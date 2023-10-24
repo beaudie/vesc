@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c982585_7e74e803",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-24T15:53:16Z",
+      "side": 1,
+      "message": "Sounds pretty bad.\n\nCan -enable-ml-inliner\u003drelease be added to optimize_max in https://source.chromium.org/chromium/chromium/src/+/main:build/config/compiler/BUILD.gn;l\u003d2484;drc\u003da4fe0037c102ba36d008deb349a7a2ae30b1ec92 first?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "9dc0132ac8c62436873abf3bf576cf123cb32c60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6e47c33_f80b7d6e",
+        "filename": "gni/angle.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-24T15:53:16Z",
+      "side": 1,
+      "message": "also need to check angle_has_build (otherwise Skia build is broken)\n\nMaybe merge with the 2 ifs above?",
+      "range": {
+        "startLine": 327,
+        "startChar": 3,
+        "endLine": 327,
+        "endChar": 13
+      },
+      "revId": "9dc0132ac8c62436873abf3bf576cf123cb32c60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
