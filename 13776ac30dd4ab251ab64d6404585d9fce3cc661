@@ -16,6 +16,24 @@
       "message": "https://ci.chromium.org/ui/p/chromium/builders/try/android-binary-size/1665208/overview\nNot bad, APK increased only by 152686 bytes (still needs approval, though).",
       "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8103f4fb_67982393",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1126674
+      },
+      "writtenOn": "2023-10-25T15:30:21Z",
+      "side": 1,
+      "message": "Also a good opportunity to look at the size diff and see if there is any low-hanging fruit for size reduction in this new mode. Here\u0027s [a link to it with it filtered to only symbols where it\u0027s captured disassembly](https://chrome-supersize.firebaseapp.com/viewer.html?load_url\u003dhttps%3A%2F%2Fstorage.googleapis.com%2Fchromium-binary-size-trybot-results%2Fandroid-binary-size%2F2023%2F10%2F24%2F1665208%2Fsupersize_diff.sizediff\u0026flag_filter\u003ddisassembly#focus\u003d20) (which is currently just the largest symbols)\n\nE.g. `BuildInternalFormatInfoMap` is 12kb, and the \"Show Disassembly\" link shows it contains a lot of inlined calls to `SplitStringAlongWhitespace`. Might be worth adding `NO_INLINE` to some of the helpers there, and/or change the helpers to take `const char*` rather than `std::string` (e.g. move the constructor call into the helper rather than at each call site)\n\nThe next bigger symbol is `DispatchTableGL`, and the \"Show Disassembly\" link shows it has a lot inlined calls to `std::string` things. Two things that I think would help here:\n1) Add an overload of `loadProcAddress()` that accepts a `const char*` rather than a `std::string` (to avoid having to create `std::string` at call sites before calling it). Might be that `string_view` could be used here as well, but I suspect `const char*` is best.\n2) Ensure `std::string` temps are not being created due to `set::contains`. Some info on that here: https://www.cppstories.com/2019/05/heterogeneous-lookup-cpp14/\n\nGuessing `gles_extensions_autogen` also suffers from string construction. Could `ExtensionInfoMap` use `map\u003cconst char*\u003e` rather than `std::string`?\n\nI don\u0027t think you need to hold up this angle roll on looking at these things, but I think some of these ideas would pan out if you look at doing them as follow-ups.",
+      "parentUuid": "73dd6735_2b2c6c18",
+      "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
