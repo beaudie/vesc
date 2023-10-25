@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de0f7e82_dcca10f2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4845,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-25T17:22:09Z",
+      "side": 1,
+      "message": "I think the right fix is use preferredFlags here instead of requiredFlags.",
+      "range": {
+        "startLine": 4845,
+        "startChar": 77,
+        "endLine": 4845,
+        "endChar": 90
+      },
+      "revId": "a0682aa57235fff8555c025ecce3d637048368eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
