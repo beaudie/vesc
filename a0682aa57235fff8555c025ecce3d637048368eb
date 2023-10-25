@@ -22,6 +22,30 @@
       },
       "revId": "a0682aa57235fff8555c025ecce3d637048368eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9db0c11_457433cc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4845,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-25T17:56:43Z",
+      "side": 1,
+      "message": "this new version the requiredFlag already changed to memoryPropertyFlagsOut.\nthe value is retrieved from \nallocator.getMemoryTypeProperties with right memoryTypeIndex. it should accute use the retrieved flags. whatever the name is.",
+      "parentUuid": "de0f7e82_dcca10f2",
+      "range": {
+        "startLine": 4845,
+        "startChar": 77,
+        "endLine": 4845,
+        "endChar": 90
+      },
+      "revId": "a0682aa57235fff8555c025ecce3d637048368eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
