@@ -552,6 +552,19 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                     adjustedClearColorValues[colorIndexGL] = adjustFloatClearColorPrecision(
                         clearColorValue, angle::Format::Get(colorRenderTargetFormat));
                 }
+                else if (colorRenderTarget->isYuvResolve())
+                {
+                    // OpenGLES spec says "clear color should be defined in yuv color space and so
+                    // floating point r, g, and b value will be mapped to corresponding y, u and v
+                    // value" https://registry.khronos.org/OpenGL/extensions/EXT/EXT_YUV_target.txt.
+                    // But vulkan spec says "Values in the G, B, and R channels of the color
+                    // attachment will be written to the Y, CB, and CR channels of the external
+                    // format image, respectively." So we have to adjust the component mapping from
+                    // GL order to vulkan order.
+                    adjustedClearColorValues[colorIndexGL].float32[0] = clearColorValue.float32[2];
+                    adjustedClearColorValues[colorIndexGL].float32[1] = clearColorValue.float32[0];
+                    adjustedClearColorValues[colorIndexGL].float32[2] = clearColorValue.float32[1];
+                }
             }
         }
     }
