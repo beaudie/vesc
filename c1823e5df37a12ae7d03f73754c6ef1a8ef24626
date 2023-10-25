@@ -16,6 +16,23 @@
       "message": "Per request from https://chromium-review.googlesource.com/c/angle/angle/+/4957193, test for issue.\n\nTested to fail on added 3.1 config without Charlie\u0027s fix, and pass with the fix.",
       "revId": "c1823e5df37a12ae7d03f73754c6ef1a8ef24626",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61491244_aef652f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-25T20:52:50Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "c1823e5df37a12ae7d03f73754c6ef1a8ef24626",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
