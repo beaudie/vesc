@@ -163,6 +163,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37435326_62a5ef56",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-25T02:34:20Z",
+      "side": 1,
+      "message": "\u003e unfortunately we are indeed that broken, at least when it comes to deferring flushes\n\nThe scenario described above by Charlie is not valid, and neither is the test in this CL. You can\u0027t use `glFlush` to synchronize between contexts. The test needs to do:\n\n- Context 1: draw, flush (or not), sync\n- Context 2: wait for sync, sample\n\nI believe you\u0027d find the test passes just fine if you add the appropriate synchronization.",
+      "parentUuid": "a6b91e0f_fe48e29a",
+      "range": {
+        "startLine": 1487,
+        "startChar": 9,
+        "endLine": 1487,
+        "endChar": 48
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "132cf555_9cd94bca",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
         "patchSetId": 3
