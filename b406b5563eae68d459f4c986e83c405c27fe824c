@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aee86cb_c723bd70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-10-25T17:48:27Z",
+      "side": 1,
+      "message": "I\u0027m fairly certain that my patch did not cause the end2end test failures on the ios bot since they\u0027re OpenGL only but the retry without patch step doesn\u0027t work either. Going to land and follow up if the tests continue to fail.",
+      "revId": "b406b5563eae68d459f4c986e83c405c27fe824c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
