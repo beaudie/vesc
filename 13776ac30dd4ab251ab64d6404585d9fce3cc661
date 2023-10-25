@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73dd6735_2b2c6c18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-25T14:49:03Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/ui/p/chromium/builders/try/android-binary-size/1665208/overview\nNot bad, APK increased only by 152686 bytes (still needs approval, though).",
+      "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
