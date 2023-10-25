@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "641c2b1b_9a7a5795",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-25T21:29:55Z",
+      "side": 1,
+      "message": "If you get to it before this lands, could you please improve the commit message here and explain what the \"issue\" is and what\u0027s begin fixed?",
+      "revId": "6aa8c803982b8156ea510facc54591fc84483676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
