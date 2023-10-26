@@ -1563,6 +1563,12 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
+    // Don't set depth stencil dynamic state if there is no depth stencil attachment
+    if (!mGraphicsPipelineDesc->getRenderPassDesc().hasDepthStencilAttachment())
+    {
+        dirtyBits = dirtyBits & ~kDepthStencilDynamicStateDirtyBits;
+    }
+
     if (dirtyBits.none())
     {
         ASSERT(hasActiveRenderPass());
