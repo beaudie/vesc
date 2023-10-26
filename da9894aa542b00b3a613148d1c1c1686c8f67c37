@@ -16,6 +16,80 @@
       "message": "gental ping",
       "revId": "da9894aa542b00b3a613148d1c1c1686c8f67c37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "908a2008_abf2116e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 43
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-26T18:25:31Z",
+      "side": 1,
+      "message": "Leaving to Charlie for detailed review of the functionality",
+      "revId": "da9894aa542b00b3a613148d1c1c1686c8f67c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e79b8c1_4911e284",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 43
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-26T18:25:31Z",
+      "side": 1,
+      "message": "nit: please move to the anonymous namespace at the top of the file, and make `CamelCase`. I suggest calling it `ShouldCombineAttributes()`.",
+      "revId": "da9894aa542b00b3a613148d1c1c1686c8f67c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "797116c5_7d1c6a62",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 43
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-26T18:25:31Z",
+      "side": 1,
+      "message": "```suggestion\n    if (mergeRanges.empty())\n    {\n        return {};\n    }\n```",
+      "range": {
+        "startLine": 948,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 18
+      },
+      "revId": "da9894aa542b00b3a613148d1c1c1686c8f67c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04d0fe83_d1c868bc",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 43
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-26T18:25:31Z",
+      "side": 1,
+      "message": "nit: please turn into `operator \u003c` for this struct and avoid the lambda",
+      "revId": "da9894aa542b00b3a613148d1c1c1686c8f67c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
