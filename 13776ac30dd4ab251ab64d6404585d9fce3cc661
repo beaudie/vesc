@@ -34,6 +34,24 @@
       "parentUuid": "73dd6735_2b2c6c18",
       "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "debdf7a4_315b1f62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-26T14:13:45Z",
+      "side": 1,
+      "message": "Thanks for the info Andrew, I too don\u0027t think this should be blocking the switch but I will have a look. Do you know if this tool can be used to iterate locally?",
+      "parentUuid": "8103f4fb_67982393",
+      "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
