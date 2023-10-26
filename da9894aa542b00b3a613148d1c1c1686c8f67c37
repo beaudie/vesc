@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79cf2cc5_9edc54cd",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 43
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-26T18:42:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e79b8c1_4911e284",
+      "revId": "da9894aa542b00b3a613148d1c1c1686c8f67c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "797116c5_7d1c6a62",
@@ -75,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b86bccd_f2c7c850",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 43
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-26T18:42:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "797116c5_7d1c6a62",
+      "range": {
+        "startLine": 948,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 18
+      },
+      "revId": "da9894aa542b00b3a613148d1c1c1686c8f67c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04d0fe83_d1c868bc",
@@ -88,6 +130,24 @@
       "writtenOn": "2023-10-26T18:25:31Z",
       "side": 1,
       "message": "nit: please turn into `operator \u003c` for this struct and avoid the lambda",
+      "revId": "da9894aa542b00b3a613148d1c1c1686c8f67c37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e56648da_802c742e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 43
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-26T18:42:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04d0fe83_d1c868bc",
       "revId": "da9894aa542b00b3a613148d1c1c1686c8f67c37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
