@@ -16,6 +16,167 @@
       "message": "Re-LGTM",
       "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cde6506_6523b2e8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-26T20:45:44Z",
+      "side": 1,
+      "message": "mergeRanges.reserve(activeStreamedAttribs.count());",
+      "range": {
+        "startLine": 932,
+        "startChar": 27,
+        "endLine": 932,
+        "endChar": 38
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0c38f99_01b557a6",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-26T20:45:44Z",
+      "side": 1,
+      "message": "Instead of continue, you could just emplace it into the mergedRanges as well. That way, in line 1098 to 1139 you can just have one code path. \n```\ngl::AttributesMask attributeMaskCanCombine;\nfor (size_t attribIndex : activeStreamedAttribs)\n{\n    attributeMaskCanCombine.set(attribIndex,ShouldCombineAttributes(renderer, attrib, binding));\n    mergeRanges.emplace_back(..);\n}\n\nif(attributeMaskCanCombine.empty)\n  return;\n```",
+      "range": {
+        "startLine": 941,
+        "startChar": 12,
+        "endLine": 941,
+        "endChar": 20
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a271e50_858e2035",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-26T20:45:44Z",
+      "side": 1,
+      "message": "Could you add a comment here \"cur and it overlaps: merge it into cur\"",
+      "range": {
+        "startLine": 962,
+        "startChar": 12,
+        "endLine": 962,
+        "endChar": 50
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98bd2c6a_86b365db",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-26T20:45:44Z",
+      "side": 1,
+      "message": "In case of you can\u0027t merge, you could possibly doing self copying here. You could implement sort yourself and then you could do the merge while doing the sort.",
+      "range": {
+        "startLine": 966,
+        "startChar": 11,
+        "endLine": 967,
+        "endChar": 23
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "775353e7_4879082a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-26T20:45:44Z",
+      "side": 1,
+      "message": "With what I suggested at line 941, you dont need this check again.",
+      "range": {
+        "startLine": 1018,
+        "startChar": 0,
+        "endLine": 1018,
+        "endChar": 83
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7115b5f9_16c28a7e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-26T20:45:44Z",
+      "side": 1,
+      "message": "With what I suggested at line 941, you dont need this block. you will always use mergeRanges to stream.",
+      "range": {
+        "startLine": 1098,
+        "startChar": 12,
+        "endLine": 1110,
+        "endChar": 13
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "730d2470_258c2595",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-26T20:45:44Z",
+      "side": 1,
+      "message": "You can remember which range to use for each attribute in mergeClientAttribsRange() function so that this loop can be avoided. Basically build a attributeIndex to mergedRangeIndex mapping while you do the range merge.",
+      "range": {
+        "startLine": 1114,
+        "startChar": 16,
+        "endLine": 1120,
+        "endChar": 17
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
