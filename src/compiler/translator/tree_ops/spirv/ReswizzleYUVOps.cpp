@@ -45,6 +45,7 @@ bool ReswizzleYUVOpsTraverser::visitAggregate(Visit visit, TIntermAggregate *nod
     }
 
     TOperator op = node->getFunction()->getBuiltInOp();
+    WARN() << " op:" << op;
     if (op != EOpTexture && op != EOpTextureProj && op != EOpTexelFetch)
     {
         return true;
@@ -52,6 +53,7 @@ bool ReswizzleYUVOpsTraverser::visitAggregate(Visit visit, TIntermAggregate *nod
 
     TIntermSequence *arguments = node->getSequence();
     TType const &samplerType   = (*arguments)[0]->getAsTyped()->getType();
+    WARN() << " samplerType.getBasicType():" << samplerType.getBasicType();
     if (samplerType.getBasicType() != EbtSamplerExternal2DY2YEXT)
     {
         return true;
