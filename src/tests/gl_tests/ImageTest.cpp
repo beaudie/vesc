@@ -4862,6 +4862,9 @@ TEST_P(ImageTestES31, SourceAHBCubeArrayTargetCubeArray)
     ANGLE_SKIP_TEST_IF(!hasEglImageStorageExt() ||
                        !IsGLExtensionEnabled("GL_EXT_texture_cube_map_array"));
     ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+    ANGLE_SKIP_TEST_IF(!isAndroidHardwareBufferConfigurationSupported(
+        1, 1, kCubeFaceCount, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+        kDefaultAHBUsage | kAHBUsageGPUCubeMap));
 
     // Create the Image
     AHardwareBuffer *source;
