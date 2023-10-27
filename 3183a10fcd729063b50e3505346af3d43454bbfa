@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "718c8f7f_913ff335",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-27T21:37:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cde6506_6523b2e8",
+      "range": {
+        "startLine": 932,
+        "startChar": 27,
+        "endLine": 932,
+        "endChar": 38
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0c38f99_01b557a6",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-10-26T20:45:44Z",
       "side": 1,
       "message": "Instead of continue, you could just emplace it into the mergedRanges as well. That way, in line 1098 to 1139 you can just have one code path. \n```\ngl::AttributesMask attributeMaskCanCombine;\nfor (size_t attribIndex : activeStreamedAttribs)\n{\n    attributeMaskCanCombine.set(attribIndex,ShouldCombineAttributes(renderer, attrib, binding));\n    mergeRanges.emplace_back(..);\n}\n\nif(attributeMaskCanCombine.empty)\n  return;\n```",
+      "range": {
+        "startLine": 941,
+        "startChar": 12,
+        "endLine": 941,
+        "endChar": 20
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c3805cc_90b97a50",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-27T21:37:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0c38f99_01b557a6",
       "range": {
         "startLine": 941,
         "startChar": 12,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca09e4b9_6309fd62",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-27T21:37:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a271e50_858e2035",
+      "range": {
+        "startLine": 962,
+        "startChar": 12,
+        "endLine": 962,
+        "endChar": 50
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98bd2c6a_86b365db",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-10-26T20:45:44Z",
       "side": 1,
       "message": "In case of you can\u0027t merge, you could possibly doing self copying here. You could implement sort yourself and then you could do the merge while doing the sort.",
+      "range": {
+        "startLine": 966,
+        "startChar": 11,
+        "endLine": 967,
+        "endChar": 23
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb1d7f55_cf83c769",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-27T21:37:28Z",
+      "side": 1,
+      "message": "currently keep the sort. keep the logic simple",
+      "parentUuid": "98bd2c6a_86b365db",
       "range": {
         "startLine": 966,
         "startChar": 11,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "646b5920_7b512c3c",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-27T21:37:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "775353e7_4879082a",
+      "range": {
+        "startLine": 1018,
+        "startChar": 0,
+        "endLine": 1018,
+        "endChar": 83
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7115b5f9_16c28a7e",
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d7c9d95_013e3504",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-27T21:37:28Z",
+      "side": 1,
+      "message": "there are some difference at allocation side too. still some difference. not fully merged",
+      "parentUuid": "7115b5f9_16c28a7e",
+      "range": {
+        "startLine": 1098,
+        "startChar": 12,
+        "endLine": 1110,
+        "endChar": 13
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "730d2470_258c2595",
@@ -169,6 +313,30 @@
       "writtenOn": "2023-10-26T20:45:44Z",
       "side": 1,
       "message": "You can remember which range to use for each attribute in mergeClientAttribsRange() function so that this loop can be avoided. Basically build a attributeIndex to mergedRangeIndex mapping while you do the range merge.",
+      "range": {
+        "startLine": 1114,
+        "startChar": 16,
+        "endLine": 1120,
+        "endChar": 17
+      },
+      "revId": "3183a10fcd729063b50e3505346af3d43454bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f36c533_ec990d68",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 45
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-27T21:37:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "730d2470_258c2595",
       "range": {
         "startLine": 1114,
         "startChar": 16,
