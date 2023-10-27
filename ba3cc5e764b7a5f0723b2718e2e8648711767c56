@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6a670bf_93c963f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-10-27T19:34:23Z",
+      "side": 1,
+      "message": "This ended up being way simpler because handleGennedResource() already sets up the correct state to delete the new textures at reset. Replay could be a more faithful to the original app behavior by finding an unallocated handle on the fly, but I think the difference is negligible.",
+      "revId": "ba3cc5e764b7a5f0723b2718e2e8648711767c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
