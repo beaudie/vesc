@@ -16,6 +16,23 @@
       "message": "lgtm+2 to unblock the Android SDK roll.\n\n+syoussefi, yuxinhu as FYI.",
       "revId": "34341b499c4c3b77642129c62b8562a25a240054",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3860e09a_a4f3409a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-10-27T21:32:49Z",
+      "side": 1,
+      "message": "Win build failures are known and hopefully infrequent: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d5292",
+      "revId": "34341b499c4c3b77642129c62b8562a25a240054",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
