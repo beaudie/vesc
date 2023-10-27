@@ -1029,6 +1029,7 @@ bool TranslatorSPIRV::translateImpl(TIntermBlock *root,
 
             bool hasGLSampleMask        = false;
             bool hasGLSecondaryFragData = false;
+            std::vector<ImmutableString> yuvOutputVariables;
 
             for (const ShaderVariable &outputVar : mOutputVariables)
             {
@@ -1042,6 +1043,11 @@ bool TranslatorSPIRV::translateImpl(TIntermBlock *root,
                 {
                     ASSERT(!hasGLSecondaryFragData);
                     hasGLSecondaryFragData = true;
+                    continue;
+                }
+                if (outputVar.yuv)
+                {
+                    yuvOutputVariables.emplace_back(ImmutableString(outputVar.name));
                     continue;
                 }
             }
@@ -1166,7 +1172,7 @@ bool TranslatorSPIRV::translateImpl(TIntermBlock *root,
                     return false;
                 }
 
-                if (!ReswizzleYUVOps(this, root, &getSymbolTable()))
+                if (!ReswizzleYUVOps(this, root, &getSymbolTable(), yuvOutputVariables))
                 {
                     return false;
                 }
