@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb2f8c6_c918fc02",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3707,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-10-27T19:23:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "614d9515_107dc6f3",
+      "range": {
+        "startLine": 3707,
+        "startChar": 8,
+        "endLine": 3707,
+        "endChar": 28
+      },
+      "revId": "a4719b9b633b778d79d587aaabc42582dabb1fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b14dee84_61a04197",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44c3fcc0_da7e5737",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5066,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-10-27T19:23:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b14dee84_61a04197",
+      "revId": "a4719b9b633b778d79d587aaabc42582dabb1fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "047ec587_fd0fdb0a",
@@ -54,6 +96,24 @@
       "writtenOn": "2023-10-12T13:39:46Z",
       "side": 1,
       "message": "ref1",
+      "revId": "a4719b9b633b778d79d587aaabc42582dabb1fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5ad08db_294b7355",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7621,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-10-27T19:23:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "047ec587_fd0fdb0a",
       "revId": "a4719b9b633b778d79d587aaabc42582dabb1fd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
