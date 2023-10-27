@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eb379b5_8a0d3118",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-10-27T21:25:27Z",
+      "side": 1,
+      "message": "Replaces https://chromium-review.googlesource.com/c/angle/angle/+/4979166, is slightly cheaper by avoiding having to visit declarations",
+      "revId": "ecc473fb86aa92ab60da2e65864519716ef6223f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
