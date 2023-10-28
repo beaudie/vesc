@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963b175e_1f81b263",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4866,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-10-28T20:29:46Z",
+      "side": 1,
+      "message": "This is not the actual layer count that is going to be used below. Is possible for the \"single cubemap\" case to be supported but an array of two cubemaps not to be.",
+      "revId": "250109483edfe4199f20fbcda7fc168d4068ede1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
