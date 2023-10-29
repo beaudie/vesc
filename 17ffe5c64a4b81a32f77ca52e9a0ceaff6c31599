@@ -16,6 +16,24 @@
       "message": "I am unable to find the VUID-vkCmdBindVertexBuffers2-pStrides-06209 error message in the CI Logs to see what the VVL are displaying",
       "revId": "17ffe5c64a4b81a32f77ca52e9a0ceaff6c31599",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "149c17f0_26ea40eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-29T22:09:07Z",
+      "side": 1,
+      "message": "From the linux-rel failure:\n\n```\n[ RUN      ] KHR-GLES31.core.vertex_attrib_binding.basic-input-case11\n../../src/tests/deqp_support/angle_deqp_gtest.cpp:53: Failure\nFailed\nRendererVk.cpp:793 (DebugUtilsMessenger): [ VUID-vkCmdBindVertexBuffers2-pStrides-06209 ] Validation Error: [ VUID-vkCmdBindVertexBuffers2-pStrides-06209 ] Object 0: handle \u003d 0x560b0e2da0e0, type \u003d VK_OBJECT_TYPE_COMMAND_BUFFER; Object 1: handle \u003d 0xa530000000a53, type \u003d VK_OBJECT_TYPE_PIPELINE; | MessageID \u003d 0x9e5db3a3 | The pStrides[4] (8) parameter in the last call to vkCmdDraw is not 0 and less than the extent of the binding for attribute 4 (12). The Vulkan spec states: If pStrides is not NULL each element of pStrides must be either 0 or greater than or equal to the maximum extent of all vertex input attributes fetched from the corresponding binding, where the extent is calculated as the VkVertexInputAttributeDescription::offset plus VkVertexInputAttributeDescription::format size (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkCmdBindVertexBuffers2-pStrides-06209)\n```",
+      "parentUuid": "f183fbbb_9fb42b43",
+      "revId": "17ffe5c64a4b81a32f77ca52e9a0ceaff6c31599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
