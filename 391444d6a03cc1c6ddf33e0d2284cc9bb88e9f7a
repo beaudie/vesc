@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f7fb375_8a06a235",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-29T18:36:26Z",
+      "side": 1,
+      "message": "Mike, this is great.  Thank you for tackling this.\n\nOne small nit, in addition to the feedback we discussed over chat.",
+      "revId": "391444d6a03cc1c6ddf33e0d2284cc9bb88e9f7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50d60986_aed2420a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8639,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-29T18:36:26Z",
+      "side": 1,
+      "message": "Can you just set `mResetActiveTexture \u003d 0` in the class itself?  See `mMaxShaderPrograms` for example.",
+      "range": {
+        "startLine": 8639,
+        "startChar": 38,
+        "endLine": 8639,
+        "endChar": 61
+      },
+      "revId": "391444d6a03cc1c6ddf33e0d2284cc9bb88e9f7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
