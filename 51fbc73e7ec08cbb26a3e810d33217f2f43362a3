@@ -50,6 +50,23 @@
       "message": "This clang update looks like a potential culprit:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/4903785",
       "revId": "51fbc73e7ec08cbb26a3e810d33217f2f43362a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "354daf3e_844912ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-30T14:59:53Z",
+      "side": 1,
+      "message": "Actually, different test failures have different history.\nThat Chromium roll is for ClearTest.ChangeFramebufferAttachmentFromRGBAtoRGB/ES2_OpenGL and RobustResourceInitTestES3.MaskedStencilClearBuffer/ES3_OpenGL.\n\nGLSLTest_ES3.InactiveVaryingStructUnusedInFragmentShader/ES3_OpenGL_ScalarizeVecAndMatConstructorArgs and GLSLTest_ES3.GLVertexIDIntegerTextureDrawElementsU8Line/ES3_OpenGL_ScalarizeVecAndMatConstructorArgs seem to be failing since they were added in https://chromium-review.googlesource.com/c/angle/angle/+/4898697\n\nIOSurfaceClientBufferTest.ReadFromRGBX8888IOSurface/ES2_OpenGL has this blamelist:\nhttps://chromium.googlesource.com/angle/angle/+log/2e11fcc5..cc61dded\nso probably https://chromium-review.googlesource.com/c/angle/angle/+/4930309",
+      "revId": "51fbc73e7ec08cbb26a3e810d33217f2f43362a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
