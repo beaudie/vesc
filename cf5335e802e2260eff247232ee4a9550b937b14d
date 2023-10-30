@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea9afe47_aae4e3e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-10-30T13:23:17Z",
+      "side": 1,
+      "message": "This workaround fixes `EXT_clip_control` behavior on Adreno 5xx/6xx devices with driver versions older than 490.",
+      "revId": "cf5335e802e2260eff247232ee4a9550b937b14d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
