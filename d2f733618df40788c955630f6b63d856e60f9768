@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94ce19a2_93c3d3da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-30T14:31:13Z",
+      "side": 1,
+      "message": "Drive-by!",
+      "revId": "d2f733618df40788c955630f6b63d856e60f9768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83d0bc01_063e3a2a",
+        "filename": "src/compiler/translator/tree_ops/spirv/ReswizzleYUVOps.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-30T14:31:13Z",
+      "side": 1,
+      "message": "nit: I\u0027d remove this TODO. This is actually much cleaner and less error-prone than that.\n\n(and for future reference, we don\u0027t leave TODO\u0027s in the code without an associated issue link)",
+      "revId": "d2f733618df40788c955630f6b63d856e60f9768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
