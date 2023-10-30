@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef761616_df610fc4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002237
+      },
+      "writtenOn": "2023-10-30T22:54:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7aed9bed_48a38680",
+      "revId": "9e8364025142f13987f2e6e877c474f608d0f6b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "059b2332_db0fc197",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-30T21:04:40Z",
       "side": 1,
       "message": "nit: please mention why this is not being done in a Chromium build.",
+      "revId": "9e8364025142f13987f2e6e877c474f608d0f6b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07a06e36_e9937634",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1002237
+      },
+      "writtenOn": "2023-10-30T22:54:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "059b2332_db0fc197",
       "revId": "9e8364025142f13987f2e6e877c474f608d0f6b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
