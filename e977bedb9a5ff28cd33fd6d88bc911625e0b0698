@@ -34,6 +34,24 @@
       "parentUuid": "e56900ec_048857eb",
       "revId": "e977bedb9a5ff28cd33fd6d88bc911625e0b0698",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dfeec93_b71e4643",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-30T18:37:10Z",
+      "side": 1,
+      "message": "Ugh, right, that _is_ a problem.\n\nWe\u0027ll revisit 5 years from now when we can use dynamic rendering...",
+      "parentUuid": "f245fb29_d85a65b3",
+      "revId": "e977bedb9a5ff28cd33fd6d88bc911625e0b0698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
