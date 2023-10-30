@@ -16,6 +16,23 @@
       "message": "Replaces https://chromium-review.googlesource.com/c/angle/angle/+/4979166, is slightly cheaper by avoiding having to visit declarations",
       "revId": "ecc473fb86aa92ab60da2e65864519716ef6223f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49d643be_49288a77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-30T15:09:28Z",
+      "side": 1,
+      "message": "Ack. The other change was fine too IMO.",
+      "revId": "ecc473fb86aa92ab60da2e65864519716ef6223f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
