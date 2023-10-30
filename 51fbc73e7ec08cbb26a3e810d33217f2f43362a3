@@ -16,6 +16,23 @@
       "message": "If confirmed to be the issue let\u0027s revert only on iOS: https://crrev.com/c/4989661",
       "revId": "51fbc73e7ec08cbb26a3e810d33217f2f43362a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a3c7157_4e32e7bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-30T14:51:53Z",
+      "side": 1,
+      "message": "Test history / blamelist points to this Chromium roll:\nhttps://ci.chromium.org/ui/p/chromium/builders/ci/ios-angle-intel/53535/overview\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4916750",
+      "revId": "51fbc73e7ec08cbb26a3e810d33217f2f43362a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
