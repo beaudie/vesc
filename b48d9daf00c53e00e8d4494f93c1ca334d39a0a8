@@ -34,6 +34,24 @@
       "parentUuid": "4802782c_ab49f3a6",
       "revId": "b48d9daf00c53e00e8d4494f93c1ca334d39a0a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c00462ac_b6f88972",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-30T21:48:59Z",
+      "side": 1,
+      "message": "I didn\u0027t have anything specific in mind, I was just thinking something that would show a diff in capture_tests - doesn\u0027t have to be exact repro of the issue. But if full repro is the only way to get a diff in that test then it might not be worth it - if so, nevermind!",
+      "parentUuid": "3298d401_3c958924",
+      "revId": "b48d9daf00c53e00e8d4494f93c1ca334d39a0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
