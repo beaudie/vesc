@@ -142,6 +142,30 @@
       },
       "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2a8603d_04569f0f",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 66
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-30T18:26:39Z",
+      "side": 1,
+      "message": "Mm, for streaming, looks you are right, we always go over all active attributes. But the mStreamedVertexBuffers also keeps data for the default attribute. If you disable the attrib and many frame later you re-enable the attrib, we retreive the default attribute value for that index in mStreamedVertexBuffers. Same bug will apply if this range has been released. I think a better optimization might be look at all app traces to see if usage pattern is that app always dirty all attribs or not, if not, then we should add dirty bits tracking it.",
+      "parentUuid": "fe5b136c_c8853128",
+      "range": {
+        "startLine": 1131,
+        "startChar": 37,
+        "endLine": 1131,
+        "endChar": 65
+      },
+      "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
