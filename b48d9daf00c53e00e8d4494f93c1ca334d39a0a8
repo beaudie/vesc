@@ -16,6 +16,24 @@
       "message": "Can we also test this with\nhttps://crsrc.org/c/third_party/angle/src/tests/capture_tests/CapturedTest.cpp\n?",
       "revId": "b48d9daf00c53e00e8d4494f93c1ca334d39a0a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3298d401_3c958924",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-10-30T21:45:08Z",
+      "side": 1,
+      "message": "The simplest way to exercise it would be to bind one of the existing textures without calling glGenTextures first. Is that what you had in mind?",
+      "parentUuid": "4802782c_ab49f3a6",
+      "revId": "b48d9daf00c53e00e8d4494f93c1ca334d39a0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
