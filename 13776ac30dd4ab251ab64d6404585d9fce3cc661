@@ -52,6 +52,24 @@
       "parentUuid": "8103f4fb_67982393",
       "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82705972_781fba28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1196069
+      },
+      "writtenOn": "2023-10-30T18:30:16Z",
+      "side": 1,
+      "message": "This issue also impacts the fuchsia.\n\nhttps://ci.chromium.org/ui/p/chrome/builders/ci/fuchsia-fyi-arm64-size/54819/blamelist",
+      "parentUuid": "debdf7a4_315b1f62",
+      "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
