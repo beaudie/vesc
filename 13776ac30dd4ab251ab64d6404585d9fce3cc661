@@ -88,6 +88,24 @@
       "parentUuid": "82705972_781fba28",
       "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "646d69f6_95e3c848",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1196069
+      },
+      "writtenOn": "2023-10-30T19:04:55Z",
+      "side": 1,
+      "message": "The size of the web_engine increased ~860K: https://ci.chromium.org/ui/p/chromium/builders/try/fuchsia-binary-size/512859/overview, which breaks the very tight space restriction for smart display devices.\n\nI quite understand the size-increment is expected for the optimization, but likely the change should be excluded on fuchsia with optimize_for_size enabled. https://crsrc.org/c/build/config/fuchsia/size_optimized_cast_receiver_args.gn;l\u003d37?q\u003doptimize_for_size",
+      "parentUuid": "91bd8edc_a15c8124",
+      "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
