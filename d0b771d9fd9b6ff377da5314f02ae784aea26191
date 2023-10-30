@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b66e745_52411250",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-30T16:30:03Z",
+      "side": 1,
+      "message": "This LGTM as an elegant way to handle this (awkward) scenario.\n\nThanks Mike!",
+      "revId": "d0b771d9fd9b6ff377da5314f02ae784aea26191",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6858042c_ee25ece8",
+        "filename": "util/capture/trace_fixture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-30T16:30:03Z",
+      "side": 1,
+      "message": "Review note: Calls like these are coming from `maybeGenResourceOnBind`, you can\u0027t actually grep for them.  The tracer emits them when it detects this is a GenOnBind scenarios and correctly deletes them on Reset.",
+      "range": {
+        "startLine": 461,
+        "startChar": 5,
+        "endLine": 461,
+        "endChar": 21
+      },
+      "revId": "d0b771d9fd9b6ff377da5314f02ae784aea26191",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
