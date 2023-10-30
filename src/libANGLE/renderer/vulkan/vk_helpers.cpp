@@ -8535,14 +8535,30 @@ bool ImageHelper::verifyEmulatedClearsAreBeforeOtherUpdates(
     return true;
 }
 
-void ImageHelper::stageSelfAsSubresourceUpdates(ContextVk *contextVk,
-                                                uint32_t levelCount,
-                                                gl::TexLevelMask skipLevelsMask)
+void ImageHelper::stageSelfAsSubresourceUpdates(
+    ContextVk *contextVk,
+    uint32_t levelCount,
+    gl::TextureType textureType,
+    const gl::TexLevelArray<gl::CubeFaceMask> &skipLevels)
 
 {
     // Nothing to do if every level must be skipped
-    gl::TexLevelMask levelsMask(angle::BitMask<uint32_t>(levelCount) << mFirstAllocatedLevel.get());
-    if ((~skipLevelsMask & levelsMask).none())
+    gl::CubeFaceMask allLayers;
+    allLayers.set(0);
+    if (textureType == gl::TextureType::CubeMap)
+    {
+        allLayers.set();
+    }
+    bool anyLevelToStage = false;
+    for (uint32_t level = 0; level < levelCount; ++level)
+    {
+        if ((allLayers & ~skipLevels[mFirstAllocatedLevel.get() + level]).any())
+        {
+            anyLevelToStage = true;
+            break;
+        }
+    }
+    if (!anyLevelToStage)
     {
         return;
     }
@@ -8594,16 +8610,29 @@ void ImageHelper::stageSelfAsSubresourceUpdates(ContextVk *contextVk,
     for (LevelIndex levelVk(0); levelVk < LevelIndex(levelCount); ++levelVk)
     {
         gl::LevelIndex levelGL = toGLLevel(levelVk);
-        if (skipLevelsMask.test(levelGL.get()))
+        if (skipLevels[levelGL.get()].none())
         {
-            continue;
+            const gl::ImageIndex index =
+                gl::ImageIndex::Make2DArrayRange(levelGL.get(), 0, mLayerCount);
+
+            stageSubresourceUpdateFromImage(prevImage.get(), index, levelVk, gl::kOffsetZero,
+                                            getLevelExtents(levelVk), mImageType);
         }
+        else if (textureType == gl::TextureType::CubeMap)
+        {
+            for (uint32_t layer = 0; layer < gl::kCubeFaceCount; ++layer)
+            {
+                if (!skipLevels[levelGL.get()][layer])
+                {
+                    const gl::ImageIndex index =
+                        gl::ImageIndex::Make2DArrayRange(levelGL.get(), layer, 1);
 
-        const gl::ImageIndex index =
-            gl::ImageIndex::Make2DArrayRange(levelGL.get(), 0, mLayerCount);
-
-        stageSubresourceUpdateFromImage(prevImage.get(), index, levelVk, gl::kOffsetZero,
-                                        getLevelExtents(levelVk), mImageType);
+                    stageSubresourceUpdateFromImage(prevImage.get(), index, levelVk,
+                                                    gl::kOffsetZero, getLevelExtents(levelVk),
+                                                    mImageType);
+                }
+            }
+        }
     }
 
     ASSERT(levelCount > 0);
@@ -8684,7 +8713,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                               gl::LevelIndex levelGLEnd,
                                               uint32_t layerStart,
                                               uint32_t layerEnd,
-                                              gl::TexLevelMask skipLevelsMask)
+                                              const gl::TexLevelArray<gl::CubeFaceMask> &skipLevels)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -8693,7 +8722,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    removeSupersededUpdates(contextVk, skipLevelsMask);
+    removeSupersededUpdates(contextVk, skipLevels);
 
     // If a clear is requested and we know it was previously cleared with the same value, we drop
     // the clear.
@@ -8792,7 +8821,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             // them. This can happen when recreating an image that has been partially incompatibly
             // redefined, in which case only updates to the levels that haven't been redefined
             // should be flushed.
-            if (areUpdateLayersOutsideRange || skipLevelsMask.test(updateMipLevelGL.get()))
+            if (areUpdateLayersOutsideRange || skipLevels[updateMipLevelGL.get()].any())
             {
                 updatesToKeep.emplace_back(std::move(update));
                 continue;
@@ -9275,7 +9304,8 @@ void ImageHelper::pruneSupersededUpdatesForLevel(ContextVk *contextVk,
     mTotalStagedBufferUpdateSize -= supersededUpdateSize;
 }
 
-void ImageHelper::removeSupersededUpdates(ContextVk *contextVk, gl::TexLevelMask skipLevelsMask)
+void ImageHelper::removeSupersededUpdates(ContextVk *contextVk,
+                                          const gl::TexLevelArray<gl::CubeFaceMask> &skipLevels)
 {
     ASSERT(validateSubresourceUpdateRefCountsConsistent());
 
@@ -9283,8 +9313,7 @@ void ImageHelper::removeSupersededUpdates(ContextVk *contextVk, gl::TexLevelMask
     {
         gl::LevelIndex levelGL                       = toGLLevel(levelVk);
         std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(levelGL);
-        if (levelUpdates == nullptr || levelUpdates->size() == 0 ||
-            skipLevelsMask.test(levelGL.get()))
+        if (levelUpdates == nullptr || levelUpdates->size() == 0 || skipLevels[levelGL.get()].any())
         {
             // There are no valid updates to process, continue.
             continue;
