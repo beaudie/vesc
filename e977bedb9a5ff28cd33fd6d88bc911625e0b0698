@@ -16,6 +16,24 @@
       "message": "There is a trade-off here, and it\u0027s not necessarily a clear win. The downside of this approach is that the same program used in two passes (with and without depth/stencil) now has to create two graphics pipelines instead of one.\n\nD/S state is dynamic for most/all hardware, so the two graphics pipelines (with and without dynamic D/S) are internally the same and this change could cause unnecessary pipeline creation in ANGLE.\n\nYou could make a similar argument for a lot of state, and that would move us back to static state and pipeline explosion. May I suggest:\n\n- Fix the immediate problem by having UtilsVk set the D/S state correctly\n- Get back to this change later, run the traces through it and log how many pipelines ANGLE creates. If it doesn\u0027t change (i.e. same pipeline in two passes with and without D/S does not happen in practice) _and_ it improves CPU perf, we could take the complication. Note that right now this is adding code to the hottest path (ContextVk::setupDraw)",
       "revId": "e977bedb9a5ff28cd33fd6d88bc911625e0b0698",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f245fb29_d85a65b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-30T16:15:52Z",
+      "side": 1,
+      "message": "But the GraphicsPipelineDesc contains RenderPassDesc, which has the D/S format baked in. That means you can\u0027t have same program used for both D/S and without D/S as it stands. Am I not reading it correctly?",
+      "parentUuid": "e56900ec_048857eb",
+      "revId": "e977bedb9a5ff28cd33fd6d88bc911625e0b0698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
