@@ -947,6 +947,7 @@ template <typename T>
 using RenderToTextureImageMap = angle::PackedEnumMap<RenderToTextureImageIndex, T>;
 
 constexpr size_t kCubeFaceCount = 6;
+using CubeFaceMask              = angle::BitSet<kCubeFaceCount>;
 
 template <typename T>
 using TextureTypeMap = angle::PackedEnumMap<TextureType, T>;
