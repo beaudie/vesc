@@ -166,6 +166,30 @@
       },
       "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb56c533_edc60816",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 66
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-30T18:38:05Z",
+      "side": 1,
+      "message": "change the default attirbute , will call glEnableVertexAttribArray or glDisableVertexAttribArray. in this case. it did affect the streaming (if it  the attribute index use streaming).  (ie need to update the client buffer data)",
+      "parentUuid": "c2a8603d_04569f0f",
+      "range": {
+        "startLine": 1131,
+        "startChar": 37,
+        "endLine": 1131,
+        "endChar": 65
+      },
+      "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
