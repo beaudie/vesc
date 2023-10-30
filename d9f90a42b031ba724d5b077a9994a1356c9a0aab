@@ -70,6 +70,30 @@
       },
       "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b76084a0_451c07a5",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 66
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-30T18:07:20Z",
+      "side": 1,
+      "message": "if it dirty all the client buffer data. the orignal code also need to copy the old data too.",
+      "parentUuid": "4c25668d_9ea19945",
+      "range": {
+        "startLine": 1131,
+        "startChar": 37,
+        "endLine": 1131,
+        "endChar": 65
+      },
+      "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
