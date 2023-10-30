@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04fe4d99_772cdccb",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 66
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-30T17:53:13Z",
+      "side": 1,
+      "message": "Thought about this more, this optimization actually wont work. If you look at allocateStreamedVertexBuffer implementation, you can see that we have per attribute index dynamicBuffer: mStreamedVertexBuffers. The reason for this is that dynamic buffer is a linear allocation, i.e, when you allocate a new range, the previous range is automatically released. There is no way to retain a old range while allocate a new range. Lets say you have two attributes (A1 and A2), one attribute (A2) specify once and did not change. The other attribute A1 keep getting new data. Right now because they are independently allocated, it works fine. But if first time comes in you see A1 and A2 can be merged, and both allocated from A1\u0027s DynamiBuffer (i.e, mStreamedVertexBuffers[0]). Now next draw call app changes A1 to different data, now you allocate new range from mStreamedVertexBuffers[0]. Because it is linear allocation, previous allocation is released. But A2 is still pointing to it. Now you have bug that GPU may access a released buffer. Even if you tag A2\u0027s buffer for every draw call so that it wont get freed, you have other bug that because A2 holding onto one buffer, we will keep allocating new buffers since the DynamicBuffer assumes all usage is FIFO order.",
+      "range": {
+        "startLine": 1131,
+        "startChar": 37,
+        "endLine": 1131,
+        "endChar": 65
+      },
+      "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
