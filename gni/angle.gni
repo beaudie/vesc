@@ -318,16 +318,10 @@ angle_remove_configs = []
 
 if (angle_has_build) {
   angle_remove_configs += [ "//build/config/compiler:default_include_dirs" ]
+}
 
-  if (is_clang) {
-    angle_remove_configs += [ "//build/config/clang:find_bad_constructs" ]
-  }
-
-  if (!is_debug) {
-    # default->optimize_max (e.g. Android defaults to -Oz, optimize_max is -O2)
-    angle_remove_configs += [ "//build/config/compiler:default_optimization" ]
-    angle_common_configs += [ "//build/config/compiler:optimize_max" ]
-  }
+if (angle_has_build && is_clang) {
+  angle_remove_configs += [ "//build/config/clang:find_bad_constructs" ]
 }
 
 set_defaults("angle_executable") {
