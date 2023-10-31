@@ -53,7 +53,7 @@ SUBPROCESS_TIMEOUT = 600  # in seconds
 DEFAULT_RESULT_FILE = "results.txt"
 DEFAULT_LOG_LEVEL = "info"
 DEFAULT_MAX_JOBS = 8
-DEFAULT_MAX_NINJA_JOBS = 3
+DEFAULT_MAX_AUTONINJA_JOBS = 3
 REPLAY_BINARY = "capture_replay_tests"
 if sys.platform == "win32":
     REPLAY_BINARY += ".exe"
@@ -132,24 +132,24 @@ class SubProcess():
 class ChildProcessesManager():
 
     @classmethod
-    def _GetGnAbsolutePaths(self):
+    def _GetGnAbsolutePath(self):
         return os.path.join('third_party', 'depot_tools', winext('gn', 'bat'))
 
     @classmethod
-    def _GetNinjaAbsolutePaths(self):
-        return os.path.join('third_party', 'ninja', 'ninja')
+    def _GetAutoninjaAbsolutePath(self):
+        return os.path.join('third_party', 'depot_tools', winext('autoninja', 'bat'))
 
-    def __init__(self, args, logger, ninja_lock):
+    def __init__(self, args, logger, autoninja_lock):
         # a dictionary of Subprocess, with pid as key
         self.subprocesses = {}
         # list of Python multiprocess.Process handles
         self.workers = []
 
-        self._gn_path = self._GetGnAbsolutePaths()
-        self._ninja_path = self._GetNinjaAbsolutePaths()
+        self._gn_path = self._GetGnAbsolutePath()
+        self._autoninja_path = self._GetAutoninjaAbsolutePath()
         self._use_goma = AutodetectGoma()
         self._logger = logger
-        self._ninja_lock = ninja_lock
+        self._autoninja_lock = autoninja_lock
         self.runtimes = {}
         self._args = args
 
@@ -228,31 +228,10 @@ class ChildProcessesManager():
         self._logger.info(' '.join(cmd))
         return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
 
-    def RunNinja(self, build_dir, target, pipe_stdout):
-        cmd = [self._ninja_path]
+    def RunAutoninja(self, build_dir, target, pipe_stdout):
+        cmd = [self._autoninja_path, '-C', build_dir, target]
 
-        # This code is taken from depot_tools/autoninja.py
-        if self._use_goma:
-            num_cores = multiprocessing.cpu_count()
-            cmd.append('-j')
-            core_multiplier = 40
-            j_value = num_cores * core_multiplier
-
-            if sys.platform.startswith('win'):
-                # On windows, j value higher than 1000 does not improve build performance.
-                j_value = min(j_value, 1000)
-            elif sys.platform == 'darwin':
-                # On Mac, j value higher than 500 causes 'Too many open files' error
-                # (crbug.com/936864).
-                j_value = min(j_value, 500)
-
-            cmd.append('%d' % j_value)
-        else:
-            cmd.append('-l')
-            cmd.append('%d' % os.cpu_count())
-
-        cmd += ['-C', build_dir, target]
-        with self._ninja_lock:
+        with self._autoninja_lock:
             self._logger.info(' '.join(cmd))
             return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
 
@@ -532,13 +511,13 @@ class TestBatch():
                 GroupedResult(GroupedResult.CompileFailed, "Build replay failed at gn generation",
                               output, tests))
             return False
-        returncode, output = child_processes_manager.RunNinja(replay_build_dir, REPLAY_BINARY,
-                                                              True)
+        returncode, output = child_processes_manager.RunAutoninja(replay_build_dir, REPLAY_BINARY,
+                                                                  True)
         if returncode != 0:
-            self.logger.warning('Ninja failure output: %s' % output)
+            self.logger.warning('Autoninja failure output: %s' % output)
             self.results.append(
-                GroupedResult(GroupedResult.CompileFailed, "Build replay failed at ninja", output,
-                              tests))
+                GroupedResult(GroupedResult.CompileFailed, "Build replay failed at autoninja",
+                              output, tests))
             return False
         return True
 
@@ -786,11 +765,11 @@ def SetCWDToAngleFolder():
     return cwd
 
 
-def RunTests(args, worker_id, job_queue, result_list, message_queue, logger, ninja_lock):
+def RunTests(args, worker_id, job_queue, result_list, message_queue, logger, autoninja_lock):
     replay_build_dir = os.path.join(args.out_dir, 'Replay%d' % worker_id)
     replay_exec_path = os.path.join(replay_build_dir, REPLAY_BINARY)
 
-    child_processes_manager = ChildProcessesManager(args, logger, ninja_lock)
+    child_processes_manager = ChildProcessesManager(args, logger, autoninja_lock)
     # used to differentiate between multiple composite files when there are multiple test batchs
     # running on the same worker and --deleted_trace is set to False
     composite_file_id = 1
@@ -890,8 +869,8 @@ def main(args):
         logger.warning('Test is currently a no-op https://anglebug.com/6085')
         return EXIT_SUCCESS
 
-    ninja_lock = multiprocessing.Semaphore(args.max_ninja_jobs)
-    child_processes_manager = ChildProcessesManager(args, logger, ninja_lock)
+    autoninja_lock = multiprocessing.Semaphore(args.max_autoninja_jobs)
+    child_processes_manager = ChildProcessesManager(args, logger, autoninja_lock)
     try:
         start_time = time.time()
         # set the number of workers to be cpu_count - 1 (since the main process already takes up a
@@ -907,9 +886,9 @@ def main(args):
             logger.error(output)
             child_processes_manager.KillAll()
             return EXIT_FAILURE
-        # run ninja to build all tests
-        returncode, output = child_processes_manager.RunNinja(capture_build_dir, args.test_suite,
-                                                              False)
+        # run autoninja to build all tests
+        returncode, output = child_processes_manager.RunAutoninja(capture_build_dir,
+                                                                  args.test_suite, False)
         if returncode != 0:
             logger.error(output)
             child_processes_manager.KillAll()
@@ -980,7 +959,8 @@ def main(args):
         for worker_id in range(worker_count):
             proc = multiprocessing.Process(
                 target=RunTests,
-                args=(args, worker_id, job_queue, result_list, message_queue, logger, ninja_lock))
+                args=(args, worker_id, job_queue, result_list, message_queue, logger,
+                      autoninja_lock))
             child_processes_manager.AddWorker(proc)
             proc.start()
 
@@ -1144,10 +1124,10 @@ if __name__ == '__main__':
         action='store_true',
         help='Also run tests that are disabled in the expectations by SKIP_FOR_CAPTURE')
     parser.add_argument(
-        '--max-ninja-jobs',
+        '--max-autoninja-jobs',
         type=int,
-        default=DEFAULT_MAX_NINJA_JOBS,
-        help='Maximum number of concurrent ninja jobs to run at once.')
+        default=DEFAULT_MAX_AUTONINJA_JOBS,
+        help='Maximum number of concurrent autoninja jobs to run at once.')
     parser.add_argument('--xvfb', action='store_true', help='Run with xvfb.')
     parser.add_argument('--asan', action='store_true', help='Build with ASAN.')
     parser.add_argument(
