@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53c4bdc1_6acfc0f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-31T18:42:00Z",
+      "side": 1,
+      "message": "It didn\u0027t work, because python in angle\\third_party\\depot_tools isn\u0027t properly bootstrapped on Windows 😞\nhttps://ci.chromium.org/ui/p/angle/builders/try/win-trace/7310/overview\nThe system cannot find the file C:\\b\\s\\w\\ir\\cache\\builder\\angle\\third_party\\depot_tools\\python3_bin_reldir.txt.",
+      "parentUuid": "a495a788_93837ef0",
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "532a0669_366fad1a",
