@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d6eefaf_98ca3515",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-31T19:10:08Z",
+      "side": 1,
+      "message": "Acknowledged. This is almost entirely used by asserts. The one place it\u0027s actually called is when a texture is respecified, which is pretty rare (one would hope).",
+      "parentUuid": "c64d46be_aebd5455",
+      "range": {
+        "startLine": 477,
+        "startChar": 0,
+        "endLine": 477,
+        "endChar": 59
+      },
+      "revId": "2c5606f8d35eebe8ef4ddcca6d278d7b2b8b9132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07877347_c4e613de",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-10-31T16:49:09Z",
       "side": 1,
       "message": "Why gl::TexLevelArray\u003cgl::CubeFaceMask\u003e instead of gl::TexLevelMask mRedefinedLevels[Num_FACES]? The latter has better cache locality since majority of texture is non-cubemap and all levels will be in one uint32_t, versus here each level will be in different bitset. It is more intuitive to put all levels in one bitset.",
+      "range": {
+        "startLine": 653,
+        "startChar": 4,
+        "endLine": 653,
+        "endChar": 40
+      },
+      "revId": "2c5606f8d35eebe8ef4ddcca6d278d7b2b8b9132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d180268_27d74f54",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-31T19:10:08Z",
+      "side": 1,
+      "message": "Done, though I can\u0027t say if it made things better; just changed. Previously you could do `redefined[level].any()`, but now you\u0027d need to accumulate `redefined[*]` for all faces and do `redefinedAllFaces.test(level)`. _Some_ places were simplified, others were made more complicated.",
+      "parentUuid": "07877347_c4e613de",
       "range": {
         "startLine": 653,
         "startChar": 4,
