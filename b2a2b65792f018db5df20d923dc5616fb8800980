@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b535fd24_2428d058",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-31T16:26:15Z",
+      "side": 1,
+      "message": "To be consistent with angle\u0027s coding style, these should be on its own line above line 319",
+      "range": {
+        "startLine": 319,
+        "startChar": 33,
+        "endLine": 319,
+        "endChar": 78
+      },
+      "revId": "b2a2b65792f018db5df20d923dc5616fb8800980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
