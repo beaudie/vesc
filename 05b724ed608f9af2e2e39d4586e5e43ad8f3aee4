@@ -51,6 +51,24 @@
       "parentUuid": "6e88aaca_581ebc9d",
       "revId": "05b724ed608f9af2e2e39d4586e5e43ad8f3aee4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b54cc48d_1aea6d1d",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-31T22:08:36Z",
+      "side": 1,
+      "message": "I had the same question - can you add that clarification as a comment?",
+      "parentUuid": "8b109722_99d14101",
+      "revId": "05b724ed608f9af2e2e39d4586e5e43ad8f3aee4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
