@@ -16,6 +16,52 @@
       "message": "Needs some windows/intel/gl suppressions, but good for review",
       "revId": "2c5606f8d35eebe8ef4ddcca6d278d7b2b8b9132",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c64d46be_aebd5455",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-31T16:49:09Z",
+      "side": 1,
+      "message": "If mRedefinedLevels[Num_FACES], for non-cubemap this will still be a mRedefinedLevels[0].any() instead of a loop",
+      "range": {
+        "startLine": 477,
+        "startChar": 0,
+        "endLine": 477,
+        "endChar": 59
+      },
+      "revId": "2c5606f8d35eebe8ef4ddcca6d278d7b2b8b9132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07877347_c4e613de",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-31T16:49:09Z",
+      "side": 1,
+      "message": "Why gl::TexLevelArray\u003cgl::CubeFaceMask\u003e instead of gl::TexLevelMask mRedefinedLevels[Num_FACES]? The latter has better cache locality since majority of texture is non-cubemap and all levels will be in one uint32_t, versus here each level will be in different bitset. It is more intuitive to put all levels in one bitset.",
+      "range": {
+        "startLine": 653,
+        "startChar": 4,
+        "endLine": 653,
+        "endChar": 40
+      },
+      "revId": "2c5606f8d35eebe8ef4ddcca6d278d7b2b8b9132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
