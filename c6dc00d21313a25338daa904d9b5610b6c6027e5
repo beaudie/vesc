@@ -22,6 +22,30 @@
       },
       "revId": "c6dc00d21313a25338daa904d9b5610b6c6027e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbaf6b17_f8c632f0",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-10-31T22:11:08Z",
+      "side": 0,
+      "message": "Exactly, I got rid of the texture because the driver never bound it.",
+      "parentUuid": "d8dd5605_9bcaa81f",
+      "range": {
+        "startLine": 492,
+        "startChar": 0,
+        "endLine": 496,
+        "endChar": 25
+      },
+      "revId": "c6dc00d21313a25338daa904d9b5610b6c6027e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
