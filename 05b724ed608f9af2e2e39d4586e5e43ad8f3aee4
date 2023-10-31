@@ -33,6 +33,24 @@
       "message": "Does this translate to:\n\nif `angle_on_system` is false, then `vendor` \u003d False, and we do not care `target` ?",
       "revId": "05b724ed608f9af2e2e39d4586e5e43ad8f3aee4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b109722_99d14101",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2023-10-31T21:56:42Z",
+      "side": 1,
+      "message": "that\u0027s right, `target` is used to the relative path, we won\u0027t use relative path if ANGLE is in system partition because that path is not accessible by the loader",
+      "parentUuid": "6e88aaca_581ebc9d",
+      "revId": "05b724ed608f9af2e2e39d4586e5e43ad8f3aee4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
