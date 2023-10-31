@@ -16,6 +16,23 @@
       "message": "Two isolated tests for the first failing case in the linked issue.",
       "revId": "f6be555207c74275c541567cb6f007fcb54621e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2602740f_3a9c7d75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-31T15:56:16Z",
+      "side": 1,
+      "message": "Thank you!\n\n@cclao@google.com these tests are showing VVL errors in the reformat-to-renderable path in TextureVk.",
+      "revId": "f6be555207c74275c541567cb6f007fcb54621e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
