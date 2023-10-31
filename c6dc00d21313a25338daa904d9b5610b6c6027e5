@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8dd5605_9bcaa81f",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-31T21:58:17Z",
+      "side": 0,
+      "message": "So you are removing this because glBindRenderbuffer was just consuming whatever integer this texture object had and genning a new renderbuffer with that ID?  (it doesn\u0027t make sense to bind a depth/stencil texture as a render buffer).  I wonder if this should have thrown an error, but I guess ... this is what you get with GenOnBind semantics.",
+      "range": {
+        "startLine": 492,
+        "startChar": 0,
+        "endLine": 496,
+        "endChar": 25
+      },
+      "revId": "c6dc00d21313a25338daa904d9b5610b6c6027e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
