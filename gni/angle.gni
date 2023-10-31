@@ -101,37 +101,6 @@ if (!defined(checkout_angle_restricted_traces)) {
   checkout_angle_restricted_traces = false
 }
 
-if (angle_enable_cl) {
-  import("//build_overrides/llvm.gni")
-
-  # for cl clspv is needed
-  # clspv build files are present in secondary location
-  clspv_secondary_source = "${angle_clspv_dir}/utils/gn/"
-  clspv_symlink_target = "//util/gn/${angle_clspv_dir}/"
-  clspv_symlink_stamp = "${root_build_dir}/clspv_symlink.stamp"
-
-  exec_script("//symlink_or_copydir.py",
-              [
-                "--stamp",
-                rebase_path(clspv_symlink_stamp, root_build_dir),
-                rebase_path(clspv_secondary_source),
-                rebase_path(clspv_symlink_target),
-              ],
-              "")  # Add the symlink as build dependency
-
-  llvm_secondary_source = "//${llvm_build_root}secondary/"
-  llvm_symlink_target = "//util/gn/${llvm_root}"
-  llvm_symlink_stamp = "${root_build_dir}/llvm_symlink.stamp"
-  exec_script("//symlink_or_copydir.py",
-              [
-                "--stamp",
-                rebase_path(llvm_symlink_stamp, root_build_dir),
-                rebase_path(llvm_secondary_source),
-                rebase_path(llvm_symlink_target),
-              ],
-              "")
-}
-
 # Subdirectory to place data files (e.g. layer JSON files).
 angle_data_dir = "angledata"
 

@@ -1,5 +1,5 @@
-llvm_root = "third_party/llvm/"
-llvm_build_root = "third_party/llvm/llvm/utils/gn/"
+llvm_root = "third_party/llvm"
+llvm_build_root = "third_party/llvm/llvm/utils/gn"
 
 llvm_third_party_build = true
 
@@ -19,7 +19,7 @@ import("//build/config/compiler/compiler.gni")
 
 # Configs to be appended and removed based on top level build
 llvm_code_override_configs_remove = [ "//build/config/compiler:chromium_code" ]
-llvm_code_override_configs_append = [ "//${llvm_build_root}build:llvm_code" ]
+llvm_code_override_configs_append = [ "//${llvm_build_root}/build:llvm_code" ]
 
 # FIXME: There should be a way to query the output_dir of a target
 # as set in toolchain/BUILD.gn
