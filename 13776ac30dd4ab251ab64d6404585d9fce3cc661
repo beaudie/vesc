@@ -142,6 +142,24 @@
       "parentUuid": "d72bdb27_c9aa083f",
       "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6526db9b_3faac8fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1126674
+      },
+      "writtenOn": "2023-10-31T13:54:52Z",
+      "side": 1,
+      "message": "re: size tool -\nThere\u0027s kinda 3 layers you could use it at.\n1) Use //tools/binary_size/supersize directly (finicky, but could be made to work with any ELF or APK).\n2) Use //tools/binary_size/diagnose_bloat.py (builds locally with \u0026 without a commit using a dedicated `out/`\n3) Update chromium\u0027s `DEPS` to point to an ANGLE code review commit and run `android-binary-size` trybot",
+      "parentUuid": "63009097_e4ff94a7",
+      "revId": "13776ac30dd4ab251ab64d6404585d9fce3cc661",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
