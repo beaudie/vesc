@@ -33,6 +33,23 @@
       "message": "I\u0027ll give +2 in case you want to land this before Christopher comes back.",
       "revId": "88c410bb549b6ebf491e57af16201e38ee06fbbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88222d6e_d9bf5aec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-10-31T19:09:11Z",
+      "side": 1,
+      "message": "Confirmed with Chris that we\u0027re good to go",
+      "revId": "88c410bb549b6ebf491e57af16201e38ee06fbbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
