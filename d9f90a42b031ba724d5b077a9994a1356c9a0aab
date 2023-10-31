@@ -190,6 +190,30 @@
       },
       "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adf82cde_b5451b11",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 66
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-31T16:52:50Z",
+      "side": 1,
+      "message": "I think the better optimization is to track per attribute index dirty bits so that you only copy dirty client array instead of always copy all of them. This CL will made such optimization impossible.",
+      "parentUuid": "bb56c533_edc60816",
+      "range": {
+        "startLine": 1131,
+        "startChar": 37,
+        "endLine": 1131,
+        "endChar": 65
+      },
+      "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
