@@ -262,6 +262,54 @@
       },
       "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2df7e24_5f9190ae",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 66
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-31T17:08:48Z",
+      "side": 1,
+      "message": "average updateStreamAttrib for summer war reduced from 80us to 40us. for the scene we debugged.",
+      "parentUuid": "748a495e_cbd6ba8d",
+      "range": {
+        "startLine": 1131,
+        "startChar": 37,
+        "endLine": 1131,
+        "endChar": 65
+      },
+      "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46727ac4_37b7ec4e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 66
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-31T17:08:48Z",
+      "side": 1,
+      "message": "average cost for updateStreamAttrib reduced from 80us to 40us.\n\nhttps://docs.google.com/document/d/1_l74TLpov7k9wdjJocHCyBBfgGIR2FkOoGnjeFWJOCw/edit?resourcekey\u003d0-tJiFEyN51aU8IUFgGOTsrQ#heading\u003dh.17wg41voij6q",
+      "parentUuid": "6c61e35e_edfab82e",
+      "range": {
+        "startLine": 1131,
+        "startChar": 37,
+        "endLine": 1131,
+        "endChar": 65
+      },
+      "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
