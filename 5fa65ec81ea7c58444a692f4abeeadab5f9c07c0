@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9a2d632_e3223297",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3181,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-31T16:53:45Z",
+      "side": 0,
+      "message": "This needs to exclude pixel4 in expectation file.",
+      "range": {
+        "startLine": 3181,
+        "startChar": 0,
+        "endLine": 3181,
+        "endChar": 35
+      },
+      "revId": "5fa65ec81ea7c58444a692f4abeeadab5f9c07c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
