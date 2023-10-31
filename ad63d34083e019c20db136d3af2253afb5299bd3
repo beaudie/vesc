@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ddc0acc_e4c44e0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-31T16:11:45Z",
+      "side": 1,
+      "message": "I believe we can use autoninja.bat instead of autoninja.py, which would be a simpler change.\nWe were using autoninja originally, but had to work around in https://chromium-review.googlesource.com/c/angle/angle/+/2787186.\nI believe the reason was that we were using autoninja from C:\\b\\s\\w\\ir\\kitchen-checkout\\depot_tools\\autoninja.bat\nBut since we are now using ninja from third_party/depot_tools after https://chromium-review.googlesource.com/c/angle/angle/+/4060128, I think it will work now.\nGoing to try this approach.",
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "532a0669_366fad1a",
