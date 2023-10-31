@@ -238,6 +238,30 @@
       },
       "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "748a495e_cbd6ba8d",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 66
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-31T17:04:57Z",
+      "side": 1,
+      "message": "Okay, then you should also make mStreamedVertexBuffers one per contxt instead of one per attribute, in case any test expose any hidden bug.\nDo you have performance data showing the improvement?",
+      "parentUuid": "6c61e35e_edfab82e",
+      "range": {
+        "startLine": 1131,
+        "startChar": 37,
+        "endLine": 1131,
+        "endChar": 65
+      },
+      "revId": "d9f90a42b031ba724d5b077a9994a1356c9a0aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
