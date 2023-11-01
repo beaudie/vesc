@@ -7340,7 +7340,11 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
 {
     *updateAppliedImmediatelyOut = false;
 
-    const angle::Format &storageFormat = vkFormat.getActualImageFormat(access);
+    const angle::Format &storageFormat         = vkFormat.getActualImageFormat(access);
+    const angle::Format &intendedStorageFormat = vkFormat.getIntendedFormat();
+    bool useComputeForRGBToRGBA                = intendedStorageFormat.pixelBytes == 3 &&
+                                  storageFormat.pixelBytes != 3 && glExtents.width > 1000 &&
+                                  glExtents.height > 1000;
 
     size_t outputRowPitch;
     size_t outputDepthPitch;
@@ -7432,6 +7436,10 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         }
         else if (!stencilOnly)
         {
+            if (useComputeForRGBToRGBA)
+            {
+                loadFunctionInfo.loadFunction = angle::LoadToNative<GLubyte, 3>;
+            }
             outputRowPitch = storageFormat.pixelBytes * glExtents.width;
         }
         else
@@ -7489,9 +7497,53 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                 MemoryCoherency::NonCoherent, storageFormat.id,
                                                 &stagingOffset, &stagingPointer));
 
-    loadFunctionInfo.loadFunction(
-        contextVk->getImageLoadContext(), glExtents.width, glExtents.height, glExtents.depth,
-        source, inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+    if (useComputeForRGBToRGBA)
+    {
+        // WARN() << "RGB8 to RGBA8 test";
+        //  Init src buffer for RGB
+        RendererScoped<BufferHelper> srcBuffer(contextVk->getRenderer());
+        size_t outputRowPitch2        = intendedStorageFormat.pixelBytes * glExtents.width;
+        size_t outputDepthPitch2      = outputRowPitch2 * glExtents.height;
+        size_t intendedAllocationSize = outputDepthPitch2 * glExtents.depth;
+        size_t vertexCount            = glExtents.width * glExtents.height * glExtents.depth;
+
+        VkBufferCreateInfo bufferInfo = {};
+        bufferInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.flags              = 0;
+        bufferInfo.size               = intendedAllocationSize;
+        bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+        bufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        bufferInfo.queueFamilyIndexCount = 0;
+        bufferInfo.pQueueFamilyIndices   = nullptr;
+
+        ANGLE_TRY(srcBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
+        uint8_t *dataPtr;
+        ANGLE_TRY(srcBuffer.get().map(contextVk, &dataPtr));
+
+        // Copy data over to RGB buffer
+        loadFunctionInfo.loadFunction(contextVk->getImageLoadContext(), glExtents.width,
+                                      glExtents.height, glExtents.depth, source, inputRowPitch,
+                                      inputDepthPitch, dataPtr, outputRowPitch2, outputDepthPitch2);
+
+        // Convert the data to RGBA and copy it to the RGBA buffer.
+        UtilsVk::ConvertVertexParameters params;
+        params.vertexCount = vertexCount;
+        params.srcFormat   = &intendedStorageFormat;
+        params.dstFormat   = &storageFormat;
+        params.srcStride   = 3;  // TODO: Should be 3 for correct data, but we get device-lost.
+        params.srcOffset   = 0;
+        params.dstOffset   = stagingOffset;
+        ANGLE_TRY(contextVk->getUtils().convertVertexBuffer(contextVk, &stagingBuffer->get(),
+                                                            &srcBuffer.get(), params));
+        ANGLE_TRY(contextVk->flushAndSubmitOutsideRenderPassCommands());
+    }
+    else
+    {
+        loadFunctionInfo.loadFunction(contextVk->getImageLoadContext(), glExtents.width,
+                                      glExtents.height, glExtents.depth, source, inputRowPitch,
+                                      inputDepthPitch, stagingPointer, outputRowPitch,
+                                      outputDepthPitch);
+    }
 
     // YUV formats need special handling.
     if (storageFormat.isYUV)
