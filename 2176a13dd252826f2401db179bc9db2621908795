@@ -16,6 +16,23 @@
       "message": "(+1 is assuming kbr\u0027s concerns are addressed. I do agree this is not _supposed_ to return nullptr)",
       "revId": "2176a13dd252826f2401db179bc9db2621908795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72d0eea6_1682b8ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-11-01T20:31:49Z",
+      "side": 1,
+      "message": "lgtm as a workaround but please see below as well as comment on crbug.com/1498447 .",
+      "revId": "2176a13dd252826f2401db179bc9db2621908795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
