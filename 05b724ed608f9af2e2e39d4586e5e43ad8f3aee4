@@ -69,6 +69,24 @@
       "parentUuid": "8b109722_99d14101",
       "revId": "05b724ed608f9af2e2e39d4586e5e43ad8f3aee4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18964cce_8e840fc5",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2023-11-01T00:13:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b54cc48d_1aea6d1d",
+      "revId": "05b724ed608f9af2e2e39d4586e5e43ad8f3aee4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
