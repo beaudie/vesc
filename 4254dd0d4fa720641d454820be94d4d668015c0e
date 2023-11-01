@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "faa7c0f2_6436c160",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2023-11-01T18:57:52Z",
+      "side": 1,
+      "message": "Dawn is doing egl.GetCurrentDisplay(), and if that is EGL_NO_DISPLAY then  egl.GetDisplay(EGL_DEFAULT_DISPLAY)\n\nthen egl.Initialize which returns EGL_TRUE,\negl.ChooseConfig succeeds (and finds a config)\negl.QueryString of EGL_EXTENSIONS is able to succeed,\nand egl.CreateContext which we check succeeds (not EGL_NO_CONTEXT).\n\nmaybe instead something needs to check the context is actually created successfully sooner? Not sure how all these things can succeed but then MakeCurrent fail",
+      "parentUuid": "ceeb654c_57c6f926",
+      "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "189d3bb5_f368726a",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 3
