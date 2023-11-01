@@ -7489,6 +7489,12 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                 MemoryCoherency::NonCoherent, storageFormat.id,
                                                 &stagingOffset, &stagingPointer));
 
+    // TODO: Potential dEQP bug regarding dimensions for the new loading function. (There is a
+    // problem with 39x43)
+    //    if (glExtents.width != 64)
+    //    {
+    //        loadFunctionInfo.loadFunction = angle::LoadToNative3To4<GLubyte, 0xFF>;
+    //    }
     loadFunctionInfo.loadFunction(
         contextVk->getImageLoadContext(), glExtents.width, glExtents.height, glExtents.depth,
         source, inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);

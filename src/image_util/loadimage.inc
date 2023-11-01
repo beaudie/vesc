@@ -89,6 +89,98 @@ inline void LoadToNative3To4(const ImageLoadContext &context, size_t width, size
     }
 }
 
+template <uint8_t fourthValue>
+inline void LoadToNativeUbyte3To4(const ImageLoadContext &context,
+                                  size_t width,
+                                  size_t height,
+                                  size_t depth,
+                                  const uint8_t *input,
+                                  size_t inputRowPitch,
+                                  size_t inputDepthPitch,
+                                  uint8_t *output,
+                                  size_t outputRowPitch,
+                                  size_t outputDepthPitch)
+{
+    ASSERT(IsLittleEndian());
+
+    auto fourthValue64      = static_cast<uint64_t>(fourthValue);
+    bool isWidthMultipleOf8 = (width & 0x7) == 0;
+
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            // In the first loop, 8 RGB pixels will be read in each iteration. If the width is not a
+            // multiple of 8, the remaining pixels at the end of the row will be copied afterwards
+            // one at a time.
+            const uint64_t *source64 =
+                priv::OffsetDataPointer<uint64_t>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint64_t *dest64 =
+                priv::OffsetDataPointer<uint64_t>(output, y, z, outputRowPitch, outputDepthPitch);
+
+            size_t pixelPairIndex = 0;
+            if (width >= 8)
+            {
+                const uint64_t *sourceIndex = source64;
+
+                // Each 64-bit value on the destination will be two RGBA pixels.
+                size_t eightByteCopyThreshold = width / 2 - 4;
+                for (; pixelPairIndex <= eightByteCopyThreshold; pixelPairIndex += 4)
+                {
+                    // Three 64-bit values from the input contain 8 RGB pixels in total. This
+                    // translates to four 64-bits on the output.
+                    uint64_t newPixelData0 = sourceIndex[0];
+                    uint64_t newPixelData1 = sourceIndex[1];
+                    uint64_t newPixelData2 = sourceIndex[2];
+
+                    uint64_t rgbaPixelData0 =
+                        ((newPixelData0 & 0xFFFFFF) | (fourthValue64 << 24)) |
+                        (((newPixelData0 << 8) & 0xFFFFFF00000000) | (fourthValue64 << 56));
+                    uint64_t rgbaPixelData1 =
+                        ((newPixelData0 >> 48) | ((newPixelData1 & 0xFF) << 16) |
+                         (fourthValue64 << 24)) |
+                        (((newPixelData1 << 24) & 0xFFFFFF00000000) | (fourthValue64 << 56));
+                    uint64_t rgbaPixelData2 =
+                        (((newPixelData1 >> 32) & 0xFFFFFF) | (fourthValue64 << 24)) |
+                        ((((newPixelData1 >> 24) | (newPixelData2 << 40)) & 0xFFFFFF00000000) |
+                         (fourthValue64 << 56));
+                    uint64_t rgbaPixelData3 =
+                        (((newPixelData2 >> 16) & 0xFFFFFF) | (fourthValue64 << 24)) |
+                        (((newPixelData2 >> 8) & 0xFFFFFF00000000) | (fourthValue64 << 56));
+
+                    dest64[pixelPairIndex]     = rgbaPixelData0;
+                    dest64[pixelPairIndex + 1] = rgbaPixelData1;
+                    dest64[pixelPairIndex + 2] = rgbaPixelData2;
+                    dest64[pixelPairIndex + 3] = rgbaPixelData3;
+
+                    sourceIndex += 3;
+                }
+            }
+
+            // We should copy the remaining pixels at the end one by one.
+            if (!isWidthMultipleOf8)
+            {
+                auto source8 = reinterpret_cast<const uint8_t *>(source64);
+                auto dest8   = reinterpret_cast<uint8_t *>(dest64);
+
+                size_t pixelIndex = pixelPairIndex * 2;
+                size_t src8Index  = pixelIndex * 3;
+                size_t dest8Index = pixelIndex * 4;
+                for (; pixelIndex < width; pixelIndex++)
+                {
+                    dest8[dest8Index]     = source8[src8Index];
+                    dest8[dest8Index + 1] = source8[src8Index + 1];
+                    dest8[dest8Index + 2] = source8[src8Index + 2];
+                    dest8[dest8Index + 3] = fourthValue;
+
+                    src8Index += 3;
+                    dest8Index += 4;
+                }
+            }
+        }
+    }
+}
+
 template <size_t componentCount>
 inline void Load32FTo16F(const ImageLoadContext &context, size_t width, size_t height, size_t depth,
                          const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
