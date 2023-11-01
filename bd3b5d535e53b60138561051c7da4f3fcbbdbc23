@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7388154_32306bc3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-01T23:21:33Z",
+      "side": 1,
+      "message": "Yes, only reuse the conversion buffer if the stdSize matches the block size recorded in the conversion buffer, else create a new conversion buffer. Previously buffers were reused with no regard for the block size.",
+      "parentUuid": "104bda6c_a2cce68a",
+      "range": {
+        "startLine": 7,
+        "startChar": 35,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4124edd4_2c0d38d7",
