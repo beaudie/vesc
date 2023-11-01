@@ -89,6 +89,83 @@ inline void LoadToNative3To4(const ImageLoadContext &context, size_t width, size
     }
 }
 
+template <uint8_t fourthValue>
+inline void LoadToNativeUbyte3To4(const ImageLoadContext &context,
+                             size_t width,
+                             size_t height,
+                             size_t depth,
+                             const uint8_t *input,
+                             size_t inputRowPitch,
+                             size_t inputDepthPitch,
+                             uint8_t *output,
+                             size_t outputRowPitch,
+                             size_t outputDepthPitch)
+{
+    ASSERT(IsLittleEndian());
+
+    // Eight RGB pixels will be read in each loop iteration. If the width is not a multiple of 8,
+    // the remaining pixels will be copied afterwards one at a time.
+    auto fourthValue64      = static_cast<uint64_t>(fourthValue);
+    size_t pixelCount       = width * height * depth;
+    bool isCountMultipleOf8 = (pixelCount & 0x7) == 0;
+
+    const uint64_t *source =
+        priv::OffsetDataPointer<uint64_t>(input, 0, 0, inputRowPitch, inputDepthPitch);
+    uint64_t *dest =
+        priv::OffsetDataPointer<uint64_t>(output, 0, 0, outputRowPitch, outputDepthPitch);
+    const uint64_t *sourceIndex = source;
+
+    // Each 64-bit value on the destination will be two RGBA pixels.
+    size_t x = 0;
+    if (pixelCount >= 8)
+    {
+        size_t eightByteCopyThreshold = pixelCount / 2 - 4;
+        for (; x <= eightByteCopyThreshold; x += 4)
+        {
+            // Three 64-bit values from the source contain 8 RGB pixels in total. This translates to
+            // four 64-bits on the destination.
+            uint64_t newPixelData0 = sourceIndex[0];
+            uint64_t newPixelData1 = sourceIndex[1];
+            uint64_t newPixelData2 = sourceIndex[2];
+
+            uint64_t rgbaPixelData0 =
+                ((newPixelData0 & 0xFFFFFF) | (fourthValue64 << 24)) |
+                (((newPixelData0 << 8) & 0xFFFFFF00000000) | (fourthValue64 << 56));
+            uint64_t rgbaPixelData1 =
+                ((newPixelData0 >> 48) | ((newPixelData1 & 0xFF) << 16) | (fourthValue64 << 24)) |
+                (((newPixelData1 << 24) & 0xFFFFFF00000000) | (fourthValue64 << 56));
+            uint64_t rgbaPixelData2 =
+                (((newPixelData1 >> 32) & 0xFFFFFF) | (fourthValue64 << 24)) |
+                ((((newPixelData1 >> 24) | (newPixelData2 << 40)) & 0xFFFFFF00000000) |
+                 (fourthValue64 << 56));
+            uint64_t rgbaPixelData3 =
+                (((newPixelData2 >> 16) & 0xFFFFFF) | (fourthValue64 << 24)) |
+                (((newPixelData2 >> 8) & 0xFFFFFF00000000) | (fourthValue64 << 56));
+
+            dest[x]     = rgbaPixelData0;
+            dest[x + 1] = rgbaPixelData1;
+            dest[x + 2] = rgbaPixelData2;
+            dest[x + 3] = rgbaPixelData3;
+            sourceIndex += 3;
+        }
+    }
+
+    // We should copy the remaining pixels at the end one by one.
+    if (!isCountMultipleOf8)
+    {
+        auto source8 = reinterpret_cast<const uint8_t *>(source);
+        auto dest8   = reinterpret_cast<uint8_t *>(dest);
+        x *= 2;
+        for (; x < pixelCount; x++)
+        {
+            dest8[x * 4]     = source8[x * 3];
+            dest8[x * 4 + 1] = source8[x * 3 + 1];
+            dest8[x * 4 + 2] = source8[x * 3 + 2];
+            dest8[x * 4 + 3] = fourthValue;
+        }
+    }
+}
+
 template <size_t componentCount>
 inline void Load32FTo16F(const ImageLoadContext &context, size_t width, size_t height, size_t depth,
                          const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
