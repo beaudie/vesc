@@ -94,6 +94,30 @@
       },
       "revId": "c6dc00d21313a25338daa904d9b5610b6c6027e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65ac102e_ba861f5d",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-11-01T17:30:46Z",
+      "side": 0,
+      "message": "I think capture is more robust to gen-on-bind patterns now than it was previously, but one tradeoff is that replay handle ids are not guaranteed to match capture handle ids. These specific tests are failing because the handle ids embedded in the serialized state don\u0027t match, even if replay behavior is functionally the same.",
+      "parentUuid": "20d80419_f854b106",
+      "range": {
+        "startLine": 492,
+        "startChar": 0,
+        "endLine": 496,
+        "endChar": 25
+      },
+      "revId": "c6dc00d21313a25338daa904d9b5610b6c6027e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
