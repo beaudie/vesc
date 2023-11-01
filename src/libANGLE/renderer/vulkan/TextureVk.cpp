@@ -1597,6 +1597,8 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
                                                const gl::Extents &size,
                                                bool fixedSampleLocations)
 {
+    WARN() << "Tex Storage: " << size.width << "x" << size.height << " | Format: 0x" << std::hex
+           << internalformat;
     ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
     RendererVk *renderer = contextVk->getRenderer();
 

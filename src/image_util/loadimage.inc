@@ -89,6 +89,36 @@ inline void LoadToNative3To4(const ImageLoadContext &context, size_t width, size
     }
 }
 
+template <uint8_t fourthValue>
+inline void LoadToNativeUbyte3To4(const ImageLoadContext &context,
+                             size_t width,
+                             size_t height,
+                             size_t depth,
+                             const uint8_t *input,
+                             size_t inputRowPitch,
+                             size_t inputDepthPitch,
+                             uint8_t *output,
+                             size_t outputRowPitch,
+                             size_t outputDepthPitch)
+{
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const uint8_t *source =
+                priv::OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint32_t *dest = priv::OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch,
+                                                               outputDepthPitch);
+            const uint8_t *sourceIndex = source;
+            for (size_t x = 0; x < width; x++)
+            {
+                dest[x] = (*reinterpret_cast<const uint32_t*>(sourceIndex) & 0xFFFFFF) | (fourthValue << 24);
+                sourceIndex += 3;
+            }
+        }
+    }
+}
+
 template <size_t componentCount>
 inline void Load32FTo16F(const ImageLoadContext &context, size_t width, size_t height, size_t depth,
                          const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
