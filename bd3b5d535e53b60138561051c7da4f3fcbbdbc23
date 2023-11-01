@@ -77,6 +77,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "de454306_add7fab3",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T23:10:20Z",
+      "side": 1,
+      "message": "Per our style, please move to the top, call it `RoundUp`, put in an anonymous namespace and drop `static`.",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c87047e8_6c5bcdff",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 1
@@ -88,6 +105,46 @@
       "writtenOn": "2023-11-01T22:51:56Z",
       "side": 1,
       "message": "UBOs -\u003e uniform blocks\n\n\"buffer\" could be \"UBO\" for more clarity.\n\n(UBO \u003d\u003d Uniform Buffer Object, not the same thing as a uniform block)",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59481ec7_ecb12427",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T23:10:20Z",
+      "side": 1,
+      "message": "While you\u0027re at it, Object is redundant with UBO.",
+      "range": {
+        "startLine": 613,
+        "startChar": 37,
+        "endLine": 613,
+        "endChar": 46
+      },
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7d8fbf6_95f990f6",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T23:10:20Z",
+      "side": 1,
+      "message": "Could you please assert that `offsetAlignmentInBytes` is divisible by 16?",
       "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
