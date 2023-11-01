@@ -1,0 +1,204 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e767d362_6569830d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "I\u0027m trusting Charlie that the change itself makes sense. I just have quality of code comments.\n\nAlso, I suspect this can be error-prone with attribute updates, so I expect to see a good deal of tests added. Otherwise it\u0027s going to be the cause of a stream of security bugs coming our way.\n\nIn particular, please make sure there are tests that:\n\n- Exercise the case where there are a mix of attributes that can and cannot be merged\n- Exercise where the merged attributes don\u0027t have already-consecutive indices\n- With a mix of merged and unmerged attributes:\n  * update a merged attribute to not be mergeable anymore and draw again\n  * update an unmerged attribute to now be mergeable and draw again\n  * update a merged attribute to be merged with a different attribute now and draw again\n  * update an unmerged attribute to still be unmerged but in a different range and draw again\n  * update multiple merged and unmerged attributes and draw again\n  * (ideally use parameters and loops to test a large number of variations)\n- Test when all attributes are merged, then update them all to be a different mix of merged and unmerged attributes and draw again\n- Test when none of the attributes are merged, then update them all to be a different mix of merged and unmerged attributes and draw again\n\nThanks!",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f7bba27_26dbd980",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "nit: please avoid `auto`. We only use those for complicated nested types (like `std::vector\u003cFoo\u003e::iterator`). In these cases, it helps readability a lot to know the type of the variable.",
+      "range": {
+        "startLine": 926,
+        "startChar": 10,
+        "endLine": 926,
+        "endChar": 14
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27f18fcb_a430e1df",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "nit: `indexes`. The name is not descriptive though, maybe `combinedIndexes`?",
+      "range": {
+        "startLine": 930,
+        "startChar": 21,
+        "endLine": 930,
+        "endChar": 27
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38f7c5d8_04d12c74",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "nit: we use `static_cast`. Please do that once in a temp variable above to avoid repeated casts.",
+      "range": {
+        "startLine": 947,
+        "startChar": 12,
+        "endLine": 947,
+        "endChar": 23
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79542721_c89be80a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "nit: suggest an early return here to avoid indenting the whole block:\n\n```\nif (attributeMaskCanCombine.none())\n{\n    // No attributes to combine\n    return {};\n}\n```",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a79e7cef_00f7c8a7",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "nit: maybe call this `next`?",
+      "range": {
+        "startLine": 960,
+        "startChar": 13,
+        "endLine": 960,
+        "endChar": 15
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae589346_1076d9d1",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "Is this trying to make the entries for all merged attributes be identical? You could probably simplify things more and remove the need for this (and the `index` member) if you follow my suggestion below about making `mergeRanges` indexed by `attribIndex`.\n\nThen you can:\n\n- Remove the `index` member of `AttributeRange`\n- Return a merge map here, like `std::array\u003csize_t, gl::MAX_VERTEX_ATTRIBS\u003e mergedIndexes`, filled with identity (i.e. `mergedIndexes[i] \u003d i;`. Instead of `std::min(a.index, b.index)` above, you can say `mergedIndexes[b.index] \u003d a.index`.\n- In `updateStreamedAttribs()` below, instead of `it-\u003eindex` use `mergedIndexes[attribIndex]`.",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69f88b94_a25c3d85",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "I think you can simplify things if you made `mergeRanges` indexed by `attribIndex`. I suggest the following:\n\n- Make `mergeRanges` be a `std::array\u003cRangeSpan, gl::MAX_VERTEX_ATTRIBS\u003e`\n- In `mergeClientAttribsRange`, write each attribute\u0027s range in element `attribIndex`.\n- Remove `it` here and in the for loop below say `const AttributeRange \u0026range \u003d mergeRanges[attribIndex]`",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "663657b8_4bf47189",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "nit: now that this is very specific to attributes, I suggest calling it `AttributeRange`",
+      "range": {
+        "startLine": 28,
+        "startChar": 7,
+        "endLine": 28,
+        "endChar": 16
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bda96081_addc50ce",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-01T14:50:31Z",
+      "side": 1,
+      "message": "nit: please document the meaning of these members",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
