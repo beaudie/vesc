@@ -13,6 +13,12 @@ using namespace angle;
 namespace
 {
 
+template <typename T>
+inline T RoundUp(T n, T s)
+{
+    return ((n + s - 1) / s) * s;
+}
+
 class UniformBufferTest : public ANGLETest<>
 {
   protected:
@@ -599,6 +605,118 @@ TEST_P(UniformBufferTest, VeryLargeReadback)
     EXPECT_EQ(expectedData, actualData);
 
     glUnmapBuffer(GL_UNIFORM_BUFFER);
+}
+
+// Test drawing with different sized uniform blocks from the same UBO, drawing a smaller uniform
+// block before larger one.
+TEST_P(UniformBufferTest, MultipleSizesSmallBeforeBig)
+{
+    constexpr char kUniformName[] = "uni";
+    constexpr char kFS1[]         = R"(#version 300 es
+precision highp float;
+layout(std140) uniform uni {
+    bool b;
+};
+
+out vec4 fragColor;
+void main() {
+    fragColor = b ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    constexpr char kFS2[] = R"(#version 300 es
+precision highp float;
+layout(std140) uniform uni {
+    layout(row_major) mat4x3 mat;
+};
+
+#define EXPECT(result, expression, value) if ((expression) != value) { result = false; }
+
+#define VERIFY_IN(result, mat, cols, rows)                  \
+    for (int c = 0; c < cols; ++c)                          \
+    {                                                       \
+        for (int r = 0; r < rows; ++r)                      \
+        {                                                   \
+            EXPECT(result, mat[c][r], float(c * 4 + r));    \
+        }                                                   \
+    }
+
+out vec4 fragColor;
+void main() {
+    bool result = true;
+
+    VERIFY_IN(result, mat, 4, 3);
+
+    fragColor = result ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    GLint offsetAlignmentInBytes;
+    glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &offsetAlignmentInBytes);
+    ASSERT_EQ(offsetAlignmentInBytes % (4 * sizeof(float)), 0U);
+    GLint offsetAlignmentInVec4 = offsetAlignmentInBytes / (4 * sizeof(float));
+    // TODO(djg): Debugging aid. Remove before landing
+    printf("offsetAlignmentInVec4 = %d\n", offsetAlignmentInVec4);
+
+    // Insert padding required by implementation to have first unform block at a non-zero
+    // offset.
+    int initialPadding = RoundUp(3, offsetAlignmentInVec4);
+    std::vector<float> uboData;
+    for (int n = 0; n < initialPadding; ++n)
+        uboData.insert(uboData.end(), {0.0f, 0.0f, 0.0f, 0.0f});
+
+    // First uniform block - a single bool
+    uboData.insert(uboData.end(), {1.0f, 0.0f, 0.0f, 0.0f});
+
+    // Insert padding required by implementation to align second UBO
+    for (int n = 0; n < offsetAlignmentInVec4 - 1; ++n)
+        uboData.insert(uboData.end(), {0.0f, 0.0f, 0.0f, 0.0f});
+
+    // Second uniform block - a row-major mat4x3
+    uboData.insert(uboData.end(), {0.0f, 4.0f, 8.0f, 12.0f});
+    uboData.insert(uboData.end(), {1.0f, 5.0f, 9.0f, 13.0f});
+    uboData.insert(uboData.end(), {2.0f, 6.0f, 10.0f, 14.0f});
+
+    ANGLE_GL_PROGRAM(program1, essl3_shaders::vs::Simple(), kFS1);
+    ANGLE_GL_PROGRAM(program2, essl3_shaders::vs::Simple(), kFS2);
+
+    // UBO containing 2 different uniform blocks
+    GLBuffer ubo;
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo);
+    glBufferData(GL_UNIFORM_BUFFER, uboData.size() * sizeof(float), uboData.data(), GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Draw with first uniform block
+    GLuint index = glGetUniformBlockIndex(program1, kUniformName);
+    EXPECT_NE(GL_INVALID_INDEX, index);
+    ASSERT_GL_NO_ERROR();
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo, initialPadding * 4 * sizeof(float),
+                      4 * sizeof(float));
+    ASSERT_GL_NO_ERROR();
+
+    glUniformBlockBinding(program1, index, 0);
+    drawQuad(program1, essl3_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_NEAR(0, 0, 0, 255, 0, 255, 1);
+
+    // Draw with second uniform block
+    index = glGetUniformBlockIndex(program2, kUniformName);
+    EXPECT_NE(GL_INVALID_INDEX, index);
+    ASSERT_GL_NO_ERROR();
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo,
+                      (initialPadding + offsetAlignmentInVec4) * 4 * sizeof(float),
+                      4 * sizeof(float));
+    ASSERT_GL_NO_ERROR();
+
+    glUniformBlockBinding(program2, index, 0);
+    drawQuad(program2, essl3_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_NEAR(0, 0, 0, 255, 0, 255, 1);
 }
 
 class UniformBufferTest31 : public ANGLETest<>
