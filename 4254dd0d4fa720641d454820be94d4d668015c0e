@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ceeb654c_57c6f926",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2023-11-01T17:18:38Z",
+      "side": 1,
+      "message": "reviving this old cl\nseeing crashes in the wild now in crbug.com/1498447. I think we should make these string utils more robust to avoid the crashes",
+      "parentUuid": "0002a52c_b9cbb3d2",
+      "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "189d3bb5_f368726a",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 3
@@ -101,6 +119,24 @@
       "writtenOn": "2023-04-12T14:35:34Z",
       "side": 1,
       "message": "nit: why turn to std::string when a lot of users below operate on `const char *` only?",
+      "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d6be90e_4dbc1da7",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2023-11-01T17:18:38Z",
+      "side": 1,
+      "message": "changed this to be more minimal and return an empty cstr",
+      "parentUuid": "189d3bb5_f368726a",
       "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
