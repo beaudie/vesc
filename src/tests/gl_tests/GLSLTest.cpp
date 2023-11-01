@@ -16255,6 +16255,45 @@ void main() {
     ASSERT_GL_NO_ERROR();
 }
 
+// Test coverage of some matrix/scalar ops which Metal translation was missing.
+TEST_P(GLSLTest, MatrixScalarOps)
+{
+    constexpr char kFS[] = R"(precision highp float;
+uniform vec4 testUniform;
+void main() {
+    float scalar = testUniform.x;
+    mat3 matrix = mat3(vec3(1.0), vec3(1.0), vec3(1.0));
+
+    mat3 m0 = scalar / matrix;
+    mat3 m1 = scalar * matrix;
+    mat3 m2 = scalar + matrix;
+    mat3 m3 = scalar - matrix;
+
+    gl_FragColor = vec4(m0[0][0], m1[0][0], m2[0][0], m3[0][0]);
+}
+)";
+
+    ANGLE_GL_PROGRAM(testProgram, essl1_shaders::vs::Simple(), kFS);
+    ASSERT_GL_NO_ERROR();
+}
+
+// Test coverage of some matrix ops which Metal translation was missing.
+TEST_P(GLSLTest, MatrixNegate)
+{
+    constexpr char kFS[] = R"(precision highp float;
+void main() {
+    mat3 matrix = mat3(vec3(1.0), vec3(1.0), vec3(1.0));
+
+    mat3 m0 = -matrix;
+
+    gl_FragColor = vec4(m0[0][0], 0, 0, 1);
+}
+)";
+
+    ANGLE_GL_PROGRAM(testProgram, essl1_shaders::vs::Simple(), kFS);
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that aliasing function inout parameters work when more than one param is aliased.
 TEST_P(GLSLTest, AliasingFunctionInOutParamsMultiple)
 {
