@@ -3283,7 +3283,7 @@ LoadImageFunctionInfo RGB8_to_R8G8B8A8_UNORM(GLenum type)
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
-            return LoadImageFunctionInfo(LoadToNative3To4<GLubyte, 0xFF>, true);
+            return LoadImageFunctionInfo(LoadToNativeUbyte3To4<0xFF>, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
