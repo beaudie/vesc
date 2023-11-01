@@ -3213,8 +3213,20 @@ angle::Result TextureVk::syncState(const gl::Context *context,
          dirtyBits.test(gl::Texture::DIRTY_BIT_MAG_FILTER)))
     {
         const gl::SamplerState &samplerState = mState.getSamplerState();
-        ASSERT(samplerState.getMinFilter() == samplerState.getMagFilter());
-        if (mImage->updateChromaFilter(renderer, gl_vk::GetFilter(samplerState.getMinFilter())))
+
+        VkFilter vkFilter = gl_vk::GetFilter(samplerState.getMinFilter());
+        if (samplerState.getMinFilter() != samplerState.getMagFilter())
+        {
+            // App is using different min/mag filters, need to choose a chromafilter
+            // See https://issuetracker.google.com/246378938
+            vkFilter = renderer->getPreferredFilterForYUV(vkFilter);
+
+            WARN() << "GL min(" << samplerState.getMinFilter() << ") and mag("
+                   << samplerState.getMagFilter()
+                   << ") filters don't match, forcing the chromafilter to " << vkFilter;
+        }
+
+        if (mImage->updateChromaFilter(renderer, vkFilter))
         {
             resetSampler();
             ANGLE_TRY(refreshImageViews(contextVk));
