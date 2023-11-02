@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84e28192_c28920a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "there are a lot of tests testing the attributes.\npossible there is no all attributes merged case. \nwill add a test for all attributes merged then turn to mixed.",
+      "parentUuid": "e767d362_6569830d",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f7bba27_26dbd980",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 2
@@ -31,6 +49,30 @@
       "writtenOn": "2023-11-01T14:50:31Z",
       "side": 1,
       "message": "nit: please avoid `auto`. We only use those for complicated nested types (like `std::vector\u003cFoo\u003e::iterator`). In these cases, it helps readability a lot to know the type of the variable.",
+      "range": {
+        "startLine": 926,
+        "startChar": 10,
+        "endLine": 926,
+        "endChar": 14
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f05019f3_427e5769",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f7bba27_26dbd980",
       "range": {
         "startLine": 926,
         "startChar": 10,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5446c55_36b64262",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27f18fcb_a430e1df",
+      "range": {
+        "startLine": 930,
+        "startChar": 21,
+        "endLine": 930,
+        "endChar": 27
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38f7c5d8_04d12c74",
@@ -77,6 +143,30 @@
       "writtenOn": "2023-11-01T14:50:31Z",
       "side": 1,
       "message": "nit: we use `static_cast`. Please do that once in a temp variable above to avoid repeated casts.",
+      "range": {
+        "startLine": 947,
+        "startChar": 12,
+        "endLine": 947,
+        "endChar": 23
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47cc2f73_c954de17",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "for pointers static_cast seems not works. use reinterpret_cast.",
+      "parentUuid": "38f7c5d8_04d12c74",
       "range": {
         "startLine": 947,
         "startChar": 12,
@@ -104,6 +194,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc4963d6_11537cc4",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79542721_c89be80a",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a79e7cef_00f7c8a7",
@@ -117,6 +225,30 @@
       "writtenOn": "2023-11-01T14:50:31Z",
       "side": 1,
       "message": "nit: maybe call this `next`?",
+      "range": {
+        "startLine": 960,
+        "startChar": 13,
+        "endLine": 960,
+        "endChar": 15
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a4f030b_0d89514c",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a79e7cef_00f7c8a7",
       "range": {
         "startLine": 960,
         "startChar": 13,
@@ -144,6 +276,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "229be205_e628b549",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae589346_1076d9d1",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69f88b94_a25c3d85",
@@ -157,6 +307,24 @@
       "writtenOn": "2023-11-01T14:50:31Z",
       "side": 1,
       "message": "I think you can simplify things if you made `mergeRanges` indexed by `attribIndex`. I suggest the following:\n\n- Make `mergeRanges` be a `std::array\u003cRangeSpan, gl::MAX_VERTEX_ATTRIBS\u003e`\n- In `mergeClientAttribsRange`, write each attribute\u0027s range in element `attribIndex`.\n- Remove `it` here and in the for loop below say `const AttributeRange \u0026range \u003d mergeRanges[attribIndex]`",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f39524ed_285e66aa",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69f88b94_a25c3d85",
       "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -184,6 +352,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a3792f6_f1ddbc21",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "663657b8_4bf47189",
+      "range": {
+        "startLine": 28,
+        "startChar": 7,
+        "endLine": 28,
+        "endChar": 16
+      },
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bda96081_addc50ce",
@@ -197,6 +389,24 @@
       "writtenOn": "2023-11-01T14:50:31Z",
       "side": 1,
       "message": "nit: please document the meaning of these members",
+      "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06d522da_3ec6615d",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T01:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bda96081_addc50ce",
       "revId": "13158fc8e481d9a457eea75d91d352aefbd153a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
