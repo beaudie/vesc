@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4164f3f5_bcb29c00",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 18
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-11-02T23:23:24Z",
+      "side": 1,
+      "message": "I think this function should be changed to receive gl::MultisamplingMode from RenderBufferMtl::setStorageMultisample(). And we should only allocate single sampled texture if `mode \u003d\u003d gl::MultisamplingMode::MultisampledRenderToTexture`.\n\nOtherwise it is just a normal ES3 glRenderbufferStorageMultisample call and there is no point in allocating a resolve texture because a GL application cannot sample from a renderbuffer directly anw.",
+      "revId": "d7048377cb9331e8aabc2eec51083e7ba89cc253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
