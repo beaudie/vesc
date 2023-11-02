@@ -340,6 +340,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2b2b5459_1e27dd03",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-11-02T09:18:44Z",
+      "side": 1,
+      "message": "I think this is ok since GLSL bool will be true as long as the int representation is not zero AFAIK.\n\nBesides the test failed on mac at line 718 which uses the row major matrix not the bool flag.\n\nIt looks like this is a Mac\u0027s OpenGL driver bug wrt row major matrices http://anglebug.com/2273.\n\nOn Android, the failure was caused by the 2nd shader (with row major matrix) failing to be compiled. I saw this error log https://chromium-swarm.appspot.com/task?id\u003d65a7dcb968f5df11\u0026w\u003dtrue\n```\nshader compilation failed: Assertion failed: BitWidth \u003d\u003d RHS.BitWidth \u0026\u0026 \"Bit widths must be the same\"\n../../src/tests/gl_tests/UniformBufferTest.cpp:679: Failure\n```\nHowever, I don\u0027t see any obvious thing wrong in the shader.\n\nMaybe we should skip the test on Mac \u0026 Android with OpenGL backend.",
+      "parentUuid": "82f115c5_67012b03",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d96c66f9_b9679e38",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 1
