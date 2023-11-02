@@ -590,20 +590,26 @@ const char *ValidateProgramDrawAdvancedBlendState(const Context *context,
     const BlendEquationBitSet &supportedBlendEquations = executable.getAdvancedBlendEquations();
     const DrawBufferMask &enabledDrawBufferMask        = state.getBlendStateExt().getEnabledMask();
 
-    for (size_t blendEnabledBufferIndex : enabledDrawBufferMask)
+    // Zero (default) means everything is BlendEquationType::Add, so check can be skipped
+    if (state.getBlendStateExt().getEquationColorBits() != 0)
     {
-        const gl::BlendEquationType &enabledBlendEquation = gl::FromGLenum<gl::BlendEquationType>(
-            state.getBlendStateExt().getEquationColorIndexed(blendEnabledBufferIndex));
-
-        if (enabledBlendEquation < gl::BlendEquationType::Multiply ||
-            enabledBlendEquation > gl::BlendEquationType::HslLuminosity)
+        for (size_t blendEnabledBufferIndex : enabledDrawBufferMask)
         {
-            continue;
-        }
+            // getEquationColorIndexed but without conversion to/from GL enum
+            const gl::BlendEquationType &enabledBlendEquation =
+                gl::BlendStateExt::EquationStorage::GetValueIndexed(
+                    blendEnabledBufferIndex, state.getBlendStateExt().getEquationColorBits());
 
-        if (!supportedBlendEquations.test(enabledBlendEquation))
-        {
-            return gl::err::kBlendEquationNotEnabled;
+            if (enabledBlendEquation < gl::BlendEquationType::Multiply ||
+                enabledBlendEquation > gl::BlendEquationType::HslLuminosity)
+            {
+                continue;
+            }
+
+            if (!supportedBlendEquations.test(enabledBlendEquation))
+            {
+                return gl::err::kBlendEquationNotEnabled;
+            }
         }
     }
 
