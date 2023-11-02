@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a60532c3_164a0fc2",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-02T19:02:58Z",
+      "side": 1,
+      "message": "Looking at where `getEquationColorIndexed` is used, most of the code would benefit from getting the ANGLE enum instead of the GL enum out of that function.\n\nInstead of this, I highly recommend changing the return value of `getEquationColorIndexed` to be the ANGLE enum, and adjust the call sites accordingly. In a couple places, their GL enum based `switch`es can become ANGLE enum based. In other places you can call the ToGL call explicitly.",
+      "revId": "c1d5cfe1b74836b8669feb8ab7e42f50e6978f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
