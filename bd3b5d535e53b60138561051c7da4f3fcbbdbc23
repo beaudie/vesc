@@ -382,6 +382,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0699b3ed_3142010d",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-11-02T21:59:53Z",
+      "side": 1,
+      "message": "Good points Quyen. Dan, could you consider getting rid of the row_major attribute to bypass these bugs? They don\u0027t seem that essential for testing the problem you\u0027re fixing.",
+      "parentUuid": "2b2b5459_1e27dd03",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d96c66f9_b9679e38",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 1
