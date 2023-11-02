@@ -16,6 +16,24 @@
       "message": "Looking at where `getEquationColorIndexed` is used, most of the code would benefit from getting the ANGLE enum instead of the GL enum out of that function.\n\nInstead of this, I highly recommend changing the return value of `getEquationColorIndexed` to be the ANGLE enum, and adjust the call sites accordingly. In a couple places, their GL enum based `switch`es can become ANGLE enum based. In other places you can call the ToGL call explicitly.",
       "revId": "c1d5cfe1b74836b8669feb8ab7e42f50e6978f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c02f470_8b3e4e31",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-11-02T19:07:41Z",
+      "side": 1,
+      "message": "SG. However are you suggesting we update all of these? (otherwise we lose consistency)\n\n```\nGLenum BlendStateExt::getEquationColorIndexed(size_t index) const\n{\n    ASSERT(index \u003c mDrawBufferCount);\n    return ToGLenum(EquationStorage::GetValueIndexed(index, mEquationColor));\n}\n\nGLenum BlendStateExt::getEquationAlphaIndexed(size_t index) const\n{\n    ASSERT(index \u003c mDrawBufferCount);\n    return ToGLenum(EquationStorage::GetValueIndexed(index, mEquationAlpha));\n}\n\nGLenum BlendStateExt::getSrcColorIndexed(size_t index) const\n{\n    ASSERT(index \u003c mDrawBufferCount);\n    return ToGLenum(FactorStorage::GetValueIndexed(index, mSrcColor));\n}\n\nGLenum BlendStateExt::getDstColorIndexed(size_t index) const\n{\n    ASSERT(index \u003c mDrawBufferCount);\n    return ToGLenum(FactorStorage::GetValueIndexed(index, mDstColor));\n}\n\nGLenum BlendStateExt::getSrcAlphaIndexed(size_t index) const\n{\n    ASSERT(index \u003c mDrawBufferCount);\n    return ToGLenum(FactorStorage::GetValueIndexed(index, mSrcAlpha));\n}\n\nGLenum BlendStateExt::getDstAlphaIndexed(size_t index) const\n{\n    ASSERT(index \u003c mDrawBufferCount);\n    return ToGLenum(FactorStorage::GetValueIndexed(index, mDstAlpha));\n}\n```",
+      "parentUuid": "a60532c3_164a0fc2",
+      "revId": "c1d5cfe1b74836b8669feb8ab7e42f50e6978f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
