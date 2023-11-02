@@ -22,6 +22,7 @@ namespace sh
 const char ESSLVersion100[] = "#version 100\n";
 const char ESSLVersion300[] = "#version 300 es\n";
 const char ESSLVersion310[] = "#version 310 es\n";
+const char ESSLVersion320[] = "#version 320 es\n";
 
 class ShaderExtensionTest
     : public testing::TestWithParam<testing::tuple<ShShaderSpec, const char *, const char *>>

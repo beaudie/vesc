@@ -396,6 +396,55 @@ INSTANTIATE_TEST_SUITE_P(CorrectESSL300Shaders,
                                         ESSL300_BuiltInFunctionsNested4Shader,
                                         ESSL300_BuiltInFunctionsPrecisionShader)));
 
+const char ESSL320_Yuv2Rgb[] =
+    R"(
+// This shader directly converts YUV to RGB.
+//
+// All numbers are interpreted as floats in the shader and the
+// output will be converted to whatever the destination buffer's format is.
+#extension GL_EXT_YUV_target : enable
+
+precision highp float;
+
+// binding: what texture unit the sampler goes into by default.
+layout(binding = 0) uniform highp __samplerExternal2DY2YEXT uInputYuv;
+
+layout(location = 0) in vec2 vTexCoord;
+layout(location = 0) out vec3 color_out;
+
+void main() {
+vec3 src_yuv = texture(uInputYuv, vTexCoord).xyz;
+ color_out = yuv_2_rgb(src_yuv, itu_601_full_range);
+    })";
+
+class EXTYUVTargetCameraShadersCompileSuccessTest : public EXTYUVTargetTest
+{};
+
+// Test that shaders used by camera works on Vulkan
+TEST_P(EXTYUVTargetCameraShadersCompileSuccessTest, CompileSucceeds)
+{
+    // Expect compile success.
+    mResources.EXT_YUV_target = 1;
+    InitializeCompiler();
+    EXPECT_TRUE(TestShaderCompile(EXTYTPragma));
+}
+
+#ifdef ANGLE_ENABLE_VULKAN
+// Test that YUV built-in emulation works on Vulkan
+TEST_P(EXTYUVTargetCameraShadersCompileSuccessTest, CompileSucceedsWithExtensionAndPragmaOnVulkan)
+{
+    mResources.EXT_YUV_target = 1;
+    InitializeCompiler(SH_SPIRV_VULKAN_OUTPUT);
+    EXPECT_TRUE(TestShaderCompile(EXTYTPragma));
+}
+#endif
+
+INSTANTIATE_TEST_SUITE_P(CorrectESSL320Shaders,
+                         EXTYUVTargetCameraShadersCompileSuccessTest,
+                         Combine(Values(SH_GLES3_2_SPEC),
+                                 Values(sh::ESSLVersion320),
+                                 Values(ESSL320_Yuv2Rgb)));
+
 class EXTYUVTargetCompileFailureTest : public EXTYUVTargetTest
 {};
 
