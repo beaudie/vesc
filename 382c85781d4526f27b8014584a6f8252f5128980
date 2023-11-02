@@ -22,6 +22,30 @@
       },
       "revId": "382c85781d4526f27b8014584a6f8252f5128980",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "746749a9_0c70cc1f",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T21:06:00Z",
+      "side": 1,
+      "message": "it seems there are some tests will be failed. but i can not remember what is the reason. will retry to see.",
+      "parentUuid": "365e7517_cb4d43e3",
+      "range": {
+        "startLine": 876,
+        "startChar": 12,
+        "endLine": 879,
+        "endChar": 85
+      },
+      "revId": "382c85781d4526f27b8014584a6f8252f5128980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
