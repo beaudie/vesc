@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74def4e6_89f9bbf0",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 16277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-02T15:33:49Z",
+      "side": 1,
+      "message": "If you add a basic draw/readback test, it\u0027ll help catch more bugs",
+      "revId": "44dc2a742d3d2152782ead68e532cb62a957422f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
