@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d17614_cddf6bf0",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T20:53:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b73c3fe_d37b0695",
+      "range": {
+        "startLine": 924,
+        "startChar": 56,
+        "endLine": 924,
+        "endChar": 67
+      },
+      "revId": "45ec9dadb1d2dac31b5021fb6e01fab06a7bf9ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a7ba33b_d8b9d79c",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4797aaa7_f9500946",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T20:53:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a7ba33b_d8b9d79c",
+      "range": {
+        "startLine": 992,
+        "startChar": 0,
+        "endLine": 997,
+        "endChar": 63
+      },
+      "revId": "45ec9dadb1d2dac31b5021fb6e01fab06a7bf9ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b84ce56_9a1d8ea1",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-11-02T14:53:33Z",
       "side": 1,
       "message": "nit: as much as I dislike it, we don\u0027t use `_` in the names like this. Maybe just call the parameters `start`/`end`/`copyStart` (and please remove index, it\u0027s unused now).",
+      "range": {
+        "startLine": 38,
+        "startChar": 29,
+        "endLine": 38,
+        "endChar": 39
+      },
+      "revId": "45ec9dadb1d2dac31b5021fb6e01fab06a7bf9ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a25312d4_f19dd5ba",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T20:53:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b84ce56_9a1d8ea1",
       "range": {
         "startLine": 38,
         "startChar": 29,
