@@ -22,27 +22,33 @@ class ShCompilerInstance;
 
 namespace rx
 {
-
-using UpdateShaderStateFunctor = std::function<void(bool compiled, ShHandle handle)>;
-class WaitableCompileEvent : public angle::WaitableEvent
+// The compile task is generally just a call to the translator.  However, different backends behave
+// differently afterwards:
+//
+// - The Vulkan backend which generates binary (i.e. SPIR-V), does nothing more
+// - The backends that generate text (HLSL and MSL), do nothing at this stage, but modify the text
+//   at link time before invoking the native compiler.  These expensive calls are handled in link
+//   sub-tasks (see LinkSubTask in ProgramImpl.h).
+// - The GL backend needs to invoke the native driver, which is problematic when done in another
+//   thread (and is avoided).
+//
+// The call to the translator can thus be done in a separate thread or without holding the share
+// group lock on all backends except GL.  On the GL backend, the translator call is done on the main
+// thread followed by a call to the native driver.  If the driver supports
+// GL_KHR_parallel_shader_compile, ANGLE still delays post-processing of the results to when
+// compilation is done (just as if it was ANGLE itself that was doing the compilation in a thread).
+class ShaderTranslateTask
 {
-  public:
-    WaitableCompileEvent(std::shared_ptr<angle::WaitableEvent> waitableEvent);
-    ~WaitableCompileEvent() override;
+public:
+    virtual ~ShaderTranslateTask() = default;
+    virtual angle::Result translate(ShHandle compiler, const ShCompileOptions &options,
+            const std::string &source) = 0; // TODO
+    virtual angle::Result getResult(const gl::Context *context, gl::InfoLog &infoLog) = 0; // TODO: only needed for GL, right?
 
-    void wait() override;
-
-    bool isReady() override;
-
-    virtual bool getResult() = 0;
-
-    virtual bool postTranslate(std::string *infoLog) = 0;
-
-    const std::string &getInfoLog();
-
-  protected:
-    std::shared_ptr<angle::WaitableEvent> mWaitableEvent;
-    std::string mInfoLog;
+    // Used by the GL backend to kick off compilation internally.
+    virtual void compileTranslated(ShHandle compiler) {}
+    // Used by the GL backend to query whether the driver is compiling in parallel internally.
+    virtual bool isCompilingInternally();
 };
 
 class ShaderImpl : angle::NonCopyable
@@ -53,9 +59,8 @@ class ShaderImpl : angle::NonCopyable
 
     virtual void destroy() {}
 
-    virtual std::shared_ptr<WaitableCompileEvent> compile(const gl::Context *context,
-                                                          gl::ShCompilerInstance *compilerInstance,
-                                                          ShCompileOptions *options) = 0;
+    virtual std::shared_ptr<ShaderTranslateTask> compile(const gl::Context *context,
+                                                         ShCompileOptions *options) = 0;
 
     virtual std::string getDebugInfo() const = 0;
 

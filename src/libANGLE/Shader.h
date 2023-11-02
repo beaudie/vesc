@@ -47,7 +47,6 @@ class WorkerThreadPool;
 
 namespace gl
 {
-class CompileTask;
 class Context;
 class ShaderProgramManager;
 class State;
@@ -161,12 +160,6 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     const ShaderState &getState() const { return mState; }
 
-    GLuint getCurrentMaxComputeWorkGroupInvocations() const
-    {
-        return mCurrentMaxComputeWorkGroupInvocations;
-    }
-
-    unsigned int getMaxComputeSharedMemory() const { return mMaxComputeSharedMemory; }
     bool hasBeenDeleted() const { return mDeleteStatus; }
 
     // Block until compiling is finished and resolve it.
@@ -189,8 +182,11 @@ class Shader final : angle::NonCopyable, public LabeledObject
     }
 
   private:
-    struct CompilingState;
+    class CompileTask;
+    class CompileEvent;
+    friend class CompileTask;
 
+    struct CompilingState;
     ~Shader() override;
     static std::string joinShaderSources(GLsizei count,
                                          const char *const *string,
@@ -224,9 +220,6 @@ class Shader final : angle::NonCopyable, public LabeledObject
     egl::BlobCache::Key mShaderHash;
 
     ShaderProgramManager *mResourceManager;
-
-    GLuint mCurrentMaxComputeWorkGroupInvocations;
-    unsigned int mMaxComputeSharedMemory;
 };
 
 const char *GetShaderTypeString(ShaderType type);

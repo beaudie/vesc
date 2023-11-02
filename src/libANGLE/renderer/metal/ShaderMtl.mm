@@ -63,13 +63,13 @@ class MTLWaitableCompileEventImpl final : public WaitableCompileEvent
     bool postTranslate(std::string *infoLog) override
     {
         sh::TShHandleBase *base    = static_cast<sh::TShHandleBase *>(mTranslateTask->getHandle());
-        auto translatorMetalDirect = base->getAsTranslatorMSL();
-        if (translatorMetalDirect != nullptr)
+        sh::TranslatorMSL *translatorMSL = base->getAsTranslatorMSL();
+        if (translatorMSL != nullptr)
         {
             // Copy reflection from translation.
             mShader->translatorMetalReflection =
-                *(translatorMetalDirect->getTranslatorMetalReflection());
-            translatorMetalDirect->getTranslatorMetalReflection()->reset();
+                *(translatorMSL->getTranslatorMetalReflection());
+            translatorMSL->getTranslatorMetalReflection()->reset();
         }
         return true;
     }
