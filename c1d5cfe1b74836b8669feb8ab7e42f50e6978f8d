@@ -34,6 +34,24 @@
       "parentUuid": "a60532c3_164a0fc2",
       "revId": "c1d5cfe1b74836b8669feb8ab7e42f50e6978f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de5f38eb_5919d05b",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-02T19:29:48Z",
+      "side": 1,
+      "message": "Right, would be good to update all of them. You could probably use `sed` to fix most cases to shift the `ToGLenum` to the call site, at least as an initial CL.\n\nIf it were me, I\u0027d probably go over all the call sites manually and convert everything to ANGLE enums. It can be a big job, but it would improve the code.",
+      "parentUuid": "9c02f470_8b3e4e31",
+      "revId": "c1d5cfe1b74836b8669feb8ab7e42f50e6978f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
