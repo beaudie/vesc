@@ -46,6 +46,30 @@
       },
       "revId": "382c85781d4526f27b8014584a6f8252f5128980",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "916b323a_2f232304",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-11-02T21:25:49Z",
+      "side": 1,
+      "message": "the fail is due to when create graphics pipeline it will use this.\nwhile when no dynamic state support it will be problem. \n\nsee AttributeLayoutBufferIndexed.Test/ES3_Vulkan_NoSupportsExtendedDynamicState_NoSupportsExtendedDynamicState2",
+      "parentUuid": "746749a9_0c70cc1f",
+      "range": {
+        "startLine": 876,
+        "startChar": 12,
+        "endLine": 879,
+        "endChar": 85
+      },
+      "revId": "382c85781d4526f27b8014584a6f8252f5128980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
