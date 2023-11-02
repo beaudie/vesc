@@ -116,6 +116,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1950ec8_41519797",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "de454306_add7fab3",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c87047e8_6c5bcdff",
@@ -129,6 +147,24 @@
       "writtenOn": "2023-11-01T22:51:56Z",
       "side": 1,
       "message": "UBOs -\u003e uniform blocks\n\n\"buffer\" could be \"UBO\" for more clarity.\n\n(UBO \u003d\u003d Uniform Buffer Object, not the same thing as a uniform block)",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a77c9db7_09dc4a3c",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c87047e8_6c5bcdff",
       "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -156,6 +192,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88fa7c58_b7d81a4a",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "That was the name from the original source code I derived the test from. Replaced with uni to match the rest of the test.",
+      "parentUuid": "59481ec7_ecb12427",
+      "range": {
+        "startLine": 613,
+        "startChar": 37,
+        "endLine": 613,
+        "endChar": 46
+      },
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7d8fbf6_95f990f6",
@@ -169,6 +229,24 @@
       "writtenOn": "2023-11-01T23:10:20Z",
       "side": 1,
       "message": "Could you please assert that `offsetAlignmentInBytes` is divisible by 16?",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cdcf900_5c06820d",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c7d8fbf6_95f990f6",
       "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -190,6 +268,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f66c70e7_8b63b783",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4c6e9280_1455b478",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f94d40bf_ab0b2e52",
@@ -203,6 +299,24 @@
       "writtenOn": "2023-11-01T22:51:56Z",
       "side": 1,
       "message": "UBO -\u003e uniform block",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2482284e_ad41b743",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f94d40bf_ab0b2e52",
       "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -260,6 +374,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3aea0f5c_16241d4e",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "If the padding is wrong, I\u0027d expect glBindBufferRange to fail and ASSERT_GL_NO_ERROR to catch it.",
+      "parentUuid": "bc94bd87_31a63820",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5e62e65_691527d0",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 1
@@ -271,6 +403,24 @@
       "writtenOn": "2023-11-01T22:51:56Z",
       "side": 1,
       "message": "UBO -\u003e uniform block",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03fb4cd5_6d22fe9c",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d5e62e65_691527d0",
       "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -292,6 +442,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab785dd2_8b002dad",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "This matrix was some random data which I tried to pull out correct elements to make green. I\u0027ve replaced the test with logic to test the correct layout of a row-major matrix from GLSLTest.cpp to see if that works correctly.",
+      "parentUuid": "24413637_a8f45ce7",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7864c095_116a76cd",
@@ -305,6 +473,24 @@
       "writtenOn": "2023-11-01T22:51:56Z",
       "side": 1,
       "message": "UBOs -\u003e uniform blocks\n\nOptionally: Buffer -\u003e UBO",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33d11f66_6f5702dd",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7864c095_116a76cd",
       "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -326,6 +512,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ca2b5e6_0c8a0977",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "32da7800_d969f2d1",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc5ad268_0849697b",
@@ -339,6 +543,24 @@
       "writtenOn": "2023-11-01T22:51:56Z",
       "side": 1,
       "message": "UBO -\u003e uniform block",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "326bdf8b_98360af6",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-02T04:15:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fc5ad268_0849697b",
       "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
