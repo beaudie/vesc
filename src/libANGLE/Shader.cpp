@@ -28,6 +28,7 @@
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/ShaderImpl.h"
+#include "libANGLE/trace.h"
 #include "platform/autogen/FrontendFeatures_autogen.h"
 
 namespace gl
@@ -111,21 +112,233 @@ std::string GetShaderDumpFileName(size_t shaderHash)
     return name.str();
 }
 
-class [[nodiscard]] ScopedExit final : angle::NonCopyable
+class Shader::CompileTask final : public angle::Closure
 {
   public:
-    ScopedExit(std::function<void()> exit) : mExit(exit) {}
-    ~ScopedExit() { mExit(); }
+    CompileTask(const angle::FrontendFeatures &frontendFeatures,
+                ShHandle compilerHandle,
+                ShShaderOutput outputType,
+                const ShCompileOptions &options,
+                const std::string &source,
+                size_t sourceHash,
+                const SharedCompiledShaderState &compiledState,
+                size_t maxComputeWorkGroupInvocations,
+                size_t maxComputeSharedMemory,
+                std::shared_ptr<rx::ShaderTranslateTask> &&translateTask)
+        : mFrontendFeatures(frontendFeatures),
+          mMaxComputeWorkGroupInvocations(maxComputeWorkGroupInvocations),
+          mMaxComputeSharedMemory(maxComputeSharedMemory),
+          mCompilerHandle(compilerHandle),
+          mOutputType(outputType),
+          mOptions(options),
+          mSource(source),
+          mSourceHash(sourceHash),
+          mCompiledState(compiledState),
+          mTranslateTask(std::move(translateTask))
+    {}
+    ~CompileTask() override = default;
+
+    void operator()() override { mResult = compileImpl(); }
+
+    angle::Result getResult()
+    {
+        ANGLE_TRY(mResult);
+        ANGLE_TRY(mTranslateTask->getResult(mCompilerHandle, *mCompiledState.get(), mInfoLog));
+
+        return angle::Result::Continue;
+    }
+
+    bool isCompilingInternally() { return mTranslateTask->isCompilingInternally(); }
+
+    std::string &&getInfoLog() { return std::move(mInfoLog); }
 
   private:
-    std::function<void()> mExit;
+    angle::Result compileImpl();
+    angle::Result postTranslate();
+
+    // Global constants that are safe to access by the worker thread
+    const angle::FrontendFeatures &mFrontendFeatures;
+    size_t mMaxComputeWorkGroupInvocations;
+    size_t mMaxComputeSharedMemory;
+
+    // Access to the compile information which are unchanged for the duration of compilation (for
+    // example shader source which cannot be changed until compilation is finished) or are kept
+    // alive (for example the compiler instance in CompilingState)
+    ShHandle mCompilerHandle;
+    ShShaderOutput mOutputType;
+    ShCompileOptions mOptions;
+    const std::string mSource;
+    size_t mSourceHash;
+    SharedCompiledShaderState mCompiledState;
+
+    std::shared_ptr<rx::ShaderTranslateTask> mTranslateTask;
+    angle::Result mResult;
+    std::string mInfoLog;
+};
+
+class Shader::CompileEvent final
+{
+  public:
+    CompileEvent(const std::shared_ptr<CompileTask> &compileTask,
+                 const std::shared_ptr<angle::WaitableEvent> &waitEvent)
+        : mCompileTask(compileTask), mWaitableEvent(waitEvent)
+    {}
+    ~CompileEvent() = default;
+
+    angle::Result wait()
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "Shader::CompileEvent::wait");
+
+        mWaitableEvent->wait();
+
+        return mCompileTask->getResult();
+    }
+    bool isCompiling()
+    {
+        return !mWaitableEvent->isReady() || mCompileTask->isCompilingInternally();
+    }
+
+    std::string &&getInfoLog() { return std::move(mCompileTask->getInfoLog()); }
+
+  private:
+    std::shared_ptr<CompileTask> mCompileTask;
+    std::shared_ptr<angle::WaitableEvent> mWaitableEvent;
 };
 
 struct Shader::CompilingState
 {
-    std::shared_ptr<rx::WaitableCompileEvent> compileEvent;
+    std::unique_ptr<CompileEvent> compileEvent;
     ShCompilerInstance shCompilerInstance;
 };
+
+angle::Result Shader::CompileTask::compileImpl()
+{
+    // Call the translator and get the info log
+    bool result = mTranslateTask->translate(mCompilerHandle, mOptions, mSource);
+    mInfoLog    = sh::GetInfoLog(mCompilerHandle);
+    if (!result)
+    {
+        return angle::Result::Stop;
+    }
+
+    // Process the translation results itself; gather compilation info, substitute the shader if
+    // being overriden, etc.
+    ANGLE_TRY(postTranslate());
+
+    // For the GL backend, ensure the driver starts compilation now that translation has succeeded.
+    mTranslateTask->compileTranslated(*mCompiledState.get());
+    return angle::Result::Continue;
+}
+
+angle::Result Shader::CompileTask::postTranslate()
+{
+    const bool isBinaryOutput = mOutputType == SH_SPIRV_VULKAN_OUTPUT;
+    mCompiledState->buildCompiledShaderState(mCompilerHandle, isBinaryOutput);
+
+    ASSERT(!mCompiledState->translatedSource.empty() || !mCompiledState->compiledBinary.empty());
+
+    // Validation checks for compute shaders
+    if (mCompiledState->shaderType == ShaderType::Compute && mCompiledState->localSize.isDeclared())
+    {
+        angle::CheckedNumeric<size_t> checked_local_size_product(mCompiledState->localSize[0]);
+        checked_local_size_product *= mCompiledState->localSize[1];
+        checked_local_size_product *= mCompiledState->localSize[2];
+
+        if (!checked_local_size_product.IsValid() ||
+            checked_local_size_product.ValueOrDie() > mMaxComputeWorkGroupInvocations)
+        {
+            mInfoLog +=
+                "\nThe total number of invocations within a work group exceeds "
+                "MAX_COMPUTE_WORK_GROUP_INVOCATIONS.";
+            return angle::Result::Stop;
+        }
+    }
+
+    unsigned int sharedMemSize = sh::GetShaderSharedMemorySize(mCompilerHandle);
+    if (sharedMemSize > mMaxComputeSharedMemory)
+    {
+        mInfoLog += "\nShared memory size exceeds GL_MAX_COMPUTE_SHARED_MEMORY_SIZE";
+        return angle::Result::Stop;
+    }
+
+    bool substitutedTranslatedShader = false;
+    const char *suffix               = "translated";
+    if (mFrontendFeatures.enableTranslatedShaderSubstitution.enabled)
+    {
+        // To support reading/writing compiled binaries (SPIR-V representation), need more file
+        // input/output facilities, and figure out the byte ordering of writing the 32-bit words to
+        // disk.
+        if (isBinaryOutput)
+        {
+            INFO() << "Can not substitute compiled binary (SPIR-V) shaders yet";
+        }
+        else
+        {
+            std::string substituteShaderPath = GetShaderDumpFilePath(mSourceHash, suffix);
+
+            std::string substituteShader;
+            if (angle::ReadFileToString(substituteShaderPath, &substituteShader))
+            {
+                mCompiledState->translatedSource = std::move(substituteShader);
+                substitutedTranslatedShader      = true;
+                INFO() << "Translated shader substitute found, loading from "
+                       << substituteShaderPath;
+            }
+        }
+    }
+
+    // Only dump translated shaders that have not been previously substituted. It would write the
+    // same data back to the file.
+    if (mFrontendFeatures.dumpTranslatedShaders.enabled && !substitutedTranslatedShader)
+    {
+        if (isBinaryOutput)
+        {
+            INFO() << "Can not dump compiled binary (SPIR-V) shaders yet";
+        }
+        else
+        {
+            std::string dumpFile = GetShaderDumpFilePath(mSourceHash, suffix);
+
+            const std::string &translatedSource = mCompiledState->translatedSource;
+            writeFile(dumpFile.c_str(), translatedSource.c_str(), translatedSource.length());
+            INFO() << "Dumped translated source: " << dumpFile;
+        }
+    }
+
+#if defined(ANGLE_ENABLE_ASSERTS)
+    if (!isBinaryOutput)
+    {
+        // Prefix translated shader with commented out un-translated shader.
+        // Useful in diagnostics tools which capture the shader source.
+        std::ostringstream shaderStream;
+        shaderStream << "// GLSL\n";
+        shaderStream << "//\n";
+
+        std::istringstream inputSourceStream(mSource);
+        std::string line;
+        while (std::getline(inputSourceStream, line))
+        {
+            // Remove null characters from the source line
+            line.erase(std::remove(line.begin(), line.end(), '\0'), line.end());
+
+            shaderStream << "// " << line;
+
+            // glslang complains if a comment ends with backslash
+            if (!line.empty() && line.back() == '\\')
+            {
+                shaderStream << "\\";
+            }
+
+            shaderStream << std::endl;
+        }
+        shaderStream << "\n\n";
+        shaderStream << mCompiledState->translatedSource;
+        mCompiledState->translatedSource = shaderStream.str();
+    }
+#endif  // defined(ANGLE_ENABLE_ASSERTS)
+
+    return angle::Result::Continue;
+}
 
 ShaderState::ShaderState(ShaderType shaderType)
     : mCompiledState(std::make_shared<CompiledShaderState>(shaderType))
@@ -144,9 +357,7 @@ Shader::Shader(ShaderProgramManager *manager,
       mHandle(handle),
       mRefCount(0),
       mDeleteStatus(false),
-      mResourceManager(manager),
-      mCurrentMaxComputeWorkGroupInvocations(0u),
-      mMaxComputeSharedMemory(0u)
+      mResourceManager(manager)
 {
     ASSERT(mImplementation);
 }
@@ -392,9 +603,11 @@ void Shader::compile(const Context *context)
 
     mInfoLog.clear();
 
+#if 0
     mCurrentMaxComputeWorkGroupInvocations =
         static_cast<GLuint>(context->getCaps().maxComputeWorkGroupInvocations);
     mMaxComputeSharedMemory = context->getCaps().maxComputeSharedMemorySize;
+#endif
 
     ShCompileOptions options = {};
     options.objectCode       = true;
@@ -431,6 +644,10 @@ void Shader::compile(const Context *context)
         options.initializeUninitializedLocals = true;
     }
 
+#if defined(ANGLE_ENABLE_ASSERTS)
+    options.validateAST = true;
+#endif
+
     mBoundCompiler.set(context, context->getCompiler());
 
     ASSERT(mBoundCompiler.get());
@@ -457,10 +674,37 @@ void Shader::compile(const Context *context)
 
     // Cache load failed, fall through normal compiling.
     mState.mCompileStatus = CompileStatus::COMPILE_REQUESTED;
-    mCompilingState.reset(new CompilingState());
+
+    // Ask the backend to prepare the translate task
+    std::shared_ptr<rx::ShaderTranslateTask> translateTask =
+        mImplementation->compile(context, &options);
+
+    // Prepare the complete compile task
+    const size_t maxComputeWorkGroupInvocations =
+        static_cast<size_t>(context->getCaps().maxComputeWorkGroupInvocations);
+    const size_t maxComputeSharedMemory = context->getCaps().maxComputeSharedMemorySize;
+
+    std::shared_ptr<CompileTask> compileTask(
+        new CompileTask(context->getFrontendFeatures(), compilerInstance.getHandle(),
+                        compilerInstance.getShaderOutputType(), options, mState.mSource,
+                        mState.mSourceHash, mState.mCompiledState, maxComputeWorkGroupInvocations,
+                        maxComputeSharedMemory, std::move(translateTask)));
+
+    // The GL backend relies on the driver's internal parallel compilation, and thus does not use a
+    // thread to compile.  A front-end feature selects whether the single-threaded pool must be
+    // used.
+    std::shared_ptr<angle::WorkerThreadPool> compileWorkerPool =
+        context->getFrontendFeatures().compileJobIsThreadSafe.enabled
+            ? context->getShaderCompileThreadPool()
+            : context->getSingleThreadPool();
+
+    // TODO: add the possibility to perform this in an unlocked tail call.  http://anglebug.com/8297
+    std::shared_ptr<angle::WaitableEvent> compileEvent =
+        compileWorkerPool->postWorkerTask(compileTask);
+
+    mCompilingState                     = std::make_unique<CompilingState>();
     mCompilingState->shCompilerInstance = std::move(compilerInstance);
-    mCompilingState->compileEvent =
-        mImplementation->compile(context, &(mCompilingState->shCompilerInstance), &options);
+    mCompilingState->compileEvent       = std::make_unique<CompileEvent>(compileTask, compileEvent);
 }
 
 void Shader::resolveCompile(const Context *context)
@@ -473,160 +717,30 @@ void Shader::resolveCompile(const Context *context)
     ASSERT(mCompilingState.get());
     mState.mCompileStatus = CompileStatus::IS_RESOLVING;
 
-    mCompilingState->compileEvent->wait();
+    angle::Result result = mCompilingState->compileEvent->wait();
+    mInfoLog             = std::move(mCompilingState->compileEvent->getInfoLog());
 
-    mInfoLog += mCompilingState->compileEvent->getInfoLog();
-
-    ScopedExit exit([this]() {
-        mBoundCompiler->putInstance(std::move(mCompilingState->shCompilerInstance));
-        mCompilingState->compileEvent.reset();
-        mCompilingState.reset();
-    });
-
-    ShHandle compilerHandle = mCompilingState->shCompilerInstance.getHandle();
-    if (!mCompilingState->compileEvent->getResult())
-    {
-        mInfoLog += sh::GetInfoLog(compilerHandle);
-        INFO() << std::endl << mInfoLog;
-        mState.mCompileStatus = CompileStatus::NOT_COMPILED;
-        return;
-    }
-
-    const ShShaderOutput outputType = mCompilingState->shCompilerInstance.getShaderOutputType();
-    bool isBinaryOutput             = outputType == SH_SPIRV_VULKAN_OUTPUT;
-    mState.mCompiledState->buildCompiledShaderState(compilerHandle, isBinaryOutput);
-
-    const angle::FrontendFeatures &frontendFeatures = context->getFrontendFeatures();
-    bool substitutedTranslatedShader                = false;
-    const char *suffix                              = "translated";
-    if (frontendFeatures.enableTranslatedShaderSubstitution.enabled)
-    {
-        // To support reading/writing compiled binaries (SPIR-V
-        // representation), need more file input/output facilities,
-        // and figure out the byte ordering of writing the 32-bit
-        // words to disk.
-        if (isBinaryOutput)
-        {
-            INFO() << "Can not substitute compiled binary (SPIR-V) shaders yet";
-        }
-        else
-        {
-            std::string substituteShaderPath = GetShaderDumpFilePath(mState.mSourceHash, suffix);
-
-            std::string substituteShader;
-            if (angle::ReadFileToString(substituteShaderPath, &substituteShader))
-            {
-                mState.mCompiledState->translatedSource = std::move(substituteShader);
-                substitutedTranslatedShader             = true;
-                INFO() << "Trasnslated shader substitute found, loading from "
-                       << substituteShaderPath;
-            }
-        }
-    }
-
-    // Only dump translated shaders that have not been previously substituted. It would write the
-    // same data back to the file.
-    if (frontendFeatures.dumpTranslatedShaders.enabled && !substitutedTranslatedShader)
-    {
-        if (isBinaryOutput)
-        {
-            INFO() << "Can not dump compiled binary (SPIR-V) shaders yet";
-        }
-        else
-        {
-            std::string dumpFile = GetShaderDumpFilePath(mState.mSourceHash, suffix);
-
-            const std::string &translatedSource = mState.mCompiledState->translatedSource;
-            writeFile(dumpFile.c_str(), translatedSource.c_str(), translatedSource.length());
-            INFO() << "Dumped translated source: " << dumpFile;
-        }
-    }
-
-#if !defined(NDEBUG)
-    if (outputType != SH_SPIRV_VULKAN_OUTPUT)
-    {
-        // Prefix translated shader with commented out un-translated shader.
-        // Useful in diagnostics tools which capture the shader source.
-        std::ostringstream shaderStream;
-        shaderStream << "// GLSL\n";
-        shaderStream << "//\n";
-
-        std::istringstream inputSourceStream(mState.mSource);
-        std::string line;
-        while (std::getline(inputSourceStream, line))
-        {
-            // Remove null characters from the source line
-            line.erase(std::remove(line.begin(), line.end(), '\0'), line.end());
-
-            shaderStream << "// " << line;
-
-            // glslang complains if a comment ends with backslash
-            if (!line.empty() && line.back() == '\\')
-            {
-                shaderStream << "\\";
-            }
-
-            shaderStream << std::endl;
-        }
-        shaderStream << "\n\n";
-        shaderStream << mState.mCompiledState->translatedSource;
-        mState.mCompiledState->translatedSource = shaderStream.str();
-    }
-#endif  // !defined(NDEBUG)
-
-    // Validation checks for compute shaders
-    if (mState.mCompiledState->shaderType == ShaderType::Compute &&
-        mState.mCompiledState->localSize.isDeclared())
-    {
-        angle::CheckedNumeric<uint32_t> checked_local_size_product(
-            mState.mCompiledState->localSize[0]);
-        checked_local_size_product *= mState.mCompiledState->localSize[1];
-        checked_local_size_product *= mState.mCompiledState->localSize[2];
-
-        if (!checked_local_size_product.IsValid())
-        {
-            WARN() << std::endl
-                   << "Integer overflow when computing the product of local_size_x, "
-                   << "local_size_y and local_size_z.";
-            mState.mCompileStatus = CompileStatus::NOT_COMPILED;
-            return;
-        }
-        if (checked_local_size_product.ValueOrDie() > mCurrentMaxComputeWorkGroupInvocations)
-        {
-            WARN() << std::endl
-                   << "The total number of invocations within a work group exceeds "
-                   << "MAX_COMPUTE_WORK_GROUP_INVOCATIONS.";
-            mState.mCompileStatus = CompileStatus::NOT_COMPILED;
-            return;
-        }
-    }
-
-    unsigned int sharedMemSize = sh::GetShaderSharedMemorySize(compilerHandle);
-    if (sharedMemSize > mMaxComputeSharedMemory)
-    {
-        WARN() << std::endl << "Exceeded maximum shared memory size";
-        mState.mCompileStatus = CompileStatus::NOT_COMPILED;
-        return;
-    }
-
-    ASSERT(!mState.mCompiledState->translatedSource.empty() ||
-           !mState.mCompiledState->compiledBinary.empty());
-
-    bool success          = mCompilingState->compileEvent->postTranslate(&mInfoLog);
+    bool success          = result == angle::Result::Continue;
     mState.mCompileStatus = success ? CompileStatus::COMPILED : CompileStatus::NOT_COMPILED;
-
     mState.mCompiledState->successfullyCompiled = success;
 
-    MemoryShaderCache *shaderCache = context->getMemoryShaderCache();
-    if (success && shaderCache)
+    if (success)
     {
-        // Save to the shader cache.
-        if (shaderCache->putShader(context, mShaderHash, this) != angle::Result::Continue)
+        MemoryShaderCache *shaderCache = context->getMemoryShaderCache();
+        if (shaderCache != nullptr)
         {
-            ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
-                               "Failed to save compiled shader to memory shader cache.");
+            // Save to the shader cache.
+            if (shaderCache->putShader(context, mShaderHash, this) != angle::Result::Continue)
+            {
+                ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
+                                   "Failed to save compiled shader to memory shader cache.");
+            }
         }
     }
+
+    mBoundCompiler->putInstance(std::move(mCompilingState->shCompilerInstance));
+    mCompilingState->compileEvent.reset();
+    mCompilingState.reset();
 }
 
 void Shader::addRef()
@@ -667,7 +781,7 @@ bool Shader::isCompiled(const Context *context)
 
 bool Shader::isCompleted()
 {
-    return (!mState.compilePending() || mCompilingState->compileEvent->isReady());
+    return !mState.compilePending() || !mCompilingState->compileEvent->isCompiling();
 }
 
 angle::Result Shader::serialize(const Context *context, angle::MemoryBuffer *binaryOut) const
