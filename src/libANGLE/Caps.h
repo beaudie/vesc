@@ -127,6 +127,7 @@ struct Limitations
     bool noSeparateStencilRefsAndMasks = false;
 
     // Renderer doesn't support non-constant indexing loops in fragment shader
+    // TODO: turn into d3d feature and move to backend
     bool shadersRequireIndexedLoopValidation = false;
 
     // Renderer doesn't support Simultaneous use of GL_CONSTANT_ALPHA/GL_ONE_MINUS_CONSTANT_ALPHA
