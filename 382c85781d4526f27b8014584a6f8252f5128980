@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "365e7517_cb4d43e3",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-02T19:51:55Z",
+      "side": 1,
+      "message": "Do you need this diff? from what I read, this can be kept as is since it will be updated in line 1147.",
+      "range": {
+        "startLine": 876,
+        "startChar": 12,
+        "endLine": 879,
+        "endChar": 85
+      },
+      "revId": "382c85781d4526f27b8014584a6f8252f5128980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
