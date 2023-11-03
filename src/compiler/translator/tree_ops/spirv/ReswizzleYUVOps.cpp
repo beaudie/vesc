@@ -29,6 +29,7 @@ class ReswizzleYUVOpsTraverser : public TIntermTraverser
     {}
 
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
+    bool visitSwizzle(Visit visit, TIntermSwizzle *node) override;
     bool adjustOutput(TCompiler *compiler, TIntermBlock *root, const TIntermSymbol &yuvOutput);
 
   private:
@@ -47,27 +48,60 @@ bool ReswizzleYUVOpsTraverser::visitAggregate(Visit visit, TIntermAggregate *nod
     }
 
     TOperator op = node->getFunction()->getBuiltInOp();
-    if (op != EOpTexture && op != EOpTextureProj && op != EOpTexelFetch)
+    if (op == EOpTexture || op == EOpTextureProj || op == EOpTexelFetch)
     {
-        return true;
+        TIntermSequence *arguments = node->getSequence();
+        TType const &samplerType   = (*arguments)[0]->getAsTyped()->getType();
+        if (samplerType.getBasicType() != EbtSamplerExternal2DY2YEXT)
+        {
+            return true;
+        }
+
+        // texture(...).gbra
+        ASSERT(!getParentNode()->getAsSwizzleNode());
+        TIntermTyped *replacement = new TIntermSwizzle(node, {1, 2, 0, 3});
+        if (replacement != nullptr)
+        {
+            queueReplacement(replacement, OriginalNode::BECOMES_CHILD);
+            return false;
+        }
     }
 
-    TIntermSequence *arguments = node->getSequence();
-    TType const &samplerType   = (*arguments)[0]->getAsTyped()->getType();
-    if (samplerType.getBasicType() != EbtSamplerExternal2DY2YEXT)
+    return true;
+}
+
+bool ReswizzleYUVOpsTraverser::visitSwizzle(Visit visit, TIntermSwizzle *node)
+{
+    TIntermAggregate *aggregate = node->getOperand()->getAsAggregate();
+    if (aggregate != nullptr && BuiltInGroup::IsBuiltIn(aggregate->getOp()))
     {
-        return true;
+        TOperator op = aggregate->getFunction()->getBuiltInOp();
+        if (op == EOpTexture || op == EOpTextureProj || op == EOpTexelFetch)
+        {
+            TIntermSequence *arguments = aggregate->getSequence();
+            TType const &samplerType   = (*arguments)[0]->getAsTyped()->getType();
+            if (samplerType.getBasicType() != EbtSamplerExternal2DY2YEXT)
+            {
+                return true;
+            }
+
+            // There is swizzle on YUV texture sampler, and we need to apply YUV swizzle first and
+            // then followed by the original swizzle. Finally we fold the two swizzles into one.
+            TIntermTyped *yuvSwizze = new TIntermSwizzle(aggregate, {1, 2, 0, 3});
+            if (!yuvSwizze)
+            {
+                return true;
+            }
+
+            TIntermTyped *replacement = new TIntermSwizzle(yuvSwizze, node->getSwizzleOffsets());
+            if (replacement)
+            {
+                replacement = replacement->fold(nullptr);
+                queueReplacement(replacement, OriginalNode::IS_DROPPED);
+                return false;
+            }
+        }
     }
-
-    // texture(...).gbra
-    TIntermTyped *replacement = new TIntermSwizzle(node, {1, 2, 0, 3});
-
-    if (replacement != nullptr)
-    {
-        queueReplacement(replacement, OriginalNode::BECOMES_CHILD);
-        return false;
-    }
-
     return true;
 }
 
