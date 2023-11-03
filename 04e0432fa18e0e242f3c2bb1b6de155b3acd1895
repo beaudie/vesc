@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "546c7528_940774e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-03T18:31:23Z",
+      "side": 1,
+      "message": "Also thanks for pushing this forward. Some of my suggestions may make more sense for a follow-up patch. The existing CL scaffolding is several years old and we\u0027ve adopted a couple different practices since it was written, hence the suggestions on return types.",
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c10b5a38_c3cf7b71",
@@ -32,6 +49,98 @@
       "side": 1,
       "message": "\u003e (and so you don\u0027t have to bubble the error code up all the way back to the entry point)\n\nActually, we **do** have to bubble error code back up to entrypoint(s) for OpenCL (returns error code per API call by design).\n\nUnlike OpenGL where error state is internally tracked and checked via `glGetError()` query like you mentioned.\n\n\u003e Otherwise you\u0027re going to end up having a bad time when it comes to interop with shared code.\n\nYeah we did run into this already - actually I had rolled my own `ANCLE_VK_TRY` and friends - but yeah not as nice as using existing `ANGLE_VK_TRY`.\n\nI had some ideas for handling errors like GL does but they feel hacky at best. If you have any suggestions there let me know, otherwise I think this PR is okay for now and we can look into later.",
       "parentUuid": "c10b5a38_c3cf7b71",
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fba90c18_26c3e401",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-03T18:31:23Z",
+      "side": 1,
+      "message": "These would benefit a lot from a typedef somewhere. Particularly because this represents a memory offset but `region` is more of a coordinate.",
+      "range": {
+        "startLine": 45,
+        "startChar": 33,
+        "endLine": 45,
+        "endChar": 62
+      },
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fd76b0e_c2ed787f",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-03T18:31:23Z",
+      "side": 1,
+      "message": "I\u0027d prefer to omit this parameter and simply return nullptr on error. All the input should be validated by this point so the range of errors that are generated from here should all be \"something went horribly wrong\" or device loss kind of thing.",
+      "range": {
+        "startLine": 31,
+        "startChar": 47,
+        "endLine": 31,
+        "endChar": 64
+      },
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d42c5d65_e0107bab",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-03T18:31:23Z",
+      "side": 1,
+      "message": "I don\u0027t think this is needed (here and CLMemoryImpl). Functions like `getSize` should be fully implemented in the frontend `CLMemory` class.",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 53
+      },
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a57d8aaa_a0cd7181",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-03T18:31:23Z",
+      "side": 1,
+      "message": "Same comment about the Memory::getSize.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 85
+      },
       "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
