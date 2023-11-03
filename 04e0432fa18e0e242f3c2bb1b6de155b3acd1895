@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "689d39ea_0f1cef9e",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-03T19:24:16Z",
+      "side": 1,
+      "message": "What if you set the error code in the context (like GL), and in the entry point retrieve and return it? Every entry point could set the error to success at the beginning, then return the error code (whatever it might have changed to) at the end. A simple change to the generator would do, and then you can safely just use angle::Result everywhere in CL like the rest of the codebase.",
+      "parentUuid": "0237a202_e51b3096",
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fba90c18_26c3e401",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
         "patchSetId": 4
