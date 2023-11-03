@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf2465f9_200388d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-03T04:35:08Z",
+      "side": 1,
+      "message": "I appear to be hitting errors in the implementation of row-major mat4x3 on OpenGL and OpenGL|ES. For example, on Mac OpenGL Intel, I\u0027m seeing the 4x3 matrix:\n```\n| 0  4  8 12|\n| 1  5  9 13|\n| 2  6 10 14|\n```\nreturning the following values:\n```\n| 0  4  8 12|\n| 4  8 12  0|\n| 8 12  0  4|\n```",
+      "revId": "51d3d868cd7bd5ac8a3c5d2153fcb761581c1d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cdf1c675_9745add7",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 3
