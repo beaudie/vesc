@@ -16,6 +16,24 @@
       "message": "Thanks for the CL! Could you please unify the error handling with the way we do it for GL? Otherwise you\u0027re going to end up having a bad time when it comes to interop with shared code.\n\nGenerally that means returning `angle::Result`, and using `ANGLE_TRY` everywhere. You can then return `angle::Result::Stop` in all these functions.\n\nLater on, you can use `ANGLE_VK_TRY` where appropriate to handle errors. See how that macro ends up storing the error code in the context to be returned by `glGetError()` (and so you don\u0027t have to bubble the error code up all the way back to the entry point). CL could use a very similar mechanism.",
       "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0237a202_e51b3096",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-11-03T16:50:41Z",
+      "side": 1,
+      "message": "\u003e (and so you don\u0027t have to bubble the error code up all the way back to the entry point)\n\nActually, we **do** have to bubble error code back up to entrypoint(s) for OpenCL (returns error code per API call by design).\n\nUnlike OpenGL where error state is internally tracked and checked via `glGetError()` query like you mentioned.\n\n\u003e Otherwise you\u0027re going to end up having a bad time when it comes to interop with shared code.\n\nYeah we did run into this already - actually I had rolled my own `ANCLE_VK_TRY` and friends - but yeah not as nice as using existing `ANGLE_VK_TRY`.\n\nI had some ideas for handling errors like GL does but they feel hacky at best. If you have any suggestions there let me know, otherwise I think this PR is okay for now and we can look into later.",
+      "parentUuid": "c10b5a38_c3cf7b71",
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
