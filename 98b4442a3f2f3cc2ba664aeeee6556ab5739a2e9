@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18917878_0985771e",
+        "filename": "src/compiler/translator/tree_ops/spirv/ReswizzleYUVOps.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-03T22:27:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "340b74fa_6953d225",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 0
+      },
+      "revId": "98b4442a3f2f3cc2ba664aeeee6556ab5739a2e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "966198a8_5d14141b",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-11-03T20:44:36Z",
       "side": 1,
       "message": "No need to check the result of `new`. It never returns `nullptr` (C++\u0027s `new` throws an exception, or crashes with exceptions disabled, probably ANGLE\u0027s `new` (allocates from pool) does something similar. Anyway, we never check this).",
+      "revId": "98b4442a3f2f3cc2ba664aeeee6556ab5739a2e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1396d19d_f8bb2937",
+        "filename": "src/compiler/translator/tree_ops/spirv/ReswizzleYUVOps.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-03T22:27:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "966198a8_5d14141b",
       "revId": "98b4442a3f2f3cc2ba664aeeee6556ab5739a2e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
