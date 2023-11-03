@@ -51,6 +51,24 @@
       "parentUuid": "cdf1c675_9745add7",
       "revId": "51d3d868cd7bd5ac8a3c5d2153fcb761581c1d6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f87b58_541cbcbc",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-03T06:13:05Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "cdf1c675_9745add7",
+      "revId": "51d3d868cd7bd5ac8a3c5d2153fcb761581c1d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
