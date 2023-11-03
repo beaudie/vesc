@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8b446bc_a2084323",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-03T20:40:59Z",
+      "side": 1,
+      "message": "I\u0027m 50-50 on this one, I guess it\u0027s exposed to the front-end as a limitation because it\u0027s actually making those implementations non-conformant. But its effect can be contained to the d3d backend.",
+      "revId": "7bfe5d8b1bea909abeb4568f16a7fad63852d26e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
