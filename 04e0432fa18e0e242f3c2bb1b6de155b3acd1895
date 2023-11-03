@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33aee1e6_30e04bf1",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-11-03T21:36:19Z",
+      "side": 1,
+      "message": "That\u0027s a good idea - yeah I like that better than say wrapping `ANCLE_VK_TRY` around `ANGLE_VK_TRY` and such.\n\nI\u0027ll look into the details (e.g. thread safety on concurrent CL API calls using same context object and how we set/retrieve error code(s)), but I think this is doable.\n\nDepending on how large this new update is, I might need to break this up in a relation chain.\n\n\u003e A simple change to the generator would do\n\nIs this some script in ANGLE somewhere? Any pointers to docs on it?\n\n\u003e Thanks for the CL!\n\nSure thing - glad to be finally getting the ball rolling on the OpenCL stuff 🙂",
+      "parentUuid": "689d39ea_0f1cef9e",
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fba90c18_26c3e401",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
         "patchSetId": 4
@@ -84,6 +102,30 @@
       "writtenOn": "2023-11-03T18:31:23Z",
       "side": 1,
       "message": "These would benefit a lot from a typedef somewhere. Particularly because this represents a memory offset but `region` is more of a coordinate.",
+      "range": {
+        "startLine": 45,
+        "startChar": 33,
+        "endLine": 45,
+        "endChar": 62
+      },
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "756e6bc8_38da2605",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-11-03T21:36:19Z",
+      "side": 1,
+      "message": "Agreed - will update on next patchset.",
+      "parentUuid": "fba90c18_26c3e401",
       "range": {
         "startLine": 45,
         "startChar": 33,
@@ -119,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "918fca8c_75b31116",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-11-03T21:36:19Z",
+      "side": 1,
+      "message": "Yeah agreed (along with Shahbaz\u0027s suggestion of swapping CL errors with ANGLE error abstraction).",
+      "parentUuid": "1fd76b0e_c2ed787f",
+      "range": {
+        "startLine": 31,
+        "startChar": 47,
+        "endLine": 31,
+        "endChar": 64
+      },
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d42c5d65_e0107bab",
         "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
         "patchSetId": 4
@@ -142,6 +208,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b840d84c_ab205dda",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-11-03T21:36:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d42c5d65_e0107bab",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 53
+      },
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a57d8aaa_a0cd7181",
         "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
         "patchSetId": 4
@@ -153,6 +243,30 @@
       "writtenOn": "2023-11-03T18:31:23Z",
       "side": 1,
       "message": "Same comment about the Memory::getSize.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 85
+      },
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c448aa90_b947c2f3",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-11-03T21:36:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a57d8aaa_a0cd7181",
       "range": {
         "startLine": 24,
         "startChar": 0,
