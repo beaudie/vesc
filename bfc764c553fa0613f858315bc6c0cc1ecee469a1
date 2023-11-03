@@ -16,6 +16,24 @@
       "message": "Would this work correctly in the following case:\n1. Have something rendered.\n2. Call `readPixels` with a buffer bound as `PIXEL_PACK_BUFFER`.\n3. Rebind the buffer as `ARRAY_BUFFER`.\n4. Draw with this buffer as vertex data source that needs the conversion.",
       "revId": "bfc764c553fa0613f858315bc6c0cc1ecee469a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6b856a0_a7012730",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-11-03T19:06:24Z",
+      "side": 1,
+      "message": "I think this should work because `readPixels` uses compute shader to copy pixels to the bound buffer. So before this vertex data conversion, there is only a compute pass and no render commands, so we don\u0027t need to care about ending the current render encoder or not.\n\nAnd between readPixels compute kernel and \"vertex conversion\" compute kernel there is already an implicit barrier:\n```\nWithin a Compute Command Encoder\n\nAll resource writes performed in a given kernel function are visible in the next kernel function.\n\n```\nhttps://developer.apple.com/library/archive/documentation/Miscellaneous/Conceptual/MetalProgrammingGuide/WhatsNewiniOS10tvOS10andOSX1012/WhatsNewiniOS10tvOS10andOSX1012.html#//apple_ref/doc/uid/TP40014221-CH14-DontLinkElementID_73",
+      "parentUuid": "e2d24c44_b990890b",
+      "revId": "bfc764c553fa0613f858315bc6c0cc1ecee469a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
