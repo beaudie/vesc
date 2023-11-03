@@ -34,6 +34,24 @@
       "parentUuid": "e2d24c44_b990890b",
       "revId": "bfc764c553fa0613f858315bc6c0cc1ecee469a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a7b341b_d83ad30f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-03T19:15:30Z",
+      "side": 1,
+      "message": "Would the same apply if the buffer is filled with a blit encoder, e.g., via `copyBufferSubData`?",
+      "parentUuid": "a6b856a0_a7012730",
+      "revId": "bfc764c553fa0613f858315bc6c0cc1ecee469a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
