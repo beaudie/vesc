@@ -52,6 +52,24 @@
       "parentUuid": "a6b856a0_a7012730",
       "revId": "bfc764c553fa0613f858315bc6c0cc1ecee469a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "161caa60_e06d7f30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-11-03T19:21:44Z",
+      "side": 1,
+      "message": "Yes there is also implicit barrier between different passes (blit, compute, render, etc).\n\nIn this case the buffer is filled by Blit encoder and we convert it by a compute encoder. So there is already a barrier between them.",
+      "parentUuid": "6a7b341b_d83ad30f",
+      "revId": "bfc764c553fa0613f858315bc6c0cc1ecee469a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
