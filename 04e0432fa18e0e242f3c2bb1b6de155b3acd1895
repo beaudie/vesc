@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9590511_dfeaae4c",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-04T03:23:20Z",
+      "side": 1,
+      "message": "\u003e Depending on how large this new update is\n\nIt\u0027ll probably be a lot of annoying updates which you could hopefully `sed` through! Agreed that a split preparation CL would be good\n\n\u003e Is this some script in ANGLE somewhere?\n\nYes, that would be `scripts/generate_entry_points.py`\n\n\u003e Sure thing - glad to be finally getting the ball rolling on the OpenCL stuff 🙂\n\n🎉",
+      "parentUuid": "33aee1e6_30e04bf1",
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fba90c18_26c3e401",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
         "patchSetId": 4
