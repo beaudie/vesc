@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3779acde_b5b4ba73",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-04T07:56:48Z",
+      "side": 1,
+      "message": "Drive-by nit: might use `0xFFFFFF` directly for better readability.",
+      "range": {
+        "startLine": 115,
+        "startChar": 77,
+        "endLine": 115,
+        "endChar": 90
+      },
+      "revId": "5361ddb1309ec53693510403b3b1811af51b4e2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
