@@ -16,6 +16,40 @@
       "message": "All bots are green, so LGTM, but please address the 2 unresolved comments by kbr@",
       "revId": "7f9f02f9e86de174de3716a0b49a99448d89bfd3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14cfb6df_403f7dfa",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-05T14:54:41Z",
+      "side": 1,
+      "message": "nit: Per our style, please use `{}` even on single-statement blocks.",
+      "revId": "7f9f02f9e86de174de3716a0b49a99448d89bfd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae5df17d_03f17303",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-05T14:54:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "7f9f02f9e86de174de3716a0b49a99448d89bfd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
