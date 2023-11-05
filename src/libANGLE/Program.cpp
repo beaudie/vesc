@@ -915,12 +915,15 @@ angle::Result Program::linkImpl(const Context *context)
     egl::BlobCache::Key programHash = {0};
     MemoryProgramCache *cache       = context->getMemoryProgramCache();
 
+    printf("%s:%d: attempting to look up in cache\n", __FILE__, __LINE__);
+
     // TODO: http://anglebug.com/4530: Enable program caching for separable programs
     if (cache && !isSeparable())
     {
         std::lock_guard<std::mutex> cacheLock(context->getProgramCacheMutex());
         bool success = false;
         ANGLE_TRY(cache->getProgram(context, this, &programHash, &success));
+        printf("%s:%d: success? %d\n", __FILE__, __LINE__, success);
 
         if (success)
         {
@@ -980,13 +983,17 @@ angle::Result Program::linkJobImpl(const Caps &caps,
     // Cache load failed, fall through to normal linking.
     unlink();
 
+    printf("%s:%d: do link\n", __FILE__, __LINE__);
+
     // Validate we have properly attached shaders after checking the cache.  Since the input to the
     // shaders is part of the cache key, if there was a cache hit, the shaders would have linked
     // correctly.
     if (!linkValidateShaders())
     {
+        printf("%s:%d: failed validation\n", __FILE__, __LINE__);
         return angle::Result::Stop;
     }
+    printf("%s:%d: passed validation\n", __FILE__, __LINE__);
 
     linkShaders();
 
