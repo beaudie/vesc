@@ -328,51 +328,61 @@ angle::Result VertexArrayMtl::syncState(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-ANGLE_INLINE void VertexArrayMtl::getVertexAttribFormatAndArraySize(const gl::ProgramInput &var,
-                                                                    MTLVertexFormat *formatOut,
-                                                                    uint32_t *arraySizeOut)
+ANGLE_INLINE void VertexArrayMtl::getDefaultVertexAttribFormatAndArraySize(
+    const gl::ProgramInput &var,
+    MTLVertexFormat *formatOut,
+    uint32_t *vertexPullingTypeOut,
+    uint32_t *arraySizeOut)
 {
     uint32_t arraySize = var.getArraySizeProduct();
 
     MTLVertexFormat format;
+    uint32_t vertexPullingType;
     switch (var.getType())
     {
         case GL_INT:
         case GL_INT_VEC2:
         case GL_INT_VEC3:
         case GL_INT_VEC4:
-            format = mDefaultIntVertexFormat.metalFormat;
+            format            = mDefaultIntVertexFormat.metalFormat;
+            vertexPullingType = mDefaultIntVertexFormat.vertexPullingShaderType;
             break;
         case GL_UNSIGNED_INT:
         case GL_UNSIGNED_INT_VEC2:
         case GL_UNSIGNED_INT_VEC3:
         case GL_UNSIGNED_INT_VEC4:
-            format = mDefaultUIntVertexFormat.metalFormat;
+            format            = mDefaultUIntVertexFormat.metalFormat;
+            vertexPullingType = mDefaultUIntVertexFormat.vertexPullingShaderType;
             break;
         case GL_FLOAT_MAT2:
         case GL_FLOAT_MAT2x3:
         case GL_FLOAT_MAT2x4:
             arraySize *= 2;
-            format = mDefaultFloatVertexFormat.metalFormat;
+            format            = mDefaultFloatVertexFormat.metalFormat;
+            vertexPullingType = mDefaultFloatVertexFormat.vertexPullingShaderType;
             break;
         case GL_FLOAT_MAT3:
         case GL_FLOAT_MAT3x2:
         case GL_FLOAT_MAT3x4:
             arraySize *= 3;
-            format = mDefaultFloatVertexFormat.metalFormat;
+            format            = mDefaultFloatVertexFormat.metalFormat;
+            vertexPullingType = mDefaultFloatVertexFormat.vertexPullingShaderType;
             break;
         case GL_FLOAT_MAT4:
         case GL_FLOAT_MAT4x2:
         case GL_FLOAT_MAT4x3:
             arraySize *= 4;
-            format = mDefaultFloatVertexFormat.metalFormat;
+            format            = mDefaultFloatVertexFormat.metalFormat;
+            vertexPullingType = mDefaultFloatVertexFormat.vertexPullingShaderType;
             break;
         default:
-            format = mDefaultFloatVertexFormat.metalFormat;
+            format            = mDefaultFloatVertexFormat.metalFormat;
+            vertexPullingType = mDefaultFloatVertexFormat.vertexPullingShaderType;
     }
 
-    *arraySizeOut = arraySize;
-    *formatOut    = format;
+    *arraySizeOut         = arraySize;
+    *formatOut            = format;
+    *vertexPullingTypeOut = vertexPullingType;
 }
 
 // vertexDescChanged is both input and output, the input value if is true, will force new
@@ -384,6 +394,8 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
                                         bool *vertexDescChanged,
                                         mtl::VertexDesc *vertexDescOut)
 {
+    ContextMtl *contextMtl = mtl::GetImpl(glContext);
+
     // NOTE(hqle): consider only updating dirty attributes
     bool dirty = mVertexArrayDirty || *vertexDescChanged;
 
@@ -415,9 +427,8 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
         {
             if (!programActiveAttribsMask.test(v))
             {
-                desc.attributes[v].format      = MTLVertexFormatInvalid;
-                desc.attributes[v].bufferIndex = 0;
-                desc.attributes[v].offset      = 0;
+                desc.attributes[v].asInt       = 0;
+                desc.attributes[v].metalFormat = MTLVertexFormatInvalid;
                 continue;
             }
 
@@ -449,30 +460,74 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
                     continue;
                 }
 
-                uint32_t arraySize;
                 MTLVertexFormat format;
+                uint32_t vertexPullingType;
+                uint32_t arraySize;
 
-                getVertexAttribFormatAndArraySize(*attribInfoIte, &format, &arraySize);
+                getDefaultVertexAttribFormatAndArraySize(*attribInfoIte, &format,
+                                                         &vertexPullingType, &arraySize);
 
                 for (uint32_t vaIdx = v; vaIdx < v + arraySize; ++vaIdx)
                 {
+                    desc.attributes[vaIdx].asInt       = 0;
                     desc.attributes[vaIdx].bufferIndex = mtl::kDefaultAttribsBindingIndex;
                     desc.attributes[vaIdx].offset      = vaIdx * mtl::kDefaultAttributeSize;
-                    desc.attributes[vaIdx].format      = format;
+                    desc.attributes[vaIdx].metalFormat = static_cast<uint32_t>(format);
+
+                    if (contextMtl->getDisplay()->getFeatures().useVertexPulling.enabled)
+                    {
+                        desc.attributes[vaIdx].vertexPullingComponentCount = 4;
+                        desc.attributes[vaIdx].vertexPullingType           = vertexPullingType;
+                        desc.attributes[vaIdx].vertexPullingConvertMode =
+                            mtl_shader::kVertexConvertModeNone;
+                        desc.attributes[vaIdx].vertexPullingOffsetIsAligned = true;
+                    }
                 }
             }
             else
             {
+                // Reset all fields.
+                desc.attributes[v].asInt = 0;
+
                 uint32_t bufferIdx    = mtl::kVboBindingIndexStart + v;
                 uint32_t bufferOffset = static_cast<uint32_t>(mCurrentArrayBufferOffsets[v]);
 
                 const angle::Format &angleFormat =
                     mCurrentArrayBufferFormats[v]->actualAngleFormat();
-                desc.attributes[v].format = mCurrentArrayBufferFormats[v]->metalFormat;
+                desc.attributes[v].metalFormat =
+                    static_cast<uint32_t>(mCurrentArrayBufferFormats[v]->metalFormat);
+
+                if (contextMtl->getDisplay()->getFeatures().useVertexPulling.enabled)
+                {
+                    // Vertex pulling in shader can pull vertex from unaligned offset.
+                    ASSERT(mCurrentArrayBufferFormats[v]->intendedFormatId ==
+                           mCurrentArrayBufferFormats[v]->actualFormatId);
+
+                    desc.attributes[v].vertexPullingComponentCount = angleFormat.channelCount;
+                    desc.attributes[v].vertexPullingType =
+                        mCurrentArrayBufferFormats[v]->vertexPullingShaderType;
+                    if (angleFormat.isNorm())
+                    {
+                        desc.attributes[v].vertexPullingConvertMode =
+                            mtl_shader::kVertexConvertModeNormalize;
+                    }
+                    else if (angleFormat.isScaled)
+                    {
+                        desc.attributes[v].vertexPullingConvertMode =
+                            mtl_shader::kVertexConvertModeToFloat;
+                    }
+                    desc.attributes[v].vertexPullingOffsetIsAligned =
+                        (bufferOffset % mCurrentArrayBufferFormats[v]->vertexPullingAlignment) == 0;
+                }
+                else
+                {
+                    // Without vertex pulling, the bufferOffset must be aligned to the attribute's
+                    // size.
+                    ASSERT((bufferOffset % angleFormat.pixelBytes) == 0);
+                }
 
                 desc.attributes[v].bufferIndex = bufferIdx;
                 desc.attributes[v].offset      = 0;
-                ASSERT((bufferOffset % angleFormat.pixelBytes) == 0);
 
                 ASSERT(bufferIdx < mtl::kMaxVertexAttribs);
                 if (binding.getDivisor() == 0)
@@ -675,12 +730,18 @@ angle::Result VertexArrayMtl::syncDirtyAttrib(const gl::Context *glContext,
             // even non-converted buffers need to be observed for potential
             // data rebinds.
             mContentsObservers->enableForBuffer(bufferGL, static_cast<uint32_t>(attribIndex));
-            bool needConversion =
-                format.actualFormatId != format.intendedFormatId ||
-                (binding.getOffset() % format.actualAngleFormat().pixelBytes) != 0 ||
-                (binding.getOffset() % mtl::kVertexAttribBufferStrideAlignment) != 0 ||
-                (binding.getStride() < format.actualAngleFormat().pixelBytes) ||
-                (binding.getStride() % mtl::kVertexAttribBufferStrideAlignment) != 0;
+            bool needConversion = false;
+
+            // Vertex pulling doesn't need to convert vertex data before draw calls.
+            if (!contextMtl->getDisplay()->getFeatures().useVertexPulling.enabled)
+            {
+                needConversion =
+                    format.actualFormatId != format.intendedFormatId ||
+                    (binding.getOffset() % format.actualAngleFormat().pixelBytes) != 0 ||
+                    (binding.getOffset() % mtl::kVertexAttribBufferStrideAlignment) != 0 ||
+                    (binding.getStride() < format.actualAngleFormat().pixelBytes) ||
+                    (binding.getStride() % mtl::kVertexAttribBufferStrideAlignment) != 0;
+            }
 
             if (needConversion)
             {
@@ -971,6 +1032,9 @@ angle::Result VertexArrayMtl::convertVertexBuffer(const gl::Context *glContext,
                                                   size_t attribIndex,
                                                   const mtl::VertexFormat &srcVertexFormat)
 {
+    ContextMtl *contextMtl = mtl::GetImpl(glContext);
+    ASSERT(!contextMtl->getDisplay()->getFeatures().useVertexPulling.enabled);
+
     unsigned srcFormatSize = srcVertexFormat.intendedAngleFormat().pixelBytes;
 
     size_t numVertices = GetVertexCount(srcBuffer, binding, srcFormatSize);
@@ -984,8 +1048,6 @@ angle::Result VertexArrayMtl::convertVertexBuffer(const gl::Context *glContext,
         mCurrentArrayBufferStrides[attribIndex] = 16;
         return angle::Result::Continue;
     }
-
-    ContextMtl *contextMtl = mtl::GetImpl(glContext);
 
     // Convert to tightly packed format
     GLuint stride;

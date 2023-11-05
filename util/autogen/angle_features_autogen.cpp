@@ -379,6 +379,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::UseSystemMemoryForConstantBuffers, "useSystemMemoryForConstantBuffers"},
     {Feature::UseUnusedBlocksWithStandardOrSharedLayout, "useUnusedBlocksWithStandardOrSharedLayout"},
     {Feature::UseVertexInputBindingStrideDynamicState, "useVertexInputBindingStrideDynamicState"},
+    {Feature::UseVertexPulling, "useVertexPulling"},
     {Feature::UseVmaForImageSuballocation, "useVmaForImageSuballocation"},
     {Feature::VaryingsRequireMatchingPrecisionInSpirv, "varyingsRequireMatchingPrecisionInSpirv"},
     {Feature::VertexIDDoesNotIncludeBaseVertex, "vertexIDDoesNotIncludeBaseVertex"},
