@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53dfe054_154e60da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-05T14:53:35Z",
+      "side": 1,
+      "message": "FYI, _lots_ of row-major related suppressions can be found in GLSLTest.cpp; look for test names with `Major` in them.",
+      "parentUuid": "218b8fa4_e649f902",
+      "revId": "51d3d868cd7bd5ac8a3c5d2153fcb761581c1d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdf1c675_9745add7",
