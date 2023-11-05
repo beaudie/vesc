@@ -119,6 +119,7 @@ std::shared_ptr<WaitableCompileEvent> ShaderMtl::compile(const gl::Context *cont
 
     options->metal.generateShareableShaders =
         displayMtl->getFeatures().generateShareableShaders.enabled;
+    options->metal.useVertexPulling = displayMtl->getFeatures().useVertexPulling.enabled;
 
     if (displayMtl->getFeatures().intelExplicitBoolCastWorkaround.enabled ||
         options->metal.generateShareableShaders)

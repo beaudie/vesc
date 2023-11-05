@@ -428,6 +428,14 @@
                 "Always automatically resolve MSAA render buffers to single sampled texture."
             ],
             "issue": "http://crbug.com/1486094"
+        },
+        {
+            "name": "use_vertex_pulling",
+            "category": "Features",
+            "description": [
+                "Fetch vertex attributes manually in shader instead of via MTLVertexDescriptor."
+            ],
+            "issue": "http://crbug.com/1486094"
         }
     ]
 }

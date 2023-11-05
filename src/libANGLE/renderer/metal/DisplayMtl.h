@@ -140,6 +140,7 @@ class DisplayMtl : public DisplayImpl
     bool supportsMacGPUFamily(uint8_t macFamily) const;
     bool supportsMetal2_1() const;
     bool supportsMetal2_2() const;
+    bool supportsMetal2_4() const;
     bool supportsDepth24Stencil8PixelFormat() const;
     bool supports32BitFloatFiltering() const;
     bool isAMD() const;
@@ -160,6 +161,7 @@ class DisplayMtl : public DisplayImpl
     bool hasFragmentMemoryBarriers() const { return mHasFragmentMemoryBarriers; }
 
     id<MTLLibrary> getDefaultShadersLib();
+    id<MTLLibrary> getExtendedDefaultShadersLib();
 
     const mtl::Format &getPixelFormat(angle::FormatID angleFormatId) const
     {
@@ -215,6 +217,9 @@ class DisplayMtl : public DisplayImpl
 
     // Built-in Shaders
     mtl::AutoObjCPtr<id<MTLLibrary>> mDefaultShaders;
+
+    // Built-in Shaders that are only available on Metal 2.4+.
+    mtl::AutoObjCPtr<id<MTLLibrary>> mDefaultShadersExtended;
 #if ANGLE_MTL_EVENT_AVAILABLE
     mtl::AutoObjCObj<MTLSharedEventListener> mSharedEventListener;
 #endif

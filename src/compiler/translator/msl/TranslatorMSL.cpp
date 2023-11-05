@@ -1076,6 +1076,13 @@ bool TranslatorMSL::translateImpl(TInfoSinkBase &sink,
     {
         bool usesInstanceId = false;
         bool usesVertexId   = false;
+
+        if (compileOptions.metal.useVertexPulling && getShaderType() == GL_VERTEX_SHADER)
+        {
+            usesInstanceId = true;
+            usesVertexId   = true;
+        }
+
         for (const ShaderVariable &var : mAttributes)
         {
             if (var.isBuiltIn())
