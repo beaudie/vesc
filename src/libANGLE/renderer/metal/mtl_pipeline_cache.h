@@ -33,6 +33,15 @@ struct PipelineKey
     size_t hash() const;
 };
 
+struct VertexPullingFunctionKey
+{
+    VertexAttributeDesc attribute;
+    VertexBufferLayoutDesc layout;
+
+    bool operator==(const VertexPullingFunctionKey &rhs) const;
+    size_t hash() const;
+};
+
 }  // namespace mtl
 }  // namespace rx
 
@@ -43,6 +52,12 @@ template <>
 struct hash<rx::mtl::PipelineKey>
 {
     size_t operator()(const rx::mtl::PipelineKey &key) const { return key.hash(); }
+};
+
+template <>
+struct hash<rx::mtl::VertexPullingFunctionKey>
+{
+    size_t operator()(const rx::mtl::VertexPullingFunctionKey &key) const { return key.hash(); }
 };
 
 }  // namespace std
@@ -65,12 +80,11 @@ class PipelineCache : angle::NonCopyable
     angle::Result getComputePipeline(ContextMtl *context,
                                      id<MTLFunction> computeShader,
                                      AutoObjCPtr<id<MTLComputePipelineState>> *outComputePipeline);
+    using VertexPullFunctionMap =
+        angle::base::HashingMRUCache<VertexPullingFunctionKey, AutoObjCPtr<id<MTLFunction>>>;
 
   private:
     static constexpr unsigned int kMaxPipelines = 128;
-
-    // The cache tries to clean up this many states at once.
-    static constexpr unsigned int kGCLimit = 32;
 
     struct PipelineVariant
     {
@@ -80,6 +94,8 @@ class PipelineCache : angle::NonCopyable
 
     using RenderPipelineMap = angle::base::HashingMRUCache<PipelineKey, PipelineVariant>;
     RenderPipelineMap mPipelineCache;
+
+    VertexPullFunctionMap mVertexPullFunctionsCache;
 };
 
 }  // namespace mtl

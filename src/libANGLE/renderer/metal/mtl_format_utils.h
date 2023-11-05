@@ -19,6 +19,7 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/copyvertex.h"
+#include "libANGLE/renderer/metal/shaders/constants.h"
 #include "libANGLE/renderer/renderer_utils.h"
 
 namespace rx
@@ -110,17 +111,22 @@ struct VertexFormat : public FormatBase
 {
     VertexFormat() = default;
 
+    // Equivalent metal format to be used by MTLVertexDescriptor.
     MTLVertexFormat metalFormat = MTLVertexFormatInvalid;
 
-    VertexCopyFunction vertexLoadFunction = nullptr;
+    VertexCopyFunction vertexLoadFunction                  = nullptr;
+    VertexCopyFunction vertexCopyFunctionWithoutConversion = nullptr;
 
-    uint32_t defaultAlpha = 0;
+    uint32_t defaultAlpha           = 0;
+    uint32_t vertexPullingAlignment = 1;
+    int vertexPullingShaderType     = mtl_shader::kVertexTypeInvalid;
+
     // Intended and actual format have same GL type, and possibly only differ in number of
     // components?
     bool actualSameGLType = true;
 
   private:
-    void init(angle::FormatID angleFormatId, bool tightlyPacked = false);
+    void init(const DisplayMtl *display, angle::FormatID angleFormatId, bool tightlyPacked = false);
 
     friend class FormatTable;
 };

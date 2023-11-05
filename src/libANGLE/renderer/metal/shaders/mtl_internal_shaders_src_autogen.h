@@ -47,6 +47,29 @@ enum
     kTextureTypeCount = 5,
 };
 
+enum
+{
+    kVertexTypeFloat = 0,
+    kVertexTypeFixed = 1,
+    kVertexTypeHalf = 2,
+    kVertexTypeXYZW1010102Int = 3,
+    kVertexTypeXYZW1010102UInt = 4,
+    kVertexTypeByte = 5,
+    kVertexTypeUByte = 6,
+    kVertexTypeShort = 7,
+    kVertexTypeUShort = 8,
+    kVertexTypeInt = 9,
+    kVertexTypeUInt = 10,
+    kVertexTypeInvalid = 11,
+};
+
+enum
+{
+    kVertexConvertModeNone = 0,
+    kVertexConvertModeNormalize = 1,
+    kVertexConvertModeToFloat = 2,
+};
+
 
 
 
@@ -3648,6 +3671,463 @@ kernel void genIndexBuffer(
     }
 }
 # 8 "temp_master_source.metal" 2
+# 1 "./vertex_pulling.metal" 1
+
+#if __METAL_VERSION__ >= 240
+# 30 "./vertex_pulling.metal"
+using namespace metal;
+using namespace rx::mtl_shader;
+
+constant uint kVertexPullingType [[function_constant(2100)]];
+constant uint kVertexPullingComponentCount [[function_constant(2101)]];
+constant uint kVertexPullingOffset [[function_constant(2102)]];
+constant uint kVertexPullingStride [[function_constant(2103)]];
+constant uint kVertexPullingDivisor [[function_constant(2104)]];
+constant bool kVertexPullingUseDefaultAttribs [[function_constant(2105)]];
+constant bool kVertexPullingOffsetIsAligned [[function_constant(2106)]];
+constant uint kVertexPullingConvertMode [[function_constant(2107)]];
+
+constant bool kVertexPullingNormalize = kVertexPullingConvertMode == kVertexConvertModeNormalize;
+constant bool kVertexPullingConvertToFloat = kVertexPullingConvertMode == kVertexConvertModeToFloat;
+
+template <typename Short>
+static inline Short fetchShortFromBytes(const device uchar *input, uint offset)
+{
+    if (kVertexPullingOffsetIsAligned) {
+        auto shortPtr = reinterpret_cast<const device Short*>(input + offset);
+        return shortPtr[0];
+    }
+    auto packedPtr = reinterpret_cast<const device packed_uchar2*>(input + offset);
+    packed_uchar2 data = packedPtr[0];
+    return as_type<Short>(data);
+}
+
+template <typename Int>
+static inline Int fetchIntFromBytes(const device uchar *input, uint offset)
+{
+    if (kVertexPullingOffsetIsAligned) {
+        auto intPtr = reinterpret_cast<const device Int*>(input + offset);
+        return intPtr[0];
+    }
+    auto packedPtr = reinterpret_cast<const device packed_uchar4*>(input + offset);
+    packed_uchar4 data = packedPtr[0];
+    return as_type<Int>(data);
+}
+
+template <typename T1, typename T2>
+static inline T1 fixedToFloat(T2 fixed)
+{
+    constexpr float divisor = 1.0 / static_cast<float>(1 << 16);
+    return static_cast<T1>(fixed) * divisor;
+}
+
+
+template <bool isSigned, bool normalized>
+static inline float packedXYZ101010ToFloat(uint32_t data)
+{
+    const uint32_t rgbSignMask = 0x200;
+    const uint32_t negativeMask = 0xFFFFFC00;
+
+    float finalValue = static_cast<float>(data);
+    if (isSigned)
+    {
+        if (data & rgbSignMask)
+        {
+            int negativeNumber = data | negativeMask;
+            finalValue = static_cast<float>(negativeNumber);
+        }
+
+        if (normalized)
+        {
+            const int32_t maxValue = 0x1FF;
+            const int32_t minValue = 0xFFFFFE01;
+
+
+
+
+            if (finalValue < minValue)
+            {
+                finalValue = minValue;
+            }
+
+            const int32_t halfRange = (maxValue - minValue) >> 1;
+            finalValue = ((finalValue - minValue) / halfRange) - 1.0f;
+        }
+    }
+    else
+    {
+        if (normalized)
+        {
+            const uint32_t maxValue = 0x3FF;
+            finalValue /= static_cast<float>(maxValue);
+        }
+    }
+
+    return finalValue;
+}
+
+template <bool isSigned, bool normalized>
+inline float packedW2ToFloat(uint32_t data)
+{
+    float finalValue = 0;
+    if (isSigned)
+    {
+        if (normalized)
+        {
+            switch (data)
+            {
+                case 0x0:
+                    finalValue = 0.0f;
+                    break;
+                case 0x1:
+                    finalValue = 1.0f;
+                    break;
+                case 0x2:
+                    finalValue = -1.0f;
+                    break;
+                case 0x3:
+                    finalValue = -1.0f;
+                    break;
+            }
+        }
+        else
+        {
+            switch (data)
+            {
+                case 0x0:
+                    finalValue = 0.0f;
+                    break;
+                case 0x1:
+                    finalValue = 1.0f;
+                    break;
+                case 0x2:
+                    finalValue = -2.0f;
+                    break;
+                case 0x3:
+                    finalValue = -1.0f;
+                    break;
+            }
+        }
+    }
+    else
+    {
+        if (normalized)
+        {
+            finalValue = data / 3.0f;
+        }
+        else
+        {
+            finalValue = static_cast<float>(data);
+        }
+    }
+
+    return finalValue;
+}
+
+template <bool isSigned, bool normalized>
+static inline float4 packedXYZW1010102ToFloat(uint packedValue)
+{
+    const uint32_t rgbMask = 0x3FF;
+    const size_t redShift = 0;
+    const size_t greenShift = 10;
+    const size_t blueShift = 20;
+
+    const uint32_t alphaMask = 0x3;
+    const size_t alphaShift = 30;
+
+    float4 re;
+    re.x = packedXYZ101010ToFloat<isSigned, normalized>((packedValue >> redShift) & rgbMask);
+    re.y = packedXYZ101010ToFloat<isSigned, normalized>((packedValue >> greenShift) & rgbMask);
+    re.z = packedXYZ101010ToFloat<isSigned, normalized>((packedValue >> blueShift) & rgbMask);
+    re.w = packedW2ToFloat<isSigned, normalized>((packedValue >> alphaShift) & alphaMask);
+    return re;
+}
+
+template <unsigned int inputBitCount, typename T1, typename T2>
+static inline T1 normalizedToFloat(T2 input)
+{
+    static_assert(inputBitCount <= (sizeof(T2) * 8),
+                  "T2 must have more bits than or same bits as inputBitCount.");
+
+    if (inputBitCount < 32)
+    {
+        const float inverseMax = 1.0f / (static_cast<uint>(0x1 << inputBitCount) - 1);
+        return max(static_cast<T1>(input) * inverseMax, T1(-1.0));
+    }
+    else
+    {
+        constexpr float inverseMax32 = 1.0f / 0xffffffff;
+        return max(static_cast<T1>(input) * inverseMax32, T1(-1.0));
+    }
+}
+
+
+static inline uchar4 fetchUByte(const device uchar *input,
+                                int offset,
+                                int stride,
+                                int index,
+                                uint components,
+                                uchar defaultAlpha = 1)
+{
+    uchar4 re = uchar4(0, 0, 0, defaultAlpha);
+    for (uint i = 0; i < components; ++i)
+    {
+        re[i] = input[offset + stride * index + i];
+    }
+    return re;
+}
+
+
+static inline float4 fetchUByteNorm(const device uchar *input,
+                                    int offset,
+                                    int stride,
+                                    int index,
+                                    uint components)
+{
+    uchar4 re = fetchUByte(input, offset, stride, index, components, 255);
+    return normalizedToFloat<8, float4>(re);
+}
+
+
+static inline char4 fetchByte(const device uchar *input,
+                              int offset,
+                              int stride,
+                              int index,
+                              uint components)
+{
+    return as_type<char4>(fetchUByte(input, offset, stride, index, components));
+}
+
+
+static inline float4 fetchByteNorm(const device uchar *input,
+                                   int offset,
+                                   int stride,
+                                   int index,
+                                   uint components)
+{
+    char4 re = as_type<char4>(fetchUByte(input, offset, stride, index, components, 127));
+    return normalizedToFloat<7, float4>(re);
+}
+
+
+static inline ushort4 fetchUShort(const device uchar *input,
+                                  int offset,
+                                  int stride,
+                                  int index,
+                                  uint components,
+                                  ushort defaultAlpha = 1)
+{
+    ushort4 re = ushort4(0, 0, 0, defaultAlpha);
+    for (uint i = 0; i < components; ++i)
+    {
+        re[i] = fetchShortFromBytes<ushort>(input, offset + stride * index + i * 2);
+    }
+    return re;
+}
+
+
+static inline float4 fetchUShortNorm(const device uchar *input,
+                                     int offset,
+                                     int stride,
+                                     int index,
+                                     uint components)
+{
+    ushort4 re = fetchUShort(input, offset, stride, index, components, 0xffff);
+    return normalizedToFloat<16, float4>(re);
+}
+
+
+static inline short4 fetchShort(const device uchar *input,
+                                int offset,
+                                int stride,
+                                int index,
+                                uint components)
+{
+    return as_type<short4>(fetchUShort(input, offset, stride, index, components));
+}
+
+
+static inline float4 fetchShortNorm(const device uchar *input,
+                                    int offset,
+                                    int stride,
+                                    int index,
+                                    uint components)
+{
+    short4 re = as_type<short4>(fetchUShort(input, offset, stride, index, components, 0x7fff));
+    return normalizedToFloat<15, float4>(re);
+}
+
+
+static inline uint4 fetchUInt(const device uchar *input,
+                              int offset,
+                              int stride,
+                              int index,
+                              uint components,
+                              uint defaultAlpha = 1)
+{
+    uint4 re = uint4(0, 0, 0, defaultAlpha);
+    for (uint i = 0; i < components; ++i)
+    {
+        re[i] = fetchIntFromBytes<uint>(input, offset + stride * index + i * 4);
+    }
+    return re;
+}
+
+
+static inline float4 fetchUIntNorm(const device uchar *input,
+                                   int offset,
+                                   int stride,
+                                   int index,
+                                   uint components)
+{
+    uint4 re = fetchUInt(input, offset, stride, index, components, 0xffffffff);
+    return normalizedToFloat<32, float4>(re);
+}
+
+
+static inline int4 fetchInt(const device uchar *input,
+                            int offset,
+                            int stride,
+                            int index,
+                            uint components)
+{
+    return as_type<int4>(fetchUInt(input, offset, stride, index, components));
+}
+
+
+static inline float4 fetchIntNorm(const device uchar *input,
+                                  int offset,
+                                  int stride,
+                                  int index,
+                                  uint components)
+{
+    int4 re = as_type<int4>(fetchUInt(input, offset, stride, index, components, 0x7fffffff));
+    return normalizedToFloat<31, float4>(re);
+}
+
+
+static inline half4 fetchHalf(const device uchar *input,
+                              int offset,
+                              int stride,
+                              int index,
+                              uint components)
+{
+    constexpr half defaultAlpha = 1.0;
+    return as_type<half4>(
+        fetchUShort(input, offset, stride, index, components, as_type<ushort>(defaultAlpha)));
+}
+
+
+static inline float4 fetchFloat(const device uchar *input,
+                                int offset,
+                                int stride,
+                                int index,
+                                uint components)
+{
+    constexpr float defaultAlpha = 1.0;
+    return as_type<float4>(
+        fetchUInt(input, offset, stride, index, components, as_type<uint>(defaultAlpha)));
+}
+
+
+static inline float4 fetchFixed(const device uchar *input,
+                                int offset,
+                                int stride,
+                                int index,
+                                uint components)
+{
+    float4 re = float4(0, 0, 0, 1);
+    float4 convertedWithPadding =
+        fixedToFloat<float4>(fetchInt(input, offset, stride, index, components));
+    for (uint i = 0; i < components; ++i)
+    {
+        re[i] = convertedWithPadding[i];
+    }
+    return re;
+}
+
+
+template <bool isSigned, bool normalized>
+static inline float4 fetchPackedXYZW1010102(const device uchar *input,
+                                            int offset,
+                                            int stride,
+                                            int index)
+{
+    uint packedValue = fetchIntFromBytes<uint>(input, offset + stride * index);
+    return packedXYZW1010102ToFloat<isSigned, normalized>(packedValue);
+}
+
+template <bool isSigned, bool normalized>
+static inline float4 fetchPackedXYZW1010102(const device uchar *input,
+                                            int offset,
+                                            int stride,
+                                            int index,
+                                            int components )
+{
+    return fetchPackedXYZW1010102<isSigned, normalized>(input, offset, stride, index);
+}
+# 429 "./vertex_pulling.metal"
+static inline uint4 asUInt4(uint4 src)
+{
+    return src;
+}
+static inline uint4 asUInt4(float4 src)
+{
+    return as_type<uint4>(src);
+}
+static inline uint4 asUInt4(int4 src)
+{
+    return as_type<uint4>(src);
+}
+
+
+static inline uint4 asUInt4(half4 src)
+{
+    return asUInt4(static_cast<float4>(src));
+}
+
+
+static inline uint4 asUInt4(uchar4 src)
+{
+    return static_cast<uint4>(src);
+}
+static inline uint4 asUInt4(ushort4 src)
+{
+    return static_cast<uint4>(src);
+}
+
+
+static inline uint4 asUInt4(char4 src)
+{
+    return asUInt4(static_cast<int4>(src));
+}
+static inline uint4 asUInt4(short4 src)
+{
+    return asUInt4(static_cast<int4>(src));
+}
+# 555 "./vertex_pulling.metal"
+[[stitchable]] uint4 ANGLE_pullVertexAsUInt4(const device uchar *inputUnaligned,
+                                             const device uchar *defaultAttribs,
+                                             int gl_VertexIndex,
+                                             int gl_InstanceIndex,
+                                             int gl_BaseInstance)
+{
+    uint4 re;
+
+    if (kVertexPullingUseDefaultAttribs)
+    {
+        { uint vertexFinalIndex; if (kVertexPullingDivisor == 0) { vertexFinalIndex = gl_VertexIndex; } else { vertexFinalIndex = gl_BaseInstance + gl_InstanceIndex / kVertexPullingDivisor; } switch (kVertexPullingType) { case kVertexTypeByte: if (kVertexPullingNormalize) { re = asUInt4(fetchByteNorm(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchByte(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchByte(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeUByte: if (kVertexPullingNormalize) { re = asUInt4(fetchUByteNorm(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchUByte(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchUByte(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeShort: if (kVertexPullingNormalize) { re = asUInt4(fetchShortNorm(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchShort(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchShort(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeUShort: if (kVertexPullingNormalize) { re = asUInt4(fetchUShortNorm(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchUShort(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchUShort(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeInt: if (kVertexPullingNormalize) { re = asUInt4(fetchIntNorm(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchInt(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchInt(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeUInt: if (kVertexPullingNormalize) { re = asUInt4(fetchUIntNorm(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchUInt(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchUInt(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeXYZW1010102Int: if (kVertexPullingNormalize) { re = asUInt4(fetchPackedXYZW1010102<true, true>(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchPackedXYZW1010102<true, false>(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0))); } else { re = asUInt4(fetchPackedXYZW1010102<true, false>(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0)); } break; case kVertexTypeXYZW1010102UInt: if (kVertexPullingNormalize) { re = asUInt4(fetchPackedXYZW1010102<false, true>(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchPackedXYZW1010102<false, false>(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0))); } else { re = asUInt4(fetchPackedXYZW1010102<false, false>(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0)); } break; case kVertexTypeFloat: re = asUInt4(static_cast<float4>(fetchFloat(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)));; break; case kVertexTypeHalf: re = asUInt4(static_cast<float4>(fetchHalf(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)));; break; case kVertexTypeFixed: re = asUInt4(static_cast<float4>(fetchFixed(defaultAttribs, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)));; break; break; } };
+    }
+    else
+    {
+        { uint vertexFinalIndex; if (kVertexPullingDivisor == 0) { vertexFinalIndex = gl_VertexIndex; } else { vertexFinalIndex = gl_BaseInstance + gl_InstanceIndex / kVertexPullingDivisor; } switch (kVertexPullingType) { case kVertexTypeByte: if (kVertexPullingNormalize) { re = asUInt4(fetchByteNorm(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchByte(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchByte(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeUByte: if (kVertexPullingNormalize) { re = asUInt4(fetchUByteNorm(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchUByte(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchUByte(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeShort: if (kVertexPullingNormalize) { re = asUInt4(fetchShortNorm(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchShort(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchShort(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeUShort: if (kVertexPullingNormalize) { re = asUInt4(fetchUShortNorm(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchUShort(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchUShort(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeInt: if (kVertexPullingNormalize) { re = asUInt4(fetchIntNorm(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchInt(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchInt(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeUInt: if (kVertexPullingNormalize) { re = asUInt4(fetchUIntNorm(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchUInt(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount))); } else { re = asUInt4(fetchUInt(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)); }; break; case kVertexTypeXYZW1010102Int: if (kVertexPullingNormalize) { re = asUInt4(fetchPackedXYZW1010102<true, true>(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchPackedXYZW1010102<true, false>(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0))); } else { re = asUInt4(fetchPackedXYZW1010102<true, false>(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0)); } break; case kVertexTypeXYZW1010102UInt: if (kVertexPullingNormalize) { re = asUInt4(fetchPackedXYZW1010102<false, true>(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0)); } else if (kVertexPullingConvertToFloat) { re = asUInt4(static_cast<float4>(fetchPackedXYZW1010102<false, false>(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0))); } else { re = asUInt4(fetchPackedXYZW1010102<false, false>(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, 0)); } break; case kVertexTypeFloat: re = asUInt4(static_cast<float4>(fetchFloat(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)));; break; case kVertexTypeHalf: re = asUInt4(static_cast<float4>(fetchHalf(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)));; break; case kVertexTypeFixed: re = asUInt4(static_cast<float4>(fetchFixed(inputUnaligned, kVertexPullingOffset, kVertexPullingStride, vertexFinalIndex, kVertexPullingComponentCount)));; break; break; } };
+    }
+
+    return re;
+}
+
+#endif
+# 9 "temp_master_source.metal" 2
 
 
 )";

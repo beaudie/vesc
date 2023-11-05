@@ -123,18 +123,34 @@ struct alignas(4) SamplerDesc
 
 struct VertexAttributeDesc
 {
-    inline bool operator==(const VertexAttributeDesc &rhs) const
-    {
-        return format == rhs.format && offset == rhs.offset && bufferIndex == rhs.bufferIndex;
-    }
+    inline bool operator==(const VertexAttributeDesc &rhs) const { return asInt == rhs.asInt; }
     inline bool operator!=(const VertexAttributeDesc &rhs) const { return !(*this == rhs); }
 
-    // Use uint8_t instead of MTLVertexFormat to compact space
-    uint8_t format : 6;
-    // Offset is only used for default attributes buffer. So 8 bits are enough.
-    uint8_t offset : 8;
-    uint8_t bufferIndex : 5;
+    union
+    {
+        struct
+        {
+            // Offset is only used for default attributes buffer. So 8 bits are enough.
+            uint32_t offset : 8;
+            uint32_t bufferIndex : 5;
+
+            // metal format to be used by MTLVertexDescriptor when vertex pulling is disabled.
+            uint32_t metalFormat : 6;
+
+            // component count and base type for vertex pulling. These fields are filled with zeros
+            // if vertex pulling is not enabled.
+            uint32_t vertexPullingComponentCount : 3;
+            uint32_t vertexPullingType : 4;
+            uint32_t vertexPullingConvertMode : 2;  // normalize, cast to float or none.
+            uint32_t vertexPullingOffsetIsAligned : 1;
+        };
+
+        uint32_t asInt;
+    };
 };
+
+static_assert(sizeof(VertexAttributeDesc) == sizeof(uint32_t),
+              "Unexpected VertexAttributeDesc size");
 
 struct VertexBufferLayoutDesc
 {
@@ -274,6 +290,7 @@ struct alignas(4) RenderPipelineDesc
     bool rasterizationEnabled() const;
 
     AutoObjCPtr<MTLRenderPipelineDescriptor *> createMetalDesc(
+        bool useMetalVertexDesc,
         id<MTLFunction> vertexShader,
         id<MTLFunction> fragmentShader) const;
 

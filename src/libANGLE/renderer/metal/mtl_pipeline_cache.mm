@@ -9,7 +9,11 @@
 
 #include "libANGLE/renderer/metal/mtl_pipeline_cache.h"
 
+#include <tuple>
+
 #include "libANGLE/renderer/metal/ContextMtl.h"
+#include "libANGLE/renderer/metal/mtl_msl_utils.h"
+#include "libANGLE/renderer/metal/shaders/constants.h"
 
 namespace rx
 {
@@ -18,6 +22,37 @@ namespace mtl
 
 namespace
 {
+
+constexpr unsigned int kMaxVertexPullingFunctions = 256;
+
+// The cache tries to clean up this many states at once.
+constexpr unsigned int kGCLimit = 32;
+
+constexpr char kVertexPullingLibFuncName[] = "ANGLE_pullVertexAsUInt4";
+
+NSString *GetVertexPullingSpecializedLibFunctionName(VertexPullingFunctionKey key)
+{
+    return [NSString stringWithFormat:@"%s%zu", kVertexPullingLibFuncName, key.hash()];
+}
+
+// Returns {isDefaultAttribute, divisor } pair.
+std::tuple<BOOL, uint32_t> GetVertexPullingStepFunctionParams(VertexPullingFunctionKey key)
+{
+    if (key.attribute.bufferIndex == kDefaultAttribsBindingIndex)
+    {
+        return {YES, 0};
+    }
+    switch (key.layout.stepFunction)
+    {
+        case MTLVertexStepFunctionPerVertex:
+            return {NO, 0};
+        case MTLVertexStepFunctionPerInstance:
+            return {NO, key.layout.stepRate};
+    }
+    UNREACHABLE();
+    return {YES, 0};
+}
+
 bool HasDefaultAttribs(const RenderPipelineDesc &rpdesc)
 {
     const VertexDesc &desc = rpdesc.vertexDescriptor;
@@ -91,9 +126,269 @@ angle::Result ValidateRenderPipelineState(ContextMtl *context,
     return angle::Result::Continue;
 }
 
-angle::Result CreateRenderPipelineState(ContextMtl *context,
-                                        const PipelineKey &key,
-                                        AutoObjCPtr<id<MTLRenderPipelineState>> *outRenderPipeline)
+// Compile and create "pullVertexAsUInt4" function specialed for the VertexPullingFunctionKey.
+angle::Result CreateVertexPullingSpecializedLibFunction(ContextMtl *context,
+                                                        const VertexPullingFunctionKey &key,
+                                                        AutoObjCPtr<id<MTLFunction>> *outFunction)
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        MTLFunctionConstantValues *funcConstants = [MTLFunctionConstantValues new];
+
+        BOOL flag = key.attribute.vertexPullingOffsetIsAligned;
+        [funcConstants setConstantValue:&flag
+                                   type:MTLDataTypeBool
+                               withName:@"kVertexPullingOffsetIsAligned"];
+
+        uint value = key.attribute.vertexPullingType;
+        [funcConstants setConstantValue:&value type:MTLDataTypeUInt withName:@"kVertexPullingType"];
+
+        value = key.attribute.vertexPullingComponentCount;
+        [funcConstants setConstantValue:&value
+                                   type:MTLDataTypeUInt
+                               withName:@"kVertexPullingComponentCount"];
+
+        value = key.attribute.offset;
+        [funcConstants setConstantValue:&value
+                                   type:MTLDataTypeUInt
+                               withName:@"kVertexPullingOffset"];
+
+        value = key.layout.stride;
+        [funcConstants setConstantValue:&value
+                                   type:MTLDataTypeUInt
+                               withName:@"kVertexPullingStride"];
+
+        BOOL isDefaultAttrib;
+        uint32_t divisor;
+        std::tie(isDefaultAttrib, divisor) = GetVertexPullingStepFunctionParams(key);
+        [funcConstants setConstantValue:&divisor
+                                   type:MTLDataTypeUInt
+                               withName:@"kVertexPullingDivisor"];
+
+        [funcConstants setConstantValue:&isDefaultAttrib
+                                   type:MTLDataTypeBool
+                               withName:@"kVertexPullingUseDefaultAttribs"];
+
+        value = key.attribute.vertexPullingConvertMode;
+        [funcConstants setConstantValue:&value
+                                   type:MTLDataTypeUInt
+                               withName:@"kVertexPullingConvertMode"];
+
+        MTLFunctionDescriptor *libFuncDesc = [MTLFunctionDescriptor new];
+        libFuncDesc.name            = [NSString stringWithUTF8String:kVertexPullingLibFuncName];
+        libFuncDesc.specializedName = GetVertexPullingSpecializedLibFunctionName(key);
+        libFuncDesc.constantValues  = funcConstants;
+
+        NSError *err = nil;
+        auto libFunc = [context->getDisplay()->getExtendedDefaultShadersLib()
+            newFunctionWithDescriptor:libFuncDesc
+                                error:&err];
+        if (err)
+        {
+            ANGLE_MTL_HANDLE_ERROR(context, mtl::FormatMetalErrorMessage(err).c_str(),
+                                   GL_INVALID_OPERATION);
+            return angle::Result::Stop;
+        }
+
+        *outFunction = adoptObjCObj(libFunc);
+    }
+
+    return angle::Result::Continue;
+}
+
+// This will construct a shader code to use the specialized function from
+// CreateSpecializedVertexPullingLibFunction() to fetch the vertex attribute at the specified index.
+// This allows runtime to choose the corresponding precompiled pulling function based on the
+// attribute's offset, stride, format, etc. without the need to re-compile the whole shader
+// program.
+angle::Result StitchVertexPullingCode(ContextMtl *context,
+                                      uint32_t attributeIdx,
+                                      const VertexPullingFunctionKey &key,
+                                      const AutoObjCPtr<id<MTLFunction>> &pullingLibFunction,
+                                      AutoObjCPtr<id<MTLFunction>> *outStichedFunction)
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        MTLFunctionStitchingInputNode *bufferInput =
+            [[MTLFunctionStitchingInputNode alloc] initWithArgumentIndex:0];
+        MTLFunctionStitchingInputNode *defaultAttribsBufferInput =
+            [[MTLFunctionStitchingInputNode alloc] initWithArgumentIndex:1];
+        MTLFunctionStitchingInputNode *vertexIndexInput =
+            [[MTLFunctionStitchingInputNode alloc] initWithArgumentIndex:2];
+        MTLFunctionStitchingInputNode *instanceIndexInput =
+            [[MTLFunctionStitchingInputNode alloc] initWithArgumentIndex:3];
+        MTLFunctionStitchingInputNode *baseInstanceInput =
+            [[MTLFunctionStitchingInputNode alloc] initWithArgumentIndex:4];
+
+        MTLFunctionStitchingFunctionNode *funcCall = [[MTLFunctionStitchingFunctionNode alloc]
+                   initWithName:GetVertexPullingSpecializedLibFunctionName(key)
+                      arguments:@[
+                          bufferInput, defaultAttribsBufferInput, vertexIndexInput,
+                          instanceIndexInput, baseInstanceInput
+                      ]
+            controlDependencies:@[]];
+
+        NSString *stitchedFunctionName = [NSString
+            stringWithUTF8String:MslGetVertexPullingHelperFunctionName(attributeIdx).c_str()];
+        MTLFunctionStitchingGraph *funcCallGraph =
+            [[MTLFunctionStitchingGraph alloc] initWithFunctionName:stitchedFunctionName
+                                                              nodes:@[]
+                                                         outputNode:funcCall
+                                                         attributes:@[]];
+
+        MTLStitchedLibraryDescriptor *stitchedLibDesc = [MTLStitchedLibraryDescriptor new];
+        stitchedLibDesc.functions                     = @[ pullingLibFunction.get() ];
+        stitchedLibDesc.functionGraphs                = @[ funcCallGraph ];
+
+        NSError *err = nil;
+        auto stitchedLibrary =
+            context->getMetalDevice().newLibraryWithStitchedDescriptor(stitchedLibDesc, &err);
+
+        if (err)
+        {
+            ANGLE_MTL_HANDLE_ERROR(context, mtl::FormatMetalErrorMessage(err).c_str(),
+                                   GL_INVALID_OPERATION);
+            return angle::Result::Stop;
+        }
+
+        MTLFunctionDescriptor *stitchedFuncDesc = [MTLFunctionDescriptor new];
+        stitchedFuncDesc.name                   = stitchedFunctionName;
+
+        *outStichedFunction =
+            adoptObjCObj([stitchedLibrary.get() newFunctionWithDescriptor:stitchedFuncDesc
+                                                                    error:&err]);
+        if (err)
+        {
+            ANGLE_MTL_HANDLE_ERROR(context, mtl::FormatMetalErrorMessage(err).c_str(),
+                                   GL_INVALID_OPERATION);
+            return angle::Result::Stop;
+        }
+    }
+    return angle::Result::Continue;
+}
+
+// Create render pipeline state with manual vertex fetching in shader.
+angle::Result CreateRenderPipelineStateWithVertexPulling(
+    ContextMtl *context,
+    const PipelineKey &key,
+    PipelineCache::VertexPullFunctionMap *vertexPullingFuncCache,
+    MTLRenderPipelineDescriptor *objCDesc,
+    AutoObjCPtr<id<MTLRenderPipelineState>> *outRenderPipeline)
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        NSMutableArray *stitchedFunctions = [NSMutableArray new];
+        const VertexDesc &vertexDesc      = key.pipelineDesc.vertexDescriptor;
+        for (uint8_t i = 0; i < vertexDesc.numAttribs; ++i)
+        {
+            VertexPullingFunctionKey attribKey;
+            attribKey.attribute = vertexDesc.attributes[i];
+            if (attribKey.attribute.vertexPullingComponentCount == 0)
+            {
+                // disabled attribute.
+                continue;
+            }
+            if (vertexDesc.attributes[i].bufferIndex == kDefaultAttribsBindingIndex)
+            {
+                attribKey.layout = {};
+            }
+            else
+            {
+                const auto &layout = vertexDesc.layouts[vertexDesc.attributes[i].bufferIndex];
+                if (layout.stepFunction == kVertexStepFunctionInvalid)
+                {
+                    // disabled attribute
+                    continue;
+                }
+                attribKey.layout = layout;
+            }
+
+            // Find the corresponding vertex pulling function in the cache.
+            auto libFuncIter = vertexPullingFuncCache->Get(attribKey);
+            if (libFuncIter == vertexPullingFuncCache->end())
+            {
+                angle::TrimCache(kMaxVertexPullingFunctions, kGCLimit, "vertex pulling function",
+                                 vertexPullingFuncCache);
+
+                AutoObjCPtr<id<MTLFunction>> pullingFunction;
+                ANGLE_TRY(CreateVertexPullingSpecializedLibFunction(context, attribKey,
+                                                                    &pullingFunction));
+
+                libFuncIter =
+                    vertexPullingFuncCache->Put(std::move(attribKey), std::move(pullingFunction));
+            }
+
+            // Generate stitched function to load this vertex attribute.
+            AutoObjCPtr<id<MTLFunction>> stitchedFunction;
+            ANGLE_TRY(StitchVertexPullingCode(context, i, attribKey, libFuncIter->second,
+                                              &stitchedFunction));
+            [stitchedFunctions addObject:stitchedFunction];
+        }  // for (attributes)
+
+        // Link stitched functions.
+        MTLLinkedFunctions *linkedFuncs = [MTLLinkedFunctions new];
+        linkedFuncs.privateFunctions    = stitchedFunctions;
+
+        objCDesc.vertexLinkedFunctions = linkedFuncs;
+
+        // Create pipeline state
+        NSError *err = nil;
+        auto newState =
+            context->getMetalDevice().newRenderPipelineStateWithDescriptor(objCDesc, &err);
+        if (err)
+        {
+            ANGLE_MTL_HANDLE_ERROR(context, mtl::FormatMetalErrorMessage(err).c_str(),
+                                   GL_INVALID_OPERATION);
+            return angle::Result::Stop;
+        }
+
+        *outRenderPipeline = newState;
+    }
+    return angle::Result::Continue;
+}
+
+// Create render pipeline state with auto vertex fetching from Metal API.
+angle::Result CreateRenderPipelineStateWithoutVertexPulling(
+    ContextMtl *context,
+    const PipelineKey &key,
+    MTLRenderPipelineDescriptor *objCDesc,
+    AutoObjCPtr<id<MTLRenderPipelineState>> *outRenderPipeline)
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        // Special attribute slot for default attribute
+        if (HasDefaultAttribs(key.pipelineDesc))
+        {
+            auto defaultAttribLayoutObjCDesc = adoptObjCObj<MTLVertexBufferLayoutDescriptor>(
+                [[MTLVertexBufferLayoutDescriptor alloc] init]);
+            defaultAttribLayoutObjCDesc.get().stepFunction = MTLVertexStepFunctionConstant;
+            defaultAttribLayoutObjCDesc.get().stepRate     = 0;
+            defaultAttribLayoutObjCDesc.get().stride = kDefaultAttributeSize * kMaxVertexAttribs;
+
+            [objCDesc.vertexDescriptor.layouts setObject:defaultAttribLayoutObjCDesc
+                                      atIndexedSubscript:kDefaultAttribsBindingIndex];
+        }
+        // Create pipeline state
+        NSError *err = nil;
+        auto newState =
+            context->getMetalDevice().newRenderPipelineStateWithDescriptor(objCDesc, &err);
+        if (err)
+        {
+            ANGLE_MTL_HANDLE_ERROR(context, mtl::FormatMetalErrorMessage(err).c_str(),
+                                   GL_INVALID_OPERATION);
+            return angle::Result::Stop;
+        }
+
+        *outRenderPipeline = newState;
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result CreateRenderPipelineState(
+    ContextMtl *context,
+    const PipelineKey &key,
+    PipelineCache::VertexPullFunctionMap *vertexPullingFuncCache,
+    AutoObjCPtr<id<MTLRenderPipelineState>> *outRenderPipeline)
 {
     ANGLE_MTL_OBJC_SCOPE
     {
@@ -106,35 +401,23 @@ angle::Result CreateRenderPipelineState(ContextMtl *context,
             return angle::Result::Stop;
         }
 
-        const mtl::ContextDevice &metalDevice = context->getMetalDevice();
-
-        auto objCDesc = key.pipelineDesc.createMetalDesc(key.vertexShader, key.fragmentShader);
+        const bool useVertexPulling = context->getDisplay()->getFeatures().useVertexPulling.enabled;
+        auto objCDesc               = key.pipelineDesc.createMetalDesc(
+            /*useMetalVertexDesc=*/!useVertexPulling, key.vertexShader, key.fragmentShader);
 
         ANGLE_TRY(ValidateRenderPipelineState(context, objCDesc));
 
-        // Special attribute slot for default attribute
-        if (HasDefaultAttribs(key.pipelineDesc))
+        if (useVertexPulling)
         {
-            auto defaultAttribLayoutObjCDesc = adoptObjCObj<MTLVertexBufferLayoutDescriptor>(
-                [[MTLVertexBufferLayoutDescriptor alloc] init]);
-            defaultAttribLayoutObjCDesc.get().stepFunction = MTLVertexStepFunctionConstant;
-            defaultAttribLayoutObjCDesc.get().stepRate     = 0;
-            defaultAttribLayoutObjCDesc.get().stride = kDefaultAttributeSize * kMaxVertexAttribs;
-
-            [objCDesc.get().vertexDescriptor.layouts setObject:defaultAttribLayoutObjCDesc
-                                            atIndexedSubscript:kDefaultAttribsBindingIndex];
+            ANGLE_TRY(CreateRenderPipelineStateWithVertexPulling(
+                context, key, vertexPullingFuncCache, objCDesc.get(), outRenderPipeline));
         }
-        // Create pipeline state
-        NSError *err  = nil;
-        auto newState = metalDevice.newRenderPipelineStateWithDescriptor(objCDesc, &err);
-        if (err)
+        else
         {
-            ANGLE_MTL_HANDLE_ERROR(context, mtl::FormatMetalErrorMessage(err).c_str(),
-                                   GL_INVALID_OPERATION);
-            return angle::Result::Stop;
+            ANGLE_TRY(CreateRenderPipelineStateWithoutVertexPulling(context, key, objCDesc.get(),
+                                                                    outRenderPipeline));
         }
 
-        *outRenderPipeline = newState;
         return angle::Result::Continue;
     }
 }
@@ -217,7 +500,38 @@ size_t PipelineKey::hash() const
     }
 }
 
-PipelineCache::PipelineCache() : mPipelineCache(kMaxPipelines) {}
+bool VertexPullingFunctionKey::operator==(const VertexPullingFunctionKey &rhs) const
+{
+    // For caching, ee don't consider bufferIdx & metalFormat when comparing.
+    VertexAttributeDesc lhsAttribVal = attribute;
+    lhsAttribVal.bufferIndex         = 0;
+    lhsAttribVal.metalFormat         = 0;
+
+    VertexAttributeDesc rhsAttribVal = rhs.attribute;
+    rhsAttribVal.bufferIndex         = 0;
+    rhsAttribVal.metalFormat         = 0;
+
+    return layout == rhs.layout && lhsAttribVal == rhsAttribVal;
+}
+size_t VertexPullingFunctionKey::hash() const
+{
+    uint64_t key[2];
+
+    // For caching, ignore bufferIndex & metalFormat
+    VertexAttributeDesc hashableAttribVal = attribute;
+    hashableAttribVal.bufferIndex         = 0;
+    hashableAttribVal.metalFormat         = 0;
+
+    key[0] = (static_cast<uint64_t>(layout.stepRate) << 32) | layout.stride;
+    key[1] = static_cast<uint64_t>(layout.stepFunction) << 32;
+    key[1] = key[1] | hashableAttribVal.asInt;
+
+    return angle::ComputeGenericHash(key, sizeof(key));
+}
+
+PipelineCache::PipelineCache()
+    : mPipelineCache(kMaxPipelines), mVertexPullFunctionsCache(kMaxVertexPullingFunctions)
+{}
 
 angle::Result PipelineCache::getRenderPipeline(
     ContextMtl *context,
@@ -243,7 +557,8 @@ angle::Result PipelineCache::getRenderPipeline(
     angle::TrimCache(kMaxPipelines, kGCLimit, "render pipeline", &mPipelineCache);
 
     PipelineVariant newPipeline;
-    ANGLE_TRY(CreateRenderPipelineState(context, key, &newPipeline.renderPipeline));
+    ANGLE_TRY(CreateRenderPipelineState(context, key, &mVertexPullFunctionsCache,
+                                        &newPipeline.renderPipeline));
 
     iter = mPipelineCache.Put(std::move(key), std::move(newPipeline));
 

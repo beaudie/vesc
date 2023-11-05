@@ -60,6 +60,9 @@ angle::Result MTLGetMSL(Context *context,
 
 // Get equivalent shadow compare mode that is used in translated msl shader.
 uint MslGetShaderShadowCompareMode(GLenum mode, GLenum func);
+
+std::string MslGetVertexPullingHelperFunctionName(uint32_t attributeIdx);
+
 }  // namespace mtl
 }  // namespace rx
 
