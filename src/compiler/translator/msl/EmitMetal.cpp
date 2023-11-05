@@ -184,12 +184,13 @@ class GenMetalTraverser : public TIntermTraverser
     const PipelineStructs &mPipelineStructs;
     SymbolEnv &mSymbolEnv;
     IdGen &mIdGen;
-    int mIndentLevel                  = -1;
-    int mLastIndentationPos           = -1;
-    int mOpenPointerParenCount        = 0;
-    bool mParentIsSwitch              = false;
-    bool isTraversingVertexMain       = false;
-    bool mTemporarilyDisableSemicolon = false;
+    int mIndentLevel                          = -1;
+    int mLastIndentationPos                   = -1;
+    int mOpenPointerParenCount                = 0;
+    bool mParentIsSwitch                      = false;
+    bool isTraversingVertexMain               = false;
+    bool mTemporarilyDisableSemicolon         = false;
+    const TVariable *mVertexInputToDeclInBody = nullptr;
     std::unordered_map<const TSymbol *, Name> mRenamedSymbols;
     const FuncToName mFuncToName          = BuildFuncToName();
     size_t mMainTextureIndex              = 0;
@@ -198,6 +199,7 @@ class GenMetalTraverser : public TIntermTraverser
     size_t mDriverUniformsBindingIndex    = 0;
     size_t mUBOArgumentBufferBindingIndex = 0;
     bool mRasterOrderGroupsSupported      = false;
+    bool mUseVertexPulling                = false;
 };
 }  // anonymous namespace
 
@@ -224,7 +226,8 @@ GenMetalTraverser::GenMetalTraverser(const TCompiler &compiler,
       mDriverUniformsBindingIndex(compileOptions.metal.driverUniformsBindingIndex),
       mUBOArgumentBufferBindingIndex(compileOptions.metal.UBOArgumentBufferBindingIndex),
       mRasterOrderGroupsSupported(compileOptions.pls.fragmentSyncType ==
-                                  ShFragmentSynchronizationType::RasterOrderGroups_Metal)
+                                  ShFragmentSynchronizationType::RasterOrderGroups_Metal),
+      mUseVertexPulling(compileOptions.metal.useVertexPulling)
 {}
 
 void GenMetalTraverser::emitIndentation()
@@ -1361,6 +1364,7 @@ void GenMetalTraverser::emitAttributeDeclaration(const TField &field,
     EmitVariableDeclarationConfig evdConfig;
     evdConfig.disableStructSpecifier = true;
     emitVariableDeclaration(VarDecl(field), evdConfig);
+
     mOut << sh::kUnassignedAttributeString;
 }
 
@@ -1933,7 +1937,19 @@ bool GenMetalTraverser::visitCase(Visit, TIntermCase *caseNode)
 
 void GenMetalTraverser::emitFunctionSignature(const TFunction &func)
 {
-    const bool isMain = func.isMain();
+    const bool isMain       = func.isMain();
+    const TType &returnType = func.getReturnType();
+    bool isVertexMain       = false;
+    if (isMain)
+    {
+        const TStructure *structure = returnType.getStruct();
+        if (mUseVertexPulling && structure && mPipelineStructs.vertexOut.matches(*structure))
+        {
+            isVertexMain = true;
+            // Emit vertex pulling's helper functions right before main.
+            mOut << kVertexPullingFuncsMarker << "\n";
+        }
+    }
 
     emitFunctionReturn(func);
 
@@ -1945,18 +1961,37 @@ void GenMetalTraverser::emitFunctionSignature(const TFunction &func)
     }
     mOut << "(";
 
+    if (mUseVertexPulling && isVertexMain)
+    {
+        mOut << kAttributeBuffersMarker;
+        if (func.getParamCount())
+        {
+            mOut << ", ";
+        }
+    }
+
     bool emitComma          = false;
     const size_t paramCount = func.getParamCount();
     for (size_t i = 0; i < paramCount; ++i)
     {
-        if (emitComma)
+        const TVariable &param      = *func.getParam(i);
+        const TStructure *structure = param.getType().getStruct();
+        // Don't emit vertex [[stage_in]] if vertex pulling is enabled. Instead we will declare the
+        // vertex input in main's body and filling it manually.
+        if (mUseVertexPulling && isMain && structure &&
+            mPipelineStructs.vertexIn.matches(*structure))
         {
-            mOut << ", ";
+            mVertexInputToDeclInBody = &param;
         }
-        emitComma = true;
-
-        const TVariable &param = *func.getParam(i);
-        emitFunctionParameter(func, param);
+        else
+        {
+            if (emitComma)
+            {
+                mOut << ", ";
+            }
+            emitComma = true;
+            emitFunctionParameter(func, param);
+        }
     }
 
     if (isTraversingVertexMain)
@@ -2024,6 +2059,7 @@ void GenMetalTraverser::emitFunctionParameter(const TFunction &func, const TVari
             if (mPipelineStructs.fragmentIn.matches(*structure) ||
                 mPipelineStructs.vertexIn.matches(*structure))
             {
+                ASSERT(!mUseVertexPulling || !mPipelineStructs.vertexIn.matches(*structure));
                 mOut << " [[stage_in]]";
             }
             else if (mPipelineStructs.angleUniforms.matches(*structure))
@@ -2397,6 +2433,22 @@ bool GenMetalTraverser::visitBlock(Visit, TIntermBlock *blockNode)
         {
             ++mIndentLevel;
         }
+    }
+
+    if (mVertexInputToDeclInBody)
+    {
+        // Declare vertex input at the beginning of main. This should happen only once.
+        ASSERT(mUseVertexPulling);
+        EmitVariableDeclarationConfig evdConfig;
+        emitIndentation();
+        emitVariableDeclaration(VarDecl(*mVertexInputToDeclInBody), evdConfig);
+        mOut << ";\n";
+        emitIndentation();
+        mOut << kVertexPullingMarker << "(";
+        emitNameOf(VarDecl(*mVertexInputToDeclInBody));
+        mOut << ");\n";
+
+        mVertexInputToDeclInBody = nullptr;
     }
 
     TIntermNode *prevStmtNode = nullptr;

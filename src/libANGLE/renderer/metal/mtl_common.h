@@ -25,6 +25,7 @@
 #include "libANGLE/ImageIndex.h"
 #include "libANGLE/Version.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/metal/shaders/constants.h"
 
 #if defined(ANGLE_MTL_ENABLE_TRACE)
 #    define ANGLE_MTL_LOG(...) NSLog(@__VA_ARGS__)

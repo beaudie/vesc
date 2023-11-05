@@ -414,6 +414,13 @@ struct FeaturesMtl : FeatureSetBase
         &members, "http://crbug.com/1486094"
     };
 
+    FeatureInfo useVertexPulling = {
+        "useVertexPulling",
+        FeatureCategory::MetalFeatures,
+        "Fetch vertex attributes manually in shader instead of via MTLVertexDescriptor.",
+        &members, "http://crbug.com/1486094"
+    };
+
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;
