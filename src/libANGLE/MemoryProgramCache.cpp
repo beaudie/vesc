@@ -67,12 +67,14 @@ void MemoryProgramCache::ComputeHash(const Context *context,
                                      egl::BlobCache::Key *hashOut)
 {
     // Compute the program hash. Start with the shader hashes.
+    printf("%s:%d: Making program hash\n", __FILE__, __LINE__);
     BinaryOutputStream hashStream;
     for (ShaderType shaderType : AllShaderTypes())
     {
         Shader *shader = program->getAttachedShader(shaderType);
         if (shader)
         {
+            printf("%s:%d: added %u\n", __FILE__, __LINE__, (uint32_t)shaderType);
             shader->writeShaderKey(&hashStream);
         }
     }
@@ -102,6 +104,19 @@ void MemoryProgramCache::ComputeHash(const Context *context,
     // Call the secure SHA hashing function.
     const std::vector<uint8_t> &programKey = hashStream.getData();
     angle::base::SHA1HashBytes(programKey.data(), programKey.size(), hashOut->data());
+    printf("%s:%d: Done making program hash\n", __FILE__, __LINE__);
+    printf("Program key:");
+    for (size_t i = 0; i < programKey.size(); ++i)
+    {
+        printf(" %02X", programKey[i]);
+    }
+    printf("\n");
+    printf("Hashed to:");
+    for (size_t i = 0; i < hashOut->size(); ++i)
+    {
+        printf(" %02X", (*hashOut)[i]);
+    }
+    printf("\n");
 }
 
 angle::Result MemoryProgramCache::getProgram(const Context *context,
@@ -122,6 +137,7 @@ angle::Result MemoryProgramCache::getProgram(const Context *context,
                                         kMaxUncompressedProgramSize, &uncompressedData))
     {
         case egl::BlobCache::GetAndDecompressResult::NotFound:
+            printf("%s:%d: Not in cache\n", __FILE__, __LINE__);
             return angle::Result::Continue;
 
         case egl::BlobCache::GetAndDecompressResult::DecompressFailure:
@@ -130,6 +146,7 @@ angle::Result MemoryProgramCache::getProgram(const Context *context,
             return angle::Result::Continue;
 
         case egl::BlobCache::GetAndDecompressResult::GetSuccess:
+            printf("%s:%d: IN CACHE!\n", __FILE__, __LINE__);
             ANGLE_TRY(program->loadBinary(context, uncompressedData.data(),
                                           static_cast<int>(uncompressedData.size()), successOut));
 
