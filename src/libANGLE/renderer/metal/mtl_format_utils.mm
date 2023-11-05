@@ -204,8 +204,8 @@ angle::Result FormatTable::initialize(const DisplayMtl *display)
                 mPixelFormatTable[i].actualFormatId);
         }
 
-        mVertexFormatTables[0][i].init(formatId, false);
-        mVertexFormatTables[1][i].init(formatId, true);
+        mVertexFormatTables[0][i].init(display, formatId, false);
+        mVertexFormatTables[1][i].init(display, formatId, true);
     }
 
     // TODO(anglebug.com/5505): unmerged change from WebKit was here -

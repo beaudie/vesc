@@ -44,6 +44,7 @@ template_autogen_inl = """// GENERATED FILE - DO NOT EDIT.
 #include "libANGLE/renderer/metal/DisplayMtl.h"
 #include "libANGLE/renderer/metal/mtl_format_utils.h"
 #include "libANGLE/renderer/metal/mtl_utils.h"
+#include "libANGLE/renderer/metal/shaders/constants.h"
 
 using namespace angle;
 
@@ -75,7 +76,7 @@ void Format::init(const DisplayMtl *display, angle::FormatID intendedFormatId_)
     }}
 }}
 
-void VertexFormat::init(angle::FormatID angleFormatId, bool tightlyPacked)
+void VertexFormat::init(const DisplayMtl *display, angle::FormatID angleFormatId, bool tightlyPacked)
 {{
     this->intendedFormatId = angleFormatId;
 
@@ -83,6 +84,22 @@ void VertexFormat::init(angle::FormatID angleFormatId, bool tightlyPacked)
     switch (this->intendedFormatId)
     {{
 {angle_vertex_format_switch}
+    }}
+
+    // If GPU vertex pulling is enabled. There is no need for format conversion before
+    // drawing.
+    if (display->getFeatures().useVertexPulling.enabled)
+    {{
+        // Metal format is not used by vertex pulling.
+        this->metalFormat = MTLVertexFormatInvalid;
+        this->actualFormatId = this->intendedFormatId;
+
+        this->vertexLoadFunction = this->vertexCopyFunctionWithoutConversion;
+    }}
+    else
+    {{
+        this->vertexPullingAlignment = 0;
+        this->vertexPullingShaderType = 0;
     }}
 }}
 
@@ -167,7 +184,10 @@ case_vertex_format_template1 = """        case angle::FormatID::{angle_format}:
             this->metalFormat = {mtl_format};
             this->actualFormatId = angle::FormatID::{actual_angle_format};
             this->vertexLoadFunction = {vertex_copy_function};
+            this->vertexCopyFunctionWithoutConversion = {vertex_copy_function_no_convert};
             this->defaultAlpha = {default_alpha};{same_gl_type}
+            this->vertexPullingAlignment = {mtl_pulling_alignment};
+            this->vertexPullingShaderType = {mtl_pulling_type};
             break;
 
 """
@@ -187,6 +207,9 @@ case_vertex_format_template2 = """        case angle::FormatID::{angle_format}:
                 this->vertexLoadFunction = {vertex_copy_function};
                 this->defaultAlpha = {default_alpha};{same_gl_type}
             }}
+            this->vertexPullingAlignment = {mtl_pulling_alignment};
+            this->vertexPullingShaderType = {mtl_pulling_type};
+            this->vertexCopyFunctionWithoutConversion = {vertex_copy_function_no_convert};
             break;
 
 """
@@ -245,6 +268,35 @@ def get_vertex_copy_function_and_default_alpha(src_format, dst_format):
 
     return angle_format_utils.get_vertex_copy_function(src_format, dst_format), 0, "false"
 
+
+def get_vertex_pulling_shader_type(angle_format):
+    if angle_format.startswith('R10G10B10A2'):
+        is_signed = True if 'SINT' in angle_format or 'SNORM' in angle_format or 'SSCALED' in angle_format else False
+        if is_signed:
+            return 'XYZW1010102Int'
+        return 'XYZW1010102UInt'
+
+    num_channel = len(angle_format_utils.get_channel_tokens(angle_format))
+    if num_channel < 1 or num_channel > 4:
+        return 'Invalid'
+
+    if 'FIXED' in angle_format:
+        return 'Fixed'
+
+    gl_type = angle_format_utils.get_format_gl_type(angle_format)
+
+    dict = {
+        'GLint': 'Int',
+        'GLuint': 'UInt',
+        'GLfloat': 'Float',
+        'GLhalf': 'Half',
+        'GLshort': 'Short',
+        'GLushort': 'UShort',
+        'GLbyte': 'Byte',
+        'GLubyte': 'UByte'
+    }
+
+    return dict[gl_type]
 
 # Generate format conversion switch case (generic case)
 
@@ -576,10 +628,17 @@ def gen_image_mtl_to_angle_switch_string(image_table):
     return switch_data
 
 
-def gen_vertex_map_switch_case(angle_fmt, actual_angle_fmt, angle_to_mtl_map, override_packed_map):
+def gen_vertex_map_switch_case(angle_fmt, actual_angle_fmt, angle_to_mtl_map, override_packed_map,
+                               pulling_alignments):
     mtl_format = angle_to_mtl_map[actual_angle_fmt]
+    mtl_pulling_alignment = pulling_alignments[angle_fmt]
+    mtl_pulling_type = 'mtl_shader::kVertexType' + get_vertex_pulling_shader_type(angle_fmt)
+
     copy_function, default_alpha, same_gl_type = get_vertex_copy_function_and_default_alpha(
         angle_fmt, actual_angle_fmt)
+
+    copy_function_no_convert, _, _ = get_vertex_copy_function_and_default_alpha(
+        angle_fmt, angle_fmt)
 
     if actual_angle_fmt in override_packed_map:
         # This format has an override when used in tightly packed buffer,
@@ -599,8 +658,11 @@ def gen_vertex_map_switch_case(angle_fmt, actual_angle_fmt, angle_to_mtl_map, ov
             mtl_format=mtl_format,
             actual_angle_format=actual_angle_fmt,
             vertex_copy_function=copy_function,
+            vertex_copy_function_no_convert=copy_function_no_convert,
             default_alpha=default_alpha,
-            same_gl_type=wrap_actual_same_gl_type(same_gl_type))
+            same_gl_type=wrap_actual_same_gl_type(same_gl_type),
+            mtl_pulling_alignment=mtl_pulling_alignment,
+            mtl_pulling_type=mtl_pulling_type)
     else:
         # This format has no packed buffer's override, return ordinary block.
         return case_vertex_format_template1.format(
@@ -608,29 +670,37 @@ def gen_vertex_map_switch_case(angle_fmt, actual_angle_fmt, angle_to_mtl_map, ov
             mtl_format=mtl_format,
             actual_angle_format=actual_angle_fmt,
             vertex_copy_function=copy_function,
+            vertex_copy_function_no_convert=copy_function_no_convert,
             default_alpha=default_alpha,
-            same_gl_type=wrap_actual_same_gl_type(same_gl_type))
+            same_gl_type=wrap_actual_same_gl_type(same_gl_type),
+            mtl_pulling_alignment=mtl_pulling_alignment,
+            mtl_pulling_type=mtl_pulling_type)
 
 
 def gen_vertex_map_switch_string(vertex_table):
     angle_to_mtl = vertex_table["map"]
+    pulling_alignments = vertex_table["pulling_alignment"]
     angle_override = vertex_table["override"]
     override_packed = vertex_table["override_tightly_packed"]
 
     switch_data = ''
     for angle_fmt in sorted(angle_to_mtl.keys()):
         switch_data += gen_vertex_map_switch_case(angle_fmt, angle_fmt, angle_to_mtl,
-                                                  override_packed)
+                                                  override_packed, pulling_alignments)
 
     for angle_fmt in sorted(angle_override.keys()):
         switch_data += gen_vertex_map_switch_case(angle_fmt, angle_override[angle_fmt],
-                                                  angle_to_mtl, override_packed)
+                                                  angle_to_mtl, override_packed,
+                                                  pulling_alignments)
 
     switch_data += "        default:\n"
     switch_data += "            this->metalFormat = MTLVertexFormatInvalid;\n"
     switch_data += "            this->actualFormatId = angle::FormatID::NONE;\n"
     switch_data += "            this->vertexLoadFunction = nullptr;"
+    switch_data += "            this->vertexCopyFunctionWithoutConversion = nullptr;"
     switch_data += "            this->defaultAlpha = 0;"
+    switch_data += "            this->vertexPullingAlignment = 1;"
+    switch_data += "            this->vertexPullingShaderType = mtl_shader::kVertexTypeInvalid;"
     switch_data += "            this->actualSameGLType = false;"
     return switch_data
 

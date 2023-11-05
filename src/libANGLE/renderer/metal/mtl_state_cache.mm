@@ -77,8 +77,8 @@ inline AutoObjCPtr<MTLSamplerDescriptor *> ToObjC(const SamplerDesc &desc)
 
 inline AutoObjCPtr<MTLVertexAttributeDescriptor *> ToObjC(const VertexAttributeDesc &desc)
 {
-    auto objCDesc = adoptObjCObj([[MTLVertexAttributeDescriptor alloc] init]);
-    ANGLE_OBJC_CP_PROPERTY(objCDesc.get(), desc, format);
+    auto objCDesc         = adoptObjCObj([[MTLVertexAttributeDescriptor alloc] init]);
+    objCDesc.get().format = static_cast<MTLVertexFormat>(desc.metalFormat);
     ANGLE_OBJC_CP_PROPERTY(objCDesc.get(), desc, offset);
     ANGLE_OBJC_CP_PROPERTY(objCDesc.get(), desc, bufferIndex);
     ASSERT(desc.bufferIndex >= kVboBindingIndexStart);
@@ -650,13 +650,17 @@ bool RenderPipelineDesc::rasterizationEnabled() const
 }
 
 AutoObjCPtr<MTLRenderPipelineDescriptor *> RenderPipelineDesc::createMetalDesc(
+    bool useMetalVertexDesc,
     id<MTLFunction> vertexShader,
     id<MTLFunction> fragmentShader) const
 {
     auto objCDesc = adoptObjCObj([[MTLRenderPipelineDescriptor alloc] init]);
     [objCDesc reset];
 
-    ANGLE_OBJC_CP_PROPERTY(objCDesc.get(), *this, vertexDescriptor);
+    if (useMetalVertexDesc)
+    {
+        ANGLE_OBJC_CP_PROPERTY(objCDesc.get(), *this, vertexDescriptor);
+    }
 
     for (uint8_t i = 0; i < outputDescriptor.numColorAttachments; ++i)
     {

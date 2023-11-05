@@ -1316,6 +1316,8 @@ void DisplayMtl::initializeFeatures()
     ANGLE_FEATURE_CONDITION((&mFeatures), alwaysUseSharedStorageModeForBuffers, isIntel());
     ANGLE_FEATURE_CONDITION((&mFeatures), useShadowBuffersWhenAppropriate, isIntel());
 
+    ANGLE_FEATURE_CONDITION((&mFeatures), useVertexPulling, supportsMetal2_4());
+
     // At least one of these must not be set.
     ASSERT(!mFeatures.alwaysUseManagedStorageModeForBuffers.enabled ||
            !mFeatures.alwaysUseSharedStorageModeForBuffers.enabled);
@@ -1370,9 +1372,16 @@ angle::Result DisplayMtl::initializeShaderLibrary()
 #if ANGLE_METAL_XCODE_BUILDS_SHADERS || ANGLE_METAL_HAS_PREBUILT_INTERNAL_SHADERS
     mDefaultShaders = mtl::CreateShaderLibraryFromBinary(getMetalDevice(), gDefaultMetallib,
                                                          std::size(gDefaultMetallib), &err);
+
+    if (supportsMetal2_4())
+    {
+        mDefaultShadersExtended = mtl::CreateShaderLibraryFromBinary(
+            getMetalDevice(), gDefaultMetallibExtended, std::size(gDefaultMetallibExtended), &err);
+    }
 #else
-    mDefaultShaders = mtl::CreateShaderLibrary(getMetalDevice(), gDefaultMetallibSrc,
-                                               std::size(gDefaultMetallibSrc), &err);
+    mDefaultShaders         = mtl::CreateShaderLibrary(getMetalDevice(), gDefaultMetallibSrc,
+                                                       std::size(gDefaultMetallibSrc), &err);
+    mDefaultShadersExtended = mDefaultShaders;
 #endif
 
     if (err)
@@ -1387,6 +1396,11 @@ angle::Result DisplayMtl::initializeShaderLibrary()
 id<MTLLibrary> DisplayMtl::getDefaultShadersLib()
 {
     return mDefaultShaders;
+}
+
+id<MTLLibrary> DisplayMtl::getExtendedDefaultShadersLib()
+{
+    return mDefaultShadersExtended;
 }
 
 bool DisplayMtl::supportsAppleGPUFamily(uint8_t iOSFamily) const
@@ -1418,6 +1432,17 @@ bool DisplayMtl::supportsMetal2_1() const
 bool DisplayMtl::supportsMetal2_2() const
 {
     if (ANGLE_APPLE_AVAILABLE_XCI(10.15, 13.1, 13.0))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+bool DisplayMtl::supportsMetal2_4() const
+{
+    if (ANGLE_APPLE_AVAILABLE_XCI(12.0, 15.0, 15.0))
     {
         return true;
     }

@@ -120,6 +120,13 @@ AutoObjCPtr<id<MTLLibrary>> ContextDevice::newLibraryWithData(dispatch_data_t da
     return adoptObjCObj([get() newLibraryWithData:data error:error]);
 }
 
+AutoObjCPtr<id<MTLLibrary>> ContextDevice::newLibraryWithStitchedDescriptor(
+    MTLStitchedLibraryDescriptor *desc,
+    __autoreleasing NSError **error) const
+{
+    return adoptObjCObj([get() newLibraryWithStitchedDescriptor:desc error:error]);
+}
+
 AutoObjCPtr<id<MTLDepthStencilState>> ContextDevice::newDepthStencilStateWithDescriptor(
     MTLDepthStencilDescriptor *descriptor) const
 {
