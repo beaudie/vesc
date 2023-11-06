@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d32713e_b563aa2e",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-06T14:40:28Z",
+      "side": 1,
+      "message": "Needs deletion",
+      "range": {
+        "startLine": 607,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 6
+      },
+      "revId": "77f7a122290fb63530ca8a697fb2b81ed93c6355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
