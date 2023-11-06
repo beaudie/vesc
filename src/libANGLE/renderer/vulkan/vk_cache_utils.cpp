@@ -128,49 +128,49 @@ bool GraphicsPipelineHasFragmentOutput(GraphicsPipelineSubset subset)
            subset == GraphicsPipelineSubset::FragmentOutput;
 }
 
-uint8_t PackGLBlendOp(GLenum blendOp)
+uint8_t PackGLBlendOp(gl::BlendEquationType blendOp)
 {
     switch (blendOp)
     {
-        case GL_FUNC_ADD:
+        case gl::BlendEquationType::Add:
             return static_cast<uint8_t>(VK_BLEND_OP_ADD);
-        case GL_FUNC_SUBTRACT:
+        case gl::BlendEquationType::Subtract:
             return static_cast<uint8_t>(VK_BLEND_OP_SUBTRACT);
-        case GL_FUNC_REVERSE_SUBTRACT:
+        case gl::BlendEquationType::ReverseSubtract:
             return static_cast<uint8_t>(VK_BLEND_OP_REVERSE_SUBTRACT);
-        case GL_MIN:
+        case gl::BlendEquationType::Min:
             return static_cast<uint8_t>(VK_BLEND_OP_MIN);
-        case GL_MAX:
+        case gl::BlendEquationType::Max:
             return static_cast<uint8_t>(VK_BLEND_OP_MAX);
-        case GL_MULTIPLY_KHR:
+        case gl::BlendEquationType::Multiply:
             return static_cast<uint8_t>(VK_BLEND_OP_MULTIPLY_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_SCREEN_KHR:
+        case gl::BlendEquationType::Screen:
             return static_cast<uint8_t>(VK_BLEND_OP_SCREEN_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_OVERLAY_KHR:
+        case gl::BlendEquationType::Overlay:
             return static_cast<uint8_t>(VK_BLEND_OP_OVERLAY_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_DARKEN_KHR:
+        case gl::BlendEquationType::Darken:
             return static_cast<uint8_t>(VK_BLEND_OP_DARKEN_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_LIGHTEN_KHR:
+        case gl::BlendEquationType::Lighten:
             return static_cast<uint8_t>(VK_BLEND_OP_LIGHTEN_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_COLORDODGE_KHR:
+        case gl::BlendEquationType::Colordodge:
             return static_cast<uint8_t>(VK_BLEND_OP_COLORDODGE_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_COLORBURN_KHR:
+        case gl::BlendEquationType::Colorburn:
             return static_cast<uint8_t>(VK_BLEND_OP_COLORBURN_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_HARDLIGHT_KHR:
+        case gl::BlendEquationType::Hardlight:
             return static_cast<uint8_t>(VK_BLEND_OP_HARDLIGHT_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_SOFTLIGHT_KHR:
+        case gl::BlendEquationType::Softlight:
             return static_cast<uint8_t>(VK_BLEND_OP_SOFTLIGHT_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_DIFFERENCE_KHR:
+        case gl::BlendEquationType::Difference:
             return static_cast<uint8_t>(VK_BLEND_OP_DIFFERENCE_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_EXCLUSION_KHR:
+        case gl::BlendEquationType::Exclusion:
             return static_cast<uint8_t>(VK_BLEND_OP_EXCLUSION_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_HSL_HUE_KHR:
+        case gl::BlendEquationType::HslHue:
             return static_cast<uint8_t>(VK_BLEND_OP_HSL_HUE_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_HSL_SATURATION_KHR:
+        case gl::BlendEquationType::HslSaturation:
             return static_cast<uint8_t>(VK_BLEND_OP_HSL_SATURATION_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_HSL_COLOR_KHR:
+        case gl::BlendEquationType::HslColor:
             return static_cast<uint8_t>(VK_BLEND_OP_HSL_COLOR_EXT - VK_BLEND_OP_ZERO_EXT);
-        case GL_HSL_LUMINOSITY_KHR:
+        case gl::BlendEquationType::HslLuminosity:
             return static_cast<uint8_t>(VK_BLEND_OP_HSL_LUMINOSITY_EXT - VK_BLEND_OP_ZERO_EXT);
         default:
             UNREACHABLE();
@@ -3740,13 +3740,13 @@ void GraphicsPipelineDesc::updateBlendFuncs(GraphicsPipelineTransitionBits *tran
         PackedColorBlendAttachmentState &blendAttachmentState =
             mFragmentOutput.blend.attachments[attachmentIndex];
         blendAttachmentState.srcColorBlendFactor =
-            PackGLBlendFactor(blendStateExt.getSrcColorIndexed(attachmentIndex));
+            PackGLBlendFactor(ToGLenum(blendStateExt.getSrcColorIndexed(attachmentIndex)));
         blendAttachmentState.dstColorBlendFactor =
-            PackGLBlendFactor(blendStateExt.getDstColorIndexed(attachmentIndex));
+            PackGLBlendFactor(ToGLenum(blendStateExt.getDstColorIndexed(attachmentIndex)));
         blendAttachmentState.srcAlphaBlendFactor =
-            PackGLBlendFactor(blendStateExt.getSrcAlphaIndexed(attachmentIndex));
+            PackGLBlendFactor(ToGLenum(blendStateExt.getSrcAlphaIndexed(attachmentIndex)));
         blendAttachmentState.dstAlphaBlendFactor =
-            PackGLBlendFactor(blendStateExt.getDstAlphaIndexed(attachmentIndex));
+            PackGLBlendFactor(ToGLenum(blendStateExt.getDstAlphaIndexed(attachmentIndex)));
         transition->set(ANGLE_GET_INDEXED_TRANSITION_BIT(mFragmentOutput.blend.attachments,
                                                          attachmentIndex, kSizeBits));
     }
