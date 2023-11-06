@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c65bb8_f71adede",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-06T18:06:04Z",
+      "side": 1,
+      "message": "FYI Ken and Cody, the shader replacement/dump-to/from-file features have moved here and are now done by the compile thread (if any) instead of the main thread. If this ends up breaking your debug-flow, let me know.",
+      "revId": "77f7a122290fb63530ca8a697fb2b81ed93c6355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d32713e_b563aa2e",
@@ -14,6 +31,30 @@
       "writtenOn": "2023-11-06T14:40:28Z",
       "side": 1,
       "message": "Needs deletion",
+      "range": {
+        "startLine": 607,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 6
+      },
+      "revId": "77f7a122290fb63530ca8a697fb2b81ed93c6355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58301fc5_df8c6d16",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-06T18:06:04Z",
+      "side": 1,
+      "message": "Oops, done",
+      "parentUuid": "1d32713e_b563aa2e",
       "range": {
         "startLine": 607,
         "startChar": 0,
