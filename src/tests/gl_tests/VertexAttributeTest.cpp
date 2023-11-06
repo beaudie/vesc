@@ -1394,6 +1394,57 @@ TEST_P(VertexAttributeTest, DrawArraysWithUnalignedShortBufferOffset)
     EXPECT_GL_NO_ERROR();
 }
 
+// Verify that using a GL_FLOATx2 attribute with offset not divisible by 8 works.
+TEST_P(VertexAttributeTest, DrawArraysWith2FloatAtOffsetNotDivisbleBy8)
+{
+    initBasicProgram();
+    glUseProgram(mProgram);
+
+    // input data is GL_FLOATx2 (8 bytes) and stride=36
+    std::array<GLubyte, 36 * kVertexCount> inputData;
+    std::array<GLfloat, 2 * kVertexCount> expectedData;
+    for (size_t i = 0; i < kVertexCount; ++i)
+    {
+        expectedData[2 * i]     = 2 * i;
+        expectedData[2 * i + 1] = 2 * i + 1;
+
+        GLubyte *input = inputData.data() + 36 * i;
+        memcpy(input, &expectedData[2 * i], sizeof(float));
+        memcpy(input + sizeof(float), &expectedData[2 * i + 1], sizeof(float));
+    }
+
+    GLBuffer quadBuffer;
+    InitQuadPlusOneVertexBuffer(&quadBuffer);
+
+    GLint positionLocation = glGetAttribLocation(mProgram, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    // offset is not float2 aligned (28)
+    GLsizei dataSize = 36 * kVertexCount + 28;
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, dataSize, nullptr, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 28, dataSize - 28, inputData.data());
+    glVertexAttribPointer(mTestAttrib, 2, GL_FLOAT, GL_FALSE, /* stride */ 36,
+                          reinterpret_cast<void *>(28));
+    glEnableVertexAttribArray(mTestAttrib);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(mExpectedAttrib, 2, GL_FLOAT, GL_FALSE, 0, expectedData.data());
+    glEnableVertexAttribArray(mExpectedAttrib);
+
+    // Vertex draw with no start vertex offset (second argument is zero).
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+
+    // Draw offset by one vertex.
+    glDrawArrays(GL_TRIANGLES, 1, 6);
+    checkPixels();
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Verify that using an aligned but non-multiples of 4 offset vertex attribute doesn't mess up the
 // draw.
 TEST_P(VertexAttributeTest, DrawArraysWithShortBufferOffsetNotMultipleOf4)
@@ -1640,7 +1691,7 @@ TEST_P(VertexAttributeTest, DrawWithLargeBufferOffset)
     std::array<GLbyte, kQuadVertexCount> validInputData = {{0, 1, 2, 3}};
 
     // 4 components
-    std::array<GLbyte, 4 * kQuadVertexCount + kBufferOffset> inputData = {};
+    std::array<GLbyte, 4 *kQuadVertexCount + kBufferOffset> inputData = {};
 
     std::array<GLfloat, 4 * kQuadVertexCount> expectedData;
     for (size_t i = 0; i < kQuadVertexCount; i++)
