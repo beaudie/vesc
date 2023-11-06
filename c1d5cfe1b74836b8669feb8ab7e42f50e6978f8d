@@ -52,6 +52,24 @@
       "parentUuid": "9c02f470_8b3e4e31",
       "revId": "c1d5cfe1b74836b8669feb8ab7e42f50e6978f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5de7b134_12fb887c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-11-06T19:46:39Z",
+      "side": 1,
+      "message": "Done in crrev.com/c/5008031",
+      "parentUuid": "de5f38eb_5919d05b",
+      "revId": "c1d5cfe1b74836b8669feb8ab7e42f50e6978f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
