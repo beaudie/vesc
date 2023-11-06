@@ -4728,6 +4728,7 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     ES3_VULKAN_SWIFTSHADER().enable(Feature::ForceFallbackFormat),
     ES3_METAL().disable(Feature::HasExplicitMemBarrier).disable(Feature::HasCheapRenderPass),
     ES3_METAL().disable(Feature::HasExplicitMemBarrier).enable(Feature::HasCheapRenderPass),
+    ES3_METAL().enable(Feature::PreferGpuVertexConversionInSameRenderPass),
     EMULATED_VAO_CONFIGS);
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
@@ -4737,7 +4738,8 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     ES3_VULKAN().enable(Feature::ForceFallbackFormat),
     ES3_VULKAN_SWIFTSHADER().enable(Feature::ForceFallbackFormat),
     ES3_METAL().disable(Feature::HasExplicitMemBarrier).disable(Feature::HasCheapRenderPass),
-    ES3_METAL().disable(Feature::HasExplicitMemBarrier).enable(Feature::HasCheapRenderPass));
+    ES3_METAL().disable(Feature::HasExplicitMemBarrier).enable(Feature::HasCheapRenderPass),
+    ES3_METAL().enable(Feature::PreferGpuVertexConversionInSameRenderPass));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(VertexAttributeTestES3);
 ANGLE_INSTANTIATE_TEST_ES3_AND(
@@ -4746,6 +4748,7 @@ ANGLE_INSTANTIATE_TEST_ES3_AND(
     ES3_VULKAN_SWIFTSHADER().enable(Feature::ForceFallbackFormat),
     ES3_METAL().disable(Feature::HasExplicitMemBarrier).disable(Feature::HasCheapRenderPass),
     ES3_METAL().disable(Feature::HasExplicitMemBarrier).enable(Feature::HasCheapRenderPass),
+    ES3_METAL().enable(Feature::PreferGpuVertexConversionInSameRenderPass),
     ES3_VULKAN()
         .disable(Feature::UseVertexInputBindingStrideDynamicState)
         .disable(Feature::SupportsGraphicsPipelineLibrary));
@@ -4765,6 +4768,7 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     ES3_VULKAN().enable(Feature::ForceFallbackFormat),
     ES3_VULKAN_SWIFTSHADER().enable(Feature::ForceFallbackFormat),
     ES3_METAL().disable(Feature::HasExplicitMemBarrier).disable(Feature::HasCheapRenderPass),
-    ES3_METAL().disable(Feature::HasExplicitMemBarrier).enable(Feature::HasCheapRenderPass));
+    ES3_METAL().disable(Feature::HasExplicitMemBarrier).enable(Feature::HasCheapRenderPass),
+    ES3_METAL().enable(Feature::PreferGpuVertexConversionInSameRenderPass));
 
 }  // anonymous namespace

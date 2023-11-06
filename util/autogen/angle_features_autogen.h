@@ -224,6 +224,7 @@ enum class Feature
     PreferDeviceLocalMemoryHostVisible,
     PreferDrawClearOverVkCmdClearAttachments,
     PreferDriverUniformOverSpecConst,
+    PreferGpuVertexConversionInSameRenderPass,
     PreferHostCachedForNonStaticBufferUsage,
     PreferLinearFilterForYUV,
     PreferMonolithicPipelinesOverLibraries,

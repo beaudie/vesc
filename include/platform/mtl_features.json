@@ -428,6 +428,15 @@
                 "Always automatically resolve MSAA render buffers to single sampled texture."
             ],
             "issue": "http://crbug.com/1486094"
+        },
+        {
+            "name": "prefer_gpu_vertex_conversion_in_same_render_pass",
+            "category": "Features",
+            "description": [
+                "Prefer doing GPU vertex conversion in the current render pass instead of",
+                "doing it in a compute pass."
+            ],
+            "issue": "http://crbug.com/1499911"
         }
     ]
 }

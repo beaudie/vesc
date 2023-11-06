@@ -224,6 +224,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::PreferDeviceLocalMemoryHostVisible, "preferDeviceLocalMemoryHostVisible"},
     {Feature::PreferDrawClearOverVkCmdClearAttachments, "preferDrawClearOverVkCmdClearAttachments"},
     {Feature::PreferDriverUniformOverSpecConst, "preferDriverUniformOverSpecConst"},
+    {Feature::PreferGpuVertexConversionInSameRenderPass, "preferGpuVertexConversionInSameRenderPass"},
     {Feature::PreferHostCachedForNonStaticBufferUsage, "preferHostCachedForNonStaticBufferUsage"},
     {Feature::PreferLinearFilterForYUV, "preferLinearFilterForYUV"},
     {Feature::PreferMonolithicPipelinesOverLibraries, "preferMonolithicPipelinesOverLibraries"},

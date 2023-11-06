@@ -414,6 +414,14 @@ struct FeaturesMtl : FeatureSetBase
         &members, "http://crbug.com/1486094"
     };
 
+    FeatureInfo preferGpuVertexConversionInSameRenderPass = {
+        "preferGpuVertexConversionInSameRenderPass",
+        FeatureCategory::MetalFeatures,
+        "Prefer doing GPU vertex conversion in the current render pass instead of"
+        "doing it in a compute pass.",
+        &members, "http://crbug.com/1499911"
+    };
+
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;
