@@ -66,6 +66,8 @@ using BoundBufferMap       = BufferBindingMap<BindingPointer<Buffer>>;
 using TextureBindingVector = std::vector<BindingPointer<Texture>>;
 using TextureBindingMap    = angle::PackedEnumMap<TextureType, TextureBindingVector>;
 using ActiveQueryMap       = angle::PackedEnumMap<QueryType, BindingPointer<Query>>;
+using VertexAttribCurrentValueArray =
+    angle::FixedVector<VertexAttribCurrentValueData, MAX_VERTEX_ATTRIBS>;
 
 class ActiveTexturesCache final : angle::NonCopyable
 {
@@ -498,7 +500,7 @@ class PrivateState : angle::NonCopyable
         ASSERT(attribNum < mVertexAttribCurrentValues.size());
         return mVertexAttribCurrentValues[attribNum];
     }
-    const std::vector<VertexAttribCurrentValueData> &getVertexAttribCurrentValues() const
+    const VertexAttribCurrentValueArray &getVertexAttribCurrentValues() const
     {
         return mVertexAttribCurrentValues;
     }
@@ -652,8 +654,7 @@ class PrivateState : angle::NonCopyable
     // GL_ANGLE_provoking_vertex
     ProvokingVertexConvention mProvokingVertex;
 
-    using VertexAttribVector = std::vector<VertexAttribCurrentValueData>;
-    VertexAttribVector mVertexAttribCurrentValues;  // From glVertexAttrib
+    VertexAttribCurrentValueArray mVertexAttribCurrentValues;  // From glVertexAttrib
     ComponentTypeMask mCurrentValuesTypeMask;
 
     // Mask of all attributes that are available to this context: [0, maxVertexAttributes)
@@ -1360,7 +1361,7 @@ class State : angle::NonCopyable
     {
         return mPrivateState.getVertexAttribCurrentValue(attribNum);
     }
-    const std::vector<VertexAttribCurrentValueData> &getVertexAttribCurrentValues() const
+    const VertexAttribCurrentValueArray &getVertexAttribCurrentValues() const
     {
         return mPrivateState.getVertexAttribCurrentValues();
     }

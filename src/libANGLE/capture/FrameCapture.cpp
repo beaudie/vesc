@@ -3760,7 +3760,7 @@ void CaptureDefaultVertexAttribs(const gl::State &replayState,
                                  const gl::State &apiState,
                                  std::vector<CallCapture> *setupCalls)
 {
-    const std::vector<gl::VertexAttribCurrentValueData> &currentValues =
+    const gl::VertexAttribCurrentValueArray &currentValues =
         apiState.getVertexAttribCurrentValues();
 
     for (GLuint attribIndex = 0; attribIndex < currentValues.size(); ++attribIndex)

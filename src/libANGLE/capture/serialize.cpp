@@ -587,7 +587,7 @@ void SerializeContextState(JsonSerializer *json, const gl::State &state)
     SerializeResourceID(json, "CurrentProgramID", state.getProgram());
     SerializeResourceID(json, "CurrentProgramPipelineID", state.getProgramPipeline());
     json->addString("ProvokingVertex", ToString(state.getProvokingVertex()));
-    const std::vector<gl::VertexAttribCurrentValueData> &vertexAttribCurrentValues =
+    const gl::VertexAttribCurrentValueArray &vertexAttribCurrentValues =
         state.getVertexAttribCurrentValues();
     for (size_t i = 0; i < vertexAttribCurrentValues.size(); i++)
     {
