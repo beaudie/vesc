@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "411629a1_12373145",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-06T03:28:46Z",
+      "side": 1,
+      "message": "Will fix. I thought that `git cl format` would sort that. (WebKit has the opposite rule).",
+      "parentUuid": "14cfb6df_403f7dfa",
+      "revId": "7f9f02f9e86de174de3716a0b49a99448d89bfd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae5df17d_03f17303",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-11-05T14:54:41Z",
       "side": 1,
       "message": "ditto",
+      "revId": "7f9f02f9e86de174de3716a0b49a99448d89bfd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aab54b5_a19d4963",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-06T03:28:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ae5df17d_03f17303",
       "revId": "7f9f02f9e86de174de3716a0b49a99448d89bfd3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

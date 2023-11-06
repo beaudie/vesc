@@ -147,6 +147,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9208699f_e2ecb1b9",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-06T03:28:46Z",
+      "side": 1,
+      "message": "With the hypehype.com sample page, anything but `buffer.uniformBufferBlockSize \u003d\u003d stdSize` results in rendering artefact, so I\u0027d prefer correctness over performance at this stage. We should open an issue to look into the performance impact.",
+      "parentUuid": "d643553e_e7195708",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de454306_add7fab3",
@@ -453,6 +471,24 @@
       "writtenOn": "2023-11-01T22:51:56Z",
       "side": 1,
       "message": "UBO -\u003e uniform block",
+      "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2a9e7fa_2f2b1172",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-11-06T03:28:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d96c66f9_b9679e38",
       "revId": "bd3b5d535e53b60138561051c7da4f3fcbbdbc23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
