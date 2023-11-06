@@ -1020,6 +1020,14 @@ angle::Result VertexArrayMtl::convertVertexBuffer(const gl::Context *glContext,
 
     bool canExpandComponentsOnGPU = convertedFormat.actualSameGLType;
 
+    if (contextMtl->getRenderCommandEncoder() &&
+        !contextMtl->getDisplay()->getFeatures().hasCheapRenderPass.enabled &&
+        !contextMtl->getDisplay()->getFeatures().hasExplicitMemBarrier.enabled)
+    {
+        // Cannot use GPU to convert when we are in a middle of a render pass.
+        canConvertToFloatOnGPU = canExpandComponentsOnGPU = false;
+    }
+
     conversion->data.releaseInFlightBuffers(contextMtl);
     conversion->data.updateAlignment(contextMtl, convertedAngleFormat.pixelBytes);
 
@@ -1121,18 +1129,36 @@ angle::Result VertexArrayMtl::convertVertexBufferGPU(const gl::Context *glContex
 
     params.vertexCount = static_cast<uint32_t>(numVertices);
 
-    mtl::RenderUtils &utils = contextMtl->getDisplay()->getUtils();
-
-    // Compute based buffer conversion.
-    if (!isExpandingComponents)
+    mtl::RenderUtils &utils                  = contextMtl->getDisplay()->getUtils();
+    mtl::RenderCommandEncoder *renderEncoder = contextMtl->getRenderCommandEncoder();
+    if (renderEncoder && contextMtl->getDisplay()->getFeatures().hasExplicitMemBarrier.enabled)
     {
-        ANGLE_TRY(utils.convertVertexFormatToFloatCS(
-            contextMtl, convertedFormat.intendedAngleFormat(), params));
+        // If we are in the middle of a render pass, use vertex shader based buffer conversion to
+        // avoid breaking the render pass.
+        if (!isExpandingComponents)
+        {
+            ANGLE_TRY(utils.convertVertexFormatToFloatVS(
+                glContext, renderEncoder, convertedFormat.intendedAngleFormat(), params));
+        }
+        else
+        {
+            ANGLE_TRY(utils.expandVertexFormatComponentsVS(
+                glContext, renderEncoder, convertedFormat.intendedAngleFormat(), params));
+        }
     }
     else
     {
-        ANGLE_TRY(utils.expandVertexFormatComponentsCS(
-            contextMtl, convertedFormat.intendedAngleFormat(), params));
+        // Compute based buffer conversion.
+        if (!isExpandingComponents)
+        {
+            ANGLE_TRY(utils.convertVertexFormatToFloatCS(
+                contextMtl, convertedFormat.intendedAngleFormat(), params));
+        }
+        else
+        {
+            ANGLE_TRY(utils.expandVertexFormatComponentsCS(
+                contextMtl, convertedFormat.intendedAngleFormat(), params));
+        }
     }
 
     ANGLE_TRY(conversion->data.commit(contextMtl));

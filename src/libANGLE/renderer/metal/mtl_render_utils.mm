@@ -2671,10 +2671,7 @@ angle::Result VertexFormatConversionUtils::convertVertexFormatToFloatCS(
     const angle::Format &srcAngleFormat,
     const VertexFormatConvertParams &params)
 {
-    // Since vertex buffer doesn't depend on previous render commands we don't
-    // need to end the current render encoder.
-    ComputeCommandEncoder *cmdEncoder =
-        contextMtl->getComputeCommandEncoderWithoutEndingRenderEncoder();
+    ComputeCommandEncoder *cmdEncoder = contextMtl->getComputeCommandEncoder();
     ASSERT(cmdEncoder);
 
     AutoObjCPtr<id<MTLComputePipelineState>> pipeline;
@@ -2750,10 +2747,7 @@ angle::Result VertexFormatConversionUtils::expandVertexFormatComponentsCS(
     const angle::Format &srcAngleFormat,
     const VertexFormatConvertParams &params)
 {
-    // Since vertex buffer doesn't depend on previous render commands we don't
-    // need to end the current render encoder.
-    ComputeCommandEncoder *cmdEncoder =
-        contextMtl->getComputeCommandEncoderWithoutEndingRenderEncoder();
+    ComputeCommandEncoder *cmdEncoder = contextMtl->getComputeCommandEncoder();
     ASSERT(cmdEncoder);
 
     AutoObjCPtr<id<MTLComputePipelineState>> pipeline;
