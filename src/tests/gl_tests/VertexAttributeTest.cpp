@@ -3682,6 +3682,12 @@ TEST_P(VertexAttributeTest, AliasingVectorAttribLocations)
     // TODO(anglebug.com/5491): iOS GLSL compiler rejects attribute aliasing.
     ANGLE_SKIP_TEST_IF(IsIOS() && IsOpenGLES());
 
+    // This test needs 10 total attributes. All backends support this except some old Android
+    // devices.
+    GLint maxVertexAttribs = 0;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttribs);
+    ANGLE_SKIP_TEST_IF(maxVertexAttribs < 10);
+
     constexpr char kVS[] = R"(attribute vec4 position;
 // 4 aliasing attributes
 attribute float attr0f;
@@ -3841,6 +3847,12 @@ TEST_P(VertexAttributeTest, AliasingMatrixAttribLocations)
 
     // TODO(anglebug.com/5491): iOS GLSL compiler rejects attribute aliasing.
     ANGLE_SKIP_TEST_IF(IsIOS() && IsOpenGLES());
+
+    // This test needs 16 total attributes. All backends support this except some old Android
+    // devices.
+    GLint maxVertexAttribs = 0;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttribs);
+    ANGLE_SKIP_TEST_IF(maxVertexAttribs < 16);
 
     constexpr char kVS[] = R"(attribute vec4 position;
 // attributes aliasing location 0 and above
