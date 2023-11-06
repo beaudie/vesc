@@ -22,6 +22,30 @@
       },
       "revId": "8b4901d044e8417ee9cd6dbe7b49d83aa3528433",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45dc6bee_703d9c97",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-11-06T19:37:48Z",
+      "side": 1,
+      "message": "yeah, I got spooked by `d3d9` showing up in some of these searches and decided to leave the Windows part mostly as is (this might also matter less on desktop CPUs and workloads)",
+      "parentUuid": "a953f323_5c316c91",
+      "range": {
+        "startLine": 166,
+        "startChar": 15,
+        "endLine": 176,
+        "endChar": 93
+      },
+      "revId": "8b4901d044e8417ee9cd6dbe7b49d83aa3528433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
