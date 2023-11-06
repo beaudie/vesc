@@ -70,6 +70,30 @@
       },
       "revId": "9d4121d283ae75f43c42222a69195c1ca6121359",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9689283_e21a5762",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-11-06T20:46:44Z",
+      "side": 1,
+      "message": "Last time I looked into RVO (years ago, when it was a fairly new thing) on msvc (I know!) it was so brittle I\u0027d rather `const\u0026` 😊 Hopefully things have improved since. Anyways, this specific case is totally supposed to get optimized down to a couple of instructions _without_ a function call once I moved implementation to .h in crrev.com/c/5008031. Otherwise there was a call which seemed a bit sketchy given the entire thing is literally just a shift and a mask:\nhttps://crsrc.org/c/third_party/angle/src/libANGLE/angletypes.h;drc\u003d8b4901d044e8417ee9cd6dbe7b49d83aa3528433;l\u003d559\n(well, we also had enum conversion there before so maybe that messed up the optimization)",
+      "parentUuid": "3bb56460_d7cf60e8",
+      "range": {
+        "startLine": 598,
+        "startChar": 12,
+        "endLine": 598,
+        "endChar": 41
+      },
+      "revId": "9d4121d283ae75f43c42222a69195c1ca6121359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
