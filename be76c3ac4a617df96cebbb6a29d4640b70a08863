@@ -16,6 +16,23 @@
       "message": "PTAL this significantly improves the performance of Adobe Illustrator web app.",
       "revId": "be76c3ac4a617df96cebbb6a29d4640b70a08863",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a30c9af4_7f21bc78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-11-06T13:32:21Z",
+      "side": 1,
+      "message": "Apology, mark this as WIP for now since I think the assumption about the metal\u0027s requirement for setVertexBuffer\u0027s offset\u0027s alignment might be wrong. There might be a better way.",
+      "revId": "be76c3ac4a617df96cebbb6a29d4640b70a08863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
