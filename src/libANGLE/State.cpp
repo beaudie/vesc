@@ -443,8 +443,6 @@ void PrivateState::initialize(Context *context)
 
     mActiveSampler = 0;
 
-    mVertexAttribCurrentValues.resize(mCaps.maxVertexAttributes);
-
     for (int i = 0; i < MAX_VERTEX_ATTRIBS; i++)
     {
         // Set all indexes in state attributes type mask to float (default)
