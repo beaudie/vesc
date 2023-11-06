@@ -12,6 +12,7 @@
 #include <cerrno>
 #include <cstring>
 #include <fstream>
+#include <queue>
 #include <string>
 
 #include "sys/stat.h"
@@ -1788,6 +1789,160 @@ void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
     }
 }
 
+void WriteCppReplayFunctionWithPartsMultiContext(const gl::ContextID contextID,
+                                                 ReplayFunc replayFunc,
+                                                 ReplayWriter &replayWriter,
+                                                 uint32_t frameIndex,
+                                                 std::vector<uint8_t> *binaryData,
+                                                 std::vector<CallCapture> &calls,
+                                                 std::stringstream &header,
+                                                 std::stringstream &out,
+                                                 size_t *maxResourceIDBufferSize)
+{
+    int callCount = 0;
+    int partCount = 0;
+
+    if (calls.size() > kFunctionSizeLimit)
+    {
+        out << "void "
+            << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, ++partCount)
+            << "\n";
+    }
+    else
+    {
+        out << "void "
+            << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, kNoPartId)
+            << "\n";
+    }
+
+    out << "{\n";
+
+    std::map<gl::ContextID, std::queue<int>> sideContextCallIndices;
+
+    int callIndex = 0;
+    for (CallCapture &call : calls)
+    {
+        if (call.contextID != contextID)
+        {
+            sideContextCallIndices[call.contextID].push(callIndex);
+        }
+        callIndex++;
+    }
+
+    for (auto const &sideContext : sideContextCallIndices)
+    {
+        gl::ContextID cID = sideContext.first;
+
+        // Make sidecontext current if there are commands before the first syncpoint
+        if (!calls[sideContextCallIndices[cID].front()].isSyncPoint)
+        {
+            CallCapture makeCurrentCall =
+                egl::CaptureMakeCurrent(nullptr, true, nullptr, {0}, {0}, cID, EGL_TRUE);
+            out << "    ";
+            WriteCppReplayForCall(makeCurrentCall, replayWriter, out, header, binaryData,
+                                  maxResourceIDBufferSize);
+            out << ";\n";
+            callCount++;
+        }
+        // Output all commands in sidecontext until a syncpoint is reached
+        while (!sideContextCallIndices[cID].empty() &&
+               !calls[sideContextCallIndices[cID].front()].isSyncPoint)
+        {
+            out << "    ";
+            WriteCppReplayForCall(calls[sideContextCallIndices[cID].front()], replayWriter, out,
+                                  header, binaryData, maxResourceIDBufferSize);
+            out << ";\n";
+            sideContextCallIndices[cID].pop();
+            callCount++;
+        }
+    }
+
+    // Make mainContext current
+    CallCapture makeCurrentCall =
+        egl::CaptureMakeCurrent(nullptr, true, nullptr, {0}, {0}, contextID, EGL_TRUE);
+    out << "    ";
+    WriteCppReplayForCall(makeCurrentCall, replayWriter, out, header, binaryData,
+                          maxResourceIDBufferSize);
+    out << ";\n";
+    callCount++;
+
+    for (CallCapture &call : calls)
+    {
+        if (call.contextID == contextID)
+        {
+            out << "    ";
+            WriteCppReplayForCall(call, replayWriter, out, header, binaryData,
+                                  maxResourceIDBufferSize);
+            out << ";\n";
+        }
+        else
+        {
+            if (call.isSyncPoint)
+            {
+                // Make sideContext current
+                CallCapture makeSideCurrentCall = egl::CaptureMakeCurrent(
+                    nullptr, true, nullptr, {0}, {0}, call.contextID, EGL_TRUE);
+                out << "    ";
+                WriteCppReplayForCall(makeSideCurrentCall, replayWriter, out, header, binaryData,
+                                      maxResourceIDBufferSize);
+                out << ";\n";
+                callCount++;
+
+                do
+                {
+                    out << "    ";
+                    WriteCppReplayForCall(calls[sideContextCallIndices[call.contextID].front()],
+                                          replayWriter, out, header, binaryData,
+                                          maxResourceIDBufferSize);
+                    out << ";\n";
+                    sideContextCallIndices[call.contextID].pop();
+                } while (!sideContextCallIndices[call.contextID].empty() &&
+                         !calls[sideContextCallIndices[call.contextID].front()].isSyncPoint);
+
+                // Make mainContext current
+                CallCapture makeMainCurrentCall =
+                    egl::CaptureMakeCurrent(nullptr, true, nullptr, {0}, {0}, contextID, EGL_TRUE);
+                out << "    ";
+                WriteCppReplayForCall(makeMainCurrentCall, replayWriter, out, header, binaryData,
+                                      maxResourceIDBufferSize);
+                out << ";\n";
+                callCount++;
+
+                if (partCount > 0 && ++callCount % kFunctionSizeLimit == 0)
+                {
+                    out << "}\n";
+                    out << "\n";
+                    out << "void "
+                        << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex,
+                                       ++partCount)
+                        << "\n";
+                    out << "{\n";
+                }
+            }
+        }
+        callCount++;
+    }
+    out << "}\n";
+
+    if (partCount > 0)
+    {
+        out << "\n";
+        out << "void "
+            << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, kNoPartId)
+            << "\n";
+        out << "{\n";
+
+        // Write out the main call which calls all the parts.
+        for (int i = 1; i <= partCount; i++)
+        {
+            out << "    " << FmtFunction(replayFunc, contextID, FuncUsage::Call, frameIndex, i)
+                << ";\n";
+        }
+
+        out << "}\n";
+    }
+}
+
 // Auxiliary contexts are other contexts in the share group that aren't the context calling
 // eglSwapBuffers().
 void WriteAuxiliaryContextCppSetupReplay(ReplayWriter &replayWriter,
@@ -3405,6 +3560,7 @@ void CaptureCustomFenceSync(CallCapture &call, std::vector<CallCapture> &callsOu
     params.addValueParam("fenceSync", ParamType::TGLuint64,
                          params.getReturnValue().value.GLuint64Val);
     call.customFunctionName = "FenceSync2";
+    call.isSyncPoint        = true;
     callsOut.emplace_back(std::move(call));
 }
 
@@ -5785,8 +5941,7 @@ void FrameCapture::reset()
 }
 
 FrameCaptureShared::FrameCaptureShared()
-    : mLastContextId{0},
-      mEnabled(true),
+    : mEnabled(true),
       mSerializeStateEnabled(false),
       mCompression(true),
       mClientVertexArrayMap{},
@@ -7960,21 +8115,13 @@ void FrameCaptureShared::captureCall(gl::Context *context, CallCapture &&inCall,
 
     if (isCallValid)
     {
-        // If the context ID has changed, then we need to inject an eglMakeCurrent() call. Only do
-        // this if there is more than 1 context in the share group to avoid unnecessary
-        // eglMakeCurrent() calls.
-        size_t contextCount = context->getShareGroup()->getContexts().size();
-        if (contextCount > 1 && mLastContextId != context->id())
-        {
-            // Inject the eglMakeCurrent() call. Ignore the display and surface.
-            CallCapture makeCurrentCall =
-                egl::CaptureMakeCurrent(nullptr, true, nullptr, {0}, {0}, context->id(), EGL_TRUE);
-            mFrameCalls.emplace_back(std::move(makeCurrentCall));
-            mLastContextId = context->id();
-        }
+        // Save the call's contextID
+        inCall.contextID = context->id();
 
         // Update resource counts before we override entry points with custom calls.
         updateResourceCountsFromCallCapture(inCall);
+
+        size_t j = mFrameCalls.size();
 
         std::vector<CallCapture> outCalls;
         maybeOverrideEntryPoint(context, inCall, outCalls);
@@ -7992,6 +8139,12 @@ void FrameCaptureShared::captureCall(gl::Context *context, CallCapture &&inCall,
                                        &mResourceIDToSetupCalls);
             mFrameCalls.emplace_back(std::move(call));
             maybeCapturePostCallUpdates(context);
+        }
+
+        // Tag all 'added' commands with this context
+        for (size_t k = j; k < mFrameCalls.size(); k++)
+        {
+            mFrameCalls[k].contextID = context->id();
         }
 
         // Evaluate the validation expression to determine if we insert a validation checkpoint.
@@ -9337,14 +9490,21 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         protoStream << "void "
                     << FmtReplayFunction(context->id(), FuncUsage::Prototype, frameIndex);
         std::string proto = protoStream.str();
-
         std::stringstream headerStream;
         std::stringstream bodyStream;
 
-        WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Replay, mReplayWriter,
-                                        frameIndex, &mBinaryData, mFrameCalls, headerStream,
-                                        bodyStream, &mResourceIDBufferSize);
-
+        if (context->getShareGroup()->getContexts().size() > 1)
+        {
+            WriteCppReplayFunctionWithPartsMultiContext(
+                context->id(), ReplayFunc::Replay, mReplayWriter, frameIndex, &mBinaryData,
+                mFrameCalls, headerStream, bodyStream, &mResourceIDBufferSize);
+        }
+        else
+        {
+            WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Replay, mReplayWriter,
+                                            frameIndex, &mBinaryData, mFrameCalls, headerStream,
+                                            bodyStream, &mResourceIDBufferSize);
+        }
         mReplayWriter.addPrivateFunction(proto, headerStream, bodyStream);
     }
 
