@@ -111,6 +111,7 @@ struct VertexFormat : public FormatBase
     VertexFormat() = default;
 
     MTLVertexFormat metalFormat = MTLVertexFormatInvalid;
+    int metalAlignment          = 1;
 
     VertexCopyFunction vertexLoadFunction = nullptr;
 

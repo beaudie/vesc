@@ -131,7 +131,8 @@ struct VertexAttributeDesc
 
     // Use uint8_t instead of MTLVertexFormat to compact space
     uint8_t format : 6;
-    // Offset is only used for default attributes buffer. So 8 bits are enough.
+    // Offset is only used in addition to setVertexBuffer's offset. So it is usually small and 8
+    // bits are enough.
     uint8_t offset : 8;
     uint8_t bufferIndex : 5;
 };
