@@ -69,6 +69,24 @@
       "message": "Awesome - thank you Quyen for digging into this!\n\nAs Shabi asked, please do add a couple of small tests under src/tests/gl_tests/ exercising these code paths.\n\nRegarding the crashes in the Metal driver on the AMD Mac Pro - can you add a driver bug workaround for this over-alignment into mtl_features.json, and turn it on in DisplayMtl.mm for isAMDBronzeDriver()?\n\nlgtm",
       "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aace0908_307809ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-11-06T21:00:28Z",
+      "side": 1,
+      "message": "The application uses 2 components GL_FLOAT for a vertex attribute and binds to offset \u003d 28.\nPreviously metal backend would require the offset to be multiple of 8 bytes (2 floats). 28 % 8 !\u003d 0 so we had to convert. But apparently this restriction is not true due to poor metal docs (I don\u0027t see any doc stating the required alignment of attributes). There are documented alignments but they are only for the case when you fetch the data manually from buffer. The data must be aligned to the value\u0027s type. For example, fetching `vec2` value from a buffer, the offset must be 8 bytes aligned. But this doesn\u0027t mean the rules applied to vertex input provided automatically by vertex attribute descriptor.\n\nThere is also documented rule for attribute\u0027s relative offsets [1]. But there is no rule recorded for buffer offset AFAICU.\n\nI believe vulkan backend doesn\u0027t have the same issue. IIUC currently the vulkan backend only requires the offset to be aligned to component\u0027s size. So `vec2` only needs 4 bytes alignment which 28 satisfies.\n\n[1] https://developer.apple.com/documentation/metal/mtlvertexattributedescriptor/1515785-offset?language\u003dobjc",
+      "parentUuid": "ddda02bf_caf5c6a4",
+      "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
