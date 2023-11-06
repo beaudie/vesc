@@ -87,6 +87,24 @@
       "parentUuid": "ddda02bf_caf5c6a4",
       "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdece2eb_67b6a674",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-06T21:05:36Z",
+      "side": 1,
+      "message": "Ah yes, I just noticed we have `componentAlignmentMask` to save us there:\n\n```\n    GLuint mask          \u003d angleFormat.componentAlignmentMask;\n    if (mask !\u003d std::numeric_limits\u003cGLuint\u003e::max())\n    {\n        return ((totalOffset \u0026 mask) \u003d\u003d 0 \u0026\u0026 (binding.getStride() \u0026 mask) \u003d\u003d 0);\n    }\n    else\n    {\n        // To perform the GPU conversion for formats with components that aren\u0027t byte-aligned\n        // (for example, A2BGR10 or RGB10A2), one element has to be placed in 4 bytes to perform\n        // the compute shader. So, binding offset and stride has to be aligned to formatSize.\n        unsigned int formatSize \u003d angleFormat.pixelBytes;\n        return (totalOffset % formatSize \u003d\u003d 0) \u0026\u0026 (binding.getStride() % formatSize \u003d\u003d 0);\n    }\n```\n\nWith `componentAlignmentMask` set to UINT_MAX, we require alignment to `pixelBytes`, but that\u0027s not the case for R32G32_FLOAT.",
+      "parentUuid": "aace0908_307809ce",
+      "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
