@@ -445,10 +445,13 @@ void PrivateState::initialize(Context *context)
 
     mVertexAttribCurrentValues.resize(mCaps.maxVertexAttributes);
 
-    // Set all indexes in state attributes type mask to float (default)
     for (int i = 0; i < MAX_VERTEX_ATTRIBS; i++)
     {
+        // Set all indexes in state attributes type mask to float (default)
         SetComponentTypeMask(ComponentType::Float, i, &mCurrentValuesTypeMask);
+
+        // Compute the mask of all attributes that can be used by this context
+        mAllAttribsMask.set(i, i < mCaps.maxVertexAttributes);
     }
 
     mMultiSampling    = true;
