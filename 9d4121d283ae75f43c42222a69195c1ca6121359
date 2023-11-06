@@ -46,6 +46,30 @@
       },
       "revId": "9d4121d283ae75f43c42222a69195c1ca6121359",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb56460_d7cf60e8",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-06T20:35:11Z",
+      "side": 1,
+      "message": "+1 to `const`.\n\nAgreed, there\u0027s no codegen difference probably, I just find it very strange to take a reference to a temporary (and in a more complex situation, maybe that also kills RVO?)",
+      "parentUuid": "7b1f947d_97354a22",
+      "range": {
+        "startLine": 598,
+        "startChar": 12,
+        "endLine": 598,
+        "endChar": 41
+      },
+      "revId": "9d4121d283ae75f43c42222a69195c1ca6121359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
