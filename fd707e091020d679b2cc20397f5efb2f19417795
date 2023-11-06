@@ -33,6 +33,24 @@
       "message": "As a bonus, these `switch`es are also more efficient because the ANGLE enum is packed 😊",
       "revId": "fd707e091020d679b2cc20397f5efb2f19417795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4088879d_ffd4e61f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-11-06T18:28:40Z",
+      "side": 1,
+      "message": "yup!",
+      "parentUuid": "0a531057_51e9d49a",
+      "revId": "fd707e091020d679b2cc20397f5efb2f19417795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
