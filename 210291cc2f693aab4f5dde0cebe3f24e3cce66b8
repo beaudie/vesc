@@ -52,6 +52,23 @@
       "parentUuid": "f125e227_67d4beb8",
       "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2355e637_8e1dac1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-11-06T20:45:48Z",
+      "side": 1,
+      "message": "Awesome - thank you Quyen for digging into this!\n\nAs Shabi asked, please do add a couple of small tests under src/tests/gl_tests/ exercising these code paths.\n\nRegarding the crashes in the Metal driver on the AMD Mac Pro - can you add a driver bug workaround for this over-alignment into mtl_features.json, and turn it on in DisplayMtl.mm for isAMDBronzeDriver()?\n\nlgtm",
+      "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
