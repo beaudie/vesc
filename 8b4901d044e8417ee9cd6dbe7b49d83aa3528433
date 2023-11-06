@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a953f323_5c316c91",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-06T19:14:08Z",
+      "side": 1,
+      "message": "Drive-by: `gl_d3d11::ConvertBlendOp` and `gl_d3d11::ConvertBlendFunc` could also be updated to accept ANGLE enums.",
+      "range": {
+        "startLine": 166,
+        "startChar": 15,
+        "endLine": 176,
+        "endChar": 93
+      },
+      "revId": "8b4901d044e8417ee9cd6dbe7b49d83aa3528433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
