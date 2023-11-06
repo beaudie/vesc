@@ -22,6 +22,30 @@
       },
       "revId": "9d4121d283ae75f43c42222a69195c1ca6121359",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b1f947d_97354a22",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-11-06T20:05:11Z",
+      "side": 1,
+      "message": "const is nice to make intent clear. I removed the `\u0026`, though seems like it\u0027s just a matter of style as this shouldn\u0027t make any difference otherwise",
+      "parentUuid": "4d40514a_198096cd",
+      "range": {
+        "startLine": 598,
+        "startChar": 12,
+        "endLine": 598,
+        "endChar": 41
+      },
+      "revId": "9d4121d283ae75f43c42222a69195c1ca6121359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
