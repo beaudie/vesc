@@ -182,6 +182,13 @@ inline void SetDefaultVertexBufferLayout(mtl::VertexBufferLayoutDesc *layout)
     layout->stride       = 0;
 }
 
+// Get offset we will use for MTLVertexAttributeDescriptor's offset in contrast from
+// the offset used for setVertexBuffer call.
+uint32_t GetOffsetForVertexAttribDesc(const mtl::VertexFormat &format, size_t bindingOffset)
+{
+    return static_cast<uint32_t>(bindingOffset % format.metalAlignment);
+}
+
 }  // namespace
 
 // VertexArrayMtl implementation
@@ -385,7 +392,9 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
                                         mtl::VertexDesc *vertexDescOut)
 {
     // NOTE(hqle): consider only updating dirty attributes
-    bool dirty = mVertexArrayDirty || *vertexDescChanged;
+    bool dirty                                      = mVertexArrayDirty || *vertexDescChanged;
+    const std::vector<gl::VertexAttribute> &attribs = mState.getVertexAttributes();
+    mtl::VertexDesc &desc                           = *vertexDescOut;
 
     if (dirty)
     {
@@ -397,10 +406,7 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
         const gl::AttributesMask &programActiveAttribsMask =
             executable->getActiveAttribLocationsMask();
 
-        const std::vector<gl::VertexAttribute> &attribs = mState.getVertexAttributes();
-        const std::vector<gl::VertexBinding> &bindings  = mState.getVertexBindings();
-
-        mtl::VertexDesc &desc = *vertexDescOut;
+        const std::vector<gl::VertexBinding> &bindings = mState.getVertexBindings();
 
         desc.numAttribs       = mtl::kMaxVertexAttribs;
         desc.numBufferLayouts = mtl::kMaxVertexAttribs;
@@ -425,7 +431,9 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
             const gl::VertexBinding &binding = bindings[attrib.bindingIndex];
 
             bool attribEnabled = attrib.enabled;
-            if (attribEnabled && !mCurrentArrayBuffers[v] && !mCurrentArrayInlineDataPointers[v])
+            if (attribEnabled &&
+                (!mCurrentArrayBuffers[v] || !mCurrentArrayBuffers[v]->getCurrentBuffer()) &&
+                !mCurrentArrayInlineDataPointers[v])
             {
                 // Disable it to avoid crash.
                 attribEnabled = false;
@@ -463,16 +471,16 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
             }
             else
             {
-                uint32_t bufferIdx    = mtl::kVboBindingIndexStart + v;
-                uint32_t bufferOffset = static_cast<uint32_t>(mCurrentArrayBufferOffsets[v]);
+                uint32_t bufferIdx = mtl::kVboBindingIndexStart + v;
 
-                const angle::Format &angleFormat =
-                    mCurrentArrayBufferFormats[v]->actualAngleFormat();
+                uint32_t offsetForDesc = GetOffsetForVertexAttribDesc(
+                    *mCurrentArrayBufferFormats[v], mCurrentArrayBufferOffsets[v]);
+
                 desc.attributes[v].format = mCurrentArrayBufferFormats[v]->metalFormat;
 
                 desc.attributes[v].bufferIndex = bufferIdx;
-                desc.attributes[v].offset      = 0;
-                ASSERT((bufferOffset % angleFormat.pixelBytes) == 0);
+                desc.attributes[v].offset      = offsetForDesc;
+                ASSERT((offsetForDesc % mtl::kVertexAttribBufferStrideAlignment) == 0);
 
                 ASSERT(bufferIdx < mtl::kMaxVertexAttribs);
                 if (binding.getDivisor() == 0)
@@ -500,16 +508,19 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
 
         for (uint32_t v = 0; v < mtl::kMaxVertexAttribs; ++v)
         {
-            if (!programActiveAttribsMask.test(v))
+            if (!programActiveAttribsMask.test(v) || !attribs[v].enabled)
             {
                 continue;
             }
-            uint32_t bufferIdx    = mtl::kVboBindingIndexStart + v;
-            uint32_t bufferOffset = static_cast<uint32_t>(mCurrentArrayBufferOffsets[v]);
+            uint32_t bufferIdx = mtl::kVboBindingIndexStart + v;
+
+            ASSERT(mCurrentArrayBufferOffsets[v] >= desc.attributes[v].offset);
+            uint32_t offsetForSetBuffer =
+                static_cast<uint32_t>(mCurrentArrayBufferOffsets[v] - desc.attributes[v].offset);
             if (mCurrentArrayBuffers[v])
             {
                 cmdEncoder->setVertexBuffer(mCurrentArrayBuffers[v]->getCurrentBuffer(),
-                                            bufferOffset, bufferIdx);
+                                            offsetForSetBuffer, bufferIdx);
             }
             else
             {
@@ -675,10 +686,19 @@ angle::Result VertexArrayMtl::syncDirtyAttrib(const gl::Context *glContext,
             // even non-converted buffers need to be observed for potential
             // data rebinds.
             mContentsObservers->enableForBuffer(bufferGL, static_cast<uint32_t>(attribIndex));
+
+            // There are 2 offsets for a vertex attribute:
+            // 1. setVertexBuffer's offset which must be multiples of format's alignment.
+            // See table 2.3 in
+            // https://developer.apple.com/metal/Metal-Shading-Language-Specification.pdf
+            // 2. MTLVertexAttributeDescriptor's offset which must be multiples of 4.
+            // See
+            // https://developer.apple.com/documentation/metal/mtlvertexattributedescriptor/1515785-offset?language=objc
+            uint32_t offsetForDesc = GetOffsetForVertexAttribDesc(format, binding.getOffset());
+
             bool needConversion =
                 format.actualFormatId != format.intendedFormatId ||
-                (binding.getOffset() % format.actualAngleFormat().pixelBytes) != 0 ||
-                (binding.getOffset() % mtl::kVertexAttribBufferStrideAlignment) != 0 ||
+                (offsetForDesc % mtl::kVertexAttribBufferStrideAlignment) != 0 ||
                 (binding.getStride() < format.actualAngleFormat().pixelBytes) ||
                 (binding.getStride() % mtl::kVertexAttribBufferStrideAlignment) != 0;
 

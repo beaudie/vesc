@@ -166,6 +166,7 @@ case_image_mtl_to_angle_template = """        case {mtl_format}:
 case_vertex_format_template1 = """        case angle::FormatID::{angle_format}:
             this->metalFormat = {mtl_format};
             this->actualFormatId = angle::FormatID::{actual_angle_format};
+            this->metalAlignment = {mtl_alignment};
             this->vertexLoadFunction = {vertex_copy_function};
             this->defaultAlpha = {default_alpha};{same_gl_type}
             break;
@@ -176,6 +177,7 @@ case_vertex_format_template2 = """        case angle::FormatID::{angle_format}:
             if (tightlyPacked)
             {{
                 this->metalFormat = {mtl_format_packed};
+                this->metalAlignment = {mtl_alignment_packed};
                 this->actualFormatId = angle::FormatID::{actual_angle_format_packed};
                 this->vertexLoadFunction = {vertex_copy_function_packed};
                 this->defaultAlpha = {default_alpha_packed};{same_gl_type_packed}
@@ -183,6 +185,7 @@ case_vertex_format_template2 = """        case angle::FormatID::{angle_format}:
             else
             {{
                 this->metalFormat = {mtl_format};
+                this->metalAlignment = {mtl_alignment};
                 this->actualFormatId = angle::FormatID::{actual_angle_format};
                 this->vertexLoadFunction = {vertex_copy_function};
                 this->defaultAlpha = {default_alpha};{same_gl_type}
@@ -576,8 +579,10 @@ def gen_image_mtl_to_angle_switch_string(image_table):
     return switch_data
 
 
-def gen_vertex_map_switch_case(angle_fmt, actual_angle_fmt, angle_to_mtl_map, override_packed_map):
+def gen_vertex_map_switch_case(angle_fmt, actual_angle_fmt, angle_to_mtl_map, override_packed_map,
+                               alignment_map):
     mtl_format = angle_to_mtl_map[actual_angle_fmt]
+    mtl_alignment = alignment_map[actual_angle_fmt]
     copy_function, default_alpha, same_gl_type = get_vertex_copy_function_and_default_alpha(
         angle_fmt, actual_angle_fmt)
 
@@ -586,17 +591,20 @@ def gen_vertex_map_switch_case(angle_fmt, actual_angle_fmt, angle_to_mtl_map, ov
         # Return if else block
         angle_fmt_packed = override_packed_map[actual_angle_fmt]
         mtl_format_packed = angle_to_mtl_map[angle_fmt_packed]
+        mtl_alignment_packed = alignment_map[angle_fmt_packed]
         copy_function_packed, default_alpha_packed, same_gl_type_packed = get_vertex_copy_function_and_default_alpha(
             angle_fmt, angle_fmt_packed)
 
         return case_vertex_format_template2.format(
             angle_format=angle_fmt,
             mtl_format_packed=mtl_format_packed,
+            mtl_alignment_packed=mtl_alignment_packed,
             actual_angle_format_packed=angle_fmt_packed,
             vertex_copy_function_packed=copy_function_packed,
             default_alpha_packed=default_alpha_packed,
             same_gl_type_packed=wrap_actual_same_gl_type(same_gl_type_packed),
             mtl_format=mtl_format,
+            mtl_alignment=mtl_alignment,
             actual_angle_format=actual_angle_fmt,
             vertex_copy_function=copy_function,
             default_alpha=default_alpha,
@@ -606,6 +614,7 @@ def gen_vertex_map_switch_case(angle_fmt, actual_angle_fmt, angle_to_mtl_map, ov
         return case_vertex_format_template1.format(
             angle_format=angle_fmt,
             mtl_format=mtl_format,
+            mtl_alignment=mtl_alignment,
             actual_angle_format=actual_angle_fmt,
             vertex_copy_function=copy_function,
             default_alpha=default_alpha,
@@ -616,15 +625,16 @@ def gen_vertex_map_switch_string(vertex_table):
     angle_to_mtl = vertex_table["map"]
     angle_override = vertex_table["override"]
     override_packed = vertex_table["override_tightly_packed"]
+    alignment_map = vertex_table["alignment"]
 
     switch_data = ''
     for angle_fmt in sorted(angle_to_mtl.keys()):
         switch_data += gen_vertex_map_switch_case(angle_fmt, angle_fmt, angle_to_mtl,
-                                                  override_packed)
+                                                  override_packed, alignment_map)
 
     for angle_fmt in sorted(angle_override.keys()):
         switch_data += gen_vertex_map_switch_case(angle_fmt, angle_override[angle_fmt],
-                                                  angle_to_mtl, override_packed)
+                                                  angle_to_mtl, override_packed, alignment_map)
 
     switch_data += "        default:\n"
     switch_data += "            this->metalFormat = MTLVertexFormatInvalid;\n"
