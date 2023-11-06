@@ -16,6 +16,24 @@
       "message": "PTAL again. This is a simpler fix than expected. This will significantly improve Adobe Illustrator\u0027s performance as well as reducing the needs for vertex conversion in general.",
       "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f125e227_67d4beb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-06T20:26:12Z",
+      "side": 1,
+      "message": "Drive by: what was the format and alignment in that application? I see we have a similar restriction in the Vulkan backend, but according to the comment mainly for non-byte-aligned channels (like RGB10A2) so we may be able to similarly lift a restriction there.",
+      "parentUuid": "1c984ff7_09b6d74a",
+      "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
