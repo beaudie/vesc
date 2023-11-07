@@ -94,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a07a127_df4a4de9",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2023-11-07T08:09:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "532a0669_366fad1a",
+      "range": {
+        "startLine": 108,
+        "startChar": 34,
+        "endLine": 108,
+        "endChar": 85
+      },
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d40d594_06276080",
@@ -135,6 +159,54 @@
         "startChar": 42,
         "endLine": 237,
         "endChar": 53
+      },
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7633459_59bb3aa6",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2023-11-07T08:09:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7da19382_0d18416b",
+      "range": {
+        "startLine": 237,
+        "startChar": 42,
+        "endLine": 237,
+        "endChar": 53
+      },
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f61529c7_77d35759",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2023-11-07T08:09:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d40d594_06276080",
+      "range": {
+        "startLine": 237,
+        "startChar": 8,
+        "endLine": 237,
+        "endChar": 16
       },
       "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -201,6 +273,30 @@
       "side": 1,
       "message": "Oh, I thought you would want to make your CL work.\nI don\u0027t like \"unquoting\" in my CL, but I can work on a better solution if you\u0027re no longer interested in this CL.",
       "parentUuid": "ff30d600_ba31a667",
+      "range": {
+        "startLine": 241,
+        "startChar": 19,
+        "endLine": 241,
+        "endChar": 61
+      },
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e447f6bd_79e0dd1f",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2023-11-07T08:09:30Z",
+      "side": 1,
+      "message": "I updated this CL.",
+      "parentUuid": "796ffd52_d50903c3",
       "range": {
         "startLine": 241,
         "startChar": 19,
