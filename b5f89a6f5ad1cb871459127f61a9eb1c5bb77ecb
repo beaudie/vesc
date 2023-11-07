@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79faaa9c_2766ed4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-07T15:34:45Z",
+      "side": 1,
+      "message": "Thanks for the follow up!",
+      "revId": "b5f89a6f5ad1cb871459127f61a9eb1c5bb77ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53e7c79_887b0397",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-07T15:34:45Z",
+      "side": 1,
+      "message": "Could we just delete this? It\u0027s hiding the conversion cost, we could have the caller call FromGL if necessary.",
+      "revId": "b5f89a6f5ad1cb871459127f61a9eb1c5bb77ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
