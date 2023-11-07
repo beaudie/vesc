@@ -161,6 +161,10 @@ angle::Result CompileTask::compileImpl()
     mInfoLog    = sh::GetInfoLog(mCompilerHandle);
     if (!result)
     {
+        std::ostringstream moreinfo;
+        moreinfo << "\nFailing shader is:\n" << mSource;
+        moreinfo << "\nShader first char:" << (int)mSource[0] << "\n";
+        mInfoLog += moreinfo.str();
         return angle::Result::Stop;
     }
 

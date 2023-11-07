@@ -7776,6 +7776,12 @@ int PaParseStrings(size_t count,
     int error = glslang_scan(count, string, length, context);
     if (!error)
         error = glslang_parse(context);
+    WARN() << "String count: " << count << ", error count: " << context->numErrors();
+    WARN() << "Shader:\n" << string[0];
+    if (string[0][0] != '\0')
+    {
+        WARN() << "First char: " << (int)string[0][0] << " '" << string[0][0] << "'";
+    }
 
     glslang_finalize(context);
 
