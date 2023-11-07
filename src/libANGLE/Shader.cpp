@@ -157,10 +157,16 @@ class CompileEvent final
 angle::Result CompileTask::compileImpl()
 {
     // Call the translator and get the info log
+    WARN() << "SHABI: going to translate";
     bool result = mTranslateTask->translate(mCompilerHandle, mOptions, mSource);
     mInfoLog    = sh::GetInfoLog(mCompilerHandle);
     if (!result)
     {
+        std::ostringstream moreinfo;
+        moreinfo << "\nFailing shader is:\n" << mSource;
+        moreinfo << "\nShader first char:" << (int)mSource[0] << "\n";
+        mInfoLog += moreinfo.str();
+        WARN() << "SHABI: FAILED";
         return angle::Result::Stop;
     }
 
@@ -173,6 +179,7 @@ angle::Result CompileTask::postTranslate()
 {
     const bool isBinaryOutput = mOutputType == SH_SPIRV_VULKAN_OUTPUT;
     mCompiledState->buildCompiledShaderState(mCompilerHandle, isBinaryOutput);
+    WARN() << "SHABI: Post translate, translated shader is:\n" << mCompiledState->translatedSource;
 
     ASSERT(!mCompiledState->translatedSource.empty() || !mCompiledState->compiledBinary.empty());
 
@@ -250,7 +257,7 @@ angle::Result CompileTask::postTranslate()
         // Prefix translated shader with commented out un-translated shader.
         // Useful in diagnostics tools which capture the shader source.
         std::ostringstream shaderStream;
-        shaderStream << "// GLSL\n";
+        shaderStream << "\n// GLSL\n";
         shaderStream << "//\n";
 
         std::istringstream inputSourceStream(mSource);
@@ -270,9 +277,7 @@ angle::Result CompileTask::postTranslate()
 
             shaderStream << std::endl;
         }
-        shaderStream << "\n\n";
-        shaderStream << mCompiledState->translatedSource;
-        mCompiledState->translatedSource = shaderStream.str();
+        mCompiledState->translatedSource += shaderStream.str();
     }
 #endif  // defined(ANGLE_ENABLE_ASSERTS)
 
