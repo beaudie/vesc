@@ -123,6 +123,24 @@
       "parentUuid": "cdece2eb_67b6a674",
       "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa1fe289_dfacb901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-11-07T12:00:53Z",
+      "side": 1,
+      "message": "btw, fwiw. I was intending to adding a custom vertex pulling code to the translated shader so that it can fetch vertex attributes at arbitrary offset. However, that solution was too big compared to this simple fix.",
+      "parentUuid": "b63eabfc_1be3974e",
+      "revId": "210291cc2f693aab4f5dde0cebe3f24e3cce66b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
