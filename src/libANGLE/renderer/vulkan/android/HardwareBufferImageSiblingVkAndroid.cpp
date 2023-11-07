@@ -241,8 +241,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
 
     // BUG: b/223456677 Android sometimes uses an uninitialized value for layerCount of the
     // ANativeWindowBuffer. Force depth <= 256 here. If we see a bigger value,
-    // force to 1.
-    mSize.depth = mSize.depth > 256 ? 1 : mSize.depth;
+    // force to 1. And if it returns 0, force it to 1.
+    mSize.depth = (mSize.depth > 256 || mSize.depth == 0) ? 1 : mSize.depth;
 
     struct AHardwareBuffer *hardwareBuffer =
         angle::android::ANativeWindowBufferToAHardwareBuffer(windowBuffer);
