@@ -698,14 +698,10 @@ void Shader::compile(const Context *context)
     // The GL backend relies on the driver's internal parallel compilation, and thus does not use a
     // thread to compile.  A front-end feature selects whether the single-threaded pool must be
     // used.
-    std::shared_ptr<angle::WorkerThreadPool> compileWorkerPool =
-        context->getFrontendFeatures().compileJobIsThreadSafe.enabled
-            ? context->getShaderCompileThreadPool()
-            : context->getSingleThreadPool();
-
-    // TODO: add the possibility to perform this in an unlocked tail call.  http://anglebug.com/8297
-    std::shared_ptr<angle::WaitableEvent> compileEvent =
-        compileWorkerPool->postWorkerTask(compileTask);
+    std::shared_ptr<angle::WaitableEvent> compileEvent = context->postCompileLinkTask(
+        compileTask, context->getFrontendFeatures().compileJobIsThreadSafe.enabled
+                         ? JobThreadSafety::Safe
+                         : JobThreadSafety::Unsafe);
 
     mCompileJob                     = std::make_shared<CompileJob>();
     mCompileJob->shCompilerInstance = std::move(compilerInstance);

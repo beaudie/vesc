@@ -43,9 +43,11 @@
 
 namespace angle
 {
+class Closure;
 class FrameCapture;
 class FrameCaptureShared;
 struct FrontendFeatures;
+class WaitableEvent;
 }  // namespace angle
 
 namespace rx
@@ -84,6 +86,12 @@ class Texture;
 class TransformFeedback;
 class VertexArray;
 struct VertexAttribute;
+
+enum class JobThreadSafety
+{
+    Safe,
+    Unsafe,
+};
 
 class ErrorSet : angle::NonCopyable
 {
@@ -697,6 +705,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // GL_KHR_parallel_shader_compile
     std::shared_ptr<angle::WorkerThreadPool> getShaderCompileThreadPool() const;
+    std::shared_ptr<angle::WaitableEvent> postCompileLinkTask(
+        const std::shared_ptr<angle::Closure> &task,
+        JobThreadSafety safety) const;
 
     // Single-threaded pool; runs everything instantly
     std::shared_ptr<angle::WorkerThreadPool> getSingleThreadPool() const;

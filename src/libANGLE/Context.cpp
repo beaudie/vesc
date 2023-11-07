@@ -52,6 +52,7 @@
 #include "libANGLE/queryutils.h"
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/Format.h"
+#include "libANGLE/trace.h"
 #include "libANGLE/validationES.h"
 
 #if defined(ANGLE_PLATFORM_APPLE)
@@ -9237,6 +9238,35 @@ std::shared_ptr<angle::WorkerThreadPool> Context::getShaderCompileThreadPool() c
         return mDisplay->getMultiThreadPool();
     }
     return mDisplay->getSingleThreadPool();
+}
+
+std::shared_ptr<angle::WaitableEvent> Context::postCompileLinkTask(
+    const std::shared_ptr<angle::Closure> &task,
+    JobThreadSafety safety) const
+{
+    // If the compile/link job is not thread safe, use the single-thread pool.  Otherwise, the pool
+    // that is configured by the application (through GL_KHR_parallel_shader_compile) is used.
+    const bool isThreadSafe = safety == JobThreadSafety::Safe;
+    std::shared_ptr<angle::WorkerThreadPool> workerPool =
+        isThreadSafe ? getShaderCompileThreadPool() : getSingleThreadPool();
+
+    // If the job is thread-safe, but it's still not going to be threaded, then it's performed as an
+    // unlocked tail call to allow other threads to proceed.
+    if (isThreadSafe && !workerPool->isAsync())
+    {
+        std::shared_ptr<angle::AsyncWaitableEvent> event =
+            std::make_shared<angle::AsyncWaitableEvent>();
+        auto unlockedTask = [task, event](void *resultOut) {
+            ANGLE_TRACE_EVENT0("gpu.angle", "Compile/Link (unlocked)");
+            (*task)();
+            event->markAsReady();
+        };
+        egl::Display::GetCurrentThreadUnlockedTailCall()->add(unlockedTask);
+        return event;
+    }
+
+    // Otherwise, just scheduled the task on the pool
+    return workerPool->postWorkerTask(task);
 }
 
 std::shared_ptr<angle::WorkerThreadPool> Context::getSingleThreadPool() const

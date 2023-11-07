@@ -956,14 +956,10 @@ angle::Result Program::linkImpl(const Context *context)
 
     // While the subtasks are currently always thread-safe, the main task is not safe on all
     // backends.  A front-end feature selects whether the single-threaded pool must be used.
-    std::shared_ptr<angle::WorkerThreadPool> mainLinkWorkerPool =
-        context->getFrontendFeatures().linkJobIsThreadSafe.enabled
-            ? context->getShaderCompileThreadPool()
-            : context->getSingleThreadPool();
-
-    // TODO: add the possibility to perform this in an unlocked tail call.  http://anglebug.com/8297
-    std::shared_ptr<angle::WaitableEvent> mainLinkEvent =
-        mainLinkWorkerPool->postWorkerTask(mainLinkTask);
+    std::shared_ptr<angle::WaitableEvent> mainLinkEvent = context->postCompileLinkTask(
+        mainLinkTask, context->getFrontendFeatures().linkJobIsThreadSafe.enabled
+                          ? JobThreadSafety::Safe
+                          : JobThreadSafety::Unsafe);
 
     mLinkingState                    = std::move(linkingState);
     mLinkingState->linkingFromBinary = false;
