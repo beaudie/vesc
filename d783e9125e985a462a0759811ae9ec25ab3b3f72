@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f3967f0_7c7d6c58",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-07T18:17:25Z",
+      "side": 1,
+      "message": "Like I\u0027ve said in the previous PS, this doesn\u0027t actually run ninja.\nIt only prints to stdout the command line with the needed ninja args.\nI\u0027d prefer to use autoninja.bat instead of autoninja.py.\nI think I\u0027ve found a way to bootstrap third_party/depot_tools on Windows, so that autoninja.bat can be run. Final step to figure out how to add this bootstrap hook to our DEPS.",
+      "range": {
+        "startLine": 238,
+        "startChar": 12,
+        "endLine": 238,
+        "endChar": 67
+      },
+      "revId": "d783e9125e985a462a0759811ae9ec25ab3b3f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
