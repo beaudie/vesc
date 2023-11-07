@@ -106,18 +106,14 @@ class SubProcess():
         # the command. Since we do not have a handle to the 2nd process, we cannot terminate it.
         if pipe_stdout:
             self.proc_handle = subprocess.Popen(
-                command, env=env, # stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                shell=False)
+                command, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False)
         else:
             self.proc_handle = subprocess.Popen(command, env=env, shell=False)
         self._logger = logger
 
     def Join(self, timeout):
         self._logger.debug('Joining with subprocess %d, timeout %s' % (self.Pid(), str(timeout)))
-        output, stderr = self.proc_handle.communicate(timeout=timeout)
-        self._logger.debug('Retcode with subprocess %d' % self.proc_handle.returncode)
-        self._logger.debug('Output with subprocess %s' % output)
-        self._logger.debug('Stderr with subprocess %s' % stderr)
+        output = self.proc_handle.communicate(timeout=timeout)[0]
         if output:
             output = output.decode('utf-8')
         else:
@@ -235,11 +231,11 @@ class ChildProcessesManager():
         self._logger.info(' '.join(cmd))
         return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
 
-    def RunNinja(self, build_dir, target, pipe_stdout):
+    def RunAutoNinja(self, build_dir, target, pipe_stdout):
         cmd = [sys.executable, self._autoninja_path, '-C', build_dir, target]
         with self._ninja_lock:
             self._logger.info(' '.join(cmd))
-            return self.RunSubprocess(cmd, pipe_stdout=False)
+            return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
 
 
 def GetTestsListForFilter(args, test_path, filter, logger):
@@ -517,15 +513,14 @@ class TestBatch():
                 GroupedResult(GroupedResult.CompileFailed, "Build replay failed at gn generation",
                               output, tests))
             return False
-        returncode, output = child_processes_manager.RunNinja(replay_build_dir, REPLAY_BINARY,
-                                                              True)
+        returncode, output = child_processes_manager.RunAutoNinja(replay_build_dir, REPLAY_BINARY,
+                                                                  True)
         if returncode != 0:
             self.logger.warning('Ninja failure output: %s' % output)
             self.results.append(
                 GroupedResult(GroupedResult.CompileFailed, "Build replay failed at ninja", output,
                               tests))
             return False
-        self.logger.error("Ninja's output: %s" % output)
         return True
 
     def RunReplay(self, args, replay_build_dir, replay_exe_path, child_processes_manager, tests):
@@ -894,13 +889,12 @@ def main(args):
             child_processes_manager.KillAll()
             return EXIT_FAILURE
         # run ninja to build all tests
-        returncode, output = child_processes_manager.RunNinja(capture_build_dir, args.test_suite,
-                                                              False)
+        returncode, output = child_processes_manager.RunAutoNinja(capture_build_dir,
+                                                                  args.test_suite, False)
         if returncode != 0:
             logger.error(output)
             child_processes_manager.KillAll()
             return EXIT_FAILURE
-        logger.error("Ninja's output: %s" % output)
         # get a list of tests
         test_path = os.path.join(capture_build_dir, args.test_suite)
         test_list = GetTestsListForFilter(args, test_path, args.filter, logger)
