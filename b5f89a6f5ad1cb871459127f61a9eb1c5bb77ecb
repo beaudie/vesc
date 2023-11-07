@@ -33,6 +33,24 @@
       "message": "Could we just delete this? It\u0027s hiding the conversion cost, we could have the caller call FromGL if necessary.",
       "revId": "b5f89a6f5ad1cb871459127f61a9eb1c5bb77ecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d32a81c_b104e206",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-07T15:49:17Z",
+      "side": 1,
+      "message": "It\u0027s used in `PrivateState::setBlendFactorsIndexed`, which receives the values from `ContextPrivateBlendFunci` and `ContextPrivateBlendFuncSeparatei`.\n\nIt should be possible (in another follow-up) to move the conversion to `GL_BlendFunc*` and thus completely avoid these enums everywhere except the GL backend.\n\nLet\u0027s keep this CL focused on D3D11.",
+      "parentUuid": "d53e7c79_887b0397",
+      "revId": "b5f89a6f5ad1cb871459127f61a9eb1c5bb77ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
