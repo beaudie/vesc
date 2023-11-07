@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44cd657b_b1dd58c1",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-07T21:35:26Z",
+      "side": 1,
+      "message": "```suggestion\n            \"name\": \"force_AHB_layer_count_to_one\",\n```",
+      "revId": "495e56b80bc5f7022b890b219f1aa8ac9d5d429b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1301c8e_debd58be",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4813,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-07T21:35:26Z",
+      "side": 1,
+      "message": "Could you please move this to the `RendererVk::appBasedFeatureOverrides` function below?",
+      "revId": "495e56b80bc5f7022b890b219f1aa8ac9d5d429b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
