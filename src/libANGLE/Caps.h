@@ -50,6 +50,9 @@ struct TextureCaps
     // Get the maximum number of samples supported
     GLuint getMaxSamples() const;
 
+    // Apply an upper limit to the supported sample counts
+    void limitMaxSamples(GLuint maxSamples);
+
     // Get the number of supported samples that is at least as many as requested.  Returns 0 if
     // there are no sample counts available
     GLuint getNearestSamples(GLuint requestedSamples) const;

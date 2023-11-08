@@ -42,6 +42,17 @@ GLuint TextureCaps::getMaxSamples() const
     return !sampleCounts.empty() ? *sampleCounts.rbegin() : 0;
 }
 
+void TextureCaps::limitMaxSamples(GLuint maxSamples)
+{
+    for (auto it = sampleCounts.begin(); it != sampleCounts.end();)
+    {
+        if (*it > maxSamples)
+            it = sampleCounts.erase(it);
+        else
+            ++it;
+    }
+}
+
 GLuint TextureCaps::getNearestSamples(GLuint requestedSamples) const
 {
     if (requestedSamples == 0)

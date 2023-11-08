@@ -4358,6 +4358,9 @@ void Context::updateCaps()
         }
         else
         {
+            // Do not expose format samples > MAX_SAMPLES
+            formatCaps.limitMaxSamples(caps->maxSamples);
+
             // We may have limited the max samples for some required renderbuffer formats due to
             // non-conformant formats. In this case MAX_SAMPLES needs to be lowered accordingly.
             GLuint formatMaxSamples = formatCaps.getMaxSamples();
