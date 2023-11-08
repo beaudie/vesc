@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8d61c27_7c72e8b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-08T18:50:41Z",
+      "side": 1,
+      "message": "Sorry for my confusion. LGTM and thanks!",
+      "revId": "d783e9125e985a462a0759811ae9ec25ab3b3f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f3967f0_7c7d6c58",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "autoninja.py is refactored in https://crrev.com/c/4924185 and we can run it directly now.",
       "parentUuid": "6f3967f0_7c7d6c58",
+      "range": {
+        "startLine": 238,
+        "startChar": 12,
+        "endLine": 238,
+        "endChar": 67
+      },
+      "revId": "d783e9125e985a462a0759811ae9ec25ab3b3f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae73370f_d79d4868",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-08T18:50:41Z",
+      "side": 1,
+      "message": "Ah, looks great then!",
+      "parentUuid": "327c13a8_f7d3d5fc",
       "range": {
         "startLine": 238,
         "startChar": 12,
