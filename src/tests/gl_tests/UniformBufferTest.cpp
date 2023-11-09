@@ -3422,6 +3422,57 @@ void main() {
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Tests rendering with two different interface blocks bound to the same binding point in vert and
+// frag shaders.
+TEST_P(UniformBufferTest31, RenamedInterfaceBlock)
+{
+    constexpr GLuint kBasicUBOIndex = 0;
+    constexpr GLuint kEmptyUBOIndex = 1;
+
+    // Create two UBOs. One is empty and the other is used.
+    constexpr GLfloat basicUBOData[4] = {0.0, 0.5, 0.0, 0.5};
+    GLBuffer basicUBO;
+    glBindBuffer(GL_UNIFORM_BUFFER, basicUBO);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(basicUBOData), basicUBOData, GL_STATIC_READ);
+    glBindBufferBase(GL_UNIFORM_BUFFER, kBasicUBOIndex, basicUBO);
+
+    GLBuffer emptyUBO;
+    glBindBufferBase(GL_UNIFORM_BUFFER, kEmptyUBOIndex, emptyUBO);
+
+    // Create a simple UBO program.
+    constexpr char kVS[] = R"(#version 310 es
+layout (binding=0) uniform block0 {
+    vec3 v;
+} b0;
+
+in vec4 a_position;
+out vec4 c;
+
+void main() {
+    c = vec4(b0.v, 0.5);
+    gl_Position = a_position;
+})";
+
+    constexpr char kFS[] = R"(#version 310 es
+precision mediump float;
+layout (binding=0) uniform block1 {
+    vec4 v;
+} b1;
+
+in vec4 c;
+out vec4 outColor;
+
+void main() {
+   outColor = b1.v + c;
+})";
+
+    // Draw and check result. Should not crash.
+    ANGLE_GL_PROGRAM(uboProgram, kVS, kFS);
+    drawQuad(uboProgram, essl1_shaders::PositionAttrib(), 0.5f, 1.0f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Calling BufferData and use it in a loop to force descriptorSet creation and destroy.
 TEST_P(UniformBufferTest, BufferDataInLoop)
 {
