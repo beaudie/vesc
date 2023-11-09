@@ -21,6 +21,7 @@ vars = {
   'chromium_git': 'https://chromium.googlesource.com',
   'chrome_internal_git': 'https://chrome-internal.googlesource.com',
   'swiftshader_git': 'https://swiftshader.googlesource.com',
+  'github_git': 'https://github.com',
 
   # This variable is overrided in Chromium's DEPS file.
   'build_with_chromium': False,
@@ -369,6 +370,11 @@ deps = {
     'condition': 'checkout_android and not build_with_chromium',
   },
 
+  'third_party/clspv': {
+    'url': Var('github_git') + '/gowtham-sarc/clspv.git@518eb15aa1ab75c5f0e7f96b6aba445f45ae4b63',
+    'condition': 'not build_with_chromium',
+  },
+
   'third_party/cpu_features/src': {
     'url': Var('chromium_git') + '/external/github.com/google/cpu_features.git' + '@' + '936b9ab5515dead115606559502e3864958f7f6e',
     'condition': 'checkout_android and not build_with_chromium',
@@ -453,6 +459,11 @@ deps = {
 
   'third_party/libpng/src': {
     'url': Var('android_git') + '/platform/external/libpng@d2ece84bd73af1cd5fae5e7574f79b40e5de4fba',
+    'condition': 'not build_with_chromium',
+  },
+
+  'third_party/llvm': {
+    'url': Var('github_git') + '/llvm/llvm-project@5888dee7d04748744743a35d3aef030018bdc275',
     'condition': 'not build_with_chromium',
   },
 

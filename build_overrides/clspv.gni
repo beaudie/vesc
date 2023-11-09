@@ -1,0 +1,23 @@
+# Clspv build overrides for GN
+# Any configuration that could be overridden from a top-level build where clspv
+# is a third-party module goes in here.
+
+# LLVM source location
+clspv_llvm_dir = "third_party/llvm"
+
+# Set this to true if clspv is built as a standalone, and false if being
+# incorporated as a third-party module
+clspv_standalone_build = false
+
+import("//gni/angle.gni")
+spirv_tools_dir = angle_spirv_tools_dir
+
+# LLVM build flags that setup default libs
+import("//third_party/clspv/gn/build/llvm_buildflags.gni")
+
+# configs that need adjustment
+clspv_configs_to_append = []
+clspv_configs_to_remove = [
+  "//build/config/compiler:chromium_code",
+  "//build/config/clang:extra_warnings",
+]
