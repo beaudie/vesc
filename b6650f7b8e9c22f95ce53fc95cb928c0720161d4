@@ -16,6 +16,24 @@
       "message": "lgtm\n\nI\u0027m only a little familiar with these memory ordering semantics, but thought acquire/release were most commonly paired together. Reading the docs it looks like consume/release is correct too.\n\nCould you update the bug with more details of how you realized the need for this change?",
       "revId": "b6650f7b8e9c22f95ce53fc95cb928c0720161d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f4a37f2_1bff27b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-11-09T10:11:09Z",
+      "side": 1,
+      "message": "Thanks. I updated the bug tracker asking for more insights. The memory order topic is quite complicated. I was just thinking of adding release - consume as a safer option than current approach since Vulkan backend is already using release - consume for its AtomicQueueSerial.",
+      "parentUuid": "04c8fa3a_b2b91b81",
+      "revId": "b6650f7b8e9c22f95ce53fc95cb928c0720161d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
