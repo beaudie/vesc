@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b069063_58f8dfad",
+        "filename": "include/platform/frontend_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-09T15:43:52Z",
+      "side": 1,
+      "message": "nit: Workarounds",
+      "range": {
+        "startLine": 191,
+        "startChar": 25,
+        "endLine": 191,
+        "endChar": 33
+      },
+      "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c01a496_43bc8326",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3980,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-09T15:43:52Z",
+      "side": 1,
+      "message": "wrong feature!",
+      "range": {
+        "startLine": 3980,
+        "startChar": 40,
+        "endLine": 3980,
+        "endChar": 62
+      },
+      "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "754db25f_87c78097",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2302,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-09T15:43:52Z",
+      "side": 1,
+      "message": "FWIW, you don\u0027t have to explicitly disable it.",
+      "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b65c229a_e351be13",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-09T15:43:52Z",
+      "side": 1,
+      "message": "This looks wrong, the second argument of `set` is bool. Besides, this is setting the flag for all `i` anyway.\n\nSuggest taking this out of the loop, and doing this:\n\n```\nmAllAttribsMask \u003d angle::BitMask(mCaps.maxVertexAttributes);\n```",
+      "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
