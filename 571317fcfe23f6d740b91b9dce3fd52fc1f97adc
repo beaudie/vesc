@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e21df9ae_5435e89c",
+        "filename": "include/platform/frontend_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-09T16:13:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0b069063_58f8dfad",
+      "range": {
+        "startLine": 191,
+        "startChar": 25,
+        "endLine": 191,
+        "endChar": 33
+      },
+      "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c01a496_43bc8326",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-09T15:43:52Z",
       "side": 1,
       "message": "wrong feature!",
+      "range": {
+        "startLine": 3980,
+        "startChar": 40,
+        "endLine": 3980,
+        "endChar": 62
+      },
+      "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3875c6db_6ac04afb",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3980,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-09T16:13:34Z",
+      "side": 1,
+      "message": "Oh geez, autocomplete. Well it was definitely tested...",
+      "parentUuid": "9c01a496_43bc8326",
       "range": {
         "startLine": 3980,
         "startChar": 40,
@@ -77,6 +125,24 @@
       "writtenOn": "2023-11-09T15:43:52Z",
       "side": 1,
       "message": "This looks wrong, the second argument of `set` is bool. Besides, this is setting the flag for all `i` anyway.\n\nSuggest taking this out of the loop, and doing this:\n\n```\nmAllAttribsMask \u003d angle::BitMask(mCaps.maxVertexAttributes);\n```",
+      "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ab8c3d9_c08029b4",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-09T16:13:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b65c229a_e351be13",
       "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
