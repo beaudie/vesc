@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04c8fa3a_b2b91b81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-11-09T05:13:17Z",
+      "side": 1,
+      "message": "lgtm\n\nI\u0027m only a little familiar with these memory ordering semantics, but thought acquire/release were most commonly paired together. Reading the docs it looks like consume/release is correct too.\n\nCould you update the bug with more details of how you realized the need for this change?",
+      "revId": "b6650f7b8e9c22f95ce53fc95cb928c0720161d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
