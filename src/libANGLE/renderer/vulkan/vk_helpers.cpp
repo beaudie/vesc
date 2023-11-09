@@ -495,6 +495,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::TransferSrcDst,
+        ImageMemoryBarrierData{
+            "TransferSrcDst",
+            VK_IMAGE_LAYOUT_GENERAL,
+            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_TRANSFER_WRITE_BIT,
+            ResourceAccess::ReadWrite,
+            PipelineStage::Transfer,
+        },
+    },
+    {
         ImageLayout::HostCopy,
         ImageMemoryBarrierData{
             "HostCopy",
@@ -7077,17 +7092,28 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         region.extent.depth  = (isSrc3D || isDst3D) ? srcDepth : 1;
 
         CommandBufferAccess access;
-        access.onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage);
-        access.onImageTransferWrite(dstLevelGL, 1, region.dstSubresource.baseArrayLayer,
-                                    region.dstSubresource.layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
-                                    dstImage);
+        if (srcImage == dstImage)
+        {
+            access.onImageSelfCopy(dstLevelGL, 1, region.dstSubresource.baseArrayLayer,
+                                   region.dstSubresource.layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
+                                   srcImage);
+        }
+        else
+        {
+            access.onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage);
+            access.onImageTransferWrite(dstLevelGL, 1, region.dstSubresource.baseArrayLayer,
+                                        region.dstSubresource.layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
+                                        dstImage);
+        }
 
         OutsideRenderPassCommandBuffer *commandBuffer;
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
         ASSERT(srcImage->valid() && dstImage->valid());
-        ASSERT(srcImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        ASSERT(dstImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        ASSERT(srcImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ||
+               srcImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_GENERAL);
+        ASSERT(dstImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ||
+               dstImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_GENERAL);
 
         commandBuffer->copyImage(srcImage->getImage(), srcImage->getCurrentLayout(contextVk),
                                  dstImage->getImage(), dstImage->getCurrentLayout(contextVk), 1,
