@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03bade1b_bee5cdc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-10T19:29:45Z",
+      "side": 1,
+      "message": "After the fact, but these changes had an impact on the following traces:\n\nbeach_buggy_racing\negypt_1500\neve_echoes\nlego_legacy\nmanhattan_10\nmanhattan_31\nreal_racing3\nsupertuxkart\ntrex_200\nwar_planet_online\n\nMost significantly on egypt_1500, trex_200 and beach_buggy_racing. I found these by logging the sum of SPIR-V sizes we transform in the backend before and after the changes.",
+      "revId": "4c5009448d01b5bd50a8dbba1f0b577623560fd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
