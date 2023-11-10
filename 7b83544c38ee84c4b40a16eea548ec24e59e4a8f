@@ -34,6 +34,24 @@
       "parentUuid": "0e4cbb6a_6fcd8147",
       "revId": "7b83544c38ee84c4b40a16eea548ec24e59e4a8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fb2b8bf_d899cd6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2023-11-10T01:46:09Z",
+      "side": 1,
+      "message": "I made https://crrev.com/c/4796170 for that.",
+      "parentUuid": "3708fb4a_2a215e53",
+      "revId": "7b83544c38ee84c4b40a16eea548ec24e59e4a8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
