@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b33ccd82_587272eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-10T19:14:41Z",
+      "side": 1,
+      "message": "We could do this in ANGLE, but Chromium would have to the same thing too.\n\nAnother easy solution here is to \"prepend\" compile jobs and \"append\" link jobs. Then link jobs get done later and consequently don\u0027t need to wait for anything.\n\nTBH, with most apps seemingly just check for link results right after link, this seems unlikely to actually help anyone.",
+      "parentUuid": "3f4284b1_cea2302c",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 31
+      },
+      "revId": "d3cef31f99d2e32bd3e724bad37d059940c4d3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d44bdfc_a905d836",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05812721_0520498e",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-10T19:14:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d44bdfc_a905d836",
+      "revId": "d3cef31f99d2e32bd3e724bad37d059940c4d3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "499c6c57_36cf4f31",
@@ -54,6 +96,30 @@
       "writtenOn": "2023-11-10T15:51:13Z",
       "side": 1,
       "message": "nit: Could become `std::make_shared\u003cCompileJobDone\u003e(mState.mCompileStatus \u003d\u003d CompileStatus::COMPILED)`",
+      "range": {
+        "startLine": 805,
+        "startChar": 3,
+        "endLine": 808,
+        "endChar": 48
+      },
+      "revId": "d3cef31f99d2e32bd3e724bad37d059940c4d3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c74718de_618f1c0c",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-10T19:14:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "499c6c57_36cf4f31",
       "range": {
         "startLine": 805,
         "startChar": 3,
