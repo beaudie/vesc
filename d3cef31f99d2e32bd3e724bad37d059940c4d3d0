@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f4284b1_cea2302c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-10T15:51:13Z",
+      "side": 1,
+      "message": "This seems reasonable. I think increasing the thread pool size is much simpler though.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 31
+      },
+      "revId": "d3cef31f99d2e32bd3e724bad37d059940c4d3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d44bdfc_a905d836",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-10T15:51:13Z",
+      "side": 1,
+      "message": "nit: suggest a constructor with the compiled bool. Unless it forces you to add a ton of other constructors",
+      "revId": "d3cef31f99d2e32bd3e724bad37d059940c4d3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "499c6c57_36cf4f31",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-10T15:51:13Z",
+      "side": 1,
+      "message": "nit: Could become `std::make_shared\u003cCompileJobDone\u003e(mState.mCompileStatus \u003d\u003d CompileStatus::COMPILED)`",
+      "range": {
+        "startLine": 805,
+        "startChar": 3,
+        "endLine": 808,
+        "endChar": 48
+      },
+      "revId": "d3cef31f99d2e32bd3e724bad37d059940c4d3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
