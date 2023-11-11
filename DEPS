@@ -2726,6 +2726,16 @@ deps = {
       'dep_type': 'cipd',
       'condition': 'checkout_angle_restricted_traces',
   },
+  'src/tests/restricted_traces/slay_the_spire': {
+      'packages': [
+        {
+            'package': 'angle/traces/slay_the_spire',
+            'version': 'version:1',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_restricted_traces',
+  },
   'src/tests/restricted_traces/slingshot_test1': {
       'packages': [
         {
