@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78455441_6169efc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-13T14:53:36Z",
+      "side": 1,
+      "message": "Old test I had around. We had disabled the workaround because it was buggy, but it was fixed a while ago.",
+      "revId": "f97e62f2ef0000b861dc84348749fda288b5f9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
