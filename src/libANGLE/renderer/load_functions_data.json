@@ -293,7 +293,7 @@
   },
   "GL_RGB8": {
     "R8G8B8A8_UNORM": {
-      "GL_UNSIGNED_BYTE": "LoadToNative3To4<GLubyte, 0xFF>"
+      "GL_UNSIGNED_BYTE": "LoadToNativeUbyte3To4<0xFF>"
     },
     "R8G8B8_UNORM": {
       "GL_UNSIGNED_BYTE": "LoadToNative<GLbyte, 3>"
