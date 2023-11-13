@@ -646,6 +646,30 @@ inline void LoadToNative3To4(const ImageLoadContext &context,
                              size_t outputRowPitch,
                              size_t outputDepthPitch);
 
+template <typename type, uint32_t fourthComponentBits>
+inline void LoadToNative3To4Impl(const ImageLoadContext &context,
+                                 size_t width,
+                                 size_t height,
+                                 size_t depth,
+                                 const uint8_t *input,
+                                 size_t inputRowPitch,
+                                 size_t inputDepthPitch,
+                                 uint8_t *output,
+                                 size_t outputRowPitch,
+                                 size_t outputDepthPitch);
+
+inline void LoadToNativeUbyte3To4Impl(const ImageLoadContext &context,
+                                      const uint8_t fourthValue,
+                                      size_t width,
+                                      size_t height,
+                                      size_t depth,
+                                      const uint8_t *input,
+                                      size_t inputRowPitch,
+                                      size_t inputDepthPitch,
+                                      uint8_t *output,
+                                      size_t outputRowPitch,
+                                      size_t outputDepthPitch);
+
 template <size_t componentCount>
 inline void Load32FTo16F(const ImageLoadContext &context,
                          size_t width,
