@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3314cbd7_ea6297ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1123894
+      },
+      "writtenOn": "2023-11-13T17:19:08Z",
+      "side": 1,
+      "message": "It is good to remove this broken functionality. I believe the lack of Fuchsia bots made this less useful, but following https://bugs.chromium.org/p/fuchsia/issues/detail?id\u003d116832, we can enable this on Fuchsia bots. \n\nLets add a TODO on https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7868 to follow up when we have cycles.",
+      "revId": "8c30a272f5e0ccf54b5ea07194b5a76a0acc7b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
