@@ -45,7 +45,7 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '7b99529aa4946002b25d46608c132b59e49a1c6a',
+  'chromium_revision': 'b0369339b1230e893fdf086eef6c30196e708fd6',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -135,7 +135,7 @@ vars = {
   'reclient_version': 're_client_version:0.120.1.f75cfb7-gomaip',
 
   # siso CIPD package version.
-  'siso_version': 'git_revision:9aef05a1a1bddf2cf8e60bc7d9312c7afbfbe9a2',
+  'siso_version': 'git_revision:c4b451b1bbfc63c12459aba4960686f8a82417df',
 
   # 'magic' text to tell depot_tools that git submodules should be accepted but
   # but parity with DEPS file is expected.
@@ -145,7 +145,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': Var('chromium_git') + '/chromium/src/build.git@eb1aaf3896f583c298fc487e7e31ef0c04b0271b',
+    'url': Var('chromium_git') + '/chromium/src/build.git@a23c7038eb260b9943631a4aaf8056b58dcd30d3',
     'condition': 'not build_with_chromium',
   },
 
@@ -163,7 +163,7 @@ deps = {
     'packages': [
       {
         'package': 'gn/gn/linux-${{arch}}',
-        'version': 'git_revision:e4702d7409069c4f12d45ea7b7f0890717ca3f4b',
+        'version': 'git_revision:85bd0a62938bc84e1b8db0ef92be0e2bb634378d',
       }
     ],
     'dep_type': 'cipd',
@@ -174,7 +174,7 @@ deps = {
     'packages': [
       {
         'package': 'gn/gn/mac-${{arch}}',
-        'version': 'git_revision:e4702d7409069c4f12d45ea7b7f0890717ca3f4b',
+        'version': 'git_revision:85bd0a62938bc84e1b8db0ef92be0e2bb634378d',
       }
     ],
     'dep_type': 'cipd',
@@ -196,7 +196,7 @@ deps = {
     'packages': [
       {
         'package': 'gn/gn/windows-amd64',
-        'version': 'git_revision:e4702d7409069c4f12d45ea7b7f0890717ca3f4b',
+        'version': 'git_revision:85bd0a62938bc84e1b8db0ef92be0e2bb634378d',
       }
     ],
     'dep_type': 'cipd',
@@ -204,7 +204,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@e69e220dc68b2e31e3217ad8cf20ef4912c5fa8f',
+    'url': '{chromium_git}/chromium/src/testing@b4f15c8c668ced6894ab3aced878e2cbf5d5c7b3',
     'condition': 'not build_with_chromium',
   },
 
