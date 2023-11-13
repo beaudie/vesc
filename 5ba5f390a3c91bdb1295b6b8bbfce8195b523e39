@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1528fe7_9d1aa742",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-13T17:09:55Z",
+      "side": 1,
+      "message": "win-trace is broken at the moment, I\u0027ll CQ this when I confirm it\u0027s green.",
+      "revId": "5ba5f390a3c91bdb1295b6b8bbfce8195b523e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
