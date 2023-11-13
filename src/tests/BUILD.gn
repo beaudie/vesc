@@ -438,6 +438,7 @@ if (is_win || is_linux || is_chromeos || is_android || is_apple) {
     data_deps = [ "//testing:run_perf_test" ]
 
     if (angle_enable_vulkan) {
+      include_dirs += [ "$angle_glslang_dir/glslang" ]
       sources += angle_white_box_perf_tests_vulkan_sources
       deps += [
         "$angle_glslang_dir:glslang_lib_sources",
