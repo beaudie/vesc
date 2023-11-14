@@ -16,6 +16,29 @@
       "message": "PTAL - trivial change",
       "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b6781bd_d337dce6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1300106
+      },
+      "writtenOn": "2023-11-14T19:27:51Z",
+      "side": 1,
+      "message": "Needs to be more than this! For example, what if the types match, but the format itself doesn\u0027t match (like GL_RG vs GL_RGBA)?\n\nThe way you can make sure this is bullet proof is to get a `vk::Format` out of `formatInfo` (which, already includes `type` I think?), then inside `isFastUnpackPossible` check that `vkFormat.getActualImageFormatID()` is the same as `bufferFormat.getIntendedFormatID()`.",
+      "range": {
+        "startLine": 862,
+        "startChar": 56,
+        "endLine": 862,
+        "endChar": 60
+      },
+      "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
