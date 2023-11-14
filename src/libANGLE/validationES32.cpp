@@ -468,7 +468,7 @@ bool ValidateGetSamplerParameterIiv(const Context *context,
                                     GLenum pname,
                                     const GLint *params)
 {
-    return true;
+    return ValidateGetSamplerParameterBase(context, entryPoint, sampler, pname, nullptr);
 }
 
 bool ValidateGetSamplerParameterIuiv(const Context *context,
@@ -477,7 +477,7 @@ bool ValidateGetSamplerParameterIuiv(const Context *context,
                                      GLenum pname,
                                      const GLuint *params)
 {
-    return true;
+    return ValidateGetSamplerParameterBase(context, entryPoint, sampler, pname, nullptr);
 }
 
 bool ValidateGetTexParameterIiv(const Context *context,
@@ -486,7 +486,7 @@ bool ValidateGetTexParameterIiv(const Context *context,
                                 GLenum pname,
                                 const GLint *params)
 {
-    return true;
+    return ValidateGetTexParameterBase(context, entryPoint, targetPacked, pname, nullptr);
 }
 
 bool ValidateGetTexParameterIuiv(const Context *context,
@@ -495,7 +495,7 @@ bool ValidateGetTexParameterIuiv(const Context *context,
                                  GLenum pname,
                                  const GLuint *params)
 {
-    return true;
+    return ValidateGetTexParameterBase(context, entryPoint, targetPacked, pname, nullptr);
 }
 
 bool ValidateGetnUniformfv(const Context *context,
@@ -636,7 +636,7 @@ bool ValidateSamplerParameterIiv(const Context *context,
                                  GLenum pname,
                                  const GLint *param)
 {
-    return true;
+    return ValidateSamplerParameterBase(context, entryPoint, sampler, pname, -1, true, param);
 }
 
 bool ValidateSamplerParameterIuiv(const Context *context,
@@ -645,7 +645,7 @@ bool ValidateSamplerParameterIuiv(const Context *context,
                                   GLenum pname,
                                   const GLuint *param)
 {
-    return true;
+    return ValidateSamplerParameterBase(context, entryPoint, sampler, pname, -1, true, param);
 }
 
 bool ValidateTexBuffer(const Context *context,
@@ -687,7 +687,7 @@ bool ValidateTexParameterIiv(const Context *context,
                              GLenum pname,
                              const GLint *params)
 {
-    return true;
+    return ValidateTexParameterBase(context, entryPoint, targetPacked, pname, -1, true, params);
 }
 
 bool ValidateTexParameterIuiv(const Context *context,
@@ -696,7 +696,7 @@ bool ValidateTexParameterIuiv(const Context *context,
                               GLenum pname,
                               const GLuint *params)
 {
-    return true;
+    return ValidateTexParameterBase(context, entryPoint, targetPacked, pname, -1, true, params);
 }
 
 bool ValidateTexStorage3DMultisample(const Context *context,

@@ -5005,6 +5005,11 @@ bool ValidateGetSamplerParameterIivOES(const Context *context,
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
         return false;
     }
+    if (!context->getExtensions().textureBorderClampOES)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
     return ValidateGetSamplerParameterBase(context, entryPoint, sampler, pname, nullptr);
 }
 
@@ -5017,6 +5022,11 @@ bool ValidateGetSamplerParameterIuivOES(const Context *context,
     if (context->getClientMajorVersion() < 3)
     {
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        return false;
+    }
+    if (!context->getExtensions().textureBorderClampOES)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateGetSamplerParameterBase(context, entryPoint, sampler, pname, nullptr);
@@ -5069,6 +5079,11 @@ bool ValidateSamplerParameterIivOES(const Context *context,
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
         return false;
     }
+    if (!context->getExtensions().textureBorderClampOES)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
     return ValidateSamplerParameterBase(context, entryPoint, sampler, pname, -1, true, params);
 }
 
@@ -5081,6 +5096,11 @@ bool ValidateSamplerParameterIuivOES(const Context *context,
     if (context->getClientMajorVersion() < 3)
     {
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        return false;
+    }
+    if (!context->getExtensions().textureBorderClampOES)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateSamplerParameterBase(context, entryPoint, sampler, pname, -1, true, params);
