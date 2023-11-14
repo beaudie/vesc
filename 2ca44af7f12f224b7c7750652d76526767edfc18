@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c00c114_09447650",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-11-14T23:15:31Z",
+      "side": 1,
+      "message": "Mark, this LGTM.  Let me know how whether CapturedTest changes would be a big task.",
+      "revId": "2ca44af7f12f224b7c7750652d76526767edfc18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "befd81b4_5b9b0244",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 9493,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-11-14T23:15:31Z",
+      "side": 1,
+      "message": "Mark, can you add a comment here about why want to use the multi-context version here, but all the other call points can remain single?  I believe it is because all other points are created by the tracer, not the app, so we control the contexts ourselves.",
+      "range": {
+        "startLine": 9493,
+        "startChar": 0,
+        "endLine": 9493,
+        "endChar": 56
+      },
+      "revId": "2ca44af7f12f224b7c7750652d76526767edfc18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
