@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a2e527d_7de35b21",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-14T14:56:04Z",
+      "side": 1,
+      "message": "I think this should be just $angle_glslang_dir, since the include is glslang/Public/ShaderLang.h now?",
+      "parentUuid": "4cd79f50_5320ddbc",
+      "range": {
+        "startLine": 441,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 71
+      },
+      "revId": "1b0f50abf3689b185ba68eed3ef00e6b695c6a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f162ba2_3d529cdd",
