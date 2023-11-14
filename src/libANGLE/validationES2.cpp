@@ -5817,6 +5817,11 @@ bool ValidateGetTexParameterIivOES(const Context *context,
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
         return false;
     }
+    if (!context->getExtensions().textureBorderClampOES)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
     return ValidateGetTexParameterBase(context, entryPoint, target, pname, nullptr);
 }
 
@@ -5830,6 +5835,11 @@ bool ValidateGetTexParameterIuivOES(const Context *context,
     {
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
         return false;
+    }
+
+    if (!context->getExtensions().textureBorderClampOES)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
     }
     return ValidateGetTexParameterBase(context, entryPoint, target, pname, nullptr);
 }
@@ -5974,6 +5984,12 @@ bool ValidateTexParameterIivOES(const Context *context,
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
         return false;
     }
+
+    if (!context->getExtensions().textureBorderClampOES)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
     return ValidateTexParameterBase(context, entryPoint, target, pname, -1, true, params);
 }
 
@@ -5988,6 +6004,13 @@ bool ValidateTexParameterIuivOES(const Context *context,
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
         return false;
     }
+
+    if (!context->getExtensions().textureBorderClampOES)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
     return ValidateTexParameterBase(context, entryPoint, target, pname, -1, true, params);
 }
 
