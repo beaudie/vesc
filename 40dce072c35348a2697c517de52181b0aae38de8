@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d95075f3_6b7f8d5e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-14T20:43:35Z",
+      "side": 1,
+      "message": "Could you add result here? How much perf improvement are you seeing?",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32c1307d_37396d4d",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-14T20:43:35Z",
+      "side": 1,
+      "message": "Do we have unit tests for these methods?",
+      "range": {
+        "startLine": 93,
+        "startChar": 12,
+        "endLine": 93,
+        "endChar": 33
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50255828_a99028db",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-14T20:43:35Z",
+      "side": 1,
+      "message": "I think ANGLE style want explicit type instead of auto.",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 8
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83eeb16b_6210e3b1",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-14T20:43:35Z",
+      "side": 1,
+      "message": "what if input is not 3 bytes aligned and line 133 will never result in source8Mod\u003d\u003d0? Samething for dest8Mod.",
+      "range": {
+        "startLine": 125,
+        "startChar": 20,
+        "endLine": 125,
+        "endChar": 52
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
