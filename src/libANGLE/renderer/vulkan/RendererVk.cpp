@@ -4562,8 +4562,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, supportsExtendedDynamicState,
         mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE && dynamicStateWorks);
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, useVertexInputBindingStrideDynamicState,
-                            mFeatures.supportsExtendedDynamicState.enabled && dynamicStateWorks);
+    // b/309499197 angle currently set the param sizes to nullptr for
+    // vkCmdBindVertexBuffers2. this will crash at intel card.
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, useVertexInputBindingStrideDynamicState,
+        mFeatures.supportsExtendedDynamicState.enabled && dynamicStateWorks && !isIntel);
     ANGLE_FEATURE_CONDITION(&mFeatures, useCullModeDynamicState,
                             mFeatures.supportsExtendedDynamicState.enabled && dynamicStateWorks);
     ANGLE_FEATURE_CONDITION(&mFeatures, useDepthCompareOpDynamicState,
