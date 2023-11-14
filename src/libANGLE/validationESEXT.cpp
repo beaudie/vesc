@@ -1565,6 +1565,11 @@ bool ValidateTexParameterIivEXT(const Context *context,
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
         return false;
     }
+    if (!context->getExtensions().textureBorderClampAny())
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
     return ValidateTexParameterBase(context, entryPoint, targetPacked, pname, -1, true, params);
 }
 
@@ -1577,6 +1582,11 @@ bool ValidateTexParameterIuivEXT(const Context *context,
     if (context->getClientMajorVersion() < 3)
     {
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        return false;
+    }
+    if (!context->getExtensions().textureBorderClampAny())
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateTexParameterBase(context, entryPoint, targetPacked, pname, -1, true, params);

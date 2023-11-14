@@ -495,7 +495,7 @@ bool ValidateGetTexParameterIuiv(const Context *context,
                                  GLenum pname,
                                  const GLuint *params)
 {
-    return true;
+    return ValidateGetTexParameterBase(context, entryPoint, targetPacked, pname, nullptr);
 }
 
 bool ValidateGetnUniformfv(const Context *context,
@@ -696,7 +696,7 @@ bool ValidateTexParameterIuiv(const Context *context,
                               GLenum pname,
                               const GLuint *params)
 {
-    return true;
+    return ValidateTexParameterBase(context, entryPoint, targetPacked, pname, -1, true, params);
 }
 
 bool ValidateTexStorage3DMultisample(const Context *context,
