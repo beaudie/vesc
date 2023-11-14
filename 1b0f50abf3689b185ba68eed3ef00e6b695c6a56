@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ec6bf00_036b9922",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-11-14T01:17:41Z",
+      "side": 1,
+      "message": "Shabi, PTAL, specifically at the three real changes I marked.",
+      "revId": "1b0f50abf3689b185ba68eed3ef00e6b695c6a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17c229e1_08fcc18c",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-11-14T01:17:41Z",
+      "side": 1,
+      "message": "Real change 1",
+      "range": {
+        "startLine": 441,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 71
+      },
+      "revId": "1b0f50abf3689b185ba68eed3ef00e6b695c6a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f162ba2_3d529cdd",
+        "filename": "src/tests/test_utils/third_party/vulkan_command_buffer_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-11-14T01:17:41Z",
+      "side": 1,
+      "message": "Real change 3",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 31
+      },
+      "revId": "1b0f50abf3689b185ba68eed3ef00e6b695c6a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b3fbb23_2b9bdbf1",
+        "filename": "src/tests/test_utils/third_party/vulkan_command_buffer_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-11-14T01:17:41Z",
+      "side": 1,
+      "message": "Real change 2",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "1b0f50abf3689b185ba68eed3ef00e6b695c6a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
