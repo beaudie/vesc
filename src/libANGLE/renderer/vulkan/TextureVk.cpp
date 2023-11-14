@@ -631,7 +631,10 @@ angle::Result TextureVk::setImageImpl(const gl::Context *context,
                            unpackBuffer, pixels, vkFormat);
 }
 
-bool TextureVk::isFastUnpackPossible(const vk::Format &vkFormat, size_t offset) const
+bool TextureVk::isFastUnpackPossible(const vk::Format &vkFormat,
+                                     size_t offset,
+                                     GLenum bufferFormatDataType,
+                                     const gl::ImageIndex &index) const
 {
     // Conditions to determine if fast unpacking is possible
     // 1. Image must be well defined to unpack directly to it
@@ -639,20 +642,23 @@ bool TextureVk::isFastUnpackPossible(const vk::Format &vkFormat, size_t offset) 
     // 2. Can't perform a fast copy for depth/stencil, except from non-emulated depth or stencil
     //    to emulated depth/stencil.  GL requires depth and stencil data to be packed, while Vulkan
     //    requires them to be separate.
-    // 2. Can't perform a fast copy for emulated formats, except from non-emulated depth or stencil
+    // 3. Can't perform a fast copy for emulated formats, except from non-emulated depth or stencil
     //    to emulated depth/stencil.
-    // 3. vkCmdCopyBufferToImage requires byte offset to be a multiple of 4.
+    // 4. vkCmdCopyBufferToImage requires byte offset to be a multiple of 4.
+    // 5. Texture and buffer format data types must be the same
     const angle::Format &bufferFormat = vkFormat.getActualBufferFormat(false);
     const bool isCombinedDepthStencil = bufferFormat.hasDepthAndStencilBits();
     const bool isDepthXorStencil = bufferFormat.hasDepthOrStencilBits() && !isCombinedDepthStencil;
     const bool isCompatibleDepth = vkFormat.getIntendedFormat().depthBits == bufferFormat.depthBits;
     const VkDeviceSize imageCopyAlignment =
         vk::GetImageCopyBufferAlignment(mImage->getActualFormatID());
+    const bool hasSameFormatDataType =
+        mState.getImageDesc(index).format.info->type == bufferFormatDataType;
     return mImage->valid() && !isCombinedDepthStencil &&
            (vkFormat.getIntendedFormatID() ==
                 vkFormat.getActualImageFormatID(getRequiredImageAccess()) ||
             (isDepthXorStencil && isCompatibleDepth)) &&
-           (offset % imageCopyAlignment) == 0;
+           (offset % imageCopyAlignment) == 0 && hasSameFormatDataType;
 }
 
 bool TextureVk::isMipImageDescDefined(gl::TextureTarget textureTarget, size_t level)
@@ -853,7 +859,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
 
         if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
                                   vkFormat.getActualImageFormatID(getRequiredImageAccess())) &&
-            isFastUnpackPossible(vkFormat, offsetBytes))
+            isFastUnpackPossible(vkFormat, offsetBytes, type, index))
         {
             GLuint pixelSize   = formatInfo.pixelBytes;
             GLuint blockWidth  = formatInfo.compressedBlockWidth;
