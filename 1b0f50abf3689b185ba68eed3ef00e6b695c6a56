@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f51fab0_2eb6c65f",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-14T13:18:50Z",
+      "side": 1,
+      "message": "Let\u0027s use $angle_glslang_dir/glslang so that this can be built both in ANGLE and Chromium checkouts.",
+      "parentUuid": "17c229e1_08fcc18c",
+      "range": {
+        "startLine": 441,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 71
+      },
+      "revId": "1b0f50abf3689b185ba68eed3ef00e6b695c6a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f162ba2_3d529cdd",
         "filename": "src/tests/test_utils/third_party/vulkan_command_buffer_utils.cpp",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2023-11-14T01:17:41Z",
       "side": 1,
       "message": "Real change 3",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 31
+      },
+      "revId": "1b0f50abf3689b185ba68eed3ef00e6b695c6a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f236860_fbd8faed",
+        "filename": "src/tests/test_utils/third_party/vulkan_command_buffer_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-14T13:18:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6f162ba2_3d529cdd",
       "range": {
         "startLine": 32,
         "startChar": 0,
@@ -77,6 +125,30 @@
       "writtenOn": "2023-11-14T01:17:41Z",
       "side": 1,
       "message": "Real change 2",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "1b0f50abf3689b185ba68eed3ef00e6b695c6a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca9fb296_75fa50ff",
+        "filename": "src/tests/test_utils/third_party/vulkan_command_buffer_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-14T13:18:50Z",
+      "side": 1,
+      "message": "Would it work if the include dir is glslang/src and then we have \"glslang/Public/ShaderLang.h\" here, so that we have some indication where the include comes from?\nOr would it break finding other files included from ShaderLang.h?",
+      "parentUuid": "9b3fbb23_2b9bdbf1",
       "range": {
         "startLine": 39,
         "startChar": 0,
