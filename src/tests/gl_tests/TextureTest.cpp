@@ -7764,7 +7764,7 @@ TEST_P(TextureBorderClampTest, TextureBorderClampValidation)
     glTexParameteriv(GL_TEXTURE_2D_MULTISAMPLE_ARRAY, GL_TEXTURE_BORDER_COLOR, colorInt);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 
-    if (getClientMajorVersion() < 3)
+    if (getClientMajorVersion() < 2)
     {
         glTexParameterIivOES(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, colorInt);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
