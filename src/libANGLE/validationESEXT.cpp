@@ -1476,9 +1476,9 @@ bool ValidateGetSamplerParameterIivEXT(const Context *context,
                                        GLenum pname,
                                        const GLint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampEXT)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateGetSamplerParameterBase(context, entryPoint, samplerPacked, pname, nullptr);
@@ -1490,9 +1490,9 @@ bool ValidateGetSamplerParameterIuivEXT(const Context *context,
                                         GLenum pname,
                                         const GLuint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampEXT)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateGetSamplerParameterBase(context, entryPoint, samplerPacked, pname, nullptr);
@@ -1504,9 +1504,9 @@ bool ValidateGetTexParameterIivEXT(const Context *context,
                                    GLenum pname,
                                    const GLint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampEXT)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateGetTexParameterBase(context, entryPoint, targetPacked, pname, nullptr);
@@ -1518,9 +1518,9 @@ bool ValidateGetTexParameterIuivEXT(const Context *context,
                                     GLenum pname,
                                     const GLuint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampEXT)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateGetTexParameterBase(context, entryPoint, targetPacked, pname, nullptr);
@@ -1532,9 +1532,9 @@ bool ValidateSamplerParameterIivEXT(const Context *context,
                                     GLenum pname,
                                     const GLint *param)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampEXT)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateSamplerParameterBase(context, entryPoint, samplerPacked, pname, -1, true, param);
@@ -1546,9 +1546,9 @@ bool ValidateSamplerParameterIuivEXT(const Context *context,
                                      GLenum pname,
                                      const GLuint *param)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampEXT)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateSamplerParameterBase(context, entryPoint, samplerPacked, pname, -1, true, param);
@@ -1560,9 +1560,9 @@ bool ValidateTexParameterIivEXT(const Context *context,
                                 GLenum pname,
                                 const GLint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampEXT)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateTexParameterBase(context, entryPoint, targetPacked, pname, -1, true, params);
@@ -1574,9 +1574,9 @@ bool ValidateTexParameterIuivEXT(const Context *context,
                                  GLenum pname,
                                  const GLuint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampEXT)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateTexParameterBase(context, entryPoint, targetPacked, pname, -1, true, params);

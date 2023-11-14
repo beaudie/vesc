@@ -5000,9 +5000,9 @@ bool ValidateGetSamplerParameterIivOES(const Context *context,
                                        GLenum pname,
                                        const GLint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampOES)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateGetSamplerParameterBase(context, entryPoint, sampler, pname, nullptr);
@@ -5014,9 +5014,9 @@ bool ValidateGetSamplerParameterIuivOES(const Context *context,
                                         GLenum pname,
                                         const GLuint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampOES)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateGetSamplerParameterBase(context, entryPoint, sampler, pname, nullptr);
@@ -5064,9 +5064,9 @@ bool ValidateSamplerParameterIivOES(const Context *context,
                                     GLenum pname,
                                     const GLint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampOES)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateSamplerParameterBase(context, entryPoint, sampler, pname, -1, true, params);
@@ -5078,9 +5078,9 @@ bool ValidateSamplerParameterIuivOES(const Context *context,
                                      GLenum pname,
                                      const GLuint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampOES)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateSamplerParameterBase(context, entryPoint, sampler, pname, -1, true, params);

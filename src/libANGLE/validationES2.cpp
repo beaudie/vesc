@@ -5812,9 +5812,9 @@ bool ValidateGetTexParameterIivOES(const Context *context,
                                    GLenum pname,
                                    const GLint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampOES)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateGetTexParameterBase(context, entryPoint, target, pname, nullptr);
@@ -5826,10 +5826,9 @@ bool ValidateGetTexParameterIuivOES(const Context *context,
                                     GLenum pname,
                                     const GLuint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampOES)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
-        return false;
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
     }
     return ValidateGetTexParameterBase(context, entryPoint, target, pname, nullptr);
 }
@@ -5969,9 +5968,9 @@ bool ValidateTexParameterIivOES(const Context *context,
                                 GLenum pname,
                                 const GLint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampOES)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
     return ValidateTexParameterBase(context, entryPoint, target, pname, -1, true, params);
@@ -5983,11 +5982,12 @@ bool ValidateTexParameterIuivOES(const Context *context,
                                  GLenum pname,
                                  const GLuint *params)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (!context->getExtensions().textureBorderClampOES)
     {
-        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES3Required);
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
+
     return ValidateTexParameterBase(context, entryPoint, target, pname, -1, true, params);
 }
 
