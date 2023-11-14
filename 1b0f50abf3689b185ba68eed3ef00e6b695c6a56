@@ -178,6 +178,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13380f65_a851ed72",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-14T15:39:19Z",
+      "side": 1,
+      "message": "Looks like it\u0027s coming from here: https://chromium.googlesource.com/external/github.com/KhronosGroup/glslang.git/+/1dcb072cda091180a5b8b03c030bcbe83a54f8e2/BUILD.gn#101\n\nAlso looks like GN is smart enough to rebase \".\" on top of the BUILD.gn location.",
+      "parentUuid": "e99b7c80_63822a2f",
+      "range": {
+        "startLine": 441,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 71
+      },
+      "revId": "1b0f50abf3689b185ba68eed3ef00e6b695c6a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f162ba2_3d529cdd",
