@@ -33,6 +33,23 @@
       "message": "lgtm as a workaround but please see below as well as comment on crbug.com/1498447 .",
       "revId": "2176a13dd252826f2401db179bc9db2621908795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6fa4bb3_fbc18cd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-11-14T23:42:55Z",
+      "side": 1,
+      "message": "Saif ran into this same problem and abandoned another duplicate CL - do you want to move forward with this in order to try to get the crash rate down? Not pressing you to do so.",
+      "revId": "2176a13dd252826f2401db179bc9db2621908795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
