@@ -164,6 +164,8 @@ std::shared_ptr<WaitableEvent> AsyncWorkerPool::postWorkerTask(const std::shared
 
 void AsyncWorkerPool::threadLoop()
 {
+    angle::SetCurrentThreadName("ANGLE-Worker");
+
     while (true)
     {
         Task task;
