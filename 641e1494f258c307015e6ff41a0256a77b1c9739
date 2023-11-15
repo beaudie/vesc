@@ -34,6 +34,24 @@
       "parentUuid": "a662e0a2_d7f8c711",
       "revId": "641e1494f258c307015e6ff41a0256a77b1c9739",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8971a20f_77180497",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5809,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-15T20:27:59Z",
+      "side": 1,
+      "message": "Sure, I suggested moving only the functions related to this CL, i.e., integer texture and sampler parameters.",
+      "parentUuid": "9c01326d_1809093f",
+      "revId": "641e1494f258c307015e6ff41a0256a77b1c9739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
