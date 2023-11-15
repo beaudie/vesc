@@ -159,6 +159,30 @@
       },
       "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a5ff147_b21fe44e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-11-15T18:55:49Z",
+      "side": 1,
+      "message": "\u003e When in doubt, add one\n\ndone\n\n\u003e That said, getting the vk::Format and checking the id is still the preferred way.\n\ndone\n\n\u003e check that vkFormat.getActualImageFormatID() is the same as bufferFormat.getIntendedFormatID()\n\nis there a reason we check for intended format (instead of actual format) of the buffer?\n\n\u003e we can\u0027t use vkCmdCopyBufferToImage if the formats don\u0027t perfectly match\n\nis there a VU for this?",
+      "parentUuid": "27b181ea_14426778",
+      "range": {
+        "startLine": 862,
+        "startChar": 56,
+        "endLine": 862,
+        "endChar": 60
+      },
+      "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
