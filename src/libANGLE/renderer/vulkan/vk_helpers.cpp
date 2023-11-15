@@ -1891,6 +1891,82 @@ void OutsideRenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *cont
     contextVk->addCommandBufferDiagnostics(out.str());
 }
 
+// RenderPassFramebuffer implementation.
+void RenderPassFramebuffer::reset()
+{
+    mInitialFramebuffer.release();
+    mImageViews.clear();
+}
+
+void RenderPassFramebuffer::addResolveAttachment(size_t viewIndex, VkImageView view)
+{
+    // The initial framebuffer is no longer usable.
+    mInitialFramebuffer.release();
+
+    if (viewIndex >= mImageViews.size())
+    {
+        mImageViews.resize(viewIndex + 1, VK_NULL_HANDLE);
+    }
+
+    ASSERT(mImageViews[viewIndex] == VK_NULL_HANDLE);
+    mImageViews[viewIndex] = view;
+}
+
+angle::Result RenderPassFramebuffer::packResolveViewsAndCreateFramebuffer(
+    Context *context,
+    const RenderPass &renderPass,
+    FramebufferHelper *framebufferOut)
+{
+    // This is only called if the initial framebuffer was not usable.  Since this is called when
+    // the render pass is finalized, the render pass that is passed in is the final one (not a
+    // compatible one) and the framebuffer that is created is not imageless.
+    ASSERT(!mInitialFramebuffer.valid());
+
+    PackViews(&mImageViews);
+
+    VkFramebufferCreateInfo framebufferInfo = {};
+    framebufferInfo.sType                   = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.flags                   = 0;
+    framebufferInfo.renderPass              = renderPass.getHandle();
+    framebufferInfo.attachmentCount         = static_cast<uint32_t>(mImageViews.size());
+    framebufferInfo.pAttachments            = mImageViews.data();
+    framebufferInfo.width                   = mWidth;
+    framebufferInfo.height                  = mHeight;
+    framebufferInfo.layers                  = mLayers;
+
+    return framebufferOut->init(contextVk, framebufferInfo);
+}
+
+void RenderPassFramebuffer::packResolveViewsForRenderPassBegin(
+    VkRenderPassAttachmentBeginInfo *beginInfoOut)
+{
+    // Called when using the initial framebuffer which is imageless
+    ASSERT(mInitialFramebuffer.valid());
+
+    PackViews(&mImageViews);
+
+    *beginInfoOut                 = {};
+    beginInfoOut->sType           = VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
+    beginInfoOut->attachmentCount = static_cast<uint32_t>(mImageViews.size());
+    beginInfoOut->pAttachments    = mImageViews.data();
+}
+
+// static
+void RenderPassFramebuffer::PackViews(FramebufferAttachmentVector<VkImageView> *views)
+{
+    PackedAttachmentIndex packIndex = kAttachmentIndexZero;
+    for (size_t viewIndex = 0; viewIndex < views->size(); ++viewIndex)
+    {
+        if ((*views)[viewIndex] != VK_NULL_HANDLE)
+        {
+            (*views)[packIndex.get()] = (*views)[viewIndex];
+            ++packIndex;
+        }
+    }
+
+    views->resize(packIndex.get());
+}
+
 // RenderPassCommandBufferHelper implementation.
 RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
     : mCurrentSubpassCommandBufferIndex(0),
@@ -1970,7 +2046,7 @@ angle::Result RenderPassCommandBufferHelper::reset(
     mCurrentSubpassCommandBufferIndex = 0;
 
     // Reset the image views used for imageless framebuffer (if any)
-    std::fill(mImageViews.begin(), mImageViews.end(), VK_NULL_HANDLE);
+    mFramebuffer.reset();
 
     // Invalidate the queue serial here. We will get a new queue serial when we begin renderpass.
     mQueueSerial = QueueSerial();
@@ -2509,7 +2585,7 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilImageLayoutAndLoadStore(
 
 angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     ContextVk *contextVk,
-    MaybeImagelessFramebuffer &framebuffer,
+    RenderPassFramebuffer &&framebuffer,
     const gl::Rectangle &renderArea,
     const RenderPassDesc &renderPassDesc,
     const AttachmentOpsArray &renderPassAttachmentOps,
@@ -2695,8 +2771,14 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
 
 angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
                                                             CommandsState *commandsState,
-                                                            const RenderPass *renderPass)
+                                                            const RenderPass &renderPass,
+                                                            VkFramebuffer framebufferOverride)
 {
+    // |framebufferOverride| must only be provided if the initial framebuffer the render pass was
+    // started with is not usable (due to the addition of resolve attachments after the fact).
+    ASSERT(framebufferOverride == VK_NULL_HANDLE ||
+           mFramebuffer.needsNewFramebufferWithResolveAttachments());
+
     ANGLE_TRACE_EVENT0("gpu.angle", "RenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(mRenderPassStarted);
     PrimaryCommandBuffer &primary = commandsState->primaryCommands;
@@ -2704,11 +2786,11 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     // Commands that are added to primary before beginRenderPass command
     executeBarriers(context->getRenderer()->getFeatures(), commandsState);
 
-    ASSERT(renderPass != nullptr);
-    VkRenderPassBeginInfo beginInfo    = {};
-    beginInfo.sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    beginInfo.renderPass               = renderPass->getHandle();
-    beginInfo.framebuffer              = mFramebuffer.getHandle();
+    VkRenderPassBeginInfo beginInfo = {};
+    beginInfo.sType                 = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    beginInfo.renderPass            = renderPass.getHandle();
+    beginInfo.framebuffer =
+        framebufferOverride ? framebufferOverride : mFramebuffer.getFramebuffer();
     beginInfo.renderArea.offset.x      = static_cast<uint32_t>(mRenderArea.x);
     beginInfo.renderArea.offset.y      = static_cast<uint32_t>(mRenderArea.y);
     beginInfo.renderArea.extent.width  = static_cast<uint32_t>(mRenderArea.width);
@@ -2717,20 +2799,17 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     beginInfo.pClearValues    = mClearValues.data();
 
     // With imageless framebuffers, the attachments should be also added to beginInfo.
-    VkRenderPassAttachmentBeginInfoKHR rpAttachmentBeginInfo = {};
+    VkRenderPassAttachmentBeginInfo attachmentBeginInfo = {};
     if (mFramebuffer.isImageless())
     {
+        mFramebuffer.packResolveViewsForRenderPassBegin(&attachmentBeginInfo);
+        AddToPNextChain(&beginInfo, &attachmentBeginInfo);
+
         // If nullColorAttachmentWithExternalFormatResolve is true, there will be no color
         // attachment even though mRenderPassDesc indicates so.
         ASSERT((mRenderPassDesc.hasYUVResolveAttachment() &&
                 context->getRenderer()->nullColorAttachmentWithExternalFormatResolve()) ||
-               mFramebuffer.getImageViews().size() == mRenderPassDesc.attachmentCount());
-        rpAttachmentBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
-        rpAttachmentBeginInfo.attachmentCount =
-            static_cast<uint32_t>(mFramebuffer.getImageViews().size());
-        rpAttachmentBeginInfo.pAttachments = mFramebuffer.getImageViews().data();
-
-        AddToPNextChain(&beginInfo, &rpAttachmentBeginInfo);
+               attachmentBeginInfo.attachmentCount == mRenderPassDesc.attachmentCount());
     }
 
     // Run commands inside the RenderPass.
@@ -2753,14 +2832,25 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     return reset(context, &commandsState->secondaryCommands);
 }
 
-void RenderPassCommandBufferHelper::updateRenderPassForResolve(
-    ContextVk *contextVk,
-    MaybeImagelessFramebuffer &newFramebuffer,
-    const RenderPassDesc &renderPassDesc)
+void RenderPassCommandBufferHelper::addColorResolveAttachment(size_t colorIndexGL, VkImageView view)
 {
-    ASSERT(newFramebuffer.getHandle());
-    mFramebuffer    = std::move(newFramebuffer);
-    mRenderPassDesc = renderPassDesc;
+    mFramebuffer.addColorResolveAttachment(colorIndexGL, view);
+    mRenderPassDesc.packColorResolveAttachment(colorIndexGL);
+}
+
+void RenderPassCommandBufferHelper::addDepthStencilResolveAttachemnt(VkImageView view)
+{
+    mFramebuffer.addDepthStencilResolveAttachment(view);
+    mRenderPassDesc.packDepthStencilResolveAttachment();
+}
+
+void RenderPassCommandBufferHelper::onSwapchainResolve()
+{
+    // When |ContextVk::optimizeRenderPassForPresent| adds a resolve attachment to the default
+    // framebuffer's render pass, it directly modifies |mFramebuffer|.  This step is needed to
+    // update the render pass desc as well.  Note that |addColorResolveAttachment| must not be used
+    // in this case because it invalidates the framebuffer handle in |mFramebuffer|.
+    mRenderPassDesc.packColorResolveAttachment(0);
 }
 
 void RenderPassCommandBufferHelper::resumeTransformFeedback()

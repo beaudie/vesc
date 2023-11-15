@@ -1371,46 +1371,114 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     friend class CommandBufferHelperCommon;
 };
 
-enum class ImagelessStatus
-{
-    NotImageless,
-    Imageless,
-};
-
-class MaybeImagelessFramebuffer : angle::NonCopyable
+class RenderPassFramebuffer : angle::NonCopyable
 {
   public:
-    MaybeImagelessFramebuffer() : mImageViews({}), mImageless(ImagelessStatus::NotImageless) {}
-    ~MaybeImagelessFramebuffer() { mFramebuffer.release(); }
+    RenderPassFramebuffer() = default;
+    ~RenderPassFramebuffer() { mInitialFramebuffer.release(); }
 
-    MaybeImagelessFramebuffer &operator=(MaybeImagelessFramebuffer &&rhs)
+    RenderPassFramebuffer &operator=(RenderPassFramebuffer &&other)
     {
-        updateFramebuffer(rhs.mFramebuffer.getHandle(), &rhs.mImageViews, rhs.mImageless);
+        mInitialFramebuffer.setHandle(other.mInitialFramebuffer.release());
+        std::swap(mImageViews, other.mImageViews);
+        mWidth  = other.mWidth;
+        mHeight = other.mHeight;
+        mLayers = other.mLayers;
         return *this;
     }
 
-    void updateFramebuffer(VkFramebuffer newFramebufferHandle,
-                           FramebufferAttachmentsVector<VkImageView> *newImageViews,
-                           ImagelessStatus imagelessStatus)
+    void reset();
+
+    void setFramebuffer(Framebuffer &&initialFramebuffer,
+                        FramebufferAttachmentsVector<VkImageView> &&imageViews,
+                        uint32_t width,
+                        uint32_t height,
+                        uint32_t layers)
     {
-        mFramebuffer.setHandle(newFramebufferHandle);
-        std::swap(mImageViews, *newImageViews);
-        mImageless = imagelessStatus;
+        mInitialFramebuffer = std::move(initialFramebuffer);
+        mImageViews         = std::move(imageViews);
+        mWidth              = width;
+        mHeight             = height;
+        mLayers             = layers;
+    }
+    // TODO: DR would add another variant without mInitialFramebuffer.
+
+    VkFramebuffer getFramebuffer() const { return mInitialFramebuffer.get(); }
+    bool needsNewFramebufferWithResolveAttachments() const { return !mInitialFramebuffer.valid(); }
+
+    // Helpers to determine if a resolve attachment already exists
+    bool hasColorResolveAttachment(size_t colorIndexGL)
+    {
+        const size_t viewIndex = kColorResolveAttachmentBegin + colorIndexGL;
+        return viewIndex < mImageViews.size() && mImageViews[viewIndex] != VK_NULL_HANDLE;
+    }
+    bool hasDepthStencilResolveAttachment()
+    {
+        return mImageViews[kDepthStencilResolveAttachment] != VK_NULL_HANDLE;
     }
 
-    Framebuffer &getFramebuffer() { return mFramebuffer; }
-    [[nodiscard]] VkFramebuffer getHandle() const { return mFramebuffer.getHandle(); }
-    void setHandle(VkFramebuffer handle) { mFramebuffer.setHandle(handle); }
+    // Add a resolve attachment.  This is only called through glBlitFramebuffer, as other cases
+    // where resolve attachments are implicitly added already include the resolve attachment when
+    // initially populating mImageViews.
+    void addColorResolveAttachment(size_t colorIndexGL, VkImageView view)
+    {
+        addResolveAttachment(kColorResolveAttachmentBegin, view);
+    }
+    void addDepthStencilResolveAttachemnt(VkImageView view)
+    {
+        addResolveAttachment(kDepthStencilResolveAttachment, view);
+    }
 
-    FramebufferAttachmentsVector<VkImageView> &getImageViews() { return mImageViews; }
+    // Prepare for rendering by creating a new framebuffer because the initial framebuffer is not
+    // valid (due to added resolve attachments).  This is called when the render pass is finalized.
+    angle::Result packResolveViewsAndCreateFramebuffer(Context *context,
+                                                       const RenderPass &renderPass,
+                                                       FramebufferHelper *framebufferOut);
 
-    bool isImageless() { return mImageless == ImagelessStatus::Imageless; }
+    // Prepare for rendering using the initial imageless framebuffer.
+    void packResolveViewsForRenderPassBegin(VkRenderPassAttachmentBeginInfo *beginInfoOut);
+    // TODO: same for dynamic rendering.  It should get the render pass desc to be able to split the
+    // views.
+
+    // Packs views in a contiguous list.
+    //
+    // It can be used before creating a framebuffer, or when starting a render pass with an
+    // imageless framebuffer.
+    static void PackViews(FramebufferAttachmentVector<VkImageView> *views)
+
+        static constexpr size_t kColorResolveAttachmentBegin = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS +
+                                                               2;
+    static constexpr size_t kDepthStencilResolveAttachment =
+        gl::IMPLEMENTATION_MAX_DRAW_BUFFERS * 2 + 2;
 
   private:
-    Framebuffer mFramebuffer;
-    FramebufferAttachmentsVector<VkImageView> mImageViews;
-    ImagelessStatus mImageless;
-};
+    void addResolveAttachment(size_t viewIndex, VkImageView view);
+    void packResolveViews();
+
+    // The following is the framebuffer object that was used to start the render pass.  If the
+    // resolve attachments have not been modified, the same framebuffer object can be used.
+    // Otherwise a temporary framebuffer object is created when the render pass is closed.  This
+    // inefficiency is removed with VK_KHR_dynamic_rendering when supported.
+    Framebuffer mInitialFramebuffer;
+
+    // The first gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 2 attachments are laid out as follows:
+    //
+    // - Color attachments, if any
+    // - Depth/stencil attachment, if any
+    // - Fragment shading rate attachment, if any
+    // - Padding if needed
+    //
+    // Starting from index gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 2, there are potentially another
+    // gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1 resolve attachments.  However, these are not packed
+    // (with gaps per missing attachment, and depth/stencil resolve is last).  This allow more
+    // resolve attachments to be added by optimizing calls to glBlitFramebuffer.  When the render
+    // pass is closed, the resolve attachments are packed.
+    FramebufferAttachmentVector<VkImageView> mImageViews = {};
+
+    uint32_t mWidth  = 0;
+    uint32_t mHeight = 0;
+    uint32_t mLayers = 0;
+}
 
 class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 {
@@ -1494,7 +1562,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     angle::Result flushToPrimary(Context *context,
                                  CommandsState *commandsState,
-                                 const RenderPass *renderPass);
+                                 const RenderPass &renderPass,
+                                 VkFramebuffer framebufferOverride);
 
     bool started() const { return mRenderPassStarted; }
 
@@ -1504,7 +1573,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                              UniqueSerial imageSiblingSerial);
 
     angle::Result beginRenderPass(ContextVk *contextVk,
-                                  MaybeImagelessFramebuffer &framebuffer,
+                                  RenderPassFramebuffer &&framebuffer,
                                   const gl::Rectangle &renderArea,
                                   const RenderPassDesc &renderPassDesc,
                                   const AttachmentOpsArray &renderPassAttachmentOps,
@@ -1550,8 +1619,6 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     bool isTransformFeedbackStarted() const { return mValidTransformFeedbackBufferCount > 0; }
     bool isTransformFeedbackActiveUnpaused() const { return mIsTransformFeedbackActiveUnpaused; }
 
-    bool usesImagelessFramebuffer() { return mFramebuffer.isImageless(); }
-
     uint32_t getAndResetCounter()
     {
         uint32_t count = mCounter;
@@ -1559,7 +1626,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
         return count;
     }
 
-    VkFramebuffer getFramebufferHandle() const { return mFramebuffer.getHandle(); }
+    RenderPassFramebuffer &getFramebuffer() { return mFramebuffer; }
+    const RenderPassFramebuffer &getFramebuffer() const { return mFramebuffer; }
 
     void onColorAccess(PackedAttachmentIndex packedAttachmentIndex, ResourceAccess access);
     void onDepthAccess(ResourceAccess access);
@@ -1573,9 +1641,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     bool hasAnyDepthAccess() { return mDepthAttachment.hasAnyAccess(); }
     bool hasAnyStencilAccess() { return mStencilAttachment.hasAnyAccess(); }
 
-    void updateRenderPassForResolve(ContextVk *contextVk,
-                                    MaybeImagelessFramebuffer &newFramebuffer,
-                                    const RenderPassDesc &renderPassDesc);
+    void addColorResolveAttachment(size_t colorIndexGL, VkImageView view);
+    void addDepthStencilResolveAttachemnt(VkImageView view);
+    void onSwapchainResolve();
 
     bool hasDepthWriteOrClear() const
     {
@@ -1652,9 +1720,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void finalizeFragmentShadingRateImageLayout(Context *context);
 
     // When using Vulkan secondary command buffers, each subpass must be recorded in a separate
-    // command buffer.  Currently ANGLE produces render passes with at most 2 subpasses.  Once
-    // framebuffer-fetch is appropriately implemented to use subpasses, this array must be made
-    // dynamic.
+    // command buffer.  Currently ANGLE produces render passes with at most 2 subpasses.
     static constexpr size_t kMaxSubpassCount = 2;
     std::array<RenderPassCommandBuffer, kMaxSubpassCount> mCommandBuffers;
     uint32_t mCurrentSubpassCommandBufferIndex;
@@ -1663,7 +1729,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     uint32_t mCounter;
     RenderPassDesc mRenderPassDesc;
     AttachmentOpsArray mAttachmentOps;
-    MaybeImagelessFramebuffer mFramebuffer;
+    RenderPassFramebuffer mFramebuffer;
     gl::Rectangle mRenderArea;
     PackedClearValuesArray mClearValues;
     bool mRenderPassStarted;
@@ -1694,8 +1760,6 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     RenderPassAttachment mStencilResolveAttachment;
 
     RenderPassAttachment mFragmentShadingRateAtachment;
-
-    FramebufferAttachmentArray<VkImageView> mImageViews;
 
     // This is last renderpass before present and this is the image will be presented. We can use
     // final layout of the renderpass to transition it to the presentable layout

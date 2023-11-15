@@ -342,13 +342,15 @@ class WindowSurfaceVk : public SurfaceVk
                                      GLenum binding,
                                      const gl::ImageIndex &imageIndex) override;
 
-    vk::Framebuffer &chooseFramebuffer(const SwapchainResolveMode swapchainResolveMode);
+    vk::Framebuffer &chooseFramebuffer(vk::Context *context,
+                                       const SwapchainResolveMode swapchainResolveMode);
 
     angle::Result getCurrentFramebuffer(ContextVk *context,
                                         FramebufferFetchMode fetchMode,
                                         const vk::RenderPass &compatibleRenderPass,
                                         const SwapchainResolveMode swapchainResolveMode,
-                                        vk::MaybeImagelessFramebuffer *framebufferOut);
+                                        vk::Framebuffer *framebufferOut,
+                                        VkImageView *resolveViewOut);
 
     VkSurfaceTransformFlagBitsKHR getPreTransform() const
     {

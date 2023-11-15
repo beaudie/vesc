@@ -120,6 +120,8 @@ void RenderTargetVk::onColorResolve(ContextVk *contextVk, uint32_t framebufferLa
     ASSERT(framebufferLayerCount <= mLayerCount);
     ASSERT(mResolveImage == nullptr);
 
+    // TODO: who calls this? And why onImageRenderPassWrite, and not onColorDraw? (or whatever
+    // portion of it that's needed?)
     contextVk->onImageRenderPassWrite(mLevelIndexGL, mLayerIndex, framebufferLayerCount,
                                       VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorWrite,
                                       mImage);

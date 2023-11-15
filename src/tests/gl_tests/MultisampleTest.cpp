@@ -365,6 +365,54 @@ TEST_P(MultisampleTestES3, ResolveToFBO)
     EXPECT_PIXEL_COLOR_NEAR(kWindowWidth / 2, kWindowHeight / 2, kResult, 1);
 }
 
+// Test that resolve from multisample default framebuffer after an open render pass works when the
+// framebuffer is also immediately implicitly resolved due to swap afterwards.
+TEST_P(MultisampleTestES3, RenderPassResolveToFBOThenSwap)
+{
+    GLTexture resolveTexture;
+    glBindTexture(GL_TEXTURE_2D, resolveTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWindowWidth, kWindowHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    GLFramebuffer resolveFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, resolveFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, resolveTexture, 0);
+
+    auto runTest = [&](bool flipY) {
+        // Open a render pass by drawing to the default framebuffer
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        ANGLE_GL_PROGRAM(red, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+        drawQuad(red, essl1_shaders::PositionAttrib(), 0.5f);
+
+        // Resolve into FBO
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resolveFBO);
+        if (flipY)
+        {
+            glFramebufferParameteriMESA(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 1);
+        }
+        glBlitFramebuffer(0, 0, kWindowWidth, kWindowHeight, 0, 0, kWindowWidth, kWindowHeight,
+                          GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        ASSERT_GL_NO_ERROR();
+
+        // Immediately swap so that an implicit resolve to the backbuffer happens right away.
+        swapBuffers();
+
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, resolveFBO);
+        EXPECT_PIXEL_RECT_EQ(0, 0, kWindowWidth, kWindowHeight, GLColor::red);
+    };
+
+    runTest(false);
+    if (IsGLExtensionEnabled("GL_MESA_framebuffer_flip_y"))
+    {
+        // With multiple backends, the default framebuffer is flipped w.r.t GL's coordinates.  As a
+        // result, the glBlitFramebuffer may need to take a different path from a direct multisample
+        // resolve.  This test ensures a direct resolve is also tested where possible.
+        runTest(true);
+    }
+}
+
 class MultisampleResolveTest : public ANGLETest<>
 {
   protected:

@@ -533,6 +533,23 @@ bool AreAllFencesSignaled(VkDevice device, const std::vector<vk::Fence> &fences)
     }
     return true;
 }
+
+void FillSwapchainAttachmentImageInfo(const vk::ImageHelper &image,
+                                      VkFramebufferAttachmentImageInfo *infoOut)
+{
+    *infoOut = {};
+
+    infoOut->sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO;
+
+    infoOut->width  = image.getExtents().width;
+    infoOut->height = image.getExtents().height;
+
+    infoOut->layerCount      = 1;
+    infoOut->flags           = image.getCreateFlags();
+    infoOut->usage           = image.getUsage();
+    infoOut->viewFormatCount = static_cast<uint32_t>(image.getViewFormats().size());
+    infoOut->pViewFormats    = image.getViewFormats().data();
+}
 }  // namespace
 
 SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfaceState) {}
@@ -2091,20 +2108,28 @@ angle::Result WindowSurfaceVk::computePresentOutOfDate(vk::Context *context,
     return angle::Result::Continue;
 }
 
-vk::Framebuffer &WindowSurfaceVk::chooseFramebuffer(const SwapchainResolveMode swapchainResolveMode)
+vk::Framebuffer &WindowSurfaceVk::chooseFramebuffer(vk::Context *context,
+                                                    const SwapchainResolveMode swapchainResolveMode)
 {
+    const bool useImagelessFramebuffer =
+        context->getFeatures().supportsImagelessFramebuffer.enabled;
+
+    // When using imageless framebuffers, there is no need to have a framebuffer per image.  The
+    // framebuffer of image 0 is always used in that case.
+    const uint32_t framebufferIndex = useImagelessFramebuffer ? 0 : mCurrentSwapchainImageIndex;
+
     if (isMultiSampled())
     {
         return swapchainResolveMode == SwapchainResolveMode::Enabled
-                   ? mSwapchainImages[mCurrentSwapchainImageIndex].framebufferResolveMS
+                   ? mSwapchainImages[framebufferIndex].framebufferResolveMS
                    : mFramebufferMS;
     }
 
     // Choose which framebuffer to use based on fetch, so it will have a matching renderpass
     ASSERT(swapchainResolveMode == SwapchainResolveMode::Disabled);
     return mFramebufferFetchMode == FramebufferFetchMode::Enabled
-               ? mSwapchainImages[mCurrentSwapchainImageIndex].fetchFramebuffer
-               : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
+               ? mSwapchainImages[framebufferIndex].fetchFramebuffer
+               : mSwapchainImages[framebufferIndex].framebuffer;
 }
 
 angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
@@ -2112,8 +2137,9 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
 {
     vk::Renderer *renderer = contextVk->getRenderer();
 
-    SwapchainImage &image               = mSwapchainImages[mCurrentSwapchainImageIndex];
-    vk::Framebuffer &currentFramebuffer = chooseFramebuffer(SwapchainResolveMode::Disabled);
+    SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
+    vk::Framebuffer &currentFramebuffer =
+        chooseFramebuffer(contextVk, SwapchainResolveMode::Disabled);
 
     // Make sure deferred clears are applied, if any.
     if (mColorImageMS.valid())
@@ -2145,11 +2171,12 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
     // swapchain image. MSAA resolve and overlay will insert another renderpass which disqualifies
     // the optimization.
     bool imageResolved = false;
-    if (currentFramebuffer.valid())
+    if (currentFramebuffer.valid() &&
+        contextVk->hasStartedRenderPassWithSwapchainFramebuffer(currentFramebuffer))
     {
-        ANGLE_TRY(contextVk->optimizeRenderPassForPresent(
-            currentFramebuffer.getHandle(), &image.imageViews, image.image.get(), &mColorImageMS,
-            mSwapchainPresentMode, &imageResolved));
+        ANGLE_TRY(contextVk->optimizeRenderPassForPresent(&image.imageViews, image.image.get(),
+                                                          &mColorImageMS, mSwapchainPresentMode,
+                                                          &imageResolved));
     }
 
     // Because the color attachment defers layout changes until endRenderPass time, we must call
@@ -2948,7 +2975,8 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     FramebufferFetchMode fetchMode,
     const vk::RenderPass &compatibleRenderPass,
     const SwapchainResolveMode swapchainResolveMode,
-    vk::MaybeImagelessFramebuffer *framebufferOut)
+    vk::Framebuffer *framebufferOut,
+    VkImageView *resolveViewOut)
 {
     // FramebufferVk dirty-bit processing should ensure that a new image was acquired.
     ASSERT(!needsAcquireImageOrProcessResult());
@@ -2956,86 +2984,114 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     // Track the new fetch mode
     mFramebufferFetchMode = fetchMode;
 
-    vk::Framebuffer &currentFramebuffer = chooseFramebuffer(swapchainResolveMode);
-    if (currentFramebuffer.valid())
+    SwapchainImage &swapchainImage = mSwapchainImages[mCurrentSwapchainImageIndex];
+
+    const vk::ImageView *swapchainImageView = nullptr;
+    ANGLE_TRY(swapchainImage.imageViews.getLevelLayerDrawImageView(
+        contextVk, *swapchainImage.image, vk::LevelIndex(0), 0, gl::SrgbWriteControlMode::Default,
+        &swapchainImageView));
+    ASSERT(swapchainImageView->valid());
+
+    const bool hasResolve = swapchainResolveMode == SwapchainResolveMode::Enabled;
+    if (hasResolve)
+    {
+        ASSERT(isMultiSampled());
+        *resolveViewOut = swapchainImageView->getHandle();
+    }
+
+    vk::Framebuffer *currentFramebuffer = &chooseFramebuffer(contextVk, swapchainResolveMode);
+    if (currentFramebuffer->valid())
     {
         // Validation layers should detect if the render pass is really compatible.
-        framebufferOut->setHandle(currentFramebuffer.getHandle());
+        framebufferOut->setHandle(currentFramebuffer->getHandle());
         return angle::Result::Continue;
     }
 
+    const gl::Extents rotatedExtents = mColorRenderTarget.getRotatedExtents();
+    const uint32_t attachmentCount =
+        1 + (mDepthStencilImage.valid() ? 1 : 0) + (hasResolve ? 1 : 0);
+
     VkFramebufferCreateInfo framebufferInfo = {};
-    uint32_t attachmentCount                = mDepthStencilImage.valid() ? 2u : 1u;
+    framebufferInfo.sType                   = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.flags                   = 0;
+    framebufferInfo.renderPass              = compatibleRenderPass.getHandle();
+    framebufferInfo.attachmentCount         = attachmentCount;
+    framebufferInfo.width                   = static_cast<uint32_t>(rotatedExtents.width);
+    framebufferInfo.height                  = static_cast<uint32_t>(rotatedExtents.height);
+    framebufferInfo.layers                  = 1;
 
-    const gl::Extents rotatedExtents      = mColorRenderTarget.getRotatedExtents();
+    const bool useImagelessFramebuffer =
+        context->getFeatures().supportsImagelessFramebuffer.enabled;
+
     std::array<VkImageView, 3> imageViews = {};
+    vk::FramebufferAttachmentsVector<VkFramebufferAttachmentImageInfo> attachmentImageInfos;
+    VkFramebufferAttachmentsCreateInfo attachmentsCreateInfo;
 
-    if (mDepthStencilImage.valid())
+    if (!useImagelessFramebuffer)
     {
-        const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(mDepthStencilRenderTarget.getImageView(contextVk, &imageView));
-        imageViews[1] = imageView->getHandle();
-    }
-
-    framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.flags           = 0;
-    framebufferInfo.renderPass      = compatibleRenderPass.getHandle();
-    framebufferInfo.attachmentCount = attachmentCount;
-    framebufferInfo.pAttachments    = imageViews.data();
-    framebufferInfo.width           = static_cast<uint32_t>(rotatedExtents.width);
-    framebufferInfo.height          = static_cast<uint32_t>(rotatedExtents.height);
-    framebufferInfo.layers          = 1;
-
-    if (isMultiSampled())
-    {
-        const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(mColorRenderTarget.getImageView(contextVk, &imageView));
-        imageViews[0] = imageView->getHandle();
-
-        if (swapchainResolveMode == SwapchainResolveMode::Enabled)
+        // If the framebuffer is not imageless, accumulate the necessary views and create it based
+        // on them.
+        if (mDepthStencilImage.valid())
         {
-            SwapchainImage &swapchainImage = mSwapchainImages[mCurrentSwapchainImageIndex];
+            const vk::ImageView *imageView = nullptr;
+            ANGLE_TRY(mDepthStencilRenderTarget.getImageView(contextVk, &imageView));
+            imageViews[1] = imageView->getHandle();
+        }
 
-            framebufferInfo.attachmentCount = attachmentCount + 1;
+        if (isMultiSampled())
+        {
+            const vk::ImageView *imageView = nullptr;
+            ANGLE_TRY(mColorRenderTarget.getImageView(contextVk, &imageView));
+            imageViews[0] = imageView->getHandle();
 
-            ANGLE_TRY(swapchainImage.imageViews.getLevelLayerDrawImageView(
-                contextVk, *swapchainImage.image, vk::LevelIndex(0), 0,
-                gl::SrgbWriteControlMode::Default, &imageView));
-            imageViews[attachmentCount] = imageView->getHandle();
-
-            ANGLE_VK_TRY(contextVk, swapchainImage.framebufferResolveMS.init(contextVk->getDevice(),
-                                                                             framebufferInfo));
+            if (hasResolve)
+            {
+                imageViews[attachmentCount - 1] = swapchainImageView->getHandle();
+            }
         }
         else
         {
-            // If multisampled, there is only a single color image and framebuffer.
-            ANGLE_VK_TRY(contextVk, mFramebufferMS.init(contextVk->getDevice(), framebufferInfo));
+            imageViews[0] = swapchainImageView->getHandle();
         }
+
+        framebufferInfo.pAttachments = imageViews.data();
     }
     else
     {
-        SwapchainImage &swapchainImage = mSwapchainImages[mCurrentSwapchainImageIndex];
+        // If the framebuffer is imageless, create it based on the images' info.
+        attachmentImageInfos.resize(attachmentCount);
 
-        const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(swapchainImage.imageViews.getLevelLayerDrawImageView(
-            contextVk, *swapchainImage.image, vk::LevelIndex(0), 0,
-            gl::SrgbWriteControlMode::Default, &imageView));
-
-        imageViews[0] = imageView->getHandle();
-
-        if (fetchMode == FramebufferFetchMode::Enabled)
+        if (mDepthStencilImage.valid())
         {
-            ANGLE_VK_TRY(contextVk, swapchainImage.fetchFramebuffer.init(contextVk->getDevice(),
-                                                                         framebufferInfo));
+            FillSwapchainAttachmentImageInfo(mDepthStencilImage, &attachmentImageInfos[1]);
+        }
+
+        if (isMultiSampled())
+        {
+            FillSwapchainAttachmentImageInfo(mColorImageMS, &attachmentImageInfos[0]);
+            if (hasResolve)
+            {
+                FillSwapchainAttachmentImageInfo(swapchainImage.image,
+                                                 &attachmentImageInfos[attachmentCount - 1]);
+            }
         }
         else
         {
-            ANGLE_VK_TRY(contextVk,
-                         swapchainImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
+            FillSwapchainAttachmentImageInfo(swapchainImage.image, &attachmentImageInfos[0]);
         }
+
+        attachmentsCreateInfo       = {};
+        attachmentsCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO;
+        attachmentsCreateInfo.attachmentImageInfoCount =
+            static_cast<uint32_t>(attachmentImageInfos.size());
+        attachmentsCreateInfo.pAttachmentImageInfos = attachmentImageInfos.data();
+
+        framebufferInfo.flags |= VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT;
+        vk::AddToPNextChain(&framebufferInfo, &attachmentsCreateInfo);
     }
 
-    ASSERT(currentFramebuffer.valid());
+    ANGLE_VK_TRY(contextVk, currentFramebuffer->init(contextVk->getDevice(), framebufferInfo));
+
     framebufferOut->setHandle(currentFramebuffer.getHandle());
     return angle::Result::Continue;
 }

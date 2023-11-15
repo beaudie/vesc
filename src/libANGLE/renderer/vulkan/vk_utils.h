@@ -1246,6 +1246,7 @@ enum class RenderPassClosureReason
     // Closure due to switching rendering to another framebuffer.
     FramebufferBindingChange,
     FramebufferChange,
+    FramebufferMultisampleResolve,
     NewRenderPass,
 
     // Incompatible use of resource in the same render pass

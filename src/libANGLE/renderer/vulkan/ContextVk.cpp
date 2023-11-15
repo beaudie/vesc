@@ -577,6 +577,8 @@ constexpr angle::PackedEnumMap<RenderPassClosureReason, const char *> kRenderPas
     {RenderPassClosureReason::FramebufferBindingChange,
      "Render pass closed due to framebuffer binding change"},
     {RenderPassClosureReason::FramebufferChange, "Render pass closed due to framebuffer change"},
+    {RenderPassClosureReason::FramebufferMultisampleResolve,
+     "Render pass closed due to multisample resolve"},
     {RenderPassClosureReason::NewRenderPass,
      "Render pass closed due to starting a new render pass"},
     {RenderPassClosureReason::BufferUseThenXfbWrite,
@@ -871,6 +873,9 @@ void ContextVk::flushDescriptorSetUpdates()
 
 ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason)
 {
+    // TODO: catch which test triggers this. If none, add a test.
+    ASSERT(reason != RenderPassClosureReason::FramebufferMultisampleResolve);
+
     if (mRenderPassCommandBuffer != nullptr)
     {
         pauseRenderPassQueriesIfActive();
@@ -4561,8 +4566,7 @@ angle::Result ContextVk::multiDrawElementsInstancedBaseVertexBaseInstance(
         drawcount);
 }
 
-angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
-                                                      vk::ImageViewHelper *colorImageView,
+angle::Result ContextVk::optimizeRenderPassForPresent(vk::ImageViewHelper *colorImageView,
                                                       vk::ImageHelper *colorImage,
                                                       vk::ImageHelper *colorImageMS,
                                                       vk::PresentMode presentMode,
@@ -4572,15 +4576,9 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
     // That doesn't matter and the render pass can continue to be modified.  This function shouldn't
     // rely on mRenderPassCommandBuffer.
 
-    if (!mRenderPassCommands->started())
-    {
-        return angle::Result::Continue;
-    }
-
-    if (framebufferHandle != mRenderPassCommands->getFramebufferHandle())
-    {
-        return angle::Result::Continue;
-    }
+    // The caller must have verified this is the right render pass by calling
+    // |hasStartedRenderPassWithSwapchainFramebuffer()|.
+    ASSERT(mRenderPassCommands->started());
 
     // EGL1.5 spec: The contents of ancillary buffers are always undefined after calling
     // eglSwapBuffers
@@ -4609,27 +4607,19 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
                                        colorImageMS->getExtents().height);
     if (colorImageMS->valid() && renderArea == invalidateArea)
     {
-        vk::ImageOrBufferViewSubresourceSerial resolveImageViewSerial =
-            colorImageView->getSubresourceSerial(gl::LevelIndex(0), 1, 0, vk::LayerMode::All,
-                                                 vk::SrgbDecodeMode::SkipDecode,
-                                                 gl::SrgbOverride::Default);
-        ASSERT(resolveImageViewSerial.viewSerial.valid());
-        drawFramebufferVk->updateColorResolveAttachment(0, resolveImageViewSerial);
-        drawFramebufferVk->releaseCurrentFramebuffer(this);
+        // Due to lack of support for GL_MESA_framebuffer_flip_y, it is currently impossible for the
+        // application to resolve the default framebuffer into an FBO with a resolve attachment.  If
+        // that is ever supported, the path that adds the resolve attachment would invalidate the
+        // framebuffer that the render pass holds on to, in which case this function is not called.
+        // Either way, there cannot be a resolve attachment here already.
+        ASSERT(!mRenderPassCommands->getFramebuffer().hasColorResolveAttachment(0));
 
-        const vk::ImageView *resolveImageView = nullptr;
-        ANGLE_TRY(colorImageView->getLevelLayerDrawImageView(this, *colorImage, vk::LevelIndex(0),
-                                                             0, gl::SrgbWriteControlMode::Default,
-                                                             &resolveImageView));
-        vk::MaybeImagelessFramebuffer newFramebuffer         = {};
-        constexpr SwapchainResolveMode kSwapchainResolveMode = SwapchainResolveMode::Enabled;
-        RenderTargetVk *resolveRenderTarget = drawFramebufferVk->getColorDrawRenderTarget(0);
-        ANGLE_TRY(drawFramebufferVk->getFramebuffer(this, &newFramebuffer, resolveRenderTarget,
-                                                    resolveImageView, kSwapchainResolveMode));
+        // Update the render pass's framebuffer with the one that includes the resolve attachment.
+        ANGLE_TRY(drawFramebufferVk->getFramebuffer(this, SwapchainResolveMode::Enabled,
+                                                    &mRenderPassCommands->getFramebuffer()));
 
-        commandBufferHelper.updateRenderPassForResolve(this, newFramebuffer,
-                                                       drawFramebufferVk->getRenderPassDesc());
-
+        // Update the render pass with information about the new resolve attachment.
+        mRenderPassCommands->onSwapchainResolve();
         onImageRenderPassWrite(gl::LevelIndex(0), 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
                                vk::ImageLayout::ColorWrite, colorImage);
 
@@ -4643,9 +4633,6 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
 
         ANGLE_TRY(
             flushCommandsAndEndRenderPass(RenderPassClosureReason::AlreadySpecifiedElsewhere));
-
-        // Remove the resolve attachment from the draw framebuffer.
-        drawFramebufferVk->removeColorResolveAttachment(0);
 
         *imageResolved = true;
 
@@ -7938,7 +7925,7 @@ angle::Result ContextVk::onImageReleaseToExternal(const vk::ImageHelper &image)
 }
 
 angle::Result ContextVk::beginNewRenderPass(
-    vk::MaybeImagelessFramebuffer &framebuffer,
+    vk::RenderPassFramebuffer &&framebuffer,
     const gl::Rectangle &renderArea,
     const vk::RenderPassDesc &renderPassDesc,
     const vk::AttachmentOpsArray &renderPassAttachmentOps,
@@ -7956,10 +7943,10 @@ angle::Result ContextVk::beginNewRenderPass(
     generateRenderPassCommandsQueueSerial(&renderPassQueueSerial);
 
     mPerfCounters.renderPasses++;
-    ANGLE_TRY(mRenderPassCommands->beginRenderPass(this, framebuffer, renderArea, renderPassDesc,
-                                                   renderPassAttachmentOps, colorAttachmentCount,
-                                                   depthStencilAttachmentIndex, clearValues,
-                                                   renderPassQueueSerial, commandBufferOut));
+    ANGLE_TRY(mRenderPassCommands->beginRenderPass(
+        this, std::move(framebuffer), renderArea, renderPassDesc, renderPassAttachmentOps,
+        colorAttachmentCount, depthStencilAttachmentIndex, clearValues, renderPassQueueSerial,
+        commandBufferOut));
 
     // By default all render pass should allow to be reactivated.
     mAllowRenderPassToReactivate = true;
@@ -8069,8 +8056,22 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
                                                    mRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mRenderPassCommands->getQueueSerial();
 
+    // If a new framebuffer is used to accomodate resolve attachments that have been added after the
+    // fact, create a temp one now and add it to garbage list.
+    VkFramebuffer framebufferOverride = VK_NULL_HANDLE;
+    if (mRenderPassCommands.getFramebuffer().needsNewFramebufferWithResolveAttachments())
+    {
+        vk::Framebuffer tempFramebuffer;
+        ANGLE_TRY(mRenderPassCommands.getFramebuffer().packResolveViewsAndCreateFramebuffer(
+            this, *renderPass, &tempFramebuffer));
+
+        framebufferOverride = tempFramebuffer.getHandle();
+        addGarbage(&tempFramebuffer);
+    }
+
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, getProtectionType(), mContextPriority,
-                                                 *renderPass, &mRenderPassCommands));
+                                                 *renderPass, framebufferOverride,
+                                                 &mRenderPassCommands));
 
     // We just flushed outSideRenderPassCommands above, and any future use of
     // outsideRenderPassCommands must have a queueSerial bigger than renderPassCommands. To ensure
@@ -8094,6 +8095,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
 angle::Result ContextVk::flushCommandsAndEndRenderPass(RenderPassClosureReason reason)
 {
+    // TODO: catch which test triggers this. If none, add a test.
+    ASSERT(reason != RenderPassClosureReason::FramebufferMultisampleResolve);
     // The main reason we have mHasDeferredFlush is not to break render pass just because we want
     // to issue a flush. So there must be a started RP if it is true. Otherwise we should just
     // issue a flushImpl immediately instead of set mHasDeferredFlush to true.
@@ -8117,6 +8120,9 @@ angle::Result ContextVk::flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirty
                                                       DirtyBits dirtyBitMask,
                                                       RenderPassClosureReason reason)
 {
+    // TODO: catch which test triggers this. If none, add a test.
+    ASSERT(reason != RenderPassClosureReason::FramebufferMultisampleResolve);
+
     ASSERT(mRenderPassCommands->started());
 
     ANGLE_TRY(flushCommandsAndEndRenderPass(reason));
@@ -8330,8 +8336,8 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     flushDescriptorSetUpdates();
 
-    // Save the queueSerial before calling flushRenderPassCommands, which may return a new
-    // mRenderPassCommands
+    // Save the queueSerial before calling flushOutsideRPCommands, which may return a new
+    // mOutsideRenderPassCommands
     ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastFlushedQueueSerial,
                                                    mOutsideRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mOutsideRenderPassCommands->getQueueSerial();
