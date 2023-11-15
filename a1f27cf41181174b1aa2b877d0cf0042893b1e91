@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d352c13_574b83be",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-15T22:53:47Z",
+      "side": 1,
+      "message": "All new `*ParameterI*` functions are ES 3.0+:\n\n    If OpenGL ES 3.0 is not supported, delete all references to the\n    TexParameterI*, GetTexParameterI*, SamplerParameterI*, and\n    GetSamplerParameterI* entry points and all related text about\n    signed and unsigned integer textures.",
+      "revId": "a1f27cf41181174b1aa2b877d0cf0042893b1e91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
