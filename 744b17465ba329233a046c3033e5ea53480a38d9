@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8529359b_29ac9fbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-15T21:41:13Z",
+      "side": 1,
+      "message": "The new function seems generic enough to be suitable for other 3-byte-to-4-byte uploads. Consider evaluating it for all instances of `LoadToNative3To4\u003cGLubyte, \u003e` and `LoadToNative3To4\u003cGLbyte, \u003e`.",
+      "revId": "744b17465ba329233a046c3033e5ea53480a38d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
