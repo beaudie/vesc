@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "00d8a97f_e934dc4b",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:20:37Z",
+      "side": 1,
+      "message": "If you give it the same name, it will be a partial template specialization and it would just work everywhere. You wouldn\u0027t need the next CL.",
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "32c1307d_37396d4d",
         "filename": "src/image_util/loadimage.inc",
         "patchSetId": 13
@@ -37,6 +54,30 @@
       "writtenOn": "2023-11-14T20:43:35Z",
       "side": 1,
       "message": "Do we have unit tests for these methods?",
+      "range": {
+        "startLine": 93,
+        "startChar": 12,
+        "endLine": 93,
+        "endChar": 33
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60ffca41_9c769a92",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:20:37Z",
+      "side": 1,
+      "message": "+1, make sure the different paths are exercised (especially unaligned cases)",
+      "parentUuid": "32c1307d_37396d4d",
       "range": {
         "startLine": 93,
         "startChar": 12,
@@ -72,6 +113,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a84b8619_7f9f20b4",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:20:37Z",
+      "side": 1,
+      "message": "`intptr_t`\n\nAlso, you should be able to say `% 8`, the compiler turns it into `\u0026 7`, but the intent would be clearer.",
+      "range": {
+        "startLine": 119,
+        "startChar": 51,
+        "endLine": 119,
+        "endChar": 59
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83eeb16b_6210e3b1",
         "filename": "src/image_util/loadimage.inc",
         "patchSetId": 13
@@ -89,6 +153,110 @@
         "endLine": 125,
         "endChar": 52
       },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4841ffae_5eee10e3",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:20:37Z",
+      "side": 1,
+      "message": "3 and 8 are relatively prime, so that will eventually happen for source, but I agree dest may get stuck forever.\n\nI suggest calling `LoadToNative3To4` directly if dest is not aligned. TBH, for now I\u0027d do the same for unaligned source. Until we hit it in real apps, there\u0027s no point in complicating this code.",
+      "parentUuid": "83eeb16b_6210e3b1",
+      "range": {
+        "startLine": 125,
+        "startChar": 20,
+        "endLine": 125,
+        "endChar": 52
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f64df9a4_5150c9e4",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:20:37Z",
+      "side": 1,
+      "message": "ditto about `auto`",
+      "range": {
+        "startLine": 142,
+        "startChar": 12,
+        "endLine": 142,
+        "endChar": 16
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a7f018e_08293011",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:20:37Z",
+      "side": 1,
+      "message": "Remove the `-4` above, and you can do it.\n\n```suggestion\n                for (; pixelPairIndex \u003c eightByteCopyThreshold; pixelPairIndex +\u003d 4)\n```",
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30a512f7_fc5ae3e4",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:20:37Z",
+      "side": 1,
+      "message": "I removed the extra parentheses in (a | b) | (c | d), but still looks hard to read. Could use a few temporaries? Like `rgba0` through `rgba7`, where each contains the top or bottom half of the four values being calculated here.\n\n```suggestion\n                    uint64_t rgbaPixelData0 \u003d\n                        (newPixelData0 \u0026 0xFFFFFF) | (fourthValue64 \u003c\u003c 24) |\n                        ((newPixelData0 \u003c\u003c 8) \u0026 0xFFFFFF00000000) | (fourthValue64 \u003c\u003c 56);\n                    uint64_t rgbaPixelData1 \u003d\n                        (newPixelData0 \u003e\u003e 48) | ((newPixelData1 \u0026 0xFF) \u003c\u003c 16) |\n                         (fourthValue64 \u003c\u003c 24) |\n                        ((newPixelData1 \u003c\u003c 24) \u0026 0xFFFFFF00000000) | (fourthValue64 \u003c\u003c 56);\n                    uint64_t rgbaPixelData2 \u003d\n                        ((newPixelData1 \u003e\u003e 32) \u0026 0xFFFFFF) | (fourthValue64 \u003c\u003c 24) |\n                        (((newPixelData1 \u003e\u003e 24) | (newPixelData2 \u003c\u003c 40)) \u0026 0xFFFFFF00000000) |\n                         (fourthValue64 \u003c\u003c 56);\n                    uint64_t rgbaPixelData3 \u003d\n                        ((newPixelData2 \u003e\u003e 16) \u0026 0xFFFFFF) | (fourthValue64 \u003c\u003c 24) |\n                        ((newPixelData2 \u003e\u003e 8) \u0026 0xFFFFFF00000000) | (fourthValue64 \u003c\u003c 56);\n```",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 92
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c015988_1367700a",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:20:37Z",
+      "side": 1,
+      "message": "No need for a temp variable\n\n```suggestion\n            if (remainingWidth % 8 !\u003d 0)\n```",
       "revId": "40dce072c35348a2697c517de52181b0aae38de8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
