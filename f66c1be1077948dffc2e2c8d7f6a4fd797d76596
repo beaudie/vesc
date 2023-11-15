@@ -87,6 +87,30 @@
       },
       "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70f64f31_c2452737",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:28:22Z",
+      "side": 1,
+      "message": "Assuming there are tests. When in doubt, add one 😊\n\nThat said, getting the `vk::Format` and checking the id is still the preferred way.",
+      "parentUuid": "f95ae00c_d22bb89e",
+      "range": {
+        "startLine": 862,
+        "startChar": 56,
+        "endLine": 862,
+        "endChar": 60
+      },
+      "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
