@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fcb80e9_4f0eb1b6",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5819,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-11-15T22:39:04Z",
+      "side": 1,
+      "message": "In the specs: https://registry.khronos.org/OpenGL/extensions/OES/OES_texture_border_clamp.txt\nhttps://registry.khronos.org/OpenGL/extensions/EXT/EXT_texture_border_clamp.txt\n\nIn the `Dependencies` section, it says `OpenGL ES 2.0 is required`. Should we add below checks in validation functions?\n\n```\nif (context-\u003egetClientMajorVersion() \u003c 2)\n{\n    ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES2Required);\n}\n```",
+      "parentUuid": "a813ff91_971dad6e",
+      "range": {
+        "startLine": 5815,
+        "startChar": 0,
+        "endLine": 5819,
+        "endChar": 5
+      },
+      "revId": "ee6127cd603a966bab3b3adbcb8c4fed0b941a36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e563caa_62617f7b",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 5
