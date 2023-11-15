@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a662e0a2_d7f8c711",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5809,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-15T18:46:18Z",
+      "side": 1,
+      "message": "All these `*TexParameterI*OES` functions should not be in `validationES2.cpp` because integer textures require at least ES 3.0.\n\nFor consistency, consider moving all related `*OES` functions (also from `validationES3.cpp`) to `validationESEXT.cpp`.",
+      "revId": "641e1494f258c307015e6ff41a0256a77b1c9739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
