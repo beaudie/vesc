@@ -135,6 +135,30 @@
       },
       "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27b181ea_14426778",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-15T16:35:10Z",
+      "side": 1,
+      "message": "Based on the GL validation you posted, that would be the same, wouldn\u0027t it?\n\nRegardless, we can\u0027t use `vkCmdCopyBufferToImage` if the formats don\u0027t perfectly match, whether GL allows it or not.",
+      "parentUuid": "9964abf4_86da4424",
+      "range": {
+        "startLine": 862,
+        "startChar": 56,
+        "endLine": 862,
+        "endChar": 60
+      },
+      "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
