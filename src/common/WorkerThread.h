@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "common/debug.h"
+#include "common/system_utils.h"
 #include "platform/PlatformMethods.h"
 
 namespace angle
