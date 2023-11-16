@@ -161,6 +161,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "912d1bb0_1e7ccc04",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5819,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-11-16T19:34:53Z",
+      "side": 1,
+      "message": "Thanks. From Alexey\u0027s comment: https://chromium-review.googlesource.com/c/angle/angle/+/5028139/comment/1d352c13_574b83be/, part of the extension should still work, only if the app sets/queries `integer` border color value, the driver needs to support GLES 3.0.",
+      "parentUuid": "bfa055b3_8b4079cd",
+      "range": {
+        "startLine": 5815,
+        "startChar": 0,
+        "endLine": 5819,
+        "endChar": 5
+      },
+      "revId": "ee6127cd603a966bab3b3adbcb8c4fed0b941a36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e563caa_62617f7b",
