@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25880d24_a50bed03",
+        "filename": "src/common/WorkerThread.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-11-16T16:30:39Z",
+      "side": 1,
+      "message": "can we include the header file in the source file `WorkerThread.cpp` instead? If other source / header files that include `WorkerThread.h` do not need `system_utils.h`, we can save some compilation time for them.",
+      "revId": "fe87bead5d6b7e086f5b8cd9a9aa73241064e4cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c08f210_78554c54",
+        "filename": "src/common/system_utils_linux.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-11-16T16:30:39Z",
+      "side": 1,
+      "message": "nit: is there a typo in the comment? Do you mean `If the name is too big and ERANGE is returned`?",
+      "revId": "fe87bead5d6b7e086f5b8cd9a9aa73241064e4cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
