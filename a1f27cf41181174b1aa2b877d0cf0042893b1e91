@@ -52,6 +52,24 @@
       "parentUuid": "c995f9b8_c1f632f8",
       "revId": "a1f27cf41181174b1aa2b877d0cf0042893b1e91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25f568c5_a265971c",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-11-16T16:32:33Z",
+      "side": 1,
+      "message": "Got it, thank you.",
+      "parentUuid": "a2025ea7_8ff081f5",
+      "revId": "a1f27cf41181174b1aa2b877d0cf0042893b1e91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
