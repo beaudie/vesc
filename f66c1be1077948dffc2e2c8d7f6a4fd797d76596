@@ -207,6 +207,30 @@
       },
       "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2531cce_3bbf8cca",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-11-16T19:53:51Z",
+      "side": 1,
+      "message": "\u003e So we check the intended format because that\u0027s how we can be sure the buffer gets exactly what the app asked for\n\nyup, that makes sense\n\n\u003e because vkCmdCopyBufferToImage is a \"raw\" copy\n\nindeed, got it. Thanks for the info",
+      "parentUuid": "60b5ebb3_5a1febce",
+      "range": {
+        "startLine": 862,
+        "startChar": 56,
+        "endLine": 862,
+        "endChar": 60
+      },
+      "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

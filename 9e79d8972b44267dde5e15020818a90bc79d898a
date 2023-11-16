@@ -16,6 +16,29 @@
       "message": "👍",
       "revId": "9e79d8972b44267dde5e15020818a90bc79d898a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "081e19cd_a5ec5bfe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7434,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-11-16T19:53:51Z",
+      "side": 1,
+      "message": "the `stencilLoadFunction` and the `loadFunctionInfo.loadFunction` logic is a little convoluted. The test for which i had to make this change for was `Texture2DTestES3.TexImageWithStencilPBO/ES3_Vulkan_ForceFallbackFormat` which requests S8 format using the `GL_STENCIL_INDEX_OES` enum but gets emulated using D32_S8x24 format\n\nWant to make sure this change was alright?",
+      "range": {
+        "startLine": 7434,
+        "startChar": 19,
+        "endLine": 7434,
+        "endChar": 31
+      },
+      "revId": "9e79d8972b44267dde5e15020818a90bc79d898a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
