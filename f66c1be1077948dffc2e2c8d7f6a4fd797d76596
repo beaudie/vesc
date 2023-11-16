@@ -183,6 +183,30 @@
       },
       "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60b5ebb3_5a1febce",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-16T18:40:46Z",
+      "side": 1,
+      "message": "\u003e is there a reason we check for intended format (instead of actual format) of the buffer?\n\nThe format/type that ends up in the buffer should be exactly what the app asked for. So for example if app asks for RGB8 and we normally emulate that with RGBA8, we can\u0027t just write RGBA8 to the buffer. So we check the intended format because that\u0027s how we can be sure the buffer gets exactly what the app asked for.\n\n---\n\nThere\u0027s no VU because there\u0027s no buffer format in `vkCmdCopyBufferToImage`. The reason I said we can\u0027t do the copy that way is because `vkCmdCopyBufferToImage` is a \"raw\" copy, so if the format of the image doesn\u0027t match what the _GL_ app asked for in the buffer, doing `vkCmdCopyBufferToImage` would result in something that\u0027s not what the GL app asked for.",
+      "parentUuid": "5a5ff147_b21fe44e",
+      "range": {
+        "startLine": 862,
+        "startChar": 56,
+        "endLine": 862,
+        "endChar": 60
+      },
+      "revId": "f66c1be1077948dffc2e2c8d7f6a4fd797d76596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
