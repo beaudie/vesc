@@ -39,6 +39,30 @@
       },
       "revId": "9e79d8972b44267dde5e15020818a90bc79d898a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43665941_5b8187ea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-16T23:31:30Z",
+      "side": 1,
+      "message": "I can\u0027t tell off hand, \"should be fine\" :P\n\nActually that does point out a regression with this change. I didn\u0027t notice it before, but before we could copy from D/S texture to D-only or S-only buffer. With this change, the format equality fails and that won\u0027t happen anymore.\n\nSo I\u0027d say, this hunk of the change is fine, but you\u0027d need to make the `formatsMatch` restricted to color formats. The depth/stencil compatibility is already checked.",
+      "parentUuid": "081e19cd_a5ec5bfe",
+      "range": {
+        "startLine": 7434,
+        "startChar": 19,
+        "endLine": 7434,
+        "endChar": 31
+      },
+      "revId": "9e79d8972b44267dde5e15020818a90bc79d898a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
