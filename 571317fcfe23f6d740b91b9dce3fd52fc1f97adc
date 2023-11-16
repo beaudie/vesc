@@ -145,6 +145,24 @@
       "parentUuid": "b65c229a_e351be13",
       "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cad46a00_cd022f23",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-16T14:53:38Z",
+      "side": 1,
+      "message": "For future reference, I forgot about it, but we also have `BitSetT::Mask`, which you could have used to avoid the explicit cast to bit set.",
+      "parentUuid": "2ab8c3d9_c08029b4",
+      "revId": "571317fcfe23f6d740b91b9dce3fd52fc1f97adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
