@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68540ccb_00e755c4",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5819,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-11-16T00:12:09Z",
+      "side": 1,
+      "message": "I got help from Alexey w.r.t the ES version check in https://chromium-review.googlesource.com/c/angle/angle/+/5028139/comment/1d352c13_574b83be/. I added back the ES 3 version check to the extension validation functions, as it is stated in the spec, and the test `TextureBorderClampTest.TextureBorderClampValidation` is also expecting the `gl*Tex*OES` calls to fail if the client does not support ES 3.*:\n\n```\nif (getClientMajorVersion() \u003c 3)\n{\n    glTexParameterIivOES(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, colorInt);\n    EXPECT_GL_ERROR(GL_INVALID_OPERATION);\n    glGetTexParameterIivOES(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, colorInt);\n    EXPECT_GL_ERROR(GL_INVALID_OPERATION);\n```",
+      "parentUuid": "2fcb80e9_4f0eb1b6",
+      "range": {
+        "startLine": 5815,
+        "startChar": 0,
+        "endLine": 5819,
+        "endChar": 5
+      },
+      "revId": "ee6127cd603a966bab3b3adbcb8c4fed0b941a36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e563caa_62617f7b",
