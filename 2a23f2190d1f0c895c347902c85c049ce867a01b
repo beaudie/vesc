@@ -16,6 +16,24 @@
       "message": "Will there be any changes when we update ANGLE repos with `gclient sync` in the future?",
       "revId": "2a23f2190d1f0c895c347902c85c049ce867a01b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2638461c_75459a8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1560543
+      },
+      "writtenOn": "2023-11-16T21:32:12Z",
+      "side": 1,
+      "message": "There won\u0027t be any changes, as gclient still uses DEPS file as source of truth. Also, `gclient gitmodules`, if used, won\u0027t update .gitmodules file either (it knows if .git suffix is needed or not based on currently checked out .gitmodules).",
+      "parentUuid": "1ab0202e_e8a82f58",
+      "revId": "2a23f2190d1f0c895c347902c85c049ce867a01b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
