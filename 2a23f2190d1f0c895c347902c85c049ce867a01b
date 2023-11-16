@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ab0202e_e8a82f58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-11-16T21:28:23Z",
+      "side": 1,
+      "message": "Will there be any changes when we update ANGLE repos with `gclient sync` in the future?",
+      "revId": "2a23f2190d1f0c895c347902c85c049ce867a01b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
