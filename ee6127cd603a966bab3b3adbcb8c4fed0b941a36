@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37069f2f_995fbc71",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5819,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-11-16T00:14:01Z",
+      "side": 1,
+      "message": "On a side note, on some backend, e.g. `swiftshader`, the extension `GL_OES_texture_border_clamp` is supported, but the client major version is less than 3, is that a bug? Maybe we should only expose the extension if the backend supports at least GLES 3.0?",
+      "parentUuid": "68540ccb_00e755c4",
+      "range": {
+        "startLine": 5815,
+        "startChar": 0,
+        "endLine": 5819,
+        "endChar": 5
+      },
+      "revId": "ee6127cd603a966bab3b3adbcb8c4fed0b941a36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e563caa_62617f7b",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 5
