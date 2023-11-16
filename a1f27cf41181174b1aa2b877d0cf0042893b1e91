@@ -34,6 +34,24 @@
       "parentUuid": "1d352c13_574b83be",
       "revId": "a1f27cf41181174b1aa2b877d0cf0042893b1e91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2025ea7_8ff081f5",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-16T01:09:41Z",
+      "side": 1,
+      "message": "No. The core functionality, i.e., clamp-to-border-color wrapping mode is still supported for ES 2.0. The only ES 3.x part of this extension is setting (or querying) an _integer_ border color value, hence `*I*` in the new functions.",
+      "parentUuid": "c995f9b8_c1f632f8",
+      "revId": "a1f27cf41181174b1aa2b877d0cf0042893b1e91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
