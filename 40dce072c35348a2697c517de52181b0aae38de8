@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b66b1361_cb9560ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "Added average improvement to commit message ([Data](https://docs.google.com/spreadsheets/d/1PfYmal85xhAeuo_jNoLUlBBzn55i44Nz87Cbr4DyVEs))\n\nI updated the perf test to use different upload data in each iteration. If the same data is used for in the test (e.g., if `mColors` is initialized only once and reused), we see a larger gain on Windows.\n\n* Previous perf test: \n  * On Windows: +\\~90% cpu_time, +\\~86% wall_time\n  * On Linux:   +\\~18% cpu_time, +\\~12% wall_time\n\n* Current perf test:\n  * On Windows: +\\~3% cpu_time, \\~same wall_time\n  * On Linux:   +\\~18% cpu_time, +\\~18% wall_time",
+      "parentUuid": "d95075f3_6b7f8d5e",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00d8a97f_e934dc4b",
         "filename": "src/image_util/loadimage.inc",
         "patchSetId": 13
@@ -37,6 +61,24 @@
       "writtenOn": "2023-11-15T16:20:37Z",
       "side": 1,
       "message": "If you give it the same name, it will be a partial template specialization and it would just work everywhere. You wouldn\u0027t need the next CL.",
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c5b7ab4_fcb24850",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "Next CL has been removed and merged into this CL.\n\nIt seems that function template partial specialization is not allowed at the moment. However, I replaced it with a fully specialized case of `LoadToNative3To4\u003cGLubyte, 0xFF\u003e`.",
+      "parentUuid": "00d8a97f_e934dc4b",
       "revId": "40dce072c35348a2697c517de52181b0aae38de8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +130,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b672e81_f1b3fe87",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "Added unit tests (in `LoadToNative_unittest.cpp`)",
+      "parentUuid": "60ffca41_9c769a92",
+      "range": {
+        "startLine": 93,
+        "startChar": 12,
+        "endLine": 93,
+        "endChar": 33
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50255828_a99028db",
@@ -111,6 +177,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21d32e8a_b2bec248",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50255828_a99028db",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 8
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a84b8619_7f9f20b4",
@@ -124,6 +214,30 @@
       "writtenOn": "2023-11-15T16:20:37Z",
       "side": 1,
       "message": "`intptr_t`\n\nAlso, you should be able to say `% 8`, the compiler turns it into `\u0026 7`, but the intent would be clearer.",
+      "range": {
+        "startLine": 119,
+        "startChar": 51,
+        "endLine": 119,
+        "endChar": 59
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ac2fe50_585b65ee",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a84b8619_7f9f20b4",
       "range": {
         "startLine": 119,
         "startChar": 51,
@@ -183,6 +297,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3cc77a2_daad2188",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "Since the performance improvement is similar between using `uint64_t` and `uint32_t` to load multiple pixels, we can switch to `uint32_t` to remove the need to align the destination pointer, and only do it for the source pointer.",
+      "parentUuid": "4841ffae_5eee10e3",
+      "range": {
+        "startLine": 125,
+        "startChar": 20,
+        "endLine": 125,
+        "endChar": 52
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f64df9a4_5150c9e4",
         "filename": "src/image_util/loadimage.inc",
         "patchSetId": 13
@@ -194,6 +332,30 @@
       "writtenOn": "2023-11-15T16:20:37Z",
       "side": 1,
       "message": "ditto about `auto`",
+      "range": {
+        "startLine": 142,
+        "startChar": 12,
+        "endLine": 142,
+        "endChar": 16
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ec64d75_92686658",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f64df9a4_5150c9e4",
       "range": {
         "startLine": 142,
         "startChar": 12,
@@ -223,6 +385,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe8af7fd_5f41a7b9",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "The `-4` is used to prevent copying extra bytes beyond `width`, especially in non-aligned cases. For example, if `width` is 23, we stop copying 4 bytes at index 20 and copy the rest bytewise. However, for `width \u003d 24`, we can continue copying 4 bytes until the end.",
+      "parentUuid": "8a7f018e_08293011",
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "30a512f7_fc5ae3e4",
         "filename": "src/image_util/loadimage.inc",
         "patchSetId": 13
@@ -234,6 +414,30 @@
       "writtenOn": "2023-11-15T16:20:37Z",
       "side": 1,
       "message": "I removed the extra parentheses in (a | b) | (c | d), but still looks hard to read. Could use a few temporaries? Like `rgba0` through `rgba7`, where each contains the top or bottom half of the four values being calculated here.\n\n```suggestion\n                    uint64_t rgbaPixelData0 \u003d\n                        (newPixelData0 \u0026 0xFFFFFF) | (fourthValue64 \u003c\u003c 24) |\n                        ((newPixelData0 \u003c\u003c 8) \u0026 0xFFFFFF00000000) | (fourthValue64 \u003c\u003c 56);\n                    uint64_t rgbaPixelData1 \u003d\n                        (newPixelData0 \u003e\u003e 48) | ((newPixelData1 \u0026 0xFF) \u003c\u003c 16) |\n                         (fourthValue64 \u003c\u003c 24) |\n                        ((newPixelData1 \u003c\u003c 24) \u0026 0xFFFFFF00000000) | (fourthValue64 \u003c\u003c 56);\n                    uint64_t rgbaPixelData2 \u003d\n                        ((newPixelData1 \u003e\u003e 32) \u0026 0xFFFFFF) | (fourthValue64 \u003c\u003c 24) |\n                        (((newPixelData1 \u003e\u003e 24) | (newPixelData2 \u003c\u003c 40)) \u0026 0xFFFFFF00000000) |\n                         (fourthValue64 \u003c\u003c 56);\n                    uint64_t rgbaPixelData3 \u003d\n                        ((newPixelData2 \u003e\u003e 16) \u0026 0xFFFFFF) | (fourthValue64 \u003c\u003c 24) |\n                        ((newPixelData2 \u003e\u003e 8) \u0026 0xFFFFFF00000000) | (fourthValue64 \u003c\u003c 56);\n```",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 92
+      },
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d57269e7_aa3291ea",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "30a512f7_fc5ae3e4",
       "range": {
         "startLine": 162,
         "startChar": 0,
@@ -257,6 +461,24 @@
       "writtenOn": "2023-11-15T16:20:37Z",
       "side": 1,
       "message": "No need for a temp variable\n\n```suggestion\n            if (remainingWidth % 8 !\u003d 0)\n```",
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9ef99c_0c46769f",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-17T00:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c015988_1367700a",
       "revId": "40dce072c35348a2697c517de52181b0aae38de8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
