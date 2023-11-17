@@ -96,9 +96,22 @@ bool IsVulkan11(uint32_t apiVersion)
     return apiVersion >= VK_API_VERSION_1_1;
 }
 
-bool IsRADV(uint32_t driverId)
+bool IsRADV(uint32_t vendorId, uint32_t driverId, const char *deviceName)
 {
-    return driverId == VK_DRIVER_ID_MESA_RADV;
+    if (!IsAMD(vendorId))
+    {
+        return false;
+    }
+
+    // Check against RADV driver id first.
+    if (driverId == VK_DRIVER_ID_MESA_RADV)
+    {
+        return true;
+    }
+
+    // Otherwise, look for RADV in the device name.  This works for both RADV
+    // and Venus-over-RADV.
+    return strstr(deviceName, "RADV") != nullptr;
 }
 
 bool IsVenus(uint32_t driverId, const char *deviceName)
@@ -3904,7 +3917,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         ParseARMDriverVersion(mPhysicalDeviceProperties.driverVersion);
 
     // Distinguish between the mesa and proprietary drivers
-    const bool isRADV = IsRADV(mDriverProperties.driverID);
+    const bool isRADV = IsRADV(mPhysicalDeviceProperties.vendorID, mDriverProperties.driverID,
+                               mPhysicalDeviceProperties.deviceName);
 
     // Identify Google Pixel brand Android devices
     const bool isPixel = IsPixel();
@@ -4789,8 +4803,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // virtualized environment. https://issuetracker.google.com/246378938
     ANGLE_FEATURE_CONDITION(&mFeatures, preferLinearFilterForYUV, isVenus);
 
-    // Intel mesa drivers need depthBiasConstantFactor to be doubled to align with GL.
-    ANGLE_FEATURE_CONDITION(&mFeatures, doubleDepthBiasConstantFactor, isIntel && !IsWindows());
+    // Intel and AMD mesa drivers need depthBiasConstantFactor to be doubled to align with GL.
+    ANGLE_FEATURE_CONDITION(&mFeatures, doubleDepthBiasConstantFactor,
+                            (isIntel && !IsWindows()) || isRADV);
 
     // Required to pass android.media.codec.cts.EncodeDecodeTest with MESA Virtio-GPU Venus driver
     // in virtualized environment. https://issuetracker.google.com/246218584
