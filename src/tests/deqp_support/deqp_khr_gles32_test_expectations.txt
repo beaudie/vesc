@@ -106,6 +106,9 @@
 6441 VULKAN NVIDIA : KHR-GLES32.core.compressed_format.format.*astc* = FAIL
 6441 VULKAN AMD : KHR-GLES32.core.compressed_format.format.*astc* = FAIL
 
+// Pipeline cache failure with older drivers
+8431 VULKAN NVIDIA : KHR-GLES32.core.tessellation_shader.single.primitive_coverage = FAIL
+
 // Pixel 4 expectations.
 5990 PIXEL4ORXL VULKAN : KHR-GLES32.core.draw_buffers_indexed.color_masks = SKIP
 
