@@ -4958,6 +4958,9 @@ void RendererVk::initializeFrontendFeatures(angle::FrontendFeatures *features) c
     // The Vulkan backend's handling of compile and link is thread-safe
     ANGLE_FEATURE_CONDITION(features, compileJobIsThreadSafe, true);
     ANGLE_FEATURE_CONDITION(features, linkJobIsThreadSafe, true);
+    // Always run the link's warm up job in a thread.  It's an optimization only, and does not block
+    // the link resolution.
+    ANGLE_FEATURE_CONDITION(features, alwaysRunLinkSubJobsThreaded, true);
 }
 
 angle::Result RendererVk::getPipelineCacheSize(DisplayVk *displayVk, size_t *pipelineCacheSizeOut)

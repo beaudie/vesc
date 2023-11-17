@@ -166,28 +166,41 @@ void main()
     gl_FragColor = vTest - vec4(0.0, 1.0, 0.0, 0.0);
 })";
 
-    // Compile a shader so it puts something in the cache
+    // Compile a shader so it puts something in the cache.  Note that with Vulkan, some optional
+    // link subtasks may run beyond link, and so the caching is delayed until the program is used.
+    // A small draw call is used to wait on these subtasks.
     if (programBinaryAvailable())
     {
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(0, 0, 1, 1);
+
         ANGLE_GL_PROGRAM(program, kVertexShaderSrc, kFragmentShaderSrc);
+        glUseProgram(program);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::SetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;
 
         // Compile the same shader again, so it would try to retrieve it from the cache
         program.makeRaster(kVertexShaderSrc, kFragmentShaderSrc);
         ASSERT_TRUE(program.valid());
+        glUseProgram(program);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::GetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;
 
         // Compile another shader, which should create a new entry
         program.makeRaster(kVertexShaderSrc2, kFragmentShaderSrc2);
         ASSERT_TRUE(program.valid());
+        glUseProgram(program);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::SetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;
 
         // Compile the first shader again, which should still reside in the cache
         program.makeRaster(kVertexShaderSrc, kFragmentShaderSrc);
         ASSERT_TRUE(program.valid());
+        glUseProgram(program);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::GetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;
     }
@@ -254,6 +267,9 @@ TEST_P(EGLBlobCacheTest, FragmentOutputLocationKey)
     // Compile a shader so it puts something in the cache
     if (programBinaryAvailable())
     {
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(0, 0, 1, 1);
+
         constexpr char kFragmentShaderSrc[] = R"(#version 300 es
 #extension GL_EXT_blend_func_extended : require
 precision mediump float;
@@ -277,6 +293,8 @@ void main() {
             glBindFragDataLocationIndexedEXT(p, 0, 1, "SecondaryFragData[0]");
         });
         ASSERT_NE(0u, program);
+        glUseProgram(program);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::SetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;
 
@@ -286,6 +304,8 @@ void main() {
             glBindFragDataLocationIndexedEXT(p, 0, 1, "SecondaryFragData");
         });
         ASSERT_NE(0u, program);
+        glUseProgram(program);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::SetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;
     }
