@@ -2828,6 +2828,12 @@ angle::Result State::setProgram(const Context *context, Program *newProgram)
         {
             newProgram->addRef();
             ANGLE_TRY(installProgramExecutable(context));
+
+            // Make sure the program is synced before draw, if needed
+            if (newProgram->needsSync())
+            {
+                mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM);
+            }
         }
         else if (mProgramPipeline.get() == nullptr)
         {
