@@ -1147,8 +1147,8 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
         // The data must not contain corruption.
         if (chunkIndex0 != 0 || numChunks == 0 || uncompressedCacheDataSize == 0)
         {
-            FATAL() << "Unexpected values while unpacking chunk index 0: "
-                    << "cacheVersion = " << cacheVersion << ", chunkIndex = " << chunkIndex0
+            FATAL() << "Unexpected values while unpacking chunk index 0: " << "cacheVersion = "
+                    << cacheVersion << ", chunkIndex = " << chunkIndex0
                     << ", numChunks = " << numChunks
                     << ", uncompressedCacheDataSize = " << uncompressedCacheDataSize;
         }
@@ -1168,9 +1168,8 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
         }
         else
         {
-            WARN() << "Change in cache header version detected: "
-                   << "newVersion = " << kPipelineCacheVersion
-                   << ", existingVersion = " << cacheVersion;
+            WARN() << "Change in cache header version detected: " << "newVersion = "
+                   << kPipelineCacheVersion << ", existingVersion = " << cacheVersion;
         }
         return angle::Result::Continue;
     }
@@ -1218,10 +1217,9 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
             (compressedData.size() < compressedSize + chunkSize);
         if (isHeaderDataCorrupted)
         {
-            WARN() << "Pipeline cache chunk header corrupted: "
-                   << "checkCacheVersion = " << checkCacheVersion
-                   << ", cacheVersion = " << cacheVersion << ", checkNumChunks = " << checkNumChunks
-                   << ", numChunks = " << numChunks
+            WARN() << "Pipeline cache chunk header corrupted: " << "checkCacheVersion = "
+                   << checkCacheVersion << ", cacheVersion = " << cacheVersion
+                   << ", checkNumChunks = " << checkNumChunks << ", numChunks = " << numChunks
                    << ", checkUncompressedCacheDataSize = " << checkUncompressedCacheDataSize
                    << ", uncompressedCacheDataSize = " << uncompressedCacheDataSize
                    << ", checkCompressedDataCRC = " << checkCompressedDataCRC
@@ -4950,6 +4948,9 @@ void RendererVk::initializeFrontendFeatures(angle::FrontendFeatures *features) c
     // The Vulkan backend's handling of compile and link is thread-safe
     ANGLE_FEATURE_CONDITION(features, compileJobIsThreadSafe, true);
     ANGLE_FEATURE_CONDITION(features, linkJobIsThreadSafe, true);
+    // Always run the link's warm up job in a thread.  It's an optimization only, and does not block
+    // the link resolution.
+    ANGLE_FEATURE_CONDITION(features, alwaysRunLinkSubJobsThreaded, true);
 }
 
 angle::Result RendererVk::getPipelineCacheSize(DisplayVk *displayVk, size_t *pipelineCacheSizeOut)
