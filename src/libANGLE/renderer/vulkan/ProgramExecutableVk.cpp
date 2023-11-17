@@ -661,10 +661,7 @@ angle::Result ProgramExecutableVk::warmUpPipelineCache(
     vk::PipelineProtectedAccess pipelineProtectedAccess,
     vk::RenderPass *temporaryCompatibleRenderPassOut)
 {
-    if (!context->getFeatures().warmUpPipelineCacheAtLink.enabled)
-    {
-        return angle::Result::Continue;
-    }
+    ASSERT(context->getFeatures().warmUpPipelineCacheAtLink.enabled);
 
     ANGLE_TRY(ensurePipelineCacheInitialized(context));
 
