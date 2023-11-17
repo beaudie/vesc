@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aa92e90_dfd633f8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-17T15:52:48Z",
+      "side": 1,
+      "message": "A bit simpler:\n\n```suggestion\n    // Check against RADV driver id first.\n    if (driverId \u003d\u003d VK_DRIVER_ID_MESA_RADV)\n    {\n        return true;\n    }\n\n    // Otherwise, look for RADV in the device name.  This works for both RADV\n    // and Venus-over-RADV.\n    return IsAMD(vendorId) \u0026\u0026 strstr(deviceName, \"RADV\") !\u003d nullptr;\n```",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 49
+      },
+      "revId": "55be0123ac0efe6a1796b63f64d61470fd8434d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
