@@ -173,32 +173,40 @@ void main()
         glEnable(GL_SCISSOR_TEST);
         glScissor(0, 0, 1, 1);
 
+        printf("============= link\n");
         ANGLE_GL_PROGRAM(program, kVertexShaderSrc, kFragmentShaderSrc);
         glUseProgram(program);
+        printf("============= draw\n");
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::SetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;
 
         // Compile the same shader again, so it would try to retrieve it from the cache
+        printf("============= link\n");
         program.makeRaster(kVertexShaderSrc, kFragmentShaderSrc);
         ASSERT_TRUE(program.valid());
         glUseProgram(program);
+        printf("============= draw\n");
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::GetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;
 
         // Compile another shader, which should create a new entry
+        printf("============= link\n");
         program.makeRaster(kVertexShaderSrc2, kFragmentShaderSrc2);
         ASSERT_TRUE(program.valid());
         glUseProgram(program);
+        printf("============= draw\n");
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::SetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;
 
         // Compile the first shader again, which should still reside in the cache
+        printf("============= link\n");
         program.makeRaster(kVertexShaderSrc, kFragmentShaderSrc);
         ASSERT_TRUE(program.valid());
         glUseProgram(program);
+        printf("============= draw\n");
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_EQ(CacheOpResult::GetSuccess, gLastCacheOpResult);
         gLastCacheOpResult = CacheOpResult::ValueNotSet;

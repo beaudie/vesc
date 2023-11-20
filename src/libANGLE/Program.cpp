@@ -918,6 +918,7 @@ void Program::makeNewExecutable(const Context *context)
 
 angle::Result Program::link(const Context *context, angle::JobResultExpectancy resultExpectancy)
 {
+    printf("Program link\n");
     auto *platform   = ANGLEPlatformCurrent();
     double startTime = platform->currentTime(platform);
 
@@ -978,12 +979,14 @@ angle::Result Program::link(const Context *context, angle::JobResultExpectancy r
     // TODO: http://anglebug.com/4530: Enable program caching for separable programs
     if (cache && !isSeparable())
     {
+        printf("-- attempt to load from cache\n");
         std::lock_guard<std::mutex> cacheLock(context->getProgramCacheMutex());
         bool success = false;
         ANGLE_TRY(cache->getProgram(context, this, &mProgramHash, &success));
 
         if (success)
         {
+            printf("-- success!\n");
             // No need to care about the compile jobs any more.
             mState.mShaderCompileJobs = {};
 
@@ -995,6 +998,7 @@ angle::Result Program::link(const Context *context, angle::JobResultExpectancy r
             ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ProgramCache.ProgramCacheHitTimeUS", us);
             return angle::Result::Continue;
         }
+        printf("-- fail!\n");
     }
 
     const Caps &caps               = context->getCaps();
@@ -1025,6 +1029,7 @@ angle::Result Program::link(const Context *context, angle::JobResultExpectancy r
     mLinkingState->linkingFromBinary = false;
     mLinkingState->linkEvent = std::make_unique<MainLinkLoadEvent>(mainLinkTask, mainLinkEvent);
 
+    printf("Program link scheduled\n");
     return angle::Result::Continue;
 }
 
@@ -1186,11 +1191,14 @@ void Program::resolveLinkImpl(const Context *context)
 
     mLinkingState->linkEvent->retrieveOptionalSubTasks(&mOptionalLinkTasks,
                                                        &mOptionalLinkTaskWaitableEvents);
+    printf("Resolve link; has optional tasks? %zu (should equal %zu)\n", mOptionalLinkTasks.size(),
+           mOptionalLinkTaskWaitableEvents.size());
 
     mLinked                                    = result == angle::Result::Continue;
     std::unique_ptr<LinkingState> linkingState = std::move(mLinkingState);
     if (!mLinked)
     {
+        printf(" -- failed link\n");
         // If the link fails, the spec allows program queries to either return empty results (all
         // zeros) or whatever parts of the link happened to have been done before the failure:
         //
@@ -1234,8 +1242,14 @@ void Program::resolveLinkImpl(const Context *context)
     //
     if (!linkingState->linkingFromBinary && mOptionalLinkTasks.empty())
     {
+        printf(" -- DO program binary cache on resolve\n");
         cacheProgramBinary(context);
     }
+    else
+        printf(
+            " -- skip program binary cache on resolve because: link from binary? %d, any link "
+            "tasks? %d\n",
+            linkingState->linkingFromBinary, !mOptionalLinkTasks.empty());
 }
 
 void Program::waitForOptionalLinkTasks(const Context *context)
@@ -1244,6 +1258,8 @@ void Program::waitForOptionalLinkTasks(const Context *context)
     {
         return;
     }
+
+    printf("--- waiting for subtasks\n");
 
     // Wait for all optional tasks to finish
     angle::WaitableEvent::WaitMany(&mOptionalLinkTaskWaitableEvents);
@@ -1267,6 +1283,7 @@ void Program::waitForOptionalLinkTasks(const Context *context)
     mOptionalLinkTaskWaitableEvents.clear();
 
     // Now that the subtasks are done, cache the binary (this was deferred in resolveLinkImpl).
+    printf(" -- DO program binary cache after wait for optional link tasks\n");
     cacheProgramBinary(context);
 }
 
@@ -2137,10 +2154,12 @@ void Program::initInterfaceBlockBindings()
 
 angle::Result Program::syncState(const Context *context)
 {
+    printf("Program sync state\n");
     ASSERT(!mLinkingState);
     // Wait for the link tasks.  This is because these optimization passes are not currently
     // thread-safe with draw's usage of the executable.
     waitForOptionalLinkTasks(context);
+    printf("Program sync state done\n");
     return mProgram->syncState(context);
 }
 
@@ -2353,6 +2372,7 @@ void Program::postResolveLink(const Context *context)
 
 void Program::cacheProgramBinary(const gl::Context *context)
 {
+    printf("CACHE PROGRAM BINARY\n");
     // Save to the program cache.
     std::lock_guard<std::mutex> cacheLock(context->getProgramCacheMutex());
     MemoryProgramCache *cache = context->getMemoryProgramCache();
@@ -2368,6 +2388,10 @@ void Program::cacheProgramBinary(const gl::Context *context)
             ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
                                "Failed to save linked program to memory program cache.");
         }
+    }
+    else
+    {
+        printf("CACHE PROGRAM BINARY --- skipped\n");
     }
 }
 
