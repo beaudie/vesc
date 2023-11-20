@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2f7ad905_2b1c499b",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-20T22:54:54Z",
+      "side": 1,
+      "message": "I See. But the two block of for loop for rgbData and rgbInput could be merged though.",
+      "parentUuid": "e5f19a99_7fc38701",
+      "range": {
+        "startLine": 59,
+        "startChar": 26,
+        "endLine": 59,
+        "endChar": 33
+      },
+      "revId": "f6665541f5a9b025f1d339a25cb949a7a2c316f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d60b0ce5_8c51fb10",
         "filename": "src/image_util/loadimage.inc",
         "patchSetId": 26
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "If `source4Mod` is not 0, it will always copy one RGB pixel (3 bytes) in each loop iteration until `source4Mod` becomes 0. Therefore, the current code should not result in a partial pixel.\nTests to check the loading function with an input/output offset have been added to the unit tests.",
       "parentUuid": "d60b0ce5_8c51fb10",
+      "range": {
+        "startLine": 176,
+        "startChar": 21,
+        "endLine": 176,
+        "endChar": 31
+      },
+      "revId": "f6665541f5a9b025f1d339a25cb949a7a2c316f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9a4d3d8_3c8027d9",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 26
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-20T22:54:54Z",
+      "side": 1,
+      "message": "I see.",
+      "parentUuid": "c7893728_630bde4d",
       "range": {
         "startLine": 176,
         "startChar": 21,
