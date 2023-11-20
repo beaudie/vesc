@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "589fe0d7_f21908b4",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-20T21:28:17Z",
+      "side": 1,
+      "message": "Suggest: call rgbData.resize(d*h*w*sizeof(RGBColor)) and then get a pointer here uint8_t *srcPtr \u003d rgbData.data(); and line 666 will be write to *srcPtr++\u003d...\n\n\nFor test the source4Mod being 1 or 2 case, you can adjust srcPtr by 1 or 2 bytes.",
+      "range": {
+        "startLine": 59,
+        "startChar": 26,
+        "endLine": 59,
+        "endChar": 33
+      },
+      "revId": "f6665541f5a9b025f1d339a25cb949a7a2c316f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d60b0ce5_8c51fb10",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 26
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-20T21:28:17Z",
+      "side": 1,
+      "message": "What if source4Mod is not 3, i.e., this while loop will have partial pixel?\nI think you can add the check of  input and inputRowPitch so that for this kind of  situation it goes to LoadToNative3To4Impl. Then this will only handle source4Mod either 0 or 3.",
+      "range": {
+        "startLine": 176,
+        "startChar": 21,
+        "endLine": 176,
+        "endChar": 31
+      },
+      "revId": "f6665541f5a9b025f1d339a25cb949a7a2c316f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66929ed8_5991db6f",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 26
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-20T21:28:17Z",
+      "side": 1,
+      "message": "Suggest make it 0x00FFFFFF so that people dont need to count number of \u0027F\u0027. Similar bellow.",
+      "revId": "f6665541f5a9b025f1d339a25cb949a7a2c316f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
