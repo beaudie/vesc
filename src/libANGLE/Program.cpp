@@ -918,6 +918,7 @@ void Program::makeNewExecutable(const Context *context)
 
 angle::Result Program::link(const Context *context, angle::JobResultExpectancy resultExpectancy)
 {
+    printf("Program link\n");
     auto *platform   = ANGLEPlatformCurrent();
     double startTime = platform->currentTime(platform);
 
@@ -1025,6 +1026,7 @@ angle::Result Program::link(const Context *context, angle::JobResultExpectancy r
     mLinkingState->linkingFromBinary = false;
     mLinkingState->linkEvent = std::make_unique<MainLinkLoadEvent>(mainLinkTask, mainLinkEvent);
 
+    printf("Program link scheduled\n");
     return angle::Result::Continue;
 }
 
@@ -1244,6 +1246,8 @@ void Program::waitForOptionalLinkTasks(const Context *context)
     {
         return;
     }
+
+    printf("--- waiting for subtasks\n");
 
     // Wait for all optional tasks to finish
     angle::WaitableEvent::WaitMany(&mOptionalLinkTaskWaitableEvents);
@@ -2137,10 +2141,12 @@ void Program::initInterfaceBlockBindings()
 
 angle::Result Program::syncState(const Context *context)
 {
+    printf("Program sync state\n");
     ASSERT(!mLinkingState);
     // Wait for the link tasks.  This is because these optimization passes are not currently
     // thread-safe with draw's usage of the executable.
     waitForOptionalLinkTasks(context);
+    printf("Program sync state done\n");
     return mProgram->syncState(context);
 }
 
