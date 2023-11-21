@@ -2453,18 +2453,8 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     bool presentOutOfDate = false;
     ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
 
-    if (!presentOutOfDate)
-    {
-        // Defer acquiring the next swapchain image since the swapchain is not out-of-date.
-        deferAcquireNextImage();
-    }
-    else
-    {
-        // Immediately try to acquire the next image, which will recognize the out-of-date
-        // swapchain (potentially because of a rotation change), and recreate it.
-        ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Out-of-Date Swapbuffer");
-        ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
-    }
+    mAcquireOperation.needToAcquireNextSwapchainImage = true;
+    ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
 
     RendererVk *renderer = contextVk->getRenderer();
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
