@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfe5c351_9c0eb3c0",
+        "filename": "src/compiler/translator/tree_ops/spirv/ReswizzleYUVOps.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-11-21T22:10:32Z",
+      "side": 1,
+      "message": "@cclao@google.com - this is a typo right? isn\u0027t it -\n```\nR_vulkan\u003dv, G_vulkan\u003dy, B_vulkan\u003du\n```\nif not, could you provide a link to the spec that shows this mapping?",
+      "range": {
+        "startLine": 39,
+        "startChar": 36,
+        "endLine": 39,
+        "endChar": 70
+      },
+      "revId": "32f209b83f782d396d9197744b897af421762726",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
