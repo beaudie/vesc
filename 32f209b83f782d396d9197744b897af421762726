@@ -22,6 +22,30 @@
       },
       "revId": "32f209b83f782d396d9197744b897af421762726",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73769d1b_5cb74e26",
+        "filename": "src/compiler/translator/tree_ops/spirv/ReswizzleYUVOps.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-21T22:17:43Z",
+      "side": 1,
+      "message": "You are right, I will fix it.\n\nhttps://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#renderpass-resolve-operations\n\n```\nVK_RESOLVE_MODE_EXTERNAL_FORMAT_DOWNSAMPLE_ANDROID indicates that rather than a multisample resolve, a single sampled color attachment will be downsampled into a Y′CBCR format image specified by an external Android format. Unlike other resolve modes, implementations can resolve multiple times during rendering, or even bypass writing to the color attachment altogether, as long as the final value is resolved to the resolve attachment. Values in the G, B, and R channels of the color attachment will be written to the Y, CB, and CR channels of the external format image, respectively. Chroma values are calculated as if sampling with a linear filter from the color attachment at full rate, at the location the chroma values sit according to VkPhysicalDeviceExternalFormatResolvePropertiesANDROID::chromaOffsetX, VkPhysicalDeviceExternalFormatResolvePropertiesANDROID::chromaOffsetY, and the chroma sample rate of the resolved image.\n```",
+      "parentUuid": "bfe5c351_9c0eb3c0",
+      "range": {
+        "startLine": 39,
+        "startChar": 36,
+        "endLine": 39,
+        "endChar": 70
+      },
+      "revId": "32f209b83f782d396d9197744b897af421762726",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
