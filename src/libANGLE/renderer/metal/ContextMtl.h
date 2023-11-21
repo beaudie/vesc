@@ -317,9 +317,11 @@ class ContextMtl : public ContextImpl, public mtl::Context
     void onTransformFeedbackActive(const gl::Context *context, TransformFeedbackMtl *xfb);
     void onTransformFeedbackInactive(const gl::Context *context, TransformFeedbackMtl *xfb);
 
-    // Invoke by mtl::Sync
-    void queueEventSignal(const mtl::SharedEventRef &event, uint64_t value);
-    void serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value);
+    // Invoked by multiple classes in SyncMtl.mm
+#if ANGLE_MTL_EVENT_AVAILABLE
+    void queueEventSignal(id<MTLEvent> event, uint64_t value);
+    void serverWaitEvent(id<MTLEvent> event, uint64_t value);
+#endif
 
     const mtl::ClearColorValue &getClearColorValue() const;
     const mtl::WriteMaskArray &getWriteMaskArray() const;
@@ -391,6 +393,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
     mtl::ComputeCommandEncoder *getIndexPreprocessingCommandEncoder();
 
     bool isCurrentRenderEncoderSerial(uint64_t serial);
+    uint64_t getCurrentEncoderSerial();
 
     const mtl::ContextDevice &getMetalDevice() const { return mContextDevice; }
 
