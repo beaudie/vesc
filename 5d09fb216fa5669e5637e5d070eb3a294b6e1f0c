@@ -16,6 +16,166 @@
       "message": "Thanks",
       "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa91b982_53d30c91",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-21T14:40:19Z",
+      "side": 1,
+      "message": "nit: we have a utility for this in mathutil.h",
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63e2160e_3c175912",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-21T14:40:19Z",
+      "side": 1,
+      "message": "nit: no need for this helper, you can write this directly instead:\n\n```\nEXPECT_TRUE(success) \u003c\u003c \"Case \" \u003c\u003c inputCase;\n```",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 1
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "148adb36_31fbd4b0",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-21T14:40:19Z",
+      "side": 1,
+      "message": "```suggestion\n                EXPECT_TRUE(rMatch \u0026\u0026 gMatch \u0026\u0026 bMatch \u0026\u0026 aMatch) \u003c\u003c \"Mismatch at Index (\" \u003c\u003c x \u003c\u003c \", \" \u003c\u003c y \u003c\u003c \", \" \u003c\u003c z \u003c\u003c \")\"\n```\n\nIf you add the case information here, you don\u0027t need another `EXPECT_TRUE` (or a return value).",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 88
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "609932e3_ae709eb9",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-21T14:40:19Z",
+      "side": 1,
+      "message": "It\u0027s great to have parameterized tests to cover the various scenarios, good job.\n\nI\u0027d also suggest writing a few hand-crafted tests. That helps rule out bugs in the test generator itself.",
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b19bb8c_a71ecb78",
+        "filename": "src/image_util/loadimage.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-21T14:40:19Z",
+      "side": 1,
+      "message": "nit: even if `.inc` is an include file, you don\u0027t need to expose the \"impl\" versions to the API header (.h).\n\nThey could just live in the `.inc` file itself",
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6ef16ec_37731b23",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 28
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-21T14:40:19Z",
+      "side": 1,
+      "message": "Tiny optimization: You can remove `source4Mod` and replace this with `srcIndexStart % 4 \u003d\u003d 0`",
+      "range": {
+        "startLine": 177,
+        "startChar": 19,
+        "endLine": 177,
+        "endChar": 34
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cce9ab96_e14843d6",
+        "filename": "src/tests/perf_tests/RGBImageAllocation.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-21T14:40:19Z",
+      "side": 1,
+      "message": "nit: you might want to preallocate and initialize this in `initializeBenchmark` to remove its cost from the benchmark.\n\nWhat\u0027s the purpose of `mUsesSameDataPerUpdate` by the way, does it matter what the actual data is?",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 9
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ea456d6_5a7a826b",
+        "filename": "src/tests/perf_tests/RGBImageAllocation.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-21T14:40:19Z",
+      "side": 1,
+      "message": "Please add the other backends too.",
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

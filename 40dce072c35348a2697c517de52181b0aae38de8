@@ -473,6 +473,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c53ad39_aa5cd5f4",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 13
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-21T14:40:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fe8af7fd_5f41a7b9",
+      "revId": "40dce072c35348a2697c517de52181b0aae38de8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30a512f7_fc5ae3e4",
