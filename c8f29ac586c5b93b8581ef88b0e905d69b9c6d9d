@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f6ac53d_4c0b29b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-22T19:55:47Z",
+      "side": 1,
+      "message": "Alright, I iterated on this further.\n\nThe EGL syncs can now be backed by regular events or shared events based on the creation parameters. I also have a Chrome patch to always use EGL syncs so it takes advantage of this.\n\nAlso removed the sleep loop. Uses a condition variable to block and wait for the queue serials to be updated.",
+      "revId": "c8f29ac586c5b93b8581ef88b0e905d69b9c6d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

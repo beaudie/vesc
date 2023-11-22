@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3adfab13_2e84780b",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 2358,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-22T19:55:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb2ceff7_86aceebd",
+      "range": {
+        "startLine": 2358,
+        "startChar": 4,
+        "endLine": 2358,
+        "endChar": 31
+      },
+      "revId": "964db46c0680f59598f6b24b4dba1c33c9cba405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "289ac46f_f2461920",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "That sounds good to me. We require MTLSharedEvents in out multi-process case, but we can signal that with `EGL_SYNC_METAL_SHARED_EVENT_ANGLE`.",
       "parentUuid": "289ac46f_f2461920",
+      "range": {
+        "startLine": 267,
+        "startChar": 0,
+        "endLine": 272,
+        "endChar": 5
+      },
+      "revId": "964db46c0680f59598f6b24b4dba1c33c9cba405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3727f3ac_d4b2afd8",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-22T19:55:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c5d6828_13cc4dcb",
       "range": {
         "startLine": 267,
         "startChar": 0,
