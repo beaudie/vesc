@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3ee6b6f_173d71e3",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-22T01:43:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa91b982_53d30c91",
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63e2160e_3c175912",
@@ -48,6 +66,30 @@
       "writtenOn": "2023-11-21T14:40:19Z",
       "side": 1,
       "message": "nit: no need for this helper, you can write this directly instead:\n\n```\nEXPECT_TRUE(success) \u003c\u003c \"Case \" \u003c\u003c inputCase;\n```",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 1
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a34aa41e_aa022355",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-22T01:43:51Z",
+      "side": 1,
+      "message": "Thanks! Done.",
+      "parentUuid": "63e2160e_3c175912",
       "range": {
         "startLine": 31,
         "startChar": 0,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91aa4182_0632ebdb",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-22T01:43:51Z",
+      "side": 1,
+      "message": "Done. Also, included the case information in the args.",
+      "parentUuid": "148adb36_31fbd4b0",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 88
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "609932e3_ae709eb9",
@@ -94,6 +160,24 @@
       "writtenOn": "2023-11-21T14:40:19Z",
       "side": 1,
       "message": "It\u0027s great to have parameterized tests to cover the various scenarios, good job.\n\nI\u0027d also suggest writing a few hand-crafted tests. That helps rule out bugs in the test generator itself.",
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6bf9da8_b7cf77ae",
+        "filename": "src/image_util/LoadToNative_unittest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-22T01:43:51Z",
+      "side": 1,
+      "message": "Thanks! I have added two small tests without the test generator.",
+      "parentUuid": "609932e3_ae709eb9",
       "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -115,6 +199,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecf1d679_e66f3ea9",
+        "filename": "src/image_util/loadimage.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-22T01:43:51Z",
+      "side": 1,
+      "message": "I see. Thanks. Removed the functions from the header file.",
+      "parentUuid": "4b19bb8c_a71ecb78",
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6ef16ec_37731b23",
@@ -128,6 +230,30 @@
       "writtenOn": "2023-11-21T14:40:19Z",
       "side": 1,
       "message": "Tiny optimization: You can remove `source4Mod` and replace this with `srcIndexStart % 4 \u003d\u003d 0`",
+      "range": {
+        "startLine": 177,
+        "startChar": 19,
+        "endLine": 177,
+        "endChar": 34
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c03ffa0_ec3c2438",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 28
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-22T01:43:51Z",
+      "side": 1,
+      "message": "`srcIndexStart` is the offset from `source8`. So the condition would be changing to `reinterpret_cast\u003cuintptr_t\u003e(\u0026source8[srcIndexStart]) % 4 !\u003d 0`.",
+      "parentUuid": "c6ef16ec_37731b23",
       "range": {
         "startLine": 177,
         "startChar": 19,
@@ -163,6 +289,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d0bebbc_c67db92d",
+        "filename": "src/tests/perf_tests/RGBImageAllocation.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-22T01:43:51Z",
+      "side": 1,
+      "message": "The actual data does not matter. `mUsesSameDataPerUpdate` was added to see the effect on the results if the data changed for each update (vs if the same data was used for all the copy ops). Windows shows more improvement in `cpu_time` and `wall_time` in the test when the same data is used for all copies. However, it is true that the memory allocation also gets into the cost in the case of data change per update.\n\nI tried allocating 64 color arrays in `initializeBenchmark()` and using each of them per iteration (round-robin) for texture copy. The results seem to be similar to the same-data case. Should we merge the cases?",
+      "parentUuid": "cce9ab96_e14843d6",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 9
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ea456d6_5a7a826b",
         "filename": "src/tests/perf_tests/RGBImageAllocation.cpp",
         "patchSetId": 28
@@ -174,6 +324,24 @@
       "writtenOn": "2023-11-21T14:40:19Z",
       "side": 1,
       "message": "Please add the other backends too.",
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8297d8e9_667cf29d",
+        "filename": "src/tests/perf_tests/RGBImageAllocation.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-11-22T01:43:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ea456d6_5a7a826b",
       "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
