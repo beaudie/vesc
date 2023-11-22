@@ -264,6 +264,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6c56b74_7af97b47",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 28
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-22T02:57:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5c03ffa0_ec3c2438",
+      "range": {
+        "startLine": 177,
+        "startChar": 19,
+        "endLine": 177,
+        "endChar": 34
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cce9ab96_e14843d6",
@@ -301,6 +325,30 @@
       "side": 1,
       "message": "The actual data does not matter. `mUsesSameDataPerUpdate` was added to see the effect on the results if the data changed for each update (vs if the same data was used for all the copy ops). Windows shows more improvement in `cpu_time` and `wall_time` in the test when the same data is used for all copies. However, it is true that the memory allocation also gets into the cost in the case of data change per update.\n\nI tried allocating 64 color arrays in `initializeBenchmark()` and using each of them per iteration (round-robin) for texture copy. The results seem to be similar to the same-data case. Should we merge the cases?",
       "parentUuid": "cce9ab96_e14843d6",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 9
+      },
+      "revId": "5d09fb216fa5669e5637e5d070eb3a294b6e1f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e27287b_87c417a7",
+        "filename": "src/tests/perf_tests/RGBImageAllocation.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-22T02:57:31Z",
+      "side": 1,
+      "message": "Probably not worth having this variation. You _could_ think of other variations though, like an unaligned source pointer.",
+      "parentUuid": "9d0bebbc_c67db92d",
       "range": {
         "startLine": 110,
         "startChar": 0,
