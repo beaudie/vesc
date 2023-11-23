@@ -16,6 +16,24 @@
       "message": "@geofflang@chromium.org I need your help debugging something here. Prior to the fix in this CL, getResult() was not called. Now that it\u0027s being called, `mShaderExecutable` is frequently nullptr. See https://ci.chromium.org/ui/p/angle/builders/try/win-test/17354/overview\n\nThe relevant history of this code is this: https://chromium-review.googlesource.com/c/angle/angle/+/4808191/23/src/libANGLE/renderer/d3d/ProgramD3D.cpp#b551\n\nThe `ShaderExecutableD3D` used to get extracted at the end of link, and if it was not `nullptr`, debug info was added. My understand was that if the shader is not nullptr, then the corresponding `ShaderExecutableD3D` is also not nullptr (hence the previous `if` only checking the shader).\n\nCould you please check to see why the shader can be valid here but the executable nullptr?",
       "revId": "37b43555c4aa871e6c9005050d55ab0c8b00571a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7536f38a_6834a57a",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-23T16:12:04Z",
+      "side": 1,
+      "message": "Will do. I can debug this tomorrow or next monday.",
+      "parentUuid": "84eb15f2_399fe44e",
+      "revId": "37b43555c4aa871e6c9005050d55ab0c8b00571a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
