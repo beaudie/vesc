@@ -27,6 +27,7 @@
 #include "compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.h"
 #include "compiler/translator/tree_ops/RewriteDfdy.h"
 #include "compiler/translator/tree_ops/RewriteStructSamplers.h"
+#include "compiler/translator/tree_ops/RewriteTextureCubeGrad.h"
 #include "compiler/translator/tree_ops/SeparateStructFromUniformDeclarations.h"
 #include "compiler/translator/tree_ops/msl/AddExplicitTypeCasts.h"
 #include "compiler/translator/tree_ops/msl/ConvertUnsupportedConstructorsToFunctionCalls.h"
@@ -1034,6 +1035,18 @@ bool TranslatorMSL::translateImpl(TInfoSinkBase &sink,
                                              getShaderType() == GL_FRAGMENT_SHADER))
         {
             return false;
+        }
+    }
+
+    if (getShaderVersion() >= 300 ||
+        IsExtensionEnabled(getExtensionBehavior(), TExtension::EXT_shader_texture_lod))
+    {
+        if (compileOptions.rewriteTextureCubeGradAGX)
+        {
+            if (!RewriteTextureCubeGradAGX(this, root, &symbolTable, getShaderVersion()))
+            {
+                return false;
+            }
         }
     }
 

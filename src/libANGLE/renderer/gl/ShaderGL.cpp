@@ -201,6 +201,11 @@ std::shared_ptr<ShaderTranslateTask> ShaderGL::compile(const gl::Context *contex
         options->rewriteRepeatedAssignToSwizzled = true;
     }
 
+    if (features.rewriteTextureCubeGradAgx.enabled)
+    {
+        options->rewriteTextureCubeGradAGX = true;
+    }
+
     if (mMultiviewImplementationType == MultiviewImplementationTypeGL::NV_VIEWPORT_ARRAY2)
     {
         options->initializeBuiltinsForInstancedMultiview = true;
