@@ -12,6 +12,7 @@
 #include "compiler/translator/glsl/OutputGLSL.h"
 #include "compiler/translator/glsl/VersionGLSL.h"
 #include "compiler/translator/tree_ops/RewriteTexelFetchOffset.h"
+#include "compiler/translator/tree_ops/RewriteTextureCubeGrad.h"
 #include "compiler/translator/tree_ops/glsl/apple/RewriteRowMajorMatrices.h"
 #include "compiler/translator/tree_ops/glsl/apple/RewriteUnaryMinusOperatorFloat.h"
 
@@ -87,6 +88,18 @@ bool TranslatorGLSL::translate(TIntermBlock *root,
                 // Currently not reached, but leave this in for future expansion.
                 ASSERT(false);
                 break;
+        }
+    }
+
+    if (getShaderVersion() >= 300 ||
+        IsExtensionEnabled(getExtensionBehavior(), TExtension::EXT_shader_texture_lod))
+    {
+        if (compileOptions.rewriteTextureCubeGradAGX)
+        {
+            if (!sh::RewriteTextureCubeGradAGX(this, root, &getSymbolTable(), getShaderVersion()))
+            {
+                return false;
+            }
         }
     }
 

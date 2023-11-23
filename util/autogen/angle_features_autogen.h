@@ -251,6 +251,7 @@ enum class Feature
     RewriteFloatUnaryMinusOperator,
     RewriteRepeatedAssignToSwizzled,
     RewriteRowMajorMatrices,
+    RewriteTextureCubeGradAgx,
     RewriteUnaryMinusOperator,
     RGBA4IsNotSupportedForColorRendering,
     RGBDXT1TexturesSampleZeroAlpha,

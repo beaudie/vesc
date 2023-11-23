@@ -251,6 +251,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::RewriteFloatUnaryMinusOperator, "rewriteFloatUnaryMinusOperator"},
     {Feature::RewriteRepeatedAssignToSwizzled, "rewriteRepeatedAssignToSwizzled"},
     {Feature::RewriteRowMajorMatrices, "rewriteRowMajorMatrices"},
+    {Feature::RewriteTextureCubeGradAgx, "rewriteTextureCubeGradAgx"},
     {Feature::RewriteUnaryMinusOperator, "rewriteUnaryMinusOperator"},
     {Feature::RGBA4IsNotSupportedForColorRendering, "RGBA4IsNotSupportedForColorRendering"},
     {Feature::RGBDXT1TexturesSampleZeroAlpha, "RGBDXT1TexturesSampleZeroAlpha"},
