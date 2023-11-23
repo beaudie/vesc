@@ -217,6 +217,13 @@
             ]
         },
         {
+            "name": "rewrite_texture_cube_grad_agx",
+            "category": "Workarounds",
+            "description": [
+                "Apply a vendor-specific transformation to explicit cubemap derivatives"
+            ]
+        },
+        {
             "name": "disable_blend_func_extended",
             "category": "Workarounds",
             "description": [
