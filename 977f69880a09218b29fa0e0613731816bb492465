@@ -22,6 +22,30 @@
       },
       "revId": "977f69880a09218b29fa0e0613731816bb492465",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "014671fe_2b3bb5d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2023-11-24T00:44:38Z",
+      "side": 1,
+      "message": "There no more riscv changes.\nI open a bug for riscv support",
+      "parentUuid": "c1dcdd81_e8df3a5c",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "977f69880a09218b29fa0e0613731816bb492465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
