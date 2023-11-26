@@ -42,7 +42,7 @@ TEST_P(ShaderAlgorithmTest, rgb_to_hsl_vertex_shader)
         "    mediump float maxVal = max(max(r, g), b);\n"
         "    mediump float H = 0.0; \n"
         "    mediump float S = 0.0; \n"
-        "    if (r == maxVal)\n"
+        "    if (abs(r - maxVal) < 1e-7)\n"
         "       H = 1.0;\n"
         "    else\n"
         "       S = 1.0;\n"
