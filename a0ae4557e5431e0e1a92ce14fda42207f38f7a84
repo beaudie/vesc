@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "623d0ce9_b39f042f",
+        "filename": "src/tests/gl_tests/ShaderAlgorithmTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-27T14:16:30Z",
+      "side": 1,
+      "message": "This is a replica of a dEQP test that was failing on ARM for a similar reason. We had a lot of back and forth with ARM about it, and in the end we had to force fp16 for mediump through OpQuantizeToF16. Try enabling the `explicitlyCastMediumpFloatTo16Bit` feature to see if that fixes the test.\n\nFor context, see this change: https://chromium-review.googlesource.com/c/angle/angle/+/4400404\n\nFeel free to contact Nvidia about it; like I said, this is a duplicate of a dEQP test, I\u0027d love to know if Nvidia has better arguments about why they are failing this check.",
+      "revId": "a0ae4557e5431e0e1a92ce14fda42207f38f7a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
