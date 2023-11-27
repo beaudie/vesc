@@ -15,12 +15,7 @@
 namespace rx
 {
 
-SyncEGL::SyncEGL(const egl::AttributeMap &attribs, const FunctionsEGL *egl)
-    : mEGL(egl),
-      mNativeFenceFD(
-          attribs.getAsInt(EGL_SYNC_NATIVE_FENCE_FD_ANDROID, EGL_NO_NATIVE_FENCE_FD_ANDROID)),
-      mSync(EGL_NO_SYNC_KHR)
-{}
+SyncEGL::SyncEGL(const FunctionsEGL *egl) : mEGL(egl), mSync(EGL_NO_SYNC_KHR) {}
 
 SyncEGL::~SyncEGL()
 {
@@ -38,7 +33,8 @@ void SyncEGL::onDestroy(const egl::Display *display)
 
 egl::Error SyncEGL::initialize(const egl::Display *display,
                                const gl::Context *context,
-                               EGLenum type)
+                               EGLenum type,
+                               const egl::AttributeMap &attribs)
 {
     ASSERT(type == EGL_SYNC_FENCE_KHR || type == EGL_SYNC_NATIVE_FENCE_ANDROID);
 
@@ -46,8 +42,10 @@ egl::Error SyncEGL::initialize(const egl::Display *display,
     angle::FixedVector<EGLint, kAttribVectorSize> attribs;
     if (type == EGL_SYNC_NATIVE_FENCE_ANDROID)
     {
+        EGLint fenceFd =
+            attribs.getAsInt(EGL_SYNC_NATIVE_FENCE_FD_ANDROID, EGL_NO_NATIVE_FENCE_FD_ANDROID);
         attribs.push_back(EGL_SYNC_NATIVE_FENCE_FD_ANDROID);
-        attribs.push_back(mNativeFenceFD);
+        attribs.push_back(fenceFd);
     }
     attribs.push_back(EGL_NONE);
 
