@@ -22,6 +22,30 @@
       },
       "revId": "1bdb403899f2040a7b816b3261f13a48914d439c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b55410b_11e24551",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-11-27T16:52:54Z",
+      "side": 0,
+      "message": "This bug refers to the lack of texture swizzling support on certain old platforms that are no longer used in ANGLE tryjobs.",
+      "parentUuid": "6cb0e0b0_96224a8b",
+      "range": {
+        "startLine": 553,
+        "startChar": 0,
+        "endLine": 553,
+        "endChar": 5
+      },
+      "revId": "1bdb403899f2040a7b816b3261f13a48914d439c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
