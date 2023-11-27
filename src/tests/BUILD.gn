@@ -1122,6 +1122,9 @@ if (build_angle_deqp_tests && !is_fuchsia) {
         "-Wno-unused-local-typedef",
         "-Wno-unused-result",  # ignoring return value of function declared with
                                # 'nodiscard' attribute
+        "-fwrapv",  # Treat signed integer overflow as two's complement
+                    # https://gitlab.khronos.org/Tracker/vk-gl-cts/-/issues/37
+                    # https://android.googlesource.com/platform/external/deqp/+/ae6c306e39080de59a8535cf1797b27951dcaa6c%5E%21/
       ]
     }
 
