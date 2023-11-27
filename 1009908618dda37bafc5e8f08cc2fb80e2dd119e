@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "595a27e9_d2f08357",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-27T14:22:22Z",
+      "side": 1,
+      "message": "Nice!\n\nFYI @cnorthrop@google.com, this might have been the cause of some of the capture/replay test failures",
+      "revId": "1009908618dda37bafc5e8f08cc2fb80e2dd119e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "258500fa_6511ade2",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1598,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-27T14:22:22Z",
+      "side": 1,
+      "message": "```suggestion\n            EXPECT_EQ(mapped[i], data0[i]) \u003c\u003c \"Expected \" \u003c\u003c static_cast\u003cint\u003e(data0[i]) \u003c\u003c \" at index \" \u003c\u003c i \u003c\u003c \", got \"\n                       \u003c\u003c static_cast\u003cint\u003e(mapped[i]);\n```",
+      "range": {
+        "startLine": 1594,
+        "startChar": 0,
+        "endLine": 1598,
+        "endChar": 13
+      },
+      "revId": "1009908618dda37bafc5e8f08cc2fb80e2dd119e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
