@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f05d2c0_52a29861",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-27T15:07:20Z",
+      "side": 1,
+      "message": "This is being fixed in dEQP: https://gerrit.khronos.org/c/vk-gl-cts/+/12972",
+      "revId": "90a906b3e9774be3ade379b29f4e6121643b802f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
