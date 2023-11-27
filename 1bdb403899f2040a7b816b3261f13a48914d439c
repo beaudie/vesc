@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cb0e0b0_96224a8b",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-27T16:37:10Z",
+      "side": 0,
+      "message": "Please also reference this bug in the commit message.\nShould it be closed now?",
+      "range": {
+        "startLine": 553,
+        "startChar": 0,
+        "endLine": 553,
+        "endChar": 5
+      },
+      "revId": "1bdb403899f2040a7b816b3261f13a48914d439c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
