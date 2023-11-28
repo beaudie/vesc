@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87c0069c_495d313c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-11-28T18:40:16Z",
+      "side": 1,
+      "message": "Patchset 11 proposes a template, `AHBUploadDataColorspace`, for a group of test cases that do the same thing for each of the AHB formats, i.e. `ahbFormat` is varying and the rest changes accordingly.\n\nThe context is the [discussion](https://chromium-review.googlesource.com/c/angle/angle/+/4819053/comments/92737958_7f776b02) and the [bug](http://b/294086848#comment23).  The CL is adding a subset of cases from the context, starting with minimum and simplest.\n\nThe review request is to check if the template makes sense before formalizing the code.",
+      "revId": "0136fecd10d07716ca20e5b91acc1a2ca1390f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
