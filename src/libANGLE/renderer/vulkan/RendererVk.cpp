@@ -1155,8 +1155,8 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
         // The data must not contain corruption.
         if (chunkIndex0 != 0 || numChunks == 0 || uncompressedCacheDataSize == 0)
         {
-            FATAL() << "Unexpected values while unpacking chunk index 0: " << "cacheVersion = "
-                    << cacheVersion << ", chunkIndex = " << chunkIndex0
+            FATAL() << "Unexpected values while unpacking chunk index 0: "
+                    << "cacheVersion = " << cacheVersion << ", chunkIndex = " << chunkIndex0
                     << ", numChunks = " << numChunks
                     << ", uncompressedCacheDataSize = " << uncompressedCacheDataSize;
         }
@@ -1176,8 +1176,9 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
         }
         else
         {
-            WARN() << "Change in cache header version detected: " << "newVersion = "
-                   << kPipelineCacheVersion << ", existingVersion = " << cacheVersion;
+            WARN() << "Change in cache header version detected: "
+                   << "newVersion = " << kPipelineCacheVersion
+                   << ", existingVersion = " << cacheVersion;
         }
         return angle::Result::Continue;
     }
@@ -1225,9 +1226,10 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
             (compressedData.size() < compressedSize + chunkSize);
         if (isHeaderDataCorrupted)
         {
-            WARN() << "Pipeline cache chunk header corrupted: " << "checkCacheVersion = "
-                   << checkCacheVersion << ", cacheVersion = " << cacheVersion
-                   << ", checkNumChunks = " << checkNumChunks << ", numChunks = " << numChunks
+            WARN() << "Pipeline cache chunk header corrupted: "
+                   << "checkCacheVersion = " << checkCacheVersion
+                   << ", cacheVersion = " << cacheVersion << ", checkNumChunks = " << checkNumChunks
+                   << ", numChunks = " << numChunks
                    << ", checkUncompressedCacheDataSize = " << checkUncompressedCacheDataSize
                    << ", uncompressedCacheDataSize = " << uncompressedCacheDataSize
                    << ", checkCompressedDataCRC = " << checkCompressedDataCRC
@@ -4800,9 +4802,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, doubleDepthBiasConstantFactor,
                             (isIntel && !IsWindows()) || isRADV);
 
-    // Required to pass android.media.codec.cts.EncodeDecodeTest with MESA Virtio-GPU Venus driver
-    // in virtualized environment. https://issuetracker.google.com/246218584
-    ANGLE_FEATURE_CONDITION(&mFeatures, mapUnspecifiedColorSpaceToPassThrough, isVenus);
+    // Required to pass android.media.codec.cts.EncodeDecodeTest
+    // https://issuetracker.google.com/246218584
+    ANGLE_FEATURE_CONDITION(&mFeatures, mapUnspecifiedColorSpaceToPassThrough, true);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, enablePipelineCacheDataCompression, true);
 
