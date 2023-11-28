@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a1ecd9c_7702e2a4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-11-28T18:02:39Z",
+      "side": 0,
+      "message": "It\u0027s better to keep this one until ANGLE-\u003eChromium and vulkan-deps-\u003eChromium roll.\nSince removing it can (if it happens on swangle bots) block these from rolling.\nYou might need to re-add it if you see problems there.",
+      "range": {
+        "startLine": 236,
+        "startChar": 5,
+        "endLine": 236,
+        "endChar": 44
+      },
+      "revId": "f2aee23fc3561fb7de8cab1111cf5f11000c4487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
