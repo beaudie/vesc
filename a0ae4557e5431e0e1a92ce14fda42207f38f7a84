@@ -16,6 +16,24 @@
       "message": "This is a replica of a dEQP test that was failing on ARM for a similar reason. We had a lot of back and forth with ARM about it, and in the end we had to force fp16 for mediump through OpQuantizeToF16. Try enabling the `explicitlyCastMediumpFloatTo16Bit` feature to see if that fixes the test.\n\nFor context, see this change: https://chromium-review.googlesource.com/c/angle/angle/+/4400404\n\nFeel free to contact Nvidia about it; like I said, this is a duplicate of a dEQP test, I\u0027d love to know if Nvidia has better arguments about why they are failing this check.",
       "revId": "a0ae4557e5431e0e1a92ce14fda42207f38f7a84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a30d26c_f5e3b3e8",
+        "filename": "src/tests/gl_tests/ShaderAlgorithmTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-11-28T13:03:51Z",
+      "side": 1,
+      "message": "Heh, that `explicitlyCastMediumpFloatTo16Bit` feature doesn\u0027t solve it, it actually gets worse, it causes a device loss:\n\n```\n[ RUN      ] ShaderAlgorithmTest.rgb_to_hsl_vertex_shader/ES2_Vulkan\nWarning: MemoryTracking.cpp:50 (OutputMemoryLogStream): Currently allocated size for memory allocation type (Buffer): 12582976 | Count: 4\n--\u003e Heap index 0: 4194368 | Count: 2\n--\u003e Heap index 1: 8388608 | Count: 2\n\nWarning: MemoryTracking.cpp:50 (OutputMemoryLogStream): Memory heap info\n\n* Available memory heaps:\n0 | Heap size: 25329401856 | Flags: 0x1\n1 | Heap size: 68671873024 | Flags: 0x0\n\n* Available memory budget and usage per heap:\n0 | Heap budget: 24524095488 | Heap usage: 79745024\n1 | Heap budget: 67866566656 | Heap usage: 38277120\n\n* Available memory types:\n0 | Heap index: 1 | Property flags: 0x0\n1 | Heap index: 0 | Property flags: 0x1\n2 | Heap index: 1 | Property flags: 0x6\n3 | Heap index: 1 | Property flags: 0xe\n4 | Heap index: 0 | Property flags: 0x7\n\nWarning: ContextVk.cpp:6959 (handleError): Internal Vulkan error (-4): The logical or physical device has been lost.\nWarning: Debug.cpp:186 (insertMessage): GL error: HIGH: Error: 0x00000507, in ..\\..\\src\\libANGLE\\renderer\\vulkan\\CommandProcessor.cpp, finishResourceUse:1202. Internal Vulkan error (-4): The logical or physical device has been lost.\n..\\..\\src\\tests\\test_utils\\ANGLETest.cpp(284): error: Expected equality of these values:\n  static_cast\u003cGLenum\u003e(0)\n    Which is: 0\n  l_glGetError()\n    Which is: 1287\n..\\..\\src\\tests\\gl_tests\\ShaderAlgorithmTest.cpp(124): error: Expected equality of these values:\n  GLColor::red\n    Which is: Red\n  angle::ReadColor(0, 0)\n    Which is: Transparent Black\n..\\..\\src\\tests\\gl_tests\\ShaderAlgorithmTest.cpp(119): error: Expected equality of these values:\n  static_cast\u003cGLenum\u003e(0)\n    Which is: 0\n  l_glGetError()\n    Which is: 1287\n..\\..\\src\\tests\\test_utils\\ANGLETest.cpp(878): error: Expected equality of these values:\n  (0x3000)\n    Which is: 12288\n  l_eglGetError()\n    Which is: 12302\n[  FAILED  ] ShaderAlgorithmTest.rgb_to_hsl_vertex_shader/ES2_Vulkan, where GetParam() \u003d ES2_Vulkan (2824 ms)\n```",
+      "parentUuid": "623d0ce9_b39f042f",
+      "revId": "a0ae4557e5431e0e1a92ce14fda42207f38f7a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
