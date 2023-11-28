@@ -33,6 +33,24 @@
       "message": "should pixel values at (1,0) and (0,1) be also checked?  so wrong alignment can be detected.",
       "revId": "da82a95cd8ea0309f5eff28fb6821ddffb6974c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e9dbb42_4e3c251a",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4330,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-28T19:16:01Z",
+      "side": 1,
+      "message": "Yes please, checking only 0,0 has masked problems in the past",
+      "parentUuid": "2bd4f966_e5f157af",
+      "revId": "da82a95cd8ea0309f5eff28fb6821ddffb6974c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
