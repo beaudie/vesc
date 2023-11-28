@@ -287,8 +287,10 @@ bool DisplayVk::isSurfaceFormatColorspacePairSupported(VkSurfaceKHR surface,
 
         for (const VkSurfaceFormat2KHR &surfaceFormat : surfaceFormats)
         {
+            // VK_COLOR_SPACE_PASS_THROUGH_EXT should always supported.
             if (surfaceFormat.surfaceFormat.format == format &&
-                surfaceFormat.surfaceFormat.colorSpace == colorspace)
+                (surfaceFormat.surfaceFormat.colorSpace == colorspace ||
+                 colorspace == VK_COLOR_SPACE_PASS_THROUGH_EXT))
             {
                 return true;
             }
