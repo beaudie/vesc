@@ -16,6 +16,15 @@ void RegisterTraceTests();
 
 int main(int argc, char **argv)
 {
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+    CPU_SET(8, &cpuset);
+    CPU_SET(7, &cpuset);
+    CPU_SET(6, &cpuset);
+    CPU_SET(5, &cpuset);
+    CPU_SET(4, &cpuset);
+    sched_setaffinity(0, sizeof(cpu_set_t), &cpuset);
+
     ANGLEProcessTraceTestArgs(&argc, argv);
     RegisterTraceTests();
     angle::TestSuite testSuite(&argc, argv);
