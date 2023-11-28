@@ -4800,9 +4800,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, doubleDepthBiasConstantFactor,
                             (isIntel && !IsWindows()) || isRADV);
 
-    // Required to pass android.media.codec.cts.EncodeDecodeTest with MESA Virtio-GPU Venus driver
-    // in virtualized environment. https://issuetracker.google.com/246218584
-    ANGLE_FEATURE_CONDITION(&mFeatures, mapUnspecifiedColorSpaceToPassThrough, isVenus);
+    // Required to pass android.media.codec.cts.EncodeDecodeTest
+    // https://issuetracker.google.com/246218584
+    ANGLE_FEATURE_CONDITION(&mFeatures, mapUnspecifiedColorSpaceToPassThrough, true);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, enablePipelineCacheDataCompression, true);
 
