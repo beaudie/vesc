@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4b0aa85_5bcd08f6",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4286,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-11-28T18:42:34Z",
+      "side": 1,
+      "message": "can all AHB formats here be tested? should they be?",
+      "revId": "da82a95cd8ea0309f5eff28fb6821ddffb6974c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bd4f966_e5f157af",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4330,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-11-28T18:42:34Z",
+      "side": 1,
+      "message": "should pixel values at (1,0) and (0,1) be also checked?  so wrong alignment can be detected.",
+      "revId": "da82a95cd8ea0309f5eff28fb6821ddffb6974c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
