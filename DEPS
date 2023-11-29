@@ -45,7 +45,7 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'a2a7acf06e257e7c483f18073e8760536669e3df',
+  'chromium_revision': '50a29392dba71165664e4b1a1c20c27cf5ce8956',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -204,12 +204,12 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@342c05bb4df3d7aae5d8cd2bdbb9887a56e52f91',
+    'url': '{chromium_git}/chromium/src/testing@89b26982d6a7ebff61d4fa2e85af1165b7694b31',
     'condition': 'not build_with_chromium',
   },
 
   'third_party/abseil-cpp': {
-    'url': Var('chromium_git') + '/chromium/src/third_party/abseil-cpp@ec903ccd87fb656084639f68e61516bf31d084cc',
+    'url': Var('chromium_git') + '/chromium/src/third_party/abseil-cpp@0764ad493e54a79c7e3e02fc3412ef55b4835b9e',
     'condition': 'not build_with_chromium',
   },
 
@@ -576,7 +576,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/r8',
-              'version': 'o6MAAUwWCotub-YLAZV6fewtgr4AUJUrZpDwervcrtMC',
+              'version': '1cleC9ETmNTNjX-TQoPj14Siz7FFAy6HR6x5pbSS00oC',
           },
       ],
       'condition': 'checkout_android and not build_with_chromium',
@@ -714,7 +714,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': Var('chromium_git') + '/chromium/src/tools/perf@5e2447e2fbca4e6fbb11a17d0bd71781228eec0f',
+    'url': Var('chromium_git') + '/chromium/src/tools/perf@6eb2ef6b7754bbdf1da2aae33766be982d3bd395',
     'condition': 'not build_with_chromium',
   },
 
