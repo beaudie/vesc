@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58d8dbd8_3b1ec4d2",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4344,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-11-29T00:02:06Z",
+      "side": 1,
+      "message": "both (0, 1) and (1, 0) are {90, 0, 0, 255} at the moment.  suspecting it\u0027s a bug in the test case where `drawQuad()` in `drawTexture2D()` doesn\u0027t draw the entire plane.",
+      "revId": "0fb0663d5529badf8acb32cb918915f603dc2ef4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
