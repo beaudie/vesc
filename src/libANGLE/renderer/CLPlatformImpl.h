@@ -57,7 +57,7 @@ class CLPlatformImpl : angle::NonCopyable
                                                      bool userSync,
                                                      cl_int &errorCode) = 0;
 
-    virtual cl_int unloadCompiler() = 0;
+    virtual angle::Result unloadCompiler() = 0;
 
   protected:
     const cl::Platform &mPlatform;
