@@ -181,11 +181,11 @@ CLMemoryImpl::Ptr CLContextCL::createImage(const cl::Image &image,
     return CLMemoryImpl::Ptr(nativeImage != nullptr ? new CLMemoryCL(image, nativeImage) : nullptr);
 }
 
-cl_int CLContextCL::getSupportedImageFormats(cl::MemFlags flags,
-                                             cl::MemObjectType imageType,
-                                             cl_uint numEntries,
-                                             cl_image_format *imageFormats,
-                                             cl_uint *numImageFormats)
+angle::Result CLContextCL::getSupportedImageFormats(cl::MemFlags flags,
+                                                    cl::MemObjectType imageType,
+                                                    cl_uint numEntries,
+                                                    cl_image_format *imageFormats,
+                                                    cl_uint *numImageFormats)
 {
     // Fetch available image formats for given flags and image type.
     cl_uint numFormats = 0u;
@@ -215,7 +215,7 @@ cl_int CLContextCL::getSupportedImageFormats(cl::MemFlags flags,
     {
         *numImageFormats = static_cast<cl_uint>(supportedFormats.size());
     }
-    return CL_SUCCESS;
+    return angle::Result::Continue;
 }
 
 CLSamplerImpl::Ptr CLContextCL::createSampler(const cl::Sampler &sampler, cl_int &errorCode)
@@ -344,11 +344,12 @@ CLEventImpl::Ptr CLContextCL::createUserEvent(const cl::Event &event, cl_int &er
     return CLEventImpl::Ptr(nativeEvent != nullptr ? new CLEventCL(event, nativeEvent) : nullptr);
 }
 
-cl_int CLContextCL::waitForEvents(const cl::EventPtrs &events)
+angle::Result CLContextCL::waitForEvents(const cl::EventPtrs &events)
 {
     const std::vector<cl_event> nativeEvents = CLEventCL::Cast(events);
-    return mNative->getDispatch().clWaitForEvents(static_cast<cl_uint>(nativeEvents.size()),
-                                                  nativeEvents.data());
+    cl::gClErrorTls                          = mNative->getDispatch().clWaitForEvents(
+        static_cast<cl_uint>(nativeEvents.size()), nativeEvents.data());
+    return angle::Result::Continue;
 }
 
 }  // namespace rx
