@@ -69,6 +69,7 @@ Query11::~Query11()
 
 angle::Result Query11::begin(const gl::Context *context)
 {
+    ANGLE_TRY(flush(GetImplAs<Context11>(context), true));
     mResultSum = 0;
     mRenderer->getStateManager()->onBeginQuery(this);
     return resume(GetImplAs<Context11>(context));
