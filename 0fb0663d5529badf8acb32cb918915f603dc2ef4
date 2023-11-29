@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c01ce41_7bb232ad",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-29T19:08:08Z",
+      "side": 1,
+      "message": "Code below assumes this is always 4 elements. It could be either a GLColor or std::array. GLColor would let you use `EXPECT_PIXEL_COLOR_NEAR` below.",
+      "range": {
+        "startLine": 673,
+        "startChar": 8,
+        "endLine": 673,
+        "endChar": 34
+      },
+      "revId": "0fb0663d5529badf8acb32cb918915f603dc2ef4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58d8dbd8_3b1ec4d2",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 14
