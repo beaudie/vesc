@@ -39,6 +39,30 @@
       },
       "revId": "0bc52df364b4fceabf77a6910006800b49b3a21f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7aac4c2_1c4b049d",
+        "filename": "src/libANGLE/renderer/gl/QueryGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2023-11-29T21:24:23Z",
+      "side": 1,
+      "message": "Done in a non-blocking way",
+      "parentUuid": "e2f7e397_33bfc327",
+      "range": {
+        "startLine": 89,
+        "startChar": 29,
+        "endLine": 89,
+        "endChar": 33
+      },
+      "revId": "0bc52df364b4fceabf77a6910006800b49b3a21f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
