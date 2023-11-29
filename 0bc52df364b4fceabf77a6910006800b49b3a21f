@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ea8a7cb_6a45e546",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-29T15:56:47Z",
+      "side": 1,
+      "message": "Nice find, just one request so that we don\u0027t block waiting for old queries to finish.",
+      "revId": "0bc52df364b4fceabf77a6910006800b49b3a21f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2f7e397_33bfc327",
+        "filename": "src/libANGLE/renderer/gl/QueryGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-29T15:56:47Z",
+      "side": 1,
+      "message": "Flushing with \u0027forced\u0027 in this case will block until the previous query result is available which could take a long time. I think what we\u0027re counting on here is that `mPendingQueries` and `mActiveQuery` don\u0027t contain old queries from the previous glBeginQuery. We could probably just delete them and the `resume` call will create a new one.\n\nYou could refactor the destructor into a `clearInternalQueries` method.\n\nI suspect the Query11 has the same issue.",
+      "range": {
+        "startLine": 89,
+        "startChar": 29,
+        "endLine": 89,
+        "endChar": 33
+      },
+      "revId": "0bc52df364b4fceabf77a6910006800b49b3a21f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
