@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2470d88b_d5dd4698",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-29T02:04:44Z",
+      "side": 1,
+      "message": "A little simpler to follow:\n\n```suggestion\n    if (eglColorSpaceEnum \u003d\u003d EGL_NONE \u0026\u0026\n        renderer-\u003egetFeatures().mapUnspecifiedColorSpaceToPassThrough.enabled \u0026\u0026\n        displayVk-\u003eisSurfaceFormatColorspacePairSupported(mSurface, vkFormat,\n                                                          VK_COLOR_SPACE_PASS_THROUGH_EXT))\n    {\n        mSurfaceColorSpace \u003d VK_COLOR_SPACE_PASS_THROUGH_EXT;\n        return true;\n    }\n\n    mSurfaceColorSpace \u003d MapEglColorSpaceToVkColorSpace(renderer, eglColorSpaceEnum);\n    return displayVk-\u003eisSurfaceFormatColorspacePairSupported(mSurface, vkFormat,\n                                                             mSurfaceColorSpace));\n```",
+      "range": {
+        "startLine": 1156,
+        "startChar": 0,
+        "endLine": 1172,
+        "endChar": 16
+      },
+      "revId": "04bcf6329e65002d4d4fd17e8272582bd4d41e6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
