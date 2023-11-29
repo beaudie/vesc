@@ -86,6 +86,7 @@ StandardQueryGL::~StandardQueryGL()
 
 angle::Result StandardQueryGL::begin(const gl::Context *context)
 {
+    ANGLE_TRY(flush(context, true));
     mResultSum = 0;
     return resume(context);
 }
