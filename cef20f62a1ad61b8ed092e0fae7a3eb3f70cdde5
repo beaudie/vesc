@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73b98d07_d6065752",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-29T18:52:09Z",
+      "side": 1,
+      "message": "LGTM, I can\u0027t say I understand all the transformation Math. Adding Shabi to take a quick look at the high level compiler changes too.",
+      "revId": "cef20f62a1ad61b8ed092e0fae7a3eb3f70cdde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d22e018_4d3ac87b",
+        "filename": "src/compiler/translator/tree_ops/RewriteTextureCubeGrad.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-11-29T18:52:09Z",
+      "side": 1,
+      "message": "Could you add a quick comment about what the transform does? High level is fine \"transforms derivatives from screen space to XXXX space\"",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 21
+      },
+      "revId": "cef20f62a1ad61b8ed092e0fae7a3eb3f70cdde5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
