@@ -675,7 +675,12 @@ cl_int ValidateGetDeviceInfo(cl_device_id device,
             break;
 
         case DeviceInfo::DoubleFpConfig:
-            ANGLE_VALIDATE_EXTENSION(info.khrFP64);
+            // This extension became a core query from OpenCL 1.2 onward.
+            // Only need to validate for OpenCL 1.0 here.
+            if (!dev.isVersionOrNewer(1, 2))
+            {
+                ANGLE_VALIDATE_EXTENSION(info.khrFP64);
+            }
             break;
 
         case DeviceInfo::InvalidEnum:
