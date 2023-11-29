@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "107d62ad_0b9a0f7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-11-29T20:23:36Z",
+      "side": 1,
+      "message": "LGTM - thanks for upstreaming this Yiwei!",
+      "revId": "a2c61adfe2d1498a86a02a2da027e728d94584dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
