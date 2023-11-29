@@ -83,7 +83,7 @@ class CLKernelImpl : angle::NonCopyable
     CLKernelImpl(const cl::Kernel &kernel);
     virtual ~CLKernelImpl();
 
-    virtual cl_int setArg(cl_uint argIndex, size_t argSize, const void *argValue) = 0;
+    virtual angle::Result setArg(cl_uint argIndex, size_t argSize, const void *argValue) = 0;
 
     virtual Info createInfo(cl_int &errorCode) const = 0;
 
