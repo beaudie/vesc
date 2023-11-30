@@ -9,6 +9,7 @@
 
 #include "libANGLE/CLBuffer.h"
 #include "libANGLE/CLContext.h"
+#include "libANGLE/CLImage.h"
 #include "libANGLE/cl_utils.h"
 
 #include <cstring>
@@ -211,8 +212,20 @@ Memory::Memory(const Image &image,
                      : std::move(implPtr);
       }()),
       mSize([&]() -> size_t {
-          size_t retSize = 0;
-          return mImpl && !IsError(mImpl->getSize(retSize)) ? retSize : 0u;
+          switch (image.getDescriptor().type)
+          {
+              case MemObjectType::Image1D_Array:
+                  return image.getSliceSize() * image.getDescriptor().arraySize;
+              case MemObjectType::Image2D:
+                  return image.getSliceSize();
+              case MemObjectType::Image2D_Array:
+                  return image.getSliceSize() * image.getDescriptor().arraySize;
+              case MemObjectType::Image3D:
+                  return image.getSliceSize() * image.getDescriptor().depth;
+              default:
+                  // 1D, 1D-buffer and buffer
+                  return image.getRowSize();
+          }
       }()),
       mMapCount(0u)
 {}

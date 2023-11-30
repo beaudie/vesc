@@ -227,11 +227,6 @@ Program::Program(Context &context, const void *il, size_t length)
           return IsError(context.getImpl().createProgramWithIL(*this, il, length, &implPtr))
                      ? nullptr
                      : std::move(implPtr);
-      }()),
-      mSource([&]() -> std::string {
-          std::string sourceRet;
-          return mImpl && !IsError(mImpl->getSource(sourceRet)) ? std::move(sourceRet)
-                                                                : std::string{};
       }())
 {}
 
@@ -249,11 +244,6 @@ Program::Program(Context &context,
                                                                    binaryStatus, &implPtr))
                      ? nullptr
                      : std::move(implPtr);
-      }()),
-      mSource([&]() -> std::string {
-          std::string sourceRet;
-          return mImpl && !IsError(mImpl->getSource(sourceRet)) ? std::move(sourceRet)
-                                                                : std::string{};
       }())
 {}
 
@@ -267,11 +257,6 @@ Program::Program(Context &context, DevicePtrs &&devices, const char *kernelNames
                                                                            &implPtr))
                      ? nullptr
                      : std::move(implPtr);
-      }()),
-      mSource([&]() -> std::string {
-          std::string sourceRet;
-          return mImpl && !IsError(mImpl->getSource(sourceRet)) ? std::move(sourceRet)
-                                                                : std::string{};
       }())
 {}
 
@@ -294,11 +279,6 @@ Program::Program(Context &context,
                                                        &implPtr))
                      ? nullptr
                      : std::move(implPtr);
-      }()),
-      mSource([&]() -> std::string {
-          std::string sourceRet;
-          return mImpl && !IsError(mImpl->getSource(sourceRet)) ? std::move(sourceRet)
-                                                                : std::string{};
       }())
 {}
 
