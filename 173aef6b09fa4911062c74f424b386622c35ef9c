@@ -22,6 +22,30 @@
       },
       "revId": "173aef6b09fa4911062c74f424b386622c35ef9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ec76fa5_e94f9dc1",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T19:49:53Z",
+      "side": 1,
+      "message": "Actually that\u0027s exactly what\u0027s happening here, `gl_FragColor` doesn\u0027t exist in ES3! (I fixed that for the other CL, but forgot this one).\n\nThe problem is that the \"error message\" is not defined by the standard. It\u0027s not a good fit to test such a thing here, but I\u0027ll add another compiler-specific test that could do that.",
+      "parentUuid": "82e5c429_7851d2d1",
+      "range": {
+        "startLine": 18298,
+        "startChar": 4,
+        "endLine": 18298,
+        "endChar": 26
+      },
+      "revId": "173aef6b09fa4911062c74f424b386622c35ef9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
