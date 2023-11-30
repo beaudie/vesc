@@ -39,6 +39,30 @@
       },
       "revId": "079780a2ab53961e7d271740b689b853eee84527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4022e07_ef585b69",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3227,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-11-30T02:42:36Z",
+      "side": 1,
+      "message": "\"all the filters would be identical anyway\" is referring to vulkan driver side, that if driver does not support separate filter, we will force to one filter anyway. But if driver does support separate, min/mag/chroma will have its own filter. As to which one to pick when min/mag disagrees, I think it is hard to argue which one to pick, so I just set to default value.",
+      "parentUuid": "33d2be62_611cb50f",
+      "range": {
+        "startLine": 3225,
+        "startChar": 32,
+        "endLine": 3227,
+        "endChar": 68
+      },
+      "revId": "079780a2ab53961e7d271740b689b853eee84527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
