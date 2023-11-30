@@ -136,16 +136,17 @@ EventPtrs Event::Cast(cl_uint numEvents, const cl_event *eventList)
     return events;
 }
 
-Event::Event(Context &context, cl_int &errorCode)
-    : mContext(&context),
-      mCommandType(CL_COMMAND_USER),
-      mImpl(context.getImpl().createUserEvent(*this, errorCode))
+Event::Event(Context &context)
+    : mContext(&context), mCommandType(CL_COMMAND_USER), mImpl([&]() -> rx::CLEventImpl::Ptr {
+          rx::CLEventImpl::Ptr implPtr = nullptr;
+          return IsError(context.getImpl().createUserEvent(*this, &implPtr)) ? nullptr
+                                                                             : std::move(implPtr);
+      }())
 {}
 
 Event::Event(CommandQueue &queue,
              cl_command_type commandType,
-             const rx::CLEventImpl::CreateFunc &createFunc,
-             cl_int &errorCode)
+             const rx::CLEventImpl::CreateFunc &createFunc)
     : mContext(&queue.getContext()),
       mCommandQueue(&queue),
       mCommandType(commandType),

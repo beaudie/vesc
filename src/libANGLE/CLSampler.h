@@ -43,8 +43,7 @@ class Sampler final : public _cl_sampler, public Object
             PropArray &&properties,
             cl_bool normalizedCoords,
             AddressingMode addressingMode,
-            FilterMode filterMode,
-            cl_int &errorCode);
+            FilterMode filterMode);
 
     const ContextPtr mContext;
     const PropArray mProperties;

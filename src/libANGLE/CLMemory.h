@@ -58,15 +58,9 @@ class Memory : public _cl_mem, public Object
            PropArray &&properties,
            MemFlags flags,
            size_t size,
-           void *hostPtr,
-           cl_int &errorCode);
+           void *hostPtr);
 
-    Memory(const Buffer &buffer,
-           Buffer &parent,
-           MemFlags flags,
-           size_t offset,
-           size_t size,
-           cl_int &errorCode);
+    Memory(const Buffer &buffer, Buffer &parent, MemFlags flags, size_t offset, size_t size);
 
     Memory(const Image &image,
            Context &context,
@@ -75,8 +69,7 @@ class Memory : public _cl_mem, public Object
            const cl_image_format &format,
            const ImageDescriptor &desc,
            Memory *parent,
-           void *hostPtr,
-           cl_int &errorCode);
+           void *hostPtr);
 
     const ContextPtr mContext;
     const PropArray mProperties;

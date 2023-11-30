@@ -169,17 +169,17 @@ angle::Result CLKernelCL::setArg(cl_uint argIndex, size_t argSize, const void *a
     return angle::Result::Continue;
 }
 
-CLKernelImpl::Info CLKernelCL::createInfo(cl_int &errorCode) const
+angle::Result CLKernelCL::createInfo(CLKernelImpl::Info &info) const
 {
+    cl_int errorCode       = CL_SUCCESS;
     const cl::Context &ctx = mKernel.getProgram().getContext();
-    Info info;
 
     if (!GetKernelString(mNative, cl::KernelInfo::FunctionName, info.functionName, errorCode) ||
         !GetKernelInfo(mNative, cl::KernelInfo::NumArgs, info.numArgs, errorCode) ||
         (ctx.getPlatform().isVersionOrNewer(1u, 2u) &&
          !GetKernelString(mNative, cl::KernelInfo::Attributes, info.attributes, errorCode)))
     {
-        return Info{};
+        ANGLE_CL_RETURN_ERROR(errorCode);
     }
 
     info.workGroups.resize(ctx.getDevices().size());
@@ -204,7 +204,7 @@ CLKernelImpl::Info CLKernelCL::createInfo(cl_int &errorCode) const
             !GetWorkGroupInfo(mNative, device, cl::KernelWorkGroupInfo::PrivateMemSize,
                               workGroup.privateMemSize, errorCode))
         {
-            return Info{};
+            ANGLE_CL_RETURN_ERROR(errorCode);
         }
     }
 
@@ -224,12 +224,12 @@ CLKernelImpl::Info CLKernelCL::createInfo(cl_int &errorCode) const
                             errorCode) ||
                 !GetArgString(mNative, index, cl::KernelArgInfo::Name, arg.name, errorCode))
             {
-                return Info{};
+                ANGLE_CL_RETURN_ERROR(errorCode);
             }
         }
     }
 
-    return info;
+    return angle::Result::Continue;
 }
 
 }  // namespace rx
