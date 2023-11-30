@@ -169,17 +169,17 @@ angle::Result CLKernelCL::setArg(cl_uint argIndex, size_t argSize, const void *a
     return angle::Result::Continue;
 }
 
-CLKernelImpl::Info CLKernelCL::createInfo(cl_int &errorCode) const
+angle::Result CLKernelCL::createInfo(CLKernelImpl::Info &info) const
 {
     const cl::Context &ctx = mKernel.getProgram().getContext();
-    Info info;
 
-    if (!GetKernelString(mNative, cl::KernelInfo::FunctionName, info.functionName, errorCode) ||
-        !GetKernelInfo(mNative, cl::KernelInfo::NumArgs, info.numArgs, errorCode) ||
+    if (!GetKernelString(mNative, cl::KernelInfo::FunctionName, info.functionName,
+                         cl::gClErrorTls) ||
+        !GetKernelInfo(mNative, cl::KernelInfo::NumArgs, info.numArgs, cl::gClErrorTls) ||
         (ctx.getPlatform().isVersionOrNewer(1u, 2u) &&
-         !GetKernelString(mNative, cl::KernelInfo::Attributes, info.attributes, errorCode)))
+         !GetKernelString(mNative, cl::KernelInfo::Attributes, info.attributes, cl::gClErrorTls)))
     {
-        return Info{};
+        return angle::Result::Stop;
     }
 
     info.workGroups.resize(ctx.getDevices().size());
@@ -191,20 +191,20 @@ CLKernelImpl::Info CLKernelCL::createInfo(cl_int &errorCode) const
         if ((ctx.getPlatform().isVersionOrNewer(1u, 2u) &&
              ctx.getDevices()[index]->supportsBuiltInKernel(info.functionName) &&
              !GetWorkGroupInfo(mNative, device, cl::KernelWorkGroupInfo::GlobalWorkSize,
-                               workGroup.globalWorkSize, errorCode)) ||
+                               workGroup.globalWorkSize, cl::gClErrorTls)) ||
             !GetWorkGroupInfo(mNative, device, cl::KernelWorkGroupInfo::WorkGroupSize,
-                              workGroup.workGroupSize, errorCode) ||
+                              workGroup.workGroupSize, cl::gClErrorTls) ||
             !GetWorkGroupInfo(mNative, device, cl::KernelWorkGroupInfo::CompileWorkGroupSize,
-                              workGroup.compileWorkGroupSize, errorCode) ||
+                              workGroup.compileWorkGroupSize, cl::gClErrorTls) ||
             !GetWorkGroupInfo(mNative, device, cl::KernelWorkGroupInfo::LocalMemSize,
-                              workGroup.localMemSize, errorCode) ||
+                              workGroup.localMemSize, cl::gClErrorTls) ||
             !GetWorkGroupInfo(mNative, device,
                               cl::KernelWorkGroupInfo::PreferredWorkGroupSizeMultiple,
-                              workGroup.prefWorkGroupSizeMultiple, errorCode) ||
+                              workGroup.prefWorkGroupSizeMultiple, cl::gClErrorTls) ||
             !GetWorkGroupInfo(mNative, device, cl::KernelWorkGroupInfo::PrivateMemSize,
-                              workGroup.privateMemSize, errorCode))
+                              workGroup.privateMemSize, cl::gClErrorTls))
         {
-            return Info{};
+            return angle::Result::Stop;
         }
     }
 
@@ -215,21 +215,21 @@ CLKernelImpl::Info CLKernelCL::createInfo(cl_int &errorCode) const
         {
             ArgInfo &arg = info.args[index];
             if (!GetArgInfo(mNative, index, cl::KernelArgInfo::AddressQualifier,
-                            arg.addressQualifier, errorCode) ||
+                            arg.addressQualifier, cl::gClErrorTls) ||
                 !GetArgInfo(mNative, index, cl::KernelArgInfo::AccessQualifier, arg.accessQualifier,
-                            errorCode) ||
+                            cl::gClErrorTls) ||
                 !GetArgString(mNative, index, cl::KernelArgInfo::TypeName, arg.typeName,
-                              errorCode) ||
+                              cl::gClErrorTls) ||
                 !GetArgInfo(mNative, index, cl::KernelArgInfo::TypeQualifier, arg.typeQualifier,
-                            errorCode) ||
-                !GetArgString(mNative, index, cl::KernelArgInfo::Name, arg.name, errorCode))
+                            cl::gClErrorTls) ||
+                !GetArgString(mNative, index, cl::KernelArgInfo::Name, arg.name, cl::gClErrorTls))
             {
-                return Info{};
+                return angle::Result::Stop;
             }
         }
     }
 
-    return info;
+    return angle::Result::Continue;
 }
 
 }  // namespace rx

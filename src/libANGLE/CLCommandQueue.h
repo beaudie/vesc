@@ -272,13 +272,9 @@ class CommandQueue final : public _cl_command_queue, public Object
                  Device &device,
                  PropArray &&propArray,
                  CommandQueueProperties properties,
-                 cl_uint size,
-                 cl_int &errorCode);
+                 cl_uint size);
 
-    CommandQueue(Context &context,
-                 Device &device,
-                 CommandQueueProperties properties,
-                 cl_int &errorCode);
+    CommandQueue(Context &context, Device &device, CommandQueueProperties properties);
 
     const ContextPtr mContext;
     const DevicePtr mDevice;
