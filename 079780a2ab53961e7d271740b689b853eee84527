@@ -63,6 +63,30 @@
       },
       "revId": "079780a2ab53961e7d271740b689b853eee84527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7897695f_013a9520",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T02:44:31Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make sense to at least respect _one_ of the filters the application has chosen?\n\nBut ok, not pushing, I have no idea what these filters mean for YCbCr.",
+      "parentUuid": "e4022e07_ef585b69",
+      "range": {
+        "startLine": 3225,
+        "startChar": 32,
+        "endLine": 3227,
+        "endChar": 68
+      },
+      "revId": "079780a2ab53961e7d271740b689b853eee84527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
