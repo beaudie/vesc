@@ -16,6 +16,29 @@
       "message": "Cody was looking at this recently too.",
       "revId": "079780a2ab53961e7d271740b689b853eee84527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33d2be62_611cb50f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T02:37:53Z",
+      "side": 1,
+      "message": "Why not just drop the assert and unconditionally use `gl_vk::GetFilter(samplerState.getMinFilter())`? The CL description says all the filters would be identical anyway?",
+      "range": {
+        "startLine": 3225,
+        "startChar": 32,
+        "endLine": 3227,
+        "endChar": 68
+      },
+      "revId": "079780a2ab53961e7d271740b689b853eee84527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
