@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1370131_29f3fbc4",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-11-30T20:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9590511_dfeaae4c",
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fba90c18_26c3e401",
@@ -191,6 +209,30 @@
       "side": 1,
       "message": "Yeah agreed (along with Shahbaz\u0027s suggestion of swapping CL errors with ANGLE error abstraction).",
       "parentUuid": "1fd76b0e_c2ed787f",
+      "range": {
+        "startLine": 31,
+        "startChar": 47,
+        "endLine": 31,
+        "endChar": 64
+      },
+      "revId": "04e0432fa18e0e242f3c2bb1b6de155b3acd1895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9563a8c3_42d68875",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-11-30T20:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "918fca8c_75b31116",
       "range": {
         "startLine": 31,
         "startChar": 47,
