@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82e5c429_7851d2d1",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18298,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-11-30T19:33:23Z",
+      "side": 1,
+      "message": "Would it be difficult to check the error message? Compilation might fail for an unrelated reason..",
+      "range": {
+        "startLine": 18298,
+        "startChar": 4,
+        "endLine": 18298,
+        "endChar": 26
+      },
+      "revId": "173aef6b09fa4911062c74f424b386622c35ef9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
