@@ -70,6 +70,30 @@
       },
       "revId": "173aef6b09fa4911062c74f424b386622c35ef9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0fcc11c_3e053635",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18298,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-11-30T20:10:30Z",
+      "side": 1,
+      "message": "Ah I see. Maybe call CompileShader twice? Once with less fields and check that it succeeds, then a second time with more fields and check that it fails.",
+      "parentUuid": "03db6f74_dabafb0a",
+      "range": {
+        "startLine": 18298,
+        "startChar": 4,
+        "endLine": 18298,
+        "endChar": 26
+      },
+      "revId": "173aef6b09fa4911062c74f424b386622c35ef9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
