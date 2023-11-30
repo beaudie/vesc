@@ -73,6 +73,9 @@ struct ImageDescriptor
     cl_uint numSamples;
 };
 
+using MemOffset  = size_t;
+using Coordinate = size_t;
+
 }  // namespace cl
 
 #endif  // LIBANGLE_CLTYPES_H_

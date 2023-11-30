@@ -115,7 +115,7 @@ angle::Result Image::getInfo(ImageInfo name,
 
 Image::~Image() = default;
 
-bool Image::isRegionValid(const size_t origin[3], const size_t region[3]) const
+bool Image::isRegionValid(const cl::MemOffset origin[3], const cl::Coordinate region[3]) const
 {
     switch (getType())
     {
