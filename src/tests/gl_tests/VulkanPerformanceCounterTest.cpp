@@ -3274,6 +3274,101 @@ TEST_P(VulkanPerformanceCounterTest, DepthFuncALWAYSWithDepthMaskDisabledShouldN
     EXPECT_DEPTH_STENCIL_OP_COUNTERS(getPerfCounters(), expected);
 }
 
+// Test
+TEST_P(VulkanPerformanceCounterTest, DepthFuncALWAYSWithDepthMaskEnabledShouldLoadStore)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+
+    angle::VulkanPerfCounters expected;
+
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupForDepthStencilOpsTest(&framebuffer, &texture, &renderbuffer);
+
+    // Expect rpCount+1, depth(Clears+0, Loads+0, LoadNones+0, Stores+1, StoreNones+0),
+    setExpectedCountersForDepthOps(getPerfCounters(), 1, 0, 0, 0, 1, 0, &expected);
+    if (hasDisallowMixedDepthStencilLoadOpNoneAndLoad())
+    {
+        // stencil(Clears+0, Loads+1, LoadNones+0, Stores+0, StoreNones+1)
+        setExpectedCountersForStencilOps(getPerfCounters(), 0, 1, 0, 0, 1, &expected);
+    }
+    else
+    {
+        // stencil(Clears+0, Loads+0, LoadNones+1, Stores+0, StoreNones+1)
+        setExpectedCountersForStencilOps(getPerfCounters(), 0, 0, 1, 0, 1, &expected);
+    }
+    // Initialize the buffers with known value
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_ALWAYS);
+    ANGLE_GL_PROGRAM(redProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.95f);
+    EXPECT_PIXEL_COLOR_EQ(kOpsTestSize / 2, kOpsTestSize / 2, GLColor::red);
+    EXPECT_DEPTH_STENCIL_OP_COUNTERS(getPerfCounters(), expected);
+
+    // Expect rpCount+1, depth(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0),
+    //                 stencil(Clears+0, Loads+0, LoadNones+1, Stores+0, StoreNones+1)
+    setExpectedCountersForDepthOps(getPerfCounters(), 1, 0, 1, 0, 1, 0, &expected);
+    setExpectedCountersForStencilOps(getPerfCounters(), 0, 0, 1, 0, 1, &expected);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_ALWAYS);
+    drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(kOpsTestSize / 2, kOpsTestSize / 2, GLColor::red);
+    EXPECT_DEPTH_STENCIL_OP_COUNTERS(getPerfCounters(), expected);
+}
+
+// Test
+TEST_P(VulkanPerformanceCounterTest,
+       DepthFuncALWAYSWithDepthMaskDisabledAndThenEnabledWithMidRenderPassClearShouldStore)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+
+    angle::VulkanPerfCounters expected;
+
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupForDepthStencilOpsTest(&framebuffer, &texture, &renderbuffer);
+
+    // Expect rpCount+1, depth(Clears+0, Loads+0, LoadNones+0, Stores+1, StoreNones+0),
+    setExpectedCountersForDepthOps(getPerfCounters(), 1, 0, 0, 0, 1, 0, &expected);
+    if (hasDisallowMixedDepthStencilLoadOpNoneAndLoad())
+    {
+        // stencil(Clears+0, Loads+1, LoadNones+0, Stores+0, StoreNones+1)
+        setExpectedCountersForStencilOps(getPerfCounters(), 0, 1, 0, 0, 1, &expected);
+    }
+    else
+    {
+        // stencil(Clears+0, Loads+0, LoadNones+1, Stores+0, StoreNones+1)
+        setExpectedCountersForStencilOps(getPerfCounters(), 0, 0, 1, 0, 1, &expected);
+    }
+    // Initialize the buffers with known value
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_ALWAYS);
+    ANGLE_GL_PROGRAM(redProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.95f);
+    EXPECT_PIXEL_COLOR_EQ(kOpsTestSize / 2, kOpsTestSize / 2, GLColor::red);
+    EXPECT_DEPTH_STENCIL_OP_COUNTERS(getPerfCounters(), expected);
+
+    // Expect rpCount+1, depth(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0),
+    //                 stencil(Clears+0, Loads+0, LoadNones+1, Stores+0, StoreNones+1)
+    setExpectedCountersForDepthOps(getPerfCounters(), 1, 0, 1, 0, 1, 0, &expected);
+    setExpectedCountersForStencilOps(getPerfCounters(), 0, 0, 1, 0, 1, &expected);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+    glDepthFunc(GL_ALWAYS);
+    drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    glDepthMask(GL_TRUE);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(kOpsTestSize / 2, kOpsTestSize / 2, GLColor::red);
+    EXPECT_DEPTH_STENCIL_OP_COUNTERS(getPerfCounters(), expected);
+}
+
 // Tests that the renderpass is using depthFunc(GL_ALWAYS) and depthMask(GL_FALSE) and draw. Then it
 // followed by glClear, it should not load or store depth value.
 TEST_P(VulkanPerformanceCounterTest,
