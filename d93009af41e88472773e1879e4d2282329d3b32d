@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bafc66b_2d8b660e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T14:57:23Z",
+      "side": 1,
+      "message": "Parallelizing review; this needs to land after https://chromium-review.googlesource.com/c/chromium/src/+/5063432 lands and rolls into ANGLE",
+      "revId": "d93009af41e88472773e1879e4d2282329d3b32d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
