@@ -219,16 +219,29 @@ Kernel::~Kernel()
     --mProgram->mNumAttachedKernels;
 }
 
-Kernel::Kernel(Program &program, const char *name, cl_int &errorCode)
+Kernel::Kernel(Program &program, const char *name)
     : mProgram(&program),
-      mImpl(program.getImpl().createKernel(*this, name, errorCode)),
-      mInfo(mImpl ? mImpl->createInfo(errorCode) : rx::CLKernelImpl::Info{})
+      mImpl([&]() -> rx::CLKernelImpl::Ptr {
+          rx::CLKernelImpl::Ptr implPtr = nullptr;
+          return IsError(program.getImpl().createKernel(*this, name, &implPtr))
+                     ? nullptr
+                     : std::move(implPtr);
+      }()),
+      mInfo([&]() -> rx::CLKernelImpl::Info {
+          rx::CLKernelImpl::Info infoRet;
+          return mImpl && !IsError(mImpl->createInfo(infoRet)) ? std::move(infoRet)
+                                                               : rx::CLKernelImpl::Info{};
+      }())
 {
     ++mProgram->mNumAttachedKernels;
 }
 
-Kernel::Kernel(Program &program, const rx::CLKernelImpl::CreateFunc &createFunc, cl_int &errorCode)
-    : mProgram(&program), mImpl(createFunc(*this)), mInfo(mImpl->createInfo(errorCode))
+Kernel::Kernel(Program &program, const rx::CLKernelImpl::CreateFunc &createFunc)
+    : mProgram(&program), mImpl(createFunc(*this)), mInfo([&]() -> rx::CLKernelImpl::Info {
+          rx::CLKernelImpl::Info infoRet;
+          return mImpl && !IsError(mImpl->createInfo(infoRet)) ? std::move(infoRet)
+                                                               : rx::CLKernelImpl::Info{};
+      }())
 {
     ++mProgram->mNumAttachedKernels;
 }
