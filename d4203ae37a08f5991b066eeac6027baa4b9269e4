@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a26809d6_1d9021ff",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T15:10:54Z",
+      "side": 1,
+      "message": "nit: suggest decoupling what the transformation does from who the transformation is for. This kind of entanglement doesn\u0027t usually age well.\n\nHow about `preTransformTextureCubeGradDerivatives`?",
+      "range": {
+        "startLine": 439,
+        "startChar": 13,
+        "endLine": 439,
+        "endChar": 38
+      },
+      "revId": "d4203ae37a08f5991b066eeac6027baa4b9269e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "914344d9_7f35c341",
+        "filename": "include/platform/gl_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T15:10:54Z",
+      "side": 1,
+      "message": "Same note about untangling the function from the target",
+      "range": {
+        "startLine": 220,
+        "startChar": 21,
+        "endLine": 220,
+        "endChar": 50
+      },
+      "revId": "d4203ae37a08f5991b066eeac6027baa4b9269e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93a43e08_4807d24d",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T15:10:54Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 197,
+        "startChar": 21,
+        "endLine": 197,
+        "endChar": 50
+      },
+      "revId": "d4203ae37a08f5991b066eeac6027baa4b9269e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9725566d_ad852e41",
+        "filename": "src/compiler/translator/tree_ops/RewriteTextureCubeGrad.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T15:10:54Z",
+      "side": 1,
+      "message": "nit: You can remove a lot of duplicate `StaticType::Get` calls throughout this function if you cache a few of them upfront; also helps readability:\n\n```\nconst TType *vec3Type \u003d StaticType::GetTemporary\u003cEbtFloat, EbpMedium, 3\u003e();\nconst TType *vec4Type \u003d StaticType::GetTemporary\u003cEbtFloat, EbpMedium, 4\u003e();\nconst TType *vec3InType \u003d StaticType::GetQualified\u003cEbtFloat, EbpMedium, EvqParamIn, 3\u003e();\nconst TType *vec4InType \u003d StaticType::GetQualified\u003cEbtFloat, EbpMedium, EvqParamIn, 4\u003e();\n```",
+      "revId": "d4203ae37a08f5991b066eeac6027baa4b9269e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ebe3e92_5e26845f",
+        "filename": "src/compiler/translator/tree_ops/RewriteTextureCubeGrad.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T15:10:54Z",
+      "side": 1,
+      "message": "nit: we tend to avoid lambdas in ANGLE if we can help it. Lambdas are inherently slower than function calls (due to type erasure), and while this particular case is probably optimized away by the compiler, there\u0027s little benefit to it (makes this function longer, stack trace inside is not as nice to see etc).\n\nJust use a helper function above!",
+      "revId": "d4203ae37a08f5991b066eeac6027baa4b9269e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6b2da47_5c8f628e",
+        "filename": "src/compiler/translator/tree_ops/RewriteTextureCubeGrad.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T15:10:54Z",
+      "side": 1,
+      "message": "While you\u0027re at it, why not make `addSwizzleStatement` create the variable and return it?",
+      "revId": "d4203ae37a08f5991b066eeac6027baa4b9269e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0971c9a4_28c2012b",
+        "filename": "src/compiler/translator/tree_ops/RewriteTextureCubeGrad.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-11-30T15:10:54Z",
+      "side": 1,
+      "message": "```suggestion\n    {\n        ASSERT(mNewFunctionType !\u003d EbtVoid);\n```",
+      "revId": "d4203ae37a08f5991b066eeac6027baa4b9269e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
