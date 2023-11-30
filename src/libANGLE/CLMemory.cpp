@@ -158,30 +158,34 @@ Memory::Memory(const Buffer &buffer,
                PropArray &&properties,
                MemFlags flags,
                size_t size,
-               void *hostPtr,
-               cl_int &errorCode)
+               void *hostPtr)
     : mContext(&context),
       mProperties(std::move(properties)),
       mFlags(flags),
       mHostPtr(flags.isSet(CL_MEM_USE_HOST_PTR) ? hostPtr : nullptr),
-      mImpl(context.getImpl().createBuffer(buffer, size, hostPtr, errorCode)),
+      mImpl([&]() -> rx::CLMemoryImpl::Ptr {
+          rx::CLMemoryImpl::Ptr implPtr = nullptr;
+          return IsError(context.getImpl().createBuffer(buffer, size, hostPtr, implPtr))
+                     ? nullptr
+                     : std::move(implPtr);
+      }()),
       mSize(size),
       mMapCount(0u)
 {}
 
-Memory::Memory(const Buffer &buffer,
-               Buffer &parent,
-               MemFlags flags,
-               size_t offset,
-               size_t size,
-               cl_int &errorCode)
+Memory::Memory(const Buffer &buffer, Buffer &parent, MemFlags flags, size_t offset, size_t size)
     : mContext(parent.mContext),
       mFlags(InheritMemFlags(flags, &parent)),
       mHostPtr(parent.mHostPtr != nullptr ? static_cast<char *>(parent.mHostPtr) + offset
                                           : nullptr),
       mParent(&parent),
       mOffset(offset),
-      mImpl(parent.mImpl->createSubBuffer(buffer, flags, size, errorCode)),
+      mImpl([&]() -> rx::CLMemoryImpl::Ptr {
+          rx::CLMemoryImpl::Ptr implPtr = nullptr;
+          return IsError(parent.mImpl->createSubBuffer(buffer, flags, size, implPtr))
+                     ? nullptr
+                     : std::move(implPtr);
+      }()),
       mSize(size),
       mMapCount(0u)
 {}
@@ -193,15 +197,23 @@ Memory::Memory(const Image &image,
                const cl_image_format &format,
                const ImageDescriptor &desc,
                Memory *parent,
-               void *hostPtr,
-               cl_int &errorCode)
+               void *hostPtr)
     : mContext(&context),
       mProperties(std::move(properties)),
       mFlags(InheritMemFlags(flags, parent)),
       mHostPtr(flags.isSet(CL_MEM_USE_HOST_PTR) ? hostPtr : nullptr),
       mParent(parent),
-      mImpl(context.getImpl().createImage(image, flags, format, desc, hostPtr, errorCode)),
-      mSize(mImpl ? mImpl->getSize(errorCode) : 0u),
+      mImpl([&]() -> rx::CLMemoryImpl::Ptr {
+          rx::CLMemoryImpl::Ptr implPtr = nullptr;
+          return IsError(
+                     context.getImpl().createImage(image, flags, format, desc, hostPtr, implPtr))
+                     ? nullptr
+                     : std::move(implPtr);
+      }()),
+      mSize([&]() -> size_t {
+          size_t retSize = 0;
+          return mImpl && !IsError(mImpl->getSize(retSize)) ? retSize : 0u;
+      }()),
       mMapCount(0u)
 {}
 

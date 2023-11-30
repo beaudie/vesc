@@ -89,14 +89,17 @@ Sampler::Sampler(Context &context,
                  PropArray &&properties,
                  cl_bool normalizedCoords,
                  AddressingMode addressingMode,
-                 FilterMode filterMode,
-                 cl_int &errorCode)
+                 FilterMode filterMode)
     : mContext(&context),
       mProperties(std::move(properties)),
       mNormalizedCoords(normalizedCoords),
       mAddressingMode(addressingMode),
       mFilterMode(filterMode),
-      mImpl(context.getImpl().createSampler(*this, errorCode))
+      mImpl([&]() -> rx::CLSamplerImpl::Ptr {
+          rx::CLSamplerImpl::Ptr implPtr = nullptr;
+          return IsError(context.getImpl().createSampler(*this, implPtr)) ? nullptr
+                                                                          : std::move(implPtr);
+      }())
 {}
 
 }  // namespace cl
