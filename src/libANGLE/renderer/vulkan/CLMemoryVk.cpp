@@ -16,13 +16,6 @@ CLMemoryVk::CLMemoryVk(const cl::Memory &memory) : CLMemoryImpl(memory) {}
 
 CLMemoryVk::~CLMemoryVk() = default;
 
-angle::Result CLMemoryVk::getSize(size_t &sizeRet) const
-{
-    UNIMPLEMENTED();
-    // TODO(annestrand) Placeholder error for now
-    ANGLE_CL_ERROR(CL_OUT_OF_RESOURCES);
-}
-
 angle::Result CLMemoryVk::createSubBuffer(const cl::Buffer &buffer,
                                           cl::MemFlags flags,
                                           size_t size,
