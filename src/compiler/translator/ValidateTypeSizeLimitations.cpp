@@ -24,10 +24,10 @@ namespace
 // Arbitrarily enforce that all types declared with a size in bytes of over 2 GB will cause
 // compilation failure.
 //
-// For local and global variables, the limit is much lower (16MB) as that much memory won't fit in
+// For local and global variables, the limit is much lower (32KB) as that much memory won't fit in
 // the GPU registers anyway.
 constexpr size_t kMaxVariableSizeInBytes        = static_cast<size_t>(2) * 1024 * 1024 * 1024;
-constexpr size_t kMaxPrivateVariableSizeInBytes = static_cast<size_t>(16) * 1024 * 1024;
+constexpr size_t kMaxPrivateVariableSizeInBytes = static_cast<size_t>(32) * 1024;
 
 // Traverses intermediate tree to ensure that the shader does not
 // exceed certain implementation-defined limits on the sizes of types.
@@ -111,6 +111,8 @@ class ValidateTypeSizeLimitationsTraverser : public TIntermTraverser
 
         return true;
     }
+
+    // TODO: do the same for arguments of the function.  Count them as private variables.
 
     void validateTotalPrivateVariableSize()
     {
