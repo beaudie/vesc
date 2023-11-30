@@ -933,7 +933,7 @@ gl::AttributesMask VertexArrayVk::mergeClientAttribsRange(
     const std::vector<gl::VertexAttribute> &attribs = mState.getVertexAttributes();
     const std::vector<gl::VertexBinding> &bindings  = mState.getVertexBindings();
     gl::AttributesMask attributeMaskCanCombine;
-    std::vector<size_t> combinedIndexes;
+    angle::FastVector<size_t, gl::MAX_VERTEX_ATTRIBS> combinedIndexes;
     for (size_t attribIndex : activeStreamedAttribs)
     {
         const gl::VertexAttribute &attrib = attribs[attribIndex];
@@ -964,7 +964,7 @@ gl::AttributesMask VertexArrayVk::mergeClientAttribsRange(
         return mergeRangesOut[a] < mergeRangesOut[b];
     };
     // Only sort combined range indexes.
-    std::sort(combinedIndexes.begin(), combinedIndexes.end(), comp);
+    std::sort(combinedIndexes.data(), combinedIndexes.data() + combinedIndexes.size(), comp);
     // Merge combined range span.
     auto next = combinedIndexes.begin();
     auto cur  = next++;
