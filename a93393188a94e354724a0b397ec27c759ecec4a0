@@ -22,6 +22,30 @@
       },
       "revId": "a93393188a94e354724a0b397ec27c759ecec4a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "672f5c90_b2a73ff5",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-11-30T18:11:53Z",
+      "side": 1,
+      "message": "ah yes, FixedVector is perfect, thanks",
+      "parentUuid": "236105b6_75f92df8",
+      "range": {
+        "startLine": 936,
+        "startChar": 11,
+        "endLine": 936,
+        "endChar": 21
+      },
+      "revId": "a93393188a94e354724a0b397ec27c759ecec4a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
