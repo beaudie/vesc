@@ -82,8 +82,8 @@ class Rescoper : public TIntermTraverser
     void visitSymbol(TIntermSymbol *node) override
     {
         const TVariable &var = node->variable();
-         // Check that the symbol is in the globals list, but is not LHS of
-         // the current global initialiser
+        // Check that the symbol is in the globals list, but is not LHS of
+        // the current global initialiser
         if (&var != mCurrentGlobal &&
             mGlobalVarsNeedRescope.find(&var) != mGlobalVarsNeedRescope.end())
         {
