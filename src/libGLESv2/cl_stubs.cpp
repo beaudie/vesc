@@ -235,6 +235,14 @@ cl_int RetainCommandQueue(cl_command_queue command_queue)
 cl_int ReleaseCommandQueue(cl_command_queue command_queue)
 {
     CommandQueue &queue = command_queue->cast<CommandQueue>();
+
+    // We need to ensure queue is flushed/finished prior to releasing
+    // https://registry.khronos.org/OpenCL/specs/3.0-unified/html/OpenCL_API.html#_flush_and_finish
+    if (IsError(queue.finish()))
+    {
+        WARN() << "Failed to perform finish on queue!";
+    }
+
     if (queue.release())
     {
         delete &queue;
