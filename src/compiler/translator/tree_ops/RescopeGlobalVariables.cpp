@@ -45,6 +45,8 @@ class Rescoper : public TIntermTraverser
         {
             if (pair.second.functions.size() == 1)
             {
+                // Function* may be a nullptr if the variable was used in a
+                // global initializer. Don't rescope, bug: angleproject:8403
                 if (TIntermFunctionDefinition *func = *pair.second.functions.begin())
                 {
                     TIntermSequence *funcSequence = func->getBody()->getSequence();
@@ -80,6 +82,8 @@ class Rescoper : public TIntermTraverser
     void visitSymbol(TIntermSymbol *node) override
     {
         const TVariable &var = node->variable();
+         // Check that the symbol is in the globals list, but is not LHS of
+         // the current global initialiser
         if (&var != mCurrentGlobal &&
             mGlobalVarsNeedRescope.find(&var) != mGlobalVarsNeedRescope.end())
         {
@@ -105,6 +109,9 @@ class Rescoper : public TIntermTraverser
                 mGlobalVarsNeedRescope.at(&var).declaration = node;
             }
 
+            // A declaration outside function definition context would be a
+            // global variable, set the flag to avoid rescoping any variables
+            // used in initializers.
             if (!mCurrentFunction)
             {
                 mCurrentGlobal = &var;
