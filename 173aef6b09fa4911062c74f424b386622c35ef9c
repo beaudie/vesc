@@ -94,6 +94,30 @@
       },
       "revId": "173aef6b09fa4911062c74f424b386622c35ef9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b8f243b_5ea45117",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-01T23:11:17Z",
+      "side": 1,
+      "message": "That\u0027s basically the `LotsOfFieldsInStruct` test 😊",
+      "parentUuid": "d0fcc11c_3e053635",
+      "range": {
+        "startLine": 18298,
+        "startChar": 4,
+        "endLine": 18298,
+        "endChar": 26
+      },
+      "revId": "173aef6b09fa4911062c74f424b386622c35ef9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
