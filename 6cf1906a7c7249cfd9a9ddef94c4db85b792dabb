@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf88be23_a9dd58c2",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-01T16:58:46Z",
+      "side": 1,
+      "message": "Per our style, please don\u0027t do `if (x \u003d y)`. Instead, do `x \u003d y; if (x !\u003d nullptr)`.",
+      "revId": "6cf1906a7c7249cfd9a9ddef94c4db85b792dabb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
