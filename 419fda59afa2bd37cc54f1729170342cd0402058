@@ -22,6 +22,30 @@
       },
       "revId": "419fda59afa2bd37cc54f1729170342cd0402058",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13a5dc6c_d2e0b3a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-12-01T14:49:42Z",
+      "side": 1,
+      "message": "Thanks, yeah let\u0027s do this anyways to try to make some progress",
+      "parentUuid": "2b3c97d4_f85820e2",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "419fda59afa2bd37cc54f1729170342cd0402058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
