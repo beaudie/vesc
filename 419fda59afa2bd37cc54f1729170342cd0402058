@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b3c97d4_f85820e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-12-01T14:48:25Z",
+      "side": 1,
+      "message": "I don\u0027t believe this is the case.\n--delete_unversioned_trees would only do something if we previously had DEPS entry that is removed now.\nThis would be extremely rare.\nLike Josip points out in https://issuetracker.google.com/issues/305091097#comment7 we delete submodules explicitly, which is the common case, and which is the behavior that we want.\n\nRemoving this flag would leave stale files in autoroller repo, but again, this would be very rare, so I don\u0027t mind.\nJust to prove to Gerrit folks that the problem is on their side and not ours.",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "419fda59afa2bd37cc54f1729170342cd0402058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
