@@ -118,6 +118,30 @@
       },
       "revId": "173aef6b09fa4911062c74f424b386622c35ef9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22a77ec8_eb86ee5d",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18298,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-12-01T23:39:48Z",
+      "side": 1,
+      "message": "All minor, just to explain my point: as you pointed out there was a mistake in _this_ test. Structuring the test in a way where it first checks for success, then checks for failure would\u0027ve likely avoided that. It\u0027s better than creating separate tests because those can then diverge in future and a new mistake might sneak in. If the test is structured as pass(x) followed by fail(x+delta), then the mistake would have to be introduced in the delta, which is less likely. In this case the delta could be simply the number of repetitions, so introducing a mistake would be very unlikely.",
+      "parentUuid": "3b8f243b_5ea45117",
+      "range": {
+        "startLine": 18298,
+        "startChar": 4,
+        "endLine": 18298,
+        "endChar": 26
+      },
+      "revId": "173aef6b09fa4911062c74f424b386622c35ef9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
