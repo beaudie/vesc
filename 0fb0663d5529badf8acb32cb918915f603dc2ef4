@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f2f763b_547b2826",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-01T19:44:26Z",
+      "side": 1,
+      "message": "+1, and unroll the loop. You will know exactly which pixel failed, the list is only a few pixels anyway.",
+      "parentUuid": "5eccf805_03d81275",
+      "range": {
+        "startLine": 1016,
+        "startChar": 9,
+        "endLine": 1016,
+        "endChar": 32
+      },
+      "revId": "0fb0663d5529badf8acb32cb918915f603dc2ef4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58d8dbd8_3b1ec4d2",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 14
