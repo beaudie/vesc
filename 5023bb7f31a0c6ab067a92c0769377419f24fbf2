@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ddbc048_607e0344",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-01T18:42:32Z",
+      "side": 1,
+      "message": "```suggestion\n                // global initializer. Don\u0027t rescope, http://anglebug.com/8403\n```",
+      "revId": "5023bb7f31a0c6ab067a92c0769377419f24fbf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
