@@ -16,6 +16,24 @@
       "message": "```suggestion\n                // global initializer. Don\u0027t rescope, http://anglebug.com/8403\n```",
       "revId": "5023bb7f31a0c6ab067a92c0769377419f24fbf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b37385c6_c436deba",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2023-12-01T18:47:40Z",
+      "side": 1,
+      "message": "Oops, just pressed \"submit to CQ\", will do it separately if CQ goes through",
+      "parentUuid": "3ddbc048_607e0344",
+      "revId": "5023bb7f31a0c6ab067a92c0769377419f24fbf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
