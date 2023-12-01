@@ -117,6 +117,31 @@ TIntermTyped *MakeMatrix(const std::array<float, 9> &elements)
     return TIntermAggregate::CreateConstructor(*matType, &matrix);
 }
 
+TIntermTyped *MakeVector(float x, float y, float z)
+{
+    TIntermSequence values;
+    values.push_back(CreateFloatNode(x, EbpHigh));
+    values.push_back(CreateFloatNode(y, EbpHigh));
+    values.push_back(CreateFloatNode(z, EbpHigh));
+
+    const TType *vecType = StaticType::GetBasic<EbtFloat, EbpHigh, 3>();
+    return TIntermAggregate::CreateConstructor(*vecType, &values);
+}
+
+TIntermConstantUnion *CreateIntConstantNode(int i)
+{
+    TConstantUnion *constant = new TConstantUnion();
+    constant->setIConst(i);
+    return new TIntermConstantUnion(constant, TType(EbtInt, EbpHigh));
+}
+
+TIntermConstantUnion *CreateFloatConstantNode(float f)
+{
+    TConstantUnion *constant = new TConstantUnion();
+    constant->setFConst(f);
+    return new TIntermConstantUnion(constant, TType(EbtFloat, EbpHigh));
+}
+
 const TFunction *EmulateYUVBuiltInsTraverser::getYUV2RGBFunc(TPrecision precision)
 {
     const char *name = "ANGLE_yuv_2_rgb";
@@ -135,15 +160,129 @@ const TFunction *EmulateYUVBuiltInsTraverser::getYUV2RGBFunc(TPrecision precisio
             UNREACHABLE();
     }
 
-    constexpr std::array<float, 9> itu601Matrix = {
-        1.0, 1.0, 1.0, 0.0, -0.3441, 1.7720, 1.4020, -0.7141, 0.0,
-    };
+    if (mYUV2RGBFuncDefs[precision] != nullptr)
+    {
+        return mYUV2RGBFuncDefs[precision]->getFunction();
+    }
 
-    constexpr std::array<float, 9> itu709Matrix = {1.0,    1.0,    1.0,     0.0, -0.1873,
-                                                   1.8556, 1.5748, -0.4681, 0.0};
+    // The function prototype is vec3 name(vec3 color, yuvCscStandardEXT conv_standard)
+    TType *vec3Type = new TType(*StaticType::GetBasic<EbtFloat, EbpMedium, 3>());
+    vec3Type->setPrecision(precision);
+    const TType *yuvCscType = StaticType::GetBasic<EbtYuvCscStandardEXT, EbpUndefined>();
 
-    return getYUVFunc(precision, name, MakeMatrix(itu601Matrix), MakeMatrix(itu709Matrix),
-                      &mYUV2RGBFuncDefs[precision]);
+    TType *colorType = new TType(*vec3Type);
+    TType *convType  = new TType(*yuvCscType);
+    colorType->setQualifier(EvqParamIn);
+    convType->setQualifier(EvqParamIn);
+
+    TVariable *colorParam =
+        new TVariable(mSymbolTable, ImmutableString("color"), colorType, SymbolType::AngleInternal);
+    TVariable *convParam = new TVariable(mSymbolTable, ImmutableString("conv_standard"), convType,
+                                         SymbolType::AngleInternal);
+
+    TFunction *function = new TFunction(mSymbolTable, ImmutableString(name),
+                                        SymbolType::AngleInternal, vec3Type, true);
+    function->addParameter(colorParam);
+    function->addParameter(convParam);
+
+    TIntermBlock *body = new TIntermBlock;
+
+    TConstantUnion *itu709 = new TConstantUnion;
+    itu709->setYuvCscStandardEXTConst(EycsItu709);
+    TConstantUnion *itu601FullRange = new TConstantUnion;
+    itu601FullRange->setYuvCscStandardEXTConst(EycsItu601FullRange);
+
+    TIntermDeclaration *kRDecl = nullptr;
+    TVariable *kR = DeclareTempVariable(mSymbolTable,
+            new TIntermTernary(
+                new TIntermBinary(EOpEqual,
+                    new TIntermSymbol(convParam),
+                    new TIntermConstantUnion(itu709, *yuvCscType)),
+                CreateFloatConstantNode(0.2126f),
+                CreateFloatConstantNode(0.229f)),
+            EvqTemporary,
+            &kRDecl);
+    body->appendStatement(kRDecl);
+
+    TIntermDeclaration *kBDecl = nullptr;
+    TVariable *kB = DeclareTempVariable(mSymbolTable,
+            new TIntermTernary(
+                new TIntermBinary(EOpEqual,
+                    new TIntermSymbol(convParam),
+                    new TIntermConstantUnion(itu709, *yuvCscType)),
+                CreateFloatConstantNode(0.0722f),
+                CreateFloatConstantNode(0.114f)),
+            EvqTemporary,
+            &kBDecl);
+    body->appendStatement(kBDecl);
+
+    TIntermDeclaration *expandedDecl = nullptr;
+    TVariable *expanded = DeclareTempVariable(mSymbolTable,
+            new TIntermTernary(
+                new TIntermBinary(EOpEqual,
+                    new TIntermSymbol(convParam),
+                    new TIntermConstantUnion(itu601FullRange, *yuvCscType)),
+                new TIntermBinary(EOpAdd, new TIntermSymbol(colorParam), MakeVector(0.f, -128/255.f, -128/255.f)),
+                new TIntermBinary(EOpMul, MakeVector(255.f/219.f, 255.f/224.f, 255.f/224.f),
+                        new TIntermBinary(EOpAdd, new TIntermSymbol(colorParam), MakeVector(-16.f/255.f, -128/255.f, -128/255.f)))),
+            EvqTemporary,
+            &expandedDecl);
+    body->appendStatement(expandedDecl);
+
+    TIntermBinary *y = new TIntermBinary(EOpIndexDirect, new TIntermSymbol(expanded), CreateIntConstantNode(0));
+    TIntermBinary *cb = new TIntermBinary(EOpIndexDirect, new TIntermSymbol(expanded), CreateIntConstantNode(1));
+    TIntermBinary *cr = new TIntermBinary(EOpIndexDirect, new TIntermSymbol(expanded), CreateIntConstantNode(2));
+
+    // r = cr * (1 - kr) * 2 + y
+    TIntermDeclaration *outRedDecl = nullptr;
+    TVariable *outRed = DeclareTempVariable(mSymbolTable,
+            new TIntermBinary(EOpAdd, y->deepCopy(),
+                new TIntermBinary(EOpMul, CreateFloatConstantNode(2.f),
+                    new TIntermBinary(EOpMul,
+                        cr, new TIntermBinary(EOpSub, CreateFloatConstantNode(1.f), new TIntermSymbol(kR))))),
+            EvqTemporary,
+            &outRedDecl);
+    body->appendStatement(outRedDecl);
+
+    // b = cb * (1 - kb) * 2 + y
+    TIntermDeclaration *outBlueDecl = nullptr;
+    TVariable *outBlue = DeclareTempVariable(mSymbolTable,
+            new TIntermBinary(EOpAdd, y->deepCopy(),
+                new TIntermBinary(EOpMul, CreateFloatConstantNode(2.f),
+                    new TIntermBinary(EOpMul,
+                        cb, new TIntermBinary(EOpSub, CreateFloatConstantNode(1.f), new TIntermSymbol(kB))))),
+            EvqTemporary,
+            &outBlueDecl);
+    body->appendStatement(outBlueDecl);
+
+    // g = (y - kr * r - kb * b) / (1 - kr - kb)
+    TIntermDeclaration *outGreenDecl = nullptr;
+    TVariable *outGreen = DeclareTempVariable(mSymbolTable,
+            new TIntermBinary(EOpDiv,
+                new TIntermBinary(EOpSub,       // y - kr*r - kb*b
+                    new TIntermBinary(EOpSub,
+                        y,
+                        new TIntermBinary(EOpMul, new TIntermSymbol(kR), new TIntermSymbol(outRed))),
+                    new TIntermBinary(EOpMul, new TIntermSymbol(kB), new TIntermSymbol(outBlue))),
+                new TIntermBinary(EOpSub,       // 1 - kr - kb
+                    new TIntermBinary(EOpSub,
+                        CreateFloatConstantNode(1.f),
+                        new TIntermSymbol(kR)),
+                    new TIntermSymbol(kB))),
+            EvqTemporary,
+            &outGreenDecl);
+    body->appendStatement(outGreenDecl);
+
+    // return vec3(r,g,b)
+    TIntermSequence resultValues;
+    resultValues.push_back(new TIntermSymbol(outRed));
+    resultValues.push_back(new TIntermSymbol(outGreen));
+    resultValues.push_back(new TIntermSymbol(outBlue));
+    body->appendStatement(new TIntermBranch(EOpReturn, 
+                TIntermAggregate::CreateConstructor(*vec3Type, &resultValues)));
+
+    mYUV2RGBFuncDefs[precision] = new TIntermFunctionDefinition(new TIntermFunctionPrototype(function), body);
+    return function;
 }
 
 const TFunction *EmulateYUVBuiltInsTraverser::getRGB2YUVFunc(TPrecision precision)
@@ -220,13 +359,19 @@ const TFunction *EmulateYUVBuiltInsTraverser::getYUVFunc(TPrecision precision,
     //     // error
     //     return vec3(0.0);
 
+    // preprocess
+    TType *biasedType = new TType(*vec3Type);
+    TIntermTyped *biased = new TIntermBinary(EOpAdd, new TIntermSymbol(colorParam), MakeVector(-16.f/255.f, -0.5f, -0.5f));
+    TType *scaledType = new TType(*vec3Type);
+    TIntermTyped *scaled = new TIntermBinary(EOpMul, biased, MakeVector(255.f/219.f, 255.f/224.f, 255.f/224.f));
+
     // Matrix * color
     TIntermTyped *itu601Mul =
-        new TIntermBinary(EOpMatrixTimesVector, itu601Matrix, new TIntermSymbol(colorParam));
+        new TIntermBinary(EOpMatrixTimesVector, itu601Matrix, scaled);
     TIntermTyped *itu601FullRangeMul = new TIntermBinary(
-        EOpMatrixTimesVector, itu601Matrix->deepCopy(), new TIntermSymbol(colorParam));
+        EOpMatrixTimesVector, itu601Matrix->deepCopy(), scaled->deepCopy());
     TIntermTyped *itu709Mul =
-        new TIntermBinary(EOpMatrixTimesVector, itu709Matrix, new TIntermSymbol(colorParam));
+        new TIntermBinary(EOpMatrixTimesVector, itu709Matrix, scaled->deepCopy());
 
     // return Matrix * color
     TIntermBranch *returnItu601Mul          = new TIntermBranch(EOpReturn, itu601Mul);
