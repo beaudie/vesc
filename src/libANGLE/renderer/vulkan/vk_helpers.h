@@ -1139,6 +1139,10 @@ class CommandBufferHelperCommon : angle::NonCopyable
         return buffer.writtenByCommandBuffer(mQueueSerial);
     }
 
+    bool usesImage(const ImageHelper &image) const;
+
+    bool usesImageForWrite(const ImageHelper &image) const;
+
     void executeBarriers(const angle::FeaturesVk &features, CommandsState *commandsState);
 
     // The markOpen and markClosed functions are to aid in proper use of the *CommandBufferHelper.
@@ -1795,6 +1799,21 @@ enum class ImageLayout
     EnumCount = InvalidEnum,
 };
 
+// TODO: Read-only layouts for which images would not need a barrier to transition to the same
+// layout.
+// constexpr std::set<ImageLayout> kReadOnlyImageLayouts = {
+//    ImageLayout::DepthReadStencilRead,
+//    ImageLayout::DepthReadStencilReadFragmentShaderRead,
+//    ImageLayout::DepthReadStencilReadAllShadersRead,
+//    ImageLayout::ExternalShadersReadOnly,
+//    ImageLayout::TransferSrc,
+//    ImageLayout::VertexShaderReadOnly,
+//    ImageLayout::PreFragmentShadersReadOnly,
+//    ImageLayout::FragmentShaderReadOnly,
+//    ImageLayout::ComputeShaderReadOnly,
+//    ImageLayout::AllGraphicsShadersReadOnly,
+//};
+
 VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType);
 
 ImageLayout GetImageLayoutFromGLImageLayout(Context *context, GLenum layout);
@@ -1847,7 +1866,7 @@ bool CanCopyWithTransfer(RendererVk *renderer,
                          VkImageTiling dstTilingMode);
 
 class ImageViewHelper;
-class ImageHelper final : public Resource, public angle::Subject
+class ImageHelper final : public ReadWriteResource, public angle::Subject
 {
   public:
     ImageHelper();
