@@ -1429,6 +1429,9 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
             extents.depth = 1;
         }
 
+        contextVk->addImageLayoutUsage(srcImage);
+        contextVk->addImageLayoutUsage(&stagingImage->get());
+
         vk::ImageHelper::Copy(contextVk, srcImage, &stagingImage->get(), srcOffset, gl::kOffsetZero,
                               extents, srcSubresource, destSubresource, commandBuffer);
 
@@ -2238,6 +2241,8 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
             UtilsVk::GenerateMipmapParameters params = {};
             params.srcLevel                          = srcLevelVk.get();
             params.dstLevelCount                     = dstLevelCount.get();
+
+            contextVk->addImageLayoutUsage(mImage);
 
             ANGLE_TRY(contextVk->getUtils().generateMipmap(
                 contextVk, mImage, srcView, mImage, destLevelViews, sampler.get().get(), params));

@@ -1291,6 +1291,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::copyBuffer(const Buffer &srcBuffer,
     storePointerParameter(writePtr, regions, regionSize);
 }
 
+// TODO: Add image layout info for where the copy image ops below are used, including compute.
 ANGLE_INLINE void SecondaryCommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
                                                             const Image &dstImage,
                                                             VkImageLayout dstImageLayout,
