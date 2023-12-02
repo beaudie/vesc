@@ -702,6 +702,9 @@ class PipelineBarrier : angle::NonCopyable
         ASSERT(imageMemoryBarrier.pNext == nullptr);
         mSrcStageMask |= srcStageMask;
         mDstStageMask |= dstStageMask;
+        //        WARN() << "Added image barrier for " << imageMemoryBarrier.image << " | "
+        //               << imageMemoryBarrier.oldLayout << " to " << imageMemoryBarrier.newLayout
+        //               << " | Vec size: " << mImageMemoryBarriers.size() + 1;
         mImageMemoryBarriers.push_back(imageMemoryBarrier);
     }
 
@@ -1138,6 +1141,10 @@ class CommandBufferHelperCommon : angle::NonCopyable
     {
         return buffer.writtenByCommandBuffer(mQueueSerial);
     }
+
+    bool usesImage(const ImageHelper &image) const;
+
+    bool usesImageForWrite(const ImageHelper &image) const;
 
     void executeBarriers(const angle::FeaturesVk &features, CommandsState *commandsState);
 
@@ -1795,6 +1802,21 @@ enum class ImageLayout
     EnumCount = InvalidEnum,
 };
 
+// TODO: Read-only layouts for which images would not need a barrier to transition to the same
+// layout.
+// constexpr std::set<ImageLayout> kReadOnlyImageLayouts = {
+//    ImageLayout::DepthReadStencilRead,
+//    ImageLayout::DepthReadStencilReadFragmentShaderRead,
+//    ImageLayout::DepthReadStencilReadAllShadersRead,
+//    ImageLayout::ExternalShadersReadOnly,
+//    ImageLayout::TransferSrc,
+//    ImageLayout::VertexShaderReadOnly,
+//    ImageLayout::PreFragmentShadersReadOnly,
+//    ImageLayout::FragmentShaderReadOnly,
+//    ImageLayout::ComputeShaderReadOnly,
+//    ImageLayout::AllGraphicsShadersReadOnly,
+//};
+
 VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType);
 
 ImageLayout GetImageLayoutFromGLImageLayout(Context *context, GLenum layout);
@@ -1847,7 +1869,7 @@ bool CanCopyWithTransfer(RendererVk *renderer,
                          VkImageTiling dstTilingMode);
 
 class ImageViewHelper;
-class ImageHelper final : public Resource, public angle::Subject
+class ImageHelper final : public ReadWriteResource, public angle::Subject
 {
   public:
     ImageHelper();

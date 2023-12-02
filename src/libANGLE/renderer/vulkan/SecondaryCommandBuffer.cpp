@@ -501,6 +501,10 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const ImageBarrierParams *params =
                         getParamPtr<ImageBarrierParams>(currentCommand);
+                    //                    WARN() << "Execute image barrier: " <<
+                    //                    params->imageMemoryBarrier.image << " | "
+                    //                           << params->imageMemoryBarrier.oldLayout << " to "
+                    //                           << params->imageMemoryBarrier.newLayout;
                     vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0,
                                          0, nullptr, 0, nullptr, 1, &params->imageMemoryBarrier);
                     break;

@@ -2591,6 +2591,7 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
 
     UpdateColorAccess(contextVk, MakeColorBufferMask(0), MakeColorBufferMask(0));
 
+    //    WARN() << "Barrier suspected of breaking ImageTest";
     contextVk->onImageRenderPassWrite(dst->toGLLevel(params.dstMip), params.dstLayer, 1,
                                       VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorWrite, dst);
 
