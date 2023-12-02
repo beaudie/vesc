@@ -1632,6 +1632,16 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
     }
 }
 
+bool CommandBufferHelperCommon::usesImage(const ImageHelper &image) const
+{
+    return image.usedByCommandBuffer(mQueueSerial);
+}
+
+bool CommandBufferHelperCommon::usesImageForWrite(const ImageHelper &image) const
+{
+    return image.writtenByCommandBuffer(mQueueSerial);
+}
+
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
                                                 CommandsState *commandsState)
 {
@@ -1827,7 +1837,7 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                       ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    image->setWriteQueueSerial(mQueueSerial);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
@@ -2019,7 +2029,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    image->setWriteQueueSerial(mQueueSerial);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
@@ -5828,7 +5838,9 @@ void ImageHelper::releaseImage(RendererVk *renderer)
 
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory, &mVmaAllocation);
     mUse.reset();
-    mImageSerial = kInvalidImageSerial;
+    mWriteUse.reset();
+    mImageSerial        = kInvalidImageSerial;
+    mBarrierQueueSerial = QueueSerial();
     setEntireContentUndefined();
 }
 
@@ -8599,7 +8611,7 @@ void ImageHelper::stageSelfAsSubresourceUpdates(
     // object.
 
     // Usage info
-    prevImage->get().Resource::operator=(std::move(*this));
+    prevImage->get().ReadWriteResource::operator=(std::move(*this));
 
     // Vulkan objects
     prevImage->get().mImage         = std::move(mImage);
@@ -8916,6 +8928,11 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
             if (IsClearOfAllChannels(update.updateSource))
             {
+                ImageLayoutUsage imageLayoutUsage = {};
+                imageLayoutUsage.usedImageHelper  = this;
+                imageLayoutUsage.usedImageLayout  = getCurrentImageLayout();
+                contextVk->addImageLayoutUsage(imageLayoutUsage);
+
                 clear(contextVk, update.data.clear.aspectFlags, update.data.clear.value,
                       updateMipLevelVk, updateBaseLayer, updateLayerCount,
                       &commandBuffer->getCommandBuffer());
@@ -8997,6 +9014,17 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                                                              &commandBuffer));
 
                 VkImageCopy *copyRegion = &update.data.image.copyRegion;
+
+                ImageLayoutUsage imageLayoutUsageSrc = {};
+                imageLayoutUsageSrc.usedImageHelper  = &update.refCounted.image->get();
+                imageLayoutUsageSrc.usedImageLayout =
+                    update.refCounted.image->get().getCurrentImageLayout();
+                contextVk->addImageLayoutUsage(imageLayoutUsageSrc);
+                ImageLayoutUsage imageLayoutUsageDst = {};
+                imageLayoutUsageDst.usedImageHelper  = this;
+                imageLayoutUsageDst.usedImageLayout  = getCurrentImageLayout();
+                contextVk->addImageLayoutUsage(imageLayoutUsageDst);
+
                 commandBuffer->getCommandBuffer().copyImage(
                     update.refCounted.image->get().getImage(),
                     update.refCounted.image->get().getCurrentLayout(contextVk), mImage,
@@ -9006,6 +9034,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             }
 
             update.release(contextVk->getRenderer());
+            // TODO: mImageLayoutUsages should be updated?
         }
 
         // Only remove the updates that were actually applied to the image.
@@ -10073,6 +10102,10 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     OutsideRenderPassCommandBuffer *readbackCommandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(readbackAccess, &readbackCommandBuffer));
 
+    ImageLayoutUsage imageLayoutUsage = {};
+    imageLayoutUsage.usedImageHelper  = src;
+    imageLayoutUsage.usedImageLayout  = src->getCurrentImageLayout();
+    contextVk->addImageLayoutUsage(imageLayoutUsage);
     readbackCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(contextVk),
                                              bufferHandle, 1, &region);
 

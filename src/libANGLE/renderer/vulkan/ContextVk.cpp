@@ -673,8 +673,7 @@ void DumpPipelineCacheGraph(ContextVk *contextVk, const std::ostringstream &grap
 {
     std::ostream &out = std::cout;
 
-    out << "digraph {\n"
-        << " node [shape=box";
+    out << "digraph {\n" << " node [shape=box";
     if (contextVk->getFeatures().supportsPipelineCreationFeedback.enabled)
     {
         out << ",color=green";
@@ -8002,8 +8001,7 @@ void ContextVk::dumpCommandStreamDiagnostics()
     if (mCommandBufferDiagnostics.empty())
         return;
 
-    out << "digraph {\n"
-        << "  node [shape=plaintext fontname=\"Consolas\"]\n";
+    out << "digraph {\n" << "  node [shape=plaintext fontname=\"Consolas\"]\n";
 
     for (size_t index = 0; index < mCommandBufferDiagnostics.size(); ++index)
     {
@@ -8112,6 +8110,8 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, getProtectionType(), mContextPriority,
                                                 &mOutsideRenderPassCommands));
+
+    mImageLayoutUsages.clear();
 
     // Make sure appropriate dirty bits are set, in case another thread makes a submission before
     // the next dispatch call.
@@ -8417,6 +8417,96 @@ angle::Result ContextVk::switchToReadOnlyDepthStencilMode(gl::Texture *texture,
     return angle::Result::Continue;
 }
 
+void ContextVk::addImageLayoutUsage(ImageLayoutUsage imageLayoutUsage)
+{
+    // Only unique VkImage objects should be added to the list.
+    // TODO: Use a set instead?
+    for (auto &usage : mImageLayoutUsages)
+    {
+        if (usage.usedImageHelper->getImage().getHandle() !=
+            imageLayoutUsage.usedImageHelper->getImage().getHandle())
+        {
+            continue;
+        }
+
+        //        if (containsLayoutTransitionHazard(usage.usedImageLayout,
+        //        imageLayoutUsage.usedImageLayout))
+        //        {
+        //            return;
+        //        }
+
+        // TODO: Remove WARNs, and replace with above (containsLayoutTransitionHazard()).
+        if (usage.usedImageLayout != imageLayoutUsage.usedImageLayout)
+        {
+            WARN() << "Layout transition warning for image "
+                   << imageLayoutUsage.usedImageHelper->getImage().getHandle()
+                   << " | Current layout: " << ToUnderlying(usage.usedImageLayout)
+                   << " | New layout: " << ToUnderlying(imageLayoutUsage.usedImageLayout)
+                   << " | Barrier cannot be aggregated for execution";
+        }
+
+        // Even if the layout is not changing, WAW hazards are still possible.
+        // TODO: For now, it is limited to TransferDst as a test. But technically, it should be
+        // applied to all such hazard cases.
+        if (usage.usedImageLayout == imageLayoutUsage.usedImageLayout &&
+            imageLayoutUsage.usedImageLayout == vk::ImageLayout::TransferDst)
+        {
+            // TODO: Should this also apply to different levels of the same image?
+            WARN() << "WAW hazard warning for image "
+                   << imageLayoutUsage.usedImageHelper->getImage().getHandle()
+                   << " | Current layout: " << ToUnderlying(usage.usedImageLayout)
+                   << " | New layout: " << ToUnderlying(imageLayoutUsage.usedImageLayout)
+                   << " | Barrier cannot be aggregated for execution";
+        }
+
+        // TODO: The used layout should still be updated for the future updates? For example, if
+        // there is a transition to the first layout again.
+        //  Or use another field?
+        return;
+    }
+
+    mImageLayoutUsages.push_back(imageLayoutUsage);
+}
+
+bool ContextVk::containsImageLayoutUsage(ImageLayoutUsage imageLayoutUsage)
+{
+    for (auto &usage : mImageLayoutUsages)
+    {
+        if (usage.usedImageHelper->getImage().getHandle() !=
+            imageLayoutUsage.usedImageHelper->getImage().getHandle())
+        {
+            continue;
+        }
+
+        // Check if there is another usage of the same image. If so, the barrier must be separate.
+        if (containsLayoutTransitionHazard(usage.usedImageLayout, imageLayoutUsage.usedImageLayout))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool ContextVk::containsLayoutTransitionHazard(vk::ImageLayout fromLayout, vk::ImageLayout toLayout)
+{
+    // Data hazard should be avoided. Only RAR is safe. A change in layout is recorded as a hazard.
+    if (fromLayout != toLayout)
+    {
+        return true;
+    }
+
+    // Even if the layout is not changing, WAW hazards are still possible.
+    // TODO: For now, it is limited to TransferDst as a test. But technically, it should be applied
+    // to all such hazard cases.
+    if (fromLayout == vk::ImageLayout::TransferDst)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
 {
     ANGLE_TRY(flushCommandBuffersIfNecessary(access));
@@ -8424,20 +8514,47 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
     for (const vk::CommandBufferImageAccess &imageAccess : access.getReadImages())
     {
         ASSERT(!isRenderPassStartedAndUsesImage(*imageAccess.image));
-
-        imageAccess.image->recordReadBarrier(this, imageAccess.aspectFlags, imageAccess.imageLayout,
-                                             mOutsideRenderPassCommands);
+        // If there is a currently pending command that is using this image (with a different
+        // layout), this should be a separate barrier due to potential dependency problems.
+        ImageLayoutUsage imageLayoutUsage = {};
+        imageLayoutUsage.usedImageHelper  = imageAccess.image;
+        imageLayoutUsage.usedImageLayout  = imageAccess.imageLayout;
+        if (containsImageLayoutUsage(imageLayoutUsage))
+        {
+            imageAccess.image->recordReadBarrier(
+                this, imageAccess.aspectFlags, imageAccess.imageLayout, mOutsideRenderPassCommands);
+        }
+        else
+        {
+            mOutsideRenderPassCommands->imageRead(this, imageAccess.aspectFlags,
+                                                  imageAccess.imageLayout, imageAccess.image);
+        }
         mOutsideRenderPassCommands->retainResource(imageAccess.image);
     }
 
     for (const vk::CommandBufferImageWrite &imageWrite : access.getWriteImages())
     {
         ASSERT(!isRenderPassStartedAndUsesImage(*imageWrite.access.image));
-
-        imageWrite.access.image->recordWriteBarrier(this, imageWrite.access.aspectFlags,
-                                                    imageWrite.access.imageLayout,
-                                                    mOutsideRenderPassCommands);
-        mOutsideRenderPassCommands->retainResource(imageWrite.access.image);
+        // If there is a currently pending command that is using this image (with a different
+        // layout), this should be a separate barrier due to potential dependency problems.
+        ImageLayoutUsage imageLayoutUsage = {};
+        imageLayoutUsage.usedImageHelper  = imageWrite.access.image;
+        imageLayoutUsage.usedImageLayout  = imageWrite.access.imageLayout;
+        if (containsImageLayoutUsage(imageLayoutUsage))
+        {
+            imageWrite.access.image->recordWriteBarrier(this, imageWrite.access.aspectFlags,
+                                                        imageWrite.access.imageLayout,
+                                                        mOutsideRenderPassCommands);
+            mOutsideRenderPassCommands->retainResource(imageWrite.access.image);
+        }
+        else
+        {
+            mOutsideRenderPassCommands->imageWrite(
+                this, imageWrite.levelStart, imageWrite.layerStart, imageWrite.layerCount,
+                imageWrite.access.aspectFlags, imageWrite.access.imageLayout,
+                imageWrite.access.image);
+            mOutsideRenderPassCommands->retainResourceForWrite(imageWrite.access.image);
+        }
         imageWrite.access.image->onWrite(imageWrite.levelStart, imageWrite.levelCount,
                                          imageWrite.layerStart, imageWrite.layerCount,
                                          imageWrite.access.aspectFlags);
@@ -8484,7 +8601,7 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
     // track of whether the outside render pass commands need to be closed, and if so, it will do
     // that once at the end.
 
-    // Read images only need to close the render pass if they need a layout transition.
+    bool shouldCloseOutsideRenderPassCommands = false;
     for (const vk::CommandBufferImageAccess &imageAccess : access.getReadImages())
     {
         // Note that different read methods are not compatible. A shader read uses a different
@@ -8495,6 +8612,10 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
         {
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageUseThenOutOfRPRead);
         }
+        else if (mOutsideRenderPassCommands->usesImageForWrite(*imageAccess.image))
+        {
+            shouldCloseOutsideRenderPassCommands = true;
+        }
     }
 
     // Write images only need to close the render pass if they need a layout transition.
@@ -8504,9 +8625,11 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
         {
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageUseThenOutOfRPWrite);
         }
+        else if (mOutsideRenderPassCommands->usesImage(*imageWrite.access.image))
+        {
+            shouldCloseOutsideRenderPassCommands = true;
+        }
     }
-
-    bool shouldCloseOutsideRenderPassCommands = false;
 
     // Read buffers only need a new command buffer if previously used for write.
     for (const vk::CommandBufferBufferAccess &bufferAccess : access.getReadBuffers())

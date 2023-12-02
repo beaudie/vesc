@@ -66,6 +66,15 @@ enum class UpdateDepthFeedbackLoopReason
     Clear,
 };
 
+// TODO: Are any updates needed to track multiple layout changes? Sometimes, there may be neither
+// need for an aggregated barrier nor a separate barrier, since the object is still in the same
+// read-only layout.
+struct ImageLayoutUsage
+{
+    vk::ImageHelper *usedImageHelper;
+    vk::ImageLayout usedImageLayout;
+};
+
 class ContextVk : public ContextImpl, public vk::Context, public MultisampleTextureInitializer
 {
   public:
@@ -73,6 +82,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     ~ContextVk() override;
 
     angle::Result initialize() override;
+
+    void addImageLayoutUsage(ImageLayoutUsage imageLayoutUsage);
+    bool containsImageLayoutUsage(ImageLayoutUsage imageLayoutUsage);
+    bool containsLayoutTransitionHazard(vk::ImageLayout fromLayout, vk::ImageLayout toLayout);
 
     void onDestroy(const gl::Context *context) override;
 
@@ -1679,6 +1692,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     std::ostringstream mPipelineCacheGraph;
 
     RangedSerialFactory mOutsideRenderPassSerialFactory;
+
+    std::vector<ImageLayoutUsage> mImageLayoutUsages;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
