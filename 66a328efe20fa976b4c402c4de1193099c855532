@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98c2cae3_504ea187",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-12-03T23:09:54Z",
+      "side": 1,
+      "message": "Note: alternative approaches explored:\n- https://chromium-review.googlesource.com/c/angle/angle/+/5082559\n- https://chromium-review.googlesource.com/c/angle/angle/+/5076840",
+      "revId": "66a328efe20fa976b4c402c4de1193099c855532",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
