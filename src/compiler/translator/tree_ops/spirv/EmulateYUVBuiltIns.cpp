@@ -36,6 +36,7 @@ class EmulateYUVBuiltInsTraverser : public TIntermTraverser
                                 const char *name,
                                 TIntermTyped *itu601Matrix,
                                 TIntermTyped *itu709Matrix,
+                                bool isYuvInput,
                                 TIntermFunctionDefinition **funcDefOut);
 
     TIntermTyped *replaceYUVFuncCall(TIntermTyped *node);
@@ -117,6 +118,17 @@ TIntermTyped *MakeMatrix(const std::array<float, 9> &elements)
     return TIntermAggregate::CreateConstructor(*matType, &matrix);
 }
 
+TIntermTyped *MakeVector(float x, float y, float z)
+{
+    TIntermSequence values;
+    values.push_back(CreateFloatNode(x, EbpMedium));
+    values.push_back(CreateFloatNode(y, EbpMedium));
+    values.push_back(CreateFloatNode(z, EbpMedium));
+
+    const TType *vecType = StaticType::GetBasic<EbtFloat, EbpMedium, 3>();
+    return TIntermAggregate::CreateConstructor(*vecType, &values);
+}
+
 const TFunction *EmulateYUVBuiltInsTraverser::getYUV2RGBFunc(TPrecision precision)
 {
     const char *name = "ANGLE_yuv_2_rgb";
@@ -142,7 +154,7 @@ const TFunction *EmulateYUVBuiltInsTraverser::getYUV2RGBFunc(TPrecision precisio
     constexpr std::array<float, 9> itu709Matrix = {1.0,    1.0,    1.0,     0.0, -0.1873,
                                                    1.8556, 1.5748, -0.4681, 0.0};
 
-    return getYUVFunc(precision, name, MakeMatrix(itu601Matrix), MakeMatrix(itu709Matrix),
+    return getYUVFunc(precision, name, MakeMatrix(itu601Matrix), MakeMatrix(itu709Matrix), true,
                       &mYUV2RGBFuncDefs[precision]);
 }
 
@@ -170,7 +182,7 @@ const TFunction *EmulateYUVBuiltInsTraverser::getRGB2YUVFunc(TPrecision precisio
     constexpr std::array<float, 9> itu709Matrix = {0.2126,  -0.1146, 0.5, 0.7152, -0.3854,
                                                    -0.4542, 0.0722,  0.5, -0.0458};
 
-    return getYUVFunc(precision, name, MakeMatrix(itu601Matrix), MakeMatrix(itu709Matrix),
+    return getYUVFunc(precision, name, MakeMatrix(itu601Matrix), MakeMatrix(itu709Matrix), false,
                       &mRGB2YUVFuncDefs[precision]);
 }
 
@@ -178,6 +190,7 @@ const TFunction *EmulateYUVBuiltInsTraverser::getYUVFunc(TPrecision precision,
                                                          const char *name,
                                                          TIntermTyped *itu601Matrix,
                                                          TIntermTyped *itu709Matrix,
+                                                         bool isYuvInput,
                                                          TIntermFunctionDefinition **funcDefOut)
 {
     if (*funcDefOut != nullptr)
@@ -257,6 +270,23 @@ const TFunction *EmulateYUVBuiltInsTraverser::getYUVFunc(TPrecision precision,
     TIntermSwitch *switchStatement = new TIntermSwitch(new TIntermSymbol(convParam), switchBody);
 
     TIntermBlock *body = new TIntermBlock;
+
+    // do range expansion on the way in
+    if (isYuvInput)
+    {
+        body->appendStatement(new TIntermBinary(
+            EOpAssign, new TIntermSymbol(colorParam),
+            new TIntermTernary(
+                new TIntermBinary(
+                    EOpEqual, new TIntermSymbol(convParam),
+                    new TIntermConstantUnion(&ituConstants[1], *yuvCscType)),  // 601 full range
+                new TIntermBinary(EOpAdd, new TIntermSymbol(colorParam),
+                                  MakeVector(0.f, -128 / 255.f, -128 / 255.f)),
+                new TIntermBinary(
+                    EOpMul, MakeVector(255.f / 219.f, 255.f / 224.f, 255.f / 224.f),
+                    new TIntermBinary(EOpAdd, new TIntermSymbol(colorParam),
+                                      MakeVector(-16.f / 255.f, -128 / 255.f, -128 / 255.f))))));
+    }
 
     body->appendStatement(switchStatement);
     body->appendStatement(new TIntermBranch(EOpReturn, CreateZeroNode(*vec3Type)));
