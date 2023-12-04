@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "492796a0_4f185ce5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T19:23:56Z",
+      "side": 1,
+      "message": "This definitely helps readability, but I see both of these are always passed as array of 3. We can make the code cleaner here if we make these structs. I don\u0027t know what MemOffset represents, but you may want something like this for example:\n\n```\nstruct MemOffsets\n{\n    size_t x, y, z;\n};\nstruct Coordinates\n{\n    size_t x, y, z;\n};\n```\n\nSee for example `Offset` in `angletypes.h` for the similar GL struct.",
+      "revId": "9a995c4e6e685c9ea6e3da8dcb10a171c730367e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95b2c6f4_b93624ab",
+        "filename": "src/libANGLE/CLtypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T19:23:56Z",
+      "side": 1,
+      "message": "One thing I wish C++ had is to make these strong types; as is, you can pass a `MemOffset` as `Coordinate` and the compiler won\u0027t complain. If you are worried about them getting confused (like, we had that happen a lot with GL and VK \"texture level\"), we should look into rolling a helper to make them distinguished.",
+      "revId": "9a995c4e6e685c9ea6e3da8dcb10a171c730367e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
