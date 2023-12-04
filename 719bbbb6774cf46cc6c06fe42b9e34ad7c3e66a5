@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2af7bf2e_c2457fb3",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T19:10:57Z",
+      "side": 1,
+      "message": "FWIW, this sort of thing happens a lot in ANGLE (check for \"version or extension\"). You might as well extend the macros to make this simpler, like:\n\n```\nANGLE_VALIDATE_VERSION_OR_EXTENSION(version, 1, 2, info.khrFP64);\n```",
+      "range": {
+        "startLine": 678,
+        "startChar": 0,
+        "endLine": 683,
+        "endChar": 13
+      },
+      "revId": "719bbbb6774cf46cc6c06fe42b9e34ad7c3e66a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
