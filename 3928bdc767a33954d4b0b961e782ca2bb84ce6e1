@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be00b1be_f3b3bab3",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T19:14:57Z",
+      "side": 1,
+      "message": "super nit: We always associate TODOs with bug links, a few years ago we learned that leaving that out ends up confusing later.\n\nI don\u0027t think you even need a comment here (it\u0027s rather obvious given `UNIMPLEMENTED`), so you might as well drop these. I was saying that for future reference.",
+      "revId": "3928bdc767a33954d4b0b961e782ca2bb84ce6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
