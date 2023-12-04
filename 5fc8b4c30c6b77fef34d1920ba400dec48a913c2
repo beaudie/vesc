@@ -1,0 +1,285 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96652d5f_c2d80268",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "🎉 Thanks for the massive clean up!",
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbc44c29_f35727e2",
+        "filename": "src/libANGLE/CLContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "For future reference, you can still return an `angle::Result`. That\u0027s what we typically do with the last statement of the block that returns:\n\n```suggestion\n    return mImpl-\u003egetSupportedImageFormats(flags, imageType, numEntries, imageFormats,\n                                           numImageFormats);\n```",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 35
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70ece792_fbeac9cc",
+        "filename": "src/libANGLE/cl_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "Suggest calling this `ANGLE_CL_ERROR_AND_RETURN` or `ANGLE_CL_RETURN_ERROR`. It makes it clear there\u0027s control flow (`return`) here.",
+      "range": {
+        "startLine": 13,
+        "startChar": 8,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3501f1a_76a573af",
+        "filename": "src/libANGLE/cl_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "Probably slightly faster to remove access to the TLS on the success path:\n\n```suggestion\n        auto ANGLE_LOCAL_VAR \u003d expression;                 \\\n        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR !\u003d CL_SUCCESS)) \\\n        {                                                  \\\n            ANGLE_CL_ERROR(ANGLE_LOCAL_VAR);               \\\n        }                                                  \\\n```\n\n(`const cl_int` instead of `auto` if I\u0027m not mistaken)",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 15
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37e77d59_3d0e5a18",
+        "filename": "src/libANGLE/renderer/cl/CLCommandQueueCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "Should this have used `ANGLE_CL_TRY` instead?",
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9411f0de_77943817",
+        "filename": "src/libANGLE/renderer/cl/CLCommandQueueCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "I see the next CL removes this from the front-end\u0027s `CheckCreateEvent`. Would be nice to also remove it from `cl/`. The line above using `ANGLE_CL_TRY` makes passing this obsolete.\n\nI expect ultimately you wouldn\u0027t ever see `gClErrorTls` outside a few macros and in the autogen code.",
+      "range": {
+        "startLine": 93,
+        "startChar": 21,
+        "endLine": 93,
+        "endChar": 36
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ff43860_83ead5a7",
+        "filename": "src/libANGLE/renderer/cl/CLCommandQueueCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "Avoiding unnecessary TLS access (and also hiding the details of the error handling):\n\n```suggestion\n                                                       nativeEventPtr, \u0026errorCode);\n    ANGLE_CL_TRY(errorCode);\n```\n\nThat\u0027s typically how we do it in the Vulkan backend, like:\n\n```\nVkResult result \u003d ...;\n...\nANGLE_VK_TRY(result);\n```",
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "443f4be8_a26c61e3",
+        "filename": "src/libANGLE/renderer/cl/CLCommandQueueCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 448,
+        "startChar": 53,
+        "endLine": 448,
+        "endChar": 68
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3718d50d_000c8694",
+        "filename": "src/libANGLE/renderer/cl/CLContextCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "ANGLE_CL_TRY",
+      "range": {
+        "startLine": 350,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 19
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d1a5863_0d57a04a",
+        "filename": "src/libANGLE/renderer/cl/CLDeviceCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "ANGLE_CL_TRY here and below",
+      "range": {
+        "startLine": 187,
+        "startChar": 4,
+        "endLine": 187,
+        "endChar": 19
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f309c572_dbb35457",
+        "filename": "src/libANGLE/renderer/cl/CLPlatformCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "If this is intentional (and probably temporary?) please add a comment with a bug tag (like `// TODO foo bar http://anglebug.com/NNNN)`)",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 29
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1d40782_eb1c7c67",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "nit: just `ANGLE_VALIDATE` or `ANGLE_CL_VALIDATE` would have worked too.",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 32,
+        "endChar": 28
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b130c3d3_d798fe7f",
+        "filename": "src/libGLESv2/cl_stubs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-04T18:39:52Z",
+      "side": 1,
+      "message": "nit: Could use a macro to avoid the duplication. Or even a helper function in an anonymous namespace (in that case, suggest passing `__func__` for a better message that doesn\u0027t rely on stack trace)",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 27
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
