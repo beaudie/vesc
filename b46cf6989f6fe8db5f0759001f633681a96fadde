@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f1d71c8_612aed2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1301012
+      },
+      "writtenOn": "2023-12-04T23:50:43Z",
+      "side": 1,
+      "message": "FWIW - manually patched this atop the version of ANGLE in Android 14, and it seems to do the trick for my failure case.",
+      "revId": "b46cf6989f6fe8db5f0759001f633681a96fadde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
