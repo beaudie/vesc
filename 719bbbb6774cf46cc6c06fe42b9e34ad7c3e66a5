@@ -22,6 +22,30 @@
       },
       "revId": "719bbbb6774cf46cc6c06fe42b9e34ad7c3e66a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40c34ebc_287f9a66",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:22Z",
+      "side": 1,
+      "message": "Nice!\n\nDone.",
+      "parentUuid": "2af7bf2e_c2457fb3",
+      "range": {
+        "startLine": 678,
+        "startChar": 0,
+        "endLine": 683,
+        "endChar": 13
+      },
+      "revId": "719bbbb6774cf46cc6c06fe42b9e34ad7c3e66a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
