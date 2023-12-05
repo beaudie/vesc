@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "535b7f0c_dd749de8",
+        "filename": "src/libANGLE/CLContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Yup, missed these ones.\n\nDone.",
+      "parentUuid": "fbc44c29_f35727e2",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 35
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70ece792_fbeac9cc",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-12-04T18:39:52Z",
       "side": 1,
       "message": "Suggest calling this `ANGLE_CL_ERROR_AND_RETURN` or `ANGLE_CL_RETURN_ERROR`. It makes it clear there\u0027s control flow (`return`) here.",
+      "range": {
+        "startLine": 13,
+        "startChar": 8,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "675158a5_0749278a",
+        "filename": "src/libANGLE/cl_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70ece792_fbeac9cc",
       "range": {
         "startLine": 13,
         "startChar": 8,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "837dfadb_182e6483",
+        "filename": "src/libANGLE/cl_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Nice suggestion! \n\nDone.",
+      "parentUuid": "d3501f1a_76a573af",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 15
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37e77d59_3d0e5a18",
@@ -100,6 +172,24 @@
       "writtenOn": "2023-12-04T18:39:52Z",
       "side": 1,
       "message": "Should this have used `ANGLE_CL_TRY` instead?",
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "158b31d0_d13d50a3",
+        "filename": "src/libANGLE/renderer/cl/CLCommandQueueCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Yup, missed this one.\n\nDone.",
+      "parentUuid": "37e77d59_3d0e5a18",
       "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -127,6 +217,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec491b05_ad929ed1",
+        "filename": "src/libANGLE/renderer/cl/CLCommandQueueCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Great suggestion!\n\nDone.",
+      "parentUuid": "9411f0de_77943817",
+      "range": {
+        "startLine": 93,
+        "startChar": 21,
+        "endLine": 93,
+        "endChar": 36
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ff43860_83ead5a7",
@@ -144,6 +258,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6253e57_18c22ec8",
+        "filename": "src/libANGLE/renderer/cl/CLCommandQueueCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ff43860_83ead5a7",
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "443f4be8_a26c61e3",
@@ -157,6 +289,30 @@
       "writtenOn": "2023-12-04T18:39:52Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 448,
+        "startChar": 53,
+        "endLine": 448,
+        "endChar": 68
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c52e6f02_31829c1b",
+        "filename": "src/libANGLE/renderer/cl/CLCommandQueueCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "443f4be8_a26c61e3",
       "range": {
         "startLine": 448,
         "startChar": 53,
@@ -190,6 +346,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f7d5c12_31e96102",
+        "filename": "src/libANGLE/renderer/cl/CLContextCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3718d50d_000c8694",
+      "range": {
+        "startLine": 350,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 19
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d1a5863_0d57a04a",
@@ -203,6 +383,30 @@
       "writtenOn": "2023-12-04T18:39:52Z",
       "side": 1,
       "message": "ANGLE_CL_TRY here and below",
+      "range": {
+        "startLine": 187,
+        "startChar": 4,
+        "endLine": 187,
+        "endChar": 19
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b069bff2_d592fa25",
+        "filename": "src/libANGLE/renderer/cl/CLDeviceCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d1a5863_0d57a04a",
       "range": {
         "startLine": 187,
         "startChar": 4,
@@ -238,6 +442,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "09073a43_b730df75",
+        "filename": "src/libANGLE/renderer/cl/CLPlatformCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "D\u0027oh! My mistake, it\u0027s not intentional but more of a WA on one area we ought to have a bug-ticket on.\n\nIssue stems from `clGetPlatformIDs` vs. `clIcdGetPlatformIDsKHR`...\n\nThe former being the pre-ICD era of OpenCL, where OpenCL user would need to\nmanually find and query different vendor platforms on system.\n\nThe latter being the \"new\" way forward with the \"Installable Client Driver\" (ICD)\napproach (combined with an open-source Khronos-provided ICD Loader library).\n\nIt appears that ANGLE CL backend uses the latter approach:\n```C++\nvoid CLPlatformCL::Initialize(CreateFuncs \u0026createFuncs, bool isIcd)\n{\n    // Using khrIcdInitialize() of the third party Khronos OpenCL ICD Loader to\n    // enumerate the available OpenCL implementations on the system. They will be\n    // stored in the singly linked list khrIcdVendors of the C struct KHRicdVendor.\n    khrIcdInitialize();\n```\n\nOur (vendor) ICD\u0027s dispatch table sets `clGetPlatformIDs` to nullptr here as it has\nessentially become obsolete. The ANGLE CL backend actually does not make\nuse of this particular dispatch table ptr. from a quick inspection.\n\nAlso, I see an unused `isIcd` boolean? My guess was that its purpose was to\ndisambiguate the two approaches here but got tossed in favor of just always\nresorting to using ICD loader instead.\n\nI think that\u0027s the \"modern way\" going forward, but I am open to allowing logic\nexist to dynamically check if using ICD loader or not.\n\nTl;dr - Will revert this and open ticket.",
+      "parentUuid": "f309c572_dbb35457",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 29
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1d40782_eb1c7c67",
         "filename": "src/libANGLE/validationCL.cpp",
         "patchSetId": 2
@@ -249,6 +477,30 @@
       "writtenOn": "2023-12-04T18:39:52Z",
       "side": 1,
       "message": "nit: just `ANGLE_VALIDATE` or `ANGLE_CL_VALIDATE` would have worked too.",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 32,
+        "endChar": 28
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98118a06_b66d8fd3",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1d40782_eb1c7c67",
       "range": {
         "startLine": 32,
         "startChar": 8,
@@ -272,6 +524,30 @@
       "writtenOn": "2023-12-04T18:39:52Z",
       "side": 1,
       "message": "nit: Could use a macro to avoid the duplication. Or even a helper function in an anonymous namespace (in that case, suggest passing `__func__` for a better message that doesn\u0027t rely on stack trace)",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 27
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05d6ea55_1cf3464a",
+        "filename": "src/libGLESv2/cl_stubs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b130c3d3_d798fe7f",
       "range": {
         "startLine": 40,
         "startChar": 0,
