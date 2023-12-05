@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4e10ff6d_9642ab96",
+        "filename": "src/libANGLE/CLContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "Ah, so I wanted this on my first draft. As-is we can\u0027t move to ctor body since mImpl is `const` here.\n\nI\u0027m thinking maybe we could?\n```suggestion\n      mImpl(nullptr),\n      mDevices(std::move(devices))\n{\n    static_cast\u003cvoid\u003e(platform.getImpl().createContext(\n        *this, devices, userSync, const_cast\u003crx::CLContextImpl::Ptr \u0026\u003e(mImpl)));\n```\n`static_cast\u003cvoid\u003e` since we need to throw away the return inside the ctor body.\nThoughts?",
+      "parentUuid": "f7ec83bc_6f66a2dd",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 2
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79183e25_a23dac24",
         "filename": "src/libANGLE/CLContext.cpp",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2023-12-04T18:55:50Z",
       "side": 1,
       "message": "ditto about moving to the body of the function.",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 10
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "384a6701_6c33cbc2",
+        "filename": "src/libANGLE/CLContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "79183e25_a23dac24",
       "range": {
         "startLine": 369,
         "startChar": 0,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7224b993_0f393c96",
+        "filename": "src/libANGLE/CLEvent.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "a1a1f324_53703929",
+      "range": {
+        "startLine": 140,
+        "startChar": 57,
+        "endLine": 144,
+        "endChar": 10
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4d5f6b8_0e4f0fa8",
         "filename": "src/libANGLE/CLKernel.cpp",
         "patchSetId": 5
@@ -100,6 +172,30 @@
       "writtenOn": "2023-12-04T18:55:50Z",
       "side": 1,
       "message": "ditto!",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 244,
+        "endChar": 1
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34e68ce2_7a8b68ac",
+        "filename": "src/libANGLE/CLKernel.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "See above",
+      "parentUuid": "c4d5f6b8_0e4f0fa8",
       "range": {
         "startLine": 224,
         "startChar": 0,
@@ -135,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bff080e1_eb80dd0c",
+        "filename": "src/libANGLE/CLMemory.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "ac96d238_f47c7b18",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 11
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "063b4ffa_60b7377f",
         "filename": "src/libANGLE/CLProgram.cpp",
         "patchSetId": 5
@@ -146,6 +266,30 @@
       "writtenOn": "2023-12-04T18:55:50Z",
       "side": 1,
       "message": "ditto here and below",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 11
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7134fe2_83d2cedc",
+        "filename": "src/libANGLE/CLProgram.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "063b4ffa_60b7377f",
       "range": {
         "startLine": 211,
         "startChar": 0,
@@ -181,6 +325,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "166cbf48_a8f0bfd3",
+        "filename": "src/libANGLE/CLSampler.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "bd59f2f0_8dca5912",
+      "range": {
+        "startLine": 98,
+        "startChar": 1,
+        "endLine": 102,
+        "endChar": 10
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5bef2681_9ddcffc9",
         "filename": "src/libANGLE/renderer/CLMemoryImpl.h",
         "patchSetId": 5
@@ -192,6 +360,30 @@
       "writtenOn": "2023-12-04T18:55:50Z",
       "side": 1,
       "message": "Per our style, we pass either `const Type \u0026var` or `Type *varOut`. Passing by pointer really helps make it clear that the called function may modify the passed in argument.\n\nSo these would take `size_t *sizeOut` and `CLMemoryImpl::Ptr *subBufferOut`. I hate to be annoying here, but would you please change the objects you\u0027re passing now (instead of returning) to `* ...Out` instead to keep the code consistent?\n\n(I realize the previous author did not follow this rule, which is unfortunate, but let\u0027s at least not add to it)",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 74
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1760d1d_d18cb886",
+        "filename": "src/libANGLE/renderer/CLMemoryImpl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bef2681_9ddcffc9",
       "range": {
         "startLine": 24,
         "startChar": 0,
@@ -225,6 +417,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f042b63_ffe2a976",
+        "filename": "src/libANGLE/renderer/cl/CLContextCL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "Fixed now.\n\nDone.",
+      "parentUuid": "e6aefe96_4366b517",
+      "range": {
+        "startLine": 90,
+        "startChar": 71,
+        "endLine": 90,
+        "endChar": 87
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fecf0f15_3f4811cf",
@@ -248,6 +464,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "226c83ed_fc0c6475",
+        "filename": "src/libANGLE/renderer/cl/CLContextCL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fecf0f15_3f4811cf",
+      "range": {
+        "startLine": 98,
+        "startChar": 47,
+        "endLine": 98,
+        "endChar": 62
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fc9fdf6_b34ae3c9",
@@ -261,6 +501,24 @@
       "writtenOn": "2023-12-04T18:55:50Z",
       "side": 1,
       "message": "nit: If you return `angle::Result` here, you can use `ANGLE_CL_TRY` inside and `ANGLE_TRY` at call site to simplify things a bit.\n\nSame with the other helpers above. Could be a follow up CL.",
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad535404_a8ac6b0b",
+        "filename": "src/libANGLE/renderer/cl/CLKernelCL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T22:55:12Z",
+      "side": 1,
+      "message": "Gotcha - will do a follow up CL.",
+      "parentUuid": "2fc9fdf6_b34ae3c9",
       "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
