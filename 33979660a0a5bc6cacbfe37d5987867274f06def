@@ -16,6 +16,24 @@
       "message": "A bit too much traces here though.",
       "revId": "33979660a0a5bc6cacbfe37d5987867274f06def",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da5a6e01_4607b2ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-05T19:57:21Z",
+      "side": 1,
+      "message": "We could prune a few once I can figure out what the perf issue is.",
+      "parentUuid": "3f1ef929_8f17e39e",
+      "revId": "33979660a0a5bc6cacbfe37d5987867274f06def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
