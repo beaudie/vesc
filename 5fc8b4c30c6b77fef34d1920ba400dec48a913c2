@@ -464,6 +464,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72a4b79d_4ea7ce88",
+        "filename": "src/libANGLE/renderer/cl/CLPlatformCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-05T23:02:34Z",
+      "side": 1,
+      "message": "Done - see:\n\n  https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d8447",
+      "parentUuid": "09073a43_b730df75",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 29
+      },
+      "revId": "5fc8b4c30c6b77fef34d1920ba400dec48a913c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1d40782_eb1c7c67",
