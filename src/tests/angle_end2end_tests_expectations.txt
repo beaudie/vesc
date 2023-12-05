@@ -32,6 +32,8 @@
 
 6743 OPENGL : SimpleStateChangeTestES3.RespecifyBufferAfterBeginTransformFeedback/* = SKIP
 6743 GLES : SimpleStateChangeTestES3.RespecifyBufferAfterBeginTransformFeedback/* = SKIP
+8446 OPENGL : CopyTexImageTestES3.RedefineSameLevel/* = SKIP
+8446 GLES : CopyTexImageTestES3.RedefineSameLevel/* = SKIP
 
 // Shared context failing on OpenGL and D3D11
 7854 OPENGL : MultithreadingTest.CreateMultiSharedContextAndDraw/* = SKIP

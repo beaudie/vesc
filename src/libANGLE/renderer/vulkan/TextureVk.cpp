@@ -2021,19 +2021,6 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
                 const uint32_t redefinedFace = isCubeMap ? layerIndex : 0;
                 mRedefinedLevels[redefinedFace].set(levelIndexGL.get(), !isCompatibleRedefinition);
             }
-
-            const bool isUpdateToSingleLevelImage =
-                mImage->getLevelCount() == 1 && mImage->getFirstAllocatedLevel() == levelIndexGL;
-
-            // If incompatible, and redefining the single-level image, release it so it can be
-            // recreated immediately.  This is an optimization to avoid an extra copy.
-            //
-            // This is not done for cubemaps because every face may be separately redefined.  Note
-            // that this is not possible for texture arrays in general.
-            if (!isCompatibleRedefinition && isUpdateToSingleLevelImage && !isCubeMap)
-            {
-                releaseImage(contextVk);
-            }
         }
     }
 
