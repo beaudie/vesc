@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "466b1d7d_86e4ec39",
+        "filename": "src/tests/gl_tests/BuiltinVariableTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-05T16:04:25Z",
+      "side": 1,
+      "message": "nit: can use `ANGLE_INSTANTIATE_TEST_ES3` to avoid missing platforms. Like, this is missing `ES3_VULKAN()` too.",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 22
+      },
+      "revId": "0117550d87d0b15c170dd5b187515b6ebf3a0cb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
