@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f1c6bf4_4f2bd4f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-06T14:30:55Z",
+      "side": 1,
+      "message": "Drive by LGTM",
+      "revId": "ba94741102f762291ab9252b0d5442b2b2c16708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "079bd096_320a276c",
@@ -32,6 +49,24 @@
       "side": 1,
       "message": "This is a spec const, similarly to `ANGLEEmulateAlphaToCoverage`, to make built-in Chromium shaders portable.",
       "parentUuid": "079bd096_320a276c",
+      "revId": "ba94741102f762291ab9252b0d5442b2b2c16708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00d92183_51613ec6",
+        "filename": "src/compiler/translator/msl/TranslatorMSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-06T14:30:55Z",
+      "side": 1,
+      "message": "Ah, got it, never mind then",
+      "parentUuid": "80a41a5c_494e09ed",
       "revId": "ba94741102f762291ab9252b0d5442b2b2c16708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
