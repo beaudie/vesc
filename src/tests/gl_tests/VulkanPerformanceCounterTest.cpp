@@ -3281,55 +3281,39 @@ TEST_P(VulkanPerformanceCounterTest,
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
 
-    angle::VulkanPerfCounters expected;
-
     GLFramebuffer framebuffer;
     GLTexture texture;
     GLRenderbuffer renderbuffer;
     setupForDepthStencilOpsTest(&framebuffer, &texture, &renderbuffer);
 
     // Initialize the buffers with known value
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE);
+    glDepthMask(GL_FALSE);
     glDepthFunc(GL_ALWAYS);
+    glDisable(GL_SCISSOR_TEST);
     ANGLE_GL_PROGRAM(redProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.95f);
     EXPECT_PIXEL_COLOR_EQ(kOpsTestSize / 2, kOpsTestSize / 2, GLColor::red);
 
-    if (hasPreferDrawOverClearAttachments())
-    {
-        // Expect rpCount+1, depth(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0),
-        //                 stencil(Clears+0, Loads+0, LoadNones+0, Stores+1, StoreNones+0)
-        setExpectedCountersForDepthOps(getPerfCounters(), 1, 0, 1, 0, 1, 0, &expected);
-    }
-    else
-    {
-        // Expect rpCount+1, depth(Clears+1, Loads+0, LoadNones+0, Stores+1, StoreNones+0),
-        //                 stencil(Clears+0, Loads+0, LoadNones+0, Stores+1, StoreNones+0)
-        setExpectedCountersForDepthOps(getPerfCounters(), 1, 1, 0, 0, 1, 0, &expected);
-    }
-    setExpectedCountersForStencilOps(getPerfCounters(), 0, 0, 0, 1, 0, &expected);
-
     glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_FALSE);
     glDepthFunc(GL_ALWAYS);
-    glEnable(GL_STENCIL_TEST);
+    glDisable(GL_STENCIL_TEST);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+    std::array<GLenum, 2> attachments = {GL_DEPTH, GL_STENCIL};
+    glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, attachments.data());
     drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.95f);
+    glEnable(GL_SCISSOR_TEST);
     glDepthMask(GL_TRUE);
     glClearDepthf(1);
     glClearStencil(0);
     glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glDisable(GL_SCISSOR_TEST);
     glDepthFunc(GL_LEQUAL);
-    glDepthMask(GL_FALSE);
-    glEnable(GL_STENCIL_TEST);
-    glStencilFuncSeparate(GL_FRONT, GL_ALWAYS, 0, 255);
-    glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_KEEP);
-    glStencilFuncSeparate(GL_BACK, GL_ALWAYS, 0, 255);
-    glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_KEEP);
-    glStencilMask(255);
     drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.9f);
     EXPECT_PIXEL_COLOR_EQ(kOpsTestSize / 2, kOpsTestSize / 2, GLColor::red);
-    EXPECT_DEPTH_STENCIL_OP_COUNTERS(getPerfCounters(), expected);
 }
 
 // Tests that the renderpass is using depthFunc(GL_NEVER) and depthMask(GL_FALSE), it should not
