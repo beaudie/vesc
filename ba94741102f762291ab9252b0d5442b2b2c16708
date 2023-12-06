@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "079bd096_320a276c",
+        "filename": "src/compiler/translator/msl/TranslatorMSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-06T14:22:12Z",
+      "side": 1,
+      "message": "Since it\u0027s working around a driver bug, it\u0027s best conditioned to a compile option.\n\nIn that case, I think you won\u0027t need a spec const anymore?",
+      "revId": "ba94741102f762291ab9252b0d5442b2b2c16708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
