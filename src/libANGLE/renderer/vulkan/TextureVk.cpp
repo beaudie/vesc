@@ -567,6 +567,23 @@ angle::Result TextureVk::setSubImage(const gl::Context *context,
                            vkFormat);
 }
 
+bool TextureVk::isCompressedFormatEmulated(const gl::Context *context,
+                                           gl::TextureTarget target,
+                                           GLint level)
+{
+    const gl::ImageDesc &levelDesc = mState.getImageDesc(target, level);
+    if (!levelDesc.format.info->compressed)
+    {
+        return false;
+    }
+
+    ContextVk *contextVk = vk::GetImpl(context);
+    const vk::Format &vkFormat =
+        contextVk->getRenderer()->getFormat(levelDesc.format.info->sizedInternalFormat);
+    return vkFormat.getIntendedFormatID() !=
+           vkFormat.getActualImageFormatID(getRequiredImageAccess());
+}
+
 angle::Result TextureVk::setCompressedImage(const gl::Context *context,
                                             const gl::ImageIndex &index,
                                             GLenum internalFormat,
@@ -579,6 +596,14 @@ angle::Result TextureVk::setCompressedImage(const gl::Context *context,
 
     const gl::State &glState = context->getState();
     gl::Buffer *unpackBuffer = glState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
+
+    if (unpackBuffer &&
+        this->isCompressedFormatEmulated(context, index.getTarget(), index.getLevelIndex()))
+    {
+        // TODO (anglebug.com/7464): Can't populate from a buffer using emulated format
+        UNIMPLEMENTED();
+        return angle::Result::Stop;
+    }
 
     return setImageImpl(context, index, formatInfo, size, GL_UNSIGNED_BYTE, unpack, unpackBuffer,
                         pixels);
@@ -600,6 +625,14 @@ angle::Result TextureVk::setCompressedSubImage(const gl::Context *context,
         contextVk->getRenderer()->getFormat(levelDesc.format.info->sizedInternalFormat);
     const gl::State &glState = contextVk->getState();
     gl::Buffer *unpackBuffer = glState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
+
+    if (unpackBuffer &&
+        this->isCompressedFormatEmulated(context, index.getTarget(), index.getLevelIndex()))
+    {
+        // TODO (anglebug.com/7464): Can't populate from a buffer using emulated format
+        UNIMPLEMENTED();
+        return angle::Result::Stop;
+    }
 
     return setSubImageImpl(context, index, area, formatInfo, GL_UNSIGNED_BYTE, unpack, unpackBuffer,
                            pixels, vkFormat);
@@ -3907,6 +3940,13 @@ angle::Result TextureVk::getTexImage(const gl::Context *context,
                                      GLenum type,
                                      void *pixels)
 {
+    if (packBuffer && this->isCompressedFormatEmulated(context, target, level))
+    {
+        // TODO (anglebug.com/7464): Can't populate from a buffer using emulated format
+        UNIMPLEMENTED();
+        return angle::Result::Stop;
+    }
+
     ContextVk *contextVk = vk::GetImpl(context);
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
