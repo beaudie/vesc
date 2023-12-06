@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20d49f72_f68c441c",
+        "filename": "src/libANGLE/CLContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-06T20:53:33Z",
+      "side": 1,
+      "message": "Gotcha, will update in next patchset 👍",
+      "parentUuid": "9c5e4e3d_1b07ae87",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 2
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79183e25_a23dac24",
         "filename": "src/libANGLE/CLContext.cpp",
         "patchSetId": 5
@@ -126,6 +150,30 @@
       "side": 1,
       "message": "See above.",
       "parentUuid": "79183e25_a23dac24",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 10
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5dcdea4_ad4602bb",
+        "filename": "src/libANGLE/CLContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-06T20:53:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "384a6701_6c33cbc2",
       "range": {
         "startLine": 369,
         "startChar": 0,
@@ -183,6 +231,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5332122d_a57f6bcc",
+        "filename": "src/libANGLE/CLEvent.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-06T20:53:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7224b993_0f393c96",
+      "range": {
+        "startLine": 140,
+        "startChar": 57,
+        "endLine": 144,
+        "endChar": 10
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4d5f6b8_0e4f0fa8",
@@ -220,6 +292,30 @@
       "side": 1,
       "message": "See above",
       "parentUuid": "c4d5f6b8_0e4f0fa8",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 244,
+        "endChar": 1
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd515bb0_e875e326",
+        "filename": "src/libANGLE/CLKernel.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-06T20:53:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34e68ce2_7a8b68ac",
       "range": {
         "startLine": 224,
         "startChar": 0,
@@ -277,6 +373,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2ad046d_d41d5066",
+        "filename": "src/libANGLE/CLMemory.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-06T20:53:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bff080e1_eb80dd0c",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 11
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "063b4ffa_60b7377f",
@@ -324,6 +444,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9670d1c3_9b940415",
+        "filename": "src/libANGLE/CLProgram.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-06T20:53:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7134fe2_83d2cedc",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 11
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd59f2f0_8dca5912",
@@ -361,6 +505,30 @@
       "side": 1,
       "message": "See above.",
       "parentUuid": "bd59f2f0_8dca5912",
+      "range": {
+        "startLine": 98,
+        "startChar": 1,
+        "endLine": 102,
+        "endChar": 10
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3c1049d_ea2d1343",
+        "filename": "src/libANGLE/CLSampler.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-06T20:53:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "166cbf48_a8f0bfd3",
       "range": {
         "startLine": 98,
         "startChar": 1,
