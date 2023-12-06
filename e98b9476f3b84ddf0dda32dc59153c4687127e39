@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c5e4e3d_1b07ae87",
+        "filename": "src/libANGLE/CLContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-06T01:02:26Z",
+      "side": 1,
+      "message": "I\u0027d say just make the `mImpl` not const. That\u0027s how it is with gl::Context etc. We typically destroy the objects in an `onDestroy()`, including the impl pointer, and in destructor assert that it\u0027s nullptr; it gives us a check that `onDestroy()` was called correctly. I\u0027m saying all this to say the impl being non-const is a good thing :P\n\nAbout the `static_cast\u003cvoid\u003e`, we also have a solution for that for `gl::`. See the `ANGLE_CONTEXT_TRY` macro. It basically translates to the same thing, but _semantically_ you\u0027re handling the error (which, as an implementation detail, is already handled by being placed in the TLS).",
+      "parentUuid": "4e10ff6d_9642ab96",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 2
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79183e25_a23dac24",
         "filename": "src/libANGLE/CLContext.cpp",
         "patchSetId": 5
