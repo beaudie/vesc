@@ -236,6 +236,10 @@ class StateCache final : angle::NonCopyable
     {
         return mCachedNonInstancedVertexElementLimit;
     }
+    GLint64 getInstancedVertexNonInstancedDrawElementLimit() const
+    {
+        return mCachedInstancedVertexNonInstancedDrawElementLimit;
+    }
     GLint64 getInstancedVertexElementLimit() const { return mCachedInstancedVertexElementLimit; }
 
     // Places that can trigger updateBasicDrawStatesError:
@@ -414,9 +418,52 @@ class StateCache final : angle::NonCopyable
     AttributesMask mCachedActiveBufferedAttribsMask;
     AttributesMask mCachedActiveClientAttribsMask;
     AttributesMask mCachedActiveDefaultAttribsMask;
-    bool mCachedHasAnyEnabledClientAttrib;
+
+    // Given a vertex attribute's stride, the corresponding vertex buffer can fit a number of such
+    // attributes.  A draw call that attempts to use more vertex attributes thus needs to fail (when
+    // robust access is enabled).  The following variables help implement this limit given the
+    // following situations:
+    //
+    // Assume:
+    //
+    // Ni = Number of vertex attributes that can fit in buffer bound to attribute i.
+    // Di = Vertex attribute divisor set for attribute i.
+    // F = Draw calls "first" vertex index
+    // C = Draw calls vertex "count"
+    // B = Instanced draw calls "baseinstance"
+    // P = Instanced draw calls "primcount" (or "instancecount" in desktop GL)
+    //
+    // Then, for each attribute i:
+    //
+    //   If Di == 0 (i.e. non-instanced)
+    //     Vertices [F, F+C) are accessed
+    //     Draw call should fail if F+C > Ni
+    //
+    //   If Di != 0 (i.e. instanced), in a non-instanced draw call:
+    //     Only vertex 0 is accessed - note that a non-zero divisor in a non-instanced draw call
+    //       implies that F is ignored and the vertex index is not incremented.
+    //     Draw call should fail if Ni < 1
+    //
+    //   If Di != 0, in an instanced draw call:
+    //     Vertices [B, B+ceil(P/Di)) are accessed
+    //     Draw call should fail if B+ceil(P/Di) > Ni
+    //
+    // To avoid needing to iterate over all attributes in the hot paths, the following is
+    // calculated:
+    //
+    // Non-instanced limit: min(Ni) for all non-instanced attributes.  At draw time F+C <= min(Ni)
+    // is validated.
+    // Instanced-vertex-non-instanced-draw limit: min(Ni) for all instancedd attributes.  At
+    // non-instanced draw time, min(Ni) > 0 is validated.
+    // Instanced limit: min(Ni*Di) for all instanced attributes.  At draw time, B+P <= min(Ni*Di) is
+    // validated (the math works out, try with an example!)
+    //
+    // If there are no instanced attributes, the non-instanced limit is set to infinity.  If there
+    // are no instanced attributes, the instanced limits are set to infinity.
     GLint64 mCachedNonInstancedVertexElementLimit;
+    GLint64 mCachedInstancedVertexNonInstancedDrawElementLimit;
     GLint64 mCachedInstancedVertexElementLimit;
+
     mutable intptr_t mCachedBasicDrawStatesErrorString;
     mutable GLenum mCachedBasicDrawStatesErrorCode;
     mutable intptr_t mCachedBasicDrawElementsError;
@@ -429,6 +476,7 @@ class StateCache final : angle::NonCopyable
     // mCachedProgramPipelineError can be no-error or also in error, or
     // unknown due to early exiting.
     mutable intptr_t mCachedProgramPipelineError;
+    bool mCachedHasAnyEnabledClientAttrib;
     bool mCachedTransformFeedbackActiveUnpaused;
     StorageBuffersMask mCachedActiveShaderStorageBufferIndices;
     ImageUnitMask mCachedActiveImageUnitIndices;
