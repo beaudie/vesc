@@ -893,7 +893,7 @@ bool ValidateDrawElementsInstancedBase(const Context *context,
         return true;
     }
 
-    return ValidateDrawInstancedAttribs(context, entryPoint, primcount);
+    return ValidateDrawInstancedAttribs(context, entryPoint, 0, primcount);
 }
 
 bool ValidateDrawArraysInstancedBase(const Context *context,
@@ -926,7 +926,7 @@ bool ValidateDrawArraysInstancedBase(const Context *context,
         return true;
     }
 
-    return ValidateDrawInstancedAttribs(context, entryPoint, primcount);
+    return ValidateDrawInstancedAttribs(context, entryPoint, first, primcount);
 }
 
 bool ValidateDrawInstancedANGLE(const Context *context, angle::EntryPoint entryPoint)
@@ -8563,7 +8563,7 @@ void RecordDrawAttribsError(const Context *context, angle::EntryPoint entryPoint
     // An overflow can happen when adding the offset. Check against a special constant.
     if (context->getStateCache().getNonInstancedVertexElementLimit() ==
             VertexAttribute::kIntegerOverflow ||
-        context->getStateCache().getInstancedVertexElementLimit() ==
+        context->getStateCache().getInstancedVertexNonInstancedDrawElementLimit() ==
             VertexAttribute::kIntegerOverflow)
     {
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kIntegerOverflow);

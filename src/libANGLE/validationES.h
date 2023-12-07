@@ -983,9 +983,12 @@ void RecordDrawAttribsError(const Context *context, angle::EntryPoint entryPoint
 
 ANGLE_INLINE bool ValidateDrawAttribs(const Context *context,
                                       angle::EntryPoint entryPoint,
-                                      int64_t maxVertex)
+                                      const IndexRange &vertexRange)
 {
-    if (maxVertex > context->getStateCache().getNonInstancedVertexElementLimit())
+    if (static_cast<GLint64>(vertexRange.start) >=
+            context->getStateCache().getInstancedVertexNonInstancedDrawElementLimit() ||
+        static_cast<GLint64>(vertexRange.end) >=
+            context->getStateCache().getNonInstancedVertexElementLimit())
     {
         RecordDrawAttribsError(context, entryPoint);
         return false;
@@ -1017,11 +1020,14 @@ ANGLE_INLINE bool ValidateDrawArraysAttribs(const Context *context,
         return false;
     }
 
-    return ValidateDrawAttribs(context, entryPoint, maxVertex);
+    IndexRange vertexRange(static_cast<size_t>(first), static_cast<size_t>(maxVertex), 0);
+
+    return ValidateDrawAttribs(context, entryPoint, vertexRange);
 }
 
 ANGLE_INLINE bool ValidateDrawInstancedAttribs(const Context *context,
                                                angle::EntryPoint entryPoint,
+                                               GLint first,
                                                GLint primcount)
 {
     if (!context->isBufferAccessValidationEnabled())
@@ -1029,10 +1035,23 @@ ANGLE_INLINE bool ValidateDrawInstancedAttribs(const Context *context,
         return true;
     }
 
-    if ((primcount - 1) > context->getStateCache().getInstancedVertexElementLimit())
+    // Validate that the buffers bound for the attributes can hold enough vertices for this
+    // instanced draw.  For attributes with a divisor of 0, ValidateDrawAttribs already checks this.
+    // Thus, the following only checks attributes with a non-zero divisor (i.e. "instanced").
+    const auto &bindings = context->getState().getVertexArray()->getVertexBindings();
+    for (size_t attribIndex : context->getStateCache().getActiveInstancedAttribsMask())
     {
-        RecordDrawAttribsError(context, entryPoint);
-        return false;
+        ASSERT(bindings[attribIndex].getDivisor() != 0);
+
+        const int64_t firstInInstanceCounts =
+            static_cast<int64_t>(first) * bindings[attribIndex].getDivisor();
+        const int64_t vertexLimit =
+            context->getStateCache().getInstancedVertexElementLimit(attribIndex);
+        if (firstInInstanceCounts >= vertexLimit || primcount > vertexLimit - firstInInstanceCounts)
+        {
+            RecordDrawAttribsError(context, entryPoint);
+            return false;
+        }
     }
 
     return true;
@@ -1243,7 +1262,7 @@ ANGLE_INLINE bool ValidateDrawElementsCommon(const Context *context,
             return false;
         }
 
-        if (!ValidateDrawAttribs(context, entryPoint, static_cast<GLint>(indexRange.end)))
+        if (!ValidateDrawAttribs(context, entryPoint, indexRange))
         {
             return false;
         }
