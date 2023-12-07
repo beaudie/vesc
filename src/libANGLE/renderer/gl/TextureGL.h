@@ -213,6 +213,8 @@ class TextureGL : public TextureImpl
 
     angle::Result setBuffer(const gl::Context *context, GLenum internalFormat) override;
 
+    GLenum getColorReadFormat(const gl::Context *context) override;
+
     GLenum getNativeInternalFormat(const gl::ImageIndex &index) const;
     bool hasEmulatedAlphaChannel(const gl::ImageIndex &index) const;
 

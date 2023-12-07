@@ -2320,4 +2320,9 @@ GLint TextureGL::getRequiredExternalTextureImageUnits(const gl::Context *context
     return result;
 }
 
+GLenum TextureGL::getColorReadFormat(const gl::Context *context)
+{
+    return GL_RGBA_INTEGER;
+}
+
 }  // namespace rx
