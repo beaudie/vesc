@@ -223,6 +223,10 @@ class StateCache final : angle::NonCopyable
     AttributesMask getActiveBufferedAttribsMask() const { return mCachedActiveBufferedAttribsMask; }
     AttributesMask getActiveClientAttribsMask() const { return mCachedActiveClientAttribsMask; }
     AttributesMask getActiveDefaultAttribsMask() const { return mCachedActiveDefaultAttribsMask; }
+    AttributesMask getActiveInstancedAttribsMask() const
+    {
+        return mCachedActiveInstancedAttribsMask;
+    }
     bool hasAnyEnabledClientAttrib() const { return mCachedHasAnyEnabledClientAttrib; }
     bool hasAnyActiveClientAttrib() const { return mCachedActiveClientAttribsMask.any(); }
 
@@ -236,7 +240,14 @@ class StateCache final : angle::NonCopyable
     {
         return mCachedNonInstancedVertexElementLimit;
     }
-    GLint64 getInstancedVertexElementLimit() const { return mCachedInstancedVertexElementLimit; }
+    GLint64 getInstancedVertexNonInstancedDrawElementLimit() const
+    {
+        return mCachedInstancedVertexNonInstancedDrawElementLimit;
+    }
+    GLint64 getInstancedVertexElementLimit(size_t attribIndex) const
+    {
+        return mCachedInstancedVertexElementLimits[attribIndex];
+    }
 
     // Places that can trigger updateBasicDrawStatesError:
     // 1. onVertexArrayBindingChange.
@@ -414,9 +425,58 @@ class StateCache final : angle::NonCopyable
     AttributesMask mCachedActiveBufferedAttribsMask;
     AttributesMask mCachedActiveClientAttribsMask;
     AttributesMask mCachedActiveDefaultAttribsMask;
-    bool mCachedHasAnyEnabledClientAttrib;
+    AttributesMask mCachedActiveInstancedAttribsMask;
+
+    // Given a vertex attribute's stride, the corresponding vertex buffer can fit a number of such
+    // attributes.  A draw call that attempts to use more vertex attributes thus needs to fail (when
+    // robust access is enabled).  The following variables help implement this limit given the
+    // following situations:
+    //
+    // Assume:
+    //
+    // Ni = Number of vertex attributes that can fit in buffer bound to attribute i.
+    // Di = Vertex attribute divisor set for attribute i.
+    // F = Draw calls "first" vertex index
+    // C = Draw calls vertex "count"
+    // P = Instanced draw calls "primcount" (or "instancecount" in desktop GL)
+    //
+    // Then, for each attribute i:
+    //
+    //   If Di == 0 (i.e. non-instanced)
+    //     Vertices [F, F+C) are accessed
+    //     Draw call should fail if F+C > Ni
+    //
+    //   If Di != 0 (i.e. instanced), in a non-instanced draw call:
+    //     Only vertex F is accessed - note that a non-zero divisor in a non-instanced draw calls
+    //       implies that the vertex index is not incremented.
+    //     Draw call should fail if F >= Ni
+    //
+    //   If Di != 0, in an instanced draw call:
+    //     Vertices [F, F+ceil(P/Di)) are accessed
+    //     Draw call should fail if F+ceil(P/Di) > Ni
+    //
+    // To avoid needing to iterate over all attributes in the hot paths, the following is
+    // calculated:
+    //
+    // Non-instanced limit: min(Ni) for all non-instanced attributes.  At draw time F+C <= min(Ni)
+    // is validated.
+    // Instanced-vertex-non-instanced-draw limit: min(Ni) for all instancedd attributes.  At
+    // non-instanced draw time, F < min(Ni) is validated.
+    // Instanced limit: Ni*Di for each instanced attribute.  At draw time, F*Di+P <= Ni*Di is
+    // validated (the math works out, try with an example!)
+    //   * Note that this check subsumes the F < min(Ni) check for the non-instanced draws.  As
+    //     such, the validation code does the non-instanced draw check unconditionally for all
+    //     draws.
+    //
+    // If there are no instanced attributes, the non-instanced limit is set to infinity.  If there
+    // are no instanced attributes, the instanced limits are set to infinity.
+    //
+    // TODO: these limits should represent N, i.e. they are exclusive.  The limit calculation code
+    // should likely be fixed to add a few +1s somewhere.
     GLint64 mCachedNonInstancedVertexElementLimit;
-    GLint64 mCachedInstancedVertexElementLimit;
+    GLint64 mCachedInstancedVertexNonInstancedDrawElementLimit;
+    AttribArray<GLint64> mCachedInstancedVertexElementLimits;
+
     mutable intptr_t mCachedBasicDrawStatesErrorString;
     mutable GLenum mCachedBasicDrawStatesErrorCode;
     mutable intptr_t mCachedBasicDrawElementsError;
@@ -429,6 +489,7 @@ class StateCache final : angle::NonCopyable
     // mCachedProgramPipelineError can be no-error or also in error, or
     // unknown due to early exiting.
     mutable intptr_t mCachedProgramPipelineError;
+    bool mCachedHasAnyEnabledClientAttrib;
     bool mCachedTransformFeedbackActiveUnpaused;
     StorageBuffersMask mCachedActiveShaderStorageBufferIndices;
     ImageUnitMask mCachedActiveImageUnitIndices;
