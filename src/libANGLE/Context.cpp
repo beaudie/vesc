@@ -10002,13 +10002,13 @@ GLenum ErrorSet::getGraphicsResetStatus(rx::ContextImpl *contextImpl)
 
 // StateCache implementation.
 StateCache::StateCache()
-    : mCachedHasAnyEnabledClientAttrib(false),
-      mCachedNonInstancedVertexElementLimit(0),
+    : mCachedNonInstancedVertexElementLimit(0),
       mCachedInstancedVertexElementLimit(0),
       mCachedBasicDrawStatesErrorString(kInvalidPointer),
       mCachedBasicDrawStatesErrorCode(GL_NO_ERROR),
       mCachedBasicDrawElementsError(kInvalidPointer),
       mCachedProgramPipelineError(kInvalidPointer),
+      mCachedHasAnyEnabledClientAttrib(false),
       mCachedTransformFeedbackActiveUnpaused(false),
       mCachedCanDraw(false)
 {
@@ -10072,8 +10072,9 @@ void StateCache::updateVertexElementLimitsImpl(Context *context)
 
     const VertexArray *vao = context->getState().getVertexArray();
 
-    mCachedNonInstancedVertexElementLimit = std::numeric_limits<GLint64>::max();
-    mCachedInstancedVertexElementLimit    = std::numeric_limits<GLint64>::max();
+    mCachedNonInstancedVertexElementLimit              = std::numeric_limits<GLint64>::max();
+    mCachedInstancedVertexNonInstancedDrawElementLimit = std::numeric_limits<GLint64>::max();
+    mCachedInstancedVertexElementLimit                 = std::numeric_limits<GLint64>::max();
 
     // VAO can be null on Context startup. If we make this computation lazier we could ASSERT.
     // If there are no buffered attributes then we should not limit the draw call count.
@@ -10096,8 +10097,17 @@ void StateCache::updateVertexElementLimitsImpl(Context *context)
         GLint64 limit = attrib.getCachedElementLimit();
         if (binding.getDivisor() > 0)
         {
+            mCachedInstancedVertexNonInstancedDrawElementLimit =
+                std::min(mCachedInstancedVertexNonInstancedDrawElementLimit, limit);
+
+            // For instanced draw calls, |divisor| times this limit is the limit for instance count
+            // (because every |divisor| instances accesses the same attribute)
+            angle::CheckedNumeric<GLint64> checkedLimit = limit;
+            checkedLimit *= binding.getDivisor();
+
             mCachedInstancedVertexElementLimit =
-                std::min(mCachedInstancedVertexElementLimit, limit);
+                std::min<GLint64>(mCachedInstancedVertexElementLimit,
+                                  checkedLimit.ValueOrDefault(VertexAttribute::kIntegerOverflow));
         }
         else
         {
