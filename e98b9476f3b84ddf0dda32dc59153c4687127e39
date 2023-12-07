@@ -113,6 +113,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adc51cc4_42ddefdd",
+        "filename": "src/libANGLE/CLContext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-07T00:23:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20d49f72_f68c441c",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 2
+      },
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79183e25_a23dac24",
