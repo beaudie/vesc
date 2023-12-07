@@ -168,9 +168,14 @@ class FastVector final
 
     void reserve(size_type count);
 
-    // Specialty function that removes a known element and might shuffle the list.
+    // Remove the first instance of "element" or the element at "pos". May change the ordering of
+    // the data.
     void remove_and_permute(const value_type &element);
     void remove_and_permute(iterator pos);
+
+    // Remove all data that satisifies predicate P. May change the ordering of the data.
+    template <typename Pred>
+    void remove_all_and_permute(Pred p);
 
   private:
     void assign_from_initializer_list(std::initializer_list<value_type> init);
@@ -533,16 +538,20 @@ void FastVector<T, N, Storage>::assign_from_initializer_list(std::initializer_li
 template <class T, size_t N, class Storage>
 ANGLE_INLINE void FastVector<T, N, Storage>::remove_and_permute(const value_type &element)
 {
-    size_t len = mSize - 1;
-    for (size_t index = 0; index < len; ++index)
+    for (size_t index = 0; index < mSize; ++index)
     {
         if (mData[index] == element)
         {
-            mData[index] = std::move(mData[len]);
-            break;
+            if (index < mSize - 1)
+            {
+                // If there are mor elements after the one to be removed, swap the last element into
+                // this slot.
+                mData[index] = std::move(mData[mSize - 1]);
+            }
+            pop_back();
+            return;
         }
     }
-    pop_back();
 }
 
 template <class T, size_t N, class Storage>
@@ -553,6 +562,25 @@ ANGLE_INLINE void FastVector<T, N, Storage>::remove_and_permute(iterator pos)
     size_t len = mSize - 1;
     *pos       = std::move(mData[len]);
     pop_back();
+}
+
+template <class T, size_t N, class Storage>
+template <typename Pred>
+ANGLE_INLINE void FastVector<T, N, Storage>::remove_all_and_permute(Pred p)
+{
+    size_t i = 0;
+    while (i < mSize)
+    {
+        if (p(mData[i]))
+        {
+            mData[i] = std::move(mData[mSize - 1]);
+            pop_back();
+        }
+        else
+        {
+            i++;
+        }
+    }
 }
 
 template <class T, size_t N, class Storage>

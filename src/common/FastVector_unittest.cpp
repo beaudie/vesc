@@ -278,6 +278,39 @@ TEST(FastVector, NonCopyable)
     EXPECT_EQ(3, copy[0].x);
 }
 
+// Tests of the remove_and_permute and remove_all_and_permute methods.
+TEST(FastVector, RemoveAndPermute)
+{
+    FastVector<int, 10> vec;
+
+    // Removing an element that does not exist should not change the vector
+    vec.remove_and_permute(1);  // vec = { }
+    EXPECT_EQ(0u, vec.size());
+
+    vec.push_back(0);           // vec = { 0 }
+    vec.remove_and_permute(1);  // vec = { 0 }
+    EXPECT_EQ(1u, vec.size());
+
+    // remove_and_permute only removes one element
+    vec.push_back(0);  // vec = { 0, 0 }
+    EXPECT_EQ(2u, vec.size());
+    vec.remove_and_permute(0);  // vec = { 0 }
+    EXPECT_EQ(1u, vec.size());
+
+    // remove_all_and_permute removes all elements matching
+    vec.push_back(1);                                          // vec = { 0, 1 }
+    vec.push_back(0);                                          // vec = { 0, 1, 0 }
+    vec.remove_all_and_permute([](int x) { return x == 0; });  // vec = { 1 }
+    EXPECT_EQ(1u, vec.size());
+    EXPECT_EQ(1, vec[0]);
+
+    // remove_all_and_permute clears when everything matches
+    vec.push_back(1);                                      // vec = { 1, 1 }
+    vec.push_back(0);                                      // vec = { 1, 1, 0 }
+    vec.remove_all_and_permute([](int) { return true; });  // vec = { }
+    EXPECT_EQ(0u, vec.size());
+}
+
 // Basic functionality for FlatUnorderedMap
 TEST(FlatUnorderedMap, BasicUsage)
 {
@@ -388,4 +421,5 @@ TEST(FastMap, Basic)
         EXPECT_TRUE(testMap[i] == i);
     }
 }
+
 }  // namespace angle
