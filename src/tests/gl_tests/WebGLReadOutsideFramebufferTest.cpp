@@ -357,8 +357,6 @@ TEST_P(WebGLReadOutsideFramebufferTest, CopyTexSubImage2D)
 // Check that copyTexImage2D sets (0,0,0,0) for pixels outside the framebuffer.
 TEST_P(WebGLReadOutsideFramebufferTest, CopyTexImage2D)
 {
-    // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsD3D9() || IsD3D11());
     Main2D(&WebGLReadOutsideFramebufferTest::TestCopyTexImage2D, true);
     Main2D(&WebGLReadOutsideFramebufferTest::TestCopyTexImageCube, true);
 }
@@ -367,16 +365,11 @@ TEST_P(WebGLReadOutsideFramebufferTest, CopyTexImage2D)
 // the corresponding source pixel is outside the framebuffer.
 TEST_P(WebGL2ReadOutsideFramebufferTest, CopyTexSubImage3D)
 {
-    // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(IsVulkan() || IsD3D9() || IsD3D11());
-    // Robust CopyTexSubImage3D behaviour is not implemented on OpenGL.
-    ANGLE_SKIP_TEST_IF(IsDesktopOpenGL() || IsOpenGLES());
-
     Main3D(&WebGLReadOutsideFramebufferTest::TestCopyTexSubImage3D, false);
 }
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(WebGLReadOutsideFramebufferTest);
 
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(WebGL2ReadOutsideFramebufferTest);
+ANGLE_INSTANTIATE_TEST_ES3(WebGL2ReadOutsideFramebufferTest);
 
 }  // namespace angle
