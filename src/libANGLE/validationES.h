@@ -1017,6 +1017,9 @@ ANGLE_INLINE bool ValidateDrawArraysAttribs(const Context *context,
         return false;
     }
 
+    if (binding.getDivisor() > 0)
+        maxVertex = first;
+
     return ValidateDrawAttribs(context, entryPoint, maxVertex);
 }
 
