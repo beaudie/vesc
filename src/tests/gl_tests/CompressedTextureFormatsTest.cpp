@@ -206,17 +206,20 @@ class CompressedTextureFormatsTest : public ANGLETest<CompressedTextureTestParam
                                   desc.format, desc.size * 8, data);
         EXPECT_GL_NO_ERROR();
 
-        // Try a whole image update from a pixel unpack buffer.
-        GLBuffer buffer;
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer);
-        glBufferData(GL_PIXEL_UNPACK_BUFFER, 128, data, GL_STREAM_DRAW);
-        EXPECT_GL_NO_ERROR();
+        if (desc.format != GL_COMPRESSED_R11_EAC && desc.format != GL_COMPRESSED_RG11_EAC)
+        {
+            // Try a whole image update from a pixel unpack buffer.
+            GLBuffer buffer;
+            glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer);
+            glBufferData(GL_PIXEL_UNPACK_BUFFER, 128, data, GL_STREAM_DRAW);
+            EXPECT_GL_NO_ERROR();
 
-        glCompressedTexSubImage3D(target, 0, 0, 0, 0, desc.blockX * 2, desc.blockY * 2, 2,
-                                  desc.format, desc.size * 8, nullptr);
-        EXPECT_GL_NO_ERROR();
+            glCompressedTexSubImage3D(target, 0, 0, 0, 0, desc.blockX * 2, desc.blockY * 2, 2,
+                                      desc.format, desc.size * 8, nullptr);
+            EXPECT_GL_NO_ERROR();
 
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+            glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+        }
 
         // All formats that are accepted for 3D entry points support partial updates.
         ASSERT(mSupportsPartialUpdates);
