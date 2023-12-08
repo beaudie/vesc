@@ -27,10 +27,9 @@ if (current_cpu == "x86") {
   } else if (current_os == "linux") {
     llvm_current_triple = "aarch64-unknown-linux-gnu"
   }
-}
-
-if (!defined(llvm_current_triple)) {
-  assert(true, "unimplemented cpu/os $current_cpu / $current_os")
+} else {
+  # Default to host arch for llvm's target output for all other platforms for now (win32/macOS)
+  llvm_current_triple = "host"
 }
 
 declare_args() {

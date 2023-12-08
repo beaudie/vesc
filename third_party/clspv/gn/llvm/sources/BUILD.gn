@@ -228,6 +228,7 @@ clspv_llvm_static_lib("clspv_llvm_lib_lto") {
     ":clspv_llvm_lib_transforms_objcarc",
     ":clspv_llvm_lib_transforms_scalar",
     ":clspv_llvm_lib_transforms_utils",
+    ":write_vcsrevision",
     "../config:config",
   ]
   sources = [
@@ -272,6 +273,7 @@ clspv_llvm_static_lib("clspv_llvm_lib_transforms_utils") {
     ":clspv_llvm_lib_ir",
     ":clspv_llvm_lib_support",
     ":clspv_llvm_lib_targetparser",
+    "../tablegen:IntrinsicsWebAssembly",
   ]
   sources = [
     "//$clspv_llvm_dir/llvm/lib/Transforms/Utils/AMDGPUEmitPrintf.cpp",
@@ -484,6 +486,7 @@ clspv_llvm_static_lib("clspv_llvm_lib_transforms_instrumentation") {
     ":clspv_llvm_lib_support",
     ":clspv_llvm_lib_targetparser",
     ":clspv_llvm_lib_transforms_utils",
+    "../tablegen:IntrinsicsX86",
   ]
   sources = [
     "//$clspv_llvm_dir/llvm/lib/Transforms/Instrumentation/AddressSanitizer.cpp",
@@ -517,6 +520,10 @@ clspv_llvm_static_lib("clspv_llvm_lib_transforms_instcombine") {
     ":clspv_llvm_lib_ir",
     ":clspv_llvm_lib_support",
     ":clspv_llvm_lib_transforms_utils",
+    "../tablegen:IntrinsicsAArch64",
+    "../tablegen:IntrinsicsAMDGPU",
+    "../tablegen:IntrinsicsARM",
+    "../tablegen:IntrinsicsHexagon",
   ]
   sources = [
     "//$clspv_llvm_dir/llvm/lib/Transforms/InstCombine/InstCombineAddSub.cpp",
@@ -556,6 +563,8 @@ clspv_llvm_static_lib("clspv_llvm_lib_transforms_ipo") {
     ":clspv_llvm_lib_transforms_scalar",
     ":clspv_llvm_lib_transforms_utils",
     ":clspv_llvm_lib_transforms_vectorize",
+    "../tablegen:IntrinsicsAMDGPU",
+    "../tablegen:IntrinsicsNVPTX",
   ]
   sources = [
     "//$clspv_llvm_dir/llvm/lib/Transforms/IPO/AlwaysInliner.cpp",
@@ -823,6 +832,8 @@ clspv_llvm_static_lib("clspv_llvm_lib_bitcode_reader") {
     ":clspv_llvm_lib_ir",
     ":clspv_llvm_lib_support",
     ":clspv_llvm_lib_targetparser",
+    "../tablegen:IntrinsicsAArch64",
+    "../tablegen:IntrinsicsARM",
   ]
 
   sources = [
@@ -866,6 +877,8 @@ clspv_llvm_static_lib("clspv_llvm_lib_codegen") {
     ":clspv_llvm_lib_transforms_scalar",
     ":clspv_llvm_lib_transforms_utils",
     "../tablegen:GenVT",
+    "../tablegen:IntrinsicsAArch64",
+    "../tablegen:IntrinsicsWebAssembly",
   ]
   sources = [
     # llvm/lib/CodeGen
@@ -1382,7 +1395,10 @@ clspv_llvm_static_lib("clspv_llvm_lib_demangle") {
 
 clspv_llvm_static_lib("clspv_llvm_lib_extensions") {
   sources = [ "//$clspv_llvm_dir/llvm/lib/Extensions/Extensions.cpp" ]
-  deps = [ ":clspv_llvm_lib_support" ]
+  deps = [
+    ":clspv_llvm_lib_support",
+    "../config:write_extension_def",
+  ]
 }
 
 clspv_llvm_static_lib("clspv_llvm_lib_ir") {
@@ -2473,6 +2489,7 @@ if (true) {
       ":clspv_llvm_lib_transforms_objcarc",
       ":clspv_llvm_lib_transforms_scalar",
       ":clspv_llvm_lib_transforms_utils",
+      "../config:write_extension_def",
       "../tablegen:arm_cde_builtin_cg",
       "../tablegen:arm_mve_builtin_cg",
       "../tablegen:arm_sme_builtin_cg",
@@ -2751,6 +2768,7 @@ clspv_clang_static_lib("clspv_clang_lib_lex") {
     ":clspv_clang_lib_basic",
     ":clspv_llvm_lib_support",
     ":clspv_llvm_lib_targetparser",
+    "../config/clang:Config",
   ]
   sources = [
     "//$clspv_llvm_dir/clang/lib/Lex/DependencyDirectivesScanner.cpp",
