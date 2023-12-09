@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60a49ee7_2bee4a2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-09T04:04:42Z",
+      "side": 1,
+      "message": "Nice! Would you please do this for llvm/ too? I realize now we should have added a README.chromium for the sake of licensing info (that Chromium needs) and for that alone we need space between third_party/llvm and the actual llvm!\n\nI\u0027ll follow up with a README.chromium for clspv and llvm myself",
+      "revId": "7ba0a87bcc7f47aea46206b7e0e6652ce51dbc6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
