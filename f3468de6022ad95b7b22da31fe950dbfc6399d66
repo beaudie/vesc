@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d1ef32e_be1563a0",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-09T03:13:38Z",
+      "side": 1,
+      "message": "A couple of suggestions:\n\n- Please move this to `FastVector.h`, perhaps even make it a member function\n- Please add unit tests\n- Instead of `vec.begin()`, use `iter` from last iteration. It\u0027s potentially O(n^2) now, and it\u0027ll become O(n). Basically (untested code):\n\n```suggestion\n    auto iter \u003d std::find_if(vec.begin(), vec.end(), p);\n    while (iter !\u003d vec.end())\n    {\n        vec.remove_and_permute(iter);\n        iter \u003d std::find_if(iter, vec.end(), p);\n    }\n```\n\nI think the only complication with that is that `remove_and_permute` must guarantee that `iter` stays valid. We could fix that by making `remove_and_permute` return the passed in iterator. If the element being removed is not the last, return `iter` as-is (because of `pop_back` guarantees). If it\u0027s the last element, return the new `end()`.\n\nThe optimization could very well be a follow up",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 5
+      },
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65c31998_41952cd2",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-09T03:13:38Z",
+      "side": 1,
+      "message": "```suggestion\n    FastVectorEraseIf(mReleasedList, [value](GLuint x) { return x \u003c value; });\n```",
+      "range": {
+        "startLine": 50,
+        "startChar": 38,
+        "endLine": 50,
+        "endChar": 39
+      },
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a12e8069_a722df5c",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-09T03:13:38Z",
+      "side": 1,
+      "message": "```suggestion\n    FastVectorEraseIf(mReleasedList, [handle](GLuint x) { return x \u003d\u003d handle; });\n```",
+      "range": {
+        "startLine": 96,
+        "startChar": 38,
+        "endLine": 96,
+        "endChar": 39
+      },
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc480404_11e20350",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-09T03:13:38Z",
+      "side": 1,
+      "message": "```suggestion\n    FastVectorEraseIf(mReleasedList, [handle](GLuint x) { return x \u003d\u003d handle; });\n```",
+      "range": {
+        "startLine": 111,
+        "startChar": 38,
+        "endLine": 111,
+        "endChar": 39
+      },
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a616e701_f4f99d4b",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-09T03:13:38Z",
+      "side": 1,
+      "message": "nit: there are no callers to this (`TextureManager::enableHandleAllocatorLogging` calls this, but no one calls that). Suggest turning this into a constexpr flag at the top of the file that defaults to false so the `if`s are eliminated.",
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88b29af5_dfb6989c",
+        "filename": "src/libANGLE/HandleAllocator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-09T03:13:38Z",
+      "side": 1,
+      "message": "If not already, please add tests in HandleAllocator_unittests.cpp that intentionally overflow these lists (just in case).",
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
