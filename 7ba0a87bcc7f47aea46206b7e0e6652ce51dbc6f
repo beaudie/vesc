@@ -34,6 +34,24 @@
       "parentUuid": "60a49ee7_2bee4a2f",
       "revId": "7ba0a87bcc7f47aea46206b7e0e6652ce51dbc6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eba345d_dccd11cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-11T20:31:29Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/5111802/1",
+      "parentUuid": "ae172b12_28d854ea",
+      "revId": "7ba0a87bcc7f47aea46206b7e0e6652ce51dbc6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
