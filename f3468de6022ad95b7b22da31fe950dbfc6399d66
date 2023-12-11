@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56462893_ffb75201",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-11T20:05:37Z",
+      "side": 1,
+      "message": "Done. Added a remove_all_and_permute which internally just uses a size_t to iterate.\n\nAdded tests to FastVector and fixed some other bugs in remove_and_permute.",
+      "parentUuid": "8d1ef32e_be1563a0",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 5
+      },
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65c31998_41952cd2",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-12-09T03:13:38Z",
       "side": 1,
       "message": "```suggestion\n    FastVectorEraseIf(mReleasedList, [value](GLuint x) { return x \u003c value; });\n```",
+      "range": {
+        "startLine": 50,
+        "startChar": 38,
+        "endLine": 50,
+        "endChar": 39
+      },
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0bdec60_df978bac",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-11T20:05:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65c31998_41952cd2",
       "range": {
         "startLine": 50,
         "startChar": 38,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "648daeec_8e952586",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-11T20:05:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a12e8069_a722df5c",
+      "range": {
+        "startLine": 96,
+        "startChar": 38,
+        "endLine": 96,
+        "endChar": 39
+      },
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc480404_11e20350",
@@ -83,6 +155,30 @@
       "writtenOn": "2023-12-09T03:13:38Z",
       "side": 1,
       "message": "```suggestion\n    FastVectorEraseIf(mReleasedList, [handle](GLuint x) { return x \u003d\u003d handle; });\n```",
+      "range": {
+        "startLine": 111,
+        "startChar": 38,
+        "endLine": 111,
+        "endChar": 39
+      },
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b248a630_855dcc31",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-11T20:05:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc480404_11e20350",
       "range": {
         "startLine": 111,
         "startChar": 38,
@@ -110,6 +206,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "268703d6_8dcbd6c0",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-11T20:05:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a616e701_f4f99d4b",
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88b29af5_dfb6989c",
@@ -123,6 +237,24 @@
       "writtenOn": "2023-12-09T03:13:38Z",
       "side": 1,
       "message": "If not already, please add tests in HandleAllocator_unittests.cpp that intentionally overflow these lists (just in case).",
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d467beb_14ac7dd8",
+        "filename": "src/libANGLE/HandleAllocator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-11T20:05:37Z",
+      "side": 1,
+      "message": "Done. Edited some of the iteration counts to cover it.",
+      "parentUuid": "88b29af5_dfb6989c",
       "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
