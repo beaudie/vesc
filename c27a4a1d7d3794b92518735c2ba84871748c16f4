@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d68b67e4_51c9646b",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1305348
+      },
+      "writtenOn": "2023-12-11T16:11:00Z",
+      "side": 1,
+      "message": "This change appears to be making Skia\u0027s build unhappy: https://logs.chromium.org/logs/skia/6670ef200089c011/+/steps/ninja/0/stdout but given the follow-up changes that have landed, I\u0027m guessing a revert isn\u0027t super trivial. Can you apply a fix-forward?",
+      "range": {
+        "startLine": 22,
+        "startChar": 27,
+        "endLine": 22,
+        "endChar": 28
+      },
+      "revId": "c27a4a1d7d3794b92518735c2ba84871748c16f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
