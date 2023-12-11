@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dfc930f_898e1e70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-11T15:30:48Z",
+      "side": 1,
+      "message": "LGTM! Thanks for reworking this. Sorry for taking so long to review. Going to get through the CL reviews today.",
+      "revId": "06282114580ed5a6bad7308bb6e4792845ee1126",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
