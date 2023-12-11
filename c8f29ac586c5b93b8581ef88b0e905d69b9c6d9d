@@ -92,6 +92,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "556a3ae9_4a6eb548",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-11T19:09:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b2d4c1c_29afa5bc",
+      "range": {
+        "startLine": 322,
+        "startChar": 9,
+        "endLine": 322,
+        "endChar": 25
+      },
+      "revId": "c8f29ac586c5b93b8581ef88b0e905d69b9c6d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e640ea6a_d3b16d1d",
@@ -105,6 +129,30 @@
       "writtenOn": "2023-11-30T17:42:31Z",
       "side": 1,
       "message": "nit: Uppercase `PendingEvent`?",
+      "range": {
+        "startLine": 222,
+        "startChar": 11,
+        "endLine": 222,
+        "endChar": 23
+      },
+      "revId": "c8f29ac586c5b93b8581ef88b0e905d69b9c6d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2d3f8fa_e3f382d1",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-11T19:09:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e640ea6a_d3b16d1d",
       "range": {
         "startLine": 222,
         "startChar": 11,
