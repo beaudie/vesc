@@ -33,6 +33,24 @@
       "message": "Which entry point causing this issue? Could it be added to `setDefaultResetCalls` above instead of skipped?",
       "revId": "c9106a4527d27a160869c3f0eebf395ae8701d3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7665e67e_16fc5161",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-12-12T20:16:14Z",
+      "side": 1,
+      "message": "It was GLBindVertexArray, but the state was already default, so no calls were added:\n```\n        case angle::EntryPoint::GLBindVertexArray:\n        {\n            if (context-\u003egetState().getVertexArray()-\u003eid().value !\u003d 0)\n            {\n                VertexArrayCaptureFuncs vertexArrayFuncs(context-\u003eisGLES1());\n                Capture(\u0026mResetCalls[angle::EntryPoint::GLBindVertexArray],\n                        vertexArrayFuncs.bindVertexArray(context-\u003egetState(), true, {0}));\n            }\n            break;\n        }\n```\n\nThis resulted in a crash when calling `resetCalls-\u003eat(entryPoint)` since the entries are not present.",
+      "parentUuid": "3da22f18_4bbd1324",
+      "revId": "c9106a4527d27a160869c3f0eebf395ae8701d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
