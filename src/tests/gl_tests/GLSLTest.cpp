@@ -6302,6 +6302,45 @@ void main()
     glDeleteShader(shader);
 }
 
+// Test that a fragment shader that leaves undefined channels has a
+// deterministic output. (anglebug.com/8405)
+TEST_P(WebGL2GLSLTest, FragmentUndefinedChannels)
+{
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+
+out highp float frag_color;
+
+void main()
+{
+    frag_color = 1.0;
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+
+    glUseProgram(program);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+
+    int width = getWindowWidth(), height = getWindowHeight();
+    std::vector<GLColor> pixels(width * height);
+    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+
+    int count = 0;
+    GLColor expected(255, 0, 0, 0);
+
+    for (GLColor c : pixels)
+    {
+        if (c == expected)
+            ++count;
+    }
+    ASSERT_EQ(width * height, count);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that uninitialized local variables are initialized to 0.
 TEST_P(WebGL2GLSLTest, InitUninitializedLocals)
 {
