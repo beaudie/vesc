@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75b1f3a6_dc7c1288",
+        "filename": "src/libANGLE/HandleAllocator.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-12T17:05:51Z",
+      "side": 1,
+      "message": "Thanks. Since you\u0027re away, I took the liberty of changing `remove_and_permute` back to what it was with an added assert instead that the element must exist in the vector. It\u0027s only used in 2 places that do only remove elements that already exist, the change was only (slightly) making the function more expensive with no users.\n\nAnyway we can deal with that in a follow up.",
+      "parentUuid": "56462893_ffb75201",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 5
+      },
+      "revId": "f3468de6022ad95b7b22da31fe950dbfc6399d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65c31998_41952cd2",
