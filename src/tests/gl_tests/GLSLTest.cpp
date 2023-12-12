@@ -980,6 +980,31 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// Test that a fragment shader that leaves undefined channels has a
+// deterministic output. (anglebug.com/8405)
+TEST_P(GLSLTest_ES3, FragmentUndefinedChannels)
+{
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+
+out highp float frag_color;
+
+void main()
+{
+    frag_color = 1.0;
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+
+    glUseProgram(program);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::red);
+}
+
 TEST_P(GLSLTest, ScopedStructsOrderBug)
 {
     constexpr char kFS[] = R"(precision mediump float;
