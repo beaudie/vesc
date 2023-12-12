@@ -51,6 +51,24 @@
       "parentUuid": "3da22f18_4bbd1324",
       "revId": "c9106a4527d27a160869c3f0eebf395ae8701d3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c4c197_b31e3104",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-12-12T20:21:26Z",
+      "side": 1,
+      "message": "Ah, I missed that reset does its own check for some entry points, makes sense.",
+      "parentUuid": "7665e67e_16fc5161",
+      "revId": "c9106a4527d27a160869c3f0eebf395ae8701d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
