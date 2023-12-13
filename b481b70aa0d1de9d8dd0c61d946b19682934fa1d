@@ -16,6 +16,29 @@
       "message": "@Quyen, would you mind reviewing this change in Geoff\u0027s absence? +1 for me for the test",
       "revId": "b481b70aa0d1de9d8dd0c61d946b19682934fa1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55ec7053_13b08833",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-12-13T19:00:25Z",
+      "side": 1,
+      "message": "lgtm. Just one thing: searching the entire program inputs list again for each attribute location seems like a waste.\n\nBefore it wasn\u0027t a big deal since the search only happened for disabled array locations. However now we have to do it for every attribute location.\n\nDo you think it makes sense to preprocess the program inputs such that this search could be faster?",
+      "range": {
+        "startLine": 409,
+        "startChar": 79,
+        "endLine": 409,
+        "endChar": 86
+      },
+      "revId": "b481b70aa0d1de9d8dd0c61d946b19682934fa1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
