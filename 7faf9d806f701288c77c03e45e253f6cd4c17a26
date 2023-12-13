@@ -34,6 +34,24 @@
       "parentUuid": "4794d399_a3ed9f5e",
       "revId": "7faf9d806f701288c77c03e45e253f6cd4c17a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95fdd66b_21113394",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-12-13T19:24:13Z",
+      "side": 1,
+      "message": "On presubmit we don\u0027t run perf bots.\nOur CQ bots run traces in smoke mode, i.e. only one frame, maybe it is not enough to trigger the crash?",
+      "parentUuid": "e03e8dbf_ed0be1ac",
+      "revId": "7faf9d806f701288c77c03e45e253f6cd4c17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
