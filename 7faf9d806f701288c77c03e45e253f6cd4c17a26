@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4794d399_a3ed9f5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-13T18:34:05Z",
+      "side": 1,
+      "message": "Looks like some buffer ID got messed up? It feels like there\u0027s a capture/replay bug here and the change itself is innocent. @cnorthrop@google.com\n\nkillpg at ??:?\n__nss_passwd_lookup at memmove-vec-unaligned-erms.S:257\nUpdateClientBufferData at trace_fixture.cpp:380\nReplayContext1Frame46() at cookie_run_kingdom_context1_022.cpp:2629\n\n```\nvoid UpdateClientBufferData(GLuint bufferID, const void *source, GLsizei size)\n{\n    memcpy(gMappedBufferData[gBufferMap[bufferID]], source, size);\n}\n```",
+      "revId": "7faf9d806f701288c77c03e45e253f6cd4c17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
