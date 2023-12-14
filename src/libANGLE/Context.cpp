@@ -10211,6 +10211,11 @@ void StateCache::onGLES1ClientStateChange(Context *context)
     updateActiveAttribsMask(context);
 }
 
+void StateCache::onGLES1TextureStateChange(Context *context)
+{
+    updateActiveAttribsMask(context);
+}
+
 void StateCache::onDrawFramebufferChange(Context *context)
 {
     updateBasicDrawStatesError();
