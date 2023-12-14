@@ -4532,6 +4532,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, preferDeviceLocalMemoryHostVisible,
         canPreferDeviceLocalMemoryHostVisible(mPhysicalDeviceProperties.deviceType));
 
+    // ChromeOS prefers cached noncoherent memory for read. ARM mali GPU prefers cached and coherent
+    // for reads according to
+    // https://developer.arm.com/documentation/101897/0301/CPU-overheads/Vulkan-CPU-memory-mapping.
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferCachedNoncoherentBufferForRead, isVenus);
+
     bool dynamicStateWorks = true;
     if (isARM)
     {

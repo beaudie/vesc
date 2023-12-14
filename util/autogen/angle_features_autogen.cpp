@@ -225,6 +225,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::PreAddTexelFetchOffsets, "preAddTexelFetchOffsets"},
     {Feature::PreemptivelyStartProvokingVertexCommandBuffer, "preemptivelyStartProvokingVertexCommandBuffer"},
     {Feature::PreferAggregateBarrierCalls, "preferAggregateBarrierCalls"},
+    {Feature::PreferCachedNoncoherentBufferForRead, "preferCachedNoncoherentBufferForRead"},
     {Feature::PreferCpuForBuffersubdata, "preferCpuForBuffersubdata"},
     {Feature::PreferCPUForBufferSubData, "preferCPUForBufferSubData"},
     {Feature::PreferDeviceLocalMemoryHostVisible, "preferDeviceLocalMemoryHostVisible"},

@@ -1300,6 +1300,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://issuetracker.google.com/288119108"
     };
 
+    FeatureInfo preferCachedNoncoherentBufferForRead = {
+        "preferCachedNoncoherentBufferForRead",
+        FeatureCategory::VulkanFeatures,
+        "prefer cached noncoherent memory for read pixels",
+        &members, "https://issuetracker.google.com/315836169"
+    };
+
     FeatureInfo supportsExternalFormatResolve = {
         "supportsExternalFormatResolve",
         FeatureCategory::VulkanFeatures,

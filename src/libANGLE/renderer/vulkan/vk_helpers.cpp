@@ -10067,9 +10067,13 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     VkDeviceSize stagingOffset = 0;
     size_t allocationSize      = readFormat->pixelBytes * area.width * area.height;
 
-    ANGLE_TRY(contextVk->initBufferForImageCopy(stagingBuffer, allocationSize,
-                                                MemoryCoherency::CachedCoherent, readFormat->id,
-                                                &stagingOffset, &readPixelBuffer));
+    MemoryCoherency coherency = renderer->getFeatures().preferCachedNoncoherentBufferForRead.enabled
+                                    ? MemoryCoherency::CachedNonCoherent
+                                    : MemoryCoherency::CachedCoherent;
+    ANGLE_TRY(contextVk->initBufferForImageCopy(stagingBuffer, allocationSize, coherency,
+                                                readFormat->id, &stagingOffset, &readPixelBuffer));
+    // invalidate call will check the memory coherency and early out if coherent
+    ANGLE_TRY(stagingBuffer->invalidate(renderer));
     VkBuffer bufferHandle = stagingBuffer->getBuffer().getHandle();
 
     VkBufferImageCopy region = {};
