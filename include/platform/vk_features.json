@@ -1409,6 +1409,14 @@
             "issue": "https://issuetracker.google.com/288119108"
         },
         {
+            "name": "prefer_cached_noncoherent_buffer_for_read",
+            "category": "Features",
+            "description": [
+                "prefer cached noncoherent memory for read pixels"
+            ],
+            "issue": "https://issuetracker.google.com/315836169"
+        },
+        {
             "name": "supports_external_format_resolve",
             "category": "Features",
             "description": [
