@@ -69,6 +69,24 @@
       "parentUuid": "22d6e63d_b7dd8dba",
       "revId": "962d4d6b9bf64a270d2db8a8502fde8b893fd98c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0799170b_3d74d4dc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4538,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-12-14T22:27:53Z",
+      "side": 1,
+      "message": "Maybe we should detect if hostVisible+cached+coherent exist or not, and fall back to hostVisible+cached+noncoherent if not exist. I think the problem hurting you is that we are falling back to hostVisible+uncached+coherent.",
+      "parentUuid": "12806661_99526bb6",
+      "revId": "962d4d6b9bf64a270d2db8a8502fde8b893fd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
