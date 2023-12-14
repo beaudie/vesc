@@ -10064,6 +10064,21 @@ void StateCache::updateActiveAttribsMask(Context *context)
     mCachedActiveBufferedAttribsMask = activeEnabled & ~clientAttribs;
     mCachedActiveDefaultAttribsMask  = activeAttribs & ~enabledAttribs;
     mCachedHasAnyEnabledClientAttrib = (clientAttribs & enabledAttribs).any();
+
+    // In case of disabled texture, texture coord pointer is not used.
+    if (isGLES1)
+    {
+        const GLES1State &gles1State = glState.gles1();
+        unsigned int activeSampler   = glState.getActiveSampler();
+        bool isTextureEnabled =
+            gles1State.isTextureTargetEnabled(activeSampler, TextureType::_2D) &&
+            gles1State.isTextureTargetEnabled(activeSampler, TextureType::CubeMap);
+        if (!isTextureEnabled)
+        {
+            mCachedActiveClientAttribsMask &=
+                ~(1 << context->vertexArrayIndex(gl::ClientVertexArrayType::TextureCoord));
+        }
+    }
 }
 
 void StateCache::updateVertexElementLimitsImpl(Context *context)
@@ -10207,6 +10222,11 @@ void StateCache::onVertexArrayBufferStateChange(Context *context)
 }
 
 void StateCache::onGLES1ClientStateChange(Context *context)
+{
+    updateActiveAttribsMask(context);
+}
+
+void StateCache::onGLES1TextureStateChange(Context *context)
 {
     updateActiveAttribsMask(context);
 }
