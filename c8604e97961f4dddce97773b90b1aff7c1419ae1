@@ -22,6 +22,30 @@
       },
       "revId": "c8604e97961f4dddce97773b90b1aff7c1419ae1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abeaf4b4_d0b9a662",
+        "filename": "src/android_system_settings/src/com/android/angle/common/MainFragment.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2023-12-14T23:29:24Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "47cf82f8_32b8e61c",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 27
+      },
+      "revId": "c8604e97961f4dddce97773b90b1aff7c1419ae1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
