@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b1f4aa0_d31e49c8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2023-12-14T21:50:25Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "882e8b77_885854d8",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54b656e4_e7ed7802",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e7efc075_f788c591",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2023-12-14T21:50:25Z",
+      "side": 1,
+      "message": "TBH, I don\u0027t know the answer. I\u0027m just moving this code from the common code to avoid an assert on non-Vulkan.\n\nIf the emulation code is CPU-side conversion, I don\u0027t think it\u0027ll work for any emulated format.",
+      "parentUuid": "54b656e4_e7ed7802",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca919fc1_60551df2",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -65,6 +101,58 @@
       "writtenOn": "2023-12-14T21:16:25Z",
       "side": 1,
       "message": "nit: `UNIMPLEMENTED()`\n\nThis is not really \"unreachable\", neither is it the application\u0027s fault.",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "640e0f66_7ee631b8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2023-12-14T21:50:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca919fc1_60551df2",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a384b14_0adf6927",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2023-12-14T21:50:25Z",
+      "side": 1,
+      "message": "Should these also be UNIMPLEMENTED()?",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be3518a6_f7fba2b4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3944,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2023-12-14T21:50:25Z",
+      "side": 1,
+      "message": "Ibid.",
       "revId": "3bea24bcb97c8f969666db241d1d647164922636",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
