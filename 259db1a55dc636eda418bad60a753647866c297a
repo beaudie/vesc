@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af1c22b2_82efa977",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-14T21:57:44Z",
+      "side": 1,
+      "message": "Thanks for the review, will push a v3.",
+      "revId": "259db1a55dc636eda418bad60a753647866c297a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62ce9519_d1186d07",
@@ -20,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd063151_bf708145",
+        "filename": "third_party/clspv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-14T21:57:44Z",
+      "side": 1,
+      "message": "Good catch. These are generated directly from the LLVM. Is it ok to make a note on the README.md.",
+      "parentUuid": "62ce9519_d1186d07",
+      "revId": "259db1a55dc636eda418bad60a753647866c297a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f3d4327_4551ac53",
         "filename": "third_party/clspv/BUILD.gn",
         "patchSetId": 2
@@ -31,6 +66,30 @@
       "writtenOn": "2023-12-14T19:54:36Z",
       "side": 1,
       "message": "Do you need help with this?\n\nI don\u0027t know what exactly needs this check, but typically an `#if` in a header deals with this sort of variation.",
+      "range": {
+        "startLine": 127,
+        "startChar": 35,
+        "endLine": 128,
+        "endChar": 46
+      },
+      "revId": "259db1a55dc636eda418bad60a753647866c297a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c04d280_f571ea74",
+        "filename": "third_party/clspv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-14T21:57:44Z",
+      "side": 1,
+      "message": "was a note self -- can be removed, as its C++11 specific and here it is C++17. Will update in v3.",
+      "parentUuid": "9f3d4327_4551ac53",
       "range": {
         "startLine": 127,
         "startChar": 35,
@@ -66,6 +125,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5cb9b7e6_d512ef47",
+        "filename": "third_party/clspv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-14T21:57:44Z",
+      "side": 1,
+      "message": "This looks like a miss. Will take care of it in patchset 3.",
+      "parentUuid": "7f80f771_214872e9",
+      "range": {
+        "startLine": 265,
+        "startChar": 52,
+        "endLine": 266,
+        "endChar": 60
+      },
+      "revId": "259db1a55dc636eda418bad60a753647866c297a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4e12ea98_e7154c6d",
         "filename": "third_party/clspv/gn/README.md",
         "patchSetId": 2
@@ -77,6 +160,24 @@
       "writtenOn": "2023-12-14T19:54:36Z",
       "side": 1,
       "message": "nit: could you please add a few lines about how to update these based on upstream llvm changes? I imagine it\u0027d be something like \"find the corresponding file under `llvm/.../gn/...`, prefix paths with `$..`, and apply it to the files here\", that sort of thing,",
+      "revId": "259db1a55dc636eda418bad60a753647866c297a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8d9dd57_6d719344",
+        "filename": "third_party/clspv/gn/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-14T21:57:44Z",
+      "side": 1,
+      "message": "Yes, for now it is what you described. Will add a note. Ack.",
+      "parentUuid": "4e12ea98_e7154c6d",
       "revId": "259db1a55dc636eda418bad60a753647866c297a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
