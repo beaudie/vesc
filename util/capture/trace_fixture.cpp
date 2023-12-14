@@ -563,7 +563,29 @@ void CreateEGLImageKHR(EGLDisplay dpy,
 
 void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID)
 {
-    gEGLSyncMap[syncID] = eglCreateSyncKHR(dpy, type, attrib_list);
+    std::vector<EGLint> attribs;
+    if (attrib_list != nullptr)
+    {
+        int i = 0;
+        while (attrib_list[i] != EGL_NONE)
+        {
+            if (attrib_list[i] == EGL_SYNC_NATIVE_FENCE_FD_ANDROID)
+            {
+                // Skip capture of file descriptor attribs
+                i += 2;
+            }
+            else
+            {
+                attribs.push_back(attrib_list[i]);
+                i += 1;
+            }
+        }
+        attribs.push_back(EGL_NONE);
+    }
+
+    gEGLSyncMap[syncID] = eglCreateSyncKHR(
+        dpy, type,
+        attrib_list == nullptr ? attrib_list : reinterpret_cast<const EGLint *>(attribs.data()));
 }
 
 void CreateEGLSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list, GLuint syncID)

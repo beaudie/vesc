@@ -5737,6 +5737,7 @@ bool SkipCall(EntryPoint entryPoint)
             return true;
 
         case EntryPoint::EGLChooseConfig:
+        case EntryPoint::EGLDupNativeFenceFDANDROID:
         case EntryPoint::EGLGetProcAddress:
         case EntryPoint::EGLGetConfigAttrib:
         case EntryPoint::EGLGetConfigs:
