@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47cf82f8_32b8e61c",
+        "filename": "src/android_system_settings/src/com/android/angle/common/MainFragment.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-12-14T02:43:24Z",
+      "side": 0,
+      "message": "This removal is a big part of the change.  We no longer attempt to merge the settings with whatever a developer has sprinkled in.  The rules in the APK will override them on boot and APK update.  This is okay, and likely a safer way to handle these, especially on boot.",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 27
+      },
+      "revId": "c8604e97961f4dddce97773b90b1aff7c1419ae1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
