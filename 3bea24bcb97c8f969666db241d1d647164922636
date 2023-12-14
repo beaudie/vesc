@@ -20,6 +20,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "882e8b77_885854d8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-14T21:16:25Z",
+      "side": 1,
+      "message": "Instead of this, you could check if `getIntendedFormatID()` and `getActualImageFormatID()` are identical. That\u0027s a definite \"is emulated\" vs the hacky implementation in this function.",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54b656e4_e7ed7802",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-14T21:16:25Z",
+      "side": 1,
+      "message": "So, if the format is emulated but not compressed, do we support PBO copies? Where exactly do we diverge for compressed formats? IIRC, our PBO implementation is basically either direct copy or CPU readback (🤮), so looks like the CPU readback case doesn\u0027t handle uncompressing the formats?",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca919fc1_60551df2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-14T21:16:25Z",
+      "side": 1,
+      "message": "nit: `UNIMPLEMENTED()`\n\nThis is not really \"unreachable\", neither is it the application\u0027s fault.",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c42828fa_526ceb3e",
         "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
         "patchSetId": 6
@@ -65,6 +116,24 @@
       "writtenOn": "2023-12-14T21:11:48Z",
       "side": 1,
       "message": "`IsDesktopOpenGL()`",
+      "parentUuid": "0e81333a_8ecf6137",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "883467d3_cf6214dd",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-14T21:16:25Z",
+      "side": 1,
+      "message": "Could you instead SKIP the tests in `angle_end2end_tests_expectations.txt` for configurations that fail?",
       "parentUuid": "0e81333a_8ecf6137",
       "revId": "3bea24bcb97c8f969666db241d1d647164922636",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
