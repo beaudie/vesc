@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3550069b_a0fb5924",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-14T18:41:20Z",
+      "side": 1,
+      "message": "Does this take Chia-l\u0027s findings into account in b/310701311#comment34?",
+      "revId": "962d4d6b9bf64a270d2db8a8502fde8b893fd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "317cc537_84db81b4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4538,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-14T18:41:20Z",
+      "side": 1,
+      "message": "It\u0027s probably less about venus, and more about the GPU? Like, should this be intel? I didn\u0027t notice this slowness on Linux though, so maybe isVenus\u0026\u0026intel?\n\nLike, would venus on ARM also prefer this?",
+      "revId": "962d4d6b9bf64a270d2db8a8502fde8b893fd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
