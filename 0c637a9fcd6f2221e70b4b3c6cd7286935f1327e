@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4905832e_73215f8e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 10100,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-12-14T18:28:59Z",
+      "side": 1,
+      "message": "Looks like this limit may be reduced to a boolean flag.",
+      "revId": "0c637a9fcd6f2221e70b4b3c6cd7286935f1327e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
