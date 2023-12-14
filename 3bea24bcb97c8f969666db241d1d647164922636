@@ -50,6 +50,24 @@
       "message": "LMK if there\u0027s a way to scope this condition to just OpenGL.",
       "revId": "3bea24bcb97c8f969666db241d1d647164922636",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faf79a2d_904f3124",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-12-14T21:11:48Z",
+      "side": 1,
+      "message": "`IsDesktopOpenGL()`",
+      "parentUuid": "0e81333a_8ecf6137",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
