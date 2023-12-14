@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "212b54fe_d9b8aff5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-12-14T23:41:09Z",
+      "side": 1,
+      "message": "Okay, I\u0027m relying on your visual inspection for functionality, not actually pulling down this CL and kicking the tires on it.",
+      "parentUuid": "f14963c6_4d2d20f8",
+      "range": {
+        "startLine": 27,
+        "startChar": 6,
+        "endLine": 27,
+        "endChar": 12
+      },
+      "revId": "3eb3bb14d1d604a9a2e2a71e66b407729cea3dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "902bd96d_f2ed2fcd",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -149,6 +173,30 @@
       "side": 1,
       "message": "it could be and we should do graceful error handling",
       "parentUuid": "aeb9b778_15c45f15",
+      "range": {
+        "startLine": 130,
+        "startChar": 18,
+        "endLine": 130,
+        "endChar": 19
+      },
+      "revId": "3eb3bb14d1d604a9a2e2a71e66b407729cea3dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "813e700b_64185ded",
+        "filename": "src/android_system_settings/src/com/android/angle/common/AngleRuleHelper.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-12-14T23:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e98be89_b8733ce6",
       "range": {
         "startLine": 130,
         "startChar": 18,
@@ -478,6 +526,30 @@
       "side": 1,
       "message": "We don\u0027t have to, we can just completely remove it if we want.",
       "parentUuid": "94c2d3f5_7be8048a",
+      "range": {
+        "startLine": 53,
+        "startChar": 53,
+        "endLine": 53,
+        "endChar": 91
+      },
+      "revId": "3eb3bb14d1d604a9a2e2a71e66b407729cea3dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "274347ef_1f2e063c",
+        "filename": "src/android_system_settings/src/com/android/angle/common/Receiver.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-12-14T23:41:09Z",
+      "side": 1,
+      "message": "Sounds like more work, okay to defer.",
+      "parentUuid": "c4c91f3f_97cf5fc3",
       "range": {
         "startLine": 53,
         "startChar": 53,
