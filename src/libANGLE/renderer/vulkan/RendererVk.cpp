@@ -461,6 +461,17 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "store with storeOp VK_ATTACHMENT_STORE_OP_STORE. Access info (usage: "
      "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
      "SYNC_FRAGMENT_SHADER_SHADER_"},
+    // b/316013423
+    {"SYNC-HAZARD-WRITE-AFTER-READ", "vkQueueSubmit():  Hazard WRITE_AFTER_READ for entry 0",
+     "Access info (prior_usage: SYNC_PRESENT_ENGINE_SYNCVAL_PRESENT_ACQUIRE_READ_SYNCVAL, "
+     "read_barriers: VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT|"
+     "VK_PIPELINE_STAGE_2_LATE_FRAGMENT_TESTS_BIT|VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT|"
+     "VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT|VK_PIPELINE_STAGE_2_COPY_BIT|"
+     "VK_PIPELINE_STAGE_2_RESOLVE_BIT|VK_PIPELINE_STAGE_2_BLIT_BIT|VK_PIPELINE_STAGE_2_CLEAR_BIT"},
+    {"SYNC-HAZARD-WRITE-AFTER-WRITE", "vkQueueSubmit():  Hazard WRITE_AFTER_WRITE for entry 0",
+     "Access info (prior_usage: SYNC_COPY_TRANSFER_WRITE"},
+    {"SYNC-HAZARD-WRITE-AFTER-WRITE", "vkQueueSubmit():  Hazard WRITE_AFTER_WRITE for entry 0",
+     "Access info (prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION"},
 };
 
 // Messages that shouldn't be generated if storeOp=NONE is supported, otherwise they are expected.
