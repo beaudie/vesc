@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a977c3c4_15c712eb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2023-12-14T23:34:39Z",
+      "side": 1,
+      "message": "Apparently I-don\u0027t-know-what-I\u0027m-doing-dog.",
+      "parentUuid": "0b1f4aa0_d31e49c8",
+      "revId": "3bea24bcb97c8f969666db241d1d647164922636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "54b656e4_e7ed7802",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
