@@ -19,8 +19,8 @@ class DrawTextureTest : public ANGLETest<>
   protected:
     DrawTextureTest()
     {
-        setWindowWidth(32);
-        setWindowHeight(32);
+        setWindowWidth(kWindowWidth);
+        setWindowHeight(kWindowHeight);
         setConfigRedBits(8);
         setConfigGreenBits(8);
         setConfigBlueBits(8);
@@ -38,6 +38,9 @@ class DrawTextureTest : public ANGLETest<>
     void testTearDown() override { mTexture.reset(); }
 
     std::unique_ptr<GLTexture> mTexture;
+
+    static constexpr int kWindowWidth  = 32;
+    static constexpr int kWindowHeight = 32;
 };
 
 // Negative test for invalid width/height values.
@@ -186,6 +189,108 @@ TEST_P(DrawTextureTest, ColorArrayDifferentTypes)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_NEAR(kCheckedPixelX, kCheckedPixelY, GLColor::red, kPixelTolerance);
+}
+
+// Tests that drawing a primitive works with enabled tex coord pointer, but disabled texture.
+TEST_P(DrawTextureTest, DrawWithTexCoordPtrDataAndDisabledTexture2D)
+{
+    constexpr GLfloat kVertexPtrData[]   = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f};
+    constexpr GLfloat kTexCoordPtrData[] = {0.0f};
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Draw a triangle fan that covers the entire window. GL_TEXTURE_2D is disabled even though
+    // texture coord pointer is set.
+    glVertexPointer(2, GL_FLOAT, 0, kVertexPtrData);
+    glTexCoordPointer(2, GL_FLOAT, 0, kTexCoordPtrData);
+    glDisable(GL_TEXTURE_2D);
+    glColor4ub(0, 0xFF, 0xFF, 0xFF);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_RECT_EQ(0, 0, kWindowWidth, kWindowHeight, GLColor::cyan);
+}
+
+// Tests that after drawing with a texture, it is possible to disable the texture and draw another
+// primitive by setting a color without using the texture data from the last draw.
+TEST_P(DrawTextureTest, DrawWithTexCoordPtrThenDisableTexture2DAndDrawAnother)
+{
+    // There will be two triangle fan draws. Both cover the entire screen, but the one with no
+    // texture uses more vertices.
+    std::vector<GLfloat> vertexPtrDataWithTexture = {-1.0f, -1.0f, -1.0f, 1.0f,
+                                                     1.0f,  1.0f,  1.0f,  -1.0f};
+    std::vector<GLfloat> vertexPtrDataNoTexture   = {-1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+                                                     1.0f,  1.0f,  1.0f,  0.0f, 1.0f, -1.0f};
+    std::vector<GLfloat> texCoordPtrData = {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f};
+
+    // Enable vertex and texture coordinate pointers. Also set up texture data with four colors; one
+    // color per corner.
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    constexpr GLColor kColorCornerBL = GLColor(0x11, 0x22, 0x33, 0xFF);
+    constexpr GLColor kColorCornerBR = GLColor(0x44, 0x55, 0x66, 0xFF);
+    constexpr GLColor kColorCornerTL = GLColor(0x77, 0x88, 0x99, 0xFF);
+    constexpr GLColor kColorCornerTR = GLColor(0xAA, 0xBB, 0xCC, 0xFF);
+
+    std::vector<GLColor> textureData;
+    textureData.push_back(kColorCornerBL);
+    textureData.push_back(kColorCornerBR);
+    textureData.push_back(kColorCornerTL);
+    textureData.push_back(kColorCornerTR);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData.data());
+
+    // Draw the first triangle fan using texture coord pointer.
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_TEXTURE_2D);
+
+    glVertexPointer(2, GL_FLOAT, 0, vertexPtrDataWithTexture.data());
+    glTexCoordPointer(2, GL_FLOAT, 0, texCoordPtrData.data());
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_RECT_EQ(0, 0, kWindowWidth / 2, kWindowHeight / 2, kColorCornerBL);
+    EXPECT_PIXEL_RECT_EQ(kWindowWidth / 2, 0, kWindowWidth / 2, kWindowHeight / 2, kColorCornerBR);
+    EXPECT_PIXEL_RECT_EQ(0, kWindowHeight / 2, kWindowWidth / 2, kWindowHeight / 2, kColorCornerTL);
+    EXPECT_PIXEL_RECT_EQ(kWindowWidth / 2, kWindowHeight / 2, kWindowWidth / 2, kWindowHeight / 2,
+                         kColorCornerTR);
+
+    // Disable texture and draw the second triangle fan. This time, the draw uses more vertex
+    // coordinates and a preset color. Note that the texture coord pointer must no longer be used.
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_TEXTURE_2D);
+
+    glVertexPointer(2, GL_FLOAT, 0, vertexPtrDataNoTexture.data());
+    glColor4ub(0, 0, 0xFF, 0xFF);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 6);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_RECT_EQ(0, 0, kWindowWidth, kWindowHeight, GLColor::blue);
+
+    // Re-enable texture and draw a final triangle fan using the first vertex pointer. There is no
+    // need to set the texture coord pointer again. However, the effect of glColor4ub() from before
+    // should be reversed by resetting the color to the default (1, 1, 1, 1).
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_TEXTURE_2D);
+
+    glVertexPointer(2, GL_FLOAT, 0, vertexPtrDataWithTexture.data());
+    glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
+
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_RECT_EQ(0, 0, kWindowWidth / 2, kWindowHeight / 2, kColorCornerBL);
+    EXPECT_PIXEL_RECT_EQ(kWindowWidth / 2, 0, kWindowWidth / 2, kWindowHeight / 2, kColorCornerBR);
+    EXPECT_PIXEL_RECT_EQ(0, kWindowHeight / 2, kWindowWidth / 2, kWindowHeight / 2, kColorCornerTL);
+    EXPECT_PIXEL_RECT_EQ(kWindowWidth / 2, kWindowHeight / 2, kWindowWidth / 2, kWindowHeight / 2,
+                         kColorCornerTR);
 }
 
 ANGLE_INSTANTIATE_TEST_ES1(DrawTextureTest);
