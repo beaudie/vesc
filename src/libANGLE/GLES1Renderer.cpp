@@ -145,6 +145,20 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode,
         }
     }
 
+    // If texture has been disabled on the active sampler, texture coordinate data should not be
+    // used. However, according to the spec, a rasterized fragment is passed on unaltered to the
+    // next stage.
+    unsigned int clientActiveTexture = gles1State->getClientTextureUnit();
+    bool isTextureEnabled =
+        tex2DEnables[clientActiveTexture] || texCubeEnables[clientActiveTexture];
+    if (gles1State->isDirty(GLES1State::DIRTY_GLES1_TEXTURE_UNIT_ENABLE))
+    {
+        glState->getVertexArray()->enableAttribute(
+            kTextureCoordAttribIndexBase + clientActiveTexture,
+            isTextureEnabled && gles1State->mTexCoordArrayEnabled[clientActiveTexture]);
+        context->getStateCache().onGLES1TextureStateChange(context);
+    }
+
     GLES1ShaderState::UintTexArray &texEnvModes          = mShaderState.texEnvModes;
     GLES1ShaderState::UintTexArray &texCombineRgbs       = mShaderState.texCombineRgbs;
     GLES1ShaderState::UintTexArray &texCombineAlphas     = mShaderState.texCombineAlphas;
