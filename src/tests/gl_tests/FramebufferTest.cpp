@@ -725,6 +725,78 @@ TEST_P(FramebufferTest_ES3, InvalidateDepthStencil)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that invalidating an FB with a stencil attachment, which
+// generates Validation errors, will not fail
+TEST_P(FramebufferTest_ES3, InvalidateStencilAttachmentOnly)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan() || isSwiftshader());
+
+    uint8_t abdata[262144];
+    GLuint arrayBuffer;
+    glGenBuffers(1, &arrayBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, arrayBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 262144, &abdata, GL_STATIC_DRAW);
+
+    uint8_t eabdata[262144];
+    GLuint elementArrayBuffer;
+    glGenBuffers(1, &elementArrayBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, elementArrayBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 262144, &eabdata, GL_STATIC_DRAW);
+
+    GLuint stencilTexture;
+    glGenTextures(1, &stencilTexture);
+    glBindTexture(GL_TEXTURE_2D, stencilTexture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, 32, 32);
+
+    constexpr char kVS[] = {
+        R"(#version 300 es
+        in highp vec4 a_position;
+        in mediump vec4 a_color;
+        out mediump vec4 v_color;
+        void main()
+        {
+        gl_Position = a_position;
+        v_color = a_color;
+        })",
+    };
+
+    constexpr char kFS[] = {
+        R"(#version 300 es
+            in mediump vec4 v_color;
+            layout(location = 0) out mediump vec4 o_color;
+            void main()
+            {
+                o_color = v_color;
+            })",
+    };
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program.get());
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, arrayBuffer);
+    glVertexAttribPointer(0, 4, GL_SHORT, GL_TRUE, 8, nullptr);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBuffer);
+
+    GLuint framebuffer;
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, stencilTexture, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+    GLuint vertexArray;
+    glGenVertexArrays(1, &vertexArray);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBuffer);
+    glDrawElements(GL_TRIANGLE_STRIP, 26, GL_UNSIGNED_INT, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    std::vector<GLenum> attachments;
+    attachments.push_back(GL_STENCIL_ATTACHMENT);
+    glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, attachments.data());
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that invalidating stencil-only attachment doesn't crash.
 TEST_P(FramebufferTest_ES3, InvalidateStencilOnly)
 {
