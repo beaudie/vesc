@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c85bb85d_5577caa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-12-15T16:00:43Z",
+      "side": 1,
+      "message": "Nice work narrowing it down Mark!\n\n+Charlie and Shabi as FYI",
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b77a4526_c7a3bb22",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-12-15T16:00:43Z",
+      "side": 1,
+      "message": "Rather than skip on SwiftShader you can add it to `angle_end2end_tests_expectations.txt` with a link to a bug explaining why it fails.",
+      "range": {
+        "startLine": 732,
+        "startChar": 38,
+        "endLine": 732,
+        "endChar": 53
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a964a1fc_009c9a9f",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-12-15T16:00:43Z",
+      "side": 1,
+      "message": "nit: Weird spacing here compared to FS",
+      "range": {
+        "startLine": 752,
+        "startChar": 0,
+        "endLine": 760,
+        "endChar": 12
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
