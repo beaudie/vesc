@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0baef2be_61a83ce6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "Nit: To make it less confusing to a future reader without this context (\"expanded from what?\"):\n\n```suggestion\n    // aspect. http://anglebug.com/6701.\n    // Additionally hit in the asphalt_9 trace\n    // https://issuetracker.google.com/316337308\n```",
+      "range": {
+        "startLine": 327,
+        "startChar": 0,
+        "endLine": 328,
+        "endChar": 21
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b77a4526_c7a3bb22",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 1
@@ -43,6 +66,156 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90d75860_dc868268",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "Is it skipped on SwiftShader because of ASAN?\n\nAlso, why is this skipped on every other backend?",
+      "parentUuid": "b77a4526_c7a3bb22",
+      "range": {
+        "startLine": 732,
+        "startChar": 38,
+        "endLine": 732,
+        "endChar": 53
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89c91405_bd203ba2",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "Please use a `std::vector` to avoid such a large allocation on the stack.\n\nAnd please initialize them, even if unused. Some ASAN bot is bound to complain about this.",
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "377ca0e1_a3224356",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "Please use `GLBuffer` from `gl_raii.h` to avoid gen/delete calls:\n\n```suggestion\n    GLBuffer arrayBuffer;\n```",
+      "range": {
+        "startLine": 735,
+        "startChar": 0,
+        "endLine": 736,
+        "endChar": 34
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b9a2c4e_a7ec0b3d",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "`constexpr GLsizei kBufferSize \u003d 262144;` somewhere above",
+      "range": {
+        "startLine": 738,
+        "startChar": 34,
+        "endLine": 738,
+        "endChar": 40
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dc44801_ca202758",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "Ditto about `std::vector` and `GLBuffer`",
+      "range": {
+        "startLine": 740,
+        "startChar": 0,
+        "endLine": 742,
+        "endChar": 41
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1035dc47_013dac7f",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "```suggestion\n    GLTexture stencilTexture;\n```",
+      "range": {
+        "startLine": 746,
+        "startChar": 0,
+        "endLine": 747,
+        "endChar": 38
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6642477e_6ad20df1",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "Is the fact that color comes from an attribute relevant? If not, please use the following shaders (which use a uniform for color).\n\n```\n-    ANGLE_GL_PROGRAM(program, kVS, kFS);\n+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());\n```",
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a964a1fc_009c9a9f",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 1
@@ -59,6 +232,92 @@
         "startChar": 0,
         "endLine": 760,
         "endChar": 12
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65227795_63fd592a",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "The RAII objects automatically cast to int:\n\n```suggestion\n    glUseProgram(program);\n```",
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da724d5d_0448ad6f",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "```suggestion\n    GLFramebuffer framebuffer;\n```",
+      "range": {
+        "startLine": 781,
+        "startChar": 0,
+        "endLine": 782,
+        "endChar": 39
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecdda9ac_beeb3630",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "```suggestion\n    GLVertexArray vertexArray;\n```",
+      "range": {
+        "startLine": 788,
+        "startChar": 0,
+        "endLine": 789,
+        "endChar": 39
+      },
+      "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5248c7e1_9b2dc9ee",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T19:00:25Z",
+      "side": 1,
+      "message": "super nit: No big deal, but this could instead just be an array 😄",
+      "range": {
+        "startLine": 794,
+        "startChar": 0,
+        "endLine": 795,
+        "endChar": 49
       },
       "revId": "0e5a01da1fa6d6e6fff3cd00539338fbbb98068f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
