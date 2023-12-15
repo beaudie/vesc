@@ -628,12 +628,13 @@ layout (std140) uniform color_ubo
 {
     float redColorIn;
     float greenColorIn;
+    float blueColorIn;
 };
 
 out vec4 my_FragColor;
 void main()
 {
-    my_FragColor = vec4(redColorIn, greenColorIn, 0.0, 1.0);
+    my_FragColor = vec4(redColorIn, greenColorIn, blueColorIn, 1.0);
 })";
 
     // Setup two uniform buffers, one with red and one with green
@@ -643,6 +644,9 @@ void main()
     GLBuffer uboBufGreen;
     glBindBuffer(GL_UNIFORM_BUFFER, uboBufGreen);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(GLColor32F), &kFloatGreen, GL_STATIC_DRAW);
+    GLBuffer uboBufBlue;
+    glBindBuffer(GL_UNIFORM_BUFFER, uboBufBlue);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(GLColor32F), &kFloatBlue, GL_STATIC_DRAW);
 
     // Setup pipeline program using red uniform buffer
     bindProgramPipeline(vertString, fragString);
@@ -661,8 +665,11 @@ void main()
     // bind to green uniform buffer
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboBufGreen);
     drawQuadWithPPO(essl31_shaders::PositionAttrib(), 0.5f, 1.0f);
+    // bind to blue uniform buffer
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboBufBlue);
+    drawQuadWithPPO(essl31_shaders::PositionAttrib(), 0.5f, 1.0f);
     ASSERT_GL_NO_ERROR();
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
 
     glDeleteProgram(mVertProg);
     glDeleteProgram(mFragProg);

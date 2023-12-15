@@ -784,6 +784,8 @@ void ProgramPipeline::onUniformBufferStateChange(size_t uniformBufferIndex)
         if (shaderProgram)
         {
             shaderProgram->onUniformBufferStateChange(uniformBufferIndex);
+            shaderProgram->onPPOUniformBufferStateChange(uniformBufferIndex,
+                                                         mState.mExecutable.get());
         }
     }
 }
