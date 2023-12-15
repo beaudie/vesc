@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0a3f0dc_78010823",
+        "filename": "src/libANGLE/renderer/cl/CLContextCL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2023-12-15T00:15:02Z",
+      "side": 1,
+      "message": "Whoops, will fix/remove next push.",
+      "range": {
+        "startLine": 257,
+        "startChar": 4,
+        "endLine": 257,
+        "endChar": 39
+      },
+      "revId": "353ee95cf09590d226b9e490136f2eeb351c1a07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
