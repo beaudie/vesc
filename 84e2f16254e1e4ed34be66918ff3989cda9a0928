@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10d8ffef_46578f8b",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-12-15T18:48:55Z",
+      "side": 1,
+      "message": "`baseinstance` is `GLuint` at call sites. Could this cause an issue on L1042?\n\nSuper nit: consider making it the last parameter to align with other functions.",
+      "revId": "84e2f16254e1e4ed34be66918ff3989cda9a0928",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
