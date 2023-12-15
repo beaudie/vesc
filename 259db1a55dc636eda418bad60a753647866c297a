@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d8592f9_30798014",
+        "filename": "third_party/clspv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-15T18:46:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "114d73b2_86a02aac",
+      "revId": "259db1a55dc636eda418bad60a753647866c297a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f3d4327_4551ac53",
@@ -126,6 +144,30 @@
       "side": 1,
       "message": "was a note self -- can be removed, as its C++11 specific and here it is C++17. Will update in v3.",
       "parentUuid": "9f3d4327_4551ac53",
+      "range": {
+        "startLine": 127,
+        "startChar": 35,
+        "endLine": 128,
+        "endChar": 46
+      },
+      "revId": "259db1a55dc636eda418bad60a753647866c297a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed293743_6f840dbb",
+        "filename": "third_party/clspv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-15T18:46:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c04d280_f571ea74",
       "range": {
         "startLine": 127,
         "startChar": 35,
@@ -183,6 +225,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3b5c9f6_4f92405a",
+        "filename": "third_party/clspv/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-15T18:46:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cb9b7e6_d512ef47",
+      "range": {
+        "startLine": 265,
+        "startChar": 52,
+        "endLine": 266,
+        "endChar": 60
+      },
+      "revId": "259db1a55dc636eda418bad60a753647866c297a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e12ea98_e7154c6d",
@@ -214,6 +280,24 @@
       "side": 1,
       "message": "Yes, for now it is what you described. Will add a note. Ack.",
       "parentUuid": "4e12ea98_e7154c6d",
+      "revId": "259db1a55dc636eda418bad60a753647866c297a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bf2cf80_3975bea3",
+        "filename": "third_party/clspv/gn/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2023-12-15T18:46:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8d9dd57_6d719344",
       "revId": "259db1a55dc636eda418bad60a753647866c297a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
