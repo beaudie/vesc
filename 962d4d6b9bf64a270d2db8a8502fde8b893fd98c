@@ -123,6 +123,24 @@
       "parentUuid": "af13dca7_72721607",
       "revId": "962d4d6b9bf64a270d2db8a8502fde8b893fd98c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b60380f_cd89bbe8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4538,
+      "author": {
+        "id": 1146485
+      },
+      "writtenOn": "2023-12-15T20:54:25Z",
+      "side": 1,
+      "message": "Yes, v7 helps!  Thanks a lot!",
+      "parentUuid": "8f03e26d_50e0b013",
+      "revId": "962d4d6b9bf64a270d2db8a8502fde8b893fd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
