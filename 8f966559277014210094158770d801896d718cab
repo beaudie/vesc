@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05eafc8f_f88b1467",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8566,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-12-15T11:32:08Z",
+      "side": 0,
+      "message": "Why was this condition removed? Couldn\u0027t the instanced limit overflow on divisor multiplication?",
+      "revId": "8f966559277014210094158770d801896d718cab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
