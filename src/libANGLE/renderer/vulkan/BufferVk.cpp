@@ -511,9 +511,7 @@ angle::Result BufferVk::allocStagingBuffer(ContextVk *contextVk,
 
     if (mStagingBuffer.valid())
     {
-        if (size <= mStagingBuffer.getSize() &&
-            IsCoherent(coherency) == mStagingBuffer.isCoherent() &&
-            IsCached(coherency) == mStagingBuffer.isCached() &&
+        if (size <= mStagingBuffer.getSize() && IsCached(coherency) == mStagingBuffer.isCached() &&
             contextVk->getRenderer()->hasResourceUseFinished(mStagingBuffer.getResourceUse()))
         {
             // If size is big enough and it is idle, then just reuse the existing staging buffer
@@ -558,14 +556,16 @@ angle::Result BufferVk::handleDeviceLocalBufferMap(ContextVk *contextVk,
                                                    VkDeviceSize size,
                                                    uint8_t **mapPtr)
 {
-    ANGLE_TRY(allocStagingBuffer(contextVk, vk::MemoryCoherency::CachedCoherent, size, mapPtr));
+    ANGLE_TRY(
+        allocStagingBuffer(contextVk, vk::MemoryCoherency::CachedPreferCoherent, size, mapPtr));
 
     // Copy data from device local buffer to host visible staging buffer.
     VkBufferCopy copyRegion = {mBuffer.getOffset() + offset, mStagingBuffer.getOffset(), size};
     ANGLE_TRY(mStagingBuffer.copyFromBuffer(contextVk, &mBuffer, 1, &copyRegion));
     ANGLE_TRY(mStagingBuffer.waitForIdle(contextVk, "GPU stall due to mapping device local buffer",
                                          RenderPassClosureReason::DeviceLocalBufferMap));
-    // Because the buffer is coherent, no need to call invalidate here.
+
+    ANGLE_TRY(mStagingBuffer.invalidate(contextVk->getRenderer()));
 
     return angle::Result::Continue;
 }
