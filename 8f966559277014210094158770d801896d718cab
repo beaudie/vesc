@@ -16,6 +16,24 @@
       "message": "Why was this condition removed? Couldn\u0027t the instanced limit overflow on divisor multiplication?",
       "revId": "8f966559277014210094158770d801896d718cab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce510863_91884e6c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8566,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T17:56:09Z",
+      "side": 0,
+      "message": "Thanks for catching that, it got removed because of this https://chromium-review.googlesource.com/c/angle/angle/+/5101508/6..7/src/libANGLE/validationES.cpp",
+      "parentUuid": "05eafc8f_f88b1467",
+      "revId": "8f966559277014210094158770d801896d718cab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
