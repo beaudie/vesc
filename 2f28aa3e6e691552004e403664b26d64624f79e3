@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d0f1d40_7645f9e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T18:40:51Z",
+      "side": 1,
+      "message": "Thanks for the changes! I think you\u0027ve addressed the feedback, so this should be good to land, but I\u0027m not sure if there are other changes you intend to make.\n\nIf this is ready to land, please \"resolve\" the comments to signify there\u0027s nothing further to be done about them.",
+      "revId": "2f28aa3e6e691552004e403664b26d64624f79e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
