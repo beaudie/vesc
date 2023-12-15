@@ -1550,7 +1550,6 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_UNIFORMS);
     }
-    ASSERT(mState.getProgram() == nullptr || !mState.getProgram()->needsSync());
 
     // Update transform feedback offsets on every draw call when emulating transform feedback.  This
     // relies on the fact that no geometry/tessellation, indirect or indexed calls are supported in
@@ -1576,24 +1575,24 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
-    if (dirtyBits.none())
+    if (dirtyBits.any())
     {
-        ASSERT(hasActiveRenderPass());
-        return angle::Result::Continue;
-    }
+        // Flush any relevant dirty bits.
+        for (DirtyBits::Iterator dirtyBitIter = dirtyBits.begin(); dirtyBitIter != dirtyBits.end();
+             ++dirtyBitIter)
+        {
+            ASSERT(mGraphicsDirtyBitHandlers[*dirtyBitIter]);
+            ANGLE_TRY(
+                (this->*mGraphicsDirtyBitHandlers[*dirtyBitIter])(&dirtyBitIter, dirtyBitMask));
+        }
 
-    // Flush any relevant dirty bits.
-    for (DirtyBits::Iterator dirtyBitIter = dirtyBits.begin(); dirtyBitIter != dirtyBits.end();
-         ++dirtyBitIter)
-    {
-        ASSERT(mGraphicsDirtyBitHandlers[*dirtyBitIter]);
-        ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[*dirtyBitIter])(&dirtyBitIter, dirtyBitMask));
+        mGraphicsDirtyBits &= ~dirtyBitMask;
     }
-
-    mGraphicsDirtyBits &= ~dirtyBitMask;
 
     // Render pass must be always available at this point.
     ASSERT(hasActiveRenderPass());
+
+    ASSERT(mState.getProgram() == nullptr || !mState.getProgram()->needsSync());
 
     return angle::Result::Continue;
 }
@@ -1813,7 +1812,6 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
         mComputeDirtyBits.set(DIRTY_BIT_UNIFORMS);
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
-    ASSERT(mState.getProgram() == nullptr || !mState.getProgram()->needsSync());
 
     DirtyBits dirtyBits = mComputeDirtyBits;
 
@@ -1825,6 +1823,8 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
     }
 
     mComputeDirtyBits.reset();
+
+    ASSERT(mState.getProgram() == nullptr || !mState.getProgram()->needsSync());
 
     return angle::Result::Continue;
 }
@@ -2680,6 +2680,10 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
 
+    // This function processes uniform buffers, so it doesn't matter which are dirty.  The following
+    // makes sure the dirty bits are reset.
+    gl::ProgramExecutable::DirtyBits dirtyBits = executable->getAndResetDirtyBits();
+
     const bool hasImages               = executable->hasImages();
     const bool hasStorageBuffers       = executable->hasStorageBuffers();
     const bool hasAtomicCounterBuffers = executable->hasAtomicCounterBuffers();
@@ -2689,6 +2693,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     if (!hasUniformBuffers && !hasStorageBuffers && !hasAtomicCounterBuffers && !hasImages &&
         !hasFramebufferFetch)
     {
+        ASSERT(dirtyBits.none());
         return angle::Result::Continue;
     }
 

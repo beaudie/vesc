@@ -452,7 +452,10 @@ class Program final : public LabeledObject, public angle::Subject
         return mState.getFragmentOutputIndexes();
     }
 
-    bool needsSync() { return !mOptionalLinkTasks.empty(); }
+    bool needsSync()
+    {
+        return !mOptionalLinkTasks.empty() || mState.getExecutable().hasAnyDirtyBit();
+    }
     angle::Result syncState(const Context *context);
 
     // Try to resolve linking. Inlined to make sure its overhead is as low as possible.
@@ -483,6 +486,15 @@ class Program final : public LabeledObject, public angle::Subject
             mUniformBlockBindingMasks.resize(uniformBufferIndex + 1, UniformBlockBindingMask());
         }
         getExecutable().mDirtyBits |= mUniformBlockBindingMasks[uniformBufferIndex];
+    }
+
+    void onPPOUniformBufferStateChange(size_t uniformBufferIndex, ProgramExecutable *ppoExecutable)
+    {
+        if (uniformBufferIndex >= mUniformBlockBindingMasks.size())
+        {
+            mUniformBlockBindingMasks.resize(uniformBufferIndex + 1, UniformBlockBindingMask());
+        }
+        ppoExecutable->mDirtyBits |= mUniformBlockBindingMasks[uniformBufferIndex];
     }
 
   private:
