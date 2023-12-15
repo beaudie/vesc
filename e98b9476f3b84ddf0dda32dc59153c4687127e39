@@ -737,6 +737,24 @@
       "parentUuid": "2fc9fdf6_b34ae3c9",
       "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1be8b06b_3460a264",
+        "filename": "src/libANGLE/renderer/cl/CLKernelCL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-15T18:43:01Z",
+      "side": 1,
+      "message": "Thanks! For future reference, please \"Resolve\" the comment to signify there\u0027s nothing further you\u0027re planning on doing about it.\n\n(It helps make it clear the change is ready to land)",
+      "parentUuid": "ad535404_a8ac6b0b",
+      "revId": "e98b9476f3b84ddf0dda32dc59153c4687127e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
