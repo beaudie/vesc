@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3defe4c4_7fbf83ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-12-16T00:18:18Z",
+      "side": 1,
+      "message": "Awesome work Geoff making this product-quality. I didn\u0027t feel comfortable CQ\u0027ing it while you were OOO, so let\u0027s do so on Monday.\n\nIt looks like Code-Owners isn\u0027t satisfied. Shabi, would you feel comfortable at least rubber-stamping this, if not also reviewing?\n\nA few tiny comments/questions.",
+      "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cf16f6f_ebd2c7e5",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-12-16T00:18:18Z",
+      "side": 1,
+      "message": "typo: enqueueEvent",
+      "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c5dfa0_47217183",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-12-16T00:18:18Z",
+      "side": 1,
+      "message": "typo: enqueueEvent",
+      "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc9e38e2_5f926830",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-12-16T00:18:18Z",
+      "side": 1,
+      "message": "Why was it necessary to relax the assertions about the retainCount here and below?\n\nIs it because the event is enqueued / retained more lazily by the implementation now?",
+      "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
