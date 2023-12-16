@@ -33,6 +33,24 @@
       "message": "Is it possible for this pre-increment to overflow mCachedElementLimit, if it\u0027s right at the limit and binding.getStride() is 1?\n\nIf so, could the elementLimit CheckedNumeric be used in this code block up until the very end, and set mCacnedElementLimit from it without any math afterward?",
       "revId": "18a68f6d2382217f38203b26efc64375dcb391d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a57bf9a3_3c4a9fac",
+        "filename": "src/libANGLE/VertexAttribute.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-16T02:37:39Z",
+      "side": 1,
+      "message": "I\u0027d say no, that\u0027s impossible. This is a GLint64, so there should be a buffer of 2^63 bytes bound for this increment to overflow.",
+      "parentUuid": "ee69200e_eb528f05",
+      "revId": "18a68f6d2382217f38203b26efc64375dcb391d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
