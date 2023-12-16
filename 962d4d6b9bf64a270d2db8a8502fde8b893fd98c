@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51dd345f_cfb15091",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1146485
+      },
+      "writtenOn": "2023-12-16T01:00:53Z",
+      "side": 1,
+      "message": "a minor clarification: rex is intel MTL, which is intel\u0027s 2024 lineup.  It\u0027s actually quite new 😊",
+      "parentUuid": "bd265762_dc2b74d6",
+      "revId": "962d4d6b9bf64a270d2db8a8502fde8b893fd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "317cc537_84db81b4",
