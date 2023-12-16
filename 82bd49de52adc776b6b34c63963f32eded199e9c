@@ -16,6 +16,29 @@
       "message": "If any of you could +2 on this we can get Chia unblocked. Will look into this ARM issue later.",
       "revId": "82bd49de52adc776b6b34c63963f32eded199e9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b72d8322_1e40c211",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-16T02:43:35Z",
+      "side": 1,
+      "message": "nit: Doesn\u0027t `mBuffer.flush()` already check `isCoherent`?",
+      "range": {
+        "startLine": 897,
+        "startChar": 0,
+        "endLine": 900,
+        "endChar": 5
+      },
+      "revId": "82bd49de52adc776b6b34c63963f32eded199e9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
