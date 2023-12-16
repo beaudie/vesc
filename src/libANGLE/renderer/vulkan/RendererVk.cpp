@@ -2011,8 +2011,16 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
 
     // Cached coherent staging buffer.  Note coherent is preferred but not required, which means we
     // may get non-coherent memory type.
-    requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
-    preferredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    if (getFeatures().requireCachedBitForStagingBuffer.enabled)
+    {
+        requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+        preferredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    }
+    else
+    {
+        requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+        preferredFlags = VK_MEMORY_PROPERTY_HOST_CACHED_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    }
     ANGLE_VK_TRY(displayVk,
                  mAllocator.findMemoryTypeIndexForBufferInfo(
                      createInfo, requiredFlags, preferredFlags, persistentlyMapped,
@@ -4536,6 +4544,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(
         &mFeatures, preferDeviceLocalMemoryHostVisible,
         canPreferDeviceLocalMemoryHostVisible(mPhysicalDeviceProperties.deviceType));
+
+    // For some reason, if we use cached staging buffer for read pixels, a lot of tests fail on ARM,
+    // even though we do have invlaid() call there. Temporary keep the old behavior for ARM until we
+    // can root cause it.
+    ANGLE_FEATURE_CONDITION(&mFeatures, requireCachedBitForStagingBuffer, !isARM);
 
     bool dynamicStateWorks = true;
     if (isARM)
