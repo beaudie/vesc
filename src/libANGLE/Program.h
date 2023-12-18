@@ -449,6 +449,13 @@ class Program final : public LabeledObject, public angle::Subject
         return mState.getFragmentOutputIndexes();
     }
 
+<<<<<<< HEAD   (01f439 M120: Vulkan: Don't crash when glCopyTexImage2D redefines it)
+=======
+    bool needsSync()
+    {
+        return !mOptionalLinkTasks.empty() || mState.getExecutable().hasAnyDirtyBit();
+    }
+>>>>>>> CHANGE (4bf402 GL: Fix missing glUniformBlockBinding handling)
     angle::Result syncState(const Context *context);
 
     // Try to resolve linking. Inlined to make sure its overhead is as low as possible.
