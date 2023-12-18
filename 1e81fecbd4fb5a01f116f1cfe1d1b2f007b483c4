@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31aebf9a_161db2f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-18T19:59:44Z",
+      "side": 1,
+      "message": "No longer needed according to b/175584609",
+      "revId": "1e81fecbd4fb5a01f116f1cfe1d1b2f007b483c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
