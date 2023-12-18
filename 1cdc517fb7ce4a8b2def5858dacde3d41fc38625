@@ -16,6 +16,23 @@
       "message": "lgtm+2\n\nMost recently reviewed by lehoangquyen@ on https://chromium-review.googlesource.com/c/angle/angle/+/4814892 .",
       "revId": "1cdc517fb7ce4a8b2def5858dacde3d41fc38625",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "204731f8_ac2d2cc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-12-18T23:58:37Z",
+      "side": 1,
+      "message": "That failure on Mac/NVIDIA is definitely unrelated. While we should fix the flake, trying CQ again.",
+      "revId": "1cdc517fb7ce4a8b2def5858dacde3d41fc38625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
