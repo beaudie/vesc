@@ -54,6 +54,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92ec1500_710a0c13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-18T22:52:26Z",
+      "side": 1,
+      "message": "Moving this to https://chromium-review.googlesource.com/c/angle/angle/+/5133706 so we can land it.",
+      "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cf16f6f_ebd2c7e5",
@@ -67,6 +84,24 @@
       "writtenOn": "2023-12-16T00:18:18Z",
       "side": 1,
       "message": "typo: enqueueEvent",
+      "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b80ab0fa_7924b7d7",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-18T22:52:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cf16f6f_ebd2c7e5",
       "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4727c8b_db319c1b",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-18T22:52:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87c5dfa0_47217183",
+      "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc9e38e2_5f926830",
@@ -101,6 +154,24 @@
       "writtenOn": "2023-12-16T00:18:18Z",
       "side": 1,
       "message": "Why was it necessary to relax the assertions about the retainCount here and below?\n\nIs it because the event is enqueued / retained more lazily by the implementation now?",
+      "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46483444_c5b3602f",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-12-18T22:52:26Z",
+      "side": 1,
+      "message": "It\u0027s because two refs to to the shared event are now held. In the EGLSyncMtl (so it can respond to queries/dup) and mtl::Sync. Testing the exact ref count is too much of an implementation detail, the test still makes sure we don\u0027t leak.",
+      "parentUuid": "bc9e38e2_5f926830",
       "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
