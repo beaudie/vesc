@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7228a905_fa1b8c2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-12-18T22:56:55Z",
+      "side": 1,
+      "message": "lgtm+2\n\nMost recently reviewed by lehoangquyen@ on https://chromium-review.googlesource.com/c/angle/angle/+/4814892 .",
+      "revId": "1cdc517fb7ce4a8b2def5858dacde3d41fc38625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
