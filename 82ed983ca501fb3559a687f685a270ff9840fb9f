@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b5a143_f8369f5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-12-18T22:29:45Z",
+      "side": 1,
+      "message": "Because Geoff updated this CL, unfortunately he can no longer code-review it. And it looks like Quyen isn\u0027t in ANGLE\u0027s OWNERS list at present.",
+      "parentUuid": "641484e8_72a72c1f",
+      "revId": "82ed983ca501fb3559a687f685a270ff9840fb9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cf16f6f_ebd2c7e5",
