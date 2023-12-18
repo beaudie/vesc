@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "818501a2_c4d25ddc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-12-18T21:13:57Z",
+      "side": 1,
+      "message": "LGTM as a quick, safe fix for Chrome.  Thank you for jumping on this!",
+      "revId": "cc6afea38d9133638b388922e107087b9d111745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
