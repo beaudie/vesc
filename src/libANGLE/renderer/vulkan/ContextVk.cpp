@@ -1592,8 +1592,8 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     // Render pass must be always available at this point.
     ASSERT(hasActiveRenderPass());
 
-    // TODO: UBO dirty bit handling has multiple bugs http://anglebug.com/8462
-    // ASSERT(mState.getProgram() == nullptr || !mState.getProgram()->needsSync());
+    ASSERT(mState.getProgram() == nullptr || !mState.getProgram()->needsSync());
+    ASSERT(mState.getProgramExecutable()->getAndResetDirtyBits().none());
 
     return angle::Result::Continue;
 }
@@ -1825,8 +1825,8 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
 
     mComputeDirtyBits.reset();
 
-    // TODO: UBO dirty bit handling has multiple bugs http://anglebug.com/8462
-    // ASSERT(mState.getProgram() == nullptr || !mState.getProgram()->needsSync());
+    ASSERT(mState.getProgram() == nullptr || !mState.getProgram()->needsSync());
+    ASSERT(mState.getProgramExecutable()->getAndResetDirtyBits().none());
 
     return angle::Result::Continue;
 }
@@ -2773,6 +2773,11 @@ angle::Result ContextVk::handleDirtyGraphicsShaderResources(DirtyBits::Iterator 
     // changed, handleDirtyShaderResourcesImpl will update entire shader resource descriptorSet.
     // This means there is no need to process uniform buffer binding change if it is also set.
     dirtyBitsIterator->resetLaterBit(DIRTY_BIT_UNIFORM_BUFFERS);
+
+    // |handleDirtyShaderResourcesImpl| processes uniform buffers, so it doesn't matter which are
+    // dirty.  The following makes sure the dirty bits are reset.
+    mState.getProgramExecutable()->getAndResetDirtyBits();
+
     return handleDirtyShaderResourcesImpl(mRenderPassCommands, PipelineType::Graphics);
 }
 
