@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "731e1347_d0f07a2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-12-18T21:31:19Z",
+      "side": 1,
+      "message": "lgtm\n\nThank you Alexey for so carefully thinking through this math!",
+      "revId": "265a6ff49a4e01d934b93ef51cecf9079746de62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
