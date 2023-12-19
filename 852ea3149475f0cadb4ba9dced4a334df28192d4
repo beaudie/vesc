@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13a1fc40_c8d6dcb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-19T16:41:11Z",
+      "side": 1,
+      "message": "Thanks for suppressing this Yuly",
+      "revId": "852ea3149475f0cadb4ba9dced4a334df28192d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df942166_dfe73bac",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-19T16:41:11Z",
+      "side": 1,
+      "message": "```suggestion\n8465 MAC NVIDIA OPENGL : UniformBufferTest.BufferBlockBindingChange/* \u003d SKIP\n```",
+      "revId": "852ea3149475f0cadb4ba9dced4a334df28192d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
