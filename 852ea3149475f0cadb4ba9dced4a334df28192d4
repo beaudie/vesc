@@ -51,6 +51,24 @@
       "parentUuid": "df942166_dfe73bac",
       "revId": "852ea3149475f0cadb4ba9dced4a334df28192d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad4019ff_7de01715",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-19T16:50:45Z",
+      "side": 1,
+      "message": "The specialized ones above look like should have been `*` too. Otherwise when someone adds a variant to the test they have to come back and resuppress these.\n\nWe (were supposed to) only use specialized for when only the specialized test fails, like `.../ES3_OpenGL_WithSpecialFeature1_WithSpecialFeature2`",
+      "parentUuid": "04773f55_c5e4aa02",
+      "revId": "852ea3149475f0cadb4ba9dced4a334df28192d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
