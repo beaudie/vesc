@@ -153,8 +153,8 @@ TEST_P(VulkanImageTest, DeviceVulkan)
     }
 
     EXPECT_EGL_TRUE(eglQueryDeviceAttribEXT(device, EGL_VULKAN_FEATURES_ANGLE, &result));
-    const VkPhysicalDeviceFeatures2KHR *features =
-        reinterpret_cast<const VkPhysicalDeviceFeatures2KHR *>(result);
+    const VkPhysicalDeviceFeatures2 *features =
+        reinterpret_cast<const VkPhysicalDeviceFeatures2 *>(result);
     EXPECT_NE(features, nullptr);
     EXPECT_EQ(features->sType, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2);
 
@@ -548,6 +548,7 @@ TEST_P(VulkanImageTest, ClientBufferWithDraw)
 TEST_P(VulkanImageTest, PreInitializedOnGLImport)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
 
     // http://anglebug.com/5381
     ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsDesktopOpenGL());
