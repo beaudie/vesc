@@ -33,6 +33,24 @@
       "message": "```suggestion\n8465 MAC NVIDIA OPENGL : UniformBufferTest.BufferBlockBindingChange/* \u003d SKIP\n```",
       "revId": "852ea3149475f0cadb4ba9dced4a334df28192d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04773f55_c5e4aa02",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-12-19T16:45:32Z",
+      "side": 1,
+      "message": "I think a precise suppression is better?\nLooks like there is a mix of the 2 approaches above.",
+      "parentUuid": "df942166_dfe73bac",
+      "revId": "852ea3149475f0cadb4ba9dced4a334df28192d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
