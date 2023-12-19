@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d1d21d_5c807db0",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-19T21:19:04Z",
+      "side": 1,
+      "message": "If you\u0027re trying to catch OOB access by having the second draw use more vertices, I suggest turning these into `std::vector`s, so they are not allocated on the stack ans *SAN bots could actually check that.",
+      "revId": "d4ef2fbc9efb8816afaf9d2b5710bd7a5cf41fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad5aaae7_12fdde9f",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-19T21:19:04Z",
+      "side": 1,
+      "message": "Nit: Suggest initializing the texture with 4 colors, and check each pixel has the right color.",
+      "revId": "d4ef2fbc9efb8816afaf9d2b5710bd7a5cf41fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88163fa0_d404afab",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-19T21:19:04Z",
+      "side": 1,
+      "message": "For completeness, please continue the test to *enable* GL_TEXTURE_2D and make sure the draw works (whatever part of the framebuffer `glDrawArrays(GL_TRIANGLE_FAN, 0, 4);` would cover).",
+      "revId": "d4ef2fbc9efb8816afaf9d2b5710bd7a5cf41fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
