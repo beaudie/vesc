@@ -153,8 +153,8 @@ TEST_P(VulkanImageTest, DeviceVulkan)
     }
 
     EXPECT_EGL_TRUE(eglQueryDeviceAttribEXT(device, EGL_VULKAN_FEATURES_ANGLE, &result));
-    const VkPhysicalDeviceFeatures2KHR *features =
-        reinterpret_cast<const VkPhysicalDeviceFeatures2KHR *>(result);
+    const VkPhysicalDeviceFeatures2 *features =
+        reinterpret_cast<const VkPhysicalDeviceFeatures2 *>(result);
     EXPECT_NE(features, nullptr);
     EXPECT_EQ(features->sType, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2);
 
@@ -548,6 +548,7 @@ TEST_P(VulkanImageTest, ClientBufferWithDraw)
 TEST_P(VulkanImageTest, PreInitializedOnGLImport)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
 
     // http://anglebug.com/5381
     ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsDesktopOpenGL());
@@ -612,6 +613,9 @@ TEST_P(VulkanImageTest, PreInitializedOnGLImport)
     glCreateMemoryObjectsEXT(1u, &memoryObject);
     EXPECT_TRUE(glIsMemoryObjectEXT(memoryObject));
 
+    GLint dedicatedMemory = GL_TRUE;
+    glMemoryObjectParameterivEXT(memoryObject, GL_DEDICATED_MEMORY_OBJECT_EXT, &dedicatedMemory);
+
     glImportMemoryFdEXT(memoryObject, vkDeviceMemorySize, GL_HANDLE_TYPE_OPAQUE_FD_EXT, memfd);
     EXPECT_GL_NO_ERROR();
 
@@ -623,7 +627,7 @@ TEST_P(VulkanImageTest, PreInitializedOnGLImport)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glTexStorageMem2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8_OES, 1, 1, memoryObject, 0);
+    glTexStorageMem2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8_OES, kWidth, kHeight, memoryObject, 0);
     EXPECT_GL_NO_ERROR();
 
     GLenum glLayout = GL_LAYOUT_COLOR_ATTACHMENT_EXT;
@@ -1059,6 +1063,9 @@ TEST_P(VulkanImageTest, PreInitializedOnGLImportLinearTiling)
     glCreateMemoryObjectsEXT(1u, &memoryObject);
     EXPECT_TRUE(glIsMemoryObjectEXT(memoryObject));
 
+    GLint dedicatedMemory = GL_TRUE;
+    glMemoryObjectParameterivEXT(memoryObject, GL_DEDICATED_MEMORY_OBJECT_EXT, &dedicatedMemory);
+
     glImportMemoryFdEXT(memoryObject, vkDeviceMemorySize, GL_HANDLE_TYPE_OPAQUE_FD_EXT, memfd);
     EXPECT_GL_NO_ERROR();
 
@@ -1072,7 +1079,7 @@ TEST_P(VulkanImageTest, PreInitializedOnGLImportLinearTiling)
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_TILING_EXT, GL_LINEAR_TILING_EXT);
 
-    glTexStorageMem2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8_OES, 1, 1, memoryObject, 0);
+    glTexStorageMem2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8_OES, kWidth, kHeight, memoryObject, 0);
     EXPECT_GL_NO_ERROR();
 
     GLenum glLayout = GL_LAYOUT_COLOR_ATTACHMENT_EXT;

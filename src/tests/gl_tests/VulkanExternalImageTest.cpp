@@ -706,7 +706,7 @@ void RunShouldClearWithSemaphoresTest(bool useMemoryObjectFlags,
         };
         constexpr uint32_t textureBarriersCount = std::extent<decltype(barrierTextures)>();
         const GLenum textureSrcLayouts[]        = {
-                   GL_LAYOUT_GENERAL_EXT,
+            GL_LAYOUT_GENERAL_EXT,
         };
         constexpr uint32_t textureSrcLayoutsCount = std::extent<decltype(textureSrcLayouts)>();
         static_assert(textureBarriersCount == textureSrcLayoutsCount,
@@ -942,7 +942,7 @@ void VulkanExternalImageTest::runShouldDrawTest(bool isSwiftshader, bool enableD
         };
         constexpr uint32_t textureBarriersCount = std::extent<decltype(barrierTextures)>();
         const GLenum textureSrcLayouts[]        = {
-                   GL_LAYOUT_GENERAL_EXT,
+            GL_LAYOUT_GENERAL_EXT,
         };
         constexpr uint32_t textureSrcLayoutsCount = std::extent<decltype(textureSrcLayouts)>();
         static_assert(textureBarriersCount == textureSrcLayoutsCount,
@@ -1060,7 +1060,7 @@ void VulkanExternalImageTest::runWaitSemaphoresRetainsContentTest(bool isSwiftsh
     VkDeviceMemory deviceMemory   = VK_NULL_HANDLE;
     VkDeviceSize deviceMemorySize = 0;
 
-    VkExtent3D extent = {1, 1, 1};
+    VkExtent3D extent = {64, 64, 1};
     result =
         Traits::CreateImage2D(&helper, format, kDefaultImageCreateFlags, kDefaultImageUsageFlags,
                               nullptr, extent, &image, &deviceMemory, &deviceMemorySize);
@@ -1080,7 +1080,7 @@ void VulkanExternalImageTest::runWaitSemaphoresRetainsContentTest(bool isSwiftsh
 
         GLTexture texture;
         glBindTexture(GL_TEXTURE_2D, texture);
-        glTexStorageMem2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1, memoryObject, 0);
+        glTexStorageMem2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, 64, 64, memoryObject, 0);
 
         GLSemaphore glAcquireSemaphore;
         Traits::ImportSemaphore(glAcquireSemaphore, acquireSemaphoreHandle);
@@ -1094,7 +1094,7 @@ void VulkanExternalImageTest::runWaitSemaphoresRetainsContentTest(bool isSwiftsh
         };
         constexpr uint32_t textureBarriersCount = std::extent<decltype(barrierTextures)>();
         const GLenum textureSrcLayouts[]        = {
-                   GL_LAYOUT_GENERAL_EXT,
+            GL_LAYOUT_GENERAL_EXT,
         };
         constexpr uint32_t textureSrcLayoutsCount = std::extent<decltype(textureSrcLayouts)>();
         static_assert(textureBarriersCount == textureSrcLayoutsCount,
@@ -1109,6 +1109,7 @@ void VulkanExternalImageTest::runWaitSemaphoresRetainsContentTest(bool isSwiftsh
 
         // Make the texture red.
         ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+        glViewport(0, 0, 64, 64);
         drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0.0f);
         EXPECT_GL_NO_ERROR();
 
@@ -1148,7 +1149,7 @@ void VulkanExternalImageTest::runWaitSemaphoresRetainsContentTest(bool isSwiftsh
                                             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                             vkReleaseSemaphore);
 
-        uint8_t pixels[4];
+        uint8_t pixels[4 * 64 * 64];
         VkOffset3D offset = {};
         helper.readPixels(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, format, offset, extent,
                           pixels, sizeof(pixels));
@@ -1157,6 +1158,11 @@ void VulkanExternalImageTest::runWaitSemaphoresRetainsContentTest(bool isSwiftsh
         EXPECT_EQ(0xFF, pixels[1]);
         EXPECT_EQ(0x00, pixels[2]);
         EXPECT_EQ(0xFF, pixels[3]);
+
+        EXPECT_EQ(0xFF, pixels[4]);
+        EXPECT_EQ(0xFF, pixels[5]);
+        EXPECT_EQ(0x00, pixels[6]);
+        EXPECT_EQ(0xFF, pixels[7]);
     }
 
     EXPECT_GL_NO_ERROR();
