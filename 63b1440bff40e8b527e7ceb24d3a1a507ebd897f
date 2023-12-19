@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1f32704_717297d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-12-19T22:59:41Z",
+      "side": 1,
+      "message": "Since Geoff is out I\u0027ll +2 and CQ this fix, which is targeted and well tested. Thanks again Alexey for fixing this.",
+      "revId": "63b1440bff40e8b527e7ceb24d3a1a507ebd897f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
