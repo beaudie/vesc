@@ -7,6 +7,7 @@
 //   Tests for ETC lossy decode formats.
 //
 
+#include "media/etc2bc_srgb8_alpha8.inc"
 #include "test_utils/ANGLETest.h"
 
 using namespace angle;
@@ -462,12 +463,12 @@ TEST_P(ETCToBCTextureTest, ETC2Rgb8UnormToBC1_2DArray)
     glBindTexture(GL_TEXTURE_2D_ARRAY, mEtcTexture);
     static constexpr int kArraySize = 6;
     uint32_t data[2 * kArraySize]   = {
-          kEtcAllZero[0], kEtcAllZero[1],  // array 0
-          kEtcRGBData[0], kEtcRGBData[1],  // array 1
-          kEtcRGBData[0], kEtcRGBData[1],  // array 2
-          kEtcAllZero[0], kEtcAllZero[1],  // array 3
-          kEtcAllZero[0], kEtcAllZero[1],  // array 4
-          kEtcAllZero[0], kEtcAllZero[1],  // array 5
+        kEtcAllZero[0], kEtcAllZero[1],  // array 0
+        kEtcRGBData[0], kEtcRGBData[1],  // array 1
+        kEtcRGBData[0], kEtcRGBData[1],  // array 2
+        kEtcAllZero[0], kEtcAllZero[1],  // array 3
+        kEtcAllZero[0], kEtcAllZero[1],  // array 4
+        kEtcAllZero[0], kEtcAllZero[1],  // array 5
     };
     glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_COMPRESSED_RGB8_ETC2, kTexSize, kTexSize, kArraySize);
     glCompressedTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, kTexSize, kTexSize, kArraySize,
@@ -604,6 +605,26 @@ TEST_P(ETCToBCTextureTest, ETC2Rgba8UnormToBC3_Lod)
     glUniform1i(texPos, 0);
     drawQuad(program, "position", 0.5f);
     EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(kExpectedRGBAColor[0]), kAbsError);
+}
+
+// Tests GPU compute transcode ETC2_SRGB8_ALPHA8 to BC3
+TEST_P(ETCToBCTextureTest, ETC2SrgbAlpha8UnormToBC3)
+{
+    ANGLE_SKIP_TEST_IF(
+        !IsVulkan() || !IsNVIDIA() ||
+        !getEGLWindow()->isFeatureEnabled(Feature::SupportsComputeTranscodeEtcToBc) ||
+        !IsGLExtensionEnabled("GL_EXT_texture_compression_s3tc"));
+
+    glViewport(0, 0, pixel_width, pixel_height);
+    glBindTexture(GL_TEXTURE_2D, mEtcTexture);
+    glCompressedTexImage2D(GL_TEXTURE_2D, 0, pixel_width, pixel_height,
+                           GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC, 0, sizeof(etc2bc_srgb8_alpha8),
+                           etc2bc_srgb8_alpha8);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    draw2DTexturedQuad(0.5f, 1.0f, false);
+    EXPECT_PIXEL_COLOR_NEAR(96, 160, GLColor(193, 193, 193, 255), kAbsError);
+    EXPECT_PIXEL_COLOR_NEAR(88, 148, GLColor(0, 0, 0, 0), kAbsError);
 }
 
 // Tests GPU compute transcode R11 Signed to BC4
