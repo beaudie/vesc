@@ -1384,6 +1384,7 @@ TEST_P(VulkanExternalImageTest, PreInitializedOnGLImportLinearWithFlags)
 
 template <typename Traits>
 void RunUninitializedOnGLImportTest(bool useMemoryObjectFlags,
+                                    bool doRender,
                                     bool isSwiftshader,
                                     bool enableDebugLayers)
 {
@@ -1467,25 +1468,30 @@ void RunUninitializedOnGLImportTest(bool useMemoryObjectFlags,
         const GLenum textureSrcLayout = GL_NONE;
         glWaitSemaphoreEXT(glAcquireSemaphore, 0, nullptr, 1, &barrierTexture, &textureSrcLayout);
 
-        GLFramebuffer framebuffer;
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+        GLenum textureDstLayout = GL_NONE;
+        if (doRender)
+        {
+            GLFramebuffer framebuffer;
+            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
 
-        glClearColor(1, 0, 0, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
+            glClearColor(1, 0, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
 
-        uint32_t pixel             = 0u;
-        constexpr uint32_t kExpect = 0xFF0000FF;
-        glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
-        EXPECT_GL_NO_ERROR();
+            uint32_t pixel             = 0u;
+            constexpr uint32_t kExpect = 0xFF0000FF;
+            glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
+            EXPECT_GL_NO_ERROR();
 
-        EXPECT_EQ(pixel, kExpect);
-        EXPECT_GL_NO_ERROR();
+            EXPECT_EQ(pixel, kExpect);
+            EXPECT_GL_NO_ERROR();
+
+            textureDstLayout = GL_LAYOUT_TRANSFER_SRC_EXT;
+        }
 
         GLSemaphore glReleaseSemaphore;
         Traits::ImportSemaphore(glReleaseSemaphore, releaseSemaphoreHandle);
 
-        const GLenum textureDstLayout = GL_LAYOUT_TRANSFER_SRC_EXT;
         glSignalSemaphoreEXT(glReleaseSemaphore, 0, nullptr, 1, &barrierTexture, &textureDstLayout);
 
         helper.waitSemaphoreAndAcquireImage(image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
@@ -1508,7 +1514,19 @@ TEST_P(VulkanExternalImageTest, UninitializedOnGLImport)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_semaphore_fd"));
 
-    RunUninitializedOnGLImportTest<OpaqueFdTraits>(false, isSwiftshader(), enableDebugLayers());
+    RunUninitializedOnGLImportTest<OpaqueFdTraits>(false, true, isSwiftshader(),
+                                                   enableDebugLayers());
+}
+
+// Test that texture storage created from VkImage memory can be imported as uninitialized in GL and
+// released without being touched.
+TEST_P(VulkanExternalImageTest, UninitializedOnGLImportAndExport)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_semaphore_fd"));
+
+    RunUninitializedOnGLImportTest<OpaqueFdTraits>(false, false, isSwiftshader(),
+                                                   enableDebugLayers());
 }
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(VulkanExternalImageTest);
