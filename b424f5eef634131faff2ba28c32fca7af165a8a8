@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf0837de_0a765139",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-12-20T14:49:49Z",
+      "side": 1,
+      "message": "Shabi, PTAL at the new suppressions in RendererVk.cpp.",
+      "revId": "b424f5eef634131faff2ba28c32fca7af165a8a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
