@@ -16,6 +16,23 @@
       "message": "hi all,\nplease help to review the changes.\n\nthanks",
       "revId": "b53c0ad6ffc8cde6e189ab83f29860389c2ff463",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21150c0d_265fe5d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-20T21:02:27Z",
+      "side": 1,
+      "message": "Thanks for the fix, please add a regression test.",
+      "revId": "b53c0ad6ffc8cde6e189ab83f29860389c2ff463",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
