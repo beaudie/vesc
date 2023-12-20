@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22fee24a_c54deca8",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-12-20T22:10:56Z",
+      "side": 1,
+      "message": "Thanks! Done.",
+      "parentUuid": "08d1d21d_5c807db0",
+      "revId": "d4ef2fbc9efb8816afaf9d2b5710bd7a5cf41fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad5aaae7_12fdde9f",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c9233a6_17683497",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-12-20T22:10:56Z",
+      "side": 1,
+      "message": "Added 4 colors, one to cover each corner.",
+      "parentUuid": "ad5aaae7_12fdde9f",
+      "revId": "d4ef2fbc9efb8816afaf9d2b5710bd7a5cf41fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88163fa0_d404afab",
@@ -82,6 +118,24 @@
       "writtenOn": "2023-12-19T21:19:04Z",
       "side": 1,
       "message": "For completeness, please continue the test to *enable* GL_TEXTURE_2D and make sure the draw works (whatever part of the framebuffer `glDrawArrays(GL_TRIANGLE_FAN, 0, 4);` would cover).",
+      "revId": "d4ef2fbc9efb8816afaf9d2b5710bd7a5cf41fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0f2d970_7eb6ad34",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-12-20T22:10:56Z",
+      "side": 1,
+      "message": "Added a final part where the texture is enabled and the first vertex pointer is used to draw a triangle fan using the tex coord pointer from before.",
+      "parentUuid": "88163fa0_d404afab",
       "revId": "d4ef2fbc9efb8816afaf9d2b5710bd7a5cf41fd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
