@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce80c5ae_5e3e945f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-20T18:37:29Z",
+      "side": 1,
+      "message": "Still plan to follow up with some changes. I think we should decouple the dirty bits for glUniformBlockBinding and glBindBufferRange. The former affects the program, and only the GL backend really cares about specifically with relation to the actual program. The latter is just state, doesn\u0027t feel like it should make the _program_ dirty. That\u0027ll hopefully simplify dealing with PPOs easier.",
+      "revId": "416a3d2c7a157d253692ac141053a089fe1140fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
