@@ -16,6 +16,24 @@
       "message": "nit: Could we test the color too at some points for completeness?\n\nYou won\u0027t need the `EXPECT_PIXEL_ALPHA_NEAR` macro anymore then, you could just use `EXPECT_PIXEL_COLOR_NEAR`",
       "revId": "4df4f82c89a8b95ddc0e551a0df80d71b490e893",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "622a5b42_75419243",
+        "filename": "src/tests/gl_tests/ETCTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-12-21T02:37:49Z",
+      "side": 1,
+      "message": "since it is srgb format and also convert to bc format, difference is for rgb channel are quite bigger than alpha channel difference",
+      "parentUuid": "17504d34_ec35f1bc",
+      "revId": "4df4f82c89a8b95ddc0e551a0df80d71b490e893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
