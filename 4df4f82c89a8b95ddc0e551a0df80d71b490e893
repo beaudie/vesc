@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17504d34_ec35f1bc",
+        "filename": "src/tests/gl_tests/ETCTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-21T02:27:01Z",
+      "side": 1,
+      "message": "nit: Could we test the color too at some points for completeness?\n\nYou won\u0027t need the `EXPECT_PIXEL_ALPHA_NEAR` macro anymore then, you could just use `EXPECT_PIXEL_COLOR_NEAR`",
+      "revId": "4df4f82c89a8b95ddc0e551a0df80d71b490e893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
