@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0714f093_bda3a8f3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-21T20:13:38Z",
+      "side": 1,
+      "message": "`handleDirtyComputeShaderResources` now resets the UBOs bit after it processes the shader resources (because that includes UBOs). It was done previously for graphics, but not compute.",
+      "parentUuid": "695ee2a5_98df5e56",
+      "range": {
+        "startLine": 1249,
+        "startChar": 0,
+        "endLine": 1256,
+        "endChar": 91
+      },
+      "revId": "416a3d2c7a157d253692ac141053a089fe1140fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e09808c1_f12295d3",
@@ -88,6 +112,30 @@
       "writtenOn": "2023-12-21T20:08:20Z",
       "side": 1,
       "message": "/cheer\n\nThis was failing before!",
+      "range": {
+        "startLine": 672,
+        "startChar": 0,
+        "endLine": 672,
+        "endChar": 47
+      },
+      "revId": "416a3d2c7a157d253692ac141053a089fe1140fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03f30c3c_a0422b86",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-21T20:13:38Z",
+      "side": 1,
+      "message": "Yeap!",
+      "parentUuid": "e09808c1_f12295d3",
       "range": {
         "startLine": 672,
         "startChar": 0,
