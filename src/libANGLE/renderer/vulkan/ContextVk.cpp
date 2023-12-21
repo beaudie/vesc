@@ -4764,6 +4764,10 @@ void ContextVk::updateColorMasks()
                                                  framebufferVk->getEmulatedAlphaAttachmentMask(),
                                                  framebufferVk->getState().getEnabledDrawBuffers());
 
+    // This function may be called outside of ContextVk::syncState, and so invalidates the graphics
+    // pipeline.
+    invalidateCurrentGraphicsPipeline();
+
     onColorAccessChange();
 }
 
@@ -4795,6 +4799,10 @@ void ContextVk::updateBlendFuncsAndEquations()
 
     mGraphicsPipelineDesc->updateBlendEquations(&mGraphicsPipelineTransition, blendStateExt,
                                                 mCachedDrawFramebufferColorAttachmentMask);
+
+    // This function may be called outside of ContextVk::syncState, and so invalidates the graphics
+    // pipeline.
+    invalidateCurrentGraphicsPipeline();
 }
 
 void ContextVk::updateSampleMaskWithRasterizationSamples(const uint32_t rasterizationSamples)
