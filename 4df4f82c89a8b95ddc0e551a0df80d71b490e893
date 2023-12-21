@@ -34,6 +34,24 @@
       "parentUuid": "17504d34_ec35f1bc",
       "revId": "4df4f82c89a8b95ddc0e551a0df80d71b490e893",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bce83fe6_b9e8fc13",
+        "filename": "src/tests/gl_tests/ETCTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-21T02:39:40Z",
+      "side": 1,
+      "message": "It\u0027s _some_ color though, we should be able to expect something, even if it\u0027s not exactly what\u0027s in the ASTC image",
+      "parentUuid": "622a5b42_75419243",
+      "revId": "4df4f82c89a8b95ddc0e551a0df80d71b490e893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
