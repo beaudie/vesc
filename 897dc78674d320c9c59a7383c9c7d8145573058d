@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fd956b0_1af292ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-21T15:26:33Z",
+      "side": 1,
+      "message": "The README.angle-\u003eREADME.chromium change is to help with some other Chromium effort.",
+      "revId": "897dc78674d320c9c59a7383c9c7d8145573058d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
