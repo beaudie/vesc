@@ -16,6 +16,24 @@
       "message": "I suggest removing this call. I realize the draw arrays won\u0027t cover the entire framebuffer anymore, and that\u0027s fine.\n\nThe key is to make sure enabling GL_TEXTURE_2D is enough to update the attributes (and re-enable access to the texture attributes); this call might accidentally set the same dirty bits.",
       "revId": "c51259ec508bbffcb5095f4052bdde67fc311c89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f8cfbb9_1df31aa7",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-12-22T00:30:30Z",
+      "side": 1,
+      "message": "I see. I have updated the test to do this in a follow-up CL: https://chromium-review.googlesource.com/c/angle/angle/+/5147197\nHowever, since the used texcoord pointer data does not correspond to the no-texture vertex pointer, the color mapping changes.",
+      "parentUuid": "4db37e45_f0860c70",
+      "revId": "c51259ec508bbffcb5095f4052bdde67fc311c89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
