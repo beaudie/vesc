@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ace5cce_096bcc72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-22T16:51:51Z",
+      "side": 1,
+      "message": "Thanks again for catching this bug Mohan. FWIW, the rest of the state changes mentioned in the bug should work fine, I realized that after writing the depth-test change in this CL.\n\nThe reason is that `FramebufferVk::syncState` may do color mask and blend state changes without calling `ContextVk::onFramebufferChange` (if the framebuffer isn\u0027t otherwise changed), which was the bug, but when it _is_ changed, all that other state change in that function is followed by a call to `ContextVk::onDrawFramebufferRenderPassDescChange` which invalidates the pipeline already.",
+      "revId": "8b51b4f86c8236fcf62093a746c8591ab91b08ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
