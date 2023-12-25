@@ -16,6 +16,47 @@
       "message": "Thanks again for catching this bug Mohan. FWIW, the rest of the state changes mentioned in the bug should work fine, I realized that after writing the depth-test change in this CL.\n\nThe reason is that `FramebufferVk::syncState` may do color mask and blend state changes without calling `ContextVk::onFramebufferChange` (if the framebuffer isn\u0027t otherwise changed), which was the bug, but when it _is_ changed, all that other state change in that function is followed by a call to `ContextVk::onDrawFramebufferRenderPassDescChange` which invalidates the pipeline already.",
       "revId": "8b51b4f86c8236fcf62093a746c8591ab91b08ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c19a6be_2a1fc91b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-12-25T21:03:57Z",
+      "side": 1,
+      "message": "thanks for the fix Shabi\n\ni see that `ContextVk::onDrawFramebufferRenderPassDescChange` invalidates the pipeline only when `renderPassDescChangedOut \u003d\u003d nullptr`. i am not familiar with this code path but is it the assumption that the callers of `ContextVk::onDrawFramebufferRenderPassDescChange` with `renderPassDescChangedOut !\u003d nullptr` are responsible for invalidating the graphics pipeline?",
+      "parentUuid": "8ace5cce_096bcc72",
+      "revId": "8b51b4f86c8236fcf62093a746c8591ab91b08ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b9814dd_cc82df8d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-12-25T21:03:57Z",
+      "side": 1,
+      "message": "for consistency with the other `onXXXXXChange` methods, should we rename these to `onColorMasksChange` and `onBlendFuncsAndEquationsChange`?",
+      "range": {
+        "startLine": 457,
+        "startChar": 0,
+        "endLine": 458,
+        "endChar": 40
+      },
+      "revId": "8b51b4f86c8236fcf62093a746c8591ab91b08ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
