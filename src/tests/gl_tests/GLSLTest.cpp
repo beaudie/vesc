@@ -6302,6 +6302,39 @@ void main()
     glDeleteShader(shader);
 }
 
+// Test that a fragment shader that leaves undefined channels has a
+// deterministic output. (anglebug.com/8405)
+TEST_P(WebGL2GLSLTest, FragmentUndefinedChannels)
+{
+    std::vector<std::pair<std::string, std::string>> configs = {
+        {"vec4 good_color", "good_color.r"},         {"float fragA_color", "fragA_color"},
+        {"float fragB_color[1]", "fragB_color[0]"},  {"vec2 fragC_color", "fragC_color.r"},
+        {"vec2 fragF_color", "fragF_color[0]"},      {"vec2 fragD_color[1]", "fragD_color[0].r"},
+        {"vec2 fragE_color[1]", "fragE_color[0][0]"}};
+
+    for (auto cfg : configs)
+    {
+        auto prog = std::format(
+            R"(#version 300 es
+  precision highp float;
+  out highp {};
+
+  void main()
+  {{
+    {} = 1.0;
+  }}
+)",
+            cfg.first, cfg.second);
+        ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), prog.data());
+
+        glUseProgram(program);
+        drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor(255, 0, 0, 0));
+    }
+}
+
 // Test that uninitialized local variables are initialized to 0.
 TEST_P(WebGL2GLSLTest, InitUninitializedLocals)
 {
