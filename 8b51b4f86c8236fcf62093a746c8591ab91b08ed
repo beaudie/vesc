@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11ee6954_cf5cf23e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-27T18:16:17Z",
+      "side": 1,
+      "message": "Yes, that\u0027s a special case where invalidating the pipeline is not enough to actually make things work. It happens during dirty bit processing, where dirty pipeline bit is already processed, but starting a render pass (which happens after that) ends up invalidating the pipeline again (due to a rare MSRTT corner case). So instead the RP dirty bit processing looks at the returned bool and reprocesses the pipeline. See `ContextVk::handleDirtyGraphicsRenderPass`, the `renderPassDescChanged` variable.",
+      "parentUuid": "4c19a6be_2a1fc91b",
+      "revId": "8b51b4f86c8236fcf62093a746c8591ab91b08ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b9814dd_cc82df8d",
@@ -49,6 +67,30 @@
       "writtenOn": "2023-12-25T21:03:57Z",
       "side": 1,
       "message": "for consistency with the other `onXXXXXChange` methods, should we rename these to `onColorMasksChange` and `onBlendFuncsAndEquationsChange`?",
+      "range": {
+        "startLine": 457,
+        "startChar": 0,
+        "endLine": 458,
+        "endChar": 40
+      },
+      "revId": "8b51b4f86c8236fcf62093a746c8591ab91b08ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "897c4e68_7d6479ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-12-27T18:16:17Z",
+      "side": 1,
+      "message": "Maybe in a follow up, we have a bunch of `updateX` calls too",
+      "parentUuid": "6b9814dd_cc82df8d",
       "range": {
         "startLine": 457,
         "startChar": 0,
