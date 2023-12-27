@@ -6302,6 +6302,89 @@ void main()
     glDeleteShader(shader);
 }
 
+// Test that a fragment shader that leaves undefined channels has a
+// deterministic output. (anglebug.com/8405)
+TEST_P(WebGL2GLSLTest, FragmentUndefinedChannels)
+{
+    std::vector<std::pair<std::string, std::string>> configs = {
+        {"vec4 fragColor", "fragColor.r"},       {"float fragColor", "fragColor"},
+        {"float fragColor[1]", "fragColor[0]"},  {"vec2 fragColor", "fragColor.r"},
+        {"vec2 fragColor", "fragColor[0]"},      {"vec2 fragColor[1]", "fragColor[0].r"},
+        {"vec2 fragColor[1]", "fragColor[0][0]"}};
+
+    for (auto cfg : configs)
+    {
+        auto prog = std::format(R"(#version 300 es
+precision highp float;
+out highp {};
+
+void main()
+{{
+  {} = 1.0;
+}})",
+                                cfg.first, cfg.second);
+        ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), prog.data());
+        EXPECT_EQ(0, glGetFragDataLocation(program, "fragColor"));
+        glUseProgram(program);
+        drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor(255, 0, 0, 0));
+    }
+}
+
+// Test that a fragment shader that leaves undefined channels has a
+// deterministic output. (anglebug.com/8405)
+TEST_P(WebGL2GLSLTest, FragmentUndefinedChannelsInt)
+{
+    GLuint fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8UI, 128, 128, 0, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE,
+                 nullptr);
+
+    std::vector<std::pair<std::string, std::string>> configs = {{"uvec4 fragColor", "fragColor.r"},
+                                                                {"uvec3 fragColor", "fragColor.r"},
+                                                                {"uvec2 fragColor", "fragColor.r"},
+                                                                {"uint fragColor", "fragColor"}};
+
+    for (auto cfg : configs)
+    {
+        std::string prog = std::format(R"(#version 300 es
+precision highp float;
+out {};
+
+void main()
+{{
+  {} = 255u;
+}})",
+                                       cfg.first, cfg.second);
+        std::cout << prog << std::endl;
+        ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), prog.data());
+        EXPECT_EQ(0, glGetFragDataLocation(program, "fragColor"));
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+        glUseProgram(program);
+
+        GLenum buffers[] = {GL_COLOR_ATTACHMENT0};
+        glDrawBuffers(1, buffers);
+
+        drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+        ASSERT_GL_NO_ERROR();
+
+        glUseProgram(0);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
+        glReadBuffer(GL_COLOR_ATTACHMENT0);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_RECT32UI_EQ(0, 0, 128, 128, GLColor32UI(255, 0, 0, 0));
+    }
+    ASSERT(0);
+}
+
 // Test that uninitialized local variables are initialized to 0.
 TEST_P(WebGL2GLSLTest, InitUninitializedLocals)
 {
