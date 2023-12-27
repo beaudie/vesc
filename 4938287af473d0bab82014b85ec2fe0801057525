@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "413f8a8d_d2f41c80",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-12-27T20:05:16Z",
+      "side": 1,
+      "message": "see other comment",
+      "parentUuid": "3259e5c7_b82cf552",
+      "range": {
+        "startLine": 1436,
+        "startChar": 25,
+        "endLine": 1436,
+        "endChar": 39
+      },
+      "revId": "4938287af473d0bab82014b85ec2fe0801057525",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4a9e836_8dab1137",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-12-27T18:19:30Z",
       "side": 1,
       "message": "Should this be `IsAndroid()`?",
+      "range": {
+        "startLine": 4332,
+        "startChar": 84,
+        "endLine": 4332,
+        "endChar": 93
+      },
+      "revId": "4938287af473d0bab82014b85ec2fe0801057525",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3675212b_2c27a4a4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4332,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-12-27T20:05:16Z",
+      "side": 1,
+      "message": "this was added while testing the change locally, needs to be removed.\n\nThis feature is a fallback option we will have internally when we need to workaround bad app behavior. by default it needs to be disabled",
+      "parentUuid": "b4a9e836_8dab1137",
       "range": {
         "startLine": 4332,
         "startChar": 84,
