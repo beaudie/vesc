@@ -36,6 +36,7 @@
 #include "compiler/translator/tree_ops/DeferGlobalInitializers.h"
 #include "compiler/translator/tree_ops/EmulateGLFragColorBroadcast.h"
 #include "compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.h"
+#include "compiler/translator/tree_ops/ExtendOutputVariables.h"
 #include "compiler/translator/tree_ops/FoldExpressions.h"
 #include "compiler/translator/tree_ops/ForcePrecisionQualifier.h"
 #include "compiler/translator/tree_ops/InitializeVariables.h"
@@ -1082,6 +1083,12 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         {
             return false;
         }
+    }
+
+    if (IsWebGLBasedSpec(mShaderSpec) && mShaderType == GL_FRAGMENT_SHADER &&
+        !ExtendOutputVariables(this, root))
+    {
+        return false;
     }
 
     ASSERT(!mVariablesCollected);
