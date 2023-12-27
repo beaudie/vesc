@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0de0e5a_36624e33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-12-27T18:23:32Z",
+      "side": 1,
+      "message": "im hoping this is documented some place other than here in the comments but thanks for the info",
+      "parentUuid": "11ee6954_cf5cf23e",
+      "revId": "8b51b4f86c8236fcf62093a746c8591ab91b08ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b9814dd_cc82df8d",
@@ -91,6 +109,30 @@
       "side": 1,
       "message": "Maybe in a follow up, we have a bunch of `updateX` calls too",
       "parentUuid": "6b9814dd_cc82df8d",
+      "range": {
+        "startLine": 457,
+        "startChar": 0,
+        "endLine": 458,
+        "endChar": 40
+      },
+      "revId": "8b51b4f86c8236fcf62093a746c8591ab91b08ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b376613_e752d00e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-12-27T18:23:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "897c4e68_7d6479ac",
       "range": {
         "startLine": 457,
         "startChar": 0,
