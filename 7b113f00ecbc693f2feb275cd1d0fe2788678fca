@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08ea4897_0d9d69d8",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6309,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-12-28T17:46:58Z",
+      "side": 1,
+      "message": "Please use `src/tests/angle_end2end_tests_expectations.txt` for test suppressions.",
+      "revId": "7b113f00ecbc693f2feb275cd1d0fe2788678fca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaf00577_b5041651",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6314,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-12-28T17:46:58Z",
+      "side": 1,
+      "message": "Signed (`int/ivec2/ivec3`) and unsigned (`uint/uvec2/uvec3`) integer outputs may also be affected by this issue. Please test them and adjust the transformation if necessary.\n\nNote that integer outputs require using custom framebuffers of matching pixel formats.",
+      "revId": "7b113f00ecbc693f2feb275cd1d0fe2788678fca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccce16e1_4d81a1d5",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6346,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-12-28T17:46:58Z",
+      "side": 1,
+      "message": "Please use `EXPECT_PIXEL_RECT_EQ`.",
+      "range": {
+        "startLine": 6338,
+        "startChar": 0,
+        "endLine": 6346,
+        "endChar": 41
+      },
+      "revId": "7b113f00ecbc693f2feb275cd1d0fe2788678fca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
