@@ -16,6 +16,24 @@
       "message": "AFAIR, SwiftShader with VVL is broken only on macOS because of some infra issues; it should work after `cd`-ing to the directory containing the `angle_end2end_tests` executable. This configuration is not tested on the bots anyway so this suppression is not needed.",
       "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1650160c_5ce9ab45",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2023-12-31T05:14:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "96ecf8d1_06ff948c",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
