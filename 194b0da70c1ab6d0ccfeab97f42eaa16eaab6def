@@ -3,6 +3,114 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20c5aa3f_b515d77b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-01T23:18:43Z",
+      "side": 1,
+      "message": "I\u0027m afraid this approach is very error prone. The code has to account for any kind of usage of the variable, and it\u0027s easy to miss some patterns. For example, have you considered that the output variable may be passed to a function as an `out` variable? (please add a test)\n\nFortunately there\u0027s an easier way to systematically handle all cases correctly. The transformation to implement is basically this:\n\nChange this:\n\n```\nout vec2 color;\n...\nvoid main()\n{\n    ...\n}\n```\n\nInto this:\n\n```\nvec2 color;\nout vec4 s123;\n...\nvoid main()\n{\n    ...\n    s123 \u003d vec4(color, 0, 0);\n}\n```\n\nBasically:\n\n* Replace the `out vecN` declaration with `vecN`\n* Make all of the code treat the variable exactly the same as they do (i.e. just replace the variable, but no need to transform the code in any way)\n* Add a second declaration that is `out vec4`\n* At the end of the shader, initialize the output variable from the global variable (we have a helper, `RunAtTheEndOfShader()` that deals with early returns etc)",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e0c5db4_5b4e2b20",
+        "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-01T23:18:43Z",
+      "side": 1,
+      "message": "```suggestion\n// Copyright 2023 The ANGLE Project Authors. All rights reserved.\n```",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8617eef9_4062a121",
+        "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-01T23:18:43Z",
+      "side": 1,
+      "message": "We typically include an explanation of the transformation here.",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39a16dbc_0e7d9418",
+        "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-01T23:18:43Z",
+      "side": 1,
+      "message": "This risks creating a variable with an existing name. You should use `kEmptyImmutableString` as the name, and `SymbolType::Empty` as the symbol type. ANGLE would then create a temp name for this variable.",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91fa70d9_cd5654ee",
+        "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-01T23:18:43Z",
+      "side": 1,
+      "message": "nit: remove",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc568c52_2154ff02",
+        "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-01T23:18:43Z",
+      "side": 1,
+      "message": "This variable is unused!",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96ecf8d1_06ff948c",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 6
@@ -32,6 +140,47 @@
       "side": 1,
       "message": "Acknowledged",
       "parentUuid": "96ecf8d1_06ff948c",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71384850_4ab6d5d4",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-01T23:18:43Z",
+      "side": 1,
+      "message": "Please remove this line then according to Alexey\u0027s comment. We _do_ run SwiftShader with validation layers.",
+      "parentUuid": "1650160c_5ce9ab45",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1dcab71_a1a89860",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-01T23:18:43Z",
+      "side": 1,
+      "message": "nit: we reserve `auto` typically for complex nested templated types. Being explicit about the type makes the code easier to follow.\n\n```suggestion\n        const std::string prog \u003d std::format(\n```",
+      "range": {
+        "startLine": 6317,
+        "startChar": 8,
+        "endLine": 6317,
+        "endChar": 12
+      },
       "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
