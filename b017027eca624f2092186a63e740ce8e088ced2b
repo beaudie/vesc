@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "878cada7_c54457e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-02T21:11:49Z",
+      "side": 1,
+      "message": "Would you mention here and possibly also in the bug which dEQP tests this fixes?",
+      "revId": "b017027eca624f2092186a63e740ce8e088ced2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86909e1c_05dbf686",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-02T21:11:49Z",
+      "side": 1,
+      "message": "Nice work getting these tests passing, even if just for the sake of completeness.\n\nlgtm+2, one request about the commit message / bug update.",
+      "revId": "b017027eca624f2092186a63e740ce8e088ced2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
