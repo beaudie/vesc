@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dac187b1_31df78d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-02T21:30:22Z",
+      "side": 1,
+      "message": "lgtm+2\n\nThank you for digging into this tricky translator bug!",
+      "revId": "1a79a9c98ecc0429361fd50c2fc24c3e5b07222c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
