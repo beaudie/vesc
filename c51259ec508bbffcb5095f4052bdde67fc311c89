@@ -34,6 +34,24 @@
       "parentUuid": "4db37e45_f0860c70",
       "revId": "c51259ec508bbffcb5095f4052bdde67fc311c89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e5d3fd2_5c2ec341",
+        "filename": "src/tests/gl_tests/gles1/DrawTextureTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-03T21:04:06Z",
+      "side": 1,
+      "message": "Test updated in the follow-up CL. Thanks!",
+      "parentUuid": "8f8cfbb9_1df31aa7",
+      "revId": "c51259ec508bbffcb5095f4052bdde67fc311c89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
