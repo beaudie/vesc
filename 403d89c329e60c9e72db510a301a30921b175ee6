@@ -16,6 +16,23 @@
       "message": "Following a post-submit comment from [a previous CL](https://chromium-review.googlesource.com/c/angle/angle/+/5124259), I updated the test to make sure that it can draw the texture by simply enable `GL_TEXTURE_2D`. However, there were some failures on some bots, leading to this fix.",
       "revId": "403d89c329e60c9e72db510a301a30921b175ee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6be3ae2_526f4e31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-03T18:51:35Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "403d89c329e60c9e72db510a301a30921b175ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
