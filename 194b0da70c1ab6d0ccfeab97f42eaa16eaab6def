@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "918f1ef4_f637956d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2024-01-03T06:16:59Z",
+      "side": 1,
+      "message": "Will do!\n\nQuestion: if a user calls glGetFragDataLocation(program, \"color\") -- will they still get the location?",
+      "parentUuid": "20c5aa3f_b515d77b",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9e0c5db4_5b4e2b20",
         "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
         "patchSetId": 6
@@ -31,6 +49,30 @@
       "writtenOn": "2024-01-01T23:18:43Z",
       "side": 1,
       "message": "```suggestion\n// Copyright 2023 The ANGLE Project Authors. All rights reserved.\n```",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a419fae3_b6c3027e",
+        "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2024-01-03T06:16:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9e0c5db4_5b4e2b20",
       "range": {
         "startLine": 2,
         "startChar": 13,
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b507bb_982bf24d",
+        "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2024-01-03T06:16:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8617eef9_4062a121",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39a16dbc_0e7d9418",
@@ -75,6 +135,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d94bdf57_6b4cd8fc",
+        "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2024-01-03T06:16:59Z",
+      "side": 1,
+      "message": "Ok!",
+      "parentUuid": "39a16dbc_0e7d9418",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91fa70d9_cd5654ee",
@@ -88,6 +166,24 @@
       "writtenOn": "2024-01-01T23:18:43Z",
       "side": 1,
       "message": "nit: remove",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27f295b2_4e087c34",
+        "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2024-01-03T06:16:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "91fa70d9_cd5654ee",
       "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -162,6 +258,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "abee8c67_f0789f0d",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2024-01-03T06:16:59Z",
+      "side": 1,
+      "message": "Removed locally, WiP on the next patch!",
+      "parentUuid": "71384850_4ab6d5d4",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1dcab71_a1a89860",
@@ -175,6 +289,30 @@
       "writtenOn": "2024-01-01T23:18:43Z",
       "side": 1,
       "message": "nit: we reserve `auto` typically for complex nested templated types. Being explicit about the type makes the code easier to follow.\n\n```suggestion\n        const std::string prog \u003d std::format(\n```",
+      "range": {
+        "startLine": 6317,
+        "startChar": 8,
+        "endLine": 6317,
+        "endChar": 12
+      },
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa560853_60037498",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6317,
+      "author": {
+        "id": 3130319
+      },
+      "writtenOn": "2024-01-03T06:16:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d1dcab71_a1a89860",
       "range": {
         "startLine": 6317,
         "startChar": 8,
