@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "256eaba3_a33e6cae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-03T20:29:44Z",
+      "side": 1,
+      "message": "There\u0027s a step (`CollectVariables()`) that collects the reflection info. As long as this transformation is done after that step, it\u0027s all good.",
+      "parentUuid": "918f1ef4_f637956d",
+      "revId": "194b0da70c1ab6d0ccfeab97f42eaa16eaab6def",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9e0c5db4_5b4e2b20",
         "filename": "src/compiler/translator/tree_ops/ExtendOutputVariables.cpp",
         "patchSetId": 6
