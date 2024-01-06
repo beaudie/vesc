@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72772a92_a0ebdf45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-06T01:53:55Z",
+      "side": 1,
+      "message": "Suggest:\n\n```\nVulkan: Drop support for VMA 2.0\n```",
+      "revId": "24b19d8792ffad9e396b8082e315e32e704c8d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c97c0f82_945323c0",
         "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
         "patchSetId": 13
@@ -37,6 +54,30 @@
       "writtenOn": "2024-01-06T01:46:24Z",
       "side": 1,
       "message": "Question: Should this be removed? `VirtualBlockCreateFlagBits::LINEAR` is never used.\nIt looks like this is only used in the CPP file being validated through a macro. (`vk_mem_alloc_wrapper.cpp`, line 20)",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 25
+      },
+      "revId": "24b19d8792ffad9e396b8082e315e32e704c8d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5a1a7a_667cdcfa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-06T01:53:55Z",
+      "side": 1,
+      "message": "Ok to leave it IMO, this is just a wrapper",
+      "parentUuid": "1acde748_0e9d5291",
       "range": {
         "startLine": 27,
         "startChar": 4,
