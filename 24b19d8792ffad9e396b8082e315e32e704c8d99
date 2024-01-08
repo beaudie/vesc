@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba50358b_5a972ba7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-08T18:28:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72772a92_a0ebdf45",
+      "revId": "24b19d8792ffad9e396b8082e315e32e704c8d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c97c0f82_945323c0",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-01-06T01:46:24Z",
       "side": 1,
       "message": "Same as the header",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 40
+      },
+      "revId": "24b19d8792ffad9e396b8082e315e32e704c8d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d82a8165_2337e7a1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-08T18:28:33Z",
+      "side": 1,
+      "message": "No change will be made for now.",
+      "parentUuid": "c97c0f82_945323c0",
       "range": {
         "startLine": 20,
         "startChar": 0,
@@ -78,6 +120,30 @@
       "side": 1,
       "message": "Ok to leave it IMO, this is just a wrapper",
       "parentUuid": "1acde748_0e9d5291",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 25
+      },
+      "revId": "24b19d8792ffad9e396b8082e315e32e704c8d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f174da4_5bfd2b4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-08T18:28:33Z",
+      "side": 1,
+      "message": "Sounds good, thanks",
+      "parentUuid": "3e5a1a7a_667cdcfa",
       "range": {
         "startLine": 27,
         "startChar": 4,
