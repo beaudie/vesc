@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "439562fe_717c51dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-08T21:57:59Z",
+      "side": 1,
+      "message": "+Geoff as I\u0027m not very familiar with this stuff.",
+      "revId": "cafc2315164839396c9062c82a960357e3912d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b29f600_b89e3d66",
@@ -31,6 +48,24 @@
       "writtenOn": "2024-01-08T14:23:29Z",
       "side": 1,
       "message": "Should we return nullptr from Angle\u0027s implementation to conform to spec better? (e.g by returning optional\u003cstd::string\u003e). Chrome treats null and empty identically, so it doesn\u0027t matter there.",
+      "revId": "cafc2315164839396c9062c82a960357e3912d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9944e05_a219dad8",
+        "filename": "src/libANGLE/renderer/gl/egl/DeviceEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-08T21:57:59Z",
+      "side": 1,
+      "message": "I have no personal preference. If there\u0027s spec that explicitly says nullptr should be returned, then yes we\u0027d have to return nullptr to be conformant. I don\u0027t believe it practically matters though.",
+      "parentUuid": "9b29f600_b89e3d66",
       "revId": "cafc2315164839396c9062c82a960357e3912d38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
