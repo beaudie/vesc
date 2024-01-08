@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cafa8f84_02487038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-08T23:44:54Z",
+      "side": 1,
+      "message": "lgtm\n\nThank you for tracking down this subtle bug and figuring out how to reuse the existing transform for it!",
+      "revId": "b4c0ded5354e6101246928b2952f8512c126860b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e543127c_c0e69706",
+        "filename": "src/compiler/translator/tree_ops/msl/RewriteOutArgs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-08T23:44:54Z",
+      "side": 1,
+      "message": "Would it be a good idea to add a comment to these struct names in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/compiler/translator/msl/Pipeline.cpp;l\u003d214?q\u003dnonConstGlobals that they\u0027re used by name in RewriteOutArgs.cpp?",
+      "revId": "b4c0ded5354e6101246928b2952f8512c126860b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
