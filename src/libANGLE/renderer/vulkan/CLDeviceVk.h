@@ -8,9 +8,12 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_CLDEVICEVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CLDEVICEVK_H_
 
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
 
 #include "libANGLE/renderer/CLDeviceImpl.h"
+
+#include "libANGLE/Display.h"
 
 namespace rx
 {
@@ -18,7 +21,7 @@ namespace rx
 class CLDeviceVk : public CLDeviceImpl
 {
   public:
-    explicit CLDeviceVk(const cl::Device &device);
+    explicit CLDeviceVk(const cl::Device &device, const egl::Display *display);
     ~CLDeviceVk() override;
 
     Info createInfo(cl::DeviceType type) const override;
@@ -33,6 +36,13 @@ class CLDeviceVk : public CLDeviceImpl
                                    cl_uint numDevices,
                                    CreateFuncs &subDevices,
                                    cl_uint *numDevicesRet) override;
+
+  private:
+    RendererVk *mRenderer;
+    std::map<cl::DeviceInfo, cl_uint> mInfoUInt;
+    std::map<cl::DeviceInfo, cl_ulong> mInfoULong;
+    std::map<cl::DeviceInfo, size_t> mInfoSizeT;
+    std::map<cl::DeviceInfo, std::string> mInfoString;
 };
 
 }  // namespace rx
