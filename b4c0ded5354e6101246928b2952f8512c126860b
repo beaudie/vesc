@@ -33,6 +33,24 @@
       "message": "Would it be a good idea to add a comment to these struct names in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/compiler/translator/msl/Pipeline.cpp;l\u003d214?q\u003dnonConstGlobals that they\u0027re used by name in RewriteOutArgs.cpp?",
       "revId": "b4c0ded5354e6101246928b2952f8512c126860b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d946de0_67779241",
+        "filename": "src/compiler/translator/tree_ops/msl/RewriteOutArgs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-09T02:09:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e543127c_c0e69706",
+      "revId": "b4c0ded5354e6101246928b2952f8512c126860b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
