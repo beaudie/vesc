@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b09615b5_2baac33a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-09T07:11:42Z",
+      "side": 1,
+      "message": "Thanks. Still lgtm\n\nIf Kyle\u0027s busy then maybe Shabi or Geoff could review too.",
+      "revId": "7fdcca40b1285c37f739031a0adea3327a005cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
