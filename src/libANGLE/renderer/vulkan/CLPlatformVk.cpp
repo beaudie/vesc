@@ -7,6 +7,8 @@
 
 #include "libANGLE/renderer/vulkan/CLPlatformVk.h"
 #include "libANGLE/renderer/vulkan/CLDeviceVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 
 #include "libANGLE/CLPlatform.h"
 #include "libANGLE/cl_utils.h"
@@ -35,9 +37,23 @@ std::string CreateExtensionString(const NameVersionVector &extList)
     return extensions;
 }
 
+angle::Result InitBackendRenderer(egl::Display *display)
+{
+    // We initialize the backend renderer boilerplate by initializing the EGL display obj
+    if (display == nullptr || IsError(display->initialize()))
+    {
+        ERR() << "Failed to init renderer!";
+        ANGLE_CL_RETURN_ERROR(CL_OUT_OF_HOST_MEMORY);
+    }
+    return angle::Result::Continue;
+}
+
 }  // namespace
 
-CLPlatformVk::~CLPlatformVk() = default;
+CLPlatformVk::~CLPlatformVk()
+{
+    mDisplay->getImplementation()->terminate();
+}
 
 CLPlatformImpl::Info CLPlatformVk::createInfo() const
 {
@@ -46,22 +62,23 @@ CLPlatformImpl::Info CLPlatformVk::createInfo() const
         cl_name_version{CL_MAKE_VERSION(1, 0, 0), "cl_khr_extended_versioning"}};
 
     Info info;
-    info.initializeExtensions(CreateExtensionString(extList));
+    info.name.assign("ANGLE Vulkan");
     info.profile.assign("FULL_PROFILE");
     info.versionStr.assign(GetVersionString());
-    info.version = GetVersion();
-    info.name.assign("ANGLE Vulkan");
-    info.extensionsWithVersion = std::move(extList);
     info.hostTimerRes          = 0u;
+    info.extensionsWithVersion = std::move(extList);
+    info.version               = GetVersion();
+    info.initializeExtensions(CreateExtensionString(extList));
     return info;
 }
 
 CLDeviceImpl::CreateDatas CLPlatformVk::createDevices() const
 {
-    cl::DeviceType type;  // TODO(jplate) Fetch device type from Vulkan
+    cl_device_type type = CL_DEVICE_TYPE_GPU | CL_DEVICE_TYPE_DEFAULT;
     CLDeviceImpl::CreateDatas createDatas;
-    createDatas.emplace_back(
-        type, [](const cl::Device &device) { return CLDeviceVk::Ptr(new CLDeviceVk(device)); });
+    createDatas.emplace_back(type, [this](const cl::Device &device) {
+        return CLDeviceVk::Ptr(new CLDeviceVk(device, mDisplay));
+    });
     return createDatas;
 }
 
@@ -103,6 +120,12 @@ const std::string &CLPlatformVk::GetVersionString()
     return *sVersion;
 }
 
-CLPlatformVk::CLPlatformVk(const cl::Platform &platform) : CLPlatformImpl(platform) {}
+CLPlatformVk::CLPlatformVk(const cl::Platform &platform) : CLPlatformImpl(platform)
+{
+    egl::AttributeMap attribMap{};
+    mDisplay = egl::Display::GetDisplayFromNativeDisplay(EGL_PLATFORM_ANGLE_ANGLE,
+                                                         EGL_DEFAULT_DISPLAY, attribMap);
+    ANGLE_CL_IMPL_TRY(InitBackendRenderer(mDisplay));
+}
 
 }  // namespace rx

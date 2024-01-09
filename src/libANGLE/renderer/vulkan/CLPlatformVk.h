@@ -10,6 +10,8 @@
 
 #include "libANGLE/renderer/CLPlatformImpl.h"
 
+#include "libANGLE/Display.h"
+
 namespace rx
 {
 
@@ -40,6 +42,7 @@ class CLPlatformVk : public CLPlatformImpl
 
   private:
     explicit CLPlatformVk(const cl::Platform &platform);
+    egl::Display *mDisplay;
 };
 
 constexpr cl_version CLPlatformVk::GetVersion()
