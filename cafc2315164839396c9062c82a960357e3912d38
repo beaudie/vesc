@@ -68,6 +68,24 @@
       "parentUuid": "9b29f600_b89e3d66",
       "revId": "cafc2315164839396c9062c82a960357e3912d38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba32bb23_f6887a78",
+        "filename": "src/libANGLE/renderer/gl/egl/DeviceEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-09T20:28:48Z",
+      "side": 1,
+      "message": "Very small preference for being able to return optional or null here but it\u0027s not a big deal since Chrome is the only user of this right now. LGTM!",
+      "parentUuid": "c9944e05_a219dad8",
+      "revId": "cafc2315164839396c9062c82a960357e3912d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
