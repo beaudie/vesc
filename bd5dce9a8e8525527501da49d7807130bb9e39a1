@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "174cd470_e8eb7fa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-01-09T06:51:05Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "bd5dce9a8e8525527501da49d7807130bb9e39a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2ad16ab_84b67726",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-01-09T06:51:05Z",
+      "side": 1,
+      "message": "enqueue",
+      "revId": "bd5dce9a8e8525527501da49d7807130bb9e39a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ad5d848_ddc56c8a",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-01-09T06:51:05Z",
+      "side": 1,
+      "message": "I think the case where `mSharedEvent !\u003d nullptr` and we don\u0027t want to enqueue is when we want to wait on the shared event which is going to be signalled from another context.",
+      "revId": "bd5dce9a8e8525527501da49d7807130bb9e39a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
