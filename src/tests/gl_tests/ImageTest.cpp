@@ -6526,12 +6526,10 @@ TEST_P(ImageTest, MultithreadedAHBImportAndUseAsTexture)
     auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
         ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
 
-        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
-
-        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
-
         // Wait for thread 0 to set up
         ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0CreatedTexture));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
 
         // Sample from the texture
         ANGLE_GL_PROGRAM(drawTexture, getVS(), getTextureExternalFS());
@@ -6629,12 +6627,10 @@ TEST_P(ImageTest, MultithreadedAHBImportAndUseAsRenderbuffer)
     auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
         ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
 
-        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
-
-        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
-
         // Wait for thread 0 to set up
         ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0CreatedRenderbuffer));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
 
         // Blend into the renderbuffer
         GLFramebuffer fbo;
