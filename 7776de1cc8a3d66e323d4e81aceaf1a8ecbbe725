@@ -51,6 +51,24 @@
       "parentUuid": "7b78bc8a_3e2d0971",
       "revId": "7776de1cc8a3d66e323d4e81aceaf1a8ecbbe725",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7065e24b_841e99cf",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6532,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-10T22:15:01Z",
+      "side": 1,
+      "message": "The comment is resolved, which means \"no action necessary\".\n\nSo that\u0027s up to yourself.",
+      "parentUuid": "21396b8f_a56638df",
+      "revId": "7776de1cc8a3d66e323d4e81aceaf1a8ecbbe725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
