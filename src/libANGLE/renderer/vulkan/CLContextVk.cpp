@@ -7,6 +7,7 @@
 
 #include "libANGLE/renderer/vulkan/CLContextVk.h"
 #include "libANGLE/renderer/vulkan/CLCommandQueueVk.h"
+#include "libANGLE/renderer/vulkan/CLProgramVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -118,8 +119,12 @@ angle::Result CLContextVk::createProgramWithSource(const cl::Program &program,
                                                    const std::string &source,
                                                    CLProgramImpl::Ptr *programOut)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    *programOut = CLProgramImpl::Ptr(new CLProgramVk(program));
+    if (*programOut == nullptr)
+    {
+        ANGLE_CL_RETURN_ERROR(CL_OUT_OF_HOST_MEMORY);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result CLContextVk::createProgramWithIL(const cl::Program &program,
@@ -137,8 +142,13 @@ angle::Result CLContextVk::createProgramWithBinary(const cl::Program &program,
                                                    cl_int *binaryStatus,
                                                    CLProgramImpl::Ptr *programOut)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    *programOut = CLProgramImpl::Ptr(new (std::nothrow)
+                                         CLProgramVk(program, lengths, binaries, binaryStatus));
+    if (*programOut == nullptr)
+    {
+        ANGLE_CL_RETURN_ERROR(CL_OUT_OF_HOST_MEMORY);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result CLContextVk::createProgramWithBuiltInKernels(const cl::Program &program,
