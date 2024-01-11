@@ -1737,7 +1737,14 @@ void PrivateState::getBooleanv(GLenum pname, GLboolean *params) const
             *params = mCaps.fragmentShaderFramebufferFetchMRT;
             break;
         default:
-            UNREACHABLE();
+            if (mClientVersion.major == 1)
+            {
+                *params = getEnableFeature(pname);
+            }
+            else
+            {
+                UNREACHABLE();
+            }
             break;
     }
 }
