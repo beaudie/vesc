@@ -290,6 +290,17 @@
 6466 MAC METAL INTEL : dEQP-GLES2.functional.texture.vertex.cube.wrap.* = FAIL
 7451 MAC METAL INTEL : dEQP-GLES2.functional.shaders.builtin_variable.pointcoord = FAIL
 
+// Some array initialization tests began to produce invalid results with added __asm__("") statements in the
+// loop bodies on Ventura. These tests always fail on Sonoma with or without __asm__. crbug.com/1513738
+1513738 MAC METAL : dEQP-GLES2.functional.shaders.indexing.tmp_array.float_const_write_dynamic_read_fragment = FAIL
+1513738 MAC METAL : dEQP-GLES2.functional.shaders.indexing.tmp_array.float_const_write_dynamic_read_vertex = FAIL
+1513738 MAC METAL : dEQP-GLES2.functional.shaders.indexing.tmp_array.vec2_const_write_dynamic_read_fragment = FAIL
+1513738 MAC METAL : dEQP-GLES2.functional.shaders.indexing.tmp_array.vec2_const_write_dynamic_read_fragment = FAIL
+1513738 MAC METAL : dEQP-GLES2.functional.shaders.indexing.tmp_array.vec3_const_write_dynamic_read_fragment = FAIL
+1513738 MAC METAL : dEQP-GLES2.functional.shaders.indexing.tmp_array.vec3_const_write_dynamic_read_vertex = FAIL
+1513738 MAC METAL : dEQP-GLES2.functional.shaders.indexing.tmp_array.vec4_const_write_dynamic_read_fragment = FAIL
+1513738 MAC METAL : dEQP-GLES2.functional.shaders.indexing.tmp_array.vec4_const_write_dynamic_read_vertex = FAIL
+
 // Test bug - fails in ASAN.
 6678 ASAN : dEQP-GLES2.functional.negative_api.texture.compressedtexsubimage2d* = SKIP
 
