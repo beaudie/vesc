@@ -69,6 +69,24 @@
       "parentUuid": "86fc7bdc_b5268bc7",
       "revId": "c89a7120120e37388b03469f50c8a6d2110381c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e493cdca_859eb35b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-11T23:00:09Z",
+      "side": 1,
+      "message": "`GL_COLOR_LOGIC_OP` needed special handling",
+      "parentUuid": "a63d3a8a_ae358d8f",
+      "revId": "c89a7120120e37388b03469f50c8a6d2110381c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
