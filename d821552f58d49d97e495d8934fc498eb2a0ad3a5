@@ -16,6 +16,24 @@
       "message": "The issue https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d8265 mentioned the bug happened when they call `eglInitialize()` in two different threads, should we add a test to do the same thing? Calling `eglInitialize()` in two different threads, on top of calling the function mutilple times in the same thread?",
       "revId": "d821552f58d49d97e495d8934fc498eb2a0ad3a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f0bb3f2_f1156180",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-11T21:47:10Z",
+      "side": 1,
+      "message": "Would be nice to have, but I don\u0027t plan on pursuing that bug further. Just wanted to land the quick test I added to make sure things work normally.",
+      "parentUuid": "0eb759e1_e604eecc",
+      "revId": "d821552f58d49d97e495d8934fc498eb2a0ad3a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
