@@ -71,6 +71,35 @@ TEST_P(EGLDisplayTest, InitializeMultipleTimes)
     }
 }
 
+// Test that double eglInitialize() in two threads works
+// > Initializing an already-initialized display is allowed, but the only effect
+// of such a call is to return EGL_TRUE and update the EGL version numbers
+TEST_P(EGLDisplayTest, InitializeMultipleTimesInDifferentThreads)
+{
+    EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    EGLint major = 0, minor = 0;
+    EXPECT_EGL_TRUE(eglInitialize(display, &major, &minor) != EGL_FALSE);
+
+    std::mutex mutex;
+    std::array<std::thread, 2> threads;
+    for (std::thread &thread : threads)
+    {
+        thread = std::thread([&]() {
+            std::lock_guard<decltype(mutex)> lock(mutex);
+            EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+            EGLint threadMajor = 123456, threadMinor = -1;
+            EXPECT_EGL_TRUE(eglInitialize(display, &threadMajor, &threadMinor) != EGL_FALSE);
+            EXPECT_EQ(threadMajor, major);
+            EXPECT_EQ(threadMinor, minor);
+        });
+    }
+
+    for (std::thread &thread : threads)
+    {
+        thread.join();
+    }
+}
+
 // Tests that an EGLDisplay can be re-initialized.
 TEST_P(EGLDisplayTest, InitializeTerminateInitialize)
 {
