@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1b95e90_ed392c96",
+        "filename": "src/android_system_settings/src/com/android/angle/common/MainFragment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2024-01-11T23:51:29Z",
+      "side": 1,
+      "message": "new line for left brace",
+      "range": {
+        "startLine": 193,
+        "startChar": 75,
+        "endLine": 193,
+        "endChar": 76
+      },
+      "revId": "4539f547c8a19232c8d5cadedba15baaf299177f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23b660b8_f7406a5b",
+        "filename": "src/android_system_settings/src/com/android/angle/common/MainFragment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2024-01-11T23:51:29Z",
+      "side": 1,
+      "message": "new line for `{`",
+      "range": {
+        "startLine": 197,
+        "startChar": 23,
+        "endLine": 197,
+        "endChar": 24
+      },
+      "revId": "4539f547c8a19232c8d5cadedba15baaf299177f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5dad9e8_24bfcde4",
+        "filename": "src/android_system_settings/src/com/android/angle/common/MainFragment.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2024-01-11T23:51:29Z",
+      "side": 1,
+      "message": "new line for `else`",
+      "range": {
+        "startLine": 197,
+        "startChar": 18,
+        "endLine": 197,
+        "endChar": 22
+      },
+      "revId": "4539f547c8a19232c8d5cadedba15baaf299177f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
