@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad682ff3_82dd9902",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-01-11T18:44:35Z",
+      "side": 1,
+      "message": "Is it guaranteed that the test suppression need to be applied to all front APIs? For example, is it possible that the test pass on ES2, but fails on ES3?",
+      "revId": "4dbbd1e50152d4c52cc61d492152ff2727661115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
