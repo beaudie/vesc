@@ -6,15 +6,143 @@
 // CLProgramVk.cpp: Implements the class methods for CLProgramVk.
 
 #include "libANGLE/renderer/vulkan/CLProgramVk.h"
+#include "libANGLE/renderer/vulkan/CLContextVk.h"
 
+#include "libANGLE/CLContext.h"
+#include "libANGLE/CLProgram.h"
 #include "libANGLE/cl_utils.h"
 
 namespace rx
 {
 
-CLProgramVk::CLProgramVk(const cl::Program &program) : CLProgramImpl(program) {}
+CLProgramVk::CLProgramVk(const cl::Program &program)
+    : CLProgramImpl(program), mContext(&program.getContext().getImpl<CLContextVk>())
+{
+    cl::DevicePtrs devices;
+    ANGLE_CL_IMPL_TRY(mContext->getDevices(&devices));
 
-CLProgramVk::~CLProgramVk() = default;
+    // The devices associated with the program object are the devices associated with context
+    for (const auto &device : devices)
+    {
+        mAssociatedDevicePrograms[device->getNative()] = DeviceProgramData{};
+    }
+}
+
+CLProgramVk::CLProgramVk(const cl::Program &program,
+                         const size_t *lengths,
+                         const unsigned char **binaries,
+                         cl_int *binaryStatus)
+    : CLProgramImpl(program), mContext(&program.getContext().getImpl<CLContextVk>())
+{
+    // The devices associated with program come from device_list param from
+    // clCreateProgramWithBinary
+    for (const cl::DevicePtr &device : program.getDevices())
+    {
+        const unsigned char *binaryHandle = *binaries++;
+        size_t binarySize                 = *lengths++;
+
+        // Check for header
+        if (binarySize < sizeof(ProgramBinaryOutputHeader))
+        {
+            if (binaryStatus)
+            {
+                *binaryStatus++ = CL_INVALID_BINARY;
+            }
+            ANGLE_CL_SET_ERROR(CL_INVALID_BINARY);
+            return;
+        }
+        binarySize -= sizeof(ProgramBinaryOutputHeader);
+
+        // Check for valid binary version from header
+        const ProgramBinaryOutputHeader *binaryHeader =
+            reinterpret_cast<const ProgramBinaryOutputHeader *>(binaryHandle);
+        if (binaryHeader == nullptr)
+        {
+            ERR() << "NULL binary header!";
+            if (binaryStatus)
+            {
+                *binaryStatus++ = CL_INVALID_BINARY;
+            }
+            ANGLE_CL_SET_ERROR(CL_INVALID_BINARY);
+            return;
+        }
+        else if (binaryHeader->headerVersion < LatestSupportedBinaryVersion)
+        {
+            ERR() << "Binary version not compatible with runtime!";
+            if (binaryStatus)
+            {
+                *binaryStatus++ = CL_INVALID_BINARY;
+            }
+            ANGLE_CL_SET_ERROR(CL_INVALID_BINARY);
+            return;
+        }
+        binaryHandle += sizeof(ProgramBinaryOutputHeader);
+
+        // See what kind of binary we have (i.e. SPIR-V or LLVM Bitcode)
+        // https://llvm.org/docs/BitCodeFormat.html#llvm-ir-magic-number
+        // https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html#_magic_number
+        constexpr uint32_t LLVM_BC_MAGIC = 0xDEC04342;
+        constexpr uint32_t SPIRV_MAGIC   = 0x07230203;
+        const uint32_t &firstWord        = reinterpret_cast<const uint32_t *>(binaryHandle)[0];
+        bool isBC                        = firstWord == LLVM_BC_MAGIC;
+        bool isSPV                       = firstWord == SPIRV_MAGIC;
+        if (!isBC && !isSPV)
+        {
+            ERR() << "Binary is neither SPIR-V nor LLVM Bitcode!";
+            if (binaryStatus)
+            {
+                *binaryStatus++ = CL_INVALID_BINARY;
+            }
+            ANGLE_CL_SET_ERROR(CL_INVALID_BINARY);
+            return;
+        }
+
+        // Add device binary to program
+        DeviceProgramData deviceBin;
+        deviceBin.binaryType = binaryHeader->binaryType;
+        switch (deviceBin.binaryType)
+        {
+            case CL_PROGRAM_BINARY_TYPE_EXECUTABLE:
+                deviceBin.binary.assign(binarySize / sizeof(uint32_t), 0);
+                std::memcpy(deviceBin.binary.data(), binaryHandle, binarySize);
+                break;
+            case CL_PROGRAM_BINARY_TYPE_LIBRARY:
+            case CL_PROGRAM_BINARY_TYPE_COMPILED_OBJECT:
+                deviceBin.IR.assign(binarySize, 0);
+                std::memcpy(deviceBin.IR.data(), binaryHandle, binarySize);
+                break;
+            default:
+                UNREACHABLE();
+                ERR() << "Invalid binary type!";
+                if (binaryStatus)
+                {
+                    *binaryStatus++ = CL_INVALID_BINARY;
+                }
+                ANGLE_CL_SET_ERROR(CL_INVALID_BINARY);
+                return;
+        }
+        mAssociatedDevicePrograms[device->getNative()] = std::move(deviceBin);
+        if (binaryStatus)
+        {
+            *binaryStatus++ = CL_SUCCESS;
+        }
+    }
+}
+
+CLProgramVk::~CLProgramVk()
+{
+    for (auto &dsLayouts : mDescriptorSetLayouts)
+    {
+        dsLayouts.reset();
+    }
+    for (auto &pool : mDescriptorPools)
+    {
+        pool.reset();
+    }
+    mMetaDescriptorPool.destroy(mContext->getRenderer());
+    mDescSetLayoutCache.destroy(mContext->getRenderer());
+    mPipelineLayoutCache.destroy(mContext->getRenderer());
+}
 
 angle::Result CLProgramVk::build(const cl::DevicePtrs &devices,
                                  const char *options,
@@ -67,6 +195,32 @@ angle::Result CLProgramVk::createKernels(cl_uint numKernels,
 {
     UNIMPLEMENTED();
     ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+}
+
+const CLProgramVk::DeviceProgramData *CLProgramVk::getDeviceProgramData(
+    const _cl_device_id *device) const
+{
+    if (!mAssociatedDevicePrograms.contains(device))
+    {
+        WARN() << "Device (" << device << ") is not associated with program (" << this << ") !";
+        return nullptr;
+    }
+    return &mAssociatedDevicePrograms.at(device);
+}
+
+const CLProgramVk::DeviceProgramData *CLProgramVk::getDeviceProgramData(
+    const char *kernelName) const
+{
+    for (const auto &devProgram : mAssociatedDevicePrograms)
+    {
+        if (devProgram.second.containsKernel(kernelName))
+        {
+            return &devProgram.second;
+        }
+    }
+    WARN() << "Kernel name (" << kernelName << ") is not associated with program (" << this
+           << ") !";
+    return nullptr;
 }
 
 }  // namespace rx
