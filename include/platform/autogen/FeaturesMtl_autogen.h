@@ -428,6 +428,14 @@ struct FeaturesMtl : FeatureSetBase
         &members, "http://crbug.com/1486094"
     };
 
+    FeatureInfo wrapLoopsInVolatileConditional = {
+        "wrapLoopsInVolatileConditional",
+        FeatureCategory::MetalFeatures,
+        "Wrap loops in conditionals with volatile bools. This allows UB loops to be "
+        "optimzied out but ensures that any later control flow optimizations are unaffected.",
+        &members, "http://crbug.com/1513738"
+    };
+
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;
