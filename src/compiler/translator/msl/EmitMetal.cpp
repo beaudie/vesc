@@ -198,6 +198,8 @@ class GenMetalTraverser : public TIntermTraverser
     size_t mDriverUniformsBindingIndex    = 0;
     size_t mUBOArgumentBufferBindingIndex = 0;
     bool mRasterOrderGroupsSupported      = false;
+    bool mWrapLoopsInVolatileConditional  = false;
+    size_t mVolatileConditionCount        = 0;
 };
 }  // anonymous namespace
 
@@ -224,7 +226,8 @@ GenMetalTraverser::GenMetalTraverser(const TCompiler &compiler,
       mDriverUniformsBindingIndex(compileOptions.metal.driverUniformsBindingIndex),
       mUBOArgumentBufferBindingIndex(compileOptions.metal.UBOArgumentBufferBindingIndex),
       mRasterOrderGroupsSupported(compileOptions.pls.fragmentSyncType ==
-                                  ShFragmentSynchronizationType::RasterOrderGroups_Metal)
+                                  ShFragmentSynchronizationType::RasterOrderGroups_Metal),
+      mWrapLoopsInVolatileConditional(compileOptions.metal.wrapLoopsInVolatileConditional)
 {}
 
 void GenMetalTraverser::emitIndentation()
@@ -2534,8 +2537,16 @@ bool GenMetalTraverser::visitDeclaration(Visit, TIntermDeclaration *declNode)
 
 bool GenMetalTraverser::visitLoop(Visit, TIntermLoop *loopNode)
 {
-    const TLoopType loopType = loopNode->getType();
+    if (mWrapLoopsInVolatileConditional)
+    {
+        emitIndentation();
+        mOut << "volatile bool ANGLE_volatile_true_" << mVolatileConditionCount << " = true;\n";
+        emitIndentation();
+        mOut << "if (ANGLE_volatile_true_" << mVolatileConditionCount << ") ";
+        mVolatileConditionCount++;
+    }
 
+    const TLoopType loopType = loopNode->getType();
     switch (loopType)
     {
         case TLoopType::ELoopFor:

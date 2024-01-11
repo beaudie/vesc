@@ -104,6 +104,11 @@ std::shared_ptr<ShaderTranslateTask> ShaderMtl::compile(const gl::Context *conte
 
     options->rescopeGlobalVariables = displayMtl->getFeatures().rescopeGlobalVariables.enabled;
 
+    if (displayMtl->getFeatures().wrapLoopsInVolatileConditional.enabled)
+    {
+        options->metal.wrapLoopsInVolatileConditional = true;
+    }
+
     return std::shared_ptr<ShaderTranslateTask>(new ShaderTranslateTaskMtl(mCompiledState));
 }
 

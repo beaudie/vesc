@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 347
+#define ANGLE_SH_VERSION 348
 
 enum ShShaderSpec
 {
@@ -81,13 +81,17 @@ struct ShCompileOptionsMetal
     // Direct-to-metal backend constants:
 
     // Binding index for driver uniforms:
-    int driverUniformsBindingIndex;
+    int driverUniformsBindingIndex = 0;
     // Binding index for default uniforms:
-    int defaultUniformsBindingIndex;
+    int defaultUniformsBindingIndex = 0;
     // Binding index for UBO's argument buffer
-    int UBOArgumentBufferBindingIndex;
+    int UBOArgumentBufferBindingIndex = 0;
 
-    bool generateShareableShaders;
+    bool generateShareableShaders = false;
+
+    // Wrap loops in conditionals with volatile bools. This allows UB loops to be optimzied out but
+    // ensures that any later control flow optimizations are unaffected.
+    bool wrapLoopsInVolatileConditional = false;
 };
 
 // For ANGLE_shader_pixel_local_storage.
