@@ -33,6 +33,24 @@
       "message": "LGTM, but please add a few basic tests that query this stuff.",
       "revId": "c89a7120120e37388b03469f50c8a6d2110381c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86fc7bdc_b5268bc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-11T21:27:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "990892fe_0e158609",
+      "revId": "c89a7120120e37388b03469f50c8a6d2110381c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
