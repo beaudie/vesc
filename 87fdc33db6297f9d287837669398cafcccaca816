@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30174ccf_0bc29563",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-11T23:37:38Z",
+      "side": 1,
+      "message": "Loops in the failing tests are added by the `InitializeUninitializedLocals` pass.\n\nThis pass could be skipped in some cases after Id4a360b0a5a15da43ce4626c6dfe03556cc9d0f0.",
+      "revId": "87fdc33db6297f9d287837669398cafcccaca816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
