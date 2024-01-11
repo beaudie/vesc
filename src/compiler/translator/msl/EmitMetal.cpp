@@ -144,6 +144,8 @@ class GenMetalTraverser : public TIntermTraverser
                            const VarDecl &decl,
                            const TQualifier qualifier);
 
+    void emitLoopVolatileWrapper();
+
     struct FieldAnnotationIndices
     {
         size_t attribute = 0;
@@ -198,6 +200,7 @@ class GenMetalTraverser : public TIntermTraverser
     size_t mDriverUniformsBindingIndex    = 0;
     size_t mUBOArgumentBufferBindingIndex = 0;
     bool mRasterOrderGroupsSupported      = false;
+    bool mWrapLoopsInVolatileConditional  = false;
 };
 }  // anonymous namespace
 
@@ -224,7 +227,8 @@ GenMetalTraverser::GenMetalTraverser(const TCompiler &compiler,
       mDriverUniformsBindingIndex(compileOptions.metal.driverUniformsBindingIndex),
       mUBOArgumentBufferBindingIndex(compileOptions.metal.UBOArgumentBufferBindingIndex),
       mRasterOrderGroupsSupported(compileOptions.pls.fragmentSyncType ==
-                                  ShFragmentSynchronizationType::RasterOrderGroups_Metal)
+                                  ShFragmentSynchronizationType::RasterOrderGroups_Metal),
+      mWrapLoopsInVolatileConditional(compileOptions.metal.wrapLoopsInVolatileConditional)
 {}
 
 void GenMetalTraverser::emitIndentation()
@@ -875,6 +879,14 @@ void GenMetalTraverser::emitPostQualifier(const EmitVariableDeclarationConfig &e
 
         TranslatorMetalReflection *reflection = mtl::getTranslatorMetalReflection(&mCompiler);
         reflection->hasInvariance             = true;
+    }
+}
+
+void GenMetalTraverser::emitLoopVolatileWrapper()
+{
+    if (mWrapLoopsInVolatileConditional)
+    {
+        mOut << "if (volatile bool ANGLE_volatile_true = true; ANGLE_volatile_true) ";
     }
 }
 
@@ -2545,6 +2557,7 @@ bool GenMetalTraverser::visitForLoop(TIntermLoop *loopNode)
     TIntermBlock *bodyNode = loopNode->getBody();
     ASSERT(bodyNode);
 
+    emitLoopVolatileWrapper();
     mOut << "for (";
 
     if (initNode)
@@ -2589,6 +2602,7 @@ bool GenMetalTraverser::visitWhileLoop(TIntermLoop *loopNode)
     ASSERT(!initNode && !exprNode);
 
     emitIndentation();
+    emitLoopVolatileWrapper();
     mOut << "while (";
     condNode->traverse(this);
     mOut << ")\n";
@@ -2609,6 +2623,7 @@ bool GenMetalTraverser::visitDoWhileLoop(TIntermLoop *loopNode)
     ASSERT(!initNode && !exprNode);
 
     emitIndentation();
+    emitLoopVolatileWrapper();
     mOut << "do\n";
     bodyNode->traverse(this);
     mOut << "\n";
