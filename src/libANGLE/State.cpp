@@ -2124,7 +2124,14 @@ void PrivateState::getIntegeri_v(GLenum target, GLuint index, GLint *data) const
             *data = mSampleMaskValues[index];
             break;
         default:
-            UNREACHABLE();
+            if (mClientVersion.major == 1)
+            {
+                *params = getEnableFeature(pname);
+            }
+            else
+            {
+                UNREACHABLE();
+            }
             break;
     }
 }
