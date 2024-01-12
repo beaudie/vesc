@@ -49,6 +49,7 @@
 #include "compiler/translator/tree_ops/RescopeGlobalVariables.h"
 #include "compiler/translator/tree_ops/RewritePixelLocalStorage.h"
 #include "compiler/translator/tree_ops/SeparateDeclarations.h"
+#include "compiler/translator/tree_ops/SeparateStructFromFunctionDeclarations.h"
 #include "compiler/translator/tree_ops/SimplifyLoopConditions.h"
 #include "compiler/translator/tree_ops/SplitSequenceOperator.h"
 #include "compiler/translator/tree_ops/glsl/RegenerateStructNames.h"
@@ -1011,6 +1012,11 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    if (!SeparateStructFromFunctionDeclarations(this, root, &getSymbolTable()))
+    {
+        return false;
+    }
+
     // Note that separate declarations need to be run before other AST transformations that
     // generate new statements from expressions.
     if (!SeparateDeclarations(this, root, &getSymbolTable()))
@@ -1675,6 +1681,8 @@ bool TCompiler::pruneUnusedFunctions(TIntermBlock *root)
 {
     TIntermSequence *sequence = root->getSequence();
 
+    std::set<const TFunction *> processedFunctions;
+
     size_t writeIndex = 0;
     for (size_t readIndex = 0; readIndex < sequence->size(); ++readIndex)
     {
@@ -1699,6 +1707,15 @@ bool TCompiler::pruneUnusedFunctions(TIntermBlock *root)
         {
             continue;
         }
+
+        // Only keep the first struct declaration in a return value. If the function has already
+        // been processed, skip this instance.
+        if (processedFunctions.find(function) != processedFunctions.end())
+        {
+            continue;
+        }
+
+        processedFunctions.insert(function);
 
         TVariable *structVariable =
             new TVariable(&mSymbolTable, kEmptyImmutableString, &returnType, SymbolType::Empty);
