@@ -34,6 +34,24 @@
       "parentUuid": "30174ccf_0bc29563",
       "revId": "87fdc33db6297f9d287837669398cafcccaca816",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d7c5792_8c3930ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-12T16:12:26Z",
+      "side": 1,
+      "message": "Oh, I actually get failures in these tests locally without the patch.",
+      "parentUuid": "ed5865d0_bc23a39c",
+      "revId": "87fdc33db6297f9d287837669398cafcccaca816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
