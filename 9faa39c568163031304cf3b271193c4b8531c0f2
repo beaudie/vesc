@@ -74,6 +74,23 @@
       "parentUuid": "e3809c82_8c1e11a9",
       "revId": "9faa39c568163031304cf3b271193c4b8531c0f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21b3eddd_37005f68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-12T20:27:24Z",
+      "side": 1,
+      "message": "lgtm too - please add the regression test Shabi requested. Thanks.",
+      "revId": "9faa39c568163031304cf3b271193c4b8531c0f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
