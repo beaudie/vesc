@@ -88,6 +88,24 @@
       "parentUuid": "07113bc6_244a2e90",
       "revId": "c2ad86bc8e5a372356608169a8621ba37583d746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bf1b1d3_dd82f47e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-12T18:52:33Z",
+      "side": 1,
+      "message": "SG asked on the bug, just wasn\u0027t sure if someone here already had the context.",
+      "parentUuid": "749e62ec_6456e8f2",
+      "revId": "c2ad86bc8e5a372356608169a8621ba37583d746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
