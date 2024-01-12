@@ -1634,5 +1634,52 @@ TEST_P(VulkanExternalImageTest, UninitializedOnGLImportAndSample)
                                                    enableDebugLayers());
 }
 
+// Test that texture storage created from VkImage memory can be imported as uninitialized in GL and
+// then used as storage image.
+TEST_P(VulkanExternalImageTestES31, UninitializedOnGLImportAndStorageWrite)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_semaphore_fd"));
+
+    constexpr uint32_t kExpect = 0xFF00FFFF;
+
+    auto storageWrite = [kExpect](GLuint texture) {
+        constexpr char kCS[] = R"(#version 310 es
+layout(local_size_x=8, local_size_y=8) in;
+layout(rgba8) uniform highp writeonly image2D img;
+void main()
+{
+    imageStore(img, ivec2(gl_GlobalInvocationID.xy), vec4(1, 1, 0, 1));
+})";
+
+        GLProgram program;
+        program.makeCompute(kCS);
+        glUseProgram(program);
+
+        glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
+        glDispatchCompute(kWidth / 8, kHeight / 8, 1);
+        EXPECT_GL_NO_ERROR();
+
+        glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+
+        GLFramebuffer framebuffer;
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        uint32_t pixel = 0u;
+        glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
+        EXPECT_GL_NO_ERROR();
+
+        EXPECT_EQ(pixel, kExpect);
+        EXPECT_GL_NO_ERROR();
+
+        return GL_LAYOUT_TRANSFER_SRC_EXT;
+    };
+
+    RunUninitializedOnGLImportTest<OpaqueFdTraits>(false, storageWrite, &kExpect, isSwiftshader(),
+                                                   enableDebugLayers());
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(VulkanExternalImageTest);
+ANGLE_INSTANTIATE_TEST_ES31(VulkanExternalImageTestES31);
 }  // namespace angle
