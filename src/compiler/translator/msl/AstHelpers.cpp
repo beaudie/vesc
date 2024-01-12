@@ -164,20 +164,29 @@ const TFunction &sh::CloneFunctionAndAppendParams(TSymbolTable &symbolTable,
 const TFunction &sh::CloneFunctionAndChangeReturnType(TSymbolTable &symbolTable,
                                                       IdGen *idGen,
                                                       const TFunction &oldFunc,
-                                                      const TStructure &newReturn)
+                                                      const TType &newReturnType)
 {
     ASSERT(oldFunc.symbolType() == SymbolType::UserDefined);
 
     Name newName = idGen ? idGen->createNewName(Name(oldFunc)) : Name(oldFunc);
 
-    TType *newReturnType = new TType(&newReturn, true);
-    TFunction &newFunc   = *new TFunction(&symbolTable, newName.rawName(), newName.symbolType(),
-                                          newReturnType, oldFunc.isKnownToNotHaveSideEffects());
+    TFunction &newFunc = *new TFunction(&symbolTable, newName.rawName(), newName.symbolType(),
+                                        &newReturnType, oldFunc.isKnownToNotHaveSideEffects());
 
     AcquireFunctionExtras(newFunc, oldFunc);
     AddParametersFrom(newFunc, oldFunc);
 
     return newFunc;
+}
+
+const TFunction &sh::CloneFunctionAndChangeReturnType(TSymbolTable &symbolTable,
+                                                      IdGen *idGen,
+                                                      const TFunction &oldFunc,
+                                                      const TStructure &newReturn)
+{
+    TType *newReturnType = new TType(&newReturn, true);
+
+    return CloneFunctionAndChangeReturnType(symbolTable, idGen, oldFunc, *newReturnType);
 }
 
 TIntermTyped &sh::GetArg(const TIntermAggregate &call, size_t index)

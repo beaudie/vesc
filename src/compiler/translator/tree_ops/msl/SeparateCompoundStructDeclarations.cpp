@@ -6,6 +6,7 @@
 
 #include <algorithm>
 
+#include "compiler/translator/msl/AstHelpers.h"
 #include "compiler/translator/tree_ops/SeparateDeclarations.h"
 #include "compiler/translator/tree_ops/msl/SeparateCompoundStructDeclarations.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -87,6 +88,50 @@ class Separator : public TIntermTraverser
         }
 
         return false;
+    }
+
+    void visitFunctionPrototype(TIntermFunctionPrototype *funcProtoNode) override
+    {
+        const TType &type = funcProtoNode->getType();
+        if (type.isStructSpecifier())
+        {
+            const TStructure *structure = type.getStruct();
+            TVariable *structVar        = nullptr;
+            TType *returnType           = nullptr;
+            // Name unnamed inline structs
+            if (structure->symbolType() == SymbolType::Empty)
+            {
+                const TStructure *structDefn =
+                    new TStructure(mSymbolTable, mIdGen.createNewName().rawName(),
+                                   &structure->fields(), SymbolType::AngleInternal);
+                structVar  = new TVariable(mSymbolTable, ImmutableString(""),
+                                           new TType(structDefn, true), SymbolType::Empty);
+                returnType = new TType(structDefn, false);
+            }
+            else
+            {
+                structVar  = new TVariable(mSymbolTable, ImmutableString(""),
+                                           new TType(structure, true), SymbolType::Empty);
+                returnType = new TType(structure, false);
+            }
+
+            insertStatementInParentBlock(new TIntermDeclaration({structVar}));
+
+            if (type.isArray())
+            {
+                returnType->makeArrays(type.getArraySizes());
+            }
+            returnType->setQualifier(type.getQualifier());
+
+            const TFunction *oldFunc = funcProtoNode->getFunction();
+            ASSERT(oldFunc->symbolType() == SymbolType::UserDefined);
+
+            const TFunction *newFunc =
+                &CloneFunctionAndChangeReturnType(*mSymbolTable, nullptr, *oldFunc, *returnType);
+
+            TIntermFunctionPrototype *newFuncProto = new TIntermFunctionPrototype(newFunc);
+            queueReplacement(newFuncProto, OriginalNode::IS_DROPPED);
+        }
     }
 
     void visitSymbol(TIntermSymbol *decl) override

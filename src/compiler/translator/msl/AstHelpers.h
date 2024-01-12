@@ -64,6 +64,13 @@ const TFunction &CloneFunctionAndAppendParams(TSymbolTable &symbolTable,
 const TFunction &CloneFunctionAndChangeReturnType(TSymbolTable &symbolTable,
                                                   IdGen *idGen,
                                                   const TFunction &oldFunc,
+                                                  const TType &newReturnType);
+
+// Clones a function and changes its return type.
+// If `idGen` is null, the original function must be discarded from the AST.
+const TFunction &CloneFunctionAndChangeReturnType(TSymbolTable &symbolTable,
+                                                  IdGen *idGen,
+                                                  const TFunction &oldFunc,
                                                   const TStructure &newReturn);
 
 // Gets the argument of a function call at the given index.
