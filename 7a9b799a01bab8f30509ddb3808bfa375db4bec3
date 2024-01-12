@@ -163,6 +163,30 @@
       },
       "revId": "7a9b799a01bab8f30509ddb3808bfa375db4bec3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a0c960b_b8ed7da5",
+        "filename": "src/tests/egl_tests/EGLBlobCacheTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-12T16:26:35Z",
+      "side": 1,
+      "message": "The test suite is run with a flag for this:\n\n```\nANGLE_INSTANTIATE_TEST(EGLBlobCacheInternalRejectionTest,\n                       ES2_OPENGL().enable(Feature::CorruptProgramBinaryForTesting),\n                       ES2_OPENGLES().enable(Feature::CorruptProgramBinaryForTesting));\n```",
+      "parentUuid": "70b5e4ca_705fa865",
+      "range": {
+        "startLine": 560,
+        "startChar": 79,
+        "endLine": 560,
+        "endChar": 95
+      },
+      "revId": "7a9b799a01bab8f30509ddb3808bfa375db4bec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
