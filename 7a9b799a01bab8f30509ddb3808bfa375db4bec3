@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d8c9820_22cd156f",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-12T16:25:41Z",
+      "side": 1,
+      "message": "I realize the apparent redundancy, but it\u0027s a bit safer this way. `GetAndDecompressResult` distinguishes between \"decompress failure\" and \"not found\". This enum doesn\u0027t. Merging them together \"works\" (in the sense that the code runs fine), but it makes it less clear when `DecompressFailure` and `Rejected` are possible and not.",
+      "parentUuid": "66bb56d5_8a16942b",
+      "range": {
+        "startLine": 40,
+        "startChar": 5,
+        "endLine": 40,
+        "endChar": 19
+      },
+      "revId": "7a9b799a01bab8f30509ddb3808bfa375db4bec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab8f079d_b9d65cfc",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29e31718_0ba4c2dd",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-12T16:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab8f079d_b9d65cfc",
+      "range": {
+        "startLine": 51,
+        "startChar": 23,
+        "endLine": 51,
+        "endChar": 39
+      },
+      "revId": "7a9b799a01bab8f30509ddb3808bfa375db4bec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1d14da8_5d5b3eb1",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-01-12T13:51:02Z",
       "side": 1,
       "message": "isnt `Get` redundant here?",
+      "range": {
+        "startLine": 67,
+        "startChar": 44,
+        "endLine": 67,
+        "endChar": 47
+      },
+      "revId": "7a9b799a01bab8f30509ddb3808bfa375db4bec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5336292a_6799470f",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-12T16:25:41Z",
+      "side": 1,
+      "message": "It is, but `Success` is `#define`d by the X11 headers and causes build failures 😐",
+      "parentUuid": "f1d14da8_5d5b3eb1",
       "range": {
         "startLine": 67,
         "startChar": 44,
