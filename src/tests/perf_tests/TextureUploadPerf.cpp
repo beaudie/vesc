@@ -13,6 +13,7 @@
 #include <random>
 #include <sstream>
 
+#include "media/etc2bc_rgba8.inc"
 #include "test_utils/gl_raii.h"
 #include "util/shader_utils.h"
 
@@ -177,6 +178,118 @@ class PBOCompressedSubImageBenchmark : public TextureUploadBenchmarkBase
   private:
     GLuint mPBO;
 };
+
+class TexureUploadETC2TranscodingBenchmark : public TextureUploadBenchmarkBase
+{
+  public:
+    TexureUploadETC2TranscodingBenchmark() : TextureUploadBenchmarkBase("ETC2Transcoding") {}
+
+    void initializeBenchmark() override
+    {
+        static GLsizei kMinTextureSize = 4;
+        const auto &params             = GetParam();
+
+        if (!GetParam().isVulkan() ||
+            !GetParam().isEnableRequested(Feature::SupportsComputeTranscodeEtcToBc) ||
+            params.baseSize < kMinTextureSize)
+        {
+            skipTest("no need to testing!!!");
+            return;
+        }
+
+        initShaders();
+
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
+
+        glActiveTexture(GL_TEXTURE0);
+        glGenTextures(1, &mTexture);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, mTexture);
+
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        ASSERT_GL_NO_ERROR();
+        mLevels          = 0;
+        GLsizei baseSize = params.baseSize;
+        while (baseSize)
+        {
+            mLevels++;
+            baseSize >>= 1;
+        }
+        mTextureBaseLevelSize = 1 << (mLevels - 1);
+        // since we testing ETC texture, the minimum block size is 4.
+        mLevels -= 2;
+        ASSERT_TRUE(mLevels > 0);
+
+        glTexStorage2DEXT(GL_TEXTURE_CUBE_MAP, mLevels, GL_COMPRESSED_RGB8_ETC2,
+                          mTextureBaseLevelSize, mTextureBaseLevelSize);
+    }
+
+    void destroyBenchmark() { TextureUploadBenchmarkBase::destroyBenchmark(); }
+
+    void drawBenchmark() override;
+
+    void initShaders();
+
+  public:
+    GLsizei mTextureBaseLevelSize;
+    GLsizei mLevels;
+};
+
+void TexureUploadETC2TranscodingBenchmark::initShaders()
+{
+    constexpr char kVS[] = R"(attribute vec4 a_position;
+void main()
+{
+    gl_Position = a_position;
+})";
+
+    constexpr char kFS[] = R"(precision mediump float;
+uniform samplerCube s_texture;
+void main()
+{
+    gl_FragColor = textureCube(s_texture, vec3(1.0f, 1.0f, 1.0f));
+})";
+
+    mProgram = CompileProgram(kVS, kFS);
+    ASSERT_NE(0u, mProgram);
+
+    mPositionLoc = glGetAttribLocation(mProgram, "a_position");
+    mSamplerLoc  = glGetUniformLocation(mProgram, "s_texture");
+    glUseProgram(mProgram);
+    glUniform1i(mSamplerLoc, 0);
+
+    glDisable(GL_DEPTH_TEST);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+void TexureUploadETC2TranscodingBenchmark::drawBenchmark()
+{
+    const auto &params = GetParam();
+    startGpuTimer();
+    for (unsigned int iteration = 0; iteration < params.iterationsPerStep; ++iteration)
+    {
+        GLsizei size = mTextureBaseLevelSize;
+        for (GLint level = 0; level < mLevels; ++level)
+        {
+            for (GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+                 face <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z; ++face)
+            {
+                glCompressedTexImage2D(face, level, GL_COMPRESSED_RGB8_ETC2, size, size, 0,
+                                       size / 4 * size / 4 * 8, garden_etc2_rgba8);
+            }
+            size >>= 1;
+        }
+        // Perform a draw just so the texture data is flushed.  With the position attributes not
+        // set, a constant default value is used, resulting in a very cheap draw.
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+    }
+    stopGpuTimer();
+}
 
 TextureUploadBenchmarkBase::TextureUploadBenchmarkBase(const char *benchmarkName)
     : ANGLERenderTest(benchmarkName, GetParam())
