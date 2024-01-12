@@ -187,6 +187,30 @@
       },
       "revId": "7a9b799a01bab8f30509ddb3808bfa375db4bec3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9600371_b6922f04",
+        "filename": "src/tests/egl_tests/EGLBlobCacheTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-12T16:58:18Z",
+      "side": 1,
+      "message": "might be helpful if you added that to the comment saying \"cache is intentionally corrupted since the test is run with \"Feature::CorruptProgramBinaryForTesting\" enabled\"",
+      "parentUuid": "0a0c960b_b8ed7da5",
+      "range": {
+        "startLine": 560,
+        "startChar": 79,
+        "endLine": 560,
+        "endChar": 95
+      },
+      "revId": "7a9b799a01bab8f30509ddb3808bfa375db4bec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
