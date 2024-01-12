@@ -1020,6 +1020,28 @@ bool ValidateAST::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition
         }
     }
 
+    if (mOptions.validateStructUsage && visit == PostVisit)
+    {
+        const TFunction *function = node->getFunction();
+        const TType &returnType   = function->getReturnType();
+
+        // structure tags defined in the return type of a function declaration
+        // need to be added to the same scope as the function declaration.
+        //
+        // The structure tag `Foo` is introduced by `foo()` and visible in
+        // `main()` in the following example:
+        //     struct Foo { ... } foo() { ... }
+        //     main() {
+        //         ...
+        //         Foo f = ...
+        //         ...
+        //     }
+        if (returnType.isStructSpecifier())
+        {
+            visitStructOrInterfaceBlockDeclaration(returnType, node->getLine());
+        }
+    }
+
     return true;
 }
 

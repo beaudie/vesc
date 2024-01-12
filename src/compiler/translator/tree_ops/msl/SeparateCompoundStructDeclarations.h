@@ -16,8 +16,10 @@ class TSymbolTable;
 
 // Example:
 //  struct Foo { int x; } foo;
+//  struct Foo { int x; } bar(void);
 // Becomes:
-//  struct Foo {int x; }; Foo foo;
+//  struct Foo { int x; }; Foo foo;
+//  struct Foo { int x; }; Foo bar(void);
 [[nodiscard]] bool SeparateCompoundStructDeclarations(TCompiler &compiler,
                                                       IdGen &idGen,
                                                       TIntermBlock &root,
