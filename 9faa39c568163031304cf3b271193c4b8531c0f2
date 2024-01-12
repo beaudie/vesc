@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f15a095_0c0a807d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-12T19:04:46Z",
+      "side": 1,
+      "message": "nit: Use `Fixed` instead of `Bug` to auto-close the linked issue.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 3
+      },
+      "revId": "9faa39c568163031304cf3b271193c4b8531c0f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e3809c82_8c1e11a9",
