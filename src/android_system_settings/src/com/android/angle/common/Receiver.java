@@ -36,6 +36,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.android.angle.R;
+
 public class Receiver extends BroadcastReceiver
 {
     private static final String TAG = "AngleBroadcastReceiver";
