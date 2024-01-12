@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b057ee0b_c5f0649f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-12T16:28:55Z",
+      "side": 1,
+      "message": "Trying to understand the bug. Was this lock somehow causing a deadlock?",
+      "revId": "c2ad86bc8e5a372356608169a8621ba37583d746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
