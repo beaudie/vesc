@@ -70,6 +70,24 @@
       "parentUuid": "89558108_ab3e3527",
       "revId": "c2ad86bc8e5a372356608169a8621ba37583d746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "749e62ec_6456e8f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-12T17:15:50Z",
+      "side": 1,
+      "message": "\u003e Perhaps best discuss that on the issue itself\n\n+1, that way the issue reporter has a chance to respond",
+      "parentUuid": "07113bc6_244a2e90",
+      "revId": "c2ad86bc8e5a372356608169a8621ba37583d746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
