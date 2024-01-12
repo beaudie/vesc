@@ -16,6 +16,24 @@
       "message": "I\u0027m worried that this error doesn\u0027t get propagated anywhere. The buffer becomes null and the success code is returned.\n\nI don\u0027t think this is worse than before but I suspect that internal state will be bad when this happens.",
       "revId": "fd47042295f1b7157951cc662df2bf907250cec6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e404b869_f7ad0103",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-12T15:21:04Z",
+      "side": 1,
+      "message": "The functions below (`newBufferWithBytes` and `newBufferWithLength`) already return null when they cannot create a buffer.\n\nIf `Buffer::reset` is called from `MakeBufferWithStorageMode` (or `MakeBuffer`), `GL_OUT_OF_MEMORY` is generated in case of null Metal buffer.",
+      "parentUuid": "8d7e275b_a3fee97e",
+      "revId": "fd47042295f1b7157951cc662df2bf907250cec6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
