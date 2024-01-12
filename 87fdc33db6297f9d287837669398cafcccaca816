@@ -70,6 +70,24 @@
       "parentUuid": "ed5865d0_bc23a39c",
       "revId": "87fdc33db6297f9d287837669398cafcccaca816",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14ac2ab4_53184bcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-12T16:42:16Z",
+      "side": 1,
+      "message": "Tried on an M1/Sonoma",
+      "parentUuid": "c6720852_a6da5e67",
+      "revId": "87fdc33db6297f9d287837669398cafcccaca816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
