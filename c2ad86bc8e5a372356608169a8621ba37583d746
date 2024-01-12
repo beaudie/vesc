@@ -52,6 +52,24 @@
       "parentUuid": "b42c33fe_23a44a8a",
       "revId": "c2ad86bc8e5a372356608169a8621ba37583d746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07113bc6_244a2e90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-12T17:14:31Z",
+      "side": 1,
+      "message": "Perhaps best discuss that on the issue itself. I\u0027m curious to know what caused the deadlock too.\n\nThis change itself is fine regardless. In the very least, it\u0027s an optimization",
+      "parentUuid": "89558108_ab3e3527",
+      "revId": "c2ad86bc8e5a372356608169a8621ba37583d746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
