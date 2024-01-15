@@ -92,6 +92,18 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
 
     return clearParams;
 }
+
+bool Is3DResourceAttachment(const gl::FramebufferAttachment *attachment)
+{
+    return attachment && attachment->isAttached() && attachment->type() == GL_TEXTURE &&
+           attachment->getTextureImageIndex().getType() == gl::TextureType::_3D;
+}
+
+bool Is2DResourceAttachment(const gl::FramebufferAttachment *attachment)
+{
+    return attachment && attachment->isAttached() && !Is3DResourceAttachment(attachment);
+}
+
 }  // namespace
 
 ClearParameters::ClearParameters() = default;
@@ -280,6 +292,28 @@ gl::FramebufferStatus FramebufferD3D::checkStatus(const gl::Context *context) co
         return gl::FramebufferStatus::Incomplete(
             GL_FRAMEBUFFER_UNSUPPORTED,
             gl::err::kFramebufferIncompleteUnsupportedMissmatchedDimensions);
+    }
+
+    // D3D11 does not support mixing resource types on render targets. All attachments are 2D except
+    // 3D texture layers so 3D textures cannot be mixed with any other attachment type.
+    bool has3DtexureColorAttachment = false;
+    for (const gl::FramebufferAttachment &colorAttachment : mState.getColorAttachments())
+    {
+        if (Is3DResourceAttachment(&colorAttachment))
+        {
+            has3DtexureColorAttachment = true;
+            break;
+        }
+    }
+
+    bool has2DDepthStencilAttachment = Is2DResourceAttachment(mState.getDepthAttachment()) ||
+                                       Is2DResourceAttachment(mState.getStencilAttachment());
+
+    if (has3DtexureColorAttachment && has2DDepthStencilAttachment)
+    {
+        return gl::FramebufferStatus::Incomplete(
+            GL_FRAMEBUFFER_UNSUPPORTED,
+            gl::err::kFramebufferIncompleteUnsupportedMixed3DandNon3DAttachments);
     }
 
     return gl::FramebufferStatus::Complete();

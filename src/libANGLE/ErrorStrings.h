@@ -185,6 +185,7 @@ MSG kFramebufferIncompleteMultiviewMismatch = "Framebuffer is incomplete: Attach
 MSG kFramebufferIncompleteMultiviewViewsMismatch = "Framebuffer is incomplete: Attachments have inconsistent multiview view counts.";
 MSG kFramebufferIncompleteSurfaceless = "Framebuffer is incomplete: Framebuffer is surfaceless.";
 MSG kFramebufferIncompleteUnsupportedMissmatchedDimensions = "Framebuffer is incomplete: Mismatched attachment sizes are unsupported.";
+MSG kFramebufferIncompleteUnsupportedMixed3DandNon3DAttachments = "Framebuffer is incomplete: Mixing 3D texture attachments with non-3D texture attachments is unsupported.";
 MSG kFramebufferIncompleteUnsupportedNonUniqueAttachments = "Framebuffer is incomplete: Non-unique attachments are unsupported.";
 MSG kFramebufferIncompleteUnsupportedSeparateDepthStencilBuffers = "Framebuffer is incomplete: Separate depth and stencil buffers are unsupported.";
 MSG kFramebufferIncompleteWebGLDepthStencilInconsistant = "Framebuffer is incomplete: WebGL depth stencil state is inconsistent.";
