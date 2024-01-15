@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "493773f8_0675dfed",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-15T18:01:50Z",
+      "side": 1,
+      "message": "This needs to be moved to `visitFunctionPrototype`. In the example of the test, that always gets called before `visitFunctionDefinition` so that works. But that would also support something like this:\n\n```\nstruct Foo { ... } foo();\nmain() {\n    ...\n    Foo f \u003d ...\n    ...\n}\nFoo foo() { ... }\n```\n\nPlease add that as a test too, to make sure the transformation can handle that.",
+      "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
