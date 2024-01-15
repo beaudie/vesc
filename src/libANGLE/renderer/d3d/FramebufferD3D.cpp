@@ -92,6 +92,27 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
 
     return clearParams;
 }
+
+void UpdateAttachment3DTextureState(const gl::FramebufferAttachment *attachment,
+                                    bool *has3DTexture,
+                                    bool *hasNon3Dtexture)
+{
+    if (!attachment || !attachment->isAttached())
+    {
+        return;
+    }
+
+    if (attachment->type() == GL_TEXTURE &&
+        attachment->getTextureImageIndex().getType() == gl::TextureType::_3D)
+    {
+        *has3DTexture = true;
+    }
+    else
+    {
+        *hasNon3Dtexture = true;
+    }
+}
+
 }  // namespace
 
 ClearParameters::ClearParameters() = default;
@@ -280,6 +301,27 @@ gl::FramebufferStatus FramebufferD3D::checkStatus(const gl::Context *context) co
         return gl::FramebufferStatus::Incomplete(
             GL_FRAMEBUFFER_UNSUPPORTED,
             gl::err::kFramebufferIncompleteUnsupportedMissmatchedDimensions);
+    }
+
+    // D3D11 does not support mixing resource types on render targets. All attachments are 2D except
+    // 3D texture layers so 3D textures cannot be mixed with any other attachment type.
+    bool has3DtexureAttachment    = false;
+    bool hasNon3DtexureAttachment = false;
+    for (const gl::FramebufferAttachment &colorAttachment : mState.getColorAttachments())
+    {
+        UpdateAttachment3DTextureState(&colorAttachment, &has3DtexureAttachment,
+                                       &hasNon3DtexureAttachment);
+    }
+    UpdateAttachment3DTextureState(mState.getDepthAttachment(), &has3DtexureAttachment,
+                                   &hasNon3DtexureAttachment);
+    UpdateAttachment3DTextureState(mState.getStencilAttachment(), &has3DtexureAttachment,
+                                   &hasNon3DtexureAttachment);
+
+    if (has3DtexureAttachment && hasNon3DtexureAttachment)
+    {
+        return gl::FramebufferStatus::Incomplete(
+            GL_FRAMEBUFFER_UNSUPPORTED,
+            gl::err::kFramebufferIncompleteUnsupportedMixed3DandNon3DAttachments);
     }
 
     return gl::FramebufferStatus::Complete();
