@@ -1090,8 +1090,8 @@ TEST_P(FramebufferTest_ES3, MultisampleDepthOnly)
 TEST_P(FramebufferTest_ES3, AttachmentWith3DLayers)
 {
     GLTexture texA;
-    glBindTexture(GL_TEXTURE_2D, texA);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glBindTexture(GL_TEXTURE_3D, texA);
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 4, 4, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     GLTexture texB;
     glBindTexture(GL_TEXTURE_3D, texB);
@@ -1099,7 +1099,7 @@ TEST_P(FramebufferTest_ES3, AttachmentWith3DLayers)
 
     GLFramebuffer framebuffer;
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texA, 0);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texA, 0, 0);
     glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, texB, 0, 0);
     ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
     EXPECT_GL_NO_ERROR();
@@ -1747,6 +1747,70 @@ TEST_P(FramebufferTest_ES3, RenderSnorm16)
     test(GL_R16_SNORM_EXT);
     test(GL_RG16_SNORM_EXT);
     test(GL_RGBA16_SNORM_EXT);
+}
+
+// D3D11 is unable to mix 3D attachments with non 3D attachments. Test that a framebuffer
+// completeness error is generated.
+TEST_P(FramebufferTest_ES3, Mixed3DAttachmentTypes)
+{
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(program);
+    GLint colorLocation = glGetUniformLocation(program, angle::essl1_shaders::ColorUniform());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    ASSERT_GL_NO_ERROR();
+
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, 4, 4);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo);
+    ASSERT_GL_NO_ERROR();
+
+    {
+        GLTexture tex3D;
+        glBindTexture(GL_TEXTURE_3D, tex3D);
+        glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, 4, 4, 4);
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex3D, 0, 0);
+
+        glUniform4f(colorLocation, 0.0f, 0.25f, 0.5f, 0.75f);
+        drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+
+        if (IsD3D11())
+        {
+            EXPECT_GL_ERROR(GL_INVALID_FRAMEBUFFER_OPERATION);
+        }
+        else
+        {
+            ASSERT_GL_NO_ERROR();
+            EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(0, 63, 127, 191), 1);
+        }
+    }
+
+    {
+        GLTexture tex2DArray;
+        glBindTexture(GL_TEXTURE_2D_ARRAY, tex2DArray);
+        glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 4, 4, 4);
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArray, 0, 0);
+
+        glUniform4f(colorLocation, 0.25f, 0.5f, 0.0f, 0.75f);
+        drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(63, 127, 0, 191), 1);
+    }
+
+    {
+        GLTexture texCube;
+        glBindTexture(GL_TEXTURE_CUBE_MAP, texCube);
+        glTexStorage2D(GL_TEXTURE_CUBE_MAP, 1, GL_RGBA8, 4, 4);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+                               texCube, 0);
+
+        glUniform4f(colorLocation, 0.25f, 0.0f, 0.5f, 0.75f);
+        drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(63, 0, 127, 191), 1);
+    }
 }
 
 class FramebufferTest_ES3Metal : public FramebufferTest_ES3
