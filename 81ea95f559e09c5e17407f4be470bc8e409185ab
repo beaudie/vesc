@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b174b82c_dc0fd38a",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-15T21:59:43Z",
+      "side": 1,
+      "message": "The spec says:\n\u003e It is required that the Pixel Shader be able to simultaneously render to at least 8 separate RenderTargets. All of these RenderTargets must be the same type of resource: `Buffer`, `Texture1D[Array]`, `Texture2D[Array]`, `Texture3D`, or `TextureCube`.\n\nThis language does not seem to imply depth/stencil attachments and they cannot be of 3D type anyway.",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 318,
+        "endChar": 62
+      },
+      "revId": "81ea95f559e09c5e17407f4be470bc8e409185ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
