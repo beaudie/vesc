@@ -22,6 +22,30 @@
       },
       "revId": "eedf3e9e9e37e74524fa7bfa7ec70a53313deb65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f64c012_71219b25",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 3250723
+      },
+      "writtenOn": "2024-01-16T22:18:43Z",
+      "side": 0,
+      "message": "I think if we do an in-place replacement, it will add `libz` to `static_libs` instead of `shared_libs`.",
+      "parentUuid": "b6b22da0_32e303de",
+      "range": {
+        "startLine": 257,
+        "startChar": 60,
+        "endLine": 257,
+        "endChar": 71
+      },
+      "revId": "eedf3e9e9e37e74524fa7bfa7ec70a53313deb65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
