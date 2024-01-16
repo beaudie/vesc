@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "095104c6_7ecaa1fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-01-16T23:20:14Z",
+      "side": 1,
+      "message": "this could be proved/disproved with a unit test. It would be nice to understand the exact bug that you try to fix",
+      "range": {
+        "startLine": 9,
+        "startChar": 52,
+        "endLine": 10,
+        "endChar": 61
+      },
+      "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
