@@ -16,6 +16,40 @@
       "message": "I tested locally with gclient sync and this seems to Just Work manually, not sure how the Dawn autoroller might react to this",
       "revId": "574ea8de3ca76a5f77c5af0a81619d9a76b0071d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43e0ef6f_5da77419",
+        "filename": "build_overrides/dawn.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-16T18:38:02Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be this?\n\n```suggestion\ndawn_angle_dir \u003d \"//\"\n```",
+      "revId": "574ea8de3ca76a5f77c5af0a81619d9a76b0071d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a680b93a_1e763635",
+        "filename": "build_overrides/dawn.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-16T18:38:02Z",
+      "side": 1,
+      "message": "What path is this? We don\u0027t have such a file.\n\nFWIW, it looks like Dawn is able to handle this automatically if building under git, so you could remove this line.",
+      "revId": "574ea8de3ca76a5f77c5af0a81619d9a76b0071d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
