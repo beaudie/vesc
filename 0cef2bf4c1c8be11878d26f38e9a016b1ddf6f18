@@ -16,6 +16,24 @@
       "message": "This needs to be moved to `visitFunctionPrototype`. In the example of the test, that always gets called before `visitFunctionDefinition` so that works. But that would also support something like this:\n\n```\nstruct Foo { ... } foo();\nmain() {\n    ...\n    Foo f \u003d ...\n    ...\n}\nFoo foo() { ... }\n```\n\nPlease add that as a test too, to make sure the transformation can handle that.",
       "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95d32b86_6cb7075a",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-01-16T00:21:16Z",
+      "side": 1,
+      "message": "I\u0027m implementing support for:\n\n```\nstruct Foo { ... } foo();\nmain() {\n    ...\n    Foo f \u003d ...\n    ...\n}\nFoo foo() { ... }\n```\n\nand it gets complicated by the way the parser handles structure types in function declarations. In this sample AST, both `Foo` in the declaration and definition are marked as specifiers, which in the definition it is not. Where should I update the parser to handle this?\n\n```\n0:1: Code block\n0:2:   Function Prototype: foo (symbol id 5626) (structure \u0027Foo\u0027 (specifier))\n0:4:   Function Definition:\n0:4:     Function Prototype: main (symbol id 5627) (void)\n0:5:     Code block\n0:6:       move second child to first child (mediump 4-component vector of float)\n0:6:         \u0027gl_FragColor\u0027 (symbol id 2987) (FragColor mediump 4-component vector of float)\n0:6:         1.0 (const float)\n0:6:         0.0 (const float)\n0:6:         0.0 (const float)\n0:6:         1.0 (const float)\n0:7:       Declaration\n0:7:         initialize first child with second child (structure \u0027Foo\u0027)\n0:7:           \u0027f\u0027 (symbol id 5628) (structure \u0027Foo\u0027)\n0:7:           Call a user-defined function: foo (symbol id 5626) (structure \u0027Foo\u0027 (specifier))\n0:8:       If test\n0:8:         Condition\n0:8:           Compare Equal (bool)\n0:8:             direct index for structure (mediump float)\n0:8:               \u0027f\u0027 (symbol id 5628) (structure \u0027Foo\u0027)\n0:8:               0 (field \u0027v\u0027)\n0:8:             0.5 (const float)\n0:8:         true case\n0:9:           Code block\n0:10:             move second child to first child (mediump 4-component vector of float)\n0:10:               \u0027gl_FragColor\u0027 (symbol id 2987) (FragColor mediump 4-component vector of float)\n0:10:               0.0 (const float)\n0:10:               1.0 (const float)\n0:10:               0.0 (const float)\n0:10:               1.0 (const float)\n0:14:   Function Definition:\n0:14:     Function Prototype: foo (symbol id 5626) (structure \u0027Foo\u0027 (specifier))\n0:15:     Code block\n0:16:       Declaration\n0:16:         \u0027f\u0027 (symbol id 5630) (structure \u0027Foo\u0027)\n0:17:       move second child to first child (mediump float)\n0:17:         direct index for structure (mediump float)\n0:17:           \u0027f\u0027 (symbol id 5630) (structure \u0027Foo\u0027)\n0:17:           0 (field \u0027v\u0027)\n0:17:         0.5 (const float)\n0:18:       Branch: Return with expression\n0:18:           \u0027f\u0027 (symbol id 5630) (structure \u0027Foo\u0027)\n```",
+      "parentUuid": "493773f8_0675dfed",
+      "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
