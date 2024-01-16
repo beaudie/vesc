@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6b22da0_32e303de",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-16T22:12:58Z",
+      "side": 0,
+      "message": "Please just replace \u0027libz_static\u0027 here with \u0027libz\u0027\nIn python `list.append(x)` and `list.extend([x])` is the same thing :) but the latter allows to append multiple items as a single statement",
+      "range": {
+        "startLine": 257,
+        "startChar": 60,
+        "endLine": 257,
+        "endChar": 71
+      },
+      "revId": "eedf3e9e9e37e74524fa7bfa7ec70a53313deb65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
