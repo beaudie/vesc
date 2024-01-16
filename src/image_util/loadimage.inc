@@ -91,8 +91,10 @@ inline void LoadToNative3To4Impl(const ImageLoadContext &context,
                 priv::OffsetDataPointer<type>(output, y, z, outputRowPitch, outputDepthPitch);
             for (size_t x = 0; x < width; x++)
             {
-                memcpy(&dest[x * 4], &source[x * 3], sizeof(type) * 3);
-                dest[x * 4 + 3] = fourthValue;
+                memcpy(&dest[0], &source[0], sizeof(type) * 3);
+                dest[3] = fourthValue;
+                source += 3;
+                dest += 4;
             }
         }
     }
