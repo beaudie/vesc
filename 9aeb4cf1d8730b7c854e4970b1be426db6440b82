@@ -16,6 +16,24 @@
       "message": "Can you also help me identify how to resolve the formatting issue? I get the following error on my cloudtop when I try to run the suggested fix\n\n```\n$ git: \u0027cl\u0027 is not a git command. See \u0027git --help\u0027.\n\nThe most similar commands are\n\tclone\n\tclean\n```",
       "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d04a7bb_68a58757",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-01-16T21:49:32Z",
+      "side": 1,
+      "message": "Can you try\n1) installing `depot_tools`: https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up.\n2) restart a new terminal to run the `git cl format` under angle repo directory.",
+      "parentUuid": "d2126173_6ae00cca",
+      "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
