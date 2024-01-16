@@ -52,6 +52,24 @@
       "parentUuid": "95d32b86_6cb7075a",
       "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36e21622_a5afe169",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-16T02:26:24Z",
+      "side": 1,
+      "message": "I wish I had a good answer for you, and I really wish our AST was a lot better than it is. I dream of doing an overhaul, but until then, perhaps you could just work around this by keeping a map of `TFunction * -\u003e bool` called `isAlreadyProcessed` so second time around you don\u0027t reprocess the prototype.",
+      "parentUuid": "e957b7c2_7d415a18",
+      "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
