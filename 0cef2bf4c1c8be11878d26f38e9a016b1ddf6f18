@@ -34,6 +34,24 @@
       "parentUuid": "493773f8_0675dfed",
       "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e957b7c2_7d415a18",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-01-16T02:19:27Z",
+      "side": 1,
+      "message": "The issue stems from `const TFunction *TSymbolTable::setFunctionParameterNamesFromDefinition()` which is returning the previous declaration of function `foo()` which has the structure definition in the return type. Because of this, the AST loses the ability to distinguish between the the two function prototypes.",
+      "parentUuid": "95d32b86_6cb7075a",
+      "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
