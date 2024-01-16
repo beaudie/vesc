@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7e8cbfa_433df19a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-01-16T19:16:40Z",
+      "side": 1,
+      "message": "This name is confusing (it sets to true even it never acquire from external). Suggest change to either mIsReleasedToExternal or mIsCurrentOwner.",
+      "range": {
+        "startLine": 901,
+        "startChar": 9,
+        "endLine": 901,
+        "endChar": 32
+      },
+      "revId": "5e3da45703897b847fe72b416fafec69b20a828d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
