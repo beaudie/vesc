@@ -106,6 +106,24 @@
       "parentUuid": "14ac2ab4_53184bcf",
       "revId": "87fdc33db6297f9d287837669398cafcccaca816",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2713920_7598db32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-16T19:09:28Z",
+      "side": 1,
+      "message": "I suspect we\u0027re triggering other compiler bugs, the diff of the generated shaders for these tests is as expected.\n\nI think I\u0027ll land with suppressions given that these tests always fail on sonoma. There are a bunch of people in Dawn and Skia trying to root cause it and I\u0027ll follow their progress and test some reduced cases myself.",
+      "parentUuid": "93cc4d91_6f7af9af",
+      "revId": "87fdc33db6297f9d287837669398cafcccaca816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
