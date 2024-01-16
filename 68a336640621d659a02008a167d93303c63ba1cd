@@ -22,6 +22,30 @@
       },
       "revId": "68a336640621d659a02008a167d93303c63ba1cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b11f5b51_6d449778",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6660,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-16T20:01:34Z",
+      "side": 1,
+      "message": "It\u0027s done before in `acquireFromExternal` so it\u0027s bundled with the rest of the relevant changes (the layout and actual queue family).\n\nI could move it done, but bots have almost finished. I\u0027ve moved it in the next CL.",
+      "parentUuid": "fba8748c_814c08b9",
+      "range": {
+        "startLine": 6660,
+        "startChar": 0,
+        "endLine": 6660,
+        "endChar": 33
+      },
+      "revId": "68a336640621d659a02008a167d93303c63ba1cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
