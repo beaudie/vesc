@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1c05638_633c0210",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-16T16:17:07Z",
+      "side": 1,
+      "message": "I tested locally with gclient sync and this seems to Just Work manually, not sure how the Dawn autoroller might react to this",
+      "revId": "574ea8de3ca76a5f77c5af0a81619d9a76b0071d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
