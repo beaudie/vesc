@@ -499,7 +499,7 @@ deps = {
    },
 
   'third_party/libc++/src': {
-    'url': Var('chromium_git') + '/external/github.com/llvm/llvm-project/libcxx.git@d1f035a3ffb719cbb5fb47c174b14555fa396cdd',
+    'url': Var('chromium_git') + '/external/github.com/llvm/llvm-project/libcxx.git@ccf3afb4b11b378f84c4f995a21a133083e34c6b',
     'condition': 'not build_with_chromium',
   },
 
