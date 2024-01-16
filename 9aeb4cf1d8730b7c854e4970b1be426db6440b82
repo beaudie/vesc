@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2126173_6ae00cca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3250723
+      },
+      "writtenOn": "2024-01-16T21:38:54Z",
+      "side": 1,
+      "message": "Can you also help me identify how to resolve the formatting issue? I get the following error on my cloudtop when I try to run the suggested fix\n\n```\n$ git: \u0027cl\u0027 is not a git command. See \u0027git --help\u0027.\n\nThe most similar commands are\n\tclone\n\tclean\n```",
+      "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
