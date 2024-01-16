@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fba8748c_814c08b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6660,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-01-16T19:40:31Z",
+      "side": 1,
+      "message": "Nit: better update state after calling changeLayoutAndQueue (similarly in acquireFromExternal clear it after call changeLayoutAndQueue).",
+      "range": {
+        "startLine": 6660,
+        "startChar": 0,
+        "endLine": 6660,
+        "endChar": 33
+      },
+      "revId": "68a336640621d659a02008a167d93303c63ba1cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
