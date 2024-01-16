@@ -22,6 +22,30 @@
       },
       "revId": "5e3da45703897b847fe72b416fafec69b20a828d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00947e52_7d1489c5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-16T19:34:59Z",
+      "side": 1,
+      "message": "Done, I wasn\u0027t happy about it either.",
+      "parentUuid": "d7e8cbfa_433df19a",
+      "range": {
+        "startLine": 901,
+        "startChar": 9,
+        "endLine": 901,
+        "endChar": 32
+      },
+      "revId": "5e3da45703897b847fe72b416fafec69b20a828d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
