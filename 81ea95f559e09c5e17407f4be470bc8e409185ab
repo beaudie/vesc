@@ -22,6 +22,30 @@
       },
       "revId": "81ea95f559e09c5e17407f4be470bc8e409185ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ced2301_67240b54",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-16T14:30:41Z",
+      "side": 1,
+      "message": "That said, running the test new case without the new validation gives the following message:\n\n\u003e The RenderTargetView at slot 0 is not compatible with the DepthStencilView. DepthStencilViews may only be used with RenderTargetViews if the effective dimensions of the Views are equal, as well as the Resource types, multisample count, and multisample quality. The RenderTargetView at slot 0 has (w:4,h:4,as:1), while the Resource is a Texture3D with (mc:1,mq:0). The DepthStencilView has (w:4,h:4,as:1), while the Resource is a Texture2D with (mc:1,mq:0).\n\nSo the assertion is unfortunately correct.\n\nMinor simplification:\n```\nif ((mState.getDepthAttachment() \u0026\u0026 mState.getDepthAttachment()-\u003eisAttached()) || \n    (mState.getStencilAttachment() \u0026\u0026 mState.getStencilAttachment()-\u003eisAttached())\n{\n    hasNon3DtexureAttachment \u003d true;\n}\n```",
+      "parentUuid": "b174b82c_dc0fd38a",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 318,
+        "endChar": 62
+      },
+      "revId": "81ea95f559e09c5e17407f4be470bc8e409185ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
