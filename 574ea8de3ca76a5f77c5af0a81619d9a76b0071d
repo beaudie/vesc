@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb650999_08a6ee25",
+        "filename": "build_overrides/dawn.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-16T19:02:58Z",
+      "side": 1,
+      "message": "Ah yeah, that makes more sense.",
+      "parentUuid": "43e0ef6f_5da77419",
+      "revId": "574ea8de3ca76a5f77c5af0a81619d9a76b0071d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a680b93a_1e763635",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-01-16T18:38:02Z",
       "side": 1,
       "message": "What path is this? We don\u0027t have such a file.\n\nFWIW, it looks like Dawn is able to handle this automatically if building under git, so you could remove this line.",
+      "revId": "574ea8de3ca76a5f77c5af0a81619d9a76b0071d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab0e6ab0_b4a0f5c2",
+        "filename": "build_overrides/dawn.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-16T19:02:58Z",
+      "side": 1,
+      "message": "Oh oops, I meant to remove that path specifically. Thanks for catching.",
+      "parentUuid": "a680b93a_1e763635",
       "revId": "574ea8de3ca76a5f77c5af0a81619d9a76b0071d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
