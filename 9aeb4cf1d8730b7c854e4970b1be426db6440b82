@@ -51,6 +51,24 @@
       "message": "Adding @Roman to the reviewers as he added the Android zlib integration change: https://chromium-review.googlesource.com/c/angle/angle/+/4300169.",
       "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0f5065d_115fa340",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3250723
+      },
+      "writtenOn": "2024-01-16T21:58:27Z",
+      "side": 1,
+      "message": "Thanks Yuxin, there is some progress, but I am getting a different error now\n```\n$ git cl format\nProblem while looking for clang-format in Chromium source tree:\nFile does not exist: /usr/local/google/home/spandandas/angle/buildtools/linux64/clang-format\n```",
+      "parentUuid": "6d04a7bb_68a58757",
+      "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
