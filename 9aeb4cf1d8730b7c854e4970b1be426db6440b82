@@ -104,6 +104,23 @@
       "message": "Thanks, this looks great!",
       "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d61bccc4_db5f1b01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-16T22:24:11Z",
+      "side": 1,
+      "message": "\u003eBefore this CL, angle could access implementation of libz. After this CL, angle can only access the public apis of libz.\n\nOh, actually I think we\u0027re accessing some of libz internals or am I misunderstanding what you mean by this?\n\nhttps://crsrc.org/c/third_party/angle/util/capture/frame_capture_test_utils.cpp;drc\u003db581a6ce333861445a9dfe1201c1ac6bafadc4d3;l\u003d81",
+      "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
