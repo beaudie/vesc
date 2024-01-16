@@ -69,6 +69,24 @@
       "parentUuid": "6d04a7bb_68a58757",
       "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c9335d_13d802da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-01-16T22:06:57Z",
+      "side": 1,
+      "message": "Can you try running `gclient sync` command? After it finishes, then try again with `git cl format`?",
+      "parentUuid": "b0f5065d_115fa340",
+      "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
