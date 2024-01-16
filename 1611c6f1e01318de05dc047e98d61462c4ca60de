@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cef6ce3e_7852a09f",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-16T22:11:29Z",
+      "side": 1,
+      "message": "I noticed that the null backend was disabled on official builds and in what looks like a script to generate AOSP builds. I decided to do the same for the wgpu backend for now, let me know if it makes more sense to enable it.",
+      "range": {
+        "startLine": 200,
+        "startChar": 2,
+        "endLine": 200,
+        "endChar": 19
+      },
+      "revId": "1611c6f1e01318de05dc047e98d61462c4ca60de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
