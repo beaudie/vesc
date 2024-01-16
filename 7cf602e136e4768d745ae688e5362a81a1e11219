@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09389e1d_23df4a38",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1576,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-01-16T19:44:16Z",
+      "side": 1,
+      "message": "Just curious, is there any reason we want to place the test under `EGLContextSharingTestNoFixture` test suite? The use case does not seem to involve context sharing.",
+      "revId": "7cf602e136e4768d745ae688e5362a81a1e11219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
