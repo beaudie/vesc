@@ -16,6 +16,23 @@
       "message": "Drive by +1!",
       "revId": "5154019306512e2d9470b0c51c730e0d26bc83ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d375307_6c7e9e63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-16T20:10:59Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "5154019306512e2d9470b0c51c730e0d26bc83ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
