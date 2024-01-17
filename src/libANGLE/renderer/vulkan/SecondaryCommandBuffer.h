@@ -115,6 +115,7 @@ enum class CommandID : uint16_t
     SetStencilReference,
     SetStencilTestEnable,
     SetStencilWriteMask,
+    SetVertexInput,
     SetViewport,
     WaitEvents,
     WriteTimestamp,
@@ -577,6 +578,13 @@ struct SetStencilWriteMaskParams
 };
 VERIFY_4_BYTE_ALIGNMENT(SetStencilWriteMaskParams)
 
+struct SetVertexInputParams
+{
+    uint32_t vertexBindingDescriptionCount;
+    uint32_t vertexAttributeDescriptionCount;
+};
+VERIFY_4_BYTE_ALIGNMENT(SetVertexInputParams)
+
 struct SetViewportParams
 {
     VkViewport viewport;
@@ -858,6 +866,10 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void setStencilReference(uint32_t frontReference, uint32_t backReference);
     void setStencilTestEnable(VkBool32 stencilTestEnable);
     void setStencilWriteMask(uint32_t writeFrontMask, uint32_t writeBackMask);
+    void setVertexInput(uint32_t vertexBindingDescriptionCount,
+                        const VkVertexInputBindingDescription2EXT *VertexBindingDescriptions,
+                        uint32_t vertexAttributeDescriptionCount,
+                        const VkVertexInputAttributeDescription2EXT *VertexAttributeDescriptions);
     void setViewport(uint32_t firstViewport, uint32_t viewportCount, const VkViewport *viewports);
 
     void waitEvents(uint32_t eventCount,
@@ -1821,6 +1833,30 @@ ANGLE_INLINE void SecondaryCommandBuffer::setStencilWriteMask(uint32_t writeFron
         initCommand<SetStencilWriteMaskParams>(CommandID::SetStencilWriteMask);
     paramStruct->writeFrontMask = static_cast<uint16_t>(writeFrontMask);
     paramStruct->writeBackMask  = static_cast<uint16_t>(writeBackMask);
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setVertexInput(
+    uint32_t vertexBindingDescriptionCount,
+    const VkVertexInputBindingDescription2EXT *vertexBindingDescriptions,
+    uint32_t vertexAttributeDescriptionCount,
+    const VkVertexInputAttributeDescription2EXT *vertexAttributeDescriptions)
+{
+    uint8_t *writePtr;
+    size_t vertexBindingDescription =
+        vertexBindingDescriptionCount * sizeof(VkVertexInputBindingDescription2EXT);
+    size_t vertexAttributeDescription =
+        vertexAttributeDescriptionCount * sizeof(VkVertexInputAttributeDescription2EXT);
+
+    SetVertexInputParams *paramStruct = initCommand<SetVertexInputParams>(
+        CommandID::SetVertexInput, vertexBindingDescription + vertexAttributeDescription,
+        &writePtr);
+
+    // Copy params
+    paramStruct->vertexBindingDescriptionCount   = vertexBindingDescriptionCount;
+    paramStruct->vertexAttributeDescriptionCount = vertexAttributeDescriptionCount;
+
+    writePtr = storePointerParameter(writePtr, vertexBindingDescriptions, vertexBindingDescription);
+    storePointerParameter(writePtr, vertexAttributeDescriptions, vertexAttributeDescription);
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::setViewport(uint32_t firstViewport,
