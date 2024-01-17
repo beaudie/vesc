@@ -637,6 +637,17 @@ MSG kNoExecutableCodeInstalled = "There is no current program object specified b
 MSG kProgramPipelineLinkFailed = "Program pipeline link failed";
 MSG kProtectedTexturesExtensionRequired = "GL_EXT_protected_textures not enabled.";
 
+MSG kFoveatedTextureQcomExtensionRequired = "GL_QCOM_texture_foveated not enabled";
+MSG kFramebufferFoveationLayersExceedMaxArrayLayers = "Requested layer exceeds the supported maximum";
+MSG kFocalPointsExceedMaxFocalPoints = "Requested focal point exceeds the supported maximum";
+MSG kFramebufferFoveationAlreadyConfigured = "glFramebufferFoveationConfigQCOM called on a framebuffer that has already been configured for foveated rendering";
+MSG kFramebufferFoveationNotConfigured = "glFramebufferFoveationParametersQCOM called on a framebuffer that has not been configured for foveated rendering";
+MSG kTextureFoveationNotEnabled = "glTextureFoveationParametersQCOM called on a texture that does not support GL_FOVEATION_ENABLE_BIT_QCOM";
+MSG kFoveatedTextureInvalidParameters = "Invalid parameters given for GL_TEXTURE_FOVEATED_FEATURE_BITS_QCOM";
+MSG kFoveatedTextureCannotDisable = "Cannot disable foveation on a foveated texture";
+MSG kFoveatedTextureInvalidPixelDensity = "Pixel density must be between 0.0 and 1.0";
+MSG kGeometryOrTessellationShaderBoundForFoveatedDraw = "Invalid to draw with foveation while current bound program uses tessellation or geometry shaders";
+
 // clang-format on
 
 #undef MSG

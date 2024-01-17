@@ -9832,7 +9832,20 @@ void Context::framebufferFoveationConfig(GLuint framebuffer,
                                          GLuint requestedFeatures,
                                          GLuint *providedFeatures)
 {
-    return;
+    ASSERT(numLayers <= FoveationState::kMaxNumLayers);
+    ASSERT(focalPointsPerLayer <= FoveationState::kMaxNumFocalPoints);
+    ASSERT((requestedFeatures & GL_FOVEATION_ENABLE_BIT_QCOM) != 0);
+    ASSERT(providedFeatures);
+
+    Framebuffer *pFB = getFramebuffer(PackParam<FramebufferID>(framebuffer));
+    ASSERT(!pFB->getState().getFoveationState().isConfigured());
+
+    *providedFeatures = 0;
+    if (pFB->canSupportFoveatedRendering())
+    {
+        pFB->configureFoveation();
+        *providedFeatures = pFB->getSupportedFoveationFeatures();
+    }
 }
 
 void Context::framebufferFoveationParameters(GLuint framebuffer,
@@ -9844,7 +9857,12 @@ void Context::framebufferFoveationParameters(GLuint framebuffer,
                                              GLfloat gainY,
                                              GLfloat foveaArea)
 {
-    return;
+    Framebuffer *fb = getFramebuffer(PackParam<FramebufferID>(framebuffer));
+    ASSERT(fb);
+    fb->setFocalPoint(this, layer, focalPoint, focalX, focalY, gainX, gainY, foveaArea);
+    mState.mDirtyBits.set(state::DIRTY_BIT_EXTENDED);
+    mState.mExtendedDirtyBits.set(
+        state::ExtendedDirtyBitType::EXTENDED_DIRTY_BIT_FOVEATED_RENDERING);
 }
 
 void Context::textureFoveationParameters(GLuint texture,
@@ -9856,7 +9874,12 @@ void Context::textureFoveationParameters(GLuint texture,
                                          GLfloat gainY,
                                          GLfloat foveaArea)
 {
-    return;
+    Texture *tex = getTexture(PackParam<TextureID>(texture));
+    ASSERT(tex);
+    tex->setFocalPoint(this, layer, focalPoint, focalX, focalY, gainX, gainY, foveaArea);
+    mState.mDirtyBits.set(state::DIRTY_BIT_EXTENDED);
+    mState.mExtendedDirtyBits.set(
+        state::ExtendedDirtyBitType::EXTENDED_DIRTY_BIT_FOVEATED_RENDERING);
 }
 
 // ErrorSet implementation.
