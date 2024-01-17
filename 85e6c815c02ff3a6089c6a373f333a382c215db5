@@ -22,6 +22,30 @@
       },
       "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45bf3be5_740f0e07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-17T01:00:24Z",
+      "side": 1,
+      "message": "The unit test would be calling the loading function (`LoadToNativeUbyte3To4Impl`). However, it seems that the current bots do not capture this error. However, when applied on the local machine, this CL seems to fix the issue. ([More info](http://b/315844825#comment21))",
+      "parentUuid": "095104c6_7ecaa1fb",
+      "range": {
+        "startLine": 9,
+        "startChar": 52,
+        "endLine": 10,
+        "endChar": 61
+      },
+      "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
