@@ -149,8 +149,12 @@ extern PFN_vkCmdSetPatchControlPointsEXT vkCmdSetPatchControlPointsEXT;
 extern PFN_vkCmdSetPrimitiveRestartEnableEXT vkCmdSetPrimitiveRestartEnableEXT;
 extern PFN_vkCmdSetRasterizerDiscardEnableEXT vkCmdSetRasterizerDiscardEnableEXT;
 
-// VK_KHR_fragment_shading_rate
-extern PFN_vkGetPhysicalDeviceFragmentShadingRatesKHR vkGetPhysicalDeviceFragmentShadingRatesKHR;
+// VK_EXT_vertex_input_dynamic_state
+extern PFN_vkCmdSetVertexInputEXT vkCmdSetVertexInputEXT
+
+    // VK_KHR_fragment_shading_rate
+    extern PFN_vkGetPhysicalDeviceFragmentShadingRatesKHR
+        vkGetPhysicalDeviceFragmentShadingRatesKHR;
 extern PFN_vkCmdSetFragmentShadingRateKHR vkCmdSetFragmentShadingRateKHR;
 
 // VK_GOOGLE_display_timing

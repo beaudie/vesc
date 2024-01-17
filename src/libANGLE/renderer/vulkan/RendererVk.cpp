@@ -2306,6 +2306,11 @@ void RendererVk::appendDeviceExtensionFeaturesNotPromoted(
         vk::AddToPNextChain(deviceProperties, &mHostImageCopyProperties);
     }
 
+    if (ExtensionFound(VK_EXT_VERTEX_INPUT_DYNAMIC_STATE_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceFeatures, &mVertexInputDynamicStateFeatures);
+    }
+
 #if defined(ANGLE_PLATFORM_ANDROID)
     if (ExtensionFound(VK_ANDROID_EXTERNAL_FORMAT_RESOLVE_EXTENSION_NAME, deviceExtensionNames))
     {
@@ -2563,6 +2568,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mGraphicsPipelineLibraryProperties.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_GRAPHICS_PIPELINE_LIBRARY_PROPERTIES_EXT;
 
+    mVertexInputDynamicStateFeatures = {};
+    mVertexInputDynamicStateFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_INPUT_DYNAMIC_STATE_FEATURES_EXT;
+
     mFragmentShadingRateFeatures = {};
     mFragmentShadingRateFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_FEATURES_KHR;
@@ -2671,6 +2680,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mExtendedDynamicState2Features.pNext                    = nullptr;
     mGraphicsPipelineLibraryFeatures.pNext                  = nullptr;
     mGraphicsPipelineLibraryProperties.pNext                = nullptr;
+    mVertexInputDynamicStateFeatures.pNext                  = nullptr;
     mFragmentShadingRateFeatures.pNext                      = nullptr;
     mFragmentShaderInterlockFeatures.pNext                  = nullptr;
     mImagelessFramebufferFeatures.pNext                     = nullptr;
@@ -2979,6 +2989,12 @@ void RendererVk::enableDeviceExtensionsNotPromoted(
         vk::AddToPNextChain(&mEnabledFeatures, &mHostImageCopyFeatures);
     }
 
+    if (getFeatures().supportsVertexInputDynamicState.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_EXT_VERTEX_INPUT_DYNAMIC_STATE_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mVertexInputDynamicStateFeatures);
+    }
+
 #if defined(ANGLE_PLATFORM_WINDOWS)
     // We only need the VK_EXT_full_screen_exclusive extension if we are opting
     // out of it via VK_FULL_SCREEN_EXCLUSIVE_DISALLOWED_EXT (i.e. working
@@ -3261,6 +3277,10 @@ void RendererVk::initDeviceExtensionEntryPoints()
     if (mFeatures.supportsHostImageCopy.enabled)
     {
         InitHostImageCopyFunctions(mDevice);
+    }
+    if (mFeatures.supportsVertexInputDynamicState.enabled)
+    {
+        InitVertexInputDynamicStateEXTFunctions(mDevice);
     }
     // Extensions promoted to Vulkan 1.2
     {
@@ -4645,6 +4665,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         mFeatures.supportsExtendedDynamicState2.enabled &&
             mExtendedDynamicState2Features.extendedDynamicState2LogicOp == VK_TRUE &&
             !(IsLinux() && isIntel && isMesaLessThan22_2) && !(IsAndroid() && isGalaxyS23));
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsVertexInputDynamicState,
+                            mVertexInputDynamicStateFeatures.vertexInputDynamicState == VK_TRUE);
 
     // Support GL_QCOM_shading_rate extension
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsFragmentShadingRate,
