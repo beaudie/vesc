@@ -73,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "648b2435_c0f149c0",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-17T21:09:40Z",
+      "side": 1,
+      "message": "Talked with @amaiorano@google.com about this, we agreed in the end that `memcpy` was the right call to make sure the compiler is aware of the type aliasing analysis would be correct. I wanna say do it only for `dest`, but since measurements show now difference, might as well keep `memcpy` for both.\n\nGiven that we are not actually accessing the same memory through aliased pointers, I have a feeling moving this to the cpp file so it\u0027s not inlined (and doesn\u0027t have access to the context around the call) would also fix this, at least until we build with LTO.",
+      "parentUuid": "59a7f6ce_2726b93e",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 80
+      },
+      "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1d8ef75_2929c0b8",
         "filename": "src/image_util/loadimage.inc",
         "patchSetId": 1
