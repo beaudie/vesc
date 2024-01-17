@@ -94,6 +94,30 @@
       },
       "revId": "1611c6f1e01318de05dc047e98d61462c4ca60de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a64ed32d_e9793e02",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-17T21:06:39Z",
+      "side": 1,
+      "message": "Based on the discussion we had in the weekly sync I went back to just disabling `angle_enable_wgpu` in official builds and on Android.",
+      "parentUuid": "657b0080_71a1b8ed",
+      "range": {
+        "startLine": 200,
+        "startChar": 2,
+        "endLine": 200,
+        "endChar": 19
+      },
+      "revId": "1611c6f1e01318de05dc047e98d61462c4ca60de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

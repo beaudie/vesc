@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bda582d7_3b2b6550",
+        "filename": "gni/angle.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-17T21:06:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "014a0ca4_4495a677",
+      "revId": "6dec4e4f2de885dfd5843d0b2567e6679fcd521c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "926d3f44_0deac41f",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-01-16T22:48:35Z",
       "side": 1,
       "message": "nit: Copyright years need to be updated in all the files.",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "6dec4e4f2de885dfd5843d0b2567e6679fcd521c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c7fd7b8_831d2bc4",
+        "filename": "src/libANGLE/renderer/wgpu/BufferWgpu.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-17T21:06:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "926d3f44_0deac41f",
       "range": {
         "startLine": 2,
         "startChar": 13,
