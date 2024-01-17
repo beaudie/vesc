@@ -175,6 +175,24 @@
       "parentUuid": "794ad59d_283a754b",
       "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a5a2fc9_0cf34b60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-17T13:40:16Z",
+      "side": 1,
+      "message": "assuming you apply this patch to `external/angle/scripts/generate_android_bp.py` of course\nand it\u0027s `scripts/roll_aosp.sh` I suppose",
+      "parentUuid": "14a177c3_85a5f647",
+      "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
