@@ -372,6 +372,7 @@ FramebufferState::FramebufferState(rx::UniqueSerial serial)
 {
     ASSERT(mDrawBufferStates.size() > 0);
     mEnabledDrawBuffers.set(0);
+    mFoveationState.reset();
 }
 
 FramebufferState::FramebufferState(const Caps &caps, FramebufferID id, rx::UniqueSerial serial)
@@ -396,6 +397,7 @@ FramebufferState::FramebufferState(const Caps &caps, FramebufferID id, rx::Uniqu
     ASSERT(mId != Framebuffer::kDefaultDrawFramebufferHandle);
     ASSERT(mDrawBufferStates.size() > 0);
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
+    mFoveationState.reset();
 }
 
 FramebufferState::~FramebufferState() {}
@@ -787,6 +789,49 @@ bool FramebufferState::isDefault() const
 bool FramebufferState::isBoundAsDrawFramebuffer(const Context *context) const
 {
     return context->getState().getDrawFramebuffer()->id() == mId;
+}
+
+bool FramebufferState::isFoveationEnabled() const
+{
+    return (getFoveatedFeatureBits() & GL_FOVEATION_ENABLE_BIT_QCOM);
+}
+
+void FramebufferState::setFoveatedFeatureBits(const Context *context, const GLuint features)
+{
+    mFoveationState.setFoveatedFeatureBits(context, features);
+}
+
+void FramebufferState::configureFoveation()
+{
+    mFoveationState.configure();
+}
+
+GLuint FramebufferState::getFoveatedFeatureBits() const
+{
+    return mFoveationState.getFoveatedFeatureBits();
+}
+
+void FramebufferState::setFocalPoint(const Context *context,
+                                     uint32_t layer,
+                                     uint32_t focalPoint,
+                                     float focalX,
+                                     float focalY,
+                                     float gainX,
+                                     float gainY,
+                                     float foveaArea)
+{
+    mFoveationState.setFocalPoint(context, layer, focalPoint, focalX, focalY, gainX, gainY,
+                                  foveaArea);
+}
+
+const FocalPointInfo FramebufferState::getFocalPoint(uint32_t layer, uint32_t focalPoint) const
+{
+    return mFoveationState.getFocalPoint(layer, focalPoint);
+}
+
+GLuint FramebufferState::getSupportedFoveationFeatures() const
+{
+    return mFoveationState.getSupportedFoveationFeatures();
 }
 
 const FramebufferID Framebuffer::kDefaultDrawFramebufferHandle = {0};
@@ -2221,6 +2266,14 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
             return;
         }
 
+        // This can be triggered when a subject's foveated rendering state is changed
+        if (message == angle::SubjectMessage::FoveatedRenderingStateChanged)
+        {
+            mDirtyBits.set(DIRTY_BIT_FOVEATION);
+            onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
+            return;
+        }
+
         // This can be triggered by the GL back-end TextureGL class.
         ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged ||
                message == angle::SubjectMessage::TextureIDDeleted);
@@ -2649,6 +2702,84 @@ Box Framebuffer::getDimensions() const
 Extents Framebuffer::getExtents() const
 {
     return mState.getExtents();
+}
+
+bool Framebuffer::isFoveationEnabled() const
+{
+    return (getFoveatedFeatureBits() & GL_FOVEATION_ENABLE_BIT_QCOM);
+}
+
+void Framebuffer::setFoveatedFeatureBits(const Context *context, const GLuint features)
+{
+    mState.setFoveatedFeatureBits(context, features);
+}
+
+void Framebuffer::configureFoveation()
+{
+    mState.configureFoveation();
+}
+
+GLuint Framebuffer::getFoveatedFeatureBits() const
+{
+    return mState.getFoveatedFeatureBits();
+}
+
+void Framebuffer::setFocalPoint(const Context *context,
+                                uint32_t layer,
+                                uint32_t focalPoint,
+                                float focalX,
+                                float focalY,
+                                float gainX,
+                                float gainY,
+                                float foveaArea)
+{
+    gl::FoveationState newState(mState.mFoveationState);
+    newState.setFocalPoint(context, layer, focalPoint, focalX, focalY, gainX, gainY, foveaArea);
+    if (mState.mFoveationState == newState)
+    {
+        // Nothing to do, early out.
+        return;
+    }
+
+    mState.mFoveationState = newState;
+    mState.setFoveatedFeatureBits(context, GL_FOVEATION_ENABLE_BIT_QCOM);
+    mDirtyBits.set(DIRTY_BIT_FOVEATION);
+    onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
+}
+
+const FocalPointInfo Framebuffer::getFocalPoint(uint32_t layer, uint32_t focalPoint) const
+{
+    return mState.getFocalPoint(layer, focalPoint);
+}
+
+bool Framebuffer::canSupportFoveatedRendering() const
+{
+    // Can't foveate a framebuffer without an attachemnt.
+    if (mState.mColorAttachmentsMask.count() == 0)
+    {
+        return false;
+    }
+
+    for (size_t drawBufferId : mState.getEnabledDrawBuffers())
+    {
+        const gl::FramebufferAttachment *attachment = mState.getColorAttachment(drawBufferId);
+        ASSERT(attachment);
+        ASSERT(attachment->type() != GL_NONE);
+
+        // This checks for the default framebuffer as Angle cannot configure the
+        // default framebuffer as a foveated framebuffer.
+        if (attachment->type() != GL_TEXTURE || attachment->isExternalTexture())
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+GLuint Framebuffer::getSupportedFoveationFeatures() const
+{
+    return mState.getSupportedFoveationFeatures();
 }
 
 angle::Result Framebuffer::ensureBufferInitialized(const Context *context,
