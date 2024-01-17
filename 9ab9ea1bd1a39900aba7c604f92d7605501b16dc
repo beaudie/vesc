@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2143b618_eeb2afa0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-17T22:50:24Z",
+      "side": 1,
+      "message": "Does this also go the other way? Is a buffer that does _not_ contain index data allowed to later be bound as index?",
+      "revId": "9ab9ea1bd1a39900aba7c604f92d7605501b16dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
