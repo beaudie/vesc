@@ -9271,6 +9271,77 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// Tests state change for vertex attribute format
+TEST_P(StateChangeTestES3, VertexFormat)
+{
+    constexpr char kVS[] = R"(precision highp float;
+attribute vec4 position;
+attribute vec4 color;
+varying vec4 colorOut;
+
+void main()
+{
+    gl_Position = position;
+    colorOut = color;
+})";
+
+    constexpr char kFS[] = R"(precision highp float;
+varying vec4 colorOut;
+
+void main()
+{
+    gl_FragColor = colorOut;
+})";
+
+    printf(" test start \n");
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    GLint colorLoc = glGetAttribLocation(program, "color");
+    ASSERT_NE(colorLoc, -1);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    const float colorAttribDataFloat[]          = {255.0f, 0.0f, 0.0f, 255.0f};
+    const GLubyte colorAttribDataUnsignedByte[] = {
+        0,
+        255,
+        0,
+        255,
+    };
+
+    // Setup vertex buffer to draw red
+    GLBuffer vertexBufferFloat;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferFloat);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colorAttribDataFloat), colorAttribDataFloat,
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(colorLoc);
+
+    // Draw red using float attribute
+    drawQuad(program, "position", 1.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Setup vertex buffer to draw green
+    GLBuffer vertexBufferUnsignedByte;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferUnsignedByte);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colorAttribDataUnsignedByte), colorAttribDataUnsignedByte,
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(colorLoc, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(colorLoc);
+
+    // Draw green using unsigned byte attribute
+    drawQuad(program, "position", 0.5f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    glUseProgram(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 // Tests state change for depth test, write and function
 TEST_P(StateChangeTestES3, DepthTestWriteAndFunc)
 {
