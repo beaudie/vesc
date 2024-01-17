@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2f58d465_22b47439",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-17T23:54:21Z",
+      "side": 1,
+      "message": "Testing all PLS code paths on Metal alone requires:\n- Intel GPUs for RGBA formats emulation\n- AMD 555/560 GPUs to ensure that coherent PLS is optional\n- AMD 5500+ GPUs for the raster order groups workaround\n- Apple GPUs for the framebuffer fetch implementation",
+      "parentUuid": "02f34809_98e97bc9",
+      "revId": "2044b74eeb9bc81f79700d4fa8e2daef794d566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fdf1dec2_3efbd411",
         "filename": "src/libANGLE/PixelLocalStorage.cpp",
         "patchSetId": 1
