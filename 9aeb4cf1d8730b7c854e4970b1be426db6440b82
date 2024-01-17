@@ -211,6 +211,24 @@
       "parentUuid": "4a5a2fc9_0cf34b60",
       "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f163f2fa_ce883322",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3250723
+      },
+      "writtenOn": "2024-01-17T17:50:20Z",
+      "side": 1,
+      "message": "Would a sufficient repro be presubmits in aosp? I do have a presubmit verified CL with a manually modified angle Android.bp file\nhttps://android-review.git.corp.google.com/c/platform/external/angle/+/2907477",
+      "parentUuid": "48aa82b8_f8dbc7e9",
+      "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
