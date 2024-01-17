@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02f34809_98e97bc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-17T23:36:44Z",
+      "side": 1,
+      "message": "lgtm+2\n\nGeoff, I tested this locally with Alexey and Chris and it makes all the PLS tests pass on the newer AMD GPUs on macOS which actually support raster order groups (the AMD Radeon Pro 5500M in this case). Taking the liberty of +2\u0027ing this directly.\n\nYuly, heads up that we don\u0027t have any testing capacity of this GPU family yet - will come online along with the 16\" MBPs. It would be great if we could leave some of the 15\" ones in Swarming as an FYI-only bot afterward, because there are two code paths in this extension.",
+      "revId": "2044b74eeb9bc81f79700d4fa8e2daef794d566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdf1dec2_3efbd411",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-17T23:36:44Z",
+      "side": 1,
+      "message": "Wow, I didn\u0027t know about these context-private calls until right now.",
+      "revId": "2044b74eeb9bc81f79700d4fa8e2daef794d566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
