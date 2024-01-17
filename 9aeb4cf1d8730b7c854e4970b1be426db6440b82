@@ -193,6 +193,24 @@
       "parentUuid": "14a177c3_85a5f647",
       "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48aa82b8_f8dbc7e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-17T13:43:29Z",
+      "side": 1,
+      "message": "Oh, and if that doesn\u0027t work you can regenerate Android.bp in an ANGLE checkout and copy it over to Android. I think I\u0027ve usually done it like that. Might need to checkout a particular revision of ANGLE to have a sane diff.",
+      "parentUuid": "4a5a2fc9_0cf34b60",
+      "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
