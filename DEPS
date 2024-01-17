@@ -150,7 +150,7 @@ deps = {
   },
 
   'buildtools': {
-    'url': Var('chromium_git') + '/chromium/src/buildtools.git@4d143ade136d847c754b7c58b143d8f711a886ac',
+    'url': Var('chromium_git') + '/chromium/src/buildtools.git@8e2ad6cfb0068e23afc1cdb129242f1bcf9e33d0',
     'condition': 'not build_with_chromium',
   },
 
