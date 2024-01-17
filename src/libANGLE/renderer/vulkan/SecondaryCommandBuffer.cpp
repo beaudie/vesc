@@ -154,6 +154,8 @@ const char *GetCommandString(CommandID id)
             return "SetStencilTestEnable";
         case CommandID::SetStencilWriteMask:
             return "SetStencilWriteMask";
+        case CommandID::SetVertexInput:
+            return "SetVertexInput";
         case CommandID::SetViewport:
             return "SetViewport";
         case CommandID::WaitEvents:
@@ -180,7 +182,7 @@ ANGLE_INLINE const T *GetFirstArrayParameter(StructType *param)
 template <typename NextT, typename PrevT>
 ANGLE_INLINE const NextT *GetNextArrayParameter(const PrevT *array, size_t arrayLen)
 {
-    const size_t arrayAllocateBytes = roundUpPow2<size_t>(sizeof(*array) * arrayLen, 8u);
+    const size_t arrayAllocateBytes = roundUpPow2<size_t>(sizeof(PrevT) * arrayLen, 8u);
     return Offset<NextT>(array, arrayAllocateBytes);
 }
 }  // namespace
@@ -745,6 +747,22 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                                              params->writeFrontMask);
                     vkCmdSetStencilWriteMask(cmdBuffer, VK_STENCIL_FACE_BACK_BIT,
                                              params->writeBackMask);
+                    break;
+                }
+                case CommandID::SetVertexInput:
+                {
+                    const SetVertexInputParams *params =
+                        getParamPtr<SetVertexInputParams>(currentCommand);
+                    const VkVertexInputBindingDescription2EXT *vertexBindingDescriptions =
+                        GetFirstArrayParameter<VkVertexInputBindingDescription2EXT>(params);
+                    const VkVertexInputAttributeDescription2EXT *vertexAttributeDescriptions =
+                        GetNextArrayParameter<VkVertexInputAttributeDescription2EXT,
+                                              VkVertexInputBindingDescription2EXT>(
+                            vertexBindingDescriptions, params->vertexBindingDescriptionCount);
+
+                    vkCmdSetVertexInputEXT(
+                        cmdBuffer, params->vertexBindingDescriptionCount, vertexBindingDescriptions,
+                        params->vertexAttributeDescriptionCount, vertexAttributeDescriptions);
                     break;
                 }
                 case CommandID::SetViewport:
