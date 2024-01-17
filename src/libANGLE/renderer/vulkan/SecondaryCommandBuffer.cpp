@@ -154,6 +154,8 @@ const char *GetCommandString(CommandID id)
             return "SetStencilTestEnable";
         case CommandID::SetStencilWriteMask:
             return "SetStencilWriteMask";
+        case CommandID::SetVertexInput:
+            return "SetVertexInput";
         case CommandID::SetViewport:
             return "SetViewport";
         case CommandID::WaitEvents:
@@ -739,6 +741,23 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                                              params->writeFrontMask);
                     vkCmdSetStencilWriteMask(cmdBuffer, VK_STENCIL_FACE_BACK_BIT,
                                              params->writeBackMask);
+                    break;
+                }
+                case CommandID::SetVertexInput:
+                {
+                    const SetVertexInputParams *params =
+                        getParamPtr<SetVertexInputParams>(currentCommand);
+                    const VkVertexInputBindingDescription2EXT *vertexBindingDescriptions =
+                        Offset<VkVertexInputBindingDescription2EXT>(params,
+                                                                    sizeof(SetVertexInputParams));
+                    const VkVertexInputAttributeDescription2EXT *vertexAttributeDescriptions =
+                        Offset<VkVertexInputAttributeDescription2EXT>(
+                            vertexBindingDescriptions, sizeof(VkVertexInputBindingDescription2EXT) *
+                                                           params->vertexBindingDescriptionCount);
+
+                    vkCmdSetVertexInputEXT(
+                        cmdBuffer, params->vertexBindingDescriptionCount, vertexBindingDescriptions,
+                        params->vertexAttributeDescriptionCount, vertexAttributeDescriptions);
                     break;
                 }
                 case CommandID::SetViewport:
