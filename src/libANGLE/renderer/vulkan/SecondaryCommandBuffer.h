@@ -115,6 +115,7 @@ enum class CommandID : uint16_t
     SetStencilReference,
     SetStencilTestEnable,
     SetStencilWriteMask,
+    SetVertexInput,
     SetViewport,
     WaitEvents,
     WriteTimestamp,
@@ -714,6 +715,15 @@ struct SetStencilWriteMaskParams
 };
 VERIFY_8_BYTE_ALIGNMENT(SetStencilWriteMaskParams)
 
+struct SetVertexInputParams
+{
+    CommandHeader header;
+
+    uint16_t vertexBindingDescriptionCount;
+    uint16_t vertexAttributeDescriptionCount;
+};
+VERIFY_8_BYTE_ALIGNMENT(SetVertexInputParams)
+
 struct SetViewportParams
 {
     CommandHeader header;
@@ -996,6 +1006,10 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void setStencilReference(uint32_t frontReference, uint32_t backReference);
     void setStencilTestEnable(VkBool32 stencilTestEnable);
     void setStencilWriteMask(uint32_t writeFrontMask, uint32_t writeBackMask);
+    void setVertexInput(uint32_t vertexBindingDescriptionCount,
+                        const VkVertexInputBindingDescription2EXT *VertexBindingDescriptions,
+                        uint32_t vertexAttributeDescriptionCount,
+                        const VkVertexInputAttributeDescription2EXT *VertexAttributeDescriptions);
     void setViewport(uint32_t firstViewport, uint32_t viewportCount, const VkViewport *viewports);
 
     void waitEvents(uint32_t eventCount,
@@ -1994,6 +2008,43 @@ ANGLE_INLINE void SecondaryCommandBuffer::setStencilWriteMask(uint32_t writeFron
         initCommand<SetStencilWriteMaskParams>(CommandID::SetStencilWriteMask);
     paramStruct->writeFrontMask = static_cast<uint16_t>(writeFrontMask);
     paramStruct->writeBackMask  = static_cast<uint16_t>(writeBackMask);
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setVertexInput(
+    uint32_t vertexBindingDescriptionCount,
+    const VkVertexInputBindingDescription2EXT *vertexBindingDescriptions,
+    uint32_t vertexAttributeDescriptionCount,
+    const VkVertexInputAttributeDescription2EXT *vertexAttributeDescriptions)
+{
+    uint8_t *writePtr;
+    const ArrayParamSize vertexBindingDescriptionSize =
+        calculateArrayParameterSize<VkVertexInputBindingDescription2EXT>(
+            vertexBindingDescriptionCount);
+    const ArrayParamSize vertexAttributeDescriptionSize =
+        calculateArrayParameterSize<VkVertexInputAttributeDescription2EXT>(
+            vertexAttributeDescriptionCount);
+
+    SetVertexInputParams *paramStruct = initCommand<SetVertexInputParams>(
+        CommandID::SetVertexInput,
+        vertexBindingDescriptionSize.allocateBytes + vertexAttributeDescriptionSize.allocateBytes,
+        &writePtr);
+
+    // Copy params
+    // SetVertexInputParams requires the binding and attribute description counts to be < 2^16
+    ASSERT(vertexBindingDescriptionCount < std::numeric_limits<uint16_t>::max());
+    ASSERT(vertexAttributeDescriptionCount < std::numeric_limits<uint16_t>::max());
+    paramStruct->vertexBindingDescriptionCount   = vertexBindingDescriptionCount;
+    paramStruct->vertexAttributeDescriptionCount = vertexAttributeDescriptionCount;
+
+    if (vertexBindingDescriptionSize.copyBytes)
+    {
+        writePtr =
+            storeArrayParameter(writePtr, vertexBindingDescriptions, vertexBindingDescriptionSize);
+    }
+    if (vertexAttributeDescriptionSize.copyBytes)
+    {
+        storeArrayParameter(writePtr, vertexAttributeDescriptions, vertexAttributeDescriptionSize);
+    }
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::setViewport(uint32_t firstViewport,
