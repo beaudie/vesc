@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20e6456a_b474534f",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1718,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-01-17T08:15:59Z",
+      "side": 1,
+      "message": "Ideally, `SeparateStructFromFunctionDeclarations` would run before `PruneUnusedFunctions` but this lead to complications with the CallDAG used to prune functions, hence this work around.",
+      "revId": "7613bf1274098d9cb10e95a143df3164df424ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4719c7c6_4042dbf8",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-01-17T08:15:59Z",
+      "side": 1,
+      "message": "This check is needed for validation of the just parsed:\n\n```\nstruct Foo { ... } foo();\n\nFoo foo() {\n    ...\n}\n```\n\nsince the struct type is shared by both the function prototype and definition.",
+      "revId": "7613bf1274098d9cb10e95a143df3164df424ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

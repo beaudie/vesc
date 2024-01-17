@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e3db0ce8_325c5f46",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-01-17T08:15:59Z",
+      "side": 1,
+      "message": "This extra scope doesn\u0027t appear to be needed.\n\nThe body of the function definition introduces a new scope and structs definitions in the function prototype need to be added to the scope containing the function definition. Perhaps is scope is needed for structs definition in arguments?",
+      "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "493773f8_0675dfed",
         "filename": "src/compiler/translator/ValidateAST.cpp",
         "patchSetId": 2
@@ -68,6 +85,24 @@
       "side": 1,
       "message": "I wish I had a good answer for you, and I really wish our AST was a lot better than it is. I dream of doing an overhaul, but until then, perhaps you could just work around this by keeping a map of `TFunction * -\u003e bool` called `isAlreadyProcessed` so second time around you don\u0027t reprocess the prototype.",
       "parentUuid": "e957b7c2_7d415a18",
+      "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5ab4447_143eebfc",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-01-17T08:15:59Z",
+      "side": 1,
+      "message": "Thanks. I use this pattern in a couple of places.",
+      "parentUuid": "36e21622_a5afe169",
       "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
