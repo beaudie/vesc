@@ -789,6 +789,7 @@ Texture::Texture(rx::GLImplFactory *factory, TextureID id, TextureType type)
     {
         mTexture->setContentsObservers(&mBufferContentsObservers);
     }
+    mState.mFoveationState.reset();
 
     // Initially assume the implementation is dirty.
     mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
@@ -1202,6 +1203,63 @@ GLuint Texture::getMipmapMaxLevel() const
 bool Texture::isMipmapComplete() const
 {
     return mState.computeMipmapCompleteness();
+}
+
+void Texture::setFoveatedFeatureBits(const Context *context, const GLuint features)
+{
+    mState.mFoveationState.setFoveatedFeatureBits(context, features);
+}
+
+GLuint Texture::getFoveatedFeatureBits() const
+{
+    return mState.mFoveationState.getFoveatedFeatureBits();
+}
+
+bool Texture::isFoveationEnabled() const
+{
+    return (getFoveatedFeatureBits() & GL_FOVEATION_ENABLE_BIT_QCOM);
+}
+
+GLuint Texture::getSupportedFoveationFeatures() const
+{
+    return mState.getFoveationState().getSupportedFoveationFeatures();
+}
+
+GLfloat Texture::getMinPixelDensity() const
+{
+    return mState.mFoveationState.getMinPixelDensity();
+}
+
+void Texture::setMinPixelDensity(const Context *context, const GLfloat density)
+{
+    mState.mFoveationState.setMinPixelDensity(context, density);
+}
+
+void Texture::setFocalPoint(const Context *context,
+                            uint32_t layer,
+                            uint32_t focalPoint,
+                            float focalX,
+                            float focalY,
+                            float gainX,
+                            float gainY,
+                            float foveaArea)
+{
+    gl::FoveationState newState(mState.mFoveationState);
+    newState.setFocalPoint(context, layer, focalPoint, focalX, focalY, gainX, gainY, foveaArea);
+    if (mState.mFoveationState == newState)
+    {
+        // Nothing to do, early out.
+        return;
+    }
+
+    mState.mFoveationState = newState;
+    mState.mFoveationState.setFoveatedFeatureBits(context, GL_FOVEATION_ENABLE_BIT_QCOM);
+    onStateChange(angle::SubjectMessage::FoveatedRenderingStateChanged);
+}
+
+const FocalPointInfo Texture::getFocalPoint(uint32_t layer, uint32_t focalPoint) const
+{
+    return mState.mFoveationState.getFocalPoint(layer, focalPoint);
 }
 
 egl::Surface *Texture::getBoundSurface() const
