@@ -157,6 +157,24 @@
       "parentUuid": "d61bccc4_db5f1b01",
       "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14a177c3_85a5f647",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-17T13:37:25Z",
+      "side": 1,
+      "message": "It\u0027s not the only place where we use zlib internals, `git grep zlib_internal` to see more.\n\nCould you check that this patch would actually build? From memory:\n- in an Android (not ANGLE) checkout\n- cd external/angle\n- see top of roll_aosp.sh for the flag to only regenerate Android.bp and run that\n- git diff should now show a diff in Android.bp\n- build ANGLE",
+      "parentUuid": "794ad59d_283a754b",
+      "revId": "9aeb4cf1d8730b7c854e4970b1be426db6440b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
