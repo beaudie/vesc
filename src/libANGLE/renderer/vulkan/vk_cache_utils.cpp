@@ -3121,6 +3121,10 @@ void GraphicsPipelineDesc::initializePipelineVertexInputState(
     {
         dynamicStateListOut->push_back(VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE);
     }
+    if (context->getFeatures().supportsVertexInputDynamicState.enabled)
+    {
+        dynamicStateListOut->push_back(VK_DYNAMIC_STATE_VERTEX_INPUT_EXT);
+    }
 }
 
 void GraphicsPipelineDesc::initializePipelineShadersState(

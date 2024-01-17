@@ -159,6 +159,12 @@ constexpr gl::ShaderMap<vk::ImageLayout> kShaderWriteImageLayouts = {
 constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 constexpr size_t kDynamicVertexDataSize         = 16 * 1024;
 
+constexpr angle::PackedEnumMap<gl::ComponentType, VkFormat> kMismatchedComponentTypeMap = {{
+    {gl::ComponentType::Float, VK_FORMAT_R32G32B32A32_SFLOAT},
+    {gl::ComponentType::Int, VK_FORMAT_R32G32B32A32_SINT},
+    {gl::ComponentType::UnsignedInt, VK_FORMAT_R32G32B32A32_UINT},
+}};
+
 bool CanMultiDrawIndirectUseCmd(ContextVk *contextVk,
                                 VertexArrayVk *vertexArray,
                                 gl::PrimitiveMode mode,
@@ -2564,13 +2570,24 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *d
     const gl::AttribArray<VkDeviceSize> &bufferOffsets =
         vertexArrayVk->getCurrentArrayBufferOffsets();
 
-    if (mRenderer->useVertexInputBindingStrideDynamicState())
+    if (mRenderer->useVertexInputBindingStrideDynamicState() ||
+        getFeatures().supportsVertexInputDynamicState.enabled)
     {
         const gl::AttribArray<GLuint> &bufferStrides =
             vertexArrayVk->getCurrentArrayBufferStrides();
         const gl::AttribArray<angle::FormatID> &bufferFormats =
             vertexArrayVk->getCurrentArrayBufferFormats();
         gl::AttribArray<VkDeviceSize> strides = {};
+        const gl::AttribArray<GLuint> &bufferDivisors =
+            vertexArrayVk->getCurrentArrayBufferDivisors();
+        const gl::AttribArray<GLuint> &bufferRelativeOffsets =
+            vertexArrayVk->getCurrentArrayBufferRelativeOffsets();
+        const gl::AttributesMask &bufferCompressed =
+            vertexArrayVk->getCurrentArrayBufferCompressed();
+
+        gl::AttribArray<VkVertexInputBindingDescription2EXT> bindingDescs;
+        gl::AttribArray<VkVertexInputAttributeDescription2EXT> attributeDescs;
+        uint32_t vertexAttribCount = 0;
 
         // Set stride to 0 for mismatching formats between the program's declared attribute and that
         // which is specified in glVertexAttribPointer.  See comment in vk_cache_utils.cpp
@@ -2593,12 +2610,83 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *d
                 attribType != programAttribType && (programAttribType == gl::ComponentType::Float ||
                                                     attribType == gl::ComponentType::Float);
             strides[attribIndex] = mismatchingType ? 0 : bufferStrides[attribIndex];
+
+            if (getFeatures().supportsVertexInputDynamicState.enabled)
+            {
+                VkVertexInputBindingDescription2EXT &bindingDesc = bindingDescs[vertexAttribCount];
+                VkVertexInputAttributeDescription2EXT &attribDesc =
+                    attributeDescs[vertexAttribCount];
+                bindingDesc.sType   = VK_STRUCTURE_TYPE_VERTEX_INPUT_BINDING_DESCRIPTION_2_EXT;
+                bindingDesc.binding = static_cast<uint32_t>(attribIndex);
+                bindingDesc.stride  = static_cast<uint32_t>(strides[attribIndex]);
+                bindingDesc.divisor =
+                    bufferDivisors[attribIndex] > mRenderer->getMaxVertexAttribDivisor()
+                        ? 1
+                        : bufferDivisors[attribIndex];
+                if (bindingDesc.divisor != 0)
+                {
+                    bindingDesc.inputRate =
+                        static_cast<VkVertexInputRate>(VK_VERTEX_INPUT_RATE_INSTANCE);
+                }
+                else
+                {
+                    bindingDesc.inputRate =
+                        static_cast<VkVertexInputRate>(VK_VERTEX_INPUT_RATE_VERTEX);
+                    // Divisor value is ignored by the implementation when using
+                    // VK_VERTEX_INPUT_RATE_VERTEX, but it is set to 1 to avoid a validation error
+                    // due to a validation layer issue.
+                    bindingDesc.divisor = 1;
+                }
+
+                VkFormat vkFormat = mRenderer->getFormat(bufferFormats[attribIndex])
+                                        .getActualBufferVkFormat(bufferCompressed[attribIndex]);
+
+                if (bufferStrides[attribIndex] > 0 && mismatchingType)
+                {
+                    if (attribType == gl::ComponentType::Float ||
+                        programAttribType == gl::ComponentType::Float)
+                    {
+                        // When dealing with float to int or unsigned int or vice versa, just
+                        // override the format with a compatible one.
+                        vkFormat = kMismatchedComponentTypeMap[programAttribType];
+                    }
+                    else
+                    {
+                        // When converting from an unsigned to a signed format or vice versa,
+                        // attempt to match the bit width.
+                        angle::FormatID convertedFormatID =
+                            gl::ConvertFormatSignedness(intendedFormat);
+                        vkFormat = mRenderer->getFormat(convertedFormatID)
+                                       .getActualBufferVkFormat(bufferCompressed[attribIndex]);
+                    }
+
+                    ASSERT(getNativeExtensions().relaxedVertexAttributeTypeANGLE);
+                }
+
+                attribDesc.sType    = VK_STRUCTURE_TYPE_VERTEX_INPUT_ATTRIBUTE_DESCRIPTION_2_EXT;
+                attribDesc.binding  = static_cast<uint32_t>(attribIndex);
+                attribDesc.format   = vkFormat;
+                attribDesc.location = static_cast<uint32_t>(attribIndex);
+                attribDesc.offset   = bufferRelativeOffsets[attribIndex];
+
+                vertexAttribCount++;
+            }
         }
 
-        // TODO: Use the sizes parameters here to fix the robustness issue worked around in
-        // crbug.com/1310038
-        mRenderPassCommandBuffer->bindVertexBuffers2(0, maxAttrib, bufferHandles.data(),
-                                                     bufferOffsets.data(), nullptr, strides.data());
+        if (!getFeatures().supportsVertexInputDynamicState.enabled)
+        {
+            // TODO: Use the sizes parameters here to fix the robustness issue worked around in
+            // crbug.com/1310038
+            mRenderPassCommandBuffer->bindVertexBuffers2(
+                0, maxAttrib, bufferHandles.data(), bufferOffsets.data(), nullptr, strides.data());
+        }
+        else
+        {
+            mRenderPassCommandBuffer->setVertexInput(vertexAttribCount, bindingDescs.data(),
+                                                     vertexAttribCount, attributeDescs.data());
+            mRenderPassCommandBuffer->bindVertexBuffers(0, maxAttrib, bufferHandles.data(),
+                                                        bufferOffsets.data());
+        }
     }
     else
     {
