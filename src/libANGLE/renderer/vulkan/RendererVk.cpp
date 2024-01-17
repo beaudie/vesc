@@ -4818,7 +4818,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // Required to pass android.media.cts.DecodeAccuracyTest with MESA Virtio-GPU Venus driver in
     // virtualized environment. https://issuetracker.google.com/246378938
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferLinearFilterForYUV, isVenus);
+    // Also required for Pixel devices to pass the same tests: https://issuetracker.google.com/315387961
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferLinearFilterForYUV, isVenus || isPixel);
 
     // Intel and AMD mesa drivers need depthBiasConstantFactor to be doubled to align with GL.
     ANGLE_FEATURE_CONDITION(&mFeatures, doubleDepthBiasConstantFactor,
