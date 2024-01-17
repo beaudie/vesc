@@ -46,6 +46,52 @@
       },
       "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59a7f6ce_2726b93e",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-17T15:06:27Z",
+      "side": 1,
+      "message": "You can avoid both `memcpy`s with:\n\n```suggestion\n                    dest32[0] \u003d (source32[0] \u0026 0x00FFFFFF) | fourthValue32;\n                    dest32[1] \u003d (source32[0] \u003e\u003e 24) |\n                                       ((source32[1] \u0026 0x0000FFFF) \u003c\u003c 8) | fourthValue32;\n                    dest32[2] \u003d (source32[1] \u003e\u003e 16) |\n                                       ((source32[2] \u0026 0x000000FF) \u003c\u003c 16) | fourthValue32;\n                    dest32[3] \u003d (source32[2] \u003e\u003e 8) | fourthValue32;\n```\n\nThe previous code used temp variables which would have just stayed in registers. There\u0027s no reason IMO to prefer doing the math on stack memory instead of the final memory.\n\nI don\u0027t have access to the linked bugs, but this:\n\n\u003e Some platforms encounter issues in this function, possibly when the\ndest pointer is accessed directly when it is cast to uint32_t.\n\nshould not have been a problem given the `if` on line 135.",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 80
+      },
+      "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1d8ef75_2929c0b8",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-17T15:06:27Z",
+      "side": 1,
+      "message": "You can improve the writes by keeping dest access 32-bit:\n\n```suggestion\n            source8 \u003d reinterpret_cast\u003cconst uint8_t *\u003e(source32);\n            for (; pixelIndex \u003c width; pixelIndex++)\n            {\n                *dest32++ \u003d source8[0] | source8[1] \u003c\u003c 8 | source8[2] \u003c\u003c 16 | fourthValue32;\n\n                source8 +\u003d 3;\n            }\n```",
+      "range": {
+        "startLine": 210,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 13
+      },
+      "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
