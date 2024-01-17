@@ -4816,9 +4816,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT flag.
     ANGLE_FEATURE_CONDITION(&mFeatures, useResetCommandBufferBitForSecondaryPools, isARM);
 
-    // Required to pass android.media.cts.DecodeAccuracyTest with MESA Virtio-GPU Venus driver in
-    // virtualized environment. https://issuetracker.google.com/246378938
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferLinearFilterForYUV, isVenus);
+    // Required to pass android.media.cts.DecodeAccuracyTest
+    // https://issuetracker.google.com/246378938
+    // https://issuetracker.google.com/315387961
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferLinearFilterForYUV, isVenus || IsAndroid());
 
     // Intel and AMD mesa drivers need depthBiasConstantFactor to be doubled to align with GL.
     ANGLE_FEATURE_CONDITION(&mFeatures, doubleDepthBiasConstantFactor,
