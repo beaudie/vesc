@@ -1314,4 +1314,95 @@ namespace gl
 class State;
 }  // namespace gl
 
+namespace gl
+{
+// Focal Point information for foveated rendering
+struct FocalPoint
+{
+    float focalX;
+    float focalY;
+    float gainX;
+    float gainY;
+    float foveaArea;
+
+    constexpr FocalPoint() : focalX(0), focalY(0), gainX(0), gainY(0), foveaArea(0) {}
+
+    FocalPoint(float fX, float fY, float gX, float gY, float fArea)
+        : focalX(fX), focalY(fY), gainX(gX), gainY(gY), foveaArea(fArea)
+    {}
+
+    FocalPoint(const FocalPoint &other) { *this = other; }
+
+    FocalPoint &operator=(const FocalPoint &other)
+    {
+        focalX    = other.focalX;
+        focalY    = other.focalY;
+        gainX     = other.gainX;
+        gainY     = other.gainY;
+        foveaArea = other.foveaArea;
+
+        return *this;
+    }
+
+    bool operator==(const FocalPoint &other) const
+    {
+        return memcmp(this, &other, sizeof(FocalPoint)) == 0;
+    }
+    bool operator!=(const FocalPoint &other) const { return !(*this == other); }
+};
+
+constexpr FocalPoint kInvalidFocalPoint = FocalPoint();
+
+class FoveationState
+{
+  public:
+    FoveationState()
+    {
+        mConfigured          = false;
+        mFoveatedFeatureBits = 0;
+        mMinPixelDensity     = 0.0f;
+        // Only support one layer and 2 points for now
+        mFocalPoints[0][0] = kInvalidFocalPoint;
+        mFocalPoints[0][1] = kInvalidFocalPoint;
+    }
+    void configure() { mConfigured = true; }
+    bool isConfigured() const { return mConfigured; }
+    bool isFoviated() const
+    {
+        // Only support one layer and 2 points for now
+        // Consider foveated if either one of the focal points is valid
+        return mFocalPoints[0][0] != kInvalidFocalPoint || mFocalPoints[0][1] != kInvalidFocalPoint;
+    }
+    void setFoveatedFeatureBits(const GLuint features) { mFoveatedFeatureBits = features; }
+    GLuint getFoveatedFeatureBits() const { return mFoveatedFeatureBits; }
+    void setMinPixelDensity(const GLfloat density) { mMinPixelDensity = density; }
+    GLfloat getMinPixelDensity() const { return mMinPixelDensity; }
+    GLuint getMaxNumFocalPoints() const { return gl::IMPLEMENTATION_MAX_FOCAL_POINTS; }
+    void setFocalPoint(uint32_t layer, uint32_t focalPointIndex, const FocalPoint &focalPoint)
+    {
+        // Only support one layer and 2 points for now
+        ASSERT(layer < gl::IMPLEMENTATION_MAX_NUM_LAYERS &&
+               focalPointIndex < gl::IMPLEMENTATION_MAX_FOCAL_POINTS);
+
+        mFocalPoints[layer][focalPointIndex] = focalPoint;
+    }
+    const FocalPoint &getFocalPoint(uint32_t layer, uint32_t focalPointIndex) const
+    {
+        // Only support one layer and 2 points for now
+        ASSERT(layer < gl::IMPLEMENTATION_MAX_NUM_LAYERS &&
+               focalPointIndex < gl::IMPLEMENTATION_MAX_FOCAL_POINTS);
+
+        return mFocalPoints[layer][focalPointIndex];
+    }
+    GLuint getSupportedFoveationFeatures() const { return GL_FOVEATION_ENABLE_BIT_QCOM; }
+
+  private:
+    bool mConfigured;
+    GLuint mFoveatedFeatureBits;
+    GLfloat mMinPixelDensity;
+    FocalPoint mFocalPoints[gl::IMPLEMENTATION_MAX_NUM_LAYERS][gl::IMPLEMENTATION_MAX_FOCAL_POINTS];
+};
+
+}  // namespace gl
+
 #endif  // LIBANGLE_ANGLETYPES_H_

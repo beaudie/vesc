@@ -789,6 +789,43 @@ bool FramebufferState::isBoundAsDrawFramebuffer(const Context *context) const
     return context->getState().getDrawFramebuffer()->id() == mId;
 }
 
+bool FramebufferState::isFoveationEnabled() const
+{
+    return (getFoveatedFeatureBits() & GL_FOVEATION_ENABLE_BIT_QCOM);
+}
+
+void FramebufferState::setFoveatedFeatureBits(const GLuint features)
+{
+    mFoveationState.setFoveatedFeatureBits(features);
+}
+
+void FramebufferState::configureFoveation()
+{
+    mFoveationState.configure();
+}
+
+GLuint FramebufferState::getFoveatedFeatureBits() const
+{
+    return mFoveationState.getFoveatedFeatureBits();
+}
+
+void FramebufferState::setFocalPoint(uint32_t layer,
+                                     uint32_t focalPointIndex,
+                                     const FocalPoint &focalPoint)
+{
+    mFoveationState.setFocalPoint(layer, focalPointIndex, focalPoint);
+}
+
+const FocalPoint &FramebufferState::getFocalPoint(uint32_t layer, uint32_t focalPoint) const
+{
+    return mFoveationState.getFocalPoint(layer, focalPoint);
+}
+
+GLuint FramebufferState::getSupportedFoveationFeatures() const
+{
+    return mFoveationState.getSupportedFoveationFeatures();
+}
+
 const FramebufferID Framebuffer::kDefaultDrawFramebufferHandle = {0};
 
 Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory)
@@ -2221,6 +2258,14 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
             return;
         }
 
+        // This can be triggered when a subject's foveated rendering state is changed
+        if (message == angle::SubjectMessage::FoveatedRenderingStateChanged)
+        {
+            mDirtyBits.set(DIRTY_BIT_FOVEATION);
+            onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
+            return;
+        }
+
         // This can be triggered by the GL back-end TextureGL class.
         ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged ||
                message == angle::SubjectMessage::TextureIDDeleted);
@@ -2649,6 +2694,82 @@ Box Framebuffer::getDimensions() const
 Extents Framebuffer::getExtents() const
 {
     return mState.getExtents();
+}
+
+bool Framebuffer::isFoveationEnabled() const
+{
+    return (getFoveatedFeatureBits() & GL_FOVEATION_ENABLE_BIT_QCOM);
+}
+
+void Framebuffer::setFoveatedFeatureBits(const GLuint features)
+{
+    mState.setFoveatedFeatureBits(features);
+}
+
+void Framebuffer::configureFoveation()
+{
+    mState.configureFoveation();
+}
+
+GLuint Framebuffer::getFoveatedFeatureBits() const
+{
+    return mState.getFoveatedFeatureBits();
+}
+
+void Framebuffer::setFocalPoint(uint32_t layer,
+                                uint32_t focalPointIndex,
+                                float focalX,
+                                float focalY,
+                                float gainX,
+                                float gainY,
+                                float foveaArea)
+{
+    gl::FocalPoint newFocalPoint(focalX, focalY, gainX, gainY, foveaArea);
+    if (mState.getFocalPoint(layer, focalPointIndex) == newFocalPoint)
+    {
+        // Nothing to do, early out.
+        return;
+    }
+
+    mState.setFocalPoint(layer, focalPointIndex, newFocalPoint);
+    mState.setFoveatedFeatureBits(GL_FOVEATION_ENABLE_BIT_QCOM);
+    mDirtyBits.set(DIRTY_BIT_FOVEATION);
+    onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
+}
+
+const FocalPoint &Framebuffer::getFocalPoint(uint32_t layer, uint32_t focalPoint) const
+{
+    return mState.getFocalPoint(layer, focalPoint);
+}
+
+bool Framebuffer::canSupportFoveatedRendering() const
+{
+    // Can't foveate a framebuffer without an attachemnt.
+    if (mState.mColorAttachmentsMask.count() == 0)
+    {
+        return false;
+    }
+
+    for (size_t drawBufferId : mState.getEnabledDrawBuffers())
+    {
+        const gl::FramebufferAttachment *attachment = mState.getColorAttachment(drawBufferId);
+        ASSERT(attachment);
+        ASSERT(attachment->type() != GL_NONE);
+
+        // This checks for the default framebuffer as Angle cannot configure the
+        // default framebuffer as a foveated framebuffer.
+        if (attachment->type() != GL_TEXTURE || attachment->isExternalTexture())
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+GLuint Framebuffer::getSupportedFoveationFeatures() const
+{
+    return mState.getSupportedFoveationFeatures();
 }
 
 angle::Result Framebuffer::ensureBufferInitialized(const Context *context,
