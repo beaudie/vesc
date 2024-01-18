@@ -1246,10 +1246,7 @@ void ContextVk::onDestroy(const gl::Context *context)
     mDefaultUniformStorage.release(mRenderer);
     mEmptyBuffer.release(mRenderer);
 
-    for (vk::DynamicBuffer &defaultBuffer : mStreamedVertexBuffers)
-    {
-        defaultBuffer.destroy(mRenderer);
-    }
+    mStreamedVertexBuffer.destroy(mRenderer);
 
     for (vk::DynamicQueryPool &queryPool : mQueryPools)
     {
@@ -1369,11 +1366,8 @@ angle::Result ContextVk::initialize()
                                         pipelineRobustness(), pipelineProtectedAccess());
 
     // Initialize current value/default attribute buffers.
-    for (vk::DynamicBuffer &buffer : mStreamedVertexBuffers)
-    {
-        buffer.init(mRenderer, kVertexBufferUsage, vk::kVertexBufferAlignment,
-                    kDynamicVertexDataSize, true);
-    }
+    mStreamedVertexBuffer.init(mRenderer, kVertexBufferUsage, vk::kVertexBufferAlignment,
+                               kDynamicVertexDataSize, true);
 
 #if ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
@@ -7520,14 +7514,11 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     mDefaultUniformStorage.updateQueueSerialAndReleaseInFlightBuffers(this,
                                                                       mLastFlushedQueueSerial);
 
-    if (mHasInFlightStreamedVertexBuffers.any())
+    if (mHasInFlightStreamedVertexBuffers)
     {
-        for (size_t attribIndex : mHasInFlightStreamedVertexBuffers)
-        {
-            mStreamedVertexBuffers[attribIndex].updateQueueSerialAndReleaseInFlightBuffers(
-                this, mLastFlushedQueueSerial);
-        }
-        mHasInFlightStreamedVertexBuffers.reset();
+        mStreamedVertexBuffer.updateQueueSerialAndReleaseInFlightBuffers(this,
+                                                                         mLastFlushedQueueSerial);
+        mHasInFlightStreamedVertexBuffers = false;
     }
 
     ASSERT(mWaitSemaphores.empty());

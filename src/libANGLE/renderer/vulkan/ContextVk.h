@@ -733,18 +733,24 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex, usageType);
     }
 
-    angle::Result allocateStreamedVertexBuffer(size_t attribIndex,
-                                               size_t bytesToAllocate,
-                                               vk::BufferHelper **vertexBufferOut)
+    std::unique_ptr<vk::BufferHelper> allocateStreamedVertexBuffer(size_t bytesToAllocate)
     {
         bool newBufferOut;
-        ANGLE_TRY(mStreamedVertexBuffers[attribIndex].allocate(this, bytesToAllocate,
-                                                               vertexBufferOut, &newBufferOut));
+        vk::BufferHelper *vertexBufferOut;
+<<<<<<< HEAD
+        if(mStreamedVertexBuffer.allocate(this, bytesToAllocate, &vertexBufferOut,
+=======
+        if (mStreamedVertexBuffer.allocate(this, bytesToAllocate, &vertexBufferOut,
+>>>>>>> newperf
+                                           &newBufferOut) != angle::Result::Continue)
+        {
+            return nullptr;
+        }
         if (newBufferOut)
         {
-            mHasInFlightStreamedVertexBuffers.set(attribIndex);
+            mHasInFlightStreamedVertexBuffers = true;
         }
-        return angle::Result::Continue;
+        return std::make_unique<vk::BufferHelper>(std::move(*vertexBufferOut));
     }
 
     // Put the context in framebuffer fetch mode.  If the permanentlySwitchToFramebufferFetchMode
@@ -1542,8 +1548,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // DynamicBuffers for streaming vertex data from client memory pointer as well as for default
     // attributes. mHasInFlightStreamedVertexBuffers indicates if the dynamic buffer has any
     // in-flight buffer or not that we need to release at submission time.
-    gl::AttribArray<vk::DynamicBuffer> mStreamedVertexBuffers;
-    gl::AttributesMask mHasInFlightStreamedVertexBuffers;
+    vk::DynamicBuffer mStreamedVertexBuffer;
+    bool mHasInFlightStreamedVertexBuffers;
 
     // We use a single pool for recording commands. We also keep a free list for pool recycling.
     vk::SecondaryCommandPools mCommandPools;

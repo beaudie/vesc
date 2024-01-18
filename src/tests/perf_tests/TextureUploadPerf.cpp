@@ -495,7 +495,7 @@ TextureUploadParams ES3VulkanParams(bool webglCompat)
     params.majorVersion  = 3;
     params.minorVersion  = 0;
     params.enable(Feature::SupportsComputeTranscodeEtcToBc);
-    params.iterationsPerStep = 16;
+    params.iterationsPerStep = 1;
     params.baseSize          = 256;
     return params;
 }
