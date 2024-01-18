@@ -12,6 +12,8 @@
 #include "libANGLE/CLProgram.h"
 #include "libANGLE/cl_utils.h"
 
+#include "common/system_utils.h"
+
 #include "clspv/Compiler.h"
 
 #include "spirv/unified1/NonSemanticClspvReflection.h"
@@ -195,47 +197,6 @@ spv_result_t ParseReflection(CLProgramVk::SpvReflectionData &reflectionData,
     }
     return SPV_SUCCESS;
 }
-
-class CLAsyncBuildTask : public angle::Closure
-{
-  public:
-    CLAsyncBuildTask(CLProgramVk *programVk,
-                     const cl::DevicePtrs &devices,
-                     std::string options,
-                     std::string internalOptions,
-                     CLProgramVk::BuildType buildType,
-                     const CLProgramVk::DeviceProgramDatas &inputProgramDatas,
-                     cl::Program *notify)
-        : mProgramVk(programVk),
-          mDevices(devices),
-          mOptions(options),
-          mInternalOptions(internalOptions),
-          mBuildType(buildType),
-          mDeviceProgramDatas(inputProgramDatas),
-          mNotify(notify)
-    {}
-
-    void operator()() override
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "CLProgramVk::buildInternal (async)");
-        CLProgramVk::ScopedProgramCallback spc(mNotify);
-        if (!mProgramVk->buildInternal(mDevices, mOptions, mInternalOptions, mBuildType,
-                                       mDeviceProgramDatas))
-        {
-            ERR() << "Async build failed for program (" << mProgramVk
-                  << ")! Check the build status or build log for details.";
-        }
-    }
-
-  private:
-    CLProgramVk *mProgramVk;
-    const cl::DevicePtrs mDevices;
-    std::string mOptions;
-    std::string mInternalOptions;
-    CLProgramVk::BuildType mBuildType;
-    const CLProgramVk::DeviceProgramDatas mDeviceProgramDatas;
-    cl::Program *mNotify;
-};
 
 std::string ProcessBuildOptions(const std::vector<std::string> &optionTokens,
                                 CLProgramVk::BuildType buildType)
@@ -436,8 +397,55 @@ angle::Result CLProgramVk::compile(const cl::DevicePtrs &devices,
                                    const char **headerIncludeNames,
                                    cl::Program *notify)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    const cl::DevicePtrs &devicePtrs = !devices.empty() ? devices : mProgram.getDevices();
+
+    // Ensure OS temp dir is available
+    std::string internalCompileOpts;
+    Optional<std::string> tmpDir = angle::GetTempDirectory();
+    if (!tmpDir.valid())
+    {
+        ERR() << "Failed to open OS temp dir";
+        ANGLE_CL_RETURN_ERROR(CL_INVALID_OPERATION);
+    }
+    internalCompileOpts += inputHeaders.empty() ? "" : " -I" + tmpDir.value();
+
+    // Dump input headers to OS temp directory
+    for (size_t i = 0; i < inputHeaders.size(); ++i)
+    {
+        const std::string &inputHeaderSrc =
+            inputHeaders.at(i)->getImpl<CLProgramVk>().mProgram.getSource();
+        std::string headerFilePath(angle::ConcatenatePath(tmpDir.value(), headerIncludeNames[i]));
+
+        // Ensure parent dir(s) exists
+        size_t baseDirPos = headerFilePath.find_last_of(angle::GetPathSeparator());
+        if (!angle::CreatePath(headerFilePath.substr(0, baseDirPos)))
+        {
+            ERR() << "Failed to create output path(s) for header(s)!";
+            ANGLE_CL_RETURN_ERROR(CL_INVALID_OPERATION);
+        }
+        writeFile(headerFilePath.c_str(), inputHeaderSrc.data(), inputHeaderSrc.size());
+    }
+
+    // Perform compile
+    if (notify)
+    {
+        std::shared_ptr<angle::WaitableEvent> asyncEvent =
+            mProgram.getContext().getPlatform().getMultiThreadPool()->postWorkerTask(
+                std::make_shared<CLAsyncBuildTask>(
+                    this, devicePtrs, std::string(options ? options : ""), internalCompileOpts,
+                    BuildType::COMPILE, DeviceProgramDatas{}, notify));
+        ASSERT(asyncEvent != nullptr);
+    }
+    else
+    {
+        if (!buildInternal(devicePtrs, std::string(options ? options : ""), internalCompileOpts,
+                           BuildType::COMPILE, DeviceProgramDatas{}))
+        {
+            ANGLE_CL_RETURN_ERROR(CL_BUILD_PROGRAM_FAILURE);
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLProgramVk::getInfo(cl::ProgramInfo name,

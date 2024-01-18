@@ -3012,6 +3012,13 @@ cl_int ValidateCompileProgram(cl_program program,
         return CL_INVALID_PROGRAM;
     }
 
+    // CL_INVALID_OPERATION if we do not have source code.
+    if (prog.getSource().empty())
+    {
+        ERR() << "No OpenCL C source available from program object (" << &prog << ")!";
+        return CL_INVALID_OPERATION;
+    }
+
     // CL_INVALID_VALUE if device_list is NULL and num_devices is greater than zero,
     // or if device_list is not NULL and num_devices is zero.
     if ((device_list != nullptr) != (num_devices != 0u))

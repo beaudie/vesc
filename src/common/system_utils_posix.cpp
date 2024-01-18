@@ -283,6 +283,29 @@ std::string GetRootDirectory()
     return "/";
 }
 
+bool CreatePath(const std::string &path)
+{
+    size_t pos = 0;
+    do
+    {
+        pos = path.find(GetPathSeparator(), pos);
+        std::string checkPath(path.substr(0, pos));
+        if (!checkPath.empty() && !IsDirectory(checkPath.c_str()))
+        {
+            if (mkdir(checkPath.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1)
+            {
+                return false;
+            }
+        }
+        if (pos == std::string::npos)
+        {
+            break;
+        }
+        ++pos;
+    } while (true);
+    return true;
+}
+
 Optional<std::string> GetTempDirectory()
 {
     const char *tmp = getenv("TMPDIR");
