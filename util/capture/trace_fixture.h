@@ -243,6 +243,7 @@ void CreateShaderProgramv(GLenum type,
 void FenceSync(GLenum condition, GLbitfield flags, uintptr_t fenceSync);
 void FenceSync2(GLenum condition, GLbitfield flags, uintptr_t fenceSync);
 void CreateEGLImageResource(GLuint imageID, GLsizei width, GLsizei height);
+void DestroyEGLImageResource(GLuint imageID);
 void CreateEGLImage(EGLDisplay dpy,
                     EGLContext ctx,
                     EGLenum target,

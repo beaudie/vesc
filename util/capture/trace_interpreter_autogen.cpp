@@ -6216,6 +6216,12 @@ CallCapture ParseCallCapture(const Token &nameToken,
             ParseParameters<decltype(DeleteUniformLocations)>(paramTokens, strings);
         return CallCapture("DeleteUniformLocations", std::move(params));
     }
+    if (strcmp(nameToken, "DestroyEGLImageResource") == 0)
+    {
+        ParamBuffer params =
+            ParseParameters<decltype(DestroyEGLImageResource)>(paramTokens, strings);
+        return CallCapture("DestroyEGLImageResource", std::move(params));
+    }
     if (strcmp(nameToken, "FenceSync") == 0)
     {
         ParamBuffer params = ParseParameters<decltype(FenceSync)>(paramTokens, strings);
@@ -6551,6 +6557,11 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
     if (call.customFunctionName == "DeleteUniformLocations")
     {
         DispatchCallCapture(DeleteUniformLocations, captures);
+        return;
+    }
+    if (call.customFunctionName == "DestroyEGLImageResource")
+    {
+        DispatchCallCapture(DestroyEGLImageResource, captures);
         return;
     }
     if (call.customFunctionName == "FenceSync")
