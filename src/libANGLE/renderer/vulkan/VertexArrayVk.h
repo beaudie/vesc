@@ -146,6 +146,10 @@ class VertexArrayVk : public VertexArrayImpl
         std::array<AttributeRange, gl::MAX_VERTEX_ATTRIBS> &mergeRangesOut,
         std::array<size_t, gl::MAX_VERTEX_ATTRIBS> &mergedIndexesOut) const;
 
+    angle::Result allocateStreamBuffer(ContextVk *contextVk,
+                                       size_t attribIndex,
+                                       size_t sizeToAllocate);
+
     angle::Result setDefaultPackedInput(ContextVk *contextVk,
                                         size_t attribIndex,
                                         angle::FormatID *formatOut);
@@ -178,6 +182,7 @@ class VertexArrayVk : public VertexArrayImpl
     // The offset into the buffer to the first attrib
     gl::AttribArray<GLuint> mCurrentArrayBufferRelativeOffsets;
     gl::AttribArray<vk::BufferHelper *> mCurrentArrayBuffers;
+    gl::AttribArray<std::unique_ptr<vk::BufferHelper>> mArrayBuffers;
     // Tracks BufferSerial of mCurrentArrayBuffers since they are always valid to access.
     gl::AttribArray<vk::BufferSerial> mCurrentArrayBufferSerial;
     // Cache strides of attributes for a fast pipeline cache update when VAOs are changed

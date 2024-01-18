@@ -363,6 +363,22 @@ TextureUploadParams VulkanParams(bool webglCompat)
     return params;
 }
 
+<<<<<<< PATCH SET (0cc521 Vulkan: use one dynamic buffer for vertex array)
+TextureUploadParams ES3VulkanParams(bool webglCompat)
+{
+    TextureUploadParams params;
+    params.eglParameters = egl_platform::VULKAN();
+    params.webgl         = webglCompat;
+    params.majorVersion  = 3;
+    params.minorVersion  = 0;
+    params.enable(Feature::SupportsComputeTranscodeEtcToBc);
+    params.iterationsPerStep = 1;
+    params.baseSize          = 256;
+    return params;
+}
+
+=======
+>>>>>>> BASE      (0da652 Prefer linear filtering for YUV for Pixel6+)
 TextureUploadParams MetalPBOParams(GLsizei baseSize, GLsizei subImageSize)
 {
     TextureUploadParams params;
