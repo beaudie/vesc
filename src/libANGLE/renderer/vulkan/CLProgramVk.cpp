@@ -408,8 +408,99 @@ angle::Result CLProgramVk::getInfo(cl::ProgramInfo name,
                                    void *value,
                                    size_t *valueSizeRet) const
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    cl_uint valUInt            = 0u;
+    void *valPointer           = nullptr;
+    const void *copyValue      = nullptr;
+    size_t copySize            = 0u;
+    unsigned char **outputBins = reinterpret_cast<unsigned char **>(value);
+    std::string kernelNamesList;
+    std::vector<size_t> vBinarySizes;
+
+    switch (name)
+    {
+        case cl::ProgramInfo::NumKernels:
+            for (const auto &dev : mAssociatedDevicePrograms)
+            {
+                valUInt += static_cast<decltype(valUInt)>(dev.second.numKernels());
+            }
+            copyValue = &valUInt;
+            copySize  = sizeof(valUInt);
+            break;
+        case cl::ProgramInfo::BinarySizes:
+        {
+            for (const auto &dev : mAssociatedDevicePrograms)
+            {
+                vBinarySizes.push_back(sizeof(ProgramBinaryOutputHeader) +
+                                       (dev.second.binaryType == CL_PROGRAM_BINARY_TYPE_EXECUTABLE
+                                            ? dev.second.binary.size() * sizeof(uint32_t)
+                                            : dev.second.IR.size()));
+            }
+            valPointer = vBinarySizes.data();
+            copyValue  = valPointer;
+            copySize   = vBinarySizes.size() * sizeof(size_t);
+            break;
+        }
+        case cl::ProgramInfo::Binaries:
+            for (const auto &dev : mAssociatedDevicePrograms)
+            {
+                const void *bin = dev.second.binaryType == CL_PROGRAM_BINARY_TYPE_EXECUTABLE
+                                      ? reinterpret_cast<const void *>(dev.second.binary.data())
+                                      : reinterpret_cast<const void *>(dev.second.IR.data());
+                size_t binSize  = dev.second.binaryType == CL_PROGRAM_BINARY_TYPE_EXECUTABLE
+                                      ? dev.second.binary.size() * sizeof(uint32_t)
+                                      : dev.second.IR.size();
+                ProgramBinaryOutputHeader header{.headerVersion = LatestSupportedBinaryVersion,
+                                                 .binaryType    = dev.second.binaryType};
+
+                if (outputBins != nullptr)
+                {
+                    if (*outputBins != nullptr)
+                    {
+                        std::memcpy(*outputBins, &header, sizeof(ProgramBinaryOutputHeader));
+                        std::memcpy((*outputBins) + sizeof(ProgramBinaryOutputHeader), bin,
+                                    binSize);
+                    }
+                    outputBins++;
+                }
+
+                // Spec just wants pointer size here
+                copySize += sizeof(unsigned char *);
+            }
+            // We already copied the (headers + binaries) over - nothing else left to copy
+            copyValue = nullptr;
+            break;
+        case cl::ProgramInfo::KernelNames:
+            for (const auto &dev : mAssociatedDevicePrograms)
+            {
+                kernelNamesList = dev.second.getKernelNames();
+            }
+            valPointer = kernelNamesList.data();
+            copyValue  = valPointer;
+            copySize   = kernelNamesList.size() + 1;
+            break;
+        default:
+            ANGLE_CL_RETURN_ERROR(CL_INVALID_VALUE);
+    }
+
+    if (value != nullptr)
+    {
+        // CL_INVALID_VALUE if size in bytes specified by param_value_size is < size of return type
+        // as described in the Program Object Queries table and param_value is not NULL.
+        if (valueSize < copySize)
+        {
+            ANGLE_CL_RETURN_ERROR(CL_INVALID_VALUE);
+        }
+        if (copyValue != nullptr)
+        {
+            std::memcpy(value, copyValue, copySize);
+        }
+    }
+    if (valueSizeRet != nullptr)
+    {
+        *valueSizeRet = copySize;
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLProgramVk::getBuildInfo(const cl::Device &device,
@@ -418,8 +509,57 @@ angle::Result CLProgramVk::getBuildInfo(const cl::Device &device,
                                         void *value,
                                         size_t *valueSizeRet) const
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    cl_uint valUInt           = 0;
+    cl_build_status valStatus = 0;
+    const void *copyValue     = nullptr;
+    size_t copySize           = 0;
+    auto &deviceProgramData   = mAssociatedDevicePrograms.at(device.getNative());
+
+    switch (name)
+    {
+        case cl::ProgramBuildInfo::Status:
+            valStatus = deviceProgramData.buildStatus;
+            copyValue = &valStatus;
+            copySize  = sizeof(valStatus);
+            break;
+        case cl::ProgramBuildInfo::Log:
+            copyValue = deviceProgramData.buildLog.c_str();
+            copySize  = deviceProgramData.buildLog.size() + 1;
+            break;
+        case cl::ProgramBuildInfo::Options:
+            copyValue = mProgramOpts.c_str();
+            copySize  = mProgramOpts.size() + 1;
+            break;
+        case cl::ProgramBuildInfo::BinaryType:
+            valUInt   = deviceProgramData.binaryType;
+            copyValue = &valUInt;
+            copySize  = sizeof(valUInt);
+            break;
+        case cl::ProgramBuildInfo::GlobalVariableTotalSize:
+            // Returns 0 if device does not support program scope global variables.
+            valUInt   = 0;
+            copyValue = &valUInt;
+            copySize  = sizeof(valUInt);
+            break;
+        default:
+            ANGLE_CL_RETURN_ERROR(CL_INVALID_VALUE);
+    }
+
+    if ((value != nullptr) && (copySize > valueSize))
+    {
+        ANGLE_CL_RETURN_ERROR(CL_INVALID_VALUE);
+    }
+    else if ((value != nullptr) && (copyValue != nullptr))
+    {
+        memcpy(value, copyValue, std::min(valueSize, copySize));
+    }
+
+    if (valueSizeRet != nullptr)
+    {
+        *valueSizeRet = copySize;
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLProgramVk::createKernel(const cl::Kernel &kernel,
