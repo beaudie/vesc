@@ -1163,6 +1163,50 @@ cl_int ValidateBuildProgram(cl_program program,
         return CL_INVALID_OPERATION;
     }
 
+    // Check for any invalid option sub-strings
+    const bool createLibrary =
+        std::string(options ? options : "").find("-create-library") != std::string::npos;
+    const bool enableLinkOptions =
+        std::string(options ? options : "").find("-enable-link-options") != std::string::npos;
+    if (createLibrary || enableLinkOptions)
+    {
+        ERR() << "Invalid option: '-create-library' and '-enable-link-options' are invalid "
+                 "options "
+                 "for clBuildProgram!";
+        return CL_INVALID_BUILD_OPTIONS;
+    }
+
+    // If program was created with clCreateProgramWithBinary and device does not have a valid
+    // program binary loaded
+    std::vector<size_t> binSizes{prog.getDevices().size()};
+    std::vector<std::vector<unsigned char *>> bins{prog.getDevices().size()};
+    if (IsError(prog.getInfo(ProgramInfo::BinarySizes, binSizes.size() * sizeof(size_t),
+                             binSizes.data(), nullptr)))
+    {
+        return CL_INVALID_PROGRAM;
+    }
+    for (size_t i = 0; i < prog.getDevices().size(); ++i)
+    {
+        cl_program_binary_type binType;
+        bins.at(i).resize(binSizes[i]);
+
+        if (IsError(prog.getInfo(ProgramInfo::Binaries, sizeof(unsigned char *) * bins.size(),
+                                 bins.data(), nullptr)))
+        {
+            return CL_INVALID_PROGRAM;
+        }
+        if (IsError(prog.getBuildInfo(prog.getDevices()[i]->getNative(),
+                                      ProgramBuildInfo::BinaryType, sizeof(cl_program_binary_type),
+                                      &binType, nullptr)))
+        {
+            return CL_INVALID_PROGRAM;
+        }
+        if ((binType & CL_PROGRAM_BINARY_TYPE) && bins[i].empty())
+        {
+            return CL_INVALID_BINARY;
+        }
+    }
+
     return CL_SUCCESS;
 }
 
