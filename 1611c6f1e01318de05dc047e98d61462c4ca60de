@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97e72727_adbc4f3e",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-18T18:37:47Z",
+      "side": 1,
+      "message": "Thanks for the callout, the copyright changes were also lost, brought those back as well.",
+      "parentUuid": "5d0beaa1_49bf268d",
+      "revId": "1611c6f1e01318de05dc047e98d61462c4ca60de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cef6ce3e_7852a09f",
