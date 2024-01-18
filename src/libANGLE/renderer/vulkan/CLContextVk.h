@@ -8,6 +8,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_CLCONTEXTVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CLCONTEXTVK_H_
 
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
