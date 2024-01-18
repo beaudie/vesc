@@ -837,6 +837,16 @@ void CaptureGLCallToFrameCapture(CaptureFuncT captureFunc,
     frameCaptureShared->captureCall(context, std::move(call), isCallValid);
 }
 
+template <typename FirstT, typename... OthersT>
+egl::Display *GetEGLDisplayArg(FirstT display, OthersT... others)
+{
+    if constexpr (std::is_same<egl::Display *, FirstT>::value)
+    {
+        return display;
+    }
+    return nullptr;
+}
+
 template <typename CaptureFuncT, typename... ArgsT>
 void CaptureEGLCallToFrameCapture(CaptureFuncT captureFunc,
                                   bool isCallValid,
@@ -846,7 +856,15 @@ void CaptureEGLCallToFrameCapture(CaptureFuncT captureFunc,
     gl::Context *context = thread->getContext();
     if (!context)
     {
-        return;
+        egl::Display *display = GetEGLDisplayArg(captureParams...);
+        if (display)
+        {
+            context = display->getContext(gl::ContextID(2));  // MJS HACK!
+        }
+        if (!context)
+        {
+            return;
+        }
     }
     std::lock_guard<egl::ContextMutex> lock(context->getContextMutex());
 
