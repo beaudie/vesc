@@ -12,6 +12,8 @@
 #include "libANGLE/CLProgram.h"
 #include "libANGLE/cl_utils.h"
 
+#include "common/system_utils.h"
+
 #include "clspv/Compiler.h"
 
 #include "spirv/unified1/NonSemanticClspvReflection.h"
@@ -436,8 +438,81 @@ angle::Result CLProgramVk::compile(const cl::DevicePtrs &devices,
                                    const char **headerIncludeNames,
                                    cl::Program *notify)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    const cl::DevicePtrs &devicePtrs = !devices.empty() ? devices : mProgram.getDevices();
+
+    // Set original program options
+    setProgramOpts(options);
+
+    // Ensure we have source code
+    if (mProgram.getSource().empty())
+    {
+        ERR() << "No OpenCL C source available!";
+        ANGLE_CL_RETURN_ERROR(CL_INVALID_OPERATION);
+    }
+
+    // Check for invalid build options
+    const bool createLibrary =
+        std::string(options ? options : "").find("-create-library") != std::string::npos;
+    const bool enableLinkOptions =
+        std::string(options ? options : "").find("-enable-link-options") != std::string::npos;
+    if (createLibrary || enableLinkOptions)
+    {
+        ERR() << "Invalid option: '-create-library' and '-enable-link-options' are invalid options "
+                 "for clCompileProgram!";
+        ANGLE_CL_RETURN_ERROR(CL_INVALID_COMPILER_OPTIONS);
+    }
+
+    // Ensure OS temp dir is available
+    Optional<std::string> tmpDir = angle::GetTempDirectory();
+    if (!tmpDir.valid())
+    {
+        ERR() << "Failed to open OS temp dir";
+        ANGLE_CL_RETURN_ERROR(CL_INVALID_OPERATION);
+    }
+
+    std::string internalCompileOpts;
+    for (const auto &devicePtr : devicePtrs)
+    {
+        DeviceProgramData &deviceProgramData = mAssociatedDevicePrograms.at(devicePtr->getNative());
+
+        // Check if previous call to clBuildProgram has not completed
+        if (deviceProgramData.buildStatus == CL_BUILD_IN_PROGRESS)
+        {
+            ERR() << "Prior device compile is not yet complete!";
+            ANGLE_CL_RETURN_ERROR(CL_INVALID_OPERATION);
+        }
+        internalCompileOpts += inputHeaders.empty() ? "" : " -I" + tmpDir.value();
+    }
+
+    // Dump input headers to OS temp directory
+    for (size_t i = 0; i < inputHeaders.size(); ++i)
+    {
+        const std::string &inputHeaderSrc =
+            inputHeaders.at(i)->getImpl<CLProgramVk>().mProgram.getSource();
+        std::string headerFilePath(angle::ConcatenatePath(tmpDir.value(), headerIncludeNames[i]));
+
+        // Ensure parent dir(s) exists
+        size_t baseDirPos = headerFilePath.find_last_of(angle::GetPathSeparator());
+        if (!angle::CreatePath(headerFilePath.substr(0, baseDirPos)))
+        {
+            ERR() << "Failed to create output path(s) for header(s)!";
+            ANGLE_CL_RETURN_ERROR(CL_INVALID_OPERATION);
+        }
+        writeFile(headerFilePath.c_str(), inputHeaderSrc.data(), inputHeaderSrc.size());
+    }
+
+    // Perform compile
+    // TODO: Look into spawning build thread here if callback is utilized
+    if (!buildInternal(devicePtrs, internalCompileOpts, BuildType::COMPILE, DeviceProgramDatas{}))
+    {
+        ANGLE_CL_RETURN_ERROR(CL_BUILD_PROGRAM_FAILURE);
+    }
+    if (notify)
+    {
+        notify->callback();
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLProgramVk::getInfo(cl::ProgramInfo name,

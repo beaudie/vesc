@@ -12,6 +12,8 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include "libANGLE/CLContext.h"
+#include "libANGLE/CLProgram.h"
 #include "libANGLE/cl_utils.h"
 
 namespace rx
@@ -171,8 +173,71 @@ angle::Result CLContextVk::linkProgram(const cl::Program &program,
                                        cl::Program *notify,
                                        CLProgramImpl::Ptr *programOut)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    const cl::DevicePtrs &devicePtrs = !devices.empty() ? devices : mContext.getDevices();
+
+    auto programImpl = CLProgramVk::Ptr(new (std::nothrow) CLProgramVk(program));
+    if (programImpl == nullptr)
+    {
+        ANGLE_CL_RETURN_ERROR(CL_OUT_OF_HOST_MEMORY);
+    }
+
+    // Set original program options
+    programImpl->setProgramOpts(options);
+
+    // We need to check to make sure that all or none of the program objects for each device contain
+    // a valid binary.
+    cl::DevicePtrs devicesWithAllBins;
+    CLProgramVk::DeviceProgramDatas linkProgramDatas;
+    for (const auto &devicePtr : devicePtrs)
+    {
+        bool foundBinary = false;
+        for (const auto &inputProgram : inputPrograms)
+        {
+            auto deviceProgramData =
+                inputProgram->getImpl<CLProgramVk>().getDeviceProgramData(devicePtr->getNative());
+            if (deviceProgramData && !deviceProgramData->IR.empty())
+            {
+                // We only need one set of program binaries to link for all associated devices
+                if (devicesWithAllBins.empty())
+                {
+                    linkProgramDatas.push_back(deviceProgramData);
+                }
+                foundBinary = true;
+            }
+            else
+            {
+                if (foundBinary)
+                {
+                    ANGLE_CL_RETURN_ERROR(CL_INVALID_OPERATION);
+                }
+            }
+        }
+        if (foundBinary)
+        {
+            devicesWithAllBins.push_back(devicePtr);
+        }
+    }
+
+    // Also check to see if we have at least one device with all program binaries.
+    if (devicesWithAllBins.empty())
+    {
+        ANGLE_CL_RETURN_ERROR(CL_INVALID_OPERATION);
+    }
+
+    // Perform link
+    // TODO: Look into spawning build thread here if callback is utilized
+    if (!programImpl->buildInternal(devicesWithAllBins, "", CLProgramVk::BuildType::LINK,
+                                    linkProgramDatas))
+    {
+        ANGLE_CL_RETURN_ERROR(CL_LINK_PROGRAM_FAILURE);
+    }
+    if (notify)
+    {
+        notify->callback();
+    }
+
+    *programOut = std::move(programImpl);
+    return angle::Result::Continue;
 }
 
 angle::Result CLContextVk::createUserEvent(const cl::Event &event, CLEventImpl::Ptr *eventOut)

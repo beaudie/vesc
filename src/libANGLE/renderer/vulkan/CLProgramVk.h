@@ -29,6 +29,7 @@ namespace rx
 class CLProgramVk : public CLProgramImpl
 {
   public:
+    using Ptr = std::unique_ptr<CLProgramVk>;
     struct SpvReflectionData
     {
         angle::HashMap<uint32_t, uint32_t> spvIntLookup;
