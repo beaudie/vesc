@@ -8,6 +8,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_CLCONTEXTVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CLCONTEXTVK_H_
 
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
@@ -36,6 +37,7 @@ class CLContextVk : public CLContextImpl, public vk::Context
     bool hasMemory(cl_mem memory) const;
 
     angle::Result getDevices(cl::DevicePtrs *devicePtrsOut) const override;
+    const angle::FeaturesVk &getFeatures() const { return mRenderer->getFeatures(); }
 
     angle::Result createCommandQueue(const cl::CommandQueue &commandQueue,
                                      CLCommandQueueImpl::Ptr *commandQueueOut) override;
