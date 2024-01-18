@@ -29,6 +29,7 @@ namespace rx
 class CLProgramVk : public CLProgramImpl
 {
   public:
+    using Ptr = std::unique_ptr<CLProgramVk>;
     struct SpvReflectionData
     {
         angle::HashMap<uint32_t, uint32_t> spvIntLookup;
@@ -209,6 +210,47 @@ class CLProgramVk : public CLProgramImpl
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
     vk::DescriptorSetArray<vk::DescriptorPoolPointer> mDescriptorPools;
     std::mutex mProgramMutex;
+};
+
+class CLAsyncBuildTask : public angle::Closure
+{
+  public:
+    CLAsyncBuildTask(CLProgramVk *programVk,
+                     const cl::DevicePtrs &devices,
+                     std::string options,
+                     std::string internalOptions,
+                     CLProgramVk::BuildType buildType,
+                     const CLProgramVk::DeviceProgramDatas &inputProgramDatas,
+                     cl::Program *notify)
+        : mProgramVk(programVk),
+          mDevices(devices),
+          mOptions(options),
+          mInternalOptions(internalOptions),
+          mBuildType(buildType),
+          mDeviceProgramDatas(inputProgramDatas),
+          mNotify(notify)
+    {}
+
+    void operator()() override
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "CLProgramVk::buildInternal (async)");
+        CLProgramVk::ScopedProgramCallback spc(mNotify);
+        if (!mProgramVk->buildInternal(mDevices, mOptions, mInternalOptions, mBuildType,
+                                       mDeviceProgramDatas))
+        {
+            ERR() << "Async build failed for program (" << mProgramVk
+                  << ")! Check the build status or build log for details.";
+        }
+    }
+
+  private:
+    CLProgramVk *mProgramVk;
+    const cl::DevicePtrs mDevices;
+    std::string mOptions;
+    std::string mInternalOptions;
+    CLProgramVk::BuildType mBuildType;
+    const CLProgramVk::DeviceProgramDatas mDeviceProgramDatas;
+    cl::Program *mNotify;
 };
 
 }  // namespace rx
