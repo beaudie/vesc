@@ -566,6 +566,12 @@ void CreateEGLImageResource(GLuint imageID, GLsizei width, GLsizei height)
     glBindTexture(GL_TEXTURE_2D, previousTexId);
 }
 
+void DestroyEGLImageResource(GLuint imageID)
+{
+    glDeleteTextures(1, &gEGLImageMap2Resources[imageID]);
+    gEGLImageMap2Resources[imageID] = 0;
+}
+
 void CreateEGLImage(EGLDisplay dpy,
                     EGLContext ctx,
                     EGLenum target,

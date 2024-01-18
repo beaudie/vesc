@@ -1464,6 +1464,45 @@ void MaybeResetResources(gl::ContextID contextID,
             }
             break;
         }
+        case ResourceIDType::Image:
+        {
+            TrackedResource &trackedEGLImages =
+                resourceTracker->getTrackedResource(contextID, ResourceIDType::Image);
+            ResourceSet &newEGLImages         = trackedEGLImages.getNewResources();
+            ResourceSet &eglImagesToDelete    = trackedEGLImages.getResourcesToDelete();
+            ResourceSet &eglImagesToRegen     = trackedEGLImages.getResourcesToRegen();
+            ResourceCalls &eglImageRegenCalls = trackedEGLImages.getResourceRegenCalls();
+
+            if (!newEGLImages.empty() || !eglImagesToDelete.empty())
+            {
+                for (GLuint oldResource : eglImagesToDelete)
+                {
+                    out << "    eglDestroyImageKHR(gEGLDisplay, gEGLImageMap2[" << oldResource
+                        << "]);\n";
+                    out << "    DestroyEGLImageResource(" << oldResource << ");\n";
+                }
+
+                for (GLuint newResource : newEGLImages)
+                {
+                    out << "    eglDestroyImageKHR(gEGLDisplay, gEGLImageMap2[" << newResource
+                        << "]);\n";
+                    out << "    DestroyEGLImageResource(" << newResource << ");\n";
+                }
+            }
+            // If any of our starting EGLsyncs were deleted during the run, recreate them
+            for (GLuint id : eglImagesToRegen)
+            {
+                // Emit their regen calls
+                for (CallCapture &call : eglImageRegenCalls[id])
+                {
+                    out << "    ";
+                    WriteCppReplayForCall(call, replayWriter, out, header, binaryData,
+                                          maxResourceIDBufferSize);
+                    out << ";\n";
+                }
+            }
+            break;
+        }
         default:
             // TODO (http://anglebug.com/4599): Reset more resource types
             break;
@@ -4165,20 +4204,31 @@ void CaptureShareGroupMidExecutionSetup(
     const egl::ImageMap eglImageMap = context->getDisplay()->getImagesForCapture();
     for (const auto &[eglImageID, eglImage] : eglImageMap)
     {
+        // Track this as a starting resource that may need to be restored.
+        TrackedResource &trackedImages =
+            resourceTracker->getTrackedResource(context->id(), ResourceIDType::Image);
+        trackedImages.getStartingResources().insert(eglImageID);
+
+        ResourceCalls &imageRegenCalls = trackedImages.getResourceRegenCalls();
+        CallVector imageGenCalls({setupCalls, &imageRegenCalls[eglImageID]});
+
         auto eglImageAttribIter = resourceTracker->getImageToAttribTable().find(
             reinterpret_cast<EGLImage>(static_cast<uintptr_t>(eglImageID)));
         ASSERT(eglImageAttribIter != resourceTracker->getImageToAttribTable().end());
         const egl::AttributeMap &attribs = eglImageAttribIter->second;
 
-        // Create the image on demand with the same attrib retrieved above
-        CallCapture eglCreateImageKHRCall = egl::CaptureCreateImageKHR(
-            nullptr, true, nullptr, context->id(), EGL_NATIVE_BUFFER_ANDROID,
-            reinterpret_cast<EGLClientBuffer>(static_cast<GLuint64>(0)), attribs,
-            reinterpret_cast<EGLImage>(static_cast<uintptr_t>(eglImageID)));
+        for (std::vector<CallCapture> *calls : imageGenCalls)
+        {
+            // Create the image on demand with the same attrib retrieved above
+            CallCapture eglCreateImageKHRCall = egl::CaptureCreateImageKHR(
+                nullptr, true, nullptr, context->id(), EGL_NATIVE_BUFFER_ANDROID,
+                reinterpret_cast<EGLClientBuffer>(static_cast<GLuint64>(0)), attribs,
+                reinterpret_cast<EGLImage>(static_cast<uintptr_t>(eglImageID)));
 
-        // Convert the CaptureCreateImageKHR CallCapture to the customized CallCapture
-        CaptureCustomCreateEGLImage(context, "CreateEGLImageKHR", eglCreateImageKHRCall,
-                                    *setupCalls);
+            // Convert the CaptureCreateImageKHR CallCapture to the customized CallCapture
+            CaptureCustomCreateEGLImage(context, "CreateEGLImageKHR", eglCreateImageKHRCall,
+                                        *calls);
+        }
     }
 
     // Capture Texture setup and data.
@@ -7903,12 +7953,37 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             CreateEGLImagePreCallUpdate<EGLAttrib>(call, mResourceTracker,
                                                    ParamType::TEGLAttribPointer,
                                                    egl::AttributeMap::CreateFromAttribArray);
+            if (isCaptureActive())
+            {
+                EGLImage eglImage    = call.params.getReturnValue().value.EGLImageVal;
+                egl::ImageID imageID = egl::PackParam<egl::ImageID>(eglImage);
+                handleGennedResource(context, imageID);
+            }
             break;
         }
         case EntryPoint::EGLCreateImageKHR:
         {
             CreateEGLImagePreCallUpdate<EGLint>(call, mResourceTracker, ParamType::TEGLintPointer,
                                                 egl::AttributeMap::CreateFromIntArray);
+            if (isCaptureActive())
+            {
+                EGLImageKHR eglImage = call.params.getReturnValue().value.EGLImageKHRVal;
+                egl::ImageID imageID = egl::PackParam<egl::ImageID>(eglImage);
+                handleGennedResource(context, imageID);
+            }
+            break;
+        }
+        case EntryPoint::EGLDestroyImage:
+        case EntryPoint::EGLDestroyImageKHR:
+        {
+            egl::ImageID eglImageID =
+                call.params.getParam("imagePacked", ParamType::TImageID, 1).value.ImageIDVal;
+            FrameCaptureShared *frameCaptureShared =
+                context->getShareGroup()->getFrameCaptureShared();
+            if (frameCaptureShared->isCaptureActive())
+            {
+                handleDeletedResource(context, eglImageID);
+            }
             break;
         }
         case EntryPoint::EGLCreateSync:
