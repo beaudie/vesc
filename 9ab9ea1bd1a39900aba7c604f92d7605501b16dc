@@ -16,6 +16,24 @@
       "message": "Does this also go the other way? Is a buffer that does _not_ contain index data allowed to later be bound as index?",
       "revId": "9ab9ea1bd1a39900aba7c604f92d7605501b16dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd44a3d9_e475cfef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-18T15:05:56Z",
+      "side": 1,
+      "message": "It goes both ways. Once the buffer has been marked as ElementArray or OtherData, it can only be bound to specific points.",
+      "parentUuid": "2143b618_eeb2afa0",
+      "revId": "9ab9ea1bd1a39900aba7c604f92d7605501b16dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
