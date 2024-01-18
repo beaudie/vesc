@@ -1249,6 +1249,18 @@ cl_int ValidateGetProgramInfo(cl_program program,
             break;
     }
 
+    // CL_INVALID_VALUE if size in bytes specified by param_value_size is < size of return type
+    // as described in the Program Object Queries table and param_value is not NULL.
+    if (param_value != nullptr)
+    {
+        size_t valueSizeRet = 0;
+        if (IsError(prog.getInfo(param_name, 0, nullptr, &valueSizeRet)) ||
+            param_value_size < valueSizeRet)
+        {
+            return CL_INVALID_VALUE;
+        }
+    }
+
     return CL_SUCCESS;
 }
 
@@ -1287,6 +1299,18 @@ cl_int ValidateGetProgramBuildInfo(cl_program program,
         default:
             // All remaining possible values for param_name are valid for all versions.
             break;
+    }
+
+    // CL_INVALID_VALUE if size in bytes specified by param_value_size is < size of return type
+    // as described in the Program Object Queries table and param_value is not NULL.
+    if (param_value != nullptr)
+    {
+        size_t valueSizeRet = 0;
+        if (IsError(prog.getBuildInfo(device, param_name, 0, nullptr, &valueSizeRet)) ||
+            param_value_size < valueSizeRet)
+        {
+            return CL_INVALID_VALUE;
+        }
     }
 
     return CL_SUCCESS;
