@@ -1753,6 +1753,7 @@ bool GenMetalTraverser::visitBinary(Visit, TIntermBinary *binaryNode)
             TType leftType = leftNode.getType();
             groupedTraverse(leftNode);
             mOut << "[";
+            if (op == TOperator::EOpIndexIndirect || leftType.isUnsizedArray())
             {
                 mOut << "ANGLE_int_clamp(";
                 groupedTraverse(rightNode);
@@ -1776,6 +1777,17 @@ bool GenMetalTraverser::visitBinary(Visit, TIntermBinary *binaryNode)
                     mOut << maxSize;
                 }
                 mOut << ")";
+            }
+            else
+            {
+                const TConstantUnion *constIndex = rightNode.getConstantValue();
+                ASSERT(constIndex != nullptr);
+                ASSERT(constIndex->getType() == EbtInt);
+                ASSERT(constIndex->getIConst() >= 0);
+                ASSERT(constIndex->getIConst() <
+                       static_cast<int>(leftType.isArray() ? leftType.getOutermostArraySize()
+                                                           : leftType.getNominalSize()));
+                emitSingleConstant(constIndex);
             }
             mOut << "]";
         }
