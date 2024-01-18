@@ -61,6 +61,7 @@ class Program final : public _cl_program, public Object
     Context &getContext();
     const Context &getContext() const;
     const DevicePtrs &getDevices() const;
+    const std::string &getSource() const;
     bool hasDevice(const _cl_device_id *device) const;
 
     bool isBuilding() const;
@@ -121,6 +122,11 @@ inline const Context &Program::getContext() const
 inline const DevicePtrs &Program::getDevices() const
 {
     return mDevices;
+}
+
+inline const std::string &Program::getSource() const
+{
+    return mSource;
 }
 
 inline bool Program::hasDevice(const _cl_device_id *device) const
