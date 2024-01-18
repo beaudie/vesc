@@ -1329,6 +1329,14 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/8503"
     };
 
+    FeatureInfo clDumpVkSpirv = {
+        "clDumpVkSpirv",
+        FeatureCategory::VulkanFeatures,
+        "Enable SPIR-V dumping at runtime for OpenCL programs compiled with clspv "
+        "(Vulkan backend)",
+        &members,
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

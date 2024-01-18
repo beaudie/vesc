@@ -11,6 +11,8 @@
 
 #include "libANGLE/cl_utils.h"
 
+#include "common/string_utils.h"
+
 #define ANGLE_VALIDATE_VERSION(version, major, minor)          \
     do                                                         \
     {                                                          \
@@ -1161,6 +1163,52 @@ cl_int ValidateBuildProgram(cl_program program,
     if (prog.hasAttachedKernels())
     {
         return CL_INVALID_OPERATION;
+    }
+
+    // Check for any invalid option sub-strings
+    std::vector<std::string> vOptions;
+    angle::SplitStringAlongWhitespace(options, &vOptions);
+    for (const std::string &option : vOptions)
+    {
+        if (option.find("-create-library") != std::string::npos ||
+            option.find("-enable-link-options") != std::string::npos)
+        {
+            ERR() << "Invalid option: '-create-library' and/or '-enable-link-options' are invalid "
+                     "options "
+                     "for clBuildProgram!";
+            return CL_INVALID_BUILD_OPTIONS;
+        }
+    }
+
+    // If program was created with clCreateProgramWithBinary and device does not have a valid
+    // program binary loaded
+    std::vector<size_t> binSizes{prog.getDevices().size()};
+    std::vector<std::vector<unsigned char *>> bins{prog.getDevices().size()};
+    if (IsError(prog.getInfo(ProgramInfo::BinarySizes, binSizes.size() * sizeof(size_t),
+                             binSizes.data(), nullptr)))
+    {
+        return CL_INVALID_PROGRAM;
+    }
+    for (size_t i = 0; i < prog.getDevices().size(); ++i)
+    {
+        cl_program_binary_type binType;
+        bins.at(i).resize(binSizes[i]);
+
+        if (IsError(prog.getInfo(ProgramInfo::Binaries, sizeof(unsigned char *) * bins.size(),
+                                 bins.data(), nullptr)))
+        {
+            return CL_INVALID_VALUE;
+        }
+        if (IsError(prog.getBuildInfo(prog.getDevices()[i]->getNative(),
+                                      ProgramBuildInfo::BinaryType, sizeof(cl_program_binary_type),
+                                      &binType, nullptr)))
+        {
+            return CL_INVALID_VALUE;
+        }
+        if ((binType & CL_PROGRAM_BINARY_TYPE) && bins[i].empty())
+        {
+            return CL_INVALID_BINARY;
+        }
     }
 
     return CL_SUCCESS;
