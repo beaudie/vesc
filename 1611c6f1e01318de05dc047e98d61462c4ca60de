@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d0beaa1_49bf268d",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-18T18:26:24Z",
+      "side": 1,
+      "message": "Super tiny nit, but this whitespace change was reverted. Please make sure nothing else was accidentally lost.",
+      "revId": "1611c6f1e01318de05dc047e98d61462c4ca60de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cef6ce3e_7852a09f",
         "filename": "gni/angle.gni",
         "patchSetId": 2
@@ -158,6 +175,30 @@
       "side": 1,
       "message": "Oh hmm, yeah I set it to !is_official_build because I remember either you or Geoff mentioning that we wanted to be conscious of binary size for Android, and `angle_enable_wgpu` is also set to false in the roll_aosp script. \n\nDo you think it makes more sense to fully disable it for all of Android in angle.gni?",
       "parentUuid": "1bd7d3e5_2ec3d001",
+      "range": {
+        "startLine": 200,
+        "startChar": 2,
+        "endLine": 200,
+        "endChar": 19
+      },
+      "revId": "1611c6f1e01318de05dc047e98d61462c4ca60de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69949479_90d04ace",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-18T18:26:24Z",
+      "side": 1,
+      "message": "Ok the code is fine with me, I was just replying because of your comment that says:\n\n\u003e in official builds and on Android.",
+      "parentUuid": "9569ee43_bec2b3ad",
       "range": {
         "startLine": 200,
         "startChar": 2,
