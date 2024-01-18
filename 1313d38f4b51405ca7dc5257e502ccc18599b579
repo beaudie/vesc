@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "517603e2_3e9fd924",
+        "filename": "src/libANGLE/renderer/wgpu/BufferWgpu.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-18T16:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00371fb9_77c35795",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 31
+      },
+      "revId": "1313d38f4b51405ca7dc5257e502ccc18599b579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9966cade_c2a46071",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2a06be1_1052643f",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-18T16:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9966cade_c2a46071",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 2
+      },
+      "revId": "1313d38f4b51405ca7dc5257e502ccc18599b579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a30e68b_0faa21ae",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-01-17T21:18:32Z",
       "side": 1,
       "message": "Can remove this, not relevant to this backend.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 40
+      },
+      "revId": "1313d38f4b51405ca7dc5257e502ccc18599b579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2dab608_e12b5061",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-18T16:54:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a30e68b_0faa21ae",
       "range": {
         "startLine": 31,
         "startChar": 0,
