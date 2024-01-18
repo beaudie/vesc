@@ -48,6 +48,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6783863_f0cf5d51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-18T20:52:51Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59a7f6ce_2726b93e",
@@ -97,6 +114,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "39153ac1_ed056aa2",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-18T20:52:51Z",
+      "side": 1,
+      "message": "Thank you for the update! I agree that the code be updated to avoid the possibility of aliasing by using `memcpy`.\n\n* I tried only changing the 4-byte loop to write to `dest32` using `memcpy` (without the other clean-up changes in this CL). It seems that that was enough for the issue to disappear. However, I also agree with keeping `memcpy` for both `src32` and `dest32`.\n\n* I logged the expected input/output addresses before the function call. In the local crash, the fault address was not within the range of either the input or output pointers, which theoretically should not have happened.\n\n* I also tried moving the original loading function (`LoadToNativeUbyte3To4Impl()`) to `loadimage.cpp`. However, that did not fix the issue.",
+      "parentUuid": "648b2435_c0f149c0",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 80
+      },
+      "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1d8ef75_2929c0b8",
         "filename": "src/image_util/loadimage.inc",
         "patchSetId": 1
@@ -108,6 +149,30 @@
       "writtenOn": "2024-01-17T15:06:27Z",
       "side": 1,
       "message": "You can improve the writes by keeping dest access 32-bit:\n\n```suggestion\n            source8 \u003d reinterpret_cast\u003cconst uint8_t *\u003e(source32);\n            for (; pixelIndex \u003c width; pixelIndex++)\n            {\n                *dest32++ \u003d source8[0] | source8[1] \u003c\u003c 8 | source8[2] \u003c\u003c 16 | fourthValue32;\n\n                source8 +\u003d 3;\n            }\n```",
+      "range": {
+        "startLine": 210,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 13
+      },
+      "revId": "85e6c815c02ff3a6089c6a373f333a382c215db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67ac5be8_ede87d5c",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-18T20:52:51Z",
+      "side": 1,
+      "message": "Based on the possibility of strict aliasing, it is best to avoid writing to `dest32` directly.",
+      "parentUuid": "e1d8ef75_2929c0b8",
       "range": {
         "startLine": 210,
         "startChar": 0,
