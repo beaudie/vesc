@@ -532,6 +532,12 @@ void CreateEGLImageResource(GLuint imageID, GLsizei width, GLsizei height)
     gEGLImageMap2Resources[imageID] = stagingTexId;
 }
 
+void DestroyEGLImageResource(GLuint imageID)
+{
+    glDeleteTextures(1, &gEGLImageMap2Resources[imageID]);
+    gEGLImageMap2Resources[imageID] = 0;
+}
+
 void CreateEGLImage(EGLDisplay dpy,
                     EGLContext ctx,
                     EGLenum target,
