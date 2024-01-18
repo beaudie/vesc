@@ -15,7 +15,13 @@
 
 #include "libANGLE/renderer/CLProgramImpl.h"
 
+#include "libANGLE/CLProgram.h"
+
+#include "clspv/Compiler.h"
+
 #include "vulkan/vulkan_core.h"
+
+#include "spirv-tools/libspirv.h"
 
 namespace rx
 {
@@ -43,6 +49,38 @@ class CLProgramVk : public CLProgramImpl
         cl_program_binary_type binaryType{CL_PROGRAM_BINARY_TYPE_NONE};
     };
     static constexpr uint32_t LatestSupportedBinaryVersion = 1;
+
+    struct ScopedClspvContext
+    {
+        ScopedClspvContext() = default;
+        ~ScopedClspvContext() { clspvFreeOutputBuildObjs(mOutputBin, mOutputBuildLog); }
+
+        size_t mOutputBinSize{0};
+        char *mOutputBin{nullptr};
+        char *mOutputBuildLog{nullptr};
+    };
+
+    struct ScopedProgramCallback
+    {
+        ScopedProgramCallback(cl::Program *notify) : mNotify(notify) {}
+        ~ScopedProgramCallback()
+        {
+            if (mNotify)
+            {
+                mNotify->callback();
+            }
+        }
+
+        cl::Program *mNotify;
+    };
+
+    enum class BuildType
+    {
+        BUILD = 0,
+        COMPILE,
+        LINK,
+        BINARY
+    };
 
     struct DeviceProgramData
     {
@@ -113,7 +151,8 @@ class CLProgramVk : public CLProgramImpl
             return std::string{};
         }
     };
-    using DevicePrograms = angle::HashMap<cl_device_id, DeviceProgramData>;
+    using DevicePrograms     = angle::HashMap<cl_device_id, DeviceProgramData>;
+    using DeviceProgramDatas = std::vector<const DeviceProgramData *>;
 
     CLProgramVk(const cl::Program &program);
 
@@ -158,6 +197,13 @@ class CLProgramVk : public CLProgramImpl
     const DeviceProgramData *getDeviceProgramData(const char *kernelName) const;
     const DeviceProgramData *getDeviceProgramData(const _cl_device_id *device) const;
 
+    bool buildInternal(const cl::DevicePtrs &devices,
+                       std::string extraOptions,
+                       BuildType buildType,
+                       const DeviceProgramDatas &inputProgramDatas);
+    std::string disassembleSpirv(uint32_t options, DeviceProgramData &deviceProgramData);
+    angle::spirv::Blob stripReflection(const DeviceProgramData *deviceProgramData);
+
   private:
     CLContextVk *mContext;
     std::string mProgramOpts;
@@ -167,6 +213,10 @@ class CLProgramVk : public CLProgramImpl
     DescriptorSetLayoutCache mDescSetLayoutCache;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
     vk::DescriptorSetArray<vk::DescriptorPoolPointer> mDescriptorPools;
+
+    // Used by SPIRV-Tools to parse reflection info
+    static spv_result_t parseReflection(SpvReflectionData &reflectionData,
+                                        const spv_parsed_instruction_t &spvInstr);
 };
 
 }  // namespace rx
