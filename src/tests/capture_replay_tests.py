@@ -851,6 +851,10 @@ def main(args):
 
     is_bot = getpass.getuser() == 'chrome-bot'
     if sys.platform == 'linux' and is_bot:
+        os.environ["RBE_use_application_default_credentials"] = "true"
+        os.environ["RBE_automatic_auth"] = "false"
+        os.environ["RBE_experimental_credentials_helper"] = ""
+        os.environ["RBE_experimental_credentials_helper_args"] = ""
         logger.warning('Test is currently a no-op https://anglebug.com/6085')
         return EXIT_SUCCESS
 
