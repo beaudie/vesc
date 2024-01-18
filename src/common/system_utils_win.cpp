@@ -169,6 +169,31 @@ std::string GetRootDirectory()
     return "C:\\";
 }
 
+bool CreatePath(const std::string &path)
+{
+    size_t pos = 0;
+    do
+    {
+        // Check for both '\\' and '/' since Windows allows both cases
+        pos = path.find_first_of("/\\", pos);
+
+        std::string checkPath(path.substr(0, pos));
+        if (!checkPath.empty() && !IsDirectory(checkPath.c_str()))
+        {
+            if (!CreateDirectory(checkPath.c_str()))
+            {
+                return false;
+            }
+        }
+        if (pos == std::string::npos)
+        {
+            break;
+        }
+        ++pos;
+    } while (true);
+    return true;
+}
+
 Optional<std::string> GetTempDirectory()
 {
     char tempDirOut[MAX_PATH + 1];
