@@ -234,6 +234,7 @@ struct UnlockedTryAcquireData : angle::NonCopyable
     // Before this wait, there were three acquire semaphores in use corresponding to frames i, i+1
     // and i+2.  Frame i+3 can reuse the semaphore of frame i.
     angle::CircularBuffer<vk::Semaphore, impl::kSwapHistorySize + 1> acquireImageSemaphores;
+    angle::CircularBuffer<vk::Fence, impl::kSwapHistorySize + 1> acquireImageFences;
 };
 
 struct UnlockedTryAcquireResult : angle::NonCopyable
@@ -244,6 +245,9 @@ struct UnlockedTryAcquireResult : angle::NonCopyable
 
     // Semaphore to signal.
     VkSemaphore acquireSemaphore = VK_NULL_HANDLE;
+
+    // Fence to signal.
+    VkFence acquireFence = VK_NULL_HANDLE;
 
     // Image index that was acquired
     uint32_t imageIndex = std::numeric_limits<uint32_t>::max();

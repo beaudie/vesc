@@ -496,13 +496,14 @@ void TryAcquireNextImageUnlocked(VkDevice device,
 
     // Get a semaphore to signal.
     result->acquireSemaphore = tryAcquire->acquireImageSemaphores.front().getHandle();
+    result->acquireFence = tryAcquire->acquireImageFences.front().getHandle();
 
     // Try to acquire an image.
     if (result->result == VK_SUCCESS)
     {
         result->result =
             vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, result->acquireSemaphore,
-                                  VK_NULL_HANDLE, &result->imageIndex);
+                                  result->acquireFence, &result->imageIndex);
     }
 
     // Don't process the results.  It will be done later when the share group lock is held.
@@ -1049,9 +1050,19 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         mSwapchain = VK_NULL_HANDLE;
     }
 
+    // Ensure that any ANI operations have completed before trying to destroy any
+    // sync objects used during ANI.
+    if (mAcquireOperation.unlockedTryAcquireResult.acquireFence != VK_NULL_HANDLE)
+    {
+        vkWaitForFences(device, 1, &mAcquireOperation.unlockedTryAcquireResult.acquireFence, true, renderer->getMaxFenceWaitTimeNs());
+    }
     for (vk::Semaphore &semaphore : mAcquireOperation.unlockedTryAcquireData.acquireImageSemaphores)
     {
         semaphore.destroy(device);
+    }
+    for (vk::Fence &fence : mAcquireOperation.unlockedTryAcquireData.acquireImageFences)
+    {
+        fence.destroy(device);
     }
     for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
     {
@@ -1375,6 +1386,13 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk, bool *anyMat
     for (vk::Semaphore &semaphore : mAcquireOperation.unlockedTryAcquireData.acquireImageSemaphores)
     {
         ANGLE_VK_TRY(displayVk, semaphore.init(displayVk->getDevice()));
+    }
+    for (vk::Fence &fence : mAcquireOperation.unlockedTryAcquireData.acquireImageFences)
+    {
+        VkFenceCreateInfo fenceCreateInfo = {};
+        fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+        fenceCreateInfo.flags             = 0;
+        ANGLE_VK_TRY(displayVk, fence.init(displayVk->getDevice(), fenceCreateInfo));
     }
 
     VkResult vkResult = acquireNextSwapchainImage(displayVk);
@@ -2742,6 +2760,7 @@ VkResult WindowSurfaceVk::postProcessUnlockedTryAcquire(vk::Context *context)
 
     // The semaphore will be waited on in the next flush.
     mAcquireOperation.unlockedTryAcquireData.acquireImageSemaphores.next();
+    mAcquireOperation.unlockedTryAcquireData.acquireImageFences.next();
 
     // Update RenderTarget pointers to this swapchain image if not multisampling.  Note: a possible
     // optimization is to defer the |vkAcquireNextImageKHR| call itself to |present()| if
