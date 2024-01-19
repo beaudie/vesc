@@ -113,6 +113,7 @@ enum class CustomTask
     Invalid = 0,
     // Flushes wait semaphores
     FlushWaitSemaphores,
+    FlushOutsideBarriers,
     // Process SecondaryCommandBuffer commands into the primary CommandBuffer.
     ProcessOutsideRenderPassCommands,
     ProcessRenderPassCommands,
@@ -146,6 +147,9 @@ class CommandProcessorTask
     void initOutsideRenderPassProcessCommands(ProtectionType protectionType,
                                               egl::ContextPriority priority,
                                               OutsideRenderPassCommandBufferHelper *commandBuffer);
+    void initFlushOutsideBarriers(ProtectionType protectionType,
+                                  egl::ContextPriority priority,
+                                  OutsideRenderPassCommandBufferHelper *commandBuffer);
 
     void initRenderPassProcessCommands(ProtectionType protectionType,
                                        egl::ContextPriority priority,
@@ -452,6 +456,10 @@ class CommandQueue : angle::NonCopyable
                                          ProtectionType protectionType,
                                          egl::ContextPriority priority,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands);
+    angle::Result flushOutsideBarriers(Context *context,
+                                       ProtectionType protectionType,
+                                       egl::ContextPriority priority,
+                                       OutsideRenderPassCommandBufferHelper **outsideRPCommands);
     angle::Result flushRenderPassCommands(Context *context,
                                           ProtectionType protectionType,
                                           egl::ContextPriority priority,
@@ -590,6 +598,10 @@ class CommandProcessor : public Context
         egl::ContextPriority priority,
         std::vector<VkSemaphore> &&waitSemaphores,
         std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
+    angle::Result enqueueFlushOutsideBarriers(
+        ProtectionType protectionType,
+        egl::ContextPriority priority,
+        OutsideRenderPassCommandBufferHelper **outsideRPCommands);
     angle::Result enqueueFlushOutsideRPCommands(
         Context *context,
         ProtectionType protectionType,

@@ -66,6 +66,12 @@ enum class UpdateDepthFeedbackLoopReason
     Clear,
 };
 
+struct ImageLayoutUsage
+{
+    void *usedVkImage;
+    vk::ImageLayout usedImageLayout;
+};
+
 class ContextVk : public ContextImpl, public vk::Context, public MultisampleTextureInitializer
 {
   public:
@@ -73,6 +79,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     ~ContextVk() override;
 
     angle::Result initialize() override;
+
+    void addImageLayoutUsage(vk::ImageHelper *imageHelper);
+    //    bool containsImageLayoutUsage(vk::ImageHelper *imageHelper, vk::ImageLayout imageLayout);
+    //    bool containsLayoutTransitionHazard(vk::ImageLayout fromLayout, vk::ImageLayout toLayout);
 
     void onDestroy(const gl::Context *context) override;
 
@@ -639,6 +649,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         return mRenderPassCommands->started() && mRenderPassCommands->usesImage(image);
     }
+
+    bool shouldFlushDueToImageLayoutTransition(vk::CommandBufferImageAccess access);
 
     vk::RenderPassCommandBufferHelper &getStartedRenderPassCommands()
     {
@@ -1681,6 +1693,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     std::ostringstream mPipelineCacheGraph;
 
     RangedSerialFactory mOutsideRenderPassSerialFactory;
+
+    // TODO: This should be in ORPCB? Also, it should be a set/map to avoid duplicates and for
+    // faster search. (Each image used in the command buffer will be added, along with its layout.)
+    std::map<void *, ImageLayoutUsage> mImageLayoutUsages;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
