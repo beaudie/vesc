@@ -17,6 +17,7 @@ class CLContextVk;
 class CLDeviceVk;
 class CLPlatformVk;
 class CLProgramVk;
+class CLCommandQueueVk;
 
 }  // namespace rx
 
