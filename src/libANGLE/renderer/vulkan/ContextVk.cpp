@@ -8450,20 +8450,18 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
     for (const vk::CommandBufferImageAccess &imageAccess : access.getReadImages())
     {
         ASSERT(!isRenderPassStartedAndUsesImage(*imageAccess.image));
-
-        imageAccess.image->recordReadBarrier(this, imageAccess.aspectFlags, imageAccess.imageLayout,
-                                             mOutsideRenderPassCommands);
+        mOutsideRenderPassCommands->imageRead(this, imageAccess.aspectFlags,
+                                              imageAccess.imageLayout, imageAccess.image);
         mOutsideRenderPassCommands->retainResource(imageAccess.image);
     }
 
     for (const vk::CommandBufferImageWrite &imageWrite : access.getWriteImages())
     {
         ASSERT(!isRenderPassStartedAndUsesImage(*imageWrite.access.image));
-
-        imageWrite.access.image->recordWriteBarrier(this, imageWrite.access.aspectFlags,
-                                                    imageWrite.access.imageLayout,
-                                                    mOutsideRenderPassCommands);
-        mOutsideRenderPassCommands->retainResource(imageWrite.access.image);
+        mOutsideRenderPassCommands->imageWrite(
+            this, imageWrite.levelStart, imageWrite.layerStart, imageWrite.layerCount,
+            imageWrite.access.aspectFlags, imageWrite.access.imageLayout, imageWrite.access.image);
+        mOutsideRenderPassCommands->retainResourceForWrite(imageWrite.access.image);
         imageWrite.access.image->onWrite(imageWrite.levelStart, imageWrite.levelCount,
                                          imageWrite.layerStart, imageWrite.layerCount,
                                          imageWrite.access.aspectFlags);
@@ -8501,6 +8499,44 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
     return angle::Result::Continue;
 }
 
+bool ContextVk::shouldFlushDueToImageLayoutTransition(vk::CommandBufferImageAccess access)
+{
+    vk::ImageHelper *image      = access.image;
+    vk::ImageLayout imageLayout = access.imageLayout;
+
+    if (image->getCurrentImageLayout() == vk::ImageLayout::Undefined)
+    {
+        ASSERT(imageLayout != vk::ImageLayout::Undefined);
+        return false;
+    }
+
+    // TODO: Check serial against last flushed serial. If the usage is before the flush, flushing is
+    // not necessary. (getWriteResourceUse()?)
+    if (image->getResourceUse().getSerials().size() > 0 &&
+        image->getResourceUse().getSerials().front() < mLastFlushedQueueSerial.getSerial())
+    {
+        return false;
+    }
+
+    // TODO: Add the WAW hazard conditions as well. (Except RAR cases; currently TransferDst for
+    // test)
+    if (imageLayout != image->getCurrentImageLayout() ||
+        imageLayout == vk::ImageLayout::TransferDst)
+    {
+        return true;
+    }
+
+    // TODO: Test
+    //    if (image->getWriteResourceUse().getSerials().size() > 0 &&
+    //        image->getWriteResourceUse().getSerials().front() <
+    //        mLastFlushedQueueSerial.getSerial())
+    //    {
+    //        WARN() << "Should be flushed? Does getResourceUse() cover both read and write?";
+    //    }
+
+    return false;
+}
+
 angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferAccess &access)
 {
     // Go over resources and decide whether the render pass needs to close, whether the outside
@@ -8510,7 +8546,7 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
     // track of whether the outside render pass commands need to be closed, and if so, it will do
     // that once at the end.
 
-    // Read images only need to close the render pass if they need a layout transition.
+    bool shouldCloseOutsideRenderPassCommands = false;
     for (const vk::CommandBufferImageAccess &imageAccess : access.getReadImages())
     {
         // Note that different read methods are not compatible. A shader read uses a different
@@ -8521,6 +8557,14 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
         {
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageUseThenOutOfRPRead);
         }
+        else if (shouldFlushDueToImageLayoutTransition(imageAccess))
+        {
+            // TODO: (Also check if the image is already in the list
+            // (using serial (e.g., resource mUse and mWriteUse)?). This should not happen for
+            // read-after-read (RAR) cases.)
+            //            WARN() << "Read flush";
+            shouldCloseOutsideRenderPassCommands = true;
+        }
     }
 
     // Write images only need to close the render pass if they need a layout transition.
@@ -8530,9 +8574,14 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
         {
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageUseThenOutOfRPWrite);
         }
+        else if (shouldFlushDueToImageLayoutTransition(imageWrite.access))
+        {
+            // TODO: (Also check if the image is already in the list
+            // (using serial (e.g., resource mUse and mWriteUse)?).)
+            //            WARN() << "Write flush";
+            shouldCloseOutsideRenderPassCommands = true;
+        }
     }
-
-    bool shouldCloseOutsideRenderPassCommands = false;
 
     // Read buffers only need a new command buffer if previously used for write.
     for (const vk::CommandBufferBufferAccess &bufferAccess : access.getReadBuffers())

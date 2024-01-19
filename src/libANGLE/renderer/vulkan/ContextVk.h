@@ -640,6 +640,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mRenderPassCommands->started() && mRenderPassCommands->usesImage(image);
     }
 
+    bool shouldFlushDueToImageLayoutTransition(vk::CommandBufferImageAccess access);
+
     vk::RenderPassCommandBufferHelper &getStartedRenderPassCommands()
     {
         ASSERT(mRenderPassCommands->started());
