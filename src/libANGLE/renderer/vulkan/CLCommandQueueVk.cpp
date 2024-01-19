@@ -351,4 +351,9 @@ angle::Result CLCommandQueueVk::finish()
     ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
 }
 
+void CLCommandQueueVk::onEventInit(CLEventVk *eventVk)
+{
+    mComputePassCommands->retainResource(eventVk);
+}
+
 }  // namespace rx
