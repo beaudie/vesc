@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "652c8131_9b2eb9f4",
+        "filename": "src/common/CompiledShaderState.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-19T01:12:55Z",
+      "side": 1,
+      "message": "Question: Could this be set to any value here? Or should it be `Triangles`?",
+      "range": {
+        "startLine": 187,
+        "startChar": 39,
+        "endLine": 187,
+        "endChar": 67
+      },
+      "revId": "ef4ab9a3e92925056a14c4275f9c1718e269fa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
