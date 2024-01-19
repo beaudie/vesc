@@ -353,6 +353,17 @@ namespace vk
 const char *gLoaderLayersPathEnv   = "VK_LAYER_PATH";
 const char *gLoaderICDFilenamesEnv = "VK_ICD_FILENAMES";
 
+void ReleaseRefcountedEvent(VkDevice device,
+                            RefCountedEventAndStageMaskHandle atomicRefCountedEvent)
+{
+    atomicRefCountedEvent->releaseRef();
+    if (!atomicRefCountedEvent->isReferenced())
+    {
+        atomicRefCountedEvent->get().event.destroy(device);
+        SafeDelete(atomicRefCountedEvent);
+    }
+}
+
 VkImageAspectFlags GetDepthStencilAspectFlags(const angle::Format &format)
 {
     return (format.depthBits > 0 ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
@@ -686,6 +697,9 @@ void GarbageObject::destroy(RendererVk *renderer)
         case HandleType::CommandBuffer:
             // Command buffers are pool allocated.
             UNREACHABLE();
+            break;
+        case HandleType::RefCountedEvent:
+            ReleaseRefcountedEvent(device, (RefCountedEventAndStageMaskHandle)mHandle);
             break;
         case HandleType::Event:
             vkDestroyEvent(device, (VkEvent)mHandle, nullptr);

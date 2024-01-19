@@ -646,31 +646,12 @@ class PipelineBarrier : angle::NonCopyable
     {}
     ~PipelineBarrier() = default;
 
-    bool isEmpty() const { return mImageMemoryBarriers.empty() && mMemoryBarrierDstAccess == 0; }
-
-    void execute(PrimaryCommandBuffer *primary)
+    bool isEmpty() const
     {
-        if (isEmpty())
-        {
-            return;
-        }
-
-        // Issue vkCmdPipelineBarrier call
-        VkMemoryBarrier memoryBarrier = {};
-        uint32_t memoryBarrierCount   = 0;
-        if (mMemoryBarrierDstAccess != 0)
-        {
-            memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-            memoryBarrier.srcAccessMask = mMemoryBarrierSrcAccess;
-            memoryBarrier.dstAccessMask = mMemoryBarrierDstAccess;
-            memoryBarrierCount++;
-        }
-        primary->pipelineBarrier(
-            mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
-            static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
-
-        reset();
+        return mImageMemoryBarriers.empty() && mWaitEvents.empty() && mMemoryBarrierDstAccess == 0;
     }
+
+    void execute(GarbageObjects *collector, PrimaryCommandBuffer *primary);
 
     // merge two barriers into one
     void merge(PipelineBarrier *other)
@@ -681,6 +662,16 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierDstAccess |= other->mMemoryBarrierDstAccess;
         mImageMemoryBarriers.insert(mImageMemoryBarriers.end(), other->mImageMemoryBarriers.begin(),
                                     other->mImageMemoryBarriers.end());
+        // For events
+        mImageEventSrcStageMask |= other->mImageEventSrcStageMask;
+        mImageEventDstStageMask |= other->mImageEventDstStageMask;
+        while (!other->mWaitEvents.empty())
+        {
+            mWaitEvents.push_back(std::move(other->mWaitEvents.back()));
+            other->mWaitEvents.pop_back();
+        }
+        mImageEventBarriers.insert(mImageEventBarriers.end(), other->mImageEventBarriers.begin(),
+                                   other->mImageEventBarriers.end());
         other->reset();
     }
 
@@ -705,6 +696,19 @@ class PipelineBarrier : angle::NonCopyable
         mImageMemoryBarriers.push_back(imageMemoryBarrier);
     }
 
+    void mergeImageEvent(VkPipelineStageFlags srcStageMask,
+                         VkPipelineStageFlags dstStageMask,
+                         const VkImageMemoryBarrier &imageMemoryBarrier,
+                         const RefCountedEvent &event)
+    {
+        ASSERT(event.valid());
+        ASSERT(imageMemoryBarrier.pNext == nullptr);
+        mImageEventSrcStageMask |= srcStageMask;
+        mImageEventDstStageMask |= dstStageMask;
+        mWaitEvents.push_back(event);
+        mImageEventBarriers.push_back(imageMemoryBarrier);
+    }
+
     void reset()
     {
         mSrcStageMask           = 0;
@@ -712,6 +716,11 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierSrcAccess = 0;
         mMemoryBarrierDstAccess = 0;
         mImageMemoryBarriers.clear();
+        // For events
+        ASSERT(mWaitEvents.empty());
+        mImageEventBarriers.clear();
+        mImageEventSrcStageMask = 0;
+        mImageEventDstStageMask = 0;
     }
 
     void addDiagnosticsString(std::ostringstream &out) const;
@@ -722,6 +731,11 @@ class PipelineBarrier : angle::NonCopyable
     VkAccessFlags mMemoryBarrierSrcAccess;
     VkAccessFlags mMemoryBarrierDstAccess;
     std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
+    // The list of events that we should wait for
+    std::vector<RefCountedEvent> mWaitEvents;
+    std::vector<VkImageMemoryBarrier> mImageEventBarriers;
+    VkPipelineStageFlags mImageEventSrcStageMask;
+    VkPipelineStageFlags mImageEventDstStageMask;
 };
 using PipelineBarrierArray = angle::PackedEnumMap<PipelineStage, PipelineBarrier>;
 
@@ -1153,7 +1167,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
         return buffer.writtenByCommandBuffer(mQueueSerial);
     }
 
-    void executeBarriers(const angle::FeaturesVk &features, CommandsState *commandsState);
+    void executeBarriers(RendererVk *renderer, CommandsState *commandsState);
 
     // The markOpen and markClosed functions are to aid in proper use of the *CommandBufferHelper.
     // saw invalid use due to threading issues that can be easily caught by marking when it's safe
@@ -1184,6 +1198,13 @@ class CommandBufferHelperCommon : angle::NonCopyable
         mAcquireNextImageSemaphore.setHandle(semaphore);
     }
 
+    void collectRefCountedEventGarbage(RefCountedEvent *refCountedEvent)
+    {
+        ASSERT(refCountedEvent->valid());
+        mRefCountedEventGarbage.emplace_back(GetGarbage(refCountedEvent));
+    }
+    GarbageObjects *getEventGarbageCollector() { return &mRefCountedEventGarbage; }
+
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
@@ -1193,7 +1214,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     void initializeImpl();
 
-    void resetImpl();
+    void resetImpl(RendererVk *renderer);
 
     template <class DerivedT>
     angle::Result attachCommandPoolImpl(Context *context, SecondaryCommandPool *commandPool);
@@ -1265,8 +1286,13 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // Tracks resources used in the command buffer.
     QueueSerial mQueueSerial;
 
+    RefCountedEvent mRefCountedEvent;
+
     // Only used for swapChain images
     Semaphore mAcquireNextImageSemaphore;
+
+    // The list of RefCountedEvents that should be garbage collected when it gets reset.
+    GarbageObjects mRefCountedEventGarbage;
 };
 
 class SecondaryCommandBufferCollector;
@@ -1350,6 +1376,7 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     {
         mQueueSerial = QueueSerial(index, serial);
     }
+    void initRefCountedEvent(VkDevice device) { mRefCountedEvent.init(device); }
 
   private:
     angle::Result initializeCommandBuffer(Context *context);
@@ -1465,14 +1492,16 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
         buffer->setQueueSerial(mQueueSerial);
     }
 
-    void colorImagesDraw(gl::LevelIndex level,
+    void colorImagesDraw(ContextVk *contextVk,
+                         gl::LevelIndex level,
                          uint32_t layerStart,
                          uint32_t layerCount,
                          ImageHelper *image,
                          ImageHelper *resolveImage,
                          UniqueSerial imageSiblingSerial,
                          PackedAttachmentIndex packedAttachmentIndex);
-    void depthStencilImagesDraw(gl::LevelIndex level,
+    void depthStencilImagesDraw(ContextVk *contextVk,
+                                gl::LevelIndex level,
                                 uint32_t layerStart,
                                 uint32_t layerCount,
                                 ImageHelper *image,
@@ -2326,7 +2355,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                   VkSemaphore *acquireNextImageSemaphoreOut)
     {
         barrierImpl(context, getAspectFlags(), newLayout, mCurrentQueueFamilyIndex, commandBuffer,
-                    acquireNextImageSemaphoreOut);
+                    nullptr, acquireNextImageSemaphoreOut);
     }
 
     // This function can be used to prevent issuing redundant layout transition commands.
@@ -2533,6 +2562,8 @@ class ImageHelper final : public Resource, public angle::Subject
 
     size_t getLevelUpdateCount(gl::LevelIndex level) const;
 
+    void setCurrentRefCountedEvent(VkDevice device, const RefCountedEvent &refCountedEvent);
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2647,6 +2678,7 @@ class ImageHelper final : public Resource, public angle::Subject
                      ImageLayout newLayout,
                      uint32_t newQueueFamilyIndex,
                      CommandBufferT *commandBuffer,
+                     GarbageObjects *eventCollector,
                      VkSemaphore *acquireNextImageSemaphoreOut);
 
     // If the image has emulated channels, we clear them once so as not to leave garbage on those
@@ -2844,6 +2876,9 @@ class ImageHelper final : public Resource, public angle::Subject
     RenderPassUsageFlags mRenderPassUsageFlags;
     // The QueueSerial that associated with the last barrier.
     QueueSerial mBarrierQueueSerial;
+    // The current refcounted event. When barrier or layout change is needed, we should wait for
+    // this event.
+    RefCountedEvent mCurrentEvent;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
