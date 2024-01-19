@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ef4673c7_ac6b675f",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1718,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-19T15:53:59Z",
+      "side": 1,
+      "message": "What complication is that? If `SeparateStructFromFunctionDeclarations` is run before this, we can also remove this logic from here which would be nice.",
+      "parentUuid": "20e6456a_b474534f",
+      "revId": "7613bf1274098d9cb10e95a143df3164df424ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4719c7c6_4042dbf8",
         "filename": "src/compiler/translator/ValidateAST.cpp",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-17T08:15:59Z",
       "side": 1,
       "message": "This check is needed for validation of the just parsed:\n\n```\nstruct Foo { ... } foo();\n\nFoo foo() {\n    ...\n}\n```\n\nsince the struct type is shared by both the function prototype and definition.",
+      "revId": "7613bf1274098d9cb10e95a143df3164df424ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "688ead28_6d3fe2f2",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-19T15:53:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4719c7c6_4042dbf8",
       "revId": "7613bf1274098d9cb10e95a143df3164df424ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
