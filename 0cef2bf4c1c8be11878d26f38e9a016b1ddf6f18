@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c5d6590_0a9df0c0",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-19T19:19:35Z",
+      "side": 1,
+      "message": "I also can\u0027t guess from looking at the code what construct the extra scope in ValidateAST::visitFunctionDefinition was intended to handle.",
+      "parentUuid": "e4228116_63a0c299",
+      "revId": "0cef2bf4c1c8be11878d26f38e9a016b1ddf6f18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "493773f8_0675dfed",
         "filename": "src/compiler/translator/ValidateAST.cpp",
         "patchSetId": 2
