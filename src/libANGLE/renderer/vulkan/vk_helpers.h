@@ -1153,6 +1153,10 @@ class CommandBufferHelperCommon : angle::NonCopyable
         return buffer.writtenByCommandBuffer(mQueueSerial);
     }
 
+    bool usesImage(const ImageHelper &image) const;
+
+    bool usesImageForWrite(const ImageHelper &image) const;
+
     void executeBarriers(const angle::FeaturesVk &features, CommandsState *commandsState);
 
     // The markOpen and markClosed functions are to aid in proper use of the *CommandBufferHelper.
@@ -1820,6 +1824,8 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(Context *context, ImageLayout im
 // The source of update to an ImageHelper
 enum class UpdateSource
 {
+    // No updates; either deferred or already applied.
+    Null,
     // Clear an image subresource.
     Clear,
     // Clear only the emulated channels of the subresource.  This operation is more expensive than
@@ -1861,7 +1867,7 @@ bool CanCopyWithTransfer(RendererVk *renderer,
                          VkImageTiling dstTilingMode);
 
 class ImageViewHelper;
-class ImageHelper final : public Resource, public angle::Subject
+class ImageHelper final : public ReadWriteResource, public angle::Subject
 {
   public:
     ImageHelper();
