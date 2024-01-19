@@ -1320,6 +1320,9 @@ ANGLE_INLINE void SecondaryCommandBuffer::copyImage(const Image &srcImage,
     paramStruct->dstImage        = dstImage.getHandle();
     paramStruct->dstImageLayout  = dstImageLayout;
     paramStruct->region          = regions[0];
+    //    WARN() << "CopyImage to be executed: " << paramStruct->srcImage << " | "
+    //           << paramStruct->srcImageLayout << " || " << paramStruct->dstImage << " | "
+    //           << paramStruct->dstImageLayout;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::copyImageToBuffer(const Image &srcImage,

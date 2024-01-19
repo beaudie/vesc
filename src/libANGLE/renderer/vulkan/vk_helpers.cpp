@@ -1581,6 +1581,16 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
     }
 }
 
+bool CommandBufferHelperCommon::usesImage(const ImageHelper &image) const
+{
+    return image.usedByCommandBuffer(mQueueSerial);
+}
+
+bool CommandBufferHelperCommon::usesImageForWrite(const ImageHelper &image) const
+{
+    return image.writtenByCommandBuffer(mQueueSerial);
+}
+
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
                                                 CommandsState *commandsState)
 {
@@ -1776,7 +1786,7 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                       ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    image->setWriteQueueSerial(mQueueSerial);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
@@ -1968,7 +1978,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    image->setWriteQueueSerial(mQueueSerial);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
@@ -5787,9 +5797,10 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     }
 
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory, &mVmaAllocation);
-    mUse.reset();
-    mImageSerial          = kInvalidImageSerial;
     mMemoryAllocationType = MemoryAllocationType::InvalidEnum;
+    mWriteUse.reset();
+    mImageSerial        = kInvalidImageSerial;
+    mBarrierQueueSerial = QueueSerial();
     setEntireContentUndefined();
 }
 
@@ -7087,6 +7098,15 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
                srcImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_GENERAL);
         ASSERT(dstImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ||
                dstImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_GENERAL);
+
+        //        WARN() << "1 Scheduling vkCmdCopyImage | " << srcImage->getImage().getHandle() <<
+        //        " | "
+        //               << srcImage->getCurrentLayout(contextVk) << " || "
+        //               << dstImage->getImage().getHandle() << " | "
+        //               << dstImage->getCurrentLayout(contextVk);
+
+        contextVk->addImageLayoutUsage(srcImage);
+        contextVk->addImageLayoutUsage(dstImage);
 
         commandBuffer->copyImage(srcImage->getImage(), srcImage->getCurrentLayout(contextVk),
                                  dstImage->getImage(), dstImage->getCurrentLayout(contextVk), 1,
@@ -8573,7 +8593,7 @@ void ImageHelper::stageSelfAsSubresourceUpdates(
     // object.
 
     // Usage info
-    prevImage->get().Resource::operator=(std::move(*this));
+    prevImage->get().ReadWriteResource::operator=(std::move(*this));
 
     // Vulkan objects
     prevImage->get().mImage         = std::move(mImage);
@@ -8945,6 +8965,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                     bufferAccess.onBufferTransferRead(currentBuffer);
                     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(bufferAccess,
                                                                                  &commandBuffer));
+                    contextVk->addImageLayoutUsage(this);
                     commandBuffer->getCommandBuffer().copyBufferToImage(
                         currentBuffer->getBuffer().getHandle(), mImage, getCurrentLayout(contextVk),
                         1, copyRegion);
@@ -8973,6 +8994,10 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                                                              &commandBuffer));
 
                 VkImageCopy *copyRegion = &update.data.image.copyRegion;
+
+                contextVk->addImageLayoutUsage(this);
+                contextVk->addImageLayoutUsage(&update.refCounted.image->get());
+
                 commandBuffer->getCommandBuffer().copyImage(
                     update.refCounted.image->get().getImage(),
                     update.refCounted.image->get().getCurrentLayout(contextVk), mImage,

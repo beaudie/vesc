@@ -702,6 +702,8 @@ class PipelineBarrier : angle::NonCopyable
         ASSERT(imageMemoryBarrier.pNext == nullptr);
         mSrcStageMask |= srcStageMask;
         mDstStageMask |= dstStageMask;
+        //        WARN() << "Added " << imageMemoryBarrier.image << " for future image barrier | "
+        //               << imageMemoryBarrier.oldLayout << " to " << imageMemoryBarrier.newLayout;
         mImageMemoryBarriers.push_back(imageMemoryBarrier);
     }
 
@@ -1152,6 +1154,10 @@ class CommandBufferHelperCommon : angle::NonCopyable
     {
         return buffer.writtenByCommandBuffer(mQueueSerial);
     }
+
+    bool usesImage(const ImageHelper &image) const;
+
+    bool usesImageForWrite(const ImageHelper &image) const;
 
     void executeBarriers(const angle::FeaturesVk &features, CommandsState *commandsState);
 
@@ -1861,7 +1867,7 @@ bool CanCopyWithTransfer(RendererVk *renderer,
                          VkImageTiling dstTilingMode);
 
 class ImageViewHelper;
-class ImageHelper final : public Resource, public angle::Subject
+class ImageHelper final : public ReadWriteResource, public angle::Subject
 {
   public:
     ImageHelper();
