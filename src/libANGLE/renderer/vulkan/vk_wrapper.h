@@ -61,6 +61,7 @@ enum class HandleType
 {
     Invalid,
     CommandBuffer,
+    RefCountedEvent,
     ANGLE_HANDLE_TYPES_X(ANGLE_COMMA_SEP_FUNC) EnumCount
 };
 
@@ -71,6 +72,7 @@ ANGLE_HANDLE_TYPES_X(ANGLE_PRE_DECLARE_CLASS_FUNC)
 namespace priv
 {
 class CommandBuffer;
+class RefCountedEvent;
 }  // namespace priv
 #undef ANGLE_PRE_DECLARE_CLASS_FUNC
 
@@ -301,6 +303,11 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier &imageMemoryBarrier);
+
+    void imageWaitEvent(const VkEvent &event,
+                        VkPipelineStageFlags srcStageMask,
+                        VkPipelineStageFlags dstStageMask,
+                        const VkImageMemoryBarrier &imageMemoryBarrier);
 
     void nextSubpass(VkSubpassContents subpassContents);
 
@@ -815,6 +822,16 @@ ANGLE_INLINE void CommandBuffer::imageBarrier(VkPipelineStageFlags srcStageMask,
     ASSERT(valid());
     vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1,
                          &imageMemoryBarrier);
+}
+
+ANGLE_INLINE void CommandBuffer::imageWaitEvent(const VkEvent &event,
+                                                VkPipelineStageFlags srcStageMask,
+                                                VkPipelineStageFlags dstStageMask,
+                                                const VkImageMemoryBarrier &imageMemoryBarrier)
+{
+    ASSERT(valid());
+    vkCmdWaitEvents(mHandle, 1, &event, srcStageMask, dstStageMask, 0, nullptr, 0, nullptr, 1,
+                    &imageMemoryBarrier);
 }
 
 ANGLE_INLINE void CommandBuffer::destroy(VkDevice device)
