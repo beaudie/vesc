@@ -40,7 +40,7 @@ class RefCountObject : angle::NonCopyable
     ANGLE_INLINE void release(const ContextType *context)
     {
         ASSERT(mRefCount > 0);
-        if (--mRefCount == 0)
+        if (mRefCount.fetch_sub(1) == 1)
         {
             onDestroy(context);
             delete this;
@@ -52,7 +52,7 @@ class RefCountObject : angle::NonCopyable
   protected:
     virtual ~RefCountObject() { ASSERT(mRefCount == 0); }
 
-    mutable size_t mRefCount;
+    mutable std::atomic<size_t> mRefCount;
 };
 
 template <class ObjectType, typename ContextT, typename ErrorT = angle::Result>
