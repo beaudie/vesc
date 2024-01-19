@@ -1581,6 +1581,16 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
     }
 }
 
+bool CommandBufferHelperCommon::usesImage(const ImageHelper &image) const
+{
+    return image.usedByCommandBuffer(mQueueSerial);
+}
+
+bool CommandBufferHelperCommon::usesImageForWrite(const ImageHelper &image) const
+{
+    return image.writtenByCommandBuffer(mQueueSerial);
+}
+
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
                                                 CommandsState *commandsState)
 {
@@ -1776,7 +1786,7 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                       ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    image->setWriteQueueSerial(mQueueSerial);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
@@ -1968,7 +1978,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    image->setWriteQueueSerial(mQueueSerial);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
@@ -5816,10 +5826,11 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     }
 
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory, &mVmaAllocation);
-    mViewFormats.clear();
-    mUse.reset();
-    mImageSerial          = kInvalidImageSerial;
     mMemoryAllocationType = MemoryAllocationType::InvalidEnum;
+    mViewFormats.clear();
+    mWriteUse.reset();
+    mImageSerial        = kInvalidImageSerial;
+    mBarrierQueueSerial = QueueSerial();
     setEntireContentUndefined();
 }
 
@@ -7118,6 +7129,9 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
                srcImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_GENERAL);
         ASSERT(dstImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ||
                dstImage->getCurrentLayout(contextVk) == VK_IMAGE_LAYOUT_GENERAL);
+
+        contextVk->addImageLayoutUsage(srcImage);
+        contextVk->addImageLayoutUsage(dstImage);
 
         commandBuffer->copyImage(srcImage->getImage(), srcImage->getCurrentLayout(contextVk),
                                  dstImage->getImage(), dstImage->getCurrentLayout(contextVk), 1,
@@ -8604,7 +8618,7 @@ void ImageHelper::stageSelfAsSubresourceUpdates(
     // object.
 
     // Usage info
-    prevImage->get().Resource::operator=(std::move(*this));
+    prevImage->get().ReadWriteResource::operator=(std::move(*this));
 
     // Vulkan objects
     prevImage->get().mImage         = std::move(mImage);
@@ -8798,8 +8812,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
     // Start in TransferDst.  Don't yet mark any subresource as having defined contents; that is
     // done with fine granularity as updates are applied.  This is achieved by specifying a layer
-    // that is outside the tracking range. Under some circumstances, ComputeWrite is also required.
-    // This does not apply if the only update is ClearEmulatedChannels.
+    // that is outside the tracking range. When transcoding is used, ComputeWrite is also needed.
+    // If the only pending updates are ClearEmulatedChannelsOnly, the layout need not change.
     CommandBufferAccess transferAccess;
     OutsideRenderPassCommandBufferHelper *commandBuffer = nullptr;
     bool transCoding =
@@ -8923,7 +8937,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         }
     }
 
-    // If there are no updates to be applied, we can return early.
+    // The remaining updates should now be applied. If there are none, we can return early.
     if (updateCount > 0)
     {
         if (transCoding)
@@ -9025,6 +9039,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                             bufferAccess.onBufferComputeShaderRead(currentBuffer);
                             ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
                                 bufferAccess, &commandBuffer));
+                            // TODO: Add image layout usage here? Or in the transcode function?
+                            //                    contextVk->addImageLayoutUsage(this);
                             ANGLE_TRY(contextVk->getUtils().transCodeEtcToBc(
                                 contextVk, currentBuffer, this, copyRegion));
                         }
@@ -9033,6 +9049,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                             bufferAccess.onBufferTransferRead(currentBuffer);
                             ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
                                 bufferAccess, &commandBuffer));
+                            contextVk->addImageLayoutUsage(this);
                             commandBuffer->getCommandBuffer().copyBufferToImage(
                                 currentBuffer->getBuffer().getHandle(), mImage,
                                 getCurrentLayout(contextVk), 1, copyRegion);
@@ -9062,6 +9079,10 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                             imageAccess, &commandBuffer));
 
                         VkImageCopy *copyRegion = &update.data.image.copyRegion;
+
+                        contextVk->addImageLayoutUsage(this);
+                        contextVk->addImageLayoutUsage(&update.refCounted.image->get());
+
                         commandBuffer->getCommandBuffer().copyImage(
                             update.refCounted.image->get().getImage(),
                             update.refCounted.image->get().getCurrentLayout(contextVk), mImage,
@@ -10161,6 +10182,8 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     OutsideRenderPassCommandBuffer *readbackCommandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(readbackAccess, &readbackCommandBuffer));
 
+    // TODO: Add layout to context?
+    contextVk->addImageLayoutUsage(src);
     readbackCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(contextVk),
                                              bufferHandle, 1, &region);
 
