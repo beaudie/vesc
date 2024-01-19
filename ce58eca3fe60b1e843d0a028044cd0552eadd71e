@@ -16,6 +16,259 @@
       "message": "Looks reasonable to me. Adding Geoff here.",
       "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "870865d0_ee6d0f0d",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2742,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "If `FocalPoint` can be compared directly, you can structure this in one of two ways:\n\n - `mState.mFoveationState` returns a bool to indicate if the new value is different.\n - this compares `mState.mFoveationState.getFocalPoint(layer, focalPoint) \u003d\u003d focalPoint`\n \nThis avoids copying the whole FoveationState, changing one part of it and comparing the whole thing.",
+      "range": {
+        "startLine": 2736,
+        "startChar": 4,
+        "endLine": 2742,
+        "endChar": 5
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbfb974d_ed48bb8d",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "No need to bring context into here. The functions that use it don\u0027t reference it.",
+      "range": {
+        "startLine": 1319,
+        "startChar": 0,
+        "endLine": 1319,
+        "endChar": 14
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "792930ee_159ae7a1",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "I\u0027d just call this `FocalPoint`",
+      "range": {
+        "startLine": 1322,
+        "startChar": 7,
+        "endLine": 1322,
+        "endChar": 21
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7460853e_f362cd0f",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "I propose you remove this. Add an `isFoviated` which compares the values against defaults.",
+      "range": {
+        "startLine": 1324,
+        "startChar": 0,
+        "endLine": 1324,
+        "endChar": 18
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5fddcb1_a95cb73b",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "Add constructor that memsets and initializes (or takes them as parameters). Then add a comparison on this struct instead of the `FoveationState` (see comments in Framebuffer.cpp).",
+      "range": {
+        "startLine": 1325,
+        "startChar": 0,
+        "endLine": 1329,
+        "endChar": 20
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "767fb675_6b1267c9",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "Add a `IMPLEMENTATION_MAX_FOCAL_POINTS` around here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Constants.h;l\u003d102;drc\u003d3cc22c22d7637bc5604e8fef3b0882b51a762901\n\nEventually it needs to be queried from TextureImpl.",
+      "range": {
+        "startLine": 1338,
+        "startChar": 4,
+        "endLine": 1338,
+        "endChar": 51
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76a9bac7_73acd353",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "Reset is called in the FoveationState constructor and Texture/Framebuffer constructor (not necessary). Let\u0027s just fold it into the constructor.\n\nAs far as I can tell it\u0027s never used to reset state of an existing object.",
+      "range": {
+        "startLine": 1345,
+        "startChar": 0,
+        "endLine": 1351,
+        "endChar": 5
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dab7697e_f3e70916",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "Have this take the whole `FocalPoint` struct instead of individual parameters (and call sites in Texture/Framebuffer).",
+      "range": {
+        "startLine": 1365,
+        "startChar": 23,
+        "endLine": 1372,
+        "endChar": 38
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ac9a2a6_06f15510",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "`layer \u003c kMaxNumLayers \u0026\u0026 focalPoint \u003c kMaxNumFocalPoints`",
+      "range": {
+        "startLine": 1375,
+        "startChar": 15,
+        "endLine": 1375,
+        "endChar": 65
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2237819e_c80cd61c",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 1387,
+        "startChar": 15,
+        "endLine": 1387,
+        "endChar": 65
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33de0803_6fc4847e",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-19T21:41:58Z",
+      "side": 1,
+      "message": "This eventually needs to be a function on TextureImpl.",
+      "range": {
+        "startLine": 1393,
+        "startChar": 15,
+        "endLine": 1393,
+        "endChar": 85
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
