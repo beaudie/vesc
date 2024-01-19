@@ -87,6 +87,7 @@ enum class CommandID : uint16_t
     EndTransformFeedback,
     FillBuffer,
     ImageBarrier,
+    ImageWaitEvent,
     InsertDebugUtilsLabel,
     MemoryBarrier,
     NextSubpass,
@@ -388,6 +389,15 @@ struct ImageBarrierParams
     VkImageMemoryBarrier imageMemoryBarrier;
 };
 VERIFY_4_BYTE_ALIGNMENT(ImageBarrierParams)
+
+struct ImageWaitEventParams
+{
+    const VkEvent *event;
+    VkPipelineStageFlags srcStageMask;
+    VkPipelineStageFlags dstStageMask;
+    VkImageMemoryBarrier imageMemoryBarrier;
+};
+VERIFY_4_BYTE_ALIGNMENT(ImageWaitEventParams)
 
 struct MemoryBarrierParams
 {
@@ -795,6 +805,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier &imageMemoryBarrier);
+
+    void imageWaitEvent(const VkEvent &event,
+                        VkPipelineStageFlags srcStageMask,
+                        VkPipelineStageFlags dstStageMask,
+                        const VkImageMemoryBarrier &imageMemoryBarrier);
 
     void insertDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &label);
 
@@ -1532,6 +1547,21 @@ ANGLE_INLINE void SecondaryCommandBuffer::imageBarrier(
 {
     ImageBarrierParams *paramStruct = initCommand<ImageBarrierParams>(CommandID::ImageBarrier);
     ASSERT(imageMemoryBarrier.pNext == nullptr);
+    paramStruct->srcStageMask       = srcStageMask;
+    paramStruct->dstStageMask       = dstStageMask;
+    paramStruct->imageMemoryBarrier = imageMemoryBarrier;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::imageWaitEvent(
+    const VkEvent &event,
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    const VkImageMemoryBarrier &imageMemoryBarrier)
+{
+    ImageWaitEventParams *paramStruct =
+        initCommand<ImageWaitEventParams>(CommandID::ImageWaitEvent);
+    ASSERT(imageMemoryBarrier.pNext == nullptr);
+    paramStruct->event              = &event;
     paramStruct->srcStageMask       = srcStageMask;
     paramStruct->dstStageMask       = dstStageMask;
     paramStruct->imageMemoryBarrier = imageMemoryBarrier;

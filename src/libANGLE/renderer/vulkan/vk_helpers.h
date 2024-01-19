@@ -646,7 +646,10 @@ class PipelineBarrier : angle::NonCopyable
     {}
     ~PipelineBarrier() = default;
 
-    bool isEmpty() const { return mImageMemoryBarriers.empty() && mMemoryBarrierDstAccess == 0; }
+    bool isEmpty() const
+    {
+        return mImageMemoryBarriers.empty() && mWaitEvents.empty() && mMemoryBarrierDstAccess == 0;
+    }
 
     void execute(PrimaryCommandBuffer *primary)
     {
@@ -665,9 +668,15 @@ class PipelineBarrier : angle::NonCopyable
             memoryBarrier.dstAccessMask = mMemoryBarrierDstAccess;
             memoryBarrierCount++;
         }
-        primary->pipelineBarrier(
-            mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
-            static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
+        std::vector<VkEvent> waitEvents;
+        for (RefCountedEvent &event : mWaitEvents)
+        {
+            waitEvents.emplace_back(event.getEvent().getHandle());
+        }
+        primary->waitEvents(static_cast<uint32_t>(waitEvents.size()), waitEvents.data(),
+                            mSrcStageMask, mDstStageMask, memoryBarrierCount, &memoryBarrier, 0,
+                            nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
+                            mImageMemoryBarriers.data());
 
         reset();
     }
@@ -681,6 +690,7 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierDstAccess |= other->mMemoryBarrierDstAccess;
         mImageMemoryBarriers.insert(mImageMemoryBarriers.end(), other->mImageMemoryBarriers.begin(),
                                     other->mImageMemoryBarriers.end());
+        mWaitEvents.insert(mWaitEvents.end(), other->mWaitEvents.begin(), other->mWaitEvents.end());
         other->reset();
     }
 
@@ -697,12 +707,14 @@ class PipelineBarrier : angle::NonCopyable
 
     void mergeImageBarrier(VkPipelineStageFlags srcStageMask,
                            VkPipelineStageFlags dstStageMask,
-                           const VkImageMemoryBarrier &imageMemoryBarrier)
+                           const VkImageMemoryBarrier &imageMemoryBarrier,
+                           const RefCountedEvent &event)
     {
         ASSERT(imageMemoryBarrier.pNext == nullptr);
         mSrcStageMask |= srcStageMask;
         mDstStageMask |= dstStageMask;
         mImageMemoryBarriers.push_back(imageMemoryBarrier);
+        mWaitEvents.push_back(event);
     }
 
     void reset()
@@ -712,6 +724,7 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierSrcAccess = 0;
         mMemoryBarrierDstAccess = 0;
         mImageMemoryBarriers.clear();
+        mWaitEvents.clear();
     }
 
     void addDiagnosticsString(std::ostringstream &out) const;
@@ -722,6 +735,7 @@ class PipelineBarrier : angle::NonCopyable
     VkAccessFlags mMemoryBarrierSrcAccess;
     VkAccessFlags mMemoryBarrierDstAccess;
     std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
+    std::vector<RefCountedEvent> mWaitEvents;
 };
 using PipelineBarrierArray = angle::PackedEnumMap<PipelineStage, PipelineBarrier>;
 
@@ -1688,6 +1702,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     // final layout of the renderpass to transition it to the presentable layout
     ImageHelper *mImageOptimizeForPresent;
 
+    RefCountedEvent mRefCountedEvent;
+
     friend class CommandBufferHelperCommon;
 };
 
@@ -2542,6 +2558,8 @@ class ImageHelper final : public Resource, public angle::Subject
 
     size_t getLevelUpdateCount(gl::LevelIndex level) const;
 
+    void setEvent(const RefCountedEvent &event) { mCurrentEvent = event; }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2853,6 +2871,7 @@ class ImageHelper final : public Resource, public angle::Subject
     RenderPassUsageFlags mRenderPassUsageFlags;
     // The QueueSerial that associated with the last barrier.
     QueueSerial mBarrierQueueSerial;
+    RefCountedEvent mCurrentEvent;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
