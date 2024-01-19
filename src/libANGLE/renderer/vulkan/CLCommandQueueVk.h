@@ -12,7 +12,10 @@
 #include <vector>
 
 #include "libANGLE/renderer/vulkan/CLContextVk.h"
+#include "libANGLE/renderer/vulkan/CLEventVk.h"
+#include "libANGLE/renderer/vulkan/CLKernelVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
+#include "libANGLE/renderer/vulkan/ShareGroupVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
 #include "libANGLE/renderer/vulkan/vk_command_buffer_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -224,8 +227,17 @@ class CLCommandQueueVk : public CLCommandQueueImpl
 
     CLPlatformVk *getPlatform() { return mContext->getPlatform(); }
 
+    void removeAssociatedEvent(CLEventVk *event) { mEventsAssociated.erase(event); }
+
   private:
     vk::ProtectionType getProtectionType() const { return vk::ProtectionType::Unprotected; }
+
+    angle::Result processKernelResources(CLKernelVk &kernelVk, cl::NDRange &ndrange);
+    angle::Result flushComputePassCommands();
+
+    angle::Result submitCommands();
+    angle::Result createEvent(CLEventImpl::CreateFunc *createFunc);
+    angle::Result finishInternal();
 
     CLContextVk *mContext;
     const CLDeviceVk *mDevice;
@@ -233,8 +245,20 @@ class CLCommandQueueVk : public CLCommandQueueImpl
     vk::SecondaryCommandPools mCommandPool;
     vk::OutsideRenderPassCommandBufferHelper *mComputePassCommands;
     vk::SecondaryCommandMemoryAllocator mOutsideRenderPassCommandsAllocator;
+    SerialIndex mCurrentQueueSerialIndex;
 
-    std::vector<std::string> mCommandBufferDiagnostics;
+    UpdateDescriptorSetsBuilder mUpdateDescriptorSetsBuilder;
+
+    std::set<CLEventVk *> mEventsAssociated;
+    std::vector<cl::EventPtr> mDepEvents;
+    std::mutex mCommandQueueMutex;
+
+    // Keep track of kernel resources on prior kernel enqueues
+    static constexpr size_t kMaxDependencyTrackerSize = 64;
+    angle::HashSet<cl::Object *> mDependencyTracker;
+
+    // Resource reference capturing during execution
+    cl::MemoryPtrs mMemoryCaptures;
 };
 
 }  // namespace rx

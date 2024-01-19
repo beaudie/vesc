@@ -8,7 +8,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_CLEVENTVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CLEVENTVK_H_
 
-#include "libANGLE/renderer/vulkan/CLCommandQueueVk.h"
+#include <unordered_map>
+
 #include "libANGLE/renderer/vulkan/CLContextVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
 #include "libANGLE/renderer/vulkan/vk_resource.h"
@@ -25,22 +26,14 @@ namespace rx
 class CLEventVk : public CLEventImpl, public vk::Resource
 {
   public:
-    CLEventVk(const cl::Event &event, const cl::EventPtrs &depEvents);
+    CLEventVk(const cl::Event &event);
     ~CLEventVk() override;
 
-    CLCommandQueueVk &getCommandQueue() const
-    {
-        return mEvent.getCommandQueue()->getImpl<CLCommandQueueVk>();
-    }
-    CLContextVk &getContext() const { return mEvent.getContext().getImpl<CLContextVk>(); }
     cl_int getCommandType() const { return mEvent.getCommandType(); }
     bool isUserEvent() const { return getCommandType() == CL_COMMAND_USER; }
+    cl::Event &getFrontendObject() { return const_cast<cl::Event &>(mEvent); }
 
-    angle::Result getCommandExecutionStatus(cl_int &executionStatus) override
-    {
-        executionStatus = mStatus;
-        return angle::Result::Continue;
-    }
+    angle::Result getCommandExecutionStatus(cl_int &executionStatus) override;
 
     angle::Result setUserEventStatus(cl_int executionStatus) override;
 
@@ -51,12 +44,18 @@ class CLEventVk : public CLEventImpl, public vk::Resource
                                    void *value,
                                    size_t *valueSizeRet) override;
 
-  private:
-    // In the case of clFlush (non-blocking submit), any of the cmd event statuses in submission
-    // batch can be updated in the submission thread.
-    std::atomic<cl_int> mStatus;
+    angle::Result waitForUserEventStatus();
 
-    cl::EventPtrs mDepEvents;
+  private:
+    angle::Result setStatusAndExecuteCallback(cl_int status);
+
+    std::atomic<cl_int> mStatus;
+    std::unordered_map<cl_int, bool> mHaveCallbacks;
+
+    // Thread sleep duration (in seconds) for user-event status polling
+    static constexpr std::chrono::seconds kUserEventStatusPollSleepDuration{4};
+
+    friend class CLCommandQueueVk;
 };
 
 }  // namespace rx
