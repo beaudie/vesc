@@ -85,6 +85,44 @@ struct Coordinate
     size_t x, y, z;
 };
 
+struct NDRange
+{
+    NDRange(cl_uint workDim,
+            const size_t *globalWorkOffset,
+            const size_t *globalWorkSize,
+            const size_t *localWorkSize)
+        : workDimensions(workDim),
+          nullLocalWorkSize(localWorkSize == nullptr),
+          offset({0, 0, 0}),
+          gws({1, 1, 1}),
+          lws({1, 1, 1})
+    {
+        for (cl_uint dim = 0; dim < workDim; dim++)
+        {
+            if (globalWorkOffset != nullptr)
+            {
+                offset[dim] = static_cast<uint32_t>(globalWorkOffset[dim]);
+            }
+            if (globalWorkSize != nullptr)
+            {
+                gws[dim] = static_cast<uint32_t>(globalWorkSize[dim]);
+            }
+            if (localWorkSize != nullptr)
+            {
+                lws[dim] = static_cast<uint32_t>(localWorkSize[dim]);
+            }
+            ASSERT(gws[dim] != 0);
+            ASSERT(lws[dim] != 0);
+        }
+    }
+
+    cl_uint workDimensions;
+    bool nullLocalWorkSize{false};
+    std::array<uint32_t, 3> offset;
+    std::array<uint32_t, 3> gws;
+    std::array<uint32_t, 3> lws;
+};
+
 }  // namespace cl
 
 #endif  // LIBANGLE_CLTYPES_H_

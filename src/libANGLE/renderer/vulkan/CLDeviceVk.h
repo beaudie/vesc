@@ -10,6 +10,7 @@
 
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
+#include "libANGLE/renderer/vulkan/vk_renderer.h"
 
 #include "libANGLE/renderer/CLDeviceImpl.h"
 
@@ -36,6 +37,17 @@ class CLDeviceVk : public CLDeviceImpl
                                    cl_uint numDevices,
                                    CreateFuncs &subDevices,
                                    cl_uint *numDevicesRet) override;
+
+    bool isVkDeviceExtensionEnabled(const char *extension) const
+    {
+        const vk::ExtensionNameList &enabledDeviceExtensions =
+            mRenderer->getEnabledDeviceExtensions();
+        return std::find(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(),
+                         extension) != enabledDeviceExtensions.end();
+    }
+
+    std::array<uint32_t, 3> selectWorkGroupSize(const cl_uint workDim,
+                                                const std::array<uint32_t, 3> &globalSize) const;
 
   private:
     vk::Renderer *mRenderer;
