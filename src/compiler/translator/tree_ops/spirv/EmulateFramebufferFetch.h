@@ -11,18 +11,21 @@
 #define COMPILER_TRANSLATOR_TREEOPS_SPIRV_EMULATEFRAMEBUFFERFETCH_H_
 
 #include "common/angleutils.h"
+#include "compiler/translator/Common.h"
+#include "compiler/translator/Compiler.h"
 
 namespace sh
 {
 
-class TCompiler;
 class TIntermBlock;
-struct ShaderVariable;
+
+// An index -> TVariable map, tracking the declarated input attachments.
+using InputAttachmentMap = TUnorderedMap<uint32_t, const TVariable *>;
 
 // Emulate framebuffer fetch through the use of input attachments.
 [[nodiscard]] bool EmulateFramebufferFetch(TCompiler *compiler,
                                            TIntermBlock *root,
-                                           std::vector<ShaderVariable> *uniforms);
+                                           InputAttachmentMap *inputAttachmentMap);
 
 }  // namespace sh
 

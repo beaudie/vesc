@@ -13,6 +13,7 @@
 #define COMPILER_TRANSLATOR_SPIRV_TRANSLATORSPIRV_H_
 
 #include "compiler/translator/Compiler.h"
+#include "compiler/translator/tree_ops/spirv/EmulateFramebufferFetch.h"
 
 namespace sh
 {
@@ -39,6 +40,7 @@ class TranslatorSPIRV final : public TCompiler
                                      PerformanceDiagnostics *perfDiagnostics,
                                      SpecConst *specConst,
                                      DriverUniform *driverUniforms);
+    void assignInputAttachmentIds(const InputAttachmentMap &inputAttachmentMap);
     void assignSpirvIds(TIntermBlock *root);
 
     // A map from TSymbolUniqueId::mId to SPIR-V reserved ids.  Used by the SPIR-V generator to
