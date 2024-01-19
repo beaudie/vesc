@@ -438,8 +438,8 @@ void ProgramPipeline::updateFragmentInoutRangeAndEnablesPerSampleShading()
         return;
     }
 
-    mState.mExecutable->mPod.fragmentInoutRange = fragmentExecutable->mPod.fragmentInoutRange;
-    mState.mExecutable->mPod.hasDiscard         = fragmentExecutable->mPod.hasDiscard;
+    mState.mExecutable->mPod.fragmentInoutIndices = fragmentExecutable->mPod.fragmentInoutIndices;
+    mState.mExecutable->mPod.hasDiscard           = fragmentExecutable->mPod.hasDiscard;
     mState.mExecutable->mPod.enablesPerSampleShading =
         fragmentExecutable->mPod.enablesPerSampleShading;
 }
