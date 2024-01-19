@@ -66,6 +66,12 @@ enum class UpdateDepthFeedbackLoopReason
     Clear,
 };
 
+struct ImageLayoutUsage
+{
+    // void *usedVkImage;
+    vk::ImageLayout usedImageLayout;
+};
+
 class ContextVk : public ContextImpl, public vk::Context, public MultisampleTextureInitializer
 {
   public:
@@ -73,6 +79,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     ~ContextVk() override;
 
     angle::Result initialize() override;
+
+    void addImageLayoutUsage(vk::ImageHelper *imageHelper);
 
     void onDestroy(const gl::Context *context) override;
 
@@ -639,6 +647,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         return mRenderPassCommands->started() && mRenderPassCommands->usesImage(image);
     }
+
+    bool shouldFlushDueToImageLayoutTransition(vk::CommandBufferImageAccess access);
 
     vk::RenderPassCommandBufferHelper &getStartedRenderPassCommands()
     {
@@ -1689,6 +1699,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     std::string mPipelineCacheGraphDumpPath;
 
     RangedSerialFactory mOutsideRenderPassSerialFactory;
+
+    // TODO: Move to ORPCB?
+    std::map<void *, ImageLayoutUsage> mImageLayoutUsages;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
