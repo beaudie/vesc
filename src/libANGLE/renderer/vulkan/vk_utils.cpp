@@ -687,6 +687,9 @@ void GarbageObject::destroy(RendererVk *renderer)
             // Command buffers are pool allocated.
             UNREACHABLE();
             break;
+        case HandleType::RefCountedEvent:
+            ReleaseRefcountedEvent(device, (RefCountedEvent *)mHandle);
+            break;
         case HandleType::Event:
             vkDestroyEvent(device, (VkEvent)mHandle, nullptr);
             break;

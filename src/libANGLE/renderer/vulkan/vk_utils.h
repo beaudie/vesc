@@ -727,6 +727,85 @@ class BindingPointer final : angle::NonCopyable
 template <typename T>
 using AtomicBindingPointer = BindingPointer<T, AtomicRefCounted<T>>;
 
+// reference counted event
+struct EventAndStageMask
+{
+    Event event;
+    VkPipelineStageFlags stageMask;
+};
+using RefCountedEventAndStageMaskHandle = AtomicRefCounted<EventAndStageMask> *;
+class RefCountedEvent final
+    : public WrappedObject<RefCountedEvent, RefCountedEventAndStageMaskHandle>
+{
+  public:
+    RefCountedEvent() = default;
+    RefCountedEvent(RefCountedEvent &&other)
+    {
+        mHandle       = other.mHandle;
+        other.mHandle = nullptr;
+    }
+    RefCountedEvent(const RefCountedEvent &other)
+    {
+        mHandle = other.mHandle;
+        if (mHandle != nullptr)
+        {
+            mHandle->addRef();
+        }
+    }
+
+    VkResult init(VkDevice device)
+    {
+        ASSERT(mHandle == nullptr);
+        mHandle = new AtomicRefCounted<EventAndStageMask>;
+        if (mHandle == nullptr)
+        {
+            return VK_ERROR_OUT_OF_HOST_MEMORY;
+        }
+
+        VkEventCreateInfo createInfo = {};
+        createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
+        createInfo.flags             = 0;
+        VkResult result              = mHandle->get().event.init(device, createInfo);
+        if (result != VK_SUCCESS)
+        {
+            SafeDelete(mHandle);
+            return result;
+        }
+
+        mHandle->addRef();
+        mHandle->get().stageMask = 0;
+
+        return VK_SUCCESS;
+    }
+
+    void release(VkDevice device)
+    {
+        mHandle->releaseRef();
+        if (!mHandle->isReferenced())
+        {
+            mHandle->get().event.destroy(device);
+            SafeDelete(mHandle);
+        }
+    }
+
+    void destroy(VkDevice device) { release(device); }
+
+    void collectGarbage(RendererVk *renderer, const QueueSerial &queueSerial)
+    {
+        GarbageObjects garbageObjects;
+        garbageObjects.emplace_back(GetGarbage(&mBuffer));
+        garbageObjects.emplace_back(GetGarbage(&mAllocation));
+
+        ResourceUse use(queueSerial);
+        renderer->collectGarbage(use, std::move(garbageObjects));
+    }
+
+    bool valid() const { return mHandle != nullptr; }
+    const VkEvent &getEvent() const { return mHandle->get().event.getHandle(); }
+    VkPipelineStageFlags getStageMask() const { return mHandle->get().stageMask; }
+    void addStageMask(VkPipelineStageFlags flags) { mHandle->get().stageMask |= flags; }
+};
+
 // Helper class to share ref-counted Vulkan objects.  Requires that T have a destroy method
 // that takes a VkDevice and returns void.
 template <typename T>

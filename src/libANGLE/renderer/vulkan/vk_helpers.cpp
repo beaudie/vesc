@@ -1877,7 +1877,8 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
       mPreviousSubpassesCmdCount(0),
       mDepthStencilAttachmentIndex(kAttachmentIndexInvalid),
       mColorAttachmentsCount(0),
-      mImageOptimizeForPresent(nullptr)
+      mImageOptimizeForPresent(nullptr),
+      mRefCountedEvent(nullptr)
 {}
 
 RenderPassCommandBufferHelper::~RenderPassCommandBufferHelper()
@@ -1957,6 +1958,7 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
     image->setQueueSerial(mQueueSerial);
+    image->setEvent(&mEvent);
 }
 
 void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
@@ -1969,6 +1971,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
     image->setQueueSerial(mQueueSerial);
+    image->setEvent(&mEvent);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
@@ -2467,6 +2470,8 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mClearValues                 = clearValues;
     mQueueSerial                 = queueSerial;
     *commandBufferOut            = &getCommandBuffer();
+    ASSERT(mRefCountedEvent == nullptr);
+    ANGLE_VK_TRY(contextVk, CreateRefcountedEvent(contextVk->getDevice(), &mRefCountedEvent));
 
     mRenderPassStarted = true;
     mCounter++;
@@ -2632,9 +2637,10 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     ANGLE_TRACE_EVENT0("gpu.angle", "RenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(mRenderPassStarted);
     PrimaryCommandBuffer &primary = commandsState->primaryCommands;
+    RendererVk *renderer          = context->getRenderer();
 
     // Commands that are added to primary before beginRenderPass command
-    executeBarriers(context->getRenderer()->getFeatures(), commandsState);
+    executeBarriers(renderer->getFeatures(), commandsState);
 
     ASSERT(renderPass != nullptr);
     VkRenderPassBeginInfo beginInfo    = {};
@@ -2681,6 +2687,9 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
         mCommandBuffers[subpass].executeCommands(&primary);
     }
     primary.endRenderPass();
+    primary.setEvent(mRefCountedEvent.getEvent(), mRefCountedEvent.getStageMask());
+    ResourceUse use(mQueueSerial);
+    renderer->collectGarbage(use, std::move(mRefCountedEvent));
 
     // Restart the command buffer.
     return reset(context, &commandsState->secondaryCommands);
@@ -6713,9 +6722,10 @@ void ImageHelper::barrierImpl(Context *context,
         mCurrentShaderReadStageMask  = 0;
         mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     }
-    commandBuffer->imageBarrier(srcStageMask, GetImageLayoutDstStageMask(context, transitionTo),
-                                imageMemoryBarrier);
-
+    commandBuffer->imageWaitEvent(*mCurrentEvent, srcStageMask,
+                                  GetImageLayoutDstStageMask(context, transitionTo),
+                                  imageMemoryBarrier);
+    mCurrentEvent            = nullptr;
     mCurrentLayout           = newLayout;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
@@ -6838,7 +6848,8 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
                 mCurrentShaderReadStageMask  = 0;
                 mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
             }
-            barrier->mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
+            barrier->mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier,
+                                       mCurrentEvent);
             barrierModified     = true;
             mBarrierQueueSerial = queueSerial;
 
