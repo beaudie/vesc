@@ -240,6 +240,17 @@ void CommandProcessorTask::initFlushWaitSemaphores(
     mWaitSemaphoreStageMasks = std::move(waitSemaphoreStageMasks);
 }
 
+void CommandProcessorTask::initFlushOutsideBarriers(
+    ProtectionType protectionType,
+    egl::ContextPriority priority,
+    OutsideRenderPassCommandBufferHelper *commandBuffer)
+{
+    mTask                           = CustomTask::FlushOutsideBarriers;
+    mOutsideRenderPassCommandBuffer = commandBuffer;
+    mPriority                       = priority;
+    mProtectionType                 = protectionType;
+}
+
 void CommandProcessorTask::initOutsideRenderPassProcessCommands(
     ProtectionType protectionType,
     egl::ContextPriority priority,
@@ -748,6 +759,14 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
                                                std::move(task->getWaitSemaphoreStageMasks()));
             break;
         }
+        case CustomTask::FlushOutsideBarriers:
+        {
+            OutsideRenderPassCommandBufferHelper *commandBuffer =
+                task->getOutsideRenderPassCommandBuffer();
+            ANGLE_TRY(mCommandQueue->flushOutsideBarriers(this, task->getProtectionType(),
+                                                          task->getPriority(), &commandBuffer));
+            break;
+        }
         case CustomTask::ProcessOutsideRenderPassCommands:
         {
             OutsideRenderPassCommandBufferHelper *commandBuffer =
@@ -938,6 +957,18 @@ angle::Result CommandProcessor::enqueueFlushWaitSemaphores(
     CommandProcessorTask task;
     task.initFlushWaitSemaphores(protectionType, priority, std::move(waitSemaphores),
                                  std::move(waitSemaphoreStageMasks));
+    ANGLE_TRY(queueCommand(std::move(task)));
+
+    return angle::Result::Continue;
+}
+
+angle::Result CommandProcessor::enqueueFlushOutsideBarriers(
+    ProtectionType protectionType,
+    egl::ContextPriority priority,
+    OutsideRenderPassCommandBufferHelper **outsideRPCommands)
+{
+    CommandProcessorTask task;
+    task.initFlushOutsideBarriers(protectionType, priority, *outsideRPCommands);
     ANGLE_TRY(queueCommand(std::move(task)));
 
     return angle::Result::Continue;
@@ -1337,6 +1368,18 @@ angle::Result CommandQueue::flushOutsideRPCommands(
     ANGLE_TRY(ensurePrimaryCommandBufferValid(context, protectionType, priority));
     CommandsState &state = mCommandsStateMap[priority][protectionType];
     return (*outsideRPCommands)->flushToPrimary(context, &state);
+}
+
+angle::Result CommandQueue::flushOutsideBarriers(
+    Context *context,
+    ProtectionType protectionType,
+    egl::ContextPriority priority,
+    OutsideRenderPassCommandBufferHelper **outsideRPCommands)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    ANGLE_TRY(ensurePrimaryCommandBufferValid(context, protectionType, priority));
+    CommandsState &state = mCommandsStateMap[priority][protectionType];
+    return (*outsideRPCommands)->flushOutsideBarriers(context, &state);
 }
 
 angle::Result CommandQueue::flushRenderPassCommands(
