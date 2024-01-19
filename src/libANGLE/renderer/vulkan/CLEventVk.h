@@ -8,18 +8,24 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_CLEVENTVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CLEVENTVK_H_
 
+#include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
 
 #include "libANGLE/renderer/CLEventImpl.h"
 
+#include "vulkan/vulkan_core.h"
+
 namespace rx
 {
 
-class CLEventVk : public CLEventImpl
+class CLEventVk : public CLEventImpl, public vk::Resource
 {
   public:
     CLEventVk(const cl::Event &event);
     ~CLEventVk() override;
+
+    // Initialize the event resource with the command buffer of the associated command
+    angle::Result init(bool completed);
 
     angle::Result getCommandExecutionStatus(cl_int &executionStatus) override;
 
@@ -31,6 +37,14 @@ class CLEventVk : public CLEventImpl
                                    size_t valueSize,
                                    void *value,
                                    size_t *valueSizeRet) override;
+
+    angle::Result clientWait(bool flushCommands, uint64_t timeout, VkResult *outResult);
+    angle::Result serverWait();
+
+  private:
+    cl_int mStatus;
+    CLCommandQueueVk *mCommandQueueVk;
+    CLContextVk *mContextVk;
 };
 
 }  // namespace rx
