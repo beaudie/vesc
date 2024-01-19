@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "eb431efa9491b2ed839ec8b0c716dae702cdbd27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39758a85_47642f1f",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-19T15:47:31Z",
+      "side": 1,
+      "message": "Better than `#ifdef`, you can check `getEGLWindow()-\u003eisFeatureEnabled(Feature::ExposeNonConformantExtensionsAndVersions)`.",
+      "revId": "eb431efa9491b2ed839ec8b0c716dae702cdbd27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
