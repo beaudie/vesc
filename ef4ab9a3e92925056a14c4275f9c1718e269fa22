@@ -22,6 +22,30 @@
       },
       "revId": "ef4ab9a3e92925056a14c4275f9c1718e269fa22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d855f43b_048100cd",
+        "filename": "src/common/CompiledShaderState.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-19T02:13:33Z",
+      "side": 1,
+      "message": "Any value. The flags init to 0, so it\u0027s considered invalid anyway.",
+      "parentUuid": "652c8131_9b2eb9f4",
+      "range": {
+        "startLine": 187,
+        "startChar": 39,
+        "endLine": 187,
+        "endChar": 67
+      },
+      "revId": "ef4ab9a3e92925056a14c4275f9c1718e269fa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
