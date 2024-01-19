@@ -1456,10 +1456,18 @@ void CommandBufferHelperCommon::initializeImpl()
     mCommandAllocator.init();
 }
 
-void CommandBufferHelperCommon::resetImpl()
+void CommandBufferHelperCommon::resetImpl(RendererVk *renderer)
 {
     ASSERT(!mAcquireNextImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
+
+    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
+    // so it will not gets destroyed until the last refCount goes away.
+    if (!mRefCountedEventGarbage.empty())
+    {
+        ResourceUse use(mQueueSerial);
+        renderer->collectGarbage(use, std::move(mRefCountedEventGarbage));
+    }
 }
 
 template <class DerivedT>
@@ -1720,7 +1728,7 @@ angle::Result OutsideRenderPassCommandBufferHelper::reset(
     Context *context,
     SecondaryCommandBufferCollector *commandBufferCollector)
 {
-    resetImpl();
+    resetImpl(context->getRenderer());
 
     // Collect/Reset the command buffer
     commandBufferCollector->collectCommandBuffer(std::move(mCommandBuffer));
@@ -1905,7 +1913,7 @@ angle::Result RenderPassCommandBufferHelper::reset(
     Context *context,
     SecondaryCommandBufferCollector *commandBufferCollector)
 {
-    resetImpl();
+    resetImpl(context->getRenderer());
 
     for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorAttachmentsCount;
          ++index)
@@ -1957,6 +1965,7 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
     image->setQueueSerial(mQueueSerial);
+    image->setCurrentRefCountedEvent(contextVk->getDevice(), mRefCountedEvent);
 }
 
 void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
@@ -1969,6 +1978,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
     image->setQueueSerial(mQueueSerial);
+    image->setCurrentRefCountedEvent(contextVk->getDevice(), mRefCountedEvent);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
@@ -2467,6 +2477,11 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mClearValues                 = clearValues;
     mQueueSerial                 = queueSerial;
     *commandBufferOut            = &getCommandBuffer();
+    // We create event when we begin a new renderPass. There will be only one event per renderPass
+    // and VkCmdSetEvent will be called right after VkCmdEndRenderPass so that it will be tracking
+    // the completion of renderPass. This event will also be passed to ImageHelper object whenever
+    // it is used so that each image has a event tracking the last use.
+    ANGLE_VK_TRY(contextVk, mRefCountedEvent.init(contextVk->getDevice()));
 
     mRenderPassStarted = true;
     mCounter++;
@@ -2632,9 +2647,10 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     ANGLE_TRACE_EVENT0("gpu.angle", "RenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(mRenderPassStarted);
     PrimaryCommandBuffer &primary = commandsState->primaryCommands;
+    RendererVk *renderer          = context->getRenderer();
 
     // Commands that are added to primary before beginRenderPass command
-    executeBarriers(context->getRenderer()->getFeatures(), commandsState);
+    executeBarriers(renderer->getFeatures(), commandsState);
 
     ASSERT(renderPass != nullptr);
     VkRenderPassBeginInfo beginInfo    = {};
@@ -2681,6 +2697,13 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
         mCommandBuffers[subpass].executeCommands(&primary);
     }
     primary.endRenderPass();
+
+    // Add VkCmdSetEvent here to track the completion of this renderPass.
+    ASSERT(mRefCountedEvent.valid());
+    primary.setEvent(mRefCountedEvent.getEvent().getHandle(), mRefCountedEvent.getStageMask());
+    // We no longer need event, so garbage collect it.
+    collectRefCountedEventGarbage(&mRefCountedEvent);
+    ASSERT(!mRefCountedEvent.valid());
 
     // Restart the command buffer.
     return reset(context, &commandsState->secondaryCommands);
@@ -6713,9 +6736,9 @@ void ImageHelper::barrierImpl(Context *context,
         mCurrentShaderReadStageMask  = 0;
         mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     }
-    commandBuffer->imageBarrier(srcStageMask, GetImageLayoutDstStageMask(context, transitionTo),
-                                imageMemoryBarrier);
-
+    commandBuffer->imageWaitEvent(mCurrentEvent.getEvent().getHandle(), srcStageMask,
+                                  GetImageLayoutDstStageMask(context, transitionTo),
+                                  imageMemoryBarrier);
     mCurrentLayout           = newLayout;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
@@ -6838,7 +6861,8 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
                 mCurrentShaderReadStageMask  = 0;
                 mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
             }
-            barrier->mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
+            barrier->mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier,
+                                       mCurrentEvent);
             barrierModified     = true;
             mBarrierQueueSerial = queueSerial;
 
