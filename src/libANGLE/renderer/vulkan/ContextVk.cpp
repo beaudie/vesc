@@ -8762,12 +8762,13 @@ ANGLE_INLINE void ContextVk::generateOutsideRenderPassCommandsQueueSerial()
     {
         ASSERT(mRenderPassCommands->getQueueSerial().valid());
         ASSERT(mRenderPassCommands->getQueueSerial().getSerial() > serial);
-        mOutsideRenderPassCommands->setQueueSerial(mCurrentQueueSerialIndex, serial);
-        return;
     }
-
-    serial = mRenderer->generateQueueSerial(mCurrentQueueSerialIndex);
+    else
+    {
+        serial = mRenderer->generateQueueSerial(mCurrentQueueSerialIndex);
+    }
     mOutsideRenderPassCommands->setQueueSerial(mCurrentQueueSerialIndex, serial);
+    mOutsideRenderPassCommands->initRefCountedEvent(getDevice());
 }
 
 ANGLE_INLINE void ContextVk::generateRenderPassCommandsQueueSerial(QueueSerial *queueSerialOut)
