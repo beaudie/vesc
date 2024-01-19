@@ -94,8 +94,23 @@ class CLContextVk : public CLContextImpl, public vk::Context
   private:
     void handleDeviceLost() const;
 
+    struct Mutable
+    {
+        std::unordered_set<const _cl_mem *> mMemories;
+    };
+    using MutableData = angle::SynchronizedValue<Mutable, angle::Spinlock>;
+
+    MutableData mData;
     const cl::DevicePtrs mAssociatedDevices;
+
+    friend class CLMemoryVk;
 };
+
+inline bool CLContextVk::hasMemory(cl_mem memory) const
+{
+    const auto data = mData.synchronize();
+    return data->mMemories.find(memory) != data->mMemories.cend();
+}
 
 }  // namespace rx
 
