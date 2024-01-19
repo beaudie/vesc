@@ -542,8 +542,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                      vk::PackedAttachmentIndex packedAttachmentIndex)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->colorImagesDraw(level, layerStart, layerCount, image, resolveImage,
-                                             imageSiblingSerial, packedAttachmentIndex);
+        mRenderPassCommands->colorImagesDraw(this, level, layerStart, layerCount, image,
+                                             resolveImage, imageSiblingSerial,
+                                             packedAttachmentIndex);
     }
     void onDepthStencilDraw(gl::LevelIndex level,
                             uint32_t layerStart,
@@ -553,7 +554,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             UniqueSerial imageSiblingSerial)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->depthStencilImagesDraw(level, layerStart, layerCount, image,
+        mRenderPassCommands->depthStencilImagesDraw(this, level, layerStart, layerCount, image,
                                                     resolveImage, imageSiblingSerial);
     }
 

@@ -126,6 +126,173 @@ constexpr uint32_t kInvalidMemoryHeapIndex = UINT32_MAX;
 
 namespace vk
 {
+// This is a very simple RefCount class that has no autoreleasing.
+template <typename T>
+class RefCounted : angle::NonCopyable
+{
+  public:
+    RefCounted() : mRefCount(0) {}
+    explicit RefCounted(T &&newObject) : mRefCount(0), mObject(std::move(newObject)) {}
+    ~RefCounted() { ASSERT(mRefCount == 0 && !mObject.valid()); }
+
+    RefCounted(RefCounted &&copy) : mRefCount(copy.mRefCount), mObject(std::move(copy.mObject))
+    {
+        ASSERT(this != &copy);
+        copy.mRefCount = 0;
+    }
+
+    RefCounted &operator=(RefCounted &&rhs)
+    {
+        std::swap(mRefCount, rhs.mRefCount);
+        mObject = std::move(rhs.mObject);
+        return *this;
+    }
+
+    void addRef()
+    {
+        ASSERT(mRefCount != std::numeric_limits<uint32_t>::max());
+        mRefCount++;
+    }
+
+    void releaseRef()
+    {
+        ASSERT(isReferenced());
+        mRefCount--;
+    }
+
+    bool isReferenced() const { return mRefCount != 0; }
+
+    T &get() { return mObject; }
+    const T &get() const { return mObject; }
+
+    // A debug function to validate that the reference count is as expected used for assertions.
+    bool isRefCountAsExpected(uint32_t expectedRefCount) { return mRefCount == expectedRefCount; }
+
+  private:
+    uint32_t mRefCount;
+    T mObject;
+};
+
+// Atomic version of RefCounted.  Used in the descriptor set and pipeline layout caches, which are
+// accessed by link jobs.  No std::move is allowed due to the atomic ref count.
+template <typename T>
+class AtomicRefCounted : angle::NonCopyable
+{
+  public:
+    AtomicRefCounted() : mRefCount(0) {}
+    explicit AtomicRefCounted(T &&newObject) : mRefCount(0), mObject(std::move(newObject)) {}
+    ~AtomicRefCounted() { ASSERT(mRefCount == 0 && !mObject.valid()); }
+
+    void addRef()
+    {
+        ASSERT(mRefCount != std::numeric_limits<uint32_t>::max());
+        mRefCount.fetch_add(1, std::memory_order_relaxed);
+    }
+
+    void releaseRef()
+    {
+        ASSERT(isReferenced());
+        mRefCount.fetch_sub(1, std::memory_order_relaxed);
+    }
+
+    bool isReferenced() const { return mRefCount.load(std::memory_order_relaxed) != 0; }
+
+    T &get() { return mObject; }
+    const T &get() const { return mObject; }
+
+  private:
+    std::atomic_uint mRefCount;
+    T mObject;
+};
+
+// reference counted event
+struct EventAndStageMask
+{
+    bool valid() const { return event.valid(); }
+    Event event;
+    VkPipelineStageFlags stageMask;
+};
+using RefCountedEventAndStageMaskHandle = AtomicRefCounted<EventAndStageMask> *;
+
+class RefCountedEvent final
+    : public WrappedObject<RefCountedEvent, RefCountedEventAndStageMaskHandle>
+{
+  public:
+    RefCountedEvent() = default;
+    RefCountedEvent(RefCountedEvent &&other)
+    {
+        mHandle       = other.mHandle;
+        other.mHandle = nullptr;
+    }
+    RefCountedEvent(const RefCountedEvent &other)
+    {
+        mHandle = other.mHandle;
+        if (mHandle != nullptr)
+        {
+            mHandle->addRef();
+        }
+    }
+    RefCountedEvent &operator=(RefCountedEvent &&other)
+    {
+        ASSERT(!valid());
+        std::swap(mHandle, other.mHandle);
+        return *this;
+    }
+    RefCountedEvent &operator=(const RefCountedEvent &other)
+    {
+        addRef(other);
+        return *this;
+    }
+
+    void init(VkDevice device)
+    {
+        ASSERT(mHandle == nullptr);
+        mHandle                      = new AtomicRefCounted<EventAndStageMask>;
+        VkEventCreateInfo createInfo = {};
+        createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
+        createInfo.flags             = 0;
+        mHandle->get().event.init(device, createInfo);
+        mHandle->addRef();
+        mHandle->get().stageMask = 0;
+    }
+
+    void destroy(VkDevice device)
+    {
+        // Since the underline object is refcounted, we never actually destroy it, but always
+        // decrement the refcount and destroy only when refcount goes down to 0.
+        mHandle->releaseRef();
+        if (!mHandle->isReferenced())
+        {
+            mHandle->get().event.destroy(device);
+            SafeDelete(mHandle);
+        }
+        else
+        {
+            mHandle = nullptr;
+        }
+    }
+
+    void addRef(const RefCountedEvent &other)
+    {
+        ASSERT(!valid());
+        ASSERT(other.valid());
+        mHandle = other.mHandle;
+        mHandle->addRef();
+    }
+
+    bool valid() const { return mHandle != nullptr; }
+    const Event &getEvent() const { return mHandle->get().event; }
+    VkPipelineStageFlags getStageMask() const { return mHandle->get().stageMask; }
+    void addStageMask(VkPipelineStageFlags flags) { mHandle->get().stageMask |= flags; }
+};
+template <>
+struct HandleTypeHelper<RefCountedEvent>
+{
+    constexpr static HandleType kHandleType = HandleType::RefCountedEvent;
+};
+
+void ReleaseRefcountedEvent(VkDevice device,
+                            RefCountedEventAndStageMaskHandle atomicRefCountedEvent);
 
 // Used for memory allocation tracking.
 enum class MemoryAllocationType;
@@ -603,85 +770,6 @@ class [[nodiscard]] RendererScoped final : angle::NonCopyable
   private:
     RendererVk *mRenderer;
     T mVar;
-};
-
-// This is a very simple RefCount class that has no autoreleasing.
-template <typename T>
-class RefCounted : angle::NonCopyable
-{
-  public:
-    RefCounted() : mRefCount(0) {}
-    explicit RefCounted(T &&newObject) : mRefCount(0), mObject(std::move(newObject)) {}
-    ~RefCounted() { ASSERT(mRefCount == 0 && !mObject.valid()); }
-
-    RefCounted(RefCounted &&copy) : mRefCount(copy.mRefCount), mObject(std::move(copy.mObject))
-    {
-        ASSERT(this != &copy);
-        copy.mRefCount = 0;
-    }
-
-    RefCounted &operator=(RefCounted &&rhs)
-    {
-        std::swap(mRefCount, rhs.mRefCount);
-        mObject = std::move(rhs.mObject);
-        return *this;
-    }
-
-    void addRef()
-    {
-        ASSERT(mRefCount != std::numeric_limits<uint32_t>::max());
-        mRefCount++;
-    }
-
-    void releaseRef()
-    {
-        ASSERT(isReferenced());
-        mRefCount--;
-    }
-
-    bool isReferenced() const { return mRefCount != 0; }
-
-    T &get() { return mObject; }
-    const T &get() const { return mObject; }
-
-    // A debug function to validate that the reference count is as expected used for assertions.
-    bool isRefCountAsExpected(uint32_t expectedRefCount) { return mRefCount == expectedRefCount; }
-
-  private:
-    uint32_t mRefCount;
-    T mObject;
-};
-
-// Atomic version of RefCounted.  Used in the descriptor set and pipeline layout caches, which are
-// accessed by link jobs.  No std::move is allowed due to the atomic ref count.
-template <typename T>
-class AtomicRefCounted : angle::NonCopyable
-{
-  public:
-    AtomicRefCounted() : mRefCount(0) {}
-    explicit AtomicRefCounted(T &&newObject) : mRefCount(0), mObject(std::move(newObject)) {}
-    ~AtomicRefCounted() { ASSERT(mRefCount == 0 && !mObject.valid()); }
-
-    void addRef()
-    {
-        ASSERT(mRefCount != std::numeric_limits<uint32_t>::max());
-        mRefCount.fetch_add(1, std::memory_order_relaxed);
-    }
-
-    void releaseRef()
-    {
-        ASSERT(isReferenced());
-        mRefCount.fetch_sub(1, std::memory_order_relaxed);
-    }
-
-    bool isReferenced() const { return mRefCount.load(std::memory_order_relaxed) != 0; }
-
-    T &get() { return mObject; }
-    const T &get() const { return mObject; }
-
-  private:
-    std::atomic_uint mRefCount;
-    T mObject;
 };
 
 template <typename T, typename RC = RefCounted<T>>
