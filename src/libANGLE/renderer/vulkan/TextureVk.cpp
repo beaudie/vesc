@@ -1480,6 +1480,9 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
             extents.depth = 1;
         }
 
+        contextVk->addImageLayoutUsage(srcImage);
+        contextVk->addImageLayoutUsage(&stagingImage->get());
+
         vk::ImageHelper::Copy(contextVk, srcImage, &stagingImage->get(), srcOffset, gl::kOffsetZero,
                               extents, srcSubresource, destSubresource, commandBuffer);
 

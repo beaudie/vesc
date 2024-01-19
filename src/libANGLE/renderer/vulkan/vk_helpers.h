@@ -1153,6 +1153,10 @@ class CommandBufferHelperCommon : angle::NonCopyable
         return buffer.writtenByCommandBuffer(mQueueSerial);
     }
 
+    bool usesImage(const ImageHelper &image) const;
+
+    bool usesImageForWrite(const ImageHelper &image) const;
+
     void executeBarriers(const angle::FeaturesVk &features, CommandsState *commandsState);
 
     // The markOpen and markClosed functions are to aid in proper use of the *CommandBufferHelper.
@@ -1335,6 +1339,7 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
                     ImageHelper *image);
 
     angle::Result flushToPrimary(Context *context, CommandsState *commandsState);
+    angle::Result flushOutsideBarriers(Context *context, CommandsState *commandsState);
 
     void setGLMemoryBarrierIssued()
     {
@@ -1861,7 +1866,7 @@ bool CanCopyWithTransfer(RendererVk *renderer,
                          VkImageTiling dstTilingMode);
 
 class ImageViewHelper;
-class ImageHelper final : public Resource, public angle::Subject
+class ImageHelper final : public ReadWriteResource, public angle::Subject
 {
   public:
     ImageHelper();
