@@ -2008,6 +2008,7 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
     image->setQueueSerial(mQueueSerial);
+    image->setEvent(&mEvent);
 }
 
 void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
@@ -2020,6 +2021,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
     image->setQueueSerial(mQueueSerial);
+    image->setEvent(&mEvent);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
@@ -6761,9 +6763,10 @@ void ImageHelper::barrierImpl(Context *context,
         mCurrentShaderReadStageMask  = 0;
         mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     }
-    commandBuffer->imageBarrier(srcStageMask, GetImageLayoutDstStageMask(context, transitionTo),
-                                imageMemoryBarrier);
-
+    commandBuffer->imageWaitEvent(*mCurrentEvent, srcStageMask,
+                                  GetImageLayoutDstStageMask(context, transitionTo),
+                                  imageMemoryBarrier);
+    mCurrentEvent            = nullptr;
     mCurrentLayout           = newLayout;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
@@ -6885,7 +6888,8 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
                 mCurrentShaderReadStageMask  = 0;
                 mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
             }
-            barrier->mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
+            barrier->mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier,
+                                       mCurrentEvent);
             barrierModified     = true;
             mBarrierQueueSerial = queueSerial;
 

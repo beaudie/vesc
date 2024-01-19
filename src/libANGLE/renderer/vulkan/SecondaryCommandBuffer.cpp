@@ -98,6 +98,8 @@ const char *GetCommandString(CommandID id)
             return "FillBuffer";
         case CommandID::ImageBarrier:
             return "ImageBarrier";
+        case CommandID::ImageWaitEvent:
+            return "ImageWaitEvent";
         case CommandID::InsertDebugUtilsLabel:
             return "InsertDebugUtilsLabel";
         case CommandID::MemoryBarrier:
@@ -503,6 +505,15 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                         getParamPtr<ImageBarrierParams>(currentCommand);
                     vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0,
                                          0, nullptr, 0, nullptr, 1, &params->imageMemoryBarrier);
+                    break;
+                }
+                case CommandID::ImageWaitEvent:
+                {
+                    const ImageWaitEventParams *params =
+                        getParamPtr<ImageWaitEventParams>(currentCommand);
+                    vkCmdWaitEvents(cmdBuffer, 1, params->event, params->srcStageMask,
+                                    params->dstStageMask, 0, nullptr, 0, nullptr, 1,
+                                    &params->imageMemoryBarrier);
                     break;
                 }
                 case CommandID::InsertDebugUtilsLabel:
