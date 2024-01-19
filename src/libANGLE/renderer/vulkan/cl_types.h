@@ -18,6 +18,14 @@ class CLDeviceVk;
 class CLPlatformVk;
 class CLProgramVk;
 
+struct PushConstant
+{
+    uint32_t offset;
+    uint32_t size;
+    std::vector<uint8_t> data;
+};
+using PushConstants = std::vector<PushConstant>;
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_CL_TYPES_H_

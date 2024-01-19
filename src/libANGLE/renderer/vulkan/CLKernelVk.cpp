@@ -27,10 +27,28 @@ CLKernelVk::CLKernelVk(const cl::Kernel &kernel,
       mContext(&kernel.getProgram().getContext().getImpl<CLContextVk>()),
       mName(name),
       mAttributes(attributes),
-      mArgs(args)
-{}
+      mArgs(std::move(args))
+{
+    mShaderProgramHelper.setShader(gl::ShaderType::Compute,
+                                   mKernel.getProgram().getImpl<CLProgramVk>().getShaderModule());
+}
 
-CLKernelVk::~CLKernelVk() = default;
+CLKernelVk::~CLKernelVk()
+{
+    mPipelineLayout.reset();
+
+    for (auto &pipelineHelper : mComputePipelineCache)
+    {
+        pipelineHelper.destroy(mContext->getDevice());
+    }
+    mShaderProgramHelper.destroy(mContext->getRenderer());
+
+    for (vk::BindingPointer<vk::DescriptorSetLayout, vk::AtomicRefCounted<vk::DescriptorSetLayout>>
+             &dsLayouts : mDescriptorSetLayouts)
+    {
+        dsLayouts.reset();
+    }
+}
 
 angle::Result CLKernelVk::setArg(cl_uint argIndex, size_t argSize, const void *argValue)
 {
@@ -97,6 +115,68 @@ angle::Result CLKernelVk::createInfo(CLKernelImpl::Info *info) const
     }
 
     return angle::Result::Continue;
+}
+
+angle::Result CLKernelVk::getOrCreateComputePipeline(vk::PipelineCacheAccess *pipelineCache,
+                                                     cl::NDRange &ndrange,
+                                                     const cl::Device &device,
+                                                     vk::PipelineHelper **pipelineOut)
+{
+
+    uint32_t constantDataOffset = 0;
+    std::vector<uint32_t> specConstantData;
+    std::vector<VkSpecializationMapEntry> mapEntries;
+    const CLProgramVk::DeviceProgramData *devProgramData =
+        getProgram()->getDeviceProgramData(device.getNative());
+    ASSERT(devProgramData != nullptr);
+
+    cl::CompiledWorkgroupSize compiledWorkgroupSize =
+        devProgramData->getCompiledWGS(getKernelName());
+
+    // Configure the workgroup size (WGS) for this compute shader
+    if (compiledWorkgroupSize != std::array<uint32_t, 3>{0, 0, 0})
+    {
+        // We use "reqd_work_group_size" kernel attribute for WGS here. Frontend validation should
+        // have already ensured that this value matches user-passed LWS.
+        ASSERT(ndrange.lws == compiledWorkgroupSize);
+        ndrange.lws = compiledWorkgroupSize;
+    }
+    else
+    {
+        if (ndrange.nullLocalWorkSize)
+        {
+            // NULL value was passed, in which case the OpenCL implementation will determine
+            // how to be break the global work-items into appropriate work-group instances.
+            ndrange.lws = device.getImpl<CLDeviceVk>().selectWorkGroupSize(ndrange.workDimensions,
+                                                                           ndrange.gws);
+        }
+
+        // If at least one of the kernels does not use the reqd_work_group_size attribute, the
+        // Vulkan SPIR-V produced by the compiler will contain specialization constants
+        std::array<uint32_t, 3> specConstantWorkgroupSizeIDs =
+            devProgramData->reflectionData.specConstantWorkgroupSizeIDs;
+        for (cl_uint i = 0; i < ndrange.workDimensions; ++i)
+        {
+            mapEntries.push_back(
+                VkSpecializationMapEntry{.constantID = specConstantWorkgroupSizeIDs.at(i),
+                                         .offset     = constantDataOffset,
+                                         .size       = sizeof(uint32_t)});
+            specConstantData.push_back(ndrange.lws[i]);
+            constantDataOffset += sizeof(uint32_t);
+        }
+    }
+
+    // Now get or create (on compute pipeline cache miss) compute pipeline and return it
+    VkSpecializationInfo computeSpecializationInfo{
+        .mapEntryCount = (uint32_t)mapEntries.size(),
+        .pMapEntries   = mapEntries.data(),
+        .dataSize      = specConstantData.size() * sizeof(uint32_t),
+        .pData         = specConstantData.data(),
+    };
+    return mShaderProgramHelper.getOrCreateComputePipeline(
+        mContext, &mComputePipelineCache, pipelineCache, getPipelineLayout().get(),
+        vk::ComputePipelineFlags{}, PipelineSource::Draw, pipelineOut, mName.c_str(),
+        &computeSpecializationInfo);
 }
 
 }  // namespace rx
