@@ -11,6 +11,7 @@
 
 #include <vector>
 
+#include "libANGLE/renderer/vulkan/CLEventVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
@@ -218,6 +219,8 @@ class CLCommandQueueVk : public CLCommandQueueImpl
     angle::Result flush() override;
 
     angle::Result finish() override;
+
+    void onEventInit(CLEventVk *eventVk);
 
   private:
     vk::ProtectionType getProtectionType() const { return vk::ProtectionType::Unprotected; }
