@@ -455,6 +455,12 @@ class RendererVk : angle::NonCopyable
         egl::ContextPriority priority,
         vk::OutsideRenderPassCommandBufferHelper **outsideRPCommands);
 
+    angle::Result flushOutsideBarriers(
+        vk::Context *context,
+        vk::ProtectionType protectionType,
+        egl::ContextPriority priority,
+        vk::OutsideRenderPassCommandBufferHelper **outsideRPCommands);
+
     void queuePresent(vk::Context *context,
                       egl::ContextPriority priority,
                       const VkPresentInfoKHR &presentInfo,
