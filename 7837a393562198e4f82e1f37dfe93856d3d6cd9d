@@ -33,6 +33,24 @@
       "message": "Would it be safer to put all of the conditions in these assertions into the if-test and have the positive condition be to call emitSingleConstant? Then the catch-all would be the emission of ANGLE_int_clamp. I don\u0027t know the IR but it seems it would handle any future changes more robustly.",
       "revId": "7837a393562198e4f82e1f37dfe93856d3d6cd9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f436250_529d06d6",
+        "filename": "src/compiler/translator/msl/EmitMetal.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-21T09:55:27Z",
+      "side": 1,
+      "message": "Technically, it\u0027s the parser\u0027s job to guarantee that constant index values pass these assertions; the translator shall never emit something like `ANGLE_int_clamp(2, 0, 1)`. That said, most of MSL generation happens with AST validation disabled so yes, it would be safer for now.",
+      "parentUuid": "e2fb3801_480dc2c9",
+      "revId": "7837a393562198e4f82e1f37dfe93856d3d6cd9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
