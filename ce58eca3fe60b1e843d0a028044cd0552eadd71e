@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b3a8523_4d43527a",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2742,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "870865d0_ee6d0f0d",
+      "range": {
+        "startLine": 2736,
+        "startChar": 4,
+        "endLine": 2742,
+        "endChar": 5
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbfb974d_ed48bb8d",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-01-19T21:41:58Z",
       "side": 1,
       "message": "No need to bring context into here. The functions that use it don\u0027t reference it.",
+      "range": {
+        "startLine": 1319,
+        "startChar": 0,
+        "endLine": 1319,
+        "endChar": 14
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fab2df94_ffec0772",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbfb974d_ed48bb8d",
       "range": {
         "startLine": 1319,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75b7ce3a_2aec37d1",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "792930ee_159ae7a1",
+      "range": {
+        "startLine": 1322,
+        "startChar": 7,
+        "endLine": 1322,
+        "endChar": 21
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7460853e_f362cd0f",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-01-19T21:41:58Z",
       "side": 1,
       "message": "I propose you remove this. Add an `isFoviated` which compares the values against defaults.",
+      "range": {
+        "startLine": 1324,
+        "startChar": 0,
+        "endLine": 1324,
+        "endChar": 18
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "007c1d4b_8651c2b6",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1324,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7460853e_f362cd0f",
       "range": {
         "startLine": 1324,
         "startChar": 0,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db8f9608_c53c1bd0",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5fddcb1_a95cb73b",
+      "range": {
+        "startLine": 1325,
+        "startChar": 0,
+        "endLine": 1329,
+        "endChar": 20
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "767fb675_6b1267c9",
@@ -146,6 +266,30 @@
       "writtenOn": "2024-01-19T21:41:58Z",
       "side": 1,
       "message": "Add a `IMPLEMENTATION_MAX_FOCAL_POINTS` around here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Constants.h;l\u003d102;drc\u003d3cc22c22d7637bc5604e8fef3b0882b51a762901\n\nEventually it needs to be queried from TextureImpl.",
+      "range": {
+        "startLine": 1338,
+        "startChar": 4,
+        "endLine": 1338,
+        "endChar": 51
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c5e6650_c33393d6",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "767fb675_6b1267c9",
       "range": {
         "startLine": 1338,
         "startChar": 4,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e8a9840_59feda6b",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76a9bac7_73acd353",
+      "range": {
+        "startLine": 1345,
+        "startChar": 0,
+        "endLine": 1351,
+        "endChar": 5
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dab7697e_f3e70916",
@@ -192,6 +360,30 @@
       "writtenOn": "2024-01-19T21:41:58Z",
       "side": 1,
       "message": "Have this take the whole `FocalPoint` struct instead of individual parameters (and call sites in Texture/Framebuffer).",
+      "range": {
+        "startLine": 1365,
+        "startChar": 23,
+        "endLine": 1372,
+        "endChar": 38
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6a495a2_4917e4ef",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab7697e_f3e70916",
       "range": {
         "startLine": 1365,
         "startChar": 23,
@@ -225,6 +417,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "748974c0_e87040ab",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ac9a2a6_06f15510",
+      "range": {
+        "startLine": 1375,
+        "startChar": 15,
+        "endLine": 1375,
+        "endChar": 65
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2237819e_c80cd61c",
@@ -238,6 +454,30 @@
       "writtenOn": "2024-01-19T21:41:58Z",
       "side": 1,
       "message": "same as above",
+      "range": {
+        "startLine": 1387,
+        "startChar": 15,
+        "endLine": 1387,
+        "endChar": 65
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97e4a6c3_7c3598b7",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2237819e_c80cd61c",
       "range": {
         "startLine": 1387,
         "startChar": 15,
@@ -284,6 +524,54 @@
       "writtenOn": "2024-01-19T23:44:03Z",
       "side": 1,
       "message": "note to self - remove this bit",
+      "range": {
+        "startLine": 1393,
+        "startChar": 46,
+        "endLine": 1393,
+        "endChar": 85
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f482c990_1e83a836",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Ack, but will make sense only when different backends support different types of foveated rendering?",
+      "parentUuid": "33de0803_6fc4847e",
+      "range": {
+        "startLine": 1393,
+        "startChar": 15,
+        "endLine": 1393,
+        "endChar": 85
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb375954_3c3ec470",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-21T18:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b96f37ba_d233283a",
       "range": {
         "startLine": 1393,
         "startChar": 46,
