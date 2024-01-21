@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c448f69_bbe582a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-21T04:36:51Z",
+      "side": 1,
+      "message": "+syoussefi for any input",
+      "revId": "7837a393562198e4f82e1f37dfe93856d3d6cd9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2fb3801_480dc2c9",
+        "filename": "src/compiler/translator/msl/EmitMetal.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-01-21T04:36:51Z",
+      "side": 1,
+      "message": "Would it be safer to put all of the conditions in these assertions into the if-test and have the positive condition be to call emitSingleConstant? Then the catch-all would be the emission of ANGLE_int_clamp. I don\u0027t know the IR but it seems it would handle any future changes more robustly.",
+      "revId": "7837a393562198e4f82e1f37dfe93856d3d6cd9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
