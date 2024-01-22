@@ -16,6 +16,24 @@
       "message": "It\u0027s weird to have FormatID::NONE and mIsExternalFormat\u003d\u003d0",
       "revId": "9f1a642533c0f889bebcb94e993c03439aea42fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7910ee42_1fa6d498",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4734,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-22T21:03:45Z",
+      "side": 1,
+      "message": "Will dig in more here before proceeding",
+      "parentUuid": "305a5413_bc7984fc",
+      "revId": "9f1a642533c0f889bebcb94e993c03439aea42fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
