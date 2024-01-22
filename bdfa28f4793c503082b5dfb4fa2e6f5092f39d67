@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56c514e8_55d283cb",
+        "filename": "src/compiler/translator/msl/EmitMetal.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1761,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T14:40:36Z",
+      "side": 1,
+      "message": "nit: If you turn this into a helper function, you can expand this to multiple `if`s and make it more readable.\n\nThat would make it easier to also check for uint if that matters.",
+      "range": {
+        "startLine": 1757,
+        "startChar": 16,
+        "endLine": 1761,
+        "endChar": 91
+      },
+      "revId": "bdfa28f4793c503082b5dfb4fa2e6f5092f39d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
