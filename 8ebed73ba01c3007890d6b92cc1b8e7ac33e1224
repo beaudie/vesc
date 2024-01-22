@@ -50,6 +50,24 @@
       "message": "I don\u0027t have access to the background conversations on this, but I believe you\u0027ve added these lines to an early out in the script.  i.e. \"Don\u0027t run on the Linux Bot\".  Was that the intention?",
       "revId": "8ebed73ba01c3007890d6b92cc1b8e7ac33e1224",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "091b8449_2c3da143",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559522
+      },
+      "writtenOn": "2024-01-22T18:04:35Z",
+      "side": 1,
+      "message": "Basically the idea is that we want different authentication flags for bots versus developers. So yes the intention is \"Have different flags for the bot, but keep it the default for developers\". At the moment it doesn\u0027t do anything since it is a no-op, but in the future if the tests were reactivated for the bot, then we want the flag changes there. I\u0027m not attached to the way I have done this though, if you think there is a better way to deal with it, please go ahead with whatever is appropriate. I mostly just wanted to communitcate what the flag changes should be.\nIf you want I can also add a comment above the changes to clarify further.",
+      "parentUuid": "efec1267_f1970a91",
+      "revId": "8ebed73ba01c3007890d6b92cc1b8e7ac33e1224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
