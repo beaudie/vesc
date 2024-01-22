@@ -16,6 +16,704 @@
       "message": "PTAL",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1979e8bd_e596ae82",
+        "filename": "src/libANGLE/Constants.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "If there are going to be small limits like this, doesn\u0027t 2 layers and 1 focal point make more sense? That would support VR better if I understand correctly (2 layers, one eye each!)",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 40
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1d231f6_74322d4d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9835,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "I missed this from the previous change, please make sure this has the `FramebufferID` type. See the other entry points that take a framebuffer.\n\nThat\u0027s needed for Capture/Replay support I think.",
+      "range": {
+        "startLine": 9835,
+        "startChar": 41,
+        "endLine": 9835,
+        "endChar": 59
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1f19f5a_62f131a7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9843,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "No such limitation:\n\n\u003e If this command is called with \u0027requestedFeatures\u0027 equal to zero, then the value\n\u003e of \u0027providedFeatures\u0027 will have FOVEATION_ENABLE_BIT_QCOM unset, and the other\n\u003e bits will be set or unset to indicate which foveation features are supported\n\u003e by the implementation.\n\nThat functionality is missing",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e8a6b58_9abc673c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9846,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "super nit: we don\u0027t do hungarian notation (`pWhatever`). `s/pFB/framebuffer`.",
+      "range": {
+        "startLine": 9846,
+        "startChar": 17,
+        "endLine": 9846,
+        "endChar": 20
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86a433fd_80dcfffb",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9857,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Ditto about `FramebufferID`",
+      "range": {
+        "startLine": 9857,
+        "startChar": 45,
+        "endLine": 9857,
+        "endChar": 51
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4efa32e7_b768b02d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9866,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "super nit: `s/fb/framebuffer`",
+      "range": {
+        "startLine": 9866,
+        "startChar": 17,
+        "endLine": 9866,
+        "endChar": 19
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7264e2f_b83067b6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9874,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Same here with `TextureID`",
+      "range": {
+        "startLine": 9874,
+        "startChar": 41,
+        "endLine": 9874,
+        "endChar": 55
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c95b48a2_bbf16ee5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9883,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "super nit: `s/tex/texture`",
+      "range": {
+        "startLine": 9883,
+        "startChar": 13,
+        "endLine": 9883,
+        "endChar": 16
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9c8154a_f5d87142",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2701,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "nit: Duplicate logic with `FramebufferState::isFoveationEnabled`",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e22a8e56_b95d5938",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2747,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Should this return true instead? If a framebuffer has no attachment, it could be considered foveated all it wants! Does the spec say anything about it?",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ab4e93e_bba3c355",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2753,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "nit: For uniformity with the rest of the file\n\n```suggestion\n    for (size_t colorIndex : mState.mEnabledDrawBuffers)\n```",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1045900_c7fb58b0",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2761,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "If a renderbuffer is attached to a framebuffer, can\u0027t the framebuffer still be foveated?",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7ab5fa3_b625b51b",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "High level comment:\n\nAny helper that is needed by others (backend, Context, etc) can stay. Any helper that is for `Framebuffer`\u0027s use can either be deleted or made private.\n\nTBH, given that all of these just forward to `mFoveationState`, I\u0027d remove them all and replace with a `const FoveationState \u0026getFoveationState() const { ... }`. `Framebuffer` can access `mState.mFoveationState` directly.",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 79
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c60d061d_6ab33bd2",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "High level comment: remove what\u0027s not actually used. Also, probably still best to let the caller deal with the `FoveationState` state directly?",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 0
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab47ce5a_1f780050",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Similar high level comments as with `Framebuffer`",
+      "range": {
+        "startLine": 418,
+        "startChar": 0,
+        "endLine": 434,
+        "endChar": 79
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4242a905_7532e06a",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "```suggestion\nclass State;\n\n// Focal Point information for foveated rendering\n```",
+      "range": {
+        "startLine": 1314,
+        "startChar": 0,
+        "endLine": 1319,
+        "endChar": 49
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "774eb3ee_c8dab3c4",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "```suggestion\n    FocalPoint(const FocalPoint \u0026other) \u003d default;\n    FocalPoint \u0026operator\u003d(const FocalPoint \u0026other) \u003d default;\n```",
+      "range": {
+        "startLine": 1334,
+        "startChar": 0,
+        "endLine": 1345,
+        "endChar": 5
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04c0a453_04c29fd6",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Please surround declaration with `ANGLE_ENABLE_STRUCT_PADDING_WARNINGS` and `ANGLE_DISABLE_STRUCT_PADDING_WARNINGS` to make sure this `memcmp` is never comparing garbage.",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a93fd1f4_23e771e2",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Please use loops given the `IMPLEMENTATION_` constants. No need for the comment then.",
+      "range": {
+        "startLine": 1365,
+        "startChar": 0,
+        "endLine": 1366,
+        "endChar": 48
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c680c48_c1d65a5a",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Ditto (loops, no \"only support\" comment needed)",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66077a03_72ffe4b9",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "nit: remove (unnecessary comment)",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "527a665f_33189859",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4aa804c_309781dd",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "nit: are these _validation_ TODOs?",
+      "range": {
+        "startLine": 4434,
+        "startChar": 0,
+        "endLine": 4437,
+        "endChar": 0
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "770fdac3_ad1bb620",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7998,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Some cleanup suggestions:\n\n```suggestion\n        {\n            if (!context-\u003egetExtensions().textureFoveatedQCOM)\n            {\n                ANGLE_VALIDATION_ERROR(GL_INVALID_ENUM, kFoveatedTextureQcomExtensionRequired);\n                return false;\n            }\n            const GLuint features \u003d static_cast\u003cGLuint\u003e(params[0]);\n            constexpr GLuint kSupportedFeatures \u003d GL_FOVEATION_ENABLE_BIT_QCOM | GL_FOVEATION_SCALED_BIN_METHOD_BIT_QCOM;\n            if (features !\u003d (features \u0026 kSupportedFeatures))\n            {\n                ANGLE_VALIDATION_ERROR(GL_INVALID_ENUM, kFoveatedTextureInvalidParameters);\n                return false;\n            }\n            if ((context-\u003egetTextureByType(target)-\u003egetFoveatedFeatureBits() \u0026\n                 GL_FOVEATION_ENABLE_BIT_QCOM) \u0026\u0026\n                (features \u0026 GL_FOVEATION_ENABLE_BIT_QCOM) \u003d\u003d 0)\n            {\n                ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kFoveatedTextureCannotDisable);\n                return false;\n            }\n        }\n```",
+      "range": {
+        "startLine": 7980,
+        "startChar": 0,
+        "endLine": 7998,
+        "endChar": 13
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d77b104a_c57768d0",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "nit: `s/pFB/framebuffer`",
+      "range": {
+        "startLine": 4195,
+        "startChar": 17,
+        "endLine": 4195,
+        "endChar": 20
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87bbfa5a_59850d42",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4243,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 4243,
+        "startChar": 17,
+        "endLine": 4243,
+        "endChar": 20
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a51d3aba_243994c9",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4292,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "ditto (`texture`)",
+      "range": {
+        "startLine": 4292,
+        "startChar": 13,
+        "endLine": 4292,
+        "endChar": 17
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb434970_6e662734",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Unless you have to, consider a smaller window size (how about 144x320?). Some companies run ANGLE tests on hw simulation devices with limited RAM, and 55MB for this swapchain may be too much for them.",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4aeca35_8e12677f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11057,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Please add \"negative API\" test that exercises the error paths in the spec (do invalid things, expect error codes)",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963ea473_c98bd9af",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11071,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "```suggestion\n    const GLsizei kSizeW \u003d getWindowWidth();\n    const GLsizei kSizeH \u003d getWindowHeight();\n```",
+      "range": {
+        "startLine": 11070,
+        "startChar": 0,
+        "endLine": 11071,
+        "endChar": 32
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15df83e4_cf649575",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "No need for `swapBuffers` at the end of test",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b73137c4_aeeb7d40",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "```suggestion\n    const GLsizei kSizeW \u003d getWindowWidth();\n    const GLsizei kSizeH \u003d getWindowHeight();\n```",
+      "range": {
+        "startLine": 11163,
+        "startChar": 0,
+        "endLine": 11165,
+        "endChar": 32
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57af8ec1_35dd1573",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55d769b2_0b2c8aa6",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:11:12Z",
+      "side": 1,
+      "message": "Please add a few more tests to ensure interaction with other paths work correctly:\n\n- Clear before rendering\n- Clear in the middle of render pass\n- Clear with some channels masked in the middle of render pass\n- Use as blit source\n- Use as blit destination\n- Use as MSAA resolve attachment (i.e. blit destination after MSAA resolve)\n- `glReadPixels` (`EXPECT_PIXEL_COLOR_EQ/NEAR` would be enough)\n- Change foveation parameters and make sure they take effect in the next draw call (makes sure dirty bits are propagated correctly)\n- Set framebuffer with a texture without foveation, render, then set foveation on the texture and render in the same render pass (makes sure observer interface works correctly)\n- Anything else you might notice might interact as you implement in the backend",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
