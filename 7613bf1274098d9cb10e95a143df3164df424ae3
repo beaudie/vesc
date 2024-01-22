@@ -86,6 +86,23 @@
       "parentUuid": "4719c7c6_4042dbf8",
       "revId": "7613bf1274098d9cb10e95a143df3164df424ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96dc1d38_250d5dc4",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 18585,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-22T13:23:10Z",
+      "side": 1,
+      "message": "Consider adding the following test: return type of `foo()` declares `struct A`; return type of `bar()` declares `struct B` with a member of `struct A` type inside.",
+      "revId": "7613bf1274098d9cb10e95a143df3164df424ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
