@@ -59,7 +59,13 @@ if (angle_enable_d3d11) {
   }
 
   config("angle_enable_winuwp_config") {
-    defines = [ "ANGLE_ENABLE_WINDOWS_UWP 1" ]
+    defines = [ "ANGLE_ENABLE_WINDOWS_UWP" ]
+    if (angle_is_winappsdk) {
+      libs = [ "WindowsApp.lib" ]
+      defines += [ "ANGLE_ENABLE_WINDOWS_APP_SDK" ]
+      include_dirs = [ "$angle_root/third_party/WindowsAppSDK/include" ]
+      lib_dirs = [ "$angle_root/third_party/WindowsAppSDK/lib/${target_cpu}" ]
+    }
   }
 
   angle_source_set("angle_enable_winuwp") {

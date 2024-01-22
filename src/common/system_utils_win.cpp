@@ -151,7 +151,7 @@ char GetPathSeparator()
 std::string GetModuleDirectory()
 {
 // GetModuleHandleEx is unavailable on UWP
-#if !defined(ANGLE_IS_WINUWP)
+#if !defined(ANGLE_IS_WINUWP) && !defined(ANGLE_IS_WINAPPSDK)
     static int placeholderSymbol = 0;
     HMODULE module               = nullptr;
     if (GetModuleHandleExW(
