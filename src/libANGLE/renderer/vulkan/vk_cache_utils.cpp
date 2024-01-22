@@ -4731,7 +4731,8 @@ bool YcbcrConversionDesc::updateChromaFilter(RendererVk *rendererVk, VkFilter fi
         // Vulkan ICDs are allowed to not support LINEAR filter.
         angle::FormatID formatId =
             vk::GetFormatIDFromVkFormat(static_cast<VkFormat>(mExternalOrVkFormat));
-        if (!rendererVk->hasImageFormatFeatureBits(
+        if (formatId != angle::FormatID::NONE &&
+            !rendererVk->hasImageFormatFeatureBits(
                 formatId, VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT))
         {
             preferredChromaFilter = VK_FILTER_NEAREST;
