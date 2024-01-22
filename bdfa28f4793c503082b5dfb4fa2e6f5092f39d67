@@ -46,6 +46,30 @@
       },
       "revId": "bdfa28f4793c503082b5dfb4fa2e6f5092f39d67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f0ef35a_a83e138d",
+        "filename": "src/compiler/translator/msl/EmitMetal.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1761,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-22T22:19:10Z",
+      "side": 1,
+      "message": "Added a TODO.",
+      "parentUuid": "aeec6451_9c335b3c",
+      "range": {
+        "startLine": 1757,
+        "startChar": 16,
+        "endLine": 1761,
+        "endChar": 91
+      },
+      "revId": "bdfa28f4793c503082b5dfb4fa2e6f5092f39d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
