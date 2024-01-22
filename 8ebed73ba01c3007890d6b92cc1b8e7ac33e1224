@@ -68,6 +68,41 @@
       "parentUuid": "efec1267_f1970a91",
       "revId": "8ebed73ba01c3007890d6b92cc1b8e7ac33e1224",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50386d7e_cfaee1a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-22T19:42:45Z",
+      "side": 1,
+      "message": "+Roman",
+      "revId": "8ebed73ba01c3007890d6b92cc1b8e7ac33e1224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97f34b16_ae0b2728",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-22T19:42:45Z",
+      "side": 1,
+      "message": "Is the change just for Linux, or all operating systems?\n\nIf the latter, you could use:\n```\n    is_bot \u003d getpass.getuser() \u003d\u003d \u0027chrome-bot\u0027\n    if is_bot:\n        os.environ[\"RBE_use_application_default_credentials\"] \u003d \"true\"\n        os.environ[\"RBE_automatic_auth\"] \u003d \"false\"\n        os.environ[\"RBE_experimental_credentials_helper\"] \u003d \"\"\n        os.environ[\"RBE_experimental_credentials_helper_args\"] \u003d \"\"\n        if sys.platform \u003d\u003d \u0027linux\u0027:\n            logger.warning(\u0027Test is currently a no-op https://anglebug.com/6085\u0027)\n            return EXIT_SUCCESS\n```",
+      "parentUuid": "091b8449_2c3da143",
+      "revId": "8ebed73ba01c3007890d6b92cc1b8e7ac33e1224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
