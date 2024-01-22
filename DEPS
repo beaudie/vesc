@@ -395,10 +395,10 @@ deps = {
 
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
-  'third_party/dummy_chromium': {
-    'url': Var('chromium_git') + '/chromium/src.git' + '@' + Var('chromium_revision'),
-    'condition': 'dummy_checkout_chromium',
-  },
+  #'third_party/dummy_chromium': {
+  #  'url': Var('chromium_git') + '/chromium/src.git' + '@' + Var('chromium_revision'),
+  #  'condition': 'dummy_checkout_chromium',
+  #},
 
   'third_party/EGL-Registry/src': {
     'url': Var('chromium_git') + '/external/github.com/KhronosGroup/EGL-Registry@7dea2ed79187cd13f76183c4b9100159b9e3e071',
