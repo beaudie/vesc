@@ -22,6 +22,30 @@
       },
       "revId": "bdfa28f4793c503082b5dfb4fa2e6f5092f39d67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeec6451_9c335b3c",
+        "filename": "src/compiler/translator/msl/EmitMetal.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1761,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-22T15:01:26Z",
+      "side": 1,
+      "message": "Based on my understanding of AST, the type here shall always be `EbtInt` and the value shall always be within the bounds due to parsing and validation passes; i.e., this block ideally should be just:\n```\nif (!leftType.isUnsizedArray() \u0026\u0026 constIndex !\u003d nullptr)\n```\n\nThe only reason why the checks are `if`s and not assertions is that most of MSL translation and generation ops happen with AST validation disabled. I\u0027d expect this to be cleaned up at some point.",
+      "parentUuid": "56c514e8_55d283cb",
+      "range": {
+        "startLine": 1757,
+        "startChar": 16,
+        "endLine": 1761,
+        "endChar": 91
+      },
+      "revId": "bdfa28f4793c503082b5dfb4fa2e6f5092f39d67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
