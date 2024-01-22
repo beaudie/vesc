@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27497d55_1922d3f2",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:32:22Z",
+      "side": 1,
+      "message": "Drive by: the comment makes it sound like `gTrialTimeSeconds` will definitely pass, even if it does `warmupSteps` faster than that.\n\nIf that\u0027s true, sounds like you should be able to take advantage of that. Like, set `gTrialTimeSeconds` to `max(1.5, ...)` and no need for anything else added here?",
+      "revId": "e061e561f8dc74cfb4d697224cd29f133027fb34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
