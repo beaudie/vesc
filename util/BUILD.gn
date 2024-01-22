@@ -31,7 +31,7 @@ _util_sources = [
 
 if (is_win) {
   _util_sources += [ "windows/WGLWindow.h" ]
-  if (!angle_is_winuwp) {
+  if (!angle_is_winuwp && !angle_is_winappsdk) {
     _util_sources += [
       "windows/win32/Win32Pixmap.cpp",
       "windows/win32/Win32Pixmap.h",
@@ -155,7 +155,7 @@ angle_source_set("angle_util_loader_headers") {
     "util_export.h",
   ]
 
-  if (is_win && !angle_is_winuwp) {
+  if (is_win && !angle_is_winuwp && !angle_is_winappsdk) {
     sources += [ "windows/wgl_loader_autogen.h" ]
   }
 
@@ -173,7 +173,7 @@ angle_source_set("angle_util_loader") {
     "gles_loader_autogen.cpp",
   ]
 
-  if (is_win && !angle_is_winuwp) {
+  if (is_win && !angle_is_winuwp && !angle_is_winappsdk) {
     sources += [ "windows/wgl_loader_autogen.cpp" ]
   }
 
@@ -363,7 +363,7 @@ foreach(is_shared_library,
 
       # Currently excluded from the static build because of build issues.
       # Would be nice if could be included.
-      if (is_win && !angle_is_winuwp) {
+      if (is_win && !angle_is_winuwp && !angle_is_winappsdk) {
         sources += [ "windows/WGLWindow.cpp" ]
       }
     } else {
@@ -375,7 +375,7 @@ foreach(is_shared_library,
   }
 }
 
-if (is_win && !angle_is_winuwp) {
+if (is_win && !angle_is_winuwp && !angle_is_winappsdk) {
   angle_source_set("angle_stack_walker") {
     sources = [
       "windows/third_party/StackWalker/src/StackWalker.cpp",
@@ -429,7 +429,7 @@ angle_source_set("angle_test_utils") {
 
   if (is_win) {
     sources += [ "windows/test_utils_win.cpp" ]
-    if (angle_is_winuwp) {
+    if (angle_is_winuwp || angle_is_winappsdk) {
       sources += [ "windows/test_utils_winuwp.cpp" ]
     } else {
       deps += [ ":angle_stack_walker" ]
