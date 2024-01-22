@@ -52,6 +52,24 @@
       "parentUuid": "d679d5ea_71253799",
       "revId": "e061e561f8dc74cfb4d697224cd29f133027fb34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec4442fd_57221bb3",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-22T16:39:51Z",
+      "side": 1,
+      "message": "Ack, the comment could be improved then.\n\nAlso, I don\u0027t really know why we even glFinish during warmup. We could maybe just always do `RunContinuously`. I know Jamie experimented a lot though, I wouldn\u0027t just change it on an intuition.",
+      "parentUuid": "57edf882_de089ec4",
+      "revId": "e061e561f8dc74cfb4d697224cd29f133027fb34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
