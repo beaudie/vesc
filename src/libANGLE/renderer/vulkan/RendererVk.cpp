@@ -1927,18 +1927,21 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount,
                                              mQueueFamilyProperties.data());
 
+    WARN() << "Initializing...";
     uint32_t queueFamilyMatchCount = 0;
     // Try first for a protected graphics queue family
     uint32_t firstGraphicsQueueFamily = vk::QueueFamily::FindIndex(
         mQueueFamilyProperties,
         (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT | VK_QUEUE_PROTECTED_BIT), 0,
         &queueFamilyMatchCount);
+    WARN() << "  - Protected queue count: " << queueFamilyMatchCount;
     // else just a graphics queue family
     if (queueFamilyMatchCount == 0)
     {
         firstGraphicsQueueFamily = vk::QueueFamily::FindIndex(
             mQueueFamilyProperties, (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT), 0,
             &queueFamilyMatchCount);
+        WARN() << "  - No-protected queue count: " << queueFamilyMatchCount;
     }
     ANGLE_VK_CHECK(displayVk, queueFamilyMatchCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
@@ -1963,6 +1966,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // for the best.  We cannot wait for a window surface to know which supports present because of
     // EGL_KHR_surfaceless_context or simply pbuffers.  So far, only MoltenVk seems to expose
     // multiple queue families, and using the first queue family is fine with it.
+    WARN() << "  - Create device on queue family: " << firstGraphicsQueueFamily;
     ANGLE_TRY(createDeviceAndQueue(displayVk, firstGraphicsQueueFamily));
 
     // Initialize the format table.
@@ -3575,6 +3579,7 @@ angle::Result RendererVk::checkQueueForSurfacePresent(DisplayVk *displayVk,
                                                       VkSurfaceKHR surface,
                                                       bool *supportedOut)
 {
+    WARN() << "Checking if queue family " << mCurrentQueueFamilyIndex << " supports present";
     // We've already initialized a device, and can't re-create it unless it's never been used.
     // If recreation is ever necessary, it should be able to deal with contexts currently running in
     // other threads using the existing queue.  For example, multiple contexts (not in a share
@@ -3589,6 +3594,7 @@ angle::Result RendererVk::checkQueueForSurfacePresent(DisplayVk *displayVk,
                  vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mCurrentQueueFamilyIndex,
                                                       surface, &supportsPresent));
 
+    WARN() << " - It " << (supportsPresent == VK_TRUE ? "does" : "DOESN'T");
     *supportedOut = supportsPresent == VK_TRUE;
     return angle::Result::Continue;
 }
