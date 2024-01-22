@@ -41,8 +41,9 @@ declare_args() {
   # infrastructure (e.g. windowing helper functions) in place to run them.
   # Also don't build them with MSVC, because tests and unused dependencies
   # often have problems building with it, e.g. for C++20.
-  angle_build_all = !build_with_chromium && !angle_is_winuwp &&
-                    !angle_is_msvc && angle_has_build && angle_build_tests
+  angle_build_all =
+      !build_with_chromium && !angle_is_winuwp && !angle_is_winappsdk &&
+      !angle_is_msvc && angle_has_build && angle_build_tests
 
   # Enable generating current commit information using git
   angle_enable_commit_id = true
@@ -155,6 +156,9 @@ config("internal_config") {
     defines += [ "ANGLE_IS_WIN" ]
     if (angle_is_winuwp) {
       defines += [ "ANGLE_IS_WINUWP" ]
+    }
+    if (angle_is_winappsdk) {
+      defines += [ "ANGLE_IS_WINAPPSDK" ]
     }
   } else if (is_linux || is_chromeos) {
     defines += [ "ANGLE_IS_LINUX" ]
@@ -334,7 +338,7 @@ config("extra_warnings") {
     cflags_cc = [ "-Wdeprecated-copy" ]
   }
 
-  if (angle_is_winuwp) {
+  if (angle_is_winuwp || angle_is_winappsdk) {
     cflags += [
       "/wd4091",  # keyword ignored on left of type when no variable is declared
       "/wd4447",  # 'main' signature found without threading model.
@@ -624,7 +628,7 @@ angle_static_library("angle_gpu_info_util") {
 
   if (is_win) {
     sources += libangle_gpu_info_util_win_sources
-    if (!angle_is_winuwp) {
+    if (!angle_is_winuwp && !angle_is_winappsdk) {
       libs += [ "setupapi.lib" ]
     }
     libs += [ "dxgi.lib" ]
@@ -950,7 +954,7 @@ config("angle_backend_config") {
     configs += [ "src/libANGLE/renderer/cl:angle_cl_backend_config" ]
   }
 
-  if (angle_is_winuwp) {
+  if (angle_is_winuwp || angle_is_winappsdk) {
     configs += [ "src/libANGLE/renderer/d3d:angle_enable_winuwp_config" ]
   }
 }
@@ -1021,7 +1025,7 @@ if ((is_win && angle_enable_gl) || angle_enable_d3d11 || angle_enable_d3d9) {
       "src/libANGLE/renderer/dxgi_support_table_autogen.cpp",
     ]
 
-    if (!angle_is_winuwp) {
+    if (!angle_is_winuwp && !angle_is_winappsdk) {
       sources += [
         "src/libANGLE/renderer/d3d_format.cpp",
         "src/libANGLE/renderer/d3d_format.h",
@@ -1065,7 +1069,7 @@ angle_source_set("libANGLE_no_vulkan") {
     ":includes",
   ]
 
-  if (is_win && !angle_is_winuwp) {
+  if (is_win && !angle_is_winuwp && !angle_is_winappsdk) {
     libs += [
       "gdi32.lib",
       "user32.lib",
@@ -1092,7 +1096,7 @@ angle_source_set("libANGLE_no_vulkan") {
     public_deps += [ "src/libANGLE/renderer/wgpu:angle_wgpu_backend" ]
   }
 
-  if (angle_is_winuwp) {
+  if (angle_is_winuwp || angle_is_winappsdk) {
     public_deps += [ "src/libANGLE/renderer/d3d:angle_enable_winuwp" ]
   }
 
