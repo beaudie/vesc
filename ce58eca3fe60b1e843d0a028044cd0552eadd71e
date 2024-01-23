@@ -580,6 +580,30 @@
       },
       "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa843209_2bef97cd",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-23T19:27:12Z",
+      "side": 1,
+      "message": "Different backend or just different Vulkan drivers could support different features. We\u0027ll need a way to communicate from the backend. The extension seems say that this query is per-texture which seems extreme.",
+      "parentUuid": "f482c990_1e83a836",
+      "range": {
+        "startLine": 1393,
+        "startChar": 15,
+        "endLine": 1393,
+        "endChar": 85
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
