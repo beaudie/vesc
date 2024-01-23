@@ -51,6 +51,24 @@
       "parentUuid": "c3718811_e096749f",
       "revId": "b49c03dc700c906824343cd29cb54fb83d5347af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de27e062_c2aac9e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-01-23T19:34:24Z",
+      "side": 1,
+      "message": "Thanks for reviewing it! Could you please also submit it? I don\u0027t have the permissions to submit it",
+      "parentUuid": "5101bc52_4344d368",
+      "revId": "b49c03dc700c906824343cd29cb54fb83d5347af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
