@@ -34,6 +34,24 @@
       "parentUuid": "26b72607_b6ecfeaa",
       "revId": "2a4924f0f6b8812ddfe607d3db2d16683dc2cfd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29c56ee4_e552f88c",
+        "filename": "third_party/clspv/gn/llvm/sources/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-01-23T22:18:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9742f0f4_b288b183",
+      "revId": "2a4924f0f6b8812ddfe607d3db2d16683dc2cfd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
