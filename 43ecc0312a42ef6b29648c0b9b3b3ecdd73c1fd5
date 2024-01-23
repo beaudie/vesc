@@ -34,6 +34,24 @@
       "parentUuid": "0951d95a_cd20aae7",
       "revId": "43ecc0312a42ef6b29648c0b9b3b3ecdd73c1fd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0da2a226_14624159",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-23T21:03:40Z",
+      "side": 0,
+      "message": "\u003e does a single method add that much binary size overhead?\n\nYou could always measure, but it\u0027s a chain of functions that are ~1000 lines of code. I\u0027d rather not have that shipped everywhere by default, like to billions of Chrome users.\n\n\u003e 1 of the requirements from customer is to be able to dump such graphs without needing to update vendor partition a.k.a without rebuilding angle libs\n\nYou could always set the gn flag in your build?",
+      "parentUuid": "5abaaad7_44e54dae",
+      "revId": "43ecc0312a42ef6b29648c0b9b3b3ecdd73c1fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
