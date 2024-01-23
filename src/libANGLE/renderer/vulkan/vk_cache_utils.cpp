@@ -27,7 +27,6 @@
 
 namespace rx
 {
-constexpr bool kDumpPipelineCacheGraph = false;
 
 namespace vk
 {
@@ -6889,7 +6888,7 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
 template <typename Hash>
 void GraphicsPipelineCache<Hash>::destroy(ContextVk *contextVk)
 {
-    if (kDumpPipelineCacheGraph && !mPayload.empty())
+    if (contextVk->isPipelineCacheGraphDumpEnabled() && !mPayload.empty())
     {
         vk::DumpPipelineCacheGraph<Hash>(contextVk, mPayload);
     }
@@ -6910,7 +6909,7 @@ void GraphicsPipelineCache<Hash>::destroy(ContextVk *contextVk)
 template <typename Hash>
 void GraphicsPipelineCache<Hash>::release(ContextVk *contextVk)
 {
-    if (kDumpPipelineCacheGraph && !mPayload.empty())
+    if (contextVk->isPipelineCacheGraphDumpEnabled() && !mPayload.empty())
     {
         vk::DumpPipelineCacheGraph<Hash>(contextVk, mPayload);
     }
