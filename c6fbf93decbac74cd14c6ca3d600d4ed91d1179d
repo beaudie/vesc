@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef3dd8e1_37cf7f42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-23T18:28:23Z",
+      "side": 1,
+      "message": "This CL broke SwS: https://crrev.com/c/5228780\n(the first 3 CLs on the roll are ok https://crrev.com/c/5227431)",
+      "revId": "c6fbf93decbac74cd14c6ca3d600d4ed91d1179d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
