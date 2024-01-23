@@ -205,6 +205,11 @@ config("internal_config") {
     defines += [ "ANGLE_ENABLE_TRACE_EVENTS=1" ]
   }
 
+  # Enables pipeline dump functionality. The relevant directory must be writable for this to function.
+  if (angle_dump_pipeline_cache_graph) {
+    defines += [ "ANGLE_ENABLE_PIPELINE_DUMP=1" ]
+  }
+
   # Checks that unwind backtrace support for Android is enabled only for debug mode.
   assert(is_debug || !angle_enable_unwind_backtrace_support)
 
