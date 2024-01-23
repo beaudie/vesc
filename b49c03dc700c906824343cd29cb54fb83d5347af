@@ -33,6 +33,24 @@
       "message": "Hello, thanks for reviewing it\nYou are right, I will need a +2 to submit it",
       "revId": "b49c03dc700c906824343cd29cb54fb83d5347af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5101bc52_4344d368",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-23T14:23:36Z",
+      "side": 1,
+      "message": "Done!",
+      "parentUuid": "c3718811_e096749f",
+      "revId": "b49c03dc700c906824343cd29cb54fb83d5347af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
