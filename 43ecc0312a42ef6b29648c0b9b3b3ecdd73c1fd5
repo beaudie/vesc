@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0951d95a_cd20aae7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-23T18:12:42Z",
+      "side": 0,
+      "message": "This adds binary size overhead for a debug feature. My suggestion is to keep this here with an `ifdef ANGLE_DUMP_PIPELINE_CACHE_GRAPH` around it like in ContextVk.cpp, then check for `kDumpPipelineCacheGraph \u0026\u0026 contextVk-\u003eisPipelineCacheGraphDumpEnabled()` below (or use a helper). That will help the compiler DCE the functions when the functionality is not built at all.",
+      "revId": "43ecc0312a42ef6b29648c0b9b3b3ecdd73c1fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
