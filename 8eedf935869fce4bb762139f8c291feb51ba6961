@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80c79361_c9a57ce0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2024-01-23T21:47:08Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "9d41a009_692aba6d",
+      "revId": "8eedf935869fce4bb762139f8c291feb51ba6961",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc484c96_cf8f2013",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ed62350_415aeda3",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2024-01-23T21:47:08Z",
+      "side": 1,
+      "message": "removed limitation.",
+      "parentUuid": "dc484c96_cf8f2013",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 9
+      },
+      "revId": "8eedf935869fce4bb762139f8c291feb51ba6961",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c6e1634_b1c3149c",
@@ -54,6 +96,30 @@
       "writtenOn": "2024-01-22T21:57:32Z",
       "side": 1,
       "message": "Suggest using `log2` (and `ceil`) for clarity.",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 211,
+        "endChar": 9
+      },
+      "revId": "8eedf935869fce4bb762139f8c291feb51ba6961",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e4ed120_0bb9641b",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2024-01-23T21:47:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c6e1634_b1c3149c",
       "range": {
         "startLine": 206,
         "startChar": 0,
