@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af801c79_4710d6bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-01-23T22:02:22Z",
+      "side": 1,
+      "message": "Thanks for doing this. I noticed this when I was refactoring and then busy on other things and never get back to it.",
+      "revId": "d285c668dbb926967ef39b251ce297e3d3822c0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
