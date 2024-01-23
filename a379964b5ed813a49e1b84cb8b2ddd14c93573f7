@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e26fa9c2_a104a24b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-23T22:20:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfb45545_ed52c131",
+      "range": {
+        "startLine": 1238,
+        "startChar": 4,
+        "endLine": 1238,
+        "endChar": 28
+      },
+      "revId": "a379964b5ed813a49e1b84cb8b2ddd14c93573f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4752b1bd_3bc39ff5",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-01-23T21:47:42Z",
       "side": 1,
       "message": "not quite\n\nthis will never be true for non-Android platforms. hmmm, need some other logic?",
+      "range": {
+        "startLine": 2356,
+        "startChar": 49,
+        "endLine": 2356,
+        "endChar": 80
+      },
+      "revId": "a379964b5ed813a49e1b84cb8b2ddd14c93573f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0a375c3_b1f98fc3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2356,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-23T22:20:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4752b1bd_3bc39ff5",
       "range": {
         "startLine": 2356,
         "startChar": 49,
