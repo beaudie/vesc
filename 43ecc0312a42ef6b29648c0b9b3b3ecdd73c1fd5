@@ -52,6 +52,24 @@
       "parentUuid": "5abaaad7_44e54dae",
       "revId": "43ecc0312a42ef6b29648c0b9b3b3ecdd73c1fd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2800d9b1_13501f22",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-23T21:45:00Z",
+      "side": 0,
+      "message": "\u003e You could always set the gn flag in your build?\n\nfair enough",
+      "parentUuid": "0da2a226_14624159",
+      "revId": "43ecc0312a42ef6b29648c0b9b3b3ecdd73c1fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
