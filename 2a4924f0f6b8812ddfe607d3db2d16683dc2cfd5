@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26b72607_b6ecfeaa",
+        "filename": "third_party/clspv/gn/llvm/sources/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-23T21:07:40Z",
+      "side": 1,
+      "message": "Could absolute paths be used instead using `$clspv_llvm_dir/`? I\u0027m not quite confident this can\u0027t blow up.",
+      "revId": "2a4924f0f6b8812ddfe607d3db2d16683dc2cfd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
