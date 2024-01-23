@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7259f53_83d2a528",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-23T20:56:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efcdca0f_5fbcd714",
+      "revId": "e59c8875fcd5e71d9cc0ef509f39f83399372086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cf92000_9bca26a0",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-23T18:12:42Z",
       "side": 1,
       "message": "nit: Not really needed? `fclose()` always `fflush()`es.",
+      "revId": "e59c8875fcd5e71d9cc0ef509f39f83399372086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cf68f2e_341450e0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-23T20:56:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cf92000_9bca26a0",
       "revId": "e59c8875fcd5e71d9cc0ef509f39f83399372086",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

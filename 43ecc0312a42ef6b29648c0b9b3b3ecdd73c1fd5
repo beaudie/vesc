@@ -16,6 +16,24 @@
       "message": "This adds binary size overhead for a debug feature. My suggestion is to keep this here with an `ifdef ANGLE_DUMP_PIPELINE_CACHE_GRAPH` around it like in ContextVk.cpp, then check for `kDumpPipelineCacheGraph \u0026\u0026 contextVk-\u003eisPipelineCacheGraphDumpEnabled()` below (or use a helper). That will help the compiler DCE the functions when the functionality is not built at all.",
       "revId": "43ecc0312a42ef6b29648c0b9b3b3ecdd73c1fd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5abaaad7_44e54dae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-23T20:56:27Z",
+      "side": 0,
+      "message": "1 of the requirements from customer is to be able to dump such graphs without needing to update vendor partition a.k.a without rebuilding angle libs\n\n\u003e This adds binary size overhead for a debug feature\n\ndoes a single method add that much binary size overhead?\n\n\u003e My suggestion is to keep this here\n\ngiven we wanted to decide at runtime whether the pipeline cache graph gets dumped, having all android property checks in a single place (during Context init) made sense. Otherwise we would be querying the property unnecessarily on each cache release",
+      "parentUuid": "0951d95a_cd20aae7",
+      "revId": "43ecc0312a42ef6b29648c0b9b3b3ecdd73c1fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
