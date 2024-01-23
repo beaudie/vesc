@@ -385,8 +385,10 @@ deps = {
   },
 
 
-  'third_party/dawn':
-    Var('dawn_git') + '/dawn.git' + '@' +  Var('dawn_revision'),
+  'third_party/dawn': {
+    'url': Var('dawn_git') + '/dawn.git' + '@' +  Var('dawn_revision'),
+    'condition': 'not build_with_chromium'
+  },
 
   'third_party/depot_tools': {
     'url': Var('chromium_git') + '/chromium/tools/depot_tools.git@6fc0c97ab284021b72e3bc962f7fa879ffcad65b',
