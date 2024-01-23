@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d6b60f5_40f273a4",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1560543
+      },
+      "writtenOn": "2024-01-23T18:58:37Z",
+      "side": 1,
+      "message": "This repository is pulled in chromium/src checkout now, and results in two dawn repositories being cloned.\n\nCan we add \n\n```\n\u0027condition\u0027: \u0027not build_with_chromium\u0027\n```\nto this DEPS?",
+      "revId": "2e167e092239c3e6f5357383db405e60e3b23ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
