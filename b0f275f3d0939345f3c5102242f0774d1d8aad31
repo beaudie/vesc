@@ -22,6 +22,30 @@
       },
       "revId": "b0f275f3d0939345f3c5102242f0774d1d8aad31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5194aae7_81ab14dc",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2024-01-24T18:59:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb7cf3c9_c1b4f911",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 9
+      },
+      "revId": "b0f275f3d0939345f3c5102242f0774d1d8aad31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
