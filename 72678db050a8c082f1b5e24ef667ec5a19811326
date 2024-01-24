@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98912207_a6d89e71",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-01-24T23:43:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5d842d9_e2305576",
+      "range": {
+        "startLine": 444,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 19
+      },
+      "revId": "72678db050a8c082f1b5e24ef667ec5a19811326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b57e7f5c_3565d239",
@@ -87,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6a863fc_d92817fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5486,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-01-24T23:43:25Z",
+      "side": 1,
+      "message": "There\u0027s a comment at :5458",
+      "parentUuid": "3ab41d24_4cf3ddcb",
+      "range": {
+        "startLine": 5486,
+        "startChar": 42,
+        "endLine": 5486,
+        "endChar": 43
+      },
+      "revId": "72678db050a8c082f1b5e24ef667ec5a19811326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40b37138_e8474387",
@@ -100,6 +148,30 @@
       "writtenOn": "2024-01-24T23:33:12Z",
       "side": 1,
       "message": "Could just move this inside the isYUV check below.",
+      "range": {
+        "startLine": 5608,
+        "startChar": 11,
+        "endLine": 5608,
+        "endChar": 39
+      },
+      "revId": "72678db050a8c082f1b5e24ef667ec5a19811326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6361c8f2_10622e03",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5608,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-01-24T23:43:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40b37138_e8474387",
       "range": {
         "startLine": 5608,
         "startChar": 11,
