@@ -2331,8 +2331,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // 364 are known to be affected, at least up to 375.
     ANGLE_FEATURE_CONDITION(features, emulateAtan2Float, isNvidia);
 
+    // On the following platforms, when glProgramBinary is called, the UBO bindings are not reset to
+    // their original values.
     ANGLE_FEATURE_CONDITION(features, reapplyUBOBindingsAfterUsingBinaryProgram,
-                            isAMD || IsAndroid());
+                            isNvidia || isAMD || IsAndroid());
 
     // TODO(oetuaho): Make this specific to the affected driver versions. Versions at least up to
     // 390 are known to be affected. Versions after that are expected not to be affected.
