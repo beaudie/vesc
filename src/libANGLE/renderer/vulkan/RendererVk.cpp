@@ -742,9 +742,15 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 {
     RendererVk *rendererVk = static_cast<RendererVk *>(userData);
 
+    // VUID-VkDebugUtilsMessengerCallbackDataEXT-pMessage-parameter
+    // pMessage must be a null-terminated UTF-8 string
+    ASSERT(callbackData->pMessage != nullptr);
+
     // See if it's an issue we are aware of and don't want to be spammed about.
-    if (ShouldReportDebugMessage(rendererVk, callbackData->pMessageIdName,
-                                 callbackData->pMessage) == DebugMessageReport::Ignore)
+    // Always report the debug message if message ID is missing
+    if ((callbackData->pMessageIdName) &&
+        (ShouldReportDebugMessage(rendererVk, callbackData->pMessageIdName,
+                                  callbackData->pMessage) == DebugMessageReport::Ignore))
     {
         return VK_FALSE;
     }
