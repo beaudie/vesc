@@ -16,6 +16,24 @@
       "message": "This C++17 feature triggered problems in our flows.\nBetter to do this:\n\n```\n   volatile bool ANGLE_volatile_true_N \u003d true; // N needed for uniqueness\n   if (ANGLE_volatile_true_N)\n```",
       "revId": "55165dcc9b601ec11b1acc52955b99628c34d749",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd18b221_3761a5a3",
+        "filename": "src/compiler/translator/msl/EmitMetal.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-24T16:31:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "544b58a5_5786e0be",
+      "revId": "55165dcc9b601ec11b1acc52955b99628c34d749",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
