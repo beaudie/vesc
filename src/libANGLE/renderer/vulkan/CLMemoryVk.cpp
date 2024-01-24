@@ -164,6 +164,28 @@ angle::Result CLBufferVk::create(void *hostPtr)
     return angle::Result::Continue;
 }
 
+angle::Result CLBufferVk::createStagingBuffer(size_t size)
+{
+    VkBufferCreateInfo createInfo = mDefaultBufferCreateInfo;
+    createInfo.size               = size;
+
+    if (IsError(mStagingBuffer.init(mContext, createInfo, getVkMemPropertyFlags())))
+    {
+        ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result CLBufferVk::copyStagingTo(void *ptr, size_t offset, size_t size)
+{
+    uint8_t *ptrOut;
+    ANGLE_TRY(getStagingBuffer().map(mContext, &ptrOut));
+    std::memcpy(ptr, ptrOut + offset, size);
+    getStagingBuffer().unmap(mContext->getRenderer());
+    return angle::Result::Continue;
+}
+
 angle::Result CLBufferVk::map()
 {
     if (mParent != nullptr)
