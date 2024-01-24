@@ -16,6 +16,23 @@
       "message": "Alexey, are you happy with this? Feel free to +2",
       "revId": "129976c9de0d3aa4c6ce25c4521ca0b243a95e98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "952ef57d_ab9bb852",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-01-24T21:31:49Z",
+      "side": 1,
+      "message": "Please narrow the suppressions to the affected platforms. L295 should apply only to AMD.\n\nThe pattern for Apple GPUs is different:\n```\ndEQP-GLES2.functional.shaders.indexing.tmp_array.float_const_write_dynamic_*\n```",
+      "revId": "129976c9de0d3aa4c6ce25c4521ca0b243a95e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
