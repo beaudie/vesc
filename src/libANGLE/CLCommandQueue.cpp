@@ -659,6 +659,7 @@ angle::Result CommandQueue::enqueueMarker(cl_event *event)
 
 angle::Result CommandQueue::enqueueWaitForEvents(cl_uint numEvents, const cl_event *eventList)
 {
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
     return mImpl->enqueueWaitForEvents(Event::Cast(numEvents, eventList));
 }
 
