@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb7cf3c9_c1b4f911",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:10:32Z",
+      "side": 1,
+      "message": "nit: I\u0027d just remove this if, or turn into an ASSERT sort of thing. It\u0027s a test configuration bug, not really something that could be unforeseen.",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 9
+      },
+      "revId": "b0f275f3d0939345f3c5102242f0774d1d8aad31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
