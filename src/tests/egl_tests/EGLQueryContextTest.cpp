@@ -150,6 +150,23 @@ TEST_P(EGLQueryContextTest, BadAttribute)
     EXPECT_TRUE(eglGetError() == EGL_BAD_ATTRIBUTE);
 }
 
+TEST_P(EGLQueryContextTest, BadClientApi)
+{
+    EGLint majorVersion, minorVersion;
+    ASSERT_EGL_TRUE(eglInitialize(mDisplay, &majorVersion, &minorVersion));
+
+    eglBindAPI(EGL_OPENGL_API);
+    EXPECT_EGL_ERROR(EGL_BAD_PARAMETER);
+
+    const EGLint configAttributes[] = {EGL_NONE};
+    EGLint configCount              = 0;
+    ASSERT_EGL_TRUE(eglChooseConfig(mDisplay, configAttributes, &mConfig, 1, &configCount));
+
+    EGLint contextAttibutes[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
+    eglCreateContext(mDisplay, mConfig, nullptr, contextAttibutes);
+    ASSERT_EGL_SUCCESS();
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLQueryContextTest);
 ANGLE_INSTANTIATE_TEST(EGLQueryContextTest,
                        WithNoFixture(ES2_D3D9()),
