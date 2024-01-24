@@ -389,8 +389,30 @@ angle::Result CLCommandQueueVk::enqueueMarker(CLEventImpl::CreateFunc &eventCrea
 
 angle::Result CLCommandQueueVk::enqueueWaitForEvents(const cl::EventPtrs &events)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    // Unlike clWaitForEvents, this routine is non-blocking
+    if (!events.empty())
+    {
+        bool insertedBarrier = false;
+        for (const cl::EventPtr &event : events)
+        {
+            if (event->getImpl<CLEventVk>().isUserEvent() ||
+                event->getCommandQueue() != &mCommandQueue)
+            {
+                // We cannot use a barrier in these cases, therefor defer the event
+                // handling till submission time
+                mDepEvents.push_back(event);
+            }
+            else if (event->getCommandQueue() == &mCommandQueue && !insertedBarrier)
+            {
+                // As long as there is at least one dependant command in same queue,
+                // we just need to insert one execution barrier
+                ANGLE_TRY(enqueueBarrier());
+                insertedBarrier = true;
+            }
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueBarrierWithWaitList(const cl::EventPtrs &waitEvents,
