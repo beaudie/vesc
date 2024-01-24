@@ -15,6 +15,7 @@
 
 #include "libANGLE/CLBuffer.h"
 #include "libANGLE/CLContext.h"
+#include "libANGLE/CLEvent.h"
 #include "libANGLE/CLProgram.h"
 #include "libANGLE/cl_utils.h"
 
@@ -251,8 +252,20 @@ angle::Result CLContextVk::createUserEvent(const cl::Event &event, CLEventImpl::
 
 angle::Result CLContextVk::waitForEvents(const cl::EventPtrs &events)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    for (auto &event : events)
+    {
+        CLEventVk *eventVk = &event.get()->getImpl<CLEventVk>();
+        if (eventVk->isUserEvent())
+        {
+            ANGLE_TRY(eventVk->waitForUserEventStatus());
+        }
+        else
+        {
+            ANGLE_TRY(event->getCommandQueue()->finish());
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 }  // namespace rx
