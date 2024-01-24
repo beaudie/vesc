@@ -16,6 +16,24 @@
       "message": "shabi - do you want to validate your flow with this change or can i go ahead and land this change?",
       "revId": "5bb8a7c4a808bcdc7fa99e02608a39badfae7fe9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94319c45_67348fb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-24T20:03:29Z",
+      "side": 1,
+      "message": "ha ha, did not mark this comment as unresolved. no worries, thanks. will land this change",
+      "parentUuid": "d7288b75_10316d1c",
+      "revId": "5bb8a7c4a808bcdc7fa99e02608a39badfae7fe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
