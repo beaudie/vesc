@@ -22,6 +22,30 @@
       },
       "revId": "336a7f28f6bcaac8c5ebdf72bd9a554de40e90e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbdcd205_110d0389",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-24T20:55:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e506bee8_d2f46581",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 0
+      },
+      "revId": "336a7f28f6bcaac8c5ebdf72bd9a554de40e90e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

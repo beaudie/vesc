@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "990f25c0_8a5508eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-24T20:55:14Z",
+      "side": 1,
+      "message": "Alexey, are you happy with this? Feel free to +2",
+      "revId": "129976c9de0d3aa4c6ce25c4521ca0b243a95e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
