@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "abbfece0_e3eb1cf7",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:04:22Z",
+      "side": 1,
+      "message": "Would it be easier if `angle_is_winuwp` is true if `angle_is_winappsdk` is, so as far as gn is concerned they\u0027d be mostly the same? That aligns with the CL\u0027s description too:\n\n\u003e To reduce the set of changes, and because it is\n\u003e functionally the same, a Windows App SDK build is\n\u003e basically a UWP build, but with an extra define\n\nSee comment in the angle.gni file",
+      "parentUuid": "c98d59a3_9d5270a7",
+      "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "509aac14_6d22da50",
         "filename": "src/libANGLE/renderer/d3d/BUILD.gn",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2024-01-23T21:29:11Z",
       "side": 1,
       "message": "This is really a bit of a question. Right now, I am basically \"assuming\" that people that want WinUI will first run the preparation steps and place the results into the `third_party/WindowsAppSDK` folder.\n\nI could write a python script, but what do you folks think? The steps would be:\n\n1. Download the WinUI NuGet: https://www.nuget.org/packages/Microsoft.WindowsAppSdk\n2. Run `winmdidl` tool on all the *.winmd files in the NuGet to generate the *.idl\n3. Run the `midlrt` tool on all the *.idl files to generate the *.h files we actually want\n4. Copy all the *.h into the include folder\n5. Copy all the *.lib into the lib/\u003ccpu\u003e folder",
+      "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0edb603_6951b62d",
+        "filename": "src/libANGLE/renderer/d3d/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:04:22Z",
+      "side": 1,
+      "message": "Typically we have this stuff sorted out by Chromium folks and we pull the SDK through gclient (if not automatically done by gclient, by specifying something in the DEPS file).\n\nI\u0027ll have to ping some people ( @brucedawson@chromium.org ) to see what we can do about this. Until then, I personally won\u0027t lose any sleep if this lands and there are instructions for this until Chromium cares (if ever).\n\nCould you please update `doc/DevSetup.md` with these instructions?",
+      "parentUuid": "509aac14_6d22da50",
       "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06a4728a_e74a7440",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:04:22Z",
+      "side": 1,
+      "message": "No comment on the d3d/ changes",
+      "revId": "83c5640c02ef130ee3b15b18ece172eba387017f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00f36254_ada59c21",
+        "filename": "gni/angle.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:04:22Z",
+      "side": 1,
+      "message": "If you move `angle_is_winuwp` to the next `declare_args()`, you can make it `|| angle_is_winappsdk` automatically. Then if the user sets `angle_is_winappsdk\u003dtrue` in gn args, they automatically get `angle_is_winuwp\u003dtrue`.",
+      "revId": "83c5640c02ef130ee3b15b18ece172eba387017f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df3ab9e3_5623dbe6",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:04:22Z",
+      "side": 1,
+      "message": "Similarly, if you make `ANGLE_IS_WINUWP` defined with winappsdk, no need to change here.",
+      "range": {
+        "startLine": 154,
+        "startChar": 13,
+        "endLine": 154,
+        "endChar": 28
+      },
+      "revId": "83c5640c02ef130ee3b15b18ece172eba387017f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
