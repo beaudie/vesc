@@ -52,6 +52,24 @@
       "parentUuid": "94319c45_67348fb0",
       "revId": "5bb8a7c4a808bcdc7fa99e02608a39badfae7fe9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b8518fe_c9e3fee8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-24T20:10:45Z",
+      "side": 1,
+      "message": "this was very handy to quickly validate dynamic vertex input feature since it reduced pipeline count by almost half",
+      "parentUuid": "03da3919_ea4c94df",
+      "revId": "5bb8a7c4a808bcdc7fa99e02608a39badfae7fe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
