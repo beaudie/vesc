@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/vulkan/CLContextVk.h"
 #include "libANGLE/renderer/vulkan/CLEventVk.h"
 #include "libANGLE/renderer/vulkan/CLKernelVk.h"
+#include "libANGLE/renderer/vulkan/CLMemoryVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/ShareGroupVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
@@ -226,6 +227,8 @@ class CLCommandQueueVk : public CLCommandQueueImpl
 
     void removeAssociatedEvent(CLEventVk *event) { mEventsAssociated.erase(event); }
 
+    angle::Result syncHostBuffers();
+
     angle::Result getCommandBuffer(const vk::CommandBufferAccess &access,
                                    vk::OutsideRenderPassCommandBuffer **commandBufferOut)
     {
@@ -269,6 +272,16 @@ class CLCommandQueueVk : public CLCommandQueueImpl
 
     // Check to see if flush/finish can be skipped
     bool mHasAnyCommandsPendingSubmission;
+
+    // List of buffer refs that need host syncing
+    struct HostBufferUpdate
+    {
+        size_t offset;
+        size_t size;
+        void *hostPtr;
+        CLBufferVk *vkBuf;
+    };
+    std::vector<HostBufferUpdate> mHostBufferUpdateList;
 };
 
 }  // namespace rx
