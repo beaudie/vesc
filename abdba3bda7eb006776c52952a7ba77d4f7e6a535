@@ -52,6 +52,24 @@
       "parentUuid": "3ef2e579_2d097ce0",
       "revId": "abdba3bda7eb006776c52952a7ba77d4f7e6a535",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4a266d5_d6be1be7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:24:36Z",
+      "side": 1,
+      "message": "Oof, more build failures 😞",
+      "parentUuid": "2f031259_81a886e3",
+      "revId": "abdba3bda7eb006776c52952a7ba77d4f7e6a535",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
