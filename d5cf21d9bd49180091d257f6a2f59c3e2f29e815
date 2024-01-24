@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e215bf9a_6ad0d6c5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:07:45Z",
+      "side": 1,
+      "message": "FWIW, you might as well just make this cross-platform:\n\n```suggestion\n    mDumpPipelineCacheGraph \u003d\n        (angle::GetEnvironmentVarOrAndroidProperty(\"ANGLE_DUMP_PIPELINE_CACHE_GRAPH\",\n                                                   \"angle.dump_pipeline_cache_graph\") \u003d\u003d \"1\");\n```",
+      "range": {
+        "startLine": 1238,
+        "startChar": 0,
+        "endLine": 1244,
+        "endChar": 33
+      },
+      "revId": "d5cf21d9bd49180091d257f6a2f59c3e2f29e815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
