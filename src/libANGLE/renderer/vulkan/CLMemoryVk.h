@@ -41,6 +41,12 @@ class CLMemoryVk : public CLMemoryImpl
     angle::Result copyTo(CLMemoryVk *dst, size_t srcOffset, size_t dstOffset, size_t size);
     angle::Result copyFrom(const void *ptr, size_t offset, size_t size);
 
+    bool isWritable()
+    {
+        return getVkUsageFlags() &
+               (VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    }
+
     virtual bool isCurrentlyInUse() const = 0;
     virtual size_t getSize() const        = 0;
 
@@ -68,9 +74,12 @@ class CLBufferVk : public CLMemoryVk
                                   CLMemoryImpl::Ptr *subBufferOut) override;
 
     vk::BufferHelper &getBuffer() override { return mBuffer; }
+    vk::BufferHelper &getStagingBuffer() { return mStagingBuffer; }
     CLBufferVk *getParent() { return static_cast<CLBufferVk *>(mParent); }
 
     angle::Result create(void *hostPtr);
+    angle::Result createStagingBuffer(size_t size);
+    angle::Result copyStagingTo(void *ptr, size_t offset, size_t size);
     bool isSubBuffer() const { return mParent != nullptr; }
 
     angle::Result map() override;
@@ -83,6 +92,7 @@ class CLBufferVk : public CLMemoryVk
     angle::Result setDataImpl(const uint8_t *data, size_t size, size_t offset);
 
     vk::BufferHelper mBuffer;
+    vk::BufferHelper mStagingBuffer;
     VkBufferCreateInfo mDefaultBufferCreateInfo;
 };
 
