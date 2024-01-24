@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78769493_8d597170",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-24T23:33:12Z",
+      "side": 1,
+      "message": "Drive by comments",
+      "revId": "72678db050a8c082f1b5e24ef667ec5a19811326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d842d9_e2305576",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-24T23:33:12Z",
+      "side": 1,
+      "message": "This appears to be empty now.",
+      "range": {
+        "startLine": 444,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 19
+      },
+      "revId": "72678db050a8c082f1b5e24ef667ec5a19811326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b57e7f5c_3565d239",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-24T23:33:12Z",
+      "side": 1,
+      "message": "Can you add a comment as to why it is okay to hard code no external format here?",
+      "range": {
+        "startLine": 535,
+        "startChar": 40,
+        "endLine": 535,
+        "endChar": 41
+      },
+      "revId": "72678db050a8c082f1b5e24ef667ec5a19811326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ab41d24_4cf3ddcb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5486,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-24T23:33:12Z",
+      "side": 1,
+      "message": "Same here, possibly refer to its use in `HardwareBufferImageSiblingVkAndroid.cpp`",
+      "range": {
+        "startLine": 5486,
+        "startChar": 42,
+        "endLine": 5486,
+        "endChar": 43
+      },
+      "revId": "72678db050a8c082f1b5e24ef667ec5a19811326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40b37138_e8474387",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5608,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-24T23:33:12Z",
+      "side": 1,
+      "message": "Could just move this inside the isYUV check below.",
+      "range": {
+        "startLine": 5608,
+        "startChar": 11,
+        "endLine": 5608,
+        "endChar": 39
+      },
+      "revId": "72678db050a8c082f1b5e24ef667ec5a19811326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
