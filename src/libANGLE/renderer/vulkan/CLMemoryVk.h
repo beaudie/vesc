@@ -41,6 +41,12 @@ class CLMemoryVk : public CLMemoryImpl
     angle::Result copyTo(CLMemoryVk *dst, size_t srcOffset, size_t dstOffset, size_t size);
     angle::Result copyFrom(const void *ptr, size_t offset, size_t size);
 
+    bool isWritable()
+    {
+        return getVkUsageFlags() &
+               (VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    }
+
     virtual bool isCurrentlyInUse() const = 0;
     virtual size_t getSize() const        = 0;
 
@@ -71,6 +77,7 @@ class CLBufferVk : public CLMemoryVk
     CLBufferVk *getParent() { return static_cast<CLBufferVk *>(mParent); }
 
     angle::Result create(void *hostPtr);
+
     bool isSubBuffer() const { return mParent != nullptr; }
 
     angle::Result map() override;
