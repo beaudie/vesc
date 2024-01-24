@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7288b75_10316d1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-24T16:59:25Z",
+      "side": 1,
+      "message": "shabi - do you want to validate your flow with this change or can i go ahead and land this change?",
+      "revId": "5bb8a7c4a808bcdc7fa99e02608a39badfae7fe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
