@@ -107,8 +107,46 @@ angle::Result CLCommandQueueVk::enqueueReadBuffer(const cl::Buffer &buffer,
                                                   const cl::EventPtrs &waitEvents,
                                                   CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+
+    ANGLE_TRY(processWaitlist(waitEvents));
+
+    if (blocking)
+    {
+        ANGLE_TRY(finishInternal());
+        auto bufferVk = &buffer.getImpl<CLBufferVk>();
+        ANGLE_TRY(bufferVk->copyTo(ptr, offset, size));
+    }
+    else
+    {
+        CLBufferVk &bufferVk = buffer.getImpl<CLBufferVk>();
+
+        // Create a staging buffer and enqueue copy command (also insert appropriate barriers)
+        vk::CommandBufferAccess access;
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
+        ANGLE_TRY(bufferVk.createStagingBuffer(size));
+        access.onBufferTransferRead(&bufferVk.getBuffer());
+        access.onBufferTransferWrite(&bufferVk.getStagingBuffer());
+        ANGLE_TRY(getCommandBuffer(access, &commandBuffer));
+        const VkBufferCopy copyRegion = {offset, offset, size};
+        if (bufferVk.isWritable())
+        {
+            // We need an execution barrier if buffer can be written to by kernel
+            mComputePassCommands->getCommandBuffer().pipelineBarrier(
+                VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 0,
+                nullptr, 0, nullptr, 0, nullptr);
+        }
+        commandBuffer->copyBuffer(bufferVk.getBuffer().getBuffer(),
+                                  bufferVk.getStagingBuffer().getBuffer(), 1, &copyRegion);
+
+        // Track this deferred host copy
+        mHostBufferUpdateList.emplace_back(
+            HostBufferUpdate{.offset = offset, .size = size, .hostPtr = ptr, .vkBuf = &bufferVk});
+    }
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueWriteBuffer(const cl::Buffer &buffer,
@@ -119,8 +157,20 @@ angle::Result CLCommandQueueVk::enqueueWriteBuffer(const cl::Buffer &buffer,
                                                    const cl::EventPtrs &waitEvents,
                                                    CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+
+    ANGLE_TRY(processWaitlist(waitEvents));
+
+    auto bufferVk = &buffer.getImpl<CLBufferVk>();
+    ANGLE_TRY(bufferVk->copyFrom(ptr, offset, size));
+    if (blocking)
+    {
+        ANGLE_TRY(finishInternal());
+    }
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueReadBufferRect(const cl::Buffer &buffer,
@@ -464,6 +514,19 @@ angle::Result CLCommandQueueVk::finish()
     return finishInternal();
 }
 
+angle::Result CLCommandQueueVk::syncHostBuffers()
+{
+    for (const auto &bufUpdate : mHostBufferUpdateList)
+    {
+        ANGLE_TRY(
+            bufUpdate.vkBuf->copyStagingTo(bufUpdate.hostPtr, bufUpdate.offset, bufUpdate.size));
+        bufUpdate.vkBuf->getStagingBuffer().release(mContext->getRenderer());
+    }
+    mHostBufferUpdateList.clear();
+
+    return angle::Result::Continue;
+}
+
 angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
                                                        const cl::NDRange &ndrange)
 {
@@ -720,6 +783,9 @@ angle::Result CLCommandQueueVk::finishInternal()
         ANGLE_TRY(submitCommands());
         ANGLE_TRY(mContext->getRenderer()->finishQueueSerial(
             mContext, mComputePassCommands->getQueueSerial()));
+
+        // Ensure any resources are synced back to host on GPU completion
+        ANGLE_TRY(syncHostBuffers());
     }
 
     for (cl::EventPtr event : mAssociatedEvents)
