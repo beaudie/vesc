@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30f253be_836433e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:04:30Z",
+      "side": 1,
+      "message": "No comment on the d3d/ changes",
+      "revId": "83c5640c02ef130ee3b15b18ece172eba387017f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00f36254_ada59c21",
