@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f2f8c44_c1fd09e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-24T18:48:20Z",
+      "side": 1,
+      "message": "The asm approach seems to work best for ANGLE. It causes some specific array initialization bugs to show up on ventura (which were already present on sonoma). The volatile bool workarounds cause additional problems with some WebGL while-loop tests.",
+      "revId": "567fd60e35f56512b421749885bb12c717eaef9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
