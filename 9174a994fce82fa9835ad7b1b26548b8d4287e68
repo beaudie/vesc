@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c19acd7_10e33f45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:15:51Z",
+      "side": 1,
+      "message": "Super nit: per git conventions, please use imperative. This sounds like it\u0027s describing a problem, rather than what the CL does.\n\nSo something like this would have been clearer:\n\n```\nDon\u0027t pulled Dawn in chromium builds\n```",
+      "revId": "9174a994fce82fa9835ad7b1b26548b8d4287e68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
