@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4603564_7503ea98",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-24T15:12:28Z",
+      "side": 1,
+      "message": "Sorry I missed this, just commented to make it universal! Why does the other comment say it will never be true for non-Android?",
+      "parentUuid": "e26fa9c2_a104a24b",
+      "range": {
+        "startLine": 1238,
+        "startChar": 4,
+        "endLine": 1238,
+        "endChar": 28
+      },
+      "revId": "a379964b5ed813a49e1b84cb8b2ddd14c93573f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4752b1bd_3bc39ff5",
