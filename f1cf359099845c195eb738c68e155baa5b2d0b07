@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82c18baa_c698a87a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-25T19:43:31Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "f1cf359099845c195eb738c68e155baa5b2d0b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a33917d_fddcc2ea",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-25T19:43:31Z",
+      "side": 1,
+      "message": "I\u0027m guessing this is not supposed to be commented out :)\n\nLooks correct though.",
+      "range": {
+        "startLine": 647,
+        "startChar": 0,
+        "endLine": 659,
+        "endChar": 9
+      },
+      "revId": "f1cf359099845c195eb738c68e155baa5b2d0b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
