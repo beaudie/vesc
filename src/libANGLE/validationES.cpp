@@ -4416,6 +4416,24 @@ const char *ValidateDrawStates(const Context *context, GLenum *outErrorCode)
                 return kProgramNotLinked;
             }
         }
+
+        // The QCOM_framebuffer_foveated spec:
+        //   INVALID_OPERATION is generated if a rendering command is issued and the
+        //   current bound program uses tessellation or geometry shaders.
+        if (framebuffer->isFoveationEnabled())
+        {
+            ASSERT(extensions.framebufferFoveatedQCOM);
+
+            if (executable->hasLinkedShaderStage(gl::ShaderType::Geometry) ||
+                executable->hasLinkedShaderStage(gl::ShaderType::TessControl) ||
+                executable->hasLinkedShaderStage(gl::ShaderType::TessEvaluation))
+            {
+                return err::kGeometryOrTessellationShaderBoundForFoveatedDraw;
+            }
+
+            // TODO (anglebug.com/8484): Handle writes to an attachment of a foveated framebuffer if
+            // the attachments have changed
+        }
     }
 
     *outErrorCode = GL_NO_ERROR;
@@ -7193,6 +7211,22 @@ bool ValidateGetTexParameterBase(const Context *context,
         case GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES:
             break;
 
+        case GL_TEXTURE_FOVEATED_FEATURE_QUERY_QCOM:
+            if (!context->getExtensions().textureFoveatedQCOM)
+            {
+                ANGLE_VALIDATION_ERROR(GL_INVALID_ENUM, kFoveatedTextureQcomExtensionRequired);
+                return false;
+            }
+            break;
+
+        case GL_TEXTURE_FOVEATED_NUM_FOCAL_POINTS_QUERY_QCOM:
+            if (!context->getExtensions().textureFoveatedQCOM)
+            {
+                ANGLE_VALIDATION_ERROR(GL_INVALID_ENUM, kFoveatedTextureQcomExtensionRequired);
+                return false;
+            }
+            break;
+
         default:
             ANGLE_VALIDATION_ERRORF(GL_INVALID_ENUM, kEnumNotSupported, pname);
             return false;
@@ -7938,6 +7972,43 @@ bool ValidateTexParameterBase(const Context *context,
                         GL_INVALID_OPERATION,
                         "Texture Tilling Mode must be OPTIMAL_TILING_EXT or LINEAR_TILING_EXT");
                     return false;
+            }
+            break;
+
+        case GL_TEXTURE_FOVEATED_FEATURE_BITS_QCOM:
+            if (!context->getExtensions().textureFoveatedQCOM)
+            {
+                ANGLE_VALIDATION_ERROR(GL_INVALID_ENUM, kFoveatedTextureQcomExtensionRequired);
+                return false;
+            }
+            {
+                const GLuint features               = static_cast<GLuint>(params[0]);
+                constexpr GLuint kSupportedFeatures = GL_FOVEATION_ENABLE_BIT_QCOM;
+                if (features != (features & kSupportedFeatures))
+                {
+                    ANGLE_VALIDATION_ERROR(GL_INVALID_ENUM, kFoveatedTextureInvalidParameters);
+                    return false;
+                }
+                if ((context->getTextureByType(target)->getFoveatedFeatureBits() &
+                     GL_FOVEATION_ENABLE_BIT_QCOM) &&
+                    (features & GL_FOVEATION_ENABLE_BIT_QCOM) == 0)
+                {
+                    ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kFoveatedTextureCannotDisable);
+                    return false;
+                }
+            }
+            break;
+
+        case GL_TEXTURE_FOVEATED_MIN_PIXEL_DENSITY_QCOM:
+            if (!context->getExtensions().textureFoveatedQCOM)
+            {
+                ANGLE_VALIDATION_ERROR(GL_INVALID_ENUM, kFoveatedTextureQcomExtensionRequired);
+                return false;
+            }
+            if (static_cast<GLfloat>(params[0]) < 0.0 || static_cast<GLfloat>(params[0]) > 1.0)
+            {
+                ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kFoveatedTextureInvalidPixelDensity);
+                return false;
             }
             break;
 
