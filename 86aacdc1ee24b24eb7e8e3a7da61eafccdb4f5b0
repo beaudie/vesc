@@ -114,6 +114,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cfa1b54e_60d5a4b8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9835,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-25T15:24:03Z",
+      "side": 1,
+      "message": "Not the scripts, but there\u0027s input to them where this gets configured.\n\nSee for example `glBindFramebuffer` in `scripts/entry_point_packed_gl_enums.json`.",
+      "parentUuid": "9fc054b2_8deb0a00",
+      "range": {
+        "startLine": 9835,
+        "startChar": 41,
+        "endLine": 9835,
+        "endChar": 59
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1f19f5a_62f131a7",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
@@ -470,6 +494,24 @@
       "side": 1,
       "message": "spec doesnt explicitly forbid renderbuffers but the API / enum additions and included examples in the spec both explicitly target textures",
       "parentUuid": "d1045900_c7fb58b0",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cefa0b95_4e5a5dbc",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2761,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-25T15:24:03Z",
+      "side": 1,
+      "message": "QCOM_framebuffer_foveated does not seem to at all make a distinction about what the attachments are. I\u0027m sure renderbuffers are expected to be supported for foveated rendering just fine.\n\nI also don\u0027t see anything that forbids the default framebuffer from being foveated. There\u0027s validation that `fbo` must be valid, but 0 (default framebuffer) is not invalid, right?\n\nI don\u0027t believe there\u0027s technically anything complicated with supporting renderbuffers, you can probably just remove this if and it just works. Have you hit a limitation that makes it hard to use on the default framebuffer?",
+      "parentUuid": "42987f42_3d908029",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
