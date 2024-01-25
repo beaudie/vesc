@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6de2ff2b_74ff9fa0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-25T20:37:47Z",
+      "side": 1,
+      "message": "Could the ref count management be done under the image lock instead? Otherwise, see comment in RefCountObject",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 39
+      },
+      "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10973f3c_16344d86",
+        "filename": "src/libANGLE/RefCountObject.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-25T20:37:47Z",
+      "side": 1,
+      "message": "You could make this a template type so only images pay the cost of atomic.",
+      "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9c34a6e_3938aac8",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-25T20:37:47Z",
+      "side": 1,
+      "message": "nit: flush should be unnecessary",
+      "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
