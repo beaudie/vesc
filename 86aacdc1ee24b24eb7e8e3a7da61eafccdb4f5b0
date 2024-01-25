@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5738307e_12e1536b",
+        "filename": "src/libANGLE/Constants.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "VR usecase that we targeted this for was for 2 separate textures with 1 focal point each. we did not have a requirement for multi-layered texture",
+      "parentUuid": "1979e8bd_e596ae82",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 40
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1d231f6_74322d4d",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "I missed this from the previous change, please make sure this has the `FramebufferID` type. See the other entry points that take a framebuffer.\n\nThat\u0027s needed for Capture/Replay support I think.",
+      "range": {
+        "startLine": 9835,
+        "startChar": 41,
+        "endLine": 9835,
+        "endChar": 59
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fc054b2_8deb0a00",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9835,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "this gets autogen\u0027d in the file `Context_gles_ext_autogen.h`. Are you asking me to fix the autogen script?",
+      "parentUuid": "f1d231f6_74322d4d",
       "range": {
         "startLine": 9835,
         "startChar": 41,
@@ -81,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b80b7cb3_7d83b502",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9843,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1f19f5a_62f131a7",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e8a6b58_9abc673c",
@@ -94,6 +160,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "super nit: we don\u0027t do hungarian notation (`pWhatever`). `s/pFB/framebuffer`.",
+      "range": {
+        "startLine": 9846,
+        "startChar": 17,
+        "endLine": 9846,
+        "endChar": 20
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24ed633e_e0a3ca4d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9846,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e8a6b58_9abc673c",
       "range": {
         "startLine": 9846,
         "startChar": 17,
@@ -150,6 +240,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03db37b0_5e87e805",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9866,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4efa32e7_b768b02d",
+      "range": {
+        "startLine": 9866,
+        "startChar": 17,
+        "endLine": 9866,
+        "endChar": 19
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7264e2f_b83067b6",
@@ -196,6 +310,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0f9017b_eb1547d2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9883,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c95b48a2_bbf16ee5",
+      "range": {
+        "startLine": 9883,
+        "startChar": 13,
+        "endLine": 9883,
+        "endChar": 16
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9c8154a_f5d87142",
@@ -209,6 +347,24 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "nit: Duplicate logic with `FramebufferState::isFoveationEnabled`",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7da8caa_d8c05448",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2701,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9c8154a_f5d87142",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -230,6 +386,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bc85f00_2410aed6",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2747,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "given we need to allocate memory for the shading rate attachment we avoided the usecase where attachments are not internally allocated textures. We did not even support AHB / external attachments, would have added complexity related to matching memory type / protected status of AHB and so on",
+      "parentUuid": "e22a8e56_b95d5938",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ab4e93e_bba3c355",
@@ -243,6 +417,24 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "nit: For uniformity with the rest of the file\n\n```suggestion\n    for (size_t colorIndex : mState.mEnabledDrawBuffers)\n```",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d2825ab_b93d38c3",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2753,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ab4e93e_bba3c355",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -264,6 +456,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42987f42_3d908029",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2761,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "spec doesnt explicitly forbid renderbuffers but the API / enum additions and included examples in the spec both explicitly target textures",
+      "parentUuid": "d1045900_c7fb58b0",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7ab5fa3_b625b51b",
@@ -277,6 +487,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "High level comment:\n\nAny helper that is needed by others (backend, Context, etc) can stay. Any helper that is for `Framebuffer`\u0027s use can either be deleted or made private.\n\nTBH, given that all of these just forward to `mFoveationState`, I\u0027d remove them all and replace with a `const FoveationState \u0026getFoveationState() const { ... }`. `Framebuffer` can access `mState.mFoveationState` directly.",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 79
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db52cbc2_a758892e",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done, deleted all",
+      "parentUuid": "c7ab5fa3_b625b51b",
       "range": {
         "startLine": 144,
         "startChar": 0,
@@ -310,6 +544,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "576e397f_ea57abcb",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "\u003e Also, probably still best to let the caller deal with the FoveationState state directly?\n\nwould prefer encapsulating `FoveationState` within `Texture` /`Framebuffer` but have retained only those needed by either context or validation",
+      "parentUuid": "c60d061d_6ab33bd2",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 0
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab47ce5a_1f780050",
@@ -323,6 +581,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "Similar high level comments as with `Framebuffer`",
+      "range": {
+        "startLine": 418,
+        "startChar": 0,
+        "endLine": 434,
+        "endChar": 79
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cc1affc_b0554d35",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "`GL_QCOM_texture_foveated` will require us to use most of these, the rest will be needed by backend",
+      "parentUuid": "ab47ce5a_1f780050",
       "range": {
         "startLine": 418,
         "startChar": 0,
@@ -356,6 +638,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb1e8292_a807967c",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4242a905_7532e06a",
+      "range": {
+        "startLine": 1314,
+        "startChar": 0,
+        "endLine": 1319,
+        "endChar": 49
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "774eb3ee_c8dab3c4",
@@ -369,6 +675,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "```suggestion\n    FocalPoint(const FocalPoint \u0026other) \u003d default;\n    FocalPoint \u0026operator\u003d(const FocalPoint \u0026other) \u003d default;\n```",
+      "range": {
+        "startLine": 1334,
+        "startChar": 0,
+        "endLine": 1345,
+        "endChar": 5
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c53b953d_c4e0b2e6",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "774eb3ee_c8dab3c4",
       "range": {
         "startLine": 1334,
         "startChar": 0,
@@ -396,6 +726,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bf5c28e_412083a2",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04c0a453_04c29fd6",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a93fd1f4_23e771e2",
@@ -409,6 +757,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "Please use loops given the `IMPLEMENTATION_` constants. No need for the comment then.",
+      "range": {
+        "startLine": 1365,
+        "startChar": 0,
+        "endLine": 1366,
+        "endChar": 48
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48aa4c71_f3933534",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a93fd1f4_23e771e2",
       "range": {
         "startLine": 1365,
         "startChar": 0,
@@ -436,6 +808,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aaf5c2b_93453525",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c680c48_c1d65a5a",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66077a03_72ffe4b9",
@@ -449,6 +839,24 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "nit: remove (unnecessary comment)",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa3fb9c9_20bde337",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66077a03_72ffe4b9",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -470,6 +878,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc010298_78b50de6",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "527a665f_33189859",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4aa804c_309781dd",
@@ -483,6 +909,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "nit: are these _validation_ TODOs?",
+      "range": {
+        "startLine": 4434,
+        "startChar": 0,
+        "endLine": 4437,
+        "endChar": 0
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de276094_62fcb723",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "spec says -\n```\n    INVALID_OPERATION is generated by any API call which causes a framebuffer\n    attachment to be written to if the framebuffer attachments have changed for\n    a foveated fbo.\n```\n\nFor this sequence -\n1. create fbo and attachment\n2. configure fbo for foveated rendering\n3. draw\n4. change attachment\n5. draw\n\nif i understood the spec right, we need to generate a validation error for step 5\n\nbut (5) could have been anything like a blit / copy",
+      "parentUuid": "d4aa804c_309781dd",
       "range": {
         "startLine": 4434,
         "startChar": 0,
@@ -516,6 +966,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3cd3efd_80ddae79",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7998,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "770fdac3_ad1bb620",
+      "range": {
+        "startLine": 7980,
+        "startChar": 0,
+        "endLine": 7998,
+        "endChar": 13
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d77b104a_c57768d0",
@@ -529,6 +1003,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "nit: `s/pFB/framebuffer`",
+      "range": {
+        "startLine": 4195,
+        "startChar": 17,
+        "endLine": 4195,
+        "endChar": 20
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2cabd62_66b30f74",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4195,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d77b104a_c57768d0",
       "range": {
         "startLine": 4195,
         "startChar": 17,
@@ -562,6 +1060,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbe906f6_2249a3df",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4243,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87bbfa5a_59850d42",
+      "range": {
+        "startLine": 4243,
+        "startChar": 17,
+        "endLine": 4243,
+        "endChar": 20
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a51d3aba_243994c9",
@@ -575,6 +1097,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "ditto (`texture`)",
+      "range": {
+        "startLine": 4292,
+        "startChar": 13,
+        "endLine": 4292,
+        "endChar": 17
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9b5aebc_737e2bdb",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4292,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a51d3aba_243994c9",
       "range": {
         "startLine": 4292,
         "startChar": 13,
@@ -602,6 +1148,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d18791d4_cf07af3a",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "changed it to 256x256",
+      "parentUuid": "fb434970_6e662734",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4aeca35_8e12677f",
@@ -615,6 +1179,24 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "Please add \"negative API\" test that exercises the error paths in the spec (do invalid things, expect error codes)",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff314241_52f66036",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11057,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "TBD",
+      "parentUuid": "e4aeca35_8e12677f",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -642,6 +1224,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e7fc40f_f53b49c7",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11071,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "963ea473_c98bd9af",
+      "range": {
+        "startLine": 11070,
+        "startChar": 0,
+        "endLine": 11071,
+        "endChar": 32
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15df83e4_cf649575",
@@ -655,6 +1261,24 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "No need for `swapBuffers` at the end of test",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e71196c9_f6e87ea7",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15df83e4_cf649575",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -682,6 +1306,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a9451dd_44c98e18",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11165,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b73137c4_aeeb7d40",
+      "range": {
+        "startLine": 11163,
+        "startChar": 0,
+        "endLine": 11165,
+        "endChar": 32
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57af8ec1_35dd1573",
@@ -699,6 +1347,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "384e0531_cbfcccf0",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11199,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57af8ec1_35dd1573",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55d769b2_0b2c8aa6",
@@ -712,6 +1378,24 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "Please add a few more tests to ensure interaction with other paths work correctly:\n\n- Clear before rendering\n- Clear in the middle of render pass\n- Clear with some channels masked in the middle of render pass\n- Use as blit source\n- Use as blit destination\n- Use as MSAA resolve attachment (i.e. blit destination after MSAA resolve)\n- `glReadPixels` (`EXPECT_PIXEL_COLOR_EQ/NEAR` would be enough)\n- Change foveation parameters and make sure they take effect in the next draw call (makes sure dirty bits are propagated correctly)\n- Set framebuffer with a texture without foveation, render, then set foveation on the texture and render in the same render pass (makes sure observer interface works correctly)\n- Anything else you might notice might interact as you implement in the backend",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4ad44bf_f05e0365",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11200,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "TBD",
+      "parentUuid": "55d769b2_0b2c8aa6",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

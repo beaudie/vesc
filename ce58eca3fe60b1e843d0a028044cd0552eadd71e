@@ -604,6 +604,30 @@
       },
       "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc0cee43_c458e82a",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T14:26:49Z",
+      "side": 1,
+      "message": "\u003e Vulkan drivers could support different features\n\nwhich will mean we need new feature bits added to the GLES spec to expose those different kinds of foveation?",
+      "parentUuid": "aa843209_2bef97cd",
+      "range": {
+        "startLine": 1393,
+        "startChar": 15,
+        "endLine": 1393,
+        "endChar": 85
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
