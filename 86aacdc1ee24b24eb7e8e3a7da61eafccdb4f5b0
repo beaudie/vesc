@@ -138,6 +138,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5e844c1_68779d8b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9835,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T23:38:25Z",
+      "side": 1,
+      "message": "Done -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5238212\n\nIs capture / replay the reason for this additional level of indirection?",
+      "parentUuid": "cfa1b54e_60d5a4b8",
+      "range": {
+        "startLine": 9835,
+        "startChar": 41,
+        "endLine": 9835,
+        "endChar": 59
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1f19f5a_62f131a7",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
@@ -241,6 +265,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dda918c6_207654de",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9857,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T23:38:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86a433fd_80dcfffb",
+      "range": {
+        "startLine": 9857,
+        "startChar": 45,
+        "endLine": 9857,
+        "endChar": 51
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4efa32e7_b768b02d",
@@ -301,6 +349,30 @@
       "writtenOn": "2024-01-22T16:11:12Z",
       "side": 1,
       "message": "Same here with `TextureID`",
+      "range": {
+        "startLine": 9874,
+        "startChar": 41,
+        "endLine": 9874,
+        "endChar": 55
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "640619fb_e0a2bbdc",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9874,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T23:38:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7264e2f_b83067b6",
       "range": {
         "startLine": 9874,
         "startChar": 41,
@@ -512,6 +584,24 @@
       "side": 1,
       "message": "QCOM_framebuffer_foveated does not seem to at all make a distinction about what the attachments are. I\u0027m sure renderbuffers are expected to be supported for foveated rendering just fine.\n\nI also don\u0027t see anything that forbids the default framebuffer from being foveated. There\u0027s validation that `fbo` must be valid, but 0 (default framebuffer) is not invalid, right?\n\nI don\u0027t believe there\u0027s technically anything complicated with supporting renderbuffers, you can probably just remove this if and it just works. Have you hit a limitation that makes it hard to use on the default framebuffer?",
       "parentUuid": "42987f42_3d908029",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "981e7028_ff71048a",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2761,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-25T23:38:25Z",
+      "side": 1,
+      "message": "\u003e QCOM_framebuffer_foveated does not seem to at all make a distinction about what the attachments are\n\nyeah but it seemed like qcom themselves obsoleted that extension in favor of the qcom_texture_foveated extension and we took our cues from that\n\n\u003e you can probably just remove this if\n\nunfortunately that would mean adding backend support for renderbuffers as well. right now i have it only for textures. Can this be a follow up change? i can add a todo to track\n\n\u003e Have you hit a limitation that makes it hard to use on the default framebuffer?\n\nallocating and bookkeeping an AHB was not part of scoping since it was not part of our requirement. Do you want me to add a todo for this as well?",
+      "parentUuid": "cefa0b95_4e5a5dbc",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
