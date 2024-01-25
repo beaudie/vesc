@@ -339,6 +339,11 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     bool isMutableTextureConsistentlySpecifiedForFlush();
     bool isMipImageDescDefined(gl::TextureTarget textureTarget, size_t level);
 
+    // Foveated rendering helpers
+    angle::Result updateFoveationState(ContextVk *contextVk, const gl::FoveationState &newState);
+    void getFragmentShadingRateImageAndView(vk::ImageHelper **imageOut,
+                                            vk::ImageViewHelper **imageViewHelperOut);
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
@@ -571,6 +576,19 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     bool isCompressedFormatEmulated(const gl::Context *context,
                                     const gl::TextureTarget target,
                                     GLint level);
+    angle::Result ensureFragmentShadingRateAttachmentInitialized(ContextVk *contextVk,
+                                                                 const uint32_t attachmentWidth,
+                                                                 const uint32_t attachmentHeight);
+    angle::Result generateFragmentShadingRateAttachmentWithCPU(
+        ContextVk *contextVk,
+        const bool isGainZero,
+        const uint32_t attachmentWidth,
+        const uint32_t attachmentHeight,
+        const uint32_t attachmentBlockWidth,
+        const uint32_t attachmentBlockHeight,
+        const uint32_t textureWidth,
+        const uint32_t textureHeight,
+        const std::vector<gl::FocalPoint> &activeFocalPoints);
 
     bool mOwnsImage;
     // Generated from ImageVk if EGLImage target, or from throw-away generator if Surface target.
@@ -667,6 +685,11 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // Cached subresource indexes.
     vk::ImageOrBufferViewSubresourceSerial mCachedImageViewSubresourceSerialSRGBDecode;
     vk::ImageOrBufferViewSubresourceSerial mCachedImageViewSubresourceSerialSkipDecode;
+
+    // GL_QCOM_framebuffer_foveated and GL_QCOM_texture_foveated
+    gl::FoveationState mFoveationState;
+    vk::ImageHelper mFragmentShadingRateImage;
+    vk::ImageViewHelper mFragmentShadingRateImageView;
 
     // Manages the texture descriptor set cache that created with this texture
     vk::DescriptorSetCacheManager mDescriptorSetCacheManager;

@@ -37,6 +37,8 @@ RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
       mLevelIndexGL(other.mLevelIndexGL),
       mLayerIndex(other.mLayerIndex),
       mLayerCount(other.mLayerCount),
+      mFragmentShadingRateImage(other.mFragmentShadingRateImage),
+      mFragmentShadingRateImageView(other.mFragmentShadingRateImageView),
       mFramebufferCacheManager(other.mFramebufferCacheManager)
 {
     other.reset();
@@ -62,18 +64,23 @@ void RenderTargetVk::init(vk::ImageHelper *image,
     mLayerCount         = layerCount;
 
     mTransience = transience;
+
+    mFragmentShadingRateImage     = nullptr;
+    mFragmentShadingRateImageView = nullptr;
 }
 
 void RenderTargetVk::reset()
 {
-    mImage              = nullptr;
-    mImageViews         = nullptr;
-    mResolveImage       = nullptr;
-    mResolveImageViews  = nullptr;
-    mImageSiblingSerial = {};
-    mLevelIndexGL       = gl::LevelIndex(0);
-    mLayerIndex         = 0;
-    mLayerCount         = 0;
+    mImage                        = nullptr;
+    mImageViews                   = nullptr;
+    mResolveImage                 = nullptr;
+    mResolveImageViews            = nullptr;
+    mImageSiblingSerial           = {};
+    mLevelIndexGL                 = gl::LevelIndex(0);
+    mLayerIndex                   = 0;
+    mLayerCount                   = 0;
+    mFragmentShadingRateImage     = nullptr;
+    mFragmentShadingRateImageView = nullptr;
 }
 
 vk::ImageOrBufferViewSubresourceSerial RenderTargetVk::getSubresourceSerialImpl(
@@ -133,6 +140,13 @@ void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, uint32_t framebuff
 
     contextVk->onDepthStencilDraw(mLevelIndexGL, mLayerIndex, framebufferLayerCount, mImage,
                                   mResolveImage, mImageSiblingSerial);
+}
+
+void RenderTargetVk::onFragmentShadingRateRead(ContextVk *contextVk)
+{
+    ASSERT(mFragmentShadingRateImage && mFragmentShadingRateImage->valid());
+    ASSERT(mFragmentShadingRateImageView);
+    contextVk->onFragmentShadingRateRead(mFragmentShadingRateImage);
 }
 
 vk::ImageHelper &RenderTargetVk::getImageForRenderPass()
@@ -234,6 +248,45 @@ angle::Result RenderTargetVk::getCopyImageView(vk::Context *context,
     // done from that.
     return isResolveImageOwnerOfData() ? getResolveImageView(context, imageViewOut)
                                        : getImageView(context, imageViewOut);
+}
+
+void RenderTargetVk::updateFragmentShadingRateImageAndView(vk::ImageHelper *image,
+                                                           vk::ImageViewHelper *imageViewHelper)
+{
+    ASSERT(image && image->valid() && imageViewHelper);
+    mFragmentShadingRateImage     = image;
+    mFragmentShadingRateImageView = imageViewHelper;
+}
+
+vk::ImageOrBufferViewSubresourceSerial RenderTargetVk::getFragmentShadingRateSubresourceSerial()
+    const
+{
+    ASSERT(mFragmentShadingRateImageView);
+
+    vk::ImageOrBufferViewSubresourceSerial imageViewSerial =
+        mFragmentShadingRateImageView->getSubresourceSerial(
+            gl::LevelIndex(0), 1, 0, vk::LayerMode::All, vk::SrgbDecodeMode::SkipDecode,
+            gl::SrgbOverride::Default);
+
+    ASSERT(imageViewSerial.viewSerial.valid());
+    return imageViewSerial;
+}
+
+angle::Result RenderTargetVk::getFragmentShadingRateImageView(
+    const vk::ImageView **imageViewOut) const
+{
+    ASSERT(mFragmentShadingRateImage && mFragmentShadingRateImage->valid() &&
+           mFragmentShadingRateImageView);
+
+    const vk::ImageViewHelper *imageViewHelper = mFragmentShadingRateImageView;
+    *imageViewOut                              = &imageViewHelper->getReadImageView();
+    return angle::Result::Continue;
+}
+
+const vk::ImageHelper &RenderTargetVk::getFragmentShadingRateImageForRenderPass() const
+{
+    ASSERT(mFragmentShadingRateImage && mFragmentShadingRateImage->valid());
+    return *mFragmentShadingRateImage;
 }
 
 angle::FormatID RenderTargetVk::getImageActualFormatID() const

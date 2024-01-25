@@ -903,6 +903,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mHasDeferredFlush(false),
       mHasAnyCommandsPendingSubmission(false),
       mIsInFramebufferFetchMode(false),
+      mIsFoveatedRenderingModeDirty(false),
       mAllowRenderPassToReactivate(true),
       mTotalBufferToImageCopySize(0),
       mEstimatedPendingImageGarbageSize(0),
@@ -3263,7 +3264,13 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    gl::ShadingRate shadingRate = getState().getShadingRate();
+    FramebufferVk *drawFramebufferVk = vk::GetImpl(mState.getDrawFramebuffer());
+    const bool isFoveationEnabled    = drawFramebufferVk->isFoveationEnabled();
+
+    gl::ShadingRate shadingRate =
+        (isFoveationEnabled || getAndResetFoveatedRenderingModeDirtyState())
+            ? gl::ShadingRate::_1x1
+            : getState().getShadingRate();
     if (shadingRate == gl::ShadingRate::Undefined)
     {
         // Shading rate has not been set. Since this is dynamic state, set it to 1x1
@@ -3272,9 +3279,6 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate(
 
     const bool shadingRateSupported = mRenderer->isShadingRateSupported(shadingRate);
     VkExtent2D fragmentSize         = {};
-    VkFragmentShadingRateCombinerOpKHR shadingRateCombinerOp[2] = {
-        VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR,
-        VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR};
 
     switch (shadingRate)
     {
@@ -3327,6 +3331,16 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate(
         default:
             UNREACHABLE();
             return angle::Result::Stop;
+    }
+
+    VkFragmentShadingRateCombinerOpKHR shadingRateCombinerOp[2] = {
+        VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR,
+        VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR};
+
+    // If foveated rendering is enabled update combiner op
+    if (isFoveationEnabled)
+    {
+        shadingRateCombinerOp[1] = VK_FRAGMENT_SHADING_RATE_COMBINER_OP_REPLACE_KHR;
     }
 
     ASSERT(hasActiveRenderPass());
@@ -5352,6 +5366,22 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
     return angle::Result::Continue;
 }
 
+void ContextVk::updateFoveatedRendering()
+{
+    const bool previousFoveationMode = mGraphicsPipelineDesc->getRenderPassFoveation();
+    FramebufferVk *drawFramebufferVk = vk::GetImpl(mState.getDrawFramebuffer());
+    const bool currentFoveationMode  = drawFramebufferVk->isFoveationEnabled();
+    if (previousFoveationMode != currentFoveationMode)
+    {
+        mIsFoveatedRenderingModeDirty = true;
+        // Perform required state changes
+        mGraphicsPipelineDesc->setRenderPassFoveation(currentFoveationMode);
+        invalidateCurrentGraphicsPipeline();
+        mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
+        mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE);
+    }
+}
+
 angle::Result ContextVk::syncState(const gl::Context *context,
                                    const gl::state::DirtyBits dirtyBits,
                                    const gl::state::DirtyBits bitMask,
@@ -5643,6 +5673,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateScissor(glState);
                 updateDepthStencil(glState);
                 updateDither();
+                updateFoveatedRendering();
 
                 // Clear the blend funcs/equations for color attachment indices that no longer
                 // exist.
@@ -5862,7 +5893,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                             }
                             break;
                         case gl::state::EXTENDED_DIRTY_BIT_FOVEATED_RENDERING:
-                            // Noop until addition of backend support for QCOM foveated extensions
+                            mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE,
+                                                   drawFramebufferVk->isFoveationEnabled());
                             break;
                         default:
                             UNREACHABLE();
@@ -6374,6 +6406,9 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
 
     // Update dither based on attachment formats.
     updateDither();
+
+    // Updated foveated rendering
+    updateFoveatedRendering();
 
     // Attachments might have changed.
     updateMissingOutputsMask();

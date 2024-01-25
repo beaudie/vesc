@@ -1264,6 +1264,7 @@ enum class RenderPassClosureReason
     TextureReformatToRenderable,
     DeviceLocalBufferMap,
     OutOfReservedQueueSerialForOutsideCommands,
+    FramebufferFoveationModeChange,
 
     // UtilsVk
     PrepareForBlit,

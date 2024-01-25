@@ -601,7 +601,7 @@ class SemaphoreHelper final : angle::NonCopyable
 
 // This defines enum for VkPipelineStageFlagBits so that we can use it to compare and index into
 // array.
-enum class PipelineStage : uint16_t
+enum class PipelineStage : uint32_t
 {
     // Bellow are ordered based on Graphics Pipeline Stages
     TopOfPipe              = 0,
@@ -612,25 +612,26 @@ enum class PipelineStage : uint16_t
     TessellationEvaluation = 5,
     GeometryShader         = 6,
     TransformFeedback      = 7,
-    EarlyFragmentTest      = 8,
-    FragmentShader         = 9,
-    LateFragmentTest       = 10,
-    ColorAttachmentOutput  = 11,
+    FragmentShadingRate    = 8,
+    EarlyFragmentTest      = 9,
+    FragmentShader         = 10,
+    LateFragmentTest       = 11,
+    ColorAttachmentOutput  = 12,
 
     // Compute specific pipeline Stage
-    ComputeShader = 12,
+    ComputeShader = 13,
 
     // Transfer specific pipeline Stage
-    Transfer     = 13,
-    BottomOfPipe = 14,
+    Transfer     = 14,
+    BottomOfPipe = 15,
 
     // Host specific pipeline stage
-    Host = 15,
+    Host = 16,
 
-    InvalidEnum = 16,
+    InvalidEnum = 17,
     EnumCount   = InvalidEnum,
 };
-using PipelineStagesMask = angle::PackedEnumBitSet<PipelineStage, uint16_t>;
+using PipelineStagesMask = angle::PackedEnumBitSet<PipelineStage, uint32_t>;
 
 PipelineStage GetPipelineStage(gl::ShaderType stage);
 
@@ -1117,6 +1118,8 @@ enum class RenderPassUsage
     ColorTextureSampler,
     DepthTextureSampler,
     StencilTextureSampler,
+    // Fragment shading rate attachment
+    FragmentShadingRateReadOnlyAttachment,
 
     InvalidEnum,
     EnumCount = InvalidEnum,
@@ -1479,6 +1482,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                 ImageHelper *image,
                                 ImageHelper *resolveImage,
                                 UniqueSerial imageSiblingSerial);
+    void fragmentShadingRateImageRead(ImageHelper *image);
 
     bool usesImage(const ImageHelper &image) const;
     bool startedAndUsesImageWithBarrier(const ImageHelper &image) const;
@@ -1640,6 +1644,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void finalizeColorImageLayoutAndLoadStore(Context *context,
                                               PackedAttachmentIndex packedAttachmentIndex);
     void finalizeDepthStencilImageLayoutAndLoadStore(Context *context);
+    void finalizeFragmentShadingRateImageLayout(Context *context);
 
     // When using Vulkan secondary command buffers, each subpass must be recorded in a separate
     // command buffer.  Currently ANGLE produces render passes with at most 2 subpasses.  Once
@@ -1682,6 +1687,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     RenderPassAttachment mStencilAttachment;
     RenderPassAttachment mStencilResolveAttachment;
+
+    RenderPassAttachment mFragmentShadingRateAtachment;
 
     FramebufferAttachmentArray<VkImageView> mImageViews;
 
@@ -1798,6 +1805,7 @@ enum class ImageLayout
     // PreFragment == Vertex, Tessellation and Geometry stages
     PreFragmentShadersReadOnly,
     PreFragmentShadersWrite,
+    FragmentShadingRateAttachmentReadOnly,
     FragmentShaderReadOnly,
     FragmentShaderWrite,
     ComputeShaderReadOnly,
@@ -2025,6 +2033,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // Image formats used for the creation of imageless framebuffers.
     using ImageFormats = angle::FixedVector<VkFormat, kImageListFormatCount>;
     ImageFormats &getViewFormats() { return mViewFormats; }
+    const ImageFormats &getViewFormats() const { return mViewFormats; }
 
     // Helper for initExternal and users to extract the view formats of the image from the pNext
     // chain in VkImageCreateInfo.

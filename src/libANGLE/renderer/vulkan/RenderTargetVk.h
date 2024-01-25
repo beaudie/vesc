@@ -74,6 +74,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
                      vk::PackedAttachmentIndex index);
     void onColorResolve(ContextVk *contextVk, uint32_t framebufferLayerCount);
     void onDepthStencilDraw(ContextVk *contextVk, uint32_t framebufferLayerCount);
+    void onFragmentShadingRateRead(ContextVk *contextVk);
 
     vk::ImageHelper &getImageForRenderPass();
     const vk::ImageHelper &getImageForRenderPass() const;
@@ -95,6 +96,14 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // For 3D textures, the 2D view created for render target is invalid to read from.  The
     // following will return a view to the whole image (for all types, including 3D and 2DArray).
     angle::Result getCopyImageView(vk::Context *context, const vk::ImageView **imageViewOut) const;
+
+    // Special mutator for Texture RenderTargets. Allows the Framebuffer to keep a single
+    // RenderTargetVk pointer.
+    void updateFragmentShadingRateImageAndView(vk::ImageHelper *image,
+                                               vk::ImageViewHelper *imageViewHelper);
+    vk::ImageOrBufferViewSubresourceSerial getFragmentShadingRateSubresourceSerial() const;
+    const vk::ImageHelper &getFragmentShadingRateImageForRenderPass() const;
+    angle::Result getFragmentShadingRateImageView(const vk::ImageView **imageViewOut) const;
 
     angle::FormatID getImageActualFormatID() const;
     const angle::Format &getImageActualFormat() const;
@@ -229,6 +238,10 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // resolve attachment, it is not used.  The only purpose of |mResolveImage| is to store deferred
     // clears.
     RenderTargetTransience mTransience;
+
+    // If present, this is the corresponding fragment shading rate attachment and its view.
+    vk::ImageHelper *mFragmentShadingRateImage;
+    vk::ImageViewHelper *mFragmentShadingRateImageView;
 
     // Track references to the cached Framebuffer object that created out of this object
     vk::FramebufferCacheManager mFramebufferCacheManager;

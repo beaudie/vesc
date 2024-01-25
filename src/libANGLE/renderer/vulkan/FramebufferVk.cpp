@@ -24,6 +24,7 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
+#include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
 namespace rx
@@ -1624,6 +1625,45 @@ void FramebufferVk::updateLayerCount()
     mCurrentFramebufferDesc.updateIsMultiview(isMultiview);
 }
 
+angle::Result FramebufferVk::updateFoveationState(ContextVk *contextVk)
+{
+    bool isFoveationEnabled                       = mAttachmentHasFoveationState.any();
+    vk::ImageOrBufferViewSubresourceSerial serial = vk::kInvalidImageOrBufferViewSubresourceSerial;
+    if (isFoveationEnabled)
+    {
+        // Valid usage requires that no more than 1 attachment has foveation enabled
+        ASSERT(mAttachmentHasFoveationState.count() == 1);
+        size_t colorIndexGL = mAttachmentHasFoveationState.first();
+
+        // We support foveated rendering only for framebuffers with texture attachments
+        ASSERT(mState.getColorAttachment(colorIndexGL)->type() == GL_TEXTURE);
+        TextureVk *textureVk = vk::GetImpl(mState.getColorAttachment(colorIndexGL)->getTexture());
+        ASSERT(textureVk);
+
+        // If foveation is enabled on the framebuffer itself grab framebuffer's foveation state
+        // otherwise grab foveation state from the attachment
+        const gl::FoveationState &newFoveationState =
+            mState.isFoveationEnabled() ? mState.getFoveationState()
+                                        : textureVk->getState().getFoveationState();
+        ANGLE_TRY(textureVk->updateFoveationState(contextVk, newFoveationState));
+        vk::ImageHelper *fragmentShadingRateImage               = nullptr;
+        vk::ImageViewHelper *fragmentShadingRateImageViewHelper = nullptr;
+        textureVk->getFragmentShadingRateImageAndView(&fragmentShadingRateImage,
+                                                      &fragmentShadingRateImageViewHelper);
+        ASSERT(fragmentShadingRateImage && fragmentShadingRateImageViewHelper);
+
+        RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
+        ASSERT(renderTarget);
+        renderTarget->updateFragmentShadingRateImageAndView(fragmentShadingRateImage,
+                                                            fragmentShadingRateImageViewHelper);
+        serial = renderTarget->getFragmentShadingRateSubresourceSerial();
+    }
+
+    mCurrentFramebufferDesc.updateFragmentShadingRate(serial);
+    mRenderPassDesc.setFragmentShadingAttachment(isFoveationEnabled);
+    return angle::Result::Continue;
+}
+
 angle::Result FramebufferVk::resolveColorWithSubpass(ContextVk *contextVk,
                                                      const UtilsVk::BlitResolveParameters &params)
 {
@@ -1945,6 +1985,12 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
         mIsExternalColorAttachments.set(colorIndexGL, isExternalImage);
         mAttachmentHasFrontBufferUsage.set(
             colorIndexGL, mState.getColorAttachments()[colorIndexGL].hasFrontBufferUsage());
+        if (mState.getColorAttachment(colorIndexGL)->type() == GL_TEXTURE)
+        {
+            const gl::Texture *texture = mState.getColorAttachment(colorIndexGL)->getTexture();
+            ASSERT(texture);
+            mAttachmentHasFoveationState.set(colorIndexGL, texture->isFoveationEnabled());
+        }
     }
     else
     {
@@ -2087,6 +2133,9 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     bool shouldUpdateLayerCount           = false;
     bool shouldUpdateSrgbWriteControlMode = false;
 
+    // Reset foveation state tracker
+    mAttachmentHasFoveationState.reset();
+
     // For any updated attachments we'll update their Serials below
     ASSERT(dirtyBits.any());
     for (size_t dirtyBit : dirtyBits)
@@ -2121,6 +2170,11 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 break;
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_LAYERS:
                 shouldUpdateLayerCount = true;
+                break;
+            case gl::Framebuffer::DIRTY_BIT_FOVEATION:
+                // Enable foveation state on the 1st color attachment. All other color attachments
+                // will inherit the 1st attachment's foveation state.
+                mAttachmentHasFoveationState.set(mState.getColorAttachmentsMask().first());
                 break;
             default:
             {
@@ -2173,6 +2227,26 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     if (shouldUpdateLayerCount)
     {
         updateLayerCount();
+    }
+
+    // If foveated rendering is enabled on the framebuffer itself instead of its color attachments,
+    // enable foveation state on the 1st color attachment. All other color attachments will inherit
+    // the 1st attachment's foveation state.
+    if (mState.isFoveationEnabled())
+    {
+        mAttachmentHasFoveationState.set(mState.getColorAttachmentsMask().first());
+    }
+
+    if (mAttachmentHasFoveationState.any())
+    {
+        ANGLE_TRY(updateFoveationState(contextVk));
+        if (mCurrentFramebufferDesc != priorFramebufferDesc &&
+            !contextVk->getFeatures().supportsImagelessFramebuffer.enabled)
+        {
+            // Evict FramebufferCache entry
+            contextVk->getShareGroup()->getFramebufferCache().erase(contextVk,
+                                                                    priorFramebufferDesc);
+        }
     }
 
     // Defer clears for draw framebuffer ops.  Note that this will result in a render area that
@@ -2335,6 +2409,7 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
 
     mCurrentFramebufferDesc.updateUnresolveMask({});
     mRenderPassDesc.setWriteControlMode(mCurrentFramebufferDesc.getWriteControlMode());
+    mRenderPassDesc.setFragmentShadingAttachment(mAttachmentHasFoveationState.any());
 
     updateLegacyDither(contextVk);
 }
@@ -2426,6 +2501,22 @@ angle::Result FramebufferVk::getAttachmentsAndRenderTargets(
         attachments->push_back(imageView->getHandle());
         renderTargetsInfoOut->emplace_back(
             RenderTargetInfo(depthStencilRenderTarget, RenderTargetImage::ResolveImage));
+    }
+
+    // Fragment shading rate attachment.
+    if (mAttachmentHasFoveationState.any())
+    {
+        // If foveated rendering is enabled on the framebuffer itself, foveation state is enabled on
+        // the 1st color attachment. All other color attachments inherit the 1st attachment's
+        // foveation state.
+        size_t colorIndexGL = mAttachmentHasFoveationState.first();
+        const vk::ImageView *fragmentShadingRateAttachmentImageView = nullptr;
+        RenderTargetVk *colorRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
+        ASSERT(colorRenderTarget);
+        ANGLE_TRY(colorRenderTarget->getFragmentShadingRateImageView(
+            &fragmentShadingRateAttachmentImageView));
+        ASSERT(fragmentShadingRateAttachmentImageView);
+        attachments->push_back(fragmentShadingRateAttachmentImageView->getHandle());
     }
 
     return angle::Result::Continue;
@@ -2580,6 +2671,31 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
             fbAttachmentImageInfo.pViewFormats = renderTargetImage->getViewFormats().data();
 
             fbAttachmentImageInfoArray.push_back(fbAttachmentImageInfo);
+
+            if (mCurrentFramebufferDesc.hasFragmentShadingRateAttachment())
+            {
+                const vk::ImageHelper &fragmentShadingRateImage =
+                    info.renderTarget->getFragmentShadingRateImageForRenderPass();
+                VkFramebufferAttachmentImageInfoKHR fragmentShadingRatebAttachmentImageInfo = {};
+                fragmentShadingRatebAttachmentImageInfo.sType =
+                    VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
+
+                fragmentShadingRatebAttachmentImageInfo.width =
+                    fragmentShadingRateImage.getExtents().width;
+                fragmentShadingRatebAttachmentImageInfo.height =
+                    fragmentShadingRateImage.getExtents().height;
+
+                fragmentShadingRatebAttachmentImageInfo.layerCount = 1;
+                fragmentShadingRatebAttachmentImageInfo.flags =
+                    fragmentShadingRateImage.getCreateFlags();
+                fragmentShadingRatebAttachmentImageInfo.usage = fragmentShadingRateImage.getUsage();
+                fragmentShadingRatebAttachmentImageInfo.viewFormatCount =
+                    static_cast<uint32_t>(fragmentShadingRateImage.getViewFormats().size());
+                fragmentShadingRatebAttachmentImageInfo.pViewFormats =
+                    fragmentShadingRateImage.getViewFormats().data();
+
+                fbAttachmentImageInfoArray.push_back(fragmentShadingRatebAttachmentImageInfo);
+            }
         }
 
         VkFramebufferAttachmentsCreateInfoKHR fbAttachmentsCreateInfo = {};
@@ -3239,6 +3355,14 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     if (unresolveChanged || anyUnresolve)
     {
         contextVk->onDrawFramebufferRenderPassDescChange(this, renderPassDescChangedOut);
+    }
+
+    // Add fragment shading rate to the tracking list.
+    if (mAttachmentHasFoveationState.any())
+    {
+        size_t colorIndexGL               = mAttachmentHasFoveationState.first();
+        RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
+        colorRenderTarget->onFragmentShadingRateRead(contextVk);
     }
 
     return angle::Result::Continue;
