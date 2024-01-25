@@ -153,6 +153,8 @@ class FramebufferVk : public FramebufferImpl
         return (mAttachmentHasFrontBufferUsage & mState.getColorAttachmentsMask()).any();
     }
 
+    bool isFoveationEnabled() { return mAttachmentHasFoveationState.any(); }
+
     enum class RenderTargetImage
     {
         AttachmentImage,
@@ -260,6 +262,8 @@ class FramebufferVk : public FramebufferImpl
 
     void updateLayerCount();
 
+    angle::Result updateFoveationState(ContextVk *contextVk);
+
     void insertCache(ContextVk *contextVk,
                      const vk::FramebufferDesc &desc,
                      vk::FramebufferHelper &&newFramebuffer);
@@ -294,6 +298,7 @@ class FramebufferVk : public FramebufferImpl
     // made externally available.
     gl::DrawBufferMask mIsExternalColorAttachments;
     gl::DrawBufferMask mAttachmentHasFrontBufferUsage;
+    gl::DrawBufferMask mAttachmentHasFoveationState;
 
     bool mIsCurrentFramebufferCached;
     bool mIsYUVResolve;

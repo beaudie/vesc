@@ -555,6 +555,12 @@ class RendererVk : angle::NonCopyable
         return mSupportedFragmentShadingRates.test(shadingRate);
     }
 
+    VkExtent2D getMaxFragmentShadingRateAttachmentTexelSize() const
+    {
+        ASSERT(mFeatures.supportsFoveatedRendering.enabled);
+        return mFragmentShadingRateProperties.maxFragmentShadingRateAttachmentTexelSize;
+    }
+
     void addBufferBlockToOrphanList(vk::BufferBlock *block) { mOrphanedBufferBlockList.add(block); }
 
     VkDeviceSize getSuballocationDestroyedSize() const
@@ -768,7 +774,11 @@ class RendererVk : angle::NonCopyable
     angle::Result initializeMemoryAllocator(DisplayVk *displayVk);
 
     // Query and cache supported fragment shading rates
-    bool canSupportFragmentShadingRate(const vk::ExtensionNameList &deviceExtensionNames);
+    void queryAndCacheFragmentShadingRates();
+    // Determine support for shading rate based rendering
+    bool canSupportFragmentShadingRate() const;
+    // Determine support for foveated rendering
+    bool canSupportFoveatedRendering() const;
     // Prefer host visible device local via device local based on device type and heap size.
     bool canPreferDeviceLocalMemoryHostVisible(VkPhysicalDeviceType deviceType);
 
@@ -862,6 +872,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceGraphicsPipelineLibraryFeaturesEXT mGraphicsPipelineLibraryFeatures;
     VkPhysicalDeviceGraphicsPipelineLibraryPropertiesEXT mGraphicsPipelineLibraryProperties;
     VkPhysicalDeviceFragmentShadingRateFeaturesKHR mFragmentShadingRateFeatures;
+    VkPhysicalDeviceFragmentShadingRatePropertiesKHR mFragmentShadingRateProperties;
     VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT mFragmentShaderInterlockFeatures;
     VkPhysicalDeviceImagelessFramebufferFeaturesKHR mImagelessFramebufferFeatures;
     VkPhysicalDevicePipelineRobustnessFeaturesEXT mPipelineRobustnessFeatures;
@@ -882,6 +893,7 @@ class RendererVk : angle::NonCopyable
 #endif
 
     angle::PackedEnumBitSet<gl::ShadingRate, uint8_t> mSupportedFragmentShadingRates;
+    angle::PackedEnumMap<gl::ShadingRate, uint8_t> mSupportedFragmentShadingRateSampleCounts;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
     uint32_t mMaxVertexAttribDivisor;
     uint32_t mCurrentQueueFamilyIndex;

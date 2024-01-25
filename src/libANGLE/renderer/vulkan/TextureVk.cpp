@@ -790,6 +790,201 @@ bool TextureVk::isMutableTextureConsistentlySpecifiedForFlush()
     return true;
 }
 
+angle::Result TextureVk::generateFragmentShadingRateAttachmentWithCPU(
+    ContextVk *contextVk,
+    const bool isGainZero,
+    const uint32_t attachmentWidth,
+    const uint32_t attachmentHeight,
+    const uint32_t attachmentBlockWidth,
+    const uint32_t attachmentBlockHeight,
+    const uint32_t textureWidth,
+    const uint32_t textureHeight,
+    const std::vector<gl::FocalPoint> &activeFocalPoints)
+{
+    // Fill in image with fragment shading rate data
+    size_t bufferSize                   = attachmentWidth * attachmentHeight;
+    VkBufferCreateInfo bufferCreateInfo = {};
+    bufferCreateInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferCreateInfo.size               = bufferSize;
+    bufferCreateInfo.usage              = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+    bufferCreateInfo.sharingMode        = VK_SHARING_MODE_EXCLUSIVE;
+    vk::RendererScoped<vk::BufferHelper> stagingBuffer(contextVk->getRenderer());
+    vk::BufferHelper *buffer = &stagingBuffer.get();
+    ANGLE_TRY(buffer->init(contextVk, bufferCreateInfo, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
+    uint8_t *mappedBuffer;
+    ANGLE_TRY(buffer->map(contextVk, &mappedBuffer));
+    uint8_t val = 0;
+    memset(mappedBuffer, 0, bufferSize);
+    if (!isGainZero)
+    {
+        // The spec provides requires min_pixel_density to be computed thusly -
+        //
+        // min_pixel_density=0.;
+        // for(int i=0;i<focalPointsPerLayer;++i)
+        // {
+        //     focal_point_density = 1./max((focalX[i]-px)^2*gainX[i]^2+
+        //                         (focalY[i]-py)^2*gainY[i]^2-foveaArea[i],1.);
+        //
+        //     min_pixel_density=max(min_pixel_density,focal_point_density);
+        // }
+        float minPixelDensity   = 0.0f;
+        float focalPointDensity = 0.0f;
+        for (uint32_t y = 0; y < attachmentHeight; y++)
+        {
+            for (uint32_t x = 0; x < attachmentWidth; x++)
+            {
+                minPixelDensity = 0.0f;
+                float px        = (((float)x * attachmentBlockWidth) / textureWidth - 0.5f) * 2.0f;
+                float py = (((float)y * attachmentBlockHeight) / textureHeight - 0.5f) * 2.0f;
+                focalPointDensity = 0.0f;
+                for (uint32_t point = 0; point < activeFocalPoints.size(); point++)
+                {
+                    float density =
+                        1.0f / std::max(((std::powf(activeFocalPoints[point].focalX - px, 2) *
+                                          std::powf(activeFocalPoints[point].gainX, 2)) +
+                                         (std::powf(activeFocalPoints[point].focalY - py, 2) *
+                                          std::powf(activeFocalPoints[point].gainY, 2)) -
+                                         activeFocalPoints[point].foveaArea),
+                                        1.0f);
+                    // When focal points are overlapping, make sure to choose the highest quality of
+                    // all
+                    if (density > focalPointDensity)
+                    {
+                        focalPointDensity = density;
+                    }
+                }
+                minPixelDensity = std::max(minPixelDensity, focalPointDensity);
+                if (minPixelDensity > 0.75f)
+                {
+                    // 1x1
+                    val = 0;
+                }
+                else if (minPixelDensity > 0.5f)
+                {
+                    // 2x1
+                    val = (1 >> 1) | (2 << 1);
+                }
+                else
+                {
+                    // 2x2
+                    val = (2 >> 1) | (2 << 1);
+                }
+                mappedBuffer[y * attachmentWidth + x] = val;
+            }
+        }
+    }
+    ANGLE_TRY(buffer->flush(contextVk->getRenderer(), 0, buffer->getSize()));
+    buffer->unmap(contextVk->getRenderer());
+    // copy data from staging buffer to image
+    vk::CommandBufferAccess access;
+    access.onBufferTransferRead(buffer);
+    access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
+                                &mFragmentShadingRateImage);
+    vk::OutsideRenderPassCommandBuffer *dataUpload;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &dataUpload));
+    VkBufferImageCopy copy           = {};
+    copy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.imageSubresource.layerCount = 1;
+    copy.imageExtent.depth           = 1;
+    copy.imageExtent.width           = attachmentWidth;
+    copy.imageExtent.height          = attachmentHeight;
+    dataUpload->copyBufferToImage(buffer->getBuffer().getHandle(),
+                                  mFragmentShadingRateImage.getImage(),
+                                  VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy);
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::ensureFragmentShadingRateAttachmentInitialized(
+    ContextVk *contextVk,
+    const uint32_t attachmentWidth,
+    const uint32_t attachmentHeight)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // Release current valid image iff attachment extents need to change.
+    if (mFragmentShadingRateImage.valid() &&
+        (mFragmentShadingRateImage.getExtents().width != attachmentWidth ||
+         mFragmentShadingRateImage.getExtents().height != attachmentHeight))
+    {
+        mFragmentShadingRateImageView.release(renderer, mFragmentShadingRateImage.getResourceUse());
+        mFragmentShadingRateImage.releaseImageFromShareContexts(contextVk->getRenderer(), contextVk,
+                                                                {});
+    }
+
+    if (!mFragmentShadingRateImage.valid())
+    {
+        ANGLE_TRY(mFragmentShadingRateImage.init(
+            contextVk, gl::TextureType::_2D, VkExtent3D{attachmentWidth, attachmentHeight, 1},
+            renderer->getFormat(angle::FormatID::R8_UINT), 1,
+            VK_IMAGE_USAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR |
+                VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+            gl::LevelIndex(0), 1, 1, false, false));
+        ANGLE_TRY(contextVk->initImageAllocation(
+            &mFragmentShadingRateImage, false, renderer->getMemoryProperties(),
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vk::MemoryAllocationType::TextureImage));
+
+        mFragmentShadingRateImageView.init(renderer);
+        ANGLE_TRY(mFragmentShadingRateImageView.initReadViews(
+            contextVk, gl::TextureType::_2D, mFragmentShadingRateImage, gl::SwizzleState(),
+            gl::SwizzleState(), vk::LevelIndex(0), 1, 0, 1, false,
+            mFragmentShadingRateImage.getUsage()));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::updateFoveationState(ContextVk *contextVk,
+                                              const gl::FoveationState &newState)
+{
+    if (mFoveationState == newState)
+    {
+        // Nothing to do, early out
+        return angle::Result::Continue;
+    }
+    mFoveationState = newState;
+    ASSERT(mImage && mImage->valid());
+
+    const VkExtent2D extent = {8, 8};
+    // contextVk->getRenderer()->getMaxFragmentShadingRateAttachmentTexelSize();
+    const uint32_t attachmentBlockWidth  = extent.width;
+    const uint32_t attachmentBlockHeight = extent.height;
+    const uint32_t textureWidth          = mImage->getExtents().width;
+    const uint32_t textureHeight         = mImage->getExtents().height;
+    const uint32_t attachmentWidth =
+        static_cast<uint32_t>(std::ceil(textureWidth / attachmentBlockWidth));
+    const uint32_t attachmentHeight =
+        static_cast<uint32_t>(std::ceil(textureHeight / attachmentBlockHeight));
+
+    ANGLE_TRY(ensureFragmentShadingRateAttachmentInitialized(contextVk, attachmentWidth,
+                                                             attachmentHeight));
+    ASSERT(mFragmentShadingRateImage.valid());
+
+    bool isGainZero = true;
+    std::vector<gl::FocalPoint> activeFocalPoints;
+    for (uint32_t point = 0; point < gl::IMPLEMENTATION_MAX_FOCAL_POINTS; point++)
+    {
+        const gl::FocalPoint &focalPoint = mFoveationState.getFocalPoint(0, point);
+        if (focalPoint != gl::kInvalidFocalPoint)
+        {
+            isGainZero &= focalPoint.gainX == 0 && focalPoint.gainY == 0;
+            activeFocalPoints.push_back(focalPoint);
+        }
+    }
+
+    return generateFragmentShadingRateAttachmentWithCPU(
+        contextVk, isGainZero, attachmentWidth, attachmentHeight, attachmentBlockWidth,
+        attachmentBlockHeight, textureWidth, textureHeight, activeFocalPoints);
+}
+
+void TextureVk::getFragmentShadingRateImageAndView(vk::ImageHelper **imageOut,
+                                                   vk::ImageViewHelper **imageViewHelperOut)
+{
+    ASSERT(mFragmentShadingRateImage.valid());
+
+    *imageOut           = &mFragmentShadingRateImage;
+    *imageViewHelperOut = &mFragmentShadingRateImageView;
+}
+
 bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
                                      angle::FormatID dstImageFormatID) const
 {
@@ -3779,6 +3974,11 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
     }
 
+    if (mFragmentShadingRateImage.valid())
+    {
+        mFragmentShadingRateImage.releaseImageFromShareContexts(renderer, contextVk, {});
+    }
+
     onStateChange(angle::SubjectMessage::SubjectChanged);
     mRedefinedLevels = {};
 }
@@ -3802,6 +4002,8 @@ void TextureVk::releaseImageViews(ContextVk *contextVk)
     {
         imageViewHelper.release(renderer, mImage->getResourceUse());
     }
+
+    mFragmentShadingRateImageView.release(renderer, mFragmentShadingRateImage.getResourceUse());
 
     for (auto &renderTargets : mSingleLayerRenderTargets)
     {
