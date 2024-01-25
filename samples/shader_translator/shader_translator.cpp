@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fstream>
+#include <iterator>
 #include <sstream>
 #include <vector>
 #include "angle_gl.h"
@@ -33,7 +35,11 @@ enum TFailCode
 
 static void usage();
 static sh::GLenum FindShaderType(const char *fileName);
-static bool CompileFile(char *fileName, ShHandle compiler, const ShCompileOptions &compileOptions);
+static bool CompileFile(char *fileName,
+                        ShHandle compiler,
+                        const ShCompileOptions &compileOptions,
+                        const int &processedShadersCount,
+                        const std::string &shaderBinaryOutputFileName);
 static void LogMsg(const char *msg, const char *name, const int num, const char *logName);
 static void PrintVariable(const std::string &prefix, size_t index, const sh::ShaderVariable &var);
 static void PrintActiveVariables(ShHandle compiler);
@@ -79,16 +85,17 @@ int main(int argc, char *argv[])
 {
     TFailCode failCode = ESuccess;
 
-    ShCompileOptions compileOptions = {};
-    int numCompiles                 = 0;
-    ShHandle vertexCompiler         = 0;
-    ShHandle fragmentCompiler       = 0;
-    ShHandle computeCompiler        = 0;
-    ShHandle geometryCompiler       = 0;
-    ShHandle tessEvalCompiler       = 0;
-    ShHandle tessControlCompiler    = 0;
-    ShShaderSpec spec               = SH_GLES2_SPEC;
-    ShShaderOutput output           = SH_ESSL_OUTPUT;
+    ShCompileOptions compileOptions        = {};
+    int processedShadersCount              = 0;
+    ShHandle vertexCompiler                = 0;
+    ShHandle fragmentCompiler              = 0;
+    ShHandle computeCompiler               = 0;
+    ShHandle geometryCompiler              = 0;
+    ShHandle tessEvalCompiler              = 0;
+    ShHandle tessControlCompiler           = 0;
+    ShShaderSpec spec                      = SH_GLES2_SPEC;
+    ShShaderOutput output                  = SH_ESSL_OUTPUT;
+    std::string shaderBinaryOutputFileName = "";
 
     sh::Initialize();
 
@@ -197,6 +204,7 @@ int main(int argc, char *argv[])
                             case 'v':
                                 output = SH_SPIRV_VULKAN_OUTPUT;
                                 compileOptions.initializeUninitializedLocals = true;
+                                compileOptions.emulateGLDrawID               = true;
                                 break;
                             case 'h':
                                 if (argv[0][4] == '1' && argv[0][5] == '1')
@@ -273,6 +281,11 @@ int main(int argc, char *argv[])
                         failCode = EFailUsage;
                     }
                     break;
+                case 'f':
+                    shaderBinaryOutputFileName.assign(argv[0] + 3);
+                    // Make sure the compiler includes translated code in the shader binary blob.
+                    compileOptions.objectCode = true;
+                    break;
                 default:
                     failCode = EFailUsage;
             }
@@ -284,6 +297,13 @@ int main(int argc, char *argv[])
                 resources.MaxDrawBuffers             = 8;
                 resources.MaxVertexTextureImageUnits = 16;
                 resources.MaxTextureImageUnits       = 16;
+            }
+            if (!shaderBinaryOutputFileName.empty() && (output != SH_SPIRV_VULKAN_OUTPUT))
+            {
+                printf(
+                    "Error: Shader binary blob output is only supported on the vulkan "
+                    "backend, please supply the -b=v flag.\n");
+                failCode = EFailUsage;
             }
             ShHandle compiler = 0;
             switch (FindShaderType(argv[0]))
@@ -357,17 +377,18 @@ int main(int argc, char *argv[])
                         break;
                 }
 
-                bool compiled = CompileFile(argv[0], compiler, compileOptions);
+                bool compiled = CompileFile(argv[0], compiler, compileOptions,
+                                            processedShadersCount, shaderBinaryOutputFileName);
 
-                LogMsg("BEGIN", "COMPILER", numCompiles, "INFO LOG");
+                LogMsg("BEGIN", "COMPILER", processedShadersCount, "INFO LOG");
                 std::string log = sh::GetInfoLog(compiler);
                 puts(log.c_str());
-                LogMsg("END", "COMPILER", numCompiles, "INFO LOG");
+                LogMsg("END", "COMPILER", processedShadersCount, "INFO LOG");
                 printf("\n\n");
 
                 if (compiled && compileOptions.objectCode)
                 {
-                    LogMsg("BEGIN", "COMPILER", numCompiles, "OBJ CODE");
+                    LogMsg("BEGIN", "COMPILER", processedShadersCount, "OBJ CODE");
                     if (output != SH_SPIRV_VULKAN_OUTPUT)
                     {
                         const std::string &code = sh::GetObjectCode(compiler);
@@ -378,19 +399,21 @@ int main(int argc, char *argv[])
                         const sh::BinaryBlob &blob = sh::GetObjectBinaryBlob(compiler);
                         PrintSpirv(blob);
                     }
-                    LogMsg("END", "COMPILER", numCompiles, "OBJ CODE");
+                    LogMsg("END", "COMPILER", processedShadersCount, "OBJ CODE");
                     printf("\n\n");
                 }
                 if (compiled && printActiveVariables)
                 {
-                    LogMsg("BEGIN", "COMPILER", numCompiles, "VARIABLES");
+                    LogMsg("BEGIN", "COMPILER", processedShadersCount, "VARIABLES");
                     PrintActiveVariables(compiler);
-                    LogMsg("END", "COMPILER", numCompiles, "VARIABLES");
+                    LogMsg("END", "COMPILER", processedShadersCount, "VARIABLES");
                     printf("\n\n");
                 }
                 if (!compiled)
+                {
                     failCode = EFailCompile;
-                ++numCompiles;
+                }
+                ++processedShadersCount;
             }
             else
             {
@@ -407,6 +430,10 @@ int main(int argc, char *argv[])
     if (failCode == EFailUsage)
     {
         usage();
+    }
+    if (failCode == EFailCompile)
+    {
+        printf("Error: Shader compilation failed.\n");
     }
 
     if (vertexCompiler)
@@ -447,40 +474,42 @@ void usage()
     // clang-format off
     printf(
         "Usage: translate [-i -o -u -l -b=e -b=g -b=h9 -x=i -x=d] file1 file2 ...\n"
-        "Where: filename : filename ending in .frag*, .vert*, .comp*, .geom*, .tcs* or .tes*\n"
-        "       -i       : print intermediate tree\n"
-        "       -o       : print translated code\n"
-        "       -u       : print active attribs, uniforms, varyings and program outputs\n"
-        "       -s=e2    : use GLES2 spec (this is by default)\n"
-        "       -s=e3    : use GLES3 spec\n"
-        "       -s=e31   : use GLES31 spec (in development)\n"
-        "       -s=e32   : use GLES32 spec (in development)\n"
-        "       -s=w     : use WebGL 1.0 spec\n"
-        "       -s=wn    : use WebGL 1.0 spec with no highp support in fragment shaders\n"
-        "       -s=w2    : use WebGL 2.0 spec\n"
-        "       -s=d     : use Desktop Core spec (in development)\n"
-        "       -s=dc    : use Desktop Compatibility spec (in development)\n"
-        "       -b=e     : output GLSL ES code (this is by default)\n"
-        "       -b=g     : output GLSL code (compatibility profile)\n"
-        "       -b=g[NUM]: output GLSL code (NUM can be 130, 140, 150, 330, 400, 410, 420, 430, "
+        "Where: filename     : filename ending in .frag*, .vert*, .comp*, .geom*, .tcs* or .tes*.\n"
+        "       -i           : print intermediate tree\n"
+        "       -o           : print translated code\n"
+        "       -u           : print active attribs, uniforms, varyings and program outputs\n"
+        "       -s=e2        : use GLES2 spec (this is by default)\n"
+        "       -s=e3        : use GLES3 spec\n"
+        "       -s=e31       : use GLES31 spec (in development)\n"
+        "       -s=e32       : use GLES32 spec (in development)\n"
+        "       -s=w         : use WebGL 1.0 spec\n"
+        "       -s=wn        : use WebGL 1.0 spec with no highp support in fragment shaders\n"
+        "       -s=w2        : use WebGL 2.0 spec\n"
+        "       -s=d         : use Desktop Core spec (in development)\n"
+        "       -s=dc        : use Desktop Compatibility spec (in development)\n"
+        "       -b=e         : output GLSL ES code (this is by default)\n"
+        "       -b=g         : output GLSL code (compatibility profile)\n"
+        "       -b=g[NUM]    : output GLSL code (NUM can be 130, 140, 150, 330, 400, 410, 420, 430, "
         "440, 450)\n"
-        "       -b=v     : output Vulkan SPIR-V code\n"
-        "       -b=h9    : output HLSL9 code\n"
-        "       -b=h11   : output HLSL11 code\n"
-        "       -b=m     : output MSL code (direct)\n"
-        "       -x=i     : enable GL_OES_EGL_image_external\n"
-        "       -x=d     : enable GL_OES_EGL_standard_derivatives\n"
-        "       -x=r     : enable ARB_texture_rectangle\n"
-        "       -x=b[NUM]: enable EXT_blend_func_extended (NUM default 1)\n"
-        "       -x=w[NUM]: enable EXT_draw_buffers (NUM default 1)\n"
-        "       -x=g     : enable EXT_frag_depth\n"
-        "       -x=l     : enable EXT_shader_texture_lod\n"
-        "       -x=f     : enable EXT_shader_framebuffer_fetch\n"
-        "       -x=n     : enable NV_shader_framebuffer_fetch\n"
-        "       -x=a     : enable ARM_shader_framebuffer_fetch\n"
-        "       -x=m     : enable OVR_multiview\n"
-        "       -x=y     : enable YUV_target\n"
-        "       -x=s     : enable OES_sample_variables\n");
+        "       -b=v         : output Vulkan SPIR-V code\n"
+        "       -b=h9        : output HLSL9 code\n"
+        "       -b=h11       : output HLSL11 code\n"
+        "       -b=m         : output MSL code (direct)\n"
+        "       -x=i         : enable GL_OES_EGL_image_external\n"
+        "       -x=d         : enable GL_OES_EGL_standard_derivatives\n"
+        "       -x=r         : enable ARB_texture_rectangle\n"
+        "       -x=b[NUM]    : enable EXT_blend_func_extended (NUM default 1)\n"
+        "       -x=w[NUM]    : enable EXT_draw_buffers (NUM default 1)\n"
+        "       -x=g         : enable EXT_frag_depth\n"
+        "       -x=l         : enable EXT_shader_texture_lod\n"
+        "       -x=f         : enable EXT_shader_framebuffer_fetch\n"
+        "       -x=n         : enable NV_shader_framebuffer_fetch\n"
+        "       -x=a         : enable ARM_shader_framebuffer_fetch\n"
+        "       -x=m         : enable OVR_multiview\n"
+        "       -x=y         : enable YUV_target\n"
+        "       -x=s         : enable OES_sample_variables\n"
+        "       -f=<filename>: output a shader binary blob using the GL_SHADER_BINARY_ANGLE format, "
+        "to be consumed by the glShaderBinary API. Only one input shader may be provided when using this option.\n");
     // clang-format on
 }
 
@@ -526,18 +555,61 @@ sh::GLenum FindShaderType(const char *fileName)
 }
 
 //
-//   Read a file's data into a string, and compile it using sh::Compile
+//   Read a file's data into a string and compile it. If an output filename is provided,
+//   write a shader binary blob to the file which can be passed into glShaderBinary API.
 //
-bool CompileFile(char *fileName, ShHandle compiler, const ShCompileOptions &compileOptions)
+bool CompileFile(char *fileName,
+                 ShHandle compiler,
+                 const ShCompileOptions &compileOptions,
+                 const int &processedShadersCount,
+                 const std::string &shaderBinaryOutputFileName)
 {
+    if (!shaderBinaryOutputFileName.empty() && processedShadersCount > 0)
+    {
+        printf(
+            "COMPILER %d SKIPPED: Only one input shader may be provided when using the -f "
+            "option.\n",
+            processedShadersCount);
+        return false;
+    }
+
     ShaderSource source;
     if (!ReadShaderSource(fileName, source))
+    {
         return false;
+    }
 
-    int ret = sh::Compile(compiler, &source[0], source.size(), compileOptions);
+    bool compiled = false;
+    if (!shaderBinaryOutputFileName.empty())
+    {
+        // Call sh::GetShaderBinary to generate the complete shader binary blobs instead of just
+        // the SPIR-V blob
+        LogMsg("BEGIN", "COMPILER", processedShadersCount, "SHADER BINARY BLOB OUTPUT");
+        sh::ShaderBinaryBlob shaderBinary;
+        compiled =
+            sh::GetShaderBinary(compiler, &source[0], source.size(), compileOptions, &shaderBinary);
+
+        std::ofstream outputFile(shaderBinaryOutputFileName, std::ofstream::binary);
+        std::ostream_iterator<sh::ShaderBinaryBlob::value_type> outputIterator(outputFile);
+        std::copy(std::begin(shaderBinary), std::end(shaderBinary), outputIterator);
+        if (outputFile.bad())
+        {
+            printf("Error writing shader binary blob to file: %s\n",
+                   shaderBinaryOutputFileName.c_str());
+            compiled = false;
+        }
+
+        LogMsg("END", "COMPILER", processedShadersCount, "SHADER BINARY BLOB OUTPUT");
+        printf("\n\n");
+    }
+    else
+    {
+        // Call sh::Compile to generate the SPIR-V blob
+        compiled = sh::Compile(compiler, &source[0], source.size(), compileOptions);
+    }
 
     FreeShaderSource(source);
-    return ret ? true : false;
+    return compiled;
 }
 
 void LogMsg(const char *msg, const char *name, const int num, const char *logName)
