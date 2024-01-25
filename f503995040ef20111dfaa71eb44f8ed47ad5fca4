@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6c03f83_44854cfb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-25T00:01:55Z",
+      "side": 1,
+      "message": "Remember to `s/EXPERIMENTAL/Vulkan` before submission",
+      "revId": "f503995040ef20111dfaa71eb44f8ed47ad5fca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d9756c1_e39f55dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-25T00:01:55Z",
+      "side": 1,
+      "message": "super nit: `derive` or `calculate` instead of `guess`",
+      "range": {
+        "startLine": 2483,
+        "startChar": 31,
+        "endLine": 2483,
+        "endChar": 50
+      },
+      "revId": "f503995040ef20111dfaa71eb44f8ed47ad5fca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
