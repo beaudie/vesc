@@ -1312,6 +1312,126 @@ using UniqueObjectPointer = std::unique_ptr<ObjT, DestroyThenDelete<ObjT, Contex
 namespace gl
 {
 class State;
+
+// Focal Point information for foveated rendering
+struct FocalPoint
+{
+    ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+
+    float focalX;
+    float focalY;
+    float gainX;
+    float gainY;
+    float foveaArea;
+
+    ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
+
+    constexpr FocalPoint() : focalX(0), focalY(0), gainX(0), gainY(0), foveaArea(0) {}
+
+    FocalPoint(float fX, float fY, float gX, float gY, float fArea)
+        : focalX(fX), focalY(fY), gainX(gX), gainY(gY), foveaArea(fArea)
+    {}
+    FocalPoint(const FocalPoint &other)            = default;
+    FocalPoint &operator=(const FocalPoint &other) = default;
+
+    bool operator==(const FocalPoint &other) const
+    {
+        return memcmp(this, &other, sizeof(FocalPoint)) == 0;
+    }
+    bool operator!=(const FocalPoint &other) const { return !(*this == other); }
+};
+
+constexpr FocalPoint kInvalidFocalPoint = FocalPoint();
+
+class FoveationState
+{
+  public:
+    FoveationState()
+    {
+        mConfigured          = false;
+        mFoveatedFeatureBits = 0;
+        mMinPixelDensity     = 0.0f;
+        for (size_t layer = 0; layer < IMPLEMENTATION_MAX_NUM_LAYERS; layer++)
+        {
+            for (size_t focalPointIndex = 0; focalPointIndex < IMPLEMENTATION_MAX_FOCAL_POINTS;
+                 focalPointIndex++)
+            {
+                mFocalPoints[layer][focalPointIndex] = kInvalidFocalPoint;
+            }
+        }
+    }
+
+    FoveationState &operator=(const FoveationState &other)
+    {
+        mConfigured          = other.mConfigured;
+        mFoveatedFeatureBits = other.mFoveatedFeatureBits;
+        mMinPixelDensity     = other.mMinPixelDensity;
+        for (size_t layer = 0; layer < IMPLEMENTATION_MAX_NUM_LAYERS; layer++)
+        {
+            for (size_t focalPointIndex = 0; focalPointIndex < IMPLEMENTATION_MAX_FOCAL_POINTS;
+                 focalPointIndex++)
+            {
+                mFocalPoints[layer][focalPointIndex] = other.mFocalPoints[layer][focalPointIndex];
+            }
+        }
+
+        return *this;
+    }
+
+    void configure() { mConfigured = true; }
+    bool isConfigured() const { return mConfigured; }
+    bool isFoveated() const
+    {
+        // Consider foveated if ANY focal point is valid
+        for (size_t layer = 0; layer < IMPLEMENTATION_MAX_NUM_LAYERS; layer++)
+        {
+            for (size_t focalPointIndex = 0; focalPointIndex < IMPLEMENTATION_MAX_FOCAL_POINTS;
+                 focalPointIndex++)
+            {
+                if (mFocalPoints[layer][focalPointIndex] != kInvalidFocalPoint)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    bool operator==(const FoveationState &other) const
+    {
+        return memcmp(this, &other, sizeof(FoveationState)) == 0;
+    }
+    void setFoveatedFeatureBits(const GLuint features) { mFoveatedFeatureBits = features; }
+    GLuint getFoveatedFeatureBits() const { return mFoveatedFeatureBits; }
+    void setMinPixelDensity(const GLfloat density) { mMinPixelDensity = density; }
+    GLfloat getMinPixelDensity() const { return mMinPixelDensity; }
+    GLuint getMaxNumFocalPoints() const { return gl::IMPLEMENTATION_MAX_FOCAL_POINTS; }
+    void setFocalPoint(uint32_t layer, uint32_t focalPointIndex, const FocalPoint &focalPoint)
+    {
+        ASSERT(layer < gl::IMPLEMENTATION_MAX_NUM_LAYERS &&
+               focalPointIndex < gl::IMPLEMENTATION_MAX_FOCAL_POINTS);
+
+        mFocalPoints[layer][focalPointIndex] = focalPoint;
+    }
+    const FocalPoint &getFocalPoint(uint32_t layer, uint32_t focalPointIndex) const
+    {
+        ASSERT(layer < gl::IMPLEMENTATION_MAX_NUM_LAYERS &&
+               focalPointIndex < gl::IMPLEMENTATION_MAX_FOCAL_POINTS);
+
+        return mFocalPoints[layer][focalPointIndex];
+    }
+    GLuint getSupportedFoveationFeatures() const { return GL_FOVEATION_ENABLE_BIT_QCOM; }
+
+  private:
+    ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+
+    bool mConfigured;
+    GLuint mFoveatedFeatureBits;
+    GLfloat mMinPixelDensity;
+    FocalPoint mFocalPoints[IMPLEMENTATION_MAX_NUM_LAYERS][IMPLEMENTATION_MAX_FOCAL_POINTS];
+
+    ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
+};
+
 }  // namespace gl
 
 #endif  // LIBANGLE_ANGLETYPES_H_
