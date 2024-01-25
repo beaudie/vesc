@@ -9832,7 +9832,7 @@ void Context::drawPixelLocalStorageEXTDisable(const PixelLocalStoragePlane plane
     ANGLE_CONTEXT_TRY(mImplementation->drawPixelLocalStorageEXTDisable(this, planes, storeops));
 }
 
-void Context::framebufferFoveationConfig(GLuint framebuffer,
+void Context::framebufferFoveationConfig(FramebufferID framebufferPacked,
                                          GLuint numLayers,
                                          GLuint focalPointsPerLayer,
                                          GLuint requestedFeatures,
@@ -9841,7 +9841,7 @@ void Context::framebufferFoveationConfig(GLuint framebuffer,
     return;
 }
 
-void Context::framebufferFoveationParameters(GLuint framebuffer,
+void Context::framebufferFoveationParameters(FramebufferID framebufferPacked,
                                              GLuint layer,
                                              GLuint focalPoint,
                                              GLfloat focalX,
@@ -9853,7 +9853,7 @@ void Context::framebufferFoveationParameters(GLuint framebuffer,
     return;
 }
 
-void Context::textureFoveationParameters(GLuint texture,
+void Context::textureFoveationParameters(TextureID texturePacked,
                                          GLuint layer,
                                          GLuint focalPoint,
                                          GLfloat focalX,
