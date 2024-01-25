@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "14841ad80df23cca059995524c487b6e7b9d874e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2978a2d7_9a12e4d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-01-25T18:48:21Z",
+      "side": 1,
+      "message": "After this change, will the other part of the code that references `angle_on_system` affected?\n\ne.g. \n\nhttps://source.corp.google.com/h/googleplex-android/platform/superproject/main/+/main:build/make/target/product/base_system.mk;l\u003d363;drc\u003dee12a6552dbd06d8ce4d9fccb74f8761299b6cab\n\nhttps://source.corp.google.com/h/googleplex-android/platform/superproject/main/+/main:build/release/build_config/trunk.scl;l\u003d30;drc\u003da983928d8835bdf8b643d91e8d3ac3534960171f",
+      "revId": "14841ad80df23cca059995524c487b6e7b9d874e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
