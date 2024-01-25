@@ -191,6 +191,8 @@ class TextureState final : private angle::NonCopyable
 
     bool isInternalIncompleteTexture() const { return mIsInternalIncompleteTexture; }
 
+    const FoveationState &getFoveationState() const { return mFoveationState; }
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -274,6 +276,9 @@ class TextureState final : private angle::NonCopyable
     mutable GLenum mCachedSamplerCompareMode;
     mutable bool mCachedSamplerFormatValid;
     std::string mLabel;
+
+    // GL_QCOM_texture_foveated
+    FoveationState mFoveationState;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);
@@ -410,6 +415,23 @@ class Texture final : public RefCountObject<TextureID>,
     GLuint getMipmapMaxLevel() const;
 
     bool isMipmapComplete() const;
+
+    void setFoveatedFeatureBits(const GLuint features);
+    GLuint getFoveatedFeatureBits() const;
+    bool isFoveationEnabled() const;
+    GLuint getSupportedFoveationFeatures() const;
+
+    GLuint getNumFocalPoints() const { return mState.mFoveationState.getMaxNumFocalPoints(); }
+    void setMinPixelDensity(const GLfloat density);
+    GLfloat getMinPixelDensity() const;
+    void setFocalPoint(uint32_t layer,
+                       uint32_t focalPointIndex,
+                       float focalX,
+                       float focalY,
+                       float gainX,
+                       float gainY,
+                       float foveaArea);
+    const FocalPoint &getFocalPoint(uint32_t layer, uint32_t focalPoint) const;
 
     angle::Result setImage(Context *context,
                            const PixelUnpackState &unpackState,
