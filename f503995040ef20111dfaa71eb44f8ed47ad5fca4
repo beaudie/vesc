@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfd208cf_89ebd01a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-01-25T02:22:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16a9b4e3_d8fc1466",
+      "revId": "f503995040ef20111dfaa71eb44f8ed47ad5fca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d9756c1_e39f55dc",
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "Alright, I will go with `derive` ;)",
       "parentUuid": "9d9756c1_e39f55dc",
+      "range": {
+        "startLine": 2483,
+        "startChar": 31,
+        "endLine": 2483,
+        "endChar": 50
+      },
+      "revId": "f503995040ef20111dfaa71eb44f8ed47ad5fca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82285d38_6c0ea981",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-01-25T02:22:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4d342c5_4296c448",
       "range": {
         "startLine": 2483,
         "startChar": 31,
