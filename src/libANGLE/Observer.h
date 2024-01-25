@@ -85,6 +85,9 @@ enum class SubjectMessage
 
     // Indicates that all pending updates are complete in the subject.
     InitializationComplete,
+
+    // Indicates a change in foveated rendering state in the subject.
+    FoveatedRenderingStateChanged,
 };
 
 // The observing class inherits from this interface class.
