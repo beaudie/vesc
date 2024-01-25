@@ -33,6 +33,24 @@
       "message": "Question... this says it is \"Ready to Submit\", but there is no submit button appearing.  Is this falling under the \u0027need two reviewers\u0027 change in chromium reviews?  Is the requirement two +2\u0027s?",
       "revId": "9ef65e7ccf2c00074a1407e079d2390b0fbdd018",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afae7fa0_cdc6907e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1444553
+      },
+      "writtenOn": "2024-01-25T20:34:28Z",
+      "side": 1,
+      "message": "Is there a certain permission needed to submit to the angle repo?",
+      "parentUuid": "8fd99662_0006efa4",
+      "revId": "9ef65e7ccf2c00074a1407e079d2390b0fbdd018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
