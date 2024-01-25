@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "de025545f6585c6379644f5cd4124092442c027b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "645d140c_c715c753",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-01-25T20:49:37Z",
+      "side": 1,
+      "message": "I\u0027m going to do a bit more manual CTS testing on Android before landing this.",
+      "revId": "de025545f6585c6379644f5cd4124092442c027b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
