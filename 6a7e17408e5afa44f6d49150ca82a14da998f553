@@ -142,6 +142,24 @@
       "parentUuid": "5dcc7a0c_fd9a200f",
       "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c20cdc3_eb484a82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-01-26T21:37:17Z",
+      "side": 1,
+      "message": "\u003e Besides, why would it be a big deal to have an \"unused\" expectation in some of those expectation files\n\nIt helps reducing the confusion. e.g. in the future when people review the items in expectation files, they will notice that it doesn\u0027t make a difference when removing / adding the item. Then it might take them 10 ~ 15 min to figure out what\u0027s wrong? I agree it is a very minor thing comparing to guarding mechanism that prevents memory leak / invalid access issues. Maybe a solution would be adding a comment in the file mentioning \"some items might be outdated and no longer used by the test suites, feel free to remove them if you find it is the case.\"\n\n\u003e And why would we have this check enabled specifically in deqp but not other suites?\n\nGood point. It might be it is not easy for other suites to get a full test name lists comparing the deqp?",
+      "parentUuid": "f7ca6ed8_9944e658",
+      "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
