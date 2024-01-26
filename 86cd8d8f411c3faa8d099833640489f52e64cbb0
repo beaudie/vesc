@@ -22,6 +22,30 @@
       },
       "revId": "86cd8d8f411c3faa8d099833640489f52e64cbb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7a6bb54_ee917fc1",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T18:31:08Z",
+      "side": 1,
+      "message": "Went with grab. FWIW, I do often here (and say) \"cache this expression in a local variable\"",
+      "parentUuid": "72cb8215_618c7d44",
+      "range": {
+        "startLine": 305,
+        "startChar": 11,
+        "endLine": 305,
+        "endChar": 16
+      },
+      "revId": "86cd8d8f411c3faa8d099833640489f52e64cbb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
