@@ -52,7 +52,7 @@ vars = {
   'dummy_checkout_chromium': False,
 
   # Current revision of VK-GL-CTS (a.k.a dEQP).
-  'vk_gl_cts_revision': '0f6fd3de81102058dc2ae299af1ad5287d2145dd',
+  'vk_gl_cts_revision': 'fe0d0f90469f0547e7c751e50744ab179674fdb4',
 
   # Current revision of googletest.
   # Note: this dep cannot be auto-rolled b/c of nesting.
