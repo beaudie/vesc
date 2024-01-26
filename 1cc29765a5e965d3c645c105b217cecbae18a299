@@ -83,6 +83,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d970e80_2f1e333d",
+        "filename": "src/libANGLE/RefCountObject.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T02:15:04Z",
+      "side": 1,
+      "message": "Ack. I\u0027m sure there\u0027s some C++ template trickery to unify these two (with some templated member function to deal with `--` vs `fetch_sub`), then alias `RefCountObject \u003d RefCountObjectBase\u003csize_t\u003e`, but I can never remember the syntax.\n\n(not a blocker, just thinking out loud)",
+      "parentUuid": "32efdb8a_9108d405",
+      "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9c34a6e_3938aac8",
@@ -114,6 +132,24 @@
       "side": 1,
       "message": "What guarantees the work is done? I don\u0027t think that eglCreateSync does an implicit flush",
       "parentUuid": "b9c34a6e_3938aac8",
+      "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "297c1fcf_51a22261",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T02:15:04Z",
+      "side": 1,
+      "message": "`eglCreateSync` has that guarantee. At least it guarantees what comes before it is done before what comes after `eglWaitSync`.\n\n`glFlush` has no guarantees that it even does anything. In fact, in this case (called in the middle of an open render pass) it\u0027s completely discarded by the Vulkan backend.",
+      "parentUuid": "6291bc92_9fc38c25",
       "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
