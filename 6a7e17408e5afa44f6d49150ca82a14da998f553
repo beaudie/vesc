@@ -106,6 +106,24 @@
       "parentUuid": "d3cfff10_53b51ff3",
       "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dcc7a0c_fd9a200f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-01-26T19:03:02Z",
+      "side": 1,
+      "message": "I personally feel it is good to keep the `unused expectation check` to make sure expectation file is as clean as possible. But let\u0027s see what Yuly says.",
+      "parentUuid": "f4591261_635c5c48",
+      "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
