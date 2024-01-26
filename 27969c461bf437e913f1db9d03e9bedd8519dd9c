@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d7e1692_e45a2eb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:05:54Z",
+      "side": 1,
+      "message": "+Geoff as second reviewer",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "929877fd_17af1979",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:05:54Z",
+      "side": 1,
+      "message": "Extra space?\n\n```suggestion\n                   {info::OpenCL_C_Version, std::string(\"OpenCL C 3.0\")},\n```",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d5ea880_ce9f95d6",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:05:54Z",
+      "side": 1,
+      "message": "Please reference a bug with TODOs. Past experience shows it gets confusing when years later someone sees the TODO and cannot find the context for it.\n\nDitto for all the other TODOs in this file.",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50bb2abc_5143664a",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:05:54Z",
+      "side": 1,
+      "message": "In ANGLE, we reserve `auto` for nested template types (like iterators, lambdas, etc). It helps readability to be explicit about the type when the type is simple (also helps `grep`ability)",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 8
+      },
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89dc8ccf_94750502",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:05:54Z",
+      "side": 1,
+      "message": "Should be a query eventually?",
+      "range": {
+        "startLine": 161,
+        "startChar": 32,
+        "endLine": 161,
+        "endChar": 36
+      },
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65f4800f_0e7cbbed",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:05:54Z",
+      "side": 1,
+      "message": "Please use `angle::HashMap`",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 12
+      },
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e77074c6_679e3ea7",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:05:54Z",
+      "side": 1,
+      "message": "Excuse my ignorance, what\u0027s the exact relationship between CL and EGL? AFAICT, EGL is not used to create a CL context, that\u0027s independent, right? At the same time, I see some interop through EGL images... is there a connecting point between them otherwise?\n\nAFAIU, CL is being created with the default display (where the attributes are controlled by env vars), but the app may create a display with any other attributes (like, forcing SwiftShader). Is there an assumption in the CL implementation that the displays match? I don\u0027t imagine EGL image sharing works otherwise.\n\nBy the way, I see CL lets you query the devices and choose one; shouldn\u0027t then the display creation be done lazily until a device is chosen?",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
