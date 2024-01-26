@@ -3819,7 +3819,7 @@ Extensions Context::generateSupportedExtensions() const
     // mState.getExtensions().robustBufferAccessBehaviorKHR is true only if robust access is true
     // and the backend supports it.
     supportedExtensions.robustBufferAccessBehaviorKHR =
-        mState.hasRobustAccess() && supportedExtensions.robustBufferAccessBehaviorKHR;
+        !mWebGLContext && supportedExtensions.robustBufferAccessBehaviorKHR;
 
     // Enable the cache control query unconditionally.
     supportedExtensions.programCacheControlANGLE = true;
