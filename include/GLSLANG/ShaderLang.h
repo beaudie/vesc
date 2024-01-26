@@ -442,6 +442,9 @@ struct ShCompileOptions
     // Pre-transform explicit cubemap derivatives for Apple GPUs.
     uint64_t preTransformTextureCubeGradDerivatives : 1;
 
+    // Workaround for a driver bug with the use of the OpSelect SPIR-V instruction.
+    uint64_t avoidOpSelectWithMismatchingRelaxedPrecision : 1;
+
     ShCompileOptionsMetal metal;
     ShPixelLocalStorageOptions pls;
 };
