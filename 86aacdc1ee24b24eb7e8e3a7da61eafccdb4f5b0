@@ -160,6 +160,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d713b57d_034a234b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 9835,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:56:13Z",
+      "side": 1,
+      "message": "Yes, according to history: https://chromium-review.googlesource.com/c/angle/angle/+/1769039\n\n(thanks)",
+      "parentUuid": "b5e844c1_68779d8b",
+      "range": {
+        "startLine": 9835,
+        "startChar": 41,
+        "endLine": 9835,
+        "endChar": 59
+      },
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1f19f5a_62f131a7",
