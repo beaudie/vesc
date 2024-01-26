@@ -152,6 +152,24 @@
       "parentUuid": "6291bc92_9fc38c25",
       "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b04b81d_6ef5b937",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-01-26T17:05:13Z",
+      "side": 1,
+      "message": "Agreed that the eglCreateSync is making sure the work across threads is executed in the right order but AFAIK it doesn\u0027t do a flush to guarantee that the work is ever submitted to the GPU. That doesn\u0027t really affect this test though.",
+      "parentUuid": "297c1fcf_51a22261",
+      "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
