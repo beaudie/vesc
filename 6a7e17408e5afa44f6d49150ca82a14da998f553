@@ -124,6 +124,24 @@
       "parentUuid": "f4591261_635c5c48",
       "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7ca6ed8_9944e658",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-26T19:33:47Z",
+      "side": 1,
+      "message": "I would encourage everyone to think of this in terms of sets of pros and cons rather than focusing on one particular aspect. Besides, why would it be a big deal to have an \"unused\" expectation in some of those expectation files, like what kind of risk is this really protecting us against? And why would we have this check enabled specifically in deqp but not other suites?",
+      "parentUuid": "5dcc7a0c_fd9a200f",
+      "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
