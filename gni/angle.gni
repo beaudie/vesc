@@ -141,6 +141,7 @@ declare_args() {
 
   # There's no "is_winuwp" helper in BUILDCONFIG.gn, so we define one ourselves
   angle_is_winuwp = is_win && target_os == "winuwp"
+  angle_is_winappsdk = false
   angle_is_msvc = is_win && !is_clang
 
   # Default to using "_angle" suffix on Android
@@ -167,17 +168,18 @@ declare_args() {
   # True if we are building inside an ANGLE checkout.
   angle_standalone = !build_with_chromium
 
-  angle_enable_d3d9 = is_win && !angle_is_winuwp
+  angle_enable_d3d9 = is_win && !angle_is_winuwp && !angle_is_winappsdk
   angle_enable_d3d11 = is_win
   angle_enable_gl =
       (ozone_platform_gbm || ozone_platform_wayland || !is_linux ||
        ((angle_use_x11 && !is_chromeos) || angle_use_wayland || is_castos)) &&
-      !is_fuchsia && !angle_is_winuwp && !is_ggp && !is_win_arm64
+      !is_fuchsia && !angle_is_winuwp && !angle_is_winappsdk && !is_ggp &&
+      !is_win_arm64
 
   angle_enable_vulkan =
       angle_has_build &&
       !(is_android && build_with_chromium && is_official_build) &&
-      ((is_win && !angle_is_winuwp) ||
+      ((is_win && !angle_is_winuwp && !angle_is_winappsdk) ||
        ((is_linux || is_chromeos) &&
         (angle_use_x11 || angle_use_wayland || angle_use_vulkan_display)) ||
        is_android || is_fuchsia || is_ggp || is_mac)
@@ -211,7 +213,7 @@ declare_args() {
 
 # OpenCL is not supported on Windows UWP, because the CL headers include DX9, which is not
 # supported by UWP. A workaround might be possible if CL support on UWP is required.
-assert(!angle_is_winuwp || !angle_enable_cl,
+assert((!angle_is_winuwp && !angle_is_winappsdk) || !angle_enable_cl,
        "OpenCL is not supported on Windows UWP")
 
 if (!angle_enable_cl) {
@@ -284,7 +286,8 @@ declare_args() {
   angle_vulkan_validation_layers_dir =
       "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src"
 
-  angle_build_vulkan_system_info = angle_has_build && !angle_is_winuwp
+  angle_build_vulkan_system_info =
+      angle_has_build && !angle_is_winuwp && !angle_is_winappsdk
 
   # Enable overlay by default when debug layers are enabled.  This is currently only implemented on
   # Vulkan.

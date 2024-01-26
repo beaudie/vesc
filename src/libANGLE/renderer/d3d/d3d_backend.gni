@@ -245,7 +245,7 @@ if (angle_enable_d3d11) {
     "d3d11/texture_format_table_utils.h",
   ]
 
-  if (angle_is_winuwp) {
+  if (angle_is_winuwp || angle_is_winappsdk) {
     d3d11_backend_sources += [
       "d3d11/winrt/CoreWindowNativeWindow.cpp",
       "d3d11/winrt/CoreWindowNativeWindow.h",
