@@ -170,6 +170,24 @@
       "parentUuid": "297c1fcf_51a22261",
       "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e9c3f8c_b881ae48",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T17:21:12Z",
+      "side": 1,
+      "message": "That\u0027s true for `glCreateSync`, but at least in vulkan/ we _do_ enforce a flush with EGL sync objects because the waiting side may not be in the same share group.\n\nBut like you said, _when_ flush happens shouldn\u0027t matter to the GL app (for correctness)",
+      "parentUuid": "7b04b81d_6ef5b937",
+      "revId": "1cc29765a5e965d3c645c105b217cecbae18a299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
