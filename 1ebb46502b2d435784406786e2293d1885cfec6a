@@ -39,6 +39,30 @@
       },
       "revId": "1ebb46502b2d435784406786e2293d1885cfec6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a8223fb_c04389b5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2024-01-26T04:34:36Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "95d75f03_711848a1",
+      "range": {
+        "startLine": 750,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 5
+      },
+      "revId": "1ebb46502b2d435784406786e2293d1885cfec6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
