@@ -88,6 +88,24 @@
       "parentUuid": "6cdc1c8b_d8deddb3",
       "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4591261_635c5c48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-26T15:56:25Z",
+      "side": 1,
+      "message": "And let\u0027s not forget one particularly annoying aspect of that manual roll: getting +2 from a _human_ to be able to submit it.",
+      "parentUuid": "d3cfff10_53b51ff3",
+      "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
