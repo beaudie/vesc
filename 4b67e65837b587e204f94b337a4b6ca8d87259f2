@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ec00843_93900a0e",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-26T20:51:20Z",
+      "side": 1,
+      "message": "Good idea. Done.",
+      "parentUuid": "abbfece0_e3eb1cf7",
+      "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "509aac14_6d22da50",
@@ -108,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "542b1249_f62f01dd",
+        "filename": "src/libANGLE/renderer/d3d/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-26T20:51:20Z",
+      "side": 1,
+      "message": "Thanks for the idea of the arg to pass the path of files. I did that and will update the docs - or write a script soon.",
+      "parentUuid": "9edafe80_56a73dcd",
+      "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fbca786_9207a609",
         "filename": "src/libANGLE/renderer/d3d/d3d11/winrt/CoreWindowNativeWindow.cpp",
         "patchSetId": 2
@@ -119,6 +155,24 @@
       "writtenOn": "2024-01-23T21:29:11Z",
       "side": 1,
       "message": "The `DisplayProperties` API was deprecated in Windows 10 and the recommendation is to use `DisplayInformation` from Windows 10:\n\nhttps://learn.microsoft.com/uwp/api/windows.graphics.display.displayproperties",
+      "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b66401f_ed2701ad",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/winrt/CoreWindowNativeWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-26T20:51:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fbca786_9207a609",
       "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -136,6 +190,24 @@
       "writtenOn": "2024-01-23T21:29:11Z",
       "side": 1,
       "message": "This is the new way now for some reason. `CoreDispatcher` is not how things are done in WinUI, `DispatcherQueue` is:\n\nhttps://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/guides/threading#change-windowsuicorecoredispatcher-to-microsoftuidispatchingdispatcherqueue",
+      "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eeb372f_7732d7fc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/winrt/SwapChainPanelNativeWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-26T20:51:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d127f4bd_17383767",
       "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abf261ce_e237cc68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-26T20:51:20Z",
+      "side": 1,
+      "message": "Updated for now, I will write docs/script for the dependency. Also not sure why the one file is needing to be re-generated before I can upload.",
+      "revId": "fcabd6cb89051aa2a13dffce623ae0e299071f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99c874ea_fced1d45",
+        "filename": "scripts/code_generation_hashes/Vulkan_mandatory_format_support_table.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-26T20:51:20Z",
+      "side": 1,
+      "message": "No idea why this file always wants to be generated:\n\n\u003egit cl upload -v\nProcessing 1 commit...\n[I2024-01-26 22:42:40,681 53180 8668 presubmit_support.py] Found 6 file(s).\nRunning Python 3 presubmit upload checks ...\nRunning C:\\Projects\\angle\\PRESUBMIT.py\nRunning run_code_generation\n  21.5s to run CheckChangeOnUpload from C:\\Projects\\angle\\PRESUBMIT.py.\n** Presubmit ERRORS: 2 **\nrun_code_generation\nvpython3 C:\\Projects\\angle\\scripts/run_code_generation.py --verify-no-dirty (2.98s) failed\nHash for \"third_party/vulkan-deps/vulkan-headers/src/registry/vk.xml\" dirty for Vulkan mandatory format support table generator.\n\n\n***************\nPlease ensure your ANGLE repositiory is synced to tip-of-tree\nand all ANGLE DEPS are fully up-to-date by running gclient sync.\n\nIf that fails, run scripts/run_code_generation.py to refresh generated hashes.\n\nIf you are building ANGLE inside Chromium you must bootstrap ANGLE\nbefore gclient sync. See the DevSetup documentation for more details.\n***************\n\nThe angle directory requires source formatting. Please run: git cl format\n\nPresubmit checks took 22.8s to calculate.\nThere were Python 3 presubmit errors.",
+      "revId": "fcabd6cb89051aa2a13dffce623ae0e299071f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
