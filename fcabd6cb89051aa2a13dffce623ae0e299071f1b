@@ -33,6 +33,24 @@
       "message": "No idea why this file always wants to be generated:\n\n\u003egit cl upload -v\nProcessing 1 commit...\n[I2024-01-26 22:42:40,681 53180 8668 presubmit_support.py] Found 6 file(s).\nRunning Python 3 presubmit upload checks ...\nRunning C:\\Projects\\angle\\PRESUBMIT.py\nRunning run_code_generation\n  21.5s to run CheckChangeOnUpload from C:\\Projects\\angle\\PRESUBMIT.py.\n** Presubmit ERRORS: 2 **\nrun_code_generation\nvpython3 C:\\Projects\\angle\\scripts/run_code_generation.py --verify-no-dirty (2.98s) failed\nHash for \"third_party/vulkan-deps/vulkan-headers/src/registry/vk.xml\" dirty for Vulkan mandatory format support table generator.\n\n\n***************\nPlease ensure your ANGLE repositiory is synced to tip-of-tree\nand all ANGLE DEPS are fully up-to-date by running gclient sync.\n\nIf that fails, run scripts/run_code_generation.py to refresh generated hashes.\n\nIf you are building ANGLE inside Chromium you must bootstrap ANGLE\nbefore gclient sync. See the DevSetup documentation for more details.\n***************\n\nThe angle directory requires source formatting. Please run: git cl format\n\nPresubmit checks took 22.8s to calculate.\nThere were Python 3 presubmit errors.",
       "revId": "fcabd6cb89051aa2a13dffce623ae0e299071f1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c9dead0_14d46d9d",
+        "filename": "scripts/code_generation_hashes/Vulkan_mandatory_format_support_table.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T21:02:21Z",
+      "side": 1,
+      "message": "You\u0027d need to run `gclient sync` before uploading when you rebase. In this case, it\u0027ll ask you to rerun the autogen scripts, and will end up reverting this change (or you can just remove this change and presubmit should be happy)",
+      "parentUuid": "99c874ea_fced1d45",
+      "revId": "fcabd6cb89051aa2a13dffce623ae0e299071f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
