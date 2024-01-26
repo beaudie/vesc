@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "1ebb46502b2d435784406786e2293d1885cfec6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95d75f03_711848a1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T02:17:32Z",
+      "side": 1,
+      "message": "nit: explicit cast to bool per our style:\n\n\n```suggestion\n    // Always report the debug message if message ID is missing\n    if (callbackData-\u003epMessageIdName !\u003d nullptr \u0026\u0026\n        ShouldReportDebugMessage(rendererVk, callbackData-\u003epMessageIdName,\n                                 callbackData-\u003epMessage) \u003d\u003d DebugMessageReport::Ignore)\n    {\n        return VK_FALSE;\n    }\n\n    std::ostringstream log;\n    if (callbackData-\u003epMessageIdName !\u003d nullptr)\n    {\n        log \u003c\u003c \"[ \" \u003c\u003c callbackData-\u003epMessageIdName \u003c\u003c \" ] \";\n    }\n```",
+      "range": {
+        "startLine": 750,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 5
+      },
+      "revId": "1ebb46502b2d435784406786e2293d1885cfec6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
