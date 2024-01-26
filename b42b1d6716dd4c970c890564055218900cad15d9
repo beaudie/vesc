@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "b42b1d6716dd4c970c890564055218900cad15d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "678e6848_fb7738dc",
+        "filename": "samples/shader_translator/shader_translator.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:19:34Z",
+      "side": 1,
+      "message": "You may want to add more stuff, like `emulateGLBaseVertexBaseInstance` is always added on non-webgl contexts currently (see `Shader.cpp`)\n\nAt the same time, `initializeUninitializedLocals` is set only if the `forceInitShaderVariables` feature is set (and that\u0027s not set by default anywhere).\n\nIf you look at `ShaderVk.cpp` there are a lot of flags that depend on hardware features and vendors. If these binaries are to be useful, I think you need to add another set of options here, like `-f\u003dfeature1:feature2:...` so that the compiled shader matches what the device would have produced.\n\nLike, the shader produced here without `addVulkanXfbExtensionSupportCode` would be useless on your platform!\n\n---\n\nThinking about it more, there\u0027s always the danger that the options forced in this sample + `-f` features set in command line in your scripts would diverge from the codebase, leading to either subtle bugs or shader binary load failures.\n\nHow about adding a separate program (not under `samples/`) with the sole purpose of producing Vulkan shader binary files? In particular, what that program would do is to use the same code as `Shader.cpp` and `ShaderVk.cpp` to initialize the flags. You\u0027d still need to populate the ANGLE features to match your device, but I think we can minimize a lot of the risk by using helper functions that this app can use to set the flags and derive the features. Then all the app needs to produce is the Vk device info, and it can be sure runtime ANGLE and the offline compiler produce the same binary.",
+      "revId": "b42b1d6716dd4c970c890564055218900cad15d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
