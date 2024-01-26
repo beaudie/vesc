@@ -3816,11 +3816,6 @@ Extensions Context::generateSupportedExtensions() const
     // Determine robust resource init availability from EGL.
     supportedExtensions.robustResourceInitializationANGLE = mState.isRobustResourceInitEnabled();
 
-    // mState.getExtensions().robustBufferAccessBehaviorKHR is true only if robust access is true
-    // and the backend supports it.
-    supportedExtensions.robustBufferAccessBehaviorKHR =
-        mState.hasRobustAccess() && supportedExtensions.robustBufferAccessBehaviorKHR;
-
     // Enable the cache control query unconditionally.
     supportedExtensions.programCacheControlANGLE = true;
 
