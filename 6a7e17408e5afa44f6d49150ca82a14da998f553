@@ -34,6 +34,24 @@
       "parentUuid": "5d250be2_d3062a94",
       "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83171d22_b810be19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-26T15:45:27Z",
+      "side": 1,
+      "message": "And yes, I do see getting everything about manual roll right as an inconvenience, but not just that, a manual roll is entirely unnecessary. The beauty of automated rolls is that you know exactly how they were made. Manually patched rolls should be avoided when possible IMO. This CL (and its potential consequences) is such a small price to pay for having this option.",
+      "parentUuid": "e313df53_ad85bf9f",
+      "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
