@@ -16,6 +16,24 @@
       "message": "I\u0027ve found this error particularly annoying with suppressions where parts of one suppression covers another suppression with different conditions (like Vulkan vs SwiftShader).\n\nThe expectation files are _proabably_ going to become a mess though, so not sure how I feel about it.\n\nAbout the inconvenience mentioned in the commit message, maybe it\u0027s a workflow thing? What I normally do for it is:\n\n```\n# Get the roll CL (short cut `d3` in gerrit):\n$ git fetch https://chromium.googlesource.com/angle/angle refs/changes/... \u0026\u0026 git cherry-pick FETCH_HEAD\n$ vim \u003cexpectations file\u003e\n$ git commit --amend  # remove autoroller footer, including Change-Id\n$ git cl upload\n```\n\nThat vs:\n\n```\n$ vim \u003cexpectations file\u003e\n$ git commit  # Add Bug tag\n$ git cl upload\n```\n\nis a very small difference.\n\n---\n\nDon\u0027t get me wrong, I don\u0027t like the \"unused\" warning, it\u0027s annoyed me many times before. But I\u0027m neutral on this change, if you don\u0027t mind, I\u0027d like to defer this decision to @ynovikov@chromium.org who deals with infra a lot.",
       "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e313df53_ad85bf9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-26T15:38:55Z",
+      "side": 1,
+      "message": "Yuly is OOO next week as well. Let\u0027s just move forward with this, we can always revert if there is strong disagreement.",
+      "parentUuid": "5d250be2_d3062a94",
+      "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
