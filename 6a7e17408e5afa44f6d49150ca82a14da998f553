@@ -160,6 +160,24 @@
       "parentUuid": "f7ca6ed8_9944e658",
       "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eed61e6_59f77e04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-26T22:11:00Z",
+      "side": 1,
+      "message": "\u003e they will notice that it doesn\u0027t make a difference when removing / adding the item\n\nIn order for this to happen, either 1) the corresponding test would have to be removed (could be renamed) upstream or 2) the entry would have be incorrectly added (e.g. making a mistake in the test name) and forgotten like this.\n\n2) seems fairly unlikely as adding an item with a mistake would not solve the original issue and whoever is making this change will likely just fix the mistake\n\nIn case of 1), work still needs to happen, and IMO even more work than what you described: the wrangler needs to figure out what went wrong with the test, how to update the expectations file appropriately, manually create a patched roll, get a +2 from a team member. Does this additional (repeated) load justify the benefit of not having to deal with basically the same issue in future, just once when reviewing the entire expectation file?\n\nNote how this CL allowed me to submit https://crrev.com/c/5238216. No manually patched rolls, no need to get a +2 - it just gets rubberstamped. Automated rolls can continue.\n\nOne thing we could do is have some additional tooling to help us catch some specific cases including this one, but reviewing expectation files is such a niche use case that I wouldn\u0027t really expect anyone to remember this thing even exists by the time they get to doing the work. Besides, I feel like it would be such a tiny help compared to the amount of other work that needs to happen when reviewing expectations. Maybe we can revisit this thread in future if this actually turns out to be a bigger deal than I\u0027m expecting?",
+      "parentUuid": "5c20cdc3_eb484a82",
+      "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
