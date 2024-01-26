@@ -3,3 +3,6 @@
 // found in the LICENSE file.
 
 // See README.md for format.
+
+
+8506 VULKAN : KHR-NoContext.es32.robust_buffer_access_behavior.texel_fetch = FAIL
