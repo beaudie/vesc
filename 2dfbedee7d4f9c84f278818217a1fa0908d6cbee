@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ceeb09d_5945962f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-26T17:32:46Z",
+      "side": 1,
+      "message": "Started setting these failures sporadically, can they be caused by this CL?\n```\n[WARNING/Process-7] Ninja failure output: E0126 09:23:56.758544   44740 auth.go:558] Could not get valid Application Default Credentials token: \u003cnil\u003e\nE0126 09:23:56.760010   44740 main.go:139] Error obtaining credentials: application default credentials were invalid: could not get valid Application Default Credentials token: %!w(\u003cnil\u003e)\n```",
+      "revId": "2dfbedee7d4f9c84f278818217a1fa0908d6cbee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
