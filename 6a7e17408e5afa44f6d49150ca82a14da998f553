@@ -52,6 +52,24 @@
       "parentUuid": "e313df53_ad85bf9f",
       "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cdc1c8b_d8deddb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-26T15:48:32Z",
+      "side": 1,
+      "message": "\u003e The beauty of automated rolls is that you know exactly how they were made. Manually patched rolls should be avoided when possible IMO.\n\nThe way I see it, if you suppress in one CL and the roll is in another CL, you lose that association. If you bundle them together, it\u0027s clear why the suppression was made, reverts are \"cleaner\" etc.\n\nBut ok, I\u0027m not particularly vested in this, +2 from me, please revert if Yuly disagrees.",
+      "parentUuid": "83171d22_b810be19",
+      "revId": "6a7e17408e5afa44f6d49150ca82a14da998f553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
