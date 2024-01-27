@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f48ae0f_36ec0ad4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2024-01-27T03:29:43Z",
+      "side": 1,
+      "message": "PTAL. Isn\u0027t this the way to properly expose the extension? If so, how should I go about all these failing tests?",
+      "revId": "f59de75396384a6762a0888a0cdd3e81e9b173fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
