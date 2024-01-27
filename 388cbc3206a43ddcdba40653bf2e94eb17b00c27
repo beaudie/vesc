@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf772c29_7efe1849",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-27T22:26:57Z",
+      "side": 1,
+      "message": "This is a super hot path, and the dirty bits are the way we manage to keep the `if`s in control.\n\nThis is a typical situation with dynamic state FWIW (state must be set before draw). For most dynamic state we have `DIRTY_BIT_DYNAMIC_*` bits and the handler sets the state (like `handleDirtyGraphicsDynamicBlendConstants`).\n\nFor this particular case, the handler for `DIRTY_BIT_VERTEX_BUFFERS` should have already called this command. If no-attribute is the problem, then `handleDirtyGraphicsVertexBuffers` should have handled it.",
+      "range": {
+        "startLine": 1603,
+        "startChar": 0,
+        "endLine": 1610,
+        "endChar": 5
+      },
+      "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "560ab762_2ab97436",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2630,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-27T22:26:57Z",
+      "side": 1,
+      "message": "High level comment, this is mostly duplicate code from vk_cache_utils.cpp. Please deduplicate.",
+      "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6437f19a_4de10fd0",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1859,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-27T22:26:57Z",
+      "side": 1,
+      "message": "For consistency with the other functions:\n\n```suggestion\n    size_t vertexBindingDescriptionSize \u003d\n        vertexBindingDescriptionCount * sizeof(VkVertexInputBindingDescription2EXT);\n    size_t vertexAttributeDescriptionSize \u003d\n        vertexAttributeDescriptionCount * sizeof(VkVertexInputAttributeDescription2EXT);\n\n    SetVertexInputParams *paramStruct \u003d initCommand\u003cSetVertexInputParams\u003e(\n        CommandID::SetVertexInput, vertexBindingDescriptionSize + vertexAttributeDescriptionSize,\n        \u0026writePtr);\n\n    // Copy params\n    paramStruct-\u003evertexBindingDescriptionCount   \u003d vertexBindingDescriptionCount;\n    paramStruct-\u003evertexAttributeDescriptionCount \u003d vertexAttributeDescriptionCount;\n\n    writePtr \u003d storePointerParameter(writePtr, vertexBindingDescriptions, vertexBindingDescriptionSize);\n    storePointerParameter(writePtr, vertexAttributeDescriptions, vertexAttributeDescriptionSize);\n```",
+      "range": {
+        "startLine": 1845,
+        "startChar": 0,
+        "endLine": 1859,
+        "endChar": 93
+      },
+      "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f333314b_1fb7d652",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2610,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-27T22:26:57Z",
+      "side": 1,
+      "message": "Missed optimization opportunity here. If you add a bit to PackedInputAssemblyState to indicate whether vertex input is dynamic, you can reduce a big chunk from the hash. See `useVertexInputBindingStrideDynamicState` as reference.",
+      "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
