@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/CLMemoryImpl.h"
 
 #include "libANGLE/CLMemory.h"
+#include "vulkan/vulkan_core.h"
 
 namespace rx
 {
@@ -29,9 +30,8 @@ class CLMemoryVk : public CLMemoryImpl
     angle::Result createSubBuffer(const cl::Buffer &buffer,
                                   cl::MemFlags flags,
                                   size_t size,
-                                  CLMemoryImpl::Ptr *subBufferOut) override = 0;
+                                  CLMemoryImpl::Ptr *subBufferOut) override;
 
-    virtual vk::BufferHelper &getBuffer() = 0;
     angle::Result getMapPtr(uint8_t **mapPtrOut);
 
     VkBufferUsageFlags getVkUsageFlags();
@@ -76,7 +76,7 @@ class CLBufferVk : public CLMemoryVk
                                   size_t size,
                                   CLMemoryImpl::Ptr *subBufferOut) override;
 
-    vk::BufferHelper &getBuffer() override { return mBuffer; }
+    vk::BufferHelper &getBuffer() { return mBuffer; }
     CLBufferVk *getParent() { return static_cast<CLBufferVk *>(mParent); }
 
     angle::Result create(void *hostPtr);
@@ -94,6 +94,46 @@ class CLBufferVk : public CLMemoryVk
 
     vk::BufferHelper mBuffer;
     VkBufferCreateInfo mDefaultBufferCreateInfo;
+};
+
+class CLImageVk : public CLMemoryVk
+{
+  public:
+    CLImageVk(const cl::Image &image);
+    ~CLImageVk() override;
+
+    vk::ImageHelper &getImage() { return mImage; }
+    vk::BufferHelper &getStagingBuffer() { return mStagingBuffer; }
+
+    angle::Result create(cl::MemFlags flags,
+                         const cl_image_format &format,
+                         const cl::ImageDescriptor &desc,
+                         void *hostPtr);
+
+    angle::Result map() override;
+    angle::Result unmap() override;
+
+    bool isCurrentlyInUse() const override;
+    bool isMapped() { return mMapPtr != nullptr; }
+    bool containsHostMemExtension();
+
+    angle::Result createStagingBuffer(size_t size);
+    angle::Result copyStagingFrom(void *ptr, size_t offset, size_t size);
+    VkImageUsageFlags getVkImageUsageFlags();
+    VkImageType getVkImageType(const cl::ImageDescriptor &desc);
+    size_t getSize() const override { return mImageSize; }
+
+  private:
+    angle::Result setDataImpl(const uint8_t *data, size_t size, size_t offset);
+
+    vk::BufferHelper mStagingBuffer;
+    vk::ImageHelper mImage;
+    VkExtent3D mExtent;
+    angle::FormatID mFormat;
+    uint32_t mArrayLayers;
+    size_t mImageSize;
+    size_t mNumberChannels;
+    size_t mBytesPerChannel;
 };
 
 }  // namespace rx
