@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6257576_8a363930",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2024-01-29T17:05:13Z",
+      "side": 1,
+      "message": "\u003eIs CTS somehow expecting that robust access is exposed even on contexts without robustness?\n\nI think this is the case. The test cases I am looking at are `KHR-NoContext.es32.robust_buffer_access_behavior.*`\nWithout this change, the tests are ran as \u0027Not Supported\u0027 but with this change the tests are able to run. It\u0027s possible that this is just a CTS test bug where it is querying support incorrectly.",
+      "parentUuid": "72fdb032_314e7826",
+      "revId": "f59de75396384a6762a0888a0cdd3e81e9b173fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6f48ae0f_36ec0ad4",
