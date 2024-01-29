@@ -339,6 +339,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd6d1d4f_0837be42",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-01-29T20:49:19Z",
+      "side": 1,
+      "message": "Whoops, good catch. Double checked this time around.",
+      "parentUuid": "f1f87c33_502a46a5",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 12
+      },
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e77074c6_679e3ea7",
         "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
         "patchSetId": 4
@@ -386,6 +410,24 @@
       "side": 1,
       "message": "Ok, I guess ultimately we\u0027d want to make sure the GL and CL renderers are the same so you are not sharing images between VkDevices... but that\u0027ll probably be a major surgery. Let\u0027s shelve that for now.\n\nI mean, I guess the code as is _would_ work fine if the EGL device also uses the default attributes.\n\nHow do you deal with `clCreateContext` choosing the device? The default display may be using Nvidia for example, but `clCreateContext` trying to create a software device (SwiftShader). Kind of feels like `clCreateContext` should be the one that decides what display to use.\n\n(probably no harm in platform holding on to a random display at the same time though, just trying to understand the API better)",
       "parentUuid": "e8d84bc5_9e971008",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78f58c60_f117156b",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-01-29T20:49:19Z",
+      "side": 1,
+      "message": "\u003e How do you deal with clCreateContext choosing the device?\n\nThe device(s) are passed as a parameter of this API (from prior clGetDeviceIDs).\nHow we (ANGLE) report/return capable CL devices is by the successful creation\nof that RendererVk object (from that default/dummy display object we created).\nFor core OpenCL, there really isn\u0027t a concept of a display at all here \n(unlike EGL/WGL/etc. + GLES)\n\n\u003e probably no harm in platform holding on to a random display\n\nMy same thoughts on this here as well \n(as OpenCL will not need it for anything other than its RendererVk object).\nAgain, if there was a way to just get a handle to a RendererVk object without \nneeding a default display object, we would opt for that instead. \n\n\u003e ultimately we\u0027d want to make sure the GL and CL renderers are the same so you are not sharing images between VkDevices\n\nAre you talking about in the case we do implement CL-GL interop extensions\n(mainly with resource sharing)?\n\nIf so, then yeah I also agree to shelve for now.",
+      "parentUuid": "1038ed4d_05168b50",
       "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
