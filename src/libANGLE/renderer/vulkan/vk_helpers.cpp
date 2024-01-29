@@ -5722,7 +5722,7 @@ bool ImageHelper::FormatSupportsUsage(RendererVk *renderer,
 void ImageHelper::setImageFormatsFromActualFormat(VkFormat actualFormat,
                                                   ImageFormats &imageFormatsOut)
 {
-    imageFormatsOut[0] = actualFormat;
+    imageFormatsOut.push_back(actualFormat);
 }
 
 void ImageHelper::deriveImageViewFormatFromCreateInfoPNext(VkImageCreateInfo &imageInfo,
@@ -5746,7 +5746,7 @@ void ImageHelper::deriveImageViewFormatFromCreateInfoPNext(VkImageCreateInfo &im
 
         for (uint32_t i = 0; i < imageFormatCreateInfo->viewFormatCount; i++)
         {
-            formatOut[i] = *(imageFormatCreateInfo->pViewFormats + i);
+            formatOut.push_back(*(imageFormatCreateInfo->pViewFormats + i));
         }
     }
     else
@@ -5787,6 +5787,7 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     }
 
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory, &mVmaAllocation);
+    mViewFormats.clear();
     mUse.reset();
     mImageSerial          = kInvalidImageSerial;
     mMemoryAllocationType = MemoryAllocationType::InvalidEnum;
