@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1eaff91c_a6555b30",
+        "filename": "src/libANGLE/renderer/d3d/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T18:18:50Z",
+      "side": 1,
+      "message": "The change is good to go, just needs an update to docs.",
+      "parentUuid": "542b1249_f62f01dd",
+      "revId": "4b67e65837b587e204f94b337a4b6ca8d87259f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fbca786_9207a609",
         "filename": "src/libANGLE/renderer/d3d/d3d11/winrt/CoreWindowNativeWindow.cpp",
         "patchSetId": 2
