@@ -16,6 +16,80 @@
       "message": "Thanks for the reviews and comments. Changes are looking much better!",
       "revId": "2efcbb7fe6396103b0a7c75ba4e23fef15df0355",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a019562d_a63c82ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T23:38:28Z",
+      "side": 1,
+      "message": "Editorial suggestions",
+      "revId": "2efcbb7fe6396103b0a7c75ba4e23fef15df0355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1409ddb_97a235d6",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T23:38:28Z",
+      "side": 1,
+      "message": "```suggestion\nFor UWP, set `target_os \u003d \"winuwp\"` in the args. For WinUI 3,\n```",
+      "revId": "2efcbb7fe6396103b0a7c75ba4e23fef15df0355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ced20214_fbaea2f0",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T23:38:28Z",
+      "side": 1,
+      "message": "```suggestion\nfrom the winmd files, which is done by running the `scripts/winappsdk_setup.py`\nscript and passing in the path to store the headers. For both UWP\n```",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 80
+      },
+      "revId": "2efcbb7fe6396103b0a7c75ba4e23fef15df0355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e10f6ef3_e69076f7",
+        "filename": "scripts/winappsdk_setup.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T23:38:28Z",
+      "side": 1,
+      "message": "```suggestion\n# Copyright 2024 The ANGLE Project Authors. All rights reserved.\n```",
+      "revId": "2efcbb7fe6396103b0a7c75ba4e23fef15df0355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

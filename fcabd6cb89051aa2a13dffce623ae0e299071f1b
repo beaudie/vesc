@@ -104,6 +104,24 @@
       "parentUuid": "ddae49ae_447c2004",
       "revId": "fcabd6cb89051aa2a13dffce623ae0e299071f1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dfccbf9_246371e5",
+        "filename": "scripts/code_generation_hashes/Vulkan_mandatory_format_support_table.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T23:38:28Z",
+      "side": 1,
+      "message": "No idea. I recall a few years ago that I touched windows, `gclient sync` wouldn\u0027t run from git bash, you had to do it from cmd.exe, but presumably you have that working.\n\nBut thanks, I\u0027ll keep that in mind as a potential issue someone else might hit too.\n\nFWIW, you can use `git cl upload --bypass-hooks` to disable local presubmit checks in the worst case.",
+      "parentUuid": "4d228308_bf37138a",
+      "revId": "fcabd6cb89051aa2a13dffce623ae0e299071f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
