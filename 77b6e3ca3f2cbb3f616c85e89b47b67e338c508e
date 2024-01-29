@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "698f747f_d8c0b2ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T22:07:19Z",
+      "side": 1,
+      "message": "Suggest: `Add Dawn checkout condition in .gitmodules`\n\nAnd add link to CL in description. Helps quickly tell what the CL does in `git log --oneline`.",
+      "revId": "77b6e3ca3f2cbb3f616c85e89b47b67e338c508e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
