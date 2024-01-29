@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "72fdb032_314e7826",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T15:49:54Z",
+      "side": 1,
+      "message": "Could you please expand on this?\n\n\u003e 5) How should this extension be enabled via EGL?\n\u003e\n\u003e    PROPOSED: If a context is successfully created supporting\n\u003e    KHR_robustness (see issue 10 of that spec), the EGL 1.5 spec and\n\u003e    EGL_EXT_create_context_robustness extensions will be modified to\n\u003e    *allow* (but not require) support of\n\u003e    GL_KHR_robust_buffer_access_behavior as well.\n\nDoesn\u0027t look there\u0027s a correct way in the spec, the context is allowed to not even advertise support for the extension.\n\nIs CTS somehow expecting that robust access is exposed even on contexts without robustness? Otherwise what entity is requiring this change?",
+      "revId": "f59de75396384a6762a0888a0cdd3e81e9b173fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6f48ae0f_36ec0ad4",
