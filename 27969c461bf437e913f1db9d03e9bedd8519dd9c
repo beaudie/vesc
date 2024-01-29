@@ -430,6 +430,24 @@
       "parentUuid": "1038ed4d_05168b50",
       "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b917affd_a5fc4287",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-01-29T21:00:36Z",
+      "side": 1,
+      "message": "One thing to add, IIRC Vulkan can operate \"headless\" (surfaceless context)?\n\nPerhaps maybe its better to overload RendererVk ctor to create\nsuch a case (for OpenCL folks). That way we should not need a\ndisplay here (less abuse of existing items).\n\nThis CL\u0027s approach was just the simplest (assuming there are no other side-effects of holding on to a default/dummy display that would hurt us here).\n\nI can either change this PR to perform the above, or perhaps we can leave a TODO to \nlook at later. Thoughts?",
+      "parentUuid": "78f58c60_f117156b",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
