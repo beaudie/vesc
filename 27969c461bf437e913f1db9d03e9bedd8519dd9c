@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc2d3015_e508d47c",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-01-29T19:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c4cb3e5_cb49555a",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50bb2abc_5143664a",
@@ -153,6 +171,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47c98021_8b9863cb",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-01-29T19:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4696ff0_09438640",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 8
+      },
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89dc8ccf_94750502",
@@ -190,6 +232,30 @@
       "side": 1,
       "message": "Good catch! Will update.",
       "parentUuid": "89dc8ccf_94750502",
+      "range": {
+        "startLine": 161,
+        "startChar": 32,
+        "endLine": 161,
+        "endChar": 36
+      },
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99a2493c_1a8110f4",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-01-29T19:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba23b597_62fb53ac",
       "range": {
         "startLine": 161,
         "startChar": 32,
