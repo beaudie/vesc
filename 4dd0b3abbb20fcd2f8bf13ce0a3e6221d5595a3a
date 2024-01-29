@@ -16,6 +16,23 @@
       "message": "thanks, landing this",
       "revId": "4dd0b3abbb20fcd2f8bf13ce0a3e6221d5595a3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31027991_72896e9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-29T21:54:37Z",
+      "side": 1,
+      "message": "shabi is there a known issue with \"win-trace\" bots? my change has been stuck for hours in this state",
+      "revId": "4dd0b3abbb20fcd2f8bf13ce0a3e6221d5595a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
