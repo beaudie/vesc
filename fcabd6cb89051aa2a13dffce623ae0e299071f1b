@@ -86,6 +86,24 @@
       "parentUuid": "3c9dead0_14d46d9d",
       "revId": "fcabd6cb89051aa2a13dffce623ae0e299071f1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d228308_bf37138a",
+        "filename": "scripts/code_generation_hashes/Vulkan_mandatory_format_support_table.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-29T22:17:38Z",
+      "side": 1,
+      "message": "On windows it keeps saying this file is out of date. I even re-cloned and pushed an empty main commit and it still wanted to sync... macOS is fine. I wonder if something is line endings related. But for now, no issue.",
+      "parentUuid": "ddae49ae_447c2004",
+      "revId": "fcabd6cb89051aa2a13dffce623ae0e299071f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
