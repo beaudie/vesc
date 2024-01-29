@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a9cb3bf_217666e9",
+        "filename": "build_overrides/glslang.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T17:33:04Z",
+      "side": 0,
+      "message": "Drive by change while I was cleaning up old bugs (and removing these suppressions). This flag was removed from GLSLANG long ago.",
+      "revId": "351b85f2228aafc9f3245ad5350c1f90e9a7bac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
