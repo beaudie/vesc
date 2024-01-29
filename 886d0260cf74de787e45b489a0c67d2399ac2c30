@@ -34,6 +34,24 @@
       "parentUuid": "579446e0_e8ddabd7",
       "revId": "886d0260cf74de787e45b489a0c67d2399ac2c30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47ace79b_641d744e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-29T21:01:40Z",
+      "side": 1,
+      "message": "\u003e gclient gitmodules will regenerate .gitmodules file\n\nah right, I was making another change to DEPS and noticed this diff popped up in my CL. Didn\u0027t realize it was just `gclient gitmodules` (there seems to be a `dummy_chromium` caveat though) -\u003e https://crrev.com/c/5245649",
+      "parentUuid": "0c5a00e2_5100e1e4",
+      "revId": "886d0260cf74de787e45b489a0c67d2399ac2c30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
