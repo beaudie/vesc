@@ -490,6 +490,24 @@
       "parentUuid": "b917affd_a5fc4287",
       "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70aff0c7_cac50ad9",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T23:50:30Z",
+      "side": 1,
+      "message": "It would be great to have this as a test by the way; create CL platform/context, then create EGL+GL context, make sure one thread using CL and another thread using GL doesn\u0027t blow up.\n\nNot sure what your plan is about tests, we do frequently find the need for new tests (in GL), and we add them as end2end tests because the GL CTS is really not being focused on anymore. For CL, you might want to have such tests end up in CTS. However, it\u0027d still be a good idea to make sure we _can_ write end2end tests using CL in ANGLE itself. That would allow us to develop new tests in response to bugs noticed during development / review and prove the commit works with the new tests right away.",
+      "parentUuid": "b8d65ac6_01b115d9",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
