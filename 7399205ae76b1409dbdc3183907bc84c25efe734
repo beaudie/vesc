@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6a2f38f_c589b394",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T23:42:24Z",
+      "side": 1,
+      "message": "We had some VVL complaints about mismatching views, this probably fixes that. Worth checking if there\u0027s a VVL suppression you can lift now.\n\n(And thanks for the fix!)",
+      "revId": "7399205ae76b1409dbdc3183907bc84c25efe734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
