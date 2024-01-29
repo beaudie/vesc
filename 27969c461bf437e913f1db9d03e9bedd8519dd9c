@@ -315,6 +315,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f1f87c33_502a46a5",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T19:14:58Z",
+      "side": 1,
+      "message": "Unresolving, so it\u0027s not forgotten",
+      "parentUuid": "e5814931_5dee12de",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 12
+      },
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e77074c6_679e3ea7",
         "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
         "patchSetId": 4
@@ -344,6 +368,24 @@
       "side": 1,
       "message": "Ultimately we only use this egl display object to init RendererVk that we use in\nsubsequent API calls.\n\nIIRC we don\u0027t really use this egl display object for much else.\nPerhaps this is abusing original intent, but I see that in order to init\na RendererVk obj. we need a DisplayVk and egl::Display (thus our approach here).\n\n\u003e AFAICT, EGL is not used to create a CL context\n\nNot directly, correct. We only use the display object to get the\nRendererVk from it. We have CL\u0027s Context class derive from vk::Context here,\nand we pass our initialized default egl\u0027s display\u0027s RendererVk object\nto vk::Context\u0027s ctor.\nWith that, I don\u0027t think there should be issues with API interop? \n(If/when we cross that bridge for these ones mainly)\n```\ncl_khr_egl_image\ncl_khr_gl_sharing\n```\n\nTl;dr - If there is a way to init a RendererVk without egl display, we could do that instead.",
       "parentUuid": "e77074c6_679e3ea7",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1038ed4d_05168b50",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-29T19:14:58Z",
+      "side": 1,
+      "message": "Ok, I guess ultimately we\u0027d want to make sure the GL and CL renderers are the same so you are not sharing images between VkDevices... but that\u0027ll probably be a major surgery. Let\u0027s shelve that for now.\n\nI mean, I guess the code as is _would_ work fine if the EGL device also uses the default attributes.\n\nHow do you deal with `clCreateContext` choosing the device? The default display may be using Nvidia for example, but `clCreateContext` trying to create a software device (SwiftShader). Kind of feels like `clCreateContext` should be the one that decides what display to use.\n\n(probably no harm in platform holding on to a random display at the same time though, just trying to understand the API better)",
+      "parentUuid": "e8d84bc5_9e971008",
       "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
