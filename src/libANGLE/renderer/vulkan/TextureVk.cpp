@@ -290,162 +290,6 @@ const vk::Format *AdjustStorageViewFormatPerWorkarounds(RendererVk *renderer,
     return intended;
 }
 
-const vk::Format *AdjustViewFormatForSampler(RendererVk *renderer,
-                                             const vk::Format *intended,
-                                             gl::SamplerFormat samplerFormat)
-{
-    switch (samplerFormat)
-    {
-        case gl::SamplerFormat::Float:
-            switch (intended->getIntendedFormatID())
-            {
-                case angle::FormatID::R8_UNORM:
-                case angle::FormatID::R16_FLOAT:
-                case angle::FormatID::R32_FLOAT:
-                case angle::FormatID::R8G8_UNORM:
-                case angle::FormatID::R16G16_FLOAT:
-                case angle::FormatID::R32G32_FLOAT:
-                case angle::FormatID::R32G32B32_FLOAT:
-                case angle::FormatID::R8G8B8A8_UNORM:
-                case angle::FormatID::R16G16B16A16_FLOAT:
-                case angle::FormatID::R32G32B32A32_FLOAT:
-                    return intended;
-                case angle::FormatID::R8_SINT:
-                case angle::FormatID::R8_UINT:
-                    return &renderer->getFormat(angle::FormatID::R8_UNORM);
-                case angle::FormatID::R16_SINT:
-                case angle::FormatID::R16_UINT:
-                    return &renderer->getFormat(angle::FormatID::R16_FLOAT);
-                case angle::FormatID::R32_SINT:
-                case angle::FormatID::R32_UINT:
-                    return &renderer->getFormat(angle::FormatID::R32_FLOAT);
-                case angle::FormatID::R8G8_SINT:
-                case angle::FormatID::R8G8_UINT:
-                    return &renderer->getFormat(angle::FormatID::R8G8_UNORM);
-                case angle::FormatID::R16G16_SINT:
-                case angle::FormatID::R16G16_UINT:
-                    return &renderer->getFormat(angle::FormatID::R16G16_FLOAT);
-                case angle::FormatID::R32G32_SINT:
-                case angle::FormatID::R32G32_UINT:
-                    return &renderer->getFormat(angle::FormatID::R32G32_FLOAT);
-                case angle::FormatID::R32G32B32_SINT:
-                case angle::FormatID::R32G32B32_UINT:
-                    return &renderer->getFormat(angle::FormatID::R32G32B32_FLOAT);
-                case angle::FormatID::R8G8B8A8_SINT:
-                case angle::FormatID::R8G8B8A8_UINT:
-                    return &renderer->getFormat(angle::FormatID::R8G8B8A8_UNORM);
-                case angle::FormatID::R16G16B16A16_SINT:
-                case angle::FormatID::R16G16B16A16_UINT:
-                    return &renderer->getFormat(angle::FormatID::R16G16B16A16_FLOAT);
-                case angle::FormatID::R32G32B32A32_SINT:
-                case angle::FormatID::R32G32B32A32_UINT:
-                    return &renderer->getFormat(angle::FormatID::R32G32B32A32_FLOAT);
-                default:
-                    UNREACHABLE();
-                    return intended;
-            }
-        case gl::SamplerFormat::Unsigned:
-            switch (intended->getIntendedFormatID())
-            {
-                case angle::FormatID::R8_UINT:
-                case angle::FormatID::R16_UINT:
-                case angle::FormatID::R32_UINT:
-                case angle::FormatID::R8G8_UINT:
-                case angle::FormatID::R16G16_UINT:
-                case angle::FormatID::R32G32_UINT:
-                case angle::FormatID::R32G32B32_UINT:
-                case angle::FormatID::R8G8B8A8_UINT:
-                case angle::FormatID::R16G16B16A16_UINT:
-                case angle::FormatID::R32G32B32A32_UINT:
-                    return intended;
-                case angle::FormatID::R8_UNORM:
-                case angle::FormatID::R8_SINT:
-                    return &renderer->getFormat(angle::FormatID::R8_UINT);
-                case angle::FormatID::R16_FLOAT:
-                case angle::FormatID::R16_SINT:
-                    return &renderer->getFormat(angle::FormatID::R16_UINT);
-                case angle::FormatID::R32_FLOAT:
-                case angle::FormatID::R32_SINT:
-                    return &renderer->getFormat(angle::FormatID::R32_UINT);
-                case angle::FormatID::R8G8_UNORM:
-                case angle::FormatID::R8G8_SINT:
-                    return &renderer->getFormat(angle::FormatID::R8G8_UINT);
-                case angle::FormatID::R16G16_FLOAT:
-                case angle::FormatID::R16G16_SINT:
-                    return &renderer->getFormat(angle::FormatID::R16G16_UINT);
-                case angle::FormatID::R32G32_FLOAT:
-                case angle::FormatID::R32G32_SINT:
-                    return &renderer->getFormat(angle::FormatID::R32G32_UINT);
-                case angle::FormatID::R32G32B32_FLOAT:
-                case angle::FormatID::R32G32B32_SINT:
-                    return &renderer->getFormat(angle::FormatID::R32G32B32_UINT);
-                case angle::FormatID::R8G8B8A8_UNORM:
-                case angle::FormatID::R8G8B8A8_SINT:
-                    return &renderer->getFormat(angle::FormatID::R8G8B8A8_UINT);
-                case angle::FormatID::R16G16B16A16_FLOAT:
-                case angle::FormatID::R16G16B16A16_SINT:
-                    return &renderer->getFormat(angle::FormatID::R16G16B16A16_UINT);
-                case angle::FormatID::R32G32B32A32_FLOAT:
-                case angle::FormatID::R32G32B32A32_SINT:
-                    return &renderer->getFormat(angle::FormatID::R32G32B32A32_UINT);
-                default:
-                    UNREACHABLE();
-                    return intended;
-            }
-        case gl::SamplerFormat::Signed:
-            switch (intended->getIntendedFormatID())
-            {
-                case angle::FormatID::R8_SINT:
-                case angle::FormatID::R16_SINT:
-                case angle::FormatID::R32_SINT:
-                case angle::FormatID::R8G8_SINT:
-                case angle::FormatID::R16G16_SINT:
-                case angle::FormatID::R32G32_SINT:
-                case angle::FormatID::R32G32B32_SINT:
-                case angle::FormatID::R8G8B8A8_SINT:
-                case angle::FormatID::R16G16B16A16_SINT:
-                case angle::FormatID::R32G32B32A32_SINT:
-                    return intended;
-                case angle::FormatID::R8_UNORM:
-                case angle::FormatID::R8_UINT:
-                    return &renderer->getFormat(angle::FormatID::R8_SINT);
-                case angle::FormatID::R16_FLOAT:
-                case angle::FormatID::R16_UINT:
-                    return &renderer->getFormat(angle::FormatID::R16_SINT);
-                case angle::FormatID::R32_FLOAT:
-                case angle::FormatID::R32_UINT:
-                    return &renderer->getFormat(angle::FormatID::R32_SINT);
-                case angle::FormatID::R8G8_UNORM:
-                case angle::FormatID::R8G8_UINT:
-                    return &renderer->getFormat(angle::FormatID::R8G8_SINT);
-                case angle::FormatID::R16G16_FLOAT:
-                case angle::FormatID::R16G16_UINT:
-                    return &renderer->getFormat(angle::FormatID::R16G16_SINT);
-                case angle::FormatID::R32G32_FLOAT:
-                case angle::FormatID::R32G32_UINT:
-                    return &renderer->getFormat(angle::FormatID::R32G32_SINT);
-                case angle::FormatID::R32G32B32_FLOAT:
-                case angle::FormatID::R32G32B32_UINT:
-                    return &renderer->getFormat(angle::FormatID::R32G32B32_SINT);
-                case angle::FormatID::R8G8B8A8_UNORM:
-                case angle::FormatID::R8G8B8A8_UINT:
-                    return &renderer->getFormat(angle::FormatID::R8G8B8A8_SINT);
-                case angle::FormatID::R16G16B16A16_FLOAT:
-                case angle::FormatID::R16G16B16A16_UINT:
-                    return &renderer->getFormat(angle::FormatID::R16G16B16A16_SINT);
-                case angle::FormatID::R32G32B32A32_FLOAT:
-                case angle::FormatID::R32G32B32A32_UINT:
-                    return &renderer->getFormat(angle::FormatID::R32G32B32A32_SINT);
-                default:
-                    UNREACHABLE();
-                    return intended;
-            }
-        default:
-            UNREACHABLE();
-            return intended;
-    }
-}
-
 angle::FormatID GetRGBAEmulationDstFormat(angle::FormatID srcFormatID)
 {
     switch (srcFormatID)
@@ -510,6 +354,7 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
       mRequiresMutableStorage(false),
       mRequiredImageAccess(vk::ImageAccess::SampleOnly),
       mImmutableSamplerDirty(false),
+      mActualSamplerFormat(VK_FORMAT_UNDEFINED),
       mEGLImageNativeType(gl::TextureType::InvalidEnum),
       mEGLImageLayerOffset(0),
       mEGLImageLevelOffset(0),
@@ -1633,7 +1478,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
             vk::ImageView stagingView;
             ANGLE_TRY(stagingImage->get().initLayerImageView(
                 contextVk, stagingTextureType, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
-                &stagingView, vk::LevelIndex(0), 1, layerIndex, 1,
+                &stagingView, vk::LevelIndex(0), 1, layerIndex, 1, VK_FORMAT_UNDEFINED,
                 gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default,
                 vk::ImageHelper::kDefaultImageViewUsageFlags));
 
@@ -3415,6 +3260,186 @@ bool TextureVk::shouldDecodeSRGB(vk::Context *context,
     return decodeSRGB;
 }
 
+bool TextureVk::checkSamplerImageFormatMismatch(RendererVk *renderer,
+                                                gl::SamplerFormat samplerFormat,
+                                                const vk::ImageHelper *image)
+{
+    const angle::Format &intendedImageFormat = image->getActualFormat();
+    bool isFloat                             = intendedImageFormat.isFloat();
+    bool isUint                              = intendedImageFormat.isUint();
+    bool isSint                              = intendedImageFormat.isSint();
+    if (((isFloat || isUint || isSint) && !intendedImageFormat.hasDepthAndStencilBits()) &&
+        (((samplerFormat == gl::SamplerFormat::Float) && !isFloat) ||
+         ((samplerFormat == gl::SamplerFormat::Unsigned) && !isUint) ||
+         ((samplerFormat == gl::SamplerFormat::Signed) && !isSint)))
+    {
+        const vk::Format *intendedFormat = &renderer->getFormat(image->getActualFormatID());
+        const vk::Format *adjustedFormat =
+            AdjustViewFormatForSampler(renderer, intendedFormat, samplerFormat);
+        VkFormat actualVkFormat = rx::vk::GetVkFormatFromFormatID(
+            adjustedFormat->getActualImageFormatID(getRequiredImageAccess()));
+        setSamplerFormat(actualVkFormat);
+        return true;
+    }
+    return false;
+}
+
+const vk::Format *TextureVk::AdjustViewFormatForSampler(RendererVk *renderer,
+                                                        const vk::Format *intended,
+                                                        gl::SamplerFormat samplerFormat)
+{
+    switch (samplerFormat)
+    {
+        case gl::SamplerFormat::Float:
+            switch (intended->getIntendedFormatID())
+            {
+                case angle::FormatID::R8_UNORM:
+                case angle::FormatID::R16_FLOAT:
+                case angle::FormatID::R32_FLOAT:
+                case angle::FormatID::R8G8_UNORM:
+                case angle::FormatID::R16G16_FLOAT:
+                case angle::FormatID::R32G32_FLOAT:
+                case angle::FormatID::R32G32B32_FLOAT:
+                case angle::FormatID::R8G8B8A8_UNORM:
+                case angle::FormatID::R16G16B16A16_FLOAT:
+                case angle::FormatID::R32G32B32A32_FLOAT:
+                    return intended;
+                case angle::FormatID::R8_SINT:
+                case angle::FormatID::R8_UINT:
+                    return &renderer->getFormat(angle::FormatID::R8_UNORM);
+                case angle::FormatID::R16_SINT:
+                case angle::FormatID::R16_UINT:
+                    return &renderer->getFormat(angle::FormatID::R16_FLOAT);
+                case angle::FormatID::R32_SINT:
+                case angle::FormatID::R32_UINT:
+                    return &renderer->getFormat(angle::FormatID::R32_FLOAT);
+                case angle::FormatID::R8G8_SINT:
+                case angle::FormatID::R8G8_UINT:
+                    return &renderer->getFormat(angle::FormatID::R8G8_UNORM);
+                case angle::FormatID::R16G16_SINT:
+                case angle::FormatID::R16G16_UINT:
+                    return &renderer->getFormat(angle::FormatID::R16G16_FLOAT);
+                case angle::FormatID::R32G32_SINT:
+                case angle::FormatID::R32G32_UINT:
+                    return &renderer->getFormat(angle::FormatID::R32G32_FLOAT);
+                case angle::FormatID::R32G32B32_SINT:
+                case angle::FormatID::R32G32B32_UINT:
+                    return &renderer->getFormat(angle::FormatID::R32G32B32_FLOAT);
+                case angle::FormatID::R8G8B8A8_SINT:
+                case angle::FormatID::R8G8B8A8_UINT:
+                    return &renderer->getFormat(angle::FormatID::R8G8B8A8_UNORM);
+                case angle::FormatID::R16G16B16A16_SINT:
+                case angle::FormatID::R16G16B16A16_UINT:
+                    return &renderer->getFormat(angle::FormatID::R16G16B16A16_FLOAT);
+                case angle::FormatID::R32G32B32A32_SINT:
+                case angle::FormatID::R32G32B32A32_UINT:
+                    return &renderer->getFormat(angle::FormatID::R32G32B32A32_FLOAT);
+                default:
+                    UNREACHABLE();
+                    return intended;
+            }
+        case gl::SamplerFormat::Unsigned:
+            switch (intended->getIntendedFormatID())
+            {
+                case angle::FormatID::R8_UINT:
+                case angle::FormatID::R16_UINT:
+                case angle::FormatID::R32_UINT:
+                case angle::FormatID::R8G8_UINT:
+                case angle::FormatID::R16G16_UINT:
+                case angle::FormatID::R32G32_UINT:
+                case angle::FormatID::R32G32B32_UINT:
+                case angle::FormatID::R8G8B8A8_UINT:
+                case angle::FormatID::R16G16B16A16_UINT:
+                case angle::FormatID::R32G32B32A32_UINT:
+                    return intended;
+                case angle::FormatID::R8_UNORM:
+                case angle::FormatID::R8_SINT:
+                    return &renderer->getFormat(angle::FormatID::R8_UINT);
+                case angle::FormatID::R16_FLOAT:
+                case angle::FormatID::R16_SINT:
+                    return &renderer->getFormat(angle::FormatID::R16_UINT);
+                case angle::FormatID::R32_FLOAT:
+                case angle::FormatID::R32_SINT:
+                    return &renderer->getFormat(angle::FormatID::R32_UINT);
+                case angle::FormatID::R8G8_UNORM:
+                case angle::FormatID::R8G8_SINT:
+                    return &renderer->getFormat(angle::FormatID::R8G8_UINT);
+                case angle::FormatID::R16G16_FLOAT:
+                case angle::FormatID::R16G16_SINT:
+                    return &renderer->getFormat(angle::FormatID::R16G16_UINT);
+                case angle::FormatID::R32G32_FLOAT:
+                case angle::FormatID::R32G32_SINT:
+                    return &renderer->getFormat(angle::FormatID::R32G32_UINT);
+                case angle::FormatID::R32G32B32_FLOAT:
+                case angle::FormatID::R32G32B32_SINT:
+                    return &renderer->getFormat(angle::FormatID::R32G32B32_UINT);
+                case angle::FormatID::R8G8B8A8_UNORM:
+                case angle::FormatID::R8G8B8A8_SINT:
+                    return &renderer->getFormat(angle::FormatID::R8G8B8A8_UINT);
+                case angle::FormatID::R16G16B16A16_FLOAT:
+                case angle::FormatID::R16G16B16A16_SINT:
+                    return &renderer->getFormat(angle::FormatID::R16G16B16A16_UINT);
+                case angle::FormatID::R32G32B32A32_FLOAT:
+                case angle::FormatID::R32G32B32A32_SINT:
+                    return &renderer->getFormat(angle::FormatID::R32G32B32A32_UINT);
+                default:
+                    UNREACHABLE();
+                    return intended;
+            }
+        case gl::SamplerFormat::Signed:
+            switch (intended->getIntendedFormatID())
+            {
+                case angle::FormatID::R8_SINT:
+                case angle::FormatID::R16_SINT:
+                case angle::FormatID::R32_SINT:
+                case angle::FormatID::R8G8_SINT:
+                case angle::FormatID::R16G16_SINT:
+                case angle::FormatID::R32G32_SINT:
+                case angle::FormatID::R32G32B32_SINT:
+                case angle::FormatID::R8G8B8A8_SINT:
+                case angle::FormatID::R16G16B16A16_SINT:
+                case angle::FormatID::R32G32B32A32_SINT:
+                    return intended;
+                case angle::FormatID::R8_UNORM:
+                case angle::FormatID::R8_UINT:
+                    return &renderer->getFormat(angle::FormatID::R8_SINT);
+                case angle::FormatID::R16_FLOAT:
+                case angle::FormatID::R16_UINT:
+                    return &renderer->getFormat(angle::FormatID::R16_SINT);
+                case angle::FormatID::R32_FLOAT:
+                case angle::FormatID::R32_UINT:
+                    return &renderer->getFormat(angle::FormatID::R32_SINT);
+                case angle::FormatID::R8G8_UNORM:
+                case angle::FormatID::R8G8_UINT:
+                    return &renderer->getFormat(angle::FormatID::R8G8_SINT);
+                case angle::FormatID::R16G16_FLOAT:
+                case angle::FormatID::R16G16_UINT:
+                    return &renderer->getFormat(angle::FormatID::R16G16_SINT);
+                case angle::FormatID::R32G32_FLOAT:
+                case angle::FormatID::R32G32_UINT:
+                    return &renderer->getFormat(angle::FormatID::R32G32_SINT);
+                case angle::FormatID::R32G32B32_FLOAT:
+                case angle::FormatID::R32G32B32_UINT:
+                    return &renderer->getFormat(angle::FormatID::R32G32B32_SINT);
+                case angle::FormatID::R8G8B8A8_UNORM:
+                case angle::FormatID::R8G8B8A8_UINT:
+                    return &renderer->getFormat(angle::FormatID::R8G8B8A8_SINT);
+                case angle::FormatID::R16G16B16A16_FLOAT:
+                case angle::FormatID::R16G16B16A16_UINT:
+                    return &renderer->getFormat(angle::FormatID::R16G16B16A16_SINT);
+                case angle::FormatID::R32G32B32A32_FLOAT:
+                case angle::FormatID::R32G32B32A32_UINT:
+                    return &renderer->getFormat(angle::FormatID::R32G32B32A32_SINT);
+                default:
+                    UNREACHABLE();
+                    return intended;
+            }
+        default:
+            UNREACHABLE();
+            return intended;
+    }
+}
+
 const vk::ImageView &TextureVk::getReadImageView(vk::Context *context,
                                                  GLenum srgbDecode,
                                                  bool texelFetchStaticUse,
@@ -3739,10 +3764,11 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk, uint32_t levelCoun
     const VkImageUsageFlags kDisallowedSwizzledUsage =
         VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT |
         VK_IMAGE_USAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR;
-    ANGLE_TRY(getImageViews().initReadViews(contextVk, mState.getType(), *mImage, formatSwizzle,
-                                            readSwizzle, baseLevelVk, levelCount, baseLayer,
-                                            getImageViewLayerCount(), createExtraSRGBViews,
-                                            getImage().getUsage() & ~kDisallowedSwizzledUsage));
+
+    ANGLE_TRY(getImageViews().initReadViews(
+        contextVk, mState.getType(), *mImage, formatSwizzle, readSwizzle, baseLevelVk, levelCount,
+        baseLayer, getImageViewLayerCount(), createExtraSRGBViews, mActualSamplerFormat,
+        getImage().getUsage() & ~kDisallowedSwizzledUsage));
 
     updateCachedImageViewSerials();
 

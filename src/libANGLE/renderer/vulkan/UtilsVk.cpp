@@ -2564,8 +2564,9 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
 
     ANGLE_TRY(dst->initLayerImageView(
         contextVk, destViewType, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(), &destView.get(),
-        params.dstMip, 1, params.dstLayer, 1, gl::SrgbWriteControlMode::Default,
-        gl::YuvSamplingMode::Default, vk::ImageHelper::kDefaultImageViewUsageFlags));
+        params.dstMip, 1, params.dstLayer, 1, VK_FORMAT_UNDEFINED,
+        gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default,
+        vk::ImageHelper::kDefaultImageViewUsageFlags));
 
     const gl::Rectangle &renderArea = params.clearArea;
 
@@ -3622,7 +3623,7 @@ angle::Result UtilsVk::copyImageToBuffer(ContextVk *contextVk,
     ANGLE_TRY(src->initLayerImageView(contextVk, textureType, src->getAspectFlags(), swizzle,
                                       &srcView.get(), params.srcMip, 1,
                                       textureType == gl::TextureType::_2D ? params.srcLayer : 0, 1,
-                                      gl::SrgbWriteControlMode::Linear,
+                                      VK_FORMAT_UNDEFINED, gl::SrgbWriteControlMode::Linear,
                                       gl::YuvSamplingMode::Default, VK_IMAGE_USAGE_SAMPLED_BIT));
 
     vk::CommandBufferAccess access;
@@ -4018,8 +4019,9 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
         {
             ANGLE_TRY(depthStencilSrc->initLayerImageView(
                 contextVk, textureType, VK_IMAGE_ASPECT_DEPTH_BIT, gl::SwizzleState(),
-                &depthView.get(), levelIndex, 1, layerIndex, 1, gl::SrgbWriteControlMode::Default,
-                gl::YuvSamplingMode::Default, vk::ImageHelper::kDefaultImageViewUsageFlags));
+                &depthView.get(), levelIndex, 1, layerIndex, 1, VK_FORMAT_UNDEFINED,
+                gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default,
+                vk::ImageHelper::kDefaultImageViewUsageFlags));
             depthSrcView = &depthView.get();
         }
 
@@ -4027,8 +4029,9 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
         {
             ANGLE_TRY(depthStencilSrc->initLayerImageView(
                 contextVk, textureType, VK_IMAGE_ASPECT_STENCIL_BIT, gl::SwizzleState(),
-                &stencilView.get(), levelIndex, 1, layerIndex, 1, gl::SrgbWriteControlMode::Default,
-                gl::YuvSamplingMode::Default, vk::ImageHelper::kDefaultImageViewUsageFlags));
+                &stencilView.get(), levelIndex, 1, layerIndex, 1, VK_FORMAT_UNDEFINED,
+                gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default,
+                vk::ImageHelper::kDefaultImageViewUsageFlags));
             stencilSrcView = &stencilView.get();
         }
     }

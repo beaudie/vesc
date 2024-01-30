@@ -221,7 +221,21 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     bool isImmutable() { return mState.getImmutableFormat(); }
     bool imageValid() const { return (mImage && mImage->valid()); }
 
+    bool recreateViewFormatForSampler() const
+    {
+        return (mActualSamplerFormat != VK_FORMAT_UNDEFINED);
+    }
+    void setSamplerFormat(VkFormat samplerFormat) { mActualSamplerFormat = samplerFormat; }
+
     void releaseOwnershipOfImage(const gl::Context *context);
+
+    bool checkSamplerImageFormatMismatch(RendererVk *renderer,
+                                         gl::SamplerFormat samplerFormat,
+                                         const vk::ImageHelper *image);
+
+    const vk::Format *AdjustViewFormatForSampler(RendererVk *renderer,
+                                                 const vk::Format *intended,
+                                                 gl::SamplerFormat samplerFormat);
 
     const vk::ImageView &getReadImageView(vk::Context *context,
                                           GLenum srgbDecode,
@@ -579,6 +593,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     bool mRequiresMutableStorage;
     vk::ImageAccess mRequiredImageAccess;
     bool mImmutableSamplerDirty;
+    // Alternative imageView format used if an imageFormat/samplerFormat mismatch is detected
+    VkFormat mActualSamplerFormat;
 
     // Only valid if this texture is an "EGLImage target" and the associated EGL Image was
     // originally sourced from an OpenGL texture. Such EGL Images can be a slice of the underlying
