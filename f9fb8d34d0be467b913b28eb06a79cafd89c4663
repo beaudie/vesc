@@ -16,6 +16,24 @@
       "message": "Thank you Mohan! Your work fixed the VVL error VUID-VkFramebufferAttachmentImageInfo-viewFormatCount-09536",
       "revId": "f9fb8d34d0be467b913b28eb06a79cafd89c4663",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "912031bc_5c738a81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-01-30T02:19:20Z",
+      "side": 1,
+      "message": "No action item required from your end. I will remove the VVL error suppression after your fix lands. Thank you.",
+      "parentUuid": "28570beb_d5b5f634",
+      "revId": "f9fb8d34d0be467b913b28eb06a79cafd89c4663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
