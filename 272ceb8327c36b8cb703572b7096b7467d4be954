@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3889841e_833d5f02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-01-30T22:49:55Z",
+      "side": 1,
+      "message": "\"LGTM\". Should I be Code-Review+1ing or leave that to someone else?",
+      "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e15eea7c_20d5e72e",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-01-30T22:49:55Z",
+      "side": 1,
+      "message": "Just to check my basic understanding, by default this extension is disabled for users of Angle (e.g. renderer processes), but this Display class is only available to the browser process so the browser can request the ANGLEWebgpu platform?",
+      "range": {
+        "startLine": 2128,
+        "startChar": 15,
+        "endLine": 2128,
+        "endChar": 34
+      },
+      "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
