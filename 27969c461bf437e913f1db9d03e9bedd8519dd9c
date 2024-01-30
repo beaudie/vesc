@@ -508,6 +508,24 @@
       "parentUuid": "b8d65ac6_01b115d9",
       "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f10c6b_2b9d5664",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-01-30T23:31:54Z",
+      "side": 1,
+      "message": "Yeah sounds good to me.\n\nWill add a new ticket and TODO here for us to come back to as well as add\na new CL test here. 👍",
+      "parentUuid": "70aff0c7_cac50ad9",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
