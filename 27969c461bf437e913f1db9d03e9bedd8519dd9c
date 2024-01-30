@@ -526,6 +526,24 @@
       "parentUuid": "70aff0c7_cac50ad9",
       "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dc7520b_f077d146",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-01-30T23:50:25Z",
+      "side": 1,
+      "message": "Added tickets for testing and rework respectively:\n\nhttp://anglebug.com/8514\nhttp://anglebug.com/8515\n\nDone.",
+      "parentUuid": "e9f10c6b_2b9d5664",
+      "revId": "27969c461bf437e913f1db9d03e9bedd8519dd9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
