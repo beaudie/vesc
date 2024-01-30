@@ -83,6 +83,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "819d50d7_e8ccd81c",
+        "filename": "extensions/EGL_ANGLE_platform_angle_wgpu.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-30T19:59:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75faff3e_a47d4b5f",
+      "range": {
+        "startLine": 64,
+        "startChar": 15,
+        "endLine": 65,
+        "endChar": 16
+      },
+      "revId": "8e617ab7a0a25d2bbb0f6479ce7c991a251dfe52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58289751_9a841d19",
