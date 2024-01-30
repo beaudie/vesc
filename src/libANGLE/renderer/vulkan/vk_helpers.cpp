@@ -5379,6 +5379,7 @@ void ImageHelper::resetCachedProperties()
     mYcbcrConversionDesc.reset();
     mCurrentSingleClearValue.reset();
     mRenderPassUsageFlags.reset();
+    mLastFlushedSerial = 0;  // TODO: InvalidSerial should also work.
 
     setEntireContentUndefined();
 }
@@ -8815,6 +8816,9 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     // done with fine granularity as updates are applied.  This is achieved by specifying a layer
     // that is outside the tracking range.
     CommandBufferAccess access;
+    // TODO: "access" is only used in the beginning and in ClearEmulatedChannels. If the latter is
+    // also in the beginning, perhaps we can deal with that first, and merge the rest of the
+    // accesses into one?
     OutsideRenderPassCommandBufferHelper *commandBuffer = nullptr;
     bool transCoding =
         contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
@@ -8844,7 +8848,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         if (levelUpdates == nullptr)
         {
             ASSERT(static_cast<size_t>(updateMipLevelGL.get()) >= mSubresourceUpdates.size());
-            break;  // TODO: continue?
+            break;  // TODO: continue? break means no more updates are expected in the next levels.
         }
 
         for (SubresourceUpdate &update : *levelUpdates)
@@ -8902,6 +8906,31 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     {
         return angle::Result::Continue;
     }
+
+    // If the image has been flushed prior to this, the update tracker for level/layers should be
+    // reset.
+    if (mUse.valid() && mLastFlushedSerial < mUse.getSerials().front().getValue())
+    {
+        //        WARN() << "Image per-level/layer updates reset";
+        mLastFlushedSerial = mUse.getSerials().front().getValue();
+        clearLevelPendingUpdates();
+    }
+
+    //    if (!mWriteUse.getSerials().empty())
+    //    {
+    //        WARN() << "Serial: " << mUse.getSerials().front().getValue()
+    //               << " | WriteSerial: " << mWriteUse.getSerials().front().getValue();
+    //    }
+    //    else if (!mUse.getSerials().empty())
+    //    {
+    //        WARN() << "Serial: " << mUse.getSerials().front().getValue();
+    //    }
+    //
+    //    if (contextVk->getLastSubmittedQueueSerial().valid())
+    //    {
+    //        WARN() << "ContextSerial: "
+    //               << contextVk->getLastSubmittedQueueSerial().getSerial().getValue();
+    //    }
 
     // If it is only clearing emulated channels, don't add a barrier.
     if (updateCountClearEmulatedChannels != updateCount)
@@ -9002,6 +9031,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 const uint64_t subresourceHash =
                     ANGLE_ROTL64(subresourceHashRange, subresourceHashOffset);
 
+                // TODO: Replace the if condition to use mLevelsPendingUpdates.
                 if ((subresourceUploadsInProgress & subresourceHash) != 0)
                 {
                     // If there's overlap in subresource upload, issue a barrier.
@@ -9012,6 +9042,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                     subresourceUploadsInProgress = 0;
                 }
                 subresourceUploadsInProgress |= subresourceHash;
+
+                mLevelsPendingUpdates[updateBaseLayer].set(updateMipLevelVk.get());
             }
 
             if (IsClearOfAllChannels(update.updateSource))

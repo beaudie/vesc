@@ -70,6 +70,9 @@ struct ImageLayoutUsage
 {
     void *usedVkImage;
     vk::ImageLayout usedImageLayout;
+    // TODO: Track per-level/layer?
+    //    uint32_t usedLayer;
+    //    uint32_t usedLevel;
 };
 
 class ContextVk : public ContextImpl, public vk::Context, public MultisampleTextureInitializer
@@ -648,7 +651,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mRenderPassCommands->started() && mRenderPassCommands->usesImage(image);
     }
 
-    bool shouldFlushDueToImageLayoutTransition(vk::CommandBufferImageAccess access);
+    bool shouldFlushDueToImageLayoutTransition(vk::CommandBufferImageAccess access,
+                                               uint32_t levelStart,
+                                               uint32_t layerStart);
 
     vk::RenderPassCommandBufferHelper &getStartedRenderPassCommands()
     {

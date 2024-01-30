@@ -1304,6 +1304,8 @@ ANGLE_INLINE void SecondaryCommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
     paramStruct->dstImage       = dstImage.getHandle();
     paramStruct->dstImageLayout = dstImageLayout;
     paramStruct->region         = regions[0];
+    //    WARN() << "CopyB2Image: " << paramStruct->dstImage << " | " <<
+    //    paramStruct->dstImageLayout;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::copyImage(const Image &srcImage,
@@ -1320,6 +1322,9 @@ ANGLE_INLINE void SecondaryCommandBuffer::copyImage(const Image &srcImage,
     paramStruct->dstImage        = dstImage.getHandle();
     paramStruct->dstImageLayout  = dstImageLayout;
     paramStruct->region          = regions[0];
+    //    WARN() << "CopyImage: " << paramStruct->srcImage << " | " << paramStruct->srcImageLayout
+    //    << "->"
+    //           << paramStruct->dstImage << " | " << paramStruct->dstImageLayout;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::copyImageToBuffer(const Image &srcImage,
@@ -1335,6 +1340,8 @@ ANGLE_INLINE void SecondaryCommandBuffer::copyImageToBuffer(const Image &srcImag
     paramStruct->srcImageLayout = srcImageLayout;
     paramStruct->dstBuffer      = dstBuffer;
     paramStruct->region         = regions[0];
+    //    WARN() << "CopyImage2B: " << paramStruct->srcImage << " | " <<
+    //    paramStruct->srcImageLayout;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::dispatch(uint32_t groupCountX,
@@ -1345,6 +1352,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::dispatch(uint32_t groupCountX,
     paramStruct->groupCountX    = groupCountX;
     paramStruct->groupCountY    = groupCountY;
     paramStruct->groupCountZ    = groupCountZ;
+    //    WARN() << "Dispatch";
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::dispatchIndirect(const Buffer &buffer,
@@ -1535,6 +1543,9 @@ ANGLE_INLINE void SecondaryCommandBuffer::imageBarrier(
     paramStruct->srcStageMask       = srcStageMask;
     paramStruct->dstStageMask       = dstStageMask;
     paramStruct->imageMemoryBarrier = imageMemoryBarrier;
+    //    WARN() << "ImageBarrier: " << paramStruct->imageMemoryBarrier.image << " | "
+    //           << paramStruct->imageMemoryBarrier.oldLayout << " to "
+    //           << paramStruct->imageMemoryBarrier.newLayout;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::insertDebugUtilsLabelEXT(

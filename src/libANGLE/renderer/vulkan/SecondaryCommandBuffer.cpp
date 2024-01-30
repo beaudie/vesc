@@ -180,6 +180,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
     VkCommandBuffer cmdBuffer = primary->getHandle();
 
     ANGLE_TRACE_EVENT0("gpu.angle", "SecondaryCommandBuffer::executeCommands");
+    //    WARN() << "SecondaryCommandBuffer::executeCommands()";
 
     // Used for ring buffer allocators only.
     mCommandAllocator.terminateLastCommandBlock();

@@ -703,6 +703,8 @@ class PipelineBarrier : angle::NonCopyable
         mSrcStageMask |= srcStageMask;
         mDstStageMask |= dstStageMask;
         mImageMemoryBarriers.push_back(imageMemoryBarrier);
+        //        WARN() << "Barrier added for future: " << imageMemoryBarrier.image << " | "
+        //               << imageMemoryBarrier.oldLayout << " to " << imageMemoryBarrier.newLayout;
     }
 
     void reset()
@@ -2538,6 +2540,19 @@ class ImageHelper final : public ReadWriteResource, public angle::Subject
 
     size_t getLevelUpdateCount(gl::LevelIndex level) const;
 
+    bool isLevelPendingUpdate(uint32_t layer, uint32_t level) const
+    {
+        return (layer < 6) ? mLevelsPendingUpdates[layer].test(level) : false;
+    }
+
+    void clearLevelPendingUpdates()
+    {
+        for (uint32_t i = 0; i < 6; i++)  // TODO: kMaxContentDefinedLayerCount?
+        {
+            mLevelsPendingUpdates[i].reset();
+        }
+    }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2892,6 +2907,11 @@ class ImageHelper final : public ReadWriteResource, public angle::Subject
     // Only used for swapChain images. This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is released.
     Semaphore mAcquireNextImageSemaphore;
+
+    // Bitset array to keep track of updated layers/levels. (6 for now due to cubemap)
+    // TODO: Length should be kMaxContentDefinedLayerCount?
+    std::array<std::bitset<16>, 6> mLevelsPendingUpdates;
+    uint64_t mLastFlushedSerial;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const

@@ -8581,7 +8581,9 @@ void ContextVk::addImageLayoutUsage(vk::ImageHelper *imageHelper)
     // TODO: Make this function accept multiple image helpers as args?
 }
 
-bool ContextVk::shouldFlushDueToImageLayoutTransition(vk::CommandBufferImageAccess access)
+bool ContextVk::shouldFlushDueToImageLayoutTransition(vk::CommandBufferImageAccess access,
+                                                      uint32_t levelStart,
+                                                      uint32_t layerStart)
 {
     vk::ImageHelper *image      = access.image;
     vk::ImageLayout imageLayout = access.imageLayout;
@@ -8592,19 +8594,29 @@ bool ContextVk::shouldFlushDueToImageLayoutTransition(vk::CommandBufferImageAcce
         return false;
     }
 
+    // TOOD: HACK
+    //    if (imageLayout == vk::ImageLayout::TransferDstAndComputeWrite)
+    //    {
+    //        return false;
+    //    }
+
     // Check against currently added images. (Check for hazards)
     auto handle = reinterpret_cast<void *>(image->getImage().getHandle());
     if (mImageLayoutUsages.contains(handle))
     {
+        // TODO: It should check if there is a conflict with the updated level/layer. If so, flush.
         if (mImageLayoutUsages[handle].usedImageLayout != image->getCurrentImageLayout() ||
-            !IsLayoutReadOnly(mImageLayoutUsages[handle].usedImageLayout))
+            !(IsLayoutReadOnly(mImageLayoutUsages[handle].usedImageLayout) ||
+              !image->isLevelPendingUpdate(layerStart, levelStart)))
         {
             return true;
         }
     }
 
     // TODO: Is this necessary?
-    if (imageLayout != image->getCurrentImageLayout() || !IsLayoutReadOnly(imageLayout))
+    // TODO: Why is the first access using 8? (vk::kMaxContentDefinedLayerCount)
+    if (imageLayout != image->getCurrentImageLayout() ||
+        !(IsLayoutReadOnly(imageLayout) || !image->isLevelPendingUpdate(layerStart, levelStart)))
     {
         return true;
     }
@@ -8644,7 +8656,7 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
         {
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageUseThenOutOfRPRead);
         }
-        else if (shouldFlushDueToImageLayoutTransition(imageAccess))
+        else if (shouldFlushDueToImageLayoutTransition(imageAccess, 0, 0))
         {
             // TODO: (Also check if the image is already in the list
             // (using serial (e.g., resource mUse and mWriteUse)?). This should not happen for
@@ -8661,7 +8673,8 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
         {
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageUseThenOutOfRPWrite);
         }
-        else if (shouldFlushDueToImageLayoutTransition(imageWrite.access))
+        else if (shouldFlushDueToImageLayoutTransition(
+                     imageWrite.access, imageWrite.levelStart.get(), imageWrite.layerStart))
         {
             // TODO: (Also check if the image is already in the list
             // (using serial (e.g., resource mUse and mWriteUse)?).)
