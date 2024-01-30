@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "458dd5b3_5f1f79f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-30T17:07:56Z",
+      "side": 1,
+      "message": "You could tag the perfetto bug too.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9356d753_0cba48c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-30T17:07:56Z",
+      "side": 1,
+      "message": "The DEPS changes LGTM, just a few comments, mainly on readability.",
+      "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83c7def7_abee9212",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-30T17:07:56Z",
+      "side": 1,
+      "message": "If there\u0027s any way to align this right column so we can see at a glance that they are all the same thing, that would be preferable.  I don\u0027t know what\u0027s available in GN formatting though.",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 87
+      },
+      "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caaf7b6d_fff0daf5",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-30T17:07:56Z",
+      "side": 1,
+      "message": "Can you take this comment a step forward and say something like \"You\u0027ll want to match the traces you specify in `angle_restricted_traces` below\"",
+      "range": {
+        "startLine": 21,
+        "startChar": 93,
+        "endLine": 21,
+        "endChar": 141
+      },
+      "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "338f4ba7_214fb8e6",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-01-30T17:07:56Z",
+      "side": 1,
+      "message": "I find the previous code far more readable, but the output is fine, so no need to block.  Maybe a comment to explain what each section is doing.",
+      "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
