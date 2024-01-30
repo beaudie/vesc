@@ -39,6 +39,30 @@
       },
       "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c20af6ab_de5aadf2",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-30T23:01:37Z",
+      "side": 1,
+      "message": "As far as ANGLE is concerned, any application can create an EGL instance with the WebGPU backend. It\u0027s up to Chrome to create its EGL instance in the browser process and not the renderer process. There\u0027s nothing stopping Chrome for example to create an EGL instance with the WebGPU backend in the renderer process too, if it ever thinks it\u0027s a good idea.",
+      "parentUuid": "e15eea7c_20d5e72e",
+      "range": {
+        "startLine": 2128,
+        "startChar": 15,
+        "endLine": 2128,
+        "endChar": 34
+      },
+      "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
