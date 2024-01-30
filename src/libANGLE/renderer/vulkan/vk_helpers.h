@@ -1928,6 +1928,18 @@ class ImageHelper final : public Resource, public angle::Subject
                                      VkMemoryPropertyFlags flags);
 
     static constexpr VkImageUsageFlags kDefaultImageViewUsageFlags = 0;
+    angle::Result initLayerImageViewFloat(Context *context,
+                                          gl::TextureType textureType,
+                                          VkImageAspectFlags aspectMask,
+                                          const gl::SwizzleState &swizzleMap,
+                                          ImageView *imageViewOut,
+                                          LevelIndex baseMipLevelVk,
+                                          uint32_t levelCount,
+                                          uint32_t baseArrayLayer,
+                                          uint32_t layerCount,
+                                          VkFormat samplerFormat,
+                                          gl::YuvSamplingMode yuvSamplingMode,
+                                          VkImageUsageFlags imageUsageFlags) const;
     angle::Result initLayerImageView(Context *context,
                                      gl::TextureType textureType,
                                      VkImageAspectFlags aspectMask,
@@ -1937,6 +1949,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                      uint32_t levelCount,
                                      uint32_t baseArrayLayer,
                                      uint32_t layerCount,
+                                     VkFormat samplerFormat,
                                      gl::SrgbWriteControlMode srgbWriteControlMode,
                                      gl::YuvSamplingMode yuvSamplingMode,
                                      VkImageUsageFlags imageUsageFlags) const;
@@ -3004,6 +3017,16 @@ class ImageViewHelper final : angle::NonCopyable
         return getValidReadViewImpl(mPerLevelRangeSamplerExternal2DY2YEXTImageViews);
     }
 
+    ImageView &getCorrectedSamplerView()
+    {
+        return getReadViewImpl(mPerLevelRangeCorrectedSamplerViews);
+    }
+
+    const ImageView &getCorrectedSamplerView() const
+    {
+        return getValidReadViewImpl(mPerLevelRangeCorrectedSamplerViews);
+    }
+
     // Used when initialized RenderTargets.
     bool hasStencilReadImageView() const
     {
@@ -3055,6 +3078,7 @@ class ImageViewHelper final : angle::NonCopyable
                                 uint32_t baseLayer,
                                 uint32_t layerCount,
                                 bool requiresSRGBViews,
+                                VkFormat samplerFormat,
                                 VkImageUsageFlags imageUsageFlags);
 
     // Creates a storage view with all layers of the level.
@@ -3155,6 +3179,7 @@ class ImageViewHelper final : angle::NonCopyable
                                     uint32_t levelCount,
                                     uint32_t baseLayer,
                                     uint32_t layerCount,
+                                    VkFormat samplerFormat,
                                     VkImageUsageFlags imageUsageFlags);
 
     // Create SRGB-reinterpreted read views
@@ -3188,6 +3213,7 @@ class ImageViewHelper final : angle::NonCopyable
     ImageViewVector mPerLevelRangeSRGBCopyImageViews;
     ImageViewVector mPerLevelRangeStencilReadImageViews;
     ImageViewVector mPerLevelRangeSamplerExternal2DY2YEXTImageViews;
+    ImageViewVector mPerLevelRangeCorrectedSamplerViews;
 
     // Draw views
     LayerLevelImageViewVector mLayerLevelDrawImageViews;
