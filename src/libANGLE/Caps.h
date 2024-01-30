@@ -756,6 +756,9 @@ struct ClientExtensions
     // EGL_ANGLE_platform_angle_null
     bool platformANGLENULL = false;
 
+    // EGL_ANGLE_platform_angle_wgpu
+    bool platformANGLEWgpu = false;
+
     // EGL_ANGLE_platform_angle_vulkan
     bool platformANGLEVulkan = false;
 
