@@ -87,6 +87,30 @@
       },
       "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abd6d049_90336476",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-01-30T23:07:36Z",
+      "side": 1,
+      "message": "Is the \"EGL instance\" in this case like a file descriptor or a random ID or something?",
+      "parentUuid": "b1fba68f_b554c29a",
+      "range": {
+        "startLine": 2128,
+        "startChar": 15,
+        "endLine": 2128,
+        "endChar": 34
+      },
+      "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
