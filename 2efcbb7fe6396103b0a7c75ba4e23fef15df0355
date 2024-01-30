@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd2399c3_61b6fa8d",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-30T11:34:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1409ddb_97a235d6",
+      "revId": "2efcbb7fe6396103b0a7c75ba4e23fef15df0355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ced20214_fbaea2f0",
@@ -75,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "075eb705_56bb281a",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-30T11:34:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ced20214_fbaea2f0",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 80
+      },
+      "revId": "2efcbb7fe6396103b0a7c75ba4e23fef15df0355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e10f6ef3_e69076f7",
@@ -88,6 +130,24 @@
       "writtenOn": "2024-01-29T23:38:28Z",
       "side": 1,
       "message": "```suggestion\n# Copyright 2024 The ANGLE Project Authors. All rights reserved.\n```",
+      "revId": "2efcbb7fe6396103b0a7c75ba4e23fef15df0355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ddfa23f_793d0902",
+        "filename": "scripts/winappsdk_setup.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1184662
+      },
+      "writtenOn": "2024-01-30T11:34:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e10f6ef3_e69076f7",
       "revId": "2efcbb7fe6396103b0a7c75ba4e23fef15df0355",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
