@@ -1937,6 +1937,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                      uint32_t levelCount,
                                      uint32_t baseArrayLayer,
                                      uint32_t layerCount,
+                                     VkFormat samplerFormat,
                                      gl::SrgbWriteControlMode srgbWriteControlMode,
                                      gl::YuvSamplingMode yuvSamplingMode,
                                      VkImageUsageFlags imageUsageFlags) const;
@@ -3055,6 +3056,7 @@ class ImageViewHelper final : angle::NonCopyable
                                 uint32_t baseLayer,
                                 uint32_t layerCount,
                                 bool requiresSRGBViews,
+                                VkFormat samplerFormat,
                                 VkImageUsageFlags imageUsageFlags);
 
     // Creates a storage view with all layers of the level.
@@ -3155,6 +3157,7 @@ class ImageViewHelper final : angle::NonCopyable
                                     uint32_t levelCount,
                                     uint32_t baseLayer,
                                     uint32_t layerCount,
+                                    VkFormat samplerFormat,
                                     VkImageUsageFlags imageUsageFlags);
 
     // Create SRGB-reinterpreted read views
