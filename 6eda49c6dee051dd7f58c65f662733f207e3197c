@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "782bfe46_d064853a",
+        "filename": "extensions/EGL_ANGLE_platform_angle_wgpu.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-30T16:29:37Z",
+      "side": 1,
+      "message": "Sorry just noticed, this should also be webgpu (and the filename too)",
+      "range": {
+        "startLine": 3,
+        "startChar": 25,
+        "endLine": 3,
+        "endChar": 29
+      },
+      "revId": "6eda49c6dee051dd7f58c65f662733f207e3197c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cae42c8_c8196991",
+        "filename": "extensions/EGL_ANGLE_platform_angle_wgpu.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-30T16:29:37Z",
+      "side": 1,
+      "message": "```suggestion\n    To request a display that translates to WebGPU, the value of\n    EGL_PLATFORM_ANGLE_TYPE_ANGLE should be\n    EGL_PLATFORM_ANGLE_TYPE_WEBGPU_ANGLE.\n```",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 41
+      },
+      "revId": "6eda49c6dee051dd7f58c65f662733f207e3197c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
