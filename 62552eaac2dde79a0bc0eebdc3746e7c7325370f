@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f421ebe3_4c716f7e",
+        "filename": "extensions/EGL_ANGLE_platform_angle_wgpu.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-30T20:26:55Z",
+      "side": 1,
+      "message": "Oh wow that is embarrassing for me for not thinking to actually check the relevant strings.",
+      "parentUuid": "17a3a941_b76f2078",
+      "range": {
+        "startLine": 7,
+        "startChar": 29,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b33ea8cb_def648b2",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-01-30T20:11:38Z",
       "side": 1,
       "message": "```suggestion\n\n#ifndef EGL_ANGLE_platform_angle_webgpu\n#define EGL_ANGLE_platform_angle_webgpu 1\n#define EGL_PLATFORM_ANGLE_TYPE_WEBGPU_ANGLE 0x34DD\n#endif /* EGL_ANGLE_platform_angle_webgpu */\n```",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 42
+      },
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d2449ef_7a36e2b3",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-30T20:26:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b33ea8cb_def648b2",
       "range": {
         "startLine": 95,
         "startChar": 0,
@@ -64,6 +112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "214c6939_0a0fde39",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-30T20:26:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a9404e3_e229de78",
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c3069c9_02cfd936",
@@ -77,6 +143,30 @@
       "writtenOn": "2024-01-30T20:11:38Z",
       "side": 1,
       "message": "```suggestion\n    // EGL_ANGLE_platform_angle_webgpu\n    bool platformANGLEWebgpu \u003d false;\n```",
+      "range": {
+        "startLine": 759,
+        "startChar": 0,
+        "endLine": 760,
+        "endChar": 35
+      },
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b808206_836693a5",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-30T20:26:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c3069c9_02cfd936",
       "range": {
         "startLine": 759,
         "startChar": 0,
@@ -104,6 +194,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e59db4e_81ec98db",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-30T20:26:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27b7a083_bc14cbef",
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61e14827_0c017764",
@@ -117,6 +225,24 @@
       "writtenOn": "2024-01-30T20:11:38Z",
       "side": 1,
       "message": "```suggestion\n            if (!clientExtensions.platformANGLEWebgpu)\n```",
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54f3bc21_1e31a3dd",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-30T20:26:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61e14827_0c017764",
       "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
