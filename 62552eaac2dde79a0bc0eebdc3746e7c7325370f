@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17a3a941_b76f2078",
+        "filename": "extensions/EGL_ANGLE_platform_angle_wgpu.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-30T20:11:38Z",
+      "side": 1,
+      "message": "It\u0027s a chain of dependent names, lol, let me mark them all.\n\nBy the way, **the name of this file should also be changed accordingly**\n\n```suggestion\n    EGL_ANGLE_platform_angle_webgpu\n```",
+      "range": {
+        "startLine": 7,
+        "startChar": 29,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b33ea8cb_def648b2",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-30T20:11:38Z",
+      "side": 1,
+      "message": "```suggestion\n\n#ifndef EGL_ANGLE_platform_angle_webgpu\n#define EGL_ANGLE_platform_angle_webgpu 1\n#define EGL_PLATFORM_ANGLE_TYPE_WEBGPU_ANGLE 0x34DD\n#endif /* EGL_ANGLE_platform_angle_webgpu */\n```",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 42
+      },
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a9404e3_e229de78",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-30T20:11:38Z",
+      "side": 1,
+      "message": "```suggestion\n    InsertExtensionString(\"EGL_ANGLE_platform_angle_webgpu\",                    platformANGLEWebgpu,                  \u0026extensionStrings);\n```",
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c3069c9_02cfd936",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-30T20:11:38Z",
+      "side": 1,
+      "message": "```suggestion\n    // EGL_ANGLE_platform_angle_webgpu\n    bool platformANGLEWebgpu \u003d false;\n```",
+      "range": {
+        "startLine": 759,
+        "startChar": 0,
+        "endLine": 760,
+        "endChar": 35
+      },
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27b7a083_bc14cbef",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-30T20:11:38Z",
+      "side": 1,
+      "message": "```suggestion\n    extensions.platformANGLEWebgpu \u003d true;\n```",
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61e14827_0c017764",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-30T20:11:38Z",
+      "side": 1,
+      "message": "```suggestion\n            if (!clientExtensions.platformANGLEWebgpu)\n```",
+      "revId": "62552eaac2dde79a0bc0eebdc3746e7c7325370f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
