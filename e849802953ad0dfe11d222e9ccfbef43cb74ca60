@@ -22,6 +22,30 @@
       },
       "revId": "e849802953ad0dfe11d222e9ccfbef43cb74ca60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6b0da10_e60cab4b",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-30T17:36:30Z",
+      "side": 0,
+      "message": "No - that\u0027s the whole point of `with`, it closes the file when exiting the block.",
+      "parentUuid": "b20224f1_46b7a8c8",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 17
+      },
+      "revId": "e849802953ad0dfe11d222e9ccfbef43cb74ca60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

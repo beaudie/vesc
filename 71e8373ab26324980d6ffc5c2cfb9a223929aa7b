@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "48e27e20_96dba31f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-30T17:36:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "458dd5b3_5f1f79f4",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9356d753_0cba48c8",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13b0e79e_56bc9bca",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-30T17:36:30Z",
+      "side": 1,
+      "message": "I believe formatting is the choice of `git cl format` which runs after the codegen. I\u0027m not familiar enough with its configuration to tell if this can be easily done.",
+      "parentUuid": "83c7def7_abee9212",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 87
+      },
+      "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "caaf7b6d_fff0daf5",
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d380191_a23baf09",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-30T17:36:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caaf7b6d_fff0daf5",
+      "range": {
+        "startLine": 21,
+        "startChar": 93,
+        "endLine": 21,
+        "endChar": 141
+      },
+      "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "338f4ba7_214fb8e6",
@@ -100,6 +172,24 @@
       "writtenOn": "2024-01-30T17:07:56Z",
       "side": 1,
       "message": "I find the previous code far more readable, but the output is fine, so no need to block.  Maybe a comment to explain what each section is doing.",
+      "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d505c585_6865f676",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-01-30T17:36:30Z",
+      "side": 1,
+      "message": "Done. Also refactored a bit.",
+      "parentUuid": "338f4ba7_214fb8e6",
       "revId": "71e8373ab26324980d6ffc5c2cfb9a223929aa7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
