@@ -29,8 +29,14 @@ DEPS_TEMPLATE = """\
         }},
       ],
       'dep_type': 'cipd',
-      'condition': 'checkout_angle_restricted_traces',
+      'condition': 'checkout_angle_restricted_trace_{trace}',
   }},
+"""
+
+DEPS_VAR_START = '# === ANGLE Restricted Trace Generated Var Start ==='
+DEPS_VAR_END = '# === ANGLE Restricted Trace Generated Var End ==='
+DEPS_VAR_TEMPLATE = """\
+  'checkout_angle_restricted_trace_{trace}': 'checkout_angle_restricted_traces',
 """
 
 
@@ -67,26 +73,22 @@ def update_deps(trace_pairs):
         replacement += DEPS_TEMPLATE.format(**sub)
 
     # Update DEPS to download CIPD dependencies
-    new_deps = ""
     with open(DEPS_PATH) as f:
-        in_deps = False
-        for line in f:
-            if in_deps:
-                if DEPS_END in line:
-                    new_deps += replacement
-                    new_deps += line
-                    in_deps = False
-            else:
-                if DEPS_START in line:
-                    new_deps += line
-                    in_deps = True
-                else:
-                    new_deps += line
-        f.close()
+        lines = f.readlines()
+        deps_start, deps_end = [i for i, s in enumerate(lines) if DEPS_START in s or DEPS_END in s]
+        lines[deps_start + 1:deps_end] = [replacement]
+
+        deps_var_start, deps_var_end = [
+            i for i, s in enumerate(lines) if DEPS_VAR_START in s or DEPS_VAR_END in s
+        ]
+        lines[deps_var_start + 1:deps_var_end] = [
+            DEPS_VAR_TEMPLATE.format(trace=trace) for (trace, _) in trace_pairs
+        ]
+
+        new_deps = ''.join(lines)
 
     with open(DEPS_PATH, 'w') as f:
         f.write(new_deps)
-        f.close()
 
     return True
 
