@@ -1955,6 +1955,10 @@ angle::Result Texture::setEGLImageTargetImpl(Context *context,
     ANGLE_TRY(mTexture->setEGLImageTarget(context, type, imageTarget));
 
     signalDirtyStorage(initState);
+    // HACK: initial conversion & sampler state is not properly synced with
+    // the sampler state set at the time; set the filter dirty bits so we
+    // regenerate it the samplers after everything settles.
+    signalDirtyState(DIRTY_BIT_MIN_FILTER | DIRTY_BIT_MAG_FILTER);
 
     return angle::Result::Continue;
 }
