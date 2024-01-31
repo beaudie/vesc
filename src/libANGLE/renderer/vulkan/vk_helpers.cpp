@@ -3105,7 +3105,7 @@ angle::Result DynamicBuffer::allocate(Context *context,
     RendererVk *renderer = context->getRenderer();
 
     const size_t sizeIgnoringHistory = std::max(mInitialSize, sizeToAllocate);
-    if (sizeToAllocate > mSize || sizeIgnoringHistory < mSize / 4)
+    if (sizeToAllocate > mSize)
     {
         mSize = sizeIgnoringHistory;
         // Clear the free list since the free buffers are now either too small or too big.
