@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7baa3809_fa2bb554",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-01-31T21:17:17Z",
+      "side": 1,
+      "message": "This CL, at its current form, reverts the function of the following change: https://chromium-review.googlesource.com/c/angle/angle/+/2971004\n\nSince the original change was performed to reduce the memory usage, this policy needs to be updated to improve performance while preventing memory regression.",
+      "revId": "592f8c223c1cf0097380c72f2a447cd3c9298a8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
