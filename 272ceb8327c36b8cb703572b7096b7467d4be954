@@ -111,6 +111,30 @@
       },
       "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8b74165_898af0ea",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-31T02:16:44Z",
+      "side": 1,
+      "message": "\u003e Just checking though, the renderer can\u0027t just create an EGL instance itself right?\n\nUnless something stops it (like sandbox), there is no reason why it couldn\u0027t. I don\u0027t honestly know if _today_ that\u0027s somehow blocked, or it\u0027s just that no code in that process tries.\n\n\u003e Is the \"EGL instance\" in this case like a file descriptor or a random ID or something?\n\nSorry the \"EGL instance\" was probably not the right term. It\u0027s a \"display\" the app creates, then initializes it, and create contexts out of it. That would be the first calls in https://registry.khronos.org/EGL/sdk/docs/man/html/eglIntro.xhtml\n\nSo in this case, the \"display\" would be an opaque `EGLDisplay` type that could take a value as the driver fits. ANGLE simply uses the gl::Display object pointer cast to `EGLDisplay`.",
+      "parentUuid": "abd6d049_90336476",
+      "range": {
+        "startLine": 2128,
+        "startChar": 15,
+        "endLine": 2128,
+        "endChar": 34
+      },
+      "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
