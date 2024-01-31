@@ -1313,6 +1313,51 @@ TEST_P(CopyTexImageTestES3, RedefineSameLevel)
                          GLColor::yellow);
 }
 
+// ANGLE allows BGRA <-> RGBA copies. Test that these work and correctly swizzle the channels.
+TEST_P(CopyTexImageTestES3, BGRAAndRGBAConversions)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_format_BGRA8888"));
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    GLColor rgbaData(255, 128, 64, 255);
+
+    GLTexture rgbaTexture;
+    glBindTexture(GL_TEXTURE_2D, rgbaTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &rgbaData);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, rgbaTexture, 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, rgbaData);
+
+    // Copy RGBA framebuffer -> BGRA Texture
+    GLTexture bgraTexture;
+    glBindTexture(GL_TEXTURE_2D, bgraTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, 1, 1, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, nullptr);
+
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bgraTexture, 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, rgbaData);
+
+    // Copy BGRA framebuffer -> RGBA texture
+    GLColor bgraInputData(128, 64, 255, 255);
+    GLColor bgraExpectedData(255, 64, 128, 255);
+
+    glBindTexture(GL_TEXTURE_2D, bgraTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, 1, 1, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE,
+                 &bgraInputData);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bgraTexture, 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, bgraExpectedData);
+
+    glBindTexture(GL_TEXTURE_2D, rgbaTexture);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, rgbaTexture, 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, bgraExpectedData);
+}
+
 ANGLE_INSTANTIATE_TEST(CopyTexImageTest,
                        ANGLE_ALL_TEST_PLATFORMS_ES2,
                        ES2_D3D11_PRESENT_PATH_FAST(),
