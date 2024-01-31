@@ -159,6 +159,30 @@
       },
       "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90e279fc_47d09dc3",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-01-31T18:46:13Z",
+      "side": 1,
+      "message": "\u003e So presumably if Chrome wanted to have more control over which backend instance is used, and whether a renderer can pick and choose the backend, that would be something it (Chrome) would have to implement, right?\n\nYes, that\u0027s exactly what the extension you added here is for! That\u0027s something Chrome already does, for example select between Vulkan and OpenGL on Linux based on a command line flags, Finch flags etc. That\u0027s done in the GPU process today. Once in the renderer process, I guess it\u0027ll just be hardcoding the backend to WebGPU.\n\n\u003e Related follow up: this isn\u0027t unique to EGL or ANGLE correct? In the sense that say, Skia also offers several backends and in theory a renderer could also create a Skia display with whatever backend unless Chrome is explicitly preventing it.\n\nThat\u0027s right, though the mechanisms are different per library. ANGLE\u0027s an EGL implementation, so we expose the backends as EGL extensions. I don\u0027t know what knob Skia has for it.",
+      "parentUuid": "340cd7ab_e0e5bcd0",
+      "range": {
+        "startLine": 2128,
+        "startChar": 15,
+        "endLine": 2128,
+        "endChar": 34
+      },
+      "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
