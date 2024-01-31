@@ -2974,6 +2974,7 @@ DynamicBuffer::DynamicBuffer()
       mInitialSize(0),
       mNextAllocationOffset(0),
       mSize(0),
+      mDecayingAverageSize(0),
       mAlignment(0),
       mMemoryPropertyFlags(0)
 {}
@@ -2985,6 +2986,7 @@ DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
       mBuffer(std::move(other.mBuffer)),
       mNextAllocationOffset(other.mNextAllocationOffset),
       mSize(other.mSize),
+      mDecayingAverageSize(other.mDecayingAverageSize),
       mAlignment(other.mAlignment),
       mMemoryPropertyFlags(other.mMemoryPropertyFlags),
       mInFlightBuffers(std::move(other.mInFlightBuffers)),
@@ -3010,8 +3012,9 @@ void DynamicBuffer::init(RendererVk *renderer,
     // Check that we haven't overridden the initial size of the buffer in setMinimumSizeForTesting.
     if (mInitialSize == 0)
     {
-        mInitialSize = initialSize;
-        mSize        = 0;
+        mInitialSize         = initialSize;
+        mSize                = 0;
+        mDecayingAverageSize = 0;
     }
 
     // Workaround for the mock ICD not supporting allocations greater than 0x1000.
@@ -3104,10 +3107,15 @@ angle::Result DynamicBuffer::allocate(Context *context,
 
     RendererVk *renderer = context->getRenderer();
 
-    const size_t sizeIgnoringHistory = std::max(mInitialSize, sizeToAllocate);
-    if (sizeToAllocate > mSize || sizeIgnoringHistory < mSize / 4)
+    const size_t sizeWhileIgnoringHistory = std::max(mInitialSize, sizeToAllocate);
+    mDecayingAverageSize                  = static_cast<size_t>(
+        static_cast<float>(mDecayingAverageSize) * kDecayAvgCoefficient +
+        static_cast<float>(sizeWhileIgnoringHistory) * (1.0 - kDecayAvgCoefficient));
+
+    if (sizeToAllocate > mSize || mDecayingAverageSize < mSize / 8)
     {
-        mSize = sizeIgnoringHistory;
+        mSize                = sizeWhileIgnoringHistory;
+        mDecayingAverageSize = sizeWhileIgnoringHistory;
         // Clear the free list since the free buffers are now either too small or too big.
         ReleaseBufferListToRenderer(renderer, &mBufferFreeList);
     }
@@ -3240,12 +3248,14 @@ void DynamicBuffer::setMinimumSizeForTesting(size_t minSize)
     mInitialSize = minSize;
 
     // Forces a new allocation on the next allocate.
-    mSize = 0;
+    mSize                = 0;
+    mDecayingAverageSize = 0;
 }
 
 void DynamicBuffer::reset()
 {
     mSize                 = 0;
+    mDecayingAverageSize  = 0;
     mNextAllocationOffset = 0;
 }
 

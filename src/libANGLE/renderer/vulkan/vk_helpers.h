@@ -132,11 +132,15 @@ class DynamicBuffer : angle::NonCopyable
     std::unique_ptr<BufferHelper> mBuffer;
     uint32_t mNextAllocationOffset;
     size_t mSize;
+    size_t mDecayingAverageSize;
     size_t mAlignment;
     VkMemoryPropertyFlags mMemoryPropertyFlags;
 
     BufferHelperQueue mInFlightBuffers;
     BufferHelperQueue mBufferFreeList;
+
+    static constexpr float kDecayAvgCoefficient = 0.63f;
+    static_assert(kDecayAvgCoefficient > 0.0 && kDecayAvgCoefficient < 1.0);
 };
 
 // Class DescriptorSetHelper. This is a wrapper of VkDescriptorSet with GPU resource use tracking.
