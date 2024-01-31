@@ -1357,6 +1357,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd1e6379_2288b986",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11057,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-31T21:24:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff314241_52f66036",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "963ea473_c98bd9af",
@@ -1552,6 +1570,24 @@
       "side": 1,
       "message": "TBD",
       "parentUuid": "55d769b2_0b2c8aa6",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6bccc5b_644a99bc",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11200,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-01-31T21:24:35Z",
+      "side": 1,
+      "message": "general issue here - readpixel based value comparisons might not be too meaningful depending on the backend implementation. Choosing a shading rate like 4x4 might cause the color values to be way off. Would it be fine to just validate tests doesn\u0027t crash or produce API errors?",
+      "parentUuid": "a4ad44bf_f05e0365",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
