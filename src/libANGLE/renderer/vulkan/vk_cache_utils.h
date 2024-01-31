@@ -2452,6 +2452,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                 vk::PipelineCacheAccess *pipelineCache,
                                 const vk::GraphicsPipelineDesc &desc,
                                 const vk::PipelineLayout &pipelineLayout,
+                                const vk::RenderPass &compatibleRenderPass,
                                 vk::PipelineHelper *vertexInputPipeline,
                                 vk::PipelineHelper *shadersPipeline,
                                 vk::PipelineHelper *fragmentOutputPipeline,

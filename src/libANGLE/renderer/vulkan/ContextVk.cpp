@@ -744,11 +744,22 @@ angle::Result CreateGraphicsPipelineSubset(ContextVk *contextVk,
                                            GraphicsPipelineSubsetRenderPass renderPass,
                                            Cache *cache,
                                            vk::PipelineCacheAccess *pipelineCache,
-                                           vk::PipelineHelper **pipelineOut)
+                                           vk::PipelineHelper **pipelineOut,
+                                           const vk::RenderPass **compatibleRenderPassOut)
 {
     const vk::PipelineLayout unusedPipelineLayout;
     const vk::ShaderModuleMap unusedShaders;
     const vk::SpecializationConstants unusedSpecConsts = {};
+
+    const vk::RenderPass unusedRenderPass;
+    const vk::RenderPass *compatibleRenderPass = &unusedRenderPass;
+    if (renderPass == GraphicsPipelineSubsetRenderPass::Required)
+    {
+        // Pull in a compatible RenderPass if used by this subset.
+        ANGLE_TRY(
+            contextVk->getCompatibleRenderPass(desc.getRenderPassDesc(), &compatibleRenderPass));
+        *compatibleRenderPassOut = compatibleRenderPass;
+    }
 
     if (*pipelineOut != nullptr && !transition.any())
     {
@@ -769,15 +780,6 @@ angle::Result CreateGraphicsPipelineSubset(ContextVk *contextVk,
     const vk::GraphicsPipelineDesc *descPtr = nullptr;
     if (!cache->getPipeline(desc, &descPtr, pipelineOut))
     {
-        const vk::RenderPass unusedRenderPass;
-        const vk::RenderPass *compatibleRenderPass = &unusedRenderPass;
-        if (renderPass == GraphicsPipelineSubsetRenderPass::Required)
-        {
-            // Pull in a compatible RenderPass if used by this subset.
-            ANGLE_TRY(contextVk->getCompatibleRenderPass(desc.getRenderPassDesc(),
-                                                         &compatibleRenderPass));
-        }
-
         ANGLE_TRY(cache->createPipeline(contextVk, pipelineCache, *compatibleRenderPass,
                                         unusedPipelineLayout, unusedShaders, unusedSpecConsts,
                                         PipelineSource::Draw, desc, &descPtr, pipelineOut));
@@ -2202,20 +2204,22 @@ angle::Result ContextVk::createGraphicsPipeline()
                 this, *mGraphicsPipelineDesc,
                 mGraphicsPipelineLibraryTransition & kVertexInputTransitionBitsMask,
                 GraphicsPipelineSubsetRenderPass::Unused, &mVertexInputGraphicsPipelineCache,
-                interfacePipelineCache, &mCurrentGraphicsPipelineVertexInput));
+                interfacePipelineCache, &mCurrentGraphicsPipelineVertexInput, nullptr));
 
             // Recreate the fragment output subset if necessary
+            const vk::RenderPass *compatibleRenderPass = nullptr;
             ANGLE_TRY(CreateGraphicsPipelineSubset(
                 this, *mGraphicsPipelineDesc,
                 mGraphicsPipelineLibraryTransition & kFragmentOutputTransitionBitsMask,
                 GraphicsPipelineSubsetRenderPass::Required, &mFragmentOutputGraphicsPipelineCache,
-                interfacePipelineCache, &mCurrentGraphicsPipelineFragmentOutput));
+                interfacePipelineCache, &mCurrentGraphicsPipelineFragmentOutput,
+                &compatibleRenderPass));
 
             // Link the three subsets into one pipeline.
             ANGLE_TRY(executableVk->linkGraphicsPipelineLibraries(
-                this, &pipelineCache, *mGraphicsPipelineDesc, mCurrentGraphicsPipelineVertexInput,
-                mCurrentGraphicsPipelineShaders, mCurrentGraphicsPipelineFragmentOutput, &descPtr,
-                &mCurrentGraphicsPipeline));
+                this, &pipelineCache, *mGraphicsPipelineDesc, *compatibleRenderPass,
+                mCurrentGraphicsPipelineVertexInput, mCurrentGraphicsPipelineShaders,
+                mCurrentGraphicsPipelineFragmentOutput, &descPtr, &mCurrentGraphicsPipeline));
 
             // Reset the transition bits for pipeline libraries, they are only made to be up-to-date
             // here.

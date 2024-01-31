@@ -2298,6 +2298,7 @@ void DestroyCachedObject(RendererVk *renderer, const DescriptorSetDescAndPool &d
 angle::Result InitializePipelineFromLibraries(Context *context,
                                               PipelineCacheAccess *pipelineCache,
                                               const vk::PipelineLayout &pipelineLayout,
+                                              const vk::RenderPass &compatibleRenderPass,
                                               const vk::PipelineHelper &vertexInputPipeline,
                                               const vk::PipelineHelper &shadersPipeline,
                                               const vk::PipelineHelper &fragmentOutputPipeline,
@@ -2308,6 +2309,7 @@ angle::Result InitializePipelineFromLibraries(Context *context,
     VkGraphicsPipelineCreateInfo createInfo = {};
     createInfo.sType                        = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     createInfo.layout                       = pipelineLayout.getHandle();
+    createInfo.renderPass                   = compatibleRenderPass.getHandle();
 
     const std::array<VkPipeline, 3> pipelines = {
         vertexInputPipeline.getPipeline().getHandle(),
@@ -6982,6 +6984,7 @@ angle::Result GraphicsPipelineCache<Hash>::linkLibraries(
     vk::PipelineCacheAccess *pipelineCache,
     const vk::GraphicsPipelineDesc &desc,
     const vk::PipelineLayout &pipelineLayout,
+    const vk::RenderPass &compatibleRenderPass,
     vk::PipelineHelper *vertexInputPipeline,
     vk::PipelineHelper *shadersPipeline,
     vk::PipelineHelper *fragmentOutputPipeline,
@@ -6992,8 +6995,8 @@ angle::Result GraphicsPipelineCache<Hash>::linkLibraries(
     vk::CacheLookUpFeedback feedback = vk::CacheLookUpFeedback::None;
 
     ANGLE_TRY(vk::InitializePipelineFromLibraries(
-        context, pipelineCache, pipelineLayout, *vertexInputPipeline, *shadersPipeline,
-        *fragmentOutputPipeline, &newPipeline, &feedback));
+        context, pipelineCache, pipelineLayout, compatibleRenderPass, *vertexInputPipeline,
+        *shadersPipeline, *fragmentOutputPipeline, &newPipeline, &feedback));
 
     addToCache(PipelineSource::DrawLinked, desc, std::move(newPipeline), feedback, descPtrOut,
                pipelineOut);
@@ -7077,6 +7080,7 @@ template angle::Result GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>::
     vk::PipelineCacheAccess *pipelineCache,
     const vk::GraphicsPipelineDesc &desc,
     const vk::PipelineLayout &pipelineLayout,
+    const vk::RenderPass &compatibleRenderPass,
     vk::PipelineHelper *vertexInputPipeline,
     vk::PipelineHelper *shadersPipeline,
     vk::PipelineHelper *fragmentOutputPipeline,

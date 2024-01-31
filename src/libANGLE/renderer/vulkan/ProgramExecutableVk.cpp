@@ -1187,6 +1187,7 @@ angle::Result ProgramExecutableVk::linkGraphicsPipelineLibraries(
     ContextVk *contextVk,
     vk::PipelineCacheAccess *pipelineCache,
     const vk::GraphicsPipelineDesc &desc,
+    const vk::RenderPass &compatibleRenderPass,
     vk::PipelineHelper *vertexInputPipeline,
     vk::PipelineHelper *shadersPipeline,
     vk::PipelineHelper *fragmentOutputPipeline,
@@ -1197,8 +1198,8 @@ angle::Result ProgramExecutableVk::linkGraphicsPipelineLibraries(
     const uint8_t programIndex               = GetGraphicsProgramIndex(transformOptions);
 
     ANGLE_TRY(mCompleteGraphicsPipelines[programIndex].linkLibraries(
-        contextVk, pipelineCache, desc, getPipelineLayout(), vertexInputPipeline, shadersPipeline,
-        fragmentOutputPipeline, descPtrOut, pipelineOut));
+        contextVk, pipelineCache, desc, getPipelineLayout(), compatibleRenderPass,
+        vertexInputPipeline, shadersPipeline, fragmentOutputPipeline, descPtrOut, pipelineOut));
 
     // If monolithic pipelines are preferred over libraries, create a task so that it can be created
     // asynchronously.

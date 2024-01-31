@@ -204,6 +204,7 @@ class ProgramExecutableVk : public ProgramExecutableImpl
     angle::Result linkGraphicsPipelineLibraries(ContextVk *contextVk,
                                                 vk::PipelineCacheAccess *pipelineCache,
                                                 const vk::GraphicsPipelineDesc &desc,
+                                                const vk::RenderPass &compatibleRenderPass,
                                                 vk::PipelineHelper *vertexInputPipeline,
                                                 vk::PipelineHelper *shadersPipeline,
                                                 vk::PipelineHelper *fragmentOutputPipeline,
