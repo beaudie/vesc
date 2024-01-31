@@ -135,6 +135,30 @@
       },
       "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "340cd7ab_e0e5bcd0",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-01-31T17:06:09Z",
+      "side": 1,
+      "message": "\u003e Unless something stops it (like sandbox), there is no reason why it couldn\u0027t. I don\u0027t honestly know if today that\u0027s somehow blocked, or it\u0027s just that no code in that process tries.\n\nSo presumably if Chrome wanted to have more control over which backend instance is used, and whether a renderer can pick and choose the backend, that would be something it (Chrome) would have to implement, right? \n\nRelated follow up: this isn\u0027t unique to EGL or ANGLE correct? In the sense that say, Skia also offers several backends and in theory a renderer could also create a Skia display with whatever backend unless Chrome is explicitly preventing it.",
+      "parentUuid": "c8b74165_898af0ea",
+      "range": {
+        "startLine": 2128,
+        "startChar": 15,
+        "endLine": 2128,
+        "endChar": 34
+      },
+      "revId": "272ceb8327c36b8cb703572b7096b7467d4be954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
