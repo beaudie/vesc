@@ -52,6 +52,24 @@
       "parentUuid": "0e6daa11_d0f2eb2b",
       "revId": "2dfbedee7d4f9c84f278818217a1fa0908d6cbee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a44628b_6217d0eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559522
+      },
+      "writtenOn": "2024-01-31T15:31:13Z",
+      "side": 1,
+      "message": "I have sent another CL that directly sets GCE, instead of relying on ADC, which should work, since all other builders use GCE: https://chromium-review.googlesource.com/c/angle/angle/+/5249329",
+      "parentUuid": "93a38270_7c07db4b",
+      "revId": "2dfbedee7d4f9c84f278818217a1fa0908d6cbee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
