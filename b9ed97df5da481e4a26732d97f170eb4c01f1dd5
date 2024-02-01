@@ -83,6 +83,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5fcf9128_dac8ca62",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T04:10:20Z",
+      "side": 1,
+      "message": "Maybe this can help: https://docs.google.com/spreadsheets/d/1tm8KvE81VmVkMV8Y0Fk4zJciP5513tcAsuP_M1uLjeY\n\nI finally found the name, if you search for first-order IIR filter there are a lot of information about this online as well. In the sheets, you can see how quickly the filter responses to changes, and you can decide the coefficient based on that (or experiment with it yourself too).\n\nThe Step sheet shows the filter in response to a step function, the Impulse sheet shows the same for an impulse function. At this point the question is how quickly we want the decay to happen. For example, with a coefficient of 60%, the filtered size reaches within 12.5% of allocation size in only 4 allocations. If the application\u0027s allocation pattern is lower frequency than that (like 10 big allocations, 5N small allocations where N \u003d big/small ratio), then we\u0027d still get in an alloc/dealloc loop.\n\nIn contrast, it would take ~20 allocations to reach within 12.5% of the target with a coefficient of 0.9. Mind you, when allocation size drops, it would take many allocations for a single buffer to get exhausted, and allocating a new buffer then only counts as 1 allocation. So reacting fast to the size (like 63% as you\u0027ve chosen) is not actually bad IMO. If that satisfies the app, might as well keep it.\n\nWhere did you get 63% though?",
+      "parentUuid": "24678e17_f28b03f0",
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c3c7bf29_fda60c21",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
