@@ -1626,6 +1626,24 @@
       "parentUuid": "87c19921_a644f1ca",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1276097_abe9afce",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T20:21:20Z",
+      "side": 1,
+      "message": "Uh ok, I\u0027ll take your word for it.\n\nSo how about using a solid color for the entire attachment, which I believe cannot be distorted? Then we can both make sure there are no VVL errors, _and_ at least have some basic test that the test did anything.",
+      "parentUuid": "f4b9dac0_a62bef69",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
