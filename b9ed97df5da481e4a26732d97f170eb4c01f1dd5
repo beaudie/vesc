@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6219b053_6744b52f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3017,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-01T19:47:36Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "e503bada_49094dcb",
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4023bb0c_61e37bb7",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c106fee1_5241ea4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3110,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-01T19:47:36Z",
+      "side": 1,
+      "message": "Makes sense. Renamed to `minRequiredBlockSize`.",
+      "parentUuid": "4023bb0c_61e37bb7",
+      "range": {
+        "startLine": 3110,
+        "startChar": 17,
+        "endLine": 3110,
+        "endChar": 41
+      },
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6629a2f_9d91a958",
@@ -54,6 +96,30 @@
       "writtenOn": "2024-02-01T03:16:19Z",
       "side": 1,
       "message": "You could avoid the cast mess and have the coefficient be like `63` as a percentage, then do:\n\n```suggestion\n    mDecayingAverageSize                  \u003d (mDecayingAverageSize * kDecayAvgCoefficient +\n        sizeWhileIgnoringHistory * (100 - kDecayAvgCoefficient) + 50) / 100;\n```",
+      "range": {
+        "startLine": 3111,
+        "startChar": 0,
+        "endLine": 3113,
+        "endChar": 85
+      },
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "021741a5_d7498893",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3113,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-01T19:47:36Z",
+      "side": 1,
+      "message": "Thanks! Done.",
+      "parentUuid": "c6629a2f_9d91a958",
       "range": {
         "startLine": 3111,
         "startChar": 0,
@@ -101,6 +167,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e332502_efb2ff48",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3118,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-01T19:47:36Z",
+      "side": 1,
+      "message": "Thanks for the explanation and the doc!\n\nYou are right. We can still track the history if the required size is larger. We would allocate a larger buffer, and the history will help reduce the size later if the larger size was a one-off.\n\nFor experiments, I have been looking at the app\u0027s FPS with different settings to see what happens. The 63% was not a final decision (it came from `1-1/e` 😄). I agree that since the buffer itself is used for many suballocations, reacting faster is better. I will look at coefficients around this value as well.\n\nIn the baseline, the app would roughly go through 16K, 24K/32K/42K, 64K/96K (different variations), and back to 16K. The FPS improves by disrupting this cycle.",
+      "parentUuid": "5fcf9128_dac8ca62",
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c3c7bf29_fda60c21",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -112,6 +196,30 @@
       "writtenOn": "2024-02-01T03:16:19Z",
       "side": 1,
       "message": "nit: how about `mSizeInRecentHistory`?",
+      "range": {
+        "startLine": 135,
+        "startChar": 11,
+        "endLine": 135,
+        "endChar": 31
+      },
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d201de83_88755551",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-01T19:47:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3c7bf29_fda60c21",
       "range": {
         "startLine": 135,
         "startChar": 11,
@@ -135,6 +243,30 @@
       "writtenOn": "2024-02-01T03:16:19Z",
       "side": 1,
       "message": "Can move to the function that does the math, just as local var.",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 76
+      },
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18fcde28_fa3c2678",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-01T19:47:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5212d1bf_db3ee831",
       "range": {
         "startLine": 141,
         "startChar": 0,

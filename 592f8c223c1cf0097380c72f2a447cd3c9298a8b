@@ -33,6 +33,24 @@
       "message": "Given the context of the change that did this, I don\u0027t think we can just revert this. Otherwise the same devices that reported OOM are going to OOM again.",
       "revId": "592f8c223c1cf0097380c72f2a447cd3c9298a8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e0ad4cc_841cddbd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3108,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-01T19:47:36Z",
+      "side": 1,
+      "message": "I agree. We should still be able to reduce the buffer size.",
+      "parentUuid": "3cae80f3_8509926e",
+      "revId": "592f8c223c1cf0097380c72f2a447cd3c9298a8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
