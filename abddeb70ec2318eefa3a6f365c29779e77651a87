@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ecb2c7b_0889c225",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-01T19:36:40Z",
+      "side": 1,
+      "message": "Actually, I have a suggestion here for a way to structure this that mirrors the EGL/GL parts of ANGLE better:\n\nMake a `cl::Caps` struct in Caps.h which has all of these values as members. Make a single function in CLDeviceImpl: `virtual const cl::Caps\u0026 getCaps() const \u003d 0`. \n\nAll the `getInfo` functions in CLDeviceImpl can be removed.\n\ncl::Device can do all the switch statements with the cl::DeviceInfo -\u003e struct member to implement those functions.\n\nThe reason:\nThese caps are immutable, generated once at device creation and we know all of them ahead of time.\n\nThere will be a lot of validation code that needs to check them and this validation should all be done in the frontend. It avoids going to the backend and map lookups if the validation can do simple things like `if (size \u003e device-\u003egetCaps().maxConstantBufferSize) { ... }`. We really only want to go to the backend for things that are impossible to cache.\n\nHaving all the caps packaged in a convenient struct is also very useful for passing it around.\n\n\nYou\u0027ll see in Caps.h there are also `Extensions` structs that enumerate the extensions into bools. This is also very useful for validation vs string comparisons. We generate the extension strings from the structs.",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "abddeb70ec2318eefa3a6f365c29779e77651a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
