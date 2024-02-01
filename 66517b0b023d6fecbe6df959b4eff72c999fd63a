@@ -16,6 +16,24 @@
       "message": "Hmm.. seeing a similar error after the revert anyways `Could not get valid Application Default Credentials token: \u003cnil\u003e`. Possibly less frequent though?\n\nhttps://ci.chromium.org/ui/p/angle/builders/ci/win-trace/5339/overview\nhttps://ci.chromium.org/ui/p/angle/builders/ci/win-trace/5337/overview",
       "revId": "66517b0b023d6fecbe6df959b4eff72c999fd63a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be4500c6_27a5da5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559522
+      },
+      "writtenOn": "2024-02-01T21:02:42Z",
+      "side": 1,
+      "message": "The past few days it look healthy, post this change: https://chromium.googlesource.com/angle/angle/+/0640f651950b5380c64dfa0533eeb21ce3735c78\nCan follow up on the GCE change if there are any more authentication issues.",
+      "parentUuid": "b18a5190_39b527d1",
+      "revId": "66517b0b023d6fecbe6df959b4eff72c999fd63a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
