@@ -1305,10 +1305,9 @@ cl_int ValidateSetKernelArg(cl_kernel kernel,
         return CL_INVALID_ARG_INDEX;
     }
 
+    const std::string &typeName = krnl.getInfo().args[arg_index].typeName;
     if (arg_size == sizeof(cl_mem) && arg_value != nullptr)
     {
-        const std::string &typeName = krnl.getInfo().args[arg_index].typeName;
-
         // CL_INVALID_MEM_OBJECT for an argument declared to be a memory object
         // when the specified arg_value is not a valid memory object.
         if (typeName == "image1d_t")
@@ -1362,18 +1361,24 @@ cl_int ValidateSetKernelArg(cl_kernel kernel,
                 return CL_INVALID_MEM_OBJECT;
             }
         }
+    }
+    if (arg_size == sizeof(cl_sampler) && arg_value != nullptr)
+    {
         // CL_INVALID_SAMPLER for an argument declared to be of type sampler_t
         // when the specified arg_value is not a valid sampler object.
-        else if (typeName == "sampler_t")
+        if (typeName == "sampler_t")
         {
             if (!Sampler::IsValid(*static_cast<const cl_sampler *>(arg_value)))
             {
                 return CL_INVALID_SAMPLER;
             }
         }
+    }
+    if (arg_size == sizeof(cl_command_queue) && arg_value != nullptr)
+    {
         // CL_INVALID_DEVICE_QUEUE for an argument declared to be of type queue_t
         // when the specified arg_value is not a valid device queue object.
-        else if (typeName == "queue_t")
+        if (typeName == "queue_t")
         {
             const cl_command_queue queue = *static_cast<const cl_command_queue *>(arg_value);
             if (!CommandQueue::IsValid(queue) || !queue->cast<CommandQueue>().isOnDevice())
