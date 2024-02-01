@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dccf25bb_511d54bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T16:11:39Z",
+      "side": 1,
+      "message": "Got clarification from the WG, this was not actually needed, and VVL\u0027s interpretation was incorrect.\n\nVVL should be fixed soon (if not already)",
+      "revId": "89c0fcbab1cf428ebaa10f95677080b6ddfa5046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
