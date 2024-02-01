@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dfa1441_7b6972e4",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-01T23:20:10Z",
+      "side": 1,
+      "message": "nit: why we call them `*PreRotationTest` ? It is not clear to me where the rotation happens in the test.",
+      "revId": "b0aec717ce1c6bcf312296178701bfd321245205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0570c39c_23ac7bf1",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-01T23:20:10Z",
+      "side": 1,
+      "message": "nit: // Do you mean Draw one color?",
+      "revId": "b0aec717ce1c6bcf312296178701bfd321245205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75966ce9_27285d29",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-01T23:20:10Z",
+      "side": 1,
+      "message": "nit: are these numbers just arbitrarily selected?",
+      "revId": "b0aec717ce1c6bcf312296178701bfd321245205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
