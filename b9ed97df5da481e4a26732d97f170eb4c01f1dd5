@@ -183,6 +183,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c2e073a_9bbd5173",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T21:08:26Z",
+      "side": 1,
+      "message": "\u003e it came from `1-1/e` 😄\n\nHah, I don\u0027t know what made you go with that number, but `e^-decayrate` _is_ actually significant for this filter!\n\nIf you want more math: http://www.tsdconseil.fr/tutos/tuto-iir1-en.pdf, though note that the coefficient used there is 1 minus the one we have here, because we apply the coeff to history, and they apply (1-coeff) to history. So you didn\u0027t accidentally use a rate of 1 (but more like 0.46 (-ln(63%)), but that formula is very close to home :P",
+      "parentUuid": "5e332502_efb2ff48",
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3c7bf29_fda60c21",

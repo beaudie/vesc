@@ -16,6 +16,29 @@
       "message": "Thanks!",
       "revId": "61fa075f03b9b50329c62361522f0c8e49d55e68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eaf1f09_8c8a1c36",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T21:08:26Z",
+      "side": 1,
+      "message": "Per my original suggestion:\n\n```suggestion\n    mSizeInRecentHistory \u003d (mSizeInRecentHistory * kDecayPercentage +\n                            minRequiredBlockSize * (100 - kDecayPercentage) + 50) /\n                           100;\n```\n\nThe +50 implements `round`. Otherwise this is biased (slightly) towards converging faster to lower values than higher values (because of the integer\u0027s default round down).",
+      "range": {
+        "startLine": 3114,
+        "startChar": 0,
+        "endLine": 3116,
+        "endChar": 31
+      },
+      "revId": "61fa075f03b9b50329c62361522f0c8e49d55e68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
