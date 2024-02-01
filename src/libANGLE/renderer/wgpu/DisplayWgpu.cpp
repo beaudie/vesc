@@ -26,6 +26,14 @@ DisplayWgpu::~DisplayWgpu() {}
 
 egl::Error DisplayWgpu::initialize(egl::Display *display)
 {
+    WGPUDevice cDevice  = backendDevice;
+    DawnProcTable procs = backendProcs;
+    dawnProcSetProcs(&procs);
+    procs.deviceSetUncapturedErrorCallback(cDevice, PrintDeviceError, nullptr);
+    procs.deviceSetDeviceLostCallback(cDevice, DeviceLostCallback, nullptr);
+    procs.deviceSetLoggingCallback(cDevice, DeviceLogCallback, nullptr);
+    wgpu::Device device = wgpu::Device::Acquire(cDevice);
+    WGPUQueue queue     = wgpuDeviceGetQueue(device);
     return egl::NoError();
 }
 
