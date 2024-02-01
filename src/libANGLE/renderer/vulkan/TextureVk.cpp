@@ -1945,6 +1945,20 @@ void TextureVk::initImageUsageFlags(ContextVk *contextVk, angle::FormatID actual
     {
         mImageUsageFlags |= kColorAttachmentImageFlags;
     }
+
+    // If the driver doesn't care, add VK_IMAGE_USAGE_STORAGE_BIT too.  If the texture is ever used
+    // as an image, it won't have to be recreated.
+    if (contextVk->getFeatures().preferStorageImageUsageFlagByDefault.enabled)
+    {
+        // TODO: this should also depend on sample count, so move it to vk_helper.cpp?
+        if (renderer->hasImageFormatFeatureBits(actualFormatID,
+                                                VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT))
+        {
+            mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
+            mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+            mRequiresMutableStorage = true;
+        }
+    }
 }
 
 angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Format &format)

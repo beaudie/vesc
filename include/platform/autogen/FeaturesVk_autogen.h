@@ -1329,6 +1329,14 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/8503"
     };
 
+    FeatureInfo preferStorageImageUsageFlagByDefault = {
+        "preferStorageImageUsageFlagByDefault",
+        FeatureCategory::VulkanFeatures,
+        "On platforms where VK_IMAGE_USAGE_STORAGE_BIT is not detrimental to performance, "
+        "it can be specified by default to prevent recreating the image later with this flag",
+        &members, "https://anglebug.com/7849"
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

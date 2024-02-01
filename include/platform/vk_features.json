@@ -1439,6 +1439,15 @@
                 "RelaxedPrecision decoration causes a crash"
             ],
             "issue": "http://anglebug.com/8503"
+        },
+        {
+            "name": "prefer_storage_image_usage_flag_by_default",
+            "category": "Features",
+            "description": [
+                "On platforms where VK_IMAGE_USAGE_STORAGE_BIT is not detrimental to performance, ",
+		"it can be specified by default to prevent recreating the image later with this flag"
+            ],
+            "issue": "https://anglebug.com/7849"
         }
     ]
 }

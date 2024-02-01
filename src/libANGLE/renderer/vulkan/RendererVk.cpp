@@ -4860,6 +4860,15 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExternalFormatResolve, false);
 #endif
 
+    // The following drivers are known not to degrade performance in the presence of
+    // VK_IMAGE_USAGE_STORAGE_BIT:
+    //
+    // - Nvidia
+    // - SwiftShader
+    //
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferStorageImageUsageFlagByDefault,
+                            isNvidia || isSwiftShader);
+
     // Disable memory report feature overrides if extension is not supported.
     if ((mFeatures.logMemoryReportCallbacks.enabled || mFeatures.logMemoryReportStats.enabled) &&
         !mMemoryReportFeatures.deviceMemoryReport)

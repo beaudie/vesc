@@ -236,6 +236,7 @@ enum class Feature
     PreferLinearFilterForYUV,
     PreferMonolithicPipelinesOverLibraries,
     PreferSkippingInvalidateForEmulatedFormats,
+    PreferStorageImageUsageFlagByDefault,
     PreferSubmitAtFBOBoundary,
     PreferSubmitOnAnySamplesPassedQueryEnd,
     PreTransformTextureCubeGradDerivatives,
