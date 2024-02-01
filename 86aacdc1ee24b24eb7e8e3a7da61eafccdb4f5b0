@@ -1608,6 +1608,24 @@
       "parentUuid": "e6bccc5b_644a99bc",
       "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4b9dac0_a62bef69",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11200,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-01T16:53:19Z",
+      "side": 1,
+      "message": "\u003e only check values that are way away from the horizontal and vertical middle\n\nthe farther we are from the middle (focal point) the higher the possibility of distorted color. I could invert the logic and sample only at the focal point which should always use 1x1 shading rate but it might be the same as just using a single solid color",
+      "parentUuid": "87c19921_a644f1ca",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
