@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d0427c2_4d351742",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T20:40:49Z",
+      "side": 1,
+      "message": "What test fails if you remove this? I ran some tests without this, and so far they all passed. A corner case issue mishandled elsewhere probably.",
+      "parentUuid": "323dacc1_beef118c",
+      "revId": "358b9168ca0aaa98344428a86b7c62b42f3d0519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b8811197_c1ae7590",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
