@@ -16,6 +16,24 @@
       "message": "Got clarification from the WG, this was not actually needed, and VVL\u0027s interpretation was incorrect.\n\nVVL should be fixed soon (if not already)",
       "revId": "89c0fcbab1cf428ebaa10f95677080b6ddfa5046",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3836e10_03166450",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-01T18:11:12Z",
+      "side": 1,
+      "message": "Ok, thank you for the quick updates!",
+      "parentUuid": "dccf25bb_511d54bb",
+      "revId": "89c0fcbab1cf428ebaa10f95677080b6ddfa5046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
