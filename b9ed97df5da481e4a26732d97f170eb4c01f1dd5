@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e503bada_49094dcb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3017,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T03:16:19Z",
+      "side": 1,
+      "message": "```suggestion\n        mDecayingAverageSize \u003d initialSize;\n```",
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4023bb0c_61e37bb7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T03:16:19Z",
+      "side": 1,
+      "message": "I agree the name was not great. How about we remove the mention of history too? We can call it like `minimumBlockSize` or `minimumRequiredBlockSize`. That makes it clearer why it\u0027s being compared with `mSize` (which is also the block size).",
+      "range": {
+        "startLine": 3110,
+        "startChar": 17,
+        "endLine": 3110,
+        "endChar": 41
+      },
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6629a2f_9d91a958",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T03:16:19Z",
+      "side": 1,
+      "message": "You could avoid the cast mess and have the coefficient be like `63` as a percentage, then do:\n\n```suggestion\n    mDecayingAverageSize                  \u003d (mDecayingAverageSize * kDecayAvgCoefficient +\n        sizeWhileIgnoringHistory * (100 - kDecayAvgCoefficient) + 50) / 100;\n```",
+      "range": {
+        "startLine": 3111,
+        "startChar": 0,
+        "endLine": 3113,
+        "endChar": 85
+      },
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24678e17_f28b03f0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T03:16:19Z",
+      "side": 1,
+      "message": "Probably don\u0027t want to cut off the history like that, you could still let it track the history as usual.\n\nWhat you\u0027ve implemented here is a low-pass filter basically. But making the average snap the current value is a high frequency event. Not sure if that makes sense to you 😄",
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3c7bf29_fda60c21",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T03:16:19Z",
+      "side": 1,
+      "message": "nit: how about `mSizeInRecentHistory`?",
+      "range": {
+        "startLine": 135,
+        "startChar": 11,
+        "endLine": 135,
+        "endChar": 31
+      },
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5212d1bf_db3ee831",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-01T03:16:19Z",
+      "side": 1,
+      "message": "Can move to the function that does the math, just as local var.",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 76
+      },
+      "revId": "b9ed97df5da481e4a26732d97f170eb4c01f1dd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
