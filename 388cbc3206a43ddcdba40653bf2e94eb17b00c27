@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da04bd04_984bc2d1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-01T16:40:24Z",
+      "side": 1,
+      "message": "the issue was with `dirtyBitMask` actually. changed code to handle it according to existing pattern",
+      "parentUuid": "bf772c29_7efe1849",
+      "range": {
+        "startLine": 1603,
+        "startChar": 0,
+        "endLine": 1610,
+        "endChar": 5
+      },
+      "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "560ab762_2ab97436",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-01-27T22:26:57Z",
       "side": 1,
       "message": "High level comment, this is mostly duplicate code from vk_cache_utils.cpp. Please deduplicate.",
+      "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e93e26d_fce73bea",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2630,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-01T16:40:24Z",
+      "side": 1,
+      "message": "deduplicated as much as possible, rest are necessary due to differences in structs",
+      "parentUuid": "560ab762_2ab97436",
       "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8f186ee_cc00d526",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1859,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-01T16:40:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6437f19a_4de10fd0",
+      "range": {
+        "startLine": 1845,
+        "startChar": 0,
+        "endLine": 1859,
+        "endChar": 93
+      },
+      "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f333314b_1fb7d652",
@@ -77,6 +143,24 @@
       "writtenOn": "2024-01-27T22:26:57Z",
       "side": 1,
       "message": "Missed optimization opportunity here. If you add a bit to PackedInputAssemblyState to indicate whether vertex input is dynamic, you can reduce a big chunk from the hash. See `useVertexInputBindingStrideDynamicState` as reference.",
+      "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "640f51d1_d62b574f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2610,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-01T16:40:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f333314b_1fb7d652",
       "revId": "388cbc3206a43ddcdba40653bf2e94eb17b00c27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

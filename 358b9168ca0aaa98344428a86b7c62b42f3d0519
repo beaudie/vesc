@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc2f8168_35e9f8f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-01T16:40:24Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "358b9168ca0aaa98344428a86b7c62b42f3d0519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2c16d94_07f70c29",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-01T16:40:24Z",
+      "side": 1,
+      "message": "change to - `getPipelineVertexInputStateFormat`",
+      "range": {
+        "startLine": 3012,
+        "startChar": 31,
+        "endLine": 3012,
+        "endChar": 64
+      },
+      "revId": "358b9168ca0aaa98344428a86b7c62b42f3d0519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
