@@ -16,6 +16,24 @@
       "message": "PTAL - requested tests complete",
       "revId": "00412c148a6fb4a23202399348869779dab6ad60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50aa86d3_128f8393",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T15:38:42Z",
+      "side": 1,
+      "message": "Thanks a lot!",
+      "parentUuid": "9ce6b87b_13600bba",
+      "revId": "00412c148a6fb4a23202399348869779dab6ad60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

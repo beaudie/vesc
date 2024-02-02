@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bc67208_23f8e3c5",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 11406,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T15:38:42Z",
+      "side": 1,
+      "message": "Interesting, thanks for testing this too! Could you please also test a non-MSRTT resolve case?\n\nThat\u0027s basically using `glTexImage2DMultisample` and then a blit at the end.",
+      "revId": "dfc509fa7823a3691271bb8bd88f162e13d459ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fc156e5_86d00110",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 11483,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T15:38:42Z",
+      "side": 1,
+      "message": "nit: please use `drawQuad` instead, clear will take a non-rendering path here",
+      "range": {
+        "startLine": 11481,
+        "startChar": 0,
+        "endLine": 11483,
+        "endChar": 33
+      },
+      "revId": "dfc509fa7823a3691271bb8bd88f162e13d459ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
