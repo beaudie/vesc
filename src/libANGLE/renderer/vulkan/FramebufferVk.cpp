@@ -2012,6 +2012,7 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
 
         perfCounters.resolveImageCommands++;
     }
+    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, nullptr);
 
     contextVk->trackImageWithOutsideRenderPassEvent(srcImage);
 
