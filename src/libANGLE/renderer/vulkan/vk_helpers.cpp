@@ -1630,10 +1630,17 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
     // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to
     // make the results visible to the host.  The buffer may be mapped by the application in the
     // future.
-    if (buffer->isHostVisible())
+    if (contextVk && buffer->isHostVisible())
     {
         contextVk->onHostVisibleBufferWrite();
     }
+}
+
+void CommandBufferHelperCommon::bufferWrite(VkAccessFlags writeAccessType,
+                                            PipelineStage writeStage,
+                                            BufferHelper *buffer)
+{
+    bufferWrite(nullptr, writeAccessType, writeStage, buffer);
 }
 
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
