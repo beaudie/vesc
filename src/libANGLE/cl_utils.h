@@ -17,6 +17,13 @@
         return angle::Result::Stop;  \
     } while (0)
 
+#define ANGLE_CL_RETURN()               \
+    do                                  \
+    {                                   \
+        cl::gClErrorTls = CL_SUCCESS;   \
+        return angle::Result::Continue; \
+    } while (0)
+
 #define ANGLE_CL_TRY(expression)                           \
     do                                                     \
     {                                                      \
