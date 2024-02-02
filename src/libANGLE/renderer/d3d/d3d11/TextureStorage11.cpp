@@ -567,6 +567,7 @@ angle::Result TextureStorage11::updateSubresourceLevel(const gl::Context *contex
                                                        const gl::Box &copyArea)
 {
     ASSERT(srcTexture.valid());
+    std::cout << "Saif --- updateSubresourceLevel called \n";
 
     ANGLE_TRY(resolveTexture(context));
     const GLint level = index.getLevelIndex();
@@ -574,6 +575,10 @@ angle::Result TextureStorage11::updateSubresourceLevel(const gl::Context *contex
     markLevelDirty(level);
 
     gl::Extents texSize(getLevelWidth(level), getLevelHeight(level), getLevelDepth(level));
+    // std::cout << " Saif --- texSize width = " << texSize.width << " height = " << texSize.height
+    // << " depth = " << texSize.depth << "\n"; std::cout << " Saif --- copyArea x = " << copyArea.x
+    // << " y = " << copyArea.y << " z = " << copyArea.z << " width = " << copyArea.width << "
+    // height = " << copyArea.height << " depth = " << copyArea.depth << "\n";
 
     bool fullCopy = copyArea.coversSameExtent(texSize);
 
@@ -594,6 +599,14 @@ angle::Result TextureStorage11::updateSubresourceLevel(const gl::Context *contex
     ANGLE_TRY(getSubresourceIndex(context, index, &dstSubresource));
 
     ASSERT(dstTexture->valid());
+    // std::cout << "Saif --- dst tex internal format = " <<
+    // dstTexture->getFormatSet().internalFormat
+    //           << " dst swizzle format = " << dstTexture->getFormatSet().swizzleFormat
+    //           << " dst srv format = " << dstTexture->getFormatSet().srvFormat
+    //           << " dst rtv format = " << dstTexture->getFormatSet().rtvFormat
+    //           << " dst tex format = " << dstTexture->getFormatSet().texFormat
+    //           << " fullCopy = " << fullCopy
+    //           << "\n";
 
     const d3d11::DXGIFormatSize &dxgiFormatSizeInfo =
         d3d11::GetDXGIFormatSizeInfo(mFormatInfo.texFormat);
@@ -615,11 +628,125 @@ angle::Result TextureStorage11::updateSubresourceLevel(const gl::Context *contex
     srcBox.front = copyArea.z;
     srcBox.back  = copyArea.z + copyArea.depth;
 
+    // std::cout << " Saif --- srcBox left = " << srcBox.left << " top = " << srcBox.top << " right
+    // = " << srcBox.right << " bottom = " << srcBox.bottom << " front = " << srcBox.front << " back
+    // = " << srcBox.back << "\n";
+
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
 
-    deviceContext->CopySubresourceRegion(dstTexture->get(), dstSubresource, copyArea.x, copyArea.y,
-                                         copyArea.z, srcTexture.get(), sourceSubresource,
-                                         fullCopy ? nullptr : &srcBox);
+    // D3D11_MAPPED_SUBRESOURCE mapped = {};
+    // deviceContext->Map(srcTexture.get(), 0, D3D11_MAP_READ, 0, &mapped);
+
+    // const UINT bufferSize = 32;
+    // uint8_t *yPlane  = reinterpret_cast<uint8_t *>(mapped.pData);
+    // uint8_t *uvPlane = yPlane + bufferSize * mapped.RowPitch;
+    // std::cout << "Saif --- src y data = " << static_cast<int>(yPlane[mapped.RowPitch * bufferSize
+    // / 2]) << "\n"; std::cout << "Saif --- src u data = " <<
+    // static_cast<int>(uvPlane[mapped.RowPitch * bufferSize / 4]) << "\n"; std::cout << "Saif ---
+    // src v data = " << static_cast<int>(uvPlane[mapped.RowPitch * bufferSize / 4 + 1]) << "\n";
+    // deviceContext->Unmap(srcTexture.get(), 0);
+
+    if (d3d11::IsSupportedMultiplanarFormat(dstTexture->getFormat()))
+    {
+        // Intermediate texture used for copy for multiplanar formats or resolving multisampled
+        // textures.
+        TextureHelper11 intermediateTextureHelper;
+
+        // Check params
+        D3D11_TEXTURE2D_DESC planeDesc;
+        planeDesc.Width              = static_cast<UINT>(copyArea.width);
+        planeDesc.Height             = static_cast<UINT>(copyArea.height);
+        planeDesc.MipLevels          = 1;
+        planeDesc.ArraySize          = 1;
+        planeDesc.Format             = srcTexture.getFormatSet().srvFormat;
+        planeDesc.SampleDesc.Count   = 1;
+        planeDesc.SampleDesc.Quality = 0;
+        planeDesc.Usage              = D3D11_USAGE_DEFAULT;
+        planeDesc.BindFlags          = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+        planeDesc.CPUAccessFlags     = 0;
+        planeDesc.MiscFlags          = 0;
+
+        GLenum internalFormat = srcTexture.getFormatSet().internalFormat;
+        // std::cout << "Saif --- src internal foramt = " << internalFormat
+        //           << " src swizzle format = " << srcTexture.getFormatSet().swizzleFormat
+        //           << " src srv format = " << srcTexture.getFormatSet().srvFormat
+        //           << " src rtv format = " << srcTexture.getFormatSet().rtvFormat
+        //           << " src tex format = " << srcTexture.getFormatSet().texFormat << "\n";
+        ANGLE_TRY(mRenderer->allocateTexture(
+            GetImplAs<Context11>(context), planeDesc,
+            d3d11::Format::Get(internalFormat, mRenderer->getRenderer11DeviceCaps()),
+            &intermediateTextureHelper));
+        intermediateTextureHelper.setInternalName("readFromAttachment::intermediateTextureHelper");
+        // std::cout << "Saif --- dstSubresource = " << dstSubresource << " sourceSubresource = " <<
+        // sourceSubresource << "\n";
+
+        // intermediate texture has 0 offsets.
+        deviceContext->CopySubresourceRegion(intermediateTextureHelper.get(), dstSubresource, 0, 0,
+                                             0, srcTexture.get(), sourceSubresource,
+                                             fullCopy ? nullptr : &srcBox);
+
+        Context11 *context11 = GetImplAs<Context11>(context);
+        // d3d11::RenderTargetView temprtv;
+        // D3D11_RENDER_TARGET_VIEW_DESC temprtvDesc;
+        // temprtvDesc.Format             = srcTexture.getFormatSet().rtvFormat;
+        // temprtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+        // temprtvDesc.Texture2D.MipSlice = 0;
+
+        // ANGLE_TRY(
+        //     mRenderer->allocateResource(context11, temprtvDesc, intermediateTextureHelper.get(),
+        //     &temprtv));
+        // temprtv.setInternalName("readFromAttachment.TempRTV");
+
+        // std::cout << "Saif --- performing intermediate clear view \n";
+        // float clearValues[4] = { 0.5f, 1.0f, 0.0f, 0.0f, };
+        // mRenderer->getDeviceContext1IfSupported()->ClearView(temprtv.get(), clearValues, nullptr,
+        // 0);
+
+        d3d11::RenderTargetView rtv;
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format             = srcTexture.getFormatSet().rtvFormat;
+        rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D.MipSlice = 0;
+
+        ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, dstTexture->get(), &rtv));
+        rtv.setInternalName("readFromAttachment.RTV");
+
+        d3d11::SharedSRV srv;
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        srvDesc.Format                    = srcTexture.getFormatSet().srvFormat;
+        srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+        srvDesc.Texture2D.MipLevels       = 1;
+
+        ANGLE_TRY(
+            mRenderer->allocateResource(context11, srvDesc, intermediateTextureHelper.get(), &srv));
+        srv.setInternalName("readFromAttachment.SRV");
+
+        // intermediate has 0 offsets.
+        gl::Box intermediateGlBox(0, 0, 0, copyArea.width, copyArea.height, 1);
+        // destination has offsets similar to that of srcTexture.
+        gl::Box destGlBox(copyArea.x, copyArea.y, copyArea.z, copyArea.width, copyArea.height, 1);
+        gl::Extents safeSize(copyArea.width, copyArea.height, 1);
+
+        // std::cout << "Saif --- performing clear view \n";
+        // float clearValues[4] = { 1.0f, 1.0f, 0.0f, 0.0f, };
+        // mRenderer->getDeviceContext1IfSupported()->ClearView(rtv.get(), clearValues, nullptr, 0);
+
+        // Perform a copy to planeTexture as we cannot read directly from NV12 d3d11 textures.
+        Blit11 *blitter = mRenderer->getBlitter();
+        std::cout << "Saif --- performing copy texture \n";
+        ANGLE_TRY(blitter->copyTexture(context, srv, intermediateGlBox, safeSize, internalFormat,
+                                       rtv, destGlBox, safeSize, nullptr,
+                                       gl::GetUnsizedFormat(internalFormat), GL_NONE, GL_NEAREST,
+                                       false, false, false));
+    }
+    else
+    {
+        deviceContext->CopySubresourceRegion(dstTexture->get(), dstSubresource, copyArea.x,
+                                             copyArea.y, copyArea.z, srcTexture.get(),
+                                             sourceSubresource, fullCopy ? nullptr : &srcBox);
+    }
+
     return angle::Result::Continue;
 }
 
