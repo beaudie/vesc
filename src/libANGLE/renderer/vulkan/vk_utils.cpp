@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
+#include "libANGLE/renderer/vulkan/RefCountedEvent.h"
 #include "libANGLE/renderer/vulkan/android/vk_android_utils.h"
 #include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
 #include "libANGLE/renderer/vulkan/vk_renderer.h"
@@ -713,6 +714,9 @@ void GarbageObject::destroy(Renderer *renderer)
             break;
         case HandleType::PipelineLayout:
             vkDestroyPipelineLayout(device, (VkPipelineLayout)mHandle, nullptr);
+            break;
+        case HandleType::RefCountedEvent:
+            ReleaseRefcountedEvent(device, (RefCountedEventAndLayoutHandle)mHandle);
             break;
         case HandleType::RenderPass:
             vkDestroyRenderPass(device, (VkRenderPass)mHandle, nullptr);
