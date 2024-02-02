@@ -128,6 +128,40 @@ namespace vk
 {
 class Renderer;
 
+// This defines enum for VkPipelineStageFlagBits so that we can use it to compare and index into
+// array.
+enum class PipelineStage : uint32_t
+{
+    // Bellow are ordered based on Graphics Pipeline Stages
+    TopOfPipe              = 0,
+    DrawIndirect           = 1,
+    VertexInput            = 2,
+    VertexShader           = 3,
+    TessellationControl    = 4,
+    TessellationEvaluation = 5,
+    GeometryShader         = 6,
+    TransformFeedback      = 7,
+    FragmentShadingRate    = 8,
+    EarlyFragmentTest      = 9,
+    FragmentShader         = 10,
+    LateFragmentTest       = 11,
+    ColorAttachmentOutput  = 12,
+
+    // Compute specific pipeline Stage
+    ComputeShader = 13,
+
+    // Transfer specific pipeline Stage
+    Transfer     = 14,
+    BottomOfPipe = 15,
+
+    // Host specific pipeline stage
+    Host = 16,
+
+    InvalidEnum = 17,
+    EnumCount   = InvalidEnum,
+};
+using PipelineStagesMask = angle::PackedEnumBitSet<PipelineStage, uint32_t>;
+
 // Used for memory allocation tracking.
 enum class MemoryAllocationType;
 
@@ -689,22 +723,22 @@ class AtomicRefCounted : angle::NonCopyable
     void addRef()
     {
         ASSERT(mRefCount != std::numeric_limits<uint32_t>::max());
-        mRefCount.fetch_add(1, std::memory_order_relaxed);
+        mRefCount.fetch_add(1, std::memory_order_acq_rel);
     }
 
     void releaseRef()
     {
         ASSERT(isReferenced());
-        mRefCount.fetch_sub(1, std::memory_order_relaxed);
+        mRefCount.fetch_sub(1, std::memory_order_acq_rel);
     }
 
     unsigned int getAndReleaseRef()
     {
         ASSERT(isReferenced());
-        return mRefCount.fetch_sub(1, std::memory_order_relaxed);
+        return mRefCount.fetch_sub(1, std::memory_order_acq_rel);
     }
 
-    bool isReferenced() const { return mRefCount.load(std::memory_order_relaxed) != 0; }
+    bool isReferenced() const { return mRefCount.load(std::memory_order_consume) != 0; }
 
     T &get() { return mObject; }
     const T &get() const { return mObject; }

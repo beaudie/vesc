@@ -1105,6 +1105,12 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
                              dstImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
                              gl_vk::GetFilter(filter));
 
+    // KHR-GLES3.copy_tex_image_conversions.forbidden.renderbuffer_cubemap* becomes super slow due
+    // to extraordinary VVL overhead (See
+    // https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/7285). For now we just not use
+    // event to workaround it.
+    // contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, dstImage);
+
     return angle::Result::Continue;
 }
 
@@ -2010,6 +2016,7 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
 
         perfCounters.resolveImageCommands++;
     }
+    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, nullptr);
 
     return angle::Result::Continue;
 }
