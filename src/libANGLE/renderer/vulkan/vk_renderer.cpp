@@ -279,6 +279,8 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkCmdDrawIndexed-format-07753",
     "VUID-vkCmdDraw-format-07753",
     "Undefined-Value-ShaderFragmentOutputMismatch",
+    // MultithreadingTestES3.RenderThenSampleInNewContextWithDifferentPriority/ES3_Vulkan.
+    "UNASSIGNED-SubmitValidation-WaitEvents-WrongQueue",
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
@@ -286,6 +288,13 @@ constexpr const char *kSkippedMessages[] = {
 constexpr const char *kNoListRestartSkippedMessages[] = {
     // http://anglebug.com/3832
     "VUID-VkPipelineInputAssemblyStateCreateInfo-topology-06252",
+};
+
+// VVL appears has a bug tracking stageMask on VkEvent with secondary command buffer.
+// https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/7849
+constexpr const char *kSkippedMessagesWithVulkanSecondaryCommandBuffer[] = {
+    // http://anglebug.com/8401
+    "VUID-vkCmdWaitEvents-srcStageMask-parameter",
 };
 
 // Some syncval errors are resolved in the presence of the NONE load or store render pass ops.  For
@@ -3614,6 +3623,15 @@ void Renderer::initializeValidationMessageSuppressions()
         mSkippedValidationMessages.insert(
             mSkippedValidationMessages.end(), kNoListRestartSkippedMessages,
             kNoListRestartSkippedMessages + ArraySize(kNoListRestartSkippedMessages));
+    }
+
+    if (!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
+        !vk::RenderPassCommandBuffer::ExecutesInline())
+    {
+        mSkippedValidationMessages.insert(
+            mSkippedValidationMessages.end(), kSkippedMessagesWithVulkanSecondaryCommandBuffer,
+            kSkippedMessagesWithVulkanSecondaryCommandBuffer +
+                ArraySize(kSkippedMessagesWithVulkanSecondaryCommandBuffer));
     }
 
     // Build the list of syncval errors that are currently expected and should be skipped.
