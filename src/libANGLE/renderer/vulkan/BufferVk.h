@@ -161,6 +161,10 @@ class BufferVk : public BufferImpl
                                      vk::MemoryCoherency coherency,
                                      VkDeviceSize size,
                                      uint8_t **mapPtr);
+    angle::Result copyFromBuffer(ContextVk *contextVk,
+                                 vk::BufferHelper *srcBuffer,
+                                 uint32_t regionCount,
+                                 const VkBufferCopy *copyRegions);
     angle::Result flushStagingBuffer(ContextVk *contextVk, VkDeviceSize offset, VkDeviceSize size);
     angle::Result acquireAndUpdate(ContextVk *contextVk,
                                    size_t bufferSize,

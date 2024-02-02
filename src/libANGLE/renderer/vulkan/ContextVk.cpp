@@ -7046,8 +7046,9 @@ angle::Result ContextVk::initBufferAllocation(vk::BufferHelper *bufferHelper,
                                               size_t alignment,
                                               BufferUsageType bufferUsageType)
 {
-    VkResult result = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize,
-                                                      alignment, bufferUsageType);
+    vk::BufferPool *pool = getDefaultBufferPool(allocationSize, memoryTypeIndex, bufferUsageType);
+    VkResult result = bufferHelper->initSuballocationFromPool(this, memoryTypeIndex, allocationSize,
+                                                              alignment, bufferUsageType, pool);
     if (ANGLE_LIKELY(result == VK_SUCCESS))
     {
         if (mRenderer->getFeatures().allocateNonZeroMemory.enabled)
@@ -7074,8 +7075,8 @@ angle::Result ContextVk::initBufferAllocation(vk::BufferHelper *bufferHelper,
         if (anyBatchCleaned)
         {
             batchesWaitedAndCleaned++;
-            result = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize,
-                                                     alignment, bufferUsageType);
+            result = bufferHelper->initSuballocationFromPool(this, memoryTypeIndex, allocationSize,
+                                                             alignment, bufferUsageType, pool);
         }
     } while (result != VK_SUCCESS && anyBatchCleaned);
 
@@ -7092,8 +7093,8 @@ angle::Result ContextVk::initBufferAllocation(vk::BufferHelper *bufferHelper,
     {
         ANGLE_TRY(finishImpl(RenderPassClosureReason::OutOfMemory));
         INFO() << "Context flushed due to out-of-memory error.";
-        result = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize, alignment,
-                                                 bufferUsageType);
+        result = bufferHelper->initSuballocationFromPool(this, memoryTypeIndex, allocationSize,
+                                                         alignment, bufferUsageType, pool);
     }
 
     // If the allocation continues to fail despite all the fallback options, the error must be

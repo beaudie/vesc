@@ -530,6 +530,34 @@ angle::Result BufferVk::allocStagingBuffer(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferVk::copyFromBuffer(ContextVk *contextVk,
+                                       vk::BufferHelper *srcBuffer,
+                                       uint32_t regionCount,
+                                       const VkBufferCopy *copyRegions)
+{
+    ASSERT(srcBuffer->valid());
+
+    // Enqueue a copy command on the GPU.
+    vk::CommandBufferAccess access;
+    if (mBuffer.getBufferSerial() == srcBuffer->getBufferSerial())
+    {
+        access.onBufferSelfCopy(&mBuffer);
+    }
+    else
+    {
+        access.onBufferTransferRead(srcBuffer);
+        access.onBufferTransferWrite(&mBuffer);
+    }
+
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+    commandBuffer->copyBuffer(srcBuffer->getBuffer(), mBuffer.getBuffer(), regionCount,
+                              copyRegions);
+
+    return angle::Result::Continue;
+}
+
 angle::Result BufferVk::flushStagingBuffer(ContextVk *contextVk,
                                            VkDeviceSize offset,
                                            VkDeviceSize size)
@@ -544,9 +572,8 @@ angle::Result BufferVk::flushStagingBuffer(ContextVk *contextVk,
         ANGLE_TRY(mStagingBuffer.flush(renderer));
     }
 
-    // Enqueue a copy command on the GPU.
     VkBufferCopy copyRegion = {mStagingBuffer.getOffset(), mBuffer.getOffset() + offset, size};
-    ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, &mStagingBuffer, 1, &copyRegion));
+    ANGLE_TRY(copyFromBuffer(contextVk, &mStagingBuffer, 1, &copyRegion));
 
     return angle::Result::Continue;
 }
@@ -561,8 +588,21 @@ angle::Result BufferVk::handleDeviceLocalBufferMap(ContextVk *contextVk,
     ANGLE_TRY(mStagingBuffer.invalidate(contextVk->getRenderer()));
 
     // Copy data from device local buffer to host visible staging buffer.
+    vk::CommandBufferAccess access;
+    if (mBuffer.getBufferSerial() == mStagingBuffer.getBufferSerial())
+    {
+        access.onBufferSelfCopy(&mBuffer);
+    }
+    else
+    {
+        access.onBufferTransferRead(&mBuffer);
+        access.onBufferTransferWrite(&mStagingBuffer);
+    }
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
     VkBufferCopy copyRegion = {mBuffer.getOffset() + offset, mStagingBuffer.getOffset(), size};
-    ANGLE_TRY(mStagingBuffer.copyFromBuffer(contextVk, &mBuffer, 1, &copyRegion));
+    commandBuffer->copyBuffer(mBuffer.getBuffer(), mStagingBuffer.getBuffer(), 1, &copyRegion);
     ANGLE_TRY(mStagingBuffer.waitForIdle(contextVk, "GPU stall due to mapping device local buffer",
                                          RenderPassClosureReason::DeviceLocalBufferMap));
     // Because the buffer is coherent, no need to call invalidate here.
@@ -1046,8 +1086,8 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
 
     if (!copyRegions.empty())
     {
-        ANGLE_TRY(mBuffer.copyFromBuffer(
-            contextVk, &prevBuffer, static_cast<uint32_t>(copyRegions.size()), copyRegions.data()));
+        ANGLE_TRY(copyFromBuffer(contextVk, &prevBuffer, static_cast<uint32_t>(copyRegions.size()),
+                                 copyRegions.data()));
     }
 
     if (prevBuffer.valid())
