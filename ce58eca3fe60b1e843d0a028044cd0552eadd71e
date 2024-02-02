@@ -652,6 +652,30 @@
       },
       "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cd27224_fe90d723",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-02T20:35:26Z",
+      "side": 1,
+      "message": "\u003e this extension doesn\u0027t require any as far as I can tell\n\nyes, all this extension requires is `GL_FOVEATION_ENABLE_BIT_QCOM` feature bit but the rest is implementation defined\n\nqcom added `FOVEATION_SCALED_BIN_METHOD_BIT_QCOM` and it looks like they added a new one as well here -\u003e https://registry.khronos.org/OpenGL/extensions/QCOM/QCOM_texture_foveated_subsampled_layout.txt",
+      "parentUuid": "7c5dd7f2_b368a0a9",
+      "range": {
+        "startLine": 1393,
+        "startChar": 15,
+        "endLine": 1393,
+        "endChar": 85
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

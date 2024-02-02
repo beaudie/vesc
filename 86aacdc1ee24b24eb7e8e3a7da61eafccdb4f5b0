@@ -648,6 +648,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f346412_e1ac25fd",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2761,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-02T20:35:26Z",
+      "side": 1,
+      "message": "it might turn out to be simple with some refactoring of backend logic of who owns / tracks the shading rate image but i dont have that done yet. Will take a look as a follow up task once i am done with this set of changes\n\nthanks, will add a todo",
+      "parentUuid": "6555deb6_04318115",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7ab5fa3_b625b51b",

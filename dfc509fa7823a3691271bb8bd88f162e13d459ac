@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f21cfa6_ab4de101",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 11406,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-02T20:35:26Z",
+      "side": 1,
+      "message": "i assume you meant `glTexStorage2DMultisample`, done",
+      "parentUuid": "0bc67208_23f8e3c5",
+      "revId": "dfc509fa7823a3691271bb8bd88f162e13d459ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fc156e5_86d00110",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-02-02T15:38:42Z",
       "side": 1,
       "message": "nit: please use `drawQuad` instead, clear will take a non-rendering path here",
+      "range": {
+        "startLine": 11481,
+        "startChar": 0,
+        "endLine": 11483,
+        "endChar": 33
+      },
+      "revId": "dfc509fa7823a3691271bb8bd88f162e13d459ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ed4abe1_2ae4dba1",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 11483,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-02T20:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fc156e5_86d00110",
       "range": {
         "startLine": 11481,
         "startChar": 0,
