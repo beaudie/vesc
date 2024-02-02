@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb30394a_0ab1b1c9",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T15:14:23Z",
+      "side": 1,
+      "message": "This is where the prerotation happens:\n\n```\nGTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(CopyTexImagePreRotationTest);\nANGLE_INSTANTIATE_TEST_ES3_AND(CopyTexImagePreRotationTest,\n                               ES3_VULKAN().enable(Feature::EmulatedPrerotation90),\n                               ES3_VULKAN().enable(Feature::EmulatedPrerotation180),\n                               ES3_VULKAN().enable(Feature::EmulatedPrerotation270));\n```\n\nThe reason it I made a new test suite for it is to avoid having all the other tests run with pre-rotation because pretty much all of them use FBOs which are unaffected by pre-rotation.",
+      "parentUuid": "0dfa1441_7b6972e4",
+      "revId": "b0aec717ce1c6bcf312296178701bfd321245205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0570c39c_23ac7bf1",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7eb17c8_b118d450",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T15:14:23Z",
+      "side": 1,
+      "message": "Oops, copy-paste error from other test.",
+      "parentUuid": "0570c39c_23ac7bf1",
+      "revId": "b0aec717ce1c6bcf312296178701bfd321245205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75966ce9_27285d29",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-02-01T23:20:10Z",
       "side": 1,
       "message": "nit: are these numbers just arbitrarily selected?",
+      "revId": "b0aec717ce1c6bcf312296178701bfd321245205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f203770_4e700fcb",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T15:14:23Z",
+      "side": 1,
+      "message": "Yeap, added a comment.",
+      "parentUuid": "75966ce9_27285d29",
       "revId": "b0aec717ce1c6bcf312296178701bfd321245205",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
