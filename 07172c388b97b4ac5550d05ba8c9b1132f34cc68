@@ -263,6 +263,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "036c2238_7c4930fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4727,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-02T19:41:00Z",
+      "side": 1,
+      "message": "Right, for case 3), you can just assign NEAREST filter, since once the format is known it will call this function again and proper filter will be set. I am  fine to fix actual bug now (which is more important) and do more clean up later.",
+      "parentUuid": "c288696d_a8f1353b",
+      "range": {
+        "startLine": 4727,
+        "startChar": 26,
+        "endLine": 4727,
+        "endChar": 44
+      },
+      "revId": "07172c388b97b4ac5550d05ba8c9b1132f34cc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f169a13_0ac58259",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 3
