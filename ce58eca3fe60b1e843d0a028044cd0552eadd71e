@@ -628,6 +628,30 @@
       },
       "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c5dd7f2_b368a0a9",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-02T15:38:48Z",
+      "side": 1,
+      "message": "Possibly. QCOM_texture_foveated adds the FOVEATION_SCALED_BIN_METHOD_BIT_QCOM method of foveation but the spec is written in a way that other extensions can depend on it and add new methods. We would eventually want to ask the backend what the supported feature bits are, this extension doesn\u0027t require any as far as I can tell.",
+      "parentUuid": "dc0cee43_c458e82a",
+      "range": {
+        "startLine": 1393,
+        "startChar": 15,
+        "endLine": 1393,
+        "endChar": 85
+      },
+      "revId": "ce58eca3fe60b1e843d0a028044cd0552eadd71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
