@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03a7e07f_f51c31d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-02T23:50:39Z",
+      "side": 1,
+      "message": "lgtm+2 already with Alexey\u0027s feedback addressed. Couple of small comments.",
+      "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "440d48a8_a310aabb",
+        "filename": "src/common/apple_platform_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-02T23:50:39Z",
+      "side": 1,
+      "message": "Understanding that GetMacosMachineModel\u0027s implementation is ifdef\u0027d out for iOS, I also wonder whether this whole new block of code here should also be conditional to macOS/MacCatalyst.",
+      "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22bacbae_0c84b519",
@@ -37,6 +71,24 @@
         "endLine": 54,
         "endChar": 0
       },
+      "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8f2f50b_ee620053",
+        "filename": "src/common/apple_platform_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-02T23:50:39Z",
+      "side": 1,
+      "message": "Description: `MacBook (Retina, 12-inch, Early 2016)`.",
+      "parentUuid": "22bacbae_0c84b519",
       "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
