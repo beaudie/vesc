@@ -577,23 +577,25 @@ angle::Result TextureStorage11::updateSubresourceLevel(const gl::Context *contex
 
     bool fullCopy = copyArea.coversSameExtent(texSize);
 
-    const TextureHelper11 *dstTexture = nullptr;
+    // Intermediate texture used for copy for multiplanar formats or resolving multisampled
+    // textures.
+    const TextureHelper11 *intermediateTextureHelper = nullptr;
 
     // If the zero-LOD workaround is active and we want to update a level greater than zero, then we
     // should update the mipmapped texture, even if mapmaps are currently disabled.
     if (level > 0 && mRenderer->getFeatures().zeroMaxLodWorkaround.enabled)
     {
-        ANGLE_TRY(getMippedResource(context, &dstTexture));
+        ANGLE_TRY(getMippedResource(context, &intermediateTextureHelper));
     }
     else
     {
-        ANGLE_TRY(getResource(context, &dstTexture));
+        ANGLE_TRY(getResource(context, &intermediateTextureHelper));
     }
 
     unsigned int dstSubresource = 0;
     ANGLE_TRY(getSubresourceIndex(context, index, &dstSubresource));
 
-    ASSERT(dstTexture->valid());
+    ASSERT(intermediateTextureHelper->valid());
 
     const d3d11::DXGIFormatSize &dxgiFormatSizeInfo =
         d3d11::GetDXGIFormatSizeInfo(mFormatInfo.texFormat);
@@ -602,9 +604,11 @@ angle::Result TextureStorage11::updateSubresourceLevel(const gl::Context *contex
         // CopySubresourceRegion cannot copy partial depth stencils, use the blitter instead
         Blit11 *blitter = mRenderer->getBlitter();
         return blitter->copyDepthStencil(context, srcTexture, sourceSubresource, copyArea, texSize,
-                                         *dstTexture, dstSubresource, copyArea, texSize, nullptr);
+                                         *intermediateTextureHelper, dstSubresource, copyArea,
+                                         texSize, nullptr);
     }
 
+    // check if box is correct?
     D3D11_BOX srcBox;
     srcBox.left = copyArea.x;
     srcBox.top  = copyArea.y;
@@ -617,9 +621,76 @@ angle::Result TextureStorage11::updateSubresourceLevel(const gl::Context *contex
 
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
 
-    deviceContext->CopySubresourceRegion(dstTexture->get(), dstSubresource, copyArea.x, copyArea.y,
-                                         copyArea.z, srcTexture.get(), sourceSubresource,
-                                         fullCopy ? nullptr : &srcBox);
+    // check area, box params are correct?
+    deviceContext->CopySubresourceRegion(intermediateTextureHelper->get(), dstSubresource,
+                                         copyArea.x, copyArea.y, copyArea.z, srcTexture.get(),
+                                         sourceSubresource, fullCopy ? nullptr : &srcBox);
+
+    if (d3d11::IsSupportedMultiplanarFormat(srcTexture.getFormat()))
+    {
+        TextureHelper11 dstTexture;
+
+        D3D11_TEXTURE2D_DESC planeDesc;
+        planeDesc.Width              = static_cast<UINT>(copyArea.width);   // check?
+        planeDesc.Height             = static_cast<UINT>(copyArea.height);  // check?
+        planeDesc.MipLevels          = 1;
+        planeDesc.ArraySize          = 1;
+        planeDesc.Format             = srcTexture.getFormatSet().srvFormat;
+        planeDesc.SampleDesc.Count   = 1;
+        planeDesc.SampleDesc.Quality = 0;
+        planeDesc.Usage              = D3D11_USAGE_DEFAULT;
+        planeDesc.BindFlags          = D3D11_BIND_RENDER_TARGET;
+        planeDesc.CPUAccessFlags     = 0;
+        planeDesc.MiscFlags          = 0;
+
+        GLenum internalFormat = srcTexture.getFormatSet().internalFormat;
+        ANGLE_TRY(mRenderer->allocateTexture(
+            GetImplAs<Context11>(context), planeDesc,
+            d3d11::Format::Get(internalFormat, mRenderer->getRenderer11DeviceCaps()), &dstTexture));
+        dstTexture.setInternalName("readFromAttachment::dstTexture");
+
+        Context11 *context11 = GetImplAs<Context11>(context);
+        d3d11::RenderTargetView rtv;
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format             = srcTexture.getFormatSet().rtvFormat;
+        rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D.MipSlice = 0;
+
+        ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, dstTexture.get(), &rtv));
+        rtv.setInternalName("readFromAttachment.RTV");
+
+        d3d11::SharedSRV srv;
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        srvDesc.Format                    = srcTexture.getFormatSet().srvFormat;
+        srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+        srvDesc.Texture2D.MipLevels       = 1;
+
+        ANGLE_TRY(mRenderer->allocateResource(context11, srvDesc, intermediateTextureHelper->get(),
+                                              &srv));
+        srv.setInternalName("readFromAttachment.SRV");
+
+        // check boxes
+        gl::Box srcGlBox(copyArea.x, copyArea.y, 0, copyArea.width, copyArea.height, 1);
+        gl::Box destGlBox(0, 0, 0, copyArea.width, copyArea.height, 1);
+        gl::Extents safeSize(copyArea.width, copyArea.height, 1);
+
+        // Perform a copy to planeTexture as we cannot read directly from NV12 d3d11 textures.
+        Blit11 *blitter = mRenderer->getBlitter();
+        ANGLE_TRY(blitter->copyTexture(
+            context, srv, srcGlBox, safeSize, internalFormat, rtv, destGlBox, safeSize, nullptr,
+            gl::GetUnsizedFormat(internalFormat), GL_NONE, GL_NEAREST, false, false, false));
+
+        // Update safeArea based on the destination.
+        // safeArea.x      = destGlBox.x;
+        // safeArea.y      = destGlBox.y;
+        // safeArea.width  = destGlBox.width;
+        // safeArea.height = destGlBox.height;
+
+        // sourceSubResource = 0;
+        // srcTexture        = &intermediateTextureHelper;
+    }
+
     return angle::Result::Continue;
 }
 
