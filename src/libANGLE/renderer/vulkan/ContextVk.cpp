@@ -6629,6 +6629,7 @@ angle::Result ContextVk::dispatchCompute(const gl::Context *context,
     ANGLE_TRY(setupDispatch(context));
 
     mOutsideRenderPassCommands->getCommandBuffer().dispatch(numGroupsX, numGroupsY, numGroupsZ);
+    mOutsideRenderPassCommands->setEvents(this);
 
     return angle::Result::Continue;
 }
@@ -6655,6 +6656,7 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
 
     mOutsideRenderPassCommands->getCommandBuffer().dispatchIndirect(buffer.getBuffer(),
                                                                     buffer.getOffset() + indirect);
+    mOutsideRenderPassCommands->setEvents(this);
 
     return angle::Result::Continue;
 }
@@ -8271,6 +8273,8 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     // Save the queueSerial before calling flushOutsideRPCommands, which may return a new
     // mOutsideRenderPassCommands
+    mOutsideRenderPassCommands->setEvents(this);
+
     ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastFlushedQueueSerial,
                                                    mOutsideRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mOutsideRenderPassCommands->getQueueSerial();
