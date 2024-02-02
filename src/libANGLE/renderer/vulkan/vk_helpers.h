@@ -1151,6 +1151,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
                      VkAccessFlags writeAccessType,
                      PipelineStage writeStage,
                      BufferHelper *buffer);
+    void bufferWrite(VkAccessFlags writeAccessType, PipelineStage writeStage, BufferHelper *buffer);
 
     bool usesBuffer(const BufferHelper &buffer) const
     {
@@ -1320,6 +1321,12 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     {
         bufferReadImpl(readAccessType, readStage, buffer);
         setBufferReadQueueSerial(contextVk, buffer);
+    }
+
+    void bufferRead(VkAccessFlags readAccessType, PipelineStage readStage, BufferHelper *buffer)
+    {
+        bufferReadImpl(readAccessType, readStage, buffer);
+        buffer->setQueueSerial(mQueueSerial);
     }
 
     void bufferRead(ContextVk *contextVk,
