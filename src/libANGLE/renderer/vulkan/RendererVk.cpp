@@ -497,6 +497,15 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "vkQueueSubmit():  Hazard WRITE_AFTER_READ for entry 0"},
     {"SYNC-HAZARD-WRITE-AFTER-WRITE", "type = VK_OBJECT_TYPE_QUEUE",
      "vkQueueSubmit():  Hazard WRITE_AFTER_WRITE for entry 0"},
+    // From VkEvent
+    {"SYNC-HAZARD-WRITE-AFTER-READ",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_PRESENT_ENGINE_SYNCVAL_PRESENT_ACQUIRE_READ_SYNCVAL",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
+    {"SYNC-HAZARD-WRITE-AFTER-READ",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_RESOLVE_TRANSFER_READ",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
 };
 
 // Messages that shouldn't be generated if storeOp=NONE is supported, otherwise they are expected.
