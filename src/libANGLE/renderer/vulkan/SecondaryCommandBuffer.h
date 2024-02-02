@@ -87,6 +87,7 @@ enum class CommandID : uint16_t
     EndTransformFeedback,
     FillBuffer,
     ImageBarrier,
+    ImageWaitEvent,
     InsertDebugUtilsLabel,
     MemoryBarrier,
     NextSubpass,
@@ -476,6 +477,17 @@ struct ImageBarrierParams
     VkPipelineStageFlags dstStageMask;
 };
 VERIFY_8_BYTE_ALIGNMENT(ImageBarrierParams)
+
+struct ImageWaitEventParams
+{
+    CommandHeader header;
+
+    uint32_t padding;
+    VkEvent event;
+    VkPipelineStageFlags srcStageMask;
+    VkPipelineStageFlags dstStageMask;
+};
+VERIFY_8_BYTE_ALIGNMENT(ImageWaitEventParams)
 
 struct MemoryBarrierParams
 {
@@ -941,6 +953,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier &imageMemoryBarrier);
+
+    void imageWaitEvent(const VkEvent &event,
+                        VkPipelineStageFlags srcStageMask,
+                        VkPipelineStageFlags dstStageMask,
+                        const VkImageMemoryBarrier &imageMemoryBarrier);
 
     void insertDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &label);
 
@@ -1718,6 +1735,26 @@ ANGLE_INLINE void SecondaryCommandBuffer::imageBarrier(
     const ArrayParamSize imgBarrierSize = calculateArrayParameterSize<VkImageMemoryBarrier>(1);
     ImageBarrierParams *paramStruct     = initCommand<ImageBarrierParams>(
         CommandID::ImageBarrier, imgBarrierSize.allocateBytes, &writePtr);
+    paramStruct->srcStageMask = srcStageMask;
+    paramStruct->dstStageMask = dstStageMask;
+    storeArrayParameter(writePtr, &imageMemoryBarrier, imgBarrierSize);
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::imageWaitEvent(
+    const VkEvent &event,
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    const VkImageMemoryBarrier &imageMemoryBarrier)
+{
+    ASSERT(imageMemoryBarrier.pNext == nullptr);
+
+    uint8_t *writePtr;
+    const ArrayParamSize imgBarrierSize = calculateArrayParameterSize<VkImageMemoryBarrier>(1);
+
+    ImageWaitEventParams *paramStruct = initCommand<ImageWaitEventParams>(
+        CommandID::ImageWaitEvent, imgBarrierSize.allocateBytes, &writePtr);
+    ASSERT(imageMemoryBarrier.pNext == nullptr);
+    paramStruct->event        = event;
     paramStruct->srcStageMask = srcStageMask;
     paramStruct->dstStageMask = dstStageMask;
     storeArrayParameter(writePtr, &imageMemoryBarrier, imgBarrierSize);

@@ -45,6 +45,8 @@ vulkan_backend_sources = [
   "ProgramVk.h",
   "QueryVk.cpp",
   "QueryVk.h",
+  "RefCountedEvent.cpp",
+  "RefCountedEvent.h",
   "RenderTargetVk.cpp",
   "RenderTargetVk.h",
   "RenderbufferVk.cpp",
