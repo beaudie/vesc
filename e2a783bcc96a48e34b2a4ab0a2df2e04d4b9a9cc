@@ -16,6 +16,69 @@
       "message": "V4 applies Shahbaz\u0027s suggestions.",
       "revId": "e2a783bcc96a48e34b2a4ab0a2df2e04d4b9a9cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "853b2829_d4795644",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T19:36:55Z",
+      "side": 1,
+      "message": "Unsolicited LGTM 😄",
+      "revId": "e2a783bcc96a48e34b2a4ab0a2df2e04d4b9a9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7365bc7f_2ff775c4",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T19:36:55Z",
+      "side": 1,
+      "message": "Super nit: Explicit cast to bool (per our informal style):\n\n```suggestion\n        vk::YcbcrLinearFilterSupport linearFilterSupported \u003d\n            (bufferFormatProperties.formatFeatures \u0026\n             VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT) !\u003d 0\n                ? vk::YcbcrLinearFilterSupport::Supported\n                : vk::YcbcrLinearFilterSupport::Unsupported;\n```",
+      "range": {
+        "startLine": 402,
+        "startChar": 0,
+        "endLine": 406,
+        "endChar": 60
+      },
+      "revId": "e2a783bcc96a48e34b2a4ab0a2df2e04d4b9a9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0cfdf29_c88f51ef",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T19:36:55Z",
+      "side": 1,
+      "message": "Ditto:\n\n```suggestion\n        VkChromaLocation supportedLocation \u003d\n            (supportedFeatureBits \u0026 VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) !\u003d 0\n                ? VK_CHROMA_LOCATION_COSITED_EVEN\n                : VK_CHROMA_LOCATION_MIDPOINT;\n        vk::YcbcrLinearFilterSupport linearFilterSupported \u003d\n            (supportedFeatureBits \u0026\n             VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT) !\u003d 0\n                ? vk::YcbcrLinearFilterSupport::Supported\n                : vk::YcbcrLinearFilterSupport::Unsupported;\n```",
+      "range": {
+        "startLine": 5472,
+        "startChar": 0,
+        "endLine": 5480,
+        "endChar": 60
+      },
+      "revId": "e2a783bcc96a48e34b2a4ab0a2df2e04d4b9a9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
