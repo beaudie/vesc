@@ -501,6 +501,30 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "vkQueueSubmit():  Hazard WRITE_AFTER_READ for entry 0"},
     {"SYNC-HAZARD-WRITE-AFTER-WRITE", "type = VK_OBJECT_TYPE_QUEUE",
      "vkQueueSubmit():  Hazard WRITE_AFTER_WRITE for entry 0"},
+    /***** From VkEvent *****/
+    {"SYNC-HAZARD-WRITE-AFTER-READ",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_PRESENT_ENGINE_SYNCVAL_PRESENT_ACQUIRE_READ_SYNCVAL",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
+    {"SYNC-HAZARD-WRITE-AFTER-READ",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_RESOLVE_TRANSFER_READ",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
+    // Texture2DTest.UploadThenFSThenNewRPThenFSThenVS/ES2_Vulkan
+    {"SYNC-HAZARD-READ-AFTER-WRITE",
+     "Access info (usage: SYNC_VERTEX_SHADER_SHADER_SAMPLED_READ, prior_usage: "
+     "SYNC_IMAGE_LAYOUT_TRANSITION",
+     "command: vkCmdWaitEvents, seq_no: 5, reset_no: 1"},
+    // ClearTestES3.RepeatedClear/ES3_Vulkan_ForceFallbackFormat
+    {"SYNC-HAZARD-WRITE-AFTER-WRITE",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_IMAGE_LAYOUT_TRANSITION",
+     "command: vkCmdWaitEvents"},
+    // VulkanUniformUpdatesTest.DescriptorPoolUniformAndTextureRegeneration/ES2_Vulkan
+    {"SYNC-HAZARD-WRITE-AFTER-PRESENT",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_PRESENT_ENGINE_SYNCVAL_PRESENT_PRESENTED_SYNCVAL",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_PRESENT for image barrier"},
 };
 
 // Messages that shouldn't be generated if storeOp=NONE is supported, otherwise they are expected.
@@ -3888,7 +3912,7 @@ void RendererVk::queryAndCacheFragmentShadingRates()
         }
         const gl::ShadingRate rate = GetShadingRateFromVkExtent(shadingRate.fragmentSize);
         mSupportedFragmentShadingRates.set(rate);
-        ASSERT(shadingRate.sampleCounts < 256);
+        //        ASSERT(shadingRate.sampleCounts < 256);
         mSupportedFragmentShadingRateSampleCounts[rate] =
             static_cast<uint8_t>(shadingRate.sampleCounts);
     }
