@@ -279,6 +279,15 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkCmdDrawIndexed-format-07753",
     "VUID-vkCmdDraw-format-07753",
     "Undefined-Value-ShaderFragmentOutputMismatch",
+    // dEQP-EGL.functional.buffer_age.no_preserve.no_resize.odd_clear_clear_even_clear_clear.
+    // Present layout uses VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT as destination stageMask. Spec says
+    // VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT is equivalent to VK_PIPELINE_STAGE_ALL_COMMANDS_BIT with
+    // VkAccessFlags set to 0 when specified in the first synchronization scope. But VVL seems not
+    // recognizing it as VK_PIPELINE_STAGE_ALL_COMMANDS_BIT and complains srcStageMask  must be the
+    // bitwise OR of the stageMask parameters used in calls to vkCmdSetEvent.
+    "if used with vkSetEvent but instead is VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT",
+    "stageMask 2000 includes bits not present in srcStageMask 0x1480.",
+    "vkCmdWaitEvents():  srcStageMask 0x1480 contains stages not present in pEvents stageMask.",
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
@@ -484,6 +493,35 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "vkQueueSubmit():  Hazard WRITE_AFTER_READ for entry 0"},
     {"SYNC-HAZARD-WRITE-AFTER-WRITE", "type = VK_OBJECT_TYPE_QUEUE",
      "vkQueueSubmit():  Hazard WRITE_AFTER_WRITE for entry 0"},
+    /***** From VkEvent *****/
+    {"SYNC-HAZARD-WRITE-AFTER-READ",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_PRESENT_ENGINE_SYNCVAL_PRESENT_ACQUIRE_READ_SYNCVAL",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
+    {"SYNC-HAZARD-WRITE-AFTER-READ",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_RESOLVE_TRANSFER_READ",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
+    // Texture2DTest.UploadThenFSThenNewRPThenFSThenVS/ES2_Vulkan
+    {"SYNC-HAZARD-READ-AFTER-WRITE",
+     "Access info (usage: SYNC_VERTEX_SHADER_SHADER_SAMPLED_READ, prior_usage: "
+     "SYNC_IMAGE_LAYOUT_TRANSITION",
+     "command: vkCmdWaitEvents, seq_no: 5, reset_no: 1"},
+    // ClearTestES3.RepeatedClear/ES3_Vulkan_ForceFallbackFormat
+    {"SYNC-HAZARD-WRITE-AFTER-WRITE",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_IMAGE_LAYOUT_TRANSITION",
+     "command: vkCmdWaitEvents"},
+    // VulkanUniformUpdatesTest.DescriptorPoolUniformAndTextureRegeneration/ES2_Vulkan
+    {"SYNC-HAZARD-WRITE-AFTER-PRESENT",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_PRESENT_ENGINE_SYNCVAL_PRESENT_PRESENTED_SYNCVAL",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_PRESENT for image barrier"},
+    // KHR-GLES2.texture_3d.copy_sub_image.rgba
+    {"SYNC-HAZARD-WRITE-AFTER-READ",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_COPY_TRANSFER_READ",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
 };
 
 // Messages that shouldn't be generated if storeOp=NONE is supported, otherwise they are expected.
