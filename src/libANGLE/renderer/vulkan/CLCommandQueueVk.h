@@ -226,6 +226,14 @@ class CLCommandQueueVk : public CLCommandQueueImpl
 
     void removeAssociatedEvent(CLEventVk *event) { mEventsAssociated.erase(event); }
 
+    angle::Result getCommandBuffer(const vk::CommandBufferAccess &access,
+                                   vk::OutsideRenderPassCommandBuffer **commandBufferOut)
+    {
+        ANGLE_TRY(onResourceAccess(access));
+        *commandBufferOut = &mComputePassCommands->getCommandBuffer();
+        return angle::Result::Continue;
+    }
+
   private:
     vk::ProtectionType getProtectionType() const { return vk::ProtectionType::Unprotected; }
 
@@ -235,6 +243,8 @@ class CLCommandQueueVk : public CLCommandQueueImpl
     angle::Result submitCommands();
     angle::Result createEvent(CLEventImpl::CreateFunc *createFunc);
     angle::Result finishInternal();
+
+    angle::Result onResourceAccess(const vk::CommandBufferAccess &access);
 
     CLContextVk *mContext;
     const CLDeviceVk *mDevice;
