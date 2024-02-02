@@ -204,8 +204,30 @@ angle::Result CLCommandQueueVk::enqueueReadBufferRect(const cl::Buffer &buffer,
                                                       const cl::EventPtrs &waitEvents,
                                                       CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+
+    ANGLE_TRY(processWaitlist(waitEvents));
+
+    auto bufferVk = &buffer.getImpl<CLBufferVk>();
+
+    if (blocking || mComputePassCommands->usesBufferForWrite(bufferVk->getBuffer()))
+    {
+        ANGLE_TRY(finishInternal());
+    }
+
+    cl::BufferRect bufferRect{
+        cl::Offset{(int)bufferOrigin.x, (int)bufferOrigin.y, (int)bufferOrigin.z},
+        cl::Extents{(int)region.x, (int)region.y, (int)region.z}, bufferRowPitch, bufferSlicePitch,
+        1};
+
+    cl::BufferRect ptrRect{cl::Offset{(int)hostOrigin.x, (int)hostOrigin.y, (int)hostOrigin.z},
+                           cl::Extents{(int)region.x, (int)region.y, (int)region.z}, hostRowPitch,
+                           hostSlicePitch, 1};
+
+    ANGLE_TRY(bufferVk->getRect(bufferRect, ptrRect, ptr));
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueWriteBufferRect(const cl::Buffer &buffer,
@@ -221,8 +243,30 @@ angle::Result CLCommandQueueVk::enqueueWriteBufferRect(const cl::Buffer &buffer,
                                                        const cl::EventPtrs &waitEvents,
                                                        CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+
+    ANGLE_TRY(processWaitlist(waitEvents));
+
+    auto bufferVk = &buffer.getImpl<CLBufferVk>();
+
+    if (blocking || mComputePassCommands->usesBuffer(bufferVk->getBuffer()))
+    {
+        ANGLE_TRY(finishInternal());
+    }
+
+    cl::BufferRect bufferRect{
+        cl::Offset{(int)bufferOrigin.x, (int)bufferOrigin.y, (int)bufferOrigin.z},
+        cl::Extents{(int)region.x, (int)region.y, (int)region.z}, bufferRowPitch, bufferSlicePitch,
+        1};
+
+    cl::BufferRect ptrRect{cl::Offset{(int)hostOrigin.x, (int)hostOrigin.y, (int)hostOrigin.z},
+                           cl::Extents{(int)region.x, (int)region.y, (int)region.z}, hostRowPitch,
+                           hostSlicePitch, 1};
+
+    ANGLE_TRY(bufferVk->setRect(ptr, ptrRect, bufferRect));
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueCopyBuffer(const cl::Buffer &srcBuffer,
@@ -249,8 +293,27 @@ angle::Result CLCommandQueueVk::enqueueCopyBufferRect(const cl::Buffer &srcBuffe
                                                       const cl::EventPtrs &waitEvents,
                                                       CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+
+    ANGLE_TRY(processWaitlist(waitEvents));
+
+    cl::BufferRect srcRect{cl::Offset{(int)srcOrigin.x, (int)srcOrigin.y, (int)srcOrigin.z},
+                           cl::Extents{(int)region.x, (int)region.y, (int)region.z}, srcRowPitch,
+                           srcSlicePitch, 1};
+
+    cl::BufferRect dstRect{cl::Offset{(int)dstOrigin.x, (int)dstOrigin.y, (int)dstOrigin.z},
+                           cl::Extents{(int)region.x, (int)region.y, (int)region.z}, dstRowPitch,
+                           dstSlicePitch, 1};
+
+    auto srcBufferVk    = &srcBuffer.getImpl<CLBufferVk>();
+    auto dstBufferVk    = &dstBuffer.getImpl<CLBufferVk>();
+    uint8_t *mapPointer = nullptr;
+    ANGLE_TRY(srcBufferVk->getMapPtr(&mapPointer));
+    ASSERT(mapPointer);
+    ANGLE_TRY(dstBufferVk->setRect(static_cast<const void *>(mapPointer), srcRect, dstRect));
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueFillBuffer(const cl::Buffer &buffer,

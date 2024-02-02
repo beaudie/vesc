@@ -86,6 +86,13 @@ class CLBufferVk : public CLMemoryVk
     angle::Result map() override;
     angle::Result unmap() override;
 
+    angle::Result setRect(const void *data,
+                          const cl::BufferRect &srcRect,
+                          const cl::BufferRect &bufferRect);
+    angle::Result getRect(const cl::BufferRect &srcRect,
+                          const cl::BufferRect &outRect,
+                          void *outData);
+
     bool isCurrentlyInUse() const override;
     size_t getSize() const override { return mMemory.getSize(); }
 
