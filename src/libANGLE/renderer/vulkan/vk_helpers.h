@@ -11,6 +11,7 @@
 
 #include "common/MemoryBuffer.h"
 #include "libANGLE/renderer/vulkan/MemoryTracking.h"
+#include "libANGLE/renderer/vulkan/RefCountedEvent.h"
 #include "libANGLE/renderer/vulkan/Suballocation.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
@@ -50,6 +51,108 @@ constexpr VkPipelineStageFlags kSwapchainAcquireImageWaitStageFlags =
     VK_PIPELINE_STAGE_TRANSFER_BIT;                  // First use is a clear without scissor.
 
 using StagingBufferOffsetArray = std::array<VkDeviceSize, 2>;
+
+// Imagine an image going through a few layout transitions:
+//
+//           srcStage 1    dstStage 2          srcStage 2     dstStage 3
+//  Layout 1 ------Transition 1-----> Layout 2 ------Transition 2------> Layout 3
+//           srcAccess 1  dstAccess 2          srcAccess 2   dstAccess 3
+//   \_________________  ___________________/
+//                     \/
+//               A transition
+//
+// Every transition requires 6 pieces of information: from/to layouts, src/dst stage masks and
+// src/dst access masks.  At the moment we decide to transition the image to Layout 2 (i.e.
+// Transition 1), we need to have Layout 1, srcStage 1 and srcAccess 1 stored as history of the
+// image.  To perform the transition, we need to know Layout 2, dstStage 2 and dstAccess 2.
+// Additionally, we need to know srcStage 2 and srcAccess 2 to retain them for the next transition.
+//
+// That is, with the history kept, on every new transition we need 5 pieces of new information:
+// layout/dstStage/dstAccess to transition into the layout, and srcStage/srcAccess for the future
+// transition out from it.  Given the small number of possible combinations of these values, an
+// enum is used were each value encapsulates these 5 pieces of information:
+//
+//                       +--------------------------------+
+//           srcStage 1  | dstStage 2          srcStage 2 |   dstStage 3
+//  Layout 1 ------Transition 1-----> Layout 2 ------Transition 2------> Layout 3
+//           srcAccess 1 |dstAccess 2          srcAccess 2|  dstAccess 3
+//                       +---------------  ---------------+
+//                                       \/
+//                                 One enum value
+//
+// Note that, while generally dstStage for the to-transition and srcStage for the from-transition
+// are the same, they may occasionally be BOTTOM_OF_PIPE and TOP_OF_PIPE respectively.
+enum class ImageLayout
+{
+    Undefined = 0,
+    // Framebuffer attachment layouts are placed first, so they can fit in fewer bits in
+    // PackedAttachmentOpsDesc.
+
+    // Color (Write):
+    ColorWrite,
+
+    // Depth (Write), Stencil (Write)
+    DepthWriteStencilWrite,
+
+    // Depth (Write), Stencil (Read)
+    DepthWriteStencilRead,
+    DepthWriteStencilReadFragmentShaderStencilRead,
+    DepthWriteStencilReadAllShadersStencilRead,
+
+    // Depth (Read), Stencil (Write)
+    DepthReadStencilWrite,
+    DepthReadStencilWriteFragmentShaderDepthRead,
+    DepthReadStencilWriteAllShadersDepthRead,
+
+    // Depth (Read), Stencil (Read)
+    DepthReadStencilRead,
+    DepthReadStencilReadFragmentShaderRead,
+    DepthReadStencilReadAllShadersRead,
+
+    // The GENERAL layout is used when there's a feedback loop.  For depth/stencil it does't matter
+    // which aspect is participating in feedback and whether the other aspect is read-only.
+    ColorWriteFragmentShaderFeedback,
+    ColorWriteAllShadersFeedback,
+    DepthStencilFragmentShaderFeedback,
+    DepthStencilAllShadersFeedback,
+
+    // Depth/stencil resolve is special because it uses the _color_ output stage and mask
+    DepthStencilResolve,
+
+    Present,
+    SharedPresent,
+    // The rest of the layouts.
+    ExternalPreInitialized,
+    ExternalShadersReadOnly,
+    ExternalShadersWrite,
+    TransferSrc,
+    TransferDst,
+    TransferSrcDst,
+    // Used when the image is transitioned on the host for use by host image copy
+    HostCopy,
+    VertexShaderReadOnly,
+    VertexShaderWrite,
+    // PreFragment == Vertex, Tessellation and Geometry stages
+    PreFragmentShadersReadOnly,
+    PreFragmentShadersWrite,
+    FragmentShaderReadOnly,
+    FragmentShaderWrite,
+    ComputeShaderReadOnly,
+    ComputeShaderWrite,
+    AllGraphicsShadersReadOnly,
+    AllGraphicsShadersWrite,
+    TransferDstAndComputeWrite,
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+
+VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType);
+ImageLayout GetImageLayoutFromGLImageLayout(Context *context, GLenum layout);
+GLenum ConvertImageLayoutToGLImageLayout(ImageLayout imageLayout);
+VkImageLayout ConvertImageLayoutToVkImageLayout(Context *context, ImageLayout imageLayout);
+
+using ImageLayoutEventMaps = angle::PackedEnumMap<ImageLayout, RefCountedEvent>;
 
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
 // you will always write to a previously unused portion. After a series of writes, you must flush
@@ -643,35 +746,20 @@ class PipelineBarrier : angle::NonCopyable
           mDstStageMask(0),
           mMemoryBarrierSrcAccess(0),
           mMemoryBarrierDstAccess(0),
-          mImageMemoryBarriers()
+          mImageMemoryBarriers(),
+          mWaitEvents(),
+          mImageEventBarriers(),
+          mImageEventSrcStageMask(0),
+          mImageEventDstStageMask(0)
     {}
     ~PipelineBarrier() = default;
 
-    bool isEmpty() const { return mImageMemoryBarriers.empty() && mMemoryBarrierDstAccess == 0; }
-
-    void execute(PrimaryCommandBuffer *primary)
+    bool isEmpty() const
     {
-        if (isEmpty())
-        {
-            return;
-        }
-
-        // Issue vkCmdPipelineBarrier call
-        VkMemoryBarrier memoryBarrier = {};
-        uint32_t memoryBarrierCount   = 0;
-        if (mMemoryBarrierDstAccess != 0)
-        {
-            memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-            memoryBarrier.srcAccessMask = mMemoryBarrierSrcAccess;
-            memoryBarrier.dstAccessMask = mMemoryBarrierDstAccess;
-            memoryBarrierCount++;
-        }
-        primary->pipelineBarrier(
-            mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
-            static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
-
-        reset();
+        return mImageMemoryBarriers.empty() && mMemoryBarrierDstAccess == 0 && mWaitEvents.empty();
     }
+
+    void execute(GarbageObjects *collector, PrimaryCommandBuffer *primary);
 
     // merge two barriers into one
     void merge(PipelineBarrier *other)
@@ -682,6 +770,16 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierDstAccess |= other->mMemoryBarrierDstAccess;
         mImageMemoryBarriers.insert(mImageMemoryBarriers.end(), other->mImageMemoryBarriers.begin(),
                                     other->mImageMemoryBarriers.end());
+        // For events
+        while (!other->mWaitEvents.empty())
+        {
+            mWaitEvents.push_back(std::move(other->mWaitEvents.back()));
+            other->mWaitEvents.pop_back();
+        }
+        mImageEventBarriers.insert(mImageEventBarriers.end(), other->mImageEventBarriers.begin(),
+                                   other->mImageEventBarriers.end());
+        mImageEventSrcStageMask |= other->mImageEventSrcStageMask;
+        mImageEventDstStageMask |= other->mImageEventDstStageMask;
         other->reset();
     }
 
@@ -706,6 +804,19 @@ class PipelineBarrier : angle::NonCopyable
         mImageMemoryBarriers.push_back(imageMemoryBarrier);
     }
 
+    void mergeImageEvent(VkPipelineStageFlags srcStageMask,
+                         VkPipelineStageFlags dstStageMask,
+                         const RefCountedEvent &event,
+                         const VkImageMemoryBarrier &imageMemoryBarrier)
+    {
+        ASSERT(event.valid());
+        ASSERT(imageMemoryBarrier.pNext == nullptr);
+        mImageEventSrcStageMask |= srcStageMask;
+        mImageEventDstStageMask |= dstStageMask;
+        mWaitEvents.push_back(event);
+        mImageEventBarriers.push_back(imageMemoryBarrier);
+    }
+
     void reset()
     {
         mSrcStageMask           = 0;
@@ -713,6 +824,11 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierSrcAccess = 0;
         mMemoryBarrierDstAccess = 0;
         mImageMemoryBarriers.clear();
+        // For events
+        ASSERT(mWaitEvents.empty());
+        mImageEventBarriers.clear();
+        mImageEventSrcStageMask = 0;
+        mImageEventDstStageMask = 0;
     }
 
     void addDiagnosticsString(std::ostringstream &out) const;
@@ -723,6 +839,11 @@ class PipelineBarrier : angle::NonCopyable
     VkAccessFlags mMemoryBarrierSrcAccess;
     VkAccessFlags mMemoryBarrierDstAccess;
     std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
+    // The list of events that we should wait for
+    std::vector<RefCountedEvent> mWaitEvents;
+    std::vector<VkImageMemoryBarrier> mImageEventBarriers;
+    VkPipelineStageFlags mImageEventSrcStageMask;
+    VkPipelineStageFlags mImageEventDstStageMask;
 };
 using PipelineBarrierArray = angle::PackedEnumMap<PipelineStage, PipelineBarrier>;
 
@@ -1268,6 +1389,9 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     // Only used for swapChain images
     Semaphore mAcquireNextImageSemaphore;
+
+    // The list of RefCountedEvents that should be garbage collected when it gets reset.
+    EventCollector mRefCountedEventGarbage;
 };
 
 class SecondaryCommandBufferCollector;
@@ -1335,6 +1459,9 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
                     ImageLayout imageLayout,
                     ImageHelper *image);
 
+    void retainImage(Context *context, ImageHelper *image);
+    angle::Result setEvents(Context *context);
+
     angle::Result flushToPrimary(Context *context, CommandsState *commandsState);
 
     void setGLMemoryBarrierIssued()
@@ -1359,6 +1486,8 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
 
     OutsideRenderPassCommandBuffer mCommandBuffer;
     bool mIsCommandBufferEnded = false;
+
+    ImageLayoutEventMaps mRefCountedEvents;
 
     friend class CommandBufferHelperCommon;
 };
@@ -1689,6 +1818,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     // final layout of the renderpass to transition it to the presentable layout
     ImageHelper *mImageOptimizeForPresent;
 
+    ImageLayoutEventMaps mRefCountedEvents;
+
     friend class CommandBufferHelperCommon;
 };
 
@@ -1714,109 +1845,6 @@ class CommandBufferRecycler
     std::mutex mMutex;
     std::vector<CommandBufferHelperT *> mCommandBufferHelperFreeList;
 };
-
-// Imagine an image going through a few layout transitions:
-//
-//           srcStage 1    dstStage 2          srcStage 2     dstStage 3
-//  Layout 1 ------Transition 1-----> Layout 2 ------Transition 2------> Layout 3
-//           srcAccess 1  dstAccess 2          srcAccess 2   dstAccess 3
-//   \_________________  ___________________/
-//                     \/
-//               A transition
-//
-// Every transition requires 6 pieces of information: from/to layouts, src/dst stage masks and
-// src/dst access masks.  At the moment we decide to transition the image to Layout 2 (i.e.
-// Transition 1), we need to have Layout 1, srcStage 1 and srcAccess 1 stored as history of the
-// image.  To perform the transition, we need to know Layout 2, dstStage 2 and dstAccess 2.
-// Additionally, we need to know srcStage 2 and srcAccess 2 to retain them for the next transition.
-//
-// That is, with the history kept, on every new transition we need 5 pieces of new information:
-// layout/dstStage/dstAccess to transition into the layout, and srcStage/srcAccess for the future
-// transition out from it.  Given the small number of possible combinations of these values, an
-// enum is used were each value encapsulates these 5 pieces of information:
-//
-//                       +--------------------------------+
-//           srcStage 1  | dstStage 2          srcStage 2 |   dstStage 3
-//  Layout 1 ------Transition 1-----> Layout 2 ------Transition 2------> Layout 3
-//           srcAccess 1 |dstAccess 2          srcAccess 2|  dstAccess 3
-//                       +---------------  ---------------+
-//                                       \/
-//                                 One enum value
-//
-// Note that, while generally dstStage for the to-transition and srcStage for the from-transition
-// are the same, they may occasionally be BOTTOM_OF_PIPE and TOP_OF_PIPE respectively.
-enum class ImageLayout
-{
-    Undefined = 0,
-    // Framebuffer attachment layouts are placed first, so they can fit in fewer bits in
-    // PackedAttachmentOpsDesc.
-
-    // Color (Write):
-    ColorWrite,
-
-    // Depth (Write), Stencil (Write)
-    DepthWriteStencilWrite,
-
-    // Depth (Write), Stencil (Read)
-    DepthWriteStencilRead,
-    DepthWriteStencilReadFragmentShaderStencilRead,
-    DepthWriteStencilReadAllShadersStencilRead,
-
-    // Depth (Read), Stencil (Write)
-    DepthReadStencilWrite,
-    DepthReadStencilWriteFragmentShaderDepthRead,
-    DepthReadStencilWriteAllShadersDepthRead,
-
-    // Depth (Read), Stencil (Read)
-    DepthReadStencilRead,
-    DepthReadStencilReadFragmentShaderRead,
-    DepthReadStencilReadAllShadersRead,
-
-    // The GENERAL layout is used when there's a feedback loop.  For depth/stencil it does't matter
-    // which aspect is participating in feedback and whether the other aspect is read-only.
-    ColorWriteFragmentShaderFeedback,
-    ColorWriteAllShadersFeedback,
-    DepthStencilFragmentShaderFeedback,
-    DepthStencilAllShadersFeedback,
-
-    // Depth/stencil resolve is special because it uses the _color_ output stage and mask
-    DepthStencilResolve,
-
-    Present,
-    SharedPresent,
-    // The rest of the layouts.
-    ExternalPreInitialized,
-    ExternalShadersReadOnly,
-    ExternalShadersWrite,
-    TransferSrc,
-    TransferDst,
-    TransferSrcDst,
-    // Used when the image is transitioned on the host for use by host image copy
-    HostCopy,
-    VertexShaderReadOnly,
-    VertexShaderWrite,
-    // PreFragment == Vertex, Tessellation and Geometry stages
-    PreFragmentShadersReadOnly,
-    PreFragmentShadersWrite,
-    FragmentShaderReadOnly,
-    FragmentShaderWrite,
-    ComputeShaderReadOnly,
-    ComputeShaderWrite,
-    AllGraphicsShadersReadOnly,
-    AllGraphicsShadersWrite,
-    TransferDstAndComputeWrite,
-
-    InvalidEnum,
-    EnumCount = InvalidEnum,
-};
-
-VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType);
-
-ImageLayout GetImageLayoutFromGLImageLayout(Context *context, GLenum layout);
-
-GLenum ConvertImageLayoutToGLImageLayout(ImageLayout imageLayout);
-
-VkImageLayout ConvertImageLayoutToVkImageLayout(Context *context, ImageLayout imageLayout);
 
 // The source of update to an ImageHelper
 enum class UpdateSource
@@ -2534,6 +2562,24 @@ class ImageHelper final : public Resource, public angle::Subject
 
     size_t getLevelUpdateCount(gl::LevelIndex level) const;
 
+    // Event
+    void setCurrentRefCountedEvent(Context *context,
+                                   EventCollector &collector,
+                                   ImageLayoutEventMaps &layoutEventMaps)
+    {
+        if (mCurrentEvent.valid())
+        {
+            collector.emplace_back(GetGarbage(&mCurrentEvent));
+        }
+
+        if (!layoutEventMaps[mCurrentLayout].valid())
+        {
+            layoutEventMaps[mCurrentLayout].init(context->getDevice(), mCurrentLayout);
+        }
+        // Make a copy here. This will add extra refcount to the underline VkEvent.
+        mCurrentEvent = layoutEventMaps[mCurrentLayout];
+    }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2845,6 +2891,9 @@ class ImageHelper final : public Resource, public angle::Subject
     RenderPassUsageFlags mRenderPassUsageFlags;
     // The QueueSerial that associated with the last barrier.
     QueueSerial mBarrierQueueSerial;
+    // The current refcounted event. When barrier or layout change is needed, we should wait for
+    // this event.
+    RefCountedEvent mCurrentEvent;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
