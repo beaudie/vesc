@@ -2323,6 +2323,7 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
                 contextVk, mImage, srcView, mImage, destLevelViews, sampler.get().get(), params));
         }
     }
+    contextVk->trackImagesWithOutsideRenderPassEvent(mImage, nullptr);
 
     contextVk->trackImageWithOutsideRenderPassEvent(mImage);
 
