@@ -295,6 +295,7 @@ angle::Result TextureD3D::subImage(const gl::Context *context,
         ImageD3D *image = getImage(index);
         ASSERT(image);
 
+        // don't go through this path if multiplanar format check
         if (shouldUseSetData(image))
         {
             return mTexStorage->setData(context, index, image, &area, type, unpack, pixelData);
