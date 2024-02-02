@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ca739db_1a37d7a1",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-02-02T19:13:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2c1f26a_f73e00f0",
+      "range": {
+        "startLine": 535,
+        "startChar": 0,
+        "endLine": 540,
+        "endChar": 86
+      },
+      "revId": "07172c388b97b4ac5550d05ba8c9b1132f34cc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "295b262a_feec008b",
@@ -72,6 +96,24 @@
       "side": 1,
       "message": "Understood, I will make this change.",
       "parentUuid": "295b262a_feec008b",
+      "revId": "07172c388b97b4ac5550d05ba8c9b1132f34cc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c97ee21_9ee49323",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4710,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-02-02T19:13:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca626e12_d798ddbc",
       "revId": "07172c388b97b4ac5550d05ba8c9b1132f34cc68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -232,6 +274,30 @@
       "writtenOn": "2024-02-02T15:54:54Z",
       "side": 1,
       "message": "We avoid `bool` params as much as we can. In this case, please use an `enum class`:\n\n```\nenum class YCbCrLinearFilterSupport\n{\n    Supported,\n    Unsupported,\n};\n```",
+      "range": {
+        "startLine": 1080,
+        "startChar": 16,
+        "endLine": 1080,
+        "endChar": 42
+      },
+      "revId": "07172c388b97b4ac5550d05ba8c9b1132f34cc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6e1716f_a00780e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-02-02T19:13:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f169a13_0ac58259",
       "range": {
         "startLine": 1080,
         "startChar": 16,

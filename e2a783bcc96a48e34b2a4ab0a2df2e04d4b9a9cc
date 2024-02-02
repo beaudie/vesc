@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26475bfe_e4d219d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-02-02T19:13:53Z",
+      "side": 1,
+      "message": "V4 applies Shahbaz\u0027s suggestions.",
+      "revId": "e2a783bcc96a48e34b2a4ab0a2df2e04d4b9a9cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
