@@ -1449,6 +1449,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
 
         vk::ImageHelper::Copy(contextVk, srcImage, mImage, srcOffset, dstOffsetModified, extents,
                               srcSubresource, destSubresource, commandBuffer);
+        contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, mImage);
     }
     else
     {
@@ -1482,6 +1483,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
 
         vk::ImageHelper::Copy(contextVk, srcImage, &stagingImage->get(), srcOffset, gl::kOffsetZero,
                               extents, srcSubresource, destSubresource, commandBuffer);
+        contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, &stagingImage->get());
 
         // Stage the copy for when the image storage is actually created.
         VkImageType imageType = gl_vk::GetImageType(mState.getType());
@@ -2206,6 +2208,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
 
     commandBuffer->copyBufferToImage(srcBuffer->getBuffer().getHandle(), mImage->getImage(),
                                      mImage->getCurrentLayout(contextVk), 1, &region);
+    contextVk->trackImagesWithOutsideRenderPassEvent(mImage, nullptr);
 
     return angle::Result::Continue;
 }
@@ -2315,6 +2318,7 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
                 contextVk, mImage, srcView, mImage, destLevelViews, sampler.get().get(), params));
         }
     }
+    contextVk->trackImagesWithOutsideRenderPassEvent(mImage, nullptr);
 
     return angle::Result::Continue;
 }
@@ -2516,6 +2520,7 @@ angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
                                  stagingImage->get().getImage(),
                                  stagingImage->get().getCurrentLayout(contextVk), 1, &copyRegion);
     }
+    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, &stagingImage->get());
 
     // Stage the staging image in the destination
     dstImage->stageSubresourceUpdatesFromAllImageLevels(stagingImage.release(),
