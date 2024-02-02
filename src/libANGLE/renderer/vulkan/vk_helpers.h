@@ -11,6 +11,7 @@
 
 #include "common/MemoryBuffer.h"
 #include "libANGLE/renderer/vulkan/MemoryTracking.h"
+#include "libANGLE/renderer/vulkan/RefCountedEvent.h"
 #include "libANGLE/renderer/vulkan/Suballocation.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
@@ -166,6 +167,14 @@ ImageLayout GetImageLayoutFromGLImageLayout(Context *context, GLenum layout);
 GLenum ConvertImageLayoutToGLImageLayout(ImageLayout imageLayout);
 
 VkImageLayout ConvertImageLayoutToVkImageLayout(Context *context, ImageLayout imageLayout);
+
+struct ImageLayoutEventMaps
+{
+    // The list of RefCountedEvents that have be tracked. mRefCountedEventMask is used to quick the
+    // access to mRefCountedEvents
+    angle::PackedEnumMap<ImageLayout, RefCountedEvent> map;
+    angle::PackedEnumBitSet<ImageLayout, uint64_t> mask;
+};
 
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
 // you will always write to a previously unused portion. After a series of writes, you must flush
@@ -762,7 +771,7 @@ class PipelineBarrier : angle::NonCopyable
           mMemoryBarrierDstAccess(0),
           mImageMemoryBarriers()
     {}
-    ~PipelineBarrier() = default;
+    ~PipelineBarrier() { ASSERT(mImageMemoryBarriers.empty()); }
 
     bool isEmpty() const { return mImageMemoryBarriers.empty() && mMemoryBarrierDstAccess == 0; }
 
@@ -1326,6 +1335,15 @@ class CommandBufferHelperCommon : angle::NonCopyable
         writeResource->setWriteQueueSerial(mQueueSerial);
     }
 
+    void retainImage(Context *context, ImageHelper *image);
+    bool hasEvent(const RefCountedEvent &event) const;
+    template <typename CommandBufferT>
+    void setEventsImpl(Context *context, CommandBufferT *commandBuffer);
+    RefCountedEventGarbageObjects *getRefCountedEventCollector()
+    {
+        return &mRefCountedEventGarbage;
+    }
+
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
     void setAcquireNextImageSemaphore(VkSemaphore semaphore)
@@ -1377,6 +1395,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     void imageReadImpl(ContextVk *contextVk,
                        VkImageAspectFlags aspectFlags,
                        ImageLayout imageLayout,
+                       BarrierType barrierType,
                        ImageHelper *image);
     void imageWriteImpl(ContextVk *contextVk,
                         gl::LevelIndex level,
@@ -1384,12 +1403,14 @@ class CommandBufferHelperCommon : angle::NonCopyable
                         uint32_t layerCount,
                         VkImageAspectFlags aspectFlags,
                         ImageLayout imageLayout,
+                        BarrierType barrierType,
                         ImageHelper *image);
 
     void updateImageLayoutAndBarrier(Context *context,
                                      ImageHelper *image,
                                      VkImageAspectFlags aspectFlags,
-                                     ImageLayout imageLayout);
+                                     ImageLayout imageLayout,
+                                     BarrierType barrierType);
 
     void addCommandDiagnosticsCommon(std::ostringstream *out);
 
@@ -1398,6 +1419,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     // Barriers to be executed before the command buffer.
     PipelineBarrierArray mPipelineBarriers;
+    EventBarrierArray mEventBarriers;
 
     // The command pool *CommandBufferHelper::mCommandBuffer is allocated from.  Only used with
     // Vulkan secondary command buffers (as opposed to ANGLE's SecondaryCommandBuffer).
@@ -1417,6 +1439,11 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     // Only used for swapChain images
     Semaphore mAcquireNextImageSemaphore;
+
+    // The list of RefCountedEvents that have be tracked
+    ImageLayoutEventMaps mRefCountedEvents;
+    // The list of RefCountedEvents that should be garbage collected when it gets reset.
+    RefCountedEventGarbageObjects mRefCountedEventGarbage;
 };
 
 class SecondaryCommandBufferCollector;
@@ -1483,6 +1510,9 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
                     VkImageAspectFlags aspectFlags,
                     ImageLayout imageLayout,
                     ImageHelper *image);
+
+    void setEvents(Context *context) { setEventsImpl(context, &mCommandBuffer); }
+    void trackImagesWithEvent(Context *context, ImageHelper *image1, ImageHelper *image2);
 
     angle::Result flushToPrimary(Context *context, CommandsState *commandsState);
 
@@ -2170,6 +2200,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void finalizeImageLayoutInShareContexts(Renderer *renderer,
                                             ContextVk *contextVk,
                                             UniqueSerial imageSiblingSerial);
+
     void releaseStagedUpdates(Renderer *renderer);
 
     bool valid() const { return mImage.valid(); }
@@ -2470,8 +2501,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                   PrimaryCommandBuffer *commandBuffer,
                                   VkSemaphore *acquireNextImageSemaphoreOut)
     {
-        barrierImpl(context, getAspectFlags(), newLayout, mCurrentQueueFamilyIndex, commandBuffer,
-                    acquireNextImageSemaphoreOut);
+        barrierImpl(context, getAspectFlags(), newLayout, mCurrentQueueFamilyIndex,
+                    BarrierType::Pipeline, nullptr, commandBuffer, acquireNextImageSemaphoreOut);
     }
 
     // This function can be used to prevent issuing redundant layout transition commands.
@@ -2497,7 +2528,7 @@ class ImageHelper final : public Resource, public angle::Subject
         return mCurrentQueueFamilyIndex != newQueueFamilyIndex;
     }
 
-    void changeLayoutAndQueue(Context *context,
+    void changeLayoutAndQueue(ContextVk *contextVk,
                               VkImageAspectFlags aspectMask,
                               ImageLayout newLayout,
                               uint32_t newQueueFamilyIndex,
@@ -2507,8 +2538,11 @@ class ImageHelper final : public Resource, public angle::Subject
     void updateLayoutAndBarrier(Context *context,
                                 VkImageAspectFlags aspectMask,
                                 ImageLayout newLayout,
+                                BarrierType barrierType,
                                 const QueueSerial &queueSerial,
                                 PipelineBarrierArray *pipelineBarriers,
+                                EventBarrierArray *eventBarriers,
+                                RefCountedEventGarbageObjects *garbageCollector,
                                 VkSemaphore *semaphoreOut);
 
     // Performs an ownership transfer from an external instance or API.
@@ -2688,6 +2722,9 @@ class ImageHelper final : public Resource, public angle::Subject
 
     size_t getLevelUpdateCount(gl::LevelIndex level) const;
 
+    // Event
+    void setCurrentRefCountedEvent(Context *context, ImageLayoutEventMaps &layoutEventMaps);
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2801,6 +2838,8 @@ class ImageHelper final : public Resource, public angle::Subject
                      VkImageAspectFlags aspectMask,
                      ImageLayout newLayout,
                      uint32_t newQueueFamilyIndex,
+                     BarrierType barrierType,
+                     RefCountedEventGarbageObjects *garbageObjects,
                      CommandBufferT *commandBuffer,
                      VkSemaphore *acquireNextImageSemaphoreOut);
 
@@ -3031,6 +3070,11 @@ class ImageHelper final : public Resource, public angle::Subject
     RenderPassUsageFlags mRenderPassUsageFlags;
     // The QueueSerial that associated with the last barrier.
     QueueSerial mBarrierQueueSerial;
+
+    // The current refcounted event. When barrier or layout change is needed, we should wait for
+    // this event.
+    RefCountedEvent mCurrentEvent;
+    RefCountedEvent mLastNonShaderReadOnlyEvent;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
