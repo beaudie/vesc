@@ -149,6 +149,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f46dc5b_50824fa1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4727,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-02-02T18:35:38Z",
+      "side": 1,
+      "message": "On rearranging other logic -- there are more changes to come after this.",
+      "parentUuid": "5472f547_59650ced",
+      "range": {
+        "startLine": 4727,
+        "startChar": 26,
+        "endLine": 4727,
+        "endChar": 44
+      },
+      "revId": "07172c388b97b4ac5550d05ba8c9b1132f34cc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f169a13_0ac58259",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 3
