@@ -21,6 +21,7 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/android/vk_android_utils.h"
+#include "libANGLE/renderer/vulkan/vk_ref_counted_event.h"
 #include "libANGLE/renderer/vulkan/vk_renderer.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
@@ -1096,6 +1097,21 @@ ImageLayerWriteMask GetImageLayerWriteMask(uint32_t layerStart, uint32_t layerCo
 uint32_t DynamicDescriptorPool::mMaxSetsPerPool           = 16;
 uint32_t DynamicDescriptorPool::mMaxSetsPerPoolMultiplier = 2;
 
+VkPipelineStageFlags GetImageLayoutSrcStageMask(Context *context, const RefCountedEvent &event)
+{
+    const ImageMemoryBarrierData &barrierData = kImageMemoryBarrierData[event.getImageLayout()];
+    return barrierData.srcStageMask & context->getRenderer()->getSupportedVulkanPipelineStageMask();
+}
+
+VkPipelineStageFlags GetRefCountedEventStageMask(Context *context,
+                                                 const RefCountedEvent &event,
+                                                 VkAccessFlags *accessMask)
+{
+    const ImageMemoryBarrierData &barrierData = kImageMemoryBarrierData[event.getImageLayout()];
+    *accessMask                               = barrierData.dstAccessMask;
+    return barrierData.dstStageMask & context->getRenderer()->getSupportedVulkanPipelineStageMask();
+}
+
 ImageLayout GetImageLayoutFromGLImageLayout(Context *context, GLenum layout)
 {
     const bool supportsMixedReadWriteDepthStencilLayouts =
@@ -1647,6 +1663,7 @@ void CommandBufferHelperCommon::executeBarriers(Renderer *renderer, CommandsStat
     }
 
     mPipelineBarriers.execute(renderer, &commandsState->primaryCommands);
+    mEventBarriers.execute(renderer, &commandsState->primaryCommands);
 }
 
 void CommandBufferHelperCommon::bufferReadImpl(VkAccessFlags readAccessType,
@@ -1661,11 +1678,12 @@ void CommandBufferHelperCommon::bufferReadImpl(VkAccessFlags readAccessType,
 void CommandBufferHelperCommon::imageReadImpl(ContextVk *contextVk,
                                               VkImageAspectFlags aspectFlags,
                                               ImageLayout imageLayout,
+                                              BarrierType barrierType,
                                               ImageHelper *image)
 {
     if (image->isReadBarrierNecessary(imageLayout))
     {
-        updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
+        updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout, barrierType);
     }
 }
 
@@ -1675,23 +1693,26 @@ void CommandBufferHelperCommon::imageWriteImpl(ContextVk *contextVk,
                                                uint32_t layerCount,
                                                VkImageAspectFlags aspectFlags,
                                                ImageLayout imageLayout,
+                                               BarrierType barrierType,
                                                ImageHelper *image)
 {
     image->onWrite(level, 1, layerStart, layerCount, aspectFlags);
     if (image->isWriteBarrierNecessary(imageLayout, level, 1, layerStart, layerCount))
     {
-        updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
+        updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout, barrierType);
     }
 }
 
 void CommandBufferHelperCommon::updateImageLayoutAndBarrier(Context *context,
                                                             ImageHelper *image,
                                                             VkImageAspectFlags aspectFlags,
-                                                            ImageLayout imageLayout)
+                                                            ImageLayout imageLayout,
+                                                            BarrierType barrierType)
 {
     VkSemaphore semaphore = VK_NULL_HANDLE;
-    image->updateLayoutAndBarrier(context, aspectFlags, imageLayout, mQueueSerial,
-                                  &mPipelineBarriers, &semaphore);
+    image->updateLayoutAndBarrier(context, aspectFlags, imageLayout, barrierType, mQueueSerial,
+                                  &mPipelineBarriers, &mEventBarriers, &mRefCountedEventGarbage,
+                                  &semaphore);
     // If image has an ANI semaphore, move it to command buffer so that we can wait for it in
     // next submission.
     if (semaphore != VK_NULL_HANDLE)
@@ -1709,6 +1730,20 @@ void CommandBufferHelperCommon::retainImage(Context *context, ImageHelper *image
     {
         image->setCurrentRefCountedEvent(context, mRefCountedEvents);
     }
+}
+
+bool CommandBufferHelperCommon::hasEvent(const RefCountedEvent &event) const
+{
+    ASSERT(event.valid());
+    for (ImageLayout layout : mRefCountedEvents.mask)
+    {
+        const RefCountedEvent &refCountedEvent = mRefCountedEvents.map[layout];
+        if (refCountedEvent.getHandle() == event.getHandle())
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 template <typename CommandBufferT>
@@ -1744,6 +1779,7 @@ template void CommandBufferHelperCommon::setEventsImpl<VulkanSecondaryCommandBuf
 void CommandBufferHelperCommon::addCommandDiagnosticsCommon(std::ostringstream *out)
 {
     mPipelineBarriers.addDiagnosticsString(*out);
+    mEventBarriers.addDiagnosticsString(*out);
 }
 
 // OutsideRenderPassCommandBufferHelper implementation.
@@ -1777,6 +1813,14 @@ angle::Result OutsideRenderPassCommandBufferHelper::reset(
     commandBufferCollector->collectCommandBuffer(std::move(mCommandBuffer));
     mIsCommandBufferEnded = false;
 
+    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
+    // so it will not gets destroyed until the last refCount goes away.
+    if (!mRefCountedEventGarbage.empty())
+    {
+        context->getRenderer()->collectRefCountedEventGarbage(mQueueSerial,
+                                                              std::move(mRefCountedEventGarbage));
+    }
+
     // Invalidate the queue serial here. We will get a new queue serial after commands flush.
     mQueueSerial = QueueSerial();
 
@@ -1806,23 +1850,19 @@ void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
                                                      ImageLayout imageLayout,
                                                      ImageHelper *image)
 {
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
-
     if (contextVk->isRenderPassStartedAndUsesImage(*image))
     {
-        // Usually an image can only used by a RenderPassCommands or OutsideRenderPassCommands
-        // because the layout will be different, except with image sampled from compute shader. In
-        // this case, the renderPassCommands' read will override the outsideRenderPassCommands'
-        // read, since its queueSerial must be greater than outsideRP. So dont update queueSerial
-        // here.
-        if (contextVk->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled)
-        {
-            // We always have to update event here since compute tracks its own event.
-            image->setCurrentRefCountedEvent(contextVk, mRefCountedEvents);
-        }
+        // If image is already used by renderPass, it may already set the event to renderPass's
+        // event. In this case we already lost the previous event to wait for, thus use pipeline
+        // barrier instead of event
+        imageReadImpl(contextVk, aspectFlags, imageLayout, BarrierType::Pipeline, image);
     }
     else
     {
+        imageReadImpl(contextVk, aspectFlags, imageLayout, BarrierType::Event, image);
+        // Usually an image can only used by a RenderPassCommands or OutsideRenderPassCommands
+        // because the layout will be different, except with image sampled from compute shader. In
+        // this case, the renderPassCommands' read will override the outsideRenderPassCommands'
         retainImage(contextVk, image);
     }
 }
@@ -1835,7 +1875,8 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                       ImageLayout imageLayout,
                                                       ImageHelper *image)
 {
-    imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
+    imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout,
+                   BarrierType::Event, image);
     retainImage(contextVk, image);
 }
 
@@ -2096,6 +2137,14 @@ angle::Result RenderPassCommandBufferHelper::reset(
     // Reset the image views used for imageless framebuffer (if any)
     mFramebuffer.reset();
 
+    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
+    // so it will not gets destroyed until the last refCount goes away.
+    if (!mRefCountedEventGarbage.empty())
+    {
+        context->getRenderer()->collectRefCountedEventGarbage(mQueueSerial,
+                                                              std::move(mRefCountedEventGarbage));
+    }
+
     // Invalidate the queue serial here. We will get a new queue serial when we begin renderpass.
     mQueueSerial = QueueSerial();
 
@@ -2107,7 +2156,7 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
                                               ImageLayout imageLayout,
                                               ImageHelper *image)
 {
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
+    imageReadImpl(contextVk, aspectFlags, imageLayout, BarrierType::Event, image);
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
     retainImage(contextVk, image);
@@ -2121,7 +2170,8 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                ImageLayout imageLayout,
                                                ImageHelper *image)
 {
-    imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
+    imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout,
+                   BarrierType::Event, image);
     retainImage(contextVk, image);
 }
 
@@ -2311,7 +2361,8 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
             isResolveImage && mRenderPassDesc.getColorUnresolveAttachmentMask().any();
         imageLayout = hasUnresolve ? ImageLayout::MSRTTEmulationColorUnresolveAndResolve
                                    : ImageLayout::ColorWrite;
-        updateImageLayoutAndBarrier(context, image, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout);
+        updateImageLayoutAndBarrier(context, image, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout,
+                                    BarrierType::Event);
     }
 
     if (!isResolveImage)
@@ -2410,11 +2461,16 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilImageLayout(Context *con
         depthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::DepthReadOnlyAttachment);
     const bool isReadOnlyStencil =
         depthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::StencilReadOnlyAttachment);
+    BarrierType barrierType = BarrierType::Event;
 
     if (isDepthAttachmentAndSampler || isStencilAttachmentAndSampler)
     {
         // texture code already picked layout and inserted barrier
         imageLayout = depthStencilImage->getCurrentImageLayout();
+        // TODO: Use pipelineBarrier for now. Otherwise we may end up waitForEvents on the event
+        // that has not been set.
+        barrierType = BarrierType::Pipeline;
+
         if ((isDepthAttachmentAndSampler && !isReadOnlyDepth) ||
             (isStencilAttachmentAndSampler && !isReadOnlyStencil))
         {
@@ -2457,7 +2513,8 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilImageLayout(Context *con
         const angle::Format &format = depthStencilImage->getActualFormat();
         ASSERT(format.hasDepthOrStencilBits());
         VkImageAspectFlags aspectFlags = GetDepthStencilAspectFlags(format);
-        updateImageLayoutAndBarrier(context, depthStencilImage, aspectFlags, imageLayout);
+        updateImageLayoutAndBarrier(context, depthStencilImage, aspectFlags, imageLayout,
+                                    barrierType);
     }
 }
 
@@ -2476,7 +2533,8 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilResolveImageLayout(Conte
     ASSERT(format.hasDepthOrStencilBits());
     VkImageAspectFlags aspectFlags = GetDepthStencilAspectFlags(format);
 
-    updateImageLayoutAndBarrier(context, depthStencilResolveImage, aspectFlags, imageLayout);
+    updateImageLayoutAndBarrier(context, depthStencilResolveImage, aspectFlags, imageLayout,
+                                BarrierType::Event);
 
     // The resolve image can never be read-only.
     ASSERT(!depthStencilResolveImage->hasRenderPassUsageFlag(
@@ -2506,7 +2564,8 @@ void RenderPassCommandBufferHelper::finalizeFragmentShadingRateImageLayout(Conte
     ASSERT(image && image->valid());
     if (image->isReadBarrierNecessary(imageLayout))
     {
-        updateImageLayoutAndBarrier(context, image, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout);
+        updateImageLayoutAndBarrier(context, image, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout,
+                                    BarrierType::Event);
     }
     image->resetRenderPassUsageFlags();
 }
@@ -2853,9 +2912,10 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     ANGLE_TRACE_EVENT0("gpu.angle", "RenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(mRenderPassStarted);
     PrimaryCommandBuffer &primary = commandsState->primaryCommands;
+    Renderer *renderer            = context->getRenderer();
 
     // Commands that are added to primary before beginRenderPass command
-    executeBarriers(context->getRenderer(), commandsState);
+    executeBarriers(renderer, commandsState);
 
     VkRenderPassBeginInfo beginInfo = {};
     beginInfo.sType                 = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -6085,7 +6145,7 @@ void ImageHelper::releaseImage(Renderer *renderer)
                                   mVmaAllocation.getHandle());
     }
     mCurrentEvent.release(renderer->getDevice());
-
+    mLastNonShaderReadOnlyEvent.release(renderer->getDevice());
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory, &mVmaAllocation);
     mViewFormats.clear();
     mUse.reset();
@@ -6191,7 +6251,8 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
     // Queue a DMA copy.
     VkSemaphore acquireNextImageSemaphore;
     barrierImpl(context, getAspectFlags(), ImageLayout::TransferDst,
-                renderer->getQueueFamilyIndex(), &commandBuffer, &acquireNextImageSemaphore);
+                renderer->getQueueFamilyIndex(), BarrierType::Pipeline, nullptr, &commandBuffer,
+                &acquireNextImageSemaphore);
     // SwapChain image should not come here
     ASSERT(acquireNextImageSemaphore == VK_NULL_HANDLE);
 
@@ -6561,6 +6622,7 @@ void ImageHelper::destroy(Renderer *renderer)
     }
 
     mCurrentEvent.release(device);
+    mLastNonShaderReadOnlyEvent.release(device);
     mImage.destroy(device);
     mDeviceMemory.destroy(device);
     mVmaAllocation.destroy(renderer->getAllocator());
@@ -6922,7 +6984,7 @@ bool ImageHelper::isWriteBarrierNecessary(ImageLayout newLayout,
     return false;
 }
 
-void ImageHelper::changeLayoutAndQueue(Context *context,
+void ImageHelper::changeLayoutAndQueue(ContextVk *contextVk,
                                        VkImageAspectFlags aspectMask,
                                        ImageLayout newLayout,
                                        uint32_t newQueueFamilyIndex,
@@ -6930,8 +6992,8 @@ void ImageHelper::changeLayoutAndQueue(Context *context,
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
     VkSemaphore acquireNextImageSemaphore;
-    barrierImpl(context, aspectMask, newLayout, newQueueFamilyIndex, commandBuffer,
-                &acquireNextImageSemaphore);
+    barrierImpl(contextVk, aspectMask, newLayout, newQueueFamilyIndex, BarrierType::Pipeline,
+                nullptr, commandBuffer, &acquireNextImageSemaphore);
     // SwapChain image should not get here.
     ASSERT(acquireNextImageSemaphore == VK_NULL_HANDLE);
 }
@@ -7039,9 +7101,15 @@ void ImageHelper::barrierImpl(Context *context,
                               VkImageAspectFlags aspectMask,
                               ImageLayout newLayout,
                               uint32_t newQueueFamilyIndex,
+                              BarrierType barrierType,
+                              RefCountedEventGarbageObjects *garbageObjects,
                               CommandBufferT *commandBuffer,
                               VkSemaphore *acquireNextImageSemaphoreOut)
 {
+    // mCurrentEvent must be invalid if useVkEventForImageBarrieris disabled.
+    ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled ||
+           !mCurrentEvent.valid());
+
     // Release the ANI semaphore to caller to add to the command submission.
     *acquireNextImageSemaphoreOut = mAcquireNextImageSemaphore.release();
 
@@ -7069,16 +7137,43 @@ void ImageHelper::barrierImpl(Context *context,
     initImageMemoryBarrierStruct(context, aspectMask, newLayout, newQueueFamilyIndex,
                                  &imageMemoryBarrier);
 
-    // There might be other shaderRead operations there other than the current layout.
-    VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
-    if (mCurrentShaderReadStageMask)
+    VkPipelineStageFlags dstStageMask = GetImageLayoutDstStageMask(context, transitionTo);
+
+    if (mCurrentQueueFamilyIndex != newQueueFamilyIndex && barrierType == BarrierType::Event)
     {
-        srcStageMask |= mCurrentShaderReadStageMask;
-        mCurrentShaderReadStageMask  = 0;
-        mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+        // VkCmdWaitEvent requires the srcQueueFamilyIndex and dstQueueFamilyIndex members of any
+        // element of pBufferMemoryBarriers or pImageMemoryBarriers must be equal
+        // (VUID-vkCmdWaitEvents-srcQueueFamilyIndex-02803).
+        barrierType = BarrierType::Pipeline;
     }
-    commandBuffer->imageBarrier(srcStageMask, GetImageLayoutDstStageMask(context, transitionTo),
-                                imageMemoryBarrier);
+
+    if (barrierType == BarrierType::Event && mCurrentEvent.valid())
+    {
+        // If there is an event, we use the waitEvent to do layout change. Once we have waited, the
+        // event gets garbage collected (which is GPU completion tracked) to avoid waited again in
+        // future. We always use DstStageMask since that is what setEvent used and
+        // VUID-vkCmdWaitEvents-srcStageMask-01158 requires they must match.
+        VkAccessFlags srcAccessMask;
+        VkPipelineStageFlags srcStageMask =
+            GetRefCountedEventStageMask(context, mCurrentEvent, &srcAccessMask);
+        commandBuffer->imageWaitEvent(mCurrentEvent.getEvent().getHandle(), srcStageMask,
+                                      dstStageMask, imageMemoryBarrier);
+        garbageObjects->add(&mCurrentEvent);
+    }
+    else
+    {
+        // There might be other shaderRead operations there other than the current layout.
+        VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
+        if (mCurrentShaderReadStageMask)
+        {
+            srcStageMask |= mCurrentShaderReadStageMask;
+            mCurrentShaderReadStageMask  = 0;
+            mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+        }
+        commandBuffer->imageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
+        // We use pipelineBarrier here, no needs to wait for events any more.
+        mCurrentEvent.release(context->getDevice());
+    }
 
     mCurrentLayout           = newLayout;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
@@ -7090,6 +7185,8 @@ template void ImageHelper::barrierImpl<priv::CommandBuffer>(
     VkImageAspectFlags aspectMask,
     ImageLayout newLayout,
     uint32_t newQueueFamilyIndex,
+    BarrierType barrierType,
+    RefCountedEventGarbageObjects *garbageObjects,
     priv::CommandBuffer *commandBuffer,
     VkSemaphore *acquireNextImageSemaphoreOut);
 
@@ -7132,8 +7229,10 @@ void ImageHelper::recordWriteBarrier(Context *context,
 {
     if (isWriteBarrierNecessary(newLayout, levelStart, levelCount, layerStart, layerCount))
     {
+        ASSERT(!mCurrentEvent.valid() || !commands->hasEvent(mCurrentEvent));
         VkSemaphore acquireNextImageSemaphore;
         barrierImpl(context, aspectMask, newLayout, context->getRenderer()->getQueueFamilyIndex(),
+                    BarrierType::Event, commands->getRefCountedEventCollector(),
                     &commands->getCommandBuffer(), &acquireNextImageSemaphore);
 
         if (acquireNextImageSemaphore != VK_NULL_HANDLE)
@@ -7161,6 +7260,7 @@ void ImageHelper::recordReadSubresourceBarrier(Context *context,
     {
         VkSemaphore acquireNextImageSemaphore;
         barrierImpl(context, aspectMask, newLayout, context->getRenderer()->getQueueFamilyIndex(),
+                    BarrierType::Event, commands->getRefCountedEventCollector(),
                     &commands->getCommandBuffer(), &acquireNextImageSemaphore);
 
         if (acquireNextImageSemaphore != VK_NULL_HANDLE)
@@ -7178,6 +7278,7 @@ void ImageHelper::recordReadBarrier(Context *context,
                                     ImageLayout newLayout,
                                     OutsideRenderPassCommandBufferHelper *commands)
 {
+    ASSERT(!mCurrentEvent.valid() || !commands->hasEvent(mCurrentEvent));
     if (!isReadBarrierNecessary(newLayout))
     {
         return;
@@ -7185,6 +7286,7 @@ void ImageHelper::recordReadBarrier(Context *context,
 
     VkSemaphore acquireNextImageSemaphore;
     barrierImpl(context, aspectMask, newLayout, context->getRenderer()->getQueueFamilyIndex(),
+                BarrierType::Event, commands->getRefCountedEventCollector(),
                 &commands->getCommandBuffer(), &acquireNextImageSemaphore);
 
     if (acquireNextImageSemaphore != VK_NULL_HANDLE)
@@ -7196,8 +7298,11 @@ void ImageHelper::recordReadBarrier(Context *context,
 void ImageHelper::updateLayoutAndBarrier(Context *context,
                                          VkImageAspectFlags aspectMask,
                                          ImageLayout newLayout,
+                                         BarrierType barrierType,
                                          const QueueSerial &queueSerial,
                                          PipelineBarrierArray *pipelineBarriers,
+                                         EventBarrierArray *eventBarriers,
+                                         RefCountedEventGarbageObjects *garbageObjects,
                                          VkSemaphore *semaphoreOut)
 {
     ASSERT(queueSerial.valid());
@@ -7205,6 +7310,9 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
            mBarrierQueueSerial.getIndex() != queueSerial.getIndex() ||
            mBarrierQueueSerial.getSerial() <= queueSerial.getSerial());
     ASSERT(kImageMemoryBarrierData[newLayout].barrierIndex != PipelineStage::InvalidEnum);
+    // mCurrentEvent must be invalid if useVkEventForImageBarrieris disabled.
+    ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled ||
+           !mCurrentEvent.valid());
 
     // Once you transition to ImageLayout::SharedPresent, you never transition out of it.
     if (mCurrentLayout == ImageLayout::SharedPresent)
@@ -7227,11 +7335,30 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         // RAR is not a hazard and doesn't require a barrier, especially as the image layout hasn't
         // changed.  The following asserts that such a barrier is not attempted.
         ASSERT(HasResourceWriteAccess(layoutData.type));
+
         // No layout change, only memory barrier is required
-        pipelineBarriers->mergeMemoryBarrier(layoutData.barrierIndex,
-                                             GetImageLayoutSrcStageMask(context, layoutData),
-                                             GetImageLayoutDstStageMask(context, layoutData),
-                                             layoutData.srcAccessMask, layoutData.dstAccessMask);
+        if (barrierType == BarrierType::Event && mCurrentEvent.valid())
+        {
+            eventBarriers->addMemoryEvent(context, mCurrentEvent,
+                                          GetImageLayoutDstStageMask(context, layoutData),
+                                          layoutData.dstAccessMask);
+            // Garbage collect the event, which tracks GPU completion automatically.
+            garbageObjects->add(&mCurrentEvent);
+        }
+        else
+        {
+            pipelineBarriers->mergeMemoryBarrier(
+                layoutData.barrierIndex, GetImageLayoutSrcStageMask(context, layoutData),
+                GetImageLayoutDstStageMask(context, layoutData), layoutData.srcAccessMask,
+                layoutData.dstAccessMask);
+
+            if (mCurrentEvent.valid())
+            {
+                // Release it. No need to garbage collect since we did not use the event here. ALl
+                // previous use of event should garbage tracked already.
+                mCurrentEvent.release(context->getDevice());
+            }
+        }
         mBarrierQueueSerial = queueSerial;
     }
     else
@@ -7255,6 +7382,33 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
                 ASSERT(!mAcquireNextImageSemaphore.valid());
                 return;
             }
+
+            if (barrierType == BarrierType::Event && mLastNonShaderReadOnlyEvent.valid())
+            {
+                eventBarriers->addMemoryEvent(context, mLastNonShaderReadOnlyEvent, dstStageMask,
+                                              transitionTo.dstAccessMask);
+                garbageObjects->addDuplicate(mLastNonShaderReadOnlyEvent);
+            }
+            else
+            {
+                const ImageMemoryBarrierData &layoutData =
+                    kImageMemoryBarrierData[mLastNonShaderReadOnlyLayout];
+                pipelineBarriers->mergeMemoryBarrier(
+                    transitionTo.barrierIndex, GetImageLayoutSrcStageMask(context, layoutData),
+                    dstStageMask, layoutData.srcAccessMask, transitionTo.dstAccessMask);
+            }
+
+            mBarrierQueueSerial = queueSerial;
+            // Accumulate new read stage.
+            mCurrentShaderReadStageMask |= dstStageMask;
+
+            // Since we used pipelineBarrier, release the event now to avoid wait for the
+            // event again.
+            if (mCurrentEvent.valid())
+            {
+                garbageObjects->add(&mCurrentEvent);
+            }
+
             const ImageMemoryBarrierData &layoutData =
                 kImageMemoryBarrierData[mLastNonShaderReadOnlyLayout];
             pipelineBarriers->mergeMemoryBarrier(
@@ -7270,26 +7424,82 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             initImageMemoryBarrierStruct(context, aspectMask, newLayout,
                                          context->getRenderer()->getQueueFamilyIndex(),
                                          &imageMemoryBarrier);
+
+            if (transitionFrom.layout == transitionTo.layout &&
+                IsShaderReadOnlyLayout(transitionTo))
+            {
+                // If we are transiting within shaderReadOnly layout, i.e. reading from different
+                // shader stages, VkEvent can't handle this right now. In order for VkEvent to
+                // handle this properly we have to wait for the previous shaderReadOnly layout
+                // transition event and add a new memoryBarrier. But we may have lost that event
+                // already if it has been used in a new render pass (because we have to update the
+                // event even if there is no barrier needed). To workaround this issue we fall back
+                // to pipelineBarrier for now.
+                barrierType = BarrierType::Pipeline;
+            }
+            else if (mBarrierQueueSerial == queueSerial)
+            {
+                // If we already inserted a barrier in this render pass, force to use
+                // pipelineBarrier. Otherwise we will end up inserting a VkCmdWaitEvent that has not
+                // been set (See https://issuetracker.google.com/333419317 for example).
+                barrierType = BarrierType::Pipeline;
+            }
+
             // if we transition from shaderReadOnly, we must add in stashed shader stage masks since
             // there might be outstanding shader reads from stages other than current layout. We do
             // not insert barrier between one shaderRead to another shaderRead
             if (mCurrentShaderReadStageMask)
             {
-                srcStageMask |= mCurrentShaderReadStageMask;
+                if ((mCurrentShaderReadStageMask & srcStageMask) != mCurrentShaderReadStageMask)
+                {
+                    // mCurrentShaderReadStageMask has more bits than srcStageMask. This means it
+                    // has been used by more than one shader stage in the same render pass. These
+                    // two usages are tracked by two different ImageLayout, even though underline
+                    // VkImageLayout is the same. This means two different RefCountedEvents since
+                    // each RefCountedEvent is associated with one ImageLayout. When we transit out
+                    // of this layout, we must wait for all reads to finish. But Right now
+                    // ImageHelper only keep track of the last read. To workaround this problem we
+                    // use pipelineBarrier in this case.
+                    barrierType = BarrierType::Pipeline;
+                    srcStageMask |= mCurrentShaderReadStageMask;
+                }
                 mCurrentShaderReadStageMask  = 0;
                 mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+                if (mLastNonShaderReadOnlyEvent.valid())
+                {
+                    mLastNonShaderReadOnlyEvent.release(context->getDevice());
+                }
             }
-            pipelineBarriers->mergeImageBarrier(transitionTo.barrierIndex, srcStageMask,
-                                                dstStageMask, imageMemoryBarrier);
-            mBarrierQueueSerial = queueSerial;
 
-            // If we are transition into shaderRead layout, remember the last
-            // non-shaderRead layout here.
-            if (IsShaderReadOnlyLayout(transitionTo))
+            if (barrierType == BarrierType::Event && mCurrentEvent.valid())
             {
-                mLastNonShaderReadOnlyLayout = mCurrentLayout;
-                mCurrentShaderReadStageMask  = dstStageMask;
+                eventBarriers->addImageEvent(context, mCurrentEvent, dstStageMask,
+                                             imageMemoryBarrier);
+                // If we are transition into shaderRead layout, remember the last
+                // non-shaderRead layout here.
+                if (IsShaderReadOnlyLayout(transitionTo))
+                {
+                    mLastNonShaderReadOnlyEvent.release(context->getDevice());
+                    mLastNonShaderReadOnlyEvent = mCurrentEvent;
+                    mCurrentShaderReadStageMask = dstStageMask;
+                }
+                garbageObjects->add(&mCurrentEvent);
             }
+            else
+            {
+                pipelineBarriers->mergeImageBarrier(transitionTo.barrierIndex, srcStageMask,
+                                                    dstStageMask, imageMemoryBarrier);
+                // If we are transition into shaderRead layout, remember the last
+                // non-shaderRead layout here.
+                if (IsShaderReadOnlyLayout(transitionTo))
+                {
+                    mLastNonShaderReadOnlyLayout = mCurrentLayout;
+                    mCurrentShaderReadStageMask  = dstStageMask;
+                }
+                mCurrentEvent.release(context->getDevice());
+            }
+
+            mBarrierQueueSerial = queueSerial;
         }
         mCurrentLayout = newLayout;
     }
@@ -7692,6 +7902,10 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
     mLastNonShaderReadOnlyLayout = ImageLayout::TransferDst;
     mCurrentShaderReadStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
     mCurrentLayout               = ImageLayout::FragmentShaderReadOnly;
+
+    // Since we just used pipelineBarrier to wait, release all events so that we dont wait for them
+    // again.
+    mCurrentEvent.release(contextVk->getDevice());
 
     return angle::Result::Continue;
 }
@@ -9978,7 +10192,8 @@ angle::Result ImageHelper::copySurfaceImageToBuffer(DisplayVk *displayVk,
 
     VkSemaphore acquireNextImageSemaphore;
     barrierImpl(displayVk, getAspectFlags(), ImageLayout::TransferSrc,
-                renderer->getQueueFamilyIndex(), &primaryCommandBuffer, &acquireNextImageSemaphore);
+                renderer->getQueueFamilyIndex(), BarrierType::Pipeline, nullptr,
+                &primaryCommandBuffer, &acquireNextImageSemaphore);
     primaryCommandBuffer.copyImageToBuffer(mImage, getCurrentLayout(displayVk),
                                            bufferHelper->getBuffer().getHandle(), 1, &region);
 
@@ -10025,7 +10240,8 @@ angle::Result ImageHelper::copyBufferToSurfaceImage(DisplayVk *displayVk,
 
     VkSemaphore acquireNextImageSemaphore;
     barrierImpl(displayVk, getAspectFlags(), ImageLayout::TransferDst,
-                renderer->getQueueFamilyIndex(), &commandBuffer, &acquireNextImageSemaphore);
+                renderer->getQueueFamilyIndex(), BarrierType::Pipeline, nullptr, &commandBuffer,
+                &acquireNextImageSemaphore);
     commandBuffer.copyBufferToImage(bufferHelper->getBuffer().getHandle(), mImage,
                                     getCurrentLayout(displayVk), 1, &region);
 
