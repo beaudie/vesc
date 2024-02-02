@@ -1335,9 +1335,18 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // event is also updated with this command's event.
     void retainImage(Context *context, ImageHelper *image);
 
+    // Returns true if event already existed in this command buffer.
+    bool hasSetEventPendingFlush(const RefCountedEvent &event) const
+    {
+        ASSERT(event.valid());
+        return mRefCountedEvents.map[event.getImageLayout()] == event;
+    }
+
     // Issue VkCmdSetEvent call for events in this command buffer.
     template <typename CommandBufferT>
     void flushSetEventsImpl(Context *context, CommandBufferT *commandBuffer);
+
+    RefCountedEventGarbageObjects *getRefCountedEventGarbage() { return &mRefCountedEventGarbage; }
 
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
@@ -1390,6 +1399,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     void imageReadImpl(Context *context,
                        VkImageAspectFlags aspectFlags,
                        ImageLayout imageLayout,
+                       BarrierType barrierType,
                        ImageHelper *image);
     void imageWriteImpl(Context *context,
                         gl::LevelIndex level,
@@ -1397,12 +1407,14 @@ class CommandBufferHelperCommon : angle::NonCopyable
                         uint32_t layerCount,
                         VkImageAspectFlags aspectFlags,
                         ImageLayout imageLayout,
+                        BarrierType barrierType,
                         ImageHelper *image);
 
     void updateImageLayoutAndBarrier(Context *context,
                                      ImageHelper *image,
                                      VkImageAspectFlags aspectFlags,
-                                     ImageLayout imageLayout);
+                                     ImageLayout imageLayout,
+                                     BarrierType barrierType);
 
     void addCommandDiagnosticsCommon(std::ostringstream *out);
 
@@ -1411,6 +1423,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     // Barriers to be executed before the command buffer.
     PipelineBarrierArray mPipelineBarriers;
+    EventBarrierArray mEventBarriers;
 
     // The command pool *CommandBufferHelper::mCommandBuffer is allocated from.  Only used with
     // Vulkan secondary command buffers (as opposed to ANGLE's SecondaryCommandBuffer).
@@ -2198,6 +2211,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void finalizeImageLayoutInShareContexts(Renderer *renderer,
                                             ContextVk *contextVk,
                                             UniqueSerial imageSiblingSerial);
+
     void releaseStagedUpdates(Renderer *renderer);
 
     bool valid() const { return mImage.valid(); }
@@ -2498,8 +2512,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                   PrimaryCommandBuffer *commandBuffer,
                                   VkSemaphore *acquireNextImageSemaphoreOut)
     {
-        barrierImpl(context, getAspectFlags(), newLayout, mCurrentQueueFamilyIndex, commandBuffer,
-                    acquireNextImageSemaphoreOut);
+        barrierImpl(context, getAspectFlags(), newLayout, mCurrentQueueFamilyIndex,
+                    BarrierType::Pipeline, nullptr, commandBuffer, acquireNextImageSemaphoreOut);
     }
 
     // This function can be used to prevent issuing redundant layout transition commands.
@@ -2535,8 +2549,11 @@ class ImageHelper final : public Resource, public angle::Subject
     void updateLayoutAndBarrier(Context *context,
                                 VkImageAspectFlags aspectMask,
                                 ImageLayout newLayout,
+                                BarrierType barrierType,
                                 const QueueSerial &queueSerial,
                                 PipelineBarrierArray *pipelineBarriers,
+                                EventBarrierArray *eventBarriers,
+                                RefCountedEventGarbageObjects *garbageCollector,
                                 VkSemaphore *semaphoreOut);
 
     // Performs an ownership transfer from an external instance or API.
@@ -2832,6 +2849,8 @@ class ImageHelper final : public Resource, public angle::Subject
                      VkImageAspectFlags aspectMask,
                      ImageLayout newLayout,
                      uint32_t newQueueFamilyIndex,
+                     BarrierType barrierType,
+                     RefCountedEventGarbageObjects *garbageObjects,
                      CommandBufferT *commandBuffer,
                      VkSemaphore *acquireNextImageSemaphoreOut);
 
@@ -3066,6 +3085,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // The current refCounted event. When barrier or layout change is needed, we should wait for
     // this event.
     RefCountedEvent mCurrentEvent;
+    RefCountedEvent mLastNonShaderReadOnlyEvent;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
