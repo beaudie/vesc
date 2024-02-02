@@ -399,12 +399,17 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         // assumption and needs this member variable.
         mYUV = true;
 
+        bool linearFilterSupported =
+            (bufferFormatProperties.formatFeatures &
+             VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT) != 0;
+
         conversionDesc.update(
             renderer, bufferFormatProperties.externalFormat,
             bufferFormatProperties.suggestedYcbcrModel, bufferFormatProperties.suggestedYcbcrRange,
             bufferFormatProperties.suggestedXChromaOffset,
             bufferFormatProperties.suggestedYChromaOffset, vk::kDefaultYCbCrChromaFilter,
-            bufferFormatProperties.samplerYcbcrConversionComponents, angle::FormatID::NONE);
+            bufferFormatProperties.samplerYcbcrConversionComponents, angle::FormatID::NONE,
+            linearFilterSupported);
     }
 
     const gl::TextureType textureType = AhbDescUsageToTextureType(ahbDescription, layerCount);
