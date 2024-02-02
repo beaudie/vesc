@@ -276,6 +276,8 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkCmdDrawIndexed-format-07753",
     "VUID-vkCmdDraw-format-07753",
     "Undefined-Value-ShaderFragmentOutputMismatch",
+    // MultithreadingTestES3.RenderThenSampleInNewContextWithDifferentPriority/ES3_Vulkan.
+    "UNASSIGNED-SubmitValidation-WaitEvents-WrongQueue",
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
@@ -283,6 +285,13 @@ constexpr const char *kSkippedMessages[] = {
 constexpr const char *kNoListRestartSkippedMessages[] = {
     // http://anglebug.com/3832
     "VUID-VkPipelineInputAssemblyStateCreateInfo-topology-06252",
+};
+
+// VVL appears has a bug tracking stageMask on VkEvent with secondary command buffer.
+// https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/7849
+constexpr const char *kSkippedMessagesWithVulkanSecondaryCommandBuffer[] = {
+    // http://anglebug.com/8401
+    "VUID-vkCmdWaitEvents-srcStageMask-parameter",
 };
 
 // Some syncval errors are resolved in the presence of the NONE load or store render pass ops.  For
@@ -474,6 +483,34 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "store with storeOp VK_ATTACHMENT_STORE_OP_STORE. Access info (usage: "
      "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
      "SYNC_FRAGMENT_SHADER_SHADER_"},
+};
+
+/***** From VkEvent *****/
+constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessagesWithVkEvent[] = {
+    {"SYNC-HAZARD-WRITE-AFTER-READ",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_RESOLVE_TRANSFER_READ",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
+    // ClearTestES3.RepeatedClear/ES3_Vulkan_ForceFallbackFormat
+    {"SYNC-HAZARD-WRITE-AFTER-WRITE",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_IMAGE_LAYOUT_TRANSITION",
+     "command: vkCmdWaitEvents"},
+    // VulkanUniformUpdatesTest.DescriptorPoolUniformAndTextureRegeneration/ES2_Vulkan
+    {"SYNC-HAZARD-WRITE-AFTER-PRESENT",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_PRESENT_ENGINE_SYNCVAL_PRESENT_PRESENTED_SYNCVAL",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_PRESENT for image barrier"},
+    // KHR-GLES2.texture_3d.copy_sub_image.rgba
+    {"SYNC-HAZARD-WRITE-AFTER-READ",
+     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_COPY_TRANSFER_READ",
+     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
+    // Texture2DTest.UploadThenFSThenNewRPThenFSThenVS/ES2_Vulkan, TraceTest.black_desert_mobile
+    {"SYNC-HAZARD-READ-AFTER-WRITE",
+     "Access info (usage: SYNC_VERTEX_SHADER_SHADER_SAMPLED_READ, prior_usage: "
+     "SYNC_IMAGE_LAYOUT_TRANSITION,",
+     "command: vkCmdWaitEvents"},
 };
 
 // Messages that shouldn't be generated if storeOp=NONE is supported, otherwise they are expected.
@@ -3613,6 +3650,15 @@ void Renderer::initializeValidationMessageSuppressions()
             kNoListRestartSkippedMessages + ArraySize(kNoListRestartSkippedMessages));
     }
 
+    if (!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
+        !vk::RenderPassCommandBuffer::ExecutesInline())
+    {
+        mSkippedValidationMessages.insert(
+            mSkippedValidationMessages.end(), kSkippedMessagesWithVulkanSecondaryCommandBuffer,
+            kSkippedMessagesWithVulkanSecondaryCommandBuffer +
+                ArraySize(kSkippedMessagesWithVulkanSecondaryCommandBuffer));
+    }
+
     // Build the list of syncval errors that are currently expected and should be skipped.
     mSkippedSyncvalMessages.insert(mSkippedSyncvalMessages.end(), kSkippedSyncvalMessages,
                                    kSkippedSyncvalMessages + ArraySize(kSkippedSyncvalMessages));
@@ -3638,6 +3684,13 @@ void Renderer::initializeValidationMessageSuppressions()
                                        kSkippedSyncvalMessagesWithMSRTTEmulation,
                                        kSkippedSyncvalMessagesWithMSRTTEmulation +
                                            ArraySize(kSkippedSyncvalMessagesWithMSRTTEmulation));
+    }
+
+    if (true)
+    {
+        mSkippedSyncvalMessages.insert(
+            mSkippedSyncvalMessages.end(), kSkippedSyncvalMessagesWithVkEvent,
+            kSkippedSyncvalMessagesWithVkEvent + ArraySize(kSkippedSyncvalMessagesWithVkEvent));
     }
 }
 
