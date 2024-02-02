@@ -60,6 +60,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "082b8c77_1274ac74",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4727,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-02T18:25:55Z",
+      "side": 1,
+      "message": "I think the cleaner way is make this function simply just do this:\n        `SetBitField(mChromaFilter, preferredChromaFilter);`\n        \nAnd move all other logic that actually decide the filter based on feature bit and format into the helper function `RendererVk::getPreferredFilterForYUV` (possibly rename it to  `getChromeFilterForYUV(FormatID format, bool mIsExternalFormat, uint64_t mExternalOrVkFormat)`)\n\nThis way all logic to decide the filter is in one central place and the filter value stored in YcbcrConversionDesc is the final value.\n\nOr, instead of caching mLinearFilterSupported here, why not just pass the FormatID to updateChromaFilter and check feature support bit here? Either way looks more straight forward to me since you have less things cached.",
+      "range": {
+        "startLine": 4727,
+        "startChar": 26,
+        "endLine": 4727,
+        "endChar": 44
+      },
+      "revId": "07172c388b97b4ac5550d05ba8c9b1132f34cc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f169a13_0ac58259",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 3
