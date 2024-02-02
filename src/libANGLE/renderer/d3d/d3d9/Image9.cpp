@@ -355,6 +355,12 @@ bool Image9::isDirty() const
            mDirty;
 }
 
+bool Image9::isMultiplanar(const gl::Context *context, TextureStorage *storage) const
+{
+    // D3D9 does not support multiplanar formats yet.
+    return false;
+}
+
 angle::Result Image9::getSurface(Context9 *context9, IDirect3DSurface9 **outSurface)
 {
     ANGLE_TRY(createSurface(context9));

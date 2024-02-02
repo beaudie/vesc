@@ -567,7 +567,6 @@ angle::Result TextureStorage11::updateSubresourceLevel(const gl::Context *contex
                                                        const gl::Box &copyArea)
 {
     ASSERT(srcTexture.valid());
-
     ANGLE_TRY(resolveTexture(context));
     const GLint level = index.getLevelIndex();
 
@@ -617,9 +616,81 @@ angle::Result TextureStorage11::updateSubresourceLevel(const gl::Context *contex
 
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
 
-    deviceContext->CopySubresourceRegion(dstTexture->get(), dstSubresource, copyArea.x, copyArea.y,
-                                         copyArea.z, srcTexture.get(), sourceSubresource,
-                                         fullCopy ? nullptr : &srcBox);
+    if (d3d11::IsSupportedMultiplanarFormat(dstTexture->getFormat()))
+    {
+        // Intermediate texture used for copy for multiplanar formats or resolving multisampled
+        // textures.
+        TextureHelper11 intermediateTextureHelper;
+
+        D3D11_TEXTURE2D_DESC planeDesc;
+        planeDesc.Width              = static_cast<UINT>(copyArea.width);
+        planeDesc.Height             = static_cast<UINT>(copyArea.height);
+        planeDesc.MipLevels          = 1;
+        planeDesc.ArraySize          = 1;
+        planeDesc.Format             = srcTexture.getFormatSet().srvFormat;
+        planeDesc.SampleDesc.Count   = 1;
+        planeDesc.SampleDesc.Quality = 0;
+        planeDesc.Usage              = D3D11_USAGE_DEFAULT;
+        planeDesc.BindFlags          = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+        planeDesc.CPUAccessFlags     = 0;
+        planeDesc.MiscFlags          = 0;
+
+        GLenum internalFormat = srcTexture.getFormatSet().internalFormat;
+
+        // Allocate intermediate texture and copy srcTexture into it.
+        ANGLE_TRY(mRenderer->allocateTexture(
+            GetImplAs<Context11>(context), planeDesc,
+            d3d11::Format::Get(internalFormat, mRenderer->getRenderer11DeviceCaps()),
+            &intermediateTextureHelper));
+        intermediateTextureHelper.setInternalName("readFromAttachment::intermediateTextureHelper");
+
+        // intermediate texture has 0 offsets.
+        deviceContext->CopySubresourceRegion(intermediateTextureHelper.get(), dstSubresource, 0, 0,
+                                             0, srcTexture.get(), sourceSubresource,
+                                             fullCopy ? nullptr : &srcBox);
+
+        Context11 *context11 = GetImplAs<Context11>(context);
+        d3d11::RenderTargetView rtv;
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format             = srcTexture.getFormatSet().rtvFormat;
+        rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D.MipSlice = 0;
+
+        ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, dstTexture->get(), &rtv));
+        rtv.setInternalName("readFromAttachment.RTV");
+
+        d3d11::SharedSRV srv;
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        srvDesc.Format                    = srcTexture.getFormatSet().srvFormat;
+        srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+        srvDesc.Texture2D.MipLevels       = 1;
+
+        ANGLE_TRY(
+            mRenderer->allocateResource(context11, srvDesc, intermediateTextureHelper.get(), &srv));
+        srv.setInternalName("readFromAttachment.SRV");
+
+        // Intermediate texture has 0 offsets.
+        gl::Box intermediateGlBox(0, 0, 0, copyArea.width, copyArea.height, 1);
+        // Destination texture has offsets similar to that of source texture.
+        gl::Box destGlBox(copyArea.x, copyArea.y, copyArea.z, copyArea.width, copyArea.height, 1);
+        gl::Extents safeSize(copyArea.width, copyArea.height, 1);
+
+        // Perform a copy to dstTexture from intermediate as we cannot copy directly to NV12 d3d11
+        // textures.
+        Blit11 *blitter = mRenderer->getBlitter();
+        ANGLE_TRY(blitter->copyTexture(context, srv, intermediateGlBox, safeSize, internalFormat,
+                                       rtv, destGlBox, safeSize, nullptr,
+                                       gl::GetUnsizedFormat(internalFormat), GL_NONE, GL_NEAREST,
+                                       false, false, false));
+    }
+    else
+    {
+        deviceContext->CopySubresourceRegion(dstTexture->get(), dstSubresource, copyArea.x,
+                                             copyArea.y, copyArea.z, srcTexture.get(),
+                                             sourceSubresource, fullCopy ? nullptr : &srcBox);
+    }
+
     return angle::Result::Continue;
 }
 

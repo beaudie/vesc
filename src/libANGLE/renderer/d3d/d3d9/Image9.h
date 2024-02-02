@@ -54,6 +54,8 @@ class Image9 : public ImageD3D
 
     bool isDirty() const override;
 
+    bool isMultiplanar(const gl::Context *context, TextureStorage *storage) const override;
+
     angle::Result setManagedSurface2D(const gl::Context *context,
                                       TextureStorage *storage,
                                       int level) override;
