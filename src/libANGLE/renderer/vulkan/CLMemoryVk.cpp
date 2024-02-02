@@ -197,6 +197,55 @@ angle::Result CLBufferVk::unmap()
     return angle::Result::Continue;
 }
 
+angle::Result CLBufferVk::setRect(const void *data,
+                                  const cl::BufferRect &srcRect,
+                                  const cl::BufferRect &rect)
+{
+    ASSERT(srcRect.valid() && rect.valid());
+    ASSERT(srcRect.mSize == rect.mSize);
+
+    uint8_t *mapPtr = nullptr;
+    ANGLE_TRY(getMapPtr(&mapPtr));
+    const uint8_t *srcData = reinterpret_cast<const uint8_t *>(data);
+    for (int slice = 0; slice < rect.mSize.depth; slice++)
+    {
+        for (int row = 0; row < rect.mSize.height; row++)
+        {
+            const uint8_t *src = srcData + srcRect.getRowOffset(slice, row);
+            uint8_t *dst       = mapPtr + rect.getRowOffset(slice, row);
+
+            memcpy(dst, src, srcRect.mSize.width * srcRect.mElementSize);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result CLBufferVk::getRect(const cl::BufferRect &srcRect,
+                                  const cl::BufferRect &outRect,
+                                  void *outData)
+{
+    ASSERT(srcRect.valid() && outRect.valid());
+    ASSERT(srcRect.mSize == outRect.mSize);
+
+    uint8_t *mapPtr = nullptr;
+    ANGLE_TRY(getMapPtr(&mapPtr));
+    uint8_t *dstData = reinterpret_cast<uint8_t *>(outData);
+    for (int slice = 0; slice < srcRect.mSize.depth; slice++)
+    {
+        for (int row = 0; row < srcRect.mSize.height; row++)
+        {
+            const uint8_t *src = mapPtr + srcRect.getRowOffset(slice, row);
+            uint8_t *dst       = dstData + outRect.getRowOffset(slice, row);
+
+            memcpy(dst, src, srcRect.mSize.width * srcRect.mElementSize);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+// offset is for mapped pointer
 angle::Result CLBufferVk::setDataImpl(const uint8_t *data, size_t size, size_t offset)
 {
     // buffer cannot be in use state
