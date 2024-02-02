@@ -127,6 +127,39 @@ constexpr uint32_t kInvalidMemoryHeapIndex = UINT32_MAX;
 namespace vk
 {
 
+// This defines enum for VkPipelineStageFlagBits so that we can use it to compare and index into
+// array.
+enum class PipelineStage : uint16_t
+{
+    // Bellow are ordered based on Graphics Pipeline Stages
+    TopOfPipe              = 0,
+    DrawIndirect           = 1,
+    VertexInput            = 2,
+    VertexShader           = 3,
+    TessellationControl    = 4,
+    TessellationEvaluation = 5,
+    GeometryShader         = 6,
+    TransformFeedback      = 7,
+    EarlyFragmentTest      = 8,
+    FragmentShader         = 9,
+    LateFragmentTest       = 10,
+    ColorAttachmentOutput  = 11,
+
+    // Compute specific pipeline Stage
+    ComputeShader = 12,
+
+    // Transfer specific pipeline Stage
+    Transfer     = 13,
+    BottomOfPipe = 14,
+
+    // Host specific pipeline stage
+    Host = 15,
+
+    InvalidEnum = 16,
+    EnumCount   = InvalidEnum,
+};
+using PipelineStagesMask = angle::PackedEnumBitSet<PipelineStage, uint16_t>;
+
 // Used for memory allocation tracking.
 enum class MemoryAllocationType;
 
