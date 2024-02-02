@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d6eca0e_ab2da054",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-02T01:34:36Z",
+      "side": 1,
+      "message": "Thanks!\nIn case of the tested app, the performance improvement is coming from updating the comparison threshold from `mSize / 4` to `mSize / 8`. Using the new threshold, I tried changing the decay coefficient to 65%, 50%, and even 25%, but there is no change in FPS.\nIn the new patch, I have rounded the coefficient to 60%.\n* Similar to 63%, it takes 5 allocations to cross 12.5% (the 1000 to 1 exponential decay).",
+      "revId": "9b7ea9c56ac0c49cb7e1cd2c19945f844a07403d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
