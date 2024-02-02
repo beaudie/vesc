@@ -288,6 +288,7 @@ angle::Result TextureD3D::subImage(const gl::Context *context,
 {
     // CPU readback & copy where direct GPU copy is not supported
     const uint8_t *pixelData = nullptr;
+    std::cout << "Saif --- subImage called \n";
     ANGLE_TRY(GetUnpackPointer(context, unpack, unpackBuffer, pixels, layerOffset, &pixelData));
 
     if (pixelData != nullptr)
@@ -295,11 +296,14 @@ angle::Result TextureD3D::subImage(const gl::Context *context,
         ImageD3D *image = getImage(index);
         ASSERT(image);
 
-        if (shouldUseSetData(image))
-        {
-            return mTexStorage->setData(context, index, image, &area, type, unpack, pixelData);
-        }
+        // don't go through this path if multiplanar format check
+        // if (shouldUseSetData(image))
+        // {
+        //     std::cout << "Saif --- inside shouldUseSetData \n";
+        //     return mTexStorage->setData(context, index, image, &area, type, unpack, pixelData);
+        // }
 
+        std::cout << "Saif --- calling loadData \n";
         ANGLE_TRY(image->loadData(context, area, unpack, type, pixelData, index.usesTex3D()));
         ANGLE_TRY(commitRegion(context, index, area));
         mDirtyImages = true;
