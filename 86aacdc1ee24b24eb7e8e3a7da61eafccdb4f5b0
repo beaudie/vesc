@@ -630,6 +630,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6555deb6_04318115",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2761,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-02T15:29:03Z",
+      "side": 1,
+      "message": "Sorry I missed this. Sure, I just figured the implementation would be so generic it wouldn\u0027t matter where the `VkImage` came from :shrug:",
+      "parentUuid": "981e7028_ff71048a",
+      "revId": "86aacdc1ee24b24eb7e8e3a7da61eafccdb4f5b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7ab5fa3_b625b51b",
