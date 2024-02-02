@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c92239d6_cca9055f",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-02T18:40:11Z",
+      "side": 1,
+      "message": "👍 Thank you Shabi",
+      "parentUuid": "fb30394a_0ab1b1c9",
+      "revId": "b0aec717ce1c6bcf312296178701bfd321245205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0570c39c_23ac7bf1",
