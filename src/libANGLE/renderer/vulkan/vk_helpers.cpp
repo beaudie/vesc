@@ -5463,15 +5463,20 @@ YcbcrConversionDesc ImageHelper::deriveConversionDesc(Context *context,
         // VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT
         constexpr VkFormatFeatureFlags kChromaSubSampleFeatureBits =
             VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT |
-            VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT;
+            VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT |
+            VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT;
 
-        VkFormatFeatureFlags supportedChromaSubSampleFeatureBits =
+        VkFormatFeatureFlags supportedFeatureBits =
             rendererVk->getImageFormatFeatureBits(actualFormatID, kChromaSubSampleFeatureBits);
 
-        VkChromaLocation supportedLocation            = ((supportedChromaSubSampleFeatureBits &
-                                               VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) != 0)
-                                                            ? VK_CHROMA_LOCATION_COSITED_EVEN
-                                                            : VK_CHROMA_LOCATION_MIDPOINT;
+        VkChromaLocation supportedLocation =
+            ((supportedFeatureBits & VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) != 0)
+                ? VK_CHROMA_LOCATION_COSITED_EVEN
+                : VK_CHROMA_LOCATION_MIDPOINT;
+        bool linearFilterSupported =
+            (supportedFeatureBits &
+             VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT) != 0;
+
         VkSamplerYcbcrModelConversion conversionModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
         VkSamplerYcbcrRange colorRange                = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
         VkFilter chromaFilter                         = kDefaultYCbCrChromaFilter;
@@ -5483,7 +5488,8 @@ YcbcrConversionDesc ImageHelper::deriveConversionDesc(Context *context,
         };
 
         conversionDesc.update(rendererVk, 0, conversionModel, colorRange, supportedLocation,
-                              supportedLocation, chromaFilter, components, intendedFormatID);
+                              supportedLocation, chromaFilter, components, intendedFormatID,
+                              linearFilterSupported);
     }
 
     return conversionDesc;
