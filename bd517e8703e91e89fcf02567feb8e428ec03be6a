@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22bacbae_0c84b519",
+        "filename": "src/common/apple_platform_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-02T18:28:58Z",
+      "side": 1,
+      "message": "Please add an entry for `MacBook` with a minimum version of `{9, 1}`.",
+      "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "211c5f1b_9c8bb1f6",
+        "filename": "src/common/apple_platform_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-02T18:28:58Z",
+      "side": 1,
+      "message": "This is redundant since all iMac Pro models are supported.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 0
+      },
+      "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
