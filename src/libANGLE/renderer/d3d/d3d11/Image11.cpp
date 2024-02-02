@@ -141,6 +141,22 @@ bool Image11::isDirty() const
     return mDirty;
 }
 
+bool Image11::isMultiplanar(const gl::Context *context, TextureStorage *storage) const
+{
+    if (storage)
+    {
+        TextureStorage11 *storage11       = GetAs<TextureStorage11>(storage);
+        const TextureHelper11 *dstTexture = nullptr;
+        if (storage11->getResource(context, &dstTexture) == angle::Result::Continue)
+        {
+            DXGI_FORMAT format = dstTexture->getFormat();
+            return format == DXGI_FORMAT_NV12 || format == DXGI_FORMAT_P010 ||
+                   format == DXGI_FORMAT_P016;
+        }
+    }
+    return false;
+}
+
 angle::Result Image11::copyToStorage(const gl::Context *context,
                                      TextureStorage *storage,
                                      const gl::ImageIndex &index,

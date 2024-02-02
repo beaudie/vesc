@@ -46,7 +46,8 @@ class ImageD3D : angle::NonCopyable
 
     void markDirty() { mDirty = true; }
     void markClean() { mDirty = false; }
-    virtual bool isDirty() const = 0;
+    virtual bool isDirty() const                                                          = 0;
+    virtual bool isMultiplanar(const gl::Context *context, TextureStorage *storage) const = 0;
 
     virtual bool redefine(gl::TextureType type,
                           GLenum internalformat,
