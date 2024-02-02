@@ -532,10 +532,18 @@ angle::Result DmaBufImageSiblingVkLinux::initWithFormat(DisplayVk *displayVk,
         ANGLE_VK_CHECK(displayVk, renderer->getFeatures().supportsYUVSamplerConversion.enabled,
                        VK_ERROR_FEATURE_NOT_PRESENT);
 
+        VkFormatFeatureFlags supportedFeatureBits = renderer->getImageFormatFeatureBits(
+            actualImageFormatID,
+            VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT);
+        bool linearFilterSupported =
+            (supportedFeatureBits &
+             VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT) != 0;
+
         // Build an appropriate conversion desc. This is not an android-style external format,
         // but requires Ycbcr sampler conversion.
         conversionDesc.update(renderer, 0, model, range, xChromaOffset, yChromaOffset,
-                              VK_FILTER_NEAREST, components, intendedFormatID);
+                              VK_FILTER_NEAREST, components, intendedFormatID,
+                              linearFilterSupported);
     }
 
     ANGLE_TRY(mImage->initExternal(
