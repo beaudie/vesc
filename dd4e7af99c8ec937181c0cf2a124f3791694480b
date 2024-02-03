@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9899fcd9_64f45ed1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-03T00:22:29Z",
+      "side": 1,
+      "message": "Based on more experiments and estimations (including using small buffer size \u003d 1/16 of the large buffer), the decay coefficient has been set to 20%, i.e., faster reaction to required size than 60%. ([Experiment Data](https://docs.google.com/spreadsheets/d/1V-GUx-o8QDU7kK2u_UgXdRW5FW1JiktuEGYUfd7KgTo/))\n\nThis will still work for the tested app.",
+      "revId": "dd4e7af99c8ec937181c0cf2a124f3791694480b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
