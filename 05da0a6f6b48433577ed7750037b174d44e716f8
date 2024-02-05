@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "05da0a6f6b48433577ed7750037b174d44e716f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33767733_9fcf287c",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1571,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-05T17:33:52Z",
+      "side": 1,
+      "message": "remove redundant text",
+      "range": {
+        "startLine": 1571,
+        "startChar": 50,
+        "endLine": 1571,
+        "endChar": 91
+      },
+      "revId": "05da0a6f6b48433577ed7750037b174d44e716f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
