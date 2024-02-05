@@ -151,6 +151,30 @@
       },
       "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f59fb596_a86737ea",
+        "filename": "src/common/apple_platform_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-05T19:50:24Z",
+      "side": 1,
+      "message": "Then `MacPro` should also be here.",
+      "parentUuid": "ab301c54_e949800e",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 0
+      },
+      "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
