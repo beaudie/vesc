@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b10e13c_8a78d8d5",
+        "filename": "src/common/apple_platform_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-05T19:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "440d48a8_a310aabb",
+      "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22bacbae_0c84b519",
@@ -89,6 +107,48 @@
       "side": 1,
       "message": "Description: `MacBook (Retina, 12-inch, Early 2016)`.",
       "parentUuid": "22bacbae_0c84b519",
+      "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "473d69c4_6be74757",
+        "filename": "src/common/apple_platform_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-05T19:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8f2f50b_ee620053",
+      "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab301c54_e949800e",
+        "filename": "src/common/apple_platform_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-05T19:06:22Z",
+      "side": 1,
+      "message": "I think I prefer to keep it for completeness.",
+      "parentUuid": "211c5f1b_9c8bb1f6",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 0
+      },
       "revId": "bd517e8703e91e89fcf02567feb8e428ec03be6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
