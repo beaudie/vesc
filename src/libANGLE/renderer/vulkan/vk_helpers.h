@@ -3452,13 +3452,14 @@ class CommandBufferAccess : angle::NonCopyable
 
     // The limits reflect the current maximum concurrent usage of each resource type.  ASSERTs will
     // fire if this limit is exceeded in the future.
-    using ReadBuffers  = angle::FixedVector<CommandBufferBufferAccess, 2>;
-    using WriteBuffers = angle::FixedVector<CommandBufferBufferAccess, 2>;
-    using ReadImages   = angle::FixedVector<CommandBufferImageAccess, 2>;
-    using WriteImages  = angle::FixedVector<CommandBufferImageWrite, 1>;
+    // TODO: Raise limit?
+    using ReadBuffers  = angle::FixedVector<CommandBufferBufferAccess, 20>;
+    using WriteBuffers = angle::FixedVector<CommandBufferBufferAccess, 20>;
+    using ReadImages   = angle::FixedVector<CommandBufferImageAccess, 20>;
+    using WriteImages  = angle::FixedVector<CommandBufferImageWrite, 10>;
     using ExternalAcquireReleaseBuffers =
-        angle::FixedVector<CommandBufferBufferExternalAcquireRelease, 1>;
-    using AccessResources = angle::FixedVector<CommandBufferResourceAccess, 1>;
+        angle::FixedVector<CommandBufferBufferExternalAcquireRelease, 10>;
+    using AccessResources = angle::FixedVector<CommandBufferResourceAccess, 10>;
 
     const ReadBuffers &getReadBuffers() const { return mReadBuffers; }
     const WriteBuffers &getWriteBuffers() const { return mWriteBuffers; }
