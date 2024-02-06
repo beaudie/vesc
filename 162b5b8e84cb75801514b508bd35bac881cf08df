@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5599d081_ed44a155",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-06T16:21:37Z",
+      "side": 1,
+      "message": "FYI, we don\u0027t have CQ for branches, sorry about that. For branches, we need to manually submit the change. I\u0027ll do that for you.",
+      "revId": "162b5b8e84cb75801514b508bd35bac881cf08df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
