@@ -8804,32 +8804,33 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     bool transCoding =
         contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
         IsETCFormat(intendedFormat) && IsBCFormat(actualformat);
-    if (transCoding)
-    {
-        access.onImageTransferDstAndComputeWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0,
-                                                 aspectFlags, this);
-    }
-    else
-    {
-        access.onImageTransferWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0, aspectFlags,
-                                    this);
-    }
 
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
-    for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLEnd;
+    // Determine the updates to be applied immediately and updates to be deferred.
+    uint32_t updateCount = 0;
+    std::vector<std::vector<SubresourceUpdate>> updatesToDefer;
+    std::vector<std::vector<SubresourceUpdate>> updatesToApply;
+
+    // TODO: Merge all accesses into one? Currently two challenges:
+    // 1. Asserts due to FixedVector size when adding.
+    // 2. vkDestroyBuffer VVL (still in use by CB) in some traces (related to command buffer flush?)
+    constexpr size_t kMaxUpdateCount = 1024;
+    std::array<CommandBufferAccess, kMaxUpdateCount> updateAccesses;
+    size_t updateAccessIndex = 0;
+
+    gl::LevelIndex levelGLCutoff = levelGLEnd;
+
+    for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLCutoff;
          ++updateMipLevelGL)
     {
         std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(updateMipLevelGL);
         if (levelUpdates == nullptr)
         {
             ASSERT(static_cast<size_t>(updateMipLevelGL.get()) >= mSubresourceUpdates.size());
+            levelGLCutoff = updateMipLevelGL;
             break;
         }
-
-        std::vector<SubresourceUpdate> updatesToKeep;
-
-        // Hash map of uploads in progress.  See comment on kMaxParallelSubresourceUpload.
-        uint64_t subresourceUploadsInProgress = 0;
+        updatesToDefer.resize(updatesToDefer.size() + 1);
+        updatesToApply.resize(updatesToApply.size() + 1);
 
         for (SubresourceUpdate &update : *levelUpdates)
         {
@@ -8847,18 +8848,17 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             const bool areUpdateLayersOutsideRange =
                 updateBaseLayer + updateLayerCount <= layerStart || updateBaseLayer >= layerEnd;
 
-            const LevelIndex updateMipLevelVk = toVkLevel(updateMipLevelGL);
-
             // Additionally, if updates to this level are specifically asked to be skipped, skip
             // them. This can happen when recreating an image that has been partially incompatibly
             // redefined, in which case only updates to the levels that haven't been redefined
             // should be flushed.
             if (areUpdateLayersOutsideRange || skipLevelsAllFaces.test(updateMipLevelGL.get()))
             {
-                updatesToKeep.emplace_back(std::move(update));
+                updatesToDefer.back().emplace_back(std::move(update));
                 continue;
             }
 
+            const LevelIndex updateMipLevelVk = toVkLevel(updateMipLevelGL);
             // It seems we haven't fully support glCopyImageSubData
             // when compressed format emulated by uncompressed format.
             // make assumption that there is no data source come from image.
@@ -8866,76 +8866,13 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             // The updates were holding gl::LevelIndex values so that they would not need
             // modification when the base level of the texture changes.  Now that the update is
             // about to take effect, we need to change miplevel to LevelIndex.
-            if (IsClear(update.updateSource))
+
+            // Since the clear emulated channel updates are expected to be in the beginning, they
+            // can be applied right now. In addition, they do not require layout transitions.
+            if (update.updateSource == UpdateSource::ClearEmulatedChannelsOnly)
             {
+                // This change should be dealt with before the others.
                 update.data.clear.levelIndex = updateMipLevelVk.get();
-            }
-            else if (update.updateSource == UpdateSource::Buffer)
-            {
-                if (!transCoding && !isDataFormatMatchForCopy(update.data.buffer.formatID))
-                {
-                    // TODD: http://anglebug.com/6368, we should handle this in higher level code.
-                    // If we have incompatible updates, skip but keep it.
-                    updatesToKeep.emplace_back(std::move(update));
-                    continue;
-                }
-                update.data.buffer.copyRegion.imageSubresource.mipLevel = updateMipLevelVk.get();
-            }
-            else if (update.updateSource == UpdateSource::Image)
-            {
-                if (!isDataFormatMatchForCopy(update.data.image.formatID))
-                {
-                    // If we have incompatible updates, skip but keep it.
-                    updatesToKeep.emplace_back(std::move(update));
-                    continue;
-                }
-                update.data.image.copyRegion.dstSubresource.mipLevel = updateMipLevelVk.get();
-            }
-
-            if (updateLayerCount >= kMaxParallelSubresourceUpload)
-            {
-                // If there are more subresources than bits we can track, always insert a barrier.
-                recordWriteBarrier(contextVk, aspectFlags,
-                                   transCoding ? ImageLayout::TransferDstAndComputeWrite
-                                               : ImageLayout::TransferDst,
-                                   commandBuffer);
-                subresourceUploadsInProgress = std::numeric_limits<uint64_t>::max();
-            }
-            else
-            {
-                const uint64_t subresourceHashRange = angle::BitMask<uint64_t>(updateLayerCount);
-                const uint32_t subresourceHashOffset =
-                    updateBaseLayer % kMaxParallelSubresourceUpload;
-                const uint64_t subresourceHash =
-                    ANGLE_ROTL64(subresourceHashRange, subresourceHashOffset);
-
-                if ((subresourceUploadsInProgress & subresourceHash) != 0)
-                {
-                    // If there's overlap in subresource upload, issue a barrier.
-                    recordWriteBarrier(contextVk, aspectFlags,
-                                       transCoding ? ImageLayout::TransferDstAndComputeWrite
-                                                   : ImageLayout::TransferDst,
-                                       commandBuffer);
-                    subresourceUploadsInProgress = 0;
-                }
-                subresourceUploadsInProgress |= subresourceHash;
-            }
-
-            if (IsClearOfAllChannels(update.updateSource))
-            {
-                clear(contextVk, update.data.clear.aspectFlags, update.data.clear.value,
-                      updateMipLevelVk, updateBaseLayer, updateLayerCount,
-                      &commandBuffer->getCommandBuffer());
-                // Remember the latest operation is a clear call
-                mCurrentSingleClearValue = update.data.clear;
-
-                // Do not call onWrite as it removes mCurrentSingleClearValue, but instead call
-                // setContentDefined directly.
-                setContentDefined(updateMipLevelVk, 1, updateBaseLayer, updateLayerCount,
-                                  update.data.clear.aspectFlags);
-            }
-            else if (update.updateSource == UpdateSource::ClearEmulatedChannelsOnly)
-            {
                 ANGLE_TRY(clearEmulatedChannels(contextVk, update.data.clear.colorMaskFlags,
                                                 update.data.clear.value, updateMipLevelVk,
                                                 updateBaseLayer, updateLayerCount));
@@ -8945,78 +8882,198 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 // one-time thing that's superseded by Clears, |mCurrentSingleClearValue| is
                 // irrelevant and can't have a value.
                 ASSERT(!mCurrentSingleClearValue.valid());
-
-                // Refresh the command buffer because clearEmulatedChannels may have flushed it.
-                // This also transitions the image back to TransferDst, in case it's no longer in
-                // that layout.
-                ANGLE_TRY(
-                    contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
+                update.release(contextVk->getRenderer());
+                continue;
+            }
+            else if (IsClearOfAllChannels(update.updateSource))
+            {
+                update.data.clear.levelIndex = updateMipLevelVk.get();
             }
             else if (update.updateSource == UpdateSource::Buffer)
             {
-                BufferUpdate &bufferUpdate = update.data.buffer;
+                // TODD: http://anglebug.com/6368, we should handle this in higher level code.
+                // If we have incompatible updates, skip but keep it.
+                if (!transCoding && !isDataFormatMatchForCopy(update.data.buffer.formatID))
+                {
+                    updatesToDefer.back().emplace_back(std::move(update));
+                    continue;
+                }
+                update.data.buffer.copyRegion.imageSubresource.mipLevel = updateMipLevelVk.get();
 
-                BufferHelper *currentBuffer = bufferUpdate.bufferHelper;
+                BufferHelper *currentBuffer = update.data.buffer.bufferHelper;
                 ASSERT(currentBuffer && currentBuffer->valid());
                 ANGLE_TRY(currentBuffer->flush(renderer));
 
-                CommandBufferAccess bufferAccess;
-                VkBufferImageCopy *copyRegion = &update.data.buffer.copyRegion;
-
                 if (transCoding && update.data.buffer.formatID != actualformat)
                 {
-                    bufferAccess.onBufferComputeShaderRead(currentBuffer);
-                    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(bufferAccess,
-                                                                                 &commandBuffer));
-                    ANGLE_TRY(contextVk->getUtils().transCodeEtcToBc(contextVk, currentBuffer, this,
-                                                                     copyRegion));
+                    updateAccesses[updateAccessIndex].onBufferComputeShaderRead(currentBuffer);
                 }
                 else
                 {
-                    bufferAccess.onBufferTransferRead(currentBuffer);
-                    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(bufferAccess,
-                                                                                 &commandBuffer));
-                    commandBuffer->getCommandBuffer().copyBufferToImage(
-                        currentBuffer->getBuffer().getHandle(), mImage, getCurrentLayout(contextVk),
-                        1, copyRegion);
-                }
-                bool commandBufferWasFlushed = false;
-                ANGLE_TRY(
-                    contextVk->onCopyUpdate(currentBuffer->getSize(), &commandBufferWasFlushed));
-                onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
-                        copyRegion->imageSubresource.aspectMask);
-
-                // Update total staging buffer size
-                mTotalStagedBufferUpdateSize -= bufferUpdate.bufferHelper->getSize();
-
-                if (commandBufferWasFlushed)
-                {
-                    ANGLE_TRY(
-                        contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBuffer));
+                    updateAccesses[updateAccessIndex].onBufferTransferRead(currentBuffer);
                 }
             }
-            else
+            else if (update.updateSource == UpdateSource::Image)
             {
-                ASSERT(update.updateSource == UpdateSource::Image);
-                CommandBufferAccess imageAccess;
-                imageAccess.onImageTransferRead(aspectFlags, &update.refCounted.image->get());
-                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(imageAccess,
-                                                                             &commandBuffer));
-
-                VkImageCopy *copyRegion = &update.data.image.copyRegion;
-                commandBuffer->getCommandBuffer().copyImage(
-                    update.refCounted.image->get().getImage(),
-                    update.refCounted.image->get().getCurrentLayout(contextVk), mImage,
-                    getCurrentLayout(contextVk), 1, copyRegion);
-                onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
-                        copyRegion->dstSubresource.aspectMask);
+                if (!isDataFormatMatchForCopy(update.data.image.formatID))
+                {
+                    updatesToDefer.back().emplace_back(std::move(update));
+                    continue;
+                }
+                update.data.image.copyRegion.dstSubresource.mipLevel = updateMipLevelVk.get();
+                updateAccesses[updateAccessIndex].onImageTransferRead(
+                    aspectFlags, &update.refCounted.image->get());
             }
 
-            update.release(contextVk->getRenderer());
+            // If the update is to be applied immediately, it will be processed in the next loop.
+            updatesToApply.back().emplace_back(std::move(update));
+            updateAccessIndex++;
+            updateCount++;
+        }
+    }
+
+    // If there are no updates to be applied, we can return early.
+    if (updateCount > 0)
+    {
+        if (transCoding)
+        {
+            access.onImageTransferDstAndComputeWrite(levelGLStart, 1, kMaxContentDefinedLayerCount,
+                                                     0, aspectFlags, this);
+        }
+        else
+        {
+            access.onImageTransferWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0,
+                                        aspectFlags, this);
         }
 
-        // Only remove the updates that were actually applied to the image.
-        *levelUpdates = std::move(updatesToKeep);
+        // Acquire the outside command buffer and apply the necessary barriers.
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
+
+        updateAccessIndex = 0;
+        for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLCutoff;
+             ++updateMipLevelGL)
+        {
+            std::vector<SubresourceUpdate> *levelUpdates =
+                &updatesToApply[updateMipLevelGL.get() - levelGLStart.get()];
+
+            // Hash map of uploads in progress.  See comment on kMaxParallelSubresourceUpload.
+            uint64_t subresourceUploadsInProgress = 0;
+
+            for (SubresourceUpdate &update : *levelUpdates)
+            {
+                // ClearEmulatedChannels should already have been processed.
+                ASSERT(update.updateSource != UpdateSource::ClearEmulatedChannelsOnly);
+
+                uint32_t updateBaseLayer, updateLayerCount;
+                update.getDestSubresource(mLayerCount, &updateBaseLayer, &updateLayerCount);
+
+                const LevelIndex updateMipLevelVk = toVkLevel(updateMipLevelGL);
+
+                // TODO: Check if barrier is needed due to parallel mip level updates?
+                ImageLayout newLayout = transCoding ? ImageLayout::TransferDstAndComputeWrite
+                                                    : ImageLayout::TransferDst;
+                if (updateLayerCount >= kMaxParallelSubresourceUpload)
+                {
+                    // If there are more subresources than bits we can track, always insert a
+                    // barrier.
+                    recordWriteBarrier(contextVk, aspectFlags, newLayout, commandBuffer);
+                    subresourceUploadsInProgress = std::numeric_limits<uint64_t>::max();
+                }
+                else
+                {
+                    const uint64_t subresourceHashRange =
+                        angle::BitMask<uint64_t>(updateLayerCount);
+                    const uint32_t subresourceHashOffset =
+                        updateBaseLayer % kMaxParallelSubresourceUpload;
+                    const uint64_t subresourceHash =
+                        ANGLE_ROTL64(subresourceHashRange, subresourceHashOffset);
+
+                    if ((subresourceUploadsInProgress & subresourceHash) != 0)
+                    {
+                        // If there's overlap in subresource upload, issue a barrier.
+                        recordWriteBarrier(contextVk, aspectFlags, newLayout, commandBuffer);
+                        subresourceUploadsInProgress = 0;
+                    }
+                    subresourceUploadsInProgress |= subresourceHash;
+                }
+
+                // Get the outside command buffer.
+                // TODO: If all accesses can be merged together, this is no longer needed.
+                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
+                    updateAccesses[updateAccessIndex], &commandBuffer));
+                updateAccessIndex++;
+
+                // Add the necessary commands to the outside command buffer.
+                if (IsClearOfAllChannels(update.updateSource))
+                {
+                    clear(contextVk, update.data.clear.aspectFlags, update.data.clear.value,
+                          updateMipLevelVk, updateBaseLayer, updateLayerCount,
+                          &commandBuffer->getCommandBuffer());
+                    // Remember the latest operation is a clear call
+                    mCurrentSingleClearValue = update.data.clear;
+
+                    // Do not call onWrite as it removes mCurrentSingleClearValue, but instead call
+                    // setContentDefined directly.
+                    setContentDefined(updateMipLevelVk, 1, updateBaseLayer, updateLayerCount,
+                                      update.data.clear.aspectFlags);
+                }
+                else if (update.updateSource == UpdateSource::Buffer)
+                {
+                    BufferUpdate &bufferUpdate = update.data.buffer;
+
+                    BufferHelper *currentBuffer   = bufferUpdate.bufferHelper;
+                    VkBufferImageCopy *copyRegion = &update.data.buffer.copyRegion;
+
+                    if (transCoding && update.data.buffer.formatID != actualformat)
+                    {
+                        ANGLE_TRY(contextVk->getUtils().transCodeEtcToBc(contextVk, currentBuffer,
+                                                                         this, copyRegion));
+                    }
+                    else
+                    {
+                        commandBuffer->getCommandBuffer().copyBufferToImage(
+                            currentBuffer->getBuffer().getHandle(), mImage,
+                            getCurrentLayout(contextVk), 1, copyRegion);
+                    }
+                    bool commandBufferWasFlushed = false;
+                    ANGLE_TRY(contextVk->onCopyUpdate(currentBuffer->getSize(),
+                                                      &commandBufferWasFlushed));
+                    onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
+                            copyRegion->imageSubresource.aspectMask);
+
+                    // Update total staging buffer size
+                    mTotalStagedBufferUpdateSize -= bufferUpdate.bufferHelper->getSize();
+
+                    if (commandBufferWasFlushed)
+                    {
+                        ANGLE_TRY(
+                            contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBuffer));
+                    }
+                }
+                else
+                {
+                    ASSERT(update.updateSource == UpdateSource::Image);
+                    VkImageCopy *copyRegion = &update.data.image.copyRegion;
+                    commandBuffer->getCommandBuffer().copyImage(
+                        update.refCounted.image->get().getImage(),
+                        update.refCounted.image->get().getCurrentLayout(contextVk), mImage,
+                        getCurrentLayout(contextVk), 1, copyRegion);
+                    onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
+                            copyRegion->dstSubresource.aspectMask);
+                }
+
+                update.release(contextVk->getRenderer());
+            }
+        }
+    }
+
+    // Return the deferred updates to mSubresourceUpdates for later.
+    for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLCutoff;
+         ++updateMipLevelGL)
+    {
+        std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(updateMipLevelGL);
+
+        *levelUpdates = std::move(updatesToDefer[updateMipLevelGL.get() - levelGLStart.get()]);
     }
 
     // Compact mSubresourceUpdates, then check if there are any updates left.
@@ -9038,6 +9095,9 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         ASSERT(mTotalStagedBufferUpdateSize == 0);
         onStateChange(angle::SubjectMessage::InitializationComplete);
     }
+
+    updatesToDefer.clear();
+    updatesToApply.clear();
 
     return angle::Result::Continue;
 }
