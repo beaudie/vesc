@@ -7,6 +7,8 @@
 //    Implements the class methods for DisplayWgpu.
 //
 
+#include <dawn/native/DawnNative.h>
+
 #include "libANGLE/renderer/wgpu/DisplayWgpu.h"
 
 #include "common/debug.h"
@@ -20,12 +22,45 @@
 namespace rx
 {
 
+static wgpu::AdapterType adapterType = wgpu::AdapterType::Unknown;
+
 DisplayWgpu::DisplayWgpu(const egl::DisplayState &state) : DisplayImpl(state) {}
 
 DisplayWgpu::~DisplayWgpu() {}
 
 egl::Error DisplayWgpu::initialize(egl::Display *display)
 {
+    WGPUInstanceDescriptor instanceDescriptor{};
+    instanceDescriptor.features.timedWaitAnyEnable = true;
+    std::unique_ptr<dawn::native::Instance> instance =
+        std::make_unique<dawn::native::Instance>(&instanceDescriptor);
+
+    // Get an adapter for the backend to use, and create the device.
+    auto adapters = instance->EnumerateAdapters();
+    wgpu::DawnAdapterPropertiesPowerPreference power_props{};
+    wgpu::AdapterProperties adapterProperties{};
+    adapterProperties.nextInChain = &power_props;
+
+    auto isAdapterType = [&adapterProperties](const auto &adapter) -> bool {
+        // picks the first adapter when adapterType is unknown.
+        if (adapterType == wgpu::AdapterType::Unknown)
+        {
+            return true;
+        }
+        adapter.GetProperties(&adapterProperties);
+        return adapterProperties.adapterType == adapterType;
+    };
+
+    auto preferredAdapter = std::find_if(adapters.begin(), adapters.end(), isAdapterType);
+    if (preferredAdapter == adapters.end())
+    {
+        fprintf(stderr, "Failed to find an adapter! Please try another adapter type.\n");
+        return egl::EglNotInitialized();
+    }
+
+    WGPUDeviceDescriptor deviceDesc = {};
+    device_ = wgpu::Device::Acquire(preferredAdapter->CreateDevice(&deviceDesc));
+    queue_  = device_.GetQueue();
     return egl::NoError();
 }
 

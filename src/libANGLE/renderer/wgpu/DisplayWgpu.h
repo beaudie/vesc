@@ -10,6 +10,8 @@
 #ifndef LIBANGLE_RENDERER_WGPU_DISPLAYWGPU_H_
 #define LIBANGLE_RENDERER_WGPU_DISPLAYWGPU_H_
 
+#include <dawn/webgpu_cpp.h>
+
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/ShareGroupImpl.h"
 
@@ -90,6 +92,9 @@ class DisplayWgpu : public DisplayImpl
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;
+
+    wgpu::Device device_;
+    wgpu::Queue queue_;
 };
 
 }  // namespace rx
