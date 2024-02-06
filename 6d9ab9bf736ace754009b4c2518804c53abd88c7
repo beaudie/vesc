@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fde0e3a7_13dc3ec2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-06T18:33:05Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "6d9ab9bf736ace754009b4c2518804c53abd88c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce58fda1_436db0da",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-06T18:33:05Z",
+      "side": 1,
+      "message": "What would you think about saying something like \"...non-3D texture attachments (including depth/stencil)...\"?",
+      "revId": "6d9ab9bf736ace754009b4c2518804c53abd88c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
