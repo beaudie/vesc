@@ -290,10 +290,13 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-VkImportMemoryWin32HandleInfoKHR-handleType-00658",
     // https://anglebug.com/8497
     "VUID-vkCmdEndDebugUtilsLabelEXT-commandBuffer-01912",
+<<<<<<< PATCH SET (af684f Revert "Suppress VUID-VkGraphicsPipelineCreateInfo-dynamicRe)
+=======
     // https://anglebug.com/8516
     "VUID-VkGraphicsPipelineCreateInfo-dynamicRendering-06576",
     // https://anglebug.com/8522
     "VUID-VkPipelineVertexInputStateCreateInfo-pNext-pNext",
+>>>>>>> BASE      (c3d064 Add dawn to IGNORED_DIRECTORIES.)
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
