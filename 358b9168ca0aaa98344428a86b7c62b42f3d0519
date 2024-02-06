@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c309b78c_d1daf096",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-06T21:06:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64548731_9b7de64e",
+      "revId": "358b9168ca0aaa98344428a86b7c62b42f3d0519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "323dacc1_beef118c",
@@ -72,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc84cb12_3e57a487",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-06T21:06:32Z",
+      "side": 1,
+      "message": "the issue is not with setting the dirtybit but the `dirtyBitMask`.\n\nwith code before this change - if there were no vertex input buffers we would skip calling handleDirtyGraphicsVertexBuffers() even if `DIRTY_BIT_VERTEX_BUFFERS` because of the value of `dirtyBitMask`\n\nNow, we add `DIRTY_BIT_VERTEX_BUFFERS` bit to `dirtyBitMask` even if there are no vertex input buffers since the spec for `VK_EXT_vertex_input_dynamic_state` requires us to call `vkCmdSetVertexInputEXT` even if there are no active vertex input buffers.",
+      "parentUuid": "4d0427c2_4d351742",
+      "revId": "358b9168ca0aaa98344428a86b7c62b42f3d0519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b8811197_c1ae7590",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -83,6 +119,30 @@
       "writtenOn": "2024-02-01T20:33:50Z",
       "side": 1,
       "message": "Is this a `vector` just to be able to get the `size()`. In that case, you can use `FixedVector`. You can add that type in `angletypes.cpp` for convenience:\n\n```\n template \u003ctypename T\u003e\n using AttribArray \u003d std::array\u003cT, MAX_VERTEX_ATTRIBS\u003e;\n\n+template \u003ctypename T\u003e\n+using AttribVector \u003d std::FixedVector\u003cT, MAX_VERTEX_ATTRIBS\u003e;\n```",
+      "range": {
+        "startLine": 2627,
+        "startChar": 13,
+        "endLine": 2627,
+        "endChar": 19
+      },
+      "revId": "358b9168ca0aaa98344428a86b7c62b42f3d0519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "080aa6cc_ce407b84",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2627,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-06T21:06:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8811197_c1ae7590",
       "range": {
         "startLine": 2627,
         "startChar": 13,
@@ -116,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "908c71f6_873fd082",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2655,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-06T21:06:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81dd7686_bc2e6136",
+      "range": {
+        "startLine": 2654,
+        "startChar": 0,
+        "endLine": 2655,
+        "endChar": 65
+      },
+      "revId": "358b9168ca0aaa98344428a86b7c62b42f3d0519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2c16d94_07f70c29",
@@ -129,6 +213,30 @@
       "writtenOn": "2024-02-01T16:40:24Z",
       "side": 1,
       "message": "change to - `getPipelineVertexInputStateFormat`",
+      "range": {
+        "startLine": 3012,
+        "startChar": 31,
+        "endLine": 3012,
+        "endChar": 64
+      },
+      "revId": "358b9168ca0aaa98344428a86b7c62b42f3d0519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "005ef1f4_3ffbccbd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-06T21:06:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2c16d94_07f70c29",
       "range": {
         "startLine": 3012,
         "startChar": 31,
