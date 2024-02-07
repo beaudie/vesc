@@ -8894,6 +8894,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
             if (updateLayerCount >= kMaxParallelSubresourceUpload)
             {
+                FATAL() << "More layer counts than max subresource upload capacity";
                 // If there are more subresources than bits we can track, always insert a barrier.
                 recordWriteBarrier(contextVk, aspectFlags,
                                    transCoding ? ImageLayout::TransferDstAndComputeWrite
