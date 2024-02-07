@@ -8903,6 +8903,10 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             }
             else
             {
+                if (updateLayerCount > 1)
+                {
+                    FATAL() << "Layer count more than 1";
+                }
                 const uint64_t subresourceHashRange = angle::BitMask<uint64_t>(updateLayerCount);
                 const uint32_t subresourceHashOffset =
                     updateBaseLayer % kMaxParallelSubresourceUpload;
