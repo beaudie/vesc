@@ -1820,6 +1820,8 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(Context *context, ImageLayout im
 // The source of update to an ImageHelper
 enum class UpdateSource
 {
+    // No updates; either deferred or already applied.
+    Null,
     // Clear an image subresource.
     Clear,
     // Clear only the emulated channels of the subresource.  This operation is more expensive than
@@ -2533,6 +2535,14 @@ class ImageHelper final : public Resource, public angle::Subject
 
     size_t getLevelUpdateCount(gl::LevelIndex level) const;
 
+    void clearPerLevelUpdateFlags()
+    {
+        for (auto &bitArray : mPerLevelSubresourceUpdateFlag)
+        {
+            bitArray.reset();
+        }
+    }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2887,6 +2897,12 @@ class ImageHelper final : public Resource, public angle::Subject
     // Only used for swapChain images. This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is released.
     Semaphore mAcquireNextImageSemaphore;
+
+    // Used to track subresource updates per level. This can help parallelize independent updates
+    // further.
+    static constexpr size_t kMaxTrackedLevels = 8;  // TODO: Update? Or use an existing value?
+    // TODO: Replace 16 with MaxMipLevelCount?
+    std::array<std::bitset<16>, kMaxTrackedLevels> mPerLevelSubresourceUpdateFlag;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
