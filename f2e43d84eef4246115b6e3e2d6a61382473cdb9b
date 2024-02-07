@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a98134cc_ed45c39c",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-07T13:44:39Z",
+      "side": 1,
+      "message": "Couple style notes:\n\n- Please avoid `auto` except for complex, nested, templated types\n- Please avoid `if (a \u003d b)`\n\n```suggestion\n    egl::Surface *previousSurface \u003d texture-\u003egetBoundSurface();\n    if (previousSurface !\u003d nullptr)\n```",
+      "revId": "f2e43d84eef4246115b6e3e2d6a61382473cdb9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73f2decb_777385a5",
+        "filename": "src/tests/gl_tests/PbufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-07T13:44:39Z",
+      "side": 1,
+      "message": "Remember to remove `KKIMMO` from test names before submission 😊",
+      "revId": "f2e43d84eef4246115b6e3e2d6a61382473cdb9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88090718_b8a44149",
+        "filename": "src/tests/gl_tests/PbufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-07T13:44:39Z",
+      "side": 1,
+      "message": "Thank you for being thorough with the tests! Could you please use a draw call instead of glClear in half the tests (especially those where the unbind/rebind/destroy happens in between clear and EXPECT)? Clears can be very special, it would be good to know the tests work with an open render pass too.",
+      "revId": "f2e43d84eef4246115b6e3e2d6a61382473cdb9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
