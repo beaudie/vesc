@@ -1820,6 +1820,8 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(Context *context, ImageLayout im
 // The source of update to an ImageHelper
 enum class UpdateSource
 {
+    // No updates; either deferred or already applied.
+    Null,
     // Clear an image subresource.
     Clear,
     // Clear only the emulated channels of the subresource.  This operation is more expensive than
