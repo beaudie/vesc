@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cc4547c_ecd844d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-02-07T17:52:55Z",
+      "side": 1,
+      "message": "This isn\u0027t public, could you link the failing roll instead?\nhttps://chromium-review.googlesource.com/c/chromium/src/+/5274193",
+      "range": {
+        "startLine": 11,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 71
+      },
+      "revId": "67d8752475fbf1190fea928a1b3b73da3a46416e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
