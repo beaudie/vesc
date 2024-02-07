@@ -646,3 +646,15 @@ TEST_F(TypeTrackingTest, BuiltInUsubBorrowPrecision)
     ASSERT_FALSE(foundErrorInIntermediateTree());
     ASSERT_TRUE(foundInIntermediateTree("usubBorrow (highp 2-component vector of uint)"));
 }
+
+TEST_F(TypeTrackingTest, UnsizedArrayConstructorNoCrash)
+{
+    // const std::string &shaderString ="in d{int A;}A[]; int B[int[][](A)";
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "int A[];\n"
+        "int B[int[][](A)];";
+    compile(shaderString);
+    ASSERT_TRUE(foundErrorInIntermediateTree());
+    ASSERT_TRUE(foundInIntermediateTree("constructing from an unsized array"));
+}
