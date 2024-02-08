@@ -2807,6 +2807,7 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLe
     {
         return angle::Result::Continue;
     }
+    //    WARN() << "ensureImageInitialized";
 
     if (!mImage->valid())
     {
