@@ -8806,6 +8806,13 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
         IsETCFormat(intendedFormat) && IsBCFormat(actualformat);
 
+    // TODO: Merge all accesses into one? Currently two challenges:
+    // 1. Asserts due to FixedVector size when adding.
+    // 2. vkDestroyBuffer VVL (still in use by CB) in some traces (related to command buffer flush?)
+    constexpr size_t kMaxUpdateCount = 1024;
+    std::array<CommandBufferAccess, kMaxUpdateCount> updateAccesses;
+    size_t updateAccessIndex = 0;
+
     // Determine the updates to be applied immediately and updates to be deferred.
     uint32_t updateCount = 0;
     std::vector<std::vector<SubresourceUpdate>> updatesToDefer;
@@ -8898,6 +8905,18 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                     }
                     update.data.buffer.copyRegion.imageSubresource.mipLevel =
                         updateMipLevelVk.get();
+                    BufferHelper *currentBuffer = update.data.buffer.bufferHelper;
+                    ASSERT(currentBuffer && currentBuffer->valid());
+                    ANGLE_TRY(currentBuffer->flush(renderer));
+
+                    if (transCoding && update.data.buffer.formatID != actualformat)
+                    {
+                        updateAccesses[updateAccessIndex].onBufferComputeShaderRead(currentBuffer);
+                    }
+                    else
+                    {
+                        updateAccesses[updateAccessIndex].onBufferTransferRead(currentBuffer);
+                    }
                     break;
                 }
                 case UpdateSource::Image:
@@ -8909,6 +8928,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                         continue;
                     }
                     update.data.image.copyRegion.dstSubresource.mipLevel = updateMipLevelVk.get();
+                    updateAccesses[updateAccessIndex].onImageTransferRead(
+                        aspectFlags, &update.refCounted.image->get());
                     break;
                 }
                 default:
@@ -8920,6 +8941,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
             // If the update is to be applied immediately, it will be processed in the next loop.
             updateCount++;
+            updateAccessIndex++;
         }
     }
 
@@ -8940,6 +8962,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         // Acquire the outside command buffer and apply the necessary barriers.
         ANGLE_TRY(
             contextVk->getOutsideRenderPassCommandBufferHelper(transferAccess, &commandBuffer));
+
+        updateAccessIndex = 0;
 
         for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLCutoff;
              ++updateMipLevelGL)
@@ -8991,6 +9015,12 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                     subresourceUploadsInProgress |= subresourceHash;
                 }
 
+                // Get the outside command buffer.
+                // TODO: If all accesses can be merged together, this is no longer needed.
+                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
+                    updateAccesses[updateAccessIndex], &commandBuffer));
+                updateAccessIndex++;
+
                 // Add the necessary commands to the outside command buffer.
                 switch (update.updateSource)
                 {
@@ -9017,22 +9047,15 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                         ASSERT(currentBuffer && currentBuffer->valid());
                         ANGLE_TRY(currentBuffer->flush(renderer));
 
-                        CommandBufferAccess bufferAccess;
                         VkBufferImageCopy *copyRegion = &update.data.buffer.copyRegion;
 
                         if (transCoding && update.data.buffer.formatID != actualformat)
                         {
-                            bufferAccess.onBufferComputeShaderRead(currentBuffer);
-                            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
-                                bufferAccess, &commandBuffer));
                             ANGLE_TRY(contextVk->getUtils().transCodeEtcToBc(
                                 contextVk, currentBuffer, this, copyRegion));
                         }
                         else
                         {
-                            bufferAccess.onBufferTransferRead(currentBuffer);
-                            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
-                                bufferAccess, &commandBuffer));
                             commandBuffer->getCommandBuffer().copyBufferToImage(
                                 currentBuffer->getBuffer().getHandle(), mImage,
                                 getCurrentLayout(contextVk), 1, copyRegion);
@@ -9055,12 +9078,6 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                     }
                     case UpdateSource::Image:
                     {
-                        CommandBufferAccess imageAccess;
-                        imageAccess.onImageTransferRead(aspectFlags,
-                                                        &update.refCounted.image->get());
-                        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
-                            imageAccess, &commandBuffer));
-
                         VkImageCopy *copyRegion = &update.data.image.copyRegion;
                         commandBuffer->getCommandBuffer().copyImage(
                             update.refCounted.image->get().getImage(),
