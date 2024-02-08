@@ -16,6 +16,24 @@
       "message": "I do like it when the roll adding new tests and the expectations are bundled in one CL - makes it easy to find the reason the expectation was added.\nGetting +2 from a human could be annoying, but usually it is a matter of minutes posting a request on chat.\nAnyway, not going to impose my preferences on others, if you think this is useful.",
       "revId": "cbdbe3bd6e44b56b88f91e25bf975b32327e5ec9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36abf713_8716bea6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-08T14:01:48Z",
+      "side": 1,
+      "message": "All CLs should have context in general. I think we all agree that CL that only says \"disable X\" with no additional context is not the way to go. In this case, there should be at least info on why the expectation is being added, which one way or another should make it easy to find the reason.\n\nWhat it does make a bit more difficult is to do the reverse: given a roll find out whether there was an expectation change, but in practice I can\u0027t think of a reason why that would be necessary.\n\nWe don\u0027t have to 100% agree on everything. Your preference is X, my preference is Y. Sometimes the reason for X !\u003d Y is because we have a different vision on the weights we put on the pros and cons involved. I personally strongly dislike manually patched rolls as I mentioned above, for multiple reasons, so unless there are strong reasons for alignment let\u0027s allow both X and Y (which is what this CL does, it does not do anything about X - it only adds Y).",
+      "parentUuid": "23537a76_79872239",
+      "revId": "cbdbe3bd6e44b56b88f91e25bf975b32327e5ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
