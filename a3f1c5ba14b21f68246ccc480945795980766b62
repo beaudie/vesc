@@ -16,6 +16,52 @@
       "message": "Please take a look.",
       "revId": "a3f1c5ba14b21f68246ccc480945795980766b62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "634fe021_d14fd7ad",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1357502
+      },
+      "writtenOn": "2024-02-08T21:25:31Z",
+      "side": 1,
+      "message": "nit: updateSubresourceLevel (here and 2 places below)",
+      "range": {
+        "startLine": 644,
+        "startChar": 51,
+        "endLine": 644,
+        "endChar": 69
+      },
+      "revId": "a3f1c5ba14b21f68246ccc480945795980766b62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19191022_f5aa78f8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1357502
+      },
+      "writtenOn": "2024-02-08T21:25:31Z",
+      "side": 1,
+      "message": "This probably should be zero, as this is SubResource of intermediate texture and it should have only one. \n\nThat being said, it would be great to verify that dstSubresource is also always zero, but I\u0027m not sure what the best way to do in angle (`ASSERT` + return `kStop`?). \n\nWe shouldn\u0027t allow mipmaps on multiplanar and they should be always 2D. The reason for verification is that we ignore this value later and always copy to `MipSlice \u003d 0` and assume it\u0027s 2D.",
+      "range": {
+        "startLine": 647,
+        "startChar": 78,
+        "endLine": 647,
+        "endChar": 92
+      },
+      "revId": "a3f1c5ba14b21f68246ccc480945795980766b62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
