@@ -2207,6 +2207,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
+    //    contextVk->addImageLayoutUsage(mImage);
     commandBuffer->copyBufferToImage(srcBuffer->getBuffer().getHandle(), mImage->getImage(),
                                      mImage->getCurrentLayout(contextVk), 1, &region);
 
@@ -2807,6 +2808,7 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLe
     {
         return angle::Result::Continue;
     }
+    //    WARN() << "ensureImageInitialized";
 
     if (!mImage->valid())
     {
