@@ -10461,6 +10461,17 @@ bool ImageHelper::hasEmulatedStencilChannel() const
     return getIntendedFormat().stencilBits == 0 && getActualFormat().stencilBits > 0;
 }
 
+bool ImageHelper::hasInefficientlyEmulatedImageFormat() const
+{
+    if (hasEmulatedImageFormat())
+    {
+        // ETC1 is a subset of ETC2 so emulation is efficient
+        return !(mIntendedFormatID == angle::FormatID::ETC1_R8G8B8_UNORM_BLOCK &&
+                 mActualFormatID == angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK);
+    }
+    return false;
+}
+
 VkColorComponentFlags ImageHelper::getEmulatedChannelsMask() const
 {
     const angle::Format &angleFmt   = getIntendedFormat();

@@ -7387,13 +7387,13 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
             ANGLE_TRY(textureVk->ensureMutable(this));
         }
 
-        if (image.hasEmulatedImageFormat())
+        if (image.hasInefficientlyEmulatedImageFormat())
         {
-            ANGLE_VK_PERF_WARNING(
-                this, GL_DEBUG_SEVERITY_LOW,
-                "The Vulkan driver does not support texture format 0x%04X, emulating with 0x%04X",
-                image.getIntendedFormat().glInternalFormat,
-                image.getActualFormat().glInternalFormat);
+            ANGLE_VK_PERF_WARNING(this, GL_DEBUG_SEVERITY_LOW,
+                                  "The Vulkan driver does not support texture format 0x%04X, "
+                                  "emulating with 0x%04X",
+                                  image.getIntendedFormat().glInternalFormat,
+                                  image.getActualFormat().glInternalFormat);
         }
 
         if (image.hasImmutableSampler())
