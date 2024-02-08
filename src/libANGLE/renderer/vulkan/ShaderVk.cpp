@@ -137,7 +137,32 @@ std::shared_ptr<ShaderTranslateTask> ShaderVk::compile(const gl::Context *contex
 
 std::string ShaderVk::getDebugInfo() const
 {
-    return mState.getCompiledState()->compiledBinary.empty() ? "" : "<binary blob>";
+    const sh::BinaryBlob &spirv = mState.getCompiledState()->compiledBinary;
+    if (spirv.empty())
+    {
+        return "";
+    }
+
+    std::ostringstream blob;
+    blob << R"(Paste the following SPIR-V binary in https://www.khronos.org/spir/visualizer/
+Setting the environment variable ANGLE_FEATURE_OVERRIDES_ENABLED=retainSPIRVDebugInfo will retain debug info
+
+)";
+
+    constexpr size_t kIndicesPerRow = 10;
+    size_t rowOffset                = 0;
+    for (size_t index = 0; index < spirv.size(); ++index, ++rowOffset)
+    {
+        if (rowOffset == kIndicesPerRow)
+        {
+            blob << std::endl;
+            rowOffset = 0;
+        }
+        blob << "0x" << std::uppercase << std::setfill('0') << std::setw(8) << std::hex
+             << spirv[index] << ",";
+    }
+
+    return blob.str();
 }
 
 }  // namespace rx
