@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c3c4d69_2e3b7232",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-08T16:49:00Z",
+      "side": 1,
+      "message": "Let me know for a final review once bots are green",
+      "revId": "5089295cd48764f3df8c45a9ba88d6d5ad9614c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59ae165d_103430fc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4616,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-08T16:49:00Z",
+      "side": 1,
+      "message": "The Intel proprietary (windows) driver and mesa are completely different beasts\n\n```suggestion\n        mVertexInputDynamicStateFeatures.vertexInputDynamicState \u003d\u003d VK_TRUE \u0026\u0026 !(IsWindows() \u0026\u0026 isIntel));\n```",
+      "range": {
+        "startLine": 4616,
+        "startChar": 80,
+        "endLine": 4616,
+        "endChar": 87
+      },
+      "revId": "5089295cd48764f3df8c45a9ba88d6d5ad9614c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
