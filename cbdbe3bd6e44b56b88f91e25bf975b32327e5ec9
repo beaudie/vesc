@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23537a76_79872239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-02-08T12:45:48Z",
+      "side": 1,
+      "message": "I do like it when the roll adding new tests and the expectations are bundled in one CL - makes it easy to find the reason the expectation was added.\nGetting +2 from a human could be annoying, but usually it is a matter of minutes posting a request on chat.\nAnyway, not going to impose my preferences on others, if you think this is useful.",
+      "revId": "cbdbe3bd6e44b56b88f91e25bf975b32327e5ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
