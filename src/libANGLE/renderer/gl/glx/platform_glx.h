@@ -177,7 +177,6 @@
 // GLX typedefs
 namespace glx
 {
-
 typedef void *Context;
 typedef void *FBConfig;
 typedef XID FBConfigID;
