@@ -803,6 +803,16 @@ ANGLE_INLINE void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMa
                                                  const VkImageMemoryBarrier *imageMemoryBarriers)
 {
     ASSERT(valid());
+    //    if (imageMemoryBarrierCount > 0)
+    //    {
+    //        WARN() << "Aggregated image barriers prior to execution:";
+    //        for (uint32_t i = 0; i < imageMemoryBarrierCount; i++)
+    //        {
+    //            WARN() << " * " << i << " | " << imageMemoryBarriers[i].image << " | "
+    //                   << imageMemoryBarriers[i].oldLayout << " to "
+    //                   << imageMemoryBarriers[i].newLayout;
+    //        }
+    //    }
     vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount,
                          memoryBarriers, bufferMemoryBarrierCount, bufferMemoryBarriers,
                          imageMemoryBarrierCount, imageMemoryBarriers);
