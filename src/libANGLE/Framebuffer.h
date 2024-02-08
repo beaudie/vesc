@@ -424,12 +424,14 @@ class Framebuffer final : public angle::ObserverInterface,
         DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE,
         DIRTY_BIT_FLIP_Y,
         DIRTY_BIT_FOVEATION,
+        DIRTY_BIT_IMPLEMENTATION,
         DIRTY_BIT_UNKNOWN,
         DIRTY_BIT_MAX = DIRTY_BIT_UNKNOWN
     };
 
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
+    void setImplementationDirtyBit() { mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION); }
 
     DrawBufferMask getActiveFloat32ColorAttachmentDrawBufferMask() const
     {

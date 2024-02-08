@@ -362,6 +362,14 @@ class StateCache final : angle::NonCopyable
     // 1. onProgramExecutableChange.
     bool getCanDraw() const { return mCachedCanDraw; }
 
+    // Places that can trigger updateIncompatibleAttachments:
+    // 1. onDrawFramebufferChange
+    // 2. onProgramExecutableChange
+    DrawBufferMask getIncompatibleAttachments() const { return mCachedIncompatibleAttachments; }
+
+    bool getForceDrawFramebufferSync() const { return mCachedForceDrawFramebufferSync; }
+    void setForceDrawFramebufferSync(bool state) { mCachedForceDrawFramebufferSync = state; }
+
     // State change notifications.
     void onVertexArrayBindingChange(Context *context);
     void onProgramExecutableChange(Context *context);
@@ -398,6 +406,7 @@ class StateCache final : angle::NonCopyable
     void updateActiveShaderStorageBufferIndices(Context *context);
     void updateActiveImageUnitIndices(Context *context);
     void updateCanDraw(Context *context);
+    void updateIncompatibleAttachments(Context *context);
 
     void setValidDrawModes(bool pointsOK,
                            bool linesOK,
@@ -497,6 +506,10 @@ class StateCache final : angle::NonCopyable
         mCachedIntegerVertexAttribTypesValidation;
 
     bool mCachedCanDraw;
+
+    bool mCachedImplementationNeedsForcedDrawFramebufferSync;
+    bool mCachedForceDrawFramebufferSync;
+    DrawBufferMask mCachedIncompatibleAttachments;
 };
 
 using VertexArrayMap       = ResourceMap<VertexArray, VertexArrayID>;
@@ -849,6 +862,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
   private:
     void initializeDefaultResources();
     void releaseSharedObjects();
+
+    void maybeForceDrawFramebufferSync();
 
     angle::Result prepareForDraw(PrimitiveMode mode);
     angle::Result prepareForClear(GLbitfield mask);

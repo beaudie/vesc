@@ -522,6 +522,9 @@ void DisplayMtl::initializeFrontendFeatures(angle::FrontendFeatures *features) c
     //
     // Once the link jobs are made thread-safe and using mtl::Context, this feature can be removed.
     ANGLE_FEATURE_CONDITION(features, linkJobIsThreadSafe, false);
+
+    // Force draw framebuffer sync to avoid Metal runtime failures in certain cases.
+    ANGLE_FEATURE_CONDITION(features, forceIncompatibleDrawFramebufferSync, true);
 }
 
 void DisplayMtl::populateFeatureList(angle::FeatureList *features)

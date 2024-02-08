@@ -2153,11 +2153,6 @@ void Framebuffer::setAttachmentImpl(const Context *context,
                     colorIndex, resource->getAttachmentFormat(binding, textureIndex).info);
                 mState.mColorAttachmentsMask.set(colorIndex);
             }
-
-            bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
-            mState.mEnabledDrawBuffers.set(colorIndex, enabled);
-            SetComponentTypeMask(getDrawbufferWriteType(colorIndex), colorIndex,
-                                 &mState.mDrawBufferTypeMask);
         }
         break;
     }
@@ -2180,6 +2175,19 @@ void Framebuffer::updateAttachment(const Context *context,
                        isMultiview, samples, mState.mFramebufferSerial);
     mDirtyBits.set(dirtyBit);
     mState.mResourceNeedsInit.set(dirtyBit, attachment->initState() == InitState::MayNeedInit);
+
+    // Draw buffer type mask must be updated before notifying the observers.
+    if (binding >= GL_COLOR_ATTACHMENT0 &&
+        binding < GL_COLOR_ATTACHMENT0 + IMPLEMENTATION_MAX_DRAW_BUFFERS)
+    {
+        const size_t colorIndex = binding - GL_COLOR_ATTACHMENT0;
+        ASSERT(colorIndex < mState.mColorAttachments.size());
+        const bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
+        mState.mEnabledDrawBuffers.set(colorIndex, enabled);
+        SetComponentTypeMask(getDrawbufferWriteType(colorIndex), colorIndex,
+                             &mState.mDrawBufferTypeMask);
+    }
+
     onDirtyBinding->bind(resource);
     mAttachmentChangedAfterEnablingFoveation = isFoveationEnabled();
 
