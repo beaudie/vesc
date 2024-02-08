@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "47466319_7ef90348",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-08T18:08:27Z",
+      "side": 1,
+      "message": "Forgot to reply here. Looks like the problem really is `ContextVk::invalidateProgramExecutableHelper` which removes `DIRTY_BIT_VERTEX_BUFFERS` from the dirty bit mask if the program has no vertex attributes.\n\nYou should be able to just make that conditional to state not being dynamic (basically surround this with `if (!dynamic)`):\n\n```\n        bool useVertexBuffer \u003d (executable-\u003egetMaxActiveAttribLocation() \u003e 0);\n        mNonIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);\n        mIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);\n```",
+      "parentUuid": "dc84cb12_3e57a487",
+      "revId": "358b9168ca0aaa98344428a86b7c62b42f3d0519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b8811197_c1ae7590",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
