@@ -93,6 +93,21 @@ ANGLE_INLINE bool Context::noopMultiDraw(GLsizei drawcount) const
     return drawcount == 0 || !mStateCache.getCanDraw();
 }
 
+ANGLE_INLINE void Context::maybeForceDrawFramebufferSync()
+{
+    // Force framebuffer implementation sync if
+    // - it has incompatible attachments; OR
+    // - it had incompatible attachments during the previous operation.
+    if (mStateCache.getIncompatibleAttachments().any() || mStateCache.getForceDrawFramebufferSync())
+    {
+        mState.setDrawFramebufferDirty();
+        mState.getDrawFramebuffer()->setImplementationDirtyBit();
+
+        // Ensure sync on the next operation if the current state has incompatible attachments.
+        mStateCache.setForceDrawFramebufferSync(mStateCache.getIncompatibleAttachments().any());
+    }
+}
+
 ANGLE_INLINE angle::Result Context::syncAllDirtyBits(Command command)
 {
     constexpr state::DirtyBits kAllDirtyBits                 = state::DirtyBits().set();
@@ -133,6 +148,7 @@ ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
         ANGLE_TRY(mGLES1Renderer->prepareForDraw(mode, this, &mState, getMutableGLES1State()));
     }
 
+    maybeForceDrawFramebufferSync();
     ANGLE_TRY(syncDirtyObjects(mDrawDirtyObjects, Command::Draw));
     ASSERT(!isRobustResourceInitEnabled() ||
            !mState.getDrawFramebuffer()->hasResourceThatNeedsInit());

@@ -171,6 +171,7 @@ enum class Feature
     ForceFallbackFormat,
     ForceFragmentShaderPrecisionHighpToMediump,
     ForceGlErrorChecking,
+    ForceIncompatibleDrawFramebufferSync,
     ForceInitShaderVariables,
     ForceMaxUniformBufferSize16KB,
     ForceMinimumMaxVertexAttributes,
