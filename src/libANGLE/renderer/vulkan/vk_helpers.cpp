@@ -6723,6 +6723,9 @@ void ImageHelper::barrierImpl(Context *context,
     // Release the ANI semaphore to caller to add to the command submission.
     *acquireNextImageSemaphoreOut = mAcquireNextImageSemaphore.release();
 
+    // TODO: Reset the update tracker? (Since it is an explicit barrier)
+    clearPerLevelUpdateFlags();
+
     if (mCurrentLayout == ImageLayout::SharedPresent)
     {
         const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
@@ -6825,6 +6828,8 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
     bool barrierModified = false;
     if (newLayout == mCurrentLayout)
     {
+        // TODO: If the update has a conflict with a prior update in the same layer/level, it should
+        // become an explicit barrier?
         const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
         // RAR is not a hazard and doesn't require a barrier, especially as the image layout hasn't
         // changed.  The following asserts that such a barrier is not attempted.
@@ -6838,6 +6843,10 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
     }
     else
     {
+        // TODO: If the layout is changing, the per-level updates should be reset.
+        //        WARN() << "Layout changing, update tracker reset";
+        clearPerLevelUpdateFlags();
+
         const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[mCurrentLayout];
         const ImageMemoryBarrierData &transitionTo   = kImageMemoryBarrierData[newLayout];
         VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
@@ -8939,18 +8948,38 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     }
 
     // If there are no updates to be applied, we can return early.
+    // TODO: Too many indentations?
     if (updateCount > 0)
     {
-        if (transCoding)
+        //        WARN() << "Current image layout: " << (uint32_t)getCurrentImageLayout();
+
+        // If the image is already in this layout, no barrier is required.
+        // TODO: Check if a barrier is required due to layout transition.
+        //  (Remove isBarrierRequired later)
+        bool isBarrierRequired = false;
+        if ((transCoding && getCurrentImageLayout() != ImageLayout::TransferDstAndComputeWrite) ||
+            (!transCoding && getCurrentImageLayout() != ImageLayout::TransferDst))
         {
-            transferAccess.onImageTransferDstAndComputeWrite(
-                levelGLStart, 1, kMaxContentDefinedLayerCount, 0, aspectFlags, this);
+            //                                WARN() << "Layout transition to follow";
+            isBarrierRequired = true;
         }
-        else
+        if (isBarrierRequired)
         {
-            transferAccess.onImageTransferWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0,
-                                                aspectFlags, this);
+            if (transCoding)
+            {
+                transferAccess.onImageTransferDstAndComputeWrite(
+                    levelGLStart, 1, kMaxContentDefinedLayerCount, 0, aspectFlags, this);
+            }
+            else
+            {
+                transferAccess.onImageTransferWrite(levelGLStart, 1, kMaxContentDefinedLayerCount,
+                                                    0, aspectFlags, this);
+            }
         }
+        //        else
+        //        {
+        //            WARN() << "Barrier skipped";
+        //        }
 
         // Acquire the outside command buffer and apply the necessary barriers.
         ANGLE_TRY(
@@ -8963,7 +8992,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 &mSubresourceUpdates[updateMipLevelGL.get()];
 
             // Hash map of uploads in progress.  See comment on kMaxParallelSubresourceUpload.
-            uint64_t subresourceUploadsInProgress = 0;
+            //            uint64_t subresourceUploadsInProgress = 0;
 
             for (SubresourceUpdate &update : *levelUpdates)
             {
@@ -8976,17 +9005,39 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 uint32_t updateBaseLayer, updateLayerCount;
                 update.getDestSubresource(mLayerCount, &updateBaseLayer, &updateLayerCount);
 
+                // TODO: Per-level updates
+                //                const uint64_t expectedUpdateLevelRange =
+                //                angle::BitMask<uint64_t>(updateLayerCount)
+                //                                                          << updateBaseLayer;
+                //                if ((expectedUpdateLevelRange &
+                //                     mPerLevelSubresourceUpdateFlag[updateMipLevelGL.get()].to_ulong())
+                //                     != 0)
+                //                {
+                //                                WARN() << "Layer conflict | " <<
+                //                                expectedUpdateLevelRange << " vs " <<
+                //                                mPerLevelSubresourceUpdateFlag[updateMipLevelGL.get()];
+                //                }
+
+                //                        WARN() << "Barrier required: " << isBarrierRequired << " |
+                //                        Level: " << updateMipLevelGL.get() << " | BaseLayer: " <<
+                //                        updateBaseLayer << " | LayerCount: " << updateLayerCount;
+                //                mPerLevelSubresourceUpdateFlag[updateMipLevelGL.get()] |=
+                //                expectedUpdateLevelRange;
+                //                        WARN() << "Bits for level " << updateBaseLayer << ": " <<
+                //                            mPerLevelSubresourceUpdateFlag[updateMipLevelGL.get()];
+
                 const LevelIndex updateMipLevelVk = toVkLevel(updateMipLevelGL);
 
                 // TODO: Check if barrier is needed due to parallel mip level updates?
                 ImageLayout newLayout = transCoding ? ImageLayout::TransferDstAndComputeWrite
                                                     : ImageLayout::TransferDst;
+                // TODO: Use the per-level tracker? Move it to the previous loop?
                 if (updateLayerCount >= kMaxParallelSubresourceUpload)
                 {
                     // If there are more subresources than bits we can track, always insert a
                     // barrier.
                     recordWriteBarrier(contextVk, aspectFlags, newLayout, commandBuffer);
-                    subresourceUploadsInProgress = std::numeric_limits<uint64_t>::max();
+                    mPerLevelSubresourceUpdateFlag[updateMipLevelGL.get()].set();
                 }
                 else
                 {
@@ -8997,13 +9048,14 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                     const uint64_t subresourceHash =
                         ANGLE_ROTL64(subresourceHashRange, subresourceHashOffset);
 
-                    if ((subresourceUploadsInProgress & subresourceHash) != 0)
+                    if ((mPerLevelSubresourceUpdateFlag[updateMipLevelGL.get()].to_ullong() &
+                         subresourceHash) != 0)
                     {
                         // If there's overlap in subresource upload, issue a barrier.
                         recordWriteBarrier(contextVk, aspectFlags, newLayout, commandBuffer);
-                        subresourceUploadsInProgress = 0;
+                        mPerLevelSubresourceUpdateFlag[updateMipLevelGL.get()].reset();
                     }
-                    subresourceUploadsInProgress |= subresourceHash;
+                    mPerLevelSubresourceUpdateFlag[updateMipLevelGL.get()] |= subresourceHash;
                 }
 
                 // Add the necessary commands to the outside command buffer.
