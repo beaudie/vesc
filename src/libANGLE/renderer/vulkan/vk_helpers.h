@@ -2539,6 +2539,21 @@ class ImageHelper final : public ReadWriteResource, public angle::Subject
 
     size_t getLevelUpdateCount(gl::LevelIndex level) const;
 
+    void clearPerLevelUpdateFlags()
+    {
+        for (auto &bitArray : mPerLevelSubresourceUpdateFlag)
+        {
+            bitArray.reset();
+        }
+    }
+    void setPerLevelUpdateFlags()
+    {
+        for (auto &bitArray : mPerLevelSubresourceUpdateFlag)
+        {
+            bitArray.set();
+        }
+    }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2893,6 +2908,14 @@ class ImageHelper final : public ReadWriteResource, public angle::Subject
     // Only used for swapChain images. This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is released.
     Semaphore mAcquireNextImageSemaphore;
+
+    // Used to track subresource updates per level. This can help parallelize updates performed to
+    // different levels or layers of the image.
+    static constexpr size_t kMaxTrackedLevels = 16;
+
+    // TODO: Array size should be MaxMipLevelCount?
+    // TODO: Replace 64 with kMaxContentDefinedLayerCount? Or use another existing value?
+    std::array<std::bitset<64>, kMaxTrackedLevels> mPerLevelSubresourceUpdateFlag;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
