@@ -201,6 +201,14 @@
                 "Force the minimum GL_MAX_VERTEX_ATTRIBS that the context's client version allows."
             ],
             "issue": ""
+        },
+        {
+            "name": "force_incompatible_draw_framebuffer_sync",
+            "category": "Features",
+            "description": [
+                "Force draw framebuffer state sync when it has attachments incompatible with the current program outputs"
+            ],
+            "issue": ""
         }
     ]
 }

@@ -196,6 +196,13 @@ struct FrontendFeatures : FeatureSetBase
         &members, ""
     };
 
+    FeatureInfo forceIncompatibleDrawFramebufferSync = {
+        "forceIncompatibleDrawFramebufferSync",
+        FeatureCategory::FrontendFeatures,
+        "Force draw framebuffer state sync when it has attachments incompatible with the current program outputs",
+        &members, ""
+    };
+
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;

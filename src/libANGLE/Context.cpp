@@ -5787,11 +5787,13 @@ angle::Result Context::syncStateForBlit(GLbitfield mask)
 
     Command command = static_cast<Command>(static_cast<uint32_t>(Command::Blit) + commandMask);
 
+    maybeForceDrawFramebufferSync();
     return syncState(kBlitDirtyBits, kBlitExtendedDirtyBits, mBlitDirtyObjects, command);
 }
 
 angle::Result Context::syncStateForClear()
 {
+    maybeForceDrawFramebufferSync();
     return syncState(kClearDirtyBits, kClearExtendedDirtyBits, mClearDirtyObjects, Command::Clear);
 }
 
@@ -10091,7 +10093,10 @@ StateCache::StateCache()
       mCachedProgramPipelineError(kInvalidPointer),
       mCachedHasAnyEnabledClientAttrib(false),
       mCachedTransformFeedbackActiveUnpaused(false),
-      mCachedCanDraw(false)
+      mCachedCanDraw(false),
+      mCachedImplementationNeedsForcedDrawFramebufferSync(false),
+      mCachedForceDrawFramebufferSync(false),
+      mCachedIncompatibleAttachments(0)
 {
     mCachedValidDrawModes.fill(false);
 }
@@ -10115,6 +10120,9 @@ void StateCache::initialize(Context *context)
     updateBasicDrawElementsError();
     updateVertexAttribTypesValidation(context);
     updateCanDraw(context);
+
+    mCachedImplementationNeedsForcedDrawFramebufferSync =
+        context->getFrontendFeatures().forceIncompatibleDrawFramebufferSync.enabled;
 }
 
 void StateCache::updateActiveAttribsMask(Context *context)
@@ -10266,6 +10274,7 @@ void StateCache::onProgramExecutableChange(Context *context)
     updateActiveShaderStorageBufferIndices(context);
     updateActiveImageUnitIndices(context);
     updateCanDraw(context);
+    updateIncompatibleAttachments(context);
 }
 
 void StateCache::onVertexArrayFormatChange(Context *context)
@@ -10306,6 +10315,7 @@ void StateCache::onGLES1TextureStateChange(Context *context)
 void StateCache::onDrawFramebufferChange(Context *context)
 {
     updateBasicDrawStatesError();
+    updateIncompatibleAttachments(context);
 }
 
 void StateCache::onActiveTextureChange(Context *context)
@@ -10552,6 +10562,28 @@ void StateCache::updateCanDraw(Context *context)
     mCachedCanDraw =
         context->isGLES1() || (context->getState().getProgramExecutable() &&
                                context->getState().getProgramExecutable()->hasVertexShader());
+}
+
+void StateCache::updateIncompatibleAttachments(Context *context)
+{
+    if (!mCachedImplementationNeedsForcedDrawFramebufferSync)
+    {
+        return;
+    }
+
+    const ProgramExecutable *programExecutable = context->getState().getProgramExecutable();
+    Framebuffer *drawFramebuffer               = context->getState().getDrawFramebuffer();
+    if (programExecutable == nullptr || drawFramebuffer == nullptr)
+    {
+        mCachedIncompatibleAttachments.reset();
+        return;
+    }
+
+    // Cache a mask of incompatible attachments ignoring those that do not have fragment outputs.
+    mCachedIncompatibleAttachments =
+        GetComponentTypeMaskDiff(drawFramebuffer->getDrawBufferTypeMask(),
+                                 programExecutable->getFragmentOutputsTypeMask()) &
+        programExecutable->getActiveOutputVariablesMask();
 }
 
 bool StateCache::isCurrentContext(const Context *context,

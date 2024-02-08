@@ -664,6 +664,7 @@ angle::Result FramebufferMtl::syncState(const gl::Context *context,
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_SAMPLES:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+            case gl::Framebuffer::DIRTY_BIT_IMPLEMENTATION:
                 break;
             default:
             {
@@ -691,7 +692,7 @@ angle::Result FramebufferMtl::syncState(const gl::Context *context,
         }
     }
 
-    ANGLE_TRY(prepareRenderPass(context, &mRenderPassDesc));
+    ANGLE_TRY(prepareRenderPass(context, &mRenderPassDesc, command == gl::Command::Draw));
     bool renderPassChanged = !oldRenderPassDesc.equalIgnoreLoadStoreOptions(mRenderPassDesc);
 
     if (mustNotifyContext || renderPassChanged)
@@ -953,9 +954,14 @@ angle::Result FramebufferMtl::updateCachedRenderTarget(const gl::Context *contex
 }
 
 angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
-                                                mtl::RenderPassDesc *pDescOut)
+                                                mtl::RenderPassDesc *pDescOut,
+                                                bool checkProgram)
 {
-    const gl::DrawBufferMask enabledDrawBuffers = getState().getEnabledDrawBuffers();
+    // Skip incompatible attachments for draw ops to avoid triggering Metal runtime failures.
+    const gl::DrawBufferMask incompatibleAttachments =
+        checkProgram ? context->getStateCache().getIncompatibleAttachments() : gl::DrawBufferMask();
+    const gl::DrawBufferMask enabledDrawBuffers =
+        getState().getEnabledDrawBuffers() & ~incompatibleAttachments;
 
     mtl::RenderPassDesc &desc = *pDescOut;
 
