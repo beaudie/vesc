@@ -16,6 +16,24 @@
       "message": "Probably I added it for debugging. But not needed any more, so fine to remove.",
       "revId": "cd409fd874d07bdf63ef332441c43d7baf151ce0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e913eac7_8dbd96db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-02-08T23:55:58Z",
+      "side": 1,
+      "message": "My theory was I had added it while Cody was looking at SwS implementation, so both paths in SwS would be exercised.. and then forgotten about. That\u0027s better covered by tests though so we should drop it.",
+      "parentUuid": "43900115_2a1d92ff",
+      "revId": "cd409fd874d07bdf63ef332441c43d7baf151ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
