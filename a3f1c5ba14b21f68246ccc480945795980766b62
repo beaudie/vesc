@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc86488e_2ddd9b97",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2024-02-08T21:58:26Z",
+      "side": 1,
+      "message": "Oops done.",
+      "parentUuid": "634fe021_d14fd7ad",
+      "range": {
+        "startLine": 644,
+        "startChar": 51,
+        "endLine": 644,
+        "endChar": 69
+      },
+      "revId": "a3f1c5ba14b21f68246ccc480945795980766b62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19191022_f5aa78f8",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-08T21:25:31Z",
       "side": 1,
       "message": "This probably should be zero, as this is SubResource of intermediate texture and it should have only one. \n\nThat being said, it would be great to verify that dstSubresource is also always zero, but I\u0027m not sure what the best way to do in angle (`ASSERT` + return `kStop`?). \n\nWe shouldn\u0027t allow mipmaps on multiplanar and they should be always 2D. The reason for verification is that we ignore this value later and always copy to `MipSlice \u003d 0` and assume it\u0027s 2D.",
+      "range": {
+        "startLine": 647,
+        "startChar": 78,
+        "endLine": 647,
+        "endChar": 92
+      },
+      "revId": "a3f1c5ba14b21f68246ccc480945795980766b62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b81abc_154701db",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2024-02-08T21:58:26Z",
+      "side": 1,
+      "message": "Added an ASSERT and an early return with angle::Result::Stop if not 0. Not sure if should do `ANGLE_HR_UNREACHABLE(GetImplAs\u003cContext11\u003e(context));` as well before returning.",
+      "parentUuid": "19191022_f5aa78f8",
       "range": {
         "startLine": 647,
         "startChar": 78,
