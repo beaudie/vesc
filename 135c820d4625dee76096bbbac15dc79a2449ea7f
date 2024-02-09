@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0e44299_fb15e332",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Image11.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-09T16:43:12Z",
+      "side": 1,
+      "message": "This doesn\u0027t touch any state of the Image class, can it be a method on TextureStorage/TextureStorage11 instead?",
+      "revId": "135c820d4625dee76096bbbac15dc79a2449ea7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
