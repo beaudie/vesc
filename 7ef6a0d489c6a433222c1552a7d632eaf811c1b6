@@ -16,6 +16,245 @@
       "message": "PTAL - looking for high level feedback (or review if overall approach look ok)",
       "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13706e43_60b65735",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "I haven\u0027t been very thorough, but some high level feedback already!",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0a1c8fb_e0bc5bcd",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "```suggestion\n                \"Use VK_KHR_fragment_shading_rate extension to implement QCOM foveated rendering extensions\"\n```",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d211691_f2976328",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5897,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "Looking back, I think this dirty bit could be removed. It\u0027s set when the framebuffer or texture parameter is changed, but that has no bearing on what\u0027s going to be rendered now (like it could be set on the read framebuffer, or any texture not bound to current draw framebuffer).\n\nThis `set` here should not only work for disabled-\u003eenabled but also enabled-\u003edisabled (i.e, the bit should always be set), but regardless you should be able to just remove this code.\n\nWhat you need instead in those calls (`Context::*FoveationParameters`) is to set the dirty bit in the framebuffer, so `FramebufferVk::syncState` takes care of this (through `ContextVk::onFramebufferChange`). For textures, the observer pattern should be used to dirty all the framebuffers attached to it.",
+      "range": {
+        "startLine": 5895,
+        "startChar": 0,
+        "endLine": 5897,
+        "endChar": 92
+      },
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83152a1b_d89b5068",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1648,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "Ok I see now why you were having trouble with renderbuffers. If you move some logic around, I think you can simplify this change a lot _and_ be able to support renderbuffers.\n\nBasically, my high level suggestion is to make the FSR image and view be part of `FramebufferVk`. It doesn\u0027t matter if the attachment is texture or renderbuffer (so supporting them is identical). And we don\u0027t end up with this weird situation where the framebuffer is asking its attachment to create something for the render pass (that\u0027s the framebuffer\u0027s job).",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71d04926_2e63d07d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "I highly suggest gating this functionality on imageless framebuffers. I\u0027m also finding more situations where supporting !imageless is too much of a hassle, and I don\u0027t think it\u0027s worth supporting anything other than the mandatory on ancient drivers.",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "496552c9_df23c48f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "Feel free to split the ANGLE feature + RendererVk changes into another CL that can land pretty much right away",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c3a7c18_4d4592dd",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "nit: can fit this all in a uint32_t like:\n\n```suggestion\n    uint8_t fragmentWidth;\n    uint8_t fragmentHeight;\n    VkFragmentShadingRateCombinerOpKHR ops1 : 16;\n```\n\n(no need to store ops[0] either)",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 504,
+        "endChar": 46
+      },
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62dad146_c038c48a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "nit:",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69b2aa3c_328639c9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "Do you have VK_EXT_host_image_copy yet? My suggestion is:\n\n- Use That extension if you can, and you won\u0027t need to worry about the buffer anymore and layout transitions.\n- If you can\u0027t use that extension, issue the image layout transition to `VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR` right here (with a pipeline barrier)\n\nIn either case, because this image is never transitioned into any other layout or used for any other purpose, you can remove all the stuff about finalizing its layout in the render pass etc.",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19d10ea6_949760c8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "If you make this image per framebuffer, you don\u0027t need the complications with `releaseImageFromShareContexts` anymore.",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc89edd4_363ea808",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "Technically this needs only one view right? You could add a new function in ImageViewHelper so only that one view is initialized.",
+      "range": {
+        "startLine": 927,
+        "startChar": 0,
+        "endLine": 930,
+        "endChar": 51
+      },
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e4375b7_945ceb7a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "!",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6085d57_06382e08",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2063,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T19:09:20Z",
+      "side": 1,
+      "message": "Do we need any of this tracking? Isn\u0027t this just a temp CPU-initialized read-only image?",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
