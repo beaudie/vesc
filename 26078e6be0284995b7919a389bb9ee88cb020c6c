@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9779ab25_48cd67a9",
+        "filename": "build_overrides/dawn.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T18:07:27Z",
+      "side": 1,
+      "message": "We shouldn\u0027t need to set this manually, right?",
+      "revId": "26078e6be0284995b7919a389bb9ee88cb020c6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c0fafc_6eafbd4d",
+        "filename": "build_overrides/tint.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T18:07:27Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "26078e6be0284995b7919a389bb9ee88cb020c6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
