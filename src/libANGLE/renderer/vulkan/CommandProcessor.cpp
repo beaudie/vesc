@@ -1522,6 +1522,7 @@ angle::Result CommandQueue::queueSubmit(Context *context,
         VkQueue queue = getQueue(contextPriority);
         VkFence fence = batch.getFenceHandle();
         ASSERT(fence != VK_NULL_HANDLE);
+        WARN() << " vkQueueSubmit";
         ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fence));
 
         if (batch.externalFence)
