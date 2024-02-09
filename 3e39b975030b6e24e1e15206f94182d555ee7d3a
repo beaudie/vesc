@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c129645e_9c595b5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-09T17:45:54Z",
+      "side": 1,
+      "message": "Does this change fix the test?\n\nOne thing I am wondering is that the logic here\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/TextureVk.cpp;l\u003d3291;\n\nshould change to\n```\n        VkFilter chromaFilter \u003d gl_vk::GetFilter((samplerState.getMinFilter()) \u003d\u003d gl_vk::GetFilter(samplerState.getMagFilter())\n                                    ? gl_vk::GetFilter(samplerState.getMinFilter())\n                                    : vk::kDefaultYCbCrChromaFilter;\n``` \n\nNot sure if it will fix any test, but seems more correct than current code.",
+      "range": {
+        "startLine": 17,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "3e39b975030b6e24e1e15206f94182d555ee7d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eb790fa_ee6237b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-09T17:45:54Z",
+      "side": 1,
+      "message": "The change itself looks good to me.",
+      "revId": "3e39b975030b6e24e1e15206f94182d555ee7d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
