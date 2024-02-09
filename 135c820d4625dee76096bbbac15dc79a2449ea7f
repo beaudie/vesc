@@ -16,6 +16,24 @@
       "message": "This doesn\u0027t touch any state of the Image class, can it be a method on TextureStorage/TextureStorage11 instead?",
       "revId": "135c820d4625dee76096bbbac15dc79a2449ea7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33fd551f_bf785e35",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Image11.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2024-02-09T17:09:07Z",
+      "side": 1,
+      "message": "Oh yeah, earlier we were thinking of using Image11\u0027s mDXGIFormat but that was not multiplanar so ended up doing this. Moving to TextureStorage sounds good!",
+      "parentUuid": "e0e44299_fb15e332",
+      "revId": "135c820d4625dee76096bbbac15dc79a2449ea7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

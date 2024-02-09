@@ -158,6 +158,30 @@
       },
       "revId": "a3f1c5ba14b21f68246ccc480945795980766b62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea56f71d_7ce53124",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2024-02-09T17:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ec19bbf_fa641407",
+      "range": {
+        "startLine": 647,
+        "startChar": 78,
+        "endLine": 647,
+        "endChar": 92
+      },
+      "revId": "a3f1c5ba14b21f68246ccc480945795980766b62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
