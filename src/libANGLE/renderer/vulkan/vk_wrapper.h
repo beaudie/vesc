@@ -812,6 +812,17 @@ ANGLE_INLINE void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMa
                                                  const VkImageMemoryBarrier *imageMemoryBarriers)
 {
     ASSERT(valid());
+    std::ostringstream out;
+    out << " PipelineBarrier: srcStageMask:0x" << std::hex << srcStageMask << " dstStageMask:0x"
+        << dstStageMask;
+    for (size_t i = 0; i < imageMemoryBarrierCount; i++)
+    {
+
+        out << " {image:" << imageMemoryBarriers[i].image
+            << " oldLayout:" << imageMemoryBarriers[i].oldLayout
+            << " newLayout:" << imageMemoryBarriers[i].newLayout << "}";
+    }
+    WARN() << out.str().c_str();
     vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount,
                          memoryBarriers, bufferMemoryBarrierCount, bufferMemoryBarriers,
                          imageMemoryBarrierCount, imageMemoryBarriers);
@@ -822,6 +833,8 @@ ANGLE_INLINE void CommandBuffer::imageBarrier(VkPipelineStageFlags srcStageMask,
                                               const VkImageMemoryBarrier &imageMemoryBarrier)
 {
     ASSERT(valid());
+    WARN() << " imageBarrier: srcStageMask:0x" << std::hex << srcStageMask << " dstStageMask:0x"
+           << dstStageMask << " image:" << imageMemoryBarrier.image;
     vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1,
                          &imageMemoryBarrier);
 }
@@ -832,6 +845,7 @@ ANGLE_INLINE void CommandBuffer::imageWaitEvent(const VkEvent &event,
                                                 const VkImageMemoryBarrier &imageMemoryBarrier)
 {
     ASSERT(valid());
+    WARN() << " event:" << event;
     vkCmdWaitEvents(mHandle, 1, &event, srcStageMask, dstStageMask, 0, nullptr, 0, nullptr, 1,
                     &imageMemoryBarrier);
 }
@@ -933,12 +947,14 @@ ANGLE_INLINE void CommandBuffer::beginRenderPass(const VkRenderPassBeginInfo &be
                                                  VkSubpassContents subpassContents)
 {
     ASSERT(valid());
+    WARN() << " beginRenderPass";
     vkCmdBeginRenderPass(mHandle, &beginInfo, subpassContents);
 }
 
 ANGLE_INLINE void CommandBuffer::endRenderPass()
 {
     ASSERT(mHandle != VK_NULL_HANDLE);
+    WARN() << " endRenderPass";
     vkCmdEndRenderPass(mHandle);
 }
 
@@ -1046,6 +1062,7 @@ ANGLE_INLINE void CommandBuffer::setDepthWriteEnable(VkBool32 depthWriteEnable)
 ANGLE_INLINE void CommandBuffer::setEvent(VkEvent event, VkPipelineStageFlags stageMask)
 {
     ASSERT(valid() && event != VK_NULL_HANDLE);
+    WARN() << " event:" << event << " stageMask:0x" << std::hex << stageMask;
     vkCmdSetEvent(mHandle, event, stageMask);
 }
 
@@ -1171,6 +1188,21 @@ ANGLE_INLINE void CommandBuffer::waitEvents(uint32_t eventCount,
                                             const VkImageMemoryBarrier *imageMemoryBarriers)
 {
     ASSERT(valid());
+    std::ostringstream out;
+    out << std::hex << " srcStageMask:0x" << srcStageMask << " dstStageMask:0x" << dstStageMask
+        << " events:";
+    for (size_t i = 0; i < eventCount; i++)
+    {
+        out << " " << events[i];
+    }
+    out << " imageMemoryBarriers:" << (imageMemoryBarrierCount > 0 ? "" : " nullptr");
+    for (size_t i = 0; i < imageMemoryBarrierCount; i++)
+    {
+        out << "{image:" << imageMemoryBarriers[i].image
+            << " oldLayout:" << imageMemoryBarriers[i].oldLayout
+            << " newLayout:" << imageMemoryBarriers[i].newLayout << "}";
+    }
+    WARN() << out.str().c_str();
     vkCmdWaitEvents(mHandle, eventCount, events, srcStageMask, dstStageMask, memoryBarrierCount,
                     memoryBarriers, bufferMemoryBarrierCount, bufferMemoryBarriers,
                     imageMemoryBarrierCount, imageMemoryBarriers);
@@ -1444,7 +1476,9 @@ ANGLE_INLINE void ImageView::destroy(VkDevice device)
 
 ANGLE_INLINE VkResult ImageView::init(VkDevice device, const VkImageViewCreateInfo &createInfo)
 {
-    return vkCreateImageView(device, &createInfo, nullptr, &mHandle);
+    VkResult result = vkCreateImageView(device, &createInfo, nullptr, &mHandle);
+    WARN() << " image:" << createInfo.image << " view:" << mHandle;
+    return result;
 }
 
 // Semaphore implementation.
@@ -1916,7 +1950,9 @@ ANGLE_INLINE void Event::destroy(VkDevice device)
 ANGLE_INLINE VkResult Event::init(VkDevice device, const VkEventCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    return vkCreateEvent(device, &createInfo, nullptr, &mHandle);
+    VkResult result = vkCreateEvent(device, &createInfo, nullptr, &mHandle);
+    WARN() << " event:" << mHandle;
+    return result;
 }
 
 ANGLE_INLINE VkResult Event::getStatus(VkDevice device) const
@@ -1942,6 +1978,7 @@ ANGLE_INLINE void Fence::destroy(VkDevice device)
 {
     if (valid())
     {
+        WARN() << " event:" << mHandle;
         vkDestroyFence(device, mHandle, nullptr);
         mHandle = VK_NULL_HANDLE;
     }
