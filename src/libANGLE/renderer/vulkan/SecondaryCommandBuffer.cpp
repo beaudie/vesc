@@ -519,6 +519,11 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                         getParamPtr<ImageBarrierParams>(currentCommand);
                     const VkImageMemoryBarrier *imageMemoryBarriers =
                         GetFirstArrayParameter<VkImageMemoryBarrier>(params);
+                    WARN() << " ImageBarrier: srcStageMask:0x" << std::hex << params->srcStageMask
+                           << " dstStageMask:0x" << params->dstStageMask
+                           << " image:" << imageMemoryBarriers->image
+                           << " oldLayout:" << imageMemoryBarriers->oldLayout
+                           << " newLayout:" << imageMemoryBarriers->newLayout;
                     vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0,
                                          0, nullptr, 0, nullptr, 1, imageMemoryBarriers);
                     break;
@@ -529,6 +534,11 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                         getParamPtr<ImageWaitEventParams>(currentCommand);
                     const VkImageMemoryBarrier *imageMemoryBarriers =
                         GetFirstArrayParameter<VkImageMemoryBarrier>(params);
+                    WARN() << " ImageWaitEvent event:" << params->event << " srcStageMask:0x"
+                           << std::hex << params->srcStageMask << " dstStageMask:0x"
+                           << params->dstStageMask << " image:" << imageMemoryBarriers->image
+                           << " oldLayout:" << imageMemoryBarriers->oldLayout
+                           << " newLayout:" << imageMemoryBarriers->newLayout;
                     vkCmdWaitEvents(cmdBuffer, 1, &(params->event), params->srcStageMask,
                                     params->dstStageMask, 0, nullptr, 0, nullptr, 1,
                                     imageMemoryBarriers);
@@ -572,6 +582,17 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                     const VkImageMemoryBarrier *imageMemoryBarriers =
                         GetNextArrayParameter<VkImageMemoryBarrier>(memoryBarriers,
                                                                     params->memoryBarrierCount);
+                    std::ostringstream out;
+                    out << " PipelineBarrier: srcStageMask:0x" << std::hex << params->srcStageMask
+                        << " dstStageMask:0x" << params->dstStageMask;
+                    for (size_t i = 0; i < params->imageMemoryBarrierCount; i++)
+                    {
+
+                        out << " {image:" << imageMemoryBarriers[i].image
+                            << " oldLayout:" << imageMemoryBarriers[i].oldLayout
+                            << " newLayout:" << imageMemoryBarriers[i].newLayout << "}";
+                    }
+                    WARN() << out.str().c_str();
                     vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask,
                                          params->dependencyFlags, params->memoryBarrierCount,
                                          memoryBarriers, 0, nullptr,
@@ -663,6 +684,8 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 case CommandID::SetEvent:
                 {
                     const SetEventParams *params = getParamPtr<SetEventParams>(currentCommand);
+                    WARN() << " SetEvent: event:" << std::hex << params->event << " stageMask:0x"
+                           << params->stageMask;
                     vkCmdSetEvent(cmdBuffer, params->event, params->stageMask);
                     break;
                 }
@@ -799,6 +822,22 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                     const VkImageMemoryBarrier *imageMemoryBarriers =
                         GetNextArrayParameter<VkImageMemoryBarrier>(memoryBarriers,
                                                                     params->memoryBarrierCount);
+                    std::ostringstream out;
+                    out << " WaitEvents: srcStageMask:0x" << std::hex << params->srcStageMask
+                        << " dstStageMask:0x" << params->dstStageMask << " events:{";
+                    for (size_t i = 0; i < params->eventCount; i++)
+                    {
+                        out << events[i] << " ";
+                    }
+                    out << "}" << " imageMemoryBarriers:{";
+                    for (size_t i = 0; i < params->imageMemoryBarrierCount; i++)
+                    {
+                        out << "{image:" << imageMemoryBarriers->image
+                            << " oldLayout:" << imageMemoryBarriers->oldLayout
+                            << " newLayout:" << imageMemoryBarriers->newLayout << "} ";
+                    }
+                    out << "}";
+                    WARN() << out.str().c_str();
                     vkCmdWaitEvents(cmdBuffer, params->eventCount, events, params->srcStageMask,
                                     params->dstStageMask, params->memoryBarrierCount,
                                     memoryBarriers, 0, nullptr, params->imageMemoryBarrierCount,

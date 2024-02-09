@@ -7310,6 +7310,10 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
         // No layout change, only memory barrier is required
         if (barrierType == BarrierType::Event && mCurrentEvent.valid())
         {
+            WARN() << " addMemoryEvent:" << mCurrentEvent.getEvent().getHandle()
+                   << " image:" << mImage.getHandle() << " srcStageMask:0x" << std::hex
+                   << GetImageLayoutSrcStageMask(context, layoutData) << " dstStageMask:0x"
+                   << GetImageLayoutDstStageMask(context, layoutData);
             eventBarriers->addMemoryEvent(GetImageLayoutSrcStageMask(context, layoutData),
                                           GetImageLayoutDstStageMask(context, layoutData),
                                           layoutData.srcAccessMask, layoutData.dstAccessMask,
@@ -7356,6 +7360,10 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
                 {
                     const ImageMemoryBarrierData &layoutData =
                         kImageMemoryBarrierData[mLastNonShaderReadOnlyEvent.getImageLayout()];
+                    WARN() << " addMemoryEvent:" << mCurrentEvent.getEvent().getHandle()
+                           << " image:" << mImage.getHandle() << " srcStageMask:0x" << std::hex
+                           << GetImageLayoutSrcStageMask(context, layoutData) << " dstStageMask:0x"
+                           << dstStageMask;
                     eventBarriers->addMemoryEvent(GetImageLayoutSrcStageMask(context, layoutData),
                                                   dstStageMask, layoutData.srcAccessMask,
                                                   transitionTo.dstAccessMask,
@@ -7432,6 +7440,9 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
 
             if (barrierType == BarrierType::Event && mCurrentEvent.valid())
             {
+                WARN() << " addImageEvent:" << mCurrentEvent.getEvent().getHandle()
+                       << " image:" << mImage.getHandle() << " srcStageMask:0x" << std::hex
+                       << srcStageMask << " dstStageMask:0x" << dstStageMask;
                 eventBarriers->addImageEvent(context, mCurrentEvent, srcStageMask, dstStageMask,
                                              imageMemoryBarrier);
                 // If we are transition into shaderRead layout, remember the last
