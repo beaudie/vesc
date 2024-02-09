@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba7bc83e_69450b04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-09T02:17:54Z",
+      "side": 1,
+      "message": "Hi @kbr@chromium.org, could these WebGL tests be updated about their assumptions? In this case, ANGLE/Vulkan _is_ producing the translated shader, but being SPIR-V, it doesn\u0027t look like the way the tests expects.",
+      "revId": "daa94b32da47ba19092796390158f644f574c333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
