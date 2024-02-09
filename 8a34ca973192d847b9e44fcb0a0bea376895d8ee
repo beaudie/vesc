@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99f4c30b_f1484331",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-09T13:37:09Z",
+      "side": 1,
+      "message": "Leaving to Shabi in case he\u0027s got other suggestions",
+      "revId": "8a34ca973192d847b9e44fcb0a0bea376895d8ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
