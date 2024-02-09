@@ -440,8 +440,11 @@ angle::Result CLCommandQueueVk::enqueueUnmapMemObject(const cl::Memory &memory,
                                                       const cl::EventPtrs &waitEvents,
                                                       CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    ANGLE_TRY(enqueueWaitForEvents(waitEvents));
+    ANGLE_TRY(createEvent(eventCreateFunc, waitEvents));
+    ANGLE_TRY(memory.getImpl<CLMemoryVk>().unmap());
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueMigrateMemObjects(const cl::MemoryPtrs &memObjects,
