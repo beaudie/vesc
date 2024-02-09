@@ -755,15 +755,11 @@ class PipelineBarrier : angle::NonCopyable
           mImageMemoryBarriers(),
           mWaitEvents()
     {}
-<<<<<<< Updated upstream
-    ~PipelineBarrier() = default;
-=======
     ~PipelineBarrier()
     {
         ASSERT(mImageMemoryBarriers.empty());
         ASSERT(mWaitEvents.empty());
     }
->>>>>>> Stashed changes
 
     bool isEmpty() const
     {
