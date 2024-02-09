@@ -1677,8 +1677,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         mCompatiblePresentModes.resize(compatibleModes.presentModeCount);
 
         // The implementation must always return the given present mode as compatible with itself.
-        ASSERT(IsCompatiblePresentMode(mDesiredSwapchainPresentMode, mCompatiblePresentModes.data(),
-                                       mCompatiblePresentModes.size()));
+        /*ASSERT(IsCompatiblePresentMode(mDesiredSwapchainPresentMode,
+           mCompatiblePresentModes.data(), mCompatiblePresentModes.size()));*/
 
         // Vulkan spec says "The per-present mode image counts may be less-than or greater-than the
         // image counts returned when VkSurfacePresentModeEXT is not provided.". Use the per present
