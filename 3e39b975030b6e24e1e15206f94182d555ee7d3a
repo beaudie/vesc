@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "82dcff93_0f654a3d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2024-02-09T21:15:38Z",
+      "side": 1,
+      "message": "Yes, this CL fixes the tests and avoids rebreaking CtsNativeHardwareTestCases.\n\nYour proposed change is interesting. I don\u0027t think it matters for GL_TEXTURE_EXTERNAL_OES, where the mipmap modes are not allowed [see the new section `3.7.14 External Textures` in the OES_EGL_image_external spec] but is potentially interesting for some of the other extensions. We should write some more tests to explore those edge cases when we have less schedule pressure.",
+      "parentUuid": "c129645e_9c595b5b",
+      "range": {
+        "startLine": 17,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "3e39b975030b6e24e1e15206f94182d555ee7d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9eb790fa_ee6237b4",
