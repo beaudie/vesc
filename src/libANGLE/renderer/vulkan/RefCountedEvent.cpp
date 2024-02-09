@@ -104,6 +104,10 @@ void EventBarrierArray::addMemoryEvent(Context *context, const RefCountedEvent &
     ASSERT(waitEvent.valid());
     VkAccessFlags accessMask;
     VkPipelineStageFlags stageFlags = GetRefCountedEventStageMask(context, waitEvent, &accessMask);
+
+    WARN() << " addMemoryEvent:" << waitEvent.getEvent().getHandle() << " srcStageMask:0x"
+           << std::hex << stageFlags << " dstStageMask:0x" << stageFlags;
+
     // VkCmdWaitEvent must uses the same stageMask as VkCmdSetEvent due to
     // VUID-vkCmdWaitEvents-srcStageMask-01158 requirements.
     mBarriers.emplace_back(stageFlags, stageFlags, accessMask, accessMask,
@@ -119,6 +123,10 @@ void EventBarrierArray::addImageEvent(Context *context,
     VkAccessFlags accessMask;
     VkPipelineStageFlags srcStageFlags =
         GetRefCountedEventStageMask(context, waitEvent, &accessMask);
+
+    WARN() << " addImageEvent:" << waitEvent.getEvent().getHandle()
+           << " image:" << imageMemoryBarrier.image << " srcStageMask:0x" << std::hex
+           << srcStageFlags << " dstStageMask:0x" << dstStageMask;
 
     mBarriers.emplace_back();
     EventBarrier &barrier = mBarriers.back();
