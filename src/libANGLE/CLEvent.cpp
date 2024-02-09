@@ -18,6 +18,10 @@ namespace cl
 
 angle::Result Event::setUserEventStatus(cl_int executionStatus)
 {
+    // Spec doesn't allow multiple sets to the user status
+    if (mStatusWasChanged)
+        ANGLE_CL_RETURN_ERROR(CL_INVALID_OPERATION);
+
     ANGLE_TRY(mImpl->setUserEventStatus(executionStatus));
     mStatusWasChanged = true;
     return angle::Result::Continue;
