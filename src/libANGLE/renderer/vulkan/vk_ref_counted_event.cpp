@@ -250,6 +250,8 @@ void EventBarrierArray::addMemoryEvent(Context *context,
                                        VkAccessFlags dstAccess)
 {
     ASSERT(waitEvent.valid());
+    WARN() << " addMemoryEvent:" << waitEvent.getEvent().getHandle() << " dstStageMask:0x"
+           << std::hex << dstStageMask << " dstAccess:0x" << dstAccess;
     VkAccessFlags accessMask;
     VkPipelineStageFlags stageFlags = GetRefCountedEventStageMask(context, waitEvent, &accessMask);
     // This should come down as WAW without layout change, dstStageMask should be the same as
@@ -266,6 +268,9 @@ void EventBarrierArray::addImageEvent(Context *context,
 {
     ASSERT(waitEvent.valid());
     VkPipelineStageFlags srcStageFlags = GetRefCountedEventStageMask(context, waitEvent);
+    WARN() << " addImageEvent:" << waitEvent.getEvent().getHandle()
+           << " image:" << imageMemoryBarrier.image << " srcStageMask:0x" << std::hex
+           << srcStageFlags << " dstStageMask:0x" << dstStageMask;
     mBarriers.emplace_back(srcStageFlags, dstStageMask, waitEvent.getEvent().getHandle(),
                            imageMemoryBarrier);
 }
