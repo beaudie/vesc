@@ -397,6 +397,8 @@ void EventBarrierArray::addMemoryEvent(Renderer *renderer,
     // This should come down as WAW without layout change, dstStageMask should be the same as
     // event's stageMask. Otherwise you should get into addImageEvent.
     ASSERT(stageFlags == dstStageMask);
+    WARN() << " addMemoryEvent:" << waitEvent.getEvent().getHandle() << " dstStageMask:0x"
+           << std::hex << dstStageMask << " dstAccess:0x" << dstAccess;
     mBarriers.emplace_back(stageFlags, dstStageMask, dstAccess, dstAccess,
                            waitEvent.getEvent().getHandle());
 }
@@ -408,6 +410,9 @@ void EventBarrierArray::addImageEvent(Renderer *renderer,
 {
     ASSERT(waitEvent.valid());
     VkPipelineStageFlags srcStageFlags = renderer->getEventPipelineStageMask(waitEvent);
+    WARN() << " addImageEvent:" << waitEvent.getEvent().getHandle()
+           << " image:" << imageMemoryBarrier.image << " srcStageMask:0x" << std::hex
+           << srcStageFlags << " dstStageMask:0x" << dstStageMask;
     mBarriers.emplace_back(srcStageFlags, dstStageMask, waitEvent.getEvent().getHandle(),
                            imageMemoryBarrier);
 }
