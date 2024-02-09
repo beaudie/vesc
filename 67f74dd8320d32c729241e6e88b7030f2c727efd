@@ -16,6 +16,23 @@
       "message": "Re-LGTM",
       "revId": "67f74dd8320d32c729241e6e88b7030f2c727efd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dec457b_79e07d8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-09T01:36:17Z",
+      "side": 1,
+      "message": "lgtm+2\n\nThanks for your rigorous work on the tests.",
+      "revId": "67f74dd8320d32c729241e6e88b7030f2c727efd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
