@@ -16,6 +16,24 @@
       "message": "Drive-by nit:\n\n```\nD3D: Add multiplanar support to d3d11 glTexSubImage2D\n```",
       "revId": "ca6881ca2f3244f0837d5e8b79503aea5414f915",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c696ad2_e99fe76f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2024-02-09T14:29:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "941248c9_044e9aa3",
+      "revId": "ca6881ca2f3244f0837d5e8b79503aea5414f915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
