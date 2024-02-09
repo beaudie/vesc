@@ -118,6 +118,9 @@ void EventBarrierArray::addMemoryEvent(Context *context,
 {
     ASSERT(waitEvent.valid());
 
+    WARN() << " addMemoryEvent:" << waitEvent.getEvent().getHandle() << " dstStageMask:0x"
+           << std::hex << dstStageMask << " dstAccess:0x" << dstAccess;
+
     for (EventBarrier &barrier : mBarriers)
     {
         // If the event is already in the waiting list, just add the new stageMask to the
@@ -147,6 +150,10 @@ void EventBarrierArray::addImageEvent(Context *context,
     VkAccessFlags accessMask;
     VkPipelineStageFlags srcStageFlags =
         GetRefCountedEventStageMask(context, waitEvent, &accessMask);
+
+    WARN() << " addImageEvent:" << waitEvent.getEvent().getHandle()
+           << " image:" << imageMemoryBarrier.image << " srcStageMask:0x" << std::hex
+           << srcStageFlags << " dstStageMask:0x" << dstStageMask;
 
     mBarriers.emplace_back();
     EventBarrier &barrier = mBarriers.back();
