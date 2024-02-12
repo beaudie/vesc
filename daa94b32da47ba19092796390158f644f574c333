@@ -51,6 +51,24 @@
       "parentUuid": "ba7bc83e_69450b04",
       "revId": "daa94b32da47ba19092796390158f644f574c333",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8d3b63c_960dfc4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-12T23:45:11Z",
+      "side": 1,
+      "message": "There is metadata coming out of the compiler which I could output as comment next to the SPIR-V. It could be made to make the test pass, but you wouldn\u0027t really be verifying the translated shader itself (rather effectively what can already be queried through the shader reflection API).\n\nMaybe a compromise where the test detects the word \"SPIR-V\" in the output and checks instead for `0x07230203` (SPIR-V magic number) and call it a day?",
+      "parentUuid": "c081802f_36dfbca9",
+      "revId": "daa94b32da47ba19092796390158f644f574c333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
