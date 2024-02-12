@@ -33,6 +33,23 @@
       "message": "lgtm+2\n\nThanks for your rigorous work on the tests.",
       "revId": "67f74dd8320d32c729241e6e88b7030f2c727efd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb4e6fc0_512fe486",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-12T23:44:45Z",
+      "side": 1,
+      "message": "Kimmo - the mac-angle-chromium-try failures were unrelated flakiness which was worked around in https://chromium-review.googlesource.com/c/chromium/src/+/5277621 .\n\nThe others are failures of the new tests in this CL - please tell me if you need help reproducing them.",
+      "revId": "67f74dd8320d32c729241e6e88b7030f2c727efd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
