@@ -173,6 +173,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "acba5694_6197a7ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5897,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-12T17:27:27Z",
+      "side": 1,
+      "message": "\u003e confirmation by test would still be appreciated\n\nwill do\n\nbut getting back to comparison between `EXTENDED_DIRTY_BIT_FOVEATED_RENDERING` and `EXTENDED_DIRTY_BIT_SHADING_RATE` - i guess the key difference between the 2 is that a change in shading rate doesn\u0027t necessarily end up in RP close so we need a mechanism to emit vk command with new shading rate. BUT a change in `EXTENDED_DIRTY_BIT_FOVEATED_RENDERING` will necessarily trigger RP closure and hence the existing plumbing of dirtying all dynamic state on RP close will take care of emitting the vk command with new state, right?",
+      "parentUuid": "102734c7_0e1a81ac",
+      "range": {
+        "startLine": 5895,
+        "startChar": 0,
+        "endLine": 5897,
+        "endChar": 92
+      },
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83152a1b_d89b5068",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
