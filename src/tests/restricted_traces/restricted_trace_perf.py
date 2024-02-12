@@ -523,6 +523,48 @@ def collect_power(done_event, test_fixedtime, results):
     })
 
 
+def get_thermal_info():
+    lines = run_adb_command(
+        'shell dumpsys android.hardware.thermal.IThermal/default').stdout.splitlines()
+    result = [l for l in lines if 'VIRTUAL-SKIN' in l and 'ThrottlingStatus:' in l]
+    assert result
+    return result
+
+
+def set_vendor_thermal_control(enabled):
+    if not enabled:
+        # When disabling, first wait for vendor throttling to end to reset all state
+        waiting = True
+        while waiting:
+            waiting = False
+            for line in get_thermal_info():
+                is_charge = 'VIRTUAL-SKIN-CHARGE-' in line  # Only supposed to affect charging speed
+                if 'ThrottlingStatus: NONE' not in line and not is_charge:
+                    logging.info('Waiting for vendor throttling to finish: %s', line.strip())
+                    time.sleep(10)
+                    waiting = True
+                    break
+
+    run_adb_command('shell setprop persist.vendor.disable.thermal.control %s' %
+                    ('0' if enabled else '1'))
+
+
+def thermal_throttling(limit_temp):
+    if not limit_temp:
+        return
+
+    waiting = True
+    while waiting:
+        waiting = False
+        for line in get_thermal_info():
+            v = float(line.split('CurrentValue:')[1].strip().split(' ')[0])
+            if v > limit_temp:
+                logging.info('Throttling due to device sensor: %s', line.strip())
+                time.sleep(5)
+                waiting = True
+                break
+
+
 def drop_high_low_and_average(values):
     if len(values) >= 3:
         values.remove(min(values))
@@ -596,6 +638,11 @@ def main():
         '--device', help='Which device to run the tests on (use serial)', default='')
     parser.add_argument(
         '--sleep', help='Add a sleep of this many seconds between each test)', type=int, default=0)
+    parser.add_argument(
+        '--custom-throttling-temp',
+        help='Custom thermal throttling with limit set to this temperature',
+        type=float,
+        default=0)
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -616,8 +663,12 @@ def main():
     run_adb_command('root')
 
     try:
+        if args.custom_throttling_temp:
+            set_vendor_thermal_control(0)
         run_traces(args)
     finally:
+        if args.custom_throttling_temp:
+            set_vendor_thermal_control(1)
         # Clean up settings, including in case of exceptions (including Ctrl-C)
         run_adb_command('shell settings delete global angle_debug_package')
         run_adb_command('shell settings delete global angle_gl_driver_selection_pkgs')
@@ -849,6 +900,8 @@ def run_traces(args):
                 # For unlocked clocks, try sleeping the same amount of time that the trace ran, to dissipate heat
                 if args.sleep != 0:
                     time.sleep(args.sleep)
+
+                thermal_throttling(args.custom_throttling_temp)
 
     # Generate the SUMMARY output
 
