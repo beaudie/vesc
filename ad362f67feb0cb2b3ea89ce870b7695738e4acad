@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83da6f32_67811ab6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-12T17:51:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9cb4f46f_29e79011",
+      "revId": "ad362f67feb0cb2b3ea89ce870b7695738e4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5bd2af2_33b51b6b",
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "Since the built-in is initially unsized, the behavior should not depend on a specific index value.",
       "parentUuid": "f5bd2af2_33b51b6b",
+      "range": {
+        "startLine": 1363,
+        "startChar": 28,
+        "endLine": 1363,
+        "endChar": 29
+      },
+      "revId": "ad362f67feb0cb2b3ea89ce870b7695738e4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49ceca16_e4ff1286",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-12T17:51:17Z",
+      "side": 1,
+      "message": "Acknowledged. Still probably more comprehensive to use non-zero, but up to you",
+      "parentUuid": "9bb9ab3b_39d44a9d",
       "range": {
         "startLine": 1363,
         "startChar": 28,
