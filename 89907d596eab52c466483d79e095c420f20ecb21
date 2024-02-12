@@ -34,6 +34,24 @@
       "parentUuid": "1a9bb387_49e1b392",
       "revId": "89907d596eab52c466483d79e095c420f20ecb21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb129f96_327a30a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-12T18:23:36Z",
+      "side": 1,
+      "message": "Jamie\u0027s unmerged attempt: https://chromium-review.googlesource.com/c/angle/angle/+/4086281\n\nThe ubsan ignorelist file is the clue as to why this wasn\u0027t happening on the bots before. In this case, there are two arrays being concatenated, and the first one doesn\u0027t have a size that\u0027s aligned to 8, causing havoc. Our `storePointerParameter` should be made aware of alignment to fix that. That said, the command info before `storePointerParameter` are also not aligned to 8, so I don\u0027t recommend hacking that now.\n\nGive me a day, I\u0027ll see if I can fix the alignment thing, then you should be able to rebase over that and get no errors.",
+      "parentUuid": "27663903_1bb6eca8",
+      "revId": "89907d596eab52c466483d79e095c420f20ecb21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
