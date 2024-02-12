@@ -149,6 +149,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "102734c7_0e1a81ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5897,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-12T17:14:47Z",
+      "side": 1,
+      "message": "Ok great, then that should be working fine (confirmation by test would still be appreciated). The dirty bit is still unnecessary though, as the FramebufferVk::syncState should end up breaking the render pass and causing the dirty bit to be set (due to new render pass).",
+      "parentUuid": "c07d6e3e_2bc46eb2",
+      "range": {
+        "startLine": 5895,
+        "startChar": 0,
+        "endLine": 5897,
+        "endChar": 92
+      },
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83152a1b_d89b5068",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
