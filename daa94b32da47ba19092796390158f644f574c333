@@ -69,6 +69,24 @@
       "parentUuid": "c081802f_36dfbca9",
       "revId": "daa94b32da47ba19092796390158f644f574c333",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7224d840_93fe7a1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-12T23:46:51Z",
+      "side": 1,
+      "message": "I\u0027d personally rather include that metadata as a comment than specialize the test for ANGLE\u0027s Vulkan backend output, this test passes as-is on every other browser and every other backend which claims support for `ANGLE_translated_shader_source`.",
+      "parentUuid": "a8d3b63c_960dfc4c",
+      "revId": "daa94b32da47ba19092796390158f644f574c333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
