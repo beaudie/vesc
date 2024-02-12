@@ -33,6 +33,24 @@
       "message": "Discussing this live with Shabi, it seems best to me to always enable SPIR-V debug info for WebGL-compatibility contexts in ANGLE. It adds significant debugging support and would fix the win-angle-chromium-x64-try failure, which is happening because the well-known, built-in variable name \"gl_FragCoord\" isn\u0027t showing up in the SPIR-V disassembly.",
       "revId": "daa94b32da47ba19092796390158f644f574c333",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c081802f_36dfbca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-12T23:36:23Z",
+      "side": 1,
+      "message": "I don\u0027t think the test can be relaxed further without becoming meaningless. Is it possible to dump the SPIR-V debug info in some textual form as comments along with the hex values? Even if it just contained some string indicating that a variable at slot 0 mapped to gl_FragCoord, the test would pass.",
+      "parentUuid": "ba7bc83e_69450b04",
+      "revId": "daa94b32da47ba19092796390158f644f574c333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
