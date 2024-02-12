@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89893bc3_b50caec6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-02-12T13:38:20Z",
+      "side": 1,
+      "message": "Roman, Geoff, PTAL.\nI think the slowdown from this is acceptable.\nhttps://ci.chromium.org/ui/p/angle/builders/try/win-trace/8044/overview took 63 minutes to run the tests, while with parallel compile\nhttps://ci.chromium.org/ui/p/angle/builders/ci/win-trace/5383/overview\nit takes 44 minutes.",
+      "revId": "38c7835efbc9e50cfa151ce4bcb8cfe8aacffd5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
