@@ -48,6 +48,7 @@ New Tokens
     Accepted in the <target> parameter of eglCreateImageKHR:
 
         EGL_METAL_TEXTURE_ANGLE               0x34A7
+        EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE   0x34DD
 
 Additions to Chapter 2 of the EGL 1.2 Specification (EGL Operation)
 
@@ -57,11 +58,12 @@ Additions to Chapter 2 of the EGL 1.2 Specification (EGL Operation)
 
    "Values accepted for <target> are listed in Table aaa, below.
 
-      +----------------------------+-----------------------------------------+
-      |  <target>                  |  Notes                                  |
-      +----------------------------+-----------------------------------------+
-      |  EGL_METAL_TEXTURE_ANGLE   |  Used for Metal texture objects         |
-      +----------------------------+-----------------------------------------+
+      +--------------------------------------+-----------------------------------------+
+      |  <target>                            |  Notes                                  |
+      +--------------------------------------+-----------------------------------------+
+      |  EGL_METAL_TEXTURE_ANGLE             |  Used for Metal texture objects         |
+      |  EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE |  Used for Metal texture objects         |
+      +--------------------------------------+-----------------------------------------+
        Table aaa.  Legal values for eglCreateImageKHR <target> parameter
 
     ...
@@ -72,6 +74,9 @@ Additions to Chapter 2 of the EGL 1.2 Specification (EGL Operation)
     The width and height of the pbuffer are determined by the width and height
     of <buffer>."
 
+    If EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE is specified, it is used to access
+    the specified array slice of the texture array <buffer>.
+
     If the EGL_ANGLE_device_metal extension is present, the provided Metal texture
     object must have been created by the same Metal device queried from the
     display. If these requirements are not met, an EGL_BAD_PARAMETER error is
@@ -79,4 +84,6 @@ Additions to Chapter 2 of the EGL 1.2 Specification (EGL Operation)
 
 Revision History
 
-    Version 1, 2020/19/07 - First draft
+    Version 1, 2020-07-19 - First draft
+    Version 2, 2024-02-12 - Add EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE
+
