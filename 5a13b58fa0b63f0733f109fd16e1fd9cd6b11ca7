@@ -34,6 +34,24 @@
       "parentUuid": "166ac6b2_cb66dec7",
       "revId": "5a13b58fa0b63f0733f109fd16e1fd9cd6b11ca7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d1293ee_79d3573e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-12T21:48:14Z",
+      "side": 1,
+      "message": "Thanks for the clarification in `--help`. I realize it\u0027s for manual testing, just wanted to make Yuly aware of its existence _in case_ someone in the future thinks it\u0027s a good idea to enable it on the bots.",
+      "parentUuid": "23ca9143_de0802be",
+      "revId": "5a13b58fa0b63f0733f109fd16e1fd9cd6b11ca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
