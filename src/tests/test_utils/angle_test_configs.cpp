@@ -536,6 +536,11 @@ EGLPlatformParameters METAL()
     return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE);
 }
 
+EGLPlatformParameters WEBGPU()
+{
+    return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_WEBGPU_ANGLE);
+}
+
 }  // namespace egl_platform
 
 // ANGLE tests platforms
@@ -928,6 +933,11 @@ PlatformParameters ES31_ANGLE_Vulkan_Secondaries()
 PlatformParameters ES32_ANGLE_Vulkan_Secondaries()
 {
     return WithVulkanSecondaries(ES32_VULKAN());
+}
+
+PlatformParameters ES2_WEBGPU()
+{
+    return PlatformParameters(EGL_OPENGL_ES_API, 2, 0, 0, egl_platform::WEBGPU());
 }
 
 PlatformParameters ES1_Zink()
