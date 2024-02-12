@@ -16,6 +16,24 @@
       "message": "@ynovikov@chromium.org FYI. Increasing visibility, as this could cause trouble (including fire?) in the infra building if it gets enabled on some perf bots.",
       "revId": "5a13b58fa0b63f0733f109fd16e1fd9cd6b11ca7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23ca9143_de0802be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-12T20:49:12Z",
+      "side": 1,
+      "message": "This is an optional thing, for manual testing, not enabled on bots.",
+      "parentUuid": "166ac6b2_cb66dec7",
+      "revId": "5a13b58fa0b63f0733f109fd16e1fd9cd6b11ca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
