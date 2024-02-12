@@ -221,6 +221,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ec540f5_6a6c6bf5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5897,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-12T20:40:30Z",
+      "side": 1,
+      "message": "By the way, if you\u0027re looking for a test example to follow, here\u0027s one I recently did (though I\u0027m sure you\u0027ve previously seen this test suite): https://chromium-review.googlesource.com/c/angle/angle/+/5228599/5/src/tests/gl_tests/MultithreadingTest.cpp",
+      "parentUuid": "a8fb2bb0_b2b92cf4",
+      "range": {
+        "startLine": 5895,
+        "startChar": 0,
+        "endLine": 5897,
+        "endChar": 92
+      },
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83152a1b_d89b5068",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
