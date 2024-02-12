@@ -101,6 +101,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb2adb06_92c49ac7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5897,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-12T16:53:38Z",
+      "side": 1,
+      "message": "\u003e that dynamic state dirty bit is always enabled during a sync state\n\nThat\u0027s not true though, dynamic state is dirtied based on `EXTENDED_DIRTY_BIT_SHADING_RATE`. If `EXTENDED_DIRTY_BIT_SHADING_RATE` is not set, the dynamic state dirty bit is not set (except through render pass begin).\n\nThe difference with `EXTENDED_DIRTY_BIT_FOVEATED_RENDERING` is that the dirty bit already comes from (or rather _should_ come from in a correct implementation) through the fact that the framebuffer is changed, which closes the render pass. Opening a new render pass sets all dynamic state dirty, so this is unnecessary.\n\nBy the way, I said \"correct implementation\", because probably this scenario is broken with the current implementation (please add a test):\n\n1. Context1/thread1: Create FBO, attach to texture, draw\n2. Context2/thread2: Create FBO, attach to same texture, draw\n3. Context1/thread1: Mark texture as foveated\n4. Context2/thread2: Draw\n\nThe issue is that because there is no observer notification, when texture is marked foveated in Context1 (step 3), the FBO in context 2 is not notified of the change, and its second draw call ends up in the same render pass started at step 2. Step 1 and 2 have the effect of processing all dirty bits so there\u0027s nothing dirty to accidentally make things work at step 4.",
+      "parentUuid": "97b9f34b_14c580a7",
+      "range": {
+        "startLine": 5895,
+        "startChar": 0,
+        "endLine": 5897,
+        "endChar": 92
+      },
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83152a1b_d89b5068",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
