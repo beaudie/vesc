@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0df73990_1e59a552",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1609,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T18:06:58Z",
+      "side": 1,
+      "message": "I was thinking of adding validation for this to the AST validator after Kimmo\u0027s change.",
+      "parentUuid": "be468562_b9377a23",
+      "revId": "dd888037df099ca907746468569aae96f844017f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "75de768a_3e838964",
         "filename": "src/compiler/translator/tree_util/IntermNode_util.cpp",
         "patchSetId": 4
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-13T17:38:14Z",
       "side": 1,
       "message": "It looks like this patch also adds null-checks, so could you mention this in the CL description?",
+      "revId": "dd888037df099ca907746468569aae96f844017f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d538afe_accd695d",
+        "filename": "src/compiler/translator/tree_util/IntermNode_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T18:06:58Z",
+      "side": 1,
+      "message": "FWIW the null check here is to make `EnsureBlock(nullptr)` returns an empty body instead of nullptr (so we won\u0027t have nullptr checks).\n\nKimmo, if you managed to make sure this never happens (thanks!), yeah it would be worth mentioning in the CL that nullptr body is no longer possible.",
+      "parentUuid": "75de768a_3e838964",
       "revId": "dd888037df099ca907746468569aae96f844017f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
