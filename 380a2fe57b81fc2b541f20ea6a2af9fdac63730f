@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "679e1e73_bc891cec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-02-13T11:29:22Z",
+      "side": 1,
+      "message": "I believe that the devices would be quarantined by Swarming if they overheat.",
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
