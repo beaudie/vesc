@@ -70,6 +70,30 @@
       },
       "revId": "abddeb70ec2318eefa3a6f365c29779e77651a87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b14ac239_f6589f52",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-13T19:39:22Z",
+      "side": 1,
+      "message": "http://anglebug.com/8529",
+      "parentUuid": "6b94e2b2_14cba057",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "abddeb70ec2318eefa3a6f365c29779e77651a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
