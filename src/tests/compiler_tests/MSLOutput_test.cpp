@@ -848,3 +848,13 @@ TEST_F(MSLOutputTest, ReusedOutVarName)
         )";
     compile(shaderString);
 }
+
+// Test that for loops without body do not crash. Constant hoisting might construct such ASTs.
+TEST_F(MSLOutputTest, RemovedForBodyNoCrash)
+{
+    const char kShader[] = R"(#version 310 es
+void main() {
+    for(;;)if(2==0);
+})";
+    compile(kShader);
+}
