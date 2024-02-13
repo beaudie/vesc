@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "539a09a6_afb091aa",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-13T18:48:00Z",
+      "side": 1,
+      "message": "why do we hard-coding pipeline stage instead of using `params-\u003epipelineStage`?",
+      "revId": "180c8ae8c13c91e700267654594cf06bace5377b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
