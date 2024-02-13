@@ -1599,6 +1599,7 @@ TIntermLoop::TIntermLoop(TLoopType type,
                          TIntermBlock *body)
     : mType(type), mInit(init), mCond(cond), mExpr(expr), mBody(body)
 {
+    ASSERT(mBody != nullptr);
     // Declaration nodes with no children can appear if all the declarators just added constants to
     // the symbol table instead of generating code. They're no-ops so don't add them to the tree.
     if (mInit && mInit->getAsDeclarationNode() &&
