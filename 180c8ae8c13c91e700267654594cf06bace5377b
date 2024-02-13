@@ -16,6 +16,24 @@
       "message": "why do we hard-coding pipeline stage instead of using `params-\u003epipelineStage`?",
       "revId": "180c8ae8c13c91e700267654594cf06bace5377b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56d8af7d_a8034e3d",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T20:32:13Z",
+      "side": 1,
+      "message": "Because `params-\u003epipelineStage` is now removed. No point in encoding it and taking up command buffer space for a value that\u0027s always the same. The function that records the command `ASSERT`s that pipeline stage is always the one specified here.",
+      "parentUuid": "539a09a6_afb091aa",
+      "revId": "180c8ae8c13c91e700267654594cf06bace5377b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
