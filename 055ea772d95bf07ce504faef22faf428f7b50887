@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c011c311_612a5995",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T15:17:50Z",
+      "side": 1,
+      "message": "Ugh, nullptr checks in that file go _way_ back: https://chromium-review.googlesource.com/362570\n\nI do see nullptr check in a few places (mostly older code), but there is also a _lot_ of code that never checks for nullptr. That\u0027s what I\u0027m afraid of, that there\u0027s a lot of code that assumes it can\u0027t be nullptr. I don\u0027t know if nullptr body is just an old thing that mostly doesn\u0027t exist anymore, or if there are bugs everywhere. I\u0027ll put up a CL to find out.\n\nIn the meantime, I still think it\u0027s better to not make the problem worse. If you\u0027d fix `HoistConstants` not to produce bodies like that, I can follow up and make sure we don\u0027t create nullptr bodies elsewhere either.\n\nFWIW, in `OutputSPIRVTraverser::visitLoop`, I don\u0027t do a nullptr check for body and that has been working everywhere.\n\n\u003e getBody() shouldn\u0027t return ptr if it can never be null.\n\nIdeally yes. The translator is ancient code and uses pointers everywhere though, not as an indication that things can be nullptr.",
+      "parentUuid": "fc217731_091b08d9",
+      "revId": "055ea772d95bf07ce504faef22faf428f7b50887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58b1d502_b9fdbb5f",
         "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
         "patchSetId": 3
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Note: that\u0027s not neccessarily the crashing same code, as for(;;) gets transformed to different while construct.",
       "parentUuid": "58b1d502_b9fdbb5f",
+      "revId": "055ea772d95bf07ce504faef22faf428f7b50887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65aa79ef_be4838d9",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T15:17:50Z",
+      "side": 1,
+      "message": "Understood. Still wouldn\u0027t hurt to have the test 😊",
+      "parentUuid": "24a93584_33263f3c",
       "revId": "055ea772d95bf07ce504faef22faf428f7b50887",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
