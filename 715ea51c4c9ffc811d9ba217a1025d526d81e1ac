@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4f6c32e_a0006709",
+        "filename": "extensions/EGL_ANGLE_metal_texture_client_buffer.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-13T14:32:06Z",
+      "side": 1,
+      "message": "Please add the new enum here as well.",
+      "revId": "715ea51c4c9ffc811d9ba217a1025d526d81e1ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "df8f60c8_34cbc055",
         "filename": "extensions/EGL_ANGLE_metal_texture_client_buffer.txt",
         "patchSetId": 3
