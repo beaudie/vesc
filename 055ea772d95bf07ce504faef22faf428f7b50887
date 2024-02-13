@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59e74480_4ae68fb2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T15:53:30Z",
+      "side": 1,
+      "message": "Looks like only one unittest is producing nullptr: https://chromium-review.googlesource.com/c/angle/angle/+/5291835\n\nAgain, if you\u0027d fix `HoistConstants`, I\u0027d go over the rest of the code and make sure body is never nullptr.",
+      "parentUuid": "c011c311_612a5995",
+      "revId": "055ea772d95bf07ce504faef22faf428f7b50887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58b1d502_b9fdbb5f",
         "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
         "patchSetId": 3
