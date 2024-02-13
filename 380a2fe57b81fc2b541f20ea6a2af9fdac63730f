@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b8ef9b1_857090d9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-13T15:43:25Z",
+      "side": 1,
+      "message": "Can you add the new flag somewhere for quick reference, i.e.\n\u003e To enable this support, provide a target max temperate like this:\n\u003e \n\u003e`--custom-throttling-temp 40`",
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "679e1e73_bc891cec",
@@ -14,6 +31,92 @@
       "writtenOn": "2024-02-13T11:29:22Z",
       "side": 1,
       "message": "I believe that the devices would be quarantined by Swarming if they overheat.",
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "185f9627_64fc9664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-13T15:43:25Z",
+      "side": 1,
+      "message": "Very cool (har har), thanks Roman. This is something we\u0027ve talked about for a while but never put the time in to support (handling throttled results).\n\nA few requests just to aid future maintainability.\n\nFWIW I tried this change with a full run using air cooling and no sleeps, and it worked well for one device, but drained the battery on the other.  Maybe we can talk about battery level checking next.",
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06f2220a_06c301bd",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-13T15:43:25Z",
+      "side": 1,
+      "message": "I can\u0027t parse this line.  Can you add a comment explaining what it is doing, or break it up a bit for readability?  I can\u0027t tell if the l is a letter or a number.",
+      "range": {
+        "startLine": 529,
+        "startChar": 13,
+        "endLine": 529,
+        "endChar": 83
+      },
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a0d0b00_cc919ec5",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-13T15:43:25Z",
+      "side": 1,
+      "message": "This seems backwards and could lead to future problems.  The name of the property adds to to confusion.  Can we change the parameter of this function to be an `int` named `disabled` so it matches the property name?",
+      "range": {
+        "startLine": 549,
+        "startChar": 21,
+        "endLine": 549,
+        "endChar": 45
+      },
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad0154a6_86aa76c7",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-13T15:43:25Z",
+      "side": 1,
+      "message": "I would prefer this check outside the call to make it really clear this is only invoked when the parameter is set.  It also aligns with how you called `set_vendor_thermal_control`",
+      "range": {
+        "startLine": 553,
+        "startChar": 0,
+        "endLine": 554,
+        "endChar": 14
+      },
       "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
