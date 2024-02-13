@@ -624,7 +624,8 @@ class Separator : public TIntermRebuild
 
     PreResult visitLoopPre(TIntermLoop &node) override
     {
-        if (!rebuildInPlace(*node.getBody()))
+        TIntermBlock *body = node.getBody();
+        if (body && !rebuildInPlace(*body))
         {
             UNREACHABLE();
         }
