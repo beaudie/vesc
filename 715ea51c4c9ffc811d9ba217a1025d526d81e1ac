@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "559aca72_2a1b98aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T14:30:33Z",
+      "side": 1,
+      "message": "Contents outside metal/ LGTM",
+      "revId": "715ea51c4c9ffc811d9ba217a1025d526d81e1ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ab63d5b_c7b78d2a",
+        "filename": "extensions/EGL_ANGLE_metal_texture_client_buffer.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T14:30:33Z",
+      "side": 1,
+      "message": "I reserved this for you",
+      "revId": "715ea51c4c9ffc811d9ba217a1025d526d81e1ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df8f60c8_34cbc055",
+        "filename": "extensions/EGL_ANGLE_metal_texture_client_buffer.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T14:30:33Z",
+      "side": 1,
+      "message": "While you\u0027re at it, let\u0027s fix this highly unusual date format\n\n```suggestion\n    Version 1, 2020-07-19 - First draft\n    Version 2, 2024-02-12 - Add EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE\n```",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 67
+      },
+      "revId": "715ea51c4c9ffc811d9ba217a1025d526d81e1ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
