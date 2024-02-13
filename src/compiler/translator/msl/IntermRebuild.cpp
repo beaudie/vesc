@@ -781,7 +781,6 @@ TIntermNode *TIntermRebuild::traverseLoopChildren(TIntermLoop &node)
     auto *const cond = node.getCondition();
     auto *const expr = node.getExpression();
     auto *const body = node.getBody();
-    ASSERT(body);
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     switch (loopType)
@@ -799,8 +798,12 @@ TIntermNode *TIntermRebuild::traverseLoopChildren(TIntermLoop &node)
     }
 #endif
 
-    auto *const newBody = traverseAnyAs<TIntermBlock>(*body);
-    GUARD(newBody);
+    TIntermBlock *newBody = nullptr;
+    if (body)
+    {
+        newBody = traverseAnyAs<TIntermBlock>(*body);
+        GUARD(newBody);
+    }
     TIntermNode *newInit = nullptr;
     if (init)
     {
@@ -822,11 +825,10 @@ TIntermNode *TIntermRebuild::traverseLoopChildren(TIntermLoop &node)
         switch (loopType)
         {
             case TLoopType::ELoopFor:
-                GUARD(newBody);
                 break;
             case TLoopType::ELoopWhile:
             case TLoopType::ELoopDoWhile:
-                GUARD(newCond && newBody);
+                GUARD(newCond);
                 GUARD(!newInit && !newExpr);
                 break;
             default:
