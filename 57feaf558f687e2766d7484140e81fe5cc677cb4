@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "57feaf558f687e2766d7484140e81fe5cc677cb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48ae44c9_19dd4ebe",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T23:07:40Z",
+      "side": 1,
+      "message": "The pattern here has changed too (untested code):\n\n```suggestion\n                    const VkVertexInputBindingDescription2EXT *vertexBindingDescriptions \u003d\n                        GetFirstArrayParameter\u003cVkVertexInputBindingDescription2EXT\u003e(params);\n                    const VkVertexInputAttributeDescription2EXT *vertexAttributeDescriptions \u003d\n                        GetNextArrayParameter\u003cVkVertexInputAttributeDescription2EXT\u003e(\n                            vertexBindingDescriptions, params-\u003evertexBindingDescriptionCount);\n```",
+      "range": {
+        "startLine": 756,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 98
+      },
+      "revId": "57feaf558f687e2766d7484140e81fe5cc677cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab2e8538_1e4164c0",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-13T23:07:40Z",
+      "side": 1,
+      "message": "These have a hard cap don\u0027t they? Could you use two `uint16_t` instead and avoid the padding?",
+      "range": {
+        "startLine": 723,
+        "startChar": 0,
+        "endLine": 724,
+        "endChar": 45
+      },
+      "revId": "57feaf558f687e2766d7484140e81fe5cc677cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
