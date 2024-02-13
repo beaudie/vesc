@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0f593b7a_2a3c0f2e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-13T20:40:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b8ef9b1_857090d9",
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "679e1e73_bc891cec",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc82f5bb_7baca595",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-13T20:40:58Z",
+      "side": 1,
+      "message": "Thanks for testing! I added a simple battery level check to this change as well.",
+      "parentUuid": "185f9627_64fc9664",
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06f2220a_06c301bd",
@@ -65,6 +101,30 @@
       "writtenOn": "2024-02-13T15:43:25Z",
       "side": 1,
       "message": "I can\u0027t parse this line.  Can you add a comment explaining what it is doing, or break it up a bit for readability?  I can\u0027t tell if the l is a letter or a number.",
+      "range": {
+        "startLine": 529,
+        "startChar": 13,
+        "endLine": 529,
+        "endChar": 83
+      },
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c8bd514_b63141dd",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-13T20:40:58Z",
+      "side": 1,
+      "message": "So.. Personally I\u0027m not a fan of the `x in y` expression instead of the classic `y.contains(x)` but such is Python, it forces you to use `in` by not providing a `.contains` method or equivalent. I added parentheses although not sure if that helps clear up the confusion or it was something else.",
+      "parentUuid": "06f2220a_06c301bd",
       "range": {
         "startLine": 529,
         "startChar": 13,
@@ -98,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a5d40ed_fb62346f",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-13T20:40:58Z",
+      "side": 1,
+      "message": "Good idea, done.",
+      "parentUuid": "4a0d0b00_cc919ec5",
+      "range": {
+        "startLine": 549,
+        "startChar": 21,
+        "endLine": 549,
+        "endChar": 45
+      },
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad0154a6_86aa76c7",
@@ -111,6 +195,30 @@
       "writtenOn": "2024-02-13T15:43:25Z",
       "side": 1,
       "message": "I would prefer this check outside the call to make it really clear this is only invoked when the parameter is set.  It also aligns with how you called `set_vendor_thermal_control`",
+      "range": {
+        "startLine": 553,
+        "startChar": 0,
+        "endLine": 554,
+        "endChar": 14
+      },
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "341b56da_91b38877",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-13T20:40:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad0154a6_86aa76c7",
       "range": {
         "startLine": 553,
         "startChar": 0,
