@@ -1606,6 +1606,7 @@ TIntermLoop::TIntermLoop(TLoopType type,
     {
         mInit = nullptr;
     }
+    ASSERT(mBody);
 }
 
 TIntermLoop::TIntermLoop(const TIntermLoop &node)

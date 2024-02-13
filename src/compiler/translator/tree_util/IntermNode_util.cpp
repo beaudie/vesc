@@ -338,11 +338,14 @@ const TVariable *DeclareInterfaceBlock(TIntermBlock *root,
 TIntermBlock *EnsureBlock(TIntermNode *node)
 {
     if (node == nullptr)
-        return nullptr;
+    {
+        return new TIntermBlock();
+    }
     TIntermBlock *blockNode = node->getAsBlock();
     if (blockNode != nullptr)
+    {
         return blockNode;
-
+    }
     blockNode = new TIntermBlock();
     blockNode->setLine(node->getLine());
     blockNode->appendStatement(node);
