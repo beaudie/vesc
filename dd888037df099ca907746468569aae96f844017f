@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be468562_b9377a23",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1609,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-13T17:38:14Z",
+      "side": 1,
+      "message": "This will crash only in debug builds. Is the goal of this patch to deterministically crash in release builds too?",
+      "revId": "dd888037df099ca907746468569aae96f844017f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75de768a_3e838964",
+        "filename": "src/compiler/translator/tree_util/IntermNode_util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-13T17:38:14Z",
+      "side": 1,
+      "message": "It looks like this patch also adds null-checks, so could you mention this in the CL description?",
+      "revId": "dd888037df099ca907746468569aae96f844017f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
