@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc217731_091b08d9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-13T14:46:59Z",
+      "side": 1,
+      "message": "Nope, you yourself partially implemented the feature of not having loop body as an option.\nSee your commits in CreateFromBody handling nullable body.\ngetBody() shouldn\u0027t return ptr if it can never be null.",
+      "parentUuid": "7080fc26_039d7a1f",
+      "revId": "055ea772d95bf07ce504faef22faf428f7b50887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58b1d502_b9fdbb5f",
         "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
         "patchSetId": 3
