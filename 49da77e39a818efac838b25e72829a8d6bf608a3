@@ -16,6 +16,24 @@
       "message": "nit: Please use curly braces per the style guide.",
       "revId": "49da77e39a818efac838b25e72829a8d6bf608a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6337f11_c83a8d39",
+        "filename": "src/compiler/translator/msl/EmitMetal.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-13T14:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79da28cf_361407ac",
+      "revId": "49da77e39a818efac838b25e72829a8d6bf608a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

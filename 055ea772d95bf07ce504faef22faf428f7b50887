@@ -51,6 +51,24 @@
       "message": "Could you please add a test in GLSLTest.cpp (so it runs on all backends) with this shaders?\n\n```\nvoid main()\n{\n    int a \u003d 4;\n    float b \u003d 0.;\n    for (int c \u003d a++; (b +\u003d c / 8.) \u003c 0; b +\u003d 0.3)\n    {\n        if (2 \u003d\u003d 0);\n    }\n    int c \u003d a - 4;\n    color \u003d vec4(c, b, 0, 1);\n}\n```\n\nAnd `EXPECT_PIXEL_COLOR_NEAR` the color (255, 127, 0, 255)?\n\nThat\u0027s testing a few things:\n\n- Side effect in the init expression\n- Side effect in the condition, uses variable from init expression\n- When loop is removed, side effect in last expression should not take effect\n- If `c` in the loop is retained, it should be in a scope that doesn\u0027t affect the variable `c` defined later.",
       "revId": "055ea772d95bf07ce504faef22faf428f7b50887",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24a93584_33263f3c",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-13T14:49:37Z",
+      "side": 1,
+      "message": "Note: that\u0027s not neccessarily the crashing same code, as for(;;) gets transformed to different while construct.",
+      "parentUuid": "58b1d502_b9fdbb5f",
+      "revId": "055ea772d95bf07ce504faef22faf428f7b50887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
