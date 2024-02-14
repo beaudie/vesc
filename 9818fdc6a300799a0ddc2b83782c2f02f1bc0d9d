@@ -33,6 +33,24 @@
       "message": "Is this the same failure?\nhttps://android-review.googlesource.com/c/platform/external/angle/+/2962947",
       "revId": "9818fdc6a300799a0ddc2b83782c2f02f1bc0d9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1a81398_f10d05fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T15:44:00Z",
+      "side": 1,
+      "message": "Looks like it. I see that on Android-x86_64 too. Weird that it didn\u0027t fail that way anywhere else (especially given the struct padding warnings)",
+      "parentUuid": "74f64211_480d7a16",
+      "revId": "9818fdc6a300799a0ddc2b83782c2f02f1bc0d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
