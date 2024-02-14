@@ -5379,6 +5379,7 @@ void ImageHelper::resetCachedProperties()
     mRenderPassUsageFlags.reset();
 
     setEntireContentUndefined();
+    resetWrittenSinceTransferDstLayout();
 }
 
 void ImageHelper::setEntireContentDefined()
@@ -6766,6 +6767,7 @@ void ImageHelper::barrierImpl(Context *context,
 
     mCurrentLayout           = newLayout;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
+    resetWrittenSinceTransferDstLayout();
 }
 
 template void ImageHelper::barrierImpl<priv::CommandBuffer>(
@@ -6822,6 +6824,10 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
     ASSERT(!mBarrierQueueSerial.valid() ||
            mBarrierQueueSerial.getIndex() != queueSerial.getIndex() ||
            mBarrierQueueSerial.getSerial() <= queueSerial.getSerial());
+
+    ASSERT(newLayout != ImageLayout::TransferDst &&
+           newLayout != ImageLayout::TransferDstAndComputeWrite);
+    resetWrittenSinceTransferDstLayout();
 
     // Once you transition to ImageLayout::SharedPresent, you never transition out of it.
     if (mCurrentLayout == ImageLayout::SharedPresent)
@@ -7988,6 +7994,63 @@ bool ImageHelper::hasSubresourceDefinedStencilContent(gl::LevelIndex level,
     uint8_t layerRangeBits =
         GetContentDefinedLayerRangeBits(layerIndex, layerCount, kMaxContentDefinedLayerCount);
     return (getLevelStencilContentDefined(toVkLevel(level)) &
+            LevelContentDefinedMask(layerRangeBits))
+        .any();
+}
+
+void ImageHelper::resetWrittenSinceTransferDstLayout()
+{
+    for (LevelContentDefinedMask &mask : mWrittenSinceTransferDstLayout)
+    {
+        mask.reset();
+    }
+}
+
+void ImageHelper::setWrittenSinceTransferDstLayout(gl::LevelIndex levelStart,
+                                                   uint32_t levelCount,
+                                                   uint32_t layerStart,
+                                                   uint32_t layerCount)
+{
+    if (layerStart >= kMaxContentDefinedLayerCount)
+    {
+        return;
+    }
+    uint8_t layerRangeBits =
+        GetContentDefinedLayerRangeBits(layerStart, layerCount, kMaxContentDefinedLayerCount);
+    for (uint32_t level = 0; level < levelCount; level++)
+    {
+        mWrittenSinceTransferDstLayout[toVkLevel(levelStart).get() + level] |= layerRangeBits;
+    }
+}
+
+bool ImageHelper::isTransferDstWriteBarrierRequired(gl::LevelIndex levelStart,
+                                                    uint32_t levelCount,
+                                                    uint32_t layerStart,
+                                                    uint32_t layerCount,
+                                                    ImageLayout newLayout) const
+{
+    // If there is layout change we must insert barrier. But if there is no layout change and we
+    // have not wrote to this level yet since last layout change, then no need to insert
+    // barrier, sionce we already inserted barrier when we switch layout to TransferDst
+    if (mCurrentLayout != newLayout)
+    {
+        return true;
+    }
+
+    if (newLayout != vk::ImageLayout::TransferDst &&
+        newLayout != vk::ImageLayout::TransferDstAndComputeWrite)
+    {
+        return true;
+    }
+
+    if (layerStart >= kMaxContentDefinedLayerCount || layerCount > 1 || levelCount > 1)
+    {
+        return true;
+    }
+
+    uint8_t layerRangeBits =
+        GetContentDefinedLayerRangeBits(layerStart, layerCount, kMaxContentDefinedLayerCount);
+    return (mWrittenSinceTransferDstLayout[toVkLevel(levelStart).get()] &
             LevelContentDefinedMask(layerRangeBits))
         .any();
 }

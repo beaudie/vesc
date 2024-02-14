@@ -2496,6 +2496,19 @@ class ImageHelper final : public Resource, public angle::Subject
     bool hasSubresourceDefinedStencilContent(gl::LevelIndex level,
                                              uint32_t layerIndex,
                                              uint32_t layerCount) const;
+
+    // For write barrier optimization when doing image upload in TransferDst layout
+    void resetWrittenSinceTransferDstLayout();
+    void setWrittenSinceTransferDstLayout(gl::LevelIndex levelStart,
+                                          uint32_t levelCount,
+                                          uint32_t layerStart,
+                                          uint32_t layerCount);
+    bool isTransferDstWriteBarrierRequired(gl::LevelIndex levelStart,
+                                           uint32_t levelCount,
+                                           uint32_t layerStart,
+                                           uint32_t layerCount,
+                                           ImageLayout newLayout) const;
+
     void invalidateSubresourceContent(ContextVk *contextVk,
                                       gl::LevelIndex level,
                                       uint32_t layerIndex,
@@ -2879,6 +2892,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // above which the contents are considered unconditionally defined.
     gl::TexLevelArray<LevelContentDefinedMask> mContentDefined;
     gl::TexLevelArray<LevelContentDefinedMask> mStencilContentDefined;
+    // Track whether each subresource has been written since transit into TransferDst layout. Bits
+    // are reset once transit out of TransferDst.
+    gl::TexLevelArray<LevelContentDefinedMask> mWrittenSinceTransferDstLayout;
 
     // Used for memory allocation tracking.
     // Memory size allocated for the image in the memory during the initialization.
@@ -3415,6 +3431,7 @@ class CommandBufferAccess : angle::NonCopyable
     {
         onImageWrite(levelStart, levelCount, layerStart, layerCount, aspectFlags,
                      ImageLayout::TransferDst, image);
+        image->setWrittenSinceTransferDstLayout(levelStart, levelCount, layerStart, layerCount);
     }
     void onImageSelfCopy(gl::LevelIndex writeLevelStart,
                          uint32_t writeLevelCount,
@@ -3449,6 +3466,7 @@ class CommandBufferAccess : angle::NonCopyable
     {
         onImageWrite(levelStart, levelCount, layerStart, layerCount, aspectFlags,
                      ImageLayout::TransferDstAndComputeWrite, image);
+        image->setWrittenSinceTransferDstLayout(levelStart, levelCount, layerStart, layerCount);
     }
     void onExternalAcquireRelease(ImageHelper *image) { onResourceAccess(image); }
     void onQueryAccess(QueryHelper *query) { onResourceAccess(query); }
