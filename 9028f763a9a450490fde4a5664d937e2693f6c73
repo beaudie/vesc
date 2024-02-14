@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17c74aa2_1a189eed",
+        "filename": "extensions/EGL_ANGLE_global_fence_sync.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-14T19:36:43Z",
+      "side": 1,
+      "message": "previous submitted. \n\nInsert fence will not trigger submission on other contexts. So it is important to note all already submitted commands in other contexts is being synced.",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 26
+      },
+      "revId": "9028f763a9a450490fde4a5664d937e2693f6c73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
