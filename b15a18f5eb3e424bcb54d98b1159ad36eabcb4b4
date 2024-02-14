@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a22ebd7f_a983c04f",
+        "filename": "src/tests/gl_tests/RendererTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-14T21:00:52Z",
+      "side": 1,
+      "message": "I don\u0027t think these tests will pass once WebGPU is added here. You can confirm that they\u0027re running locally by running `angle_end2end_tests --gtest_filter\u003dRendererTest`. Once they\u0027re running (and failing), it\u0027s a good time to make sure the expectations are working too, you can add a line to `angle_end2end_tests_expectations.txt`. Something like `8485 WEBGPU : RendererTest.* \u003d SKIP`",
+      "revId": "b15a18f5eb3e424bcb54d98b1159ad36eabcb4b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
