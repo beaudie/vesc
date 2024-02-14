@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61fd9ca2_46580252",
+        "filename": "src/tests/gl_tests/PbufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-14T09:29:23Z",
+      "side": 1,
+      "message": "Please put device-specific suppressions in `src/tests/angle_end2end_tests_expectations.txt`.",
+      "revId": "d79cdf95e431d3070247fec2cc45b5b23f302434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d49d58ac_82557dfe",
+        "filename": "src/tests/gl_tests/PbufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-14T09:29:23Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "d79cdf95e431d3070247fec2cc45b5b23f302434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
