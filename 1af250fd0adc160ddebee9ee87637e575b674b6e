@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a58ae96d_a7249740",
+        "filename": "src/libANGLE/renderer/metal/ImageMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-14T13:52:42Z",
+      "side": 1,
+      "message": "My understanding was that a slice view is enough to keep the original data alive. If it\u0027s not that simple, an extra variable won\u0027t hurt.\n\nPlease add comments for these two variables in `ImageMtl.h` explaining their intended usage.",
+      "parentUuid": "e4abb2d4_c7a32245",
+      "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5174e1d_53a335e0",
         "filename": "src/tests/gl_tests/ImageTestMetal.mm",
         "patchSetId": 9
