@@ -110,6 +110,30 @@
       },
       "revId": "57feaf558f687e2766d7484140e81fe5cc677cb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bddc9227_c056016c",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T02:51:29Z",
+      "side": 1,
+      "message": "The front-end caps both of them to 16:\n\n```\nMAX_VERTEX_ATTRIBS         \u003d 16,\nMAX_VERTEX_ATTRIB_BINDINGS \u003d 16,\n...\nANGLE_LIMIT_CAP(caps-\u003emaxVertexAttributes, MAX_VERTEX_ATTRIBS);\n...\nif (getClientVersion() \u003c ES_3_1)\n{\n    caps-\u003emaxVertexAttribBindings \u003d caps-\u003emaxVertexAttributes;\n}\nelse\n{\n    ANGLE_LIMIT_CAP(caps-\u003emaxVertexAttribBindings, MAX_VERTEX_ATTRIB_BINDINGS);\n}\n```",
+      "parentUuid": "94765bdd_6d46cab5",
+      "range": {
+        "startLine": 723,
+        "startChar": 0,
+        "endLine": 724,
+        "endChar": 45
+      },
+      "revId": "57feaf558f687e2766d7484140e81fe5cc677cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

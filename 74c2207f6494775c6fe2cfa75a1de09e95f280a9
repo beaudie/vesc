@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbe56f5d_d3623d8b",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2039,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T02:51:29Z",
+      "side": 1,
+      "message": "The `SetBitField` macro already takes care of asserting the value fits in the storage\n\n```suggestion\n    SetBitField(paramStruct-\u003evertexBindingDescriptionCount,\n                vertexBindingDescriptionCount);\n    SetBitField(paramStruct-\u003evertexAttributeDescriptionCount,\n                vertexAttributeDescriptionCount);\n```",
+      "range": {
+        "startLine": 2033,
+        "startChar": 0,
+        "endLine": 2039,
+        "endChar": 63
+      },
+      "revId": "74c2207f6494775c6fe2cfa75a1de09e95f280a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
