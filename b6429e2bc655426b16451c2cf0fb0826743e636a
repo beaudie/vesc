@@ -16,6 +16,24 @@
       "message": "Could you give this a try to see if it improves hailin\u0027s test?",
       "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7275214_69fde6ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-14T23:08:06Z",
+      "side": 1,
+      "message": "It seems that this CL has no effect on the results of the perf test.\n* `TexureUploadETC2TranscodingBenchmark` tested on Windows and Linux.",
+      "parentUuid": "7cf59c8b_fddc1a20",
+      "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
