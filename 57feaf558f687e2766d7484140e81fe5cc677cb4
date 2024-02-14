@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "590bf2a8_2592426e",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-14T21:07:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aa1fdd8_ba3c47d8",
+      "range": {
+        "startLine": 756,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 98
+      },
+      "revId": "57feaf558f687e2766d7484140e81fe5cc677cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab2e8538_1e4164c0",

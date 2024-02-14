@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f054ea_021a5f6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-14T21:07:54Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c44676c9_a73f6440",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-14T21:07:54Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org want to make sure you are fine with this",
+      "range": {
+        "startLine": 185,
+        "startChar": 65,
+        "endLine": 185,
+        "endChar": 70
+      },
+      "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
