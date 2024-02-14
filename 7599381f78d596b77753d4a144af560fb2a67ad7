@@ -16,6 +16,24 @@
       "message": "I think we should do a much smaller change here. Here is my proposal:\nBasically we focus on optimize the usage case like hailian\u0027s test, i.e., a back to back glTex{Sub}Image call. In this case, you need layout change for first transfer, there is no way around that. Then the subsequent transfer will actually have no layout change, image already in the desired layout. We need to detect that case and issue memory barrier instead. The code already there, we only need to add this condition into the if check at https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d6729\n\n    if (mCurrentLayout \u003d\u003d ImageLayout::SharedPresent || mCurrentLayout \u003d\u003d newLayout)\n \n\nFurther, we could even optimize out this memory barrier if that memory barrier itself causes perf issue. There are three different approaches that I can see.\n\nA) We only need to insert memory barrier if there is previous write to that level. i.e., if that specific level does not have any content in it, and image already in that desired layout, we do nothing. \"that specific level does not have any content in it\" can be cheaply implemented by adding another tracking similar to mContentDefined, lets call it mContentInitialized. The only difference is mContentDefined may gets cleared, mContentInitialized never gets cleared.\n\nOr B) Even further, I am personally willing to go slightly out of spec here that \n\nif (mCurrentLayout \u003d\u003d newLayout \u0026\u0026 (mCurrentLayout\u003d\u003d TransferDst|| mCurrentLayout\u003d\u003d TransferDstAndComputeWrite)\n{\n// take risk of WAW and suprress the syncVal complain.\nreturn;\n}\n\nThis is not technically correct but I don\u0027t think it will actually cause any real bug in all GPUs. \n\nOr C), Further improvement on top of A), that you clear the mContentInitialized whenever there is a layout change.\n\nI think A) likely is good enough, but if not, C) is good. Or just do B) and swallow the SyncVal complain.",
       "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77f05ae3_72725660",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-14T21:44:31Z",
+      "side": 1,
+      "message": "In all of above three suggestions, the change will be quite local with minimum CPU overhead.",
+      "parentUuid": "b019f704_4980ee9c",
+      "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
