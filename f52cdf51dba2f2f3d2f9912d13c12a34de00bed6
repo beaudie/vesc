@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9639774_8a79e9d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T18:36:49Z",
+      "side": 1,
+      "message": "Verified locally that build on Linux, Linux x86, windows and mac all still have SSE enabled.\n\nAlso found out that Android does not use SSE instructions apparently (regardless of this CL), which may be a separate thing to look into.",
+      "revId": "f52cdf51dba2f2f3d2f9912d13c12a34de00bed6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
