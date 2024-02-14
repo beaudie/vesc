@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dedc2fd_98c829e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-14T23:04:01Z",
+      "side": 1,
+      "message": "lgtm too.\n\nThe tests look especially good. One question.",
+      "revId": "134c84fb55853b5c00b78d4a918c79fe7aafbbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fdf5af8_d35f2ac0",
+        "filename": "src/tests/gl_tests/ImageTestMetal.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-14T23:04:01Z",
+      "side": 1,
+      "message": "Is this test case sufficient to also cover the case of rendering to a texture bound to a Metal texture slice? I think so - blit acts much like a draw - only asking.",
+      "revId": "134c84fb55853b5c00b78d4a918c79fe7aafbbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
