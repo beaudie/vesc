@@ -8739,6 +8739,60 @@ angle::Result ImageHelper::flushSingleSubresourceStagedUpdates(ContextVk *contex
     return flushStagedUpdates(contextVk, levelGL, levelGL + 1, layer, layer + layerCount, {});
 }
 
+angle::Result ImageHelper::flushStagedClearEmulatedChannelsUpdates(ContextVk *contextVk,
+                                                                   gl::LevelIndex levelGLStart,
+                                                                   gl::LevelIndex levelGLLimit,
+                                                                   bool *otherUpdatesToFlushOut)
+{
+    *otherUpdatesToFlushOut = false;
+    for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLLimit;
+         ++updateMipLevelGL)
+    {
+        // It is expected that the checked mip levels in this loop do not surpass the size of
+        // mSubresourceUpdates.
+        std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(updateMipLevelGL);
+        ASSERT(levelUpdates != nullptr);
+
+        // The levels with no updates should be skipped.
+        if (levelUpdates->empty())
+        {
+            continue;
+        }
+
+        // Since ClearEmulatedChannelsOnly is expected in the beginning and there cannot be more
+        // than one such update type, we can process the first update and move on if there is
+        // another update type in the list.
+        ASSERT(verifyEmulatedClearsAreBeforeOtherUpdates(*levelUpdates));
+        std::vector<SubresourceUpdate>::iterator update = (*levelUpdates).begin();
+
+        if (update->updateSource != UpdateSource::ClearEmulatedChannelsOnly)
+        {
+            *otherUpdatesToFlushOut = true;
+            continue;
+        }
+
+        // If found, ClearEmulatedChannelsOnly should be flushed before the others and removed from
+        // the update list.
+        ASSERT(update->updateSource == UpdateSource::ClearEmulatedChannelsOnly);
+        uint32_t updateBaseLayer, updateLayerCount;
+        update->getDestSubresource(mLayerCount, &updateBaseLayer, &updateLayerCount);
+
+        const LevelIndex updateMipLevelVk = toVkLevel(updateMipLevelGL);
+        update->data.clear.levelIndex     = updateMipLevelVk.get();
+        ANGLE_TRY(clearEmulatedChannels(contextVk, update->data.clear.colorMaskFlags,
+                                        update->data.clear.value, updateMipLevelVk, updateBaseLayer,
+                                        updateLayerCount));
+        // Do not call onWrite. Even though some channels of the image are cleared, don't consider
+        // the contents defined. Also, since clearing emulated channels is a one-time thing that's
+        // superseded by Clears, |mCurrentSingleClearValue| is irrelevant and can't have a value.
+        ASSERT(!mCurrentSingleClearValue.valid());
+
+        levelUpdates->erase(update);
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                               gl::LevelIndex levelGLStart,
                                               gl::LevelIndex levelGLEnd,
@@ -8798,42 +8852,70 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
     // Start in TransferDst.  Don't yet mark any subresource as having defined contents; that is
     // done with fine granularity as updates are applied.  This is achieved by specifying a layer
-    // that is outside the tracking range.
-    CommandBufferAccess access;
+    // that is outside the tracking range. Under some circumstances, ComputeWrite is also required.
+    // This need not be applied if the only updates are ClearEmulatedChannels.
+    CommandBufferAccess transferAccess;
     OutsideRenderPassCommandBufferHelper *commandBuffer = nullptr;
     bool transCoding =
         contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
         IsETCFormat(intendedFormat) && IsBCFormat(actualformat);
-    if (transCoding)
+
+    // Process the clear emulated channels from the updates first. They are expected to be at the
+    // beginning of the level updates.
+    bool otherUpdatesToFlushOut = false;
+    gl::LevelIndex levelGLLimit = levelGLEnd;
+    for (gl::LevelIndex checkMipLevelGL = levelGLStart; checkMipLevelGL < levelGLEnd;
+         ++checkMipLevelGL)
     {
-        access.onImageTransferDstAndComputeWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0,
-                                                 aspectFlags, this);
+        // If the mip level is beyond the subresource vector size, the limit should be updated.
+        if (getLevelUpdates(checkMipLevelGL) == nullptr)
+        {
+            ASSERT(static_cast<size_t>(checkMipLevelGL.get()) >= mSubresourceUpdates.size());
+            levelGLLimit = checkMipLevelGL;
+            break;
+        }
+    }
+    ANGLE_TRY(flushStagedClearEmulatedChannelsUpdates(contextVk, levelGLStart, levelGLLimit,
+                                                      &otherUpdatesToFlushOut));
+
+    // If updates remain after processing ClearEmulatedChannelsOnly updates, we should acquire the
+    // outside command buffer and apply the necessary barriers. Otherwise, this function can return
+    // early, skipping the next loop.
+    if (otherUpdatesToFlushOut)
+    {
+        if (transCoding)
+        {
+            transferAccess.onImageTransferDstAndComputeWrite(
+                levelGLStart, 1, kMaxContentDefinedLayerCount, 0, aspectFlags, this);
+        }
+        else
+        {
+            transferAccess.onImageTransferWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0,
+                                                aspectFlags, this);
+        }
+        ANGLE_TRY(
+            contextVk->getOutsideRenderPassCommandBufferHelper(transferAccess, &commandBuffer));
     }
     else
     {
-        access.onImageTransferWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0, aspectFlags,
-                                    this);
+        levelGLLimit = levelGLStart;
     }
 
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
-    for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLEnd;
+    for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLLimit;
          ++updateMipLevelGL)
     {
+        // It is expected that the checked mip levels in this loop do not surpass the size of
+        // mSubresourceUpdates.
         std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(updateMipLevelGL);
-        if (levelUpdates == nullptr)
-        {
-            ASSERT(static_cast<size_t>(updateMipLevelGL.get()) >= mSubresourceUpdates.size());
-            break;
-        }
-
         std::vector<SubresourceUpdate> updatesToKeep;
+        ASSERT(levelUpdates != nullptr);
 
         // Hash map of uploads in progress.  See comment on kMaxParallelSubresourceUpload.
         uint64_t subresourceUploadsInProgress = 0;
 
         for (SubresourceUpdate &update : *levelUpdates)
         {
-            ASSERT(IsClear(update.updateSource) ||
+            ASSERT(IsClearOfAllChannels(update.updateSource) ||
                    (update.updateSource == UpdateSource::Buffer &&
                     update.data.buffer.bufferHelper != nullptr) ||
                    (update.updateSource == UpdateSource::Image &&
@@ -8870,7 +8952,6 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             {
                 case UpdateSource::Clear:
                 case UpdateSource::ClearAfterInvalidate:
-                case UpdateSource::ClearEmulatedChannelsOnly:
                 {
                     update.data.clear.levelIndex = updateMipLevelVk.get();
                     break;
@@ -8953,25 +9034,6 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                     // setContentDefined directly.
                     setContentDefined(updateMipLevelVk, 1, updateBaseLayer, updateLayerCount,
                                       update.data.clear.aspectFlags);
-                    break;
-                }
-                case UpdateSource::ClearEmulatedChannelsOnly:
-                {
-                    ANGLE_TRY(clearEmulatedChannels(contextVk, update.data.clear.colorMaskFlags,
-                                                    update.data.clear.value, updateMipLevelVk,
-                                                    updateBaseLayer, updateLayerCount));
-
-                    // Do not call onWrite.  Even though some channels of the image are cleared,
-                    // don't consider the contents defined.  Also, since clearing emulated channels
-                    // is a one-time thing that's superseded by Clears, |mCurrentSingleClearValue|
-                    // is irrelevant and can't have a value.
-                    ASSERT(!mCurrentSingleClearValue.valid());
-
-                    // Refresh the command buffer because clearEmulatedChannels may have flushed it.
-                    // This also transitions the image back to TransferDst, in case it's no longer
-                    // in that layout.
-                    ANGLE_TRY(
-                        contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
                     break;
                 }
                 case UpdateSource::Buffer:
