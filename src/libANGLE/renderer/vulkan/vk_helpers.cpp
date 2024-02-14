@@ -6729,7 +6729,7 @@ void ImageHelper::barrierImpl(Context *context,
     // Release the ANI semaphore to caller to add to the command submission.
     *acquireNextImageSemaphoreOut = mAcquireNextImageSemaphore.release();
 
-    if (mCurrentLayout == ImageLayout::SharedPresent)
+    if (mCurrentLayout == ImageLayout::SharedPresent || mCurrentLayout == newLayout)
     {
         const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
 
