@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5aa1fdd8_ba3c47d8",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-14T02:02:02Z",
+      "side": 1,
+      "message": "interesting, swiftshader had no issues and ubsan bot passed too. means the structs were already aligned?\n\nthere is still an issue here, it is possible that `vertexBindingDescriptionCount` is `0` in which case `GetNextArrayParameter` might end up dereferencing invalid memory (or nullptr). have uploaded a fix for that code as well",
+      "parentUuid": "48ae44c9_19dd4ebe",
+      "range": {
+        "startLine": 756,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 98
+      },
+      "revId": "57feaf558f687e2766d7484140e81fe5cc677cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab2e8538_1e4164c0",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
         "patchSetId": 13
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-13T23:07:40Z",
       "side": 1,
       "message": "These have a hard cap don\u0027t they? Could you use two `uint16_t` instead and avoid the padding?",
+      "range": {
+        "startLine": 723,
+        "startChar": 0,
+        "endLine": 724,
+        "endChar": 45
+      },
+      "revId": "57feaf558f687e2766d7484140e81fe5cc677cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94765bdd_6d46cab5",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-14T02:02:02Z",
+      "side": 1,
+      "message": "\u003e These have a hard cap don\u0027t they?\n\nnot a hard cap but a ICD specific cap of either `VkPhysicalDeviceLimits::maxVertexInputBindings` and `VkPhysicalDeviceLimits::maxVertexInputAttributes`\n\nfor now, i will add an assert that the counts must be \u003c 2^16 but there is a possibility that an obscure ICD allows more and we will crash",
+      "parentUuid": "ab2e8538_1e4164c0",
       "range": {
         "startLine": 723,
         "startChar": 0,
