@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c770c0f_4ccbe901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-14T15:56:41Z",
+      "side": 1,
+      "message": "Sure. I don\u0027t have any comments on this CL as is.",
+      "revId": "a06893b3dc3bdeefe69db21a96897f3488255a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
