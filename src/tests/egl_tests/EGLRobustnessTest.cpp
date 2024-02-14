@@ -368,6 +368,37 @@ TEST_P(EGLRobustnessTest, DISABLED_ResettingDisplayWorks)
     ASSERT_TRUE(glGetGraphicsResetStatusEXT() == GL_NO_ERROR);
 }
 
+TEST_P(EGLRobustnessTest, GenerateMipmapsTwice2)
+{
+    createContext(EGL_LOSE_CONTEXT_ON_RESET_EXT);
+
+    GLTexture t1;
+    glBindTexture(GL_TEXTURE_2D, t1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 512, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    GLFramebuffer fb1;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb1);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t1, 0);
+
+    EXPECT_GL_NO_ERROR();
+
+    for (int i = 0; i < 10000; i++)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, fb1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glBindTexture(GL_TEXTURE_2D, t1);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        ASSERT_TRUE(glGetGraphicsResetStatusEXT() == GL_NO_ERROR) << " on iteration " << i;
+    }
+}
+
 // Test to reproduce the crash when running
 // dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.writes.uniform_block.fragment
 // on Pixel 6

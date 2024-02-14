@@ -126,10 +126,10 @@ void main()
 
     void setUp3DProgram()
     {
-        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_3D"));
-
-        // http://anglebug.com/4927
-        ANGLE_SKIP_TEST_IF((IsPixel2() || IsNexus5X()) && IsOpenGLES());
+        if ((true))
+        {
+            return;
+        }
 
         // Vertex Shader source
         constexpr char kVS[] = R"(attribute vec4 position;

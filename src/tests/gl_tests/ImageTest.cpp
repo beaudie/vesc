@@ -6890,6 +6890,166 @@ TEST_P(ImageTest, RedefineWithMultipleImages)
     ASSERT_GL_NO_ERROR();
 }
 
+TEST_P(ImageTestES3, GenerateMipmapsTwice)
+{
+    EGLWindow *window = getEGLWindow();
+
+    GLTexture originalBackbuffertexture;
+    EGLImageKHR image;
+    createEGLImage2DTextureSource(512, 512, GL_RGBA, GL_UNSIGNED_BYTE, kDefaultAttribs, nullptr,
+                                  originalBackbuffertexture, &image);
+
+    GLTexture backbuffertexture;
+    glBindTexture(GL_TEXTURE_2D, backbuffertexture);
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, image);
+
+    GLFramebuffer backbufferfbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, backbufferfbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, backbuffertexture,
+                           0);
+
+    GLRenderbuffer msrbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, msrbo);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, 512, 512);
+
+    GLFramebuffer msfbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, msfbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, msrbo);
+
+    constexpr char kVS[] =
+        R"(precision highp float;
+
+        attribute vec2 a_pos;
+        varying vec2 uv;
+
+        void main() {
+            gl_Position = vec4( a_pos.x, a_pos.y, 0.0, 1.0 );
+            uv = vec2( a_pos.x, a_pos.y ) * 0.5 + vec2( 0.5 ,0.5 );
+        })";
+
+    constexpr char kFS[] =
+        R"(precision highp float;
+
+        uniform sampler2D u_sampler;
+
+        varying vec2 uv;
+
+        void main() {
+            gl_FragColor = texture2D( u_sampler, uv, 4.0);
+        })";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    GLint attribute = glGetAttribLocation(program, "a_pos");
+    GLint sampler   = glGetUniformLocation(program, "u_sampler");
+
+    glUseProgram(program);
+
+    glViewport(0, 0, 512, 512);
+
+    GLBuffer abuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, abuffer);
+    constexpr float abufferData[] = {-1, -1, 1, -1, -1, 1, 1, 1};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(abufferData), abufferData, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    GLBuffer ibuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuffer);
+    constexpr GLushort ibufferData[] = {0, 1, 2, 3, 2, 1};
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ibufferData), ibufferData, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    GLTexture t1;
+    glBindTexture(GL_TEXTURE_2D, t1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 512, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    GLFramebuffer fb1;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb1);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t1, 0);
+
+    GLTexture t2;
+    glBindTexture(GL_TEXTURE_2D, t2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 512, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    GLFramebuffer fb2;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb2);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t2, 0);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    glDisable(GL_SCISSOR_TEST);
+
+    glBindBuffer(GL_ARRAY_BUFFER, abuffer);
+    glEnableVertexAttribArray(attribute);
+    glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuffer);
+    glUniform1i(sampler, 0);
+
+    glScissor(112, 112, 288, 288);
+
+    glClearColor(0, 0.5, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    for (int i = 0; i < 100; i++)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, fb1);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glEnable(GL_SCISSOR_TEST);
+        glClearColor(0, 0, 0.5, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_SCISSOR_TEST);
+
+        ///////// BREAKS IT
+        glBindTexture(GL_TEXTURE_2D, t1);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        ///////// BREAKS IT
+
+        glBindFramebuffer(GL_FRAMEBUFFER, fb2);
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBindTexture(GL_TEXTURE_2D, t1);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+        ///////// BREAKS IT
+        glBindTexture(GL_TEXTURE_2D, t2);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        ///////// BREAKS IT
+
+        glBindFramebuffer(GL_FRAMEBUFFER, msfbo);
+        glClearColor(0, 0.5, 1, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBindTexture(GL_TEXTURE_2D, t2);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+        EXPECT_GL_NO_ERROR();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, backbufferfbo);
+        GLenum attachments[] = {GL_COLOR_ATTACHMENT0};
+        glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, attachments);
+
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, backbufferfbo);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, msfbo);
+        glBlitFramebuffer(0, 0, 512, 512, 0, 0, 512, 512, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+        EGLSync sync = eglCreateSyncKHR(window->getDisplay(), EGL_SYNC_FENCE_KHR, nullptr);
+        glFlush();
+        EGLint f = eglDupNativeFenceFDANDROID(window->getDisplay(), sync);
+        EXPECT_TRUE(f);
+        eglDestroySyncKHR(window->getDisplay(), sync);
+    }
+
+    EXPECT_TRUE(glGetGraphicsResetStatusEXT() == GL_NO_ERROR);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ImageTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ImageTestES3);

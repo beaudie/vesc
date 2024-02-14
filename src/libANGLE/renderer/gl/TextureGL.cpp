@@ -1422,9 +1422,15 @@ angle::Result TextureGL::generateMipmap(const gl::Context *context)
     const gl::ImageDesc &baseLevelDesc                = mState.getBaseLevelDesc();
     const gl::InternalFormat &baseLevelInternalFormat = *baseLevelDesc.format.info;
 
+    const LevelInfoGL &baseLevelInfo = getBaseLevelInfo();
+
     stateManager->bindTexture(getType(), mTextureID);
-    if (baseLevelInternalFormat.colorEncoding == GL_SRGB &&
-        features.decodeEncodeSRGBForGenerateMipmap.enabled && getType() == gl::TextureType::_2D)
+    if (getType() == gl::TextureType::_2D &&
+        ((baseLevelInternalFormat.colorEncoding == GL_SRGB &&
+          features.decodeEncodeSRGBForGenerateMipmap.enabled) ||
+         (features.useIntermediateTextureForGenerateMipmap.enabled &&
+          nativegl::SupportsNativeRendering(functions, mState.getType(),
+                                            baseLevelInfo.nativeInternalFormat))))
     {
         nativegl::TexImageFormat texImageFormat = nativegl::GetTexImageFormat(
             functions, features, baseLevelInternalFormat.internalFormat,
@@ -1440,11 +1446,11 @@ angle::Result TextureGL::generateMipmap(const gl::Context *context)
             const gl::ImageDesc &levelDesc =
                 mState.getImageDesc(gl::TextureTarget::_2D, effectiveBaseLevel + levelIdx);
 
-            // Make sure no pixel unpack buffer is bound
-            stateManager->bindBuffer(gl::BufferBinding::PixelUnpack, 0);
-
             if (levelDesc.size != levelSize || *levelDesc.format.info != baseLevelInternalFormat)
             {
+                // Make sure no pixel unpack buffer is bound
+                stateManager->bindBuffer(gl::BufferBinding::PixelUnpack, 0);
+
                 ANGLE_GL_TRY_ALWAYS_CHECK(
                     context, functions->texImage2D(
                                  ToGLenum(getType()), effectiveBaseLevel + levelIdx,
@@ -1455,8 +1461,16 @@ angle::Result TextureGL::generateMipmap(const gl::Context *context)
 
         // Use the blitter to generate the mips
         BlitGL *blitter = GetBlitGL(context);
-        ANGLE_TRY(blitter->generateSRGBMipmap(context, this, effectiveBaseLevel, levelCount,
-                                              baseLevelDesc.size));
+        if (baseLevelInternalFormat.colorEncoding == GL_SRGB)
+        {
+            ANGLE_TRY(blitter->generateSRGBMipmap(context, this, effectiveBaseLevel, levelCount,
+                                                  baseLevelDesc.size));
+        }
+        else
+        {
+            ANGLE_TRY(blitter->generateMipmap(context, this, effectiveBaseLevel, levelCount,
+                                              baseLevelDesc.size, texImageFormat));
+        }
     }
     else
     {
@@ -1560,12 +1574,16 @@ angle::Result TextureGL::syncState(const gl::Context *context,
         {
             case gl::Texture::DIRTY_BIT_MIN_FILTER:
                 mAppliedSampler.setMinFilter(mState.getSamplerState().getMinFilter());
+                WARN() << "gl::Texture::DIRTY_BIT_MIN_FILTER "
+                       << mState.getSamplerState().getMinFilter();
                 ANGLE_GL_TRY(context, functions->texParameteri(
                                           nativegl::GetTextureBindingTarget(getType()),
                                           GL_TEXTURE_MIN_FILTER, mAppliedSampler.getMinFilter()));
                 break;
             case gl::Texture::DIRTY_BIT_MAG_FILTER:
                 mAppliedSampler.setMagFilter(mState.getSamplerState().getMagFilter());
+                WARN() << "gl::Texture::DIRTY_BIT_MAG_FILTER "
+                       << mState.getSamplerState().getMagFilter();
                 ANGLE_GL_TRY(context, functions->texParameteri(
                                           nativegl::GetTextureBindingTarget(getType()),
                                           GL_TEXTURE_MAG_FILTER, mAppliedSampler.getMagFilter()));
@@ -1710,12 +1728,14 @@ angle::Result TextureGL::syncState(const gl::Context *context,
                 break;
             case gl::Texture::DIRTY_BIT_BASE_LEVEL:
                 mAppliedBaseLevel = mState.getEffectiveBaseLevel();
+                WARN() << "gl::Texture::DIRTY_BIT_BASE_LEVEL " << mAppliedBaseLevel;
                 ANGLE_GL_TRY(context,
                              functions->texParameteri(nativegl::GetTextureBindingTarget(getType()),
                                                       GL_TEXTURE_BASE_LEVEL, mAppliedBaseLevel));
                 break;
             case gl::Texture::DIRTY_BIT_MAX_LEVEL:
                 mAppliedMaxLevel = mState.getEffectiveMaxLevel();
+                WARN() << "gl::Texture::DIRTY_BIT_MAX_LEVEL " << mAppliedMaxLevel;
                 ANGLE_GL_TRY(context,
                              functions->texParameteri(nativegl::GetTextureBindingTarget(getType()),
                                                       GL_TEXTURE_MAX_LEVEL, mAppliedMaxLevel));
@@ -1778,6 +1798,7 @@ angle::Result TextureGL::setBaseLevel(const gl::Context *context, GLuint baseLev
         // Signal to the GL layer that the Impl has dirty bits.
         onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
 
+        WARN() << "TextureGL::setBaseLevel " << baseLevel;
         stateManager->bindTexture(getType(), mTextureID);
         ANGLE_GL_TRY(context, functions->texParameteri(ToGLenum(getType()), GL_TEXTURE_BASE_LEVEL,
                                                        baseLevel));
@@ -1798,6 +1819,7 @@ angle::Result TextureGL::setMaxLevel(const gl::Context *context, GLuint maxLevel
         // Signal to the GL layer that the Impl has dirty bits.
         onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
 
+        WARN() << "TextureGL::setMaxLevel " << maxLevel;
         stateManager->bindTexture(getType(), mTextureID);
         ANGLE_GL_TRY(context,
                      functions->texParameteri(ToGLenum(getType()), GL_TEXTURE_MAX_LEVEL, maxLevel));
@@ -1817,6 +1839,7 @@ angle::Result TextureGL::setMinFilter(const gl::Context *context, GLenum filter)
         // Signal to the GL layer that the Impl has dirty bits.
         onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
 
+        WARN() << "TextureGL::setMinFilter " << filter;
         stateManager->bindTexture(getType(), mTextureID);
         ANGLE_GL_TRY(context,
                      functions->texParameteri(ToGLenum(getType()), GL_TEXTURE_MIN_FILTER, filter));
@@ -1835,6 +1858,7 @@ angle::Result TextureGL::setMagFilter(const gl::Context *context, GLenum filter)
         // Signal to the GL layer that the Impl has dirty bits.
         onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
 
+        WARN() << "TextureGL::setMagFilter " << filter;
         stateManager->bindTexture(getType(), mTextureID);
         ANGLE_GL_TRY(context,
                      functions->texParameteri(ToGLenum(getType()), GL_TEXTURE_MAG_FILTER, filter));
@@ -1842,7 +1866,7 @@ angle::Result TextureGL::setMagFilter(const gl::Context *context, GLenum filter)
     return angle::Result::Continue;
 }
 
-angle::Result TextureGL::setSwizzle(const gl::Context *context, GLint swizzle[4])
+angle::Result TextureGL::setSwizzle(const gl::Context *context, const GLint swizzle[4])
 {
     gl::SwizzleState resultingSwizzle =
         gl::SwizzleState(swizzle[0], swizzle[1], swizzle[2], swizzle[3]);

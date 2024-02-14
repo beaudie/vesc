@@ -578,7 +578,7 @@ TEST_P(WebGLCompatibilityTest, ExtensionCompilerSpec)
 {
     EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_webgl_compatibility"));
 
-    // Use of reserved _webgl prefix should fail when the shader specification is for WebGL.
+    // Use of reserved _webgl prefix should fail when the shader specification is for WebGL_
     constexpr char kVS[] =
         R"(struct Foo {
     int _webgl_bar;
@@ -2400,7 +2400,7 @@ void main() {
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() * 3 / 4, getWindowHeight() * 3 / 4, GLColor::red);
 }
 
-// Tests that a rendering feedback loop triggers a GL error under WebGL.
+// Tests that a rendering feedback loop triggers a GL error under WebGL_
 // Based on WebGL test conformance/renderbuffers/feedback-loop.html.
 TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoop)
 {
@@ -2750,7 +2750,7 @@ void main() {
                                GL_INVALID_OPERATION);
 }
 
-// Test tests that texture copying feedback loops are properly rejected in WebGL.
+// Test tests that texture copying feedback loops are properly rejected in WebGL_
 // Based on the WebGL test conformance/textures/misc/texture-copying-feedback-loops.html
 TEST_P(WebGLCompatibilityTest, TextureCopyingFeedbackLoops)
 {

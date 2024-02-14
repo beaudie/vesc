@@ -1384,6 +1384,10 @@ TEST_P(RobustResourceInitTestES3, GenerateMipmapAfterRedefine)
     glGenerateMipmap(GL_TEXTURE_2D);
     EXPECT_GL_NO_ERROR();
 
+    const std::vector<GLColor> kInitData2(kTextureSize * kTextureSize, GLColor::green);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTextureSize, kTextureSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, kInitData2.data());
+
     // Validate a small mip.
     glClearColor(1, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);

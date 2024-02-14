@@ -1095,11 +1095,12 @@ angle::Result BlitGL::clearRenderableTextureAlphaToOne(const gl::Context *contex
     return angle::Result::Continue;
 }
 
-angle::Result BlitGL::generateSRGBMipmap(const gl::Context *context,
-                                         TextureGL *source,
-                                         GLuint baseLevel,
-                                         GLuint levelCount,
-                                         const gl::Extents &sourceBaseLevelSize)
+angle::Result BlitGL::generateMipmap(const gl::Context *context,
+                                     TextureGL *source,
+                                     GLuint baseLevel,
+                                     GLuint levelCount,
+                                     const gl::Extents &sourceBaseLevelSize,
+                                     const nativegl::TexImageFormat &format)
 {
     ANGLE_TRY(initializeResources(context));
 
@@ -1112,23 +1113,24 @@ angle::Result BlitGL::generateSRGBMipmap(const gl::Context *context,
     scopedState.willUseTextureUnit(context, 0);
     mStateManager->activeTexture(0);
 
-    // Copy source to a linear intermediate texture.
-    GLuint linearTexture = mScratchTextures[0];
-    mStateManager->bindTexture(sourceType, linearTexture);
-    ANGLE_GL_TRY(context, mFunctions->texImage2D(
-                              ToGLenum(sourceTarget), 0, mSRGBMipmapGenerationFormat.internalFormat,
-                              sourceBaseLevelSize.width, sourceBaseLevelSize.height, 0,
-                              mSRGBMipmapGenerationFormat.format, mSRGBMipmapGenerationFormat.type,
-                              nullptr));
+    // Copy source to an intermediate texture.
+    GLuint intermediateTexture = mScratchTextures[0];
+    mStateManager->bindTexture(sourceType, intermediateTexture);
+    mStateManager->bindBuffer(gl::BufferBinding::PixelUnpack, 0);
+    ANGLE_GL_TRY(context, mFunctions->texParameteri(ToGLenum(sourceTarget), GL_TEXTURE_MIN_FILTER,
+                                                    GL_NEAREST));
+    ANGLE_GL_TRY(context, mFunctions->texParameteri(ToGLenum(sourceTarget), GL_TEXTURE_MAG_FILTER,
+                                                    GL_NEAREST));
 
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
-    ANGLE_GL_TRY(context,
-                 mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                                  ToGLenum(sourceTarget), linearTexture, 0));
-    mStateManager->setFramebufferSRGBEnabled(context, true);
+    // Make an intermediate texture with 1 less level than the source
+    for (GLuint levelIdx = 1; levelIdx < levelCount; levelIdx++)
+    {
+        gl::Extents levelSize(std::max(sourceBaseLevelSize.width >> levelIdx, 1),
+                              std::max(sourceBaseLevelSize.height >> levelIdx, 1), 1);
+    }
 
-    // Use a shader to do the sRGB to linear conversion. glBlitFramebuffer does not always do this
-    // conversion for us.
+    // Use a shader to copy the source to intermediate texture. glBlitFramebuffer does not always do
+    // sRGB to linear conversions for us.
     BlitProgram *blitProgram = nullptr;
     ANGLE_TRY(getBlitProgram(context, sourceType, GL_FLOAT, GL_FLOAT, &blitProgram));
 
@@ -1140,40 +1142,97 @@ angle::Result BlitGL::generateSRGBMipmap(const gl::Context *context,
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->transformLinearToSrgbLocation, 0));
 
-    mStateManager->bindTexture(sourceType, source->getTextureID());
-    ANGLE_TRY(source->setMinFilter(context, GL_NEAREST));
+    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    mStateManager->setFramebufferSRGBEnabled(context, false);
 
-    ANGLE_TRY(setVAOState(context));
-    ANGLE_GL_TRY(context, mFunctions->drawArrays(GL_TRIANGLES, 0, 3));
+    ANGLE_TRY(source->setMinFilter(context, GL_LINEAR));
+    ANGLE_TRY(source->setMagFilter(context, GL_LINEAR));
 
-    // Generate mipmaps on the linear texture
-    mStateManager->bindTexture(sourceType, linearTexture);
-    ANGLE_GL_TRY_ALWAYS_CHECK(context, mFunctions->generateMipmap(ToGLenum(sourceTarget)));
-    ANGLE_GL_TRY(context, mFunctions->texParameteri(ToGLenum(sourceTarget), GL_TEXTURE_MIN_FILTER,
-                                                    GL_NEAREST));
-
-    // Copy back to the source texture from the mips generated in the linear texture
-    for (GLuint levelIdx = 0; levelIdx < levelCount; levelIdx++)
+    // Copy back to the source texture from the mips generated in the intermediate texture
+    for (GLuint levelIdx = 1; levelIdx < levelCount; levelIdx++)
     {
+        {
+            ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(
+                                      GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ToGLenum(sourceTarget),
+                                      source->getTextureID(), baseLevel + levelIdx - 1));
+
+            GLubyte px[4] = {0};
+            mFunctions->readPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, px);
+
+            WARN() << "source data " << " (" << int(px[0]) << " " << int(px[1]) << " " << int(px[2])
+                   << " " << int(px[3]) << ")";
+        }
+
         gl::Extents levelSize(std::max(sourceBaseLevelSize.width >> levelIdx, 1),
                               std::max(sourceBaseLevelSize.height >> levelIdx, 1), 1);
 
-        ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(
-                                  GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ToGLenum(sourceTarget),
-                                  source->getTextureID(), baseLevel + levelIdx));
+        // Downsample from the source texture into the intermediate texture
+        mStateManager->bindTexture(sourceType, intermediateTexture);
+        ANGLE_GL_TRY(context, mFunctions->texImage2D(
+                                  ToGLenum(sourceTarget), 0, format.internalFormat, levelSize.width,
+                                  levelSize.height, 0, format.format, format.type, nullptr));
+
+        ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                               ToGLenum(sourceTarget),
+                                                               intermediateTexture, 0));
         mStateManager->setViewport(gl::Rectangle(0, 0, levelSize.width, levelSize.height));
 
-        ANGLE_GL_TRY(context, mFunctions->texParameteri(ToGLenum(sourceTarget),
-                                                        GL_TEXTURE_BASE_LEVEL, levelIdx));
+        {
+            GLubyte px[4] = {0};
+            mFunctions->readPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, px);
+            WARN() << "data in intermediateTexture " << " (" << int(px[0]) << " " << int(px[1])
+                   << " " << int(px[2]) << " " << int(px[3]) << ")";
+        }
 
+        GLuint sourceTextureReadLevel = baseLevel + levelIdx - 1;
+        mStateManager->bindTexture(sourceType, source->getTextureID());
+        ANGLE_TRY(source->setBaseLevel(context, sourceTextureReadLevel));
         ANGLE_GL_TRY(context, mFunctions->drawArrays(GL_TRIANGLES, 0, 3));
+
+        {
+            GLubyte px[4] = {0};
+            mFunctions->readPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, px);
+
+            WARN() << "blit source " << sourceTextureReadLevel << " -> intermediate "
+                   << levelIdx - 1 << " [" << levelSize.width << "x" << levelSize.height << "]"
+                   << " (" << int(px[0]) << " " << int(px[1]) << " " << int(px[2]) << " "
+                   << int(px[3]) << ")";
+        }
+
+        // Copy back to the source texture
+        GLuint sourceTextureWriteLevel = sourceTextureReadLevel + 1;
+        ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(
+                                  GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ToGLenum(sourceTarget),
+                                  source->getTextureID(), sourceTextureWriteLevel));
+        mStateManager->bindTexture(sourceType, intermediateTexture);
+        ANGLE_GL_TRY(context, mFunctions->drawArrays(GL_TRIANGLES, 0, 3));
+
+        {
+            GLubyte px[4] = {0};
+            mFunctions->readPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, px);
+            WARN() << "blit intermediate " << levelIdx - 1 << " -> source "
+                   << sourceTextureWriteLevel << " (" << int(px[0]) << " " << int(px[1]) << " "
+                   << int(px[2]) << " " << int(px[3]) << ")";
+        }
     }
+
+    ANGLE_TRY(source->setBaseLevel(context, baseLevel));
 
     ANGLE_TRY(orphanScratchTextures(context));
     ANGLE_TRY(UnbindAttachment(context, mFunctions, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0));
 
     ANGLE_TRY(scopedState.exit(context));
     return angle::Result::Continue;
+}
+
+angle::Result BlitGL::generateSRGBMipmap(const gl::Context *context,
+                                         TextureGL *source,
+                                         GLuint baseLevel,
+                                         GLuint levelCount,
+                                         const gl::Extents &sourceBaseLevelSize)
+{
+    return generateMipmap(context, source, baseLevel, levelCount, sourceBaseLevelSize,
+                          mSRGBMipmapGenerationFormat);
 }
 
 angle::Result BlitGL::initializeResources(const gl::Context *context)
@@ -1246,39 +1305,49 @@ angle::Result BlitGL::initializeResources(const gl::Context *context)
 
 angle::Result BlitGL::orphanScratchTextures(const gl::Context *context)
 {
-    for (auto texture : mScratchTextures)
+    for (size_t i = 0; i < ArraySize(mScratchTextures); i++)
     {
-        mStateManager->bindTexture(gl::TextureType::_2D, texture);
-        gl::PixelUnpackState unpack;
-        ANGLE_TRY(mStateManager->setPixelUnpackState(context, unpack));
-        ANGLE_TRY(mStateManager->setPixelUnpackBuffer(context, nullptr));
-        if (mFunctions->isAtLeastGL(gl::Version(3, 3)))
-        {
-            constexpr GLint swizzle[4] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA};
-            ANGLE_GL_TRY(context, mFunctions->texParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA,
-                                                             swizzle));
-        }
-        else if (mFunctions->isAtLeastGLES(gl::Version(3, 0)))
-        {
-            ANGLE_GL_TRY(context,
-                         mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_RED));
-            ANGLE_GL_TRY(context,
-                         mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_GREEN));
-            ANGLE_GL_TRY(context,
-                         mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_BLUE));
-            ANGLE_GL_TRY(context,
-                         mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_ALPHA));
-        }
-
-        ANGLE_GL_TRY(context, mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0));
-        ANGLE_GL_TRY(context, mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1000));
-        ANGLE_GL_TRY(context, mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                                                        GL_NEAREST_MIPMAP_LINEAR));
-        ANGLE_GL_TRY(context,
-                     mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        ANGLE_GL_TRY(context, mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA,
-                                                     GL_UNSIGNED_BYTE, nullptr));
+        mStateManager->deleteTexture(mScratchTextures[i]);
+        ANGLE_GL_TRY(context, mFunctions->genTextures(1, &mScratchTextures[i]));
     }
+    // for (auto texture : mScratchTextures)
+    // {
+    //     mStateManager->bindTexture(gl::TextureType::_2D, texture);
+    //     gl::PixelUnpackState unpack;
+    //     ANGLE_TRY(mStateManager->setPixelUnpackState(context, unpack));
+    //     ANGLE_TRY(mStateManager->setPixelUnpackBuffer(context, nullptr));
+    //     if (mFunctions->isAtLeastGL(gl::Version(3, 3)))
+    //     {
+    //         constexpr GLint swizzle[4] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA};
+    //         ANGLE_GL_TRY(context, mFunctions->texParameteriv(GL_TEXTURE_2D,
+    //         GL_TEXTURE_SWIZZLE_RGBA,
+    //                                                          swizzle));
+    //     }
+    //     else if (mFunctions->isAtLeastGLES(gl::Version(3, 0)))
+    //     {
+    //         ANGLE_GL_TRY(context,
+    //                      mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_RED));
+    //         ANGLE_GL_TRY(context,
+    //                      mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G,
+    //                      GL_GREEN));
+    //         ANGLE_GL_TRY(context,
+    //                      mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B,
+    //                      GL_BLUE));
+    //         ANGLE_GL_TRY(context,
+    //                      mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A,
+    //                      GL_ALPHA));
+    //     }
+
+    //     ANGLE_GL_TRY(context, mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL,
+    //     0)); ANGLE_GL_TRY(context, mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL,
+    //     1000)); ANGLE_GL_TRY(context, mFunctions->texParameteri(GL_TEXTURE_2D,
+    //     GL_TEXTURE_MIN_FILTER,
+    //                                                     GL_NEAREST_MIPMAP_LINEAR));
+    //     ANGLE_GL_TRY(context,
+    //                  mFunctions->texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    //     ANGLE_GL_TRY(context, mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA,
+    //                                                  GL_UNSIGNED_BYTE, nullptr));
+    // }
 
     return angle::Result::Continue;
 }

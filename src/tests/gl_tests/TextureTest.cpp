@@ -2372,47 +2372,56 @@ TEST_P(SamplerArrayAsFunctionParameterTest, SamplerArrayAsFunctionParameter)
 // Copy of a test in conformance/textures/texture-mips, to test generate mipmaps
 TEST_P(Texture2DTestWithDrawScale, MipmapsTwice)
 {
-    int px = getWindowWidth() / 2;
-    int py = getWindowHeight() / 2;
-
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
 
-    std::vector<GLColor> pixelsRed(16u * 16u, GLColor::red);
+    std::vector<GLColor> pixelsRed(2u * 2u, GLColor::red);
+    std::vector<GLColor> pixelsBlue(2u * 2u, GLColor::blue);
+    std::vector<GLColor> pixelsGreen(2u * 2u, GLColor::green);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelsRed.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelsRed.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
-    glUniform2f(mDrawScaleUniformLocation, 0.0625f, 0.0625f);
+    glUniform2f(mDrawScaleUniformLocation, 1.0f, 1.0f);
+    glViewport(0, 0, 1, 1);
     drawQuad(mProgram, "position", 0.5f);
     EXPECT_GL_NO_ERROR();
-    EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 
-    std::vector<GLColor> pixelsBlue(16u * 16u, GLColor::blue);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                 pixelsBlue.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelsBlue.data());
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelsGreen.data());
     glGenerateMipmap(GL_TEXTURE_2D);
 
+    glViewport(0, 0, 2, 2);
     drawQuad(mProgram, "position", 0.5f);
 
     EXPECT_GL_NO_ERROR();
-    EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
 
-    std::vector<GLColor> pixelsGreen(16u * 16u, GLColor::green);
+    glViewport(0, 0, 1, 1);
+    drawQuad(mProgram, "position", 0.5f);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                 pixelsGreen.data());
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelsGreen.data());
     glGenerateMipmap(GL_TEXTURE_2D);
 
+    glViewport(0, 0, 2, 2);
     drawQuad(mProgram, "position", 0.5f);
 
     EXPECT_GL_NO_ERROR();
-    EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    glViewport(0, 0, 1, 1);
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
 // Test creating a FBO with a cube map render target, to test an ANGLE bug

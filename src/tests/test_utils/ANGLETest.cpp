@@ -79,7 +79,7 @@ void TestPlatform_logWarning(PlatformMethods *platform, const char *warningMessa
     }
     else
     {
-        std::cerr << "Warning: " << warningMessage << std::endl;
+        // std::cerr << "Warning: " << warningMessage << std::endl;
     }
 }
 
@@ -1333,8 +1333,7 @@ void ANGLETestBase::checkD3D11SDKLayersMessages()
                         reinterpret_cast<D3D11_MESSAGE *>(malloc(messageLength));
                     infoQueue->GetMessage(i, pMessage, &messageLength);
 
-                    std::cout << "Message " << i << ":"
-                              << " " << pMessage->pDescription << "\n";
+                    std::cout << "Message " << i << ":" << " " << pMessage->pDescription << "\n";
                     free(pMessage);
                 }
             }

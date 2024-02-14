@@ -209,7 +209,7 @@ class TextureGL : public TextureImpl
     angle::Result setMinFilter(const gl::Context *context, GLenum filter);
     angle::Result setMagFilter(const gl::Context *context, GLenum filter);
 
-    angle::Result setSwizzle(const gl::Context *context, GLint swizzle[4]);
+    angle::Result setSwizzle(const gl::Context *context, const GLint swizzle[4]);
 
     angle::Result setBuffer(const gl::Context *context, GLenum internalFormat) override;
 
