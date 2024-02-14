@@ -124,6 +124,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b38d4002_4cf5e687",
+        "filename": "src/libANGLE/renderer/metal/ImageMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-14T14:07:20Z",
+      "side": 1,
+      "message": "Maybe it was a stupid concept. I removed it and added a test that the external ref can be dropped and the image still works.",
+      "parentUuid": "a58ae96d_a7249740",
+      "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5174e1d_53a335e0",
