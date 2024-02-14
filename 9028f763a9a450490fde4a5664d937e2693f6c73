@@ -22,6 +22,30 @@
       },
       "revId": "9028f763a9a450490fde4a5664d937e2693f6c73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb8112f2_c592ea5c",
+        "filename": "extensions/EGL_ANGLE_global_fence_sync.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T20:12:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17c74aa2_1a189eed",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 26
+      },
+      "revId": "9028f763a9a450490fde4a5664d937e2693f6c73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
