@@ -2302,6 +2302,14 @@ class ImageHelper final : public Resource, public angle::Subject
                                      uint32_t layerEnd,
                                      const gl::CubeFaceArray<gl::TexLevelMask> &skipLevels);
 
+    // ClearEmulatedChannels updates are expected in the beginning of the level update list. They
+    // can be processed first and removed. By doing so, if this is the only update for the image,
+    // an unnecessary layout transition can be avoided.
+    angle::Result flushStagedClearEmulatedChannelsUpdates(ContextVk *contextVk,
+                                                          gl::LevelIndex levelGLStart,
+                                                          gl::LevelIndex *levelGLLimit,
+                                                          bool *otherUpdatesToFlushOut);
+
     // Creates a command buffer and flushes all staged updates.  This is used for one-time
     // initialization of resources that we don't expect to accumulate further staged updates, such
     // as with renderbuffers or surface images.
