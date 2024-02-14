@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd18feb_cd8a0d9a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T20:03:29Z",
+      "side": 1,
+      "message": "Thank you for thoroughly cleaning this up.",
+      "parentUuid": "0228533f_00c3479e",
+      "revId": "055ea772d95bf07ce504faef22faf428f7b50887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58b1d502_b9fdbb5f",
