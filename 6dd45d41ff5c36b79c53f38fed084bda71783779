@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "424d1c81_0b425c52",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T15:01:14Z",
+      "side": 1,
+      "message": "nit: you could still use `R\"(...)\"` with streams",
+      "range": {
+        "startLine": 1405,
+        "startChar": 24,
+        "endLine": 1410,
+        "endChar": 47
+      },
+      "revId": "6dd45d41ff5c36b79c53f38fed084bda71783779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
