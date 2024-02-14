@@ -20,6 +20,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd803343_3017bd91",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T21:31:22Z",
+      "side": 1,
+      "message": "Just for book-keeping purposes, please mention here what is used from this extension.",
+      "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42972923_f3bb131a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 4613,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T21:31:22Z",
+      "side": 1,
+      "message": "```suggestion\n    // http://anglebug.com/7162#c8\n```",
+      "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c44676c9_a73f6440",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
         "patchSetId": 16
@@ -37,6 +71,64 @@
         "endLine": 185,
         "endChar": 70
       },
+      "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9112dde_ef7fb33c",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T21:31:22Z",
+      "side": 1,
+      "message": "It\u0027s the same, but any reason for the change? The previous code ensures there\u0027s no mistake with the type as it\u0027s derived from the array itself.",
+      "parentUuid": "c44676c9_a73f6440",
+      "range": {
+        "startLine": 185,
+        "startChar": 65,
+        "endLine": 185,
+        "endChar": 70
+      },
+      "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9392b81_1e4904ae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T21:31:22Z",
+      "side": 1,
+      "message": "nit: for uniformity with the other bit\n\n```suggestion\n        uint32_t useVertexInputDynamicState : 1;\n```",
+      "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2758bc75_4177d42b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-14T21:31:22Z",
+      "side": 1,
+      "message": "Forgot to mention, you\u0027d need to add the equivalent function to VulkanSecondaryCommandBuffer.h. It would just forward to this one.\n\n(we don\u0027t use that at the moment, but it\u0027s a matter of time before we need to investigate them again).",
       "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
