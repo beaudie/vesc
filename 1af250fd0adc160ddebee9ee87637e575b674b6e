@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "562e6ba0_139e2331",
+        "filename": "extensions/EGL_ANGLE_metal_texture_client_buffer.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-14T13:46:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f38d5b2_eafeb1b8",
+      "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fae92e9d_219810e9",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-14T13:15:00Z",
       "side": 1,
       "message": "Therefore, this should be reverted. Sorry for not noticing the difference earlier.",
+      "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90b7a26c_88fdeae8",
+        "filename": "extensions/EGL_ANGLE_metal_texture_client_buffer.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-14T13:46:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fae92e9d_219810e9",
       "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e4abb2d4_c7a32245",
+        "filename": "src/libANGLE/renderer/metal/ImageMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-14T13:46:13Z",
+      "side": 1,
+      "message": "Keeps the texture data alive.\nThe client gives the texture \"I want to bind this texture B, slice x\".\nSo we reference the texture B until unbound.\n\n\u003e Should it be equal to mNativeTexture for non-array textures?\n\nI don\u0027t see a reason.",
+      "parentUuid": "1f5a91a6_9fb2f7b6",
+      "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5174e1d_53a335e0",
         "filename": "src/tests/gl_tests/ImageTestMetal.mm",
         "patchSetId": 9
@@ -65,6 +119,24 @@
       "writtenOn": "2024-02-14T13:15:00Z",
       "side": 1,
       "message": "`EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER)`",
+      "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13b39b3e_1a354b64",
+        "filename": "src/tests/gl_tests/ImageTestMetal.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-14T13:46:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5174e1d_53a335e0",
       "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +154,24 @@
       "writtenOn": "2024-02-14T13:15:00Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32775fac_76966904",
+        "filename": "src/tests/gl_tests/ImageTestMetal.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-14T13:46:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d65b667_0c3bc599",
       "revId": "1af250fd0adc160ddebee9ee87637e575b674b6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
