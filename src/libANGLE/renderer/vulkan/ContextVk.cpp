@@ -687,8 +687,10 @@ void DumpPipelineCacheGraph(ContextVk *contextVk, const std::ostringstream &grap
         return;
     }
 
-    std::string filename = dumpPath;
+    static uint64_t counter = 0;
+    std::string filename    = dumpPath;
     filename += angle::GetExecutableName();
+    filename += std::to_string(counter++);
     filename += ".dump";
 
     INFO() << "Dumping pipeline cache transition graph to: \"" << filename << "\"";
