@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1763b370_58b5d7b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-15T00:43:00Z",
+      "side": 1,
+      "message": "The GLES 3.1 trace tests failure on win-trace is definitely unrelated. Trying CQ again. Shabi, should we file a bug about this flake?",
+      "revId": "134c84fb55853b5c00b78d4a918c79fe7aafbbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fdf5af8_d35f2ac0",
