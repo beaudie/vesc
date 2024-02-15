@@ -34,6 +34,24 @@
       "parentUuid": "7cf59c8b_fddc1a20",
       "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e24a956_c3b48914",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-15T20:30:05Z",
+      "side": 1,
+      "message": "Something like this, but I just realized that we are not passing the correct LayerStart/LayerCount value to onImageTransferDstAndComputeWrite.You will need to fix that code in order for this to work.",
+      "parentUuid": "d7275214_69fde6ba",
+      "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
