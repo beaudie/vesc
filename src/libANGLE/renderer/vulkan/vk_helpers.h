@@ -2326,6 +2326,10 @@ class ImageHelper final : public Resource, public angle::Subject
     void recordWriteBarrier(Context *context,
                             VkImageAspectFlags aspectMask,
                             ImageLayout newLayout,
+                            gl::LevelIndex levelStart,
+                            uint32_t levelCount,
+                            uint32_t layerStart,
+                            uint32_t layerCount,
                             OutsideRenderPassCommandBufferHelper *commands);
 
     void recordWriteBarrierOneOff(Context *context,
@@ -2339,6 +2343,11 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // This function can be used to prevent issuing redundant layout transition commands.
     bool isReadBarrierNecessary(ImageLayout newLayout) const;
+    bool isWriteBarrierNecessary(ImageLayout newLayout,
+                                 gl::LevelIndex levelStart,
+                                 uint32_t levelCount,
+                                 uint32_t layerStart,
+                                 uint32_t layerCount) const;
 
     void recordReadBarrier(Context *context,
                            VkImageAspectFlags aspectMask,
@@ -2657,6 +2666,19 @@ class ImageHelper final : public Resource, public angle::Subject
                      CommandBufferT *commandBuffer,
                      VkSemaphore *acquireNextImageSemaphoreOut);
 
+    void setSubresourcesWrittenSinceBarrier(gl::LevelIndex levelStart,
+                                            uint32_t levelCount,
+                                            uint32_t layerStart,
+                                            uint32_t layerCount);
+
+    void resetSubresourcesWrittenSinceBarrier()
+    {
+        for (auto &bitArray : mSubresourcesWrittenSinceBarrier)
+        {
+            bitArray.reset();
+        }
+    }
+
     // If the image has emulated channels, we clear them once so as not to leave garbage on those
     // channels.
     VkColorComponentFlags getEmulatedChannelsMask() const;
@@ -2895,6 +2917,20 @@ class ImageHelper final : public Resource, public angle::Subject
     // Only used for swapChain images. This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is released.
     Semaphore mAcquireNextImageSemaphore;
+
+    // For each level, upload layers that don't conflict in parallel.  The layer is hashed to
+    // `layer % 64` and used to track whether that subresource is currently in transfer.  If so, a
+    // barrier is inserted.  If mLayerCount > 64, there will be a few unnecessary barriers.
+    //
+    // Note: when a barrier is necessary when uploading updates to a level, we could instead move to
+    // the next level and continue uploads in parallel.  Once all levels need a barrier, a single
+    // barrier can be issued and we could continue with the rest of the updates from the first
+    // level.
+    static constexpr uint32_t kMaxParallelSubresourceUpload = 64;
+
+    // Used to track subresource updates per level. This can help parallelize updates performed to
+    // different levels or layers of the image.
+    gl::TexLevelArray<std::bitset<kMaxParallelSubresourceUpload>> mSubresourcesWrittenSinceBarrier;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
