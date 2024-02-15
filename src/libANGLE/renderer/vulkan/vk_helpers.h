@@ -2315,9 +2315,27 @@ class ImageHelper final : public Resource, public angle::Subject
     bool removeStagedClearUpdatesAndReturnColor(gl::LevelIndex levelGL,
                                                 const VkClearColorValue **color);
 
+    void clearPerLevelUpdateFlags()
+    {
+        for (auto &bitArray : mPerLevelSubresourceUpdateFlag)
+        {
+            bitArray.reset();
+        }
+    }
+    void setPerLevelUpdateFlags()
+    {
+        for (auto &bitArray : mPerLevelSubresourceUpdateFlag)
+        {
+            bitArray.set();
+        }
+    }
+
     void recordWriteBarrier(Context *context,
                             VkImageAspectFlags aspectMask,
                             ImageLayout newLayout,
+                            gl::LevelIndex level,
+                            uint32_t layerStart,
+                            uint32_t layerCount,
                             OutsideRenderPassCommandBufferHelper *commands);
 
     void recordWriteBarrierOneOff(Context *context,
@@ -2331,6 +2349,10 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // This function can be used to prevent issuing redundant layout transition commands.
     bool isReadBarrierNecessary(ImageLayout newLayout) const;
+    bool isWriteBarrierNecessary(ImageLayout newLayout,
+                                 gl::LevelIndex level,
+                                 uint32_t layerStart,
+                                 uint32_t layerCount);
 
     void recordReadBarrier(Context *context,
                            VkImageAspectFlags aspectMask,
@@ -2887,6 +2909,14 @@ class ImageHelper final : public Resource, public angle::Subject
     // Only used for swapChain images. This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is released.
     Semaphore mAcquireNextImageSemaphore;
+
+    // Used to track subresource updates per level. This can help parallelize updates performed to
+    // different levels or layers of the image.
+    static constexpr size_t kMaxTrackedLevels = 16;
+
+    // TODO: Array size should be MaxMipLevelCount?
+    // TODO: Replace 64 with kMaxContentDefinedLayerCount? Or use another existing value?
+    std::array<std::bitset<64>, kMaxTrackedLevels> mPerLevelSubresourceUpdateFlag;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const

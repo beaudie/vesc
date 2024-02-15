@@ -8507,9 +8507,11 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
     {
         ASSERT(!isRenderPassStartedAndUsesImage(*imageWrite.access.image));
 
-        imageWrite.access.image->recordWriteBarrier(this, imageWrite.access.aspectFlags,
-                                                    imageWrite.access.imageLayout,
-                                                    mOutsideRenderPassCommands);
+        // TODO: Pass in levelCount as well?
+        imageWrite.access.image->recordWriteBarrier(
+            this, imageWrite.access.aspectFlags, imageWrite.access.imageLayout,
+            imageWrite.levelStart, imageWrite.layerStart, imageWrite.layerCount,
+            mOutsideRenderPassCommands);
         mOutsideRenderPassCommands->retainResource(imageWrite.access.image);
         imageWrite.access.image->onWrite(imageWrite.levelStart, imageWrite.levelCount,
                                          imageWrite.layerStart, imageWrite.layerCount,
