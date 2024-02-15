@@ -51,6 +51,14 @@ constexpr VkPipelineStageFlags kSwapchainAcquireImageWaitStageFlags =
     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |  // First use is a draw command.
     VK_PIPELINE_STAGE_TRANSFER_BIT;                  // First use is a clear without scissor.
 
+// For each level, write  layers that don't conflict in parallel.  The layer is hashed to
+// `layer % kMaxParallelLayerWrites` and used to track whether that subresource is currently
+// being written.  If so, a barrier is inserted; otherwise, the barrier is avoided.  If the updated
+// layer count is greater than kMaxParallelLayerWrites, there will be a few unnecessary
+// barriers.
+constexpr uint32_t kMaxParallelLayerWrites = 64;
+using ImageLayerWriteMask                  = std::bitset<kMaxParallelLayerWrites>;
+
 using StagingBufferOffsetArray = std::array<VkDeviceSize, 2>;
 
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
@@ -2317,6 +2325,10 @@ class ImageHelper final : public Resource, public angle::Subject
     void recordWriteBarrier(Context *context,
                             VkImageAspectFlags aspectMask,
                             ImageLayout newLayout,
+                            gl::LevelIndex levelStart,
+                            uint32_t levelCount,
+                            uint32_t layerStart,
+                            uint32_t layerCount,
                             OutsideRenderPassCommandBufferHelper *commands);
 
     void recordWriteBarrierOneOff(Context *context,
@@ -2330,6 +2342,11 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // This function can be used to prevent issuing redundant layout transition commands.
     bool isReadBarrierNecessary(ImageLayout newLayout) const;
+    bool isWriteBarrierNecessary(ImageLayout newLayout,
+                                 gl::LevelIndex levelStart,
+                                 uint32_t levelCount,
+                                 uint32_t layerStart,
+                                 uint32_t layerCount) const;
 
     void recordReadBarrier(Context *context,
                            VkImageAspectFlags aspectMask,
@@ -2648,6 +2665,13 @@ class ImageHelper final : public Resource, public angle::Subject
                      CommandBufferT *commandBuffer,
                      VkSemaphore *acquireNextImageSemaphoreOut);
 
+    void setSubresourcesWrittenSinceBarrier(gl::LevelIndex levelStart,
+                                            uint32_t levelCount,
+                                            uint32_t layerStart,
+                                            uint32_t layerCount);
+
+    void resetSubresourcesWrittenSinceBarrier();
+
     // If the image has emulated channels, we clear them once so as not to leave garbage on those
     // channels.
     VkColorComponentFlags getEmulatedChannelsMask() const;
@@ -2906,6 +2930,11 @@ class ImageHelper final : public Resource, public angle::Subject
     // Only used for swapChain images. This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is released.
     Semaphore mAcquireNextImageSemaphore;
+
+    // Used to track subresource writes per level/layer. This can help parallelize writes to
+    // different levels or layers of the image, such as data uploads.
+    // See comment on kMaxParallelLayerWrites.
+    gl::TexLevelArray<ImageLayerWriteMask> mSubresourcesWrittenSinceBarrier;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
