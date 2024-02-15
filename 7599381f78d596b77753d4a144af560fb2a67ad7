@@ -88,6 +88,24 @@
       "parentUuid": "f19523bc_f23847bb",
       "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5263f532_76f8d3ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-15T20:47:57Z",
+      "side": 1,
+      "message": "Right, that is exactly what I am suggesting in C) as well.\n\nThe other idea is that you do something similar to isEligibleForMutableTextureFlush() logic. Right now we always prefer immediate flush if image already allocated. You could change it to always prefer staged (even for immutable texture), and then you issue the flush when there is a texture switch. That might be a even simpler change, and will work out better since there will be only one flush call per texture.",
+      "parentUuid": "7ab84457_c312bdb1",
+      "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
