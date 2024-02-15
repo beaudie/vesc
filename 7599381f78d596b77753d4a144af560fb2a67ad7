@@ -52,6 +52,24 @@
       "parentUuid": "77f05ae3_72725660",
       "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de318d51_77a8ba9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-15T20:35:52Z",
+      "side": 1,
+      "message": "Looks like your next CL doing something similar. But I think the change can be much simpler like what I showed in my experimental CL.",
+      "parentUuid": "f19523bc_f23847bb",
+      "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
