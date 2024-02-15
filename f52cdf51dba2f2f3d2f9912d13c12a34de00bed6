@@ -63,6 +63,30 @@
       },
       "revId": "f52cdf51dba2f2f3d2f9912d13c12a34de00bed6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69807777_078b80c1",
+        "filename": "src/common/platform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T17:48:53Z",
+      "side": 1,
+      "message": "By the way, I did verify that gcc (and clang) both don\u0027t define __SSE__ at all for 32-bit (with `-m32`) with this command: https://stackoverflow.com/a/28939692, so having this `#if` seems reasonable.",
+      "parentUuid": "9749979e_e212529e",
+      "range": {
+        "startLine": 116,
+        "startChar": 5,
+        "endLine": 116,
+        "endChar": 26
+      },
+      "revId": "f52cdf51dba2f2f3d2f9912d13c12a34de00bed6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
