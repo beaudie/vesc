@@ -16,6 +16,29 @@
       "message": "Verified locally that build on Linux, Linux x86, windows and mac all still have SSE enabled.\n\nAlso found out that Android does not use SSE instructions apparently (regardless of this CL), which may be a separate thing to look into.",
       "revId": "f52cdf51dba2f2f3d2f9912d13c12a34de00bed6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a37fa40_e15635e7",
+        "filename": "src/common/platform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-15T15:27:54Z",
+      "side": 1,
+      "message": "I\u0027m guessing this include should also be conditional on sse? Might be cleaner to add `__SSE__` to the line above. I\u0027m also curious if this is actually what they\u0027re trying to do: https://anglebug.com/8536#c3",
+      "range": {
+        "startLine": 116,
+        "startChar": 5,
+        "endLine": 116,
+        "endChar": 26
+      },
+      "revId": "f52cdf51dba2f2f3d2f9912d13c12a34de00bed6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
