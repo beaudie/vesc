@@ -106,6 +106,24 @@
       "parentUuid": "7ab84457_c312bdb1",
       "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fb89c7e_6238949e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T20:59:14Z",
+      "side": 1,
+      "message": "\u003e The other idea is that you do something similar to isEligibleForMutableTextureFlush() logic\n\nI like the ability to optimize barriers away generally, I had wanted to do that for years, but I agree a lot of places where it might help are probably very rare (like blit after blit to different layers, which might happen in some VR apps). So a stop-gap measure like that is fine too. Let\u0027s see how the generic one turns out, and if it turns into a mess we can go down this route?\n\nThe way I imagine it done feels relatively straightforward TBH.",
+      "parentUuid": "5263f532_76f8d3ce",
+      "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
