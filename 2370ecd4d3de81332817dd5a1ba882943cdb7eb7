@@ -33,6 +33,46 @@
       "message": "ping, assumed this had gotten buried in your notifications",
       "revId": "2370ecd4d3de81332817dd5a1ba882943cdb7eb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8548d299_49a1db75",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T20:50:40Z",
+      "side": 1,
+      "message": "Similar to elsewhere we have something like this:\n\n```suggestion\n    static std::atomic\u003cuint32_t\u003e sContextIndex(0);\n```",
+      "revId": "2370ecd4d3de81332817dd5a1ba882943cdb7eb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0f32a51_01b77571",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T20:50:40Z",
+      "side": 1,
+      "message": "```suggestion\n    filename +\u003d std::to_string(sContextIndex.fetch_add(1));\n```",
+      "range": {
+        "startLine": 693,
+        "startChar": 31,
+        "endLine": 693,
+        "endChar": 40
+      },
+      "revId": "2370ecd4d3de81332817dd5a1ba882943cdb7eb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
