@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf020f43_35b62c5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-15T00:56:18Z",
+      "side": 1,
+      "message": "To make this change simpler, the switch-case-related changes can be split into a separate change.",
+      "revId": "b2c22e74db9b67ad5dcb8aa32b3df880ddf39c1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
