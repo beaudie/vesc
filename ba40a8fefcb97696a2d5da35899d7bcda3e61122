@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a6756ea_e8d2e261",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T20:25:54Z",
+      "side": 1,
+      "message": "Ah, ok I understand better now the whole thing about initializing an egl::Display.\n\nUltimately, it\u0027ll be best if EGL objects don\u0027t leak into the CL implementation. I realize that we didn\u0027t do a good job of making `RendererVk` independent of `DisplayVk`, but it\u0027ll probably not be too hard to make that separation.\n\nI understand the only thing you need from the display is `RendererVk`, right? I won\u0027t block this change over it, but at some point we should probably do something like this:\n\n- Make an abstraction for what RendererVk needs from DisplayVk\n- Make CLPlatform and CLPlatformVk initialize the same things as Display and DisplayVk to satisfy that abstraction\n- RendererVk could then use either DisplayVk or CLPlatformVk through that abstraction.\n\nI see a bunch of places in RendererVk where the used display is really used as a vk::Context, I suspect the abstraction would be rather small. It needs some init info (like egl attributes, but pre-processed so they are not _egl_ stuff), the blob cache (which doesn\u0027t exist for CL?), etc.\n\n---\n\nSomething to keep in mind. If you find the time to do that at some point, it\u0027d be greatly appreciated. Otherwise I might take it upon myself to clean things up (and accidentally break CL 😄)",
+      "revId": "ba40a8fefcb97696a2d5da35899d7bcda3e61122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
