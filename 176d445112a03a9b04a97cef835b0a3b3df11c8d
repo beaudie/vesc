@@ -125,6 +125,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4cdc9bf_d03b3678",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T14:54:48Z",
+      "side": 1,
+      "message": "Ah ok, no this is not invalid. See https://stackoverflow.com/a/19786755 or https://stackoverflow.com/q/13574421 for example.",
+      "parentUuid": "59681554_6acfdc32",
+      "range": {
+        "startLine": 185,
+        "startChar": 65,
+        "endLine": 185,
+        "endChar": 70
+      },
+      "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b9392b81_1e4904ae",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 16
