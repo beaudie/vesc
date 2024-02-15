@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47427c50_ec559501",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T19:11:39Z",
+      "side": 1,
+      "message": "We don\u0027t currently track failing tests, where lifting a test suppression would be an indication of what test the change fixes. Until then, if a change fixes a test, it would be great to add a `Test:` tag here.\n\n(see other comment as to why this would have been useful)",
+      "revId": "1b3dcb345b54d7fd1a78ddcb07a05c20a4555761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2c75fb5_b434c948",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T19:11:39Z",
+      "side": 1,
+      "message": "Is this fixing any tests?\n\nLooking at the header:\n\n```\ntypedef struct _cl_command_queue *  cl_command_queue;\ntypedef struct _cl_mem *            cl_mem;\n...\ntypedef struct _cl_sampler *        cl_sampler;\n```\n\nit looks like `sizeof(cl_mem)`, `sizeof(cl_sampler)` and `sizeof(cl_command_queue)` are all equal.  So it looks like the original code was _correct_ (if not obvious). If that\u0027s true, you could have also made things better here with a simple `static_assert` that ensures the sizes are the same.\n\nEither way, I\u0027m not opposing this change, just thinking out loud.",
+      "revId": "1b3dcb345b54d7fd1a78ddcb07a05c20a4555761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
