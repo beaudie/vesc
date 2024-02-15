@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44d268db_ed1a8ac3",
+        "filename": "src/libANGLE/CLEvent.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-15T23:03:06Z",
+      "side": 1,
+      "message": "I would wrap this in {}\u0027s",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 52
+      },
+      "revId": "667fbf187bdf0dd3303c60a69067b3ea2a559521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
