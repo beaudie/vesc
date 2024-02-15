@@ -101,6 +101,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59681554_6acfdc32",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-15T14:00:51Z",
+      "side": 1,
+      "message": "\u003e any reason for the change?\n\nmentioned it in the comment here -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5207462/16#message-ae2528179c95a4c296005c59ea6aa27a30b241ba\n\n\u003e it is possible that `vertexBindingDescriptionCount` is 0 in which case\n\u003e `GetNextArrayParameter` might end up dereferencing invalid memory (or nullptr)",
+      "parentUuid": "e9112dde_ef7fb33c",
+      "range": {
+        "startLine": 185,
+        "startChar": 65,
+        "endLine": 185,
+        "endChar": 70
+      },
+      "revId": "176d445112a03a9b04a97cef835b0a3b3df11c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b9392b81_1e4904ae",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 16
