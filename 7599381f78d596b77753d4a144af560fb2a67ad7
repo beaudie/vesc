@@ -70,6 +70,24 @@
       "parentUuid": "f19523bc_f23847bb",
       "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ab84457_c312bdb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T20:40:00Z",
+      "side": 1,
+      "message": "I talked with Amirali about this change. The crux of the issue is that we always assume write-after-write needs a barrier, but that\u0027s not true if the writes are to different parts of the image.\n\nIn `ImageHelper::flushStagedUpdates`, there is an optimization that avoids unnecessary WaW barriers, which as you found out by looking at the next change, I suggested Amirali hoists it up from that function so that WaW barriers can be avoided between any two commands when unnecessary.\n\nWith that optimization, you won\u0027t even need a memory barrier between the texture uploads; the problem really wasn\u0027t the memory barrier (the driver already sees the layouts are the same and turns it into a memory barrier). The problem is the _execution_ barrier that comes with it.\n\nAmirali, maybe set these changes to WIP to make it clear they are being reworked and aren\u0027t meant to be reviewed?",
+      "parentUuid": "f19523bc_f23847bb",
+      "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
