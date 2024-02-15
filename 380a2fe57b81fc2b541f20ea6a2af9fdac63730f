@@ -135,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65c251dc_03c1174d",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-15T17:57:12Z",
+      "side": 1,
+      "message": "That does help, thanks, along with the logged error message.",
+      "parentUuid": "3c8bd514_b63141dd",
+      "range": {
+        "startLine": 529,
+        "startChar": 13,
+        "endLine": 529,
+        "endChar": 83
+      },
+      "revId": "380a2fe57b81fc2b541f20ea6a2af9fdac63730f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a0d0b00_cc919ec5",
