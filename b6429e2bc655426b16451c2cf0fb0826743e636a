@@ -52,6 +52,24 @@
       "parentUuid": "d7275214_69fde6ba",
       "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c787a12_97312add",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-15T20:51:57Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org FYI, I think this illustrates the idea what you and me are referring to. Amirali, you can take over this CL if you want.",
+      "parentUuid": "4e24a956_c3b48914",
+      "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
