@@ -16,6 +16,23 @@
       "message": "PTAL - trivial change",
       "revId": "2370ecd4d3de81332817dd5a1ba882943cdb7eb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d09affc_55cf1c75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-15T19:07:11Z",
+      "side": 1,
+      "message": "ping, assumed this had gotten buried in your notifications",
+      "revId": "2370ecd4d3de81332817dd5a1ba882943cdb7eb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
