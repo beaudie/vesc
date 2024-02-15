@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf6434b2_b66da88c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-02-15T11:29:14Z",
+      "side": 1,
+      "message": "Geoff, looks like this causes merge conflicts rolling into AOSP and would need to be rolled manually.\nhttps://groups.google.com/a/google.com/g/angle-bots/c/wLfrZR-HmeE/m/S45yUqf2AQAJ",
+      "revId": "e8a3493f80a5d661e9c530c59cdf6d77309db8f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
