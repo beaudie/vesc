@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b03cf65_faa93bbe",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T20:32:39Z",
+      "side": 1,
+      "message": "Please pull what you need out of `ShareGroupVk` into a different header (maybe `vk_cache_utils.h`). That\u0027s a GL header which should ideally not be included in CL files.",
+      "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "604618a7_9ef49342",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T20:32:39Z",
+      "side": 1,
+      "message": "nit: please either don\u0027t leave TODOs in the code, or associate with an issue.\n\nAs to the question itself, once we make RendererVk independent of DisplayVk, we can always have CL set the right parameters and tweak RendererVk\u0027s behavior.",
+      "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac6199e_b79566d1",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T20:32:39Z",
+      "side": 1,
+      "message": "Perfectly fine to use these of course, but do not hesitate to create a new command buffer helper in the future for CL if it helps it become more efficient. Parts of the helper deals with GL\u0027s implicit synchronization which may or may not apply to CL.",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 76
+      },
+      "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
