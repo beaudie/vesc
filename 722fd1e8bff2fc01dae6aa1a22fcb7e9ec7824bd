@@ -16,6 +16,23 @@
       "message": "thanks, will land if bots are happy",
       "revId": "722fd1e8bff2fc01dae6aa1a22fcb7e9ec7824bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "355b465e_9ae582ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-15T19:09:11Z",
+      "side": 1,
+      "message": "PTAL - looks like it remove your votes since i added new file",
+      "revId": "722fd1e8bff2fc01dae6aa1a22fcb7e9ec7824bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
