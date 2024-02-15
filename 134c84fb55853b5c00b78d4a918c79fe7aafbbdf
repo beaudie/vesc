@@ -50,6 +50,24 @@
       "message": "Is this test case sufficient to also cover the case of rendering to a texture bound to a Metal texture slice? I think so - blit acts much like a draw - only asking.",
       "revId": "134c84fb55853b5c00b78d4a918c79fe7aafbbdf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81fd6e2c_69703648",
+        "filename": "src/tests/gl_tests/ImageTestMetal.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-15T07:23:55Z",
+      "side": 1,
+      "message": "Given enough optimizations, I expect every distinct scenario having possibility of distinct bugs. Blit-to and draw-to could have distinct bugs.\n\nThe original MTLTexture as EGLImage went in without any kind of draw-to tests. This one at least had blit-to.\n\nCurrently we\u0027re interested in blit-to, and that\u0027s why that was on Dan\u0027s mind to be tested.\n\nThis is of course a bit sloppy thinking, added the tests.",
+      "parentUuid": "6fdf5af8_d35f2ac0",
+      "revId": "134c84fb55853b5c00b78d4a918c79fe7aafbbdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
