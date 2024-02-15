@@ -70,6 +70,24 @@
       "parentUuid": "4e24a956_c3b48914",
       "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3113bb89_2717500a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-15T20:55:19Z",
+      "side": 1,
+      "message": "The change I\u0027ve been working on with Amirali is a bit more generic. It doesn\u0027t special case transfers, and just generally answers the question \"do we need a WaW barrier?\". Then the logic to skip the barrier becomes simpler.\n\nBut yes the idea is similar. In this CL, you are using the contents-defined bits to tell if a barrier is needed, in the other change we can use the \"has this subresource been written to\" bits to the same effect for that app.",
+      "parentUuid": "0c787a12_97312add",
+      "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
