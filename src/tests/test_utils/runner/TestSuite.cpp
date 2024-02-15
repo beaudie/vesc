@@ -21,16 +21,16 @@
 #include <unordered_map>
 
 #include <gtest/gtest.h>
-#include <rapidjson/document.h>
+/*#include <rapidjson/document.h>
 #include <rapidjson/filewritestream.h>
 #include <rapidjson/istreamwrapper.h>
-#include <rapidjson/prettywriter.h>
+#include <rapidjson/prettywriter.h>*/
 
 // We directly call into a function to register the parameterized tests. This saves spinning up
 // a subprocess with a new gtest filter.
 #include <gtest/../../src/gtest-internal-inl.h>
 
-namespace js = rapidjson;
+//namespace js = rapidjson;
 
 namespace angle
 {
@@ -94,36 +94,36 @@ const char *ResultTypeToString(TestResultType type)
     }
 }
 
-TestResultType GetResultTypeFromString(const std::string &str)
-{
-    if (str == "CRASH")
-        return TestResultType::Crash;
-    if (str == "FAIL")
-        return TestResultType::Fail;
-    if (str == "PASS")
-        return TestResultType::Pass;
-    if (str == "NOTRUN")
-        return TestResultType::NoResult;
-    if (str == "SKIP")
-        return TestResultType::Skip;
-    if (str == "TIMEOUT")
-        return TestResultType::Timeout;
-    return TestResultType::Unknown;
-}
+// TestResultType GetResultTypeFromString(const std::string &str)
+// {
+//     if (str == "CRASH")
+//         return TestResultType::Crash;
+//     if (str == "FAIL")
+//         return TestResultType::Fail;
+//     if (str == "PASS")
+//         return TestResultType::Pass;
+//     if (str == "NOTRUN")
+//         return TestResultType::NoResult;
+//     if (str == "SKIP")
+//         return TestResultType::Skip;
+//     if (str == "TIMEOUT")
+//         return TestResultType::Timeout;
+//     return TestResultType::Unknown;
+// }
 
 bool IsFailedResult(TestResultType resultType)
 {
     return resultType != TestResultType::Pass && resultType != TestResultType::Skip;
 }
 
-js::Value ResultTypeToJSString(TestResultType type, js::Document::AllocatorType *allocator)
+/*js::Value ResultTypeToJSString(TestResultType type, js::Document::AllocatorType *allocator)
 {
     js::Value jsName;
     jsName.SetString(ResultTypeToString(type), *allocator);
     return jsName;
-}
+}*/
 
-bool WriteJsonFile(const std::string &outputFile, js::Document *doc)
+/*bool WriteJsonFile(const std::string &outputFile, js::Document *doc)
 {
     FILE *fp = fopen(outputFile.c_str(), "w");
     if (!fp)
@@ -142,156 +142,156 @@ bool WriteJsonFile(const std::string &outputFile, js::Document *doc)
     }
     fclose(fp);
     return true;
-}
+}*/
 
 // Writes out a TestResults to the Chromium JSON Test Results format.
 // https://chromium.googlesource.com/chromium/src.git/+/main/docs/testing/json_test_results_format.md
-void WriteResultsFile(bool interrupted,
-                      const TestResults &testResults,
-                      const std::string &outputFile)
-{
-    time_t ltime;
-    time(&ltime);
-    struct tm *timeinfo = gmtime(&ltime);
-    ltime               = mktime(timeinfo);
+// void WriteResultsFile(bool interrupted,
+//                       const TestResults &testResults,
+//                       const std::string &outputFile)
+// {
+//     time_t ltime;
+//     time(&ltime);
+//     struct tm *timeinfo = gmtime(&ltime);
+//     ltime               = mktime(timeinfo);
 
-    uint64_t secondsSinceEpoch = static_cast<uint64_t>(ltime);
+//     uint64_t secondsSinceEpoch = static_cast<uint64_t>(ltime);
 
-    js::Document doc;
-    doc.SetObject();
+//     js::Document doc;
+//     doc.SetObject();
 
-    js::Document::AllocatorType &allocator = doc.GetAllocator();
+//     js::Document::AllocatorType &allocator = doc.GetAllocator();
 
-    doc.AddMember("interrupted", interrupted, allocator);
-    doc.AddMember("path_delimiter", ".", allocator);
-    doc.AddMember("version", 3, allocator);
-    doc.AddMember("seconds_since_epoch", secondsSinceEpoch, allocator);
+//     doc.AddMember("interrupted", interrupted, allocator);
+//     doc.AddMember("path_delimiter", ".", allocator);
+//     doc.AddMember("version", 3, allocator);
+//     doc.AddMember("seconds_since_epoch", secondsSinceEpoch, allocator);
 
-    js::Value tests;
-    tests.SetObject();
+//     js::Value tests;
+//     tests.SetObject();
 
-    // If we have any test artifacts, make a fake test to house them.
-    if (!testResults.testArtifactPaths.empty())
-    {
-        js::Value artifactsTest;
-        artifactsTest.SetObject();
+//     // If we have any test artifacts, make a fake test to house them.
+//     if (!testResults.testArtifactPaths.empty())
+//     {
+//         js::Value artifactsTest;
+//         artifactsTest.SetObject();
 
-        artifactsTest.AddMember("actual", "PASS", allocator);
-        artifactsTest.AddMember("expected", "PASS", allocator);
+//         artifactsTest.AddMember("actual", "PASS", allocator);
+//         artifactsTest.AddMember("expected", "PASS", allocator);
 
-        js::Value artifacts;
-        artifacts.SetObject();
+//         js::Value artifacts;
+//         artifacts.SetObject();
 
-        for (const std::string &testArtifactPath : testResults.testArtifactPaths)
-        {
-            std::vector<std::string> pieces =
-                SplitString(testArtifactPath, "/\\", WhitespaceHandling::TRIM_WHITESPACE,
-                            SplitResult::SPLIT_WANT_NONEMPTY);
-            ASSERT(!pieces.empty());
+//         for (const std::string &testArtifactPath : testResults.testArtifactPaths)
+//         {
+//             std::vector<std::string> pieces =
+//                 SplitString(testArtifactPath, "/\\", WhitespaceHandling::TRIM_WHITESPACE,
+//                             SplitResult::SPLIT_WANT_NONEMPTY);
+//             ASSERT(!pieces.empty());
 
-            js::Value basename;
-            basename.SetString(pieces.back(), allocator);
+//             js::Value basename;
+//             basename.SetString(pieces.back(), allocator);
 
-            js::Value artifactPath;
-            artifactPath.SetString(testArtifactPath, allocator);
+//             js::Value artifactPath;
+//             artifactPath.SetString(testArtifactPath, allocator);
 
-            js::Value artifactArray;
-            artifactArray.SetArray();
-            artifactArray.PushBack(artifactPath, allocator);
+//             js::Value artifactArray;
+//             artifactArray.SetArray();
+//             artifactArray.PushBack(artifactPath, allocator);
 
-            artifacts.AddMember(basename, artifactArray, allocator);
-        }
+//             artifacts.AddMember(basename, artifactArray, allocator);
+//         }
 
-        artifactsTest.AddMember("artifacts", artifacts, allocator);
+//         artifactsTest.AddMember("artifacts", artifacts, allocator);
 
-        js::Value fakeTestName;
-        fakeTestName.SetString(testResults.testArtifactsFakeTestName, allocator);
-        tests.AddMember(fakeTestName, artifactsTest, allocator);
-    }
+//         js::Value fakeTestName;
+//         fakeTestName.SetString(testResults.testArtifactsFakeTestName, allocator);
+//         tests.AddMember(fakeTestName, artifactsTest, allocator);
+//     }
 
-    std::map<TestResultType, uint32_t> counts;
+//     std::map<TestResultType, uint32_t> counts;
 
-    for (const auto &resultIter : testResults.results)
-    {
-        const TestIdentifier &id = resultIter.first;
-        const TestResult &result = resultIter.second;
+//     for (const auto &resultIter : testResults.results)
+//     {
+//         const TestIdentifier &id = resultIter.first;
+//         const TestResult &result = resultIter.second;
 
-        js::Value jsResult;
-        jsResult.SetObject();
+//         js::Value jsResult;
+//         jsResult.SetObject();
 
-        counts[result.type]++;
+//         counts[result.type]++;
 
-        std::string actualResult;
-        for (uint32_t fail = 0; fail < result.flakyFailures; ++fail)
-        {
-            actualResult += "FAIL ";
-        }
+//         std::string actualResult;
+//         for (uint32_t fail = 0; fail < result.flakyFailures; ++fail)
+//         {
+//             actualResult += "FAIL ";
+//         }
 
-        actualResult += ResultTypeToString(result.type);
+//         actualResult += ResultTypeToString(result.type);
 
-        std::string expectedResult = "PASS";
-        if (result.type == TestResultType::Skip)
-        {
-            expectedResult = "SKIP";
-        }
+//         std::string expectedResult = "PASS";
+//         if (result.type == TestResultType::Skip)
+//         {
+//             expectedResult = "SKIP";
+//         }
 
-        // Handle flaky passing tests.
-        if (result.flakyFailures > 0 && result.type == TestResultType::Pass)
-        {
-            expectedResult = "FAIL PASS";
-            jsResult.AddMember("is_flaky", true, allocator);
-        }
+//         // Handle flaky passing tests.
+//         if (result.flakyFailures > 0 && result.type == TestResultType::Pass)
+//         {
+//             expectedResult = "FAIL PASS";
+//             jsResult.AddMember("is_flaky", true, allocator);
+//         }
 
-        jsResult.AddMember("actual", actualResult, allocator);
-        jsResult.AddMember("expected", expectedResult, allocator);
+//         jsResult.AddMember("actual", actualResult, allocator);
+//         jsResult.AddMember("expected", expectedResult, allocator);
 
-        if (IsFailedResult(result.type))
-        {
-            jsResult.AddMember("is_unexpected", true, allocator);
-        }
+//         if (IsFailedResult(result.type))
+//         {
+//             jsResult.AddMember("is_unexpected", true, allocator);
+//         }
 
-        js::Value times;
-        times.SetArray();
-        for (double elapsedTimeSeconds : result.elapsedTimeSeconds)
-        {
-            times.PushBack(elapsedTimeSeconds, allocator);
-        }
+//         js::Value times;
+//         times.SetArray();
+//         for (double elapsedTimeSeconds : result.elapsedTimeSeconds)
+//         {
+//             times.PushBack(elapsedTimeSeconds, allocator);
+//         }
 
-        jsResult.AddMember("times", times, allocator);
+//         jsResult.AddMember("times", times, allocator);
 
-        char testName[500];
-        id.snprintfName(testName, sizeof(testName));
-        js::Value jsName;
-        jsName.SetString(testName, allocator);
+//         char testName[500];
+//         id.snprintfName(testName, sizeof(testName));
+//         js::Value jsName;
+//         jsName.SetString(testName, allocator);
 
-        tests.AddMember(jsName, jsResult, allocator);
-    }
+//         tests.AddMember(jsName, jsResult, allocator);
+//     }
 
-    js::Value numFailuresByType;
-    numFailuresByType.SetObject();
+//     js::Value numFailuresByType;
+//     numFailuresByType.SetObject();
 
-    for (const auto &countIter : counts)
-    {
-        TestResultType type = countIter.first;
-        uint32_t count      = countIter.second;
+//     for (const auto &countIter : counts)
+//     {
+//         TestResultType type = countIter.first;
+//         uint32_t count      = countIter.second;
 
-        js::Value jsCount(count);
-        numFailuresByType.AddMember(ResultTypeToJSString(type, &allocator), jsCount, allocator);
-    }
+//         js::Value jsCount(count);
+//         numFailuresByType.AddMember(ResultTypeToJSString(type, &allocator), jsCount, allocator);
+//     }
 
-    doc.AddMember("num_failures_by_type", numFailuresByType, allocator);
+//     doc.AddMember("num_failures_by_type", numFailuresByType, allocator);
 
-    doc.AddMember("tests", tests, allocator);
+//     doc.AddMember("tests", tests, allocator);
 
-    printf("Writing test results to %s\n", outputFile.c_str());
+//     printf("Writing test results to %s\n", outputFile.c_str());
 
-    if (!WriteJsonFile(outputFile, &doc))
-    {
-        printf("Error writing test results file.\n");
-    }
-}
+//     /*if (!WriteJsonFile(outputFile, &doc))
+//     {
+//         printf("Error writing test results file.\n");
+//     }*/
+// }
 
-void WriteHistogramJson(const HistogramWriter &histogramWriter, const std::string &outputFile)
+/*void WriteHistogramJson(const HistogramWriter &histogramWriter, const std::string &outputFile)
 {
     js::Document doc;
     doc.SetArray();
@@ -304,7 +304,7 @@ void WriteHistogramJson(const HistogramWriter &histogramWriter, const std::strin
     {
         printf("Error writing histogram json file.\n");
     }
-}
+}*/
 
 void UpdateCurrentTestResult(const testing::TestResult &resultIn, TestResults *resultsOut)
 {
@@ -415,7 +415,7 @@ std::string GetTestFilter(const std::vector<TestIdentifier> &tests)
     return filterStream.str();
 }
 
-bool GetTestArtifactsFromJSON(const js::Value::ConstObject &obj,
+/*bool GetTestArtifactsFromJSON(const js::Value::ConstObject &obj,
                               std::vector<std::string> *testArtifactPathsOut)
 {
     if (!obj.HasMember("artifacts"))
@@ -459,9 +459,9 @@ bool GetTestArtifactsFromJSON(const js::Value::ConstObject &obj,
     }
 
     return true;
-}
+}*/
 
-bool GetSingleTestResultFromJSON(const js::Value &name,
+/*bool GetSingleTestResultFromJSON(const js::Value &name,
                                  const js::Value::ConstObject &obj,
                                  TestResults *resultsOut)
 {
@@ -550,9 +550,9 @@ bool GetSingleTestResultFromJSON(const js::Value &name,
     result.type               = resultType;
     result.flakyFailures      = flakyFailures;
     return true;
-}
+}*/
 
-bool GetTestResultsFromJSON(const js::Document &document, TestResults *resultsOut)
+/*bool GetTestResultsFromJSON(const js::Document &document, TestResults *resultsOut)
 {
     if (!document.HasMember("tests") || !document["tests"].IsObject())
     {
@@ -598,7 +598,7 @@ bool GetTestResultsFromJSON(const js::Document &document, TestResults *resultsOu
     }
 
     return true;
-}
+}*/
 
 bool MergeTestResults(TestResults *input, TestResults *output, int flakyRetries)
 {
@@ -1299,7 +1299,7 @@ bool TestSuite::parseSingleArg(int *argc, char **argv, int argIndex)
            ParseStringArg(kResultFileArg, argc, argv, argIndex, &mResultsFile) ||
            ParseStringArg("--isolated-script-test-output", argc, argv, argIndex, &mResultsFile) ||
            ParseStringArg(kFilterFileArg, argc, argv, argIndex, &mFilterFile) ||
-           ParseStringArg("--histogram-json-file", argc, argv, argIndex, &mHistogramJsonFile) ||
+           //ParseStringArg("--histogram-json-file", argc, argv, argIndex, &mHistogramJsonFile) ||
            // We need these overloads to work around technical debt in the Android test runner.
            ParseStringArg("--isolated-script-test-perf-output", argc, argv, argIndex,
                           &mHistogramJsonFile) ||
@@ -1861,13 +1861,13 @@ void TestSuite::startWatchdog()
     mWatchdogThread = std::thread(watchdogMain);
 }
 
-void TestSuite::addHistogramSample(const std::string &measurement,
+/*void TestSuite::addHistogramSample(const std::string &measurement,
                                    const std::string &story,
                                    double value,
                                    const std::string &units)
 {
     mHistogramWriter.addSample(measurement, story, value, units);
-}
+}*/
 
 bool TestSuite::hasTestArtifactsDirectory() const
 {
@@ -1888,33 +1888,33 @@ std::string TestSuite::reserveTestArtifactPath(const std::string &artifactName)
     return pathStream.str();
 }
 
-bool GetTestResultsFromFile(const char *fileName, TestResults *resultsOut)
-{
-    std::ifstream ifs(fileName);
-    if (!ifs.is_open())
-    {
-        std::cerr << "Error opening " << fileName << "\n";
-        return false;
-    }
+// bool GetTestResultsFromFile(const char *fileName, TestResults *resultsOut)
+// {
+//     std::ifstream ifs(fileName);
+//     if (!ifs.is_open())
+//     {
+//         std::cerr << "Error opening " << fileName << "\n";
+//         return false;
+//     }
 
-    js::IStreamWrapper ifsWrapper(ifs);
-    js::Document document;
-    document.ParseStream(ifsWrapper);
+//     js::IStreamWrapper ifsWrapper(ifs);
+//     js::Document document;
+//     document.ParseStream(ifsWrapper);
 
-    if (document.HasParseError())
-    {
-        std::cerr << "Parse error reading JSON document: " << document.GetParseError() << "\n";
-        return false;
-    }
+//     if (document.HasParseError())
+//     {
+//         std::cerr << "Parse error reading JSON document: " << document.GetParseError() << "\n";
+//         return false;
+//     }
 
-    if (!GetTestResultsFromJSON(document, resultsOut))
-    {
-        std::cerr << "Error getting test results from JSON.\n";
-        return false;
-    }
+//     /*if (!GetTestResultsFromJSON(document, resultsOut))
+//     {
+//         std::cerr << "Error getting test results from JSON.\n";
+//         return false;
+//     }*/
 
-    return true;
-}
+//     return true;
+// }
 
 void TestSuite::dumpTestExpectationsErrorMessages()
 {
@@ -1994,15 +1994,15 @@ int TestSuite::getSlowTestTimeout() const
 
 void TestSuite::writeOutputFiles(bool interrupted)
 {
-    if (!mResultsFile.empty())
+    /*if (!mResultsFile.empty())
     {
         WriteResultsFile(interrupted, mTestResults, mResultsFile);
-    }
+    }*/
 
-    if (!mHistogramJsonFile.empty())
+    /*if (!mHistogramJsonFile.empty())
     {
         WriteHistogramJson(mHistogramWriter, mHistogramJsonFile);
-    }
+    }*/
 
     mMetricWriter.close();
 }

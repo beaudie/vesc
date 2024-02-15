@@ -16,7 +16,7 @@
 #include <string>
 #include <thread>
 
-#include "HistogramWriter.h"
+//#include "HistogramWriter.h"
 #include "tests/test_expectations/GPUTestExpectationsParser.h"
 #include "util/test_utils.h"
 
@@ -155,10 +155,10 @@ class TestSuite
 
     int run();
     void onCrashOrTimeout(TestResultType crashOrTimeout);
-    void addHistogramSample(const std::string &measurement,
+    /*void addHistogramSample(const std::string &measurement,
                             const std::string &story,
                             double value,
-                            const std::string &units);
+                            const std::string &units);*/
 
     static TestSuite *GetInstance() { return mInstance; }
     static MetricWriter &GetMetricWriter() { return GetInstance()->mMetricWriter; }
@@ -230,7 +230,7 @@ class TestSuite
     std::map<TestIdentifier, FileLine> mTestFileLines;
     std::vector<ProcessInfo> mCurrentProcesses;
     std::thread mWatchdogThread;
-    HistogramWriter mHistogramWriter;
+    //HistogramWriter mHistogramWriter;
     MetricWriter mMetricWriter;
     std::string mTestArtifactDirectory;
     GPUTestExpectationsParser mTestExpectationsParser;

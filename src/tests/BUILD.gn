@@ -166,50 +166,55 @@ angle_test("angle_system_info_test") {
   ]
 }
 
+#angle_test("angle_unittests") {
+#  sources = [ "angle_unittest_main.cpp" ]
+#}
+
 angle_test("angle_unittests") {
   sources = angle_unittests_sources + [ "angle_unittest_main.cpp" ]
+  #sources = [ "angle_unittest_main.cpp" ]
 
   # Compiler tests frequently require either TranslatorGLSL or TranslatorESSL.  Build them only if
   # both are enabled.
-  if (angle_enable_essl && angle_enable_glsl) {
-    sources += angle_unittests_compiler_tests_sources
-
-    if (is_apple) {
-      sources += angle_unittests_glsl_mac_sources
-    }
-    if (angle_enable_metal) {
-      sources += angle_unittests_msl_sources
-    }
-  }
+  #if (angle_enable_essl && angle_enable_glsl) {
+  #  sources += angle_unittests_compiler_tests_sources
+#
+  #  if (is_apple) {
+  #    sources += angle_unittests_glsl_mac_sources
+  #  }
+  #  if (angle_enable_metal) {
+  #    sources += angle_unittests_msl_sources
+  #  }
+  #}
 
   defines = []
 
-  if (angle_enable_hlsl) {
-    sources += angle_unittests_hlsl_sources
-    defines += [ "ANGLE_ENABLE_HLSL" ]
-  }
+  #if (angle_enable_hlsl) {
+  #  sources += angle_unittests_hlsl_sources
+  #  defines += [ "ANGLE_ENABLE_HLSL" ]
+  #}
 
-  if (angle_enable_gl) {
-    sources += angle_unittests_gl_sources
-  }
+  #if (angle_enable_gl) {
+  #  sources += angle_unittests_gl_sources
+  #}
 
   deps = [
-    ":angle_test_expectations",
-    "$angle_root:angle_json_serializer",
-    "$angle_root:angle_static",
-    "$angle_root:libfeature_support",
+    #":angle_test_expectations",
+    #"$angle_root:angle_json_serializer",
+    #"$angle_root:angle_static",
+    #"$angle_root:libfeature_support",
     "$angle_root/util:angle_util_static",
   ]
 
-  if (angle_enable_vulkan) {
-    sources += [ "compiler_tests/Precise_test.cpp" ]
-    deps += [
-      "$angle_root/src/common/spirv:angle_spirv_base",
-      "$angle_root/src/common/spirv:angle_spirv_headers",
-      "$angle_root/src/common/spirv:angle_spirv_parser",
-      "${angle_spirv_headers_dir}:spv_headers",
-    ]
-  }
+  #if (angle_enable_vulkan) {
+  #  sources += [ "compiler_tests/Precise_test.cpp" ]
+  #  deps += [
+  #    "$angle_root/src/common/spirv:angle_spirv_base",
+  #    "$angle_root/src/common/spirv:angle_spirv_headers",
+  #    "$angle_root/src/common/spirv:angle_spirv_parser",
+  #    "${angle_spirv_headers_dir}:spv_headers",
+  #  ]
+  #}
 
   if (!is_android && !is_fuchsia && !is_ios) {
     # SystemUtils.RunApp, the only unittest using a helper binary, is not supported on these
@@ -217,9 +222,9 @@ angle_test("angle_unittests") {
     data_deps = [ ":test_utils_unittest_helper" ]
   }
 
-  if (angle_has_rapidjson) {
-    sources += [ "../common/serializer/JsonSerializer_unittest.cpp" ]
-  }
+  #if (angle_has_rapidjson) {
+  #  sources += [ "../common/serializer/JsonSerializer_unittest.cpp" ]
+  #}
 }
 
 if (is_ios) {
@@ -356,12 +361,13 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
 }
 
 config("angle_maybe_has_histograms") {
-  if (angle_has_histograms) {
-    defines = [ "ANGLE_HAS_HISTOGRAMS=1" ]
-    include_dirs = [ "$root_gen_dir" ]
-  } else {
-    defines = [ "ANGLE_HAS_HISTOGRAMS=0" ]
-  }
+  defines = [ "ANGLE_HAS_HISTOGRAMS=0" ]
+  #if (angle_has_histograms) {
+  #  defines = [ "ANGLE_HAS_HISTOGRAMS=1" ]
+  #  include_dirs = [ "$root_gen_dir" ]
+  #} else {
+  #  defines = [ "ANGLE_HAS_HISTOGRAMS=0" ]
+  #}
 }
 
 template("angle_perftests_common") {

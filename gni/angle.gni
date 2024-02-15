@@ -376,11 +376,15 @@ set_defaults("angle_static_library") {
 
 set_defaults("angle_test") {
   # Gtest itself can't pass all the strict warning filters.
+  #configs = angle_common_configs - [
+  #            "$angle_root:constructor_and_destructor_warnings",
+  #            "$angle_root:extra_warnings",
+  #          ] + [ "$angle_root/src/tests:angle_maybe_has_histograms" ] +
+  #          [ "$angle_root/src/tests:angle_enable_renderdoc" ]
   configs = angle_common_configs - [
               "$angle_root:constructor_and_destructor_warnings",
               "$angle_root:extra_warnings",
-            ] + [ "$angle_root/src/tests:angle_maybe_has_histograms" ] +
-            [ "$angle_root/src/tests:angle_enable_renderdoc" ]
+            ] + [ "$angle_root/src/tests:angle_maybe_has_histograms" ]
 
   public_configs = []
   public_deps = []
@@ -546,24 +550,24 @@ if (angle_standalone || build_with_chromium) {
       configs += invoker.configs
       configs -= invoker.suppressed_configs
 
-      if (is_apple) {
-        # If a "build with ARC" config is present, remove it.
-        if (filter_include(configs, [ "//build/config/compiler:enable_arc" ]) !=
-            []) {
-          configs -= [ "//build/config/compiler:enable_arc" ]
-        }
-      }
+      #if (is_apple) {
+      #  # If a "build with ARC" config is present, remove it.
+      #  if (filter_include(configs, [ "//build/config/compiler:enable_arc" ]) !=
+      #      []) {
+      #    configs -= [ "//build/config/compiler:enable_arc" ]
+      #  }
+      #}
 
-      if (is_ios) {
-        # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
-        check_includes = false
-      }
+      #if (is_ios) {
+      #  # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
+      #  check_includes = false
+      #}
 
       public_deps = invoker.public_deps + [
                       "$angle_root:angle_common",
                       "$angle_root:includes",
                       "$angle_root/src/tests:angle_test_expectations",
-                      "$angle_root/third_party/rapidjson:rapidjson",
+                      #"$angle_root/third_party/rapidjson:rapidjson",
                       "$angle_root/util:angle_test_utils",
                       "//testing/gmock",
                       "//testing/gtest",
@@ -580,40 +584,40 @@ if (angle_standalone || build_with_chromium) {
              ]
 
       sources += [
-        "$angle_root/src/tests/test_utils/runner/HistogramWriter.h",
+        #"$angle_root/src/tests/test_utils/runner/HistogramWriter.h",
         "$angle_root/src/tests/test_utils/runner/TestSuite.cpp",
         "$angle_root/src/tests/test_utils/runner/TestSuite.h",
       ]
 
-      if (angle_has_histograms) {
-        sources +=
-            [ "$angle_root/src/tests/test_utils/runner/HistogramWriter.cpp" ]
-        deps += [
-          "//third_party/catapult/tracing/tracing:histogram",
-          "//third_party/catapult/tracing/tracing:reserved_infos",
-        ]
-      }
+      #if (angle_has_histograms) {
+      #  sources +=
+      #      [ "$angle_root/src/tests/test_utils/runner/HistogramWriter.cpp" ]
+      #  deps += [
+      #    "//third_party/catapult/tracing/tracing:histogram",
+      #    "//third_party/catapult/tracing/tracing:reserved_infos",
+      #  ]
+      #}
 
-      if (is_mac) {
-        if (angle_enable_metal) {
-          # On macOS, compiling Metal shader sometimes takes very long time due to internal caching
-          # mechanism. This hooking library is a way to bypass this caching mechanism.
-          data_deps += [ "$angle_root/src/libANGLE/renderer/metal/file_hooking:metal_shader_cache_file_hooking" ]
-        }
-        if (angle_enable_cgl) {
-          configs += [ "$angle_root:supports_automatic_graphics_switching" ]
-        }
-      }
+      #if (is_mac) {
+      #  if (angle_enable_metal) {
+      #    # On macOS, compiling Metal shader sometimes takes very long time due to internal caching
+      #    # mechanism. This hooking library is a way to bypass this caching mechanism.
+      #    data_deps += [ "$angle_root/src/libANGLE/renderer/metal/file_hooking:metal_shader_cache_file_hooking" ]
+      #  }
+      #  if (angle_enable_cgl) {
+      #    configs += [ "$angle_root:supports_automatic_graphics_switching" ]
+      #  }
+      #}
 
-      if ((is_linux && !is_chromeos) ||
-          (build_with_chromium && is_chromeos_lacros && !is_chromeos_device)) {
-        use_xvfb = true
-      }
+      #if ((is_linux && !is_chromeos) ||
+      #    (build_with_chromium && is_chromeos_lacros && !is_chromeos_device)) {
+      #  use_xvfb = true
+      #}
 
-      if ((is_linux || is_chromeos) && !is_component_build) {
-        # Set rpath to find shared libs in a non-component build.
-        configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
-      }
+      #if ((is_linux || is_chromeos) && !is_component_build) {
+      #  # Set rpath to find shared libs in a non-component build.
+      #  configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
+      #}
 
       if (is_android) {
         public_configs += [ "$angle_root:build_id_config" ]
@@ -627,18 +631,18 @@ if (angle_standalone || build_with_chromium) {
           "$angle_root/src/tests:native_test_support_android",
         ]
       }
-      if (is_ios) {
-        # We use a special main function on iOS to initialize UIKit before the normal main runs.
-        ldflags = [
-          "-e",
-          "_ios_main",
-        ]
-        sources += [ "$angle_root/util/ios/ios_main.mm" ]
-      }
+      #if (is_ios) {
+      #  # We use a special main function on iOS to initialize UIKit before the normal main runs.
+      #  ldflags = [
+      #    "-e",
+      #    "_ios_main",
+      #  ]
+      #  sources += [ "$angle_root/util/ios/ios_main.mm" ]
+      #}
 
-      if (angle_has_build && is_win) {
-        data_deps += [ "//build/win:runtime_libs" ]
-      }
+      #if (angle_has_build && is_win) {
+      #  data_deps += [ "//build/win:runtime_libs" ]
+      #}
     }
   }
 }
