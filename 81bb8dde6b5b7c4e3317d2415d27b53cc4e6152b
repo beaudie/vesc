@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1db73fc_6de92933",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-16T20:10:02Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/5303540/1\n\nGoing to test this to make sure this isn\u0027t breaking for GLES stuff.\n\nDone.",
+      "parentUuid": "13305fb7_598be443",
+      "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "604618a7_9ef49342",
