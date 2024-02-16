@@ -16,6 +16,24 @@
       "message": "FWIW, I think `ANGLE_CL_IMPL_TRY_ERROR` was better, you\u0027re going to end up doing this `if` thing a lot.",
       "revId": "99d4b8b625a281c2265831c62995990e098577db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4090a3c_a39657e5",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-16T19:37:24Z",
+      "side": 1,
+      "message": "Ah okay, was wondering if `ANGLE_CL_IMPL_TRY_ERROR` was the right approach (style-wise).\n\nGot it - will add back.",
+      "parentUuid": "9e193ea2_728746f7",
+      "revId": "99d4b8b625a281c2265831c62995990e098577db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
