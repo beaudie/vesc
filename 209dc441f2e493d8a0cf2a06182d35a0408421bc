@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d65c0b6_43b72db2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-16T03:19:55Z",
+      "side": 1,
+      "message": "Please squash this with the next change (where this is used).\n\nI like the git way of splitting things into small changes, but that doesn\u0027t play that efficiently with ANGLE\u0027s gerrit. Like that would have worked nicely if we merged multiple changes from a branch all at once, but since we run CI on every single commit, it becomes expensive.\n\nSo definite yes to making commits as small as possible to encompass one logical change, but it\u0027s best to keep all the related changes to that one logical change in a single commit.",
+      "revId": "209dc441f2e493d8a0cf2a06182d35a0408421bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
