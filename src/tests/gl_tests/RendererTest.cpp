@@ -10,6 +10,7 @@
 //   meant to be using the D3D9 renderer.
 
 #include "test_utils/ANGLETest.h"
+#include "util/test_utils.h"
 
 #include "common/string_utils.h"
 
@@ -165,4 +166,5 @@ TEST_P(RendererTest, SimpleOperation)
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31_AND_NULL_AND(RendererTest,
                                                          ANGLE_ALL_TEST_PLATFORMS_GL32_CORE);
+
 }  // anonymous namespace

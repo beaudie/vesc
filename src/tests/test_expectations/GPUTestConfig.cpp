@@ -452,6 +452,11 @@ inline bool IsMetal(const GPUTestConfig::API &api)
     return (api == GPUTestConfig::kAPIMetal);
 }
 
+inline bool IsWgpu(const GPUTestConfig::API &api)
+{
+    return (api == GPUTestConfig::kAPIWgpu);
+}
+
 }  // anonymous namespace
 
 // Load all conditions in the constructor since this data will not change during a test set.
@@ -536,6 +541,7 @@ GPUTestConfig::GPUTestConfig(const API &api, uint32_t preRotation)
     mConditions[kConditionGLES]      = IsGLES(api);
     mConditions[kConditionVulkan]    = IsVulkan(api);
     mConditions[kConditionMetal]     = IsMetal(api);
+    mConditions[kConditionWgpu]      = IsWgpu(api);
 
     switch (preRotation)
     {
