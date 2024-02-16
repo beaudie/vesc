@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ed7a649_64fefb7c",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-16T19:00:10Z",
+      "side": 1,
+      "message": "Hmm, okay I remember now. At some point later on when we implement enqueueNDRangeKernel (compute enqueue/dispatch), I found this:\n\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/ShareGroupVk.h#39\n\nThis `UpdateDescriptorSetsBuilder` was a nice existing utility to \"flush/update\"\nour DS\u0027s without needing to roll-our-own. And it works well for our case.\n\n\u003e That\u0027s a GL header which should ideally not be included in CL files.\n\nI see this related history/commit\n`Vulkan: Split ShareGroupVk class from DisplayVK into its own files`\n\nDo you think we should move this `UpdateDescriptorSetsBuilder` class into something \nlike:\n\n`libANGLE/renderer/vulkan/vk_helpers.h`?\n\nFor now, this commit does not use this: \n`UpdateDescriptorSetsBuilder mUpdateDescriptorSetsBuilder`\n\nyet, so I can defer this till we get enqueueNDRange support in a latter commit.",
+      "parentUuid": "3ec0c4f6_c8f1001e",
+      "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "604618a7_9ef49342",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
         "patchSetId": 13
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Sorry Shahbaz - a lot of these cherry-picks from our internal branch have these types of TODO comments.\n\nI kept this as a WIP to fixup this CL before marking as active.\n\nWill be better on this going forward.",
       "parentUuid": "604618a7_9ef49342",
+      "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a282e0a3_b1f5c62e",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-16T19:00:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbc4dbb3_a9646031",
       "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
