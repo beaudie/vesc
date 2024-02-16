@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fb1538c_3cff5c58",
+        "filename": "src/libANGLE/CLEvent.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-16T03:22:05Z",
+      "side": 1,
+      "message": "```suggestion\n    // equal to past the status specified by commandExecCallbackType\n```",
+      "revId": "56728eecaed73b8794bf22c54321020b4c68a1d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1f45c67_9b2e429a",
+        "filename": "src/libANGLE/CLEvent.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-16T03:22:05Z",
+      "side": 1,
+      "message": "Shouldn\u0027t `return angle::Result::Continue;` be sufficient? IIRC, `gClErrorTls` is already set to `CL_SUCCESS` at the beginning of the entry point.",
+      "revId": "56728eecaed73b8794bf22c54321020b4c68a1d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
