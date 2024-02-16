@@ -51,6 +51,24 @@
       "parentUuid": "f2c75fb5_b434c948",
       "revId": "1b3dcb345b54d7fd1a78ddcb07a05c20a4555761",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61056ac0_f1325ad6",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-16T21:52:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25cd7ac9_debe471a",
+      "revId": "1b3dcb345b54d7fd1a78ddcb07a05c20a4555761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
