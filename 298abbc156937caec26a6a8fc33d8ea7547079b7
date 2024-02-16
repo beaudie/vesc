@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc7c23ea_a6278433",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-02-16T15:49:04Z",
+      "side": 1,
+      "message": "Thanks for taking care of .cr.so in the helper\n\nThis being a manually patched roll took me a minute to figure out why it was missing 😊, I coincidentally needed to hack around this logic.. great to see it\u0027s gone!",
+      "revId": "298abbc156937caec26a6a8fc33d8ea7547079b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
