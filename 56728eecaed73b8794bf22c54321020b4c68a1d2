@@ -69,6 +69,24 @@
       "parentUuid": "e1f45c67_9b2e429a",
       "revId": "56728eecaed73b8794bf22c54321020b4c68a1d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70f2c1db_96042d15",
+        "filename": "src/libANGLE/CLEvent.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-16T18:28:15Z",
+      "side": 1,
+      "message": "\u003e should we say the expectation of the frontend and backend is to only update the glClErrorTls on only error.\n\nYes I think that\u0027s what we settled on in the end. Makes it easier as error paths are confined to a few places (some `handleError()` callbacks, and some macros in validation). The rest of the code can forget about it (including not having to set it to success).",
+      "parentUuid": "1c415ebc_b7871e3a",
+      "revId": "56728eecaed73b8794bf22c54321020b4c68a1d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
