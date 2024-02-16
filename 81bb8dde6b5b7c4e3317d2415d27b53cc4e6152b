@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ec0c4f6_c8f1001e",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-16T17:58:57Z",
+      "side": 1,
+      "message": "Got it - let me see what\u0027s being used from there.",
+      "parentUuid": "5b03cf65_faa93bbe",
+      "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "604618a7_9ef49342",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
         "patchSetId": 13
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-15T20:32:39Z",
       "side": 1,
       "message": "nit: please either don\u0027t leave TODOs in the code, or associate with an issue.\n\nAs to the question itself, once we make RendererVk independent of DisplayVk, we can always have CL set the right parameters and tweak RendererVk\u0027s behavior.",
+      "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbc4dbb3_a9646031",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-16T17:58:57Z",
+      "side": 1,
+      "message": "Sorry Shahbaz - a lot of these cherry-picks from our internal branch have these types of TODO comments.\n\nI kept this as a WIP to fixup this CL before marking as active.\n\nWill be better on this going forward.",
+      "parentUuid": "604618a7_9ef49342",
       "revId": "81bb8dde6b5b7c4e3317d2415d27b53cc4e6152b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
