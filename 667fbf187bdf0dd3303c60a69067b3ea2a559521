@@ -46,6 +46,30 @@
       },
       "revId": "667fbf187bdf0dd3303c60a69067b3ea2a559521",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6741baa3_82d86411",
+        "filename": "src/libANGLE/CLEvent.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-16T17:19:08Z",
+      "side": 1,
+      "message": "Good point. And I do see that this check is present in the validation layer. Looks like a rebase miss from me 😞. Will abandon this. Thanks for the review.",
+      "parentUuid": "12240dba_5a6afd0c",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 52
+      },
+      "revId": "667fbf187bdf0dd3303c60a69067b3ea2a559521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
