@@ -22,6 +22,30 @@
       },
       "revId": "667fbf187bdf0dd3303c60a69067b3ea2a559521",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12240dba_5a6afd0c",
+        "filename": "src/libANGLE/CLEvent.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-16T03:23:34Z",
+      "side": 1,
+      "message": "Also, this belongs in the validation code for this function instead.",
+      "parentUuid": "44d268db_ed1a8ac3",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 52
+      },
+      "revId": "667fbf187bdf0dd3303c60a69067b3ea2a559521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
