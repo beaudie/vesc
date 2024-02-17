@@ -124,6 +124,24 @@
       "parentUuid": "5263f532_76f8d3ce",
       "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aac3431_266a63df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-17T01:25:50Z",
+      "side": 1,
+      "message": "Thank you for the suggestions!\n\nTrue, the first `getOutsideRenderPassCommandBufferHelper()`, when flushing the image updates, adds the write barrier when the texture data is uploaded in a mip level or cubemap face.\n\nA simpler more generalized change has been uploaded, more focused on WAW barriers: https://chromium-review.googlesource.com/c/angle/angle/+/5301855\n\n* It improves the `gpu_time` for Hailin\u0027s test, similar to the current implementation. However, in the new CL, some tests which were using the image as both read and write were failing (including compute-based mipmap generation and self-copy). For this, currently two image layouts have been exempted to always use barriers.",
+      "parentUuid": "5fb89c7e_6238949e",
+      "revId": "7599381f78d596b77753d4a144af560fb2a67ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
