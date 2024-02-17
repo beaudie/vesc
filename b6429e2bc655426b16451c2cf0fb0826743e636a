@@ -142,6 +142,24 @@
       "parentUuid": "729c3a83_7efdbbe1",
       "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1b98d03_1866830a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-17T01:25:54Z",
+      "side": 1,
+      "message": "Thank you!\n\nI tried this CL on the perf test. The `gpu_time` on `TexureUploadETC2TranscodingBenchmark` remains the same.\n\n* Regarding the parameters in `onImageTransferDstAndComputeWrite()`, it is currently always applied to `levelGLStart` (which is always 0 in this test). Also, since `layerStart` is `kMaxContentDefinedLayerCount`, it always leads to a barrier.\n \n* If the parameters are updated to the level/layers of the first update, `mWrittenSinceTransferDstLayout` is set just before getting the first outside command buffer. Then, in `isTransferDstWriteBarrierRequired()`, it reads the same bit (if not a layout transition), leading to a barrier. The barrier function will then reset `mWrittenSinceTransferDstLayout`.\n\nI am also looking into this CL, which focuses on WAW: https://chromium-review.googlesource.com/c/angle/angle/+/5301855\n* It improves the `gpu_time` for the perf test. However, some tests which were using the image as both read and write were failing (including compute-based mipmap generation and self-copy). For this, currently two image layouts always use barriers.",
+      "parentUuid": "d6262cae_051ad958",
+      "revId": "b6429e2bc655426b16451c2cf0fb0826743e636a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
