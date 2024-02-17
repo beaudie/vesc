@@ -16,6 +16,24 @@
       "message": "lgtm\n\nIn the context of ANGLE\u0027s Metal backend these shaders should be rejected because only ES 3.0 is supported, right?",
       "revId": "289db11cb9d88dfafc801b49e4b688c2d7e60e7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f670327_ce761bf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-17T08:21:52Z",
+      "side": 1,
+      "message": "this is a parse problem, rejection happens after that phase. this is reflected in the test result expectation",
+      "parentUuid": "cc26e281_500f50d5",
+      "revId": "289db11cb9d88dfafc801b49e4b688c2d7e60e7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
