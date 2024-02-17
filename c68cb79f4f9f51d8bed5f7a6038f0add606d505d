@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e207b15_0277141d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8831,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-17T04:43:22Z",
+      "side": 1,
+      "message": "In 99.9999% of the times, there won\u0027t be a `ClearEmulatedChannelsOnly` update, so this loop will be a no-op. To keep the complexity of this function in check, I suggest moving this loop into a helper, like `flushStagedClearEmulatedChannelsUpdates()` which can even `pop_front()` the updates.\n\nYou can still have a `bool *otherUpdatesToFlushOut` if you want to optimize away the following `getOutsideRenderPassCommandBufferHelper`",
+      "revId": "c68cb79f4f9f51d8bed5f7a6038f0add606d505d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
