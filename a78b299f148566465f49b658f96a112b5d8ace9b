@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7264eef5_5d8534dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6612,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-17T04:49:43Z",
+      "side": 1,
+      "message": "Doesn\u0027t hurt to reduce the scope for now, but it smells like a bug in the tracking of `mPerLevelSubresourceUpdateFlags`.",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0c876f0_4e493e37",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-17T04:49:43Z",
+      "side": 1,
+      "message": "Per our discussion, feel free to update to 128 for the benchmark that had 96 layer images, but better in a follow up",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86b0edc4_546a0cdf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2928,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-17T04:49:43Z",
+      "side": 1,
+      "message": "Use `gl::TexLevelArray`. No need for `kMaxTrackedLevels` (there\u0027s already `gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS`)",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08409dd3_0082d538",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-17T04:49:43Z",
+      "side": 1,
+      "message": "Suggest `mSubresourcesWrittenSinceBarrier`. Makes it clearer what this is tracking.",
+      "range": {
+        "startLine": 2929,
+        "startChar": 8,
+        "endLine": 2929,
+        "endChar": 39
+      },
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
