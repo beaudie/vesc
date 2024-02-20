@@ -2926,7 +2926,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // the next level and continue uploads in parallel.  Once all levels need a barrier, a single
     // barrier can be issued and we could continue with the rest of the updates from the first
     // level.
-    static constexpr uint32_t kMaxParallelSubresourceUpload = 64;
+    static constexpr uint32_t kMaxParallelSubresourceUpload = 128;
 
     // Used to track subresource updates per level. This can help parallelize updates performed to
     // different levels or layers of the image.
