@@ -1039,9 +1039,17 @@ gl::TexLevelMask AggregateSkipLevels(const gl::CubeFaceArray<gl::TexLevelMask> &
 // Get layer mask for a particular image level.
 ImageLayerWriteMask GetImageLayerWriteMask(uint32_t layerStart, uint32_t layerCount)
 {
+<<<<<<< HEAD
     ImageLayerWriteMask layerMask = angle::BitMask<uint64_t>(layerCount);
     uint32_t rotateShift          = layerStart % kMaxParallelLayerWrites;
     layerMask = (layerMask << rotateShift) | (layerMask >> (kMaxParallelLayerWrites - rotateShift));
+=======
+    // TODO: Update uint64_t below?
+    SubresourceLayerMask layerMask = angle::BitMask<uint64_t>(layerCount);
+    uint32_t rotateShift           = layerStart % kMaxParallelSubresourceUpload;
+    layerMask =
+        (layerMask << rotateShift) | (layerMask >> (kMaxParallelSubresourceUpload - rotateShift));
+>>>>>>> 38ab2fba29 (Set parallel subresource upload to 128)
     return layerMask;
 }
 }  // anonymous namespace
