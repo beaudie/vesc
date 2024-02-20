@@ -16,6 +16,24 @@
       "message": "\u003e This is valid OpenGL\n\nBut it\u0027s not, right?",
       "revId": "07973bb5f87efede0a65cd5553a469b53d3dd55a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e65657d_55ee2939",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 13094,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-02-20T19:08:01Z",
+      "side": 1,
+      "message": "It\u0027s unclear to me -- the OpenGL validator doesn\u0027t complain and drivers seemingly have no issues. I\u0027ll be more clear in the comment.",
+      "parentUuid": "cf7cdd6e_f70f7770",
+      "revId": "07973bb5f87efede0a65cd5553a469b53d3dd55a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
