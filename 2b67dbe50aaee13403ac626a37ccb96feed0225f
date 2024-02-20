@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "056c533d_db6e1f6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-20T16:50:49Z",
+      "side": 1,
+      "message": "Thank you for cleaning up this interface!",
+      "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "032c877c_1bc9aa4c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-20T16:50:49Z",
+      "side": 1,
+      "message": "You can make this a static function (per our convention, called `CopyFromBuffer`, placed in an anonymous namespace at the top of the file, and no `static`) and add whatever extra params are needed. That would deduplicate the code in `BufferVk::handleDeviceLocalBufferMap`",
+      "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "367ef4bc_ebeb080d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4902,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-20T16:50:49Z",
+      "side": 1,
+      "message": "If I\u0027m reading correctly, this function is no longer used, right?\n\nThen it\u0027s better to just remove this (and then you can drop `FromPool` from `initSuballocationFromPool` 😊)",
+      "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee2b05d5_820d31db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4933,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-20T16:50:49Z",
+      "side": 1,
+      "message": "nit: our convention is to explicitly cast to bool:\n\n```suggestion\n    if (pool \u003d\u003d nullptr)\n```\n\nDoes this happen actually? Looks like ContextVk never passes nullptr here, so you could have also turned it into an `ASSERT`.",
+      "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
