@@ -34,6 +34,24 @@
       "parentUuid": "cf7cdd6e_f70f7770",
       "revId": "07973bb5f87efede0a65cd5553a469b53d3dd55a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4d9b6d0_707e907b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 13094,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-20T19:36:34Z",
+      "side": 1,
+      "message": "We\u0027ll find out in a few weeks: https://gitlab.khronos.org/opengl/API/-/issues/216",
+      "parentUuid": "0e65657d_55ee2939",
+      "revId": "07973bb5f87efede0a65cd5553a469b53d3dd55a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
