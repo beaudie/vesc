@@ -53,7 +53,7 @@ constexpr VkPipelineStageFlags kSwapchainAcquireImageWaitStageFlags =
 // `layer % kMaxParallelSubresourceUpload` and used to track whether that subresource is currently
 // in transfer.  If so, a barrier is inserted.  If mLayerCount > kMaxParallelSubresourceUpload,
 // there will be a few unnecessary barriers.
-constexpr uint32_t kMaxParallelSubresourceUpload = 64;
+constexpr uint32_t kMaxParallelSubresourceUpload = 128;
 using SubresourceLayerMask                       = std::bitset<kMaxParallelSubresourceUpload>;
 
 using StagingBufferOffsetArray = std::array<VkDeviceSize, 2>;
