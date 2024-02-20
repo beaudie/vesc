@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc93233a_e5e16b5c",
+        "filename": "src/compiler/translator/tree_ops/msl/SeparateCompoundStructDeclarations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-20T13:59:48Z",
+      "side": 1,
+      "message": "nit: Please attribute `TODO`s with a bug (or don\u0027t leave TODOs). We realized a few years ago that after time the context is lost and sometimes it becomes confusing to find out what the TODO is really about. Plus, there\u0027s no easy place to discuss the TODO (like, leave a comment about how it can be approached, assign as a easy beginner bugs, etc).",
+      "revId": "5a57ccedaeb7a67d6918b0e68cc0a0b44cb28eba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "838cdc4a_e24de3f5",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-20T13:59:48Z",
+      "side": 1,
+      "message": "```suggestion\n// Test that accessing array element of array of anonymous struct instances does not fail validation.\n```",
+      "revId": "5a57ccedaeb7a67d6918b0e68cc0a0b44cb28eba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
