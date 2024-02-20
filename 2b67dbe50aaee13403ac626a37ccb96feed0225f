@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84a85a98_dbde81bf",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-20T17:36:45Z",
+      "side": 1,
+      "message": "I have to see the change to tell, but looks like `handleDeviceLocalBufferMap` uses `mBuffer` as copy src, while this uses it as copy dst. It\u0027ll probably be confusing as a member and safer as a static function",
+      "parentUuid": "4b38c616_bf91a404",
+      "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "367ef4bc_ebeb080d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
