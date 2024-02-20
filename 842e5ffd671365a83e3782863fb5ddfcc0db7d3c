@@ -16,6 +16,24 @@
       "message": "Patchset 2 changes:\n\n  - Moved the `copyFromBuffer` to static function\n  - Delete `initSuballocation` interface and `%s/initSuballocationFromPool/initSuballocation`",
       "revId": "842e5ffd671365a83e3782863fb5ddfcc0db7d3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eecc00db_6427d40f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-20T20:44:10Z",
+      "side": 1,
+      "message": "LGTM!\n\nFYI, \"resolving\" the comments would be a signal to the reviewer that the change is ready for review again (that indeed there is nothing else to do about the comments)",
+      "parentUuid": "4a5b3e1f_0ffbce06",
+      "revId": "842e5ffd671365a83e3782863fb5ddfcc0db7d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
