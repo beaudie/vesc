@@ -1039,6 +1039,7 @@ gl::TexLevelMask AggregateSkipLevels(const gl::CubeFaceArray<gl::TexLevelMask> &
 // Get layer mask for a particular image level.
 ImageLayerWriteMask GetImageLayerWriteMask(uint32_t layerStart, uint32_t layerCount)
 {
+    // TODO: Update uint64_t below?
     ImageLayerWriteMask layerMask = angle::BitMask<uint64_t>(layerCount);
     uint32_t rotateShift          = layerStart % kMaxParallelLayerWrites;
     layerMask = (layerMask << rotateShift) | (layerMask >> (kMaxParallelLayerWrites - rotateShift));
