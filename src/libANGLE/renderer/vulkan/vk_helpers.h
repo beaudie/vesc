@@ -58,7 +58,7 @@ constexpr VkPipelineStageFlags kSwapchainAcquireImageWaitStageFlags =
 // the next level and continue uploads in parallel.  Once all levels need a barrier, a single
 // barrier can be issued and we could continue with the rest of the updates from the first
 // level.
-constexpr uint32_t kMaxParallelSubresourceUpload = 64;
+constexpr uint32_t kMaxParallelSubresourceUpload = 128;
 using SubresourceLayerMask                       = std::bitset<kMaxParallelSubresourceUpload>;
 
 using StagingBufferOffsetArray = std::array<VkDeviceSize, 2>;
