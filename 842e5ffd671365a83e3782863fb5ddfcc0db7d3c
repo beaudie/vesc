@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a5b3e1f_0ffbce06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-20T20:20:52Z",
+      "side": 1,
+      "message": "Patchset 2 changes:\n\n  - Moved the `copyFromBuffer` to static function\n  - Delete `initSuballocation` interface and `%s/initSuballocationFromPool/initSuballocation`",
+      "revId": "842e5ffd671365a83e3782863fb5ddfcc0db7d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
