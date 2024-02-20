@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t this depend on sRGB or not?",
       "revId": "19db271b184ccd375cbef6218da3632c9f6de339",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eded911a_bb0f4292",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-20T20:52:07Z",
+      "side": 1,
+      "message": "GL_FRAMEBUFFER_SRGB will only convert to sRGB if the format of the attachment is also sRGB.  It doesn\u0027t force it, just allows you disable the encoding if you\u0027re already writing sRGB encoded data in a shader.",
+      "parentUuid": "665904ce_3749a3a1",
+      "revId": "19db271b184ccd375cbef6218da3632c9f6de339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
