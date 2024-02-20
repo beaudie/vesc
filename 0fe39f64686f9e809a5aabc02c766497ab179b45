@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc950ba5_9e3233c9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7375,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-02-20T16:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0ffdd8e_c751c412",
+      "range": {
+        "startLine": 7375,
+        "startChar": 19,
+        "endLine": 7375,
+        "endChar": 50
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9eb9a082_6a2abf0e",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-20T15:51:50Z",
       "side": 1,
       "message": "Why did this need to move into the class?",
+      "range": {
+        "startLine": 3287,
+        "startChar": 29,
+        "endLine": 3287,
+        "endChar": 55
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "272c7b70_4c78f19e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3287,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-02-20T16:32:22Z",
+      "side": 1,
+      "message": "Yeah, it moved in an earlier patchset and the last round of rework removed the need to move it -- thanks!",
+      "parentUuid": "9eb9a082_6a2abf0e",
       "range": {
         "startLine": 3287,
         "startChar": 29,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87215f16_1469513a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-02-20T16:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c02b96e_27c665e0",
+      "range": {
+        "startLine": 236,
+        "startChar": 22,
+        "endLine": 236,
+        "endChar": 48
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33b27f45_e2f915e7",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-02-20T15:51:50Z",
       "side": 1,
       "message": "We should assert somewhere that this is no longer `VK_FORMAT_UNDEFINED`.",
+      "range": {
+        "startLine": 6175,
+        "startChar": 37,
+        "endLine": 6175,
+        "endChar": 48
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9f7ab48_3c90858b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6175,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-02-20T16:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33b27f45_e2f915e7",
       "range": {
         "startLine": 6175,
         "startChar": 37,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5c6624d_d7bcd306",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 12555,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-02-20T16:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b957030_38b578b5",
+      "range": {
+        "startLine": 12555,
+        "startChar": 35,
+        "endLine": 12555,
+        "endChar": 40
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "deb7a786_bf030866",
@@ -146,6 +266,30 @@
       "writtenOn": "2024-02-20T15:51:50Z",
       "side": 1,
       "message": "GL_NEAREST",
+      "range": {
+        "startLine": 12568,
+        "startChar": 56,
+        "endLine": 12568,
+        "endChar": 60
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3908727_d29f3e77",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 12568,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-02-20T16:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "deb7a786_bf030866",
       "range": {
         "startLine": 12568,
         "startChar": 56,
