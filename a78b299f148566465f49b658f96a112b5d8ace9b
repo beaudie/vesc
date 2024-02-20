@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "01c97b39_71a4f008",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6612,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-20T21:24:24Z",
+      "side": 1,
+      "message": "To fix this, it seems that we should also account for read accesses to the tracked levels, or maybe change the way some functions are performed.\n* For example, in the compute-based GenerateMipmap, could we use the same image level as the source for all the generated levels (instead of using the immediate level before them)?",
+      "parentUuid": "7264eef5_5d8534dc",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0c876f0_4e493e37",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-17T04:49:43Z",
       "side": 1,
       "message": "Per our discussion, feel free to update to 128 for the benchmark that had 96 layer images, but better in a follow up",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90b1820e_9dbb5f47",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-20T21:24:24Z",
+      "side": 1,
+      "message": "Added CL: https://chromium-review.googlesource.com/c/angle/angle/+/5309866.",
+      "parentUuid": "e0c876f0_4e493e37",
       "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2275292_031ff35b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2928,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-20T21:24:24Z",
+      "side": 1,
+      "message": "Thanks! Done.",
+      "parentUuid": "86b0edc4_546a0cdf",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08409dd3_0082d538",
@@ -65,6 +119,30 @@
       "writtenOn": "2024-02-17T04:49:43Z",
       "side": 1,
       "message": "Suggest `mSubresourcesWrittenSinceBarrier`. Makes it clearer what this is tracking.",
+      "range": {
+        "startLine": 2929,
+        "startChar": 8,
+        "endLine": 2929,
+        "endChar": 39
+      },
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06410264_2bd35765",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-20T21:24:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08409dd3_0082d538",
       "range": {
         "startLine": 2929,
         "startChar": 8,
