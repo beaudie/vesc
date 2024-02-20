@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eea4526_4a242d5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-20T17:32:56Z",
+      "side": 1,
+      "message": "👍",
+      "parentUuid": "056c533d_db6e1f6c",
+      "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "032c877c_1bc9aa4c",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-20T16:50:49Z",
       "side": 1,
       "message": "You can make this a static function (per our convention, called `CopyFromBuffer`, placed in an anonymous namespace at the top of the file, and no `static`) and add whatever extra params are needed. That would deduplicate the code in `BufferVk::handleDeviceLocalBufferMap`",
+      "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b38c616_bf91a404",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-20T17:32:56Z",
+      "side": 1,
+      "message": "\u003e That would deduplicate the code in `BufferVk::handleDeviceLocalBufferMap`\n\nGood catch. Missed this. Made a similar change in the `flushStagingBuffer` to use the newer function. Thinking similar change here would suffice. Or do you see static function is better suited here.",
+      "parentUuid": "032c877c_1bc9aa4c",
       "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3484f2c5_5ac53ecd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4902,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-20T17:32:56Z",
+      "side": 1,
+      "message": "Yes, it is not used. +1 on the suggestion, wanted to hear here to see if its ok to remove. Will spin v2.",
+      "parentUuid": "367ef4bc_ebeb080d",
+      "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee2b05d5_820d31db",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -65,6 +119,24 @@
       "writtenOn": "2024-02-20T16:50:49Z",
       "side": 1,
       "message": "nit: our convention is to explicitly cast to bool:\n\n```suggestion\n    if (pool \u003d\u003d nullptr)\n```\n\nDoes this happen actually? Looks like ContextVk never passes nullptr here, so you could have also turned it into an `ASSERT`.",
+      "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd2b0c00_65be3cd6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4933,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-20T17:32:56Z",
+      "side": 1,
+      "message": "Agreed.",
+      "parentUuid": "ee2b05d5_820d31db",
       "revId": "2b67dbe50aaee13403ac626a37ccb96feed0225f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
