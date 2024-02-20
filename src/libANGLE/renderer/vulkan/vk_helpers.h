@@ -56,7 +56,7 @@ constexpr VkPipelineStageFlags kSwapchainAcquireImageWaitStageFlags =
 // being written.  If so, a barrier is inserted; otherwise, the barrier is avoided.  If the updated
 // layer count is greater than kMaxParallelLayerWrites, there will be a few unnecessary
 // barriers.
-constexpr uint32_t kMaxParallelLayerWrites = 64;
+constexpr uint32_t kMaxParallelLayerWrites = 128;
 using ImageLayerWriteMask                  = std::bitset<kMaxParallelLayerWrites>;
 
 using StagingBufferOffsetArray = std::array<VkDeviceSize, 2>;
