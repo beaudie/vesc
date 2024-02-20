@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c6f6faf_26d65d0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-20T15:51:50Z",
+      "side": 1,
+      "message": "Mark, this LGTM, just a couple of questions/suggestions.",
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0ffdd8e_c751c412",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7375,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-20T15:51:50Z",
+      "side": 1,
+      "message": "Since this returns true on mismatch, I think it could be the condition used below and remove `recreateViewFormatForSampler`. Or at a minimum just track a bool here and use it below, rather than the helper.",
+      "range": {
+        "startLine": 7375,
+        "startChar": 19,
+        "endLine": 7375,
+        "endChar": 50
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eb9a082_6a2abf0e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3287,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-20T15:51:50Z",
+      "side": 1,
+      "message": "Why did this need to move into the class?",
+      "range": {
+        "startLine": 3287,
+        "startChar": 29,
+        "endLine": 3287,
+        "endChar": 55
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c02b96e_27c665e0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-20T15:51:50Z",
+      "side": 1,
+      "message": "If there\u0027s a reason for this to be in the class, start with lower case.",
+      "range": {
+        "startLine": 236,
+        "startChar": 22,
+        "endLine": 236,
+        "endChar": 48
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33b27f45_e2f915e7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6175,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-20T15:51:50Z",
+      "side": 1,
+      "message": "We should assert somewhere that this is no longer `VK_FORMAT_UNDEFINED`.",
+      "range": {
+        "startLine": 6175,
+        "startChar": 37,
+        "endLine": 6175,
+        "endChar": 48
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b957030_38b578b5",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 12555,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-20T15:51:50Z",
+      "side": 1,
+      "message": "GL_R16UI",
+      "range": {
+        "startLine": 12555,
+        "startChar": 35,
+        "endLine": 12555,
+        "endChar": 40
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deb7a786_bf030866",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 12568,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-20T15:51:50Z",
+      "side": 1,
+      "message": "GL_NEAREST",
+      "range": {
+        "startLine": 12568,
+        "startChar": 56,
+        "endLine": 12568,
+        "endChar": 60
+      },
+      "revId": "0fe39f64686f9e809a5aabc02c766497ab179b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
