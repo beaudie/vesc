@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cc6f0c8_a1245a8c",
+        "filename": "src/compiler/translator/tree_ops/msl/SeparateCompoundStructDeclarations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-20T19:28:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc93233a_e5e16b5c",
+      "revId": "5a57ccedaeb7a67d6918b0e68cc0a0b44cb28eba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "838cdc4a_e24de3f5",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-20T13:59:48Z",
       "side": 1,
       "message": "```suggestion\n// Test that accessing array element of array of anonymous struct instances does not fail validation.\n```",
+      "revId": "5a57ccedaeb7a67d6918b0e68cc0a0b44cb28eba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e504bc80_3753c01d",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-02-20T19:28:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "838cdc4a_e24de3f5",
       "revId": "5a57ccedaeb7a67d6918b0e68cc0a0b44cb28eba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
