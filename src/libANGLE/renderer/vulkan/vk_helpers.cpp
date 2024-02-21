@@ -6612,19 +6612,6 @@ bool ImageHelper::isWriteBarrierNecessary(ImageLayout newLayout,
         return true;
     }
 
-    // If the image can be subject to read and write at the same time (including self-copy), it is
-    // safer to add a barrier, since the prior and subsequent reads do not use the tracked writes.
-    // Also, a barrier should also be added for compute-based mipmap generation, since the
-    // destination mip level in one stage can be the source of the next one (if the number of mips
-    // are more than the maximum number of supported generated mips), which constitutes a form of
-    // self-copy.
-    // TODO: The tracking should be improved to support self-copy scenarios.
-    if (mCurrentLayout == ImageLayout::TransferSrcDst ||
-        mCurrentLayout == ImageLayout::ComputeShaderWrite)
-    {
-        return true;
-    }
-
     if (layerCount >= kMaxParallelLayerWrites)
     {
         return true;
@@ -7199,6 +7186,7 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         {
             access.onImageSelfCopy(dstLevelGL, 1, region.dstSubresource.baseArrayLayer,
                                    region.dstSubresource.layerCount, aspectFlags, srcImage);
+            srcImage->updateBarriersOnSelfCopy(&region);
         }
         else
         {
@@ -7249,6 +7237,37 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
     }
 
     return angle::Result::Continue;
+}
+
+void ImageHelper::updateBarriersOnSelfCopy(VkImageCopy *region)
+{
+    ImageLayerWriteMask srcLayerMask = GetImageLayerWriteMask(region->srcSubresource.baseArrayLayer,
+                                                              region->srcSubresource.layerCount);
+
+    // Avoid RAW hazard during self-copy.
+    if ((mSubresourcesWrittenSinceBarrier[region->srcSubresource.mipLevel] & srcLayerMask) != 0)
+    {
+        ImageLayerWriteMask dstLayerMask = GetImageLayerWriteMask(
+            region->dstSubresource.baseArrayLayer, region->dstSubresource.layerCount);
+        mSubresourcesWrittenSinceBarrier[region->dstSubresource.mipLevel] |= dstLayerMask;
+    }
+
+    // Avoid WAR hazards during self-copy.
+    mSubresourcesWrittenSinceBarrier[region->srcSubresource.mipLevel] |= srcLayerMask;
+}
+
+void ImageHelper::updateBarriersOnGenerateMipmap(uint32_t srcLevel, uint32_t maxGeneratedLevels)
+{
+    ImageLayerWriteMask srcLayerMask = GetImageLayerWriteMask(0, mLayerCount);
+
+    // Avoid RAW hazard during mipmap generation.
+    if ((mSubresourcesWrittenSinceBarrier[srcLevel] & srcLayerMask) != 0)
+    {
+        for (uint32_t i = 0; i < maxGeneratedLevels; i++)
+        {
+            mSubresourcesWrittenSinceBarrier[srcLevel + i + 1] |= srcLayerMask;
+        }
+    }
 }
 
 angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
