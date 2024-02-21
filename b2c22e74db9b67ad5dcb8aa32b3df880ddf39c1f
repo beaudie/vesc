@@ -16,6 +16,24 @@
       "message": "To make this change simpler, the switch-case-related changes can be split into a separate change.",
       "revId": "b2c22e74db9b67ad5dcb8aa32b3df880ddf39c1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95628ac8_634c6e0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-21T22:35:38Z",
+      "side": 1,
+      "message": "Split into the following changes (new chain):\n* https://chromium-review.googlesource.com/c/angle/angle/+/5297547\n* https://chromium-review.googlesource.com/c/angle/angle/+/5297317",
+      "parentUuid": "bf020f43_35b62c5f",
+      "revId": "b2c22e74db9b67ad5dcb8aa32b3df880ddf39c1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
