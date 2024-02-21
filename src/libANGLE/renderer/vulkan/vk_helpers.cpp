@@ -7231,6 +7231,7 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
                                    region.srcSubresource.layerCount, dstLevelGL, 1,
                                    region.dstSubresource.baseArrayLayer,
                                    region.dstSubresource.layerCount, aspectFlags, srcImage);
+            srcImage->updateBarriersOnSelfCopy(&region);
         }
         else
         {
@@ -7281,6 +7282,37 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
     }
 
     return angle::Result::Continue;
+}
+
+void ImageHelper::updateBarriersOnSelfCopy(VkImageCopy *region)
+{
+    ImageLayerWriteMask srcLayerMask = GetImageLayerWriteMask(region->srcSubresource.baseArrayLayer,
+                                                              region->srcSubresource.layerCount);
+
+    // Avoid RAW hazard during self-copy.
+    if ((mSubresourcesWrittenSinceBarrier[region->srcSubresource.mipLevel] & srcLayerMask) != 0)
+    {
+        ImageLayerWriteMask dstLayerMask = GetImageLayerWriteMask(
+            region->dstSubresource.baseArrayLayer, region->dstSubresource.layerCount);
+        mSubresourcesWrittenSinceBarrier[region->dstSubresource.mipLevel] |= dstLayerMask;
+    }
+
+    // Avoid WAR hazards during self-copy.
+    mSubresourcesWrittenSinceBarrier[region->srcSubresource.mipLevel] |= srcLayerMask;
+}
+
+void ImageHelper::updateBarriersOnGenerateMipmap(uint32_t srcLevel, uint32_t maxGeneratedLevels)
+{
+    ImageLayerWriteMask srcLayerMask = GetImageLayerWriteMask(0, mLayerCount);
+
+    // Avoid RAW hazard during mipmap generation.
+    if ((mSubresourcesWrittenSinceBarrier[srcLevel] & srcLayerMask) != 0)
+    {
+        for (uint32_t i = 0; i < maxGeneratedLevels; i++)
+        {
+            mSubresourcesWrittenSinceBarrier[srcLevel + i + 1] |= srcLayerMask;
+        }
+    }
 }
 
 angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,

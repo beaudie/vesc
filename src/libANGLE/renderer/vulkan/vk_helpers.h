@@ -2563,6 +2563,10 @@ class ImageHelper final : public Resource, public angle::Subject
 
     size_t getLevelUpdateCount(gl::LevelIndex level) const;
 
+    // Updates written barriers in case of self-copy.
+    void updateBarriersOnSelfCopy(VkImageCopy *region);
+    void updateBarriersOnGenerateMipmap(uint32_t srcLevel, uint32_t maxGeneratedLevels);
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
