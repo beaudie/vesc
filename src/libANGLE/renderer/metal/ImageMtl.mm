@@ -89,8 +89,21 @@ angle::Result TextureImageSiblingMtl::initImpl(DisplayMtl *displayMtl)
             baseTexture->createSliceMipView(textureArraySlice, mtl::kZeroNativeMipLevel);
     }
 
-    angle::FormatID angleFormatId =
-        mtl::Format::MetalToAngleFormatID(mNativeTexture->pixelFormat());
+    angle::FormatID angleFormatId;
+    GLenum internalFormat =
+        static_cast<GLenum>(mAttribs.get(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_NONE));
+    if (internalFormat != GL_NONE)
+    {
+        // If EGL_TEXTURE_INTERNAL_FORMAT_ANGLE is provided for eglCreateImageKHR(),
+        // the provided format will be used for mFormat and intendedFormat.
+        GLenum type                = gl::GetSizedInternalFormatInfo(internalFormat).type;
+        GLenum sizedInternalFormat = gl::Format(internalFormat, type).info->sizedInternalFormat;
+        angleFormatId              = angle::Format::InternalFormatToID(sizedInternalFormat);
+    }
+    else
+    {
+        angleFormatId = mtl::Format::MetalToAngleFormatID(mNativeTexture->pixelFormat());
+    }
     mFormat = displayMtl->getPixelFormat(angleFormatId);
 
     if (mNativeTexture)

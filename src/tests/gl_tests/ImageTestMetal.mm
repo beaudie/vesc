@@ -683,6 +683,28 @@ TEST_P(ImageTestMetal, BlitMetalTarget2DArray)
                          {result.data(), 4});
     EXPECT_EQ(result, GLColor::yellow);
 }
+
+// Tests that OpenGL can override the internal format for a texture bound with
+// Metal texture.
+TEST_P(ImageTestMetal, OverrideMetalTextureInternalFormat)
+{
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt());
+    ANGLE_SKIP_TEST_IF(!hasImageNativeMetalTextureExt());
+
+    EGLDisplay display = getEGLWindow()->getDisplay();
+
+    // On iOS devices, GL_DEPTH24_STENCIL8 is unavailable and is interally converted into
+    // GL_DEPTH32F_STENCIL8. This tests the ability to attach MTLPixelFormatDepth32Float_Stencil8
+    // and have GL treat is at GL_DEPTH24_STENCIL8 instead of GL_DEPTH32F_STENCIL8.
+    ScopedMetalTextureRef textureMtl =
+        createMtlTexture2DArray(1, 1, 1, MTLPixelFormatDepth32Float_Stencil8);
+    const EGLint attribs[] = {EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_DEPTH24_STENCIL8, EGL_NONE};
+    EGLImageKHR image =
+        eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
+                          reinterpret_cast<EGLClientBuffer>(textureMtl.get()), attribs);
+    EXPECT_EGL_SUCCESS();
+    EXPECT_NE(image, nullptr);
+}
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(ImageTestMetal, ES2_METAL(), ES3_METAL());
