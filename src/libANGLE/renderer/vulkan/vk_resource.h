@@ -97,10 +97,17 @@ class ResourceUse final
     }
 
     // Returns true if it contains a serial that is greater than
-    bool operator>(const QueueSerial &queuSerial) const
+    bool operator>(const QueueSerial &queueSerial) const
     {
-        return mSerials.size() > queuSerial.getIndex() &&
-               mSerials[queuSerial.getIndex()] > queuSerial.getSerial();
+        return mSerials.size() > queueSerial.getIndex() &&
+               mSerials[queueSerial.getIndex()] > queueSerial.getSerial();
+    }
+
+    bool operator>=(const QueueSerial &queueSerial) const
+    {
+        return operator>(queueSerial) ||
+               (mSerials.size() > queueSerial.getIndex() &&
+                mSerials[queueSerial.getIndex()] == queueSerial.getSerial());
     }
 
     // Returns true if all serials are less than or equal
