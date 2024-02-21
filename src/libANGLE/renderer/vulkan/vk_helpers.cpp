@@ -6574,6 +6574,12 @@ bool ImageHelper::usedByCurrentRenderPassAsAttachmentAndSampler(
            mRenderPassUsageFlags[textureSamplerUsage];
 }
 
+uint64_t ImageHelper::getSubresourceLayerMask(uint32_t layerStart, uint32_t layerCount) const
+{
+    return ANGLE_ROTL64(angle::BitMask<uint64_t>(layerCount),
+                        layerStart % kMaxParallelSubresourceUpload);
+}
+
 bool ImageHelper::isReadBarrierNecessary(ImageLayout newLayout) const
 {
     // If transitioning to a different layout, we need always need a barrier.
@@ -6608,11 +6614,11 @@ bool ImageHelper::isWriteBarrierNecessary(ImageLayout newLayout,
     // barrier. Also, a barrier should also be added for compute-based mipmap generation, since the
     // destination mip level in one stage can be the source of the next one (if the number of mips
     // are more than the maximum number of supported generated mips).
-    if (mCurrentLayout == ImageLayout::TransferSrcDst ||
-        mCurrentLayout == ImageLayout::ComputeShaderWrite)
-    {
-        return true;
-    }
+    //    if (mCurrentLayout == ImageLayout::TransferSrcDst ||
+    //        mCurrentLayout == ImageLayout::ComputeShaderWrite)
+    //    {
+    //        return true;
+    //    }
 
     if (layerCount >= kMaxParallelSubresourceUpload)
     {
@@ -6624,8 +6630,7 @@ bool ImageHelper::isWriteBarrierNecessary(ImageLayout newLayout,
     for (uint32_t levelOffset = 0; levelOffset < levelCount; levelOffset++)
     {
         uint32_t level           = levelStart.get() + levelOffset;
-        const uint64_t layerMask = ANGLE_ROTL64(angle::BitMask<uint64_t>(layerCount),
-                                                layerStart % kMaxParallelSubresourceUpload);
+        const uint64_t layerMask = getSubresourceLayerMask(layerStart, layerCount);
         if ((mSubresourcesWrittenSinceBarrier[level].to_ullong() & layerMask) != 0)
         {
             return true;
@@ -6820,8 +6825,7 @@ void ImageHelper::setSubresourcesWrittenSinceBarrier(gl::LevelIndex levelStart,
         }
         else
         {
-            const uint64_t layerMask = ANGLE_ROTL64(angle::BitMask<uint64_t>(layerCount),
-                                                    layerStart % kMaxParallelSubresourceUpload);
+            const uint64_t layerMask = getSubresourceLayerMask(layerStart, layerCount);
             mSubresourcesWrittenSinceBarrier[level] |= layerMask;
         }
     }
@@ -7182,6 +7186,7 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         {
             access.onImageSelfCopy(dstLevelGL, 1, region.dstSubresource.baseArrayLayer,
                                    region.dstSubresource.layerCount, aspectFlags, srcImage);
+            srcImage->updateBarriersOnSelfCopy(&region);
         }
         else
         {
@@ -7232,6 +7237,38 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
     }
 
     return angle::Result::Continue;
+}
+
+void ImageHelper::updateBarriersOnSelfCopy(VkImageCopy *region)
+{
+    const uint64_t srcLayerMask = getSubresourceLayerMask(region->srcSubresource.baseArrayLayer,
+                                                          region->srcSubresource.layerCount);
+
+    // Avoid RAW hazard during self-copy.
+    if ((mSubresourcesWrittenSinceBarrier[region->srcSubresource.mipLevel].to_ullong() &
+         srcLayerMask) != 0)
+    {
+        const uint64_t dstLayerMask = getSubresourceLayerMask(region->dstSubresource.baseArrayLayer,
+                                                              region->dstSubresource.layerCount);
+        mSubresourcesWrittenSinceBarrier[region->dstSubresource.mipLevel] |= dstLayerMask;
+    }
+
+    // Avoid WAR hazards during self-copy.
+    mSubresourcesWrittenSinceBarrier[region->srcSubresource.mipLevel] |= srcLayerMask;
+}
+
+void ImageHelper::updateBarriersOnGenerateMipmap(uint32_t srcLevel, uint32_t maxGeneratedLevels)
+{
+    const uint64_t srcLayerMask = getSubresourceLayerMask(0, mLayerCount);
+
+    // Avoid RAW hazard during mipmap generation.
+    if ((mSubresourcesWrittenSinceBarrier[srcLevel].to_ullong() & srcLayerMask) != 0)
+    {
+        for (uint32_t i = 0; i < maxGeneratedLevels; i++)
+        {
+            mSubresourcesWrittenSinceBarrier[srcLevel + i + 1] |= srcLayerMask;
+        }
+    }
 }
 
 angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
@@ -9057,11 +9094,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             }
             else
             {
-                const uint64_t subresourceHashRange = angle::BitMask<uint64_t>(updateLayerCount);
-                const uint32_t subresourceHashOffset =
-                    updateBaseLayer % kMaxParallelSubresourceUpload;
                 const uint64_t subresourceHash =
-                    ANGLE_ROTL64(subresourceHashRange, subresourceHashOffset);
+                    getSubresourceLayerMask(updateBaseLayer, updateLayerCount);
 
                 if ((mSubresourcesWrittenSinceBarrier[updateMipLevelGL.get()].to_ullong() &
                      subresourceHash) != 0)
