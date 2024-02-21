@@ -5814,8 +5814,8 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
                                  descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     if (isUniformBuffer)
     {
-        commandBufferHelper->bufferRead(contextVk, VK_ACCESS_UNIFORM_READ_BIT,
-                                        block.activeShaders(), &bufferHelper);
+        commandBufferHelper->bufferRead(VK_ACCESS_UNIFORM_READ_BIT, block.activeShaders(),
+                                        &bufferHelper);
     }
     else
     {
@@ -5827,8 +5827,8 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
             // marked read-only.  This also helps BufferVk make better decisions during
             // buffer data uploads and copies by knowing that the buffers are not actually
             // being written to.
-            commandBufferHelper->bufferRead(contextVk, VK_ACCESS_SHADER_READ_BIT,
-                                            block.activeShaders(), &bufferHelper);
+            commandBufferHelper->bufferRead(VK_ACCESS_SHADER_READ_BIT, block.activeShaders(),
+                                            &bufferHelper);
         }
         else
         {
@@ -5837,8 +5837,7 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
             for (const gl::ShaderType shaderType : block.activeShaders())
             {
                 const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
-                commandBufferHelper->bufferWrite(contextVk, accessFlags, pipelineStage,
-                                                 &bufferHelper);
+                commandBufferHelper->bufferWrite(accessFlags, pipelineStage, &bufferHelper);
             }
         }
     }
@@ -5943,8 +5942,7 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
         for (const gl::ShaderType shaderType : atomicCounterBuffer.activeShaders())
         {
             const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
-            commandBufferHelper->bufferWrite(contextVk,
-                                             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            commandBufferHelper->bufferWrite(VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
                                              pipelineStage, &bufferHelper);
         }
 
