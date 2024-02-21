@@ -1460,6 +1460,7 @@ void CommandBufferHelperCommon::resetImpl()
 {
     ASSERT(!mAcquireNextImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
+    mIsAnyHostVisibleBufferWritten = false;
 }
 
 template <class DerivedT>
@@ -1559,8 +1560,7 @@ void CommandBufferHelperCommon::assertCanBeRecycledImpl()
     ASSERT(!DerivedT::ExecutesInline() || derived->getCommandBuffer().empty());
 }
 
-void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
-                                            VkAccessFlags writeAccessType,
+void CommandBufferHelperCommon::bufferWrite(VkAccessFlags writeAccessType,
                                             PipelineStage writeStage,
                                             BufferHelper *buffer)
 {
@@ -1572,13 +1572,24 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
         mPipelineBarrierMask.set(writeStage);
     }
 
-    // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to
-    // make the results visible to the host.  The buffer may be mapped by the application in the
-    // future.
+    // Host-visible buffers may be mapped by the application. To make sure barrier are inserted at
+    // the end of the frame, mark the host-visilble writes here.
     if (buffer->isHostVisible())
     {
-        contextVk->onHostVisibleBufferWrite();
+        mIsAnyHostVisibleBufferWritten = true;
     }
+}
+
+void CommandBufferHelperCommon::imageWrite(Context *context,
+                                           gl::LevelIndex level,
+                                           uint32_t layerStart,
+                                           uint32_t layerCount,
+                                           VkImageAspectFlags aspectFlags,
+                                           ImageLayout imageLayout,
+                                           ImageHelper *image)
+{
+    imageWriteImpl(context, level, layerStart, layerCount, aspectFlags, imageLayout, image);
+    image->setQueueSerial(mQueueSerial);
 }
 
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
@@ -1634,18 +1645,18 @@ void CommandBufferHelperCommon::bufferReadImpl(VkAccessFlags readAccessType,
     ASSERT(!usesBufferForWrite(*buffer));
 }
 
-void CommandBufferHelperCommon::imageReadImpl(ContextVk *contextVk,
+void CommandBufferHelperCommon::imageReadImpl(Context *context,
                                               VkImageAspectFlags aspectFlags,
                                               ImageLayout imageLayout,
                                               ImageHelper *image)
 {
     if (image->isReadBarrierNecessary(imageLayout))
     {
-        updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
+        updateImageLayoutAndBarrier(context, image, aspectFlags, imageLayout);
     }
 }
 
-void CommandBufferHelperCommon::imageWriteImpl(ContextVk *contextVk,
+void CommandBufferHelperCommon::imageWriteImpl(Context *context,
                                                gl::LevelIndex level,
                                                uint32_t layerStart,
                                                uint32_t layerCount,
@@ -1655,7 +1666,7 @@ void CommandBufferHelperCommon::imageWriteImpl(ContextVk *contextVk,
 {
     image->onWrite(level, 1, layerStart, layerCount, aspectFlags);
     // Write always requires a barrier
-    updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
+    updateImageLayoutAndBarrier(context, image, aspectFlags, imageLayout);
 }
 
 void CommandBufferHelperCommon::updateImageLayoutAndBarrier(Context *context,
@@ -1695,6 +1706,36 @@ void CommandBufferHelperCommon::addCommandDiagnosticsCommon(std::ostringstream *
     *out << "\\l";
 }
 
+void CommandBufferHelperCommon::setBufferReadQueueSerial(BufferHelper *buffer)
+{
+    if (buffer->getResourceUse() >= mQueueSerial)
+    {
+        // A buffer could have read accessed by both renderPassCommands and
+        // outsideRenderPassCommands and there is no need to endRP or flush. In this case, the
+        // renderPassCommands' read will override the outsideRenderPassCommands' read, since its
+        // queueSerial must be greater than outsideRP.
+    }
+    else
+    {
+        buffer->setQueueSerial(mQueueSerial);
+    }
+}
+
+void CommandBufferHelperCommon::setImageReadQueueSerial(ImageHelper *image)
+{
+    if (image->getResourceUse() >= mQueueSerial)
+    {
+        // Usually an image can only used by a RenderPassCommands or OutsideRenderPassCommands
+        // because the layout will be different, except with image sampled from compute shader. In
+        // this case, the renderPassCommands' read will override the outsideRenderPassCommands'
+        // read, since its queueSerial must be greater than outsideRP.
+    }
+    else
+    {
+        image->setQueueSerial(mQueueSerial);
+    }
+}
+
 // OutsideRenderPassCommandBufferHelper implementation.
 OutsideRenderPassCommandBufferHelper::OutsideRenderPassCommandBufferHelper() {}
 
@@ -1730,53 +1771,6 @@ angle::Result OutsideRenderPassCommandBufferHelper::reset(
     mQueueSerial = QueueSerial();
 
     return initializeCommandBuffer(context);
-}
-
-void OutsideRenderPassCommandBufferHelper::setBufferReadQueueSerial(ContextVk *contextVk,
-                                                                    BufferHelper *buffer)
-{
-    if (contextVk->isRenderPassStartedAndUsesBuffer(*buffer))
-    {
-        // We should not run into situation that RP is writing to it while we are reading it here
-        ASSERT(!contextVk->isRenderPassStartedAndUsesBufferForWrite(*buffer));
-        // A buffer could have read accessed by both renderPassCommands and
-        // outsideRenderPassCommands and there is no need to endRP or flush. In this case, the
-        // renderPassCommands' read will override the outsideRenderPassCommands' read, since its
-        // queueSerial must be greater than outsideRP.
-    }
-    else
-    {
-        buffer->setQueueSerial(mQueueSerial);
-    }
-}
-
-void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
-                                                     VkImageAspectFlags aspectFlags,
-                                                     ImageLayout imageLayout,
-                                                     ImageHelper *image)
-{
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
-
-    if (!contextVk->isRenderPassStartedAndUsesImage(*image))
-    {
-        // Usually an image can only used by a RenderPassCommands or OutsideRenderPassCommands
-        // because the layout will be different, except with image sampled from compute shader. In
-        // this case, the renderPassCommands' read will override the outsideRenderPassCommands'
-        // read, since its queueSerial must be greater than outsideRP.
-        image->setQueueSerial(mQueueSerial);
-    }
-}
-
-void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
-                                                      gl::LevelIndex level,
-                                                      uint32_t layerStart,
-                                                      uint32_t layerCount,
-                                                      VkImageAspectFlags aspectFlags,
-                                                      ImageLayout imageLayout,
-                                                      ImageHelper *image)
-{
-    imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
@@ -1854,13 +1848,14 @@ void OutsideRenderPassCommandBufferHelper::assertCanBeRecycled()
     assertCanBeRecycledImpl<OutsideRenderPassCommandBufferHelper>();
 }
 
-void OutsideRenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
+std::string OutsideRenderPassCommandBufferHelper::getCommandDiagnostics()
 {
     std::ostringstream out;
     addCommandDiagnosticsCommon(&out);
 
     out << mCommandBuffer.dumpCommands("\\l");
-    contextVk->addCommandBufferDiagnostics(out.str());
+
+    return out.str();
 }
 
 // RenderPassCommandBufferHelper implementation.
@@ -1948,26 +1943,14 @@ angle::Result RenderPassCommandBufferHelper::reset(
     return initializeCommandBuffer(context);
 }
 
-void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
+void RenderPassCommandBufferHelper::imageRead(Context *context,
                                               VkImageAspectFlags aspectFlags,
                                               ImageLayout imageLayout,
                                               ImageHelper *image)
 {
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
+    imageReadImpl(context, aspectFlags, imageLayout, image);
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
-    image->setQueueSerial(mQueueSerial);
-}
-
-void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
-                                               gl::LevelIndex level,
-                                               uint32_t layerStart,
-                                               uint32_t layerCount,
-                                               VkImageAspectFlags aspectFlags,
-                                               ImageLayout imageLayout,
-                                               ImageHelper *image)
-{
-    imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
     image->setQueueSerial(mQueueSerial);
 }
 
@@ -2803,7 +2786,7 @@ void RenderPassCommandBufferHelper::assertCanBeRecycled()
     assertCanBeRecycledImpl<RenderPassCommandBufferHelper>();
 }
 
-void RenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
+std::string RenderPassCommandBufferHelper::getCommandDiagnostics()
 {
     std::ostringstream out;
     addCommandDiagnosticsCommon(&out);
@@ -2862,7 +2845,8 @@ void RenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
         }
         out << mCommandBuffers[subpass].dumpCommands("\\l");
     }
-    contextVk->addCommandBufferDiagnostics(out.str());
+
+    return out.str();
 }
 
 // CommandBufferRecycler implementation.
@@ -6594,7 +6578,7 @@ void ImageHelper::changeLayoutAndQueue(Context *context,
     ASSERT(acquireNextImageSemaphore == VK_NULL_HANDLE);
 }
 
-void ImageHelper::acquireFromExternal(ContextVk *contextVk,
+void ImageHelper::acquireFromExternal(Context *context,
                                       uint32_t externalQueueFamilyIndex,
                                       uint32_t rendererQueueFamilyIndex,
                                       ImageLayout currentLayout,
@@ -6614,7 +6598,7 @@ void ImageHelper::acquireFromExternal(ContextVk *contextVk,
     // leave it to transition out as the image is used later.
     if (currentLayout != ImageLayout::Undefined)
     {
-        changeLayoutAndQueue(contextVk, getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex,
+        changeLayoutAndQueue(context, getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex,
                              commandBuffer);
     }
 
@@ -6630,7 +6614,7 @@ void ImageHelper::acquireFromExternal(ContextVk *contextVk,
     }
 }
 
-void ImageHelper::releaseToExternal(ContextVk *contextVk,
+void ImageHelper::releaseToExternal(Context *context,
                                     uint32_t rendererQueueFamilyIndex,
                                     uint32_t externalQueueFamilyIndex,
                                     ImageLayout desiredLayout,
@@ -6642,7 +6626,7 @@ void ImageHelper::releaseToExternal(ContextVk *contextVk,
     // GL!
     if (mCurrentQueueFamilyIndex != externalQueueFamilyIndex || mCurrentLayout != desiredLayout)
     {
-        changeLayoutAndQueue(contextVk, getAspectFlags(), desiredLayout, externalQueueFamilyIndex,
+        changeLayoutAndQueue(context, getAspectFlags(), desiredLayout, externalQueueFamilyIndex,
                              commandBuffer);
     }
 
