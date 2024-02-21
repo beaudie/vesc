@@ -2260,6 +2260,11 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
                                          mImage->getLayerCount(), VK_IMAGE_ASPECT_COLOR_BIT,
                                          mImage);
 
+        // For mipmap generation, we should make sure that there is no pending write for the source
+        // mip level. If there is, a barrier should be inserted before the source mip being used.
+        const vk::LevelIndex srcLevelVk = dstBaseLevelVk - 1;
+        mImage->updateBarriersOnGenerateMipmap(srcLevelVk.get(), writeLevelCount);
+
         vk::OutsideRenderPassCommandBuffer *commandBuffer;
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
@@ -2270,7 +2275,6 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
             const vk::ImageView *srcView                         = nullptr;
             UtilsVk::GenerateMipmapDestLevelViews destLevelViews = {};
 
-            const vk::LevelIndex srcLevelVk = dstBaseLevelVk - 1;
             ANGLE_TRY(getImageViews().getLevelLayerDrawImageView(
                 contextVk, *mImage, srcLevelVk, layer, gl::SrgbWriteControlMode::Default,
                 &srcView));
