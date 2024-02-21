@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e33a65bb_3c176cc4",
+        "filename": "src/libANGLE/renderer/metal/ImageMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-21T07:04:43Z",
+      "side": 1,
+      "message": "If the attribute-provided format is unknown, `angleFormatId` will be `FormatID::NONE`. Please add a test to ensure that this case does not cause any runtime crashes.",
+      "revId": "2fd90398e4ef6cb6a7541a7ef6b2caf08f8fa8cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
