@@ -5798,7 +5798,6 @@ void DescriptorSetDescBuilder::setEmptyBuffer(uint32_t infoDescIndex,
 
 template <typename CommandBufferT>
 void DescriptorSetDescBuilder::updateOneShaderBuffer(
-    ContextVk *contextVk,
     CommandBufferT *commandBufferHelper,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
@@ -5845,8 +5844,8 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
                                  descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     if (isUniformBuffer)
     {
-        commandBufferHelper->bufferRead(contextVk, VK_ACCESS_UNIFORM_READ_BIT,
-                                        block.activeShaders(), &bufferHelper);
+        commandBufferHelper->bufferRead(VK_ACCESS_UNIFORM_READ_BIT, block.activeShaders(),
+                                        &bufferHelper);
     }
     else
     {
@@ -5858,8 +5857,8 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
             // marked read-only.  This also helps BufferVk make better decisions during
             // buffer data uploads and copies by knowing that the buffers are not actually
             // being written to.
-            commandBufferHelper->bufferRead(contextVk, VK_ACCESS_SHADER_READ_BIT,
-                                            block.activeShaders(), &bufferHelper);
+            commandBufferHelper->bufferRead(VK_ACCESS_SHADER_READ_BIT, block.activeShaders(),
+                                            &bufferHelper);
         }
         else
         {
@@ -5868,8 +5867,7 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
             for (const gl::ShaderType shaderType : block.activeShaders())
             {
                 const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
-                commandBufferHelper->bufferWrite(contextVk, accessFlags, pipelineStage,
-                                                 &bufferHelper);
+                commandBufferHelper->bufferWrite(accessFlags, pipelineStage, &bufferHelper);
             }
         }
     }
@@ -5895,7 +5893,6 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
 
 template <typename CommandBufferT>
 void DescriptorSetDescBuilder::updateShaderBuffers(
-    ContextVk *contextVk,
     CommandBufferT *commandBufferHelper,
     const gl::ProgramExecutable &executable,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -5915,9 +5912,9 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
         const GLuint binding = isUniformBuffer
                                    ? executable.getUniformBlockBinding(blockIndex)
                                    : executable.getShaderStorageBlockBinding(blockIndex);
-        updateOneShaderBuffer(contextVk, commandBufferHelper, variableInfoMap, buffers,
-                              blocks[blockIndex], binding, descriptorType, maxBoundBufferRange,
-                              emptyBuffer, writeDescriptorDescs);
+        updateOneShaderBuffer(commandBufferHelper, variableInfoMap, buffers, blocks[blockIndex],
+                              binding, descriptorType, maxBoundBufferRange, emptyBuffer,
+                              writeDescriptorDescs);
     }
 }
 
@@ -5974,8 +5971,7 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
         for (const gl::ShaderType shaderType : atomicCounterBuffer.activeShaders())
         {
             const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
-            commandBufferHelper->bufferWrite(contextVk,
-                                             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            commandBufferHelper->bufferWrite(VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
                                              pipelineStage, &bufferHelper);
         }
 
@@ -6000,7 +5996,6 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
 
 // Explicit instantiation
 template void DescriptorSetDescBuilder::updateOneShaderBuffer<vk::RenderPassCommandBufferHelper>(
-    ContextVk *contextVk,
     RenderPassCommandBufferHelper *commandBufferHelper,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
@@ -6012,7 +6007,6 @@ template void DescriptorSetDescBuilder::updateOneShaderBuffer<vk::RenderPassComm
     const WriteDescriptorDescs &writeDescriptorDescs);
 
 template void DescriptorSetDescBuilder::updateOneShaderBuffer<OutsideRenderPassCommandBufferHelper>(
-    ContextVk *contextVk,
     OutsideRenderPassCommandBufferHelper *commandBufferHelper,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
@@ -6024,7 +6018,6 @@ template void DescriptorSetDescBuilder::updateOneShaderBuffer<OutsideRenderPassC
     const WriteDescriptorDescs &writeDescriptorDescs);
 
 template void DescriptorSetDescBuilder::updateShaderBuffers<OutsideRenderPassCommandBufferHelper>(
-    ContextVk *contextVk,
     OutsideRenderPassCommandBufferHelper *commandBufferHelper,
     const gl::ProgramExecutable &executable,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -6036,7 +6029,6 @@ template void DescriptorSetDescBuilder::updateShaderBuffers<OutsideRenderPassCom
     const WriteDescriptorDescs &writeDescriptorDescs);
 
 template void DescriptorSetDescBuilder::updateShaderBuffers<RenderPassCommandBufferHelper>(
-    ContextVk *contextVk,
     RenderPassCommandBufferHelper *commandBufferHelper,
     const gl::ProgramExecutable &executable,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,

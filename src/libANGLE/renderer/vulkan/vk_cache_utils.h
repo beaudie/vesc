@@ -1784,8 +1784,7 @@ class DescriptorSetDescBuilder final
 
     // Specific helpers for shader resource descriptors.
     template <typename CommandBufferT>
-    void updateOneShaderBuffer(ContextVk *contextVk,
-                               CommandBufferT *commandBufferHelper,
+    void updateOneShaderBuffer(CommandBufferT *commandBufferHelper,
                                const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                const gl::BufferVector &buffers,
                                const gl::InterfaceBlock &block,
@@ -1795,8 +1794,7 @@ class DescriptorSetDescBuilder final
                                const BufferHelper &emptyBuffer,
                                const WriteDescriptorDescs &writeDescriptorDescs);
     template <typename CommandBufferT>
-    void updateShaderBuffers(ContextVk *contextVk,
-                             CommandBufferT *commandBufferHelper,
+    void updateShaderBuffers(CommandBufferT *commandBufferHelper,
                              const gl::ProgramExecutable &executable,
                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
                              const gl::BufferVector &buffers,

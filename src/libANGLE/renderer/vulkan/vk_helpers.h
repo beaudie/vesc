@@ -1147,10 +1147,20 @@ constexpr uint32_t kInfiniteCmdCount = 0xFFFFFFFF;
 class CommandBufferHelperCommon : angle::NonCopyable
 {
   public:
-    void bufferWrite(ContextVk *contextVk,
-                     VkAccessFlags writeAccessType,
-                     PipelineStage writeStage,
-                     BufferHelper *buffer);
+    void bufferWrite(VkAccessFlags writeAccessType, PipelineStage writeStage, BufferHelper *buffer);
+
+    void bufferRead(VkAccessFlags readAccessType, PipelineStage readStage, BufferHelper *buffer)
+    {
+        bufferReadImpl(readAccessType, readStage, buffer);
+        setBufferReadQueueSerial(buffer);
+    }
+    void bufferRead(VkAccessFlags readAccessType,
+                    const gl::ShaderBitSet &readShaderStages,
+                    BufferHelper *buffer)
+    {
+        bufferReadImpl(readAccessType, readShaderStages, buffer);
+        setBufferReadQueueSerial(buffer);
+    }
 
     bool usesBuffer(const BufferHelper &buffer) const
     {
@@ -1160,6 +1170,13 @@ class CommandBufferHelperCommon : angle::NonCopyable
     bool usesBufferForWrite(const BufferHelper &buffer) const
     {
         return buffer.writtenByCommandBuffer(mQueueSerial);
+    }
+
+    bool getAndResetHostVisibleBufferWrite()
+    {
+        bool hostBufferWrite           = mIsAnyHostVisibleBufferWritten;
+        mIsAnyHostVisibleBufferWritten = false;
+        return hostBufferWrite;
     }
 
     void executeBarriers(const angle::FeaturesVk &features, CommandsState *commandsState);
@@ -1232,11 +1249,11 @@ class CommandBufferHelperCommon : angle::NonCopyable
             bufferReadImpl(readAccessType, readStage, buffer);
         }
     }
-    void imageReadImpl(ContextVk *contextVk,
+    void imageReadImpl(Context *context,
                        VkImageAspectFlags aspectFlags,
                        ImageLayout imageLayout,
                        ImageHelper *image);
-    void imageWriteImpl(ContextVk *contextVk,
+    void imageWriteImpl(Context *context,
                         gl::LevelIndex level,
                         uint32_t layerStart,
                         uint32_t layerCount,
@@ -1250,6 +1267,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
                                      ImageLayout imageLayout);
 
     void addCommandDiagnosticsCommon(std::ostringstream *out);
+    void setBufferReadQueueSerial(BufferHelper *buffer);
 
     // Allocator used by this class.
     SecondaryCommandBlockAllocator mCommandAllocator;
@@ -1276,6 +1294,9 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     // Only used for swapChain images
     Semaphore mAcquireNextImageSemaphore;
+
+    // Check for any buffer write commands recorded for host-visible buffers
+    bool mIsAnyHostVisibleBufferWritten = false;
 };
 
 class SecondaryCommandBufferCollector;
@@ -1313,24 +1334,6 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     void markClosed() { mCommandBuffer.close(); }
 #endif
 
-    void bufferRead(ContextVk *contextVk,
-                    VkAccessFlags readAccessType,
-                    PipelineStage readStage,
-                    BufferHelper *buffer)
-    {
-        bufferReadImpl(readAccessType, readStage, buffer);
-        setBufferReadQueueSerial(contextVk, buffer);
-    }
-
-    void bufferRead(ContextVk *contextVk,
-                    VkAccessFlags readAccessType,
-                    const gl::ShaderBitSet &readShaderStages,
-                    BufferHelper *buffer)
-    {
-        bufferReadImpl(readAccessType, readShaderStages, buffer);
-        setBufferReadQueueSerial(contextVk, buffer);
-    }
-
     void imageRead(ContextVk *contextVk,
                    VkImageAspectFlags aspectFlags,
                    ImageLayout imageLayout,
@@ -1353,7 +1356,7 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
         }
     }
 
-    void addCommandDiagnostics(ContextVk *contextVk);
+    std::string getCommandDiagnostics();
 
     void setQueueSerial(SerialIndex index, Serial serial)
     {
@@ -1363,7 +1366,6 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
   private:
     angle::Result initializeCommandBuffer(Context *context);
     angle::Result endCommandBuffer(Context *context);
-    void setBufferReadQueueSerial(ContextVk *contextVk, BufferHelper *buffer);
 
     OutsideRenderPassCommandBuffer mCommandBuffer;
     bool mIsCommandBufferEnded = false;
@@ -1456,23 +1458,6 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                     VkImageAspectFlags aspectFlags,
                     ImageLayout imageLayout,
                     ImageHelper *image);
-
-    void bufferRead(ContextVk *contextVk,
-                    VkAccessFlags readAccessType,
-                    PipelineStage readStage,
-                    BufferHelper *buffer)
-    {
-        bufferReadImpl(readAccessType, readStage, buffer);
-        buffer->setQueueSerial(mQueueSerial);
-    }
-    void bufferRead(ContextVk *contextVk,
-                    VkAccessFlags readAccessType,
-                    const gl::ShaderBitSet &readShaderStages,
-                    BufferHelper *buffer)
-    {
-        bufferReadImpl(readAccessType, readShaderStages, buffer);
-        buffer->setQueueSerial(mQueueSerial);
-    }
 
     void colorImagesDraw(gl::LevelIndex level,
                          uint32_t layerStart,
@@ -1607,7 +1592,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
             mHasGLMemoryBarrierIssued = true;
         }
     }
-    void addCommandDiagnostics(ContextVk *contextVk);
+    std::string getCommandDiagnostics();
 
     // Readonly depth stencil mode and feedback loop mode
     void updateDepthReadOnlyMode(RenderPassUsageFlags dsUsageFlags);
@@ -2402,14 +2387,14 @@ class ImageHelper final : public Resource, public angle::Subject
                                 VkSemaphore *semaphoreOut);
 
     // Performs an ownership transfer from an external instance or API.
-    void acquireFromExternal(ContextVk *contextVk,
+    void acquireFromExternal(Context *context,
                              uint32_t externalQueueFamilyIndex,
                              uint32_t rendererQueueFamilyIndex,
                              ImageLayout currentLayout,
                              OutsideRenderPassCommandBuffer *commandBuffer);
 
     // Performs an ownership transfer to an external instance or API.
-    void releaseToExternal(ContextVk *contextVk,
+    void releaseToExternal(Context *context,
                            uint32_t rendererQueueFamilyIndex,
                            uint32_t externalQueueFamilyIndex,
                            ImageLayout desiredLayout,
