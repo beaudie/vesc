@@ -164,6 +164,7 @@ enum class Feature
     ForceD16TexFilter,
     ForceD24S8AsUnsupported,
     ForceDepthAttachmentInitOnClear,
+    ForceDepthClampEnable,
     ForceDisableFullScreenExclusive,
     ForceFallbackFormat,
     ForceFragmentShaderPrecisionHighpToMediump,

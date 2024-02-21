@@ -3243,7 +3243,9 @@ void GraphicsPipelineDesc::initializePipelineShadersState(
     stateOut->rasterState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
     stateOut->rasterState.flags = 0;
     stateOut->rasterState.depthClampEnable =
-        static_cast<VkBool32>(mShaders.shaders.bits.depthClampEnable);
+        context->getFeatures().forceDepthClampEnable.enabled
+            ? VK_TRUE
+            : static_cast<VkBool32>(mShaders.shaders.bits.depthClampEnable);
     stateOut->rasterState.rasterizerDiscardEnable =
         static_cast<VkBool32>(mShaders.shaders.bits.rasterizerDiscardEnable);
     stateOut->rasterState.polygonMode =

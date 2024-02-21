@@ -1329,6 +1329,15 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/8503"
     };
 
+    FeatureInfo forceDepthClampEnable = {
+        "forceDepthClampEnable",
+        FeatureCategory::VulkanAppWorkarounds,
+        "Some applications are attempting to render skyboxes at the same distance as "
+        "viewport far plane. On some hardware, this results is visual corruption due to "
+        "depth clipping. To avoid this, use Vulkan's depthClampEnable",
+        &members,
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

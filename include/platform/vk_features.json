@@ -1439,6 +1439,15 @@
                 "RelaxedPrecision decoration causes a crash"
             ],
             "issue": "http://anglebug.com/8503"
+        },
+        {
+            "name": "force_depth_clamp_enable",
+            "category": "AppWorkarounds",
+            "description": [
+                "Some applications are attempting to render skyboxes at the same distance as ",
+                "viewport far plane. On some hardware, this results is visual corruption due to ",
+                "depth clipping. To avoid this, use Vulkan's depthClampEnable"
+            ]
         }
     ]
 }
