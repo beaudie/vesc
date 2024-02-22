@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e295ac10_e0ab9330",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-22T01:02:55Z",
+      "side": 1,
+      "message": "I defer to Shabi\u0027s review, but a couple of questions came to mind while I was looking at this.",
+      "revId": "3a157146e7daad1b310bca485114f9381b49b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d42157d8_4c5e038c",
+        "filename": "src/compiler/translator/tree_ops/SeparateStructFromFunctionDeclarations.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-22T01:02:55Z",
+      "side": 1,
+      "message": "Do we always want to do this work even if the structure had a name? I\u0027m wondering if the if-test above should be something like:\n\n```\n  if (!structure-\u003esymbolType() !\u003d SymbolType::Empty)\n      return;\n```",
+      "revId": "3a157146e7daad1b310bca485114f9381b49b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d317b320_8bc8b877",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 18733,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-22T01:02:55Z",
+      "side": 1,
+      "message": "Great tests. Is it worth adding a test verifying that an out-of-line struct definition as a function return type, which theoretically the above transform shouldn\u0027t need to touch, works too?\n\n```\nstruct Foo { float v; };\nFoo foo()\n{\n    // ...\n}\n```",
+      "revId": "3a157146e7daad1b310bca485114f9381b49b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
