@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bab7a287_9d7f8017",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T18:58:38Z",
+      "side": 1,
+      "message": "nit: little point in checking the allocation result IMO. `malloc` never fails on Linux and Android anyway. And doesn\u0027t `new` `throw` on OOM on platforms that do fail?\n\nFWIW, we have many places where we dynamically allocate something, and we never check the result for `nullptr`.",
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a41bc789_90d3aa78",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T18:58:38Z",
+      "side": 1,
+      "message": "In general, we tend to avoid nested classes. They sometimes end up a hassle. I suggest moving this out and calling it `CLKernelArgument`. Especially since there\u0027s already a `using` exposing the type out of the class anyway.",
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee5a14be_d92f611f",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T18:58:38Z",
+      "side": 1,
+      "message": "Per our style, please reserve `auto` for complex nested templated types (like iterators and such).",
+      "range": {
+        "startLine": 39,
+        "startChar": 15,
+        "endLine": 39,
+        "endChar": 19
+      },
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ab9c9ca_620f8b92",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T18:58:38Z",
+      "side": 1,
+      "message": "ditto\n\n```suggestion\n        const ProgramBinaryOutputHeader *binaryHeader \u003d\n```",
+      "range": {
+        "startLine": 57,
+        "startChar": 14,
+        "endLine": 57,
+        "endChar": 18
+      },
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b46fdaa3_c01be576",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T18:58:38Z",
+      "side": 1,
+      "message": "nit: Ultimately, shorthands make the code harder to read\n\n```suggestion\n        DeviceProgramData deviceBinary;\n```\n\nSame with `dev`, just call it `device` 😊",
+      "range": {
+        "startLine": 101,
+        "startChar": 26,
+        "endLine": 101,
+        "endChar": 32
+      },
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
