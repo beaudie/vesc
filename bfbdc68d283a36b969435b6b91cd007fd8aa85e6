@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4977535_3d3f9eb0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8790,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-22T20:14:29Z",
+      "side": 1,
+      "message": "Thanks! Updated.",
+      "parentUuid": "aa51aef2_4c528a52",
+      "revId": "bfbdc68d283a36b969435b6b91cd007fd8aa85e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95c797cc_f40eeb9b",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df88327_458b722d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8877,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-22T20:14:29Z",
+      "side": 1,
+      "message": "For `std::min` to work, `mSubresourceUpdates.size()` should also become a `gl::LevelIndex`. Added the helper `clipToUpdateListUpperLimit()`.",
+      "parentUuid": "95c797cc_f40eeb9b",
+      "range": {
+        "startLine": 8863,
+        "startChar": 0,
+        "endLine": 8877,
+        "endChar": 5
+      },
+      "revId": "bfbdc68d283a36b969435b6b91cd007fd8aa85e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2b340e9_eb6662f4",
@@ -54,6 +96,24 @@
       "writtenOn": "2024-02-22T15:09:10Z",
       "side": 1,
       "message": "Suggest moving this logic and the `for` loop below into another helper. Then the code becomes simpler like:\n\n```\n    flushStagedClearEmulatedChannelsUpdates(\u0026otherUpdatesToFlush);\n    if (otherUpdatesToFlush)\n        flushStagedUpdatesImpl();\n    // clean up / finalization code\n```",
+      "revId": "bfbdc68d283a36b969435b6b91cd007fd8aa85e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4bb64ad_ea80a5f3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8884,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-22T20:14:29Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "e2b340e9_eb6662f4",
       "revId": "bfbdc68d283a36b969435b6b91cd007fd8aa85e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
