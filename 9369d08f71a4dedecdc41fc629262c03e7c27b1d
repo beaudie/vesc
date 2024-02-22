@@ -343,6 +343,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6621e9e9_304abd44",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T21:58:37Z",
+      "side": 1,
+      "message": "\u003e I swear I\u0027m not doing this kinda stuff on purpose to get better/cleaner suggestions from you... 🤥\n\nHahaha, no worries, it takes a while to get used to the style of the project. You\u0027re going through what I went through with the \"strict reviewer\" before me when I joined the project :P\n\n\u003e Nice! I\u0027m guessing we can maybe tie this to a GN arg as well? 🤞\n\nSure, if it\u0027s that useful (I figured it\u0027s just there for local debugging). But gn args never hurt.\n\n\u003e Also, is there some existing mechanism in ANGLE for runtime knobs?\n\nYes, the ANGLE features (stuff in `vk_features.json`) can be tweaked at runtime with an envvar and getprop (see `ANGLE_FEATURE_OVERRIDES_ENABLED`). The `constexpr bool` helps us save binary space though, so if something takes up significant binary size (like pull in SPIR-V Tools when it would have otherwise not linked with) we don\u0027t make it a runtime decision.\n\nIt could always be \"build with debug, enabled at runtime\" though, they are not mutually exclusive.",
+      "parentUuid": "f21613dd_034dee28",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 435,
+        "endChar": 6
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4e00f225_7f22a2ca",
         "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
         "patchSetId": 4
