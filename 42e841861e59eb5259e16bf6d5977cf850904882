@@ -159,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "014171e5_3f6b4fd4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4446,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-22T23:11:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5f602a63_d65c737a",
+      "range": {
+        "startLine": 4446,
+        "startChar": 0,
+        "endLine": 4446,
+        "endChar": 90
+      },
+      "revId": "42e841861e59eb5259e16bf6d5977cf850904882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43534e94_6b075cdf",
@@ -237,6 +261,24 @@
       "side": 1,
       "message": "Added a comment down where it is called explaining what we are doing.",
       "parentUuid": "1ed4d2cc_2a653828",
+      "revId": "42e841861e59eb5259e16bf6d5977cf850904882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eb47c2d_8b8d3d01",
+        "filename": "util/capture/trace_fixture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-22T23:11:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a4fb789b_bd8a4624",
       "revId": "42e841861e59eb5259e16bf6d5977cf850904882",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

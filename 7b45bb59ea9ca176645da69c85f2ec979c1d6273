@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d5b62e3_6fbe3bb7",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3596,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-22T23:11:56Z",
+      "side": 1,
+      "message": "Ooo, no default parameters in the ANGLE project.",
+      "range": {
+        "startLine": 3596,
+        "startChar": 41,
+        "endLine": 3596,
+        "endChar": 46
+      },
+      "revId": "7b45bb59ea9ca176645da69c85f2ec979c1d6273",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
