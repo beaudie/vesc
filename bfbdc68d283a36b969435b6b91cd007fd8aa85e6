@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa51aef2_4c528a52",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8790,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:09:10Z",
+      "side": 1,
+      "message": "Please ASSERT now that the next update (if any) is not `ClearEmulatedChannelsOnly` to support the comments above.",
+      "revId": "bfbdc68d283a36b969435b6b91cd007fd8aa85e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95c797cc_f40eeb9b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8877,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:09:10Z",
+      "side": 1,
+      "message": "Tiny optimization, no need for a loop when a min would do (untested code):\n\n```suggestion\n    levelGLEnd \u003d std::min(levelGLEnd, mSubresourceUpdates.size());\n\n    // Process the clear emulated channels from the updates first. They are expected to be at the\n    // beginning of the level updates.\n    bool otherUpdatesToFlush \u003d false;\n```\n\nYou could use a helper to do the `std::min` to hide the `mSubresourceUpdates.size()` details similar to other `getLevelUpdate*` functions.",
+      "range": {
+        "startLine": 8863,
+        "startChar": 0,
+        "endLine": 8877,
+        "endChar": 5
+      },
+      "revId": "bfbdc68d283a36b969435b6b91cd007fd8aa85e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2b340e9_eb6662f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8884,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:09:10Z",
+      "side": 1,
+      "message": "Suggest moving this logic and the `for` loop below into another helper. Then the code becomes simpler like:\n\n```\n    flushStagedClearEmulatedChannelsUpdates(\u0026otherUpdatesToFlush);\n    if (otherUpdatesToFlush)\n        flushStagedUpdatesImpl();\n    // clean up / finalization code\n```",
+      "revId": "bfbdc68d283a36b969435b6b91cd007fd8aa85e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
