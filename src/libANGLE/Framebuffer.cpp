@@ -2275,13 +2275,27 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
     // Mark the appropriate init flag.
     mState.mResourceNeedsInit.set(index, attachment->initState() == InitState::MayNeedInit);
 
-    // Update mFloat32ColorAttachmentBits and mSharedExponentColorAttachmentBits cache
+    static_assert(DIRTY_BIT_COLOR_ATTACHMENT_MAX <= DIRTY_BIT_DEPTH_ATTACHMENT);
+    static_assert(DIRTY_BIT_COLOR_ATTACHMENT_MAX <= DIRTY_BIT_STENCIL_ATTACHMENT);
+
+    // Update component type mask, mFloat32ColorAttachmentBits,
+    // and mSharedExponentColorAttachmentBits cache
     if (index < DIRTY_BIT_COLOR_ATTACHMENT_MAX)
     {
-        ASSERT(index != DIRTY_BIT_DEPTH_ATTACHMENT);
-        ASSERT(index != DIRTY_BIT_STENCIL_ATTACHMENT);
-        updateFloat32AndSharedExponentColorAttachmentBits(index - DIRTY_BIT_COLOR_ATTACHMENT_0,
-                                                          attachment->getFormat().info);
+        const size_t colorIndex = index - DIRTY_BIT_COLOR_ATTACHMENT_0;
+        ASSERT(colorIndex < mState.mColorAttachments.size());
+        ComponentType componentType = ComponentType::Float;
+        switch (attachment->getFormat().info->componentType)
+        {
+            case GL_INT:
+                componentType = ComponentType::Int;
+                break;
+            case GL_UNSIGNED_INT:
+                componentType = ComponentType::UnsignedInt;
+                break;
+        }
+        SetComponentTypeMask(componentType, colorIndex, &mState.mDrawBufferTypeMask);
+        updateFloat32AndSharedExponentColorAttachmentBits(colorIndex, attachment->getFormat().info);
     }
 }
 
