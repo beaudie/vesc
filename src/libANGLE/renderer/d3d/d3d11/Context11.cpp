@@ -454,6 +454,12 @@ angle::Result Context11::drawArraysIndirect(const gl::Context *context,
         ANGLE_TRY(mRenderer->getStateManager()->updateState(
             context, mode, cmd->first, cmd->count, gl::DrawElementsType::InvalidEnum, nullptr,
             cmd->instanceCount, 0, 0, true));
+
+        if (cmd->count == 0)
+        {
+            return angle::Result::Continue;
+        }
+
         return mRenderer->drawArrays(context, mode, cmd->first, cmd->count, cmd->instanceCount,
                                      cmd->baseInstance, true);
     }
@@ -480,13 +486,6 @@ angle::Result Context11::drawElementsIndirect(const gl::Context *context,
         const void *indices =
             reinterpret_cast<const void *>(static_cast<uintptr_t>(cmd->firstIndex * typeBytes));
 
-        // We must explicitly resolve the index range for the slow-path indirect drawElements to
-        // make sure we are using the correct 'baseVertex'. This parameter does not exist for the
-        // direct drawElements.
-        gl::IndexRange indexRange;
-        ANGLE_TRY(context->getState().getVertexArray()->getIndexRange(context, type, cmd->count,
-                                                                      indices, &indexRange));
-
         GLint startVertex;
         ANGLE_TRY(ComputeStartVertex(GetImplAs<Context11>(context), indexRange, cmd->baseVertex,
                                      &startVertex));
@@ -494,6 +493,19 @@ angle::Result Context11::drawElementsIndirect(const gl::Context *context,
         ANGLE_TRY(mRenderer->getStateManager()->updateState(
             context, mode, startVertex, cmd->count, type, indices, cmd->primCount, cmd->baseVertex,
             cmd->baseInstance, true));
+
+        if (cmd->count == 0)
+        {
+            return angle::Result::Continue;
+        }
+
+        // We must explicitly resolve the index range for the slow-path indirect drawElements to
+        // make sure we are using the correct 'baseVertex'. This parameter does not exist for the
+        // direct drawElements.
+        gl::IndexRange indexRange;
+        ANGLE_TRY(context->getState().getVertexArray()->getIndexRange(context, type, cmd->count,
+                                                                      indices, &indexRange));
+
         return mRenderer->drawElements(context, mode, static_cast<GLint>(indexRange.start),
                                        cmd->count, type, indices, cmd->primCount, 0,
                                        cmd->baseInstance, true);
