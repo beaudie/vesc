@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c20a96_fd1c2a20",
+        "filename": "src/compiler/translator/tree_ops/SeparateStructFromFunctionDeclarations.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:51:09Z",
+      "side": 1,
+      "message": "Probably not a bad idea to always make this separation. Fewer pitfalls for future transformations.\n\nLike, I have no idea if the transformation that pulls samplers out of structs works for structs defined in return types (don\u0027t know if that\u0027s even possible, but if it is possible, it\u0027s very likely broken). This change would make sure such transformations never have to worry about this.",
+      "parentUuid": "17dd4931_7818c8f6",
+      "revId": "3a157146e7daad1b310bca485114f9381b49b32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d317b320_8bc8b877",
