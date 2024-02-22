@@ -1,0 +1,221 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da41acaf_b9f2700b",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "These look like should be handled by the validation for this function instead",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 9
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c32495b4_4b28922d",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "😮 I\u0027m shocked that `clLinkProgram` is actually taking options like this and in a single string no less (what is this, Windows?)\n\nThis is a bit error prone, like if the user provides `-create-library-special-extension`, it\u0027s still going to match `-create-library`. My suggestion is to create something like `egl::AttributeMap`, except you can make it even a struct with pre-determined fields (unlike the generic EGLint-based AttributeMap). Let\u0027s call that `CLProgramOptions`?\n\nThen similar to how EGL attributes are put in an `AttributeMap` very early in the entry point, you can parse the options early on (even before validation) with `angle::SplitStringAlongWhitespace` + checking for possible values and setting the appropriate flags in `CLProgramOptions`.\n\nThe added benefit is that in validation and every backend, you don\u0027t need to re-parse the options (potentially inconsistently).",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 98
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55cb239d_c118a9b4",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "Also looks like it belongs in validation",
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18654ab5_5ec00231",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "We have a thread pool implementation in ANGLE that you could use. It\u0027ll be more efficient than creating/destroying many threads, and you could control how many things are run in parallel.\n\nYou can probably put a pool in `CLPlatform` that\u0027s initialized like `Display::mMultiThreadPool` and use that.",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 208,
+        "endChar": 36
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f05b8616_6be6133d",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "What is `mProgramMutex` protecting exactly? It\u0027s locked above when `buildInternal` is called synchronously, but it isn\u0027t when it\u0027s async.",
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b8a3313_0238a26e",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "Eventually, you could consider moving the clspv stuff under a simpler interface in `clspv_utils.h/cpp` to contain the separate its details from `CLProgramVk`.",
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d8818cd_38b858ca",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "nit: I don\u0027t know if it\u0027s accessible, but if you directly use something like `clspv::CompileFromSourcesString` (called from `clspvCompileFromSourcesString`) you can simplify and optimize this by avoiding multiple allocations and `memcpy`s.\n\n`clspvCompileFromSourcesString` creates temporary storage, then mallocs space for `clspvCtx.mOutputBin` to `memcpy` into, then this code is `memcpy`ing it into something else :/",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 353,
+        "endChar": 21
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7483042_69dc11e2",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "Avoid `#if` as much as you can. The code inside can easily bitrot. I expect on debug builds you still don\u0027t want this to be output all the time (too much log, right?)\n\nThe way we typically do it is:\n\n```\n// at top of the file:\nnamespace {\nconstexpr bool kLogSpirvDisassembly \u003d false;\n}  // anonymous namespace\n\n// here:\nif (kLogSpirvDisassembly)\n{\n    INFO() \u003c\u003c \"OpenCL program (\" \u003c\u003c this \u003c\u003c \") SPIR-V Disassembly (start)\";\n    INFO() \u003c\u003c disassembleSpirv(SPV_BINARY_TO_TEXT_OPTION_NONE, deviceProgramData);\n    INFO() \u003c\u003c \"OpenCL program (\" \u003c\u003c this \u003c\u003c \") SPIR-V Disassembly (end)\";\n}\n```\n\nThis way the code does get compiled out, but also get build-checked on every build.\n\nIf you really do want to enable this on debug builds (not recommended), then you can put the `#if` around the `bool`\u0027s initialization. See `kDumpPipelineCacheGraph` for example!",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 435,
+        "endChar": 6
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e00f225_7f22a2ca",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "FYI, `angle::spirv::Print` exists.",
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e98180a9_7a7905a1",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "Fine for now, but you might find you\u0027d need to implement this stuff in ANGLE eventualy. SPIR-V Tools does a full parse of the SPIR-V, creates maps, etc. It\u0027s somewhat heavy for the use-cases you have here.\n\nYou can find some examples of things we do directly on the SPIR-V in `spv_utils.cpp`. AFAICT, you don\u0027t actually need to look at most of the SPIR-V because the bulk of the SPIR-V is actually the shader code and parsing that is a waste of time. If you roll out your own loop to inspect the SPIR-V, you can extract the reflection info and strip it one pass, _and_ you can stop parsing as soon as you get to the `OpFunction`s section (and so skip most of the SPIR-V).\n\nNot asking you to do that now, just something to bear in mind.",
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "433f3814_bc9d6109",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T19:40:26Z",
+      "side": 1,
+      "message": "Doesn\u0027t need to be exposed in the header, you can make it a function in an anonymous namespace at the top of the cpp file.\n\nPer our style, then it would not have `static`, and be it\u0027d be called `ParseReflection`.",
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
