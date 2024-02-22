@@ -16,6 +16,23 @@
       "message": "Thanks",
       "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73d27b28_44a92508",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T20:32:58Z",
+      "side": 1,
+      "message": "Hah, looks like you also caught a bug ;)\n\nIf this wasn\u0027t caught by a test, please make sure there\u0027s a test to cover it.",
+      "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
