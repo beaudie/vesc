@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "232d432e_bc8811c8",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-22T19:32:04Z",
+      "side": 1,
+      "message": "Ah sorry - forgor the `std::nothrow` ...\n\nAgreed on new rarely failing - but IMO does not hurt to nothrow-check",
+      "parentUuid": "bab7a287_9d7f8017",
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a41bc789_90d3aa78",
         "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.h",
         "patchSetId": 3
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ab2a06d_08db3591",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-22T19:32:04Z",
+      "side": 1,
+      "message": "Fair points - will update",
+      "parentUuid": "a41bc789_90d3aa78",
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee5a14be_d92f611f",
         "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
         "patchSetId": 3
@@ -48,6 +84,30 @@
       "writtenOn": "2024-02-22T18:58:38Z",
       "side": 1,
       "message": "Per our style, please reserve `auto` for complex nested templated types (like iterators and such).",
+      "range": {
+        "startLine": 39,
+        "startChar": 15,
+        "endLine": 39,
+        "endChar": 19
+      },
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40abc7bf_549d5240",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-22T19:32:04Z",
+      "side": 1,
+      "message": "Got it - habit of mine to `const auto\u0026` range-for\u0027s - will fix",
+      "parentUuid": "ee5a14be_d92f611f",
       "range": {
         "startLine": 39,
         "startChar": 15,
@@ -83,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "702144c6_234d5233",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-22T19:32:04Z",
+      "side": 1,
+      "message": "Yep, will fix",
+      "parentUuid": "4ab9c9ca_620f8b92",
+      "range": {
+        "startLine": 57,
+        "startChar": 14,
+        "endLine": 57,
+        "endChar": 18
+      },
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b46fdaa3_c01be576",
         "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
         "patchSetId": 3
@@ -94,6 +178,30 @@
       "writtenOn": "2024-02-22T18:58:38Z",
       "side": 1,
       "message": "nit: Ultimately, shorthands make the code harder to read\n\n```suggestion\n        DeviceProgramData deviceBinary;\n```\n\nSame with `dev`, just call it `device` 😊",
+      "range": {
+        "startLine": 101,
+        "startChar": 26,
+        "endLine": 101,
+        "endChar": 32
+      },
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ac0a7f2_fa94571f",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-22T19:32:04Z",
+      "side": 1,
+      "message": "Sure, will update",
+      "parentUuid": "b46fdaa3_c01be576",
       "range": {
         "startLine": 101,
         "startChar": 26,
