@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fba542f_9ae392f8",
+        "filename": "src/tests/gl_tests/ImageTestMetal.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-22T06:05:30Z",
+      "side": 1,
+      "message": "The comment does not match the test.",
+      "range": {
+        "startLine": 747,
+        "startChar": 0,
+        "endLine": 749,
+        "endChar": 83
+      },
+      "revId": "e44db4694bf0e2b04b08b9cc39d0cc2304a1cbfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
