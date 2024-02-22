@@ -16,6 +16,24 @@
       "message": "If the attribute-provided format is unknown, `angleFormatId` will be `FormatID::NONE`. Please add a test to ensure that this case does not cause any runtime crashes.",
       "revId": "2fd90398e4ef6cb6a7541a7ef6b2caf08f8fa8cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11cc94fe_39b1dbf8",
+        "filename": "src/libANGLE/renderer/metal/ImageMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-02-22T02:45:13Z",
+      "side": 1,
+      "message": "Will do. I\u0027ve tightened up the parameter checking to only allow overrides that match the internal mapping used by the Metal backend. We can relax this restriction when the need arises.",
+      "parentUuid": "e33a65bb_3c176cc4",
+      "revId": "2fd90398e4ef6cb6a7541a7ef6b2caf08f8fa8cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
