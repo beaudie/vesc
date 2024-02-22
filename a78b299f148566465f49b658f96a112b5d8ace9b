@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5bd9ece9_9ea4152d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6612,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:25:56Z",
+      "side": 1,
+      "message": "Let\u0027s talk about it so I understand better the issue. I guess what you\u0027re saying is that because these layouts are read-write, a resource may be used in this layout in read mode, then a following write barrier would be missed (because we think the subresource is not used), right?\n\nI\u0027m a bit worried it may be possible to hit this with some other layouts too (but we can check together).\n\nIt\u0027s probably easy to fix nevertheless, like if you call `setSubresourcesWrittenSinceBarrier` (probably renamed to `accessed` instead of `written`) in `recordReadBarrier` too, then you have the right knowledge here. `isReadBarrierNecessary` itself won\u0027t use that info, but `isWriteBarrierNecessary` would.",
+      "parentUuid": "01c97b39_71a4f008",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0c876f0_4e493e37",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9

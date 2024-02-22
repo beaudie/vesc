@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdb4754c_77058e8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:25:56Z",
+      "side": 1,
+      "message": "Some suggestions to make the hoisted-up tracking more generic.",
+      "revId": "6fe5ed85d5473c154ad4bdfbe2327abe7271c9b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90da210d_314f283f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:25:56Z",
+      "side": 1,
+      "message": "```suggestion\n// For each level, write to layers that don\u0027t conflict in parallel.  The layer is hashed to\n```",
+      "revId": "6fe5ed85d5473c154ad4bdfbe2327abe7271c9b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab4fcff_a7303f1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:25:56Z",
+      "side": 1,
+      "message": "```suggestion\n// being written.  If so, a barrier is inserted, otherwise the barrier is avoided.  If mLayerCount \u003e kMaxParallelSubresourceUpload,\n```",
+      "revId": "6fe5ed85d5473c154ad4bdfbe2327abe7271c9b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bc4d2f5_7b3fe7a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:25:56Z",
+      "side": 1,
+      "message": "This note should instead be in `flushStagedUpdates` where the barrier is inserted as it\u0027s a potential optimization in how that function operates.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 9
+      },
+      "revId": "6fe5ed85d5473c154ad4bdfbe2327abe7271c9b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5c6cf41_61490321",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:25:56Z",
+      "side": 1,
+      "message": "```suggestion\nconstexpr uint32_t kMaxParallelLayerWrites \u003d 64;\n```",
+      "range": {
+        "startLine": 61,
+        "startChar": 19,
+        "endLine": 61,
+        "endChar": 48
+      },
+      "revId": "6fe5ed85d5473c154ad4bdfbe2327abe7271c9b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95a0503d_837c1d39",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:25:56Z",
+      "side": 1,
+      "message": "```suggestion\nusing ImageLayerWriteMask \u003d std::bitset\u003ckMaxParallelLayerWrites\u003e;\n```",
+      "revId": "6fe5ed85d5473c154ad4bdfbe2327abe7271c9b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "230cec41_fc6f9c3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2686,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:25:56Z",
+      "side": 1,
+      "message": "nit: no need to be in header.",
+      "revId": "6fe5ed85d5473c154ad4bdfbe2327abe7271c9b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e65cd3e5_2f967db8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-22T15:25:56Z",
+      "side": 1,
+      "message": "```suggestion\n    // Used to track subresource writes per level/layer. This can help parallelize writes to different\n    // levels or layers of the image, such as data uploads.\n    // See comment on kMaxParallelLayerWrites.\n    gl::TexLevelArray\u003cImageLayerWriteMask\u003e mSubresourcesWrittenSinceBarrier;\n```",
+      "range": {
+        "startLine": 2933,
+        "startChar": 0,
+        "endLine": 2935,
+        "endChar": 77
+      },
+      "revId": "6fe5ed85d5473c154ad4bdfbe2327abe7271c9b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
