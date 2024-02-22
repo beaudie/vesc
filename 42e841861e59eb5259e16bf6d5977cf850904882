@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "073f5f3b_7365f966",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2024-02-22T23:00:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16428aa7_3c512b45",
+      "range": {
+        "startLine": 313,
+        "startChar": 22,
+        "endLine": 313,
+        "endChar": 43
+      },
+      "revId": "42e841861e59eb5259e16bf6d5977cf850904882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f3edca7_a44f843c",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-21T22:47:43Z",
       "side": 1,
       "message": "EGLImages",
+      "range": {
+        "startLine": 1490,
+        "startChar": 38,
+        "endLine": 1490,
+        "endChar": 47
+      },
+      "revId": "42e841861e59eb5259e16bf6d5977cf850904882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a44f652_76d80e4e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2024-02-22T23:00:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f3edca7_a44f843c",
       "range": {
         "startLine": 1490,
         "startChar": 38,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5f602a63_d65c737a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4446,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2024-02-22T23:00:19Z",
+      "side": 1,
+      "message": "The current implementation of `CaptureTextureContents` isn\u0027t very useful for external textures since we already created the staging textures (either here or above with the EGLImages) and I was already skipping the call to `Texture::getTexImage` because it crashes with AHBs. It may re-converge for phase 2 but I had a feeling that the readback logic would be different enough that we should just branch early for the external case.",
+      "parentUuid": "3ee31443_831d3359",
+      "range": {
+        "startLine": 4446,
+        "startChar": 0,
+        "endLine": 4446,
+        "endChar": 90
+      },
+      "revId": "42e841861e59eb5259e16bf6d5977cf850904882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "43534e94_6b075cdf",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 9
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f0e9952_c6715468",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4466,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2024-02-22T23:00:19Z",
+      "side": 1,
+      "message": "I was able to reuse `CaptureCustomCreateEGLImage` by adding width/height arguments.",
+      "parentUuid": "43534e94_6b075cdf",
+      "range": {
+        "startLine": 4466,
+        "startChar": 24,
+        "endLine": 4466,
+        "endChar": 87
+      },
+      "revId": "42e841861e59eb5259e16bf6d5977cf850904882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1ed4d2cc_2a653828",
         "filename": "util/capture/trace_fixture.cpp",
         "patchSetId": 9
@@ -123,6 +219,24 @@
       "writtenOn": "2024-02-21T22:47:43Z",
       "side": 1,
       "message": "Can you add a comment explaining why we\u0027re creating a staging texture for the image?  In theory it could be something else, right?  I believe this is a conscious choice we are making.",
+      "revId": "42e841861e59eb5259e16bf6d5977cf850904882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4fb789b_bd8a4624",
+        "filename": "util/capture/trace_fixture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2024-02-22T23:00:19Z",
+      "side": 1,
+      "message": "Added a comment down where it is called explaining what we are doing.",
+      "parentUuid": "1ed4d2cc_2a653828",
       "revId": "42e841861e59eb5259e16bf6d5977cf850904882",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
