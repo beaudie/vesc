@@ -94,6 +94,30 @@
       },
       "revId": "7b45bb59ea9ca176645da69c85f2ec979c1d6273",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e2190c5_a53e2871",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3596,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-23T21:01:07Z",
+      "side": 1,
+      "message": "That looks like a nice simplification",
+      "parentUuid": "787767af_8fb8264a",
+      "range": {
+        "startLine": 3596,
+        "startChar": 41,
+        "endLine": 3596,
+        "endChar": 46
+      },
+      "revId": "7b45bb59ea9ca176645da69c85f2ec979c1d6273",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
