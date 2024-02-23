@@ -34,6 +34,24 @@
       "parentUuid": "6196976a_1eb6ca01",
       "revId": "e3fa52cc5fdafc5fd6918f1b8f0c7cacd95b5e75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53623756_045e0605",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-23T18:54:28Z",
+      "side": 1,
+      "message": "We have changed how ANGLE validates shader program cache: https://chromium-review.googlesource.com/c/angle/angle/+/4144078/13/src/libANGLE/Program.cpp. It used to use `angle::GetANGLECommitHash()` to check if the shader program cache should be invalidated, but now it uses a different code `angle::GetANGLEShaderProgramVersion()`, which is decoupled from `angle::GetANGLECommitHash()`.\n\nThe only places I found in code that are still using `angle::GetANGLECommitHash()`, are:\n\nchromium/src/gpu/command_buffer/service/program_cache.cc.\nchromium/src/content/browser/gpu/gpu_internals_ui.cc.\n\nI don\u0027t have full knowledge on whether they can affect ANGLE usage on Android builds. But on Android builds, there is no guarantee that git is available: https://chromium-review.googlesource.com/c/angle/angle/+/3615014/comment/159b2b5b_576de053/. So the chances that `angle::GetANGLECommitHash()` remains unknown on Android builds already exist. Thus I don\u0027t think this change is creating a potential issue that did not exist before..",
+      "parentUuid": "2d5dc186_0229ab9f",
+      "revId": "e3fa52cc5fdafc5fd6918f1b8f0c7cacd95b5e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
