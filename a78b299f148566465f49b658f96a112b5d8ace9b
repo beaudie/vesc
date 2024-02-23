@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4001b429_9a67523f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6612,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-23T21:05:27Z",
+      "side": 1,
+      "message": "Ok I think I get it. The approach in that CL is not bad, but we could probably make the change more generic and fit better with the rest of the API. What do you think of adding a new list to `CommandBufferAccess`, which like you said tracks the range being read and use that for such cases?\n\nLike, imagine if we renamed `CommandBufferImageWrite` to `CommandBufferImageSubresourceAccess`, then something like:\n\n```\nusing ReadImageSubresources \u003d angle::FixedVector\u003cCommandBufferImageSubresourceAccess, 1\u003e;\n...\nReadImageSubresources mReadImageSubresources;\n```\n\nThen the loops that process them could call something similar to `recordReadBarrier` (like `recordSubresourceReadBarrier`) which does call `setSubresourcesWrittenSinceBarrier`. As a bonus, that function can also check if a barrier is necessary or not (and optimize away a barrier^). Then we could take advantage of that to optimize shader storage images that are marked `readonly` (we don\u0027t currently do that and assume write, incurring potentially unnecessary barriers).\n\n---\n\n^ Read-after-read would still generate a barrier, so like you said we may have to track the bits for write and read separately, but that\u0027s a next step, including optimizing shader storage image usage.",
+      "parentUuid": "938b9d6e_36091bc0",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0c876f0_4e493e37",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
