@@ -52,6 +52,10 @@ angle_source_set("angle_gl_backend") {
     "$angle_root:angle_image_util",
   ]
 
+  if (angle_has_build && (is_android || is_linux || is_chromeos)) {
+    deps += [ "//build/config/linux/libdrm" ]
+  }
+
   if (is_win) {
     deps += [ "$angle_root:angle_d3d_format_tables" ]
   }
