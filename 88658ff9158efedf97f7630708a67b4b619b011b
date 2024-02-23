@@ -16,6 +16,24 @@
       "message": "Please add a comment that the test relies on internal assertions to catch a previous bug.",
       "revId": "88658ff9158efedf97f7630708a67b4b619b011b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67cfa49b_6b9fefcf",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4577,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-23T22:58:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5742145a_c859c814",
+      "revId": "88658ff9158efedf97f7630708a67b4b619b011b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

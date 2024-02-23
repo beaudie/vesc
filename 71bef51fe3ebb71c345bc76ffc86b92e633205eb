@@ -87,6 +87,24 @@
       "parentUuid": "6dab65c5_962550c2",
       "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56b1ab1d_a4169a37",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8794,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-23T22:58:14Z",
+      "side": 1,
+      "message": "Sorry. `glFramebufferTexture2D()` was from an earlier local draft based on another test (`RGBXAHBImportThenClear`), in which it actually *does not* cause the flush (`glClear()` does).\n\nFor `RGBXAHBImportThenUpload`, the flush indeed happens during `glTexSubImage2D()`, after which the image upload would not be applied without the fix. However, later during verification, it would be flushed during the `drawQuad()` call.\n\nIn addition, even if the verification part is removed, the test would pass even without flushing the remaining update if `eglDestroyImageKHR()` is called in the end. The buffer block assertion hits if `eglDestroyImageKHR()` is removed as well.",
+      "parentUuid": "42d711f4_a59aec9e",
+      "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
