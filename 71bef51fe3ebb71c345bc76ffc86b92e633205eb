@@ -51,6 +51,24 @@
       "parentUuid": "73d27b28_44a92508",
       "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dab65c5_962550c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8794,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-23T19:56:06Z",
+      "side": 1,
+      "message": "Added `ImageTestES3.IncompleteRGBXAHBImportThenUploadThenEnd`\n\nIt is based on `RGBXAHBImportThenUpload`, but the test immediately ends after adding the image update. If there is no empty check at the end of the loop in `flushStagedClearEmulatedChannelsUpdates()`, the test fails due to the non-orphan buffer block with the update during `BufferPool::destroy()`.",
+      "parentUuid": "9161c6c7_6d2479f1",
+      "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
