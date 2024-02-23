@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e22cce43_5121e370",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-02-23T19:32:04Z",
+      "side": 1,
+      "message": "One thing I\u0027m still unsure about is how the target level should be stored in the queued data uploads. CopyImageBuffer stores the offset and bytes per row/col, but no info about the level. Unless I misunderstood and the queued data uploads should be Textures as well?",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 7
+      },
+      "revId": "0177ed31bd8d9b9e3c6edfa3f1d0c29580cb9bbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
