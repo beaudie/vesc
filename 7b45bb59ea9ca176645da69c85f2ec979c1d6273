@@ -46,6 +46,30 @@
       },
       "revId": "7b45bb59ea9ca176645da69c85f2ec979c1d6273",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32b22961_81af7c80",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3596,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-23T20:03:26Z",
+      "side": 1,
+      "message": "How about keep the parameters, but just send in 1x1 in the case where we don\u0027t know.",
+      "parentUuid": "33c91a17_d59e0878",
+      "range": {
+        "startLine": 3596,
+        "startChar": 41,
+        "endLine": 3596,
+        "endChar": 46
+      },
+      "revId": "7b45bb59ea9ca176645da69c85f2ec979c1d6273",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
