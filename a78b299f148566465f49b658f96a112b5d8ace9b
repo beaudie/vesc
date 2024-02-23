@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "938b9d6e_36091bc0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6612,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-23T02:05:56Z",
+      "side": 1,
+      "message": "Yes, for example `CopyImageTestES31.ArraySelfCopyImageSubData` includes instances where different levels/layers are being copied within the same image, which could result in data hazards if the same level/layer is read and written to without barriers. Since `onImageSelfCopy()` only calls `onImageWrite()`, `recordReadBarrier()` won\u0027t be called for this part of the test.\n\nI also saw this issue for `MipmapTestES3.GenerateMipmapLargeTexture`, where it uses compute to generate mipmap. Since it generates 6 mips at a time and uses the latest mip to generate the next group, it also needs a barrier.\n\n* This draft CL tries to fix these cases: https://chromium-review.googlesource.com/c/angle/angle/+/5309435\n\nWe could also try adding the tracker to `recordReadBarrier()`, which should fix it. However, I think we should add the mip level, layer start and count for the image read accesses too.\n\nCould other layouts aside from read-write ones be affected as well?",
+      "parentUuid": "5bd9ece9_9ea4152d",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0c876f0_4e493e37",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
