@@ -33,6 +33,24 @@
       "message": "Hah, looks like you also caught a bug ;)\n\nIf this wasn\u0027t caught by a test, please make sure there\u0027s a test to cover it.",
       "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9161c6c7_6d2479f1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8794,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-23T01:44:20Z",
+      "side": 1,
+      "message": "Sounds good :)\n\nFor a test, I looked at `ImageTestES3.RGBXAHBImportThenUpload` as a base. The idea was to add a texture update after `ClearEmulatedChannels`, copy it to FBO and see that the update has not been applied. However, the updates get flushed once after `glFramebufferTexture2D()` (extra update not flushed) and once when reading pixels (extra update flushed).\n\nI also tried copying the texture to another texture (via `glCopyImageSubData()`), but it failed due to format incompatibility.\n\nIs there another way we can try to detect that the update is not flushed?",
+      "parentUuid": "73d27b28_44a92508",
+      "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
