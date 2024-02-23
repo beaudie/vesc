@@ -22,6 +22,30 @@
       },
       "revId": "0177ed31bd8d9b9e3c6edfa3f1d0c29580cb9bbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba354f48_6d68b165",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-23T21:54:56Z",
+      "side": 1,
+      "message": "We have a `gl::LevelIndex` (an int wrapper) and a vk::LevelIndex (another int wrapper, but unsigned so C++ doesn\u0027t consider them the same type :/) in the Vulkan backend which infinitely made the code clearer. I suggest you do the same in this backend from the get go.\n\nThe thing is, GL has levels which could be arbitrary, like:\n\n- Level 0, 10x20 RGB565\n- Level 1, 56x194 RGBA4444\n- Level 2, 16x16 RGBA8\n- Level 3, 8x8 RGBA8\n- Level 4, 4x4 RGBA8\n- Level 5, 123x12 RGB10A2\n\nThen with BASE/MAX level the application creates a mip chain. In the above, the mip chain could be levels {2, 3, 4}. In wgpu, you\u0027d create an image for that mip chain, which would have levels {0, 1, 2}.\n\nSo avoiding confusion between the levels as GL sees them and as wgpu sees them is very important. The difference is an offset, and you can have helpers to convert between the two, like see `toVkLevel` and `toGLLevel` in the vk backend.\n\nFor the updates in particular, we are storing updates to _any_ level, including stuff outside the allocated range of the image. For example, there could be a pending update to GL level 1 in the example above. It\u0027s a bit iffy, but we had to do in the vk backend was to store these updates with the GL level stored in them. Then when flushing the updates, we would translate them to VK level. See how `ImageHelper::flushStagedUpdates` calls `toVkLevel`.",
+      "parentUuid": "e22cce43_5121e370",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 7
+      },
+      "revId": "0177ed31bd8d9b9e3c6edfa3f1d0c29580cb9bbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
