@@ -50,6 +50,7 @@ angle_source_set("angle_gl_backend") {
   deps = [
     "$angle_root:angle_gpu_info_util",
     "$angle_root:angle_image_util",
+    "//build/config/linux/libdrm",
   ]
 
   if (is_win) {
