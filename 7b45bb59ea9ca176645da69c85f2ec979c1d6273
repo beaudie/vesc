@@ -22,6 +22,30 @@
       },
       "revId": "7b45bb59ea9ca176645da69c85f2ec979c1d6273",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33c91a17_d59e0878",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3596,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2024-02-23T19:19:39Z",
+      "side": 1,
+      "message": "Yikes, I should have known that. Would it be cheating to make an overload of `CaptureCustomCreateEGLImage` that doesn\u0027t take size so I can only do the lookup when needed? Or better to just factor out the size lookup altogether?",
+      "parentUuid": "2d5b62e3_6fbe3bb7",
+      "range": {
+        "startLine": 3596,
+        "startChar": 41,
+        "endLine": 3596,
+        "endChar": 46
+      },
+      "revId": "7b45bb59ea9ca176645da69c85f2ec979c1d6273",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
