@@ -16,6 +16,24 @@
       "message": "In terms of getting the build going, I don\u0027t see anything wrong with this, but be warned that building this way means ANGLE loses its ability to invalidate its caches next time you update ANGLE and build again. The result could be hard-to-debug failures as shaders and programs are loaded from an incompatible version.\n\nI\u0027d strongly suggest building ANGLE in a more reliable way instead of this change.",
       "revId": "e3fa52cc5fdafc5fd6918f1b8f0c7cacd95b5e75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d5dc186_0229ab9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-23T17:24:17Z",
+      "side": 1,
+      "message": "I\u0027m still +1-ing given that build with no git history is already supported in this way.",
+      "parentUuid": "6196976a_1eb6ca01",
+      "revId": "e3fa52cc5fdafc5fd6918f1b8f0c7cacd95b5e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
