@@ -69,6 +69,24 @@
       "parentUuid": "9161c6c7_6d2479f1",
       "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42d711f4_a59aec9e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-23T21:18:07Z",
+      "side": 1,
+      "message": "\u003e However, the updates get flushed once after glFramebufferTexture2D() (extra update not flushed)\n\nWait, how is that possible? `glFramebufferTexture2D` should not call into the backend for it to do such a thing. Looking at `RGBXAHBImportThenUpload`, it looks like that test should have actually caught the bug.\n\nOh, did you mean `glTexSubImage2D` does the flush? Because of `applyUpdate` in `TextureVk::setSubImageImpl`?\n\nOk, it\u0027s not ideal that we rely on that implementation detail to catch the bug, but I don\u0027t see a reliable way around it.",
+      "parentUuid": "6dab65c5_962550c2",
+      "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
