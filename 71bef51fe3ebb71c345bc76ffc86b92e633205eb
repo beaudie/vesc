@@ -105,6 +105,24 @@
       "parentUuid": "42d711f4_a59aec9e",
       "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab08f859_6dd4819f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-24T03:01:02Z",
+      "side": 1,
+      "message": "Acknowledged, I guess there\u0027s not much more we can do about it",
+      "parentUuid": "56b1ab1d_a4169a37",
+      "revId": "71bef51fe3ebb71c345bc76ffc86b92e633205eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
