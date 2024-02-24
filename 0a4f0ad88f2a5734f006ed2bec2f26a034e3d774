@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa0c64c9_26c8e757",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-24T03:22:04Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "0a4f0ad88f2a5734f006ed2bec2f26a034e3d774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d9d6b8f_2f9ba947",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-24T03:22:04Z",
+      "side": 1,
+      "message": "Last nit while waiting for Geoff\u0027s review :P\n\n```suggestion\n        DeviceProgramData deviceBinary;\n```",
+      "range": {
+        "startLine": 101,
+        "startChar": 26,
+        "endLine": 101,
+        "endChar": 35
+      },
+      "revId": "0a4f0ad88f2a5734f006ed2bec2f26a034e3d774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
