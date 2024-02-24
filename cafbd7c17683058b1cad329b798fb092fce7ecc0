@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a021962_a57bcc1f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5844,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-24T03:16:58Z",
+      "side": 1,
+      "message": "Ah forgot the barrier is inserted on flush, that\u0027s more efficient in fact.\n\nSo, ok we can still keep it easy. `onHostVisibleBufferWrite` would set a flag in the command buffer that contextVk could query (like `commands-\u003ehasHostVisibleBufferWrite()`). Then every time the outsideRP or the RP commands are flushed, the flag is taken from the command buffer and `||`ed with `ContextVk::mIsAnyHostVisibleBufferWritten`. The barrier can remain as is in the flush function.",
+      "parentUuid": "2fa7dd75_d91cbcfb",
+      "range": {
+        "startLine": 5841,
+        "startChar": 0,
+        "endLine": 5844,
+        "endChar": 17
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68c2fc43_f18a7ee4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "I was also considering this at the first. Then I saw an assert checking for `\u003c\u003d` in here -- https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/ResourceVk.h#76 -- and reasoned may be thats why`\u003e\u003d` implementation didn\u0027t exist.",
       "parentUuid": "68c2fc43_f18a7ee4",
+      "range": {
+        "startLine": 1703,
+        "startChar": 33,
+        "endLine": 1703,
+        "endChar": 34
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "696faa20_294cdc3b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-24T03:16:58Z",
+      "side": 1,
+      "message": "I think that ASSERT is just being cautious since redundantly setting the serial to the same value is not technically a problem. In the end, changing this to `\u003e\u003d` just avoids the redundant set and the slight cost of that.",
+      "parentUuid": "01d80aec_33c40f2c",
       "range": {
         "startLine": 1703,
         "startChar": 33,
