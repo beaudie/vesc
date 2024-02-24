@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47f60912_0f9f1aee",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "232d432e_bc8811c8",
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a41bc789_90d3aa78",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Fair points - will update",
       "parentUuid": "a41bc789_90d3aa78",
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec42ca96_0df5fc74",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ab2a06d_08db3591",
       "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -108,6 +144,30 @@
       "side": 1,
       "message": "Got it - habit of mine to `const auto\u0026` range-for\u0027s - will fix",
       "parentUuid": "ee5a14be_d92f611f",
+      "range": {
+        "startLine": 39,
+        "startChar": 15,
+        "endLine": 39,
+        "endChar": 19
+      },
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43519f7b_13b75b9e",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40abc7bf_549d5240",
       "range": {
         "startLine": 39,
         "startChar": 15,
@@ -165,6 +225,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "306c6c71_76955f45",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "702144c6_234d5233",
+      "range": {
+        "startLine": 57,
+        "startChar": 14,
+        "endLine": 57,
+        "endChar": 18
+      },
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b46fdaa3_c01be576",
@@ -202,6 +286,30 @@
       "side": 1,
       "message": "Sure, will update",
       "parentUuid": "b46fdaa3_c01be576",
+      "range": {
+        "startLine": 101,
+        "startChar": 26,
+        "endLine": 101,
+        "endChar": 32
+      },
+      "revId": "d04fb7abd5b052dad7ce960deffa34f9f2523f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de3ef3c4_327b91cf",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ac0a7f2_fa94571f",
       "range": {
         "startLine": 101,
         "startChar": 26,
