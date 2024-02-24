@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fa7dd75_d91cbcfb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5844,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-24T00:33:25Z",
+      "side": 1,
+      "message": "\u003e It\u0027s going to be very easy to forget to do this\n\nI was wrestling with this. In `ContextVk` it was ok as I set up a static function that was taking care of this. Didn\u0027t quite settle on for this file.\n\nLike the suggestion. A minor thing that I am seeing -- it looks like a memory barrier is inserted in `OutsideRenderPassCommands` before calling in flush -- https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/ContextVk.cpp#7618\n\nDo you think if I change the check to a predicate something like would work.\n```\nContextVk::isAnyHostVisibleBufferWritten() {\n  mOutsideRPCommands-\u003eonHostVisibleBufferWrite() || mRPCommands-\u003eonHostVisibleBufferWrite()\n}\n```",
+      "parentUuid": "7dff893e_5f91b72b",
+      "range": {
+        "startLine": 5841,
+        "startChar": 0,
+        "endLine": 5844,
+        "endChar": 17
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68c2fc43_f18a7ee4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-23T21:43:30Z",
       "side": 1,
       "message": "`\u003e\u003d`? (may not exist and need an implementation)",
+      "range": {
+        "startLine": 1703,
+        "startChar": 33,
+        "endLine": 1703,
+        "endChar": 34
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01d80aec_33c40f2c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-24T00:33:25Z",
+      "side": 1,
+      "message": "I was also considering this at the first. Then I saw an assert checking for `\u003c\u003d` in here -- https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/ResourceVk.h#76 -- and reasoned may be thats why`\u003e\u003d` implementation didn\u0027t exist.",
+      "parentUuid": "68c2fc43_f18a7ee4",
       "range": {
         "startLine": 1703,
         "startChar": 33,
@@ -95,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd18815b_2bd78291",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2782,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-24T00:33:25Z",
+      "side": 1,
+      "message": "I got influenced by the name of the function to use this approach.\n\n\u003e My suggestion is to just return the string here and have the caller deal with it.\n\n👍",
+      "parentUuid": "d0c8942b_f45ecbb0",
+      "range": {
+        "startLine": 2781,
+        "startChar": 0,
+        "endLine": 2782,
+        "endChar": 50
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07821eb7_c9051589",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -106,6 +178,30 @@
       "writtenOn": "2024-02-23T21:43:30Z",
       "side": 1,
       "message": "... and here would be:\n\n```suggestion\n    return out.str();\n```",
+      "range": {
+        "startLine": 2841,
+        "startChar": 0,
+        "endLine": 2841,
+        "endChar": 20
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf48ba22_ce95da07",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2841,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-24T00:33:25Z",
+      "side": 1,
+      "message": "Sounds good. Will change the name of function to something like getDiganostics...",
+      "parentUuid": "07821eb7_c9051589",
       "range": {
         "startLine": 2841,
         "startChar": 0,
