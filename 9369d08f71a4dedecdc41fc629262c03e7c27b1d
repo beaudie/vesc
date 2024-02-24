@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11ebafea_2acba817",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84f07564_b6bd8905",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 9
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c32495b4_4b28922d",
@@ -130,6 +154,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60eb138b_4a7231bf",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c7a5c41_64b56634",
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18654ab5_5ec00231",
@@ -177,6 +219,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d1528fa_470f2760",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be4c0833_8a0ec88e",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 208,
+        "endChar": 36
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f05b8616_6be6133d",
@@ -208,6 +274,24 @@
       "side": 1,
       "message": "\u003e What is mProgramMutex protecting exactly?\n\nWhat we mutate in the program object (mainly updating the options string cache and this build internal call) since OpenCL states that all API calls are thread-safe (except for clSetKernelArg).\n\n\u003e but it isn\u0027t when it\u0027s async\n\nAh... yeah when we detach caller thread that \"sl\" kinda goes out of scope huh 😅\nGreat catch, okay let me work on this a bit.",
       "parentUuid": "f05b8616_6be6133d",
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98cb7cba_a15791d3",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:04Z",
+      "side": 1,
+      "message": "Was able to move it inside the buildInternal routine.\n\nDone.",
+      "parentUuid": "7855e7d1_d1c73ab5",
       "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -365,6 +449,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b2ad15e_9b1806ea",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:04Z",
+      "side": 1,
+      "message": "Yup, super nice to have debug only + runtime enable:\n\n```C++\nif (kAngleDebug)\n{\n  if (mContext-\u003egetFeatures().clDumpVkSpirv.enabled)\n  {\n    angle::spirv::Print(deviceProgramData.binary);\n  }\n}\n```\nSweet, just tested and it works well - thanks again for the help/suggestions!",
+      "parentUuid": "6621e9e9_304abd44",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 435,
+        "endChar": 6
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e00f225_7f22a2ca",
@@ -448,6 +556,24 @@
       "side": 1,
       "message": "+1 on anonymous namespace suggestion. I\u0027ll do that.",
       "parentUuid": "433f3814_bc9d6109",
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb2a6f0b_30be8f17",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-24T01:25:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b17ae16_ebba0233",
       "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
