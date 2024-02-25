@@ -66,6 +66,8 @@ struct SurfaceState final : private angle::NonCopyable
     SupportedTimestamps supportedTimestamps;
     bool directComposition;
     EGLenum swapBehavior;
+    // GL_QCOM_framebuffer_foveated
+    gl::FoveationState foveationState;
 };
 
 class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
@@ -171,6 +173,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     bool isExternalImageWithoutIndividualSync() const override;
     bool hasFrontBufferUsage() const override;
     bool hasFoveatedRendering() const override { return false; }
+    const gl::FoveationState &getFoveationState() const override { return mState.foveationState; }
 
     void onAttach(const gl::Context *context, rx::UniqueSerial framebufferSerial) override {}
     void onDetach(const gl::Context *context, rx::UniqueSerial framebufferSerial) override {}
