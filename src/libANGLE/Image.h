@@ -56,6 +56,7 @@ class ImageSibling : public gl::FramebufferAttachmentObject
     bool hasFrontBufferUsage() const override;
     bool hasProtectedContent() const override;
     bool hasFoveatedRendering() const override;
+    const gl::FoveationState &getFoveationState() const override;
 
   protected:
     // Set the image target of this sibling
@@ -152,6 +153,8 @@ struct ImageState : private angle::NonCopyable
     GLuint levelCount;
     EGLenum colorspace;
     bool hasProtectedContent;
+    // GL_QCOM_framebuffer_foveated
+    gl::FoveationState foveationState;
 
     mutable std::mutex targetsLock;
 
@@ -184,6 +187,7 @@ class Image final : public ThreadSafeRefCountObject, public LabeledObject
     bool isExternalImageWithoutIndividualSync() const;
     bool hasFrontBufferUsage() const;
     bool hasFoveatedRendering() const { return false; }
+    const gl::FoveationState &getFoveationState() const { return mState.foveationState; }
     // Returns true only if the eglImage contains a complete cubemap
     bool isCubeMap() const;
     size_t getWidth() const;

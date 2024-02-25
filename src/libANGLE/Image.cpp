@@ -158,6 +158,12 @@ bool ImageSibling::hasFoveatedRendering() const
     return mTargetOf.get() && mTargetOf->hasFoveatedRendering();
 }
 
+const gl::FoveationState &ImageSibling::getFoveationState() const
+{
+    ASSERT(isEGLImageTarget());
+    return mTargetOf->getFoveationState();
+}
+
 void ImageSibling::notifySiblings(angle::SubjectMessage message)
 {
     if (mTargetOf.get())

@@ -2254,7 +2254,10 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
         // This can be triggered when a subject's foveated rendering state is changed
         if (message == angle::SubjectMessage::FoveatedRenderingStateChanged)
         {
-            mDirtyBits.set(DIRTY_BIT_FOVEATION);
+            // Only a color attachment can be foveated.
+            ASSERT(index >= DIRTY_BIT_COLOR_ATTACHMENT_0 && index < DIRTY_BIT_COLOR_ATTACHMENT_MAX);
+            // Mark the attachment as dirty so we can grab its updated foveation state.
+            mDirtyBits.set(index);
             onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
             return;
         }
