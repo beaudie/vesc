@@ -153,6 +153,8 @@ class FramebufferVk : public FramebufferImpl
         return (mAttachmentHasFrontBufferUsage & mState.getColorAttachmentsMask()).any();
     }
 
+    bool isFoveationEnabled() { return mFoveationState.isFoveated(); }
+
     enum class RenderTargetImage
     {
         AttachmentImage,
@@ -260,6 +262,26 @@ class FramebufferVk : public FramebufferImpl
 
     void updateLayerCount();
 
+    angle::Result ensureFragmentShadingRateImageAndViewInitialized(ContextVk *contextVk,
+                                                                   const uint32_t attachmentWidth,
+                                                                   const uint32_t attachmentHeight);
+    angle::Result generateFragmentShadingRateWithCPU(
+        ContextVk *contextVk,
+        const bool isGainZero,
+        const uint32_t fragmentShadingRateWidth,
+        const uint32_t fragmentShadingRateHeight,
+        const uint32_t fragmentShadingRateBlockWidth,
+        const uint32_t fragmentShadingRateBlockHeight,
+        const uint32_t attachmentWidth,
+        const uint32_t attachmentHeight,
+        const std::vector<gl::FocalPoint> &activeFocalPoints);
+    angle::Result updateFragmentShadingRateAttachment(ContextVk *contextVk,
+                                                      const gl::FoveationState &foveationState,
+                                                      const gl::Extents &attachmentExtent);
+    angle::Result updateFoveationState(ContextVk *contextVk,
+                                       const gl::FoveationState &newFoveationState,
+                                       const gl::Extents &attachmentExtents);
+
     void insertCache(ContextVk *contextVk,
                      const vk::FramebufferDesc &desc,
                      vk::FramebufferHelper &&newFramebuffer);
@@ -297,6 +319,10 @@ class FramebufferVk : public FramebufferImpl
 
     bool mIsCurrentFramebufferCached;
     bool mIsYUVResolve;
+
+    gl::FoveationState mFoveationState;
+    vk::ImageHelper mFragmentShadingRateImage;
+    vk::ImageViewHelper mFragmentShadingRateImageView;
 
     // Serial of the render pass this framebuffer has opened, if any.
     QueueSerial mLastRenderPassQueueSerial;
