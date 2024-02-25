@@ -50,6 +50,8 @@ constexpr angle::PackedEnumMap<PipelineStage, VkPipelineStageFlagBits> kPipeline
     {PipelineStage::TessellationEvaluation, VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT},
     {PipelineStage::GeometryShader, VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT},
     {PipelineStage::TransformFeedback, VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT},
+    {PipelineStage::FragmentShadingRate,
+     VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR},
     {PipelineStage::EarlyFragmentTest, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT},
     {PipelineStage::FragmentShader, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
     {PipelineStage::LateFragmentTest, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT},
@@ -586,6 +588,21 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+        },
+    },
+    {
+        ImageLayout::FragmentShadingRateAttachmentReadOnly,
+        ImageMemoryBarrierData{
+            "FragmentShadingRateAttachmentReadOnly",
+            VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            ResourceAccess::ReadOnly,
+            PipelineStage::FragmentShadingRate,
         },
     },
     {
@@ -1919,6 +1936,8 @@ angle::Result RenderPassCommandBufferHelper::reset(
     mStencilAttachment.reset();
     mStencilResolveAttachment.reset();
 
+    mFragmentShadingRateAtachment.reset();
+
     mRenderPassStarted                 = false;
     mValidTransformFeedbackBufferCount = 0;
     mRebindTransformFeedbackBuffers    = false;
@@ -2027,6 +2046,21 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(gl::LevelIndex level,
         mStencilResolveAttachment.init(resolveImage, imageSiblingSerial, level, layerStart,
                                        layerCount, VK_IMAGE_ASPECT_STENCIL_BIT);
     }
+}
+
+void RenderPassCommandBufferHelper::fragmentShadingRateImageRead(ImageHelper *image)
+{
+    ASSERT(image && image->valid());
+    ASSERT(!usesImage(*image));
+
+    image->setQueueSerial(mQueueSerial);
+
+    // Initialize RenderPassAttachment for fragment shading rate attachment.
+    mFragmentShadingRateAtachment.init(image, {}, gl::LevelIndex(0), 0, 1,
+                                       VK_IMAGE_ASPECT_COLOR_BIT);
+
+    image->resetRenderPassUsageFlags();
+    image->setRenderPassUsageFlag(RenderPassUsage::FragmentShadingRateReadOnlyAttachment);
 }
 
 void RenderPassCommandBufferHelper::onColorAccess(PackedAttachmentIndex packedAttachmentIndex,
@@ -2311,6 +2345,18 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilResolveImageLayout(Conte
     depthStencilResolveImage->resetRenderPassUsageFlags();
 }
 
+void RenderPassCommandBufferHelper::finalizeFragmentShadingRateImageLayout(Context *context)
+{
+    ImageHelper *image      = mFragmentShadingRateAtachment.getImage();
+    ImageLayout imageLayout = ImageLayout::FragmentShadingRateAttachmentReadOnly;
+    ASSERT(image && image->valid());
+    if (image->isReadBarrierNecessary(imageLayout))
+    {
+        updateImageLayoutAndBarrier(context, image, VK_IMAGE_ASPECT_COLOR_BIT, imageLayout);
+    }
+    image->resetRenderPassUsageFlags();
+}
+
 void RenderPassCommandBufferHelper::finalizeImageLayout(Context *context,
                                                         const ImageHelper *image,
                                                         UniqueSerial imageSiblingSerial)
@@ -2346,6 +2392,12 @@ void RenderPassCommandBufferHelper::finalizeImageLayout(Context *context,
         finalizeDepthStencilResolveImageLayout(context);
         mDepthResolveAttachment.reset();
         mStencilResolveAttachment.reset();
+    }
+
+    if (mFragmentShadingRateAtachment.getImage() == image)
+    {
+        finalizeFragmentShadingRateImageLayout(context);
+        mFragmentShadingRateAtachment.reset();
     }
 }
 
@@ -2502,6 +2554,11 @@ angle::Result RenderPassCommandBufferHelper::endRenderPass(ContextVk *contextVk)
         }
     }
 
+    if (mFragmentShadingRateAtachment.getImage() != nullptr)
+    {
+        finalizeFragmentShadingRateImageLayout(contextVk);
+    }
+
     if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
     {
         return angle::Result::Continue;
@@ -2645,8 +2702,8 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     beginInfo.renderArea.offset.y      = static_cast<uint32_t>(mRenderArea.y);
     beginInfo.renderArea.extent.width  = static_cast<uint32_t>(mRenderArea.width);
     beginInfo.renderArea.extent.height = static_cast<uint32_t>(mRenderArea.height);
-    beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
-    beginInfo.pClearValues             = mClearValues.data();
+    beginInfo.clearValueCount = static_cast<uint32_t>(mRenderPassDesc.clearableAttachmentCount());
+    beginInfo.pClearValues    = mClearValues.data();
 
     // With imageless framebuffers, the attachments should be also added to beginInfo.
     VkRenderPassAttachmentBeginInfoKHR rpAttachmentBeginInfo = {};
@@ -2656,8 +2713,7 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
         // attachment even though mRenderPassDesc indicates so.
         ASSERT((mRenderPassDesc.hasYUVResolveAttachment() &&
                 context->getRenderer()->nullColorAttachmentWithExternalFormatResolve()) ||
-               mFramebuffer.getImageViews().size() ==
-                   static_cast<uint32_t>(mRenderPassDesc.attachmentCount()));
+               mFramebuffer.getImageViews().size() == mRenderPassDesc.attachmentCount());
         rpAttachmentBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
         rpAttachmentBeginInfo.attachmentCount =
             static_cast<uint32_t>(mFramebuffer.getImageViews().size());
@@ -2808,7 +2864,7 @@ void RenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
     std::ostringstream out;
     addCommandDiagnosticsCommon(&out);
 
-    size_t attachmentCount             = mRenderPassDesc.attachmentCount();
+    size_t attachmentCount             = mRenderPassDesc.clearableAttachmentCount();
     size_t depthStencilAttachmentCount = mRenderPassDesc.hasDepthStencilAttachment() ? 1 : 0;
     size_t colorAttachmentCount        = attachmentCount - depthStencilAttachmentCount;
 
@@ -10510,6 +10566,7 @@ ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
     std::swap(mSubresourceDrawImageViews, other.mSubresourceDrawImageViews);
     std::swap(mLevelStorageImageViews, other.mLevelStorageImageViews);
     std::swap(mLayerLevelStorageImageViews, other.mLayerLevelStorageImageViews);
+    std::swap(mFragmentShadingRateImageView, other.mFragmentShadingRateImageView);
     std::swap(mImageViewSerial, other.mImageViewSerial);
 }
 
@@ -10585,6 +10642,12 @@ void ImageViewHelper::release(RendererVk *renderer, const ResourceUse &use)
     }
     mLayerLevelStorageImageViews.clear();
 
+    // Release fragment shading rate view
+    if (mFragmentShadingRateImageView.valid())
+    {
+        garbage.emplace_back(GetGarbage(&mFragmentShadingRateImageView));
+    }
+
     if (!garbage.empty())
     {
         renderer->collectGarbage(use, std::move(garbage));
@@ -10655,6 +10718,9 @@ void ImageViewHelper::destroy(VkDevice device)
         }
     }
     mLayerLevelStorageImageViews.clear();
+
+    // Destroy fragment shading rate view
+    mFragmentShadingRateImageView.destroy(device);
 
     mImageViewSerial = kInvalidImageOrBufferViewSerial;
 }
@@ -10996,6 +11062,28 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(Context *context,
     return image.initLayerImageView(
         context, viewType, image.getAspectFlags(), gl::SwizzleState(), imageView, levelVk, 1, layer,
         1, mode, gl::YuvSamplingMode::Default, vk::ImageHelper::kDefaultImageViewUsageFlags);
+}
+
+angle::Result ImageViewHelper::initFragmentShadingRateView(ContextVk *contextVk, ImageHelper *image)
+{
+    ASSERT(image->valid());
+    ASSERT(mImageViewSerial.valid());
+
+    // Determine if we already have ImageView
+    if (mFragmentShadingRateImageView.valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    // Fragment shading rate image view always have -
+    // - gl::TextureType    == gl::TextureType::_2D
+    // - VkImageAspectFlags == VK_IMAGE_ASPECT_COLOR_BIT
+    // - gl::SwizzleState   == gl::SwizzleState()
+    // - baseMipLevelVk     == vk::LevelIndex(0)
+    // - levelCount         == 1
+    return image->initImageView(contextVk, gl::TextureType::_2D, VK_IMAGE_ASPECT_COLOR_BIT,
+                                gl::SwizzleState(), &mFragmentShadingRateImageView,
+                                vk::LevelIndex(0), 1, image->getUsage());
 }
 
 ImageOrBufferViewSubresourceSerial ImageViewHelper::getSubresourceSerial(
