@@ -217,6 +217,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "520bf052_c3cd161b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-26T18:33:20Z",
+      "side": 1,
+      "message": "Note that isRenderPassStartedAndUsesBuffer is more exact than \u003e or \u003e\u003d. You changed to use \u003e (or \u003e\u003d) mainly because of moving this into a common function. The old way is more readable as well.",
+      "parentUuid": "3a5a79cb_5d18ebcc",
+      "range": {
+        "startLine": 1703,
+        "startChar": 33,
+        "endLine": 1703,
+        "endChar": 34
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3f9763d_00cd98ad",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
