@@ -80,10 +80,9 @@ struct PathItem
         FlattenArray,  // Array of any rank -> pointer of innermost type.
     };
 
-    PathItem(const TField &field) : field(&field), type(Type::Field) {}
-    PathItem(int index) : index(index), type(Type::Index) {}
-    PathItem(unsigned index) : PathItem(static_cast<int>(index)) {}
-    PathItem(FlattenArray flatten) : type(Type::FlattenArray) {}
+    PathItem(const TField &field, Name name) : field(&field), type(Type::Field), name(name) {}
+    PathItem(int index, Name name) : index(index), type(Type::Index), name(name) {}
+    PathItem(FlattenArray flatten, Name name) : type(Type::FlattenArray), name(name) {}
 
     union
     {
@@ -91,6 +90,7 @@ struct PathItem
         int index;
     };
     Type type;
+    Name name;
 };
 
 TIntermTyped &BuildPathAccess(SymbolEnv &symbolEnv,
@@ -169,11 +169,7 @@ class ConvertStructState : angle::NonCopyable
           useAttributeAliasing(useAttributeAliasing)
     {}
 
-    ~ConvertStructState()
-    {
-        ASSERT(namePath.empty());
-        ASSERT(namePathSizes.empty());
-    }
+    ~ConvertStructState() { ASSERT(pathItems.empty()); }
 
     void publish(const TStructure &originalStruct, const Name &modifiedStructName)
     {
@@ -291,33 +287,14 @@ class ConvertStructState : angle::NonCopyable
         outMachineries.insert(originalStruct, machinery);
     }
 
-    void pushPath(PathItem const &item)
+    template <typename T>
+    void pushPath(T &&item)
     {
-        pathItems.push_back(item);
-
-        switch (item.type)
-        {
-            case PathItem::Type::Field:
-                pushNamePath(item.field->name().data());
-                break;
-
-            case PathItem::Type::Index:
-                pushNamePath(item.index);
-                break;
-
-            case PathItem::Type::FlattenArray:
-                namePathSizes.push_back(namePath.size());
-                break;
-        }
+        pathItems.push_back({item, idGen.createNewName()});
     }
 
     void popPath()
     {
-        ASSERT(!namePath.empty());
-        ASSERT(!namePathSizes.empty());
-        namePath.resize(namePathSizes.back());
-        namePathSizes.pop_back();
-
         ASSERT(!pathItems.empty());
         pathItems.pop_back();
     }
@@ -345,7 +322,7 @@ class ConvertStructState : angle::NonCopyable
         layoutQualifier.matrixPacking    = packing;
         newType.setLayoutQualifier(layoutQualifier);
 
-        const ImmutableString pathName(namePath);
+        const ImmutableString pathName(pathItems.back().name.rawName());
         TField *modifiedField = new TField(&newType, pathName, field.line(), field.symbolType());
         if (addressSpace)
         {
@@ -592,38 +569,6 @@ class ConvertStructState : angle::NonCopyable
         }
     }
 
-    void pushNamePath(const char *extra)
-    {
-        ASSERT(extra && *extra != '\0');
-        namePathSizes.push_back(namePath.size());
-        const char *p = extra;
-        if (namePath.empty())
-        {
-            namePath = p;
-            return;
-        }
-        while (*p == '_')
-        {
-            ++p;
-        }
-        if (*p == '\0')
-        {
-            p = "x";
-        }
-        if (namePath.back() != '_')
-        {
-            namePath += '_';
-        }
-        namePath += p;
-    }
-
-    void pushNamePath(unsigned extra)
-    {
-        char buffer[std::numeric_limits<unsigned>::digits10 + 1];
-        snprintf(buffer, sizeof(buffer), "%u", extra);
-        pushNamePath(buffer);
-    }
-
   public:
     TCompiler &mCompiler;
     const ModifyStructConfig &config;
@@ -637,9 +582,6 @@ class ConvertStructState : angle::NonCopyable
     bool finalized          = false;
 
     std::vector<PathItem> pathItems;
-
-    std::vector<size_t> namePathSizes;
-    std::string namePath;
 
     std::vector<ConversionInfo> conversionInfos;
     TSymbolTable &symbolTable;
@@ -763,10 +705,10 @@ bool SplitMatrixColumns(ConvertStructState &state,
         return false;
     }
 
-    const uint8_t cols = type.getCols();
-    TType &rowType     = DropColumns(type);
+    const int cols = type.getCols();
+    TType &rowType = DropColumns(type);
 
-    for (uint8_t c = 0; c < cols; ++c)
+    for (int c = 0; c < cols; ++c)
     {
         state.pushPath(c);
 
@@ -992,7 +934,7 @@ bool InlineArray(ConvertStructState &state,
         return false;
     }
 
-    const unsigned volume = type.getArraySizeProduct();
+    const int volume      = static_cast<int>(type.getArraySizeProduct());
     const bool isMultiDim = type.isArrayOfArrays();
 
     auto &innermostType = InnermostType(type);
@@ -1002,7 +944,7 @@ bool InlineArray(ConvertStructState &state,
         state.pushPath(FlattenArray());
     }
 
-    for (unsigned i = 0; i < volume; ++i)
+    for (int i = 0; i < volume; ++i)
     {
         state.pushPath(i);
         TType setType(innermostType);
