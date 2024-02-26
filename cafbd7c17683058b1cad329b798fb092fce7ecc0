@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8127619_3b79b565",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5844,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-26T16:57:35Z",
+      "side": 1,
+      "message": "Ack. Will update this in v2.",
+      "parentUuid": "7a021962_a57bcc1f",
+      "range": {
+        "startLine": 5841,
+        "startChar": 0,
+        "endLine": 5844,
+        "endChar": 17
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68c2fc43_f18a7ee4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "I think that ASSERT is just being cautious since redundantly setting the serial to the same value is not technically a problem. In the end, changing this to `\u003e\u003d` just avoids the redundant set and the slight cost of that.",
       "parentUuid": "01d80aec_33c40f2c",
+      "range": {
+        "startLine": 1703,
+        "startChar": 33,
+        "endLine": 1703,
+        "endChar": 34
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7cf38a5_6feb6404",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-26T16:57:35Z",
+      "side": 1,
+      "message": "👍 will push a v2.",
+      "parentUuid": "696faa20_294cdc3b",
       "range": {
         "startLine": 1703,
         "startChar": 33,
