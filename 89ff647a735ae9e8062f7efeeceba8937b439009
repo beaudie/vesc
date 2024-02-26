@@ -69,6 +69,30 @@
       },
       "revId": "89ff647a735ae9e8062f7efeeceba8937b439009",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "985661bb_8523fb0f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2938,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-26T19:48:38Z",
+      "side": 1,
+      "message": "Right, I guess that \"need\" for tracking more layers maybe come from the test that hailin wrote. That is just a test try to illustrate (and magnify) the problem. (You can verify with him to see what type of texture he is seeing with the actual app). I don\u0027t think we have a real need to have to optimize for huge layerCount, and if yes, it is still better to track in a consistent way as mContentDefined.",
+      "parentUuid": "6adc8a2c_0ed9286d",
+      "range": {
+        "startLine": 2938,
+        "startChar": 22,
+        "endLine": 2938,
+        "endChar": 41
+      },
+      "revId": "89ff647a735ae9e8062f7efeeceba8937b439009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
