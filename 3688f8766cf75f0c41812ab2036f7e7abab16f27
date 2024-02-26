@@ -16,6 +16,24 @@
       "message": "Great work tracking down this longstanding bug! Does the linked bug actually block another one? In the issue tracker, could we link them together if so?",
       "revId": "3688f8766cf75f0c41812ab2036f7e7abab16f27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "022b9da2_61057d5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-02-26T21:41:17Z",
+      "side": 1,
+      "message": "On a second glance, this bug is self-contained and does not technically block anything else.",
+      "parentUuid": "80da2622_fa3fe47b",
+      "revId": "3688f8766cf75f0c41812ab2036f7e7abab16f27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
