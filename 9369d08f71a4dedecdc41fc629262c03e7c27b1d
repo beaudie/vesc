@@ -145,6 +145,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "04c3c90c_e400166a",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:55:39Z",
+      "side": 1,
+      "message": "Yeah that would be idea. Separate CL is perfectly fine.",
+      "parentUuid": "83a48a5e_c4e5a429",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 98
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55cb239d_c118a9b4",
         "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
         "patchSetId": 4
@@ -392,6 +416,30 @@
       "side": 1,
       "message": "It is, actually I wanted to use the C++ interface (and statically link clspv) in the past.\n\nBut we think we might get push-back on lib size reqs from our GLES folks when we end up sharing a singular lib for GLES + OpenCL. I\u0027m thinking we go with your suggestion here...",
       "parentUuid": "5d8818cd_38b858ca",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 353,
+        "endChar": 21
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26323c24_ea95a6e8",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:55:39Z",
+      "side": 1,
+      "message": "Not a blocking request FYI, can be a separate CL and any time you have the chance. It\u0027s a CPU perf thing, so not as high priority now of course.",
+      "parentUuid": "caeb3fc0_a59e1020",
       "range": {
         "startLine": 329,
         "startChar": 0,

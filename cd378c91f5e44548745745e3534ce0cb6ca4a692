@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25d2c0a7_02cdfa75",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 1456,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:55:39Z",
+      "side": 1,
+      "message": "nit:\n\n```suggestion\n                \"Enable SPIR-V dumping at runtime for OpenCL programs compiled with clspv\"\n```",
+      "range": {
+        "startLine": 1455,
+        "startChar": 0,
+        "endLine": 1456,
+        "endChar": 34
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b9306c7_ff6cf34d",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:55:39Z",
+      "side": 1,
+      "message": "FYI, `vk::Context` already has `getFeatures()` with the same implementation.",
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33be2852_2b474433",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:55:39Z",
+      "side": 1,
+      "message": "Failure is not an option 😎 (\"Fail fast\" philosophy etc)\n\n```suggestion\n        ASSERT(asyncEvent !\u003d nullptr);\n```",
+      "range": {
+        "startLine": 383,
+        "startChar": 0,
+        "endLine": 388,
+        "endChar": 9
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b7f8975_00cbddb9",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:55:39Z",
+      "side": 1,
+      "message": "Isn\u0027t it better to check for list of allowed options instead? Because this blocks these two, but doesn\u0027t block `-made-up-option`.",
+      "range": {
+        "startLine": 1173,
+        "startChar": 0,
+        "endLine": 1175,
+        "endChar": 0
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73f98db9_157c451b",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:55:39Z",
+      "side": 1,
+      "message": "Suggest `INFO()` instead. Any message that\u0027s generated here is just informational.\n\nFYI, `ERR()` causes an actual build failure, so if you ever have a negative API test in ANGLE and expect to get `CL_INVALID_BUILD_OPTIONS` with bad options, the test would actually fail (by gtest) even if it\u0027s really doing what you expect it.\n\nTBH, I\u0027d just drop this message instead. `CL_INVALID_BUILD_OPTIONS` is clear enough in this case. Only way the message would be useful is if it actually pointed out _which_ option is invalid (after checking it against an allowlist)",
+      "range": {
+        "startLine": 1176,
+        "startChar": 12,
+        "endLine": 1176,
+        "endChar": 15
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
