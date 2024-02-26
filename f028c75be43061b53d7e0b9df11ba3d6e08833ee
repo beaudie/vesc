@@ -16,6 +16,29 @@
       "message": "Made sure the test trigger the bug on win-test (see run from patchset 4) and then fix made it not fail.",
       "revId": "f028c75be43061b53d7e0b9df11ba3d6e08833ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4a4673e_064fc780",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-26T13:44:01Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to call updateState before the no-op, unless you found failing tests due to it.",
+      "range": {
+        "startLine": 458,
+        "startChar": 0,
+        "endLine": 461,
+        "endChar": 9
+      },
+      "revId": "f028c75be43061b53d7e0b9df11ba3d6e08833ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
