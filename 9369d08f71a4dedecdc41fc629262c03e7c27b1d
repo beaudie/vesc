@@ -121,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "83a48a5e_c4e5a429",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T19:35:43Z",
+      "side": 1,
+      "message": "+1 on `CLProgramOptions` abstraction\n\nJust to clarify tho, are we saying to replace all instances of `const char* options` with `CLProgramOptions` for all backend calls here?\n\nIf so, can we defer this task to another cleanup PR? I feel like this is better\nserved as its own standalone PR.",
+      "parentUuid": "215659c3_5c6b830f",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 98
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55cb239d_c118a9b4",
         "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
         "patchSetId": 4
