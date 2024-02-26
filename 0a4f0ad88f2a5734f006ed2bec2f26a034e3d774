@@ -39,6 +39,30 @@
       },
       "revId": "0a4f0ad88f2a5734f006ed2bec2f26a034e3d774",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d545b8bc_822d9bd6",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T19:31:26Z",
+      "side": 1,
+      "message": "Good catch! \n\nDone.",
+      "parentUuid": "8d9d6b8f_2f9ba947",
+      "range": {
+        "startLine": 101,
+        "startChar": 26,
+        "endLine": 101,
+        "endChar": 35
+      },
+      "revId": "0a4f0ad88f2a5734f006ed2bec2f26a034e3d774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
