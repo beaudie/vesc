@@ -193,6 +193,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a5a79cb_5d18ebcc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-26T18:27:48Z",
+      "side": 1,
+      "message": "This should be fine (as with comment regarding \u003e\u003d). The only concern is we lose the ability to do the assertion (that RenderPass was writing to the buffer while outsideRP is reading the buffer and we some how did not break the RP). \n\nMy personal preference is actually going the other direction: let RenderPassCommandHelper and OutsideRenderPassCommandHelper has its own methods and gradually remove CommandBufferHelperCommon and use anonymous function if needed to reduce code duplication. It is less confusing that way. For example, now you have imageRead function in both Common and RenderPass. It is asymmetrical and a bit confusing to figure out which one it uses. My Clion IDE often time highlights wrong functions, not sure if it is related. The other reason is that I am working on use VkEvent to track the barriers, it will have more merge conflicts. From what I read here, your main change is to  remove dependency to ContextVk, maybe you can keep the bufferRead/bufferWrite and imageRead/imageWrite where they are now and we can revisit this part once VkEvent stuff settles down?",
+      "parentUuid": "e7cf38a5_6feb6404",
+      "range": {
+        "startLine": 1703,
+        "startChar": 33,
+        "endLine": 1703,
+        "endChar": 34
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3f9763d_00cd98ad",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
