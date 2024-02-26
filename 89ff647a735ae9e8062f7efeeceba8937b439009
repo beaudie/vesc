@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ef9acf2_0c4fb323",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 6856,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-26T19:22:03Z",
+      "side": 1,
+      "message": "Suggest to change to \n```\nif(isWriteBarrierNecessary())\n{\n    VkSemaphore acquireNextImageSemaphore;\n    barrierImpl(context, aspectMask, newLayout, context-\u003egetRenderer()-\u003egetQueueFamilyIndex(),\n                \u0026commands-\u003egetCommandBuffer(), \u0026acquireNextImageSemaphore);\n\n    if (acquireNextImageSemaphore !\u003d VK_NULL_HANDLE)\n    {\n        commands-\u003esetAcquireNextImageSemaphore(acquireNextImageSemaphore);\n    }\n}\nsetSubresourcesWrittenSinceBarrier(levelStart, levelCount, layerStart, layerCount);\n```",
+      "range": {
+        "startLine": 6856,
+        "startChar": 0,
+        "endLine": 6856,
+        "endChar": 92
+      },
+      "revId": "89ff647a735ae9e8062f7efeeceba8937b439009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f86a3111_2ffefc67",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2938,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-02-26T19:22:03Z",
+      "side": 1,
+      "message": "Why not just mirror mContentDefined bits and use LevelContentDefinedMask here? ( i.e. `gl::TexLevelArray\u003cLevelContentDefinedMask\u003e mSubresourcesWrittenSinceBarrier;`) The GetImageLayerWriteMask is quite complicated. \n\nIn longer term, I am thinking to change to level bitSet and then track layers in an array (i.e. something like angle::FastVector\u003cTexLevelMask\u003e for both mContentDefined and this), mainly to optimize for majority usage case where layerCount is 1. But for now, I am not seeing any reason we should track different than mContentDefined is tracked.",
+      "range": {
+        "startLine": 2938,
+        "startChar": 22,
+        "endLine": 2938,
+        "endChar": 41
+      },
+      "revId": "89ff647a735ae9e8062f7efeeceba8937b439009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
