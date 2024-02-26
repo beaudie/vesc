@@ -1,0 +1,209 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd11a894_b01b3de6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "Coming together nicely, I mostly have nits. Do try to get rid of `mIsFoveatedRenderingModeDirty`!",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b2bfb13_8f5fc94a",
+        "filename": "src/libANGLE/Image.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "This is unnecessary, you can let ImageSibling not override `getFoveationState` and let Texture and Renderbuffer override it as necessary.\n\nOne tiny complication is ExternalImageSibling, and my suggestion is to make `getFoveationState` return a pointer and return nullptr in that class. At call site, you can assert that the pointer is not nullptr.",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2950003_1728d123",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "typo: `provides requires`",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3a7f2d8_aab6186f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "```suggestion\n                    (static_cast\u003cfloat\u003e(x) * fragmentShadingRateBlockWidth / attachmentWidth - 0.5f) * 2.0f;\n```",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff106aec_2df9b69e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1718,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "```suggestion\n                    (static_cast\u003cfloat\u003e(y) * fragmentShadingRateBlockHeight / attachmentHeight - 0.5f) * 2.0f;\n```",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f724ae41_6f9a90b2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1727,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "super nit: `((a*b)+(c*d))-e \u003d\u003d a*b+c*d-e`\n\n```suggestion\n                        1.0f / std::max(std::powf(activeFocalPoints[point].focalX - px, 2) *\n                                        std::powf(activeFocalPoints[point].gainX, 2) +\n                                        std::powf(activeFocalPoints[point].focalY - py, 2) *\n                                        std::powf(activeFocalPoints[point].gainY, 2) -\n                                        activeFocalPoints[point].foveaArea,\n```",
+      "range": {
+        "startLine": 1723,
+        "startChar": 0,
+        "endLine": 1727,
+        "endChar": 77
+      },
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "418bcd9b_2dba560a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "A comment about what this logic is would be nice. Does `AxB` translate to `B \u003e\u003e 1 | A \u003c\u003c 1` somehow?",
+      "range": {
+        "startLine": 1737,
+        "startChar": 0,
+        "endLine": 1751,
+        "endChar": 17
+      },
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79da22e8_4bef7d47",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "Looking for `UnsignedCeilDivide`?",
+      "range": {
+        "startLine": 1789,
+        "startChar": 0,
+        "endLine": 1791,
+        "endChar": 92
+      },
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6517c20_7f5a454e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "_Technically_ this, given that `isGainZero` is bool (not int):\n\n```suggestion\n            isGainZero \u003d isGainZero \u0026\u0026 focalPoint.gainX \u003d\u003d 0 \u0026\u0026 focalPoint.gainY \u003d\u003d 0;\n```",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "869d2dc2_6960a6c4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "Wouldn\u0027t `mState.getExtents()` work everywhere? (i.e. no need to cache this)\n\nI\u0027m saying that at least based on how `FramebufferVk::getFramebuffer` creates the VkFramebuffer.",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba333972_2b302b6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "Please use `VK_ATTACHMENT_STORE_OP_NONE` when available. You can gate support for the extension to when either of `VK_QCOM_render_pass_store_ops` or `VK_EXT_load_store_op_none` is present and always use STORE_OP_NONE here, no need to support this extension on too old drivers.",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

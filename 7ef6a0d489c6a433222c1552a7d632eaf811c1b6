@@ -472,6 +472,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c815c6d_86d27d4a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "Uh... left over comment that didn\u0027t get discarded or something. No it should be kept.",
+      "parentUuid": "2834d82e_d2e219c3",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69b2aa3c_328639c9",
@@ -503,6 +521,24 @@
       "side": 1,
       "message": "\u003e because this image is never transitioned into any other layout or used for any other purpose\n\nas mentioned in the other comment if focal points change then we reuse the image to upload new shading rate data in which case we transition from FSR layout to transfer layout",
       "parentUuid": "69b2aa3c_328639c9",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6369818f_e9ce2e4b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T20:32:40Z",
+      "side": 1,
+      "message": "Ack. I\u0027d still encourage you to add a host_image_copy path to optimize this in the future.",
+      "parentUuid": "3de74062_82f591a2",
       "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
