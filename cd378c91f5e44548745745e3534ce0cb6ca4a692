@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50c7cd08_683080fb",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 1456,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T23:10:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "25d2c0a7_02cdfa75",
+      "range": {
+        "startLine": 1455,
+        "startChar": 0,
+        "endLine": 1456,
+        "endChar": 34
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b9306c7_ff6cf34d",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5372bfac_9f211444",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T23:10:01Z",
+      "side": 1,
+      "message": "Oh, nice!\n\nAck.",
+      "parentUuid": "1b9306c7_ff6cf34d",
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33be2852_2b474433",
@@ -54,6 +96,30 @@
       "writtenOn": "2024-02-26T20:55:39Z",
       "side": 1,
       "message": "Failure is not an option 😎 (\"Fail fast\" philosophy etc)\n\n```suggestion\n        ASSERT(asyncEvent !\u003d nullptr);\n```",
+      "range": {
+        "startLine": 383,
+        "startChar": 0,
+        "endLine": 388,
+        "endChar": 9
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d2feb1_a742bf6c",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T23:10:01Z",
+      "side": 1,
+      "message": "Sounds good 👍\n\nDone.",
+      "parentUuid": "33be2852_2b474433",
       "range": {
         "startLine": 383,
         "startChar": 0,
@@ -89,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a23b2841_0b5dfab9",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T23:10:01Z",
+      "side": 1,
+      "message": "Agreed on this (actually we get this allowed options check from clspv for us anyways).\n\nHmm (taking a step back), perhaps I am being a bit too pedantic here. Not seeing any explicit spec checks for these flags in clBuildProgram case...\n\nMaybe its best to just ignore these flags in the clBuildProgram and clCompileProgram cases. \n\nOk, let me clean this up some, we can remove this validation check here in this case.",
+      "parentUuid": "7b7f8975_00cbddb9",
+      "range": {
+        "startLine": 1173,
+        "startChar": 0,
+        "endLine": 1175,
+        "endChar": 0
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73f98db9_157c451b",
         "filename": "src/libANGLE/validationCL.cpp",
         "patchSetId": 8
@@ -100,6 +190,30 @@
       "writtenOn": "2024-02-26T20:55:39Z",
       "side": 1,
       "message": "Suggest `INFO()` instead. Any message that\u0027s generated here is just informational.\n\nFYI, `ERR()` causes an actual build failure, so if you ever have a negative API test in ANGLE and expect to get `CL_INVALID_BUILD_OPTIONS` with bad options, the test would actually fail (by gtest) even if it\u0027s really doing what you expect it.\n\nTBH, I\u0027d just drop this message instead. `CL_INVALID_BUILD_OPTIONS` is clear enough in this case. Only way the message would be useful is if it actually pointed out _which_ option is invalid (after checking it against an allowlist)",
+      "range": {
+        "startLine": 1176,
+        "startChar": 12,
+        "endLine": 1176,
+        "endChar": 15
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0493f09_767e00e8",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T23:10:01Z",
+      "side": 1,
+      "message": "\u003e ERR() causes an actual build failure\n\nOh, are you saying `ERR()` boils down to something like invoking `FAIL()` in gtest (if we are unit-testing `validationCL`)?\n\nIf so, got it. Moot here anyways due to above comment\u0027s revelation I had.",
+      "parentUuid": "73f98db9_157c451b",
       "range": {
         "startLine": 1176,
         "startChar": 12,

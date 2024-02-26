@@ -167,6 +167,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b85166b_00a9da01",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T23:10:01Z",
+      "side": 1,
+      "message": "Cool, went ahead and added it to CL backlog\n\nhttps://anglebug.com/8561\n\nDone.",
+      "parentUuid": "04c3c90c_e400166a",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 98
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55cb239d_c118a9b4",
@@ -440,6 +464,30 @@
       "side": 1,
       "message": "Not a blocking request FYI, can be a separate CL and any time you have the chance. It\u0027s a CPU perf thing, so not as high priority now of course.",
       "parentUuid": "caeb3fc0_a59e1020",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 353,
+        "endChar": 21
+      },
+      "revId": "9369d08f71a4dedecdc41fc629262c03e7c27b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "956d3199_059e81b4",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T23:10:01Z",
+      "side": 1,
+      "message": "Agreed on perf - yeah separate CL sounds good to me 👍\n\nhttps://anglebug.com/8562\n\nDone.",
+      "parentUuid": "26323c24_ea95a6e8",
       "range": {
         "startLine": 329,
         "startChar": 0,
