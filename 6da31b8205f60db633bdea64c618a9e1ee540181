@@ -52,6 +52,24 @@
       "parentUuid": "72eb4a8b_6f2131ba",
       "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2883673_e20f862f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-26T23:22:46Z",
+      "side": 1,
+      "message": "Local test shows that this line https://chromium-review.googlesource.com/c/angle/angle/+/5322317/2/src/libANGLE/renderer/vulkan/RendererVk.cpp#2274 is throwing an exception on windows:\n```\nvk::AddToPNextChain(\u0026deviceProperties, \u0026mFragmentShadingRateProperties);\n```",
+      "parentUuid": "5ae5cb4b_fa043ef0",
+      "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
