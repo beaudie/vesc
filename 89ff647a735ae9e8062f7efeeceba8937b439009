@@ -93,6 +93,30 @@
       },
       "revId": "89ff647a735ae9e8062f7efeeceba8937b439009",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "709f6291_9f5a4710",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2938,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-26T21:01:12Z",
+      "side": 1,
+      "message": "Talking with Amirali, he hit an inefficiency in the existing tracking (based on 64 bits) with Manhattan which uses 96 layers in a texture. In a later CL, he is bumping this to 128 bits to optimize Manhattan.",
+      "parentUuid": "985661bb_8523fb0f",
+      "range": {
+        "startLine": 2938,
+        "startChar": 22,
+        "endLine": 2938,
+        "endChar": 41
+      },
+      "revId": "89ff647a735ae9e8062f7efeeceba8937b439009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
