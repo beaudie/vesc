@@ -16,6 +16,24 @@
       "message": "shabi - i see perf test failures here but not sure how to interpret the logs -\u003e https://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket/8755001617684007825/+/u/angle_perftests_on_NVIDIA_GPU_on_Windows_on_Windows-10-18363/stdout?format\u003draw\n\nknown issue or did my patch break something?",
       "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72eb4a8b_6f2131ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-26T20:15:02Z",
+      "side": 1,
+      "message": "leaving this unresolved for now",
+      "parentUuid": "46d96e55_5f7da612",
+      "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
