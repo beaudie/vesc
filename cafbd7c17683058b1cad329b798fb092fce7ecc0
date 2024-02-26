@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fd00ead_61598a4c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5844,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-26T18:47:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8127619_3b79b565",
+      "range": {
+        "startLine": 5841,
+        "startChar": 0,
+        "endLine": 5844,
+        "endChar": 17
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68c2fc43_f18a7ee4",
@@ -239,6 +263,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26714d17_d488bf5c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-26T18:47:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7cf38a5_6feb6404",
+      "range": {
+        "startLine": 1703,
+        "startChar": 33,
+        "endLine": 1703,
+        "endChar": 34
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3f9763d_00cd98ad",
@@ -252,6 +300,30 @@
       "writtenOn": "2024-02-23T21:43:30Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 1718,
+        "startChar": 32,
+        "endLine": 1718,
+        "endChar": 33
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40001346_12e6f85d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1718,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-26T18:47:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3f9763d_00cd98ad",
       "range": {
         "startLine": 1718,
         "startChar": 32,
@@ -299,6 +371,30 @@
       "side": 1,
       "message": "I got influenced by the name of the function to use this approach.\n\n\u003e My suggestion is to just return the string here and have the caller deal with it.\n\n👍",
       "parentUuid": "d0c8942b_f45ecbb0",
+      "range": {
+        "startLine": 2781,
+        "startChar": 0,
+        "endLine": 2782,
+        "endChar": 50
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e73f157_d95c77a2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2782,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-02-26T18:47:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd18815b_2bd78291",
       "range": {
         "startLine": 2781,
         "startChar": 0,
