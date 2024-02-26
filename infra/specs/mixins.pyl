@@ -15,6 +15,7 @@
 
 { 'android_r': {'swarming': {'dimensions': {'device_os': 'R'}}},
   'android_t': {'swarming': {'dimensions': {'device_os': 'TP1A.220624.021'}}},
+  'android_u': {'swarming': {'dimensions': {'device_os': 'UQ1A.240105.002'}}},
   'angle_skia_gold_test': { 'args': ['--git-revision=${got_angle_revision}'],
                             'precommit_args': [ '--gerrit-issue=${patch_issue}',
                                                 '--gerrit-patchset=${patch_set}',
@@ -70,6 +71,9 @@
   'no_gpu': {'swarming': {'dimensions': {'gpu': 'none'}}},
   'oriole': { 'swarming': { 'dimensions': { 'device_type': 'oriole',
                                             'os': 'Android'}}},
+  'samsung_s22': { 'swarming': { 'dimensions': { 'device_os_type': 'user',
+                                                 'device_type': 's5e9925',
+                                                 'os': 'Android'}}},
   'swarming_containment_auto': {'swarming': {'containment_type': 'AUTO'}},
   'timeout_120m': {'swarming': {'hard_timeout': 7200, 'io_timeout': 300}},
   'timeout_15m': {'swarming': {'hard_timeout': 900, 'io_timeout': 900}},
