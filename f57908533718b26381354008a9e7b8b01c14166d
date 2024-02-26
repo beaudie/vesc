@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15f69f48_2ba9522c",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T23:10:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0f664ca_b26a3282",
+      "revId": "f57908533718b26381354008a9e7b8b01c14166d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb64a226_75ff7882",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-26T20:57:50Z",
       "side": 1,
       "message": "ditto",
+      "revId": "f57908533718b26381354008a9e7b8b01c14166d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c33d74f5_1f05668c",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-26T23:10:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb64a226_75ff7882",
       "revId": "f57908533718b26381354008a9e7b8b01c14166d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
