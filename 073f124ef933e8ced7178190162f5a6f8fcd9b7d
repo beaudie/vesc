@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53f9eda9_6e2d80da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-26T13:58:44Z",
+      "side": 1,
+      "message": "A gave you tryjob access too",
+      "revId": "073f124ef933e8ced7178190162f5a6f8fcd9b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e90478f_3f9d4d7f",
+        "filename": "src/libANGLE/renderer/gl/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-26T13:58:44Z",
+      "side": 1,
+      "message": "We need to update the conditon that libdrm is checked out. You probably want to add a `or not build_with_chromium` here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/DEPS;l\u003d721;drc\u003d1fe63fecabb5089c0dd9f060b6fb0165c38c5829.\n\nWe should also only add it as a dep when compiling the EGL backend. Looks like the condition is `is_android || is_linux || is_chromeos` : https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/gl/gl_backend.gni;l\u003d123;drc\u003de8a3493f80a5d661e9c530c59cdf6d77309db8f6\n\nWe also can only inlucde it if `angle_has_build` is set. I think either way we need to wrap it\u0027s availability in a macro.",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "073f124ef933e8ced7178190162f5a6f8fcd9b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8430e90b_ef64d97a",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-26T13:58:44Z",
+      "side": 1,
+      "message": "It\u0027s a catastrophic error to be unable to query extensions, you can keep this check early on.",
+      "range": {
+        "startLine": 287,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 5
+      },
+      "revId": "073f124ef933e8ced7178190162f5a6f8fcd9b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68ca5791_bd9f9177",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-26T13:58:44Z",
+      "side": 1,
+      "message": "nit: EGL_NO_DEVICE_EXT",
+      "range": {
+        "startLine": 455,
+        "startChar": 15,
+        "endLine": 455,
+        "endChar": 17
+      },
+      "revId": "073f124ef933e8ced7178190162f5a6f8fcd9b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
