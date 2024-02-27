@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21e64ec4_7b1aa45b",
+        "filename": "src/libANGLE/renderer/gl/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1560837
+      },
+      "writtenOn": "2024-02-27T18:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e90478f_3f9d4d7f",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "073f124ef933e8ced7178190162f5a6f8fcd9b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8430e90b_ef64d97a",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "137b4657_4e5baac6",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1560837
+      },
+      "writtenOn": "2024-02-27T18:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8430e90b_ef64d97a",
+      "range": {
+        "startLine": 287,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 5
+      },
+      "revId": "073f124ef933e8ced7178190162f5a6f8fcd9b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68ca5791_bd9f9177",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-02-26T13:58:44Z",
       "side": 1,
       "message": "nit: EGL_NO_DEVICE_EXT",
+      "range": {
+        "startLine": 455,
+        "startChar": 15,
+        "endLine": 455,
+        "endChar": 17
+      },
+      "revId": "073f124ef933e8ced7178190162f5a6f8fcd9b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "806c6316_f502cc76",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1560837
+      },
+      "writtenOn": "2024-02-27T18:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68ca5791_bd9f9177",
       "range": {
         "startLine": 455,
         "startChar": 15,
