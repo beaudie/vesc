@@ -222,6 +222,30 @@
       },
       "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36cb9f21_2b3b608f",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-27T02:30:15Z",
+      "side": 1,
+      "message": "You know, I have no idea what happens internally :shrug: but the effect is like you described.",
+      "parentUuid": "c0493f09_767e00e8",
+      "range": {
+        "startLine": 1176,
+        "startChar": 12,
+        "endLine": 1176,
+        "endChar": 15
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
