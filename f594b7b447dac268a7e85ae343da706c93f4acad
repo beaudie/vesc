@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c37e0425_4a769f75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-27T20:45:35Z",
+      "side": 1,
+      "message": "LGTM with a small refactoring request",
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8a83adf_01ea34c3",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-27T20:45:35Z",
+      "side": 1,
+      "message": "Be careful when iterating over a hash map, the ordering is not guaranteed. We\u0027ve had a few bugs iterating to generate a program hash. If this is just for debugging, you may want to construct an std::map and iterate over that.",
+      "range": {
+        "startLine": 74,
+        "startChar": 12,
+        "endLine": 74,
+        "endChar": 98
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f84c74ea_1a2e0176",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-27T20:45:35Z",
+      "side": 1,
+      "message": "nit: I\u0027d add a copy constructor to CLKernelArgument which does the memcpy.",
+      "range": {
+        "startLine": 89,
+        "startChar": 20,
+        "endLine": 90,
+        "endChar": 76
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4402c47a_59a46912",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-27T20:45:35Z",
+      "side": 1,
+      "message": "nit: typedef for this?",
+      "range": {
+        "startLine": 97,
+        "startChar": 8,
+        "endLine": 97,
+        "endChar": 31
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c621170_f3391cd1",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-27T20:45:35Z",
+      "side": 1,
+      "message": "I suggest having only one constructor taking the cl::Program and adding multiple initialize functions that return an angle::Result. Generating the error codes in the constructor is not great because we can\u0027t return it.\n\nThe same for a destroy function instead of using the destructor. You don\u0027t need to return anything from a destroy function but you often want to pass parameters, the mContext can be removed that way.",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 0
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
