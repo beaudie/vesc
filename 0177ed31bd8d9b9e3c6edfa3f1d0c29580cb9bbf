@@ -46,6 +46,30 @@
       },
       "revId": "0177ed31bd8d9b9e3c6edfa3f1d0c29580cb9bbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "204996be_709f2348",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-02-27T19:43:15Z",
+      "side": 1,
+      "message": "I added the helpers you suggested and am storing a gl::LevelIndex target level for each data upload now, and added a struct to store the webgpu::ImageCopyBuffer and target level.\n\nIt looks like the method of converting between the gl::LevelIndex and webgpu::LevelIndex should be the same as the ones used for vulkan, but let me know if I miscalculated.",
+      "parentUuid": "ba354f48_6d68b165",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 7
+      },
+      "revId": "0177ed31bd8d9b9e3c6edfa3f1d0c29580cb9bbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
