@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c1a05de3_28e8eadc",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-27T22:15:29Z",
+      "side": 1,
+      "message": "Thanks for the tip Geoff - IIRC the OpenCL spec does not require specific ordering here.\n\nI think `getKernelNames()` should be okay here. I did run related CTS test and things look good.",
+      "parentUuid": "e8a83adf_01ea34c3",
+      "range": {
+        "startLine": 74,
+        "startChar": 12,
+        "endLine": 74,
+        "endChar": 98
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f84c74ea_1a2e0176",
         "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
         "patchSetId": 7
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-27T20:45:35Z",
       "side": 1,
       "message": "nit: I\u0027d add a copy constructor to CLKernelArgument which does the memcpy.",
+      "range": {
+        "startLine": 89,
+        "startChar": 20,
+        "endLine": 90,
+        "endChar": 76
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9605c10c_a89fc6f1",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-27T22:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f84c74ea_1a2e0176",
       "range": {
         "startLine": 89,
         "startChar": 20,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15bdd5de_261b28f2",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-27T22:15:29Z",
+      "side": 1,
+      "message": "+1\n\nDone.",
+      "parentUuid": "4402c47a_59a46912",
+      "range": {
+        "startLine": 97,
+        "startChar": 8,
+        "endLine": 97,
+        "endChar": 31
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c621170_f3391cd1",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-02-27T20:45:35Z",
       "side": 1,
       "message": "I suggest having only one constructor taking the cl::Program and adding multiple initialize functions that return an angle::Result. Generating the error codes in the constructor is not great because we can\u0027t return it.\n\nThe same for a destroy function instead of using the destructor. You don\u0027t need to return anything from a destroy function but you often want to pass parameters, the mContext can be removed that way.",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 0
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b6108d0_cb92e1ef",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-27T22:15:29Z",
+      "side": 1,
+      "message": "+1 on the ctor suggestion.\n\nWould it be okay to defer the dtor update to another cleanup commit?\nOnly reason being that object deletion is frontend dictated via `clRelease*`.\nSo this would involve touching/changing the interface class to add a virtual destroy() method (would need to update CL passthrough as well I think):\n\n`cl_stubs.cpp`:\n```diff\n  cl_int ReleaseProgram(cl_program program)\n  {\n    Program \u0026prog \u003d program-\u003ecast\u003cProgram\u003e();\n    if (prog.release())\n    {\n+       prog.getImpl().destroy();\n        delete \u0026prog;\n    }\n    return CL_SUCCESS;\n  }\n```",
+      "parentUuid": "6c621170_f3391cd1",
       "range": {
         "startLine": 119,
         "startChar": 0,
