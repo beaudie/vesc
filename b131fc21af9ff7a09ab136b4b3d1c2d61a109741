@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa9c3f9a_401942f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-27T20:29:18Z",
+      "side": 1,
+      "message": "Looks good with one extra feature supported.",
+      "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a890138_6041e0fd",
@@ -31,6 +48,29 @@
       "writtenOn": "2024-02-27T03:01:21Z",
       "side": 1,
       "message": "Is it worth mentioning in a comment somewhere that this enum was originally defined by the EGL_ANGLE_iosurface_client_buffer extension?",
+      "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "964fc6cc_e378f7a4",
+        "filename": "extensions/EGL_ANGLE_metal_texture_client_buffer.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-27T20:29:18Z",
+      "side": 1,
+      "message": "We need to handle the sized/unsized format issue. Either we specify that EGL_TEXTURE_INTERNAL_FORMAT_ANGLE is a sized internal format or have a way of converting unsized formats to sized.\n\nIf we don\u0027t allow unsized formats, it tends to cause validation issues with ES2 since the format you\u0027re using is not valid for ES2/WebGL.\n\nOur D3D backend allows unsized formats for this function by taking the unsized format + D3D texture\u0027s data type to come up with a sized format for internal use [0]. That could be done here too since we have the MetalToAngleFormatID function.\n\n[0] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp;l\u003d1653-1689;drc\u003d0c4d6446491f48aafe5cc769ce6072d8e01a8ed7",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 41
+      },
       "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
