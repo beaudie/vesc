@@ -82,7 +82,6 @@ struct PathItem
 
     PathItem(const TField &field) : field(&field), type(Type::Field) {}
     PathItem(int index) : index(index), type(Type::Index) {}
-    PathItem(unsigned index) : PathItem(static_cast<int>(index)) {}
     PathItem(FlattenArray flatten) : type(Type::FlattenArray) {}
 
     union
@@ -592,35 +591,23 @@ class ConvertStructState : angle::NonCopyable
         }
     }
 
-    void pushNamePath(const char *extra)
+    void pushNamePath(const char *p)
     {
-        ASSERT(extra && *extra != '\0');
+        ASSERT(p && *p != '\0');
         namePathSizes.push_back(namePath.size());
-        const char *p = extra;
-        if (namePath.empty())
-        {
-            namePath = p;
-            return;
-        }
-        while (*p == '_')
-        {
-            ++p;
-        }
-        if (*p == '\0')
+        if (ANGLE_UNLIKELY(*p == '\0'))
         {
             p = "x";
         }
-        if (namePath.back() != '_')
-        {
+        if (!namePath.empty())
             namePath += '_';
-        }
         namePath += p;
     }
 
-    void pushNamePath(unsigned extra)
+    void pushNamePath(int index)
     {
         char buffer[std::numeric_limits<unsigned>::digits10 + 1];
-        snprintf(buffer, sizeof(buffer), "%u", extra);
+        snprintf(buffer, sizeof(buffer), "%d", index);
         pushNamePath(buffer);
     }
 
@@ -763,10 +750,10 @@ bool SplitMatrixColumns(ConvertStructState &state,
         return false;
     }
 
-    const uint8_t cols = type.getCols();
-    TType &rowType     = DropColumns(type);
+    const int cols = type.getCols();
+    TType &rowType = DropColumns(type);
 
-    for (uint8_t c = 0; c < cols; ++c)
+    for (int c = 0; c < cols; ++c)
     {
         state.pushPath(c);
 
@@ -992,7 +979,7 @@ bool InlineArray(ConvertStructState &state,
         return false;
     }
 
-    const unsigned volume = type.getArraySizeProduct();
+    const int volume      = static_cast<int>(type.getArraySizeProduct());
     const bool isMultiDim = type.isArrayOfArrays();
 
     auto &innermostType = InnermostType(type);
@@ -1002,7 +989,7 @@ bool InlineArray(ConvertStructState &state,
         state.pushPath(FlattenArray());
     }
 
-    for (unsigned i = 0; i < volume; ++i)
+    for (int i = 0; i < volume; ++i)
     {
         state.pushPath(i);
         TType setType(innermostType);

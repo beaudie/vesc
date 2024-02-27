@@ -163,12 +163,12 @@ std::string UpdateAliasedShaderAttributes(std::string shaderSourceIn,
                                           const gl::ProgramExecutable &executable)
 {
     // Cache max number of components for each attribute location
-    std::array<uint8_t, gl::MAX_VERTEX_ATTRIBS> maxComponents{};
+    std::array<int, gl::MAX_VERTEX_ATTRIBS> maxComponents{};
     for (auto &attribute : executable.getProgramInputs())
     {
-        const int location       = attribute.getLocation();
-        const int registers      = gl::VariableRegisterCount(attribute.getType());
-        const uint8_t components = gl::VariableColumnCount(attribute.getType());
+        const int location   = attribute.getLocation();
+        const int registers  = gl::VariableRegisterCount(attribute.getType());
+        const int components = gl::VariableColumnCount(attribute.getType());
         for (int i = 0; i < registers; ++i)
         {
             ASSERT(location + i < static_cast<int>(maxComponents.size()));
@@ -180,9 +180,9 @@ std::string UpdateAliasedShaderAttributes(std::string shaderSourceIn,
     std::ostringstream stream;
     for (auto &attribute : executable.getProgramInputs())
     {
-        const int location       = attribute.getLocation();
-        const int registers      = gl::VariableRegisterCount(attribute.getType());
-        const uint8_t components = gl::VariableColumnCount(attribute.getType());
+        const int location   = attribute.getLocation();
+        const int registers  = gl::VariableRegisterCount(attribute.getType());
+        const int components = gl::VariableColumnCount(attribute.getType());
         for (int i = 0; i < registers; i++)
         {
             stream << "#define ANGLE_ALIASED_" << attribute.name;
@@ -229,50 +229,40 @@ std::string UpdateAliasedShaderAttributes(std::string shaderSourceIn,
     return outputSource;
 }
 
-std::string updateShaderAttributes(std::string shaderSourceIn,
-                                   const gl::ProgramExecutable &executable)
+std::string updateShaderAttributes(std::string source, const gl::ProgramExecutable &executable)
 {
     // Build string to attrib map.
-    const auto &programAttributes = executable.getProgramInputs();
     std::ostringstream stream;
-    std::unordered_map<std::string, uint32_t> attributeBindings;
-    for (auto &attribute : programAttributes)
+    std::unordered_map<std::string, int> attributeBindings;
+    for (auto &attribute : executable.getProgramInputs())
     {
-        const int regs = gl::VariableRegisterCount(attribute.getType());
-        if (regs > 1)
+        const int registers = gl::VariableRegisterCount(attribute.getType());
+        for (int i = 0; i < registers; i++)
         {
-            for (int i = 0; i < regs; i++)
+            stream.str("");
+            stream << " " << kUserDefinedNamePrefix << attribute.name;
+            if (registers > 1)
             {
-                stream.str("");
-                stream << " " << kUserDefinedNamePrefix << attribute.name << "_"
-                       << std::to_string(i) << sh::kUnassignedAttributeString;
-                attributeBindings.insert({std::string(stream.str()), i + attribute.getLocation()});
+                stream << "_" << i;
             }
-        }
-        else
-        {
-            stream.str("");
-            stream << " " << kUserDefinedNamePrefix << attribute.name
-                   << sh::kUnassignedAttributeString;
-            attributeBindings.insert({std::string(stream.str()), attribute.getLocation()});
-            stream.str("");
+            stream << sh::kUnassignedAttributeString;
+            attributeBindings.insert({stream.str(), i + attribute.getLocation()});
         }
     }
     // Rewrite attributes
-    std::string outputSource = shaderSourceIn;
-    for (auto it = attributeBindings.begin(); it != attributeBindings.end(); ++it)
+    for (auto [attributeText, location] : attributeBindings)
     {
-        std::size_t attribFound = outputSource.find(it->first);
+        std::size_t attribFound = source.find(attributeText);
         if (attribFound != std::string::npos)
         {
             stream.str("");
-            stream << "[[attribute(" << it->second << ")]]";
-            outputSource = outputSource.replace(
-                attribFound + it->first.length() - strlen(sh::kUnassignedAttributeString),
+            stream << "[[attribute(" << location << ")]]";
+            source = source.replace(
+                attribFound + attributeText.length() - strlen(sh::kUnassignedAttributeString),
                 strlen(sh::kUnassignedAttributeString), stream.str());
         }
     }
-    return outputSource;
+    return source;
 }
 
 std::string UpdateFragmentShaderOutputs(std::string shaderSourceIn,
