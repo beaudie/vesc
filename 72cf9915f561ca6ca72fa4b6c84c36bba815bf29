@@ -52,6 +52,24 @@
       "parentUuid": "34f5147f_718d0b81",
       "revId": "72cf9915f561ca6ca72fa4b6c84c36bba815bf29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4453dee2_dfa1e41a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3891,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-27T21:19:29Z",
+      "side": 1,
+      "message": "\u003e Revert already happened\n\nlooks like it has not merged yet",
+      "parentUuid": "8e2530e2_a9dddf0b",
+      "revId": "72cf9915f561ca6ca72fa4b6c84c36bba815bf29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
