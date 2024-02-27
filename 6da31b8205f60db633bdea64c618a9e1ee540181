@@ -160,6 +160,24 @@
       "parentUuid": "6ac0f89e_5200eb04",
       "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac30e2a6_9e286546",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-27T00:27:09Z",
+      "side": 1,
+      "message": "No problem! TBH I don\u0027t understand why:\n\n1) other platforms e.g. Linux did not throw errors.\n2) the exception was not reported in the test output message.\n\nIt would definitely be nice to add something to report the exception error messages properly in the test output.",
+      "parentUuid": "6ac0f89e_5200eb04",
+      "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
