@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6406a513_973df2b3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3891,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-27T20:21:52Z",
+      "side": 1,
+      "message": "@Mohan, this assert is failing on an Nvidia bot. Given that ANGLE doesn\u0027t support more than 16 samples, you can probably just clamp this instead of ASSERT.",
+      "revId": "72cf9915f561ca6ca72fa4b6c84c36bba815bf29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
