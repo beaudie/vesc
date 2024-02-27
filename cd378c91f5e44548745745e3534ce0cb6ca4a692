@@ -177,6 +177,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aacf103_48e36f3f",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-27T19:16:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a23b2841_0b5dfab9",
+      "range": {
+        "startLine": 1173,
+        "startChar": 0,
+        "endLine": 1175,
+        "endChar": 0
+      },
+      "revId": "cd378c91f5e44548745745e3534ce0cb6ca4a692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73f98db9_157c451b",

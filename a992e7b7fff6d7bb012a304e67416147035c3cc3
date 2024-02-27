@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd827b5b_ef4337c1",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-27T19:16:45Z",
+      "side": 1,
+      "message": "+1 - not intentional.\n\nDone.",
+      "parentUuid": "a5b297b5_c81f5991",
+      "range": {
+        "startLine": 248,
+        "startChar": 12,
+        "endLine": 248,
+        "endChar": 68
+      },
+      "revId": "a992e7b7fff6d7bb012a304e67416147035c3cc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe10f67a_094fe658",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-02-27T02:30:15Z",
       "side": 1,
       "message": "Same as other CL about `std::pair`",
+      "revId": "a992e7b7fff6d7bb012a304e67416147035c3cc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e741ca5_612ae3e8",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-02-27T19:16:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe10f67a_094fe658",
       "revId": "a992e7b7fff6d7bb012a304e67416147035c3cc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
