@@ -185,10 +185,10 @@ std::string UpdateAliasedShaderAttributes(std::string shaderSourceIn,
         const uint8_t components = gl::VariableColumnCount(attribute.getType());
         for (int i = 0; i < registers; i++)
         {
-            stream << "#define ANGLE_ALIASED_" << attribute.name;
+            stream << "#define ANGLE_ALIASED_" << attribute.name << "_";
             if (registers > 1)
             {
-                stream << "_" << i;
+                stream << i << "_";
             }
             stream << " ANGLE_modified.ANGLE_ATTRIBUTE_" << (location + i);
             if (components != maxComponents[location + i])
@@ -238,24 +238,17 @@ std::string updateShaderAttributes(std::string shaderSourceIn,
     std::unordered_map<std::string, uint32_t> attributeBindings;
     for (auto &attribute : programAttributes)
     {
-        const int regs = gl::VariableRegisterCount(attribute.getType());
-        if (regs > 1)
+        const int registers = gl::VariableRegisterCount(attribute.getType());
+        for (int i = 0; i < registers; i++)
         {
-            for (int i = 0; i < regs; i++)
+            stream.str("");
+            stream << " " << kUserDefinedNamePrefix << attribute.name << "_";
+            if (registers > 1)
             {
-                stream.str("");
-                stream << " " << kUserDefinedNamePrefix << attribute.name << "_"
-                       << std::to_string(i) << sh::kUnassignedAttributeString;
-                attributeBindings.insert({std::string(stream.str()), i + attribute.getLocation()});
+                stream << i << "_";
             }
-        }
-        else
-        {
-            stream.str("");
-            stream << " " << kUserDefinedNamePrefix << attribute.name
-                   << sh::kUnassignedAttributeString;
-            attributeBindings.insert({std::string(stream.str()), attribute.getLocation()});
-            stream.str("");
+            stream << sh::kUnassignedAttributeString;
+            attributeBindings.insert({std::string(stream.str()), i + attribute.getLocation()});
         }
     }
     // Rewrite attributes
