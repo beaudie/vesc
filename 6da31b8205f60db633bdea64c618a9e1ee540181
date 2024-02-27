@@ -88,6 +88,24 @@
       "parentUuid": "a2883673_e20f862f",
       "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20afdbaf_9c941ab8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-02-27T00:08:14Z",
+      "side": 1,
+      "message": "This is the exception message I am seeing:\n\n```\nUnhandled exception at 0x00007FFCB1C3EAFD (libGLESv2.dll) in angle_perftests.exe: Stack cookie instrumentation code detected a stack-based buffer overrun.\n```\n\nThis is the stack trace I am seeing:\n\n```\nlibGLESv2.dll!__report_gsfailure(unsigned __int64 stack_cookie) Line 220\tC\nlibGLESv2.dll!rx::RendererVk::appendDeviceExtensionFeaturesNotPromoted(const angle::FixedVector\u003cconst char *,400,std::__Cr::array\u003cconst char *,400\u003e\u003e \u0026 deviceExtensionNames, VkPhysicalDeviceFeatures2 * deviceFeatures, VkPhysicalDeviceProperties2 * deviceProperties) Line 2350\tC++\nlibGLESv2.dll!rx::RendererVk::queryDeviceExtensionFeatures(const angle::FixedVector\u003cconst char *,400,std::__Cr::array\u003cconst char *,400\u003e\u003e \u0026 deviceExtensionNames) Line 2670\tC++\nlibGLESv2.dll!rx::RendererVk::enableDeviceExtensions(rx::DisplayVk * displayVk) Line 3239\tC++\nlibGLESv2.dll!rx::RendererVk::setupDevice(rx::DisplayVk * displayVk) Line 3372\tC++\nlibGLESv2.dll!rx::RendererVk::initialize(rx::DisplayVk * displayVk, egl::Display * display, const char * wsiExtension, const char * wsiLayer) Line 1986\tC++\nlibGLESv2.dll!rx::DisplayVk::initialize(egl::Display * display) Line 110\tC++\nlibGLESv2.dll!rx::DisplayVkWin32::initialize(egl::Display * display) Line 62\tC++\nlibGLESv2.dll!egl::Display::initialize() Line 1067\tC++\nlibGLESv2.dll!egl::Initialize(egl::Thread * thread, egl::Display * display, int * major, int * minor) Line 514\tC++\nlibGLESv2.dll!EGL_Initialize(void * dpy, int * major, int * minor) Line 478\tC++\nangle_util.dll!EGLWindow::initializeDisplay(OSWindow * osWindow, angle::Library * glWindowingLibrary, angle::GLESDriverType driverType, const EGLPlatformParameters \u0026 params) Line 301\tC++\nangle_util.dll!EGLWindow::initializeGLWithResult(OSWindow * osWindow, angle::Library * glWindowingLibrary, angle::GLESDriverType driverType, const EGLPlatformParameters \u0026 platformParams, const ConfigParameters \u0026 configParams) Line 124\tC++\nangle_perftests.exe!ANGLERenderTest::SetUp() Line 860\tC++\n```\n\nI am still looking why. I have tested that commenting out the line `vk::AddToPNextChain(\u0026deviceProperties, \u0026mFragmentShadingRateProperties);` makes the exception go away.",
+      "parentUuid": "58a8b1a8_fe41b292",
+      "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
