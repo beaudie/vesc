@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9adbf94d_c4830de9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-27T21:16:36Z",
+      "side": 1,
+      "message": "Thanks Yuly - applied your suggestions and fixes.",
+      "parentUuid": "40de4221_5af2d6c3",
+      "revId": "da6d0c400cc09c5f4d586665587f1f07c7a58de6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e2bda0c_5603fa5b",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-02-27T19:02:04Z",
       "side": 1,
       "message": "You might want to add some condition here, so that the bot appears as \"s22\" in https://ci.chromium.org/p/angle/g/ci/console (now it enters the \"exp\" case).",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 0
+      },
+      "revId": "da6d0c400cc09c5f4d586665587f1f07c7a58de6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d98d08eb_1efeecf0",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-27T21:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e2bda0c_5603fa5b",
       "range": {
         "startLine": 260,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76b523a4_8dfd9bff",
+        "filename": "infra/specs/angle_mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-27T21:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6e3f07d_795062e4",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 74
+      },
+      "revId": "da6d0c400cc09c5f4d586665587f1f07c7a58de6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aeb289af_a5cdb01b",
@@ -87,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e99ac7fb_286d34c1",
+        "filename": "infra/specs/waterfalls.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-27T21:16:36Z",
+      "side": 1,
+      "message": "Works for me, I was modelling this against the `android-arm64-pixel6` a few lines up.",
+      "parentUuid": "aeb289af_a5cdb01b",
+      "range": {
+        "startLine": 83,
+        "startChar": 7,
+        "endLine": 83,
+        "endChar": 24
+      },
+      "revId": "da6d0c400cc09c5f4d586665587f1f07c7a58de6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a16efcf_73250e21",
@@ -100,6 +190,30 @@
       "writtenOn": "2024-02-27T19:02:04Z",
       "side": 1,
       "message": "This adds wrong OS version, UQ1A.240105.002.\nRemove it and add \u0027device_os\u0027: \u0027UP1A.231005.007\u0027 in samsung_s22 mixin instead.",
+      "range": {
+        "startLine": 86,
+        "startChar": 11,
+        "endLine": 86,
+        "endChar": 20
+      },
+      "revId": "da6d0c400cc09c5f4d586665587f1f07c7a58de6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3d17cb7_4686880b",
+        "filename": "infra/specs/waterfalls.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-27T21:16:36Z",
+      "side": 1,
+      "message": "Ah, good catch.",
+      "parentUuid": "4a16efcf_73250e21",
       "range": {
         "startLine": 86,
         "startChar": 11,
