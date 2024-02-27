@@ -178,6 +178,24 @@
       "parentUuid": "6ac0f89e_5200eb04",
       "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3d3c47e_a0b8085e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-27T02:12:50Z",
+      "side": 1,
+      "message": "Nice catch Yuxin!\n\nWe can land this, I\u0027ll see if I can add something about type safety to that function.\n\n\u003e I don\u0027t understand why\n\nThe stack itself was being corrupted, with various side effects. Likely the way the stack is laid out in windows is different from Linux, and on windows overwriting the stack is probably screwing up the return value etc, at that point a stack trace is really impossible to get.",
+      "parentUuid": "ac30e2a6_9e286546",
+      "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
