@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "543e5570_250c6b23",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-27T02:25:29Z",
+      "side": 1,
+      "message": "One final nit: we avoid `std::pair` because ultimately it hurts readability; a small `struct` usually ends up working better. In this case however, I think you just added it to avoid `auto` in a range loop over `mAssociatedDevicePrograms`, right?\n\nThat case is one of the few places we _do_ use `auto`, so you can remove this type 😊\n\n(I know, I know, it\u0027ll take a bit to figure out the unwritten rules, lol)",
+      "revId": "79edba9e14d81462ef8f70e3af3db5d090d2458d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
