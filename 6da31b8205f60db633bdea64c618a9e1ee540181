@@ -142,6 +142,24 @@
       "parentUuid": "bc4acf7e_494e3751",
       "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c871423_00961904",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-27T00:19:11Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org - you want some kind of type safety added or am i good to land this?",
+      "parentUuid": "6ac0f89e_5200eb04",
+      "revId": "6da31b8205f60db633bdea64c618a9e1ee540181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
