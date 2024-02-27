@@ -70,6 +70,30 @@
       },
       "revId": "0177ed31bd8d9b9e3c6edfa3f1d0c29580cb9bbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cba18f24_76229218",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-02-27T21:28:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "204996be_709f2348",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 7
+      },
+      "revId": "0177ed31bd8d9b9e3c6edfa3f1d0c29580cb9bbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
