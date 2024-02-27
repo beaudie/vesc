@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5371a39f_5ca2d4ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-27T03:01:21Z",
+      "side": 1,
+      "message": "I defer to Geoff\u0027s review, but a couple of small comments.",
+      "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a890138_6041e0fd",
+        "filename": "extensions/EGL_ANGLE_metal_texture_client_buffer.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-27T03:01:21Z",
+      "side": 1,
+      "message": "Is it worth mentioning in a comment somewhere that this enum was originally defined by the EGL_ANGLE_iosurface_client_buffer extension?",
+      "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "053d9f7e_02fa093e",
+        "filename": "src/tests/gl_tests/ImageTestMetal.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-27T03:01:21Z",
+      "side": 1,
+      "message": "typo: treat is at -\u003e treat it as",
+      "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "926cfb0d_56b9836f",
+        "filename": "src/tests/gl_tests/ImageTestMetal.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-27T03:01:21Z",
+      "side": 1,
+      "message": "What would you think about adding another test which uses the re-cast texture for rendering?",
+      "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
