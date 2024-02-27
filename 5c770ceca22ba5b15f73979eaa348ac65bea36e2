@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "696744fd_4733dafc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-27T20:46:31Z",
+      "side": 1,
+      "message": "Re-LGTM!",
+      "revId": "5c770ceca22ba5b15f73979eaa348ac65bea36e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c768a7f_dd2daced",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-27T20:46:31Z",
+      "side": 1,
+      "message": "nit: please use the real type instead of `auto`. We reserve `auto` for complex types that are not worth spelling out (like `std::pair` due to looping over map, `std::whatever\u003cT\u003e::iterator`, and lambdas).",
+      "range": {
+        "startLine": 39,
+        "startChar": 15,
+        "endLine": 39,
+        "endChar": 19
+      },
+      "revId": "5c770ceca22ba5b15f73979eaa348ac65bea36e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bbb896e_7738d19a",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-27T20:46:31Z",
+      "side": 1,
+      "message": "Eventually, you\u0027d want to move these to a common `wgpu_utils.h`. You\u0027ll end up needing them in `FramebufferWgpu` and some internal shaders (a la `UtilsVk`).",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 23
+      },
+      "revId": "5c770ceca22ba5b15f73979eaa348ac65bea36e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
