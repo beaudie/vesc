@@ -16,6 +16,24 @@
       "message": "@Mohan, this assert is failing on an Nvidia bot. Given that ANGLE doesn\u0027t support more than 16 samples, you can probably just clamp this instead of ASSERT.",
       "revId": "72cf9915f561ca6ca72fa4b6c84c36bba815bf29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34f5147f_718d0b81",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3891,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-27T20:27:25Z",
+      "side": 1,
+      "message": "thanks shabi, yup -\n```\n[332:11700:0226/224805.497:ERROR:angle_platform_impl.cc(44)] RendererVk.cpp:3891 (queryAndCacheFragmentShadingRates): \t! Assert failed in queryAndCacheFragmentShadingRates (..\\..\\third_party\\angle\\src\\libANGLE\\renderer\\vulkan\\RendererVk.cpp:3891): shadingRate.sampleCounts \u003c 256\nFATAL: RendererVk.cpp:3891 (queryAndCacheFragmentShadingRates): \t! Assert failed in queryAndCacheFragmentShadingRates (..\\..\\third_party\\angle\\src\\libANGLE\\renderer\\vulkan\\RendererVk.cpp:3891): shadingRate.sampleCounts \u003c 256\n```\nfound it in the raw log. should i wait for the revert or just upload a new change?",
+      "parentUuid": "6406a513_973df2b3",
+      "revId": "72cf9915f561ca6ca72fa4b6c84c36bba815bf29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
