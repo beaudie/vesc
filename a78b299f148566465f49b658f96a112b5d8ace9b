@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50e2501e_5df5ef7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6612,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-02-27T01:12:56Z",
+      "side": 1,
+      "message": "Thanks for the suggestion! :)\n* I have added `ReadImageSubresources` to `CommandBufferAccess` and the relevant loops to process this access type.\n* I also added a read barrier function (`recordReadSubresourceBarrier()`) to be called in this case, which uses the subresource bits.\n* This access is added to image self-copy and mipmap compute functions.\n* The failing tests from before now pass. I have removed the exception for these two layouts as well.",
+      "parentUuid": "4001b429_9a67523f",
+      "revId": "a78b299f148566465f49b658f96a112b5d8ace9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0c876f0_4e493e37",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 9
