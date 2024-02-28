@@ -339,6 +339,11 @@ bool IsARM()
     return HasSystemVendorID(kVendorID_ARM);
 }
 
+bool IsSamsung()
+{
+    return HasSystemVendorID(kVendorID_Samsung);
+}
+
 bool IsSwiftshaderDevice()
 {
     return HasSystemDeviceID(kVendorID_GOOGLE, kDeviceID_Swiftshader);

@@ -43,6 +43,7 @@ bool IsAppleGPU();
 bool IsARM();
 bool IsNVIDIA();
 bool IsQualcomm();
+bool IsSamsung();
 
 // GPU devices.
 bool IsSwiftshaderDevice();
