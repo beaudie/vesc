@@ -75,6 +75,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbea9649_b6c91eab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-28T19:13:28Z",
+      "side": 1,
+      "message": "Never mind, I thought the read bits are tracked separately, but not yet.",
+      "parentUuid": "89784b44_6931df54",
+      "revId": "d9719cd3f70b50ce1be8c7424538ed742dcf6fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "974332df_d40a2d55",
