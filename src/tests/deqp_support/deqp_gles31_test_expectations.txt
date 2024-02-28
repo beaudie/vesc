@@ -468,6 +468,22 @@ b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.debug.error_groups.case_9
 6678 UBSAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.framebuffer_format.rgb8 = SKIP
 6678 UBSAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.framebuffer_format.rgba32i = SKIP
 
+// Samsung Galaxy S22 (Xclipse)
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES31.functional.blend_equation_advanced.msaa.darken = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES31.functional.draw_indirect.random.45 = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES3.functional.draw.random.118 = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES3.functional.draw.random.124 = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES3.functional.draw.random.136 = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES3.functional.draw.random.138 = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES31.functional.sample_shading.min_sample_shading.multisample_renderbuffer_samples_2_* = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.sample_qualifier.multisample_texture_* = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_id.multisample_rbo_* = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES31.functional.shaders.sample_variables.sample_mask_in.bits_unique_per_two_samples.multisample_texture_* = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES31.functional.texture.border_clamp.formats.*.linear_size_npot = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES31.functional.texture.border_clamp.per_axis_wrap_mode.texture_2d.float_color.linear.* = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES31.functional.texture.border_clamp.range_clamp.linear_float_color = SKIP
+b/267953710 GALAXYS22 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.*int2_10_10_10* = SKIP
+
 // Samsung Galaxy S23
 8157 GALAXYS23 VULKAN : dEQP-GLES31.functional.blend_equation_advanced.barrier.* = SKIP
 8157 GALAXYS23 VULKAN : dEQP-GLES31.functional.blend_equation_advanced.basic.* = SKIP
