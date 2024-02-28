@@ -16,6 +16,86 @@
       "message": "Thanks",
       "revId": "d9719cd3f70b50ce1be8c7424538ed742dcf6fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37bb49ba_bfb2c7e9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 8688,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-28T18:59:40Z",
+      "side": 1,
+      "message": "ImageUseThenOutOfRPRead?",
+      "range": {
+        "startLine": 8688,
+        "startChar": 74,
+        "endLine": 8688,
+        "endChar": 98
+      },
+      "revId": "d9719cd3f70b50ce1be8c7424538ed742dcf6fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc3170ba_ab209d96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6603,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-28T18:59:40Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be `mCurrentLayout !\u003d newLayout`?\n\n`isReadBarrierNecessary` returns true if the layout is a write-able. Which means reading from different parts of the same image (in a write layout) is going to insert barriers even if there were no previous writes. The loop below should already deal with read-after-write.",
+      "revId": "d9719cd3f70b50ce1be8c7424538ed742dcf6fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89784b44_6931df54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-28T18:59:40Z",
+      "side": 1,
+      "message": "This should check the read mask too now",
+      "revId": "d9719cd3f70b50ce1be8c7424538ed742dcf6fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "974332df_d40a2d55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 2688,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-28T18:59:40Z",
+      "side": 1,
+      "message": "nit: `areLevel...` otherwise the function reads like it returns the levels that are within range.",
+      "range": {
+        "startLine": 2688,
+        "startChar": 9,
+        "endLine": 2688,
+        "endChar": 48
+      },
+      "revId": "d9719cd3f70b50ce1be8c7424538ed742dcf6fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
