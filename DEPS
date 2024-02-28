@@ -310,6 +310,7 @@ vars = {
   'checkout_angle_restricted_trace_one_punch_man': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_oxenfree': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_piano_kids': 'checkout_angle_restricted_traces',
+  'checkout_angle_restricted_trace_plague_inc': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_plants_vs_zombies_2': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_plants_vs_zombies_heroes': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_pokemon_go': 'checkout_angle_restricted_traces',
@@ -379,6 +380,7 @@ vars = {
   'checkout_angle_restricted_trace_the_witcher_monster_slayer': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_thimbleweed_park': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_tmnt_shredders_revenge': 'checkout_angle_restricted_traces',
+  'checkout_angle_restricted_trace_toca_life_world': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_toon_blast': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_top_war': 'checkout_angle_restricted_traces',
   'checkout_angle_restricted_trace_township': 'checkout_angle_restricted_traces',
@@ -2692,7 +2694,7 @@ deps = {
         },
       ],
       'dep_type': 'cipd',
-      'condition': 'checkout_angle_restricted_traces',
+      'condition': 'checkout_angle_restricted_trace_plague_inc',
   },
   'src/tests/restricted_traces/plants_vs_zombies_2': {
       'packages': [
@@ -3383,6 +3385,16 @@ deps = {
       ],
       'dep_type': 'cipd',
       'condition': 'checkout_angle_restricted_trace_tmnt_shredders_revenge',
+  },
+  'src/tests/restricted_traces/toca_life_world': {
+      'packages': [
+        {
+            'package': 'angle/traces/toca_life_world',
+            'version': 'version:2',
+        },
+      ],
+      'dep_type': 'cipd',
+      'condition': 'checkout_angle_restricted_trace_toca_life_world',
   },
   'src/tests/restricted_traces/toon_blast': {
       'packages': [
