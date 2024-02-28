@@ -2289,6 +2289,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
         features, emulateIsnanFloat,
         isIntel && IsApple() && IsSkylake(device) && GetMacOSVersion() < OSVersion(10, 13, 2));
 
+    // https://anglebug.com/8374
+    ANGLE_FEATURE_CONDITION(features, clearsWithGapsNeedFlush, !isMesa && isQualcomm);
+
     ANGLE_FEATURE_CONDITION(features, doesSRGBClearsOnLinearFramebufferAttachments,
                             isIntel || isAMD);
 

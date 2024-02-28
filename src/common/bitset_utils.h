@@ -130,6 +130,7 @@ class BitSetT final
     constexpr bool all() const;
     constexpr bool any() const;
     constexpr bool none() const;
+    constexpr bool hasGaps() const;
     constexpr std::size_t count() const;
 
     constexpr static std::size_t size() { return N; }
@@ -244,6 +245,13 @@ constexpr bool BitSetT<N, BitsT, ParamT>::none() const
 {
     ASSERT(mBits == (mBits & Mask(N).bits()));
     return (mBits == 0);
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+constexpr bool BitSetT<N, BitsT, ParamT>::hasGaps() const
+{
+    ASSERT(mBits == (mBits & Mask(N).bits()));
+    return (mBits != Mask(N).bits()) && ((mBits & (mBits + 1)) != 0);
 }
 
 template <size_t N, typename BitsT, typename ParamT>
