@@ -34,6 +34,7 @@ bool IsPixel2XL();
 bool IsPixel4();
 bool IsPixel4XL();
 bool IsPixel6();
+bool IsS22();
 bool IsNVIDIAShield();
 
 // GPU vendors.
@@ -43,6 +44,7 @@ bool IsAppleGPU();
 bool IsARM();
 bool IsNVIDIA();
 bool IsQualcomm();
+bool IsSamsung();
 
 // GPU devices.
 bool IsSwiftshaderDevice();
