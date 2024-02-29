@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43df3976_17dd16cf",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-29T16:13:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c1a05de3_28e8eadc",
+      "range": {
+        "startLine": 74,
+        "startChar": 12,
+        "endLine": 74,
+        "endChar": 98
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f84c74ea_1a2e0176",
@@ -196,6 +220,30 @@
       "side": 1,
       "message": "+1 on the ctor suggestion.\n\nWould it be okay to defer the dtor update to another cleanup commit?\nOnly reason being that object deletion is frontend dictated via `clRelease*`.\nSo this would involve touching/changing the interface class to add a virtual destroy() method (would need to update CL passthrough as well I think):\n\n`cl_stubs.cpp`:\n```diff\n  cl_int ReleaseProgram(cl_program program)\n  {\n    Program \u0026prog \u003d program-\u003ecast\u003cProgram\u003e();\n    if (prog.release())\n    {\n+       prog.getImpl().destroy();\n        delete \u0026prog;\n    }\n    return CL_SUCCESS;\n  }\n```",
       "parentUuid": "6c621170_f3391cd1",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 0
+      },
+      "revId": "f594b7b447dac268a7e85ae343da706c93f4acad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87ecca9d_68fe9f94",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-02-29T16:13:51Z",
+      "side": 1,
+      "message": "Yup. Sounds good.",
+      "parentUuid": "8b6108d0_cb92e1ef",
       "range": {
         "startLine": 119,
         "startChar": 0,
