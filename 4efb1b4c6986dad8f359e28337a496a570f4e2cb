@@ -70,6 +70,30 @@
       },
       "revId": "4efb1b4c6986dad8f359e28337a496a570f4e2cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbcdca2c_51fd6397",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3892,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-29T00:42:49Z",
+      "side": 1,
+      "message": "ah, i see. im fine either way. will push up a patch with this `\u0026` removed",
+      "parentUuid": "35c45d8b_4005ea17",
+      "range": {
+        "startLine": 3892,
+        "startChar": 36,
+        "endLine": 3892,
+        "endChar": 68
+      },
+      "revId": "4efb1b4c6986dad8f359e28337a496a570f4e2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
