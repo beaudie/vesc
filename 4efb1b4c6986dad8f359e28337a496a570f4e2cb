@@ -22,6 +22,30 @@
       },
       "revId": "4efb1b4c6986dad8f359e28337a496a570f4e2cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f75853bc_47014e45",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3892,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-02-29T00:10:40Z",
+      "side": 1,
+      "message": "\u003e This looks unnecessary\n\n`canSupportFoveatedRendering` is doing this to `getPhysicalDeviceProperties().limits.framebufferColorSampleCounts` but here we are doing that to `shadingRate.sampleCounts`",
+      "parentUuid": "923bef56_11765100",
+      "range": {
+        "startLine": 3892,
+        "startChar": 36,
+        "endLine": 3892,
+        "endChar": 68
+      },
+      "revId": "4efb1b4c6986dad8f359e28337a496a570f4e2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
