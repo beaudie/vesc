@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e266ea0d_ab835e74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2024-02-29T22:27:46Z",
+      "side": 1,
+      "message": "PTAL\n\nIn this patch, instead of completely removing the flag, we modify the flag such that we allow ANGLE to continue being built in vendor image on old OS version if a client chooses to upgrade ANGLE on an old OS",
+      "revId": "b85ed2d3616802424e060dcdf7be8fa8040763f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
