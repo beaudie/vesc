@@ -22,6 +22,7 @@
 #include "common/angleutils.h"
 #include "common/vulkan/vk_headers.h"
 #include "common/vulkan/vulkan_icd.h"
+#include "image_util/loadimage.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/renderer/vulkan/CommandProcessor.h"
@@ -152,6 +153,7 @@ class RendererVk : angle::NonCopyable
 
     angle::Result initialize(DisplayVk *displayVk,
                              egl::Display *display,
+                             const angle::ImageLoadContext &imageLoadContext,
                              const char *wsiExtension,
                              const char *wsiLayer);
     // Reload volk vk* function ptrs if needed for an already initialized RendererVk
@@ -394,6 +396,7 @@ class RendererVk : angle::NonCopyable
     void resetCommandQueuePerFrameCounters() { mCommandQueue.resetPerFramePerfCounters(); }
 
     egl::Display *getDisplay() const { return mDisplay; }
+    const angle::ImageLoadContext &getImageLoadContext() const { return mImageLoadContext; }
 
     bool enableDebugUtils() const { return mEnableDebugUtils; }
     bool angleDebuggerMode() const { return mAngleDebuggerMode; }
@@ -794,6 +797,7 @@ class RendererVk : angle::NonCopyable
                                        CommandBufferHelperT **commandBufferHelperOut);
 
     egl::Display *mDisplay;
+    angle::ImageLoadContext mImageLoadContext;
 
     void *mLibVulkanLibrary;
 

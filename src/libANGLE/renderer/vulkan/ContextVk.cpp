@@ -8960,9 +8960,9 @@ vk::ComputePipelineFlags ContextVk::getComputePipelineFlags() const
     return pipelineFlags;
 }
 
-angle::ImageLoadContext ContextVk::getImageLoadContext() const
+const angle::ImageLoadContext &ContextVk::getImageLoadContext() const
 {
-    return getRenderer()->getDisplay()->getImageLoadContext();
+    return getRenderer()->getImageLoadContext();
 }
 
 angle::Result ContextVk::ensureInterfacePipelineCache()

@@ -107,7 +107,8 @@ DisplayVk::~DisplayVk()
 egl::Error DisplayVk::initialize(egl::Display *display)
 {
     ASSERT(mRenderer != nullptr && display != nullptr);
-    angle::Result result = mRenderer->initialize(this, display, getWSIExtension(), getWSILayer());
+    angle::Result result = mRenderer->initialize(this, display, display->getImageLoadContext(),
+                                                 getWSIExtension(), getWSILayer());
     ANGLE_TRY(angle::ToEGL(result, EGL_NOT_INITIALIZED));
     // Query and cache supported surface format and colorspace for later use.
     initSupportedSurfaceFormatColorspaces();

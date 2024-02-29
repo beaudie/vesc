@@ -1552,6 +1552,8 @@ void RendererVk::onDestroy(vk::Context *context)
         angle::CloseSystemLibrary(mLibVulkanLibrary);
         mLibVulkanLibrary = nullptr;
     }
+
+    mImageLoadContext = {};
 }
 
 void RendererVk::notifyDeviceLost()
@@ -1719,6 +1721,7 @@ angle::Result RendererVk::enableInstanceExtensions(
 
 angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      egl::Display *display,
+                                     const angle::ImageLoadContext &imageLoadContext,
                                      const char *wsiExtension,
                                      const char *wsiLayer)
 {
@@ -1748,6 +1751,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     mDisplay                         = display;
     const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
+    mImageLoadContext                = imageLoadContext;
+
     angle::vk::ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseValidationLayers(attribs),
                                                            ChooseICDFromAttribs(attribs));
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();

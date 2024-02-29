@@ -781,7 +781,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::ComputePipelineFlags getComputePipelineFlags() const;
 
-    angle::ImageLoadContext getImageLoadContext() const;
+    const angle::ImageLoadContext &getImageLoadContext() const;
 
     bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
     bool hasUnsubmittedUse(const vk::Resource &resource) const
