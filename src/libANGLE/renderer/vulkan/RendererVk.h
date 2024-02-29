@@ -145,6 +145,13 @@ class OneOffCommandPool : angle::NonCopyable
     std::deque<PendingOneOffCommands> mPendingCommands;
 };
 
+enum class UseValidationLayers
+{
+    Yes,
+    YesIfAvailable,
+    No,
+};
+
 class RendererVk : angle::NonCopyable
 {
   public:
@@ -154,8 +161,13 @@ class RendererVk : angle::NonCopyable
     angle::Result initialize(DisplayVk *displayVk,
                              egl::Display *display,
                              const angle::ImageLoadContext &imageLoadContext,
+                             angle::vk::ICD desiredICD,
+                             uint32_t preferredVendorId,
+                             uint32_t preferredDeviceId,
+                             UseValidationLayers useValidationLayers,
                              const char *wsiExtension,
                              const char *wsiLayer);
+
     // Reload volk vk* function ptrs if needed for an already initialized RendererVk
     void reloadVolkIfNeeded() const;
     void onDestroy(vk::Context *context);
@@ -1030,7 +1042,7 @@ class RendererVk : angle::NonCopyable
 
     // Memory tracker for allocations and deallocations.
     MemoryAllocationTracker mMemoryAllocationTracker;
-};
+};  // namespace rx
 
 ANGLE_INLINE Serial RendererVk::generateQueueSerial(SerialIndex index)
 {
