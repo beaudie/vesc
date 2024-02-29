@@ -354,8 +354,31 @@ angle::Result CLCommandQueueVk::enqueueMapBuffer(const cl::Buffer &buffer,
                                                  CLEventImpl::CreateFunc *eventCreateFunc,
                                                  void *&mapPtr)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+
+    ANGLE_TRY(processWaitlist(waitEvents));
+
+    CLBufferVk *bufferVk = &buffer.getImpl<CLBufferVk>();
+    if (blocking || mComputePassCommands->usesBufferForWrite(bufferVk->getBuffer()))
+    {
+        ANGLE_TRY(finishInternal());
+    }
+
+    uint8_t *mapPointer = nullptr;
+    if (buffer.getFlags().isSet(CL_MEM_USE_HOST_PTR))
+    {
+        mapPointer = static_cast<uint8_t *>(buffer.getHostPtr()) + offset;
+        ANGLE_TRY(bufferVk->copyTo(mapPointer, offset, size));
+    }
+    else
+    {
+        ANGLE_TRY(bufferVk->map(mapPointer, offset));
+    }
+    mapPtr = static_cast<void *>(mapPointer);
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueReadImage(const cl::Image &image,
