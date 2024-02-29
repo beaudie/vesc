@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2c90c4e_5d306101",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-29T15:22:02Z",
+      "side": 1,
+      "message": "Yeah, I was trying to unblock the bots quickly.  The trickier one is in RendererVk.cpp.\n\nDone.",
+      "parentUuid": "0802fa04_11706b7b",
+      "range": {
+        "startLine": 1664,
+        "startChar": 8,
+        "endLine": 1664,
+        "endChar": 17
+      },
+      "revId": "e614ce4c96f18ebe73a40ce72b13a9e83dd3e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54d0b8eb_1d835c35",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-29T10:22:45Z",
       "side": 1,
       "message": "I think we need a similar IsS22()",
+      "range": {
+        "startLine": 307,
+        "startChar": 0,
+        "endLine": 310,
+        "endChar": 1
+      },
+      "revId": "e614ce4c96f18ebe73a40ce72b13a9e83dd3e321",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c8121e9_8c5838b0",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-02-29T15:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54d0b8eb_1d835c35",
       "range": {
         "startLine": 307,
         "startChar": 0,
