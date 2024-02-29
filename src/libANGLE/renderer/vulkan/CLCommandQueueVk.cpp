@@ -383,8 +383,39 @@ angle::Result CLCommandQueueVk::enqueueMapBuffer(const cl::Buffer &buffer,
                                                  CLEventImpl::CreateFunc *eventCreateFunc,
                                                  void *&mapPtr)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+
+    ANGLE_TRY(processWaitlist(waitEvents));
+
+    bool eventComplete = false;
+    if (blocking || !eventCreateFunc)
+    {
+        ANGLE_TRY(finishInternal());
+        eventComplete = true;
+    }
+
+    CLBufferVk *bufferVk = &buffer.getImpl<CLBufferVk>();
+    uint8_t *mapPointer  = nullptr;
+    if (buffer.getFlags().intersects(CL_MEM_USE_HOST_PTR))
+    {
+        ANGLE_TRY(finishInternal());
+        mapPointer = static_cast<uint8_t *>(buffer.getHostPtr()) + offset;
+        ANGLE_TRY(bufferVk->copyTo(mapPointer, offset, size));
+        eventComplete = true;
+    }
+    else
+    {
+        ANGLE_TRY(bufferVk->map(mapPointer, offset));
+    }
+    mapPtr = static_cast<void *>(mapPointer);
+
+    if (bufferVk->isCurrentlyInUse())
+    {
+        eventComplete = false;
+    }
+    ANGLE_TRY(createEvent(eventCreateFunc, eventComplete));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueReadImage(const cl::Image &image,
@@ -482,8 +513,36 @@ angle::Result CLCommandQueueVk::enqueueUnmapMemObject(const cl::Memory &memory,
                                                       const cl::EventPtrs &waitEvents,
                                                       CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+
+    ANGLE_TRY(processWaitlist(waitEvents));
+
+    bool eventComplete = false;
+    if (!eventCreateFunc)
+    {
+        ANGLE_TRY(finishInternal());
+        eventComplete = true;
+    }
+
+    if (memory.getType() == cl::MemObjectType::Buffer)
+    {
+        CLBufferVk &bufferVk = memory.getImpl<CLBufferVk>();
+        if (memory.getFlags().intersects(CL_MEM_USE_HOST_PTR))
+        {
+            ANGLE_TRY(finishInternal());
+            ANGLE_TRY(bufferVk.copyFrom(memory.getHostPtr(), 0, bufferVk.getSize()));
+            eventComplete = true;
+        }
+    }
+    else
+    {
+        UNIMPLEMENTED();
+        ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    }
+    memory.getImpl<CLMemoryVk>().unmap();
+    ANGLE_TRY(createEvent(eventCreateFunc, eventComplete));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueMigrateMemObjects(const cl::MemoryPtrs &memObjects,
