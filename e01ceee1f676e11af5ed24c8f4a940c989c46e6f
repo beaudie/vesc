@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a36c969_cf39bf95",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-02-29T18:07:06Z",
+      "side": 1,
+      "message": "nit: suggest `IsGalaxyS22` here too",
+      "revId": "e01ceee1f676e11af5ed24c8f4a940c989c46e6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
