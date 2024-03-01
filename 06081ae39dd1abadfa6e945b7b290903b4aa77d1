@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbe4b364_3caf8b03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-01T23:07:59Z",
+      "side": 1,
+      "message": "I think I have a hunch...\n\n```\ngen/third_party/llvm/src/clang/include\\clang/Driver/Options.inc(65): warning C4003: not enough arguments for function-like macro invocation \u0027LLVM_MAKE_OPT_ID\u0027\ngen/third_party/llvm/src/clang/include\\clang/Driver/Options.inc(66): warning C4003: not enough arguments for function-like macro invocation \u0027LLVM_MAKE_OPT_ID\u0027\ngen/third_party/llvm/src/clang/include\\clang/Driver/Options.inc(66): error C2365: \u0027clang::driver::options::OPT_\u0027: redefinition; previous definition was \u0027enumerator\u0027\ngen/third_party/llvm/src/clang/include\\clang/Driver/Options.inc(65): note: see declaration of \u0027clang::driver::options::OPT_\u0027\n```\n\nI think it boils down to how MSVC does/handles `__VA_ARGS__` ...\n\nTl;dr - trying `/Zc:preprocessor` for clspv building...",
+      "revId": "06081ae39dd1abadfa6e945b7b290903b4aa77d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
