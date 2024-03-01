@@ -4631,14 +4631,24 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // can root cause it.
     ANGLE_FEATURE_CONDITION(&mFeatures, requireCachedBitForStagingBuffer, !isARM);
 
-    // Multiple dynamic state issues on ARM have been fixed.
-    // http://issuetracker.google.com/285124778
-    // http://issuetracker.google.com/285196249
-    // http://issuetracker.google.com/286224923
-    // http://issuetracker.google.com/287318431
-    //
-    // On Pixel devices, the issues have been fixed since r44, but on others since r44p1.
-    const bool isArm44OrLess = isARM && armDriverVersion < ARMDriverVersion(44, 1, 0);
+    bool isExtendedDynamicStateSupported = true;
+    if (isARM)
+    {
+        // Multiple dynamic state issues on ARM have been fixed.
+        // http://issuetracker.google.com/285124778
+        // http://issuetracker.google.com/285196249
+        // http://issuetracker.google.com/286224923
+        // http://issuetracker.google.com/287318431
+        //
+        // On Pixel devices, the issues have been fixed since r44, but on others since r44p1.
+        isExtendedDynamicStateSupported = armDriverVersion >= ARMDriverVersion(44, 1, 0);
+    }
+    else if (isIntel && IsWindows())
+    {
+        // Vertex input dynamic state is supported for Windows/Intel drivers since 100.9684.
+        IntelDriverVersion intelDriverVersion(mPhysicalDeviceProperties.driverVersion);
+        isExtendedDynamicStateSupported = intelDriverVersion >= GetWinIntelDriverVersion(100, 9684);
+    }
 
     // Intel driver has issues with VK_EXT_vertex_input_dynamic_state
     // http://anglebug.com/7162#c8
@@ -4646,9 +4656,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             mVertexInputDynamicStateFeatures.vertexInputDynamicState == VK_TRUE &&
                                 !(IsWindows() && isIntel));
 
-    ANGLE_FEATURE_CONDITION(
-        &mFeatures, supportsExtendedDynamicState,
-        mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE && !isArm44OrLess);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState,
+                            mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE &&
+                                isExtendedDynamicStateSupported);
 
     // VK_EXT_vertex_input_dynamic_state enables dynamic state for the full vertex input state. As
     // such, when available use supportsVertexInputDynamicState instead of
@@ -4656,15 +4666,17 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, useVertexInputBindingStrideDynamicState,
                             mFeatures.supportsExtendedDynamicState.enabled &&
                                 !mFeatures.supportsVertexInputDynamicState.enabled &&
-                                !isArm44OrLess);
-    ANGLE_FEATURE_CONDITION(&mFeatures, useCullModeDynamicState,
-                            mFeatures.supportsExtendedDynamicState.enabled && !isArm44OrLess);
+                                isExtendedDynamicStateSupported);
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, useCullModeDynamicState,
+        mFeatures.supportsExtendedDynamicState.enabled && isExtendedDynamicStateSupported);
     ANGLE_FEATURE_CONDITION(&mFeatures, useDepthCompareOpDynamicState,
                             mFeatures.supportsExtendedDynamicState.enabled);
     ANGLE_FEATURE_CONDITION(&mFeatures, useDepthTestEnableDynamicState,
                             mFeatures.supportsExtendedDynamicState.enabled);
-    ANGLE_FEATURE_CONDITION(&mFeatures, useDepthWriteEnableDynamicState,
-                            mFeatures.supportsExtendedDynamicState.enabled && !isArm44OrLess);
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, useDepthWriteEnableDynamicState,
+        mFeatures.supportsExtendedDynamicState.enabled && isExtendedDynamicStateSupported);
     ANGLE_FEATURE_CONDITION(&mFeatures, useFrontFaceDynamicState,
                             mFeatures.supportsExtendedDynamicState.enabled);
     ANGLE_FEATURE_CONDITION(&mFeatures, useStencilOpDynamicState,
@@ -4672,12 +4684,13 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, useStencilTestEnableDynamicState,
                             mFeatures.supportsExtendedDynamicState.enabled);
 
-    ANGLE_FEATURE_CONDITION(
-        &mFeatures, supportsExtendedDynamicState2,
-        mExtendedDynamicState2Features.extendedDynamicState2 == VK_TRUE && !isArm44OrLess);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState2,
+                            mExtendedDynamicState2Features.extendedDynamicState2 == VK_TRUE &&
+                                isExtendedDynamicStateSupported);
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, usePrimitiveRestartEnableDynamicState,
-                            mFeatures.supportsExtendedDynamicState2.enabled && !isArm44OrLess);
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, usePrimitiveRestartEnableDynamicState,
+        mFeatures.supportsExtendedDynamicState2.enabled && isExtendedDynamicStateSupported);
     ANGLE_FEATURE_CONDITION(&mFeatures, useRasterizerDiscardEnableDynamicState,
                             mFeatures.supportsExtendedDynamicState2.enabled);
     ANGLE_FEATURE_CONDITION(&mFeatures, useDepthBiasEnableDynamicState,

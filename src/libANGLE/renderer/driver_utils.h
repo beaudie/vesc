@@ -181,6 +181,8 @@ class IntelDriverVersion
     uint32_t mBuildNumber;
 };
 
+IntelDriverVersion GetWinIntelDriverVersion(uint32_t majorVersion, uint32_t minorVersion);
+
 bool IsSandyBridge(uint32_t DeviceId);
 bool IsIvyBridge(uint32_t DeviceId);
 bool IsHaswell(uint32_t DeviceId);
