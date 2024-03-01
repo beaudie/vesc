@@ -162,6 +162,22 @@ bool IntelDriverVersion::operator>=(const IntelDriverVersion &version)
     return !(*this < version);
 }
 
+IntelDriverVersion GetWinIntelDriverVersion(uint32_t majorVersion, uint32_t minorVersion)
+{
+    // Current implementation of IntelDriverVersion only supports Windows.
+#if !defined(ANGLE_PLATFORM_WINDOWS)
+    return IntelDriverVersion(0);
+#else
+    // For Intel on Windows:
+    // Major: 18 bits
+    // Minor: 14 bits
+    constexpr uint32_t kMajorVersionMask = angle::BitMask<uint32_t>(18);
+    constexpr uint32_t kMinorVersionMask = angle::BitMask<uint32_t>(14);
+    ASSERT(majorVersion <= kMajorVersionMask && minorVersion <= kMinorVersionMask);
+    return IntelDriverVersion((majorVersion << 14) | minorVersion);
+#endif
+}
+
 bool IsSandyBridge(uint32_t DeviceId)
 {
     return std::find(std::begin(SandyBridge), std::end(SandyBridge), DeviceId) !=
