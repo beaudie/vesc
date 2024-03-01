@@ -7404,9 +7404,18 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ProgramExecutableVk *executableVk       = vk::GetImpl(executable);
 
-    const gl::ActiveTexturesCache &textures        = mState.getActiveTexturesCache();
-    const gl::ActiveTextureMask &activeTextures    = executable->getActiveSamplersMask();
-    const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
+    const gl::ActiveTexturesCache &textures             = mState.getActiveTexturesCache();
+    const gl::ActiveTextureMask &activeTextures         = executable->getActiveSamplersMask();
+    const gl::ActiveTextureTypeArray &textureTypes      = executable->getActiveSamplerTypes();
+    const std::vector<GLuint> &samplerBoundTextureUnits = executable->getSamplerBoundTextureUnits();
+
+    // Create a map of textureUnit <-> samplerIndex
+    angle::HashMap<size_t, uint32_t> textureUnitSamplerIndexMap = {};
+    for (size_t samplerIndex = 0; samplerIndex < samplerBoundTextureUnits.size(); samplerIndex++)
+    {
+        textureUnitSamplerIndexMap[samplerBoundTextureUnits[samplerIndex]] =
+            static_cast<uint32_t>(samplerIndex);
+    }
 
     FillWithNullptr(&mActiveTextures);
 
@@ -7474,7 +7483,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
         if (image.hasImmutableSampler())
         {
             immutableSamplerIndexMap[image.getYcbcrConversionDesc()] =
-                static_cast<uint32_t>(textureUnit);
+                textureUnitSamplerIndexMap[textureUnit];
         }
 
         if (textureVk->getAndResetImmutableSamplerDirtyState())
