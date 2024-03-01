@@ -16,6 +16,23 @@
       "message": "PTAL\n\nIn this patch, instead of completely removing the flag, we modify the flag such that we allow ANGLE to continue being built in vendor image on old OS version if a client chooses to upgrade ANGLE on an old OS",
       "revId": "b85ed2d3616802424e060dcdf7be8fa8040763f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6af5ab78_4ca003c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-03-01T00:38:31Z",
+      "side": 1,
+      "message": "Could you please test your change doesn\u0027t break the red builds shown in AP2A.240131.001? https://b.corp.google.com/issues/323094579#comment4. For example, `akita-user` build in `git_24Q2-release` branch.",
+      "revId": "b85ed2d3616802424e060dcdf7be8fa8040763f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
