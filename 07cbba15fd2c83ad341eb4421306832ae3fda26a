@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "44d76eeb_4bfcf2fc",
+        "filename": "src/libANGLE/Image.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "isnt it safer and performant (due to less branch instructions) to not have possibility of nullptrs at the cost of a little extra memory?",
+      "parentUuid": "6b2bfb13_8f5fc94a",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e2950003_1728d123",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -48,6 +66,24 @@
       "writtenOn": "2024-02-26T20:32:40Z",
       "side": 1,
       "message": "typo: `provides requires`",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b94589d0_ede533f4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2950003_1728d123",
       "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5afa72fa_9a121a7f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3a7f2d8_aab6186f",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff106aec_2df9b69e",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9f3f491_f2e936fa",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1718,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff106aec_2df9b69e",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f724ae41_6f9a90b2",
@@ -99,6 +171,30 @@
       "writtenOn": "2024-02-26T20:32:40Z",
       "side": 1,
       "message": "super nit: `((a*b)+(c*d))-e \u003d\u003d a*b+c*d-e`\n\n```suggestion\n                        1.0f / std::max(std::powf(activeFocalPoints[point].focalX - px, 2) *\n                                        std::powf(activeFocalPoints[point].gainX, 2) +\n                                        std::powf(activeFocalPoints[point].focalY - py, 2) *\n                                        std::powf(activeFocalPoints[point].gainY, 2) -\n                                        activeFocalPoints[point].foveaArea,\n```",
+      "range": {
+        "startLine": 1723,
+        "startChar": 0,
+        "endLine": 1727,
+        "endChar": 77
+      },
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2624a971_9262c66a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1727,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f724ae41_6f9a90b2",
       "range": {
         "startLine": 1723,
         "startChar": 0,
@@ -134,6 +230,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "75d79a6a_814d544a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "got this from a khronos sample here -\u003e https://github.com/KhronosGroup/Vulkan-Samples/blob/main/samples/extensions/fragment_shading_rate/fragment_shading_rate.cpp#L154\n\ndid not have a comment in there either",
+      "parentUuid": "418bcd9b_2dba560a",
+      "range": {
+        "startLine": 1737,
+        "startChar": 0,
+        "endLine": 1751,
+        "endChar": 17
+      },
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79da22e8_4bef7d47",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -145,6 +265,30 @@
       "writtenOn": "2024-02-26T20:32:40Z",
       "side": 1,
       "message": "Looking for `UnsignedCeilDivide`?",
+      "range": {
+        "startLine": 1789,
+        "startChar": 0,
+        "endLine": 1791,
+        "endChar": 92
+      },
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c96ef40c_1ea0a079",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79da22e8_4bef7d47",
       "range": {
         "startLine": 1789,
         "startChar": 0,
@@ -172,6 +316,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58d86cd3_b259247a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6517c20_7f5a454e",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "869d2dc2_6960a6c4",
@@ -191,6 +353,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7b18070_4a8736d2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "`mState.getExtents()` returns the intersection of all attachments, i need the extents of only that attachment that needs foveated rendering",
+      "parentUuid": "869d2dc2_6960a6c4",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba333972_2b302b6f",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 6
@@ -202,6 +382,24 @@
       "writtenOn": "2024-02-26T20:32:40Z",
       "side": 1,
       "message": "Please use `VK_ATTACHMENT_STORE_OP_NONE` when available. You can gate support for the extension to when either of `VK_QCOM_render_pass_store_ops` or `VK_EXT_load_store_op_none` is present and always use STORE_OP_NONE here, no need to support this extension on too old drivers.",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e40909d3_a426e07d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba333972_2b302b6f",
       "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

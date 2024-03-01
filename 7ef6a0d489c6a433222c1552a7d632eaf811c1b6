@@ -543,6 +543,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a21d1263_dc87e4e3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-01T21:58:19Z",
+      "side": 1,
+      "message": "we do not support host_image_copy\n\ni am working on adding compute based path to fill the fragment shading rate attachment",
+      "parentUuid": "6369818f_e9ce2e4b",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19d10ea6_949760c8",
