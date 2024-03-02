@@ -77,7 +77,7 @@ angle::MemoryBuffer ReadMetallibFromFile(const std::string &path)
 }
 
 // Generates a key for the BlobCache based on the specified params.
-egl::BlobCacheKey GenerateBlobCacheKeyForShaderLibrary(
+egl::BlobCache::Key GenerateBlobCacheKeyForShaderLibrary(
     const std::shared_ptr<const std::string> &source,
     const std::map<std::string, std::string> &macros,
     bool disableFastMath,
