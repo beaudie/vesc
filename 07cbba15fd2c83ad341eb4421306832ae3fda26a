@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7114a0a_a9292114",
+        "filename": "src/libANGLE/Image.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-02T02:38:44Z",
+      "side": 1,
+      "message": "It\u0027s not the memory cost, just code maintenance. It can be confusing to see state here that doesn\u0027t apply.\n\nThere are no extra branch instructions, just an ASSERT that\u0027s compiled out. In terms of safety, it\u0027s meaningful to that some attachments don\u0027t have this state (so nullptr makes sense).",
+      "parentUuid": "44d76eeb_4bfcf2fc",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e2950003_1728d123",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -254,6 +272,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21569703_12fc75e5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-02T02:38:44Z",
+      "side": 1,
+      "message": "Ah ok, explanation is just a bit above it: https://github.com/KhronosGroup/Vulkan-Samples/blob/main/samples/extensions/fragment_shading_rate/fragment_shading_rate.cpp#L127\n\nTaken from the spec https://docs.vulkan.org/spec/latest/chapters/primsrast.html#primsrast-fragment-shading-rate-attachment\n\nBasically:\n\n```\nw \u003d 2^((texel/4) \u0026 3)\nh \u003d 2^(texel \u0026 3)\n```\n\nSo `texel` should be calculated as `log2(w) \u003c\u003c 2 | log2(h)`. Since `log2(1) \u003d\u003d 0`, `log2(2) \u003d\u003d 1` and `log2(4) \u003d\u003d 2`, it just so happens that `log2(x) \u003d\u003d x \u003e\u003e 1` for the few numbers that are allowed in the ext. Making that expression equal to `w \u003c\u003c 1 | h \u003e\u003e 1`.",
+      "parentUuid": "75d79a6a_814d544a",
+      "range": {
+        "startLine": 1737,
+        "startChar": 0,
+        "endLine": 1751,
+        "endChar": 17
+      },
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79da22e8_4bef7d47",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -365,6 +407,24 @@
       "side": 1,
       "message": "`mState.getExtents()` returns the intersection of all attachments, i need the extents of only that attachment that needs foveated rendering",
       "parentUuid": "869d2dc2_6960a6c4",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea5579ba_edba3387",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-02T02:38:44Z",
+      "side": 1,
+      "message": "Didn\u0027t remember GL lets the framebuffer attachments to have different sizes!\n\nAt least then please call this `foveatedAttachmentSize`.",
+      "parentUuid": "c7b18070_4a8736d2",
       "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

@@ -561,6 +561,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5db5b0e5_350040d1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-02T02:38:44Z",
+      "side": 1,
+      "message": "Will the compute shader fill the image directly? That could degrade the performance of the image FYI, though I admittedly don\u0027t know how the hardware reads from that image and how much cache-locality matters. If it\u0027s possible (like the format permits), you might find a fragment shader would work better.",
+      "parentUuid": "a21d1263_dc87e4e3",
+      "revId": "7ef6a0d489c6a433222c1552a7d632eaf811c1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19d10ea6_949760c8",
