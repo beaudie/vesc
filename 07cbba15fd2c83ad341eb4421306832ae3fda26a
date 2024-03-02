@@ -294,6 +294,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1956c577_f1a7bbcb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-02T21:54:28Z",
+      "side": 1,
+      "message": "thank you for the details shabi, have added a note",
+      "parentUuid": "21569703_12fc75e5",
+      "range": {
+        "startLine": 1737,
+        "startChar": 0,
+        "endLine": 1751,
+        "endChar": 17
+      },
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79da22e8_4bef7d47",
@@ -425,6 +449,24 @@
       "side": 1,
       "message": "Didn\u0027t remember GL lets the framebuffer attachments to have different sizes!\n\nAt least then please call this `foveatedAttachmentSize`.",
       "parentUuid": "c7b18070_4a8736d2",
+      "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10f100f7_1cc7d779",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-02T21:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea5579ba_edba3387",
       "revId": "07cbba15fd2c83ad341eb4421306832ae3fda26a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
