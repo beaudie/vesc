@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaa80d60_bd21ae68",
+        "filename": "third_party/clspv/gn/llvm/sources/BUILD.gn",
+        "patchSetId": 18
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-02T03:00:56Z",
+      "side": 1,
+      "message": "This is fine, but I\u0027d also say don\u0027t bother with msvc for OpenCl (we can disable it in that build). msvc has always been a drag, and we support it because historically we did and some users came to rely on it.\n\nSince OpenCL is new, we can always require clang. This can also save you trouble later when msvc fails to handle complex templates SFINAE correctly.",
+      "revId": "00aba4943a7baa387ec15e9cf7d9f5f1bc4149e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
