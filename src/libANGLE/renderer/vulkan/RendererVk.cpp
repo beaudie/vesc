@@ -1527,9 +1527,10 @@ bool RendererVk::isDeviceLost() const
 }
 
 angle::Result RendererVk::enableInstanceExtensions(
-    DisplayVk *displayVk,
+    vk::Context *context,
     const VulkanLayerVector &enabledInstanceLayerNames,
     const char *wsiExtension,
+    UseVulkanSwapchain useVulkanSwapchain,
     bool canLoadDebugUtils)
 {
     // Enumerate instance extensions that are provided by the vulkan implementation and implicit
@@ -1538,8 +1539,8 @@ angle::Result RendererVk::enableInstanceExtensions(
     {
         ANGLE_SCOPED_DISABLE_LSAN();
         ANGLE_SCOPED_DISABLE_MSAN();
-        ANGLE_VK_TRY(displayVk, vkEnumerateInstanceExtensionProperties(
-                                    nullptr, &instanceExtensionCount, nullptr));
+        ANGLE_VK_TRY(context, vkEnumerateInstanceExtensionProperties(
+                                  nullptr, &instanceExtensionCount, nullptr));
     }
 
     std::vector<VkExtensionProperties> instanceExtensionProps(instanceExtensionCount);
@@ -1547,9 +1548,8 @@ angle::Result RendererVk::enableInstanceExtensions(
     {
         ANGLE_SCOPED_DISABLE_LSAN();
         ANGLE_SCOPED_DISABLE_MSAN();
-        ANGLE_VK_TRY(displayVk,
-                     vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtensionCount,
-                                                            instanceExtensionProps.data()));
+        ANGLE_VK_TRY(context, vkEnumerateInstanceExtensionProperties(
+                                  nullptr, &instanceExtensionCount, instanceExtensionProps.data()));
         // In case fewer items were returned than requested, resize instanceExtensionProps to the
         // number of extensions returned (i.e. instanceExtensionCount).
         instanceExtensionProps.resize(instanceExtensionCount);
@@ -1563,16 +1563,16 @@ angle::Result RendererVk::enableInstanceExtensions(
         {
             ANGLE_SCOPED_DISABLE_LSAN();
             ANGLE_SCOPED_DISABLE_MSAN();
-            ANGLE_VK_TRY(displayVk, vkEnumerateInstanceExtensionProperties(
-                                        layerName, &instanceLayerExtensionCount, nullptr));
+            ANGLE_VK_TRY(context, vkEnumerateInstanceExtensionProperties(
+                                      layerName, &instanceLayerExtensionCount, nullptr));
         }
         instanceExtensionProps.resize(previousExtensionCount + instanceLayerExtensionCount);
         {
             ANGLE_SCOPED_DISABLE_LSAN();
             ANGLE_SCOPED_DISABLE_MSAN();
-            ANGLE_VK_TRY(displayVk, vkEnumerateInstanceExtensionProperties(
-                                        layerName, &instanceLayerExtensionCount,
-                                        instanceExtensionProps.data() + previousExtensionCount));
+            ANGLE_VK_TRY(context, vkEnumerateInstanceExtensionProperties(
+                                      layerName, &instanceLayerExtensionCount,
+                                      instanceExtensionProps.data() + previousExtensionCount));
         }
         // In case fewer items were returned than requested, resize instanceExtensionProps to the
         // number of extensions returned (i.e. instanceLayerExtensionCount).
@@ -1594,19 +1594,19 @@ angle::Result RendererVk::enableInstanceExtensions(
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsSurfaceCapabilities2Extension,
         ExtensionFound(VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME, instanceExtensionNames) &&
-            displayVk->isUsingSwapchain());
+            useVulkanSwapchain == UseVulkanSwapchain::Yes);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfaceProtectedCapabilitiesExtension,
                             ExtensionFound(VK_KHR_SURFACE_PROTECTED_CAPABILITIES_EXTENSION_NAME,
                                            instanceExtensionNames) &&
-                                displayVk->isUsingSwapchain());
+                                useVulkanSwapchain == UseVulkanSwapchain::Yes);
 
     // TODO: Validation layer has a bug when vkGetPhysicalDeviceSurfaceFormats2KHR is called
     // on Mock ICD with surface handle set as VK_NULL_HANDLE. http://anglebug.com/7631
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsSurfacelessQueryExtension,
         ExtensionFound(VK_GOOGLE_SURFACELESS_QUERY_EXTENSION_NAME, instanceExtensionNames) &&
-            displayVk->isUsingSwapchain() && !isMockICDEnabled());
+            useVulkanSwapchain == UseVulkanSwapchain::Yes && !isMockICDEnabled());
 
     // VK_KHR_external_fence_capabilities and VK_KHR_extenral_semaphore_capabilities are promoted to
     // core in Vulkan 1.1
@@ -1623,7 +1623,7 @@ angle::Result RendererVk::enableInstanceExtensions(
                             mFeatures.supportsPortabilityEnumeration.enabled && IsApple());
 
     // Enable extensions that could be used
-    if (displayVk->isUsingSwapchain())
+    if (useVulkanSwapchain == UseVulkanSwapchain::Yes)
     {
         mEnabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
         if (ExtensionFound(VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME, instanceExtensionNames))
@@ -1672,7 +1672,7 @@ angle::Result RendererVk::enableInstanceExtensions(
 
     // Verify the required extensions are in the extension names set. Fail if not.
     std::sort(mEnabledInstanceExtensions.begin(), mEnabledInstanceExtensions.end(), StrLess);
-    ANGLE_VK_TRY(displayVk,
+    ANGLE_VK_TRY(context,
                  VerifyExtensionsPresent(instanceExtensionNames, mEnabledInstanceExtensions));
 
     return angle::Result::Continue;
@@ -1685,7 +1685,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      uint32_t preferredDeviceId,
                                      UseValidationLayers useValidationLayers,
                                      const char *wsiExtension,
-                                     const char *wsiLayer)
+                                     const char *wsiLayer,
+                                     angle::NativeWindowSystem nativeWindowSystem,
+                                     const angle::FeatureOverrides &featureOverrides)
 {
     bool canLoadDebugUtils = true;
 #if defined(ANGLE_SHARED_LIBVULKAN)
@@ -1743,7 +1745,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                                                &enabledInstanceLayerNames);
     }
 
-    if (wsiLayer)
+    if (wsiLayer != nullptr)
     {
         enabledInstanceLayerNames.push_back(wsiLayer);
     }
@@ -1775,8 +1777,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         ANGLE_VK_TRY(displayVk, VK_ERROR_INCOMPATIBLE_DRIVER);
     }
 
+    const UseVulkanSwapchain useVulkanSwapchain = wsiExtension != nullptr || wsiLayer != nullptr
+                                                      ? UseVulkanSwapchain::Yes
+                                                      : UseVulkanSwapchain::No;
     ANGLE_TRY(enableInstanceExtensions(displayVk, enabledInstanceLayerNames, wsiExtension,
-                                       canLoadDebugUtils));
+                                       useVulkanSwapchain, canLoadDebugUtils));
 
     const std::string appName = angle::GetExecutableName();
 
@@ -1927,7 +1932,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Determine the threshold for pending garbage sizes.
     calculatePendingGarbageSizeLimit();
 
-    ANGLE_TRY(setupDevice(displayVk));
+    ANGLE_TRY(
+        setupDevice(displayVk, featureOverrides, wsiLayer, useVulkanSwapchain, nativeWindowSystem));
 
     // If only one queue family, that's the only choice and the device is initialize with that.  If
     // there is more than one queue, we still create the device with the first queue family and hope
@@ -3123,13 +3129,16 @@ void RendererVk::enableDeviceExtensionsPromotedTo13(
     }
 }
 
-angle::Result RendererVk::enableDeviceExtensions(DisplayVk *displayVk)
+angle::Result RendererVk::enableDeviceExtensions(vk::Context *context,
+                                                 const angle::FeatureOverrides &featureOverrides,
+                                                 UseVulkanSwapchain useVulkanSwapchain,
+                                                 angle::NativeWindowSystem nativeWindowSystem)
 {
     // Enumerate device extensions that are provided by the vulkan
     // implementation and implicit layers.
     uint32_t deviceExtensionCount = 0;
-    ANGLE_VK_TRY(displayVk, vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr,
-                                                                 &deviceExtensionCount, nullptr));
+    ANGLE_VK_TRY(context, vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr,
+                                                               &deviceExtensionCount, nullptr));
 
     // Work-around a race condition in the Android platform during Android start-up, that can cause
     // the second call to vkEnumerateDeviceExtensionProperties to have an additional extension.  In
@@ -3138,7 +3147,7 @@ angle::Result RendererVk::enableDeviceExtensions(DisplayVk *displayVk)
     // were.  See: http://anglebug.com/6715 and internal-to-Google bug: b/206733351.
     deviceExtensionCount++;
     std::vector<VkExtensionProperties> deviceExtensionProps(deviceExtensionCount);
-    ANGLE_VK_TRY(displayVk,
+    ANGLE_VK_TRY(context,
                  vkEnumerateDeviceExtensionProperties(
                      mPhysicalDevice, nullptr, &deviceExtensionCount, deviceExtensionProps.data()));
     // In case fewer items were returned than requested, resize deviceExtensionProps to the number
@@ -3150,13 +3159,12 @@ angle::Result RendererVk::enableDeviceExtensions(DisplayVk *displayVk)
     {
         uint32_t previousExtensionCount    = static_cast<uint32_t>(deviceExtensionProps.size());
         uint32_t deviceLayerExtensionCount = 0;
-        ANGLE_VK_TRY(displayVk,
-                     vkEnumerateDeviceExtensionProperties(mPhysicalDevice, layerName,
-                                                          &deviceLayerExtensionCount, nullptr));
+        ANGLE_VK_TRY(context, vkEnumerateDeviceExtensionProperties(
+                                  mPhysicalDevice, layerName, &deviceLayerExtensionCount, nullptr));
         deviceExtensionProps.resize(previousExtensionCount + deviceLayerExtensionCount);
-        ANGLE_VK_TRY(displayVk, vkEnumerateDeviceExtensionProperties(
-                                    mPhysicalDevice, layerName, &deviceLayerExtensionCount,
-                                    deviceExtensionProps.data() + previousExtensionCount));
+        ANGLE_VK_TRY(context, vkEnumerateDeviceExtensionProperties(
+                                  mPhysicalDevice, layerName, &deviceLayerExtensionCount,
+                                  deviceExtensionProps.data() + previousExtensionCount));
         // In case fewer items were returned than requested, resize deviceExtensionProps to the
         // number of extensions returned (i.e. deviceLayerExtensionCount).
         deviceExtensionProps.resize(previousExtensionCount + deviceLayerExtensionCount);
@@ -3174,7 +3182,7 @@ angle::Result RendererVk::enableDeviceExtensions(DisplayVk *displayVk)
         std::sort(deviceExtensionNames.begin(), deviceExtensionNames.end(), StrLess);
     }
 
-    if (displayVk->isUsingSwapchain())
+    if (useVulkanSwapchain == UseVulkanSwapchain::Yes)
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
     }
@@ -3183,10 +3191,10 @@ angle::Result RendererVk::enableDeviceExtensions(DisplayVk *displayVk)
     queryDeviceExtensionFeatures(deviceExtensionNames);
 
     // Initialize features and workarounds.
-    initFeatures(displayVk, deviceExtensionNames);
+    initFeatures(deviceExtensionNames, featureOverrides, useVulkanSwapchain, nativeWindowSystem);
 
     // App based feature overrides.
-    appBasedFeatureOverrides(displayVk, deviceExtensionNames);
+    appBasedFeatureOverrides(deviceExtensionNames);
 
     // Enable extensions that could be used
     enableDeviceExtensionsNotPromoted(deviceExtensionNames);
@@ -3195,8 +3203,7 @@ angle::Result RendererVk::enableDeviceExtensions(DisplayVk *displayVk)
     enableDeviceExtensionsPromotedTo13(deviceExtensionNames);
 
     std::sort(mEnabledDeviceExtensions.begin(), mEnabledDeviceExtensions.end(), StrLess);
-    ANGLE_VK_TRY(displayVk,
-                 VerifyExtensionsPresent(deviceExtensionNames, mEnabledDeviceExtensions));
+    ANGLE_VK_TRY(context, VerifyExtensionsPresent(deviceExtensionNames, mEnabledDeviceExtensions));
 
     return angle::Result::Continue;
 }
@@ -3287,15 +3294,19 @@ void RendererVk::initDeviceExtensionEntryPoints()
     initializeDeviceExtensionEntryPointsFromCore();
 }
 
-angle::Result RendererVk::setupDevice(DisplayVk *displayVk)
+angle::Result RendererVk::setupDevice(vk::Context *context,
+                                      const angle::FeatureOverrides &featureOverrides,
+                                      const char *wsiLayer,
+                                      UseVulkanSwapchain useVulkanSwapchain,
+                                      angle::NativeWindowSystem nativeWindowSystem)
 {
     uint32_t deviceLayerCount = 0;
-    ANGLE_VK_TRY(displayVk,
+    ANGLE_VK_TRY(context,
                  vkEnumerateDeviceLayerProperties(mPhysicalDevice, &deviceLayerCount, nullptr));
 
     std::vector<VkLayerProperties> deviceLayerProps(deviceLayerCount);
-    ANGLE_VK_TRY(displayVk, vkEnumerateDeviceLayerProperties(mPhysicalDevice, &deviceLayerCount,
-                                                             deviceLayerProps.data()));
+    ANGLE_VK_TRY(context, vkEnumerateDeviceLayerProperties(mPhysicalDevice, &deviceLayerCount,
+                                                           deviceLayerProps.data()));
 
     mEnabledDeviceLayerNames.clear();
     if (mEnableValidationLayers)
@@ -3304,8 +3315,7 @@ angle::Result RendererVk::setupDevice(DisplayVk *displayVk)
             GetAvailableValidationLayers(deviceLayerProps, false, &mEnabledDeviceLayerNames);
     }
 
-    const char *wsiLayer = displayVk->getWSILayer();
-    if (wsiLayer)
+    if (wsiLayer != nullptr)
     {
         mEnabledDeviceLayerNames.push_back(wsiLayer);
     }
@@ -3313,7 +3323,8 @@ angle::Result RendererVk::setupDevice(DisplayVk *displayVk)
     mEnabledFeatures       = {};
     mEnabledFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
 
-    ANGLE_TRY(enableDeviceExtensions(displayVk));
+    ANGLE_TRY(
+        enableDeviceExtensions(context, featureOverrides, useVulkanSwapchain, nativeWindowSystem));
 
     // Used to support cubemap array:
     mEnabledFeatures.features.imageCubeArray = mFeatures.supportsImageCubeArray.enabled;
@@ -3929,12 +3940,14 @@ bool RendererVk::canPreferDeviceLocalMemoryHostVisible(VkPhysicalDeviceType devi
     return deviceType != VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
 }
 
-void RendererVk::initFeatures(DisplayVk *displayVk,
-                              const vk::ExtensionNameList &deviceExtensionNames)
+void RendererVk::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
+                              const angle::FeatureOverrides &featureOverrides,
+                              UseVulkanSwapchain useVulkanSwapchain,
+                              angle::NativeWindowSystem nativeWindowSystem)
 {
-    ApplyFeatureOverrides(&mFeatures, displayVk->getState());
+    ApplyFeatureOverrides(&mFeatures, featureOverrides);
 
-    if (displayVk->getState().featuresAllDisabled)
+    if (featureOverrides.allDisabled)
     {
         return;
     }
@@ -4276,7 +4289,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(&mFeatures, perFrameWindowSizeQuery,
                             IsAndroid() || isIntel || (IsWindows() && isAMD) || IsFuchsia() ||
-                                isSamsung || displayVk->isWayland());
+                                isSamsung ||
+                                nativeWindowSystem == angle::NativeWindowSystem::Wayland);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, padBuffersToMaxVertexAttribStride, isAMD || isSamsung);
     mMaxVertexAttribStride = std::min(static_cast<uint32_t>(gl::limits::kMaxVertexAttribStride),
@@ -4505,7 +4519,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     //
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsSwapchainMaintenance1,
                             mSwapchainMaintenance1Features.swapchainMaintenance1 == VK_TRUE &&
-                                displayVk->isUsingSwapchain());
+                                useVulkanSwapchain == UseVulkanSwapchain::Yes);
 
     // The VK_EXT_legacy_dithering extension enables dithering support without emulation
     // Disable the usage of VK_EXT_legacy_dithering on ARM until the driver bug
@@ -4843,7 +4857,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             IsAndroid() && isSamsung);
 
     // GBM does not have a VkSurface hence it does not support presentation through a Vulkan queue.
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsPresentation, !displayVk->isGBM());
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsPresentation,
+                            nativeWindowSystem != angle::NativeWindowSystem::Gbm);
 
     // For tiled renderer, the renderpass query result may not available until the entire renderpass
     // is completed. This may cause a bubble in the application thread waiting result to be
@@ -4913,9 +4928,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     }
 }
 
-void RendererVk::appBasedFeatureOverrides(DisplayVk *display,
-                                          const vk::ExtensionNameList &extensions)
-{}
+void RendererVk::appBasedFeatureOverrides(const vk::ExtensionNameList &extensions) {}
 
 angle::Result RendererVk::initPipelineCache(DisplayVk *display,
                                             vk::PipelineCache *pipelineCache,
