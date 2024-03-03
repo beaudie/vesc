@@ -2551,6 +2551,7 @@ class SamplerCache final : public HasCacheStats<VulkanCacheType::Sampler>
 
   private:
     std::unordered_map<vk::SamplerDesc, vk::RefCountedSampler> mPayload;
+    std::mutex mPayloadMutex;
 };
 
 // YuvConversion Cache
@@ -2572,6 +2573,7 @@ class SamplerYcbcrConversionCache final
         std::unordered_map<vk::YcbcrConversionDesc, vk::SamplerYcbcrConversion>;
     SamplerYcbcrConversionMap mExternalFormatPayload;
     SamplerYcbcrConversionMap mVkFormatPayload;
+    std::mutex mPayloadMutex;
 };
 
 // Descriptor Set Cache

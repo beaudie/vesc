@@ -7424,6 +7424,8 @@ SamplerYcbcrConversionCache::~SamplerYcbcrConversionCache()
 
 void SamplerYcbcrConversionCache::destroy(RendererVk *rendererVk)
 {
+    std::unique_lock<std::mutex> lock(mPayloadMutex);
+
     rendererVk->accumulateCacheStats(VulkanCacheType::SamplerYcbcrConversion, mCacheStats);
 
     VkDevice device = rendererVk->getDevice();
@@ -7456,27 +7458,34 @@ angle::Result SamplerYcbcrConversionCache::getSamplerYcbcrConversion(
     ASSERT(ycbcrConversionDesc.valid());
     ASSERT(vkSamplerYcbcrConversionOut);
 
-    SamplerYcbcrConversionMap &payload =
-        (ycbcrConversionDesc.getExternalFormat() != 0) ? mExternalFormatPayload : mVkFormatPayload;
-    const auto iter = payload.find(ycbcrConversionDesc);
-    if (iter != payload.end())
+    // Mutex lock scope
     {
-        vk::SamplerYcbcrConversion &samplerYcbcrConversion = iter->second;
-        mCacheStats.hit();
-        *vkSamplerYcbcrConversionOut = samplerYcbcrConversion.getHandle();
-        return angle::Result::Continue;
+        std::unique_lock<std::mutex> lock(mPayloadMutex);
+
+        SamplerYcbcrConversionMap &payload = (ycbcrConversionDesc.getExternalFormat() != 0)
+                                                 ? mExternalFormatPayload
+                                                 : mVkFormatPayload;
+        const auto iter                    = payload.find(ycbcrConversionDesc);
+        if (iter != payload.end())
+        {
+            vk::SamplerYcbcrConversion &samplerYcbcrConversion = iter->second;
+            mCacheStats.hit();
+            *vkSamplerYcbcrConversionOut = samplerYcbcrConversion.getHandle();
+            return angle::Result::Continue;
+        }
+
+        mCacheStats.missAndIncrementSize();
+
+        // Create the VkSamplerYcbcrConversion
+        vk::SamplerYcbcrConversion wrappedSamplerYcbcrConversion;
+        ANGLE_TRY(ycbcrConversionDesc.init(context, &wrappedSamplerYcbcrConversion));
+
+        auto insertedItem =
+            payload.emplace(ycbcrConversionDesc,
+                            vk::SamplerYcbcrConversion(std::move(wrappedSamplerYcbcrConversion)));
+        vk::SamplerYcbcrConversion &insertedSamplerYcbcrConversion = insertedItem.first->second;
+        *vkSamplerYcbcrConversionOut = insertedSamplerYcbcrConversion.getHandle();
     }
-
-    mCacheStats.missAndIncrementSize();
-
-    // Create the VkSamplerYcbcrConversion
-    vk::SamplerYcbcrConversion wrappedSamplerYcbcrConversion;
-    ANGLE_TRY(ycbcrConversionDesc.init(context, &wrappedSamplerYcbcrConversion));
-
-    auto insertedItem = payload.emplace(
-        ycbcrConversionDesc, vk::SamplerYcbcrConversion(std::move(wrappedSamplerYcbcrConversion)));
-    vk::SamplerYcbcrConversion &insertedSamplerYcbcrConversion = insertedItem.first->second;
-    *vkSamplerYcbcrConversionOut = insertedSamplerYcbcrConversion.getHandle();
 
     context->getRenderer()->onAllocateHandle(vk::HandleType::SamplerYcbcrConversion);
 
@@ -7493,6 +7502,8 @@ SamplerCache::~SamplerCache()
 
 void SamplerCache::destroy(RendererVk *rendererVk)
 {
+    std::unique_lock<std::mutex> lock(mPayloadMutex);
+
     rendererVk->accumulateCacheStats(VulkanCacheType::Sampler, mCacheStats);
 
     VkDevice device = rendererVk->getDevice();
@@ -7513,23 +7524,28 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
                                        const vk::SamplerDesc &desc,
                                        vk::SamplerBinding *samplerOut)
 {
-    auto iter = mPayload.find(desc);
-    if (iter != mPayload.end())
+    // Mutex lock scope
     {
-        vk::RefCountedSampler &sampler = iter->second;
-        samplerOut->set(&sampler);
-        mCacheStats.hit();
-        return angle::Result::Continue;
+        std::unique_lock<std::mutex> lock(mPayloadMutex);
+
+        auto iter = mPayload.find(desc);
+        if (iter != mPayload.end())
+        {
+            vk::RefCountedSampler &sampler = iter->second;
+            samplerOut->set(&sampler);
+            mCacheStats.hit();
+            return angle::Result::Continue;
+        }
+
+        mCacheStats.missAndIncrementSize();
+        vk::SamplerHelper samplerHelper(contextVk);
+        ANGLE_TRY(desc.init(contextVk, &samplerHelper.get()));
+
+        vk::RefCountedSampler newSampler(std::move(samplerHelper));
+        auto insertedItem                      = mPayload.emplace(desc, std::move(newSampler));
+        vk::RefCountedSampler &insertedSampler = insertedItem.first->second;
+        samplerOut->set(&insertedSampler);
     }
-
-    mCacheStats.missAndIncrementSize();
-    vk::SamplerHelper samplerHelper(contextVk);
-    ANGLE_TRY(desc.init(contextVk, &samplerHelper.get()));
-
-    vk::RefCountedSampler newSampler(std::move(samplerHelper));
-    auto insertedItem                      = mPayload.emplace(desc, std::move(newSampler));
-    vk::RefCountedSampler &insertedSampler = insertedItem.first->second;
-    samplerOut->set(&insertedSampler);
 
     contextVk->getRenderer()->onAllocateHandle(vk::HandleType::Sampler);
 
