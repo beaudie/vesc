@@ -124,16 +124,16 @@ void MSLGetShaderSource(const gl::ProgramState &programState,
     }
 }
 
-void GetAssignedSamplerBindings(const sh::TranslatorMetalReflection *reflection,
+void GetAssignedSamplerBindings(const sh::TranslatorMetalReflection &reflection,
                                 const OriginalSamplerBindingMap &originalBindings,
                                 std::unordered_set<std::string> &structSamplers,
                                 std::array<SamplerBinding, mtl::kMaxGLSamplerBindings> *bindings)
 {
-    for (auto &sampler : reflection->getSamplerBindings())
+    for (auto &sampler : reflection.getSamplerBindings())
     {
         const std::string &name          = sampler.first;
-        const uint32_t actualSamplerSlot = (uint32_t)reflection->getSamplerBinding(name);
-        const uint32_t actualTextureSlot = (uint32_t)reflection->getTextureBinding(name);
+        const uint32_t actualSamplerSlot = (uint32_t)reflection.getSamplerBinding(name);
+        const uint32_t actualTextureSlot = (uint32_t)reflection.getTextureBinding(name);
 
         // Assign sequential index for subsequent array elements
         const bool structSampler = structSamplers.find(name) != structSamplers.end();
@@ -159,16 +159,17 @@ void GetAssignedSamplerBindings(const sh::TranslatorMetalReflection *reflection,
     }
 }
 
-std::string UpdateAliasedShaderAttributes(std::string shaderSourceIn,
-                                          const gl::ProgramExecutable &executable)
+std::string UpdateAliasedShaderAttributes(const sh::TranslatorMetalReflection &reflection,
+                                          const gl::ProgramExecutable &executable,
+                                          std::string source)
 {
     // Cache max number of components for each attribute location
-    std::array<uint8_t, gl::MAX_VERTEX_ATTRIBS> maxComponents{};
+    std::array<int, gl::MAX_VERTEX_ATTRIBS> maxComponents{};
     for (auto &attribute : executable.getProgramInputs())
     {
-        const int location       = attribute.getLocation();
-        const int registers      = gl::VariableRegisterCount(attribute.getType());
-        const uint8_t components = gl::VariableColumnCount(attribute.getType());
+        const int location   = attribute.getLocation();
+        const int registers  = gl::VariableRegisterCount(attribute.getType());
+        const int components = gl::VariableColumnCount(attribute.getType());
         for (int i = 0; i < registers; ++i)
         {
             ASSERT(location + i < static_cast<int>(maxComponents.size()));
@@ -180,17 +181,21 @@ std::string UpdateAliasedShaderAttributes(std::string shaderSourceIn,
     std::ostringstream stream;
     for (auto &attribute : executable.getProgramInputs())
     {
-        const int location       = attribute.getLocation();
-        const int registers      = gl::VariableRegisterCount(attribute.getType());
-        const uint8_t components = gl::VariableColumnCount(attribute.getType());
+        if (attribute.isBuiltIn())
+            continue;
+        const int location   = attribute.getLocation();
+        const int registers  = gl::VariableRegisterCount(attribute.getType());
+        const int components = gl::VariableColumnCount(attribute.getType());
         for (int i = 0; i < registers; i++)
         {
-            stream << "#define ANGLE_ALIASED_" << attribute.name;
-            if (registers > 1)
+            std::string translated =
+                reflection.getTranslatedAttributeName(attribute.name, i, registers);
+            if (translated.empty())
             {
-                stream << "_" << i;
+                UNREACHABLE();
+                break;
             }
-            stream << " ANGLE_modified.ANGLE_ATTRIBUTE_" << (location + i);
+            stream << "#define " << translated << " ANGLE_ATTRIBUTE_" << (location + i);
             if (components != maxComponents[location + i])
             {
                 ASSERT(components < maxComponents[location + i]);
@@ -222,61 +227,66 @@ std::string UpdateAliasedShaderAttributes(std::string shaderSourceIn,
         stream << " ANGLE_ATTRIBUTE_" << i << "[[attribute(" << i << ")]];\n";
     }
 
-    std::string outputSource = shaderSourceIn;
-    size_t markerFound       = outputSource.find(kAttribBindingsMarker);
+    size_t markerFound = source.find(kAttribBindingsMarker);
     ASSERT(markerFound != std::string::npos);
-    outputSource.replace(markerFound, strlen(kAttribBindingsMarker), stream.str());
-    return outputSource;
+    source.replace(markerFound, strlen(kAttribBindingsMarker), stream.str());
+    return source;
 }
 
-std::string updateShaderAttributes(std::string shaderSourceIn,
-                                   const gl::ProgramExecutable &executable)
+std::string UpdateShaderAttributes(const sh::TranslatorMetalReflection &reflection,
+                                   const gl::ProgramExecutable &executable,
+                                   std::string source)
 {
-    // Build string to attrib map.
-    const auto &programAttributes = executable.getProgramInputs();
-    std::ostringstream stream;
-    std::unordered_map<std::string, uint32_t> attributeBindings;
-    for (auto &attribute : programAttributes)
+    if (reflection.hasAttributeAliasing)
     {
-        const int regs = gl::VariableRegisterCount(attribute.getType());
-        if (regs > 1)
+        return UpdateAliasedShaderAttributes(reflection, executable, source);
+    }
+    std::ostringstream stream;
+    std::array<std::string, gl::MAX_VERTEX_ATTRIBS> attributeNameTexts{};
+
+    for (auto &attribute : executable.getProgramInputs())
+    {
+        if (attribute.isBuiltIn())
+            continue;
+        const int registers = gl::VariableRegisterCount(attribute.getType());
+        for (int i = 0; i < registers; i++)
         {
-            for (int i = 0; i < regs; i++)
+            std::string translated =
+                reflection.getTranslatedAttributeName(attribute.name, i, registers);
+            if (translated.empty())
             {
-                stream.str("");
-                stream << " " << kUserDefinedNamePrefix << attribute.name << "_"
-                       << std::to_string(i) << sh::kUnassignedAttributeString;
-                attributeBindings.insert({std::string(stream.str()), i + attribute.getLocation()});
+                UNREACHABLE();
+                break;
             }
-        }
-        else
-        {
             stream.str("");
-            stream << " " << kUserDefinedNamePrefix << attribute.name
-                   << sh::kUnassignedAttributeString;
-            attributeBindings.insert({std::string(stream.str()), attribute.getLocation()});
-            stream.str("");
+            stream << " " << translated << sh::kUnassignedAttributeString;
+            attributeNameTexts[i + attribute.getLocation()] = stream.str();
         }
     }
-    // Rewrite attributes
-    std::string outputSource = shaderSourceIn;
-    for (auto it = attributeBindings.begin(); it != attributeBindings.end(); ++it)
+
+    for (size_t i = 0; i < attributeNameTexts.size(); ++i)
     {
-        std::size_t attribFound = outputSource.find(it->first);
+        std::string &nameText = attributeNameTexts[i];
+        if (nameText.empty())
+        {
+            continue;
+        }
+        std::size_t attribFound = source.find(nameText);
         if (attribFound != std::string::npos)
         {
             stream.str("");
-            stream << "[[attribute(" << it->second << ")]]";
-            outputSource = outputSource.replace(
-                attribFound + it->first.length() - strlen(sh::kUnassignedAttributeString),
+            stream << "[[attribute(" << i << ")]]";
+            source = source.replace(
+                attribFound + nameText.length() - strlen(sh::kUnassignedAttributeString),
                 strlen(sh::kUnassignedAttributeString), stream.str());
         }
     }
-    return outputSource;
+    return source;
 }
 
-std::string UpdateFragmentShaderOutputs(std::string shaderSourceIn,
+std::string UpdateFragmentShaderOutputs(const sh::TranslatorMetalReflection &reflection,
                                         const gl::ProgramExecutable &executable,
+                                        std::string shaderSourceIn,
                                         bool defineAlpha0)
 {
     std::ostringstream stream;
@@ -565,12 +575,10 @@ angle::Result MTLGetMSL(Context *context,
     for (gl::ShaderType type : {gl::ShaderType::Vertex, gl::ShaderType::Fragment})
     {
         std::string source;
+        sh::TranslatorMetalReflection &reflection = shadersState[type]->translatorMetalReflection;
         if (type == gl::ShaderType::Vertex)
         {
-            source =
-                shadersState[gl::ShaderType::Vertex]->translatorMetalReflection.hasAttributeAliasing
-                    ? UpdateAliasedShaderAttributes(shaderSources[type], executable)
-                    : updateShaderAttributes(shaderSources[type], executable);
+            source = UpdateShaderAttributes(reflection, executable, shaderSources[type]);
             // Write transform feedback output code.
             if (!source.empty())
             {
@@ -591,17 +599,16 @@ angle::Result MTLGetMSL(Context *context,
             bool defineAlpha0 =
                 context->getDisplay()->getFeatures().emulateAlphaToCoverage.enabled ||
                 context->getDisplay()->getFeatures().generateShareableShaders.enabled;
-            source = UpdateFragmentShaderOutputs(shaderSources[type], executable, defineAlpha0);
+            source = UpdateFragmentShaderOutputs(reflection, executable, shaderSources[type],
+                                                 defineAlpha0);
         }
         (*mslShaderInfoOut)[type].metalShaderSource =
             std::make_shared<const std::string>(std::move(source));
-        const sh::TranslatorMetalReflection *reflection =
-            &shadersState[type]->translatorMetalReflection;
-        if (reflection->hasUBOs)
+        if (reflection.hasUBOs)
         {
             (*mslShaderInfoOut)[type].hasUBOArgumentBuffer = true;
 
-            for (auto &uboBinding : reflection->getUniformBufferBindings())
+            for (auto &uboBinding : reflection.getUniformBufferBindings())
             {
                 const std::string &uboName         = uboBinding.first;
                 const sh::UBOBindingInfo &bindInfo = uboBinding.second;
@@ -625,9 +632,9 @@ angle::Result MTLGetMSL(Context *context,
         }
         for (uint32_t i = 0; i < kMaxShaderImages; ++i)
         {
-            mslShaderInfoOut->at(type).actualImageBindings[i] = reflection->getRWTextureBinding(i);
+            mslShaderInfoOut->at(type).actualImageBindings[i] = reflection.getRWTextureBinding(i);
         }
-        (*mslShaderInfoOut)[type].hasInvariant = reflection->hasInvariance;
+        (*mslShaderInfoOut)[type].hasInvariant = reflection.hasInvariance;
     }
     return angle::Result::Continue;
 }

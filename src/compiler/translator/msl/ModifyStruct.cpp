@@ -93,6 +93,28 @@ struct PathItem
     Type type;
 };
 
+std::string BuildOriginalPathExpr(const std::vector<PathItem> &path)
+{
+    std::ostringstream str;
+    for (const PathItem &item : path)
+    {
+        switch (item.type)
+        {
+            case PathItem::Type::Field:
+                if (str.tellp() > 0)
+                    str << '.';
+                str << item.field->name();
+                break;
+            case PathItem::Type::Index:
+                str << '[' << item.index << ']';
+                break;
+            case PathItem::Type::FlattenArray:
+                break;
+        }
+    }
+    return str.str();
+}
+
 TIntermTyped &BuildPathAccess(SymbolEnv &symbolEnv,
                               const TVariable &var,
                               const std::vector<PathItem> &path)
@@ -233,18 +255,6 @@ class ConvertStructState : angle::NonCopyable
 
             OriginalAccess *original = &BuildPathAccess(symbolEnv, originalParam, info.pathItems);
             ModifiedAccess *modified = &AccessField(modifiedParam, info.pathName);
-            if (useAttributeAliasing)
-            {
-                std::string placeholderName("ANGLE_ALIASED_");
-                placeholderName += info.pathName.data();
-
-                TType *placeholderType = new TType(modified->getType());
-                placeholderType->setQualifier(EvqSpecConst);
-
-                modified = new TIntermSymbol(
-                    new TVariable(&symbolTable, sh::ImmutableString(placeholderName),
-                                  placeholderType, SymbolType::AngleInternal));
-            }
 
             const TType ot = original->getType();
             const TType mt = modified->getType();
@@ -334,19 +344,49 @@ class ConvertStructState : angle::NonCopyable
             introducePadding();
     }
 
+    Name generateModifiedFieldName(const TField &field, const TType &newType)
+    {
+        // When a new variable is introduced, the new name must be a unique name. These should go
+        // to the AngleInternal namespace.
+        // Only the new fields are given new names. The forwarded old fields need to use the
+        // unmodified name: if no field is modified, the modified structure is not generated and the
+        // new names will not be available.
+        const bool isNew = pathItems.size() != 1 || *field.type() != newType;
+        switch (field.type()->getQualifier())
+        {
+            case EvqAttribute:
+            case EvqVertexIn:
+                if (isNew || useAttributeAliasing)
+                {
+                    // An attribute such as mat4 is expanded into multiple fields or attribute
+                    // aliasing is in effect. The attribute aliasing needs globally unique name, so
+                    // that post-link can #define it to point to the actual attribute variable name.
+                    return idGen.createNewName();
+                }
+                break;
+            default:
+                break;
+        }
+        // This may produce name clashes. Later on, other variable types might
+        // be fixed to use new names.
+        return Name(namePath, field.symbolType());
+    }
+
     void addModifiedField(const TField &field,
                           TType &newType,
                           TLayoutBlockStorage storage,
                           TLayoutMatrixPacking packing,
                           const AddressSpace *addressSpace)
     {
+        Name newName = generateModifiedFieldName(field, newType);
+
         TLayoutQualifier layoutQualifier = newType.getLayoutQualifier();
         layoutQualifier.blockStorage     = storage;
         layoutQualifier.matrixPacking    = packing;
         newType.setLayoutQualifier(layoutQualifier);
 
-        const ImmutableString pathName(namePath);
-        TField *modifiedField = new TField(&newType, pathName, field.line(), field.symbolType());
+        TField *modifiedField =
+            new TField(&newType, newName.rawName(), field.line(), newName.symbolType());
         if (addressSpace)
         {
             symbolEnv.markAsPointer(*modifiedField, *addressSpace);
@@ -356,6 +396,22 @@ class ConvertStructState : angle::NonCopyable
             symbolEnv.markAsUBO(*modifiedField);
         }
         modifiedFields.push_back(modifiedField);
+        switch (field.type()->getQualifier())
+        {
+            case EvqAttribute:
+            case EvqVertexIn:
+            {
+                // Post-link will use the attribute names to assign locations to the attributes.
+                // Make the translations available via reflection, regardless whether the modified
+                // struct is used or not.
+                std::ostringstream translated;
+                translated << Name(*modifiedField);
+                reflection().addNameTranslation(BuildOriginalPathExpr(pathItems), translated.str());
+            }
+            break;
+            default:
+                break;
+        }
     }
 
     void addConversion(const ConversionFunc &func)
@@ -399,6 +455,11 @@ class ConvertStructState : angle::NonCopyable
     bool getIsUBO() const { return isUBO; }
 
   private:
+    TranslatorMetalReflection &reflection()
+    {
+        return *mtl::getTranslatorMetalReflection(&mCompiler);
+    }
+
     void addPadding(size_t padAmount, bool updateLayout)
     {
         if (padAmount == 0)
