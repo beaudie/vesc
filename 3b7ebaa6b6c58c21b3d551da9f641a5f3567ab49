@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd798e02_aba0143b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-03T04:12:19Z",
+      "side": 1,
+      "message": "PTAL\n\nalso, i want to split this into front-end update + backend implementation for better logical separation. that ok?",
+      "revId": "3b7ebaa6b6c58c21b3d551da9f641a5f3567ab49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
