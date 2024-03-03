@@ -557,6 +557,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                     resolveImage, imageSiblingSerial);
     }
 
+    void onFragmentShadingRateRead(vk::ImageHelper *image)
+    {
+        ASSERT(mRenderPassCommands->started());
+        mRenderPassCommands->fragmentShadingRateImageRead(image);
+    }
+
     void finalizeImageLayout(const vk::ImageHelper *image, UniqueSerial imageSiblingSerial)
     {
         if (mRenderPassCommands->started())
@@ -748,6 +754,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // context use framebuffer-fetch-enabled render passes from here on.
     angle::Result switchToFramebufferFetchMode(bool hasFramebufferFetch);
     bool isInFramebufferFetchMode() const { return mIsInFramebufferFetchMode; }
+
+    void updateFoveatedRendering();
 
     const angle::PerfMonitorCounterGroups &getPerfMonitorCounters() override;
 
