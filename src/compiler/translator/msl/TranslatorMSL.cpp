@@ -1571,4 +1571,27 @@ bool TranslatorMSL::shouldFlattenPragmaStdglInvariantAll()
     return false;
 }
 
+std::string TranslatorMetalReflection::getTranslatedAttributeName(const std::string &original,
+                                                                  int registerIndex,
+                                                                  int registerCount) const
+{
+    std::string name;
+    if (registerCount > 1)
+    {
+        std::ostringstream stream;
+        stream << original << '[' << registerIndex << ']';
+        name = stream.str();
+    }
+    else
+    {
+        name = original;
+    }
+    auto it = mTranslatedNames.find(name);
+    if (it != mTranslatedNames.end())
+    {
+        return it->second;
+    }
+    return {};
+}
+
 }  // namespace sh

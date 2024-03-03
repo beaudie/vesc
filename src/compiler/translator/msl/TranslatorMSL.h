@@ -78,6 +78,12 @@ class TranslatorMetalReflection
     {
         uniformBufferBindings.insert({name, bindingInfo});
     }
+
+    void addNameTranslation(const std::string &original, const std::string &translated)
+    {
+        mTranslatedNames.emplace(std::make_pair(original, translated));
+    }
+
     std::string getOriginalName(const size_t id) { return originalNames.at(id); }
     samplerBindingMap getSamplerBindings() const { return samplerBindings; }
     textureBindingMap getTextureBindings() const { return textureBindings; }
@@ -146,6 +152,13 @@ class TranslatorMetalReflection
         return {.bindIndex = std::numeric_limits<size_t>::max(),
                 .arraySize = std::numeric_limits<size_t>::max()};
     }
+
+    // Returns name a variable output struct variable of a GLSL attribute name expression or empty
+    // if not found.
+    std::string getTranslatedAttributeName(const std::string &original,
+                                           int registerIndex,
+                                           int registerCount) const;
+
     void reset()
     {
         hasUBOs              = false;
@@ -158,6 +171,7 @@ class TranslatorMetalReflection
         rwTextureBindings.clear();
         userUniformBufferBindings.clear();
         uniformBufferBindings.clear();
+        mTranslatedNames.clear();
     }
 
     bool hasUBOs              = false;
@@ -172,6 +186,7 @@ class TranslatorMetalReflection
     rwTextureBindingMap rwTextureBindings;
     userUniformBufferBindingMap userUniformBufferBindings;
     uniformBufferBindingMap uniformBufferBindings;
+    std::unordered_map<std::string, std::string> mTranslatedNames;
 };
 
 class TranslatorMSL : public TCompiler

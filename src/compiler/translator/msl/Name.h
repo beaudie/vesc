@@ -59,6 +59,9 @@ class Name
   private:
     ImmutableString mRawName;
     SymbolType mSymbolType;
+    template <typename T>
+    void emitImpl(T &out) const;
+    friend std::ostream &operator<<(std::ostream &os, const sh::Name &name);
 };
 
 constexpr Name kBaseInstanceName = Name("baseInstance");
