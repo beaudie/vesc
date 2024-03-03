@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bc4c3e7_88a5570e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-03T03:14:29Z",
+      "side": 1,
+      "message": "@Austin, after this change you can remove the egl::Display from CLPlatformVk and create a RendererVk directly. Just need to derive `CLPlatformVk` from `vk::GlobalOps`. Implementation of all the functions can remain empty for now until you have a use for them (at which point you can start adding a worker pool to `CLPlatform`, deal with device loss etc).",
+      "revId": "fc426dd21d9775b03f1c48e5cbbcaea2a5b9a5e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
