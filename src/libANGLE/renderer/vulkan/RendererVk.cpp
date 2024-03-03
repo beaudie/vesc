@@ -1392,7 +1392,7 @@ void OneOffCommandPool::releaseCommandBuffer(const QueueSerial &submitQueueSeria
 
 // RendererVk implementation.
 RendererVk::RendererVk()
-    : mDisplay(nullptr),
+    : mGlobalOps(nullptr),
       mLibVulkanLibrary(nullptr),
       mCapsInitialized(false),
       mInstanceVersion(0),
@@ -1518,7 +1518,7 @@ void RendererVk::onDestroy(vk::Context *context)
 void RendererVk::notifyDeviceLost()
 {
     mDeviceLost = true;
-    mDisplay->notifyDeviceLost();
+    mGlobalOps->notifyDeviceLost();
 }
 
 bool RendererVk::isDeviceLost() const
@@ -1678,8 +1678,8 @@ angle::Result RendererVk::enableInstanceExtensions(
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::initialize(DisplayVk *displayVk,
-                                     egl::Display *display,
+angle::Result RendererVk::initialize(vk::Context *context,
+                                     vk::GlobalOps *globalOps,
                                      angle::vk::ICD desiredICD,
                                      uint32_t preferredVendorId,
                                      uint32_t preferredDeviceId,
@@ -1694,7 +1694,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         ANGLE_SCOPED_DISABLE_MSAN();
         mLibVulkanLibrary = angle::vk::OpenLibVulkan();
-        ANGLE_VK_CHECK(displayVk, mLibVulkanLibrary, VK_ERROR_INITIALIZATION_FAILED);
+        ANGLE_VK_CHECK(context, mLibVulkanLibrary, VK_ERROR_INITIALIZATION_FAILED);
 
         PFN_vkGetInstanceProcAddr vulkanLoaderGetInstanceProcAddr =
             reinterpret_cast<PFN_vkGetInstanceProcAddr>(
@@ -1713,7 +1713,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     }
 #endif  // defined(ANGLE_SHARED_LIBVULKAN)
 
-    mDisplay = display;
+    mGlobalOps = globalOps;
 
     angle::vk::ScopedVkLoaderEnvironment scopedEnvironment(
         useValidationLayers != UseValidationLayers::No, desiredICD);
@@ -1725,7 +1725,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         ANGLE_SCOPED_DISABLE_LSAN();
         ANGLE_SCOPED_DISABLE_MSAN();
-        ANGLE_VK_TRY(displayVk, vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
+        ANGLE_VK_TRY(context, vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
     }
 
     std::vector<VkLayerProperties> instanceLayerProps(instanceLayerCount);
@@ -1733,8 +1733,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         ANGLE_SCOPED_DISABLE_LSAN();
         ANGLE_SCOPED_DISABLE_MSAN();
-        ANGLE_VK_TRY(displayVk, vkEnumerateInstanceLayerProperties(&instanceLayerCount,
-                                                                   instanceLayerProps.data()));
+        ANGLE_VK_TRY(context, vkEnumerateInstanceLayerProperties(&instanceLayerCount,
+                                                                 instanceLayerProps.data()));
     }
 
     VulkanLayerVector enabledInstanceLayerNames;
@@ -1759,7 +1759,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         {
             ANGLE_SCOPED_DISABLE_LSAN();
             ANGLE_SCOPED_DISABLE_MSAN();
-            ANGLE_VK_TRY(displayVk, enumerateInstanceVersion(&mInstanceVersion));
+            ANGLE_VK_TRY(context, enumerateInstanceVersion(&mInstanceVersion));
         }
 
         if (IsVulkan11(mInstanceVersion))
@@ -1774,13 +1774,13 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     if (mInstanceVersion < kMinimumVulkanAPIVersion)
     {
         WARN() << "ANGLE Requires a minimum Vulkan instance version of 1.1";
-        ANGLE_VK_TRY(displayVk, VK_ERROR_INCOMPATIBLE_DRIVER);
+        ANGLE_VK_TRY(context, VK_ERROR_INCOMPATIBLE_DRIVER);
     }
 
     const UseVulkanSwapchain useVulkanSwapchain = wsiExtension != nullptr || wsiLayer != nullptr
                                                       ? UseVulkanSwapchain::Yes
                                                       : UseVulkanSwapchain::No;
-    ANGLE_TRY(enableInstanceExtensions(displayVk, enabledInstanceLayerNames, wsiExtension,
+    ANGLE_TRY(enableInstanceExtensions(context, enabledInstanceLayerNames, wsiExtension,
                                        useVulkanSwapchain, canLoadDebugUtils));
 
     const std::string appName = angle::GetExecutableName();
@@ -1828,7 +1828,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     {
         ANGLE_SCOPED_DISABLE_MSAN();
-        ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
+        ANGLE_VK_TRY(context, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
 #if defined(ANGLE_SHARED_LIBVULKAN)
         // Load volk if we are linking dynamically
         volkLoadInstance(mInstance);
@@ -1862,18 +1862,18 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         messengerInfo.pfnUserCallback = &DebugUtilsMessenger;
         messengerInfo.pUserData       = this;
 
-        ANGLE_VK_TRY(displayVk, vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo, nullptr,
-                                                               &mDebugUtilsMessenger));
+        ANGLE_VK_TRY(context, vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo, nullptr,
+                                                             &mDebugUtilsMessenger));
     }
 
     uint32_t physicalDeviceCount = 0;
-    ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, nullptr));
-    ANGLE_VK_CHECK(displayVk, physicalDeviceCount > 0, VK_ERROR_INITIALIZATION_FAILED);
+    ANGLE_VK_TRY(context, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, nullptr));
+    ANGLE_VK_CHECK(context, physicalDeviceCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // TODO(jmadill): Handle multiple physical devices. For now, use the first device.
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
-    ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount,
-                                                       physicalDevices.data()));
+    ANGLE_VK_TRY(context, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount,
+                                                     physicalDevices.data()));
     ChoosePhysicalDevice(vkGetPhysicalDeviceProperties, physicalDevices, mEnabledICD,
                          preferredVendorId, preferredDeviceId, &mPhysicalDevice,
                          &mPhysicalDeviceProperties);
@@ -1885,7 +1885,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     if (mDeviceVersion < kMinimumVulkanAPIVersion)
     {
         WARN() << "ANGLE Requires a minimum Vulkan device version of 1.1";
-        ANGLE_VK_TRY(displayVk, VK_ERROR_INCOMPATIBLE_DRIVER);
+        ANGLE_VK_TRY(context, VK_ERROR_INCOMPATIBLE_DRIVER);
     }
 
     mGarbageCollectionFlushThreshold =
@@ -1897,7 +1897,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     uint32_t queueFamilyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount, nullptr);
 
-    ANGLE_VK_CHECK(displayVk, queueFamilyCount > 0, VK_ERROR_INITIALIZATION_FAILED);
+    ANGLE_VK_CHECK(context, queueFamilyCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     mQueueFamilyProperties.resize(queueFamilyCount);
     vkGetPhysicalDeviceQueueFamilyProperties(mPhysicalDevice, &queueFamilyCount,
@@ -1916,11 +1916,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
             mQueueFamilyProperties, (VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT), 0,
             &queueFamilyMatchCount);
     }
-    ANGLE_VK_CHECK(displayVk, queueFamilyMatchCount > 0, VK_ERROR_INITIALIZATION_FAILED);
+    ANGLE_VK_CHECK(context, queueFamilyMatchCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // Store the physical device memory properties so we can find the right memory pools.
     mMemoryProperties.init(mPhysicalDevice);
-    ANGLE_VK_CHECK(displayVk, mMemoryProperties.getMemoryTypeCount() > 0,
+    ANGLE_VK_CHECK(context, mMemoryProperties.getMemoryTypeCount() > 0,
                    VK_ERROR_INITIALIZATION_FAILED);
 
     // The counters for the memory allocation tracker should be initialized.
@@ -1933,19 +1933,17 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     calculatePendingGarbageSizeLimit();
 
     ANGLE_TRY(
-        setupDevice(displayVk, featureOverrides, wsiLayer, useVulkanSwapchain, nativeWindowSystem));
+        setupDevice(context, featureOverrides, wsiLayer, useVulkanSwapchain, nativeWindowSystem));
 
     // If only one queue family, that's the only choice and the device is initialize with that.  If
     // there is more than one queue, we still create the device with the first queue family and hope
     // for the best.  We cannot wait for a window surface to know which supports present because of
     // EGL_KHR_surfaceless_context or simply pbuffers.  So far, only MoltenVk seems to expose
     // multiple queue families, and using the first queue family is fine with it.
-    ANGLE_TRY(createDeviceAndQueue(displayVk, firstGraphicsQueueFamily));
+    ANGLE_TRY(createDeviceAndQueue(context, firstGraphicsQueueFamily));
 
     // Initialize the format table.
     mFormatTable.initialize(this, &mNativeTextureCaps);
-
-    setGlobalDebugAnnotator();
 
     // Null terminate the extension list returned for EGL_VULKAN_INSTANCE_EXTENSIONS_ANGLE.
     mEnabledInstanceExtensions.push_back(nullptr);
@@ -1958,7 +1956,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
+angle::Result RendererVk::initializeMemoryAllocator(vk::Context *context)
 {
     // This number matches Chromium and was picked by looking at memory usage of
     // Android apps. The allocator will start making blocks at 1/8 the max size
@@ -1966,7 +1964,7 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     mPreferredLargeHeapBlockSize = 4 * 1024 * 1024;
 
     // Create VMA allocator
-    ANGLE_VK_TRY(displayVk,
+    ANGLE_VK_TRY(context,
                  mAllocator.init(mPhysicalDevice, mDevice, mInstance, mApplicationInfo.apiVersion,
                                  mPreferredLargeHeapBlockSize));
 
@@ -2009,7 +2007,7 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     // Uncached coherent staging buffer.
     requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     preferredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-    ANGLE_VK_TRY(displayVk,
+    ANGLE_VK_TRY(context,
                  mAllocator.findMemoryTypeIndexForBufferInfo(
                      createInfo, requiredFlags, preferredFlags, persistentlyMapped,
                      &mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::UnCachedCoherent]));
@@ -2028,7 +2026,7 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
         requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
         preferredFlags = VK_MEMORY_PROPERTY_HOST_CACHED_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     }
-    ANGLE_VK_TRY(displayVk,
+    ANGLE_VK_TRY(context,
                  mAllocator.findMemoryTypeIndexForBufferInfo(
                      createInfo, requiredFlags, preferredFlags, persistentlyMapped,
                      &mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedPreferCoherent]));
@@ -2038,7 +2036,7 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     // Cached Non-coherent staging buffer
     requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
     preferredFlags = 0;
-    ANGLE_VK_TRY(displayVk,
+    ANGLE_VK_TRY(context,
                  mAllocator.findMemoryTypeIndexForBufferInfo(
                      createInfo, requiredFlags, preferredFlags, persistentlyMapped,
                      &mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedNonCoherent]));
@@ -2063,9 +2061,9 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     createInfo.usage = vk::kVertexBufferUsageFlags;
     requiredFlags    = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     preferredFlags   = 0;
-    ANGLE_VK_TRY(displayVk, mAllocator.findMemoryTypeIndexForBufferInfo(
-                                createInfo, requiredFlags, preferredFlags, persistentlyMapped,
-                                &mDeviceLocalVertexConversionBufferMemoryTypeIndex));
+    ANGLE_VK_TRY(context, mAllocator.findMemoryTypeIndexForBufferInfo(
+                              createInfo, requiredFlags, preferredFlags, persistentlyMapped,
+                              &mDeviceLocalVertexConversionBufferMemoryTypeIndex));
     ASSERT(mDeviceLocalVertexConversionBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
 
     // Host visible and non-coherent vertex conversion buffer, which is the same as non-coherent
@@ -3393,14 +3391,13 @@ angle::Result RendererVk::setupDevice(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::createDeviceAndQueue(DisplayVk *displayVk, uint32_t queueFamilyIndex)
+angle::Result RendererVk::createDeviceAndQueue(vk::Context *context, uint32_t queueFamilyIndex)
 {
     mCurrentQueueFamilyIndex = queueFamilyIndex;
 
     vk::QueueFamily queueFamily;
     queueFamily.initialize(mQueueFamilyProperties[queueFamilyIndex], queueFamilyIndex);
-    ANGLE_VK_CHECK(displayVk, queueFamily.getDeviceQueueCount() > 0,
-                   VK_ERROR_INITIALIZATION_FAILED);
+    ANGLE_VK_CHECK(context, queueFamily.getDeviceQueueCount() > 0, VK_ERROR_INITIALIZATION_FAILED);
 
     // We enable protected context only if both supportsProtectedMemory and device also supports
     // protected. There are cases we have to disable supportsProtectedMemory feature due to driver
@@ -3457,7 +3454,7 @@ angle::Result RendererVk::createDeviceAndQueue(DisplayVk *displayVk, uint32_t qu
     // may also generate messages.
     initializeValidationMessageSuppressions();
 
-    ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
+    ANGLE_VK_TRY(context, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Load volk if we are loading dynamically
     volkLoadDevice(mDevice);
@@ -3468,7 +3465,7 @@ angle::Result RendererVk::createDeviceAndQueue(DisplayVk *displayVk, uint32_t qu
     vk::DeviceQueueMap graphicsQueueMap =
         queueFamily.initializeQueueMap(mDevice, enableProtectedContent, 0, queueCount);
 
-    ANGLE_TRY(mCommandQueue.init(displayVk, graphicsQueueMap));
+    ANGLE_TRY(mCommandQueue.init(context, graphicsQueueMap));
     ANGLE_TRY(mCommandProcessor.init());
 
     if (mFeatures.forceMaxUniformBufferSize16KB.enabled)
@@ -3483,10 +3480,10 @@ angle::Result RendererVk::createDeviceAndQueue(DisplayVk *displayVk, uint32_t qu
     {
         std::unique_lock<std::mutex> lock(mPipelineCacheMutex);
         bool loadedFromBlobCache = false;
-        ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache, &loadedFromBlobCache));
+        ANGLE_TRY(initPipelineCache(context, &mPipelineCache, &loadedFromBlobCache));
         if (loadedFromBlobCache)
         {
-            ANGLE_TRY(getPipelineCacheSize(displayVk, &mPipelineCacheSizeAtLastSync));
+            ANGLE_TRY(getPipelineCacheSize(context, &mPipelineCacheSizeAtLastSync));
         }
     }
 
@@ -3516,7 +3513,7 @@ angle::Result RendererVk::createDeviceAndQueue(DisplayVk *displayVk, uint32_t qu
     }
     mSupportedVulkanPipelineStageMask = ~unsupportedStages;
 
-    ANGLE_TRY(initializeMemoryAllocator(displayVk));
+    ANGLE_TRY(initializeMemoryAllocator(context));
 
     // Log the memory heap stats when the device has been initialized (when debugging).
     mMemoryAllocationTracker.onDeviceInit();
@@ -3579,7 +3576,7 @@ void RendererVk::initializeValidationMessageSuppressions()
     }
 }
 
-angle::Result RendererVk::checkQueueForSurfacePresent(DisplayVk *displayVk,
+angle::Result RendererVk::checkQueueForSurfacePresent(vk::Context *context,
                                                       VkSurfaceKHR surface,
                                                       bool *supportedOut)
 {
@@ -3593,7 +3590,7 @@ angle::Result RendererVk::checkQueueForSurfacePresent(DisplayVk *displayVk,
 
     // Check if the current device supports present on this surface.
     VkBool32 supportsPresent = VK_FALSE;
-    ANGLE_VK_TRY(displayVk,
+    ANGLE_VK_TRY(context,
                  vkGetPhysicalDeviceSurfaceSupportKHR(mPhysicalDevice, mCurrentQueueFamilyIndex,
                                                       surface, &supportsPresent));
 
@@ -4930,14 +4927,14 @@ void RendererVk::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
 
 void RendererVk::appBasedFeatureOverrides(const vk::ExtensionNameList &extensions) {}
 
-angle::Result RendererVk::initPipelineCache(DisplayVk *display,
+angle::Result RendererVk::initPipelineCache(vk::Context *context,
                                             vk::PipelineCache *pipelineCache,
                                             bool *success)
 {
     angle::MemoryBuffer initialData;
     if (!mFeatures.disablePipelineCacheLoadForTesting.enabled)
     {
-        ANGLE_TRY(GetAndDecompressPipelineCacheVk(mPhysicalDeviceProperties, display, display,
+        ANGLE_TRY(GetAndDecompressPipelineCacheVk(mPhysicalDeviceProperties, context, mGlobalOps,
                                                   &initialData, success));
     }
 
@@ -4948,12 +4945,12 @@ angle::Result RendererVk::initPipelineCache(DisplayVk *display,
     pipelineCacheCreateInfo.initialDataSize = *success ? initialData.size() : 0;
     pipelineCacheCreateInfo.pInitialData    = *success ? initialData.data() : nullptr;
 
-    if (display->getRenderer()->getFeatures().supportsPipelineCreationCacheControl.enabled)
+    if (getFeatures().supportsPipelineCreationCacheControl.enabled)
     {
         pipelineCacheCreateInfo.flags |= VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
     }
 
-    ANGLE_VK_TRY(display, pipelineCache->init(mDevice, pipelineCacheCreateInfo));
+    ANGLE_VK_TRY(context, pipelineCache->init(mDevice, pipelineCacheCreateInfo));
 
     return angle::Result::Continue;
 }
@@ -4970,7 +4967,7 @@ angle::Result RendererVk::getPipelineCache(vk::Context *context,
         // We should now recreate the pipeline cache with the blob cache pipeline data.
         vk::PipelineCache pCache;
         bool loadedFromBlobCache = false;
-        ANGLE_TRY(initPipelineCache(vk::GetImpl(mDisplay), &pCache, &loadedFromBlobCache));
+        ANGLE_TRY(initPipelineCache(context, &pCache, &loadedFromBlobCache));
         if (loadedFromBlobCache)
         {
             // Merge the newly created pipeline cache into the existing one.
@@ -5382,7 +5379,7 @@ uint64_t RendererVk::getMaxFenceWaitTimeNs() const
     return kMaxFenceWaitTimeNs;
 }
 
-void RendererVk::setGlobalDebugAnnotator()
+void RendererVk::setGlobalDebugAnnotator(bool *installedAnnotatorOut)
 {
     // Install one of two DebugAnnotator classes:
     //
@@ -5418,16 +5415,14 @@ void RendererVk::setGlobalDebugAnnotator()
 #endif
 
     {
-        std::unique_lock<std::mutex> lock(gl::GetDebugMutex());
         if (installDebugAnnotatorVk)
         {
+            std::unique_lock<std::mutex> lock(gl::GetDebugMutex());
             gl::InitializeDebugAnnotations(&mAnnotator);
         }
-        else
-        {
-            mDisplay->setGlobalDebugAnnotator();
-        }
     }
+
+    *installedAnnotatorOut = installDebugAnnotatorVk;
 }
 
 void RendererVk::reloadVolkIfNeeded() const

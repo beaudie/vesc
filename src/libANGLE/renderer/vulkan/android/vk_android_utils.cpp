@@ -29,7 +29,7 @@ angle::Result GetClientBufferMemoryRequirements(Context *context,
 {
 #if defined(ANGLE_PLATFORM_ANDROID)
     const AHBFunctions &ahbFunctions =
-        GetImplAs<DisplayVkAndroid>(context->getRenderer()->getDisplay())->getAHBFunctions();
+        GetImplAs<DisplayVkAndroid>(context->getRenderer()->getGlobalOps())->getAHBFunctions();
     ASSERT(ahbFunctions.valid());
 
     AHardwareBuffer_Desc aHardwareBufferDescription = {};
@@ -72,7 +72,7 @@ angle::Result InitAndroidExternalMemory(Context *context,
 {
 #if defined(ANGLE_PLATFORM_ANDROID)
     const AHBFunctions &functions =
-        GetImplAs<DisplayVkAndroid>(context->getRenderer()->getDisplay())->getAHBFunctions();
+        GetImplAs<DisplayVkAndroid>(context->getRenderer()->getGlobalOps())->getAHBFunctions();
     ASSERT(functions.valid());
 
     struct AHardwareBuffer *hardwareBuffer =
@@ -106,7 +106,7 @@ void ReleaseAndroidExternalMemory(RendererVk *rendererVk, EGLClientBuffer client
 {
 #if defined(ANGLE_PLATFORM_ANDROID)
     const AHBFunctions &functions =
-        GetImplAs<DisplayVkAndroid>(rendererVk->getDisplay())->getAHBFunctions();
+        GetImplAs<DisplayVkAndroid>(rendererVk->getGlobalOps())->getAHBFunctions();
     ASSERT(functions.valid());
     struct AHardwareBuffer *hardwareBuffer =
         angle::android::ClientBufferToAHardwareBuffer(clientBuffer);
