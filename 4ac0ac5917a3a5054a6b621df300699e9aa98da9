@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d625d29_ba7ee8d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-04T23:13:50Z",
+      "side": 1,
+      "message": "lgtm\n\nI think this is small enough that I can +2 it directly. Thanks for the new test. CQ\u0027ing.\n\nAs a potential follow-up, is another test warranted for \"layout(incoherent)\" in ESSL 1.00 shaders?",
+      "revId": "4ac0ac5917a3a5054a6b621df300699e9aa98da9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
