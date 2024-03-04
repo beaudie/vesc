@@ -8,6 +8,7 @@
 // ANGLE Format table:
 //   Queries for typed format information from the ANGLE format enum.
 
+#include "libANGLE/cl_types.h"
 #include "libANGLE/renderer/Format.h"
 
 #include "image_util/copyimage.h"
@@ -764,6 +765,142 @@ FormatID Format::InternalFormatToID(GLenum internalFormat)
             return FormatID::X2R10G10B10_UNORM_VERTEX;
         case GL_X2_RGB10_USCALED_ANGLEX:
             return FormatID::X2R10G10B10_USCALED_VERTEX;
+        default:
+            return FormatID::NONE;
+    }
+}
+
+// static
+FormatID Format::CLRFormatToID(cl_channel_type internalChannelType)
+{
+    switch (internalChannelType)
+    {
+        case CL_FLOAT:
+            return FormatID::R32_FLOAT;
+        case CL_HALF_FLOAT:
+            return FormatID::R16_FLOAT;
+        case CL_SIGNED_INT16:
+            return FormatID::R16_SINT;
+        case CL_SIGNED_INT32:
+            return FormatID::R32_SINT;
+        case CL_SIGNED_INT8:
+            return FormatID::R8_SINT;
+        case CL_SNORM_INT16:
+            return FormatID::R16_SNORM;
+        case CL_SNORM_INT8:
+            return FormatID::R8_SNORM;
+        case CL_UNORM_INT16:
+            return FormatID::R16_UNORM;
+        case CL_UNORM_INT8:
+            return FormatID::R8_UNORM;
+        case CL_UNSIGNED_INT16:
+            return FormatID::R16_UINT;
+        case CL_UNSIGNED_INT32:
+            return FormatID::R32_UINT;
+        case CL_UNSIGNED_INT8:
+            return FormatID::R8_UINT;
+        default:
+            return FormatID::NONE;
+    }
+}
+
+// static
+FormatID Format::CLRGFormatToID(cl_channel_type internalChannelType)
+{
+    switch (internalChannelType)
+    {
+        case CL_FLOAT:
+            return FormatID::R32G32_FLOAT;
+        case CL_HALF_FLOAT:
+            return FormatID::R16G16_FLOAT;
+        case CL_SIGNED_INT16:
+            return FormatID::R16G16_SINT;
+        case CL_SIGNED_INT32:
+            return FormatID::R32G32_SINT;
+        case CL_SIGNED_INT8:
+            return FormatID::R8G8_SINT;
+        case CL_SNORM_INT16:
+            return FormatID::R16G16_SNORM;
+        case CL_SNORM_INT8:
+            return FormatID::R8G8_SNORM;
+        case CL_UNORM_INT16:
+            return FormatID::R16G16_UNORM;
+        case CL_UNORM_INT8:
+            return FormatID::R8G8_UNORM;
+        case CL_UNSIGNED_INT16:
+            return FormatID::R16G16_UINT;
+        case CL_UNSIGNED_INT32:
+            return FormatID::R32G32_UINT;
+        case CL_UNSIGNED_INT8:
+            return FormatID::R8G8_UINT;
+        default:
+            return FormatID::NONE;
+    }
+}
+
+// static
+FormatID Format::CLRGBFormatToID(cl_channel_type internalChannelType)
+{
+    switch (internalChannelType)
+    {
+        case CL_FLOAT:
+            return FormatID::R32G32B32_FLOAT;
+        case CL_HALF_FLOAT:
+            return FormatID::R16G16B16_FLOAT;
+        case CL_SIGNED_INT16:
+            return FormatID::R16G16B16_SINT;
+        case CL_SIGNED_INT32:
+            return FormatID::R32G32B32_SINT;
+        case CL_SIGNED_INT8:
+            return FormatID::R8G8B8_SINT;
+        case CL_SNORM_INT16:
+            return FormatID::R16G16B16_SNORM;
+        case CL_SNORM_INT8:
+            return FormatID::R8G8B8_SNORM;
+        case CL_UNORM_INT16:
+            return FormatID::R16G16B16_UNORM;
+        case CL_UNORM_INT8:
+            return FormatID::R8G8B8_UNORM;
+        case CL_UNSIGNED_INT16:
+            return FormatID::R16G16B16_UINT;
+        case CL_UNSIGNED_INT32:
+            return FormatID::R32G32B32_UINT;
+        case CL_UNSIGNED_INT8:
+            return FormatID::R8G8B8_UINT;
+        default:
+            return FormatID::NONE;
+    }
+}
+
+// static
+FormatID Format::CLRGBAFormatToID(cl_channel_type internalChannelType)
+{
+    switch (internalChannelType)
+    {
+        case CL_FLOAT:
+            return FormatID::R32G32B32A32_FLOAT;
+        case CL_HALF_FLOAT:
+            return FormatID::R16G16B16A16_FLOAT;
+        case CL_SIGNED_INT16:
+            return FormatID::R16G16B16A16_SINT;
+        case CL_SIGNED_INT32:
+            return FormatID::R32G32B32A32_SINT;
+        case CL_SIGNED_INT8:
+            return FormatID::R8G8B8A8_SINT;
+        case CL_SNORM_INT16:
+            return FormatID::R16G16B16A16_SNORM;
+        case CL_SNORM_INT8:
+            return FormatID::R8G8B8A8_SNORM;
+        case CL_UNORM_INT16:
+            return FormatID::R16G16B16A16_UNORM;
+        case CL_UNORM_INT8:
+            return FormatID::R8G8B8A8_UNORM;
+        case CL_UNSIGNED_INT16:
+            return FormatID::R16G16B16A16_UINT;
+        case CL_UNSIGNED_INT32:
+            return FormatID::R32G32B32A32_UINT;
+        case CL_UNSIGNED_INT8:
+            return FormatID::R8G8B8A8_UINT;
         default:
             return FormatID::NONE;
     }
