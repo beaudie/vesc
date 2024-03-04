@@ -43,7 +43,9 @@ ImmutableStringBuilder &ImmutableStringBuilder::operator<<(const char &c)
 
 void ImmutableStringBuilder::appendDecimal(const uint32_t &u)
 {
-    int numChars = snprintf(mData + mPos, mMaxLength - mPos, "%d", u);
+    // + 1 is because snprintf writes at most bufsz - 1 and then \0.
+    // Our bufsz is mMaxLength + 1.
+    int numChars = snprintf(mData + mPos, mMaxLength - mPos + 1, "%d", u);
     ASSERT(numChars >= 0);
     ASSERT(mPos + numChars <= mMaxLength);
     mPos += numChars;
