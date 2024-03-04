@@ -248,6 +248,8 @@ libangle_headers = [
   "src/libANGLE/BlobCache.h",
   "src/libANGLE/Buffer.h",
   "src/libANGLE/Caps.h",
+  "src/libANGLE/CLBitField.h",
+  "src/libANGLE/CLRefPointer.h",
   "src/libANGLE/Compiler.h",
   "src/libANGLE/Config.h",
   "src/libANGLE/Constants.h",
@@ -322,6 +324,7 @@ libangle_headers = [
   "src/libANGLE/VertexAttribute.inc",
   "src/libANGLE/angletypes.h",
   "src/libANGLE/angletypes.inc",
+  "src/libANGLE/cl_types.h",
   "src/libANGLE/context_private_call_gles_autogen.h",
   "src/libANGLE/context_private_call_gl_autogen.h",
   "src/libANGLE/entry_points_utils.cpp",
@@ -394,6 +397,7 @@ libangle_headers = [
   "src/libANGLE/validationGL3_autogen.h",
   "src/libANGLE/validationGL4_autogen.h",
   "src/common/base/anglebase/trace_event/trace_event.h",
+  "src/common/PackedCLEnums_autogen.h",
 ]
 
 libangle_sources = [
