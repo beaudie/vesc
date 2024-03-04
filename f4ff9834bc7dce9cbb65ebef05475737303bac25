@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2add02a_7164af17",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-04T19:02:05Z",
+      "side": 1,
+      "message": "Is this correct? I thought if foveate disabled, it should always use 1x1?",
+      "range": {
+        "startLine": 3340,
+        "startChar": 8,
+        "endLine": 3340,
+        "endChar": 50
+      },
+      "revId": "f4ff9834bc7dce9cbb65ebef05475737303bac25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82f1f66c_f985df37",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-04T19:02:05Z",
+      "side": 1,
+      "message": "The function name says withCPU, but it uses copyBufferToImage which uses GPU to do the copy.",
+      "range": {
+        "startLine": 1673,
+        "startChar": 56,
+        "endLine": 1673,
+        "endChar": 64
+      },
+      "revId": "f4ff9834bc7dce9cbb65ebef05475737303bac25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6a46d9d_ca7d2936",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2408,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-04T19:02:05Z",
+      "side": 1,
+      "message": "Why this is different from other attachment (which uses hasImage call)? If no other reason, better keep it consistent. I believe hasImage is there for very rare cases that image gets reallocated with same pointer.",
+      "range": {
+        "startLine": 2408,
+        "startChar": 0,
+        "endLine": 2408,
+        "endChar": 58
+      },
+      "revId": "f4ff9834bc7dce9cbb65ebef05475737303bac25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
