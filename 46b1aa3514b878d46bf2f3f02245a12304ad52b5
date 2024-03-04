@@ -117,6 +117,30 @@
       },
       "revId": "46b1aa3514b878d46bf2f3f02245a12304ad52b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30dcc49f_fbec8af6",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3895,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-04T23:43:32Z",
+      "side": 1,
+      "message": "I will not rely on VVL error here. They might get spressed or not enabled on certain bots. Is there technical difficulty to check the pixel value? If not, I think we should check pixel value. Same with other test you added.",
+      "parentUuid": "e349d8a9_0dd12007",
+      "range": {
+        "startLine": 3895,
+        "startChar": 25,
+        "endLine": 3895,
+        "endChar": 82
+      },
+      "revId": "46b1aa3514b878d46bf2f3f02245a12304ad52b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
