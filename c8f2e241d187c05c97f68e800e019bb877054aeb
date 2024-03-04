@@ -46,6 +46,30 @@
       },
       "revId": "c8f2e241d187c05c97f68e800e019bb877054aeb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50d7f797_41e120ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-04T23:54:26Z",
+      "side": 1,
+      "message": "The way you did here means every RenderPassCommandBufferHelper and OutsdieRenderPassCommandBufferhelper for CLContextVK will also takes if check if queue serial which can be avoided with the way it is today, plus the readability i is better with existing code as well. My suggestion is this:\n```\nvoid OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,\n                                                     VkImageAspectFlags aspectFlags,\n                                                     ImageLayout imageLayout,\n                                                     ImageHelper *image)\n{\n    imageReadImpl(contextVk, aspectFlags, imageLayout, image);\n\n    if (!contextVk-\u003eisRenderPassStartedAndUsesImage(*image))\n    {\n        // Usually an image can only used by a RenderPassCommands or OutsideRenderPassCommands\n        // because the layout will be different, except with image sampled from compute shader. In\n        // this case, the renderPassCommands\u0027 read will override the outsideRenderPassCommands\u0027\n        // read, since its queueSerial must be greater than outsideRP.\n        image-\u003esetQueueSerial(mQueueSerial);\n    }\n}\n\nvoid OutsideRenderPassCommandBufferHelper::imageReadCL(CLContextVk *clContextVk,\n                                                     VkImageAspectFlags aspectFlags,\n                                                     ImageLayout imageLayout,\n                                                     ImageHelper *image)\n{\n    imageReadImpl(clContextVk, aspectFlags, imageLayout, image);\n    image-\u003esetQueueSerial(mQueueSerial);\n}\n```\nI really not seeing much of code duplication here but avoids unnecessary run time if check and better readability (hasOverridingUse is not clear what exactly is overriding).",
+      "parentUuid": "0e4605bb_29d53f88",
+      "range": {
+        "startLine": 1182,
+        "startChar": 0,
+        "endLine": 1182,
+        "endChar": 39
+      },
+      "revId": "c8f2e241d187c05c97f68e800e019bb877054aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
