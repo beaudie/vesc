@@ -383,6 +383,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a246165_027a297b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-03-04T22:02:58Z",
+      "side": 1,
+      "message": "@Charlie Made an update with marking the newer functions as `imageReadCL/WriteCL` while preserving the existing functions.\n\nAlso wrapped the \u003e\u003d check with a wrapper function `hasOverridingUse`. Rest of the change is kept as is.",
+      "parentUuid": "98377dd0_f7ec7d83",
+      "range": {
+        "startLine": 1703,
+        "startChar": 33,
+        "endLine": 1703,
+        "endChar": 34
+      },
+      "revId": "cafbd7c17683058b1cad329b798fb092fce7ecc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3f9763d_00cd98ad",
