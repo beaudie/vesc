@@ -66,6 +66,10 @@
 	path = third_party/depot_tools
 	url = https://chromium.googlesource.com/chromium/tools/depot_tools
 	gclient-condition = not build_with_chromium
+[submodule "third_party/dummy_chromium"]
+	path = third_party/dummy_chromium
+	url = https://chromium.googlesource.com/chromium/src
+	gclient-condition = dummy_checkout_chromium
 [submodule "third_party/EGL-Registry/src"]
 	path = third_party/EGL-Registry/src
 	url = https://chromium.googlesource.com/external/github.com/KhronosGroup/EGL-Registry
@@ -92,7 +96,7 @@
 [submodule "third_party/libdrm"]
 	path = third_party/libdrm
 	url = https://chromium.googlesource.com/chromiumos/third_party/libdrm
-	gclient-condition = checkout_angle_mesa
+	gclient-condition = checkout_angle_mesa or not build_with_chromium
 [submodule "third_party/libjpeg_turbo"]
 	path = third_party/libjpeg_turbo
 	url = https://chromium.googlesource.com/chromium/deps/libjpeg_turbo
@@ -108,7 +112,7 @@
 [submodule "third_party/jinja2"]
 	path = third_party/jinja2
 	url = https://chromium.googlesource.com/chromium/src/third_party/jinja2
-	gclient-condition = checkout_android and not build_with_chromium
+	gclient-condition = not build_with_chromium
 [submodule "third_party/jsoncpp"]
 	path = third_party/jsoncpp
 	url = https://chromium.googlesource.com/chromium/src/third_party/jsoncpp
@@ -128,7 +132,7 @@
 [submodule "third_party/markupsafe"]
 	path = third_party/markupsafe
 	url = https://chromium.googlesource.com/chromium/src/third_party/markupsafe
-	gclient-condition = checkout_android and not build_with_chromium
+	gclient-condition = not build_with_chromium
 [submodule "third_party/mesa/src"]
 	path = third_party/mesa/src
 	url = https://chromium.googlesource.com/external/github.com/Mesa3D/mesa
@@ -140,6 +144,10 @@
 [submodule "third_party/nasm"]
 	path = third_party/nasm
 	url = https://chromium.googlesource.com/chromium/deps/nasm
+	gclient-condition = not build_with_chromium
+[submodule "third_party/OpenCL-CTS/src"]
+	path = third_party/OpenCL-CTS/src
+	url = https://chromium.googlesource.com/external/github.com/KhronosGroup/OpenCL-CTS
 	gclient-condition = not build_with_chromium
 [submodule "third_party/OpenCL-Docs/src"]
 	path = third_party/OpenCL-Docs/src
@@ -156,7 +164,7 @@
 [submodule "third_party/perfetto"]
 	path = third_party/perfetto
 	url = https://android.googlesource.com/platform/external/perfetto
-	gclient-condition = not build_with_chromium and checkout_angle_restricted_traces
+	gclient-condition = not build_with_chromium and checkout_angle_perfetto
 [submodule "third_party/protobuf"]
 	path = third_party/protobuf
 	url = https://chromium.googlesource.com/chromium/src/third_party/protobuf
