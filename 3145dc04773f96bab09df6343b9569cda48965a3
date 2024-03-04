@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3f128a5_e4e3c9e5",
+        "filename": "src/libANGLE/cl_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-04T23:38:37Z",
+      "side": 1,
+      "message": "Mental Note: `ANGLE_CL_SET_ERROR`",
+      "range": {
+        "startLine": 36,
+        "startChar": 29,
+        "endLine": 36,
+        "endChar": 52
+      },
+      "revId": "3145dc04773f96bab09df6343b9569cda48965a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e3c0102_4f21a4e6",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-04T23:38:37Z",
+      "side": 1,
+      "message": "Mental Note: No need for rvalue anymore",
+      "range": {
+        "startLine": 24,
+        "startChar": 41,
+        "endLine": 24,
+        "endChar": 47
+      },
+      "revId": "3145dc04773f96bab09df6343b9569cda48965a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8081a11b_4a87372e",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-04T23:38:37Z",
+      "side": 1,
+      "message": "Mental Note: anglebug",
+      "range": {
+        "startLine": 76,
+        "startChar": 11,
+        "endLine": 76,
+        "endChar": 15
+      },
+      "revId": "3145dc04773f96bab09df6343b9569cda48965a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a4ce431_cca20824",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-04T23:38:37Z",
+      "side": 1,
+      "message": "Mental Note: anglebug",
+      "range": {
+        "startLine": 83,
+        "startChar": 11,
+        "endLine": 83,
+        "endChar": 15
+      },
+      "revId": "3145dc04773f96bab09df6343b9569cda48965a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50f8cd37_02d84fa2",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-04T23:38:37Z",
+      "side": 1,
+      "message": "Mental Note: CLKernelArguments is copyable now - no need for rvalue moving.",
+      "range": {
+        "startLine": 684,
+        "startChar": 81,
+        "endLine": 684,
+        "endChar": 97
+      },
+      "revId": "3145dc04773f96bab09df6343b9569cda48965a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "968e3fb8_b3e45aec",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-04T23:38:37Z",
+      "side": 1,
+      "message": "Mental Note: Leak in early returns!",
+      "range": {
+        "startLine": 684,
+        "startChar": 8,
+        "endLine": 684,
+        "endChar": 24
+      },
+      "revId": "3145dc04773f96bab09df6343b9569cda48965a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ed80e46_0bd17f2e",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-04T23:38:37Z",
+      "side": 1,
+      "message": "Mental Note: Superfluous comment",
+      "range": {
+        "startLine": 711,
+        "startChar": 16,
+        "endLine": 711,
+        "endChar": 67
+      },
+      "revId": "3145dc04773f96bab09df6343b9569cda48965a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abf82812_0f9a2a9a",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-04T23:38:37Z",
+      "side": 1,
+      "message": "Mental Note: Move to validationCL",
+      "range": {
+        "startLine": 769,
+        "startChar": 4,
+        "endLine": 772,
+        "endChar": 5
+      },
+      "revId": "3145dc04773f96bab09df6343b9569cda48965a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
