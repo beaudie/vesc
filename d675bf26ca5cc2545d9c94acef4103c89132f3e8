@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6ea6fd1_64b90050",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-03-04T20:43:35Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "d675bf26ca5cc2545d9c94acef4103c89132f3e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3dd0dbd_84753a10",
+        "filename": "src/libANGLE/renderer/gl/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-03-04T20:43:35Z",
+      "side": 1,
+      "message": "this should probably have the same condition as below (with angle_has_build)",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 41,
+        "endChar": 30
+      },
+      "revId": "d675bf26ca5cc2545d9c94acef4103c89132f3e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
