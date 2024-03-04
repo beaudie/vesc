@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0594d074_0ab68b02",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-04T22:44:34Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this just `image-\u003esetQueueSerial(mQueueSerial);`, since there is no renderPass in CLContextVk?",
+      "range": {
+        "startLine": 1182,
+        "startChar": 0,
+        "endLine": 1182,
+        "endChar": 39
+      },
+      "revId": "c8f2e241d187c05c97f68e800e019bb877054aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
