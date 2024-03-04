@@ -22,6 +22,30 @@
       },
       "revId": "46b1aa3514b878d46bf2f3f02245a12304ad52b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "202f6666_282f1095",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-04T22:07:01Z",
+      "side": 1,
+      "message": "\u003e I think the simpler fix is change this to textureUnit\n\nthat wont work since the ycbcrConversionDesc \u003c-\u003e textureUnit never changes in the test case `TexStorage2DMultipleYuvSamplersSwitchSamplerUniformValues`\n\nwhat does change is the sampler uniform value a.k.a ycbcrConversionDesc \u003c-\u003e samplerIndex mapping which also makes the pipeline layout incompatible",
+      "parentUuid": "56c7d739_1f660a6f",
+      "range": {
+        "startLine": 939,
+        "startChar": 61,
+        "endLine": 939,
+        "endChar": 73
+      },
+      "revId": "46b1aa3514b878d46bf2f3f02245a12304ad52b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
