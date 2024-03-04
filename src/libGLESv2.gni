@@ -396,6 +396,16 @@ libangle_headers = [
   "src/common/base/anglebase/trace_event/trace_event.h",
 ]
 
+if (angle_enable_cl)
+{
+  libangle_headers += [
+    "src/libANGLE/CLBitField.h",
+    "src/libANGLE/CLRefPointer.h",
+    "src/libANGLE/cl_types.h",
+    "src/common/PackedCLEnums_autogen.h"
+  ]
+}
+
 libangle_sources = [
   "src/libANGLE/AttributeMap.cpp",
   "src/libANGLE/BlobCache.cpp",

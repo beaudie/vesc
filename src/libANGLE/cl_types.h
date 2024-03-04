@@ -8,6 +8,7 @@
 #ifndef LIBANGLE_CLTYPES_H_
 #define LIBANGLE_CLTYPES_H_
 
+#if defined(ANGLE_ENABLE_CL)
 #include "libANGLE/CLBitField.h"
 #include "libANGLE/CLRefPointer.h"
 #include "libANGLE/Debug.h"
@@ -130,5 +131,7 @@ struct NDRange
 };
 
 }  // namespace cl
+
+#endif  // ANGLE_ENABLE_CL
 
 #endif  // LIBANGLE_CLTYPES_H_
