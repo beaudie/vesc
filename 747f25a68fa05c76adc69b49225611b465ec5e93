@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57a21642_92504843",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T02:34:22Z",
+      "side": 1,
+      "message": "In Vulkan, the Adreno drivers have a race condition between draws and `vkCmdClearAttachments`. Do you think this could be the same issue? If it is, it looks like the issue is rarer than we assumed in Vulkan (like some colors are bugfree).\n\nIn Vulkan, we work around this bug by issuing a draw call to do the clear instead of a flush.",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e18e9a7b_11c45d19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T02:34:22Z",
+      "side": 1,
+      "message": "Drive by",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7edd2aeb_b64a851e",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T02:34:22Z",
+      "side": 1,
+      "message": "A bit unclear from the name what it says. Like my first thought was `0b001111100` doesn\u0027t have a gap.\n\nMaybe another way to do this is to have `FramebufferGL` have a more descriptive helper like this, what do you think? (untested code)\n\n```\nbool HasGapsInDrawBuffers(... drawBuffers)\n{\n    return drawBuffers !\u003d angle::BitMask(drawBuffers.count());\n}\n```",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
