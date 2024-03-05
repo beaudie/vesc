@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21f8058e_410ab081",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1690,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-05T18:42:54Z",
+      "side": 1,
+      "message": "+1 for the first two params - thanks for doing that!\n\nI just have a question for the other params here for when OpenCL-side\nwants to directly create the RendererVk object here.\n\n```\ndesiredICD \u003d Default\npreferredVendorId \u003d 0\npreferredDeviceId \u003d 0\nuseValidationLayers \u003d [Yes/YesIfAvailable/No]\nwsiExtension \u003d nullptr\nwsiLayer \u003d nullptr\nnativeWindowSystem \u003d Other\nfeatureOverrides \u003d defaultConstructedFeatureOverridesObj\n```\n\nDo these values look reasonable for CL side init of a RendererVk?",
+      "range": {
+        "startLine": 1683,
+        "startChar": 37,
+        "endLine": 1690,
+        "endChar": 84
+      },
+      "revId": "3d8c436fca9517d33b1f27901fc75d1b395b66ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
