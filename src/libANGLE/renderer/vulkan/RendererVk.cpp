@@ -4650,6 +4650,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     const bool isMesaLessThan22_2 =
         mesaVersion.major < 22 || (mesaVersion.major == 22 && mesaVersion.minor < 2);
 
+    bool isAdreno750 = mPhysicalDeviceProperties.deviceID == angle::kDeviceID_Adreno750;
+
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsLogicOpDynamicState,
         mFeatures.supportsExtendedDynamicState2.enabled &&
