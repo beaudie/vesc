@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b067c86_1c80cce0",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T03:28:51Z",
+      "side": 1,
+      "message": "Windows also understands `/`, so this is going to be a source of bugs. Like if the user provides the path as `a/b/c`, then the path that gets here is something like `path\\to\\temp\\a/b/c`, and it blows up.\n\nMy suggestion is to sanitize the path first by replacing `GetPathSeparator()` with `/`, then iterating with `/`.",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e20cef6b_b5ebbc34",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T03:28:51Z",
+      "side": 1,
+      "message": "This is also going to blow up if the user provides the path with `/` on windows.",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffd56425_c64a49e7",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T03:28:51Z",
+      "side": 1,
+      "message": "As a future task, I suggest working with clspv to support taking the header contents directly as strings so you don\u0027t have to go through the file system for it.",
+      "range": {
+        "startLine": 441,
+        "startChar": 13,
+        "endLine": 441,
+        "endChar": 26
+      },
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc034b47_35d3a74d",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T03:28:51Z",
+      "side": 1,
+      "message": "nit: please keep the implementation in the source file. It\u0027s not going to be inlined anyway",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
