@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc78a811_ef4fcfd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-05T21:52:22Z",
+      "side": 1,
+      "message": "lgtm again\n\nEven better; thank you Shabi for your suggestion on using the internal ANGLE namespace.",
+      "revId": "6ab85083156628388fcb8cef0d0c07d7f892f5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0b62157_2cc03668",
+        "filename": "src/libANGLE/renderer/metal/mtl_msl_utils.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-05T21:52:22Z",
+      "side": 1,
+      "message": "What does this application of the arrow operator do? I haven\u0027t seen it before.",
+      "revId": "6ab85083156628388fcb8cef0d0c07d7f892f5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
