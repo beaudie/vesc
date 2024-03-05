@@ -7743,7 +7743,10 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
                 TIntermNode *unaryParamNode = fnCall->arguments().front();
                 TIntermTyped *callNode =
                     createUnaryMath(op, unaryParamNode->getAsTyped(), loc, fnCandidate);
-                ASSERT(callNode != nullptr);
+                if (callNode == nullptr)
+                {
+                    goto error;
+                }
                 return callNode;
             }
 
@@ -7774,7 +7777,7 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
             error(loc, "no matching overloaded function found", fnCall->name());
         }
     }
-
+error:
     // Error message was already written. Put on an unused node for error recovery.
     return CreateZeroNode(TType(EbtFloat, EbpMedium, EvqConst));
 }

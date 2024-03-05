@@ -45,6 +45,7 @@ class ParseTest : public testing::Test
         bool compilationSuccess     = mTranslator->compile(shaderStrings, 1, mCompileOptions);
         TInfoSink &infoSink         = mTranslator->getInfoSink();
         mInfoLog                    = RemoveSymbolIdsFromInfoLog(infoSink.info.c_str());
+        fprintf(stderr, "%s", mInfoLog.c_str());
         if (!compilationSuccess)
         {
             return testing::AssertionFailure() << "Shader compilation failed " << mInfoLog;
@@ -138,4 +139,16 @@ void main() { }
     EXPECT_FALSE(compile(kShader));
     EXPECT_TRUE(foundErrorInIntermediateTree());
     EXPECT_TRUE(foundInIntermediateTree("'index' : invalid layout qualifier"));
+}
+
+TEST_F(ParseTest, Radians320NoCrash)
+{
+    const char kShader[] = R"(#version 320 es
+precision mediump float;
+vec4 s() { writeonly vec4 color; radians(color); return vec4(1); })";
+    EXPECT_FALSE(compile(kShader));
+    EXPECT_TRUE(foundErrorInIntermediateTree());
+    EXPECT_TRUE(foundInIntermediateTree("'writeonly' : Only allowed with shader storage blocks,"));
+    EXPECT_TRUE(foundInIntermediateTree(
+        "'radians' : wrong operand type - no operation 'radians' exists that"));
 }
