@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c3056e5_30264984",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-05T02:22:51Z",
+      "side": 1,
+      "message": "lgtm+2\n\nNote the mac-angle-chromium-try flake is unrelated to your change and is being tracked in https://issues.chromium.org/issues/326277739 (restricted view, sorry).",
+      "revId": "de8e41e70485e531f26c0a2796f04bab6537fbe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
