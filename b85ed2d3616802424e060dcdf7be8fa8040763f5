@@ -33,6 +33,24 @@
       "message": "Could you please test your change doesn\u0027t break the red builds shown in AP2A.240131.001? https://b.corp.google.com/issues/323094579#comment4. For example, `akita-user` build in `git_24Q2-release` branch.",
       "revId": "b85ed2d3616802424e060dcdf7be8fa8040763f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b60932d_88ff1279",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2024-03-05T00:03:09Z",
+      "side": 1,
+      "message": "yep will try, in the meantime we will pair this change with the changes here: https://googleplex-android-review.git.corp.google.com/q/topic:%22remove_angle_on_system_flag%22",
+      "parentUuid": "6af5ab78_4ca003c1",
+      "revId": "b85ed2d3616802424e060dcdf7be8fa8040763f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
