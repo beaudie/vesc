@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "817ea2e7_e72d130a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T02:09:33Z",
+      "side": 1,
+      "message": "LGTM with Charlie\u0027s feedback addressed",
+      "revId": "f4ff9834bc7dce9cbb65ebef05475737303bac25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2add02a_7164af17",
