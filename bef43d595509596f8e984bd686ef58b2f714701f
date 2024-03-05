@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7e05825_d447db15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-05T01:42:58Z",
+      "side": 1,
+      "message": "Moving Shabi to CC as he\u0027s OOO, adding Geoff",
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b3875ad_cd1f185c",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-05T01:42:58Z",
+      "side": 1,
+      "message": "It looks like this already exists in `src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp`:\n```\nIntelDriverVersion GetIntelDriverVersion(const Optional\u003cLARGE_INTEGER\u003e driverVersion)\n{\n    if (!driverVersion.valid())\n        return IntelDriverVersion(0);\n\n    DWORD lowPart \u003d driverVersion.value().LowPart;\n    return IntelDriverVersion(HIWORD(lowPart) * 10000 + LOWORD(lowPart));\n}\n```\n@geofflang@chromium.org Should we merge the implementations?",
+      "range": {
+        "startLine": 165,
+        "startChar": 19,
+        "endLine": 165,
+        "endChar": 43
+      },
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1732f856_d2183f21",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-05T01:42:58Z",
+      "side": 1,
+      "message": "It looks like we use `Parse` functions in `src/libANGLE/renderer/driver_utils.cpp` to perform this i.e. `ParseARMDriverVersion`.\n\nCan we move this there and call it `ParseIntelDriverVersion`?",
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
