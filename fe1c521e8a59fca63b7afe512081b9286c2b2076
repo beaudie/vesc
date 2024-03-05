@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2a21e5a_1ee0ee3e",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-05T21:28:38Z",
+      "side": 1,
+      "message": "Nice catch! Hmm, I believe I could also do this as well?\n```\npos \u003d path.find_first_of(\"/\\\\\", pos);\n```",
+      "parentUuid": "6b067c86_1c80cce0",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e20cef6b_b5ebbc34",
         "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-05T03:28:51Z",
       "side": 1,
       "message": "This is also going to blow up if the user provides the path with `/` on windows.",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01daed86_0101a805",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-05T21:28:38Z",
+      "side": 1,
+      "message": "Same as other comment, I believe this would work right?\n```\nfind_last_of(\"/\\\\\")\n```",
+      "parentUuid": "e20cef6b_b5ebbc34",
       "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +107,24 @@
       "writtenOn": "2024-03-05T03:28:51Z",
       "side": 1,
       "message": "nit: please keep the implementation in the source file. It\u0027s not going to be inlined anyway",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f96483c_7e826354",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-05T21:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc034b47_35d3a74d",
       "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
