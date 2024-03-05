@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccd85c0b_8e49949e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T02:15:27Z",
+      "side": 1,
+      "message": "I have no familiarity with the `msl/` code, so deferring to other reviewers. FWIW, elsewhere we always generate something that _doesn\u0027t_ start with `_u` and make the symbol type `AngleInternal` and that\u0027s about it. So a bit surprised that this change isn\u0027t much smaller.",
+      "range": {
+        "startLine": 10,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 48
+      },
+      "revId": "1b01d6f9744537f5f15f1b7bd710a68327aff627",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
