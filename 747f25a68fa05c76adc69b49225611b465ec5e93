@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a43f8f6_7767ba2b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-05T05:51:02Z",
+      "side": 1,
+      "message": "Not sure if it\u0027s the same given that the GLES issue is limited to older drivers. Do you suggest replacing clears with draws here as well? Seems like a non-trivial GL state change to me.",
+      "parentUuid": "57a21642_92504843",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e18e9a7b_11c45d19",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-03-05T02:34:22Z",
       "side": 1,
       "message": "A bit unclear from the name what it says. Like my first thought was `0b001111100` doesn\u0027t have a gap.\n\nMaybe another way to do this is to have `FramebufferGL` have a more descriptive helper like this, what do you think? (untested code)\n\n```\nbool HasGapsInDrawBuffers(... drawBuffers)\n{\n    return drawBuffers !\u003d angle::BitMask(drawBuffers.count());\n}\n```",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adfa07b6_9e3385cb",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-05T05:51:02Z",
+      "side": 1,
+      "message": "Leading zeros are considered as gaps but trailing aren\u0027t. For example:\n```\n0b00000010 - has gap\n0b00000101 - has gap\n0b00000011 - no gap\n```\n\nI added this helper to `BitSet` because it does not need any arguments; maybe it could have a better name. Do you think it would be better to keep it in `FramebufferGL`?",
+      "parentUuid": "7edd2aeb_b64a851e",
       "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
