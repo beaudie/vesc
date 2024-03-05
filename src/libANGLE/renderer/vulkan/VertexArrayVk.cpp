@@ -161,7 +161,9 @@ size_t GetVertexCount(BufferVk *srcBuffer, const gl::VertexBinding &binding, uin
     // Bytes usable for vertex data.
     GLint64 bytes = srcBuffer->getSize() - binding.getOffset();
     if (bytes < srcFormatSize)
+    {
         return 0;
+    }
 
     // Count the last vertex.  It may occupy less than a full stride.
     // This is also correct if stride happens to be less than srcFormatSize.
@@ -932,11 +934,16 @@ gl::AttributesMask VertexArrayVk::mergeClientAttribsRange(
     size_t startVertex,
     size_t endVertex,
     std::array<AttributeRange, gl::MAX_VERTEX_ATTRIBS> &mergeRangesOut,
-    std::array<size_t, gl::MAX_VERTEX_ATTRIBS> &mergedIndexesOut) const
+    std::array<size_t, gl::MAX_VERTEX_ATTRIBS> &mergedIndexesOut,
+    bool *isMergeUpdated) const
 {
+    // If the expected merge did not work, we should unmerge and update the strides accordingly.
+    *isMergeUpdated = false;
+
     const std::vector<gl::VertexAttribute> &attribs = mState.getVertexAttributes();
     const std::vector<gl::VertexBinding> &bindings  = mState.getVertexBindings();
     gl::AttributesMask attributeMaskCanCombine;
+    gl::AttributesMask attributeMaskCombined;
     angle::FixedVector<size_t, gl::MAX_VERTEX_ATTRIBS> combinedIndexes;
     for (size_t attribIndex : activeStreamedAttribs)
     {
@@ -960,7 +967,9 @@ gl::AttributesMask VertexArrayVk::mergeClientAttribsRange(
             startAddress + startVertex * binding.getStride();
         mergedIndexesOut[attribIndex] = attribIndex;
     }
-    if (attributeMaskCanCombine.none())
+
+    // At least two attributes that can merge are needed to continue.
+    if (attributeMaskCanCombine.count() < 2)
     {
         return attributeMaskCanCombine;
     }
@@ -983,6 +992,10 @@ gl::AttributesMask VertexArrayVk::mergeClientAttribsRange(
             mergeRangesOut[*cur].copyStartAddr =
                 std::min(mergeRangesOut[*cur].copyStartAddr, mergeRangesOut[*next].copyStartAddr);
             mergedIndexesOut[*next] = mergedIndexesOut[*cur];
+
+            attributeMaskCombined.set(*cur);
+            attributeMaskCombined.set(*next);
+
             ++next;
         }
         else
@@ -998,7 +1011,51 @@ gl::AttributesMask VertexArrayVk::mergeClientAttribsRange(
             }
         }
     }
-    return attributeMaskCanCombine;
+
+    // If the attributes that can combine did not actually merge, their ranges should be readjusted.
+    for (size_t attribIndex : activeStreamedAttribs)
+    {
+        if (attributeMaskCanCombine.test(attribIndex) && !attributeMaskCombined.test(attribIndex))
+        {
+            *isMergeUpdated                   = true;
+            const gl::VertexAttribute &attrib = attribs[attribIndex];
+            const vk::Format &vertexFormat    = renderer->getFormat(attrib.format->id);
+            GLuint pixelBytes = vertexFormat.getActualBufferFormat(false).pixelBytes;
+
+            mergeRangesOut[attribIndex].endAddr =
+                mergeRangesOut[attribIndex].startAddr + endVertex * pixelBytes;
+        }
+    }
+
+    return attributeMaskCombined;
+}
+
+angle::Result VertexArrayVk::resetVertexStrideForAllAttributes(
+    ContextVk *contextVk,
+    const gl::AttributesMask activeStreamedAttribs)
+{
+    RendererVk *renderer  = contextVk->getRenderer();
+    const auto &attribs   = mState.getVertexAttributes();
+    const auto &bindings  = mState.getVertexBindings();
+    const bool compressed = false;
+
+    for (size_t attribIndex : activeStreamedAttribs)
+    {
+        const gl::VertexAttribute &attrib = attribs[attribIndex];
+        const angle::FormatID format      = attrib.format->id;
+        const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
+        const vk::Format &vertexFormat    = renderer->getFormat(format);
+        GLuint pixelBytes                 = vertexFormat.getActualBufferFormat(false).pixelBytes;
+
+        mCurrentArrayBufferStrides[attribIndex] = pixelBytes;
+
+        ANGLE_TRY(contextVk->onVertexAttributeChange(
+            attribIndex, mCurrentArrayBufferStrides[attribIndex], binding.getDivisor(), format,
+            compressed, mCurrentArrayBufferRelativeOffsets[attribIndex],
+            mCurrentArrayBuffers[attribIndex]));
+    }
+
+    return angle::Result::Continue;
 }
 
 // Handle copying client attribs and/or expanding attrib buffer in case where attribute
@@ -1020,7 +1077,9 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
 
     // Early return for corner case where emulated buffered attribs are not active
     if (!activeStreamedAttribs.any())
+    {
         return angle::Result::Continue;
+    }
 
     GLint startVertex;
     size_t vertexCount;
@@ -1034,9 +1093,17 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
     std::array<size_t, gl::MAX_VERTEX_ATTRIBS> mergedIndexes;
     std::array<AttributeRange, gl::MAX_VERTEX_ATTRIBS> mergeRanges;
     std::array<vk::BufferHelper *, gl::MAX_VERTEX_ATTRIBS> attribBufferHelper = {};
-    auto mergeAttribMask =
-        mergeClientAttribsRange(renderer, activeStreamedAttribs, startVertex,
-                                startVertex + vertexCount, mergeRanges, mergedIndexes);
+
+    bool isMergeUpdated                = false;
+    gl::AttributesMask mergeAttribMask = mergeClientAttribsRange(
+        renderer, activeStreamedAttribs, startVertex, startVertex + vertexCount, mergeRanges,
+        mergedIndexes, &isMergeUpdated);
+
+    // TODO: If the merge has not worked, reset the strides that were set during syncDirtyAttr().
+    if (isMergeUpdated)
+    {
+        ANGLE_TRY(resetVertexStrideForAllAttributes(contextVk, activeStreamedAttribs));
+    }
 
     for (size_t attribIndex : activeStreamedAttribs)
     {
