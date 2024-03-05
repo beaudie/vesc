@@ -70,6 +70,30 @@
       },
       "revId": "c8f2e241d187c05c97f68e800e019bb877054aeb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97f99a86_4bb6e9c1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-03-05T01:34:25Z",
+      "side": 1,
+      "message": "\u003e My suggestion is this:\n\nThat should be fine. \n\nMy intent was to see if we could have one interface for doing this in GL/CL API agonistic way. Here in this change, the hope was that `imageReadCL` would be that form (or close to it) and all of the usage could be moved to that - and was the reason for not giving it `CLContextVk` as input argument.\n\n\u003e (hasOverridingUse is not clear what exactly is overriding)\n\nI reasoned that whether a resource is being used or not boils down to its queue serial, and as such could associate with the same. See your point.\n\nGiven the suggestion, I will hold off the thought on GL/CL API agonistic way for now, and will push an update.",
+      "parentUuid": "50d7f797_41e120ed",
+      "range": {
+        "startLine": 1182,
+        "startChar": 0,
+        "endLine": 1182,
+        "endChar": 39
+      },
+      "revId": "c8f2e241d187c05c97f68e800e019bb877054aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
