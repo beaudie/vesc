@@ -56,6 +56,47 @@
       "message": "It looks like we use `Parse` functions in `src/libANGLE/renderer/driver_utils.cpp` to perform this i.e. `ParseARMDriverVersion`.\n\nCan we move this there and call it `ParseIntelDriverVersion`?",
       "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dbc5c55_7b5242fb",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T03:08:52Z",
+      "side": 1,
+      "message": "Doesn\u0027t look like the implementation is the same? (also, is it strange that the rnederer11_utils version is doing `low * 1000 + low`?) Maybe the d3d11 reported version and the Vulkan version are different.",
+      "parentUuid": "9b3875ad_cd1f185c",
+      "range": {
+        "startLine": 165,
+        "startChar": 19,
+        "endLine": 165,
+        "endChar": 43
+      },
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdbf7379_4b6d8296",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4661,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-05T03:08:52Z",
+      "side": 1,
+      "message": "You\u0027re disabling a lot more than vertex input dynamic state with this change. Could you please revert the `isArm44OrLess` rename, and add a separate bool for the win/intel workaround? Then that separate bool can apply only to the relevant dynamic state.\n\nThe expressions here also end up in chrome://gpu, and a generic `isExtendedDynamicStateSupported` is not descriptive.\n\nAlternatively, if you don\u0027t care at all about dynamic state on those old drivers, you can use the generic flag but call it `isExtendedDynamicStateBuggy`. Then at least the description is clear that the dynamic state is being disabled due to _bugs_ rather than _lack of support_.",
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
