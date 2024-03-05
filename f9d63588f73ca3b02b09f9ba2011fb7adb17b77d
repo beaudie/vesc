@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bf157ac_f499116d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-05T13:15:04Z",
+      "side": 1,
+      "message": "looks like nvidia driver has a bug in its yuv implementation, going to skip it",
+      "revId": "f9d63588f73ca3b02b09f9ba2011fb7adb17b77d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
