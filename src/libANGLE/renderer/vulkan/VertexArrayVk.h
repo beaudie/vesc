@@ -159,7 +159,12 @@ class VertexArrayVk : public VertexArrayImpl
         size_t startVertex,
         size_t endVertex,
         std::array<AttributeRange, gl::MAX_VERTEX_ATTRIBS> &mergeRangesOut,
-        std::array<size_t, gl::MAX_VERTEX_ATTRIBS> &mergedIndexesOut) const;
+        std::array<size_t, gl::MAX_VERTEX_ATTRIBS> &mergedIndexesOut,
+        bool *isMergeUpdated) const;
+
+    // TODO: Improve name.
+    angle::Result resetVertexStrideForAllAttributes(ContextVk *contextVk,
+                                                    const gl::AttributesMask activeStreamedAttribs);
 
     angle::Result setDefaultPackedInput(ContextVk *contextVk,
                                         size_t attribIndex,
