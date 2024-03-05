@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55ee396b_a4406d82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-05T21:28:18Z",
+      "side": 1,
+      "message": "Thanks :)",
+      "parentUuid": "c7e05825_d447db15",
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b3875ad_cd1f185c",
@@ -84,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc3e2294_ef0535e1",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-05T21:28:18Z",
+      "side": 1,
+      "message": "Updated and renamed the function to `ParseIntelDriverVersion()`. However, `IntelDriverVersion` has only one member (`mBuildNumber`) which will contain the driver version after construction.\n\nFor `IntelDriverVersion`, I added a Windows-only constructor to use major and minor versions for the build number, which is also used in `ParseIntelDriverVersion()` for Windows platforms.",
+      "parentUuid": "1732f856_d2183f21",
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdbf7379_4b6d8296",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 3
@@ -95,6 +131,24 @@
       "writtenOn": "2024-03-05T03:08:52Z",
       "side": 1,
       "message": "You\u0027re disabling a lot more than vertex input dynamic state with this change. Could you please revert the `isArm44OrLess` rename, and add a separate bool for the win/intel workaround? Then that separate bool can apply only to the relevant dynamic state.\n\nThe expressions here also end up in chrome://gpu, and a generic `isExtendedDynamicStateSupported` is not descriptive.\n\nAlternatively, if you don\u0027t care at all about dynamic state on those old drivers, you can use the generic flag but call it `isExtendedDynamicStateBuggy`. Then at least the description is clear that the dynamic state is being disabled due to _bugs_ rather than _lack of support_.",
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "700f025f_1071f96c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4661,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-05T21:28:18Z",
+      "side": 1,
+      "message": "I see. Thanks! Updated to include a separate flag to disable `useVertexInputBindingStrideDynamicState`.",
+      "parentUuid": "bdbf7379_4b6d8296",
       "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
