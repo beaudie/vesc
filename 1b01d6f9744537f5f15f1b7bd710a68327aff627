@@ -22,6 +22,40 @@
       },
       "revId": "1b01d6f9744537f5f15f1b7bd710a68327aff627",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a66f58be_d8341f39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-05T06:25:15Z",
+      "side": 1,
+      "message": "lgtm\n\nI\u0027m not super familiar with the translation phases in the Metal backend but given that this passes all tests and given the new tests I\u0027m sure it\u0027s solid. One small question.\n\nAlso cc\u0027ing Kyle in case he has time to take a look.\n\nLet me know if you need me to +2 this directly.",
+      "revId": "1b01d6f9744537f5f15f1b7bd710a68327aff627",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08ddee26_25edfab2",
+        "filename": "src/compiler/translator/msl/TranslatorMSL.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-05T06:25:15Z",
+      "side": 1,
+      "message": "This comment seems grammatically incorrect. Could you review it and revise if warranted?",
+      "revId": "1b01d6f9744537f5f15f1b7bd710a68327aff627",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
