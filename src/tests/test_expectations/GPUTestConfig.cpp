@@ -392,6 +392,11 @@ inline bool IsFindX6()
     return IsAndroidDevice("PGFM10");
 }
 
+inline bool IsPineapple()
+{
+    return IsAndroidDevice("Pineapple for arm64");
+}
+
 // Check whether the active GPU is a specific device based on the string device ID.
 inline bool IsDeviceIdGPU(const std::string &gpuDeviceId)
 {
@@ -510,20 +515,23 @@ GPUTestConfig::GPUTestConfig(bool isSwiftShader)
     mConditions[kConditionWgpu]      = true;
 
     // Devices are irrelevant if we are running on SW
-    mConditions[kConditionNexus5X]          = !isSwiftShader && IsNexus5X();
-    mConditions[kConditionPixel2OrXL]       = !isSwiftShader && (IsPixel2() || IsPixel2XL());
-    mConditions[kConditionPixel4OrXL]       = !isSwiftShader && (IsPixel4() || IsPixel4XL());
-    mConditions[kConditionPixel6]           = !isSwiftShader && (IsPixel6());
-    mConditions[kConditionPixel7]           = !isSwiftShader && (IsPixel7());
-    mConditions[kConditionFlipN2]           = !isSwiftShader && (IsOppoFlipN2());
-    mConditions[kConditionMaliG710]         = !isSwiftShader && (IsMaliG710());
-    mConditions[kConditionGalaxyA23]        = !isSwiftShader && (IsGalaxyA23());
-    mConditions[kConditionGalaxyA34]        = !isSwiftShader && (IsGalaxyA34());
-    mConditions[kConditionGalaxyA54]        = !isSwiftShader && (IsGalaxyA54());
-    mConditions[kConditionGalaxyS22]        = !isSwiftShader && (IsGalaxyS22());
-    mConditions[kConditionGalaxyS23]        = !isSwiftShader && (IsGalaxyS23());
-    mConditions[kConditionGalaxyQualcomm]   = !isSwiftShader && (IsGalaxyQualcomm());
-    mConditions[kConditionFindX6]           = !isSwiftShader && (IsFindX6());
+    // Android devices
+    mConditions[kConditionNexus5X]        = !isSwiftShader && IsNexus5X();
+    mConditions[kConditionPixel2OrXL]     = !isSwiftShader && (IsPixel2() || IsPixel2XL());
+    mConditions[kConditionPixel4OrXL]     = !isSwiftShader && (IsPixel4() || IsPixel4XL());
+    mConditions[kConditionPixel6]         = !isSwiftShader && (IsPixel6());
+    mConditions[kConditionPixel7]         = !isSwiftShader && (IsPixel7());
+    mConditions[kConditionFlipN2]         = !isSwiftShader && (IsOppoFlipN2());
+    mConditions[kConditionMaliG710]       = !isSwiftShader && (IsMaliG710());
+    mConditions[kConditionGalaxyA23]      = !isSwiftShader && (IsGalaxyA23());
+    mConditions[kConditionGalaxyA34]      = !isSwiftShader && (IsGalaxyA34());
+    mConditions[kConditionGalaxyA54]      = !isSwiftShader && (IsGalaxyA54());
+    mConditions[kConditionGalaxyS22]      = !isSwiftShader && (IsGalaxyS22());
+    mConditions[kConditionGalaxyS23]      = !isSwiftShader && (IsGalaxyS23());
+    mConditions[kConditionGalaxyQualcomm] = !isSwiftShader && (IsGalaxyQualcomm());
+    mConditions[kConditionFindX6]         = !isSwiftShader && (IsFindX6());
+    mConditions[kConditionPineapple]      = !isSwiftShader && IsPineapple();
+    // GPU devices
     mConditions[kConditionNVIDIAQuadroP400] = !isSwiftShader && IsNVIDIAQuadroP400();
     mConditions[kConditionNVIDIAGTX1660]    = !isSwiftShader && IsNVIDIAGTX1660();
 
