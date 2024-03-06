@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e05d8aed_9f56ee70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T01:08:51Z",
+      "side": 1,
+      "message": "No, it was just an FYI.",
+      "parentUuid": "8a43f8f6_7767ba2b",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e18e9a7b_11c45d19",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Leading zeros are considered as gaps but trailing aren\u0027t. For example:\n```\n0b00000010 - has gap\n0b00000101 - has gap\n0b00000011 - no gap\n```\n\nI added this helper to `BitSet` because it does not need any arguments; maybe it could have a better name. Do you think it would be better to keep it in `FramebufferGL`?",
       "parentUuid": "7edd2aeb_b64a851e",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb5fbe92_adbc2a39",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T01:08:51Z",
+      "side": 1,
+      "message": "Seems a little too special, so if it lives in `FramebufferGL` it\u0027s fine IMO. But Geoff\u0027s the main reviewer, so deferring to him.",
+      "parentUuid": "adfa07b6_9e3385cb",
       "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
