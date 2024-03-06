@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7d25cd9_e89d6790",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-06T21:39:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "257b8bb3_7554c9ff",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e20cef6b_b5ebbc34",
@@ -139,6 +157,24 @@
       "side": 1,
       "message": "I see, understood. Will push out an update soon.",
       "parentUuid": "166d81d1_54db0bff",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a0787a4_91689241",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-06T21:39:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91241f8c_945855ac",
       "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
