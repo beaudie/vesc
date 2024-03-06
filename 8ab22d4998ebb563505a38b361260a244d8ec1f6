@@ -34,6 +34,24 @@
       "parentUuid": "4625eb37_a91e0b8b",
       "revId": "8ab22d4998ebb563505a38b361260a244d8ec1f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70bee09a_4264a79a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T02:45:09Z",
+      "side": 1,
+      "message": "A bit fragile, but maybe we could make sure stuff added to `include/GLES2/gl2ext_angle.h` can be found in the xml in the right places?",
+      "parentUuid": "dd11471b_56915938",
+      "revId": "8ab22d4998ebb563505a38b361260a244d8ec1f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
