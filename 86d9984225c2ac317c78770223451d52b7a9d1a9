@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03395c12_d91fe062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-06T22:50:48Z",
+      "side": 1,
+      "message": "Some preliminary related CTS kernel tests we pass with this CL:\n```\ntest_api get_program_info_kernel_names\ntest_api get_kernel_info\ntest_api load_single_kernel\ntest_api load_two_kernels\ntest_api load_two_kernels_in_one\ntest_api load_two_kernels_manually\n```",
+      "revId": "86d9984225c2ac317c78770223451d52b7a9d1a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
