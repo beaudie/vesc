@@ -86,6 +86,24 @@
       "parentUuid": "ba911dca_6a09ec37",
       "revId": "72eaad988e5545d48730260771dc1eea59ef46a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e611d3e4_ed4b49dd",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-03-06T19:32:23Z",
+      "side": 1,
+      "message": "It turns out GL_ANGLE_texture_compression_dxt{3,5} are defined in the upstream Khronos XML, but dxt1 is not. So I\u0027ve simplified it and added an XML comment to that effect.",
+      "parentUuid": "a670ea08_c6e5d844",
+      "revId": "72eaad988e5545d48730260771dc1eea59ef46a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
