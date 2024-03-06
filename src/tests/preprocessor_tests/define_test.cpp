@@ -25,8 +25,7 @@ TEST_F(DefineTest, NonIdentifier)
     const char *expected =
         "\n"
         "2\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics,
                 print(pp::Diagnostics::PP_UNEXPECTED_TOKEN, pp::SourceLocation(0, 1), "2"));
 
@@ -53,8 +52,7 @@ TEST_F(DefineTest, RedefinePredefined)
         "100\n"
         "\n"
         "1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_REDEFINED,
                                     pp::SourceLocation(0, 1), "__LINE__"));
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_REDEFINED,
@@ -75,8 +73,7 @@ TEST_F(DefineTest, ReservedUnderScore1)
     const char *expected =
         "\n"
         "bar\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_WARNING_MACRO_NAME_RESERVED,
                                     pp::SourceLocation(0, 1), "__foo"));
 
@@ -91,8 +88,7 @@ TEST_F(DefineTest, ReservedUnderScore2)
     const char *expected =
         "\n"
         "baz\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_WARNING_MACRO_NAME_RESERVED,
                                     pp::SourceLocation(0, 1), "foo__bar"));
 
@@ -107,8 +103,7 @@ TEST_F(DefineTest, ReservedGL)
     const char *expected =
         "\n"
         "GL_foo\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics,
                 print(pp::Diagnostics::PP_MACRO_NAME_RESERVED, pp::SourceLocation(0, 1), "GL_foo"));
 
@@ -126,8 +121,7 @@ TEST_F(DefineTest, ObjRedefineValid)
         "\n"
         "(1-1)\n";
     // No error or warning.
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+    using testing::_;
     EXPECT_CALL(mDiagnostics, print(_, _, _)).Times(0);
 
     preprocess(input, expected);
@@ -143,8 +137,7 @@ TEST_F(DefineTest, ObjRedefineInvalid)
         "\n"
         "\n"
         "(0)\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics,
                 print(pp::Diagnostics::PP_MACRO_REDEFINED, pp::SourceLocation(0, 2), "foo"));
 
@@ -162,8 +155,7 @@ TEST_F(DefineTest, FuncRedefineValid)
         "\n"
         "( b )\n";
     // No error or warning.
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+    using testing::_;
     EXPECT_CALL(mDiagnostics, print(_, _, _)).Times(0);
 
     preprocess(input, expected);
@@ -179,8 +171,7 @@ TEST_F(DefineTest, FuncRedefineInvalid)
         "\n"
         "\n"
         "( a )\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics,
                 print(pp::Diagnostics::PP_MACRO_REDEFINED, pp::SourceLocation(0, 2), "foo"));
 
@@ -195,8 +186,7 @@ TEST_F(DefineTest, ObjBasic)
     const char *expected =
         "\n"
         "1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -208,8 +198,7 @@ TEST_F(DefineTest, ObjEmpty)
     const char *expected =
         "\n"
         "\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -223,8 +212,7 @@ TEST_F(DefineTest, ObjChain)
         "\n"
         "\n"
         "1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -238,8 +226,7 @@ TEST_F(DefineTest, ObjChainReverse)
         "\n"
         "\n"
         "1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -259,8 +246,7 @@ TEST_F(DefineTest, ObjRecursive)
         "foo\n"
         "bar\n"
         "baz\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -274,8 +260,7 @@ TEST_F(DefineTest, ObjCompositeChain)
         "\n"
         "\n"
         "a 1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -289,8 +274,7 @@ TEST_F(DefineTest, ObjCompositeChainReverse)
         "\n"
         "\n"
         "a 1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -310,8 +294,7 @@ TEST_F(DefineTest, ObjCompositeRecursive)
         "a b c foo\n"
         "b c a bar\n"
         "c a b baz\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -325,8 +308,7 @@ TEST_F(DefineTest, ObjChainSelfRecursive)
         "\n"
         "\n"
         "foo\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -342,8 +324,7 @@ TEST_F(DefineTest, ObjectLikeWithParens)
         "()1()\n"
         "\n"
         "()2()\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -355,8 +336,7 @@ TEST_F(DefineTest, FuncEmpty)
     const char *expected =
         "\n"
         "\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -368,8 +348,7 @@ TEST_F(DefineTest, FuncNoArgs)
     const char *expected =
         "\n"
         "bar\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -381,8 +360,7 @@ TEST_F(DefineTest, FuncOneArgUnused)
     const char *expected =
         "\n"
         "1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -394,8 +372,7 @@ TEST_F(DefineTest, FuncTwoArgsUnused)
     const char *expected =
         "\n"
         "1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -407,8 +384,7 @@ TEST_F(DefineTest, FuncOneArg)
     const char *expected =
         "\n"
         "((bar)+1)\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -420,8 +396,7 @@ TEST_F(DefineTest, FuncTwoArgs)
     const char *expected =
         "\n"
         "((bar)*(baz))\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -441,8 +416,7 @@ TEST_F(DefineTest, FuncEmptyArgs)
         "pass\n"
         "pass\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -456,8 +430,7 @@ TEST_F(DefineTest, FuncMacroAsParam)
         "\n"
         "\n"
         "1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -469,8 +442,7 @@ TEST_F(DefineTest, FuncOneArgMulti)
     const char *expected =
         "\n"
         "(this is a multi-word argument)\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -482,8 +454,7 @@ TEST_F(DefineTest, FuncTwoArgsMulti)
     const char *expected =
         "\n"
         "one fish,two fish,red fish,blue fish\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -497,8 +468,7 @@ TEST_F(DefineTest, FuncCompose)
         "\n"
         "\n"
         "(2*((1+(3))))\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -510,8 +480,7 @@ TEST_F(DefineTest, FuncArgWithParens)
     const char *expected =
         "\n"
         "(argument(with parens) FTW)\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -523,8 +492,7 @@ TEST_F(DefineTest, FuncMacroAsNonMacro)
     const char *expected =
         "\n"
         "foo bar\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -542,8 +510,7 @@ TEST_F(DefineTest, FuncExtraNewlines)
         "\n"
         "\n"
         "(1)\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -557,8 +524,7 @@ TEST_F(DefineTest, ChainObjToFunc)
         "\n"
         "\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -572,8 +538,7 @@ TEST_F(DefineTest, ChainObjToNonFunc)
         "\n"
         "\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -587,8 +552,7 @@ TEST_F(DefineTest, ChainObjToFuncWithArgs)
         "\n"
         "\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -604,8 +568,7 @@ TEST_F(DefineTest, ChainObjToFuncCompose)
         "\n"
         "\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -619,8 +582,7 @@ TEST_F(DefineTest, ChainObjToFuncParensInText1)
         "\n"
         "\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -636,8 +598,7 @@ TEST_F(DefineTest, ChainObjToFuncParensInText2)
         "\n"
         "\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -655,8 +616,7 @@ TEST_F(DefineTest, ChainObjToFuncMultiLevel)
         "\n"
         "\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -670,8 +630,7 @@ TEST_F(DefineTest, ObjToFuncRecursive)
         "\n"
         "\n"
         "B(0,C)\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -687,8 +646,7 @@ TEST_F(DefineTest, ChainFuncToFuncCompose)
         "\n"
         "\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -700,8 +658,7 @@ TEST_F(DefineTest, FuncSelfRecursive)
     const char *expected =
         "\n"
         "foo(2*(3))\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -713,8 +670,7 @@ TEST_F(DefineTest, FuncSelfCompose)
     const char *expected =
         "\n"
         "foo(2*(foo(2*(3))))\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -726,8 +682,7 @@ TEST_F(DefineTest, FuncSelfComposeNonFunc)
     const char *expected =
         "\n"
         "foo\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -739,8 +694,7 @@ TEST_F(DefineTest, FuncSelfComposeNonFuncMultiTokenArg)
     const char *expected =
         "\n"
         "1+foo\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -754,8 +708,7 @@ TEST_F(DefineTest, FinalizeUnexpandedMacro)
         "\n"
         "\n"
         "expand(just once)\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -767,8 +720,7 @@ TEST_F(DefineTest, FuncArgWithCommas)
     const char *expected =
         "\n"
         "pass\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -782,8 +734,7 @@ TEST_F(DefineTest, FuncArgObjMaroWithComma)
         "\n"
         "\n"
         "(two,words)\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -797,8 +748,7 @@ TEST_F(DefineTest, FuncLeftParenInMacroRightParenInText)
         "\n"
         "\n"
         "b*2\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -810,8 +760,7 @@ TEST_F(DefineTest, RepeatedArg)
     const char *expected =
         "\n"
         "1 1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -823,8 +772,7 @@ TEST_F(DefineTest, FuncMissingRightParen)
     const char *expected =
         "\n"
         "\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_UNTERMINATED_INVOCATION,
                                     pp::SourceLocation(0, 2), "foo"));
 
@@ -843,8 +791,7 @@ TEST_F(DefineTest, FuncIncorrectArgCount)
         "\n"
         "\n"
         "\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics,
                 print(pp::Diagnostics::PP_MACRO_TOO_FEW_ARGS, pp::SourceLocation(0, 2), "foo"));
     EXPECT_CALL(mDiagnostics,
@@ -867,8 +814,7 @@ TEST_F(DefineTest, Undef)
         "1\n"
         "\n"
         "foo\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     preprocess(input, expected);
 }
 
@@ -892,8 +838,7 @@ TEST_F(DefineTest, UndefPredefined)
         "100\n"
         "\n"
         "1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_UNDEFINED,
                                     pp::SourceLocation(0, 1), "__LINE__"));
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_UNDEFINED,
@@ -922,8 +867,6 @@ TEST_F(DefineTest, UndefRedefine)
         "foo\n"
         "\n"
         "2\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
 
     preprocess(input, expected);
 }
@@ -967,8 +910,6 @@ TEST_F(DefineTest, C99Example)
         "f(2 * (2+(3,4)-0,1)) | f(2 * (~ 5)) &\n"
         " f(2 * (0,1))^m(0,1);\n"
         "int i[] = { 1, 23, 4, 5, };\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
 
     preprocess(input, expected);
 }
@@ -977,8 +918,6 @@ TEST_F(DefineTest, Predefined_GL_ES)
 {
     const char *input    = "GL_ES\n";
     const char *expected = "1\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
 
     preprocess(input, expected);
 }
@@ -987,8 +926,6 @@ TEST_F(DefineTest, Predefined_VERSION)
 {
     const char *input    = "__VERSION__\n";
     const char *expected = "100\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
 
     preprocess(input, expected);
 }
@@ -996,8 +933,6 @@ TEST_F(DefineTest, Predefined_VERSION)
 TEST_F(DefineTest, Predefined_LINE1)
 {
     const char *str = "\n\n__LINE__";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 3), 100, SH_GLES2_SPEC, _))
-        .Times(1);
 
     pp::Token token;
     lexSingleToken(str, &token);
@@ -1010,8 +945,6 @@ TEST_F(DefineTest, Predefined_LINE2)
     const char *str =
         "#line 10\n"
         "__LINE__\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
 
     pp::Token token;
     lexSingleToken(str, &token);
@@ -1022,8 +955,6 @@ TEST_F(DefineTest, Predefined_LINE2)
 TEST_F(DefineTest, Predefined_FILE1)
 {
     const char *const str[] = {"", "", "__FILE__"};
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(2, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
 
     pp::Token token;
     lexSingleToken(3, str, &token);
@@ -1034,8 +965,6 @@ TEST_F(DefineTest, Predefined_FILE1)
 TEST_F(DefineTest, Predefined_FILE2)
 {
     const char *const str[] = {"#line 10 20\n", "__FILE__"};
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
 
     pp::Token token;
     lexSingleToken(2, str, &token);
@@ -1058,8 +987,6 @@ TEST_F(DefineTest, ExpandedDefinedParsedInsideIf)
         "\n"
         "1\n"
         "\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
     preprocess(input, expected);
 }
 
@@ -1072,8 +999,6 @@ TEST_F(DefineTest, ExpandedDefinedNotParsedOutsideIf)
     const char *expected =
         "\n"
         "defined(bar)\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
     preprocess(input, expected);
 }
 
@@ -1090,8 +1015,7 @@ TEST_F(DefineTest, NegativeShiftInLineDirective)
         "\n"
         "\n"
         "\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_UNDEFINED_SHIFT, _, _)).Times(4);
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_INVALID_LINE_NUMBER, _, _)).Times(2);
     preprocess(input, expected);
@@ -1106,8 +1030,7 @@ TEST_F(DefineTest, UndefineInInvocation)
         "#undef G\n"
         "1, 2)\n";
     const char *expected = "\n\n\n1 2\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
+
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_UNDEFINED_WHILE_INVOKED,
                                     pp::SourceLocation(0, 3), _));
 
@@ -1124,8 +1047,6 @@ TEST_F(DefineTest, UndefineInInvocationPreLParen)
         "(1, 2)\n";
     const char *expected = "\n\n\n1 2\n";
 
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_UNDEFINED_WHILE_INVOKED,
                                     pp::SourceLocation(0, 3), _));
 
@@ -1144,8 +1065,6 @@ TEST_F(DefineTest, RecursiveMacroNameInsideIncompleteMacroInvocationInMacroExpan
         "\n"
         "\n"
         "\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
     preprocess(input, expected);
 }
 
@@ -1167,8 +1086,6 @@ TEST_F(DefineTest, UndefInsideRecursiveMacroInvocation)
         "\n"
         "\n"
         "\n";
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
     preprocess(input, expected);
 }
 
@@ -1192,115 +1109,8 @@ TEST_F(DefineTest, LongMacroInvocationChain)
 
     pp::PreprocessorSettings settings(SH_GLES2_SPEC);
     settings.maxMacroExpansionDepth = 19;
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 100, SH_GLES2_SPEC, _))
-        .Times(1);
 
     preprocess(inputStream.str().c_str(), settings);
-}
-
-// Tests what happens when a line directive is between macro name and parenthesis and unterminated
-// argument list. Mainly to explain
-// LineDirectiveInvalidNumberWithParenthesisFromFunctionInvocationInMiddleOfUnterminatedFunctionInvocation
-TEST_F(DefineTest, LineDirectiveInMiddleOfUnterminatedFunctionInvocation)
-{
-    const char kInput[]    = R"(
-#define f() a
-f
-#line 6
-(x)";
-    const char kExpected[] = R"(
-
-
-
-
-)";
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_UNTERMINATED_INVOCATION,
-                                    pp::SourceLocation(0, 3), "f"))
-        .Times(1);
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 2), 100, SH_GLES2_SPEC, _))
-        .Times(1);
-    preprocess(kInput, kExpected);
-}
-
-// Tests what happens when an invalid line directive is between macro name and parenthesis and
-// unterminated argument list. Mainly to explain
-// LineDirectiveInvalidNumberWithParenthesisFromFunctionInvocationInMiddleOfUnterminatedFunctionInvocation
-TEST_F(DefineTest, LineDirectiveInvalidNumberInMiddleOfUnterminatedFunctionInvocation)
-{
-    const char kInput[]    = R"(
-#define f() a
-f
-#line a
-(x)";
-    const char kExpected[] = R"(
-
-
-
-)";
-    EXPECT_CALL(mDiagnostics,
-                print(pp::Diagnostics::PP_INVALID_LINE_NUMBER, pp::SourceLocation(0, 4), "a"))
-        .Times(1);
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_UNTERMINATED_INVOCATION,
-                                    pp::SourceLocation(0, 3), "f"))
-        .Times(1);
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 2), 100, SH_GLES2_SPEC, _))
-        .Times(1);
-    preprocess(kInput, kExpected);
-}
-
-// Tests what happens when an invalid line directive with number coming from a function invocation
-// is between macro name and parenthesis and unterminated argument list. Mainly to explain
-// LineDirectiveInvalidNumberWithParenthesisFromFunctionInvocationInMiddleOfUnterminatedFunctionInvocation
-TEST_F(DefineTest,
-       LineDirectiveInvalidNumberFromFunctionInvocationInMiddleOfUnterminatedFunctionInvocation)
-{
-    const char kInput[]    = R"(
-#define f() a
-f
-#line f()
-(x)";
-    const char kExpected[] = R"(
-
-
-
-)";
-    EXPECT_CALL(mDiagnostics,
-                print(pp::Diagnostics::PP_INVALID_LINE_NUMBER, pp::SourceLocation(0, 4), "a"))
-        .Times(1);
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_UNTERMINATED_INVOCATION,
-                                    pp::SourceLocation(0, 3), "f"))
-        .Times(1);
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 2), 100, SH_GLES2_SPEC, _))
-        .Times(1);
-    preprocess(kInput, kExpected);
-}
-
-// Tests what happens when an invalid line directive with number that has a parenthesis coming from
-// a function invocation is between macro name and parenthesis and unterminated argument list. This
-// used to assert.
-TEST_F(
-    DefineTest,
-    LineDirectiveInvalidNumberWithParenthesisFromFunctionInvocationInMiddleOfUnterminatedFunctionInvocation)
-{
-    const char kInput[]    = R"(
-#define f() a(
-f
-#line f()
-(x)";
-    const char kExpected[] = R"(
-
-
-
-)";
-    EXPECT_CALL(mDiagnostics,
-                print(pp::Diagnostics::PP_INVALID_LINE_NUMBER, pp::SourceLocation(0, 4), "a"))
-        .Times(1);
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_UNTERMINATED_INVOCATION,
-                                    pp::SourceLocation(0, 3), "f"))
-        .Times(1);
-    EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 2), 100, SH_GLES2_SPEC, _))
-        .Times(1);
-    preprocess(kInput, kExpected);
 }
 
 }  // namespace angle
