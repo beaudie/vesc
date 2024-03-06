@@ -981,13 +981,13 @@ void CommandBuffer::popDebugGroup()
 }
 
 #if ANGLE_MTL_EVENT_AVAILABLE
-void CommandBuffer::queueEventSignal(id<MTLEvent> event, uint64_t value)
+uint64_t CommandBuffer::queueEventSignal(id<MTLEvent> event, uint64_t value)
 {
     std::lock_guard<std::mutex> lg(mLock);
 
     ASSERT(readyImpl());
 
-    if (mActiveCommandEncoder && mActiveCommandEncoder->getType() == CommandEncoder::RENDER)
+    if (mActiveCommandEncoder)
     {
         // We cannot set event when there is an active render pass, defer the setting until the pass
         // end.
@@ -1000,6 +1000,7 @@ void CommandBuffer::queueEventSignal(id<MTLEvent> event, uint64_t value)
     {
         setEventImpl(event, value);
     }
+    return mQueueSerial;
 }
 
 void CommandBuffer::serverWaitEvent(id<MTLEvent> event, uint64_t value)
@@ -1107,23 +1108,14 @@ void CommandBuffer::setPendingEvents()
 #if ANGLE_MTL_EVENT_AVAILABLE
 void CommandBuffer::setEventImpl(id<MTLEvent> event, uint64_t value)
 {
-    ASSERT(!mActiveCommandEncoder || mActiveCommandEncoder->getType() != CommandEncoder::RENDER);
-    // For non-render command encoder, we can safely end it, so that we can encode a signal
-    // event.
-    forceEndingCurrentEncoder();
-
+    ASSERT(!mActiveCommandEncoder);
     [get() encodeSignalEvent:event value:value];
 }
 
 void CommandBuffer::waitEventImpl(id<MTLEvent> event, uint64_t value)
 {
-    ASSERT(!mActiveCommandEncoder || mActiveCommandEncoder->getType() != CommandEncoder::RENDER);
-
-    forceEndingCurrentEncoder();
-
-    // Encoding any pending event's signalling.
+    ASSERT(!mActiveCommandEncoder);
     setPendingEvents();
-
     [get() encodeWaitForEvent:event value:value];
 }
 #endif  // #if ANGLE_MTL_EVENT_AVAILABLE
