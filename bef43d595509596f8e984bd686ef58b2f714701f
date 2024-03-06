@@ -178,6 +178,48 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8baceb3c_82ad54c3",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-06T20:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9d52675_89e66a83",
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e477ab62_f9b64585",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-06T20:20:25Z",
+      "side": 1,
+      "message": "Yeah, different implementations.  Just trying to prevent helper creep.  Can leave it.",
+      "parentUuid": "0dbc5c55_7b5242fb",
+      "range": {
+        "startLine": 165,
+        "startChar": 19,
+        "endLine": 165,
+        "endChar": 43
+      },
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdbf7379_4b6d8296",

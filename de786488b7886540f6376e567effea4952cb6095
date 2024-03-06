@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "689aabf7_aff992db",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-06T20:20:25Z",
+      "side": 1,
+      "message": "nit: It\u0027s a little weird to use ifdefs here, but asserts in `IntelDriverVersion`, but not a big deal.  Might be better to just return 0 in both.",
+      "range": {
+        "startLine": 297,
+        "startChar": 0,
+        "endLine": 297,
+        "endChar": 33
+      },
+      "revId": "de786488b7886540f6376e567effea4952cb6095",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
