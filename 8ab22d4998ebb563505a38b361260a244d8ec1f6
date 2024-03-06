@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4625eb37_a91e0b8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-03-06T00:17:48Z",
+      "side": 1,
+      "message": "Also Shahbaz mentioned we should probably have presubmit checks to catch these kinds of errors, but I\u0027m not sure how to write that yet. Especially since it involves validating that the human-readable plain text extensions/*.txt files are represented in the machine-readable .xml files. I do have a shell script hack I mentioned in anglebug:8432 which may be enough to at least catch some of the errors.\n\nThoughts?",
+      "revId": "8ab22d4998ebb563505a38b361260a244d8ec1f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
