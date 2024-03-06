@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a27f73d_18652cb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-06T22:42:38Z",
+      "side": 1,
+      "message": "*Thank you* for tracking down and fixing this issue! Left a question on the associated bug; wondering if this will fix another one which was just reported.\n\nlgtm+2 to get the fix in more quickly.\n\n+geofflang as FYI.",
+      "revId": "a526e4244bf2446518638de4e4e6f0e5927ef749",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
