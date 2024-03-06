@@ -68,6 +68,24 @@
       "parentUuid": "e0b62157_2cc03668",
       "revId": "6ab85083156628388fcb8cef0d0c07d7f892f5a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5004a2c_d9a52d1f",
+        "filename": "src/libANGLE/renderer/metal/mtl_msl_utils.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-06T12:35:40Z",
+      "side": 1,
+      "message": "template \u003cclass T\u003e\n    ApplyOStream(T) -\u003e ApplyOStream\u003cT\u003e;\n\nIt\u0027s a \"user defined deduction guide\" \nhttps://en.cppreference.com/w/cpp/language/class_template_argument_deduction\n\nIt says \"For constructor call ApplyOStream with parameter type T, construct type ApplyOStream\u003cT\u003e and use the constructor of that type\".\n\nIt\u0027s used when you have a class template and want to refer to a constructor but are lazy to not put the full type with `T\u003cA\u003e(somethingcomplex)`, rather you\u0027d want to let the arguments define the type `T(somethingcomplex)`.\n\nInterestingly this variant of the patch didn\u0027t actually need it, as function style cast construction has implicit guides or something. At least on clang17. `ApplyOStream(SomethingComplex())`\n\n\nHowever, the compile fix patch needs it, for `ApplyOStream{SomethingComplex()}`.",
+      "parentUuid": "51a40ffc_9253a33f",
+      "revId": "6ab85083156628388fcb8cef0d0c07d7f892f5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
