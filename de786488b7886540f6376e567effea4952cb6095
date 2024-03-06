@@ -22,6 +22,30 @@
       },
       "revId": "de786488b7886540f6376e567effea4952cb6095",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49cdb699_57915125",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-06T22:00:05Z",
+      "side": 1,
+      "message": "Updated so the new `IntelDriverVersion` constructor would return 0 if used on non-Windows platforms.",
+      "parentUuid": "689aabf7_aff992db",
+      "range": {
+        "startLine": 297,
+        "startChar": 0,
+        "endLine": 297,
+        "endChar": 33
+      },
+      "revId": "de786488b7886540f6376e567effea4952cb6095",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
