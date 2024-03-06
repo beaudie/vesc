@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62121815_226e821b",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T03:28:12Z",
+      "side": 1,
+      "message": "I guess that works because this is windows-only (see other comment). Still might be simpler to have a `MakeSlashThePathSeparator(path)` function that\u0027s no-op everywhere except windows, and use that both here and in the other file.",
+      "parentUuid": "f2a21e5a_1ee0ee3e",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e20cef6b_b5ebbc34",
         "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
         "patchSetId": 3
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Same as other comment, I believe this would work right?\n```\nfind_last_of(\"/\\\\\")\n```",
       "parentUuid": "e20cef6b_b5ebbc34",
+      "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "166d81d1_54db0bff",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T03:28:12Z",
+      "side": 1,
+      "message": "Not on Linux (including Android), `\\` is a valid character in file names. It\u0027ll be much simpler to replace `\\` with `/` (only on windows) and just work with `/` as the universal separator.",
+      "parentUuid": "01daed86_0101a805",
       "revId": "fe1c521e8a59fca63b7afe512081b9286c2b2076",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
