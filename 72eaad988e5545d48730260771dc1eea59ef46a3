@@ -68,6 +68,24 @@
       "message": "These are three separate extensions:\n\n    GL_ANGLE_texture_compression_dxt1\n    GL_ANGLE_texture_compression_dxt3\n    GL_ANGLE_texture_compression_dxt5",
       "revId": "72eaad988e5545d48730260771dc1eea59ef46a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a670ea08_c6e5d844",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-03-06T19:22:46Z",
+      "side": 1,
+      "message": "Good catch, I\u0027ll fix that.",
+      "parentUuid": "ba911dca_6a09ec37",
+      "revId": "72eaad988e5545d48730260771dc1eea59ef46a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
