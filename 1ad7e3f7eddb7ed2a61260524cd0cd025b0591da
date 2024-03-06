@@ -22,6 +22,30 @@
       },
       "revId": "1ad7e3f7eddb7ed2a61260524cd0cd025b0591da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "378fad7d_d13e11f3",
+        "filename": "src/libANGLE/cl_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-06T21:44:11Z",
+      "side": 1,
+      "message": "Very true, tbh I was also not a fan of this macro build-up.\n\nWill update based on your suggestions, thanks.",
+      "parentUuid": "7dda34d3_f4c7f8cd",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 0
+      },
+      "revId": "1ad7e3f7eddb7ed2a61260524cd0cd025b0591da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
