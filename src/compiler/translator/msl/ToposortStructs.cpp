@@ -188,7 +188,7 @@ TIntermFunctionDefinition *CreateStructEqualityFunction(TSymbolTable &symbolTabl
     {
         const TField &aField    = *aFields[idx];
         const TType &aFieldType = *aField.type();
-        auto &aFieldName        = aField.name();
+        Name aFieldName(aField);
 
         if (aFieldType.isArray())
         {
