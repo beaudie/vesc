@@ -22,6 +22,30 @@
       },
       "revId": "3d8c436fca9517d33b1f27901fc75d1b395b66ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88a68a5e_24f08dd7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1690,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T03:01:42Z",
+      "side": 1,
+      "message": "Initially yes, those sound reasonable. Over time, you\u0027d likely want to add more options. Like `desiredICD` serves to make RendererVk choose SwiftShader. If eventually we run CL tests over SwiftShader, we have to figure out a way to control this param. Same with preferred ids in the presence of dual-GPU systems.\n\nFor useValidationLayers, you could probably choose between `YesIfAvailable` and `No` based on whether asserts are enabled. `Yes` exists to make sure we fail if VVL cannot be found but we think it should be, like when we run on the bots.",
+      "parentUuid": "21f8058e_410ab081",
+      "range": {
+        "startLine": 1683,
+        "startChar": 37,
+        "endLine": 1690,
+        "endChar": 84
+      },
+      "revId": "3d8c436fca9517d33b1f27901fc75d1b395b66ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
