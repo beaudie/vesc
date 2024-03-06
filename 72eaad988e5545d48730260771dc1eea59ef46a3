@@ -16,6 +16,24 @@
       "message": "`glLogicOp` doesn\u0027t exist in GLES, so this alias doesn\u0027t make sense?",
       "revId": "72eaad988e5545d48730260771dc1eea59ef46a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6efae413_4dae38ed",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-03-06T05:09:50Z",
+      "side": 1,
+      "message": "It\u0027s a little odd, but it does help with GL loaders anyway. It\u0027s possible to make a merged loader that supports both GL and GLES. If the loader has the option to treat them as aliased, it can still help things.",
+      "parentUuid": "1cf7b9a0_cb05329c",
+      "revId": "72eaad988e5545d48730260771dc1eea59ef46a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
