@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dda34d3_f4c7f8cd",
+        "filename": "src/libANGLE/cl_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T03:37:40Z",
+      "side": 1,
+      "message": "I think Geoff mentioned this before, but in case I misremember, the TRY macros should _always_ return Stop. So `ANGLE_CL_IMPL_TRY_ERROR` is in fact an anomaly here. It looks like it\u0027s there because `CLCommandQueueVk`\u0027s constructor is making failable calls.\n\nThe way we deal with that is to make constructors not do anything that can fail, then call `initialize()` on the object which _can_ return `angle::Result`.\n\nSince that usage is very limited right now, my suggestion is to just fix `CLCommandQueueVk` in this CL, make `CLContextVk::createCommandQueue` call `initialize` after allocation, and have `ANGLE_CL_IMPL_TRY_ERROR` return `Stop` (no need for new macro)",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 0
+      },
+      "revId": "1ad7e3f7eddb7ed2a61260524cd0cd025b0591da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
