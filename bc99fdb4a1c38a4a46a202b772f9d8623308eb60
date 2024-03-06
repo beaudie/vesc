@@ -16,6 +16,24 @@
       "message": "i see this error -\n```\n[9130/13314] ClearTest.ChangeFramebufferAttachmentFromRGBAtoRGB/ES2_Vulkan (FAIL)\n\n[ RUN      ] ClearTest.ChangeFramebufferAttachmentFromRGBAtoRGB/ES2_Vulkan\n../../src/tests/test_utils/ANGLETest.cpp:65: Failure\nRendererVk.cpp:803 (DebugUtilsMessenger): [ UNASSIGNED-Threading-MultipleThreads-Write ] Validation Error: [ UNASSIGNED-Threading-MultipleThreads-Write ] Object 0: handle \u003d 0x30000000003, type \u003d VK_OBJECT_TYPE_PIPELINE_CACHE; | MessageID \u003d 0xa05b236e | vkMergePipelineCaches():  THREADING ERROR : object of type VkPipelineCache is simultaneously used in current thread 140192253978368 and thread 140192800797120\n                            Object: 0x30000000003 (type \u003d Pipeline Cache(16))\n\nangle::PrintStackBacktrace() at crash_handler_posix.cpp:498\nangle::(anonymous namespace)::TestPlatform_logError(angle::PlatformMethods*, char const*) at ANGLETest.cpp:?\n__is_long at string:1793\ngl::LogMessage::~LogMessage() at debug.cpp:?\n__is_long at string:1793\ndebug_log_msg at logging.cpp:?\nValidationObject::LogError(std::__Cr::basic_string_view\u003cchar, std::__Cr::char_traits\u003cchar\u003e \u003e, LogObjectList const\u0026, Location const\u0026, char const*, ...) const at chassis.h:2357\ncounter\u003cVkPipelineCache_T*\u003e::HandleErrorOnWrite(std::__Cr::shared_ptr\u003cObjectUseData\u003e const\u0026, VkPipelineCache_T*, Location const\u0026) at thread_safety_validation.h:229\ncounter\u003cVkPipelineCache_T*\u003e::StartWrite(VkPipelineCache_T*, Location const\u0026) at thread_safety.cpp:?\nThreadSafety::PreCallRecordMergePipelineCaches(VkDevice_T*, VkPipelineCache_T*, unsigned int, VkPipelineCache_T* const*, RecordObject const\u0026) at thread_safety.cpp:732\n~unique_lock at unique_lock.h:62\n~unique_lock at unique_lock.h:62\nrx::RendererVk::mergeIntoPipelineCache(rx::vk::Context*, rx::vk::PipelineCache const\u0026) at RendererVk.cpp:?\nrx::ProgramExecutableVk::warmUpPipelineCache(rx::vk::Context*, rx::vk::PipelineRobustness, rx::vk::PipelineProtectedAccess, rx::vk::RenderPass*) at ProgramExecutableVk.cpp:?\nrx::(anonymous namespace)::WarmUpTask::operator()() at ProgramVk.cpp:218\nmarkAsReady at WorkerThread.cpp:43\nreset at unique_ptr.h:278\nstart_thread at pthread_create.c:463\nclone at clone.S:97\nERR: RendererVk.cpp:803 (DebugUtilsMessenger): [ UNASSIGNED-Threading-MultipleThreads-Write ] Validation Error: [ UNASSIGNED-Threading-MultipleThreads-Write ] Object 0: handle \u003d 0x30000000003, type \u003d VK_OBJECT_TYPE_PIPELINE_CACHE; | MessageID \u003d 0xa05b236e | vkMergePipelineCaches():  THREADING ERROR : object of type VkPipelineCache is simultaneously used in current thread 140192253978368 and thread 140192800797120\n                            Object: 0x30000000003 (type \u003d Pipeline Cache(16))\n\nBacktrace:\n```\n\nthis is what i got out of the clarification from khronos group -\n\n1. only the `dstCache` in the `vkMergePipelineCaches` API needs to be externally synchronized irrespective of whether the cache was created with \"external bit\".\n\n2. a read / write into a cache that is internally synchronized doesn\u0027t need mutex locks from app\n\nim curious what happens in this usecase -\n1. threadA is executing a merge with dstCache \u003d cacheA\n2. threadB calls createpipeline call with cacheA as the pipeline cache\n\nany thoughts?",
       "revId": "bc99fdb4a1c38a4a46a202b772f9d8623308eb60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbe8aa09_25e02c5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-06T22:32:40Z",
+      "side": 1,
+      "message": "`cacheA` was created without the external bit, so it is supposed to be internally synchronized",
+      "parentUuid": "25cb679f_1df37198",
+      "revId": "bc99fdb4a1c38a4a46a202b772f9d8623308eb60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
