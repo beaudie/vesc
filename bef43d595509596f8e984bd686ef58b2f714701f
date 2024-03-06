@@ -120,6 +120,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31d26ce5_5ca82f85",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T03:08:42Z",
+      "side": 1,
+      "message": "Given that the Intel driver on windows and mesa are completely different, suggest calling it `ParseIntelWindowsDriverVersion()`.",
+      "parentUuid": "fc3e2294_ef0535e1",
+      "revId": "bef43d595509596f8e984bd686ef58b2f714701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdbf7379_4b6d8296",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 3

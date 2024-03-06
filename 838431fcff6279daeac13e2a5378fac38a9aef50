@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4acdb4f_524782c4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4019,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T03:08:42Z",
+      "side": 1,
+      "message": "On the same subject, this doesn\u0027t apply to Linux, right? Better it make it clear it\u0027s about the windows driver.",
+      "revId": "838431fcff6279daeac13e2a5378fac38a9aef50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
