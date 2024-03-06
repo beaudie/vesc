@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "26def449_d1003347",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7748,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-06T03:16:38Z",
+      "side": 1,
+      "message": "We don\u0027t `goto` in ANGLE, please don\u0027t set this precedent! (I like goto for error handling in C, but it interacts terribly with C++)\n\nYou could very well duplicate the `CreateZeroNode` here as it\u0027s very simple, but for future reference, you could also put everything up to `CreateZeroNode` in a `addNonConstructorFunctionCallImpl` function and return `nullptr` here (and at the end). Then this function calls the impl, and on `nullptr` returns `CreateZeroNode`.",
+      "revId": "0efdb4bc94cef1a6b8297134eaaa2953b1011b97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f37aea9_5bf3e45d",
         "filename": "src/tests/compiler_tests/Parse_test.cpp",
         "patchSetId": 1
