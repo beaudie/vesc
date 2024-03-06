@@ -202,15 +202,15 @@ def _AddDeqpFiles(suite_name):
         '../../third_party/VK-GL-CTS/src/external/openglcts/data/mustpass/*/*/main/*.txt',
         '../../src/tests/deqp_support/*.txt'
     ]
-    if '_gles2_' in suite_name:
+    if '_gles2_' in suite_name or '_egl_' in suite_name:
         patterns.append('gen/vk_gl_cts_data/data/gles2/**')
-    if '_gles3_' in suite_name:
+    if '_gles3_' in suite_name or '_egl_' in suite_name:
         patterns.append('gen/vk_gl_cts_data/data/gles3/**')
         patterns.append('gen/vk_gl_cts_data/data/gl_cts/data/gles3/**')
-    if '_gles31_' in suite_name:
+    if '_gles31_' in suite_name or '_egl_' in suite_name:
         patterns.append('gen/vk_gl_cts_data/data/gles31/**')
         patterns.append('gen/vk_gl_cts_data/data/gl_cts/data/gles31/**')
-    if '_gles32_' in suite_name:
+    if '_gles32_' in suite_name or '_egl_' in suite_name:
         patterns.append('gen/vk_gl_cts_data/data/gl_cts/data/gles32/**')
 
     _MakeTar('/sdcard/chromium_tests_root/deqp.tar', patterns)
