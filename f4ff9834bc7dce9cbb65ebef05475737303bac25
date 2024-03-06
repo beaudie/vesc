@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b88c9aa3_9aaf8c99",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-06T23:14:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f0da856d_4ad3f7a4",
+      "range": {
+        "startLine": 3340,
+        "startChar": 8,
+        "endLine": 3340,
+        "endChar": 50
+      },
+      "revId": "f4ff9834bc7dce9cbb65ebef05475737303bac25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82f1f66c_f985df37",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "the shading rate is generated using CPU into a buffer. Only the copy from buffer to image happens with the `copyBufferToImage` command",
       "parentUuid": "82f1f66c_f985df37",
+      "range": {
+        "startLine": 1673,
+        "startChar": 56,
+        "endLine": 1673,
+        "endChar": 64
+      },
+      "revId": "f4ff9834bc7dce9cbb65ebef05475737303bac25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b4e5790_e41dd475",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-06T23:14:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "44308e10_091cc2d8",
       "range": {
         "startLine": 1673,
         "startChar": 56,
