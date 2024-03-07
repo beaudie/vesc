@@ -256,8 +256,7 @@ def _CompareHashes(local_path, device_path):
 
     if device_path.startswith('/data'):
         # Use run-as for files that reside on /data, which aren't accessible without root
-        cmd = "run-as {TEST_PACKAGE_NAME} sh -c '{cmd}'".format(
-            TEST_PACKAGE_NAME=TEST_PACKAGE_NAME, cmd=cmd)
+        cmd = "sh -c '{cmd}'".format(TEST_PACKAGE_NAME=TEST_PACKAGE_NAME, cmd=cmd)
 
     device_hash = _AdbShell(cmd).decode().strip()
     if not device_hash:
@@ -355,15 +354,13 @@ def PrepareRestrictedTraces(traces):
         tmp_path = posixpath.join(app_tmp_path, lib_name)
         logging.debug('_PushToAppDir: Pushing %s to %s' % (local_path, tmp_path))
         try:
-            _AdbRun(['push', local_path, tmp_path])
-            _AdbShell('run-as ' + TEST_PACKAGE_NAME + ' cp ' + tmp_path + ' ./angle_traces/')
-            _AdbShell('rm ' + tmp_path)
+            _AdbRun(['push', local_path, '/data/data/com.android.angle.test/angle_traces/'])
         finally:
-            _RemoveDeviceFile(tmp_path)
+            pass
 
     # Create the directories we need
     _AdbShell('mkdir -p ' + app_tmp_path)
-    _AdbShell('run-as ' + TEST_PACKAGE_NAME + ' mkdir -p angle_traces')
+    _AdbShell(' mkdir -p /data/data/com.android.angle.test/angle_traces')
 
     # Set up each trace
     for idx, trace in enumerate(sorted(traces)):
