@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a04486a5_ac6b02d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-07T14:46:05Z",
+      "side": 1,
+      "message": "+1\n\nIf you add a test under `MultisampledRenderToTextureTest.cpp`, you don\u0027t even need those feature overrides; for the foreseeable future, there will always be drivers without MSRTSS (i.e. desktop vendors) so the bug would have been caught by the bots.\n\nUnless the bug only has a visible side effect on mobile where ops matter?",
+      "parentUuid": "83943e75_bc6fc0b4",
+      "revId": "89d43c4e3a98fb70e7adb84f24f2fd9a8d08af46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2628dfe9_b5c86d67",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
