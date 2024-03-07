@@ -1711,7 +1711,7 @@ angle::Result FramebufferVk::ensureFragmentShadingRateImageAndViewInitialized(
             contextVk, gl::TextureType::_2D,
             VkExtent3D{fragmentShadingRateAttachmentWidth, fragmentShadingRateAttachmentHeight, 1},
             renderer->getFormat(angle::FormatID::R8_UINT), 1,
-            VK_IMAGE_USAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR |
+            VK_IMAGE_USAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR | VK_IMAGE_USAGE_STORAGE_BIT |
                 VK_IMAGE_USAGE_TRANSFER_DST_BIT,
             gl::LevelIndex(0), 1, 1, false,
             contextVk->getProtectionType() == vk::ProtectionType::Protected));
@@ -1847,6 +1847,40 @@ angle::Result FramebufferVk::generateFragmentShadingRateWithCPU(
     return angle::Result::Continue;
 }
 
+angle::Result FramebufferVk::generateFragmentShadingRateWithCompute(
+    ContextVk *contextVk,
+    const bool isGainZero,
+    const uint32_t fragmentShadingRateWidth,
+    const uint32_t fragmentShadingRateHeight,
+    const uint32_t fragmentShadingRateBlockWidth,
+    const uint32_t fragmentShadingRateBlockHeight,
+    const uint32_t foveatedAttachmentWidth,
+    const uint32_t foveatedAttachmentHeight,
+    const std::vector<gl::FocalPoint> &activeFocalPoints)
+{
+    ASSERT(activeFocalPoints.size() < gl::IMPLEMENTATION_MAX_FOCAL_POINTS);
+
+    UtilsVk::GenerateFragmentShadingRateParameters shadingRateParams;
+    shadingRateParams.textureWidth          = foveatedAttachmentWidth;
+    shadingRateParams.textureHeight         = foveatedAttachmentHeight;
+    shadingRateParams.attachmentBlockWidth  = fragmentShadingRateBlockWidth;
+    shadingRateParams.attachmentBlockHeight = fragmentShadingRateBlockHeight;
+    shadingRateParams.attachmentWidth       = fragmentShadingRateWidth;
+    shadingRateParams.attachmentHeight      = fragmentShadingRateHeight;
+    shadingRateParams.numFocalPoints        = 0;
+
+    for (const gl::FocalPoint &focalPoint : activeFocalPoints)
+    {
+        ASSERT(focalPoint != gl::kInvalidFocalPoint);
+        shadingRateParams.focalPoints[shadingRateParams.numFocalPoints] = focalPoint;
+        shadingRateParams.numFocalPoints++;
+    }
+
+    return contextVk->getUtils().generateFragmentShadingRate(contextVk, &mFragmentShadingRateImage,
+                                                             &mFragmentShadingRateImageView,
+                                                             isGainZero, shadingRateParams);
+}
+
 angle::Result FramebufferVk::updateFragmentShadingRateAttachment(
     ContextVk *contextVk,
     const gl::FoveationState &foveationState,
@@ -1879,10 +1913,23 @@ angle::Result FramebufferVk::updateFragmentShadingRateAttachment(
         }
     }
 
-    return generateFragmentShadingRateWithCPU(
-        contextVk, isGainZero, fragmentShadingRateWidth, fragmentShadingRateHeight,
-        fragmentShadingRateBlockWidth, fragmentShadingRateBlockHeight, foveatedAttachmentWidth,
-        foveatedAttachmentHeight, activeFocalPoints);
+    if (contextVk->getFeatures().generateFragmentShadingRateAttchementWithCpu.enabled)
+    {
+
+        ANGLE_TRY(generateFragmentShadingRateWithCPU(
+            contextVk, isGainZero, fragmentShadingRateWidth, fragmentShadingRateHeight,
+            fragmentShadingRateBlockWidth, fragmentShadingRateBlockHeight, foveatedAttachmentWidth,
+            foveatedAttachmentHeight, activeFocalPoints));
+    }
+    else
+    {
+        ANGLE_TRY(generateFragmentShadingRateWithCompute(
+            contextVk, isGainZero, fragmentShadingRateWidth, fragmentShadingRateHeight,
+            fragmentShadingRateBlockWidth, fragmentShadingRateBlockHeight, foveatedAttachmentWidth,
+            foveatedAttachmentHeight, activeFocalPoints));
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result FramebufferVk::updateFoveationState(ContextVk *contextVk,

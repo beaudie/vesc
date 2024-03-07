@@ -281,6 +281,16 @@ class FramebufferVk : public FramebufferImpl
         const uint32_t foveatedAttachmentWidth,
         const uint32_t foveatedAttachmentHeight,
         const std::vector<gl::FocalPoint> &activeFocalPoints);
+    angle::Result generateFragmentShadingRateWithCompute(
+        ContextVk *contextVk,
+        const bool isGainZero,
+        const uint32_t fragmentShadingRateWidth,
+        const uint32_t fragmentShadingRateHeight,
+        const uint32_t fragmentShadingRateBlockWidth,
+        const uint32_t fragmentShadingRateBlockHeight,
+        const uint32_t foveatedAttachmentWidth,
+        const uint32_t foveatedAttachmentHeight,
+        const std::vector<gl::FocalPoint> &activeFocalPoints);
     angle::Result updateFragmentShadingRateAttachment(ContextVk *contextVk,
                                                       const gl::FoveationState &foveationState,
                                                       const gl::Extents &foveatedAttachmentSize);
