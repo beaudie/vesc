@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc072887_4fbf1acd",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-03-07T20:11:23Z",
+      "side": 1,
+      "message": "nit: the other members don\u0027t do the m prefix, probably should do the same here.",
+      "range": {
+        "startLine": 79,
+        "startChar": 51,
+        "endLine": 79,
+        "endChar": 52
+      },
+      "revId": "0f4a47407c48123317d4105c089a8ecfa24ff6a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
