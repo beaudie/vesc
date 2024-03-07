@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d111fda_c640b4ca",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-07T02:53:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6efae413_4dae38ed",
+      "revId": "72eaad988e5545d48730260771dc1eea59ef46a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba911dca_6a09ec37",

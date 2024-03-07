@@ -88,6 +88,24 @@
       "parentUuid": "664f5173_d01170e5",
       "revId": "8ab22d4998ebb563505a38b361260a244d8ec1f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "064cd639_a0d21db2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-07T02:53:39Z",
+      "side": 1,
+      "message": "Yes it is (manual), and you\u0027re right, it\u0027d be ideal if it\u0027s autogen\u0027ed.\n\n+1 to future CL.",
+      "parentUuid": "1f3e0ef4_fa013396",
+      "revId": "8ab22d4998ebb563505a38b361260a244d8ec1f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
