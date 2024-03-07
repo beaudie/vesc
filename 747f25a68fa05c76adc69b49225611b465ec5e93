@@ -71,6 +71,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bad6fd1_f1e14454",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-07T02:22:36Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7edd2aeb_b64a851e",
@@ -120,6 +137,41 @@
       "side": 1,
       "message": "Seems a little too special, so if it lives in `FramebufferGL` it\u0027s fine IMO. But Geoff\u0027s the main reviewer, so deferring to him.",
       "parentUuid": "adfa07b6_9e3385cb",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "426916d0_9b74c041",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-07T02:22:36Z",
+      "side": 1,
+      "message": "Seeing how this helper is used in the calling code, I would rather it live in the BitSet implementation to avoid leaking implementation details and to be as efficiently implemented as possible.\n\nBut - please document in a comment what it does, and give those examples.",
+      "parentUuid": "bb5fbe92_adbc2a39",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20de0d92_daedb036",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3407,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-07T02:22:36Z",
+      "side": 1,
+      "message": "Does this new test fail reliably on the affected devices without the workaround?\n\nIf not, is there any way to do repeated runs within the test to increase the probability that it fails reliably?",
       "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
