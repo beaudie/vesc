@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f67afde3_cbff5e0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-07T14:38:05Z",
+      "side": 1,
+      "message": "A couple of robustness suggestions after the fact.",
+      "revId": "27423bffffaea5bc48e62e3fd2192387d357f224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f8ea2e3_8bc7983b",
+        "filename": "src/libANGLE/renderer/metal/mtl_msl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-07T14:38:05Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this assert happen before L381? Or maybe it should check the local `location` variable instead.",
+      "revId": "27423bffffaea5bc48e62e3fd2192387d357f224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ae1e130_a28ab467",
+        "filename": "src/libANGLE/renderer/metal/mtl_msl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-07T14:38:05Z",
+      "side": 1,
+      "message": "Maybe assert that `index \u003d\u003d 0` here.",
+      "revId": "27423bffffaea5bc48e62e3fd2192387d357f224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
