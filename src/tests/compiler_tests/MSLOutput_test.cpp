@@ -904,3 +904,20 @@ void main(){
 })";
     compile(kShader);
 }
+
+// Tests that monomorphizing functions does not crash if there is a main prototype.
+TEST_F(MSLOutputTest, MonomorphizeMainPrototypeNoCrash)
+{
+    const char kShader[] = R"(precision mediump float;
+struct S { sampler2D source; };
+vec4 f(S s)
+{
+    return texture2D(s.source, vec2(5));
+}
+uniform S green;
+void main();
+void main() {
+    f(green);
+})";
+    compile(kShader);
+}
