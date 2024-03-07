@@ -1744,8 +1744,12 @@ void StateManager11::setRenderTarget(ID3D11RenderTargetView *rtv, ID3D11DepthSte
     {
         unsetConflictingView(gl::PipelineType::GraphicsPipeline, dsv, true);
     }
-
+    angle::ComPtr<ID3D11InfoQueue> infoQueue;
+    angle::ComPtr<ID3D11Device>(mRenderer->getDevice()).As(&infoQueue);
+    ASSERT(infoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() == 0);
     mRenderer->getDeviceContext()->OMSetRenderTargets(1, &rtv, dsv);
+    ASSERT(infoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() == 0);
+
     mCurRTVs.clear();
     mCurRTVs.update(0, rtv);
     mCurrentDSV.clear();
@@ -1767,7 +1771,11 @@ void StateManager11::setRenderTargets(ID3D11RenderTargetView **rtvs,
         unsetConflictingView(gl::PipelineType::GraphicsPipeline, dsv, true);
     }
 
+    angle::ComPtr<ID3D11InfoQueue> infoQueue;
+    angle::ComPtr<ID3D11Device>(mRenderer->getDevice()).As(&infoQueue);
+    ASSERT(infoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() == 0);
     mRenderer->getDeviceContext()->OMSetRenderTargets(numRTVs, (numRTVs > 0) ? rtvs : nullptr, dsv);
+    ASSERT(infoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() == 0);
     mCurRTVs.clear();
     for (UINT i = 0; i < numRTVs; i++)
     {
@@ -2095,9 +2103,25 @@ angle::Result StateManager11::syncFramebuffer(const gl::Context *context)
 
     ASSERT(maxExistingRT <= static_cast<UINT>(context->getCaps().maxDrawBuffers));
 
+    angle::ComPtr<ID3D11InfoQueue> infoQueue;
+    angle::ComPtr<ID3D11Device>(mRenderer->getDevice()).As(&infoQueue);
+    ASSERT(infoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() == 0);
+
     // Apply the render target and depth stencil
     mRenderer->getDeviceContext()->OMSetRenderTargets(maxExistingRT, framebufferRTVs.data(),
                                                       framebufferDSV);
+    uint64_t totalErrors = infoQueue->GetNumStoredMessagesAllowedByRetrievalFilter();
+    std::vector<uint8_t> messageData;
+    for (uint64_t i = 0; i < totalErrors; ++i) {
+        SIZE_T messageLength = 0;
+        infoQueue->GetMessage(i, nullptr, &messageLength);
+        messageData.resize(messageLength);
+        D3D11_MESSAGE* message = reinterpret_cast<D3D11_MESSAGE*>(messageData.data());
+        infoQueue->GetMessage(i, message, &messageLength);
+        std::cerr << "EEEE: " << message->pDescription << std::endl;
+    }
+    ASSERT(totalErrors == 0);
+
     mCurRTVs.clear();
     for (UINT i = 0; i < maxExistingRT; i++)
     {
@@ -3940,9 +3964,13 @@ angle::Result StateManager11::syncUAVsForGraphics(const gl::Context *context)
     {
         ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
         UINT baseUAVRegister = static_cast<UINT>(mExecutableD3D->getPixelShaderKey().size());
+        angle::ComPtr<ID3D11InfoQueue> infoQueue;
+        angle::ComPtr<ID3D11Device>(mRenderer->getDevice()).As(&infoQueue);
+        ASSERT(infoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() == 0);
         deviceContext->OMSetRenderTargetsAndUnorderedAccessViews(
             D3D11_KEEP_RENDER_TARGETS_AND_DEPTH_STENCIL, nullptr, nullptr, baseUAVRegister,
             uavList.highestUsed + 1, uavList.data.data(), nullptr);
+        ASSERT(infoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() == 0);
     }
 
     return angle::Result::Continue;
