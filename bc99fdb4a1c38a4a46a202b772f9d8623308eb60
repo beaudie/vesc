@@ -34,6 +34,23 @@
       "parentUuid": "25cb679f_1df37198",
       "revId": "bc99fdb4a1c38a4a46a202b772f9d8623308eb60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7633ef0_eb5c3ca7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-07T03:02:05Z",
+      "side": 1,
+      "message": "I\u0027ve been rethinking our external synchronization of the pipeline cache for a while now, and I think maybe we should just go back to internally synchronized, except for those caches that don\u0027t need a lock at all.\n\nLike the Program\u0027s cache could be externally synchronized because it doesn\u0027t actually need a lock, but the renderer\u0027s cache can be internally synchronized.\n\nThe reason is that if we _do_ need a lock, locking around `vkCreateGraphicsPipelines` is just less granular than the driver doing the locking, so we\u0027re hurting parallelism. Externally synchronized only helps us if we _don\u0027t_ actually need the lock (because for example the share group lock is already protecting the cache).\n\nI\u0027m on vacation, but ping me next week to revisit this. Basically I think we should revert `PipelineCacheAccess`, pass the cache directly around and don\u0027t have an associated mutex. The renderer\u0027s cache would be internally synchronized, and the other caches which don\u0027t use a mutex now would have the externally synchronized flag but no mutex.",
+      "revId": "bc99fdb4a1c38a4a46a202b772f9d8623308eb60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
