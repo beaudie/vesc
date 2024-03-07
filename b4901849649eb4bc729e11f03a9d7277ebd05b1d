@@ -33,6 +33,24 @@
       "message": "This is likely incorrect. `glPolygonModeANGLE` has different validation rules than the OpenGL\u0027s `glPolygonMode`.",
       "revId": "b4901849649eb4bc729e11f03a9d7277ebd05b1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d2ea156_b087b02d",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-03-07T15:16:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10e9d796_93ae827b",
+      "revId": "b4901849649eb4bc729e11f03a9d7277ebd05b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
