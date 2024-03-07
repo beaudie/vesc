@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c07f21dd_6a4ee2ca",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-03-07T20:17:36Z",
+      "side": 1,
+      "message": "I like this trick :)",
+      "range": {
+        "startLine": 268,
+        "startChar": 11,
+        "endLine": 268,
+        "endChar": 69
+      },
+      "revId": "37c9651c7104acb80cf472a2160897721b37bfa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
