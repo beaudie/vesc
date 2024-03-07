@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c62f1b39_2dec6b1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-07T14:49:35Z",
+      "side": 1,
+      "message": "Verified locally, thanks Roman!",
+      "revId": "569180b24539f14ffdd96fc30d73dd0d9c0eff63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "171f7760_e1db2e62",
         "filename": "src/tests/py_utils/android_helper.py",
         "patchSetId": 1
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "(I also considered adding `mkdir` to the shell command but I find this slightly better due to consistency)",
       "parentUuid": "171f7760_e1db2e62",
+      "range": {
+        "startLine": 217,
+        "startChar": 60,
+        "endLine": 217,
+        "endChar": 69
+      },
+      "revId": "569180b24539f14ffdd96fc30d73dd0d9c0eff63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "679d07fe_50bb61f4",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-07T14:49:35Z",
+      "side": 1,
+      "message": "LGTM with your explanation and comment.",
+      "parentUuid": "685296f1_228dce48",
       "range": {
         "startLine": 217,
         "startChar": 60,
