@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47a2f1d5_32a2ae3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-07T23:52:38Z",
+      "side": 1,
+      "message": "This test does fail on samsung GPU before the fix and pass after the fix. But this test was passing on all bots so far because it either skip or supports natively. On Pixel 8 if I disable supportsMultisampledRenderToSingleSampled and supportsMultisampledRenderToSingleSampledGOOGLEX, then test gets skipped due to mDepthStencilResolveProperties.independentResolveNone is FALSE.",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
