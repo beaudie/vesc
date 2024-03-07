@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb7b9f03_687ec33e",
+        "filename": "src/compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-07T21:37:15Z",
+      "side": 1,
+      "message": "```suggestion\n            ASSERT(data.isOriginalUsed || function-\u003eisMain());\n```",
+      "revId": "a81b6d37a81ffcf64416a81a893a65ea62c22531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40a96cdc_1f3d0375",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-07T21:37:15Z",
+      "side": 1,
+      "message": "Suggest putting this in GLSLTest.cpp so it runs on all backends. Unless there\u0027s something specific to MSL, that\u0027s my general advice, because you never know what other issues it may uncover with other backends.",
+      "revId": "a81b6d37a81ffcf64416a81a893a65ea62c22531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
