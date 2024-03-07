@@ -16,6 +16,23 @@
       "message": "LGTM. Alexey, are you happy with the changes?",
       "revId": "b4901849649eb4bc729e11f03a9d7277ebd05b1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10e9d796_93ae827b",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-07T13:57:25Z",
+      "side": 1,
+      "message": "This is likely incorrect. `glPolygonModeANGLE` has different validation rules than the OpenGL\u0027s `glPolygonMode`.",
+      "revId": "b4901849649eb4bc729e11f03a9d7277ebd05b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
