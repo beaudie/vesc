@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b6eb794_13efe976",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-03-07T20:29:52Z",
+      "side": 1,
+      "message": "nit: `CreateDirectory` or `CreateDirectories`",
+      "range": {
+        "startLine": 43,
+        "startChar": 5,
+        "endLine": 43,
+        "endChar": 15
+      },
+      "revId": "c31ed35b83182d01fc2118f205ae277beff4daad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c680122_f7684bc1",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-03-07T20:29:52Z",
+      "side": 1,
+      "message": "This doesn\u0027t need to be in the generic header, it\u0027s not referenced anywhere except CreatePath for Windows.",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 57
+      },
+      "revId": "c31ed35b83182d01fc2118f205ae277beff4daad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75b1aafa_c9499e47",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-03-07T20:29:52Z",
+      "side": 1,
+      "message": "Ideally we don\u0027t write out things to a temp dir for compilation. ANGLE runs in lots of environments where we don\u0027t have file access (Chrome, Android sometimes, ..). \n\nIs it possible to prepend the includes to the compiled sources? Sort of like doing the proprocessor phase ouselves?",
+      "range": {
+        "startLine": 414,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 5
+      },
+      "revId": "c31ed35b83182d01fc2118f205ae277beff4daad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
