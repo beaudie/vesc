@@ -16,6 +16,46 @@
       "message": "This test does fail on samsung GPU before the fix and pass after the fix. But this test was passing on all bots so far because it either skip or supports natively. On Pixel 8 if I disable supportsMultisampledRenderToSingleSampled and supportsMultisampledRenderToSingleSampledGOOGLEX, then test gets skipped due to mDepthStencilResolveProperties.independentResolveNone is FALSE.",
       "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d7c4eb9_90972794",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-07T23:57:41Z",
+      "side": 1,
+      "message": "any reason to not squash this with https://chromium-review.googlesource.com/c/angle/angle/+/5350741?",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcbdb173_ab588d5d",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4083,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-07T23:57:41Z",
+      "side": 1,
+      "message": "blue?",
+      "range": {
+        "startLine": 4083,
+        "startChar": 12,
+        "endLine": 4083,
+        "endChar": 18
+      },
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
