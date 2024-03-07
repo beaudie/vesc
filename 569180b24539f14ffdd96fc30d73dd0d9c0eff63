@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "171f7760_e1db2e62",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-07T14:25:49Z",
+      "side": 1,
+      "message": "Note: this might look a bit odd but the proper way to add an empty dir to a tar archive complicates the code more than I\u0027d like.. this way is awkward but more consistent, easier to read",
+      "range": {
+        "startLine": 217,
+        "startChar": 60,
+        "endLine": 217,
+        "endChar": 69
+      },
+      "revId": "569180b24539f14ffdd96fc30d73dd0d9c0eff63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
