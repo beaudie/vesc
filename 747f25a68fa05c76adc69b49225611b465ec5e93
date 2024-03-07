@@ -159,6 +159,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d76f3614_3132c5a2",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-07T10:48:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "426916d0_9b74c041",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20de0d92_daedb036",
@@ -172,6 +190,24 @@
       "writtenOn": "2024-03-07T02:22:36Z",
       "side": 1,
       "message": "Does this new test fail reliably on the affected devices without the workaround?\n\nIf not, is there any way to do repeated runs within the test to increase the probability that it fails reliably?",
+      "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14cea2a1_ffcda0e7",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3407,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-07T10:48:21Z",
+      "side": 1,
+      "message": "Without the workaround, the affected devices repeat the application\u0027s draw call several times at different framebuffer offsets. Specifically, the test results in multiple squares instead of one. This failure is consistent; the bogus draws are a function of the framebuffer configuration.\n\nOnce this lands, I\u0027ll submit the JS version to the WebGL CTS.",
+      "parentUuid": "20de0d92_daedb036",
       "revId": "747f25a68fa05c76adc69b49225611b465ec5e93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
