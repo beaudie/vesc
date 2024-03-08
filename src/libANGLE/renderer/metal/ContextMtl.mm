@@ -1812,8 +1812,6 @@ void ContextMtl::endBlitAndComputeEncoding()
 
 void ContextMtl::endEncoding(bool forceSaveRenderPassContent)
 {
-    endBlitAndComputeEncoding();
-
     if (mRenderEncoder.valid())
     {
         if (forceSaveRenderPassContent)
@@ -1824,6 +1822,8 @@ void ContextMtl::endEncoding(bool forceSaveRenderPassContent)
 
         endRenderEncoding(&mRenderEncoder);
     }
+    // End blit encoder after render encoder, as render encoder might create a blit encoder.
+    endBlitAndComputeEncoding();
 }
 
 void ContextMtl::flushCommandBuffer(mtl::CommandBufferFinishOperation operation)
