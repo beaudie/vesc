@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f864ebd9_bf3c065e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-08T16:48:48Z",
+      "side": 1,
+      "message": "Dawn was browken, reported here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5349697",
+      "revId": "61f02c00a6e4613189031100573864df0815c906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
