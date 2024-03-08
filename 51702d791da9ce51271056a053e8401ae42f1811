@@ -16,6 +16,24 @@
       "message": "It looks like this CL has broken the Dawn roller. Can you please revert this CL.\n\nHere is a link to the failed compile:\n\nhttps://logs.chromium.org/logs/skia/6830b9852889aa11/+/steps/ninja/0/stdout\n\nFAILED: obj/third_party/externals/angle2/src/libANGLE/renderer/metal/angle_metal_backend.mtl_msl_utils.o \n/opt/s/w/ir/ccache_mac/bin/ccache clang++ -MD -MF obj/third_party/externals/angle2/src/libANGLE/renderer/metal/angle_metal_backend.mtl_msl_utils.o.d -DNDEBUG -DSK_TRIVIAL_ABI\u003d\\[\\[clang::trivial_abi\\]\\] -DANGLE_ENABLE_SHARE_CONTEXT_LOCK\u003d1 -DANGLE_ENABLE_CONTEXT_MUTEX\u003d1 -DANGLE_ENABLE_METAL -DANGLE_ENABLE_OPENGL -DANGLE_ENABLE_GL_DESKTOP_BACKEND -DANGLE_ENABLE_OPENGL_NULL -DGL_SILENCE_DEPRECATION -DANGLE_ENABLE_CGL -DANGLE_ENABLE_NULL -DLIBANGLE_IMPLEMENTATION -DANGLE_PLATFORM_EXPORT\u003d -I../../../../../../skia/third_party/externals/angle2/include -I../../../../../../skia/third_party/externals/angle2/src -Igen/angle -I../../../../../../skia/third_party/externals/angle2/src/common/base -I../../../../../../skia/third_party/externals/angle2/src/common/third_party/xxhash -I../../../../../../skia/third_party/externals/angle2/src/third_party/khronos  -Wno-attributes -ffp-contract\u003doff -fstrict-aliasing -fPIC -fvisibility\u003dhidden -isysroot /opt/s/w/ir/cache/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -target arm64-apple-macos11 -O3 -g -gdwarf-4 -DREBUILD_IF_CHANGED_xcode_build_version\u003d12c33 -Wexit-time-destructors -Wglobal-constructors -w -Wbad-function-cast -Wconditional-uninitialized -Wextra-semi-stmt -Wfloat-conversion -Winconsistent-missing-destructor-override -Wmissing-field-initializers -Wnewline-eof -Wnon-virtual-dtor -Wredundant-parens -Wreturn-std-move -Wshadow -Wshadow-field -Wtautological-type-limit-compare -Wundefined-reinterpret-cast -Wunneeded-internal-declaration -Wunused-but-set-variable -Wsuggest-destructor-override -Wsuggest-override -Wparentheses -Wrange-loop-analysis -Wstrict-prototypes -Wunreachable-code-aggressive -Wshorten-64-to-32 -Wno-nullability-completeness -Wno-unguarded-availability -fno-objc-arc -std\u003dc++17 -fvisibility-inlines-hidden -fno-exceptions -fno-rtti -c ../../../../../../skia/third_party/externals/angle2/src/libANGLE/renderer/metal/mtl_msl_utils.mm -o obj/third_party/externals/angle2/src/libANGLE/renderer/metal/angle_metal_backend.mtl_msl_utils.o\n../../../../../../skia/third_party/externals/angle2/src/libANGLE/renderer/metal/mtl_msl_utils.mm:129:48: error: no matching conversion for functional-style cast from \u0027const rx::(anonymous namespace)::UserDefinedNameExpr\u0027 to \u0027rx::(anonymous namespace)::ApplyOStream\u003crx::(anonymous namespace)::UserDefinedNameExpr\u003e\u0027\n    std::visit([\u0026stream](auto \u0026\u0026v) { stream \u003c\u003c ApplyOStream(v); }, sv.value);\n                                               ^~~~~~~~~~~~~~\n/opt/s/w/ir/cache/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/type_traits:3545:23: note: in instantiation of function template specialization \u0027rx::(anonymous namespace)::operator\u003c\u003c(std::ostream \u0026, ApplyOStream\u003cstd::variant\u003cUserDefinedNameExpr, InternalNameComponentExpr\u003e \u003e)::(anonymous class)::operator()\u003cconst rx::(anonymous namespace)::UserDefinedNameExpr \u0026\u003e\u0027 requested here\n_LIBCPP_INVOKE_RETURN(_VSTD::forward\u003c_Fp\u003e(__f)(_VSTD::forward\u003c_Args\u003e(__args)...))",
       "revId": "51702d791da9ce51271056a053e8401ae42f1811",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28ea207b_1542ac9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-08T16:47:35Z",
+      "side": 1,
+      "message": "This would fix the compile issue. Sorry for the inconvenience.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5352262",
+      "parentUuid": "d9980bf7_dab8708f",
+      "revId": "51702d791da9ce51271056a053e8401ae42f1811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
