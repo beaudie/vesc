@@ -164,6 +164,30 @@
       },
       "revId": "c31ed35b83182d01fc2118f205ae277beff4daad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d0b07e3_f4f3de4e",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-08T20:54:54Z",
+      "side": 1,
+      "message": "@geofflang@chromium.org - How much do we want to invest on doing preproc phase ourselves?\n\nGut says this might be a potential perf hit in the event that the user might have some `#include` towards the end of the source file (embedded data to init an array perhaps).\n\nAlso, when tokenizing each line - we need to handle cases like comments, potential user syntax errors, `#include vs. #  include` etc.\n\nThoughts on this?",
+      "parentUuid": "55f19b47_5ae1b873",
+      "range": {
+        "startLine": 414,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 5
+      },
+      "revId": "c31ed35b83182d01fc2118f205ae277beff4daad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
