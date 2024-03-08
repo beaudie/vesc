@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72079762_759ed1a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-08T00:02:02Z",
+      "side": 1,
+      "message": "I try to see the test fail on bots before the fix.",
+      "parentUuid": "0d7c4eb9_90972794",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcbdb173_ab588d5d",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-03-07T23:57:41Z",
       "side": 1,
       "message": "blue?",
+      "range": {
+        "startLine": 4083,
+        "startChar": 12,
+        "endLine": 4083,
+        "endChar": 18
+      },
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ed94d2d_82f2c4e1",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4083,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-08T00:02:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcbdb173_ab588d5d",
       "range": {
         "startLine": 4083,
         "startChar": 12,
