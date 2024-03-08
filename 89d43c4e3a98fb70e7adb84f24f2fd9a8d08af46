@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2429d7b_9fe46978",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-08T00:08:55Z",
+      "side": 1,
+      "message": "The test is here https://chromium-review.googlesource.com/c/angle/angle/+/5353371",
+      "parentUuid": "a04486a5_ac6b02d9",
+      "revId": "89d43c4e3a98fb70e7adb84f24f2fd9a8d08af46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2628dfe9_b5c86d67",
@@ -49,6 +67,24 @@
       "writtenOn": "2024-03-07T03:13:49Z",
       "side": 1,
       "message": "Should we make `hasAny*Access()` helpers automatically check for unresolve too? Could prevent similar errors elsewhere (though this is the only user so far)",
+      "revId": "89d43c4e3a98fb70e7adb84f24f2fd9a8d08af46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9820b426_92c833b8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-08T00:08:55Z",
+      "side": 1,
+      "message": "The problem is hasANyColorAccess takes colorIndexVk but hasColorUnresolveAttachment takes colorIndexGL. I am not seeing any easy way to do the conversion inside renderPassCommands.",
+      "parentUuid": "2628dfe9_b5c86d67",
       "revId": "89d43c4e3a98fb70e7adb84f24f2fd9a8d08af46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
