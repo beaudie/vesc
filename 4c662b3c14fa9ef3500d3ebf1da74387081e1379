@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1902945f_7489009d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-03-08T09:04:13Z",
+      "side": 1,
+      "message": "LGTM. Thanks.",
+      "revId": "4c662b3c14fa9ef3500d3ebf1da74387081e1379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb3d92e3_0b01b059",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-03-08T09:04:13Z",
+      "side": 1,
+      "message": "nit: \n```suggestion\n    // End blit encoder after render encoder, as endRenderEncoding() might create a\n    // blit encoder to resolve the visibility results.\n```",
+      "range": {
+        "startLine": 1827,
+        "startChar": 49,
+        "endLine": 1827,
+        "endChar": 91
+      },
+      "revId": "4c662b3c14fa9ef3500d3ebf1da74387081e1379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
