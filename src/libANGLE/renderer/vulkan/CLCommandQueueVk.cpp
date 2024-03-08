@@ -326,8 +326,7 @@ angle::Result CLCommandQueueVk::enqueueCopyBufferRect(const cl::Buffer &srcBuffe
     auto srcBufferVk    = &srcBuffer.getImpl<CLBufferVk>();
     auto dstBufferVk    = &dstBuffer.getImpl<CLBufferVk>();
     uint8_t *mapPointer = nullptr;
-    ANGLE_TRY(srcBufferVk->getMapPtr(&mapPointer));
-    ASSERT(mapPointer);
+    ANGLE_TRY(srcBufferVk->map(mapPointer));
     ANGLE_TRY(dstBufferVk->setRect(static_cast<const void *>(mapPointer), srcRect, dstRect));
 
     ANGLE_TRY(createEvent(eventCreateFunc));
@@ -454,9 +453,12 @@ angle::Result CLCommandQueueVk::enqueueUnmapMemObject(const cl::Memory &memory,
                                                       const cl::EventPtrs &waitEvents,
                                                       CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    ANGLE_TRY(enqueueWaitForEvents(waitEvents));
-    ANGLE_TRY(createEvent(eventCreateFunc, waitEvents));
-    ANGLE_TRY(memory.getImpl<CLMemoryVk>().unmap());
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+
+    ANGLE_TRY(processWaitlist(waitEvents));
+
+    memory.getImpl<CLMemoryVk>().unmap();
+    ANGLE_TRY(createEvent(eventCreateFunc));
 
     return angle::Result::Continue;
 }
