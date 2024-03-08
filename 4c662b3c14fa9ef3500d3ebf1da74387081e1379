@@ -39,6 +39,30 @@
       },
       "revId": "4c662b3c14fa9ef3500d3ebf1da74387081e1379",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46450af2_d4fcfad7",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-08T09:07:56Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "bb3d92e3_0b01b059",
+      "range": {
+        "startLine": 1827,
+        "startChar": 49,
+        "endLine": 1827,
+        "endChar": 91
+      },
+      "revId": "4c662b3c14fa9ef3500d3ebf1da74387081e1379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
