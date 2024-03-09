@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff8fa502_77b179ad",
+        "filename": "src/libANGLE/renderer/metal/mtl_msl_utils.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-09T09:12:12Z",
+      "side": 1,
+      "message": "This field is `uint32_t` so the assert is redundant.",
+      "revId": "3c0be614cf44c2a28f130209da107b2a33315a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
