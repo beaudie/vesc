@@ -39,6 +39,30 @@
       },
       "revId": "50e0ee5ec2ba97913db2bac1ba645acdcf0fe1ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f9c190_2421eaaa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4701,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-09T18:53:52Z",
+      "side": 1,
+      "message": "\u003e why not look at mPhysicalDeviceProperties.driverVersion instead\n\na bit embarrassing but our vulkan driver doesn\u0027t have reliable driver versioning 😭",
+      "parentUuid": "9ae29e78_55c12754",
+      "range": {
+        "startLine": 4697,
+        "startChar": 0,
+        "endLine": 4701,
+        "endChar": 63
+      },
+      "revId": "50e0ee5ec2ba97913db2bac1ba645acdcf0fe1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
