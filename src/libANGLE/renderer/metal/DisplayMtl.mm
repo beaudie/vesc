@@ -131,6 +131,27 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
             return angle::Result::Stop;
         }
 
+#if 1
+        if (@available(macOS 10.13, iOS 11.0, tvOS 11.0, *)) {
+            // TODO: add newer Metal interface as well
+            MTLCaptureManager* captureManager = [MTLCaptureManager sharedCaptureManager];
+            if (!captureManager.isCapturing) {
+                MTLCaptureDescriptor* captureDescriptor = [[MTLCaptureDescriptor alloc] init];
+                captureDescriptor.captureObject = mMetalDevice.get();
+    #if 0
+                captureDescriptor.destination = MTLCaptureDestinationGPUTraceDocument;
+                NSURL *tempUrl = [NSURL fileURLWithPath:NSTemporaryDirectory()];
+                captureDescriptor.outputURL = [NSURL URLWithString:@"capture.gputrace" relativeToURL:tempUrl];
+    #endif
+                NSError *error;
+                if (![captureManager startCaptureWithDescriptor: captureDescriptor error:&error])
+                {
+                    NSLog(@"Failed to start capture, error %@", error);
+                }
+            }
+        }
+#endif
+
         mMetalDeviceVendorId = mtl::GetDeviceVendorId(mMetalDevice);
 
         mCapsInitialized = false;
