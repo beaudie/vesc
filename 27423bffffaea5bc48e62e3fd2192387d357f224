@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0425e758_92b7fa2f",
+        "filename": "src/libANGLE/renderer/metal/mtl_msl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-09T08:19:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f8ea2e3_8bc7983b",
+      "revId": "27423bffffaea5bc48e62e3fd2192387d357f224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ae1e130_a28ab467",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-03-07T14:38:05Z",
       "side": 1,
       "message": "Maybe assert that `index \u003d\u003d 0` here.",
+      "revId": "27423bffffaea5bc48e62e3fd2192387d357f224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "314153ff_e5a269c0",
+        "filename": "src/libANGLE/renderer/metal/mtl_msl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-09T08:19:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ae1e130_a28ab467",
       "revId": "27423bffffaea5bc48e62e3fd2192387d357f224",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
