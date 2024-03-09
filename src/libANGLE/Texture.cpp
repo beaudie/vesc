@@ -317,10 +317,10 @@ SamplerFormat TextureState::computeRequiredSamplerFormat(const SamplerState &sam
 bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
                                               const State &state) const
 {
-    // Buffer textures cannot be incomplete.
+    // Buffer texture is incomplete if it has no buffer attached.
     if (mType == TextureType::Buffer)
     {
-        return true;
+        return mBuffer.get() != nullptr;
     }
 
     // Check for all non-format-based completeness rules
@@ -397,10 +397,10 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
 bool TextureState::computeSamplerCompletenessForCopyImage(const SamplerState &samplerState,
                                                           const State &state) const
 {
-    // Buffer textures cannot be incomplete.
+    // Buffer texture is incomplete if it has no buffer attached.
     if (mType == TextureType::Buffer)
     {
-        return true;
+        return mBuffer.get() != nullptr;
     }
 
     if (!mImmutableFormat && mBaseLevel > mMaxLevel)

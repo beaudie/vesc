@@ -13031,6 +13031,8 @@ class TextureBufferTestES31 : public ANGLETest<>
 {
   protected:
     TextureBufferTestES31() {}
+
+    void drawTestImpl(bool useCompleteTexture, bool useNonZeroTexture);
 };
 
 // Test that mutating a buffer attached to a texture returns correct results in query.
@@ -13405,6 +13407,76 @@ TEST_P(Texture2DTestES3, TexImageFormatMismatch)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, genericBuffer);
     glBindVertexArray(vertexArray);
     glDrawElementsInstanced(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0, 1);
+}
+
+void TextureBufferTestES31::drawTestImpl(bool useCompleteTexture, bool useNonZeroTexture)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_buffer"));
+
+    constexpr char kSamplerBuffer[] = R"(#version 310 es
+        #extension GL_OES_texture_buffer : require
+        precision mediump float;
+        uniform highp samplerBuffer s;
+        out vec4 colorOut;
+        void main()
+        {
+            colorOut = texelFetch(s, 0);
+        })";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kSamplerBuffer);
+    glUseProgram(program);
+    EXPECT_GL_NO_ERROR();
+
+    // Bind as texture buffer
+    GLTexture texture;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_BUFFER, useNonZeroTexture ? texture.get() : 0u);
+    EXPECT_GL_NO_ERROR();
+
+    if (useCompleteTexture)
+    {
+        const std::array<GLColor, 4> kData = {GLColor::blue, GLColor::blue, GLColor::blue,
+                                              GLColor::blue};
+
+        // Create buffer and initialize with data
+        GLBuffer buffer;
+        glBindBuffer(GL_TEXTURE_BUFFER, buffer);
+        glBufferData(GL_TEXTURE_BUFFER, sizeof(kData), kData.data(), GL_DYNAMIC_DRAW);
+        glTexBufferEXT(GL_TEXTURE_BUFFER, GL_RGBA8, buffer);
+        EXPECT_GL_NO_ERROR();
+    }
+
+    // Draw texture buffer
+    drawQuad(program, essl31_shaders::PositionAttrib(), 0.5);
+    EXPECT_GL_NO_ERROR();
+    if (useCompleteTexture)
+    {
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    }
+}
+
+// Checks that drawing incomplete zero texture buffer does not crash.
+TEST_P(TextureBufferTestES31, DrawIncompleteZeroTexture)
+{
+    drawTestImpl(false, false);
+}
+
+// Checks that drawing incomplete non-zero texture buffer does not crash.
+TEST_P(TextureBufferTestES31, DrawIncompleteNonZeroTexture)
+{
+    drawTestImpl(false, true);
+}
+
+// Checks that drawing complete zero texture buffer produces expected results.
+TEST_P(TextureBufferTestES31, DrawCompleteZeroTexture)
+{
+    drawTestImpl(true, false);
+}
+
+// Checks that drawing complete non-zero texture buffer produces expected results.
+TEST_P(TextureBufferTestES31, DrawCompleteNonZeroTexture)
+{
+    drawTestImpl(true, true);
 }
 
 // Test that the correct error is generated if texture buffer support used anyway when not enabled.
