@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "22cbf21a_fc1611f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-09T18:51:53Z",
+      "side": 1,
+      "message": "AFAICT, none of the CI bots explicitly test emulation path. this was the reason i asked for explicit config where we force disable the extension and force enable the emulation path.\n\nBUT note that this test **does** fail without @cclao@google.com fix on my windows box which emulates MSRTT",
+      "parentUuid": "34b706f2_aa1dde93",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbdb173_ab588d5d",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
