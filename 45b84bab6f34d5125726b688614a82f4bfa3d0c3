@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60c9fdbe_499db64a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-10T14:11:05Z",
+      "side": 1,
+      "message": "I\u0027m enabling building this on our bots in https://chromium-review.googlesource.com/c/angle/angle/+/5358034.\nSo far, it doesn\u0027t pass `gn gen --check` step because of missing GN dependencies.",
+      "revId": "45b84bab6f34d5125726b688614a82f4bfa3d0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
