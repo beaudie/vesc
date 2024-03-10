@@ -31,6 +31,9 @@
           'gtest_tests': 'android_vulkan_gtests',
           'isolated_scripts': 'isolated_scripts_group_pixel6',
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'android-arm64-exp-s22': {
         'os_type': 'android',
@@ -42,6 +45,9 @@
           'gtest_tests': 'android_vulkan_gtests',
           'isolated_scripts': 'isolated_scripts_group_s22',
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'android-arm64-pixel4': {
         'os_type': 'android',
@@ -54,6 +60,9 @@
           'gtest_tests': 'android_gtests',
           'isolated_scripts': 'isolated_scripts_group_common',
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'android-arm64-pixel4-perf': {
         'os_type': 'android',
@@ -78,6 +87,9 @@
           'gtest_tests': 'android_vulkan_gtests',
           'isolated_scripts': 'isolated_scripts_group_pixel6',
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'android-arm64-pixel6-perf': {
         'os_type': 'android',
@@ -98,6 +110,9 @@
         ],
         'test_suites': {
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'linux-exp-intel': {
         'os_type': 'linux',
@@ -106,6 +121,9 @@
         ],
         'test_suites': {
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'linux-exp-swiftshader': {
         'os_type': 'linux',
@@ -118,6 +136,9 @@
         ],
         'test_suites': {
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'linux-exp-swiftshader-asan': {
         'os_type': 'linux',
@@ -130,6 +151,9 @@
         ],
         'test_suites': {
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'linux-exp-swiftshader-tsan': {
         'os_type': 'linux',
@@ -142,6 +166,9 @@
         ],
         'test_suites': {
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'linux-intel': {
         'os_type': 'linux',
@@ -152,6 +179,9 @@
           'gtest_tests': 'linux_intel_gtests',
           'isolated_scripts': 'isolated_scripts_group_common',
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'linux-intel-perf': {
         'os_type': 'linux',
@@ -172,6 +202,9 @@
           'gtest_tests': 'linux_nvidia_gtests',
           'isolated_scripts': 'isolated_scripts_group_common',
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'linux-nvidia-perf': {
         'os_type': 'linux',
@@ -196,6 +229,9 @@
           'gtest_tests': 'swangle_gtests',
           'isolated_scripts': 'swangle_restricted_trace_gold_isolated_scripts',
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'linux-swiftshader-asan': {
         'os_type': 'linux',
@@ -209,6 +245,9 @@
         'test_suites': {
           'gtest_tests': 'swangle_slow_gtests',
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'linux-swiftshader-tsan': {
         'os_type': 'linux',
@@ -222,6 +261,9 @@
         'test_suites': {
           'gtest_tests': 'swangle_slow_flaky_gtests',
         },
+        'additional_compile_targets': [
+          'opencl_cts',
+        ],
       },
       'mac-amd': {
         'os_type': 'mac',
