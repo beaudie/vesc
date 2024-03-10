@@ -114,7 +114,7 @@
       'gn_args': 'is_clang=false',
     },
     'opencl': {
-      'gn_args': 'angle_enable_cl=true',
+      'gn_args': 'angle_enable_cl=true angle_enable_cl_testing=true',
     },
     'perf': {
       'gn_args': 'is_debug=false dcheck_always_on=false symbol_level=1',
