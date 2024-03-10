@@ -59,6 +59,12 @@ config("llvm_code") {
   if (current_os != "win") {
     cflags = [ "-fPIC" ]
   }
+  cflags += [
+    "-Wno-deprecated-declarations",
+    "-Wno-deprecated-this-capture",
+    "-Wno-deprecated-enum-enum-conversion",
+    "-Wno-deprecated-anon-enum-enum-conversion",
+  ]
 }
 
 config("clang_code") {
@@ -69,6 +75,7 @@ config("clang_code") {
     "//$clspv_llvm_dir/clang/include",
     "$root_gen_dir/$clspv_llvm_dir//clang/include",
   ]
+  cflags += [ "-Wno-deprecated-declarations" ]
 }
 
 config("warn_covered_switch_default") {
