@@ -56,14 +56,21 @@ config("llvm_code") {
     "//$clspv_llvm_dir/llvm/include",
     "$root_gen_dir/$clspv_llvm_dir//llvm/include",
   ]
+  cflags = [
+    "-Wno-deprecated-declarations",
+    "-Wno-deprecated-this-capture",
+    "-Wno-deprecated-enum-enum-conversion",
+    "-Wno-deprecated-anon-enum-enum-conversion",
+  ]
   if (current_os != "win") {
-    cflags = [ "-fPIC" ]
+    cflags += [ "-fPIC" ]
   }
 }
 
 config("clang_code") {
+  cflags = [ "-Wno-deprecated-declarations" ]
   if (current_os != "win") {
-    cflags = [ "-fno-strict-aliasing" ]
+    cflags += [ "-fno-strict-aliasing" ]
   }
   include_dirs = [
     "//$clspv_llvm_dir/clang/include",
