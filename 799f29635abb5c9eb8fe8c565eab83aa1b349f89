@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5825cf68_2df364a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T00:19:16Z",
+      "side": 1,
+      "message": "@r.khurram@samsung.com thanks a lot for contributing the CL CTS build. Please use this change to ensure the bots are happy with that build ... right now I see some missing `deps` causing gn to complain.\n\nOnce this change is green, we can start running some of the CL tests on the bots 😊",
+      "revId": "799f29635abb5c9eb8fe8c565eab83aa1b349f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
