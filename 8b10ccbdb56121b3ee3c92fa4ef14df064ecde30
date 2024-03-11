@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdc8f31a_45afb9ef",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T14:33:37Z",
+      "side": 1,
+      "message": "TL;DR please remove `angle::Spinlock` here and let it use `std::mutex` (its default). There is no evidence yet (because the code is not complete) that performance with `std::mutex` is good or bad.\n\n---\n\nFYI, bear in mind that spinlock in user-space is generally a bad idea. See this post by Linus explaining things after some Stadia game devs complained that their windows-oriented \"busy loop with yield()\" doesn\u0027t work the same on Linux: https://www.realworldtech.com/forum/?threadid\u003d189711\u0026curpostid\u003d189723\n\nGist of it is that:\n\n* The thread waiting on the lock is hogging the cpu, and stopping the one owning the lock to actually make progress\n* The scheduler is unaware of the relationship between the two threads, so won\u0027t wake up the thread that is waiting on the lock (and who has yield()ed) once released\n\n(In this case, the latter doesn\u0027t apply. The spinlock still wastes battery though). Looks like the original author of the CL backend introduced spinlocks in ANGLE, but eventually we should get rid of it.",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f060b31_495937a5",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T14:33:37Z",
+      "side": 1,
+      "message": "`mData` seems very generic for something in the \"context\". Please add a comment to tell what this data actually is + a better name if possible.",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6736eeb_9134d69b",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T14:33:37Z",
+      "side": 1,
+      "message": "What if the buffer is being accessed by the GPU? With GL buffers, we have basically this logic:\n\n- If dst buffer is not accessed by GPU, copy on CPU\n- If dst buffer is being accessed by GPU, copy to it on GPU\n- If src buffer is begin read by GPU, map it on the CPU\n- If src buffer is begin written to by GPU, copy to dst on GPU\n\nIf an initial implementation wants to be inefficient, that\u0027s ok, but this would need a `vkQueueWaitIdle` to make it correct.\n\n---\n\nIf the buffer cannot be accessed by the GPU, please ignore this comment!",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19863b32_7f4c51a2",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T14:33:37Z",
+      "side": 1,
+      "message": "Ah nice to finally see this syntax in C++. FYI, you can drop any field that\u0027s zero and designated initializers set them to 0/nullptr. I recommend doing that at least for fields that are normally ok to be ignored (like `pNext` and `flags`, not recommended for like `srcOffset` where 0 can be an intentional meaningful value)",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
