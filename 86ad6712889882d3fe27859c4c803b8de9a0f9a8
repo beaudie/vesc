@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6832ccce_0bbd5667",
+        "filename": "src/libANGLE/renderer/vulkan/CLEventVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T14:44:07Z",
+      "side": 1,
+      "message": "One more unwritten rule. Please avoid `bool` arguments (`bool *...Out` arguments are ok). On the call site they are generally confusing (like, what\u0027s `init(true)`?)\n\nInstead, please create an `enum class` above `CLEventVk` just for this purpose. We have a lot of them (see for example https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/CommandProcessor.h;l\u003d38) and they help keep the code readable.",
+      "revId": "86ad6712889882d3fe27859c4c803b8de9a0f9a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fb0d8ec_0fdb0c67",
+        "filename": "src/libANGLE/renderer/vulkan/CLEventVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T14:44:07Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "86ad6712889882d3fe27859c4c803b8de9a0f9a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27633b0b_f0f9eece",
+        "filename": "src/libANGLE/renderer/vulkan/CLEventVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T14:44:07Z",
+      "side": 1,
+      "message": "My gut feeling is that this is an antipattern. I see this is because the front-end is this way too, so maybe ok for now but we should look into fixing it at some point. Typically the context (from which command queue is derived?) is passed around to the functions, so no need to cache them in the objects. In GL at least, caching the context is problematic because objects can cross contexts. I don\u0027t know CL, but if an event can be used to synchronize two contexts, this caching already looks like a bug.\n\nLet\u0027s chat about this on Thursday",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 28
+      },
+      "revId": "86ad6712889882d3fe27859c4c803b8de9a0f9a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
