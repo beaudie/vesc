@@ -260,6 +260,30 @@
       },
       "revId": "c31ed35b83182d01fc2118f205ae277beff4daad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a44e8362_6e138ba8",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-11T17:26:32Z",
+      "side": 1,
+      "message": "Nice, +1 to that!\n\nOkay, I\u0027ll work on that in clspv. \nIn the meantime, do we want to shelve this PR for now, or merge as-is?\n\nI\u0027m good with either one.",
+      "parentUuid": "be1b55b4_00ba2d1f",
+      "range": {
+        "startLine": 414,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 5
+      },
+      "revId": "c31ed35b83182d01fc2118f205ae277beff4daad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
