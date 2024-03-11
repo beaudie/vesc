@@ -16,6 +16,24 @@
       "message": "I\u0027ve typically seen `fwrite` in a loop because it may not write all the data. Might wanna do that just to make sure we don\u0027t get misled by a truncated write.\n\nYou could also consider writing `data.size()` at the beginning of the file to guard against that.",
       "revId": "8ef29887780a95546e17b3a82426f884cb9d69c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8a07355_9b546a4e",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-11T17:56:48Z",
+      "side": 1,
+      "message": "I\u0027ll have the reference data as these are known gz files, so it\u0027ll be easy to check afterwards. Unsure if the loop you\u0027re thinking about is more of a socket thing, I don\u0027t recall seeing loops for fwrites (though I do see discussions around 2GB size limits in a quick search)",
+      "parentUuid": "43f80585_c8a72090",
+      "revId": "8ef29887780a95546e17b3a82426f884cb9d69c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
