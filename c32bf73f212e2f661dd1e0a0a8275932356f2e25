@@ -211,6 +211,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8ed455e9_eb655d15",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-11T20:36:16Z",
+      "side": 1,
+      "message": "\u003e switch to dynamic rendering\n\nis there someone already working on this? is there a bug tracking it?",
+      "parentUuid": "b358d4be_59978251",
+      "range": {
+        "startLine": 871,
+        "startChar": 27,
+        "endLine": 871,
+        "endChar": 45
+      },
+      "revId": "c32bf73f212e2f661dd1e0a0a8275932356f2e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0b793fd_2aa8cf48",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 1

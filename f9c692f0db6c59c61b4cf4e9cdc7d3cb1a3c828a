@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "f9c692f0db6c59c61b4cf4e9cdc7d3cb1a3c828a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "833200ab_22477154",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-11T20:36:16Z",
+      "side": 1,
+      "message": "i wish there was a \"unittest\" for all these helper classes in the vulkan backend, like how we have `*_unittest.cpp` in the `src/common/` folder",
+      "revId": "f9c692f0db6c59c61b4cf4e9cdc7d3cb1a3c828a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
