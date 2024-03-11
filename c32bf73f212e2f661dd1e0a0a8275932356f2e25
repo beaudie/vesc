@@ -235,6 +235,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa8aa444_fc0d98cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T20:58:00Z",
+      "side": 1,
+      "message": "No, I was waiting for dynamic_rendering_local_read, which is pretty new so there\u0027s little time pressure to implement dynamic rendering in ANGLE.\n\nBut at some point we should do that. I just created anglebug.com/8605 to track that",
+      "parentUuid": "8ed455e9_eb655d15",
+      "range": {
+        "startLine": 871,
+        "startChar": 27,
+        "endLine": 871,
+        "endChar": 45
+      },
+      "revId": "c32bf73f212e2f661dd1e0a0a8275932356f2e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0b793fd_2aa8cf48",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 1
