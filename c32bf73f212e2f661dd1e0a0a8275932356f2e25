@@ -163,6 +163,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "329aeb7e_69ffaaa0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-11T19:50:04Z",
+      "side": 1,
+      "message": "that would require we cache the throwAwayRenderPass in `ProgramVk` and i chose to avoid caching since the refCounted approach seemed a lot more cleaner and closer to the intent of the already present `vk::Shared` type",
+      "parentUuid": "8728a806_7024799a",
+      "range": {
+        "startLine": 871,
+        "startChar": 27,
+        "endLine": 871,
+        "endChar": 45
+      },
+      "revId": "c32bf73f212e2f661dd1e0a0a8275932356f2e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0b793fd_2aa8cf48",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 1
