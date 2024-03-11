@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "c32bf73f212e2f661dd1e0a0a8275932356f2e25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7530a76_3e0d307b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T17:27:21Z",
+      "side": 1,
+      "message": "There is a copy constructor below, so this doesn\u0027t make much sense.\n\nAlso, since `mRefCounted` is a pointer, there is no reason why std::move cannot be implemented, that would be better than copy.",
+      "range": {
+        "startLine": 871,
+        "startChar": 27,
+        "endLine": 871,
+        "endChar": 45
+      },
+      "revId": "c32bf73f212e2f661dd1e0a0a8275932356f2e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0b793fd_2aa8cf48",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T17:27:21Z",
+      "side": 1,
+      "message": "I think you don\u0027t need this, because `AtomicRefCounted` is not movable already.",
+      "range": {
+        "startLine": 886,
+        "startChar": 0,
+        "endLine": 887,
+        "endChar": 59
+      },
+      "revId": "c32bf73f212e2f661dd1e0a0a8275932356f2e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
