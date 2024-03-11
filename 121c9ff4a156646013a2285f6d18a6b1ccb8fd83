@@ -16,6 +16,24 @@
       "message": "Let\u0027s land as is",
       "revId": "121c9ff4a156646013a2285f6d18a6b1ccb8fd83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fe6cd45_e92afefe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-11T18:10:11Z",
+      "side": 1,
+      "message": "Sounds good - I also made a ticket for the rework:\nhttps://anglebug.com/8602",
+      "parentUuid": "d4069760_f60e0d2a",
+      "revId": "121c9ff4a156646013a2285f6d18a6b1ccb8fd83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
