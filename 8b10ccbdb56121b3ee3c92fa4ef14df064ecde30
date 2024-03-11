@@ -139,6 +139,24 @@
       "parentUuid": "19863b32_7f4c51a2",
       "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9a437a6_883883c9",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-11T23:48:13Z",
+      "side": 1,
+      "message": "Ah I remember now, I think with this init approach, its all or nothing:\n```\n../../src/libANGLE/renderer/vulkan/CLMemoryVk.cpp:129:5: error: missing field \u0027pNext\u0027 initializer [-Werror,-Wmissing-field-initializers]\n  129 |     };\n      |     ^\n```\nUnless we disable `missing-field-initializers` of course.\n\nI\u0027m good with the old way of doing it as well, I\u0027ll go ahead and do that.",
+      "parentUuid": "d99de84c_a9b607ca",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
