@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a8af6602_c6cd6ef9",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-11T22:42:33Z",
+      "side": 1,
+      "message": "Agreed here, yeah I would rather be more energy conscious than premature optimize this guy. And nice article - thanks for sharing 😊 - will update this chunk.",
+      "parentUuid": "cdc8f31a_45afb9ef",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0f060b31_495937a5",
         "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
         "patchSetId": 11
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-11T14:33:37Z",
       "side": 1,
       "message": "`mData` seems very generic for something in the \"context\". Please add a comment to tell what this data actually is + a better name if possible.",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4742e67f_da754c53",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-11T22:42:33Z",
+      "side": 1,
+      "message": "Yep, needs a better name for sure. Will update in next patchset",
+      "parentUuid": "0f060b31_495937a5",
       "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2096305_dfbe71bf",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-11T22:42:33Z",
+      "side": 1,
+      "message": "Correct, not being accessed by GPU \"at this point\". This method is used inside of a OpenCL enqueue API. For example, this `copyTo` is used in `enqueueReadBuffer` where if either its a blocking-read or if we determine that resource is being accessed/writen-to by GPU, we essentially do \n\n`clFinish (i.e. flush cmdQueue + vkQueueWaitIdle)`\n\nThen we call this `copyTo` method right after.\n\n---\n\n\u003e If an initial implementation wants to be inefficient, that\u0027s ok\n\nYep, exactly (at least in my above rundown). Our team debated on whether we do above for the first go, or should we instead enqueue a GPU copy `vkCmdCopyBuffer ` + host sync routine (when finished).\n\nLong-term I\u0027m pushing for the latter (especially for cmd batching performance) but there are some OpenCL - Vulkan nuances to work-out/ensure we get right. So I think former will likely be the first go (then optimize from there).\n\n---\n\n\u003e If the buffer cannot be accessed by the GPU, please ignore this comment!\n\nAt the moment yes, we introduce the `vkQueueWaitIdle` equivalent once we start pushing the enqueue APIs here soon.",
+      "parentUuid": "b6736eeb_9134d69b",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19863b32_7f4c51a2",
         "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
         "patchSetId": 11
@@ -65,6 +119,24 @@
       "writtenOn": "2024-03-11T14:33:37Z",
       "side": 1,
       "message": "Ah nice to finally see this syntax in C++. FYI, you can drop any field that\u0027s zero and designated initializers set them to 0/nullptr. I recommend doing that at least for fields that are normally ok to be ignored (like `pNext` and `flags`, not recommended for like `srcOffset` where 0 can be an intentional meaningful value)",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d99de84c_a9b607ca",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-11T22:42:33Z",
+      "side": 1,
+      "message": "Gotcha, will update 👍",
+      "parentUuid": "19863b32_7f4c51a2",
       "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
