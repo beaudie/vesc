@@ -16,6 +16,24 @@
       "message": "I\u0027m enabling building this on our bots in https://chromium-review.googlesource.com/c/angle/angle/+/5358034.\nSo far, it doesn\u0027t pass `gn gen --check` step because of missing GN dependencies.",
       "revId": "45b84bab6f34d5125726b688614a82f4bfa3d0c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61fa3816_0478a497",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T20:54:51Z",
+      "side": 1,
+      "message": "@r.khurram@samsung.com things have improved, thanks! Linux and Android bots build fine now. Some issues on windows and mac.\n\nYuly, is it too intrusive to enable CL only on Linux and Android? At least for now, we have no use for these tests on other platforms, and we could start making progress on those bots in the meantime. Rafay, if you have an easy fix, you are also welcome to sort the build out on those platforms 😊",
+      "parentUuid": "60c9fdbe_499db64a",
+      "revId": "45b84bab6f34d5125726b688614a82f4bfa3d0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
