@@ -16,6 +16,23 @@
       "message": "Any tests to add that would have previously triggered the assertion?",
       "revId": "189339abf0de0f76c9fbca005dbaf146c935002d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73e9752f_6f3aca26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-11T20:13:29Z",
+      "side": 1,
+      "message": "lgtm+2\n\nI second Shabi\u0027s request for a test. Thanks in advance.",
+      "revId": "189339abf0de0f76c9fbca005dbaf146c935002d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
