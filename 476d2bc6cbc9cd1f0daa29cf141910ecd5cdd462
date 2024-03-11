@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6221a72_8f637988",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T14:51:14Z",
+      "side": 1,
+      "message": "So I\u0027m assuming this actually helped?",
+      "revId": "476d2bc6cbc9cd1f0daa29cf141910ecd5cdd462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "381c076e_85507590",
+        "filename": "src/compiler/translator/NodeType.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T14:51:14Z",
+      "side": 1,
+      "message": "While you\u0027re at it, please move this to the bottom of the class per our style.",
+      "revId": "476d2bc6cbc9cd1f0daa29cf141910ecd5cdd462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
