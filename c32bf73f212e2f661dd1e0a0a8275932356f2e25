@@ -187,6 +187,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b358d4be_59978251",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T20:30:22Z",
+      "side": 1,
+      "message": "Ok I concede. Can\u0027t wait to switch to dynamic rendering and leave all this behind :-S",
+      "parentUuid": "329aeb7e_69ffaaa0",
+      "range": {
+        "startLine": 871,
+        "startChar": 27,
+        "endLine": 871,
+        "endChar": 45
+      },
+      "revId": "c32bf73f212e2f661dd1e0a0a8275932356f2e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0b793fd_2aa8cf48",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 1
