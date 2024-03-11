@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3b0747c_7b2e39b7",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T19:02:38Z",
+      "side": 1,
+      "message": "Looks like an issue with usage of VK_MSRTSS :-S\n\nI think this is the first time we\u0027re actually running these tests with VK_MSRTSS on the bots (or anywhere other than Chrome\u0027s usage in Fuchsia / Android-in-the-wild).",
+      "revId": "6f705661a87be8d03a73648dc0aedcdc931d587f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
