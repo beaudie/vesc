@@ -236,6 +236,30 @@
       },
       "revId": "c31ed35b83182d01fc2118f205ae277beff4daad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be1b55b4_00ba2d1f",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T16:28:28Z",
+      "side": 1,
+      "message": "We talked about this internally, and we think the best solution is to add a new compile function to clspv that takes the header-\u003econtents mapping. LLVM has a function that lets you do just that: `addRemappedFile`.\n\nYou can see an example of its use here: https://github.com/google/clspv/blob/main/lib/Compiler.cpp#L390 and some tiny documentation here: https://clang.llvm.org/doxygen/PreprocessorOptions_8h_source.html#:~:text\u003d168%20%20///%20The%20set,MemoryBuffer%20*%3E%3E%20RemappedFileBuffers%3B\n\nThen you can circumvent all of this, remove file access and make compilation much faster too.",
+      "parentUuid": "8d0b07e3_f4f3de4e",
+      "range": {
+        "startLine": 414,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 5
+      },
+      "revId": "c31ed35b83182d01fc2118f205ae277beff4daad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
