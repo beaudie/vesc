@@ -43,8 +43,7 @@ constexpr PerPlane<EGLenum> kModifiersHi = {
 
 constexpr VkImageUsageFlags kTransferUsage =
     VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
-constexpr VkImageUsageFlags kTextureUsage =
-    VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+constexpr VkImageUsageFlags kTextureUsage = VK_IMAGE_USAGE_SAMPLED_BIT;
 constexpr VkImageUsageFlags kRenderUsage =
     VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
@@ -182,6 +181,10 @@ VkImageUsageFlags GetUsageFlags(RendererVk *renderer,
     {
         usage |= isDepthStencilFormat ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
                                       : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    }
+    if (*texturableOut && *renderableOut)
+    {
+        usage |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     }
 
     return usage;
@@ -361,7 +364,7 @@ VkImageUsageFlags FindSupportedUsageFlagsForFormat(
     if (!IsFormatSupported(renderer, format, drmModifier, usageFlags, createFlags,
                            imageFormatListCreateInfo, outImageFormatProperties))
     {
-        usageFlags &= ~kRenderUsage;
+        usageFlags &= ~(kRenderUsage | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT);
         if (!IsFormatSupported(renderer, format, drmModifier, usageFlags, createFlags,
                                imageFormatListCreateInfo, outImageFormatProperties))
         {
