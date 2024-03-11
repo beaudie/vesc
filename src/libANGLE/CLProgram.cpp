@@ -250,16 +250,14 @@ Program::Program(Context &context,
                  void *userData)
     : mContext(&context),
       mDevices(!devices.empty() ? devices : context.getDevices()),
+      // This program has to be retained until the notify callback is called.
+      mCallback(pfnNotify != nullptr ? (retain(), CallbackData(pfnNotify, userData))
+                                     : CallbackData()),
       mNumAttachedKernels(0u),
       mImpl(nullptr)
 {
-    if (!IsError(context.getImpl().linkProgram(*this, mDevices, options, inputPrograms,
-                                               pfnNotify != nullptr ? this : nullptr, &mImpl)))
-    {
-        // This program has to be retained until the notify callback is called.
-        mCallback =
-            pfnNotify != nullptr ? (retain(), CallbackData(pfnNotify, userData)) : CallbackData();
-    }
+    ANGLE_CL_IMPL_TRY(context.getImpl().linkProgram(*this, mDevices, options, inputPrograms,
+                                                    pfnNotify != nullptr ? this : nullptr, &mImpl));
 }
 
 }  // namespace cl
