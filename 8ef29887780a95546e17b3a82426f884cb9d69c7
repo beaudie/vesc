@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43f80585_c8a72090",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-11T16:39:26Z",
+      "side": 1,
+      "message": "I\u0027ve typically seen `fwrite` in a loop because it may not write all the data. Might wanna do that just to make sure we don\u0027t get misled by a truncated write.\n\nYou could also consider writing `data.size()` at the beginning of the file to guard against that.",
+      "revId": "8ef29887780a95546e17b3a82426f884cb9d69c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
