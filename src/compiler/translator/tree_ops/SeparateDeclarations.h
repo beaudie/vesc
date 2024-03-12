@@ -15,6 +15,7 @@ class TCompiler;
 class TIntermBlock;
 
 // Transforms declarations so that in the end each declaration contains only one declarator.
+// Also transforms struct declarations to not have any declarators.
 // This is useful as an intermediate step when initialization needs to be separated from
 // declaration, or when things need to be unfolded out of the initializer.
 // Examples:
@@ -26,12 +27,14 @@ class TIntermBlock;
 // Input:
 //    struct S { vec3 d; } a, b;
 // Output:
-//    struct S { vec3 d; } a;
+//    struct S { vec3 d; };
+//    S a;
 //    S b;
 // Input:
 //    struct { vec3 d; } a, b;
 // Output:
-//    struct s1234 { vec3 d; } a;
+//    struct s1234 { vec3 d; };
+//    s1234 a;
 //    s1234 b;
 [[nodiscard]] bool SeparateDeclarations(TCompiler &compiler, TIntermBlock &root);
 
