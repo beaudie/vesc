@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f46f7078_0f970a87",
+        "filename": "src/libANGLE/CLProgram.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-12T02:18:01Z",
+      "side": 1,
+      "message": "For more complex expressions like this, it\u0027s better to just put this in the body with an `if`",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 255,
+        "endChar": 55
+      },
+      "revId": "ba40bc34ff5e7d72631f4de99829769b61359a67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
