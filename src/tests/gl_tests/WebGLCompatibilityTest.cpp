@@ -65,6 +65,7 @@ class WebGLCompatibilityTest : public ANGLETest<>
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
         setWebGLCompatibilityEnabled(true);
+        setRobustAccess(true);
     }
 
     template <typename T>
@@ -1733,6 +1734,48 @@ void main()
     glVertexAttribPointer(wLocation, 1, GL_UNSIGNED_BYTE, GL_FALSE, 0, zeroOffset + 32);
     glDrawArraysInstanced(GL_POINTS, 0, 1, 0);
     ASSERT_GL_NO_ERROR();
+}
+
+// Test that enabling a buffer in an unused attribute doesn't crash.  There should be an active
+// attribute after that.
+TEST_P(WebGLCompatibilityTest, BoundButUnusedBuffer)
+{
+    constexpr char kVS[] = R"(attribute vec2 offset;
+void main()
+{
+    gl_Position = vec4(offset.xy, 0, 1);
+    gl_PointSize = 1.0;
+})";
+
+    constexpr char kFS[] = R"(precision mediump float;
+void main()
+{
+    gl_FragColor = vec4(1.0, 0, 0, 1.0);
+})";
+
+    const GLuint vs = CompileShader(GL_VERTEX_SHADER, kVS);
+    const GLuint fs = CompileShader(GL_FRAGMENT_SHADER, kFS);
+
+    GLuint program = glCreateProgram();
+    glBindAttribLocation(program, 1, "offset");
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, 100, nullptr, GL_STATIC_DRAW);
+
+    // Enable an unused attribute that is within the range of active attributes (not beyond it)
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0);
+
+    glUseProgram(program);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    // Destroy the buffer.  Regression test for a tracking bug where the buffer was used by
+    // SwiftShader (even though location 1 is inactive), but not marked as used by ANGLE.
+    buffer.reset();
 }
 
 // Test the checks for OOB reads in the vertex buffers, ANGLE_instanced_arrays version
