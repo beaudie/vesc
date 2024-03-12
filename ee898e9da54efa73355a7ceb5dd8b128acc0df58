@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25d76701_1cd9ba98",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-12T19:41:50Z",
+      "side": 1,
+      "message": "This is out of place, why would the Vulkan backend depend on CTS?",
+      "revId": "ee898e9da54efa73355a7ceb5dd8b128acc0df58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
