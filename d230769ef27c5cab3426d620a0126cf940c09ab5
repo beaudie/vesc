@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e096b69_6afdaa86",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-12T15:04:54Z",
+      "side": 1,
+      "message": "Note: isolated_out_dir used similarly to here",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 20
+      },
+      "revId": "d230769ef27c5cab3426d620a0126cf940c09ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
