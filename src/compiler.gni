@@ -441,8 +441,6 @@ angle_translator_lib_msl_sources = [
   "src/compiler/translator/tree_ops/msl/RewriteUnaddressableReferences.h",
   "src/compiler/translator/tree_ops/msl/SeparateCompoundExpressions.cpp",
   "src/compiler/translator/tree_ops/msl/SeparateCompoundExpressions.h",
-  "src/compiler/translator/tree_ops/msl/SeparateCompoundStructDeclarations.cpp",
-  "src/compiler/translator/tree_ops/msl/SeparateCompoundStructDeclarations.h",
   "src/compiler/translator/tree_ops/msl/TransposeRowMajorMatrices.cpp",
   "src/compiler/translator/tree_ops/msl/TransposeRowMajorMatrices.h",
   "src/compiler/translator/tree_ops/msl/WrapMain.cpp",

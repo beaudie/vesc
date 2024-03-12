@@ -195,3 +195,16 @@ void main() {
     EXPECT_TRUE(compile(kShader));
     EXPECT_FALSE(foundInIntermediateTree("anonymous"));
 }
+
+TEST_F(ParseTest, ForAndAnonymousStructRewritesExpressions)
+{
+    mShaderSpec          = SH_WEBGL2_SPEC;
+    const char kShader[] = R"(#version 300 es
+precision mediump float;
+void main() {
+    for (struct { vec2 d; } s0; s0.d.x < 10.; s0.d.x++)
+       s0 = s0;
+})";
+    EXPECT_TRUE(compile(kShader));
+    EXPECT_FALSE(foundInIntermediateTree("anonymous"));
+}

@@ -1104,22 +1104,46 @@ bool ValidateAST::visitDeclaration(Visit visit, TIntermDeclaration *node)
 
     const TIntermSequence &sequence = *(node->getSequence());
 
-    if (mOptions.validateMultiDeclarations && sequence.size() > 1)
+    if (mOptions.validateMultiDeclarations)
     {
-        TIntermSymbol *symbol = sequence[1]->getAsSymbolNode();
-        if (symbol == nullptr)
+        if (sequence.size() > 0)
         {
-            TIntermBinary *init = sequence[1]->getAsBinaryNode();
-            ASSERT(init && init->getOp() == EOpInitialize);
-            symbol = init->getLeft()->getAsSymbolNode();
+            TIntermTyped *declarator    = sequence.at(0)->getAsTyped();
+            const TType &declaratorType = declarator->getType();
+            if (declaratorType.isStructSpecifier())
+            {
+                Declaration decl = ViewDeclaration(*node, 0);
+                if (decl.symbol.variable().symbolType() != SymbolType::Empty)
+                {
+                    mDiagnostics->error(node->getLine(),
+                                        "Found declaration specifying a struct and declaring a "
+                                        "variable where SeparateDeclarations should have "
+                                        "separated them <validateMultiDeclarations>",
+                                        decl.symbol.variable().name().data());
+                    mMultiDeclarationsFailed = true;
+                }
+                if (getParentNode()->getAsLoopNode())
+                {
+                    mDiagnostics->error(
+                        node->getLine(),
+                        "Found declaration specifying a struct in a for loop initializer"
+                        "where SeparateDeclarations should have "
+                        "separated them <validateMultiDeclarations>",
+                        decl.symbol.variable().name().data());
+                    mMultiDeclarationsFailed = true;
+                }
+            }
         }
-        ASSERT(symbol);
-
-        mDiagnostics->error(node->getLine(),
-                            "Found multiple declarations where SeparateDeclarations should have "
-                            "separated them <validateMultiDeclarations>",
-                            symbol->variable().name().data());
-        mMultiDeclarationsFailed = true;
+        if (sequence.size() > 1)
+        {
+            Declaration decl = ViewDeclaration(*node, 1);
+            mDiagnostics->error(
+                node->getLine(),
+                "Found multiple declarations where SeparateDeclarations should have "
+                "separated them <validateMultiDeclarations>",
+                decl.symbol.variable().name().data());
+            mMultiDeclarationsFailed = true;
+        }
     }
 
     if (visit == PreVisit)

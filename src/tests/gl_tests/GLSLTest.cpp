@@ -6470,6 +6470,54 @@ TEST_P(WebGL2GLSLTest, UninitializedNamelessStructInForInitStatement)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that an uninitialized nameless struct inside a for loop init statement works.
+TEST_P(WebGL2GLSLTest, UninitializedNamelessStructInForInitStatement2)
+{
+    // Test skipped on Android GLES because local variable initialization is disabled.
+    // http://anglebug.com/2046
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(1, 0, 0, 1);\n"
+        "    for (struct { float q; float z; } b; (b.q + b.z) < 2.0; b.q++, b.z++) {\n"
+        "        my_FragColor = vec4(0, 1, 0, 1);\n"
+        "    }\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that an uninitialized nameless struct inside a for loop init statement works.
+TEST_P(WebGL2GLSLTest, UninitializedNamelessStructInForInitStatement3)
+{
+    // Test skipped on Android GLES because local variable initialization is disabled.
+    // http://anglebug.com/2046
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "void main()\n"
+        "{\n"
+        "    my_FragColor = vec4(1, 0, 0, 1);\n"
+        "    for (struct { float q; float z; } b, c; (b.q + c.z) < 4.0; b.q++, c.z++) {\n"
+        "        my_FragColor = vec4(b.z, b.q, c.q, c.z);\n"
+        "    }\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Test that uninitialized global variables are initialized to 0.
 TEST_P(WebGLGLSLTest, InitUninitializedGlobals)
 {
