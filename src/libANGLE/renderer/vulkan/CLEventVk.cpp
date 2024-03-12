@@ -6,21 +6,23 @@
 // CLEventVk.cpp: Implements the class methods for CLEventVk.
 
 #include "libANGLE/renderer/vulkan/CLEventVk.h"
+#include "libANGLE/renderer/vulkan/CLCommandQueueVk.h"
+#include "libANGLE/renderer/vulkan/CLContextVk.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 
+#include "libANGLE/CLCommandQueue.h"
+#include "libANGLE/CLContext.h"
+#include "libANGLE/CLEvent.h"
 #include "libANGLE/cl_utils.h"
 
 namespace rx
 {
 
-CLEventVk::CLEventVk(const cl::Event &event) : CLEventImpl(event) {}
+CLEventVk::CLEventVk(const cl::Event &event, const cl::EventPtrs &depEvents)
+    : CLEventImpl(event), mStatus(isUserEvent() ? CL_SUBMITTED : CL_QUEUED), mDepEvents(depEvents)
+{}
 
 CLEventVk::~CLEventVk() = default;
-
-angle::Result CLEventVk::getCommandExecutionStatus(cl_int &executionStatus)
-{
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
-}
 
 angle::Result CLEventVk::setUserEventStatus(cl_int executionStatus)
 {
