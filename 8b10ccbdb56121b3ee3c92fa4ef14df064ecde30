@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5947d681_6524afbf",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-12T22:10:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8af6602_c6cd6ef9",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f060b31_495937a5",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Yep, needs a better name for sure. Will update in next patchset",
       "parentUuid": "0f060b31_495937a5",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d818545_ac2328d4",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-12T22:10:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4742e67f_da754c53",
       "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -191,6 +227,24 @@
       "side": 1,
       "message": "Ah, overcautious warning is defeating some of the niceness. Either way works for me (designated initializer or `\u003d {};` followed by setting specific fields)",
       "parentUuid": "b9a437a6_883883c9",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b8bb059_797d58e2",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-03-12T22:10:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4b9065a_8bb22ff6",
       "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
