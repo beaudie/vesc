@@ -52,6 +52,24 @@
       "parentUuid": "61fa3816_0478a497",
       "revId": "45b84bab6f34d5125726b688614a82f4bfa3d0c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41d1974e_81005587",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-12T15:15:03Z",
+      "side": 1,
+      "message": "Thanks Yuly, yes I think for now we can skip those platforms. If interest ever comes up, the interested parties can look into it.",
+      "parentUuid": "6c6bef90_429de93c",
+      "revId": "45b84bab6f34d5125726b688614a82f4bfa3d0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
