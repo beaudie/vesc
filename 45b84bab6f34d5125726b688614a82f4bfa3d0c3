@@ -70,6 +70,24 @@
       "parentUuid": "6c6bef90_429de93c",
       "revId": "45b84bab6f34d5125726b688614a82f4bfa3d0c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cda3dac_327c7127",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-12T18:39:43Z",
+      "side": 1,
+      "message": "This looks good in https://chromium-review.googlesource.com/c/angle/angle/+/5358034/6.\nBut, while I was rebasing that CL, gerrit messed up here a bit, so I\u0027m now the uploader.\nI would have given CR+2, but it\u0027s not accepted from authors and uploaders.",
+      "parentUuid": "41d1974e_81005587",
+      "revId": "45b84bab6f34d5125726b688614a82f4bfa3d0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
