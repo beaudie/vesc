@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05c81913_cccd2a35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-12T02:22:13Z",
+      "side": 1,
+      "message": "Thanks for the fix!",
+      "revId": "b42371c6f3a26f008eccd7b751a04ba463d25c1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69fcef7b_a3175e7a",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-12T02:22:13Z",
+      "side": 1,
+      "message": "Please define a new constant like `kRenderAndInputUsage`",
+      "range": {
+        "startLine": 367,
+        "startChar": 24,
+        "endLine": 367,
+        "endChar": 74
+      },
+      "revId": "b42371c6f3a26f008eccd7b751a04ba463d25c1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
