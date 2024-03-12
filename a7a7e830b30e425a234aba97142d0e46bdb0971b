@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddb8b7f5_67716993",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-12T18:39:45Z",
+      "side": 1,
+      "message": "Great work diagnosing and fixing this longstanding issue!\n\nlgtm once you and Shabi are agreed upon whether to add the flag to Separator.",
+      "revId": "a7a7e830b30e425a234aba97142d0e46bdb0971b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb46f1cb_40ae3079",
