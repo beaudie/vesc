@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "605102be_f543ec50",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-12T02:27:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e2096305_dfbe71bf",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19863b32_7f4c51a2",
@@ -155,6 +173,24 @@
       "side": 1,
       "message": "Ah I remember now, I think with this init approach, its all or nothing:\n```\n../../src/libANGLE/renderer/vulkan/CLMemoryVk.cpp:129:5: error: missing field \u0027pNext\u0027 initializer [-Werror,-Wmissing-field-initializers]\n  129 |     };\n      |     ^\n```\nUnless we disable `missing-field-initializers` of course.\n\nI\u0027m good with the old way of doing it as well, I\u0027ll go ahead and do that.",
       "parentUuid": "d99de84c_a9b607ca",
+      "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4b9065a_8bb22ff6",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-12T02:27:37Z",
+      "side": 1,
+      "message": "Ah, overcautious warning is defeating some of the niceness. Either way works for me (designated initializer or `\u003d {};` followed by setting specific fields)",
+      "parentUuid": "b9a437a6_883883c9",
       "revId": "8b10ccbdb56121b3ee3c92fa4ef14df064ecde30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
