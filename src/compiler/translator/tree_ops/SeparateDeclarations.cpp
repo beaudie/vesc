@@ -19,7 +19,9 @@ namespace
 class Separator final : private TIntermRebuild
 {
   public:
-    Separator(TCompiler &compiler) : TIntermRebuild(compiler, true, true) {}
+    Separator(TCompiler &compiler, bool separateStructs)
+        : TIntermRebuild(compiler, true, true), mSeparateStructs(separateStructs)
+    {}
     using TIntermRebuild::rebuildRoot;
 
   private:
@@ -27,19 +29,29 @@ class Separator final : private TIntermRebuild
     {
         ASSERT(!mNewStructure);  // No nested struct declarations.
         TIntermSequence &sequence = *node.getSequence();
-        if (sequence.size() <= 1)
+        if (sequence.size() == 0)
+        {
+            return;
+        }
+        if (sequence.size() == 1 && !mSeparateStructs)
         {
             return;
         }
         TIntermTyped *declarator    = sequence.at(0)->getAsTyped();
         const TType &declaratorType = declarator->getType();
         const TStructure *structure = declaratorType.getStruct();
-        // Rewrite variable declarations that specify structs AND multiple variables at the same
-        // time. Only one variable can specify the struct and rest must be rewritten with new
-        // type.
+        // Rewrite variable declarations that specify structs.
         if (!structure || !declaratorType.isStructSpecifier())
         {
             return;
+        }
+        // When declaring just the struct, empty symbol type is used.
+        {
+            Declaration decl = ViewDeclaration(node);
+            if (decl.symbol.variable().symbolType() == SymbolType::Empty)
+            {
+                return;
+            }
         }
         // Struct specifier changes for all variables except the first one.
         uint32_t index = 1;
@@ -55,12 +67,19 @@ class Separator final : private TIntermRebuild
             // Adding name causes the struct type change, so all variables need rewriting.
             index = 0;
         }
+        else if (mSeparateStructs)
+        {
+            // Struct specifier changes for all declarator variables.
+            mNewStructure = structure;
+            // Struct type changes, so all variables need rewriting.
+            index = 0;
+        }
         for (; index < sequence.size(); ++index)
         {
             Declaration decl              = ViewDeclaration(node, index);
             const TVariable &var          = decl.symbol.variable();
             const TType &varType          = var.getType();
-            const bool newTypeIsSpecifier = index == 0;
+            const bool newTypeIsSpecifier = index == 0 && !mSeparateStructs;
             TType *newType                = new TType(structure, newTypeIsSpecifier);
             newType->setQualifier(varType.getQualifier());
             newType->makeArrays(varType.getArraySizes());
@@ -78,7 +97,7 @@ class Separator final : private TIntermRebuild
     PostResult visitDeclarationPost(TIntermDeclaration &node) override
     {
         TIntermSequence &sequence = *node.getSequence();
-        if (sequence.size() <= 1)
+        if (mNewStructure == nullptr && sequence.size() <= 1)
         {
             return node;
         }
@@ -86,14 +105,23 @@ class Separator final : private TIntermRebuild
         uint32_t index = 0;
         if (mNewStructure)
         {
-            TType *namedType = new TType(mNewStructure, true);
-            namedType->setQualifier(EvqGlobal);
             TIntermDeclaration *replacement = new TIntermDeclaration;
-            replacement->appendDeclarator(sequence.at(0)->getAsTyped());
             replacement->setLine(node.getLine());
+            if (mSeparateStructs)
+            {
+                TType *namedType = new TType(mNewStructure, true);
+                namedType->setQualifier(EvqGlobal);
+                TVariable *structVariable = new TVariable(&mSymbolTable, kEmptyImmutableString,
+                                                          namedType, SymbolType::Empty);
+                replacement->appendDeclarator(new TIntermSymbol(structVariable));
+            }
+            else
+            {
+                replacement->appendDeclarator(sequence.at(0)->getAsTyped());
+                index = 1;
+            }
             replacements.push_back(replacement);
             mNewStructure = nullptr;
-            index         = 1;
         }
         for (; index < sequence.size(); ++index)
         {
@@ -119,13 +147,21 @@ class Separator final : private TIntermRebuild
     const TStructure *mNewStructure = nullptr;
     // Old struct variable to new struct variable mapping.
     std::unordered_map<const TVariable *, TVariable *> mStructVariables;
+    // True if structs should not have declarators.
+    const bool mSeparateStructs;
 };
 
 }  // namespace
 
 bool SeparateDeclarations(TCompiler &compiler, TIntermBlock &root)
 {
-    Separator separator(compiler);
+    Separator separator(compiler, false);
+    return separator.rebuildRoot(root);
+}
+
+bool SeparateDeclarationsAndStructs(TCompiler &compiler, TIntermBlock &root)
+{
+    Separator separator(compiler, true);
     return separator.rebuildRoot(root);
 }
 
