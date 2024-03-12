@@ -65,6 +65,7 @@ class WebGLCompatibilityTest : public ANGLETest<>
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
         setWebGLCompatibilityEnabled(true);
+        setRobustAccess(true);
     }
 
     template <typename T>
@@ -1733,6 +1734,59 @@ void main()
     glVertexAttribPointer(wLocation, 1, GL_UNSIGNED_BYTE, GL_FALSE, 0, zeroOffset + 32);
     glDrawArraysInstanced(GL_POINTS, 0, 1, 0);
     ASSERT_GL_NO_ERROR();
+}
+
+// Test that alternating between an attribute with no source buffer and one with a zero-sized buffer
+TEST_P(WebGLCompatibilityTest, AlternateZeroSizedBuffer)
+{
+    constexpr char kVS[] = R"(attribute vec2 offset;
+void main()
+{
+    gl_Position = vec4(offset.xy, 0, 1);
+    gl_PointSize = 1.0;
+})";
+
+    constexpr char kFS[] = R"(precision mediump float;
+void main()
+{
+    gl_FragColor = vec4(1.0, 0, 0, 1.0);
+})";
+
+    GLuint vs = CompileShader(GL_VERTEX_SHADER, kVS);
+    GLuint fs = CompileShader(GL_FRAGMENT_SHADER, kFS);
+
+    GLuint program0 = glCreateProgram();
+    glBindAttribLocation(program0, 1, "offset");
+    glAttachShader(program0, vs);
+    glAttachShader(program0, fs);
+    glLinkProgram(program0);
+
+    GLuint program1 = glCreateProgram();
+    glBindAttribLocation(program0, 0, "offset");
+    glAttachShader(program1, vs);
+    glAttachShader(program1, fs);
+    glLinkProgram(program1);
+
+    glEnableVertexAttribArray(0);
+
+    GLBuffer buffer0;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer0);
+    constexpr float data[] = {1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+
+    GLBuffer buffer1;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer1);
+
+    glUseProgram(program0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glUseProgram(program1);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer1);
+    glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    EXPECT_GL_NO_ERROR();
 }
 
 // Test the checks for OOB reads in the vertex buffers, ANGLE_instanced_arrays version
