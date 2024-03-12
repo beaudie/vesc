@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef391f7b_95ca8f87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-12T08:47:06Z",
+      "side": 1,
+      "message": "Yes, it seems to work. Will land this if the latter patch looks ok by you..",
+      "parentUuid": "f6221a72_8f637988",
+      "revId": "476d2bc6cbc9cd1f0daa29cf141910ecd5cdd462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "381c076e_85507590",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-11T14:51:14Z",
       "side": 1,
       "message": "While you\u0027re at it, please move this to the bottom of the class per our style.",
+      "revId": "476d2bc6cbc9cd1f0daa29cf141910ecd5cdd462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9d39fd2_a25c59ef",
+        "filename": "src/compiler/translator/NodeType.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-12T08:47:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "381c076e_85507590",
       "revId": "476d2bc6cbc9cd1f0daa29cf141910ecd5cdd462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
