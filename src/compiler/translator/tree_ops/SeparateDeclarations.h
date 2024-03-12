@@ -35,6 +35,14 @@ class TIntermBlock;
 //    s1234 b;
 [[nodiscard]] bool SeparateDeclarations(TCompiler &compiler, TIntermBlock &root);
 
+// Transforms declarations so that in the end each declaration contains only one declarator.
+// Also transforms struct declarations to not have any declarators.
+// Input:
+//  struct Foo { int x; } foo;
+// Output:
+//  struct Foo { int x; }; Foo foo;
+[[nodiscard]] bool SeparateDeclarationsAndStructs(TCompiler &compiler, TIntermBlock &root);
+
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TREEOPS_SEPARATEDECLARATIONS_H_
