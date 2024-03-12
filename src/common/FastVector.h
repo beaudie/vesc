@@ -178,6 +178,16 @@ class FastVector final
     bool uses_fixed_storage() const;
     void resize_impl(size_type count);
 
+    // Trivially constructible types do not require initialization and have trivial destructor.
+    // Assuming that the original intention for the "FastVector" was to have uninitialized values.
+    // Otherwise, trivially constructible types must be explicitly initialized.
+    template <class T2, std::enable_if_t<std::is_trivially_constructible<T2>::value, bool> = true>
+    void reset_old_values(T2 *first, T2 *last)
+    {}
+    // Not "trivially_constructible" must be reset before reuse and (possibly) to free resources.
+    template <class T2, std::enable_if_t<!std::is_trivially_constructible<T2>::value, bool> = true>
+    void reset_old_values(T2 *first, T2 *last);
+
     Storage mFixedStorage;
     pointer mData           = mFixedStorage.data();
     size_type mSize         = 0;
@@ -276,7 +286,6 @@ FastVector<T, N, Storage> &FastVector<T, N, Storage>::operator=(
 template <class T, size_t N, class Storage>
 FastVector<T, N, Storage>::~FastVector()
 {
-    clear();
     if (!uses_fixed_storage())
     {
         delete[] mData;
@@ -398,7 +407,18 @@ template <class T, size_t N, class Storage>
 ANGLE_INLINE void FastVector<T, N, Storage>::pop_back()
 {
     ASSERT(mSize > 0);
+    reset_old_values(mData + mSize - 1, mData + mSize);
     mSize--;
+}
+
+template <class T, size_t N, class Storage>
+template <class T2, std::enable_if_t<!std::is_trivially_constructible<T2>::value, bool>>
+ANGLE_INLINE void FastVector<T, N, Storage>::reset_old_values(T2 *first, T2 *last)
+{
+    while (first != last)
+    {
+        *(first++) = value_type();
+    }
 }
 
 template <class T, size_t N, class Storage>
@@ -498,6 +518,10 @@ void FastVector<T, N, Storage>::resize_impl(size_type count)
     {
         ensure_capacity(count);
     }
+    else if (count < mSize)
+    {
+        reset_old_values(mData + count, mData + mSize);
+    }
     mSize = count;
 }
 
@@ -508,6 +532,10 @@ void FastVector<T, N, Storage>::resize(size_type count, const value_type &value)
     {
         ensure_capacity(count);
         std::fill(mData + mSize, mData + count, value);
+    }
+    else if (count < mSize)
+    {
+        reset_old_values(mData + count, mData + mSize);
     }
     mSize = count;
 }
@@ -522,6 +550,10 @@ template <class T, size_t N, class Storage>
 void FastVector<T, N, Storage>::assign_from_initializer_list(std::initializer_list<value_type> init)
 {
     ensure_capacity(init.size());
+    if (init.size() < mSize)
+    {
+        reset_old_values(mData + init.size(), mData + mSize);
+    }
     mSize        = init.size();
     size_t index = 0;
     for (auto &value : init)
