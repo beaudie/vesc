@@ -802,7 +802,7 @@ class TIntermFunctionDefinition : public TIntermNode
 class TIntermDeclaration : public TIntermNode, public TIntermAggregateBase
 {
   public:
-    TIntermDeclaration() : TIntermNode() {}
+    TIntermDeclaration() : TIntermNode() { fprintf(stderr, "new declr: %p\n", this); }
     TIntermDeclaration(const TVariable *var, TIntermTyped *initExpr);
     TIntermDeclaration(std::initializer_list<const TVariable *> declarators);
     TIntermDeclaration(std::initializer_list<TIntermTyped *> declarators);
