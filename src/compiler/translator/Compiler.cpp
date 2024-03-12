@@ -183,6 +183,34 @@ bool IsGLSL410OrOlder(ShShaderOutput output)
             output == SH_GLSL_400_CORE_OUTPUT || output == SH_GLSL_410_CORE_OUTPUT);
 }
 
+bool IsGLSLOrESSL(ShShaderOutput output)
+{
+    switch (output)
+    {
+        case SH_ESSL_OUTPUT:
+        case SH_GLSL_COMPATIBILITY_OUTPUT:
+        case SH_GLSL_130_OUTPUT:
+        case SH_GLSL_140_OUTPUT:
+        case SH_GLSL_150_CORE_OUTPUT:
+        case SH_GLSL_330_CORE_OUTPUT:
+        case SH_GLSL_400_CORE_OUTPUT:
+        case SH_GLSL_410_CORE_OUTPUT:
+        case SH_GLSL_420_CORE_OUTPUT:
+        case SH_GLSL_430_CORE_OUTPUT:
+        case SH_GLSL_440_CORE_OUTPUT:
+        case SH_GLSL_450_CORE_OUTPUT:
+            return true;
+        case SH_HLSL_3_0_OUTPUT:
+        case SH_HLSL_4_1_OUTPUT:
+        case SH_HLSL_4_0_FL9_3_OUTPUT:
+        case SH_SPIRV_VULKAN_OUTPUT:
+        case SH_MSL_METAL_OUTPUT:
+            return false;
+    }
+    UNREACHABLE();
+    return false;
+}
+
 bool RemoveInvariant(sh::GLenum shaderType,
                      int shaderVersion,
                      ShShaderOutput outputType,
@@ -1023,20 +1051,26 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    // Note that separate declarations need to be run before other AST transformations that
+    // generate new statements from expressions.
+    {
+        // GLSL output would need a pass to combine the separated variables that are
+        // part of the interface.
+        const bool separateAnonymousInterfaceStructs          = !IsGLSLOrESSL(mOutputType);
+        mValidateASTOptions.validateMultiDeclarations         = true;
+        mValidateASTOptions.validateAnonymousInterfaceStructs = separateAnonymousInterfaceStructs;
+
+        if (!SeparateDeclarations(*this, *root, separateAnonymousInterfaceStructs))
+        {
+            return false;
+        }
+    }
+
     // Split multi declarations and remove calls to array length().
     // Note that SimplifyLoopConditions needs to be run before any other AST transformations
     // that may need to generate new statements from loop conditions or loop expressions.
-    if (!SimplifyLoopConditions(this, root,
-                                IntermNodePatternMatcher::kMultiDeclaration |
-                                    IntermNodePatternMatcher::kArrayLengthMethod,
+    if (!SimplifyLoopConditions(this, root, IntermNodePatternMatcher::kArrayLengthMethod,
                                 &getSymbolTable()))
-    {
-        return false;
-    }
-
-    // Note that separate declarations need to be run before other AST transformations that
-    // generate new statements from expressions.
-    if (!SeparateDeclarations(*this, *root))
     {
         return false;
     }
@@ -1048,8 +1082,6 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
             return false;
         }
     }
-
-    mValidateASTOptions.validateMultiDeclarations = true;
 
     if (!SplitSequenceOperator(this, root, IntermNodePatternMatcher::kArrayLengthMethod,
                                &getSymbolTable()))

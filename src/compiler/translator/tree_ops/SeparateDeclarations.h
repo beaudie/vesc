@@ -14,7 +14,12 @@ namespace sh
 class TCompiler;
 class TIntermBlock;
 
-// Transforms declarations so that in the end each declaration contains only one declarator.
+// Transforms declarations so that:
+//  - each declaration contains only one declarator
+//  - structs always have names
+//  - struct declarations never have any declarators
+//  - for loop intializers never declare anything, rather declarations and their initializers are
+//  moved to new enclosing block
 // This is useful as an intermediate step when initialization needs to be separated from
 // declaration, or when things need to be unfolded out of the initializer.
 // Examples:
@@ -26,14 +31,30 @@ class TIntermBlock;
 // Input:
 //    struct S { vec3 d; } a, b;
 // Output:
-//    struct S { vec3 d; } a;
+//    struct S { vec3 d; };
+//    S a;
 //    S b;
 // Input:
 //    struct { vec3 d; } a, b;
 // Output:
-//    struct s1234 { vec3 d; } a;
+//    struct s1234 { vec3 d; };
+//    s1234 a;
 //    s1234 b;
-[[nodiscard]] bool SeparateDeclarations(TCompiler &compiler, TIntermBlock &root);
+// Input:
+//   for (struct S { vec3 d; } a; a.d < 4.; a.d++) ...
+// Output
+//    {
+//       struct S { vec d; };
+//       S a;
+//       for (; a.d < 4.; a.d++) ...
+//    }
+// Input (separateAnonymousInterfaceStructs == false):
+//    out struct { vec3 d; } a, b;
+// Output:
+//    out struct { vec3 d; } a, b; (no change)
+[[nodiscard]] bool SeparateDeclarations(TCompiler &compiler,
+                                        TIntermBlock &root,
+                                        bool separateAnonymousInterfaceStructs = true);
 
 }  // namespace sh
 
