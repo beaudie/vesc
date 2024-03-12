@@ -124,6 +124,9 @@ class ValidateAST : public TIntermTraverser
     // For validateMultiDeclarations:
     bool mMultiDeclarationsFailed = false;
 
+    // For validateAnonymousInterfaceStructs:
+    bool mValidateAnonymousInterfaceStructsFailed = false;
+
     // For validateNoSwizzleOfSwizzle:
     bool mNoSwizzleOfSwizzleFailed = false;
 
@@ -1104,22 +1107,55 @@ bool ValidateAST::visitDeclaration(Visit visit, TIntermDeclaration *node)
 
     const TIntermSequence &sequence = *(node->getSequence());
 
-    if (mOptions.validateMultiDeclarations && sequence.size() > 1)
+    if (mOptions.validateMultiDeclarations)
     {
-        TIntermSymbol *symbol = sequence[1]->getAsSymbolNode();
-        if (symbol == nullptr)
+        if (sequence.size() > 0)
         {
-            TIntermBinary *init = sequence[1]->getAsBinaryNode();
-            ASSERT(init && init->getOp() == EOpInitialize);
-            symbol = init->getLeft()->getAsSymbolNode();
-        }
-        ASSERT(symbol);
+            TIntermTyped *declarator    = sequence.at(0)->getAsTyped();
+            const TType &declaratorType = declarator->getType();
+            bool shouldValidate         = true;
+            if (declaratorType.isStructSpecifier())
+            {
+                Declaration decl = ViewDeclaration(*node, 0);
+                if (getParentNode()->getAsLoopNode())
+                {
+                    mDiagnostics->error(
+                        node->getLine(),
+                        "Found declaration specifying a struct in a for loop initializer"
+                        "where SeparateDeclarations should have "
+                        "separated them <validateMultiDeclarations>",
+                        decl.symbol.variable().name().data());
+                    mMultiDeclarationsFailed = true;
+                }
 
-        mDiagnostics->error(node->getLine(),
-                            "Found multiple declarations where SeparateDeclarations should have "
-                            "separated them <validateMultiDeclarations>",
-                            symbol->variable().name().data());
-        mMultiDeclarationsFailed = true;
+                if (!mOptions.validateAnonymousInterfaceStructs)
+                {
+                    const TStructure *structure = declaratorType.getStruct();
+                    shouldValidate              = structure->symbolType() != SymbolType::Empty ||
+                                     (!IsShaderIn(declaratorType.getQualifier()) &&
+                                      !IsShaderOut(declaratorType.getQualifier()));
+                }
+                if (shouldValidate && decl.symbol.variable().symbolType() != SymbolType::Empty)
+                {
+                    mDiagnostics->error(node->getLine(),
+                                        "Found declaration specifying a struct and declaring a "
+                                        "variable where SeparateDeclarations should have "
+                                        "separated them <validateMultiDeclarations>",
+                                        decl.symbol.variable().name().data());
+                    mMultiDeclarationsFailed = true;
+                }
+            }
+            if (sequence.size() > 1 && shouldValidate)
+            {
+                Declaration decl = ViewDeclaration(*node, 1);
+                mDiagnostics->error(
+                    node->getLine(),
+                    "Found multiple declarations where SeparateDeclarations should have "
+                    "separated them <validateMultiDeclarations>",
+                    decl.symbol.variable().name().data());
+                mMultiDeclarationsFailed = true;
+            }
+        }
     }
 
     if (visit == PreVisit)
@@ -1255,7 +1291,8 @@ bool ValidateAST::validateInternal()
     return !mSingleParentFailed && !mVariableReferencesFailed && !mOpsFailed &&
            !mBuiltInOpsFailed && !mFunctionCallFailed && !mNoRawFunctionCallsFailed &&
            !mNullNodesFailed && !mQualifiersFailed && !mPrecisionFailed && !mStructUsageFailed &&
-           !mExpressionTypesFailed && !mMultiDeclarationsFailed && !mNoSwizzleOfSwizzleFailed &&
+           !mExpressionTypesFailed && !mMultiDeclarationsFailed &&
+           !mValidateAnonymousInterfaceStructsFailed && !mNoSwizzleOfSwizzleFailed &&
            !mNoStatementsAfterBranchFailed;
 }
 

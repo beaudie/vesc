@@ -914,3 +914,37 @@ TEST_F(MSLVertexOutputTest, ClipDistanceVarying)
 void main(){gl_ClipDistance[0];})";
     compile(kShader);
 }
+
+// Tests that separating variable declaration of single instance of a anonymous structure
+// rewrites the expression types for expressions that use the variables. At the time of writing
+// the expression types were left referencing the original anonymous function. This would cause
+// an assert while emitting a temporary variable caused by the comma expression.
+TEST_F(MSLOutputTest, SeparateAnonymousFunctionsRewritesExpressions)
+{
+    const char kShader[] = R"(
+void main() {
+    struct {
+        mediump vec2 d;
+    } a;
+    a = a,1;
+    gl_FragColor.rg = a.d;
+})";
+    compile(kShader);
+}
+
+// Tests that separating variable declaration of single instance of a anonymous structure
+// rewrites the expression types for expressions that use the variables. At the time of writing
+// the expression types were left referencing the original anonymous function. This would cause
+// an assert while emitting a temporary variable caused by the comma expression.
+TEST_F(MSLOutputTest, SeparateAnonymousFunctionsRewritesExpressions2)
+{
+    const char kShader[] = R"(
+void main() {
+    struct S {
+        mediump vec2 d;
+    } a;
+    a = a,1;
+    gl_FragColor.rg = a.d;
+})";
+    compile(kShader);
+}

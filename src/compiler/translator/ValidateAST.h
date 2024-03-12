@@ -94,6 +94,8 @@ struct ValidateASTOptions
     bool validateExpressionTypes = true;
     // If SeparateDeclarations has been run, check for the absence of multi declarations as well.
     bool validateMultiDeclarations = false;
+    // If SeparateDeclarations has been run, check for the absence of anonymous structs.
+    bool validateAnonymousInterfaceStructs = false;
     // If PruneNoOps has been run, check that no statements are ever added after branches in the
     // same block.  Those statements would be dead code.
     bool validateNoStatementsAfterBranch = false;
