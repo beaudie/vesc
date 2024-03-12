@@ -16,6 +16,24 @@
       "message": "This is out of place, why would the Vulkan backend depend on CTS?",
       "revId": "ee898e9da54efa73355a7ceb5dd8b128acc0df58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e2f904b_39b32345",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-03-12T20:54:09Z",
+      "side": 1,
+      "message": "Addressed. Could you please rebase the Bot commit to use this latest change?",
+      "parentUuid": "25d76701_1cd9ba98",
+      "revId": "ee898e9da54efa73355a7ceb5dd8b128acc0df58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
