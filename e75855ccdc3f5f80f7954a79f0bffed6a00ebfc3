@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03d648a5_e3c5a063",
+        "filename": "src/compiler/translator/IntermNode.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-12T15:03:05Z",
+      "side": 1,
+      "message": "Remember to revert",
+      "revId": "e75855ccdc3f5f80f7954a79f0bffed6a00ebfc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
