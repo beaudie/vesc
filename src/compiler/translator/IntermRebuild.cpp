@@ -6,10 +6,10 @@
 
 #include <algorithm>
 
-#include "compiler/translator/Compiler.h"
-#include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/AsNode.h"
+#include "compiler/translator/Compiler.h"
 #include "compiler/translator/IntermRebuild.h"
+#include "compiler/translator/SymbolTable.h"
 
 #define GUARD2(cond, failVal) \
     do                        \
@@ -798,8 +798,6 @@ TIntermNode *TIntermRebuild::traverseLoopChildren(TIntermLoop &node)
     }
 #endif
 
-    auto *const newBody = traverseAnyAs<TIntermBlock>(*body);
-    GUARD(newBody);
     TIntermNode *newInit = nullptr;
     if (init)
     {
@@ -815,7 +813,8 @@ TIntermNode *TIntermRebuild::traverseLoopChildren(TIntermLoop &node)
     {
         GUARD(traverseAnyAs(*expr, newExpr));
     }
-
+    auto *const newBody = traverseAnyAs<TIntermBlock>(*body);
+    GUARD(newBody);
     if (newInit != init || newCond != cond || newExpr != expr || newBody != body)
     {
         switch (loopType)
