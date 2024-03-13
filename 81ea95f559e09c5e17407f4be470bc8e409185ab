@@ -142,6 +142,30 @@
       },
       "revId": "81ea95f559e09c5e17407f4be470bc8e409185ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dfc4d74_572fd27e",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2024-03-13T20:06:11Z",
+      "side": 1,
+      "message": "Unless there is a good reason not to, we should follow what it says in the DirectX 11 spec.",
+      "parentUuid": "0f1f7822_d9ba1de4",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 318,
+        "endChar": 62
+      },
+      "revId": "81ea95f559e09c5e17407f4be470bc8e409185ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
