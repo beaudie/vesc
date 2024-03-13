@@ -33,6 +33,24 @@
       "message": "My suggestion is to drop this flag, and make `SeparateDeclarations` always separate the type declaration.\n\nThere\u0027s no value in doing the exceptional case of not separating named structs from the first declaration that uses it. I\u0027d say that\u0027s even harmful, because exceptional cases are just more sources of bugs.",
       "revId": "a7a7e830b30e425a234aba97142d0e46bdb0971b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76307f6d_9ce71e19",
+        "filename": "src/compiler/translator/tree_ops/SeparateDeclarations.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-13T13:52:21Z",
+      "side": 1,
+      "message": "Done.\nCollectHashedVertexVariablesTest, NamelessStructUniform reveals the API implications. These implications were present before this change, though..",
+      "parentUuid": "cb46f1cb_40ae3079",
+      "revId": "a7a7e830b30e425a234aba97142d0e46bdb0971b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
