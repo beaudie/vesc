@@ -377,14 +377,20 @@ angle::Result CLCommandQueueVk::enqueueNativeKernel(cl::UserFunc userFunc,
 angle::Result CLCommandQueueVk::enqueueMarkerWithWaitList(const cl::EventPtrs &waitEvents,
                                                           CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    ANGLE_TRY(enqueueWaitForEvents(waitEvents));
+    ANGLE_TRY(createEvent(eventCreateFunc));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueMarker(CLEventImpl::CreateFunc &eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    // This deprecated API is essentially a super-set of clEnqueueBarrier, where we also return an
+    // event object (i.e. marker) since clEnqueueBarrier does not provide this
+    ANGLE_TRY(enqueueBarrier());
+    ANGLE_TRY(createEvent(&eventCreateFunc));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueWaitForEvents(const cl::EventPtrs &events)
@@ -418,14 +424,29 @@ angle::Result CLCommandQueueVk::enqueueWaitForEvents(const cl::EventPtrs &events
 angle::Result CLCommandQueueVk::enqueueBarrierWithWaitList(const cl::EventPtrs &waitEvents,
                                                            CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    // The barrier command either waits for a list of events to complete, or if the list is empty it
+    // waits for all commands previously enqueued in command_queue to complete before it completes
+    if (waitEvents.empty())
+    {
+        ANGLE_TRY(enqueueBarrier());
+    }
+    else
+    {
+        ANGLE_TRY(enqueueWaitForEvents(waitEvents));
+    }
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueBarrier()
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    // Place a execution barrier here
+    mComputePassCommands->getCommandBuffer().pipelineBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                                             0, 0, nullptr, 0, nullptr, 0, nullptr);
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::flush()
