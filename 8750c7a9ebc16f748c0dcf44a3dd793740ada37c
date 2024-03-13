@@ -33,6 +33,24 @@
       "message": "The original comment was true, they cannot be incomplete. However, the spec has this text:\n\n\u003e If no buffer object is bound to the buffer texture, the results of the texel access are undefined.\n\nCould you please quote that, and say we mark them incomplete so a black texture is used instead?",
       "revId": "8750c7a9ebc16f748c0dcf44a3dd793740ada37c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44c1b446_3b248a78",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-13T21:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c250178_c0a7d747",
+      "revId": "8750c7a9ebc16f748c0dcf44a3dd793740ada37c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
