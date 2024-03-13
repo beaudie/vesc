@@ -69,6 +69,24 @@
       "parentUuid": "9820cf10_1385c14c",
       "revId": "189339abf0de0f76c9fbca005dbaf146c935002d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ac85962_8c3f3523",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-13T21:02:43Z",
+      "side": 1,
+      "message": "If the relevant code becomes incorrect in the future, these assertion will be triggered. There should be no way to trigger them now. The previous CL accidentally made them less strict.",
+      "parentUuid": "b9bd535d_f8f024a1",
+      "revId": "189339abf0de0f76c9fbca005dbaf146c935002d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
