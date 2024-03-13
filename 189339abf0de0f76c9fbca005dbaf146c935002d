@@ -33,6 +33,24 @@
       "message": "lgtm+2\n\nI second Shabi\u0027s request for a test. Thanks in advance.",
       "revId": "189339abf0de0f76c9fbca005dbaf146c935002d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9820cf10_1385c14c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-13T19:28:49Z",
+      "side": 1,
+      "message": "These were actually existing asserts, I just moved them in a bit wrong position in a patch and Alexey called me on it. So now they are again in sensible place.",
+      "parentUuid": "73e9752f_6f3aca26",
+      "revId": "189339abf0de0f76c9fbca005dbaf146c935002d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
