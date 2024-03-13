@@ -641,7 +641,10 @@ angle::Result CommandQueue::enqueueMarkerWithWaitList(cl_uint numEventsInWaitLis
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
 
-    ANGLE_TRY(mImpl->enqueueMarkerWithWaitList(waitEvents, eventCreateFuncPtr));
+    {
+        std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+        ANGLE_TRY(mImpl->enqueueMarkerWithWaitList(waitEvents, eventCreateFuncPtr));
+    }
 
     CheckCreateEvent(*this, CL_COMMAND_MARKER, eventCreateFunc, event);
     return angle::Result::Continue;
@@ -651,7 +654,10 @@ angle::Result CommandQueue::enqueueMarker(cl_event *event)
 {
     rx::CLEventImpl::CreateFunc eventCreateFunc;
 
-    ANGLE_TRY(mImpl->enqueueMarker(eventCreateFunc));
+    {
+        std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+        ANGLE_TRY(mImpl->enqueueMarker(eventCreateFunc));
+    }
 
     CheckCreateEvent(*this, CL_COMMAND_MARKER, eventCreateFunc, event);
     return angle::Result::Continue;
@@ -672,7 +678,10 @@ angle::Result CommandQueue::enqueueBarrierWithWaitList(cl_uint numEventsInWaitLi
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
 
-    ANGLE_TRY(mImpl->enqueueBarrierWithWaitList(waitEvents, eventCreateFuncPtr));
+    {
+        std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+        ANGLE_TRY(mImpl->enqueueBarrierWithWaitList(waitEvents, eventCreateFuncPtr));
+    }
 
     CheckCreateEvent(*this, CL_COMMAND_BARRIER, eventCreateFunc, event);
     return angle::Result::Continue;
@@ -680,6 +689,7 @@ angle::Result CommandQueue::enqueueBarrierWithWaitList(cl_uint numEventsInWaitLi
 
 angle::Result CommandQueue::enqueueBarrier()
 {
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
     return mImpl->enqueueBarrier();
 }
 
