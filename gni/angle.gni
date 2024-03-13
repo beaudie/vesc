@@ -207,7 +207,7 @@ declare_args() {
   # Disable WGPU backend.
   # anglebug.com/8541
   angle_enable_wgpu =
-      !is_official_build && !(is_android || is_fuchsia || is_win) &&
+      !is_official_build && !(is_android || is_fuchsia || angle_is_winuwp) &&
       defined(angle_dawn_dir)
 }
 
