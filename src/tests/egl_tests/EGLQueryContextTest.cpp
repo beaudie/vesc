@@ -19,7 +19,7 @@ class EGLQueryContextTest : public ANGLETest<>
 
         EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};
         mDisplay           = eglGetPlatformDisplayEXT(
-                      EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
+            EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
         EXPECT_TRUE(mDisplay != EGL_NO_DISPLAY);
         EXPECT_TRUE(eglInitialize(mDisplay, nullptr, nullptr) != EGL_FALSE);
 
@@ -148,6 +148,37 @@ TEST_P(EGLQueryContextTest, BadAttribute)
     EGLint val;
     EXPECT_TRUE(eglQueryContext(mDisplay, mContext, EGL_HEIGHT, &val) == EGL_FALSE);
     EXPECT_TRUE(eglGetError() == EGL_BAD_ATTRIBUTE);
+}
+
+// Test that EGL_OPENGL_API is supported only if angle_enable_gl_desktop_frontend is enabled
+TEST_P(EGLQueryContextTest, DesktopGlApi)
+{
+#ifdef ANGLE_ENABLE_GL_DESKTOP_FRONTEND
+    const bool kIsDesktopGlApiSupported = true;
+#else
+    const bool kIsDesktopGlApiSupported = false;
+#endif  // ANGLE_ENABLE_GL_DESKTOP_FRONTEND
+
+    EGLint majorVersion, minorVersion;
+    ASSERT_EGL_TRUE(eglInitialize(mDisplay, &majorVersion, &minorVersion));
+
+    eglBindAPI(EGL_OPENGL_API);
+    if (kIsDesktopGlApiSupported)
+    {
+        ASSERT_EGL_SUCCESS();
+
+        const EGLint configAttributes[] = {EGL_NONE};
+        EGLint configCount              = 0;
+        ASSERT_EGL_TRUE(eglChooseConfig(mDisplay, configAttributes, &mConfig, 1, &configCount));
+
+        EGLint contextAttibutes[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
+        eglCreateContext(mDisplay, mConfig, nullptr, contextAttibutes);
+        ASSERT_EGL_SUCCESS();
+    }
+    else
+    {
+        EXPECT_EGL_ERROR(EGL_BAD_PARAMETER);
+    }
 }
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLQueryContextTest);
