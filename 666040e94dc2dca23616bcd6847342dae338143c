@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "666040e94dc2dca23616bcd6847342dae338143c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1fc44bf_2603ad28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-13T23:08:37Z",
+      "side": 1,
+      "message": "im a little confused about the failure here -\u003e https://ci.chromium.org/ui/p/angle/builders/try/win-test/18835/overview\n\nthe gn args of the bot shows this -\n```\nangle_enable_cl \u003d true\nangle_enable_gl_desktop_frontend \u003d true\nangle_with_capture_by_default \u003d true\ndcheck_always_on \u003d true\nis_component_build \u003d true\nis_debug \u003d false\nsymbol_level \u003d 1\nuse_remoteexec \u003d true\n```\n\nbut the test was not skipped even though i have this condition in there -\n```\n#ifdef ANGLE_ENABLE_GL_DESKTOP_FRONTEND\n    // If gn args enables desktop GL frontend, skip the test.\n    ANGLE_SKIP_TEST_IF(true);\n#endif  // ANGLE_ENABLE_GL_DESKTOP_FRONTEND\n```",
+      "revId": "666040e94dc2dca23616bcd6847342dae338143c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
