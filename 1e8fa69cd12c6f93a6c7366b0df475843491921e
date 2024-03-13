@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75eb73f1_e8ce57b8",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-13T02:03:15Z",
+      "side": 1,
+      "message": "Last nit I swear\n\n```suggestion\n    mDefaultBufferCreateInfo             \u003d {};\n```",
+      "range": {
+        "startLine": 124,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 15
+      },
+      "revId": "1e8fa69cd12c6f93a6c7366b0df475843491921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
