@@ -33,6 +33,24 @@
       "message": "This change is a no-op due to this assert. We intentionally don\u0027t want to reset old values here because doing that indeed shows up as a perf hit.\n\nWhat is your use case? Perhaps `std::vector` works just fine for whatever you have in mind.",
       "revId": "cb03ad416339d778ecd9a2419c27ca4b4778a48a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e520cd2_72f6d413",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-13T21:23:08Z",
+      "side": 1,
+      "message": "i think this was a speculative fix, im not really sure i have a non-contrived test case for this. the contrived one would be -\n1. fill fastvector with elements say, some `*Desc`\n2. shrink size by 1\n3. grow size by 1\n4. some code checks for validity of last item by just checking `*Desc.valid()` to do some descriptor update",
+      "parentUuid": "ee7945e4_4074848f",
+      "revId": "cb03ad416339d778ecd9a2419c27ca4b4778a48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
