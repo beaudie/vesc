@@ -5164,11 +5164,10 @@ bool ValidateBindAPI(const ValidationContext *val, const EGLenum api)
     switch (api)
     {
         case EGL_OPENGL_ES_API:
-        case EGL_OPENGL_API:
             break;
+        case EGL_OPENGL_API:
         case EGL_OPENVG_API:
-            val->setError(EGL_BAD_PARAMETER);
-            return false;  // Not supported by this implementation
+            // Not supported by this implementation
         default:
             val->setError(EGL_BAD_PARAMETER);
             return false;
