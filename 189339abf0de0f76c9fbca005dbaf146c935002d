@@ -51,6 +51,24 @@
       "parentUuid": "73e9752f_6f3aca26",
       "revId": "189339abf0de0f76c9fbca005dbaf146c935002d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9bd535d_f8f024a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-13T20:23:58Z",
+      "side": 1,
+      "message": "I mean, the change is fixing _something_, right? If there\u0027s no test, the bug may accidentally creep back in in the future.",
+      "parentUuid": "9820cf10_1385c14c",
+      "revId": "189339abf0de0f76c9fbca005dbaf146c935002d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
