@@ -51,6 +51,24 @@
       "parentUuid": "cb46f1cb_40ae3079",
       "revId": "a7a7e830b30e425a234aba97142d0e46bdb0971b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9324da31_5742eb66",
+        "filename": "src/compiler/translator/tree_ops/SeparateDeclarations.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-13T14:05:01Z",
+      "side": 1,
+      "message": "Right, that\u0027s why you fixed `CollectVariables.cpp` right? That is, there\u0027s no actual API implication after this CL",
+      "parentUuid": "76307f6d_9ce71e19",
+      "revId": "a7a7e830b30e425a234aba97142d0e46bdb0971b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
