@@ -2033,7 +2033,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                     VkImageTiling tilingMode,
                                     VkImageUsageFlags usageFlags,
                                     VkImageCreateFlags createFlags,
-                                    void *propertiesPNext);
+                                    void *propertiesPNext,
+                                    VkImageFormatProperties *imageFormatPropertiesOut);
 
     // Image formats used for the creation of imageless framebuffers.
     using ImageFormats = angle::FixedVector<VkFormat, kImageListFormatCount>;
