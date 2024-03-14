@@ -5786,7 +5786,8 @@ bool ImageHelper::FormatSupportsUsage(RendererVk *renderer,
                                       VkImageTiling tilingMode,
                                       VkImageUsageFlags usageFlags,
                                       VkImageCreateFlags createFlags,
-                                      void *propertiesPNext)
+                                      void *propertiesPNext,
+                                      bool requireMultisampling)
 {
     VkPhysicalDeviceImageFormatInfo2 imageFormatInfo = {};
     imageFormatInfo.sType  = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
@@ -5803,6 +5804,11 @@ bool ImageHelper::FormatSupportsUsage(RendererVk *renderer,
     VkResult result = vkGetPhysicalDeviceImageFormatProperties2(
         renderer->getPhysicalDevice(), &imageFormatInfo, &imageFormatProperties2);
 
+    if (requireMultisampling)
+    {
+        return result == VK_SUCCESS &&
+               imageFormatProperties2.imageFormatProperties.sampleCounts > 1;
+    }
     return result == VK_SUCCESS;
 }
 
