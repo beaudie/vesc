@@ -3649,13 +3649,29 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         mOwnsImage && samples == 1 &&
         contextVk->getFeatures().supportsMultisampledRenderToSingleSampled.enabled)
     {
+        VkImageCreateFlags createFlagsMultisampled =
+            mImageCreateFlags |
+            vk::GetMinimalImageCreateFlags(renderer, mState.getType(), mImageUsageFlags) |
+            VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT;
+        const VkFormat additionalViewFormat = rx::vk::GetVkFormatFromFormatID(
+            angle::Format::Get(actualImageFormatID).isSRGB ? ConvertToLinear(actualImageFormatID)
+                                                           : ConvertToSRGB(actualImageFormatID));
+
+        auto supportsMSRTT = [&](VkFormat format) {
+            VkImageFormatProperties imageFormatProperties;
+            if (!vk::ImageHelper::FormatSupportsUsage(renderer, format, imageType, imageTiling,
+                                                      mImageUsageFlags, createFlagsMultisampled,
+                                                      nullptr, &imageFormatProperties))
+            {
+                return false;
+            }
+            // Some drivers return success but sampleCounts == 1 which means no MSRTT
+            return imageFormatProperties.sampleCounts > 1;
+        };
 
         // Note: If we ever fail the following check, we should use the emulation path for this
         // texture instead of ignoring MSRTT.
-        if (vk::ImageHelper::FormatSupportsUsage(
-                renderer, actualImageFormat, imageType, imageTiling, mImageUsageFlags,
-                mImageCreateFlags | VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT,
-                nullptr))
+        if (supportsMSRTT(actualImageFormat) && supportsMSRTT(additionalViewFormat))
         {
             // If supported by format add the MSRTSS flag because any texture might end up as an
             // MSRTT attachment.
@@ -3680,7 +3696,7 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         if (vk::ImageHelper::FormatSupportsUsage(
                 renderer, actualImageFormat, imageType, imageTiling,
                 mImageUsageFlags | VK_IMAGE_USAGE_HOST_TRANSFER_BIT_EXT, mImageCreateFlags,
-                &perfQuery))
+                &perfQuery, nullptr))
         {
             // Only enable it if it has no performance impact whatsoever (or impact is tiny, given
             // feature).
