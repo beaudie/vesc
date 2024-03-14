@@ -34,6 +34,41 @@
       "parentUuid": "73012532_06376388",
       "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca4624e8_aff89ecf",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-14T03:38:10Z",
+      "side": 1,
+      "message": "Hmm ok, it\u0027s kind of a ref-counting bug. When the texture is allocated below, its ref count is zero, attached to texture it becomes one, and when texture is deleted it drops to 0 and gets cleaned.",
+      "parentUuid": "ebd0e255_9e467dfd",
+      "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee8bdfb7_bf292f0c",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-14T03:38:10Z",
+      "side": 1,
+      "message": "Could you please add `mIncompleteTextureBufferAttachment-\u003eaddRef()` here instead?",
+      "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
