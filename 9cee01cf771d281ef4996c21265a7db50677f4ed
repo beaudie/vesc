@@ -16,6 +16,24 @@
       "message": "What is the reason for this change? `mIncompleteTextureBufferAttachment` is not used anymore (so it could be deleted), but more importantly, this buffer is now no longer cleaned up.",
       "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebd0e255_9e467dfd",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-14T03:29:48Z",
+      "side": 1,
+      "message": "\u003e so it could be deleted\n\ni should have probably completely removed `mIncompleteTextureBufferAttachment` in a split change?\n\n\u003e this buffer is now no longer cleaned up\u0027\n\nits actually the opposite, there is double free-ing, once by the incomplete texture\u0027s onDestroy and then again through `mIncompleteTextureBufferAttachment` onDestroy\n\nsee here for details -\u003e https://chromium-swarm.appspot.com/task?id\u003d685288f4b7d71911\u0026o\u003dtrue\u0026w\u003dtrue\n```\n[ RUN      ] TextureBufferTestES31.DrawIncompleteNonZeroTexture/ES3_1_Vulkan_SwiftShader\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\u003d\u003d29166\u003d\u003dERROR: AddressSanitizer: heap-use-after-free on address 0x51500009cb30 at pc 0x7debf3c4466a bp 0x7ffde77211c0 sp 0x7ffde77211b8\nWRITE of size 8 at 0x51500009cb30 thread T0\n    #0 0x7debf3c44669 in resize_impl src/common/FastVector.h:501:11\n    #1 0x7debf3c44669 in clear src/common/FastVector.h:371:5\n    #2 0x7debf3c44669 in gl::Buffer::onDestroy(gl::Context const*) src/libANGLE/Buffer.cpp:61:24\n    #3 0x7debf4164417 in rx::IncompleteTextureSet::onDestroy(gl::Context const*) src/libANGLE/renderer/renderer_utils.cpp:690:45\n    #4 0x7debf3660a4f in rx::ContextVk::onDestroy(gl::Context const*) src/libANGLE/renderer/vulkan/ContextVk.cpp:1281:25\n    #5 0x7debf3c7ff5a in gl::Context::onDestroy(egl::Display const*) src/libANGLE/Context.cpp:899:22\n    #6 0x7debf3d5b60b in egl::Display::releaseContextImpl(gl::Context*, absl::flat_hash_map\u003cunsigned int, gl::Context*, absl::hash_internal::Hash\u003cunsigned int\u003e, std::__Cr::equal_to\u003cunsigned int\u003e, std::__Cr::allocator\u003cstd::__Cr::pair\u003cunsigned int const, gl::Context*\u003e\u003e\u003e*) src/libANGLE/Display.cpp:1891:5\n    #7 0x7debf3d691d7 in releaseContext src/libANGLE/Display.cpp:1851:12\n    #8 0x7debf3d691d7 in egl::Display::makeCurrent(egl::Thread*, gl::Context*, egl::Surface*, egl::Surface*, gl::Context*) src/libANGLE/Display.cpp:1732:13\n    #9 0x7debf3d6b271 in egl::Display::destroyContext(egl::Thread*, gl::Context*) src/libANGLE/Display.cpp:1935:9\n    #10 0x7debf34223ea in egl::DestroyContext(egl::Thread*, egl::Display*, gl::ContextID) src/libGLESv2/egl_stubs.cpp:313:5\n    #11 0x7debf342e8da in EGL_DestroyContext src/libGLESv2/entry_points_egl_autogen.cpp:252:27\n    #12 0x7debfaf47e91 in EGLWindow::destroyContext() util/EGLWindow.cpp:695:9\n    #13 0x60fbfc90e8c0 in ANGLETestBase::ANGLETestTearDown() src/tests/test_utils/ANGLETest.cpp:827:30\n    #14 0x60fbfca86f2f in testing::TestInfo::Run() third_party/googletest/src/googletest/src/gtest.cc:2885:11\n    #15 0x60fbfca893aa in testing::TestSuite::Run() third_party/googletest/src/googletest/src/gtest.cc:3039:28\n    #16 0x60fbfcaa8734 in testing::internal::UnitTestImpl::RunAllTests() third_party/googletest/src/googletest/src/gtest.cc:5897:44\n    #17 0x60fbfcaa77ea in testing::UnitTest::Run() third_party/googletest/src/googletest/src/gtest.cc:5464:10\n    #18 0x60fbfca114c3 in RUN_ALL_TESTS third_party/googletest/src/googletest/include/gtest/gtest.h:2492:46\n    #19 0x60fbfca114c3 in angle::TestSuite::run() src/tests/test_utils/runner/TestSuite.cpp:1660:22\n    #20 0x60fbfc91b876 in main src/tests/angle_end2end_tests_main.cpp:75:22\n    #21 0x7debfa429d8f in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16\n\n```",
+      "parentUuid": "73012532_06376388",
+      "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
