@@ -1232,6 +1232,11 @@ group("angle_abseil") {
     # we can be more specific when building standalone ANGLE.
     if (build_with_chromium || is_component_build) {
       public_deps = [ "$angle_abseil_cpp_dir:absl" ]
+    } else if (angle_enable_wgpu) {
+      public_deps = [
+        "$angle_dawn_dir/third_party/gn/abseil-cpp:flat_hash_map",
+        "$angle_dawn_dir/third_party/gn/abseil-cpp:flat_hash_set",
+      ]
     } else {
       public_deps = [
         "$angle_abseil_cpp_dir/absl/container:flat_hash_map",
