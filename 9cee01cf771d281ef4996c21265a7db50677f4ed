@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73012532_06376388",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-14T03:24:25Z",
+      "side": 1,
+      "message": "What is the reason for this change? `mIncompleteTextureBufferAttachment` is not used anymore (so it could be deleted), but more importantly, this buffer is now no longer cleaned up.",
+      "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
