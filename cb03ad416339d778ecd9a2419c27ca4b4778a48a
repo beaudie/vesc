@@ -51,6 +51,24 @@
       "parentUuid": "ee7945e4_4074848f",
       "revId": "cb03ad416339d778ecd9a2419c27ca4b4778a48a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f12aead_72c53281",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-14T01:47:54Z",
+      "side": 1,
+      "message": "Yeah so that sort of thing actually happened in the past, but it was fixed and as protection against it this `static_assert` was added. There shouldn\u0027t be a bug then, right? You can shelve this",
+      "parentUuid": "5e520cd2_72f6d413",
+      "revId": "cb03ad416339d778ecd9a2419c27ca4b4778a48a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
