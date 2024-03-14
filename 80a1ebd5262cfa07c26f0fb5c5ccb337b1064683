@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cda8170_d93f94f4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3670,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-14T19:26:51Z",
+      "side": 1,
+      "message": "SG; no longer applicable",
+      "parentUuid": "e2fb53b6_f7c2e258",
+      "range": {
+        "startLine": 3660,
+        "startChar": 0,
+        "endLine": 3670,
+        "endChar": 10
+      },
+      "revId": "80a1ebd5262cfa07c26f0fb5c5ccb337b1064683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd2323bb_4b445977",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5501a0ef_6fff3c7b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3698,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-14T19:26:51Z",
+      "side": 1,
+      "message": "Went with the `mImageCreateFlags |\u003d` approach, hopefully nothing random blows up as that\u0027s changing longer-term state :)",
+      "parentUuid": "fd2323bb_4b445977",
+      "range": {
+        "startLine": 3698,
+        "startChar": 73,
+        "endLine": 3698,
+        "endChar": 90
+      },
+      "revId": "80a1ebd5262cfa07c26f0fb5c5ccb337b1064683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdac7336_58872ee7",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-03-14T18:51:54Z",
       "side": 1,
       "message": "Given that this is now both taking the pnext chain and the query output, I suggest just passing in `VkImageFormatProperties2` instead of the two arguments. No need to copy back of data then.",
+      "range": {
+        "startLine": 5789,
+        "startChar": 38,
+        "endLine": 5790,
+        "endChar": 87
+      },
+      "revId": "80a1ebd5262cfa07c26f0fb5c5ccb337b1064683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3e5aa34_5146f40f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5790,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-14T19:26:51Z",
+      "side": 1,
+      "message": "This would make usage less convenient and more error prone. Changed to arg `requireMultisampling`\u003dtrue/false, how is that looking?",
+      "parentUuid": "fdac7336_58872ee7",
       "range": {
         "startLine": 5789,
         "startChar": 38,
