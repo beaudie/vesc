@@ -69,6 +69,24 @@
       "message": "Could you please add `mIncompleteTextureBufferAttachment-\u003eaddRef()` here instead?",
       "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fde7cb8_f1a6fc80",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-14T11:45:32Z",
+      "side": 1,
+      "message": "doesn\u0027t this mean `mIncompleteTextureBufferAttachment` is actually not needed? why not get rid of that member var? what is the purpose of this member var if the incomplete texture can handle the cleanup just fine?",
+      "parentUuid": "ee8bdfb7_bf292f0c",
+      "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
