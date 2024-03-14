@@ -46,6 +46,30 @@
       },
       "revId": "dccc3604012398c85153112e63c75a152e1ef71b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "427c3c0c_57954f24",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3693,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-14T20:14:41Z",
+      "side": 1,
+      "message": "Not sure I\u0027m following. If we don\u0027t want this query to check for multisampling, `false` specifically disables that check. Yes we could return the results and have each query check it, but this is just simpler for the current use (and if future use needs other options this can be refactored in a different way).",
+      "parentUuid": "d1f0c1ab_6a5f0a62",
+      "range": {
+        "startLine": 3693,
+        "startChar": 28,
+        "endLine": 3693,
+        "endChar": 33
+      },
+      "revId": "dccc3604012398c85153112e63c75a152e1ef71b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
