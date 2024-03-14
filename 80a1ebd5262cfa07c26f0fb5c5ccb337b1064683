@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc43c9c0_931879ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-14T18:51:54Z",
+      "side": 1,
+      "message": "Nice to see such a big chunk of tests fixed 😊",
+      "revId": "80a1ebd5262cfa07c26f0fb5c5ccb337b1064683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2fb53b6_f7c2e258",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3670,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-14T18:51:54Z",
+      "side": 1,
+      "message": "Please avoid lambdas where a static function in the anonymous namespace above would do. Lambda\u0027s are inherently less efficient due to type erasure, and so we avoid them unless necessary.\n\nIt\u0027s a matter of keeping lambda usage contained (and avoid it proliferating), even if in this particular case they are being inlined.",
+      "range": {
+        "startLine": 3660,
+        "startChar": 0,
+        "endLine": 3670,
+        "endChar": 10
+      },
+      "revId": "80a1ebd5262cfa07c26f0fb5c5ccb337b1064683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd2323bb_4b445977",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3698,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-14T18:51:54Z",
+      "side": 1,
+      "message": "This has the same problem where `vk::GetMinimalImageCreateFlags()` is not added.\n\nI guess it\u0027s fine for `initExternal()` to automatically add these flags (for its many users), but it doesn\u0027t hurt if this particular instance in TextureVk also adds them. If you do that before the first `if` (i.e. `mImageCreateFlags |\u003d vk::GetMinimalImageCreateFlags(...)`), you don\u0027t have to add them for each query.",
+      "range": {
+        "startLine": 3698,
+        "startChar": 73,
+        "endLine": 3698,
+        "endChar": 90
+      },
+      "revId": "80a1ebd5262cfa07c26f0fb5c5ccb337b1064683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdac7336_58872ee7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5790,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-14T18:51:54Z",
+      "side": 1,
+      "message": "Given that this is now both taking the pnext chain and the query output, I suggest just passing in `VkImageFormatProperties2` instead of the two arguments. No need to copy back of data then.",
+      "range": {
+        "startLine": 5789,
+        "startChar": 38,
+        "endLine": 5790,
+        "endChar": 87
+      },
+      "revId": "80a1ebd5262cfa07c26f0fb5c5ccb337b1064683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
