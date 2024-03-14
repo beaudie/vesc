@@ -239,7 +239,7 @@ class ImageTestMetal : public ANGLETest<>
             [blitEncoder endEncoding];
             [commandBuffer commit];
             [commandBuffer waitUntilCompleted];
-            memcpy(sliceImage.data(), readBuffer.get().contents, sliceImage.size());
+            memcpy(sliceImage.data(), readBuffer.contents, sliceImage.size());
         }
     }
     void sourceMetalTarget2D_helper(GLubyte data[4],
@@ -268,15 +268,6 @@ class ImageTestMetal : public ANGLETest<>
     {
         verifyResultsTexture(texture, data, GL_TEXTURE_2D, mTextureProgram,
                              mTextureUniformLocation);
-    }
-
-    template <typename destType, typename sourcetype>
-    destType reinterpretHelper(sourcetype source)
-    {
-        static_assert(sizeof(destType) == sizeof(size_t),
-                      "destType should be the same size as a size_t");
-        size_t sourceSizeT = static_cast<size_t>(source);
-        return reinterpret_cast<destType>(sourceSizeT);
     }
 
     void drawColorQuad(GLColor color)
@@ -337,16 +328,16 @@ void ImageTestMetal::sourceMetalTarget2D_helper(GLubyte data[4],
     // Create image
     EGLImageKHR image =
         eglCreateImageKHR(window->getDisplay(), EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
-                          reinterpret_cast<EGLClientBuffer>(textureMtl.get()), attribs);
+                          reinterpret_cast<EGLClientBuffer>(textureMtl), attribs);
     ASSERT_EGL_SUCCESS();
 
     // Write the data to the MTLTexture
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:0
-                          withBytes:data
-                        bytesPerRow:4
-                      bytesPerImage:0];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:0
+                    withBytes:data
+                  bytesPerRow:4
+                bytesPerImage:0];
 
     // Create a texture target to bind the egl image
     GLuint target;
@@ -425,41 +416,38 @@ TEST_P(ImageTestMetal, SourceMetalTarget2DArray)
     ScopedMetalTextureRef textureMtl = createMtlTexture2DArray(1, 1, 3, MTLPixelFormatRGBA8Unorm);
 
     GLubyte data0[4] = {93, 83, 75, 128};
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:0
-                          withBytes:data0
-                        bytesPerRow:4
-                      bytesPerImage:4];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:0
+                    withBytes:data0
+                  bytesPerRow:4
+                bytesPerImage:4];
     GLubyte data1[4] = {7, 51, 197, 231};
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:1
-                          withBytes:data1
-                        bytesPerRow:4
-                      bytesPerImage:4];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:1
+                    withBytes:data1
+                  bytesPerRow:4
+                bytesPerImage:4];
     GLubyte data2[4] = {33, 51, 44, 33};
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:2
-                          withBytes:data2
-                        bytesPerRow:4
-                      bytesPerImage:4];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:2
+                    withBytes:data2
+                  bytesPerRow:4
+                bytesPerImage:4];
 
     EGLDisplay display = getEGLWindow()->getDisplay();
-    EGLImageKHR image0 =
-        eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
-                          reinterpret_cast<EGLClientBuffer>(textureMtl.get()), nullptr);
+    EGLImageKHR image0 = eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
+                                           reinterpret_cast<EGLClientBuffer>(textureMtl), nullptr);
     ASSERT_EGL_SUCCESS();
     const EGLint attribs1[] = {EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE, 1, EGL_NONE};
-    EGLImageKHR image1 =
-        eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
-                          reinterpret_cast<EGLClientBuffer>(textureMtl.get()), attribs1);
+    EGLImageKHR image1      = eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
+                                                reinterpret_cast<EGLClientBuffer>(textureMtl), attribs1);
     ASSERT_EGL_SUCCESS();
     const EGLint attribs2[] = {EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE, 2, EGL_NONE};
-    EGLImageKHR image2 =
-        eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
-                          reinterpret_cast<EGLClientBuffer>(textureMtl.get()), attribs2);
+    EGLImageKHR image2      = eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
+                                                reinterpret_cast<EGLClientBuffer>(textureMtl), attribs2);
     ASSERT_EGL_SUCCESS();
 
     GLTexture targetTexture;
@@ -485,18 +473,17 @@ TEST_P(ImageTestMetal, SourceMetalTarget2DArrayReleasedSourceOk)
     ScopedMetalTextureRef textureMtl = createMtlTexture2DArray(1, 1, 3, MTLPixelFormatRGBA8Unorm);
 
     GLubyte data1[4] = {7, 51, 197, 231};
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:1
-                          withBytes:data1
-                        bytesPerRow:4
-                      bytesPerImage:4];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:1
+                    withBytes:data1
+                  bytesPerRow:4
+                bytesPerImage:4];
 
     EGLDisplay display      = getEGLWindow()->getDisplay();
     const EGLint attribs1[] = {EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE, 1, EGL_NONE};
-    EGLImageKHR image1 =
-        eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
-                          reinterpret_cast<EGLClientBuffer>(textureMtl.get()), attribs1);
+    EGLImageKHR image1      = eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
+                                                reinterpret_cast<EGLClientBuffer>(textureMtl), attribs1);
     ASSERT_EGL_SUCCESS();
     // This is being tested: release the source texture but the slice keeps working.
     textureMtl = {};
@@ -518,16 +505,15 @@ TEST_P(ImageTestMetal, DrawMetalTarget2D)
     EGLDisplay display = getEGLWindow()->getDisplay();
 
     ScopedMetalTextureRef textureMtl = createMtlTexture2D(1, 1, MTLPixelFormatRGBA8Unorm);
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:0
-                          withBytes:GLColor::red.data()
-                        bytesPerRow:4
-                      bytesPerImage:4];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:0
+                    withBytes:GLColor::red.data()
+                  bytesPerRow:4
+                bytesPerImage:4];
 
-    EGLImageKHR image =
-        eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
-                          reinterpret_cast<EGLClientBuffer>(textureMtl.get()), nullptr);
+    EGLImageKHR image = eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
+                                          reinterpret_cast<EGLClientBuffer>(textureMtl), nullptr);
     ASSERT_EGL_SUCCESS();
 
     GLTexture texture;
@@ -548,8 +534,7 @@ TEST_P(ImageTestMetal, DrawMetalTarget2D)
     EXPECT_EGL_SUCCESS();
 
     GLColor result;
-    getTextureSliceBytes(textureMtl.get(), 4, MTLRegionMake2D(0, 0, 1, 1), 0, 0,
-                         {result.data(), 4});
+    getTextureSliceBytes(textureMtl, 4, MTLRegionMake2D(0, 0, 1, 1), 0, 0, {result.data(), 4});
     EXPECT_EQ(result, GLColor::magenta);
 }
 
@@ -562,23 +547,22 @@ TEST_P(ImageTestMetal, DrawMetalTarget2DArray)
     EGLDisplay display = getEGLWindow()->getDisplay();
 
     ScopedMetalTextureRef textureMtl = createMtlTexture2DArray(1, 1, 2, MTLPixelFormatRGBA8Unorm);
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:0
-                          withBytes:GLColor::red.data()
-                        bytesPerRow:4
-                      bytesPerImage:4];
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:1
-                          withBytes:GLColor::red.data()
-                        bytesPerRow:4
-                      bytesPerImage:4];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:0
+                    withBytes:GLColor::red.data()
+                  bytesPerRow:4
+                bytesPerImage:4];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:1
+                    withBytes:GLColor::red.data()
+                  bytesPerRow:4
+                bytesPerImage:4];
 
     const EGLint attribs[] = {EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE, 1, EGL_NONE};
-    EGLImageKHR image =
-        eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
-                          reinterpret_cast<EGLClientBuffer>(textureMtl.get()), attribs);
+    EGLImageKHR image      = eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
+                                               reinterpret_cast<EGLClientBuffer>(textureMtl), attribs);
     ASSERT_EGL_SUCCESS();
 
     GLTexture texture;
@@ -599,8 +583,7 @@ TEST_P(ImageTestMetal, DrawMetalTarget2DArray)
     EXPECT_EGL_SUCCESS();
 
     GLColor result;
-    getTextureSliceBytes(textureMtl.get(), 4, MTLRegionMake2D(0, 0, 1, 1), 0, 1,
-                         {result.data(), 4});
+    getTextureSliceBytes(textureMtl, 4, MTLRegionMake2D(0, 0, 1, 1), 0, 1, {result.data(), 4});
     EXPECT_EQ(result, GLColor::magenta);
 }
 
@@ -628,25 +611,25 @@ TEST_P(ImageTestMetal, BlitMetalTarget2DArray)
     EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
 
     ScopedMetalTextureRef textureMtl = createMtlTexture2DArray(1, 1, 2, MTLPixelFormatRGBA8Unorm);
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:0
-                          withBytes:GLColor::red.data()
-                        bytesPerRow:4
-                      bytesPerImage:4];
-    [textureMtl.get() replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
-                        mipmapLevel:0
-                              slice:1
-                          withBytes:GLColor::red.data()
-                        bytesPerRow:4
-                      bytesPerImage:4];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:0
+                    withBytes:GLColor::red.data()
+                  bytesPerRow:4
+                bytesPerImage:4];
+    [textureMtl replaceRegion:MTLRegionMake2D(0, 0, 1, 1)
+                  mipmapLevel:0
+                        slice:1
+                    withBytes:GLColor::red.data()
+                  bytesPerRow:4
+                bytesPerImage:4];
 
     for (int slice = 0; slice < 2; ++slice)
     {
         const EGLint attribs[] = {EGL_METAL_TEXTURE_ARRAY_SLICE_ANGLE, slice, EGL_NONE};
         EGLImageKHR image =
             eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_METAL_TEXTURE_ANGLE,
-                              reinterpret_cast<EGLClientBuffer>(textureMtl.get()), attribs);
+                              reinterpret_cast<EGLClientBuffer>(textureMtl), attribs);
         ASSERT_EGL_SUCCESS();
 
         GLTexture texture;
@@ -676,11 +659,9 @@ TEST_P(ImageTestMetal, BlitMetalTarget2DArray)
     EXPECT_EGL_SUCCESS();
 
     GLColor result;
-    getTextureSliceBytes(textureMtl.get(), 4, MTLRegionMake2D(0, 0, 1, 1), 0, 0,
-                         {result.data(), 4});
+    getTextureSliceBytes(textureMtl, 4, MTLRegionMake2D(0, 0, 1, 1), 0, 0, {result.data(), 4});
     EXPECT_EQ(result, GLColor::green);
-    getTextureSliceBytes(textureMtl.get(), 4, MTLRegionMake2D(0, 0, 1, 1), 0, 1,
-                         {result.data(), 4});
+    getTextureSliceBytes(textureMtl, 4, MTLRegionMake2D(0, 0, 1, 1), 0, 1, {result.data(), 4});
     EXPECT_EQ(result, GLColor::yellow);
 }
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
