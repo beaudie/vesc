@@ -87,6 +87,24 @@
       "parentUuid": "ee8bdfb7_bf292f0c",
       "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c44012f4_c73e6fee",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-14T14:37:54Z",
+      "side": 1,
+      "message": "Just my gut feeling that it\u0027s better to know there\u0027s a buffer in this class, than to let it be hidden inside a ref counted reference. I don\u0027t have a particular reason.\n\nI also don\u0027t feel too strongly about it, so your call.",
+      "parentUuid": "9fde7cb8_f1a6fc80",
+      "revId": "9cee01cf771d281ef4996c21265a7db50677f4ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
