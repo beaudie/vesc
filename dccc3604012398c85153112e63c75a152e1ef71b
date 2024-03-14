@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51d503c8_2b85a5a9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3693,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-14T19:36:52Z",
+      "side": 1,
+      "message": "Actually, do we want this to be `true` if we enabled multisampling above?",
+      "range": {
+        "startLine": 3693,
+        "startChar": 28,
+        "endLine": 3693,
+        "endChar": 33
+      },
+      "revId": "dccc3604012398c85153112e63c75a152e1ef71b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
