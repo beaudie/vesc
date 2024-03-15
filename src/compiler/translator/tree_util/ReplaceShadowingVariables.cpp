@@ -59,7 +59,7 @@ class ReplaceShadowingVariablesTraverser : public TIntermTraverser
             size_t paramCount = func->getParamCount();
             for (size_t i = 0; i < paramCount; ++i)
             {
-                mParameterNames.emplace(std::string(func->getParam(i)->name().data()));
+                mParameterNames.emplace(std::string(func->getParam(i)->name()));
             }
             if (mParameterNames.size() > 0)
                 mFunctionBody = node->getBody();
@@ -89,7 +89,7 @@ class ReplaceShadowingVariablesTraverser : public TIntermTraverser
                     symNode = binaryNode->getLeft()->getAsSymbolNode();
                 }
                 ASSERT(symNode != nullptr);
-                std::string varName = std::string(symNode->variable().name().data());
+                std::string varName = symNode->variable().name();
                 if (mParameterNames.count(varName) > 0)
                 {
                     // We found a redefined var so queue replacement

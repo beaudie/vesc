@@ -333,7 +333,7 @@ void ValidateAST::visitStructOrInterfaceBlockDeclaration(const TType &type,
         if (type.getStruct() == nullptr)
         {
             // Allow interfaces to be doubly-defined.
-            std::string name(typeName.data());
+            std::string name = typeName;
 
             if (IsShaderIn(type.getQualifier()))
             {

@@ -224,8 +224,7 @@ void TFunction::shareParameters(const TFunction &parametersSource)
 
 ImmutableString TFunction::buildMangledName() const
 {
-    ImmutableString name = this->name();
-    std::string newName(name.data(), name.length());
+    std::string newName = name();
     newName += kFunctionMangledNameSeparator;
 
     for (size_t i = 0u; i < mParamCount; ++i)

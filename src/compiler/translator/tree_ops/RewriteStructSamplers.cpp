@@ -563,7 +563,7 @@ class RewriteStructSamplersTraverser final : public TIntermTraverser
         const TType &fieldType = *field->type();
         if (fieldType.isSampler() || fieldType.isStructureContainingSamplers())
         {
-            std::string newPrefix = prefix + "_" + field->name().data();
+            std::string newPrefix = prefix + "_" + std::string(field->name());
 
             if (fieldType.isSampler())
             {

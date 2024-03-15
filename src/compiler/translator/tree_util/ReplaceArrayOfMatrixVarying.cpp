@@ -88,7 +88,7 @@ class CollectVaryingTraverser : public TIntermTraverser
     tmpReplacementType->setQualifier(EvqGlobal);
 
     TVariable *tempReplaceVar = new TVariable(
-        symbolTable, ImmutableString(std::string("ANGLE_AOM_Temp_") + varying->name().data()),
+        symbolTable, ImmutableString(std::string("ANGLE_AOM_Temp_") + std::string(varying->name())),
         tmpReplacementType, SymbolType::AngleInternal);
 
     if (!ReplaceVariable(compiler, root, varying, tempReplaceVar))
