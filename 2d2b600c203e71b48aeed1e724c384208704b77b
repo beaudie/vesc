@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6000bb5_133c5e68",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-15T17:15:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f46cd54_54f6ad65",
+      "revId": "2d2b600c203e71b48aeed1e724c384208704b77b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e51578a5_68e7318b",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5b1de0d_7285501c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-15T17:15:58Z",
+      "side": 1,
+      "message": "is it alright if i do this in a follow up change when i handle the deduplication of the pipeline cache \"merge\"?",
+      "parentUuid": "e51578a5_68e7318b",
+      "revId": "2d2b600c203e71b48aeed1e724c384208704b77b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "431c74d3_7a42c45b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 3
@@ -48,6 +84,30 @@
       "writtenOn": "2024-03-15T14:33:37Z",
       "side": 1,
       "message": "Moving the code from program executable:\n\n```suggestion\n        // Only build the shaders subset of the pipeline if VK_EXT_graphics_pipeline_library is\n        // supported, especially since the vertex input and fragment output state set up here is\n        // completely bogus.\n        const vk::GraphicsPipelineSubset subset \u003d\n            getFeatures().supportsGraphicsPipelineLibrary.enabled\n                ? vk::GraphicsPipelineSubset::Shaders\n                : vk::GraphicsPipelineSubset::Complete;\n\n        for (bool surfaceRotation : surfaceRotationVariations)\n        {\n            subTasksOut-\u003epush_back(std::make_shared\u003cWarmUpGraphicsTask\u003e(\n                mRenderer, executableVk, mPipelineRobustness, mPipelineProtectedAccess,\n                subset, surfaceRotation, graphicsPipelineDesc, sharedRenderPass));\n        }\n```",
+      "range": {
+        "startLine": 376,
+        "startChar": 0,
+        "endLine": 395,
+        "endChar": 9
+      },
+      "revId": "2d2b600c203e71b48aeed1e724c384208704b77b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fbc0b7a_94e6e0e0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-15T17:15:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "431c74d3_7a42c45b",
       "range": {
         "startLine": 376,
         "startChar": 0,
