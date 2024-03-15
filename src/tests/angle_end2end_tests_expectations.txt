@@ -39,6 +39,14 @@
 6743 OPENGL : SimpleStateChangeTestES3.RespecifyBufferAfterBeginTransformFeedback/* = SKIP
 6743 GLES : SimpleStateChangeTestES3.RespecifyBufferAfterBeginTransformFeedback/* = SKIP
 
+// Does not work due to SeparateDeclarations.
+8613 GLES : GLSLTest_ES3.VaryingAnonymousStructEquality/* = SKIP
+8613 GLES : GLSLTest_ES3.VaryingAnonymousStructWithInlineDefinition2/* = SKIP
+8613 GLES : GLSLTest_ES3.VaryingAnonymousStructWithInlineDefinition3/* = SKIP
+8613 OPENGL : GLSLTest_ES3.VaryingAnonymousStructEquality/* = SKIP
+8613 OPENGL : GLSLTest_ES3.VaryingAnonymousStructWithInlineDefinition2/* = SKIP
+8613 OPENGL : GLSLTest_ES3.VaryingAnonymousStructWithInlineDefinition3/* = SKIP
+
 // Shared context failing on OpenGL and D3D11
 7854 OPENGL : MultithreadingTest.CreateMultiSharedContextAndDraw/* = SKIP
 7854 GLES : MultithreadingTest.CreateMultiSharedContextAndDraw/* = SKIP
@@ -767,6 +775,7 @@ b/330697097 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachmen
 7833 IOS OPENGL : ShaderBinaryTest.* = SKIP
 7853 IOS OPENGL : FramebufferExtensionsTest.ColorBufferHalfFloat/* = SKIP
 8264 IOS OPENGL : WebGL2CompatibilityTest.DrawWithZeroSizedBuffer/* = SKIP
+5491 IOS OPENGL : GLSLTest_ES3.VaryingAnonymousStructWithInlineDefinition/* = SKIP
 
 // Some Metal tests fail on iOS Intel simulator
 7994 IOS METAL : CubeMapTextureTest.SampleCoordinateTransformGrad/* = SKIP

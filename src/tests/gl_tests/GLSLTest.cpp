@@ -9047,6 +9047,190 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that a varying anonymous struct that is defined as a part of the declaration is handled
+// correctly.
+TEST_P(GLSLTest_ES3, VaryingAnonymousStructWithInlineDefinition)
+{
+    constexpr char kVS[] = R"(#version 300 es
+in vec4 inputAttribute;
+
+flat out struct
+{
+    int field;
+} v_s;
+
+void main()
+{
+    v_s.field = 1;
+    gl_Position = inputAttribute;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+
+precision highp float;
+out vec4 my_FragColor;
+
+flat in struct
+{
+    int field;
+} v_s;
+
+void main()
+{
+    bool success = (v_s.field == 1);
+    my_FragColor = vec4(1, 0, 0, 1);
+    if (success)
+    {
+        my_FragColor = vec4(0, 1, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that a varying anonymous structs that are defined as a part of the declaration is handled
+// correctly.
+TEST_P(GLSLTest_ES3, VaryingAnonymousStructWithInlineDefinition2)
+{
+    constexpr char kVS[] = R"(#version 300 es
+in vec4 inputAttribute;
+flat out struct
+{
+    int field;
+} v_s0, v_s1;
+void main()
+{
+    v_s0.field = 1;
+    v_s1.field = 2;
+    gl_Position = inputAttribute;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+out vec4 my_FragColor;
+flat in struct
+{
+    int field;
+} v_s0, v_s1;
+void main()
+{
+    bool success = (v_s0.field == 1 && v_s1.field == 2);
+    my_FragColor = vec4(1, 0, 0, 1);
+    if (success)
+    {
+        my_FragColor = vec4(0, 1, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that a varying anonymous structs that are defined as a part of the declaration is handled
+// in a specific way. Highlights ambiguity of ES "Chapter 9. Shader Interface Matching":
+//  "When linking shaders, the type of declared vertex outputs and fragment inputs with the same
+//  name must match"
+TEST_P(GLSLTest_ES3, VaryingAnonymousStructWithInlineDefinition3)
+{
+    constexpr char kVS[] = R"(#version 300 es
+in vec4 inputAttribute;
+flat out struct
+{
+    int field;
+} v_s0;
+flat out struct
+{
+    int field;
+} v_s1;
+flat out struct
+{
+    int field;
+} v_s2, v_s3;
+
+void main()
+{
+    v_s0.field = 1;
+    v_s1.field = 2;
+    v_s2.field = 3;
+    v_s3.field = 4;
+    gl_Position = inputAttribute;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+out vec4 my_FragColor;
+flat in struct
+{
+    int field;
+} v_s0, v_s1, v_s2, v_s3;
+void main()
+{
+    bool success = v_s0.field == 1 && v_s1.field == 2 && v_s2.field == 3 && v_s3.field == 4;
+    my_FragColor = vec4(1, 0, 0, 1);
+    if (success)
+    {
+        my_FragColor = vec4(0, 1, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that a varying anonymous structs can be compared for equality.
+TEST_P(GLSLTest_ES3, VaryingAnonymousStructEquality)
+{
+    constexpr char kVS[] = R"(#version 300 es
+in vec4 inputAttribute;
+flat out struct
+{
+    int field;
+} v_s0;
+flat out struct
+{
+    int field;
+} v_s1;
+flat out struct
+{
+    int field;
+} v_s2, v_s3;
+
+void main()
+{
+    v_s0.field = 1;
+    v_s1.field = 2;
+    v_s2.field = 3;
+    v_s3.field = 4;
+    gl_Position = inputAttribute;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+out vec4 my_FragColor;
+flat in struct
+{
+    int field;
+} v_s0, v_s1, v_s2, v_s3;
+void main()
+{
+    bool success = v_s0 != v_s1 && v_s0 != v_s2 && v_s0 != v_s3 && v_s1 != v_s2 && v_s1 != v_s3 && v_s2 != v_s3;
+    success = success && v_s0.field == 1 && v_s1.field == 2 && v_s2.field == 3 && v_s3.field == 4;
+    my_FragColor = vec4(1, 0, 0, 1);
+    if (success)
+    {
+        my_FragColor = vec4(0, 1, 0, 1);
+    }
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Test mismatched precision in varying is handled correctly.
 TEST_P(GLSLTest_ES3, MismatchPrecisionFloat)
 {
@@ -19361,6 +19545,7 @@ void main()
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     GLSLTest,
+    ES3_OPENGL().enable(Feature::ForceInitShaderVariables),
     ES3_OPENGL().enable(Feature::ScalarizeVecAndMatConstructorArgs),
     ES3_OPENGLES().enable(Feature::ScalarizeVecAndMatConstructorArgs),
     ES3_VULKAN().enable(Feature::AvoidOpSelectWithMismatchingRelaxedPrecision),
@@ -19372,6 +19557,7 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(GLSLTestNoValidation);
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(GLSLTest_ES3);
 ANGLE_INSTANTIATE_TEST_ES3_AND(
     GLSLTest_ES3,
+    ES3_OPENGL().enable(Feature::ForceInitShaderVariables),
     ES3_OPENGL().enable(Feature::ScalarizeVecAndMatConstructorArgs),
     ES3_OPENGLES().enable(Feature::ScalarizeVecAndMatConstructorArgs),
     ES3_VULKAN().enable(Feature::AvoidOpSelectWithMismatchingRelaxedPrecision),
