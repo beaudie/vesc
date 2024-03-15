@@ -16,6 +16,24 @@
       "message": "We have moved to using the `angle_end2end_tests_expectations.txt` to manage expectations. Please add new expectations to that file.",
       "revId": "f3d04f2793b4c04c1fb80df8f8892cd882283633",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53ae18f7_05f3b390",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8818,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-15T17:27:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9f9bed1_b8eb1332",
+      "revId": "f3d04f2793b4c04c1fb80df8f8892cd882283633",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
