@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "9158164db32d61a58936b6dcd470f10028453ca9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aa70bb5_a11490e6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-15T17:18:05Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 215,
+        "startChar": 30,
+        "endLine": 215,
+        "endChar": 36
+      },
+      "revId": "9158164db32d61a58936b6dcd470f10028453ca9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
