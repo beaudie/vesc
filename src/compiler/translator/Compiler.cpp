@@ -183,6 +183,34 @@ bool IsGLSL410OrOlder(ShShaderOutput output)
             output == SH_GLSL_400_CORE_OUTPUT || output == SH_GLSL_410_CORE_OUTPUT);
 }
 
+bool IsGLSLOrESSL(ShShaderOutput output)
+{
+    switch (output)
+    {
+        case SH_ESSL_OUTPUT:
+        case SH_GLSL_COMPATIBILITY_OUTPUT:
+        case SH_GLSL_130_OUTPUT:
+        case SH_GLSL_140_OUTPUT:
+        case SH_GLSL_150_CORE_OUTPUT:
+        case SH_GLSL_330_CORE_OUTPUT:
+        case SH_GLSL_400_CORE_OUTPUT:
+        case SH_GLSL_410_CORE_OUTPUT:
+        case SH_GLSL_420_CORE_OUTPUT:
+        case SH_GLSL_430_CORE_OUTPUT:
+        case SH_GLSL_440_CORE_OUTPUT:
+        case SH_GLSL_450_CORE_OUTPUT:
+            return true;
+        case SH_HLSL_3_0_OUTPUT:
+        case SH_HLSL_4_1_OUTPUT:
+        case SH_HLSL_4_0_FL9_3_OUTPUT:
+        case SH_SPIRV_VULKAN_OUTPUT:
+        case SH_MSL_METAL_OUTPUT:
+            return false;
+    }
+    UNREACHABLE();
+    return false;
+}
+
 bool RemoveInvariant(sh::GLenum shaderType,
                      int shaderVersion,
                      ShShaderOutput outputType,
@@ -1042,7 +1070,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
 
     // Note that separate declarations need to be run before other AST transformations that
     // generate new statements from expressions.
-    if (!SeparateDeclarations(*this, *root))
+    if (!SeparateDeclarations(*this, *root, IsGLSLOrESSL(mOutputType)))
     {
         return false;
     }

@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "compiler/translator/SymbolTable.h"
 
+#include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/IntermRebuild.h"
 #include "compiler/translator/util.h"
 
@@ -19,13 +20,26 @@ namespace
 class Separator final : private TIntermRebuild
 {
   public:
-    Separator(TCompiler &compiler) : TIntermRebuild(compiler, true, true) {}
+    Separator(TCompiler &compiler, bool separateAnonymousInterfaceStructs)
+        : TIntermRebuild(compiler, true, true),
+          mSeparateAnonymousInterfaceStruct(separateAnonymousInterfaceStructs)
+    {}
     using TIntermRebuild::rebuildRoot;
 
   private:
+    bool shouldSeparateAnonymousStructAsNewStruct(const TType &type)
+    {
+        if (!mSeparateAnonymousInterfaceStruct)
+        {
+            return false;
+        }
+        // This is a workaround where the Separator guarantees that all declarations
+        // are separated, but GLSL output vertex and fragment shaders needs types that match.
+        return IsShaderIn(type.getQualifier()) || IsShaderOut(type.getQualifier());
+    }
+
     void recordModifiedStructVariables(TIntermDeclaration &node)
     {
-        ASSERT(!mNewStructure);  // No nested struct declarations.
         TIntermSequence &sequence = *node.getSequence();
         if (sequence.size() <= 1)
         {
@@ -41,27 +55,47 @@ class Separator final : private TIntermRebuild
         {
             return;
         }
-        // Struct specifier changes for all variables except the first one.
-        uint32_t index = 1;
-        if (structure->symbolType() == SymbolType::Empty)
+        if (structure->symbolType() != SymbolType::Empty)
         {
-
-            TStructure *newStructure =
-                new TStructure(&mSymbolTable, kEmptyImmutableString, &structure->fields(),
-                               SymbolType::AngleInternal);
-            newStructure->setAtGlobalScope(structure->atGlobalScope());
-            structure     = newStructure;
-            mNewStructure = newStructure;
-            // Adding name causes the struct type to change, so all variables need rewriting.
-            index = 0;
+            // Struct specifier changes for all variables except the first one.
+            for (uint32_t index = 1; index < sequence.size(); ++index)
+            {
+                Declaration decl     = ViewDeclaration(node, index);
+                const TVariable &var = decl.symbol.variable();
+                const TType &varType = var.getType();
+                TType *newType       = new TType(structure, false);
+                newType->setQualifier(varType.getQualifier());
+                newType->makeArrays(varType.getArraySizes());
+                TVariable *newVar =
+                    new TVariable(&mSymbolTable, var.name(), newType, var.symbolType());
+                mStructVariables.insert(std::make_pair(&var, newVar));
+            }
+            return;
         }
-        for (; index < sequence.size(); ++index)
+
+        // Struct specifier changes for all variables.
+        for (uint32_t index = 0; index < sequence.size(); ++index)
         {
             Declaration decl              = ViewDeclaration(node, index);
             const TVariable &var          = decl.symbol.variable();
             const TType &varType          = var.getType();
-            const bool newTypeIsSpecifier = index == 0;
-            TType *newType                = new TType(structure, newTypeIsSpecifier);
+            const bool shouldSeparate     = shouldSeparateAnonymousStructAsNewStruct(varType);
+            const bool newTypeIsSpecifier = index == 0 || shouldSeparate;
+            if (newTypeIsSpecifier)
+            {
+                ImmutableString newName = kEmptyImmutableString;
+                if (shouldSeparate)
+                {
+                    ImmutableStringBuilder str(2 + var.name().length());
+                    str << "_i" << var.name();
+                    newName = str;
+                }
+                TStructure *newStructure = new TStructure(
+                    &mSymbolTable, newName, &structure->fields(), SymbolType::AngleInternal);
+                newStructure->setAtGlobalScope(structure->atGlobalScope());
+                structure = newStructure;
+            }
+            TType *newType = new TType(structure, newTypeIsSpecifier);
             newType->setQualifier(varType.getQualifier());
             newType->makeArrays(varType.getArraySizes());
             TVariable *newVar = new TVariable(&mSymbolTable, var.name(), newType, var.symbolType());
@@ -83,19 +117,7 @@ class Separator final : private TIntermRebuild
             return node;
         }
         std::vector<TIntermNode *> replacements;
-        uint32_t index = 0;
-        if (mNewStructure)
-        {
-            TType *namedType = new TType(mNewStructure, true);
-            namedType->setQualifier(EvqGlobal);
-            TIntermDeclaration *replacement = new TIntermDeclaration;
-            replacement->appendDeclarator(sequence.at(0)->getAsTyped());
-            replacement->setLine(node.getLine());
-            replacements.push_back(replacement);
-            mNewStructure = nullptr;
-            index         = 1;
-        }
-        for (; index < sequence.size(); ++index)
+        for (uint32_t index = 0; index < sequence.size(); ++index)
         {
             TIntermDeclaration *replacement = new TIntermDeclaration;
             TIntermTyped *declarator        = sequence.at(index)->getAsTyped();
@@ -116,16 +138,18 @@ class Separator final : private TIntermRebuild
         return *new TIntermSymbol(it->second);
     }
 
-    const TStructure *mNewStructure = nullptr;
+    const bool mSeparateAnonymousInterfaceStruct;
     // Old struct variable to new struct variable mapping.
     std::unordered_map<const TVariable *, TVariable *> mStructVariables;
 };
 
 }  // namespace
 
-bool SeparateDeclarations(TCompiler &compiler, TIntermBlock &root)
+bool SeparateDeclarations(TCompiler &compiler,
+                          TIntermBlock &root,
+                          bool separateAnonymousInterfaceStructs)
 {
-    Separator separator(compiler);
+    Separator separator(compiler, separateAnonymousInterfaceStructs);
     return separator.rebuildRoot(root);
 }
 

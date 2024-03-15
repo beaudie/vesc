@@ -48,6 +48,7 @@ using SpecConstUsageBits = angle::PackedEnumBitSet<vk::SpecConstUsage, uint32_t>
 bool IsGLSL130OrNewer(ShShaderOutput output);
 bool IsGLSL420OrNewer(ShShaderOutput output);
 bool IsGLSL410OrOlder(ShShaderOutput output);
+bool IsGLSLOrESSL(ShShaderOutput output);
 
 //
 // Helper function to check if the invariant qualifier can be removed.

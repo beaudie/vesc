@@ -33,7 +33,9 @@ class TIntermBlock;
 // Output:
 //    struct s1234 { vec3 d; } a;
 //    s1234 b;
-[[nodiscard]] bool SeparateDeclarations(TCompiler &compiler, TIntermBlock &root);
+[[nodiscard]] bool SeparateDeclarations(TCompiler &compiler,
+                                        TIntermBlock &root,
+                                        bool separateAnonymousInterfaceStructs);
 
 }  // namespace sh
 
