@@ -118,6 +118,8 @@ class ImmutableString
     uint32_t mangledNameHash() const;
     uint32_t unmangledNameHash() const;
 
+    constexpr operator std::string() const { return std::string(data(), length()); }
+
   private:
     const char *mData;
     size_t mLength;
