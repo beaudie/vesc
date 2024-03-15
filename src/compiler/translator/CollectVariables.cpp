@@ -748,7 +748,10 @@ void CollectVariablesTraverser::setFieldOrVariableProperties(const TType &type,
         variableOut->type = GL_NONE;
         if (structure->symbolType() != SymbolType::Empty)
         {
-            variableOut->structOrBlockName = structure->name().data();
+            // Anonymous structs are given name from AngleInternal namespace.
+            variableOut->structOrBlockName = structure->symbolType() == SymbolType::AngleInternal
+                                                 ? ""
+                                                 : structure->name().data();
         }
 
         const TFieldList &fields = structure->fields();

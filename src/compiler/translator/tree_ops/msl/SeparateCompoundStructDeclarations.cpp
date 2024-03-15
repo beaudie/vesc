@@ -106,7 +106,7 @@ bool sh::SeparateCompoundStructDeclarations(TCompiler &compiler, IdGen &idGen, T
         return false;
     }
 
-    if (!SeparateDeclarations(compiler, root))
+    if (!SeparateDeclarations(compiler, root, false))
     {
         return false;
     }
