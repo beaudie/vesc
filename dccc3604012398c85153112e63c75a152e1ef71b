@@ -70,6 +70,30 @@
       },
       "revId": "dccc3604012398c85153112e63c75a152e1ef71b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "694f8c86_a46fb410",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3693,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-15T13:52:34Z",
+      "side": 1,
+      "message": "Ok then please define an `enum class` and avoid passing a bool. We do this everywhere (as much as we can) for increased readability.",
+      "parentUuid": "427c3c0c_57954f24",
+      "range": {
+        "startLine": 3693,
+        "startChar": 28,
+        "endLine": 3693,
+        "endChar": 33
+      },
+      "revId": "dccc3604012398c85153112e63c75a152e1ef71b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
