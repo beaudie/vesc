@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37c30f3e_55d7768d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-15T03:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bcb27e3_7efee082",
+      "revId": "29893a3b52370eb93b429f22bd8eb2af20787699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b329735_ee8f9961",
@@ -55,6 +73,30 @@
       "side": 1,
       "message": "ha ha, arrived at the root cause at exactly the same time 😊\n\nhoping PS11 does the trick",
       "parentUuid": "7b329735_ee8f9961",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 31
+      },
+      "revId": "29893a3b52370eb93b429f22bd8eb2af20787699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a6bac00_7f4f13e9",
+        "filename": "src/tests/egl_tests/EGLQueryContextTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-15T03:00:55Z",
+      "side": 1,
+      "message": "looks like that was it, thanks",
+      "parentUuid": "c0290da7_99613ba5",
       "range": {
         "startLine": 163,
         "startChar": 0,
