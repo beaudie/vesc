@@ -2464,6 +2464,8 @@ bool IsTextureUpdate(CallCapture &call)
         case EntryPoint::GLCopyImageSubData:
         case EntryPoint::GLCopyImageSubDataEXT:
         case EntryPoint::GLCopyImageSubDataOES:
+        case EntryPoint::GLDispatchCompute:
+
             return true;
         default:
             return false;
@@ -6866,8 +6868,36 @@ void FrameCaptureShared::trackBufferMapping(const gl::Context *context,
     }
 }
 
+// Mark an updated texture as modified
+void FrameCaptureShared::markUpdatedTexture(const gl::ContextID contextId, GLuint id)
+{
+    mResourceTracker.getTrackedResource(contextId, ResourceIDType::Texture).setModifiedResource(id);
+}
+
+// Identify and mark shader image textures as modified
+void FrameCaptureShared::trackShaderImageUpdate(const gl::Context *context, const CallCapture &call)
+{
+    const gl::ProgramExecutable *executable = context->getState().getProgramExecutable();
+    for (const gl::ImageBinding &imageBinding : executable->getImageBindings())
+    {
+        for (GLuint binding : imageBinding.boundImageUnits)
+        {
+            const gl::ImageUnit &imageUnit = context->getState().getImageUnit(binding);
+            // Get image binding texture id and mark it as modified
+            markUpdatedTexture(context->id(), imageUnit.texture.id().value);
+        }
+    }
+}
+
 void FrameCaptureShared::trackTextureUpdate(const gl::Context *context, const CallCapture &call)
 {
+    // Additional information is requried for textures bound as shader images
+    if (call.entryPoint == EntryPoint::GLDispatchCompute)
+    {
+        trackShaderImageUpdate(context, call);
+        return;
+    }
+
     int index             = 0;
     std::string paramName = "targetPacked";
     ParamType paramType   = ParamType::TTextureTarget;
@@ -6944,8 +6974,7 @@ void FrameCaptureShared::trackTextureUpdate(const gl::Context *context, const Ca
     }
 
     // Mark it as modified
-    mResourceTracker.getTrackedResource(context->id(), ResourceIDType::Texture)
-        .setModifiedResource(id);
+    markUpdatedTexture(context->id(), id);
 }
 
 void FrameCaptureShared::trackDefaultUniformUpdate(const gl::Context *context,

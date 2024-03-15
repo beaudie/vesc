@@ -597,6 +597,8 @@ class FrameCaptureShared final : angle::NonCopyable
                             bool writable,
                             bool coherent);
 
+    void markUpdatedTexture(const gl::ContextID contextId, GLuint id);
+    void trackShaderImageUpdate(const gl::Context *context, const CallCapture &call);
     void trackTextureUpdate(const gl::Context *context, const CallCapture &call);
     void trackDefaultUniformUpdate(const gl::Context *context, const CallCapture &call);
     void trackVertexArrayUpdate(const gl::Context *context, const CallCapture &call);
