@@ -2464,6 +2464,19 @@ bool IsTextureUpdate(CallCapture &call)
         case EntryPoint::GLCopyImageSubData:
         case EntryPoint::GLCopyImageSubDataEXT:
         case EntryPoint::GLCopyImageSubDataOES:
+
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool IsImageUpdate(CallCapture &call)
+{
+    switch (call.entryPoint)
+    {
+        case EntryPoint::GLDispatchCompute:
+        case EntryPoint::GLDispatchComputeIndirect:
             return true;
         default:
             return false;
@@ -6948,6 +6961,23 @@ void FrameCaptureShared::trackTextureUpdate(const gl::Context *context, const Ca
         .setModifiedResource(id);
 }
 
+// Identify and mark shader image textures as modified
+void FrameCaptureShared::trackImageUpdate(const gl::Context *context, const CallCapture &call)
+{
+    const gl::ProgramExecutable *executable = context->getState().getProgramExecutable();
+    for (const gl::ImageBinding &imageBinding : executable->getImageBindings())
+    {
+        for (GLuint binding : imageBinding.boundImageUnits)
+        {
+            const gl::ImageUnit &imageUnit = context->getState().getImageUnit(binding);
+            // Get image binding texture id and mark it as modified
+            GLuint id = imageUnit.texture.id().value;
+            mResourceTracker.getTrackedResource(context->id(), ResourceIDType::Texture)
+                .setModifiedResource(id);
+        }
+    }
+}
+
 void FrameCaptureShared::trackDefaultUniformUpdate(const gl::Context *context,
                                                    const CallCapture &call)
 {
@@ -8087,6 +8117,12 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
     {
         // If this call modified texture contents, track it for possible reset
         trackTextureUpdate(context, call);
+    }
+
+    if (IsImageUpdate(call))
+    {
+        // If this call modified shader image contents, track it for possible reset
+        trackImageUpdate(context, call);
     }
 
     if (isCaptureActive() && GetDefaultUniformType(call) != DefaultUniformType::None)
