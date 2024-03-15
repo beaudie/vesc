@@ -932,7 +932,7 @@ std::string ParseResourceName(const std::string &name, std::vector<unsigned int>
 
 bool IsBuiltInName(const char *name)
 {
-    return angle::BeginsWith(name, "gl_");
+    return angle::BeginsWith(name, "gl_", 3);
 }
 
 std::string StripLastArrayIndex(const std::string &name)

@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "common/Optional.h"
+#include "common/utilities.h"
 
 namespace angle
 {
@@ -50,23 +51,45 @@ bool HexStringToUInt(const std::string &input, unsigned int *uintOut);
 bool ReadFileToString(const std::string &path, std::string *stringOut);
 
 // Check if the string str begins with the given prefix.
+// str and prefix may not be NULL and need to be NULL terminated.
+// The length of the prefix string should be greater than or equal to prefixLength.
 // The comparison is case sensitive.
-bool BeginsWith(const std::string &str, const std::string &prefix);
+bool BeginsWith(const char *str, const char *prefix, size_t prefixLength);
 
 // Check if the string str begins with the given prefix.
-// Prefix may not be NULL and needs to be NULL terminated.
 // The comparison is case sensitive.
-bool BeginsWith(const std::string &str, const char *prefix);
+inline constexpr bool BeginsWith(const std::string &str, const std::string &prefix)
+{
+    return str.length() >= prefix.length() &&
+           BeginsWith(str.c_str(), prefix.c_str(), prefix.length());
+}
 
 // Check if the string str begins with the given prefix.
 // str and prefix may not be NULL and need to be NULL terminated.
 // The comparison is case sensitive.
-bool BeginsWith(const char *str, const char *prefix);
+inline constexpr bool BeginsWith(const char *str, const char *prefix)
+{
+    return BeginsWith(str, prefix, angle::ConstStrLen(prefix));
+}
+
+// Check if the string str begins with the given prefix.
+// Prefix may not be NULL and needs to be NULL terminated.
+// The comparison is case sensitive.
+inline constexpr bool BeginsWith(const std::string &str, const char *prefix)
+{
+    auto prefixLength = angle::ConstStrLen(prefix);
+    return str.length() >= prefixLength && BeginsWith(str.c_str(), prefix, prefixLength);
+}
 
 // Check if the string str begins with the first prefixLength characters of the given prefix.
 // The length of the prefix string should be greater than or equal to prefixLength.
 // The comparison is case sensitive.
-bool BeginsWith(const std::string &str, const std::string &prefix, const size_t prefixLength);
+inline constexpr bool BeginsWith(const std::string &str,
+                                 const std::string &prefix,
+                                 size_t prefixLength)
+{
+    return str.length() >= prefixLength && BeginsWith(str.c_str(), prefix.c_str(), prefixLength);
+}
 
 // Check if the string str ends with the given suffix.
 // The comparison is case sensitive.

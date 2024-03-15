@@ -830,9 +830,8 @@ void CollectVariablesTraverser::setFieldProperties(const TType &type,
     ASSERT(variableOut);
     setFieldOrVariableProperties(type, staticUse, isShaderIOBlock, isPatch, variableOut);
     variableOut->name = name;
-    variableOut->mappedName = (symbolType == SymbolType::BuiltIn)
-                                  ? name
-                                  : HashName(name, mHashFunction, nullptr);
+    variableOut->mappedName =
+        (symbolType == SymbolType::BuiltIn) ? name : HashName(name, mHashFunction, nullptr);
 }
 
 void CollectVariablesTraverser::setCommonVariableProperties(const TType &type,
