@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85e70403_b4ddb57b",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-15T15:49:44Z",
+      "side": 1,
+      "message": "Please `ASSERT` that the requirements listed in the header are true.",
+      "revId": "3c97b7c0e51ff539fe4e974ec7136029a218bb71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d092f270_f018f51a",
+        "filename": "src/common/string_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-15T15:49:44Z",
+      "side": 1,
+      "message": "`BeginWith(\"short\", \"something long\")` now violates the requirement that `strlen(str) \u003e\u003d strlen(prefix)` imposed by the called overload.",
+      "revId": "3c97b7c0e51ff539fe4e974ec7136029a218bb71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc86fe5f_d7b29da3",
+        "filename": "src/common/string_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-15T15:49:44Z",
+      "side": 1,
+      "message": "The comment says `The length of the prefix string should be greater than or equal to prefixLength.`, so could the first part of the expression turn into `ASSERT`?",
+      "revId": "3c97b7c0e51ff539fe4e974ec7136029a218bb71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
