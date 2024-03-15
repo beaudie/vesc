@@ -16,6 +16,29 @@
       "message": "pretty sure these are not flaky and is caused by my change, only problem is none of the machines i have access to either run the test or dont show the failure (they pass)\n\ncould one of you provide some help here?",
       "revId": "29893a3b52370eb93b429f22bd8eb2af20787699",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b329735_ee8f9961",
+        "filename": "src/tests/egl_tests/EGLQueryContextTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-15T02:36:52Z",
+      "side": 1,
+      "message": "In PS5, the bots were green because this test was basically skipped everywhere.\n\nI suspect the problem is here; the test is run among many other tests, and the calls here are screwing up the EGL setup the other tests are expecting to see.\n\nFor one, you don\u0027t need `eglInitialize`, right? And for the success case, shouldn\u0027t you revert the bound API to ES?",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 31
+      },
+      "revId": "29893a3b52370eb93b429f22bd8eb2af20787699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
