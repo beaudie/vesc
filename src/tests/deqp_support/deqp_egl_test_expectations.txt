@@ -113,9 +113,6 @@
 
 // Android failures
 
-// Pixel 6 Vulkan
-6899 PIXEL6 VULKAN : dEQP-EGL.functional.query_context.*.rgb888_window = FAIL
-
 // ES 1 tests
 2306 WIN : dEQP-EGL.functional.color_clears.single_context.gles1* = FAIL
 2306 WIN : dEQP-EGL.functional.color_clears.multi_context.gles1* = FAIL
