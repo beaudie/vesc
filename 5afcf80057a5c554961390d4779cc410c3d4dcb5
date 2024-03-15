@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf909a7_062bd451",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-15T18:59:40Z",
+      "side": 1,
+      "message": "Re-LGTM\u0027ing but not CQ\u0027ing because it looks like there are still test failures across platforms. Please ping me if a new LGTM is needed.",
+      "revId": "5afcf80057a5c554961390d4779cc410c3d4dcb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
