@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d12de119_82a53153",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-03-15T18:31:36Z",
+      "side": 0,
+      "message": "Thank you Mohan for the change.\n\nIf I understand it correctly, the improvement this change made is to be able to spawn two worker threads to do `createGraphicsPipelineImpl()` job if there are two surfaceRotationVariations (false, true)? Versus before this change, only one worker thread is used to complete `createGraphicsPipelineImpl()` for both surfaceRotationVariations, is that correct?",
+      "revId": "10fad5824212a8a8ae331a880b88e1141c956005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
