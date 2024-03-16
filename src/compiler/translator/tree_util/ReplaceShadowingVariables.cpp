@@ -118,9 +118,9 @@ class ReplaceShadowingVariablesTraverser : public TIntermTraverser
     }
 
   private:
-    std::unordered_set<std::string> mParameterNames;
+    std::unordered_set<ImmutableString> mParameterNames;
     TIntermBlock *mFunctionBody;
-    std::vector<DeferredReplacementBlock> mReplacements;
+    TVector<DeferredReplacementBlock> mReplacements;
 };
 
 }  // anonymous namespace
