@@ -16,6 +16,23 @@
       "message": "[Refactor test shader style.](https://chromium-review.googlesource.com/c/angle/angle/+/1357103)",
       "revId": "35cd7332ab62072a0a3d81c7e259a64ad5a61ba8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3acfc6e0_c412fc28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3346231
+      },
+      "writtenOn": "2024-03-16T01:07:47Z",
+      "side": 1,
+      "message": "// Załadowane punkty wejścia\n    PFNGLVERTEXATTRIBDIVISORANGLEPROC mVertexAttribDivisorANGLE ;\n    PFNGLDRAWARRAYSINSTANCEDANGLEPROC mDrawArraysInstancedANGLE ;\n    PFNGLDDRAWELEMENTSINSTANCEDANGLEPROC mDrawElementsInstancedANGLE ;",
+      "revId": "35cd7332ab62072a0a3d81c7e259a64ad5a61ba8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
