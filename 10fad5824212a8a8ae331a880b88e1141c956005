@@ -68,6 +68,24 @@
       "parentUuid": "2b87c4a9_7fd2114a",
       "revId": "10fad5824212a8a8ae331a880b88e1141c956005",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf3cd579_86a687d2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-16T17:47:13Z",
+      "side": 1,
+      "message": "\u003e Eventually it\u0027ll lead you to the PipelineCacheAccess class which is no longer necessary\n\nto keep things logically contained, i will have a follow up change where i get rid of the `PipelineCacheAccess` class",
+      "parentUuid": "cd9bf10c_f685ba9e",
+      "revId": "10fad5824212a8a8ae331a880b88e1141c956005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
