@@ -891,7 +891,6 @@ class Renderer : angle::NonCopyable
     VkPhysicalDevicePrimitivesGeneratedQueryFeaturesEXT mPrimitivesGeneratedQueryFeatures;
     VkPhysicalDevicePrimitiveTopologyListRestartFeaturesEXT mPrimitiveTopologyListRestartFeatures;
     VkPhysicalDeviceSamplerYcbcrConversionFeatures mSamplerYcbcrConversionFeatures;
-    VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT mPipelineCreationCacheControlFeatures;
     VkPhysicalDeviceExtendedDynamicStateFeaturesEXT mExtendedDynamicStateFeatures;
     VkPhysicalDeviceExtendedDynamicState2FeaturesEXT mExtendedDynamicState2Features;
     VkPhysicalDeviceGraphicsPipelineLibraryFeaturesEXT mGraphicsPipelineLibraryFeatures;
@@ -962,13 +961,17 @@ class Renderer : angle::NonCopyable
     uint32_t mDeviceLocalVertexConversionBufferMemoryTypeIndex;
     size_t mVertexConversionBufferAlignment;
 
-    // All access to the pipeline cache is done through EGL objects so it is thread safe to not
-    // use a lock.
+    // The mutex protects -
+    // 1. initialization of the cache
+    // 2. Vulkan driver guarantess synchronization for read and write operations but the spec
+    //    requires external synchronization when mPipelineCache is the dstCache of
+    //    vkMergePipelineCaches. Lock the mutex if mergeProgramPipelineCachesToGlobalCache is
+    //    enabled
     std::mutex mPipelineCacheMutex;
     vk::PipelineCache mPipelineCache;
     uint32_t mPipelineCacheVkUpdateTimeout;
     size_t mPipelineCacheSizeAtLastSync;
-    bool mPipelineCacheInitialized;
+    std::atomic<bool> mPipelineCacheInitialized;
 
     // Latest validation data for debug overlay.
     std::string mLastValidationMessage;
