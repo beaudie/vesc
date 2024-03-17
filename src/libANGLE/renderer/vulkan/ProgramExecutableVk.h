@@ -330,6 +330,8 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                               const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
                                               const vk::RenderPass &renderPass);
 
+    angle::Result mergeProgramExecutablePipelineCacheToRenderer(vk::Context *context) const;
+
     const vk::WriteDescriptorDescs &getShaderResourceWriteDescriptorDescs() const
     {
         return mShaderResourceWriteDescriptorDescs;

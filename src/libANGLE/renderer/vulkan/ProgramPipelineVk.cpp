@@ -138,6 +138,18 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
             }
         }
 
+        if (result == angle::Result::Continue)
+        {
+            angle::Result mergeResult =
+                executableVk->mergeProgramExecutablePipelineCacheToRenderer(contextVk);
+
+            // Treat error during merge as non fatal, log it and move on
+            if (mergeResult != angle::Result::Continue)
+            {
+                INFO() << "Error while merging to Renderer's pipeline cache";
+            }
+        }
+
         compatibleRenderPass.destroy(contextVk->getDevice());
     }
 
