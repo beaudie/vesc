@@ -86,6 +86,24 @@
       "parentUuid": "cd9bf10c_f685ba9e",
       "revId": "10fad5824212a8a8ae331a880b88e1141c956005",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8bae7df_2463f8d4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-17T01:45:56Z",
+      "side": 1,
+      "message": "I guess given that the renderer\u0027s cache still needs a mutex, you can\u0027t remove `PipelineCacheAccess`",
+      "parentUuid": "bf3cd579_86a687d2",
+      "revId": "10fad5824212a8a8ae331a880b88e1141c956005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
