@@ -122,6 +122,24 @@
       "parentUuid": "b8bae7df_2463f8d4",
       "revId": "10fad5824212a8a8ae331a880b88e1141c956005",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30f42d31_dc17688a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-17T04:58:15Z",
+      "side": 1,
+      "message": "Keep `PipelineCacheAccess` then, it\u0027s still encapsulating something",
+      "parentUuid": "54b6c878_83f53112",
+      "revId": "10fad5824212a8a8ae331a880b88e1141c956005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
