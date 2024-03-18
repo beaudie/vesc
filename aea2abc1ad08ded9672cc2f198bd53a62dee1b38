@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eeb57d9_37e1077e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-18T15:46:23Z",
+      "side": 1,
+      "message": "@m.maiya@samsung.com brought up that this is not required per spec. (I didn\u0027t find such a requirement either).\n\nThe commit message says that INPUT requires only the ATTACHMENT format features. So, why is SAMPLED being required in this change?",
+      "revId": "aea2abc1ad08ded9672cc2f198bd53a62dee1b38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
