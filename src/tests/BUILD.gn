@@ -557,6 +557,13 @@ if (build_angle_trace_tests) {
       # Allows us to edit traces and remove chunks of code without compile warnings.
       cflags_cc = [ "-Wno-unused-const-variable" ]
     }
+
+    if (!is_win || is_clang) {
+      cflags = [
+        "-msse4.2",
+        "-mpclmul",
+      ]
+    }
   }
 
   group("angle_trace_perf_tests") {
