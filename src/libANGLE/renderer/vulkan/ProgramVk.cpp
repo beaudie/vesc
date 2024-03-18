@@ -257,6 +257,8 @@ class WarmUpComputeTask : public WarmUpTaskCommon
 
     void operator()() override
     {
+        // Test: Intentionally make pipeline cache creation slow to debug threading issues
+        usleep(100'000);
         angle::Result result = mExecutableVk->warmUpComputePipelineCache(this, mPipelineRobustness,
                                                                          mPipelineProtectedAccess);
         ASSERT((result == angle::Result::Continue) == (mErrorCode == VK_SUCCESS));
@@ -287,6 +289,8 @@ class WarmUpGraphicsTask : public WarmUpTaskCommon
 
     void operator()() override
     {
+        // Test: Intentionally make pipeline cache creation slow to debug threading issues
+        usleep(100'000);
         angle::Result result = mExecutableVk->warmUpGraphicsPipelineCache(
             this, mPipelineRobustness, mPipelineProtectedAccess, mPipelineSubset, mIsSurfaceRotated,
             mGraphicsPipelineDesc, mCompatibleRenderPass.get());
