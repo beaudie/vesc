@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a90ad85f_578f1628",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6897,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-03-18T17:55:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80a9a7d3_45525940",
+      "range": {
+        "startLine": 6897,
+        "startChar": 8,
+        "endLine": 6897,
+        "endChar": 30
+      },
+      "revId": "74ad89a94714a2f01c8237162899d943533cfc93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6171dfd2_fb403de4",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-03-18T15:06:59Z",
       "side": 1,
       "message": "I appreciate that you want to minimize code duplication, but we have an established pattern throughout the file of directly calling `setModifiedResource`, would rather keep that pattern.",
+      "range": {
+        "startLine": 6977,
+        "startChar": 4,
+        "endLine": 6977,
+        "endChar": 22
+      },
+      "revId": "74ad89a94714a2f01c8237162899d943533cfc93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29265f20_93d9a162",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6977,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-03-18T17:55:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6171dfd2_fb403de4",
       "range": {
         "startLine": 6977,
         "startChar": 4,

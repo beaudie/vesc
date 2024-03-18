@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d34048_dd1ba28d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-03-18T17:55:55Z",
+      "side": 1,
+      "message": "Also added glDispatchComputeIndirect, JIC.",
+      "revId": "09c0a7fc76eccbabf6560b987a8c4922c84123b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
