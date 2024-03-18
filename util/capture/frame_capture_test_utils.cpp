@@ -87,6 +87,18 @@ bool UncompressData(const std::vector<uint8_t> &compressedData,
         GzipUncompressHelperPatched(uncompressedData->data(), &destLen, compressedData.data(),
                                     static_cast<uLong>(compressedData.size()), stream);
 
+    static const char *crct =
+        "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123";
+
+    for (int j = 16; j < (int)uncompressedSize; j *= 2)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            printf("crc check %d %d %lX %lX %lX\n", j, i, crc32(0, uncompressedData->data(), j),
+                   crc32(0, (uint8_t *)crct, 4), crc32(0, (uint8_t *)crct, 84));
+        }
+    }
+
     if (zResult != Z_OK)
     {
         std::cerr << "Failure to decompressed binary data: " << zResult
@@ -98,6 +110,7 @@ bool UncompressData(const std::vector<uint8_t> &compressedData,
                 stream.next_out, uncompressedData->data(), stream.avail_out, stream.total_out,
                 stream.adler, crc32(0, uncompressedData->data(), uncompressedSize),
                 crc32(0, uncompressedData->data(), 16 * (uncompressedSize / 16)));
+
         return false;
     }
 
