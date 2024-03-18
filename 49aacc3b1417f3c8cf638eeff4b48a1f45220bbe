@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee95da84_d433141f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-18T23:03:54Z",
+      "side": 1,
+      "message": "There\u0027s a merge conflict on this CL, so hoping it passes the trybots. I don\u0027t know this code well but it lgtm from a reading, and assuming it passes tests. Ideally another person would review too. One question.",
+      "revId": "49aacc3b1417f3c8cf638eeff4b48a1f45220bbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fb957d4_1004b50f",
+        "filename": "src/compiler/translator/msl/RewritePipelines.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-18T23:03:54Z",
+      "side": 1,
+      "message": "Only asking - is this work unneeded for the InvocationVertexGlobals pipeline type?",
+      "revId": "49aacc3b1417f3c8cf638eeff4b48a1f45220bbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
