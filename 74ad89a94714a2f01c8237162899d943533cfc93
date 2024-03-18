@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c423a301_fd074222",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-18T15:06:59Z",
+      "side": 1,
+      "message": "Nice fix Mark!",
+      "revId": "74ad89a94714a2f01c8237162899d943533cfc93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80a9a7d3_45525940",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6897,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-18T15:06:59Z",
+      "side": 1,
+      "message": "Rather than have this change directions at the bottom, can we introduce `IsImageUpdate` and only return true for `GLDispatchCompute`?  Then we can directly call `trackImageUpdate`.",
+      "range": {
+        "startLine": 6897,
+        "startChar": 8,
+        "endLine": 6897,
+        "endChar": 30
+      },
+      "revId": "74ad89a94714a2f01c8237162899d943533cfc93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6171dfd2_fb403de4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6977,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-18T15:06:59Z",
+      "side": 1,
+      "message": "I appreciate that you want to minimize code duplication, but we have an established pattern throughout the file of directly calling `setModifiedResource`, would rather keep that pattern.",
+      "range": {
+        "startLine": 6977,
+        "startChar": 4,
+        "endLine": 6977,
+        "endChar": 22
+      },
+      "revId": "74ad89a94714a2f01c8237162899d943533cfc93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
