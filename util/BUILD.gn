@@ -259,6 +259,13 @@ if (angle_has_frame_capture) {
       "$angle_root:angle_common",
       "$angle_root:angle_compression",
     ]
+
+    if (!is_win || is_clang) {
+      cflags = [
+        "-msse4.2",
+        "-mpclmul",
+      ]
+    }
   }
 
   angle_shared_library("angle_trace_interpreter") {
