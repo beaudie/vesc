@@ -39,6 +39,30 @@
       },
       "revId": "e252a4e9cfa545ddbd3631d79069b790931c7990",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2babb650_c4378e22",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-18T17:46:09Z",
+      "side": 1,
+      "message": "IIRC, there is no data dependency that depends on this atomic (data dependencies are handled by the appropriate mutexes)",
+      "parentUuid": "d50e1843_21e90ecc",
+      "range": {
+        "startLine": 704,
+        "startChar": 43,
+        "endLine": 704,
+        "endChar": 63
+      },
+      "revId": "e252a4e9cfa545ddbd3631d79069b790931c7990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
