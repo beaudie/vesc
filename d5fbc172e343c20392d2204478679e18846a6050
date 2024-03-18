@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82c52f48_ef1736b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-18T17:42:11Z",
+      "side": 1,
+      "message": "Deferring review to people who are more familiar with this code. I didn\u0027t spot anything unusual myself (but also didn\u0027t look too much into the details)",
+      "revId": "d5fbc172e343c20392d2204478679e18846a6050",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
