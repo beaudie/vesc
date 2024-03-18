@@ -16,6 +16,24 @@
       "message": "Brandon, do you have any extra context around this decision? What\u0027s stopping recordable from being usable with the other configs?",
       "revId": "317108d6ac8253e385b49fdfbfe06c7c3f5ce688",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d466dad6_94872a14",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2024-03-18T21:47:55Z",
+      "side": 1,
+      "message": "From what I recall, there is an Android CTS test that expects there to be a config that doesn\u0027t have the `recordable` bit set. So by forcing all configs to be `recordable` makes the test to fail.",
+      "parentUuid": "e9f9591c_6bfabcf9",
+      "revId": "317108d6ac8253e385b49fdfbfe06c7c3f5ce688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
