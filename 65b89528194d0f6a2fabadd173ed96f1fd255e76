@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b567dc_a9b78627",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-18T19:16:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87bb0163_82978fdd",
+      "range": {
+        "startLine": 763,
+        "startChar": 35,
+        "endLine": 763,
+        "endChar": 80
+      },
+      "revId": "65b89528194d0f6a2fabadd173ed96f1fd255e76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1286d36_02f14994",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-18T17:51:06Z",
       "side": 1,
       "message": "So far, our policy has been to fail fast. This is not expected to fail, and if it does something is seriously wrong. It\u0027s best to fail here than in an unrelated function that follows (and wonder what went wrong)\n\n```suggestion\n            ANGLE_TRY(executableVk-\u003emergePipelineCacheToRenderer(contextVk));\n```",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 13
+      },
+      "revId": "65b89528194d0f6a2fabadd173ed96f1fd255e76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4167defa_752175a3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-18T19:16:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1286d36_02f14994",
       "range": {
         "startLine": 143,
         "startChar": 0,
