@@ -16,6 +16,46 @@
       "message": "lgtm",
       "revId": "720525b314a52eae686098f81caf862bcb4796b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b279a5fc_db5fce91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-18T17:40:16Z",
+      "side": 1,
+      "message": "So very nice 😊",
+      "revId": "720525b314a52eae686098f81caf862bcb4796b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f05ac59_482ace4b",
+        "filename": "src/compiler/translator/ValidateClipCullDistance.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-18T17:40:16Z",
+      "side": 1,
+      "message": "nit: they are not `out` variables _here_:\n\n```suggestion\n    bool clipDistanceRedeclared;\n    bool cullDistanceRedeclared;\n```",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 35
+      },
+      "revId": "720525b314a52eae686098f81caf862bcb4796b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
