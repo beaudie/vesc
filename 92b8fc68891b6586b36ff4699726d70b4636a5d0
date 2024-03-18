@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66f6ad4f_d69f16e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-18T15:11:21Z",
+      "side": 1,
+      "message": "Revert doesn\u0027t seem to have helped, this commit fails with a similar error:\n\n```\nCONFLICT (modify/delete): .gitmodules deleted in HEAD and modified in 92b8fc68891b6586b36ff4699726d70b4636a5d0. Version 92b8fc68891b6586b36ff4699726d70b4636a5d0 of .gitmodules left in tree.\nCONFLICT (file/directory): directory in the way of third_party/vulkan-deps from 92b8fc68891b6586b36ff4699726d70b4636a5d0; moving it to third_party/vulkan-deps~92b8fc68891b6586b36ff4699726d70b4636a5d0 instead.\nCONFLICT (modify/delete): third_party/vulkan-deps~92b8fc68891b6586b36ff4699726d70b4636a5d0 deleted in HEAD and modified in 92b8fc68891b6586b36ff4699726d70b4636a5d0. Version 92b8fc68891b6586b36ff4699726d70b4636a5d0 of third_party/vulkan-deps~92b8fc68891b6586b36ff4699726d70b4636a5d0 left in tree.\n```",
+      "revId": "92b8fc68891b6586b36ff4699726d70b4636a5d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
