@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dbc9816_c6a92847",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-19T12:25:33Z",
+      "side": 1,
+      "message": "Maybe anonymous structure?",
+      "range": {
+        "startLine": 920,
+        "startChar": 59,
+        "endLine": 920,
+        "endChar": 77
+      },
+      "revId": "e6e4a56bf3d32774a3cca435453909e9cb2d8607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fa7b9ba_abc586ab",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-19T12:25:33Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 922,
+        "startChar": 39,
+        "endLine": 922,
+        "endChar": 48
+      },
+      "revId": "e6e4a56bf3d32774a3cca435453909e9cb2d8607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "543573b7_accb8536",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-19T12:25:33Z",
+      "side": 1,
+      "message": "The structure seems to be named in this test.",
+      "range": {
+        "startLine": 935,
+        "startChar": 70,
+        "endLine": 935,
+        "endChar": 79
+      },
+      "revId": "e6e4a56bf3d32774a3cca435453909e9cb2d8607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad542033_9f6c3607",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-19T12:25:33Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 939,
+        "startChar": 30,
+        "endLine": 939,
+        "endChar": 48
+      },
+      "revId": "e6e4a56bf3d32774a3cca435453909e9cb2d8607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
