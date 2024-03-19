@@ -209,6 +209,7 @@ class ChildProcessesManager():
             gn_args.append(('angle_assert_always_on', 'true'))
         if self._args.asan:
             gn_args.append(('is_asan', 'true'))
+        # gn_args.append(('is_component_build', 'true'))
         args_str = ' '.join(['%s=%s' % (k, v) for (k, v) in gn_args])
         cmd = [self._gn_path, 'gen', '--args=%s' % args_str, build_dir]
         self._logger.info(' '.join(cmd))
@@ -217,8 +218,30 @@ class ChildProcessesManager():
     def RunAutoNinja(self, build_dir, target, pipe_stdout):
         cmd = [sys.executable, self._autoninja_path, '-C', build_dir, target]
         with self._ninja_lock:
+            root_sz = 0
+            for x in os.listdir(build_dir):
+                dx = os.path.join(build_dir, x)
+                if not os.path.isdir(dx):
+                    root_sz += os.path.getsize(dx)
+                    continue
+
+                sz = 0
+                for dirpath, dirnames, filenames in os.walk(dx):
+                    for f in filenames:
+                        fp = os.path.join(dirpath, f)
+                        sz += os.path.getsize(fp)
+                self._logger.info('%s %.1f', x, sz / 1e6)
+
+            self._logger.info('root_sz %.1f', root_sz / 1e6)
+
             self._logger.info(' '.join(cmd))
-            return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
+
+            self._logger.info('diskb total=%.1f used=%.1f free=%.1f' %
+                              tuple(i / 1e9 for i in shutil.disk_usage(os.path.realpath('.'))))
+            result = self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
+            self._logger.info('diska total=%.1f used=%.1f free=%.1f' %
+                              tuple(i / 1e9 for i in shutil.disk_usage(os.path.realpath('.'))))
+            return result
 
 
 def GetTestsListForFilter(args, test_path, filter, logger):
