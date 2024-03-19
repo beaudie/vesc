@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a25a5ac_720e8f81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-03-19T21:20:50Z",
+      "side": 1,
+      "message": "PTAL\n\nI didn\u0027t need to change the abseil-cpp dep from it\u0027s current revision.",
+      "revId": "a879c0f31d11a848c3492fb38f4307476a5a92a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
