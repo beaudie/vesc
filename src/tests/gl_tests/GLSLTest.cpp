@@ -18872,6 +18872,29 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that struct declarations are introduced into the correct scope.
+TEST_P(GLSLTest_ES3, NestedReturnedStructs)
+{
+    const char kVS[] = R"(#version 300 es
+struct s {
+    float m;
+} f(float other);
+
+void main () {
+    float f = f(f(0.0).m).m;
+    gl_Position = vec4(f, 0.0, 0.0, 1.0);
+}
+)";
+    const char kFS[] = R"(#version 300 es
+precision highp float;
+out vec4 fragColor;
+void main() {
+    fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+}
+)";
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
