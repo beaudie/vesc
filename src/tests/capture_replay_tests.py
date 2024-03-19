@@ -218,7 +218,12 @@ class ChildProcessesManager():
         cmd = [sys.executable, self._autoninja_path, '-C', build_dir, target]
         with self._ninja_lock:
             self._logger.info(' '.join(cmd))
-            return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
+            self._logger.info('diskb total=%.1f used=%.1f free=%.1f' %
+                              tuple(i / 1e9 for i in shutil.disk_usage(os.path.realpath('.'))))
+            result = self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
+            self._logger.info('diska total=%.1f used=%.1f free=%.1f' %
+                              tuple(i / 1e9 for i in shutil.disk_usage(os.path.realpath('.'))))
+            return result
 
 
 def GetTestsListForFilter(args, test_path, filter, logger):
