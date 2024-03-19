@@ -218,7 +218,10 @@ class ChildProcessesManager():
         cmd = [sys.executable, self._autoninja_path, '-C', build_dir, target]
         with self._ninja_lock:
             self._logger.info(' '.join(cmd))
-            return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
+            start_time = time.time()
+            result = self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
+            self._logger.info('Build finished in %.1fs', time.time() - start_time)
+            return result
 
 
 def GetTestsListForFilter(args, test_path, filter, logger):
@@ -520,8 +523,10 @@ class TestBatch():
         for test in tests:
             self.UnlinkContextStateJsonFilesIfPresent(replay_build_dir, test.GetLabel())
 
+        start_time = time.time()
         returncode, output = child_processes_manager.RunSubprocess(
             run_cmd, env, timeout=SUBPROCESS_TIMEOUT)
+        self.logger.info('Replay finished in %.1fs', time.time() - start_time)
         if returncode == -1:
             cmd = replay_exe_path
             self.results.append(
