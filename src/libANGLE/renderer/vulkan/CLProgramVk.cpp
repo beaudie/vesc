@@ -330,7 +330,8 @@ angle::Result CLProgramVk::init(const size_t *lengths,
 
         // Add device binary to program
         DeviceProgramData deviceBinary;
-        deviceBinary.binaryType = binaryHeader->binaryType;
+        deviceBinary.binaryType  = binaryHeader->binaryType;
+        deviceBinary.buildStatus = binaryHeader->buildStatus;
         switch (deviceBinary.binaryType)
         {
             case CL_PROGRAM_BINARY_TYPE_EXECUTABLE:
@@ -513,7 +514,8 @@ angle::Result CLProgramVk::getInfo(cl::ProgramInfo name,
                         ? deviceProgram.second.binary.size() * sizeof(uint32_t)
                         : deviceProgram.second.IR.size();
                 ProgramBinaryOutputHeader header{.headerVersion = LatestSupportedBinaryVersion,
-                                                 .binaryType    = deviceProgram.second.binaryType};
+                                                 .binaryType    = deviceProgram.second.binaryType,
+                                                 .buildStatus   = deviceProgram.second.buildStatus};
 
                 if (outputBins != nullptr)
                 {
