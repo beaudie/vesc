@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc1ce7d_d6439557",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2024-03-19T22:37:57Z",
+      "side": 1,
+      "message": "PTAL!\n\nFor context, see https://chromium-review.googlesource.com/c/chromium/src/+/5349407 - removing a glFlush from IOSurfaceImageBacking::IOSurfaceBackingEGLStateEndAccess broke a test on SwANGLE. We can put the flush back in for SwANGLE only, but it seems the better solution is to make ReleaseTexImage do the flush like it does for the ANGLE Metal backend: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/SurfaceMtl.mm;l\u003d782",
+      "revId": "a34e2a28c985114051633625bc7d833a67233b15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
