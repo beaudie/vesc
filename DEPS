@@ -143,6 +143,8 @@ vars = {
   'dawn_standalone': False,
   'dawn_revision': '1a9f890473e2844d35bb0e541ac45f582df880ce',
 
+  'vs_toolchain': False,
+
   # All of the restricted traces (large).
   'checkout_angle_restricted_traces': 'checkout_angle_internal',
 
@@ -5487,7 +5489,7 @@ hooks = [
     # Update the Windows toolchain if necessary.  Must run before 'clang' below.
     'name': 'win_toolchain',
     'pattern': '.',
-    'condition': 'checkout_win and not build_with_chromium',
+    'condition': 'checkout_win and not build_with_chromium and vs_toolchain',
     'action': ['python3', 'build/vs_toolchain.py', 'update', '--force'],
   },
   {
