@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60d553f5_9abab0b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-19T18:58:20Z",
+      "side": 1,
+      "message": "lgtm when this passes tests. Thank you for persisting in this substantial rethinking of this area.\n\n`conformance2/glsl3/varying-struct-inline-definition.html` is failing on all platforms; is the problem in this CL or in the test?",
+      "revId": "bc9b4c6f9447034ed4cb3ee2331af6c1a0bfd12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d7fdf20_9b9bccfa",
+        "filename": "src/compiler/translator/tree_ops/SeparateDeclarations.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-19T18:58:20Z",
+      "side": 1,
+      "message": "typo: stuct with -\u003e struct with",
+      "revId": "bc9b4c6f9447034ed4cb3ee2331af6c1a0bfd12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
