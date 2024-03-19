@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d604cb1_e7f2df94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-19T13:35:56Z",
+      "side": 1,
+      "message": "Tentatively -1 while discussing it",
+      "revId": "963317d5a4121f216ed094f22109ea326a4b10ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b234c1fc_23a1d1e6",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-19T13:35:56Z",
+      "side": 1,
+      "message": "The stuff added in the front-end are kind of red flags that this is not the right approach. Could we please have a chat about what exactly is wrong and what our options are?\n\nIdeally, a workaround like this can be contained to the affected backend only as otherwise every backend is paying the tracking cost and maintenance complexity.",
+      "revId": "963317d5a4121f216ed094f22109ea326a4b10ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
