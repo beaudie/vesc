@@ -205,6 +205,13 @@ egl::Error IOSurfaceSurfaceVkMac::releaseTexImage(const gl::Context *context, EG
         return angle::ToEGL(result, EGL_BAD_SURFACE);
     }
 
+    result = contextVk->flush(context);
+
+    if (result != angle::Result::Continue)
+    {
+        return angle::ToEGL(result, EGL_BAD_SURFACE);
+    }
+
     gl::Rectangle bounds(0, 0, mWidth, mHeight);
 
     const angle::Format &dstFormat = angle::Format::Get(angle::Format::InternalFormatToID(
