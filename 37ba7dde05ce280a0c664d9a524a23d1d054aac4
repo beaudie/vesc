@@ -16,6 +16,23 @@
       "message": "lgtm+2, thanks for continuing to dig and improve this code and the tests.",
       "revId": "37ba7dde05ce280a0c664d9a524a23d1d054aac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2f2f7e5_edf825a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-19T22:56:02Z",
+      "side": 1,
+      "message": "The win-trace failures are deterministic and are caused by this CL:\n\n```\n[INFO/MainProcess] Failure: Obtained 8 results that differ from expectation:\n[INFO/MainProcess] \n[INFO/MainProcess] Unexpected \u0027CaptureFailed\u0027 (8):\n[INFO/MainProcess]      !\u003d Pass: batch_102 GLSLTest_ES3.VaryingAnonymousStructEquality/ES3_Vulkan_SwiftShader\n[INFO/MainProcess]      !\u003d Pass: batch_102 GLSLTest_ES3.VaryingAnonymousStructWithInlineDefinition/ES3_Vulkan_SwiftShader\n[INFO/MainProcess]      !\u003d Pass: batch_102 GLSLTest_ES3.VaryingAnonymousStructWithInlineDefinition2/ES3_Vulkan_SwiftShader\n[INFO/MainProcess]      !\u003d Pass: batch_102 GLSLTest_ES3.VaryingAnonymousStructWithInlineDefinition3/ES3_Vulkan_SwiftShader\n[INFO/MainProcess]      !\u003d Pass: batch_102 GLSLTest_ES3.VaryingMatrices/ES3_Vulkan_SwiftShader\n[INFO/MainProcess]      !\u003d Pass: batch_102 GLSLTest_ES3.VaryingStaticallyUsedButNotActiveInFragmentShader/ES3_Vulkan_SwiftShader\n[INFO/MainProcess]      !\u003d Pass: batch_102 GLSLTest_ES3.VaryingStructNotDeclaredInFragmentShader/ES3_Vulkan_SwiftShader\n[INFO/MainProcess]      !\u003d Pass: batch_102 GLSLTest_ES3.VaryingStructNotDeclaredInVertexShader/ES3_Vulkan_SwiftShader\n```\n\nI don\u0027t know how to handle these trace_test failures - Shabi or Geoff, can you help?",
+      "revId": "37ba7dde05ce280a0c664d9a524a23d1d054aac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
