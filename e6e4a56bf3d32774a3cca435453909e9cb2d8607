@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b6ea0cc_8417cba1",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-19T12:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6dbc9816_c6a92847",
+      "range": {
+        "startLine": 920,
+        "startChar": 59,
+        "endLine": 920,
+        "endChar": 77
+      },
+      "revId": "e6e4a56bf3d32774a3cca435453909e9cb2d8607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fa7b9ba_abc586ab",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-19T12:25:33Z",
       "side": 1,
       "message": "Ditto.",
+      "range": {
+        "startLine": 922,
+        "startChar": 39,
+        "endLine": 922,
+        "endChar": 48
+      },
+      "revId": "e6e4a56bf3d32774a3cca435453909e9cb2d8607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78534b42_5d500737",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-19T12:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fa7b9ba_abc586ab",
       "range": {
         "startLine": 922,
         "startChar": 39,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d9a11f0_f3277b7f",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-19T12:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "543573b7_accb8536",
+      "range": {
+        "startLine": 935,
+        "startChar": 70,
+        "endLine": 935,
+        "endChar": 79
+      },
+      "revId": "e6e4a56bf3d32774a3cca435453909e9cb2d8607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad542033_9f6c3607",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-03-19T12:25:33Z",
       "side": 1,
       "message": "Ditto.",
+      "range": {
+        "startLine": 939,
+        "startChar": 30,
+        "endLine": 939,
+        "endChar": 48
+      },
+      "revId": "e6e4a56bf3d32774a3cca435453909e9cb2d8607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be2871e4_9d8baa17",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-19T12:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad542033_9f6c3607",
       "range": {
         "startLine": 939,
         "startChar": 30,
