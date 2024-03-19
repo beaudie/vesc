@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3505c2b6_13c336b5",
+        "filename": "third_party/clspv/gn/build/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-03-19T16:22:59Z",
+      "side": 1,
+      "message": "miss on windows build :( ... Fixing it.",
+      "revId": "0b9896b2c8c3c5180e34a6eae119971a76fb28fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
