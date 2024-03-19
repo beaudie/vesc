@@ -8,93 +8,85 @@
 //
 
 #include "compiler/translator/tree_ops/SeparateStructFromFunctionDeclarations.h"
+#include "compiler/translator/IntermRebuild.h"
 #include "compiler/translator/SymbolTable.h"
-#include "compiler/translator/tree_util/IntermTraverse.h"
 
 namespace sh
 {
 namespace
 {
-class Traverser : public TIntermTraverser
+class SeparateStructFromFunctionDeclarationsTraverser : public TIntermRebuild
 {
   public:
-    explicit Traverser(TSymbolTable *symbolTable)
-        : TIntermTraverser(true, false, false, symbolTable)
+    explicit SeparateStructFromFunctionDeclarationsTraverser(TCompiler &compiler)
+        : TIntermRebuild(compiler, true, false)
     {}
 
-    void visitFunctionPrototype(TIntermFunctionPrototype *node) override
+    PreResult visitFunctionPrototypePre(TIntermFunctionPrototype &node) override
     {
-        const TFunction *function = node->getFunction();
+        const TFunction *function = node.getFunction();
         if (mFunctionsToReplace.count(function) > 0)
         {
             TIntermFunctionPrototype *newFuncProto =
                 new TIntermFunctionPrototype(mFunctionsToReplace[function]);
-            queueReplacement(newFuncProto, OriginalNode::IS_DROPPED);
+            return newFuncProto;
         }
-        else
+        else if (node.getType().isStructSpecifier())
         {
-            const TType &type = node->getType();
-            if (type.isStructSpecifier())
+            const TType &oldType        = node.getType();
+            const TStructure *structure = oldType.getStruct();
+            // Name unnamed inline structs
+            if (structure->symbolType() == SymbolType::Empty)
             {
-                doReplacement(function, type);
+                structure = new TStructure(&mSymbolTable, kEmptyImmutableString,
+                                           &structure->fields(), SymbolType::AngleInternal);
             }
+
+            TVariable *structVar = new TVariable(&mSymbolTable, ImmutableString(""),
+                                                 new TType(structure, true), SymbolType::Empty);
+
+            TType *returnType = new TType(structure, false);
+            if (oldType.isArray())
+            {
+                returnType->makeArrays(oldType.getArraySizes());
+            }
+            returnType->setQualifier(oldType.getQualifier());
+
+            const TFunction *oldFunc = function;
+            ASSERT(oldFunc->symbolType() == SymbolType::UserDefined);
+
+            const TFunction *newFunc     = cloneFunctionAndChangeReturnType(oldFunc, returnType);
+            mFunctionsToReplace[oldFunc] = newFunc;
+
+            return PreResult::Multi(
+                {new TIntermDeclaration({structVar}), new TIntermFunctionPrototype(newFunc)});
         }
+
+        return node;
     }
 
-    bool visitAggregate(Visit visit, TIntermAggregate *node) override
+    PreResult visitAggregatePre(TIntermAggregate &node) override
     {
-        const TFunction *function = node->getFunction();
+        const TFunction *function = node.getFunction();
         if (mFunctionsToReplace.count(function) > 0)
         {
             TIntermAggregate *replacementNode = TIntermAggregate::CreateFunctionCall(
-                *mFunctionsToReplace[function], node->getSequence());
-            queueReplacement(replacementNode, OriginalNode::IS_DROPPED);
+                *mFunctionsToReplace[function], node.getSequence());
+
+            return PreResult(replacementNode, VisitBits::Children);
         }
-        return true;
+
+        return node;
     }
 
   private:
-    void doReplacement(const TFunction *function, const TType &oldType)
-    {
-        const TStructure *structure = oldType.getStruct();
-        // Name unnamed inline structs
-        if (structure->symbolType() == SymbolType::Empty)
-        {
-            structure = new TStructure(mSymbolTable, kEmptyImmutableString, &structure->fields(),
-                                       SymbolType::AngleInternal);
-        }
-
-        TVariable *structVar = new TVariable(mSymbolTable, ImmutableString(""),
-                                             new TType(structure, true), SymbolType::Empty);
-        insertStatementInParentBlock(new TIntermDeclaration({structVar}));
-
-        TType *returnType = new TType(structure, false);
-        if (oldType.isArray())
-        {
-            returnType->makeArrays(oldType.getArraySizes());
-        }
-        returnType->setQualifier(oldType.getQualifier());
-
-        const TFunction *oldFunc = function;
-        ASSERT(oldFunc->symbolType() == SymbolType::UserDefined);
-
-        const TFunction *newFunc =
-            cloneFunctionAndChangeReturnType(mSymbolTable, oldFunc, returnType);
-
-        TIntermFunctionPrototype *newFuncProto = new TIntermFunctionPrototype(newFunc);
-        queueReplacement(newFuncProto, OriginalNode::IS_DROPPED);
-
-        mFunctionsToReplace[oldFunc] = newFunc;
-    }
-
-    const TFunction *cloneFunctionAndChangeReturnType(TSymbolTable *symbolTable,
-                                                      const TFunction *oldFunc,
+    const TFunction *cloneFunctionAndChangeReturnType(const TFunction *oldFunc,
                                                       const TType *newReturnType)
 
     {
         ASSERT(oldFunc->symbolType() == SymbolType::UserDefined);
 
-        TFunction *newFunc = new TFunction(symbolTable, oldFunc->name(), oldFunc->symbolType(),
+        TFunction *newFunc = new TFunction(&mSymbolTable, oldFunc->name(), oldFunc->symbolType(),
                                            newReturnType, oldFunc->isKnownToNotHaveSideEffects());
 
         if (oldFunc->isDefined())
@@ -123,12 +115,9 @@ class Traverser : public TIntermTraverser
 
 }  // anonymous namespace
 
-bool SeparateStructFromFunctionDeclarations(TCompiler *compiler,
-                                            TIntermBlock *root,
-                                            TSymbolTable *symbolTable)
+bool SeparateStructFromFunctionDeclarations(TCompiler &compiler, TIntermBlock &root)
 {
-    Traverser separateStructDecls(symbolTable);
-    root->traverse(&separateStructDecls);
-    return separateStructDecls.updateTree(compiler, root);
+    SeparateStructFromFunctionDeclarationsTraverser separateStructDecls(compiler);
+    return separateStructDecls.rebuildRoot(root);
 }
 }  // namespace sh
