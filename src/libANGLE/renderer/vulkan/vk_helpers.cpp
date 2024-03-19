@@ -5703,10 +5703,10 @@ YcbcrConversionDesc ImageHelper::deriveConversionDesc(Context *context,
         VkSamplerYcbcrRange colorRange                = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
         VkFilter chromaFilter                         = kDefaultYCbCrChromaFilter;
         VkComponentMapping components                 = {
-                            VK_COMPONENT_SWIZZLE_IDENTITY,
-                            VK_COMPONENT_SWIZZLE_IDENTITY,
-                            VK_COMPONENT_SWIZZLE_IDENTITY,
-                            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
         };
 
         conversionDesc.update(renderer, 0, conversionModel, colorRange, supportedLocation,
