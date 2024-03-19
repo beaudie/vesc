@@ -218,7 +218,10 @@ class ChildProcessesManager():
         cmd = [sys.executable, self._autoninja_path, '-C', build_dir, target]
         with self._ninja_lock:
             self._logger.info(' '.join(cmd))
-            return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
+            start_time = time.time()
+            result = self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
+            self._logger.info('Build finished in %.1fs', time.time() - start_time)
+            return result
 
 
 def GetTestsListForFilter(args, test_path, filter, logger):
