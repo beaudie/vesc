@@ -218,6 +218,8 @@ class ChildProcessesManager():
         cmd = [sys.executable, self._autoninja_path, '-C', build_dir, target]
         with self._ninja_lock:
             self._logger.info(' '.join(cmd))
+            self._logger.info('disk total=%.1f used=%.1f free=%.1f' %
+                              [i / 1e9 for i in shutil.disk_usage(os.path.realpath('.'))])
             return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
 
 
