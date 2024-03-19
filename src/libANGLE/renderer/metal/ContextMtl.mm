@@ -1845,6 +1845,15 @@ void ContextMtl::flushCommandBuffer(mtl::CommandBufferFinishOperation operation)
     {
         mCmdBuffer.wait(operation);
     }
+
+    // This is not always called by applications, but since glFinish() is
+    // blocking and known to be slow, we can expect that it is a good time to
+    // get rid of work buffers.
+    if (operation == mtl::CommandBufferFinishOperation::WaitUntilFinished)
+    {
+        mWorkTexture.reset();
+        mWorkBuffer.reset();
+    }
 }
 
 void ContextMtl::flushCommandBufferIfNeeded()
