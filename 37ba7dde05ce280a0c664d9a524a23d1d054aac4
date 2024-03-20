@@ -51,6 +51,24 @@
       "parentUuid": "a2f2f7e5_edf825a1",
       "revId": "37ba7dde05ce280a0c664d9a524a23d1d054aac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68218961_2065f642",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-20T09:15:53Z",
+      "side": 1,
+      "message": "I think the test cases actually reveals a bustage in the output variable initialization phase that has been there for 7 years, so need to again fix that before proceeding.",
+      "parentUuid": "4788e601_00c011e1",
+      "revId": "37ba7dde05ce280a0c664d9a524a23d1d054aac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
