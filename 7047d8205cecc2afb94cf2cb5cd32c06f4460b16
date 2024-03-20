@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3a4c7b5_7ad4101f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-20T11:37:53Z",
+      "side": 1,
+      "message": "Super, thank you, Roman!\nI think this will also save significant time and cloud storage uploading the build cache to CAS.",
+      "revId": "7047d8205cecc2afb94cf2cb5cd32c06f4460b16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
