@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e77d0d0e_dc99d3ae",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-20T08:47:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ec33579_e7d02c84",
+      "revId": "54c78d995aefb8346e164e440fa2efc14ed167fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe9d4cad_14069edd",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-15T15:43:05Z",
       "side": 1,
       "message": "Could you please change this to build an ImmutableString right away? It\u0027s turned into a std::string, then passed to `extractSampler` which turns it back to ImmutableString.",
+      "revId": "54c78d995aefb8346e164e440fa2efc14ed167fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87f32659_23ccc4db",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-20T08:47:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe9d4cad_14069edd",
       "revId": "54c78d995aefb8346e164e440fa2efc14ed167fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1e4acbbf_450b77f1",
+        "filename": "src/compiler/translator/tree_util/ReplaceArrayOfMatrixVarying.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-20T08:47:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "044f424b_d2989cb2",
+      "revId": "54c78d995aefb8346e164e440fa2efc14ed167fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9bdc86e6_a6ff3b50",
         "filename": "src/compiler/translator/tree_util/ReplaceShadowingVariables.cpp",
         "patchSetId": 1
@@ -65,6 +119,30 @@
       "writtenOn": "2024-03-15T15:43:05Z",
       "side": 1,
       "message": "If you get to it one day, these should also use `TVector`, `TUnorderedMap` and `ImmutableString` for improved memory allocation",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 56
+      },
+      "revId": "54c78d995aefb8346e164e440fa2efc14ed167fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5d8287c_8585b495",
+        "filename": "src/compiler/translator/tree_util/ReplaceShadowingVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-20T08:47:42Z",
+      "side": 1,
+      "message": "\u003e If you get to it one day, these should also use `TVector`, `TUnorderedMap` and `ImmutableString` for improved memory allocation",
+      "parentUuid": "9bdc86e6_a6ff3b50",
       "range": {
         "startLine": 121,
         "startChar": 0,
