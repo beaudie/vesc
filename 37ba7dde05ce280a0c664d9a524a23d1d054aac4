@@ -69,6 +69,24 @@
       "parentUuid": "4788e601_00c011e1",
       "revId": "37ba7dde05ce280a0c664d9a524a23d1d054aac4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e64b930_32cd23e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-03-20T09:53:29Z",
+      "side": 1,
+      "message": "Three of the four new tests fail in capture/replay with an assertion in `validateAST` but they pass when run directly.\n\nPreexisting tests are not affected.",
+      "parentUuid": "68218961_2065f642",
+      "revId": "37ba7dde05ce280a0c664d9a524a23d1d054aac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
