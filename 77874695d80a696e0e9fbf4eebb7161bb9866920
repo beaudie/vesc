@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4080e1c3_4578c215",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-20T09:15:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee18f656_10c51327",
+      "range": {
+        "startLine": 14,
+        "startChar": 13,
+        "endLine": 14,
+        "endChar": 28
+      },
+      "revId": "77874695d80a696e0e9fbf4eebb7161bb9866920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09122c90_96b5ffdf",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb118835_f8b9e950",
+        "filename": "src/compiler/translator/msl/RewritePipelines.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-20T09:15:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09122c90_96b5ffdf",
+      "revId": "77874695d80a696e0e9fbf4eebb7161bb9866920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1852fec7_0c0c6be5",
@@ -54,6 +96,30 @@
       "writtenOn": "2024-03-19T16:34:14Z",
       "side": 1,
       "message": "This block could be removed.",
+      "range": {
+        "startLine": 1362,
+        "startChar": 0,
+        "endLine": 1365,
+        "endChar": 9
+      },
+      "revId": "77874695d80a696e0e9fbf4eebb7161bb9866920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b645f63e_992b608d",
+        "filename": "src/compiler/translator/msl/TranslatorMSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-20T09:15:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1852fec7_0c0c6be5",
       "range": {
         "startLine": 1362,
         "startChar": 0,
