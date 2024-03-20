@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccb24983_8746fa4a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T18:27:48Z",
+      "side": 1,
+      "message": "```suggestion\n    bool getAndResetHasHostVisibleBufferWrite()\n```",
+      "range": {
+        "startLine": 1175,
+        "startChar": 9,
+        "endLine": 1175,
+        "endChar": 42
+      },
+      "revId": "9e5f242a2da6b2df79cf111437c6a0dbbfe10283",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
