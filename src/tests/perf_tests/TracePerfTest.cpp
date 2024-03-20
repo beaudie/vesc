@@ -1671,7 +1671,7 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("toca_life_world"))
+    if (traceNameIs("toca_life_world") || traceNameIs("poppy_playtime"))
     {
         addExtensionPrerequisite("GL_OES_EGL_image_external");
     }
