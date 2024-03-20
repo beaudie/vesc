@@ -313,6 +313,22 @@ def gn_cflags_to_blueprint_cflags(target_info):
     return result
 
 
+def gn_ldflags_to_blueprint_ldflags(target_info):
+    result = []
+
+    # regexs of allowlisted ldflags
+    ldflag_allowlist = [
+        r'-Wl,-z,max-page-size=65536'  # forward page size agnostic flags
+    ]
+
+    if 'ldflags' in target_info:
+        for ldflag in target_info['ldflags']:
+            for allowlisted_ldflag in ldflag_allowlist:
+                if re.search(re.compile(allowlisted_ldflag), ldflag):
+                    result.append(ldflag)
+    return result
+
+
 blueprint_library_target_types = {
     "static_library": "cc_library_static",
     "shared_library": "cc_library_shared",
@@ -371,6 +387,8 @@ def library_target_to_blueprint(target, build_info):
         bp['local_include_dirs'] = gn_include_dirs_to_blueprint_include_dirs(target_info)
 
         bp['cflags'] = gn_cflags_to_blueprint_cflags(target_info)
+
+        bp['ldflags'] = gn_ldflags_to_blueprint_ldflags(target_info)
 
         bp['defaults'].append('angle_common_library_cflags')
 
