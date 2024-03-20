@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d72e57f6_57a8bbe6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-20T08:40:07Z",
+      "side": 1,
+      "message": "It\u0027s an existing bug in shader output variable initialization code for webgl. need to fix that first before proceeding.",
+      "parentUuid": "60d553f5_9abab0b7",
+      "revId": "bc9b4c6f9447034ed4cb3ee2331af6c1a0bfd12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d7fdf20_9b9bccfa",
