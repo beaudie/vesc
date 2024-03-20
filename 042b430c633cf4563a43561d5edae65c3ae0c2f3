@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63b17433_7d64400c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T16:51:42Z",
+      "side": 0,
+      "message": "Please revert",
+      "revId": "042b430c633cf4563a43561d5edae65c3ae0c2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a47d3d5_c8f892d0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T16:51:42Z",
+      "side": 1,
+      "message": "You can remove contextVk here now.",
+      "range": {
+        "startLine": 533,
+        "startChar": 25,
+        "endLine": 533,
+        "endChar": 45
+      },
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b63d87f4_489e5e08",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T16:51:42Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 551,
+        "startChar": 24,
+        "endLine": 551,
+        "endChar": 44
+      },
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "584f8895_0a889d74",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5801,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T16:51:42Z",
+      "side": 1,
+      "message": "This can be removed now",
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d62f75e4_3f3a7168",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5897,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T16:51:42Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "660786a1_bf4956e4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5925,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T16:51:42Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1eb7fb5c_80c87704",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T16:51:42Z",
+      "side": 1,
+      "message": "To make sure there are no mistakes, could you please change to this:\n\n```suggestion\n    // Make sure the context has picked up and acted on this flag.\n    ASSERT(!mIsAnyHostVisibleBufferWritten);\n```\n\nThen change `hasHostVisibleBufferWrite()` to `getAndResetHasHostVisibleBufferWrite()`, which returns the value and also sets it to false. Then if the context mistakenly forgets to check this flag, the assert above would fire.",
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6ec5a60_f78bc53c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_resource.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T16:51:42Z",
+      "side": 1,
+      "message": "This should be faster:\n\n```suggestion\n        return mSerials.size() \u003e queueSerial.getIndex() \u0026\u0026\n               mSerials[queueSerial.getIndex()] \u003e\u003d queueSerial.getSerial();\n```\n\nIf you need an `operator \u003e\u003d` somewhere, you can add that too!",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 77
+      },
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
