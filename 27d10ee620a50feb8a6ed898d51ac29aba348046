@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35dc23d1_cb92b8bd",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T15:21:28Z",
+      "side": 1,
+      "message": "Does this work?\n\n```suggestion\ntemplate \u003cuint8_t FourthValue\u003e\ninline void LoadToNative3To4\u003cuint8_t, FourthValue\u003e(const ImageLoadContext \u0026context,\n                                                   size_t width,\n                                                   size_t height,\n                                                   size_t depth,\n                                                   const uint8_t *input,\n                                                   size_t inputRowPitch,\n                                                   size_t inputDepthPitch,\n                                                   uint8_t *output,\n                                                   size_t outputRowPitch,\n                                                   size_t outputDepthPitch)\n{\n    LoadToNativeByte3To4Impl(context, FourthValue, width, height, depth, input, inputRowPitch,\n                              inputDepthPitch, output, outputRowPitch, outputDepthPitch);\n}\n```\n\nThen you don\u0027t have to spell out all possible alpha values.",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 1
+      },
+      "revId": "27d10ee620a50feb8a6ed898d51ac29aba348046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "534b114a_fabf20ac",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T15:21:28Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 290,
+        "endChar": 0
+      },
+      "revId": "27d10ee620a50feb8a6ed898d51ac29aba348046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
