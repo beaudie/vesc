@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77bf81ab_288df658",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-03-20T18:34:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30259aec_696eacd6",
+      "range": {
+        "startLine": 533,
+        "startChar": 25,
+        "endLine": 533,
+        "endChar": 45
+      },
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b63d87f4_489e5e08",
@@ -95,6 +119,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34644750_44eb35be",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-03-20T18:34:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e3c623b_e31f053b",
+      "range": {
+        "startLine": 551,
+        "startChar": 24,
+        "endLine": 551,
+        "endChar": 44
+      },
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "584f8895_0a889d74",
@@ -126,6 +174,24 @@
       "side": 1,
       "message": "Good catch. Ack.",
       "parentUuid": "584f8895_0a889d74",
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31d099d9_d8feadc2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5801,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-03-20T18:34:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01675649_f2b98cfd",
       "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -196,6 +262,24 @@
       "side": 1,
       "message": "Not a big deal, but missed this one",
       "parentUuid": "660786a1_bf4956e4",
+      "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dbae410_6797543b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5925,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-03-20T18:34:29Z",
+      "side": 1,
+      "message": "Just saw that -- will fix it.",
+      "parentUuid": "732ab240_45d4bac1",
       "revId": "4c4a6f974d1b7261494a0f22c8fb6d2ce1c4db19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
