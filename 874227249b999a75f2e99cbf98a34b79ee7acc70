@@ -16,6 +16,24 @@
       "message": "Looks like some tests are failing on Pixel 6, Android T, is that expected?",
       "revId": "874227249b999a75f2e99cbf98a34b79ee7acc70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "704a4dad_cf7a39c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-03-20T17:11:44Z",
+      "side": 1,
+      "message": "Tests are failing on Pixel 4, Android R, too.",
+      "parentUuid": "96c584ea_fdb94c93",
+      "revId": "874227249b999a75f2e99cbf98a34b79ee7acc70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
