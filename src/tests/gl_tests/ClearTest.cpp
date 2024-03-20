@@ -7,6 +7,7 @@
 #include "test_utils/ANGLETest.h"
 
 #include "test_utils/gl_raii.h"
+#include "util/OSWindow.h"
 #include "util/random_utils.h"
 #include "util/shader_utils.h"
 #include "util/test_utils.h"
@@ -1676,6 +1677,228 @@ TEST_P(ClearTestES3, TextureArrayRGB8)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
 
     EXPECT_GL_NO_ERROR();
+}
+
+class ScissoredClearPbufferTest : public ANGLETest<>
+{
+  protected:
+    ScissoredClearPbufferTest() : mDisplay(EGL_NO_DISPLAY), mOSWindow(nullptr) {}
+
+    // Called before running each individual test
+    void testSetUp() override
+    {
+        mOSWindow = OSWindow::New();
+        mOSWindow->initialize("ScissoredClearPbufferTest", 32, 32);
+
+        GLenum platformType = GetParam().getRenderer();
+        GLenum deviceType   = GetParam().getDeviceType();
+
+        std::vector<EGLint> displayAttributes;
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+        displayAttributes.push_back(platformType);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE);
+        displayAttributes.push_back(EGL_DONT_CARE);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE);
+        displayAttributes.push_back(EGL_DONT_CARE);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
+        displayAttributes.push_back(deviceType);
+        displayAttributes.push_back(EGL_NONE);
+
+        mDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE,
+                                            reinterpret_cast<void *>(mOSWindow->getNativeDisplay()),
+                                            displayAttributes.data());
+        ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
+
+        EGLint majorVersion, minorVersion;
+        ASSERT_TRUE(eglInitialize(mDisplay, &majorVersion, &minorVersion) == EGL_TRUE);
+
+        eglBindAPI(EGL_OPENGL_ES_API);
+        ASSERT_EGL_SUCCESS();
+
+        //        const EGLint configAttributes[] = {EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
+        //                EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8, EGL_STENCIL_SIZE, 8,
+        //                EGL_NONE};
+        EGLint configAttributes[] = {EGL_CONFIG_ID, 28, EGL_NONE};
+        EGLint configCount;
+        eglChooseConfig(mDisplay, configAttributes, nullptr, 0, &configCount);
+        ASSERT_EGL_SUCCESS();
+        mEGLConfigs.resize(configCount);
+        eglChooseConfig(mDisplay, configAttributes, mEGLConfigs.data(), mEGLConfigs.size(),
+                        &configCount);
+
+        // debug message
+        for (std::vector<EGLConfig>::iterator it = mEGLConfigs.begin(); it != mEGLConfigs.end();
+             ++it)
+        {
+            EGLint configAlphaSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_ALPHA_SIZE, &configAlphaSize);
+            EGLint configAlphaMaskSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_ALPHA_MASK_SIZE, &configAlphaMaskSize);
+            EGLint configBindToTextureRGB = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_BIND_TO_TEXTURE_RGB, &configBindToTextureRGB);
+            EGLint configBindToTextureRGBA = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_BIND_TO_TEXTURE_RGBA, &configBindToTextureRGBA);
+            EGLint configBlueSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_BLUE_SIZE, &configBlueSize);
+            EGLint configBufferSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_BUFFER_SIZE, &configBufferSize);
+            EGLint configColorBufferType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_COLOR_BUFFER_TYPE, &configColorBufferType);
+            EGLint configCaveat = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_CONFIG_CAVEAT, &configCaveat);
+            EGLint configID = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_CONFIG_ID, &configID);
+            EGLint configConformant = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_CONFORMANT, &configConformant);
+            EGLint configDepthSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_DEPTH_SIZE, &configDepthSize);
+            EGLint configGreenSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_GREEN_SIZE, &configGreenSize);
+            EGLint configLevel = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_LEVEL, &configLevel);
+            EGLint configLuminance = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_LUMINANCE_SIZE, &configLuminance);
+            EGLint configMaxPbufferWidth = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MAX_PBUFFER_WIDTH, &configMaxPbufferWidth);
+            EGLint configMaxPbufferHeight = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MAX_PBUFFER_HEIGHT, &configMaxPbufferHeight);
+            EGLint configMaxPbufferPixels = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MAX_PBUFFER_PIXELS, &configMaxPbufferPixels);
+            EGLint configMaxSwapInterval = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MAX_SWAP_INTERVAL, &configMaxSwapInterval);
+            EGLint configMinSwapInterval = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MIN_SWAP_INTERVAL, &configMinSwapInterval);
+            EGLint configNativeRendeable = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_NATIVE_RENDERABLE, &configNativeRendeable);
+            EGLint configNativeVisualID = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_NATIVE_VISUAL_ID, &configNativeVisualID);
+            EGLint configNativeVisualType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_NATIVE_VISUAL_TYPE, &configNativeVisualType);
+            EGLint configRedSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_RED_SIZE, &configRedSize);
+            EGLint configRenderableType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_RENDERABLE_TYPE, &configRenderableType);
+            EGLint configSampleBuffers = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_SAMPLE_BUFFERS, &configSampleBuffers);
+            EGLint configSamples = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_SAMPLES, &configSamples);
+            EGLint configStencilSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_STENCIL_SIZE, &configStencilSize);
+            EGLint configSurfaceType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_SURFACE_TYPE, &configSurfaceType);
+            EGLint configTransparentType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_TRANSPARENT_TYPE, &configTransparentType);
+            EGLint configTransparentRed = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_TRANSPARENT_RED_VALUE, &configTransparentRed);
+            EGLint configTransparentGreen = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_TRANSPARENT_GREEN_VALUE, &configTransparentGreen);
+            EGLint configTransparentBlue = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_TRANSPARENT_BLUE_VALUE, &configTransparentBlue);
+
+            INFO() << "configID: " << configID << " configAlphaSize: " << configAlphaSize
+                   << " configAlphaMaskSize: " << configAlphaMaskSize
+                   << " configBindToTextureRGB: " << configBindToTextureRGB
+                   << " configBindToTextureRGBA: " << configBindToTextureRGBA
+                   << " configBlueSize: " << configBlueSize
+                   << " configBufferSize: " << configBufferSize
+                   << " configColorBufferType: " << configColorBufferType
+                   << " configCaveat: " << configCaveat << " configConformant: " << configConformant
+                   << " configDepthSize: " << configDepthSize
+                   << " configGreenSize: " << configGreenSize << " configLevel: " << configLevel
+                   << " configLuminance: " << configLuminance
+                   << " configMaxPbufferWidth: " << configMaxPbufferWidth
+                   << " configMaxPbufferHeight: " << configMaxPbufferHeight
+                   << " configMaxPbufferPixels: " << configMaxPbufferPixels
+                   << " configMaxSwapInterval: " << configMaxSwapInterval
+                   << " configMinSwapInterval: " << configMinSwapInterval
+                   << " configNativeRendeable: " << configNativeRendeable
+                   << " configNativeVisualID: " << configNativeVisualID
+                   << " configNativeVisualType: " << configNativeVisualType
+                   << " configRedSize: " << configRedSize
+                   << " configRenderableType: " << configRenderableType
+                   << " configSampleBuffers: " << configSampleBuffers
+                   << " configSamples: " << configSamples
+                   << " configStencilSize: " << configStencilSize
+                   << " configSurfaceType: " << configSurfaceType
+                   << " configTransparentType: " << configTransparentType
+                   << " configTransparentRed: " << configTransparentRed
+                   << " configTransparentGreen: " << configTransparentGreen
+                   << " configTransparentBlue: " << configTransparentBlue;
+        }
+
+        ASSERT_EGL_SUCCESS();
+    }
+
+    // Called before running each individual test
+    void testTearDown() override
+    {
+        if (mDisplay == EGL_NO_DISPLAY)
+        {
+            return;
+        }
+
+        eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+        if (mPbufferSurface != EGL_NO_SURFACE)
+        {
+            eglDestroySurface(mDisplay, mPbufferSurface);
+            mPbufferSurface = EGL_NO_SURFACE;
+        }
+
+        if (mContext != EGL_NO_CONTEXT)
+        {
+            eglDestroyContext(mDisplay, mContext);
+            mContext = EGL_NO_CONTEXT;
+        }
+
+        if (mDisplay != EGL_NO_DISPLAY)
+        {
+            eglTerminate(mDisplay);
+            mDisplay = EGL_NO_DISPLAY;
+        }
+
+        mOSWindow->destroy();
+        OSWindow::Delete(&mOSWindow);
+    }
+
+    std::vector<EGLConfig> mEGLConfigs;
+
+    EGLDisplay mDisplay;
+    OSWindow *mOSWindow;
+    EGLSurface mPbufferSurface;
+    EGLContext mContext;
+};
+
+// Test that clear with glScissor() works on PBuffer surfaces
+TEST_P(ScissoredClearPbufferTest, Test)
+{
+    EGLint surfaceAttribs[] = {EGL_HEIGHT, 16, EGL_WIDTH, 16, EGL_NONE};
+    for (std::vector<EGLConfig>::iterator iter = mEGLConfigs.begin(); iter != mEGLConfigs.end();
+         ++iter)
+    {
+        // debug message
+        EGLint configID = 0;
+        eglGetConfigAttrib(mDisplay, *iter, EGL_CONFIG_ID, &configID);
+
+        // create context
+        const EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
+        mContext = eglCreateContext(mDisplay, *iter, EGL_NO_CONTEXT, contextAttribs);
+        ASSERT_EGL_SUCCESS();
+
+        // create surface
+        mPbufferSurface = eglCreatePbufferSurface(mDisplay, *iter, surfaceAttribs);
+        ASSERT_EGL_SUCCESS();
+
+        eglMakeCurrent(mDisplay, mPbufferSurface, mPbufferSurface, mContext);
+        ASSERT_EGL_SUCCESS();
+
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(0, 0, 16 - 2, 16 - 2);
+        glClearColor(0.5f, 0.25f, 0.75f, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_SCISSOR_TEST);
+        EXPECT_PIXEL_NEAR(0, 0, 128, 64, 192, 255, 1.0);
+    }
 }
 
 void MaskedScissoredClearTestBase::maskedScissoredColorDepthStencilClear(
@@ -3577,5 +3800,7 @@ ANGLE_INSTANTIATE_TEST(ClearTestRGB,
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ClearTestRGB_ES3);
 ANGLE_INSTANTIATE_TEST(ClearTestRGB_ES3, ES3_D3D11(), ES3_VULKAN(), ES3_METAL());
+
+ANGLE_INSTANTIATE_TEST(ScissoredClearPbufferTest, WithNoFixture(ES2_VULKAN()));
 
 }  // anonymous namespace
