@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9886e1ab_e8e2009c",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T18:13:07Z",
+      "side": 1,
+      "message": "Acknowledged, let\u0027s leave it be.",
+      "parentUuid": "25b4b487_fb3ca940",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 1
+      },
+      "revId": "27d10ee620a50feb8a6ed898d51ac29aba348046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "534b114a_fabf20ac",
