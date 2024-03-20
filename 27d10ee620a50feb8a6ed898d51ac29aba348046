@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "25b4b487_fb3ca940",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-20T17:59:51Z",
+      "side": 1,
+      "message": "It results in a compilation error: `error: function template partial specialization is not allowed`",
+      "parentUuid": "35dc23d1_cb92b8bd",
+      "range": {
+        "startLine": 227,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 1
+      },
+      "revId": "27d10ee620a50feb8a6ed898d51ac29aba348046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "534b114a_fabf20ac",
         "filename": "src/image_util/loadimage.inc",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-20T15:21:28Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 290,
+        "endChar": 0
+      },
+      "revId": "27d10ee620a50feb8a6ed898d51ac29aba348046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6e127bf_7a051ec8",
+        "filename": "src/image_util/loadimage.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-20T17:59:51Z",
+      "side": 1,
+      "message": "Same",
+      "parentUuid": "534b114a_fabf20ac",
       "range": {
         "startLine": 259,
         "startChar": 0,
