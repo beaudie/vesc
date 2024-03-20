@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28e3a51b_f8658429",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-20T16:38:46Z",
+      "side": 1,
+      "message": "FWIW, this could just be a mere member `webgpu::ImageHelper mImage`. If external texture support is needed, it needs to become a pointer, but at that point it\u0027s not a `unique_ptr` either.",
+      "revId": "aaaf1a02b074c83df7933c5727d12a63d1f96ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
