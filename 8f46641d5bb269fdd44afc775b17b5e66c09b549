@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea937db0_4734ca01",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-03-21T17:42:57Z",
+      "side": 1,
+      "message": "I\u0027m not 100% confident on how I\u0027m mapping the dimension here. The options for `wgpu::TextureDimension` are undefined, e1D, e2D, e3D, and I sort of guessed which gl TextureTypes would map to them tbh. I\u0027m wondering if `gl::TextureType::_2DMultisampleArray` should map to e1D instead of e2D? Open to any other corrections here as well.",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "8f46641d5bb269fdd44afc775b17b5e66c09b549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
