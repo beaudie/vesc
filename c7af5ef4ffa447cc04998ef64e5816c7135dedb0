@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15f8b439_2a146b45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-03-21T20:11:19Z",
+      "side": 1,
+      "message": "I triaged the vast majority of the new images, as they were visually indistinguishable from the existing good images. There were 5 that I left untriaged since there were noticeable differences when switching between the new and existing images. Nothing looked major, but still would be good for someone more familiar with the tests to take a look.",
+      "revId": "c7af5ef4ffa447cc04998ef64e5816c7135dedb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
