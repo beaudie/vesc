@@ -45,6 +45,54 @@
       },
       "revId": "a8cf2548e387ec648cf8186b11478f553400e385",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c68999d5_3440e44d",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-21T16:41:21Z",
+      "side": 1,
+      "message": "Allowing any `max-page-size` entry allows a host of other flags through and I\u0027m trying to limit the impact.  I\u0027ll generate what the diff looks like.  There are a ton of ldflags that we\u0027ve never passed through.",
+      "parentUuid": "70c36747_375c6e40",
+      "range": {
+        "startLine": 321,
+        "startChar": 31,
+        "endLine": 321,
+        "endChar": 36
+      },
+      "revId": "a8cf2548e387ec648cf8186b11478f553400e385",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3a22b71_a223bedc",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-21T16:41:21Z",
+      "side": 1,
+      "message": "I was just using the exact string I\u0027m introducing upstream.",
+      "parentUuid": "5b9c2c60_ed05d3a2",
+      "range": {
+        "startLine": 321,
+        "startChar": 16,
+        "endLine": 321,
+        "endChar": 17
+      },
+      "revId": "a8cf2548e387ec648cf8186b11478f553400e385",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
