@@ -22,6 +22,53 @@
       },
       "revId": "8f46641d5bb269fdd44afc775b17b5e66c09b549",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5cde67c_9bc74fa8",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-21T18:11:22Z",
+      "side": 1,
+      "message": "Assuming you mean `e3D` (and not `e1D`), with a quick Google check I suspect 2D*Array should be `e3D` with the `TextureViewDimension` later being `e2DArray`, but not sure.\n\nIt\u0027s fine to leave this as is, and you\u0027ll eventually find the right answer when tests start to fail 😊\n\nFWIW, 2DArray and CubeMap are similar entities, so if you\u0027ve found CubeMap is e3D, pretty sure 2DArray would be the same.",
+      "parentUuid": "ea937db0_4734ca01",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "8f46641d5bb269fdd44afc775b17b5e66c09b549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11acddde_5ec3d293",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-21T18:11:22Z",
+      "side": 1,
+      "message": "nit: I don\u0027t particularly mind, but we don\u0027t use `std::` on these basic types anywhere else. You might enjoy the slight brevity by dropping it in this backend",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 17
+      },
+      "revId": "8f46641d5bb269fdd44afc775b17b5e66c09b549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
