@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1acfc2e_c5a0a4a4",
+        "filename": "src/compiler/translator/ImmutableString.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-21T20:35:39Z",
+      "side": 1,
+      "message": "This broke Android rolls:\n```\nexternal/angle/src/compiler/translator/ImmutableString.h:103:15: error: constexpr function\u0027s return type \u0027std::string\u0027 (aka \u0027basic_string\u003cchar, char_traits\u003cchar\u003e, allocator\u003cchar\u003e\u003e\u0027) is not a literal type\n  103 |     constexpr operator std::string() const { return std::string(data(), length()); }\n      |               ^\nexternal/libcxx/include/string:4332:64: note: \u0027basic_string\u003cchar\u003e\u0027 is not literal because it is not an aggregate and has no constexpr constructors other than copy or move constructors\n 4332 | _LIBCPP_EXTERN_TEMPLATE(class _LIBCPP_EXTERN_TEMPLATE_TYPE_VIS basic_string\u003cchar\u003e)\n ```\n \n https://r.android.com/3007114",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 37
+      },
+      "revId": "8c0dae388bccb00f11cd94d641d719cc68325826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
