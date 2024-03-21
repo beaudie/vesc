@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db3ffb5c_7ab8b472",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-21T10:56:34Z",
+      "side": 1,
+      "message": "I see you didn\u0027t change the hash here https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/DEPS;l\u003d480;drc\u003d042b430c633cf4563a43561d5edae65c3ae0c2f3\nIs it because this version is what we want already?\n\nLooks like that answer is yes, since it was last updated by this roll:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5369139\nand the next roll started having abseil/dawn failures:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5371697\n\nBut this roll from the night after this CL landed doesn\u0027t have the problem anymore:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5381216\n(It has a different problem on Windows, though, def files seem to be out of date.)",
+      "revId": "21b5c321138752ae6e1e4d93cfa5b78c39250f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
