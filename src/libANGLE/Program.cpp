@@ -85,7 +85,8 @@ class LinkEvent : angle::NonCopyable
     // See MainLinkLoadTask::retrieveOptionalPostLinkTasks
     virtual void retrieveOptionalPostLinkTasks(
         std::vector<std::shared_ptr<rx::PostLinkTask>> *postLinkTasksOut,
-        std::vector<std::shared_ptr<angle::WaitableEvent>> *postLinkTaskEventsOut)
+        std::vector<std::shared_ptr<angle::WaitableEvent>> *postLinkTaskEventsOut,
+        bool *arePostLinkTasksOptionalOut)
     {}
 };
 
@@ -576,16 +577,16 @@ class Program::MainLinkLoadTask : public angle::Closure
 
     void retrieveOptionalPostLinkTasks(
         std::vector<std::shared_ptr<rx::PostLinkTask>> *postLinkTasksOut,
-        std::vector<std::shared_ptr<angle::WaitableEvent>> *postLinkTaskEventsOut)
+        std::vector<std::shared_ptr<angle::WaitableEvent>> *postLinkTaskEventsOut,
+        bool *arePostLinkTasksOptionalOut)
     {
         ASSERT(postLinkTasksOut->empty());
         ASSERT(postLinkTaskEventsOut->empty());
+        ASSERT(arePostLinkTasksOptionalOut);
 
-        if (mArePostLinkTasksOptional)
-        {
-            *postLinkTasksOut      = std::move(mPostLinkTasks);
-            *postLinkTaskEventsOut = std::move(mPostLinkTaskWaitableEvents);
-        }
+        *postLinkTasksOut            = std::move(mPostLinkTasks);
+        *postLinkTaskEventsOut       = std::move(mPostLinkTaskWaitableEvents);
+        *arePostLinkTasksOptionalOut = mArePostLinkTasksOptional;
     }
 
   protected:
@@ -604,13 +605,13 @@ class Program::MainLinkLoadTask : public angle::Closure
     ProgramState &mState;
     std::shared_ptr<rx::LinkTask> mLinkTask;
 
-    // post-link task wait events
+    // post-link tasks and waitable events
     std::vector<std::shared_ptr<rx::PostLinkTask>> mPostLinkTasks;
     std::vector<std::shared_ptr<angle::WaitableEvent>> mPostLinkTaskWaitableEvents;
     // If optional, the post-link tasks are not waited on in |resolveLink|, but instead they are
     // free to run until first usage of the program (or relink).  This is used by the backends
-    // (currently only Vulkan) to run post-link optimization tasks which don't affect the link
-    // results.
+    // (currently only Vulkan) to run post-link tasks like pipleine compilation which only consume
+    // the output of link step and don't affect program state or link results.
     bool mArePostLinkTasksOptional;
 
     // The result of the front-end portion of the link.  The backend's result is retrieved via
@@ -700,9 +701,11 @@ class Program::MainLinkLoadEvent final : public LinkEvent
 
     void retrieveOptionalPostLinkTasks(
         std::vector<std::shared_ptr<rx::PostLinkTask>> *postLinkTasksOut,
-        std::vector<std::shared_ptr<angle::WaitableEvent>> *postLinkTaskEventsOut) override
+        std::vector<std::shared_ptr<angle::WaitableEvent>> *postLinkTaskEventsOut,
+        bool *arePostLinkTasksOptionalOut) override
     {
-        mLinkTask->retrieveOptionalPostLinkTasks(postLinkTasksOut, postLinkTaskEventsOut);
+        mLinkTask->retrieveOptionalPostLinkTasks(postLinkTasksOut, postLinkTaskEventsOut,
+                                                 arePostLinkTasksOptionalOut);
     }
 
   private:
@@ -765,14 +768,14 @@ Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, Shad
 Program::~Program()
 {
     ASSERT(!mProgram);
-    ASSERT(mOptionalLinkTasks.empty());
-    ASSERT(mOptionalLinkTaskWaitableEvents.empty());
+    ASSERT(mOptionalPostLinkTasks.empty());
+    ASSERT(mOptionalPostLinkTaskWaitableEvents.empty());
 }
 
 void Program::onDestroy(const Context *context)
 {
     resolveLink(context);
-    waitForOptionalLinkTasks(context);
+    waitForOptionalPostLinkTasks(context);
 
     for (ShaderType shaderType : AllShaderTypes())
     {
@@ -820,7 +823,6 @@ const std::string &Program::getLabel() const
 void Program::attachShader(const Context *context, Shader *shader)
 {
     resolveLink(context);
-    onLinkInputChange(context);
 
     ShaderType shaderType = shader->getType();
     ASSERT(shaderType != ShaderType::InvalidEnum);
@@ -832,7 +834,6 @@ void Program::attachShader(const Context *context, Shader *shader)
 void Program::detachShader(const Context *context, Shader *shader)
 {
     resolveLink(context);
-    onLinkInputChange(context);
 
     ShaderType shaderType = shader->getType();
     ASSERT(shaderType != ShaderType::InvalidEnum);
@@ -866,8 +867,6 @@ Shader *Program::getAttachedShader(ShaderType shaderType) const
 
 void Program::bindAttributeLocation(const Context *context, GLuint index, const char *name)
 {
-    onLinkInputChange(context);
-
     ASSERT(!mLinkingState);
     mState.mAttributeBindings.bindLocation(index, name);
 }
@@ -876,24 +875,18 @@ void Program::bindUniformLocation(const Context *context,
                                   UniformLocation location,
                                   const char *name)
 {
-    onLinkInputChange(context);
-
     ASSERT(!mLinkingState);
     mState.mUniformLocationBindings.bindLocation(location.value, name);
 }
 
 void Program::bindFragmentOutputLocation(const Context *context, GLuint index, const char *name)
 {
-    onLinkInputChange(context);
-
     ASSERT(!mLinkingState);
     mState.mFragmentOutputLocations.bindLocation(index, name);
 }
 
 void Program::bindFragmentOutputIndex(const Context *context, GLuint index, const char *name)
 {
-    onLinkInputChange(context);
-
     ASSERT(!mLinkingState);
     mState.mFragmentOutputIndexes.bindLocation(index, name);
 }
@@ -901,7 +894,7 @@ void Program::bindFragmentOutputIndex(const Context *context, GLuint index, cons
 void Program::makeNewExecutable(const Context *context)
 {
     ASSERT(!mLinkingState);
-    waitForOptionalLinkTasks(context);
+    waitForOptionalPostLinkTasks(context);
 
     // Unlink the program, but do not clear the validation-related caching yet, since we can still
     // use the previously linked program if linking the shaders fails.
@@ -1217,8 +1210,14 @@ void Program::resolveLinkImpl(const Context *context)
 
     angle::Result result = mLinkingState->linkEvent->wait(context);
 
-    mLinkingState->linkEvent->retrieveOptionalPostLinkTasks(&mOptionalLinkTasks,
-                                                            &mOptionalLinkTaskWaitableEvents);
+    bool arePostLinkTasksOptional = false;
+    mLinkingState->linkEvent->retrieveOptionalPostLinkTasks(
+        &mOptionalPostLinkTasks, &mOptionalPostLinkTaskWaitableEvents, &arePostLinkTasksOptional);
+
+    if (!arePostLinkTasksOptional)
+    {
+        waitForOptionalPostLinkTasks(context);
+    }
 
     mLinked                                    = result == angle::Result::Continue;
     std::unique_ptr<LinkingState> linkingState = std::move(mLinkingState);
@@ -1260,29 +1259,29 @@ void Program::resolveLinkImpl(const Context *context)
     // Cache the program if:
     //
     // - Not loading from binary, in which case the program is already in the cache.
-    // - There are no pending post-link tasks.  If there are any, waitForOptionalLinkTasks will
-    //   do this instead.
-    //   * Note that serialize() calls waitForOptionalLinkTasks, so caching the binary here
+    // - There are no pending post-link tasks.  If there are any, waitForOptionalPostLinkTasks will
+    //   do this later instead.
+    //   * Note that serialize() calls waitForOptionalPostLinkTasks, so caching the binary here
     //     effectively forces a wait for the post-link tasks.
     //
-    if (!linkingState->linkingFromBinary && mOptionalLinkTasks.empty())
+    if (!linkingState->linkingFromBinary && mOptionalPostLinkTasks.empty())
     {
         cacheProgramBinary(context);
     }
 }
 
-void Program::waitForOptionalLinkTasks(const Context *context)
+void Program::waitForOptionalPostLinkTasks(const Context *context)
 {
-    if (mOptionalLinkTasks.empty())
+    if (mOptionalPostLinkTasks.empty())
     {
         return;
     }
 
     // Wait for all optional tasks to finish
-    angle::WaitableEvent::WaitMany(&mOptionalLinkTaskWaitableEvents);
+    angle::WaitableEvent::WaitMany(&mOptionalPostLinkTaskWaitableEvents);
 
     // Get results and clean up
-    for (const std::shared_ptr<rx::PostLinkTask> &task : mOptionalLinkTasks)
+    for (const std::shared_ptr<rx::PostLinkTask> &task : mOptionalPostLinkTasks)
     {
         // As these tasks are optional, their results are ignored.  Failure is harmless, but more
         // importantly the error (effectively due to a link event) may not be allowed through the
@@ -1296,8 +1295,8 @@ void Program::waitForOptionalLinkTasks(const Context *context)
         }
     }
 
-    mOptionalLinkTasks.clear();
-    mOptionalLinkTaskWaitableEvents.clear();
+    mOptionalPostLinkTasks.clear();
+    mOptionalPostLinkTaskWaitableEvents.clear();
 
     // Now that the post-link tasks are done, cache the binary (this was deferred in
     // resolveLinkImpl).
@@ -1559,7 +1558,6 @@ void Program::getInfoLog(GLsizei bufSize, GLsizei *length, char *infoLog) const
 void Program::setSeparable(const Context *context, bool separable)
 {
     ASSERT(!mLinkingState);
-    onLinkInputChange(context);
 
     if (isSeparable() != separable)
     {
@@ -1649,7 +1647,6 @@ void Program::setTransformFeedbackVaryings(const Context *context,
                                            GLenum bufferMode)
 {
     ASSERT(!mLinkingState);
-    onLinkInputChange(context);
 
     mState.mTransformFeedbackVaryingNames.resize(count);
     for (GLsizei i = 0; i < count; i++)
@@ -2134,9 +2131,8 @@ bool Program::linkAttributes(const Caps &caps,
 angle::Result Program::syncState(const Context *context)
 {
     ASSERT(!mLinkingState);
-    // Wait for the link tasks.  This is because these optimization passes are not currently
-    // thread-safe with draw's usage of the executable.
-    waitForOptionalLinkTasks(context);
+    // Backends will need the results of post-link tasks before use by a draw call, wait for them
+    waitForOptionalPostLinkTasks(context);
     return angle::Result::Continue;
 }
 
@@ -2210,9 +2206,9 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
         }
     }
 
-    // Need to wait for optional tasks because they may be writing to caches that |serialize| would
+    // Need to wait for post-link tasks because they may be writing to caches that |serialize| would
     // read from.  In the Vulkan backend, that would be the VkPipelineCache contents.
-    waitForOptionalLinkTasks(context);
+    waitForOptionalPostLinkTasks(context);
 
     mProgram->save(context, &stream);
 

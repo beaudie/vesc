@@ -36,8 +36,8 @@ namespace rx
 //
 // - Front-end link
 // - Back-end link
-// - Post-link independent back-end tasks (typically native driver compile jobs)
 // - Post-link finalization
+// - Post-link back-end tasks decoupled from frontend (typically native driver compile jobs)
 //
 // Each step depends on the previous.  These steps are executed as such:
 //
@@ -51,6 +51,15 @@ namespace rx
 //
 // In the above, steps 1 and 4 are done under the share group lock.  Steps 2 and 3 can be done in
 // threads or without holding the share group lock if the backend supports it.
+//
+// PostLinkTasks MUST not affect program state or link results and any errors must be non-fatal.
+//
+// The frontend won't wait for PostLinkTasks to complete before making any changes to Program state,
+// unless -
+// 1. a relink is requested by the app
+// 2. first usage by a draw
+// 3. the owning LinkTask explicitly requests the frontend to wait for PostLinkTasks by setting
+//    "arePostLinkTasksOptionalOut" to "true" during link(...)
 class PostLinkTask : public angle::Closure
 {
   public:
