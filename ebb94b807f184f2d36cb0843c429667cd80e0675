@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43256bcf_18ebb924",
+        "filename": "src/compiler/translator/ImmutableStringBuilder.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1586897
+      },
+      "writtenOn": "2024-03-21T14:37:12Z",
+      "side": 1,
+      "message": "Hi there, this change has introduced compilation failures within Skia. Pasted below for convenience:\n\n```angle2\\src\\compiler\\translator\\ImmutableStringBuilder.h(65): error C3615: constexpr function \u0027sh::ImmutableStringBuilder::Length\u0027 cannot result in a constant expression```\n\n```angle2\\src\\compiler\\translator\\ImmutableStringBuilder.h(65): note: failure was caused by call of undefined function or one not declared \u0027constexpr\u0027```\n\n```angle2\\src\\compiler\\translator\\ImmutableStringBuilder.h(65): note: see usage of \u0027std::basic_string\u003cchar,std::char_traits\u003cchar\u003e,std::allocator\u003cchar\u003e\u003e::size\u0027```\n\n\n`std::string`\u0027s `size()` does not return a `constexpr` which leads to this build error.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 87
+      },
+      "revId": "ebb94b807f184f2d36cb0843c429667cd80e0675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
