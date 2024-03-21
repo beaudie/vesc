@@ -34,6 +34,24 @@
       "parentUuid": "db3ffb5c_7ab8b472",
       "revId": "21b5c321138752ae6e1e4d93cfa5b78c39250f52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f03c8866_33ec374e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-21T14:21:33Z",
+      "side": 1,
+      "message": "Actually, this time `build` had to be freezed, probably due to the toolchain update.\nPTAL https://chromium-review.googlesource.com/c/angle/angle/+/5384890/2.",
+      "parentUuid": "c68d2aa8_2a04e696",
+      "revId": "21b5c321138752ae6e1e4d93cfa5b78c39250f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
