@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12bc680e_4e8275e5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-21T20:53:59Z",
+      "side": 1,
+      "message": "GL_MAX_TEXTURE_SIZE",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 20
+      },
+      "revId": "b9875a3f810ae8378939ef3cd8341ae7bc005323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "824cf561_15b2f264",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-21T20:53:59Z",
+      "side": 1,
+      "message": "Mark, this LGTM.  That value is the most common based on https://opengl.gpuinfo.org/displaycapability.php?name\u003dGL_MAX_TEXTURE_SIZE\n\nBefore landing, can you verify the limit is good for the other test devices you have?",
+      "revId": "b9875a3f810ae8378939ef3cd8341ae7bc005323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
