@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcd56852_3016e32e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-21T16:50:12Z",
+      "side": 1,
+      "message": "PTAL.\nThis should prevent Chromium roll failures like https://chromium-review.googlesource.com/c/angle/angle/+/5381216.\nUntil we discover some other inconsistency between our dependencies.",
+      "revId": "13822f1a99e65cff0a2c34606af027753593d6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
