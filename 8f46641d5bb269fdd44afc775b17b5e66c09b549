@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "873941a3_fcf33878",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-03-21T18:27:32Z",
+      "side": 1,
+      "message": "Ah yep I did mean `e3D`. I did move 2D*Array to map to `e3D` and will leave the rest as is for now.",
+      "parentUuid": "a5cde67c_9bc74fa8",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "8f46641d5bb269fdd44afc775b17b5e66c09b549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "11acddde_5ec3d293",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.h",
         "patchSetId": 1
