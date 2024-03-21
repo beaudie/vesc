@@ -51,6 +51,40 @@
       "message": "typo: stuct with -\u003e struct with",
       "revId": "bc9b4c6f9447034ed4cb3ee2331af6c1a0bfd12c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bd4707a_ea95deba",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8948,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-21T18:51:51Z",
+      "side": 1,
+      "message": "Alexey: here\u0027s the question:\nhow can different VS types v_s0, v_s1\nbe consider same types in FS?\n\nFS v_s0 \u003d\u003d v_s1 --\u003e error\n\nVS v_s0 \u003d\u003d v_s1 --\u003e no error",
+      "revId": "bc9b4c6f9447034ed4cb3ee2331af6c1a0bfd12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c322d463_16c1cf5d",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8997,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-03-21T18:51:51Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "bc9b4c6f9447034ed4cb3ee2331af6c1a0bfd12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
