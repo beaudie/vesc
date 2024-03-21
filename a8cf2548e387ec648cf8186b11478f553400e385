@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70c36747_375c6e40",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-21T14:56:30Z",
+      "side": 1,
+      "message": "Probably want to forward any max-page-size setting, not just this specific one?",
+      "range": {
+        "startLine": 321,
+        "startChar": 31,
+        "endLine": 321,
+        "endChar": 36
+      },
+      "revId": "a8cf2548e387ec648cf8186b11478f553400e385",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b9c2c60_ed05d3a2",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-21T14:56:30Z",
+      "side": 1,
+      "message": "I\u0027m confused how this works, those commas are.. part of the regex?",
+      "range": {
+        "startLine": 321,
+        "startChar": 16,
+        "endLine": 321,
+        "endChar": 17
+      },
+      "revId": "a8cf2548e387ec648cf8186b11478f553400e385",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
