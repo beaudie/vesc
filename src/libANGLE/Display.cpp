@@ -67,6 +67,8 @@
 #        endif
 #    elif defined(ANGLE_PLATFORM_ANDROID)
 #        include "libANGLE/renderer/gl/egl/android/DisplayAndroid.h"
+#    elif defined(ANGLE_PLATFORM_OHOS)
+#        include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 #    else
 #        error Unsupported OpenGL platform.
 #    endif
@@ -465,6 +467,8 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
 #if defined(ANGLE_ENABLE_OPENGL)
 #    if defined(ANGLE_PLATFORM_WINDOWS)
             impl = new rx::DisplayWGL(state);
+#    elif defined(ANGLE_PLATFORM_OHOS)
+            impl = new rx::DisplayEGL(state);
 #    elif defined(ANGLE_PLATFORM_LINUX)
 #        if defined(ANGLE_USE_GBM)
             if (platformType == 0)
