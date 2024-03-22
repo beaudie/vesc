@@ -4237,14 +4237,11 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
                             mFeatures.supportsRenderpass2.enabled &&
                                 mDepthStencilResolveProperties.supportedDepthResolveModes != 0);
 
-    // http://issuetracker.google.com/329911999. Some Qualcomm devices show increased memory usage
-    // for images when MSRTSS is enabled, even if the image does not end up using this feature.
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsMultisampledRenderToSingleSampled,
         mFeatures.supportsRenderpass2.enabled && mFeatures.supportsDepthStencilResolve.enabled &&
             mMultisampledRenderToSingleSampledFeatures.multisampledRenderToSingleSampled ==
-                VK_TRUE &&
-            !isQualcomm);
+                VK_TRUE);
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsMultisampledRenderToSingleSampledGOOGLEX,
@@ -4253,6 +4250,11 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
             mFeatures.supportsDepthStencilResolve.enabled &&
             mMultisampledRenderToSingleSampledFeaturesGOOGLEX.multisampledRenderToSingleSampled ==
                 VK_TRUE);
+
+    // Preferring the MSRTSS flag is for texture initialization. If the MSRTSS is not used at first,
+    // it will be used (if available) when recreating the image if it is bound to a multisample
+    // framebuffer.
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferMSRTSSFlagByDefault, isARM || isSwiftShader);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsImage2dViewOf3d,
                             mImage2dViewOf3dFeatures.image2DViewOf3D == VK_TRUE);
