@@ -508,6 +508,7 @@ TextureVk::TextureVk(const gl::TextureState &state, vk::Renderer *renderer)
     : TextureImpl(state),
       mOwnsImage(false),
       mRequiresMutableStorage(false),
+      mHasBeenBoundToMultisampleFBO(false),
       mRequiredImageAccess(vk::ImageAccess::SampleOnly),
       mImmutableSamplerDirty(false),
       mEGLImageNativeType(gl::TextureType::InvalidEnum),
@@ -1897,9 +1898,10 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
         }
         releaseImage(contextVk);
         mImageObserverBinding.bind(nullptr);
-        mRequiresMutableStorage = false;
-        mRequiredImageAccess    = vk::ImageAccess::SampleOnly;
-        mImageCreateFlags       = 0;
+        mRequiresMutableStorage       = false;
+        mHasBeenBoundToMultisampleFBO = false;
+        mRequiredImageAccess          = vk::ImageAccess::SampleOnly;
+        mImageCreateFlags             = 0;
         SafeDelete(mImage);
     }
 
@@ -3048,12 +3050,20 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
 
     VkImageUsageFlags oldUsageFlags   = mImageUsageFlags;
     VkImageCreateFlags oldCreateFlags = mImageCreateFlags;
+    bool wasBoundToMultisampleFBO     = mHasBeenBoundToMultisampleFBO;
 
     // Create a new image if the storage state is enabled for the first time.
     if (mState.hasBeenBoundAsImage())
     {
         mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
         mRequiresMutableStorage = true;
+    }
+
+    // Create a new image if it is bound to a multisample framebuffer (only if it did not already
+    // include the MSRTSS bit during initialization).
+    if (mState.hasBeenBoundToMultisampleFBO() && !mHasBeenBoundToMultisampleFBO)
+    {
+        mHasBeenBoundToMultisampleFBO = true;
     }
 
     // If we're handling dirty srgb decode/override state, we may have to reallocate the image with
@@ -3090,6 +3100,16 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
     if (isGenerateMipmap)
     {
         prepareForGenerateMipmap(contextVk);
+    }
+
+    // If texture was not originally created using the MSRTSS flag, it should be recreated when it
+    // is bound to a multisample framebuffer.
+    if (!contextVk->getFeatures().preferMSRTSSFlagByDefault.enabled &&
+        wasBoundToMultisampleFBO != mHasBeenBoundToMultisampleFBO)
+    {
+        ANGLE_TRY(respecifyImageStorage(contextVk));
+        oldUsageFlags  = mImageUsageFlags;
+        oldCreateFlags = mImageCreateFlags;
     }
 
     // For immutable texture, base level does not affect allocation. Only usage flags are. If usage
@@ -3647,10 +3667,17 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     const VkImageType imageType      = gl_vk::GetImageType(mState.getType());
     const VkImageTiling imageTiling  = mImage->getTilingMode();
 
+    // The MSRTSS bit is included in the create flag for all textures if the feature flag
+    // corresponding to its preference is enabled. Otherwise, it is enabled for a texture if it is
+    // bound to a multisample framebuffer.
+    const bool shouldIncludeMSRTSSBit =
+        contextVk->getFeatures().supportsMultisampledRenderToSingleSampled.enabled &&
+        (contextVk->getFeatures().preferMSRTSSFlagByDefault.enabled ||
+         mHasBeenBoundToMultisampleFBO);
+
     if ((mImageUsageFlags & (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                              VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)) != 0 &&
-        mOwnsImage && samples == 1 &&
-        contextVk->getFeatures().supportsMultisampledRenderToSingleSampled.enabled)
+        mOwnsImage && samples == 1 && shouldIncludeMSRTSSBit)
     {
         VkImageCreateFlags createFlagsMultisampled =
             mImageCreateFlags | VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT;
