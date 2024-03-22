@@ -30,6 +30,7 @@
 #include "libANGLE/renderer/wgpu/TextureWgpu.h"
 #include "libANGLE/renderer/wgpu/TransformFeedbackWgpu.h"
 #include "libANGLE/renderer/wgpu/VertexArrayWgpu.h"
+#include "libANGLE/renderer/wgpu/wgpu_utils.h"
 
 namespace rx
 {
@@ -102,6 +103,8 @@ void ContextWgpu::onDestroy(const gl::Context *context)
 
 angle::Result ContextWgpu::initialize(const angle::ImageLoadContext &imageLoadContext)
 {
+    mWgpuDevice = mDisplay->getDevice();
+    mQueue      = mWgpuDevice.GetQueue();
     return angle::Result::Continue;
 }
 
@@ -524,4 +527,39 @@ void ContextWgpu::handleError(GLenum errorCode,
     errorStream << "Internal Wgpu back-end error: " << message << ".";
     mErrors->handleError(errorCode, errorStream.str().c_str(), file, function, line);
 }
+
+angle::Result ContextWgpu::ensureRenderPassStarted(const wgpu::RenderPassDescriptor &desc)
+{
+    if (!mCurrentCommandEncoder)
+    {
+        mCurrentCommandEncoder = mWgpuDevice.CreateCommandEncoder(nullptr);  // create encoder
+    }
+    if (mCurrentRenderPass)
+    {
+        // TODO create a new render pass only if it's needed: hasn't started or incompatible with
+        // current one see metal:
+        // https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/ContextMtl.mm;drc=05cd5e49cbf06d9646a3ee4512c025a3160502ed;l=1892
+        ANGLE_TRY(endRenderPass(webgpu::RenderPassClosureReason::NewRenderPass));
+    }
+    mCurrentRenderPass = mCurrentCommandEncoder.BeginRenderPass(&desc);
+    // renderPass.EncoderEnd(renderPass);
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextWgpu::endRenderPass(webgpu::RenderPassClosureReason closure_reason)
+{
+    mCurrentRenderPass.End();
+    mCurrentRenderPass = nullptr;
+    return angle::Result::Continue;
+}
+
+angle::Result ContextWgpu::flush()
+{
+    wgpu::CommandBuffer command_buffer = mCurrentCommandEncoder.Finish();
+    mQueue.Submit(1, &command_buffer);
+    mCurrentCommandEncoder = nullptr;
+    return angle::Result::Continue;
+}
+
 }  // namespace rx
