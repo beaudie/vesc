@@ -11,6 +11,8 @@
 #define LIBANGLE_RENDERER_WGPU_TEXTUREWGPU_H_
 
 #include "libANGLE/renderer/TextureImpl.h"
+#include "libANGLE/renderer/wgpu/ContextWgpu.h"
+#include "libANGLE/renderer/wgpu/RenderTargetWgpu.h"
 #include "libANGLE/renderer/wgpu/wgpu_helpers.h"
 
 namespace rx
@@ -164,10 +166,29 @@ class TextureWgpu : public TextureImpl
                                      GLenum binding,
                                      const gl::ImageIndex &imageIndex) override;
 
+    angle::Result getAttachmentRenderTarget(const gl::Context *context,
+                                            GLenum binding,
+                                            const gl::ImageIndex &imageIndex,
+                                            GLsizei samples,
+                                            FramebufferAttachmentRenderTarget **rtOut) override;
+
     webgpu::ImageHelper &getImage() { return mImage; }
 
   private:
+    void initSingleLayerRenderTargets(ContextWgpu *contextWgpu,
+                                      GLuint layerCount,
+                                      gl::LevelIndex levelIndex,
+                                      gl::RenderToTextureImageIndex renderToTextureIndex);
+
     webgpu::ImageHelper mImage;
+
+    // Render targets stored as array of vector of vectors
+    //
+    // - First dimension: only RenderToTextureImageIndex::Default for now.
+    // - Second dimension: level
+    // - Third dimension: layer
+    gl::RenderToTextureImageMap<std::vector<std::vector<RenderTargetWgpu>>>
+        mSingleLayerRenderTargets;
 };
 
 }  // namespace rx

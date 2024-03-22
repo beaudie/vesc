@@ -5,6 +5,7 @@
 //
 
 #include "libANGLE/renderer/wgpu/wgpu_helpers.h"
+#include "libANGLE/renderer/wgpu/ContextWgpu.h"
 
 namespace webgpu
 {
@@ -98,20 +99,3 @@ TextureInfo ImageHelper::getWgpuTextureInfo(const gl::ImageIndex &index)
     return textureInfo;
 }
 }  // namespace webgpu
-
-namespace wgpu_gl
-{
-gl::LevelIndex getLevelIndex(webgpu::LevelIndex levelWgpu, gl::LevelIndex baseLevel)
-{
-    return gl::LevelIndex(levelWgpu.get() + baseLevel.get());
-}
-}  // namespace wgpu_gl
-
-namespace gl_wgpu
-{
-webgpu::LevelIndex getLevelIndex(gl::LevelIndex levelGl, gl::LevelIndex baseLevel)
-{
-    ASSERT(baseLevel <= levelGl);
-    return webgpu::LevelIndex(levelGl.get() - baseLevel.get());
-}
-}  // namespace gl_wgpu
