@@ -577,6 +577,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     UniqueSerial mImageSiblingSerial;
 
     bool mRequiresMutableStorage;
+    bool mHasBeenBoundToMSRTTFramebuffer;
     vk::ImageAccess mRequiredImageAccess;
     bool mImmutableSamplerDirty;
 
