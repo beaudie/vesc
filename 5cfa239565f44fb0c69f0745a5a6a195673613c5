@@ -110,6 +110,30 @@
       },
       "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4358855e_b2ae97d5",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-22T15:26:35Z",
+      "side": 1,
+      "message": "instead of cramming backend logic into the frontend i am leaning towards bringing back `syncState` so Vulkan backend can handle the warmup task depending on vendor features. WDYT?",
+      "parentUuid": "7bac2b78_d4712c6e",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
