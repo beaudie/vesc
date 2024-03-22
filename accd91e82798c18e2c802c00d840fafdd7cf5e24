@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e8232b1_8eb3e527",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-22T18:20:53Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "accd91e82798c18e2c802c00d840fafdd7cf5e24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7294d564_0e41b4ea",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2827,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-22T18:20:53Z",
+      "side": 1,
+      "message": "nit",
+      "range": {
+        "startLine": 2827,
+        "startChar": 18,
+        "endLine": 2827,
+        "endChar": 24
+      },
+      "revId": "accd91e82798c18e2c802c00d840fafdd7cf5e24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
