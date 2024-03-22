@@ -62,6 +62,30 @@
       },
       "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97f46a6d_1c2e3efb",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-22T11:36:06Z",
+      "side": 1,
+      "message": "\u003e I think we should revert the SubTask-\u003ePostLinkTask change...These tasks are actually part of link\n\nok, maybe im not seeing it. Could you elaborate on what makes them \"part of link\". In what way do they impact frontend state / link status?\n\n\u003e for every backend except for Vulkan\n\nI think we should have them both for well defined separation of expectations.\nBackends can create either `LinkSubTask` or `PostLinkTask` or both and frontend guarantees to wait on all `LinkSubTask` during `resolveLink` and will wait on `PostLinkTask` only for a relink and draw use",
+      "parentUuid": "ea6747a6_28a23b7a",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
