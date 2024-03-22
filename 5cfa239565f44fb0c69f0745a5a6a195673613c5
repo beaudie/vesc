@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba5a464_06173989",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1221,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-22T19:14:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dccad10_ceee6ec7",
+      "range": {
+        "startLine": 1213,
+        "startChar": 0,
+        "endLine": 1221,
+        "endChar": 0
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "236eb7d3_2e18a98c",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-03-22T03:40:33Z",
       "side": 1,
       "message": "I prefer the previous comment to exist. The backends don\u0027t actually _need_ the result of the optional post-link tasks, they may just benefit from them if they happen to have finished.\n\nThat is, the real reason for the wait here is thread safety.",
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d69ee3f7_f23c967b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-22T19:14:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "236eb7d3_2e18a98c",
       "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -270,6 +312,30 @@
       "side": 1,
       "message": "And again sorry for the revert. Feel free to bring back the rename of the front-end vector of optional subtasks (renamed to post link).",
       "parentUuid": "2dd7a6b1_6712ecff",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf4603e8_1cceeb52",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-22T19:14:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a4361d08_1527e3e1",
       "range": {
         "startLine": 54,
         "startChar": 0,
