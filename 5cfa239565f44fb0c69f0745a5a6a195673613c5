@@ -158,6 +158,30 @@
       },
       "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24440ccb_ebf1ffc1",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-22T15:47:00Z",
+      "side": 1,
+      "message": "\u003e if the front-end is completely unaware that there are post-link tasks running, it risks overwriting link results while that\u0027s happening\n\ni dont mean to remove existing logic of frontend waiting on linksubtasks, that continues to exist. The vulkan backend will have its own tasks that it knows the frontend will never need to wait on. So my proposal would be for Vulkan backend not to return any link subtask to frontend and `ProgramVk::syncState` will ensure that Vulkan backend will wait on warmup before usage by a drawcall\n\n\u003e concept of a \"post link task\" doesn\u0027t really contain backend logic\n\nthe separation i am proposing is so that the frontend should not have to care about any of these \"post link tasks\" since by definition they are required to not affect frontend state / link results",
+      "parentUuid": "8e81c16a_9731d75e",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
