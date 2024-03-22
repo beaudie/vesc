@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6b891f1_7f19684f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4240,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-22T01:51:37Z",
+      "side": 1,
+      "message": "It\u0027s easy to forget, but we have many contributors outside Google.\n\n```suggestion\n    // http://issuetracker.google.com/329911999. Some Qualcomm devices show increased memory usage for images when MSRTSS\n```",
+      "range": {
+        "startLine": 4240,
+        "startChar": 7,
+        "endLine": 4240,
+        "endChar": 25
+      },
+      "revId": "35a176d5fd8adff12bfba9484434402c13604488",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
