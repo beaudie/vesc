@@ -206,6 +206,30 @@
       },
       "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22e68d8e_b98d4023",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-22T16:11:04Z",
+      "side": 1,
+      "message": "\u003e It will have to wait on those before a relink, re-binary-load, destruction etc\n\nthe cache warmup is happening in `ProgramExecutableVk`, as long as draw usage of the owning `ProgramVk` waits for it to complete we should be fine since all state needed by warmup has already been setup by `ProgramExecutableVk::prepareForWarmUpPipelineCache`\n\nhaving said that, since I need to get to the real change of not having to wait for warmup tasks for glProgram APIs i will put up a new patchset with reverted names",
+      "parentUuid": "d9d638b1_9519baac",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
