@@ -11,6 +11,11 @@ declare_args() {
   # If true, it assumes that //third_party/abseil-cpp is an available
   # dependency for googletest.
   gtest_enable_absl_printers = false
+
+  # Android does not fully support C++20 yet: b/330910097
+  if (is_android) {
+    use_cxx17 = true
+  }
 }
 
 if (host_os == "mac" && use_system_xcode == "") {
