@@ -19,6 +19,19 @@ namespace webgpu
 // WebGPU image level index.
 using LevelIndex = gl::LevelIndexWrapper<uint32_t>;
 
+enum class RenderPassClosureReason
+{
+    NewRenderPass,
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+
+constexpr angle::PackedEnumMap<RenderPassClosureReason, const char *> kRenderPassClosureReason = {{
+    {RenderPassClosureReason::NewRenderPass,
+     "Render pass closed due to starting a new render pass"},
+}};
+
 }  // namespace webgpu
 
 namespace wgpu_gl
