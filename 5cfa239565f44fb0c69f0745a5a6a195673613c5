@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dccad10_ceee6ec7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-22T03:40:33Z",
+      "side": 1,
+      "message": "The `linkEvent-\u003ewait()` above should already wait for non-optional tasks. This change shouldn\u0027t be necessary.",
+      "range": {
+        "startLine": 1213,
+        "startChar": 0,
+        "endLine": 1221,
+        "endChar": 0
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "236eb7d3_2e18a98c",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-22T03:40:33Z",
+      "side": 1,
+      "message": "I prefer the previous comment to exist. The backends don\u0027t actually _need_ the result of the optional post-link tasks, they may just benefit from them if they happen to have finished.\n\nThat is, the real reason for the wait here is thread safety.",
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea6747a6_28a23b7a",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-22T03:40:33Z",
+      "side": 1,
+      "message": "I was just looking again, and I think we should revert the SubTask-\u003ePostLinkTask change. I apologize for the bad suggestion. These tasks are actually part of link for every backend except for Vulkan. It\u0027s only for Vulkan that these are post-link tasks. So the name sub-task was actually appropriate (and post-link is wrong for all the other backends).\n\nI have some tweaks to the comment here, but let\u0027s undo the name change and I\u0027ll get to it.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
