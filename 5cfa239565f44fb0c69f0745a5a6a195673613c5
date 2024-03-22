@@ -134,6 +134,30 @@
       },
       "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e81c16a_9731d75e",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-22T15:41:24Z",
+      "side": 1,
+      "message": "Not sure if that works though, if the front-end is completely unaware that there are post-link tasks running, it risks overwriting link results while that\u0027s happening (for example by not knowing that there\u0027s something to wait on during a relink).\n\nIt may not be ideal, but the concept of a \"post link task\" doesn\u0027t really contain backend logic. Any backend can have such tasks (I suspect the new webgpu backend will eventually do the same warmup thing).",
+      "parentUuid": "4358855e_b2ae97d5",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
