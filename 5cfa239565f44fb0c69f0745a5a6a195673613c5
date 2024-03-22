@@ -86,6 +86,30 @@
       },
       "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bac2b78_d4712c6e",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-22T13:09:56Z",
+      "side": 1,
+      "message": "\u003e Could you elaborate on what makes them \"part of link\". In what way do they impact frontend state / link status?\n\nIn the metal and d3d backends, the main link task modifies the \"text\" of the shaders with link info, and the subtasks do internal compilation in parallel. Their result ends up ProgramExecutableMtl/D3D. `resolveLink` waits on them, and if they fail, link is considered failing. That\u0027s how they affect both the link result and status.\n\n\u003e Backends can create either LinkSubTask or PostLinkTask or both and frontend guarantees to wait on all LinkSubTask during resolveLink and will wait on PostLinkTask only for a relink and draw use\n\nWe could, but maybe a bit of over engineering? I agree the _front-end_ calling them post-link tasks is perfectly fine instead of \"optional link tasks\". So the type can remain `LinkSubTask`, but the bool return value can be `canSubTasksRunPostLink` or something, then the front-end puts them in `mOptionalPostLinkTasks` and `mOptionalPostLinkTaskWaitableEvents`.",
+      "parentUuid": "97f46a6d_1c2e3efb",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 62
+      },
+      "revId": "5cfa239565f44fb0c69f0745a5a6a195673613c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
