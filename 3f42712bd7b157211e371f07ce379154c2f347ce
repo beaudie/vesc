@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "24560dc0_931840d5",
+        "filename": "src/libANGLE/renderer/wgpu/RenderTargetWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-03-22T19:28:15Z",
+      "side": 1,
+      "message": "Is this a bug in RenderTargetMtl? https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/RenderTargetMtl.mm;drc\u003ddabab0d0c268bbdb5d62276ff3ad3f3503a055f8;l\u003d21",
+      "parentUuid": "563a9018_396033d6",
+      "revId": "3f42712bd7b157211e371f07ce379154c2f347ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fcb6cc16_09acde87",
         "filename": "src/libANGLE/renderer/wgpu/RenderTargetWgpu.cpp",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2024-03-22T14:13:45Z",
       "side": 1,
       "message": "nit: `LevelIndex` is an int, might as well pass it by value",
+      "range": {
+        "startLine": 28,
+        "startChar": 52,
+        "endLine": 28,
+        "endChar": 53
+      },
+      "revId": "3f42712bd7b157211e371f07ce379154c2f347ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aace609_c38c5dc3",
+        "filename": "src/libANGLE/renderer/wgpu/RenderTargetWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-03-22T19:28:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcb6cc16_09acde87",
       "range": {
         "startLine": 28,
         "startChar": 52,
@@ -54,6 +96,30 @@
       "writtenOn": "2024-03-22T14:45:40Z",
       "side": 1,
       "message": "Not sure this include is needed?",
+      "range": {
+        "startLine": 8,
+        "startChar": 33,
+        "endLine": 8,
+        "endChar": 44
+      },
+      "revId": "3f42712bd7b157211e371f07ce379154c2f347ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a376a4ad_e5cb5595",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-03-22T19:28:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caaf4835_3f39b54f",
       "range": {
         "startLine": 8,
         "startChar": 33,
