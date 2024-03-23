@@ -39,6 +39,30 @@
       },
       "revId": "accd91e82798c18e2c802c00d840fafdd7cf5e24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67d797f4_92705039",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2827,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-23T01:08:34Z",
+      "side": 1,
+      "message": "Thanks, fixed in a follow up to save the bots from running again",
+      "parentUuid": "7294d564_0e41b4ea",
+      "range": {
+        "startLine": 2827,
+        "startChar": 18,
+        "endLine": 2827,
+        "endChar": 24
+      },
+      "revId": "accd91e82798c18e2c802c00d840fafdd7cf5e24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
