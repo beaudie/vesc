@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbc0ac14_8f468e22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-23T10:51:17Z",
+      "side": 1,
+      "message": "So, we need to support both C++20 for compatibility with Chrome and C++17 for compatibility with Android.\nI think the best way might be if we use use_cxx17\u003dtrue as a GN arg on one of our bots, I think one of the compile-only bots: android-arm-compile, android-arm-dbg-compile, android-arm64-dbg-compile would be a good candidate.",
+      "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
