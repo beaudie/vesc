@@ -6735,8 +6735,12 @@ bool ValidateQuerySurface64KHR(const ValidationContext *val,
         case EGL_BITMAP_POINTER_KHR:
             break;
         default:
-            val->setError(EGL_BAD_ATTRIBUTE, "Invalid eglQuerySurface64 attribute");
-            return false;
+        {
+            EGLint querySurfaceValue;
+            ANGLE_VALIDATION_TRY(
+                ValidateQuerySurface(val, dpy, surfaceID, attribute, &querySurfaceValue));
+        }
+        break;
     }
 
     if (value == nullptr)
