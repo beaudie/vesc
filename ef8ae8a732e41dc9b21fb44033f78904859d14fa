@@ -16,6 +16,24 @@
       "message": "PTAL",
       "revId": "ef8ae8a732e41dc9b21fb44033f78904859d14fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba5e5ad_c519c955",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-24T03:16:33Z",
+      "side": 1,
+      "message": "Nice, thanks!\n\nI was thinking more about how to make warm up safe. We should probably have the main link task do all the preparation for the warm up, like initialize the mGraphicsProgramInfos etc, basically do everything up to the actual `vkCreate*Pipelines` call, so that the warmup task just asserts everything is set up and only makes that one call.\n\nThen you can remove the wait for the post-link task from `syncState` and remove the hitch from applications that create programs mid frame",
+      "parentUuid": "068e880d_cd45faa8",
+      "revId": "ef8ae8a732e41dc9b21fb44033f78904859d14fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
