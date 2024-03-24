@@ -34,6 +34,24 @@
       "parentUuid": "068e880d_cd45faa8",
       "revId": "ef8ae8a732e41dc9b21fb44033f78904859d14fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02b2dca2_cdc76d52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-24T12:20:18Z",
+      "side": 1,
+      "message": "i made sure to have `prepareForWarmUpPipelineCache` call `initGraphicsShaderPrograms` so that members like `mGraphicsProgramInfos` that are needed by `createGraphicsPipelineImpl` are already setup",
+      "parentUuid": "2ba5e5ad_c519c955",
+      "revId": "ef8ae8a732e41dc9b21fb44033f78904859d14fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
