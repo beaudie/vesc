@@ -22,6 +22,30 @@
       },
       "revId": "197d6428e59f18cb60c1066619094bb588e845bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1009ec3a_3c516b50",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3207,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-25T18:35:06Z",
+      "side": 1,
+      "message": "that note is from me, not the spec. wanted to make that distinction was explicit.\n\ndo you still want me to merge them?",
+      "parentUuid": "317b2b80_850ea2cb",
+      "range": {
+        "startLine": 3205,
+        "startChar": 0,
+        "endLine": 3207,
+        "endChar": 67
+      },
+      "revId": "197d6428e59f18cb60c1066619094bb588e845bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
