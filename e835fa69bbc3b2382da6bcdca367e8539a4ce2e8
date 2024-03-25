@@ -124,6 +124,24 @@
       "parentUuid": "80c58c7e_4807350c",
       "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7777de2_52f4e3fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-25T18:55:29Z",
+      "side": 1,
+      "message": "then setting it in gn args doesn\u0027t complain, but the setting has no effect (still `-std\u003dc++20` in flags). Possibly due to angle.gni vs build.gni?",
+      "parentUuid": "10b873d9_bf9eb1fc",
+      "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
