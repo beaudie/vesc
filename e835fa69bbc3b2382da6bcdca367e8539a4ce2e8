@@ -160,6 +160,24 @@
       "parentUuid": "c7777de2_52f4e3fc",
       "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22679cfd_14d429ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-25T18:58:35Z",
+      "side": 1,
+      "message": "A pity.\nWell, the only other way I can think of is uglier.\nHave some new flag in angle.gni and GN args, like `angle_use_cxx17`, then have in build_overrides something like `use_cxx17 \u003d angle_use_cxx17`",
+      "parentUuid": "c7777de2_52f4e3fc",
+      "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
