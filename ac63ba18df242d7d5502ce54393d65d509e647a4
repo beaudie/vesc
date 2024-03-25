@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdd58fca_3aa81d96",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6702,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-25T15:23:57Z",
+      "side": 1,
+      "message": "lock surface",
+      "range": {
+        "startLine": 6702,
+        "startChar": 58,
+        "endLine": 6702,
+        "endChar": 73
+      },
+      "revId": "ac63ba18df242d7d5502ce54393d65d509e647a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
