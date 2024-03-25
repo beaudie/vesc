@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b53c9aa_4688c735",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-25T18:03:15Z",
+      "side": 1,
+      "message": "Thanks for the reland. In the future, please follow these instructions for a reland: https://chromium.googlesource.com/angle/angle/+/main/doc/ContributingCode.md#relanding-a-reverted-cl\n\nIn particular, it\u0027s best to have PS1 be the exact change as before, and later patchsets showing what was fixed. Then looking at the diff with PS1, reviewers can tell what changed in the reland.",
+      "revId": "7abda15bf235ef97539d93ff84b3bddf6d17228b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
