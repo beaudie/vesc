@@ -17,6 +17,11 @@ using namespace angle;
 namespace
 {
 
+constexpr std::string test()
+{
+    return "";
+}
+
 struct FormatDesc
 {
     GLenum format;
