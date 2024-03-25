@@ -16,6 +16,24 @@
       "message": "Was this supposed to change to PLATFORM_OHOS?",
       "revId": "2c587e142a66e35d4447fcfb281645e871d06477",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53509b25_64437834",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1115793
+      },
+      "writtenOn": "2024-03-25T09:49:53Z",
+      "side": 1,
+      "message": "Yeah, that is right. Updated the CL.",
+      "parentUuid": "cc6a8f9a_2c60562c",
+      "revId": "2c587e142a66e35d4447fcfb281645e871d06477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
