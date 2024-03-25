@@ -16,6 +16,23 @@
       "message": "Note: The golden images will differ on some platforms.  The texture in the hallway is dependent on EXT_shader_framebuffer_fetch.  The shader works without it, so both results are considered correct.",
       "revId": "e530631d69be5962cdfa3a07d4be3e3b3004ed13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd8c39fd_8c78727e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-25T15:22:23Z",
+      "side": 1,
+      "message": "Mark, it looks like some other platforms have lower texture size limits.  You\u0027ll need to add a capability requirement to `TracePerfTest.cpp`.  Look for `addIntegerPrerequisite` for an example.",
+      "revId": "e530631d69be5962cdfa3a07d4be3e3b3004ed13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
