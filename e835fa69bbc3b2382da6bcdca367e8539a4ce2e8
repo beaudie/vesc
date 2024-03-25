@@ -34,6 +34,24 @@
       "parentUuid": "bbc0ac14_8f468e22",
       "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcd43c93_8b2e1452",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-25T14:28:39Z",
+      "side": 1,
+      "message": "https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/infra/specs/angle_mb_config.pyl;l\u003d69;drc\u003d142c05b543944733e45e41224a477c34c6fbc7b3",
+      "parentUuid": "5efe8b35_1e69d9a8",
+      "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
