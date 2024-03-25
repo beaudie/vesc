@@ -17,6 +17,11 @@ using namespace angle;
 namespace
 {
 
+constexpr std::string test()
+{
+    return "";
+}
+
 struct FormatDesc
 {
     GLenum format;
@@ -26,6 +31,7 @@ struct FormatDesc
 
     bool isPVRTC1() const
     {
+        test();
         return ((format & ~3) == GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG) ||
                ((format & ~3) == GL_COMPRESSED_SRGB_PVRTC_2BPPV1_EXT);
     }
