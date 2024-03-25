@@ -52,6 +52,24 @@
       "parentUuid": "704a4dad_cf7a39c2",
       "revId": "874227249b999a75f2e99cbf98a34b79ee7acc70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52ecab7c_98dd6e2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-25T02:09:43Z",
+      "side": 1,
+      "message": "Pixel 4 failures, I\u0027m going to write off as driver bugs. The pixel6 failure is reported to the pixel team for investigation (I have confirmation that the test fails on latest drivers).",
+      "parentUuid": "b1a0cf24_6efdabc6",
+      "revId": "874227249b999a75f2e99cbf98a34b79ee7acc70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
