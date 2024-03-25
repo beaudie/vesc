@@ -142,6 +142,24 @@
       "parentUuid": "10b873d9_bf9eb1fc",
       "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a96c8a6_72c2b875",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-03-25T18:57:32Z",
+      "side": 1,
+      "message": "ah, right! I need to add it to build.gni, then I can set it in gn args \u003e_\u003c",
+      "parentUuid": "c7777de2_52f4e3fc",
+      "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
