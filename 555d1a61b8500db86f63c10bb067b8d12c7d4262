@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fb250f9_c5e36ffd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-03-25T15:28:35Z",
+      "side": 1,
+      "message": "Added test dependency for \"GL_OES_EGL_image_external\".",
+      "revId": "555d1a61b8500db86f63c10bb067b8d12c7d4262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
