@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a8282a2_bcf98347",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-25T17:08:29Z",
+      "side": 1,
+      "message": "Ignore my feedback, it is handled in the next CL",
+      "parentUuid": "59cd3954_a29a90a4",
+      "revId": "ac971154e2097ad3f0204c42204b5d43a60c7ac7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "842acc3d_842beb90",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a702f874_e009a9d7",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-25T17:08:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "842acc3d_842beb90",
+      "range": {
+        "startLine": 342,
+        "startChar": 60,
+        "endLine": 342,
+        "endChar": 82
+      },
+      "revId": "ac971154e2097ad3f0204c42204b5d43a60c7ac7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b1fd435_0d04559f",
@@ -54,6 +96,30 @@
       "writtenOn": "2024-03-25T17:07:02Z",
       "side": 1,
       "message": "Same here, `TEST_PACKAGE_NAME`\n```suggestion\n            _AdbRun([\u0027push\u0027, local_path, \u0027/data/data/\u0027 + TEST_PACKAGE_NAME + \u0027/angle_traces/\u0027])\n```",
+      "range": {
+        "startLine": 379,
+        "startChar": 53,
+        "endLine": 379,
+        "endChar": 75
+      },
+      "revId": "ac971154e2097ad3f0204c42204b5d43a60c7ac7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2689c5b5_4e3aebd6",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-03-25T17:08:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b1fd435_0d04559f",
       "range": {
         "startLine": 379,
         "startChar": 53,
