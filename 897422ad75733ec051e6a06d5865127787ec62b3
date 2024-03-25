@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d284604_95fbe0e6",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7030,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-03-25T17:57:21Z",
+      "side": 1,
+      "message": "Is it intentional that the second draw not drawing to the msaaFBO?",
+      "revId": "897422ad75733ec051e6a06d5865127787ec62b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
