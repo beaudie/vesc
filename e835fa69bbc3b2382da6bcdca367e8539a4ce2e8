@@ -70,6 +70,24 @@
       "parentUuid": "dcd43c93_8b2e1452",
       "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30566d51_9fa21318",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-25T18:02:42Z",
+      "side": 1,
+      "message": "I think GN args override build_overrides, but maybe you can try locally and see if that\u0027s really true?",
+      "parentUuid": "096da2ef_ef80a692",
+      "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
