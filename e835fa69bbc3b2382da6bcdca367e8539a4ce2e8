@@ -106,6 +106,24 @@
       "parentUuid": "30566d51_9fa21318",
       "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10b873d9_bf9eb1fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-25T18:49:59Z",
+      "side": 1,
+      "message": "What if you add it to some declare_args block in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/gni/angle.gni;l\u003d7 as `false`?",
+      "parentUuid": "80c58c7e_4807350c",
+      "revId": "e835fa69bbc3b2382da6bcdca367e8539a4ce2e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
