@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b1f4ca6_4748e166",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-03-25T18:37:11Z",
+      "side": 1,
+      "message": "Is it possible to split this change into smaller changes? The change itself is too big to review in my opinion..",
+      "revId": "fbb8d2656b115a211bc464b5c03f16846d30c232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
