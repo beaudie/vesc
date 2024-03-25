@@ -52,6 +52,24 @@
       "parentUuid": "2ba5e5ad_c519c955",
       "revId": "ef8ae8a732e41dc9b21fb44033f78904859d14fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2886c2dd_344e79b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-25T01:22:30Z",
+      "side": 1,
+      "message": "Oh great! We should make the warm up task very explicit about not doing these things then. Like it can directly access the maps etc (and ASSERT everything is already valid) to make it super clear it\u0027s doing nothing but Vulkan pipeline creation.",
+      "parentUuid": "02b2dca2_cdc76d52",
+      "revId": "ef8ae8a732e41dc9b21fb44033f78904859d14fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
