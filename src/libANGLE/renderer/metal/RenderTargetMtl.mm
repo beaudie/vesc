@@ -18,13 +18,6 @@ RenderTargetMtl::~RenderTargetMtl()
     reset();
 }
 
-RenderTargetMtl::RenderTargetMtl(RenderTargetMtl &&other)
-    : mTexture(std::move(other.mTexture)),
-      mImplicitMSTexture(std::move(other.mImplicitMSTexture)),
-      mLevelIndex(other.mLevelIndex),
-      mLayerIndex(other.mLayerIndex)
-{}
-
 void RenderTargetMtl::set(const mtl::TextureRef &texture,
                           const mtl::MipmapNativeLevel &level,
                           uint32_t layer,
@@ -77,6 +70,18 @@ uint32_t RenderTargetMtl::getRenderSamples() const
     mtl::TextureRef tex           = getTexture();
     return implicitMSTex ? implicitMSTex->samples() : (tex ? tex->samples() : 1);
 }
+
+const mtl::Format *RenderTargetMtl::getFormat() const
+{
+    if (mFormat)
+    {
+        return mFormat;
+    }
+
+    static mtl::Format sInvalidFormat;
+    return &sInvalidFormat;
+}
+
 void RenderTargetMtl::toRenderPassAttachmentDesc(mtl::RenderPassAttachmentDesc *rpaDescOut) const
 {
     rpaDescOut->texture           = mTexture.lock();
@@ -85,4 +90,4 @@ void RenderTargetMtl::toRenderPassAttachmentDesc(mtl::RenderPassAttachmentDesc *
     rpaDescOut->sliceOrDepth      = mLayerIndex;
     rpaDescOut->blendable         = mFormat ? mFormat->getCaps().blendable : false;
 }
-}
+}  // namespace rx

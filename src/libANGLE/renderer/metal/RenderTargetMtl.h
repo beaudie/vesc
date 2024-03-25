@@ -29,8 +29,7 @@ class RenderTargetMtl final : public FramebufferAttachmentRenderTarget
     RenderTargetMtl();
     ~RenderTargetMtl() override;
 
-    // Used in std::vector initialization.
-    RenderTargetMtl(RenderTargetMtl &&other);
+    RenderTargetMtl &operator=(const RenderTargetMtl &) = delete;
 
     void set(const mtl::TextureRef &texture,
              const mtl::MipmapNativeLevel &level,
@@ -51,7 +50,7 @@ class RenderTargetMtl final : public FramebufferAttachmentRenderTarget
     const mtl::MipmapNativeLevel &getLevelIndex() const { return mLevelIndex; }
     uint32_t getLayerIndex() const { return mLayerIndex; }
     uint32_t getRenderSamples() const;
-    const mtl::Format *getFormat() const { return mFormat; }
+    const mtl::Format *getFormat() const;
 
     void toRenderPassAttachmentDesc(mtl::RenderPassAttachmentDesc *rpaDescOut) const;
 
