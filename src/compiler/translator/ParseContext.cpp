@@ -4991,12 +4991,9 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     {
         TField *field    = (*fieldList)[memberIndex];
         TType *fieldType = field->type();
-        if (IsOpaqueType(fieldType->getBasicType()))
+        if (ContainsSampler(*fieldType))
         {
-            std::string reason("unsupported type - ");
-            reason += fieldType->getBasicString();
-            reason += " types are not allowed in interface blocks";
-            error(field->line(), reason.c_str(), fieldType->getBasicString());
+            error(field->line(), "Opaque types are not allowed in interface blocks", blockName);
         }
 
         const TQualifier qualifier = fieldType->getQualifier();
