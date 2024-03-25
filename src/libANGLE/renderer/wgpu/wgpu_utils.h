@@ -10,6 +10,7 @@
 #include <dawn/webgpu_cpp.h>
 #include <stdint.h>
 
+#include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/angletypes.h"
 
@@ -18,6 +19,11 @@ namespace webgpu
 
 // WebGPU image level index.
 using LevelIndex = gl::LevelIndexWrapper<uint32_t>;
+
+template <typename LargerInt>
+GLint LimitToInt(const LargerInt physicalDeviceValue);
+
+void ensureCapsInitialized(gl::Caps &nativeCaps, const wgpu::Device &device);
 
 }  // namespace webgpu
 
