@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "896d0ebf_672974d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-26T15:15:13Z",
+      "side": 1,
+      "message": "Removing update to third_party/libc++/src in this roll.",
+      "revId": "e34b158395bde7086a110d09c7eb3ad85145bfe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
