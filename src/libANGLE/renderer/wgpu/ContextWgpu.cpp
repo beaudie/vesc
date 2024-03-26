@@ -30,6 +30,7 @@
 #include "libANGLE/renderer/wgpu/TextureWgpu.h"
 #include "libANGLE/renderer/wgpu/TransformFeedbackWgpu.h"
 #include "libANGLE/renderer/wgpu/VertexArrayWgpu.h"
+#include "libANGLE/renderer/wgpu/wgpu_utils.h"
 
 namespace rx
 {
@@ -85,6 +86,8 @@ ContextWgpu::ContextWgpu(const gl::State &state, gl::ErrorSet *errorSet, Display
     mCaps = GenerateMinimumCaps(maxClientVersion, mExtensions);
 
     InitMinimumTextureCapsMap(maxClientVersion, mExtensions, &mTextureCaps);
+
+    webgpu::ensureCapsInitialized(mCaps, mDisplay->getDevice());
 
     if (mExtensions.shaderPixelLocalStorageANGLE)
     {
@@ -524,4 +527,5 @@ void ContextWgpu::handleError(GLenum errorCode,
     errorStream << "Internal Wgpu back-end error: " << message << ".";
     mErrors->handleError(errorCode, errorStream.str().c_str(), file, function, line);
 }
+
 }  // namespace rx
