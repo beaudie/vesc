@@ -2112,6 +2112,10 @@ class ImageHelper final : public Resource, public angle::Subject
                        uint32_t layerCount,
                        bool isRobustResourceInitEnabled,
                        bool hasProtectedContent);
+    angle::Result init(Context *context,
+                       const VkImageCreateInfo &requestedCreateInfo,
+                       VkMemoryPropertyFlags memoryPropertyFlags);
+    angle::Result copyBuffer(Context *context, BufferHelper *stagingBuffer, VkBufferImageCopy copyRegion);
     angle::Result initMSAASwapchain(Context *context,
                                     gl::TextureType textureType,
                                     const VkExtent3D &extents,
