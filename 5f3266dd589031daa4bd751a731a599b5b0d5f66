@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7deea215_cb550102",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T14:53:50Z",
+      "side": 1,
+      "message": "Maybe keep an `UNIMPLEMENTED()` here, this is still not handling the actual upload of texture data.",
+      "revId": "5f3266dd589031daa4bd751a731a599b5b0d5f66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
