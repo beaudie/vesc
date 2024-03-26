@@ -13,23 +13,12 @@ ImageHelper::ImageHelper() {}
 ImageHelper::~ImageHelper() {}
 
 angle::Result ImageHelper::initImage(wgpu::Device &device,
-                                     wgpu::TextureUsage usage,
-                                     wgpu::TextureDimension dimension,
-                                     wgpu::Extent3D size,
-                                     wgpu::TextureFormat format,
-                                     std::uint32_t mipLevelCount,
-                                     std::uint32_t sampleCount,
-                                     std::size_t viewFormatCount)
+                                     gl::LevelIndex firstAllocatedLevel,
+                                     wgpu::TextureDescriptor textureDescriptor)
 {
-    mTextureDescriptor.usage           = usage;
-    mTextureDescriptor.dimension       = dimension;
-    mTextureDescriptor.size            = size;
-    mTextureDescriptor.format          = format;
-    mTextureDescriptor.mipLevelCount   = mipLevelCount;
-    mTextureDescriptor.sampleCount     = sampleCount;
-    mTextureDescriptor.viewFormatCount = viewFormatCount;
-
-    mTexture = device.CreateTexture(&mTextureDescriptor);
+    mTextureDescriptor   = textureDescriptor;
+    mFirstAllocatedLevel = firstAllocatedLevel;
+    mTexture             = device.CreateTexture(&mTextureDescriptor);
 
     return angle::Result::Continue;
 }
@@ -48,8 +37,42 @@ void ImageHelper::flushStagedUpdates(wgpu::Device &device)
         LevelIndex targetLevelWgpu = toWgpuLevel(src.targetLevel);
         dst.texture                = mTexture;
         dst.mipLevel               = targetLevelWgpu.get();
-        encoder.CopyBufferToTexture(&src.copyBuffer, &dst, &mTextureDescriptor.size);
+        encoder.CopyTextureToTexture(&src.copyTexture, &dst, &mTextureDescriptor.size);
     }
+}
+
+wgpu::TextureDescriptor ImageHelper::createTextureDescriptor(wgpu::TextureUsage usage,
+                                                             wgpu::TextureDimension dimension,
+                                                             wgpu::Extent3D size,
+                                                             wgpu::TextureFormat format,
+                                                             std::uint32_t mipLevelCount,
+                                                             std::uint32_t sampleCount,
+                                                             std::size_t viewFormatCount)
+{
+    wgpu::TextureDescriptor textureDescriptor = {};
+    textureDescriptor.usage                   = usage;
+    textureDescriptor.dimension               = dimension;
+    textureDescriptor.size                    = size;
+    textureDescriptor.format                  = format;
+    textureDescriptor.mipLevelCount           = mipLevelCount;
+    textureDescriptor.sampleCount             = sampleCount;
+    textureDescriptor.viewFormatCount         = viewFormatCount;
+    return textureDescriptor;
+}
+
+angle::Result ImageHelper::stageTextureUpload(wgpu::Device &device,
+                                              const gl::ImageIndex &index,
+                                              const gl::Offset &offset,
+                                              wgpu::TextureDescriptor textureDescriptor)
+{
+    wgpu::ImageCopyTexture copyTexture = {};
+    gl::LevelIndex levelGL(index.getLevelIndex());
+    copyTexture.origin          = gl_wgpu::getOffset3D(offset);
+    copyTexture.mipLevel        = toWgpuLevel(levelGL).get();
+    copyTexture.texture         = device.CreateTexture(&textureDescriptor);
+    QueuedDataUpload dataUpload = {copyTexture, levelGL};
+    mBufferQueue.push_back(dataUpload);
+    return angle::Result::Continue;
 }
 
 LevelIndex ImageHelper::toWgpuLevel(gl::LevelIndex levelIndexGl) const

@@ -20,7 +20,7 @@ namespace webgpu
 
 struct QueuedDataUpload
 {
-    wgpu::ImageCopyBuffer copyBuffer;
+    wgpu::ImageCopyTexture copyTexture;
     gl::LevelIndex targetLevel;
 };
 
@@ -41,15 +41,23 @@ class ImageHelper
     ~ImageHelper();
 
     angle::Result initImage(wgpu::Device &device,
-                            wgpu::TextureUsage usage,
-                            wgpu::TextureDimension dimension,
-                            wgpu::Extent3D size,
-                            wgpu::TextureFormat format,
-                            std::uint32_t mipLevelCount,
-                            std::uint32_t sampleCount,
-                            std::size_t ViewFormatCount);
+                            gl::LevelIndex firstAllocatedLevel,
+                            wgpu::TextureDescriptor textureDescriptor);
 
     void flushStagedUpdates(wgpu::Device &device);
+
+    wgpu::TextureDescriptor createTextureDescriptor(wgpu::TextureUsage usage,
+                                                    wgpu::TextureDimension dimension,
+                                                    wgpu::Extent3D size,
+                                                    wgpu::TextureFormat format,
+                                                    std::uint32_t mipLevelCount,
+                                                    std::uint32_t sampleCount,
+                                                    std::size_t viewFormatCount);
+
+    angle::Result stageTextureUpload(wgpu::Device &device,
+                                     const gl::ImageIndex &index,
+                                     const gl::Offset &offset,
+                                     wgpu::TextureDescriptor textureDescriptor);
 
     LevelIndex toWgpuLevel(gl::LevelIndex levelIndexGl) const;
     gl::LevelIndex toGlLevel(LevelIndex levelIndexWgpu) const;

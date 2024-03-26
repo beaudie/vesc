@@ -38,6 +38,7 @@ namespace gl_wgpu
 webgpu::LevelIndex getLevelIndex(gl::LevelIndex levelGl, gl::LevelIndex baseLevel);
 wgpu::TextureDimension getWgpuTextureDimension(gl::TextureType glTextureType);
 wgpu::Extent3D getExtent3D(const gl::Extents &glExtent);
+wgpu::Origin3D getOffset3D(const gl::Offset &offsetGL);
 }  // namespace gl_wgpu
 
 #endif  // LIBANGLE_RENDERER_WGPU_WGPU_UTILS_H_
