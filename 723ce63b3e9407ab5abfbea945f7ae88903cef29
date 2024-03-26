@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cc4d3aa_6584192d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8056,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T19:29:28Z",
+      "side": 1,
+      "message": "\"after the fact\" means once something has already taken place.\n\nIn this case, \"resolve attachments have been added after the fact\" means after the render pass was started with a framebuffer that didn\u0027t have resolve attachments.",
+      "parentUuid": "97ca8483_76099848",
+      "revId": "723ce63b3e9407ab5abfbea945f7ae88903cef29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bcf04086_9f257b7e",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-26T18:50:15Z",
       "side": 1,
       "message": "why do we remove the check of noFlip and rotation?",
+      "revId": "723ce63b3e9407ab5abfbea945f7ae88903cef29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fcfd80e_fadccbda",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T19:29:28Z",
+      "side": 1,
+      "message": "It\u0027s moved above (line 1431)",
+      "parentUuid": "bcf04086_9f257b7e",
       "revId": "723ce63b3e9407ab5abfbea945f7ae88903cef29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9587663_53764048",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2565,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T19:29:28Z",
+      "side": 1,
+      "message": "Nothing, just noticed it didn\u0027t need a `ContextVk`.\n\n(`vk::Context` is more generic, and using it makes it clear this function is actually not accessing the GL state)",
+      "parentUuid": "d71f3d21_898d5789",
+      "revId": "723ce63b3e9407ab5abfbea945f7ae88903cef29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d87d49c_55e1ff44",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-03-26T18:50:15Z",
       "side": 1,
       "message": "Do you think it is clearer if we rename this function to `getRenderPassFramebuffer`?",
+      "revId": "723ce63b3e9407ab5abfbea945f7ae88903cef29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "663afa8d_f6617e00",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2808,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T19:29:28Z",
+      "side": 1,
+      "message": "Not really. Every framebuffer is a render pass framebuffer. The struct name itself (`RenderPassFramebuffer`) is redundant, but I don\u0027t know of a better alternative (just `Framebuffer` is overloaded)",
+      "parentUuid": "2d87d49c_55e1ff44",
       "revId": "723ce63b3e9407ab5abfbea945f7ae88903cef29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfc58ec3_ef186932",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2826,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T19:29:28Z",
+      "side": 1,
+      "message": "In this case, this is just a `vk::Framebuffer` 😊",
+      "parentUuid": "32b857a2_141c1acd",
+      "revId": "723ce63b3e9407ab5abfbea945f7ae88903cef29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd47ef27_c057a162",
@@ -99,6 +189,24 @@
       "writtenOn": "2024-03-26T18:50:15Z",
       "side": 1,
       "message": "Would you mind adding some comments here explaining the reason we are checking `mBackbuffer \u003d\u003d nullptr`?",
+      "revId": "723ce63b3e9407ab5abfbea945f7ae88903cef29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e8f9c82_1da78af0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2836,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T19:29:28Z",
+      "side": 1,
+      "message": "Will do",
+      "parentUuid": "dd47ef27_c057a162",
       "revId": "723ce63b3e9407ab5abfbea945f7ae88903cef29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
