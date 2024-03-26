@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "966857af_abf31b3a",
+        "filename": "src/tests/perf_tests/MultisampleResolvePerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T19:44:13Z",
+      "side": 1,
+      "message": "I see `Benchmark` is used more commonly, but `Perf` is also used in a bunch of perf tests (happened to be `Perf` from the one I copied from). Doesn\u0027t look like we enforce one way or another.",
+      "parentUuid": "d1f2291d_34735dce",
+      "range": {
+        "startLine": 74,
+        "startChar": 6,
+        "endLine": 74,
+        "endChar": 28
+      },
+      "revId": "3120b8e958953563e71760ba46181f9c145c824c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6501d62a_fcfdb77d",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbfd97d6_6324afab",
+        "filename": "src/tests/perf_tests/MultisampleResolvePerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T19:44:13Z",
+      "side": 1,
+      "message": "Too tiny to affect anything.",
+      "parentUuid": "6501d62a_fcfdb77d",
+      "range": {
+        "startLine": 249,
+        "startChar": 21,
+        "endLine": 249,
+        "endChar": 29
+      },
+      "revId": "3120b8e958953563e71760ba46181f9c145c824c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0536ff6d_f8cdc332",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-03-26T19:39:16Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 253,
+        "startChar": 48,
+        "endLine": 253,
+        "endChar": 78
+      },
+      "revId": "3120b8e958953563e71760ba46181f9c145c824c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef7c650_4f126c56",
+        "filename": "src/tests/perf_tests/MultisampleResolvePerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-26T19:44:13Z",
+      "side": 1,
+      "message": "Ditto. FWIW, iterationsPerStep is one, so not really a loop in the end\n\n(I had to do that to make single-sampled also become one draw per pass, otherwise it was all bunching in one render pass and made comparison invalid)",
+      "parentUuid": "0536ff6d_f8cdc332",
       "range": {
         "startLine": 253,
         "startChar": 48,
