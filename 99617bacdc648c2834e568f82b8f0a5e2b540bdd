@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a79e263_3ca34406",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-26T21:20:03Z",
+      "side": 1,
+      "message": "Exactly what Mohan said. At least on pixel devices, I am not able to get emulation path to run. Hopefully we can add samsung GPU into CI bots soon which should fill the testing coverage gap.",
+      "parentUuid": "22cbf21a_fc1611f3",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcbdb173_ab588d5d",
