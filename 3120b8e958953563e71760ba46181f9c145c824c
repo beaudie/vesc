@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1f2291d_34735dce",
+        "filename": "src/tests/perf_tests/MultisampleResolvePerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-26T19:39:16Z",
+      "side": 1,
+      "message": "Question: Should the class name have \"Benchmark\" at the end? (e.g., style guide)",
+      "range": {
+        "startLine": 74,
+        "startChar": 6,
+        "endLine": 74,
+        "endChar": 28
+      },
+      "revId": "3120b8e958953563e71760ba46181f9c145c824c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6501d62a_fcfdb77d",
+        "filename": "src/tests/perf_tests/MultisampleResolvePerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-26T19:39:16Z",
+      "side": 1,
+      "message": "Nit: Move to before the for-loop? Does it affect perf results?",
+      "range": {
+        "startLine": 249,
+        "startChar": 21,
+        "endLine": 249,
+        "endChar": 29
+      },
+      "revId": "3120b8e958953563e71760ba46181f9c145c824c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0536ff6d_f8cdc332",
+        "filename": "src/tests/perf_tests/MultisampleResolvePerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-26T19:39:16Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 253,
+        "startChar": 48,
+        "endLine": 253,
+        "endChar": 78
+      },
+      "revId": "3120b8e958953563e71760ba46181f9c145c824c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
