@@ -78,6 +78,15 @@ wgpu::Extent3D getExtent3D(const gl::Extents &glExtent)
     return wgpuExtent;
 }
 
+wgpu::Origin3D getOffset3D(const gl::Offset &offsetGL)
+{
+    wgpu::Origin3D offsetWgpu;
+    offsetWgpu.x = offsetGL.x;
+    offsetWgpu.y = offsetGL.y;
+    offsetWgpu.z = offsetGL.z;
+    return offsetWgpu;
+}
+
 wgpu::TextureDimension getWgpuTextureDimension(gl::TextureType glTextureType)
 {
     wgpu::TextureDimension dimension = {};
