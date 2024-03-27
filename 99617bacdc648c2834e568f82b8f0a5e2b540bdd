@@ -163,6 +163,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4787d15d_612451d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-27T20:17:41Z",
+      "side": 1,
+      "message": "ah, you mean `supportsIndependentDepthStencilResolve`? then yes, we support that feature\n\n+1 to atleast have this for swiftshader",
+      "parentUuid": "c6cf807c_a9003c97",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbdb173_ab588d5d",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
