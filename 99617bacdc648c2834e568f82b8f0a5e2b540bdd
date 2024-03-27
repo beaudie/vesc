@@ -145,6 +145,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c6cf807c_a9003c97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-27T20:14:54Z",
+      "side": 1,
+      "message": "That^\n\nI tried it here: https://chromium-review.googlesource.com/c/angle/angle/+/5359654 but didn\u0027t get the time to debug. We could potentially only enable that for SwiftShader though, it might just work.",
+      "parentUuid": "c4c0ed5b_676fa986",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbdb173_ab588d5d",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
