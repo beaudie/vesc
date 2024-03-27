@@ -34,6 +34,24 @@
       "parentUuid": "3cf835be_f44dbb59",
       "revId": "bbd4ae6206d161675d73dc417c05ae81bffc4279",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37a76084_9a11b92d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-27T20:21:43Z",
+      "side": 1,
+      "message": "\u003e there\u0027s no perf cost either because the mutex lock is taken after we know we want to dump the cache\n\nnot really, you need to write into the stream whenever pipeline cache is released which can happen in different pipeline executables in different contexts simultaneously\n\n\u003e How many workloads do you have that use non-shared contexts and you need to dump the pipeline cache out of them?\n\nmany real games have atleast 2 contexts that are non-shared, 1 for content and 1 for UI overlay",
+      "parentUuid": "b7da7d4c_922b4500",
+      "revId": "bbd4ae6206d161675d73dc417c05ae81bffc4279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
