@@ -254,9 +254,16 @@ struct FeaturesVk : FeatureSetBase
     FeatureInfo supportsDepthStencilResolve = {
         "supportsDepthStencilResolve",
         FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_depth_stencil_resolve extension",
+        &members, "http://anglebug.com/4836"
+    };
+
+    FeatureInfo supportsDepthStencilIndependentResolveNone = {
+        "supportsDepthStencilIndependentResolveNone",
+        FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_depth_stencil_resolve "
         "extension with the independentResolveNone feature",
-        &members, "http://anglebug.com/4836"
+        &members, "http://anglebug.com/7551"
     };
 
     FeatureInfo supportsMultisampledRenderToSingleSampledGOOGLEX = {
