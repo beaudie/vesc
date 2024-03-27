@@ -665,6 +665,12 @@ class Renderer : angle::NonCopyable
         return getFeatures().supportsExtendedDynamicState2.enabled &&
                getFeatures().supportsLogicOpDynamicState.enabled;
     }
+    bool supportsDepthStencilResolve()
+    {
+        // Depth/stencil resolve without independentResolveNone is not accounted for in ANGLE.
+        return mFeatures.supportsDepthStencilResolve.enabled &&
+               mDepthStencilResolveProperties.independentResolveNone == VK_TRUE;
+    }
 
     angle::Result allocateScopedQueueSerialIndex(vk::ScopedQueueSerialIndex *indexOut);
     angle::Result allocateQueueSerialIndex(SerialIndex *serialIndexOut);
