@@ -4319,6 +4319,9 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsDepthStencilResolve,
                             mFeatures.supportsRenderpass2.enabled &&
                                 mDepthStencilResolveProperties.supportedDepthResolveModes != 0);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsDepthStencilIndependentResolveNone,
+                            mFeatures.supportsDepthStencilResolve.enabled &&
+                                mDepthStencilResolveProperties.independentResolveNone);
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsMultisampledRenderToSingleSampled,
