@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "638455bc_3cb6f383",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-27T19:44:40Z",
+      "side": 1,
+      "message": "\u003e I am not able to get emulation path to run\n\nwhy wouldn\u0027t force disabling the extension feature and force enabling emulation feature suffice?\n\n\u003e Hopefully we can add samsung GPU into CI bots soon\n\nwhy wait when we can do this now through feature overrides?",
+      "parentUuid": "1a79e263_3ca34406",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbdb173_ab588d5d",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
