@@ -16,6 +16,24 @@
       "message": "we will now need to make this thread-safe which will cause stalls due to mutex contension?",
       "revId": "bbd4ae6206d161675d73dc417c05ae81bffc4279",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7da7d4c_922b4500",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-27T20:17:30Z",
+      "side": 1,
+      "message": "I don\u0027t plan on doing that. How many workloads do you have that use non-shared contexts and you need to dump the pipeline cache out of them?\n\nBut even if we add a mutex in the future, there\u0027s no perf cost either because the mutex lock is taken after we know we want to dump the cache, and that\u0027s disabled by default.",
+      "parentUuid": "3cf835be_f44dbb59",
+      "revId": "bbd4ae6206d161675d73dc417c05ae81bffc4279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
