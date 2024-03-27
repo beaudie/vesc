@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cf835be_f44dbb59",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-27T20:13:09Z",
+      "side": 1,
+      "message": "we will now need to make this thread-safe which will cause stalls due to mutex contension?",
+      "revId": "bbd4ae6206d161675d73dc417c05ae81bffc4279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
