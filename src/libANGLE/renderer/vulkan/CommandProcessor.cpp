@@ -21,7 +21,7 @@ namespace
 constexpr bool kOutputVmaStatsString = false;
 // When suballocation garbages is more than this, we may wait for GPU to finish and free up some
 // memory for allocation.
-constexpr VkDeviceSize kMaxBufferSuballocationGarbageSize = 64 * 1024 * 1024;
+constexpr VkDeviceSize kMaxBufferSuballocationGarbageSize = 0;
 
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const PrimaryCommandBuffer &commandBuffer,
@@ -1159,15 +1159,15 @@ angle::Result CommandQueue::postSubmitCheck(Context *context)
     ANGLE_TRY(checkAndCleanupCompletedCommands(context));
 
     VkDeviceSize suballocationGarbageSize = renderer->getSuballocationGarbageSize();
-    if (suballocationGarbageSize > kMaxBufferSuballocationGarbageSize)
+    if (suballocationGarbageSize >= kMaxBufferSuballocationGarbageSize)
     {
         // CPU should be throttled to avoid accumulating too much memory garbage waiting to be
         // destroyed. This is important to keep peak memory usage at check when game launched and a
         // lot of staging buffers used for textures upload and then gets released. But if there is
         // only one command buffer in flight, we do not wait here to ensure we keep GPU busy.
         std::unique_lock<std::mutex> lock(mMutex);
-        while (suballocationGarbageSize > kMaxBufferSuballocationGarbageSize &&
-               mInFlightCommands.size() > 1)
+        while (suballocationGarbageSize >= kMaxBufferSuballocationGarbageSize &&
+               mInFlightCommands.size() > 0)
         {
             ANGLE_TRY(
                 finishOneCommandBatchAndCleanupImpl(context, renderer->getMaxFenceWaitTimeNs()));
