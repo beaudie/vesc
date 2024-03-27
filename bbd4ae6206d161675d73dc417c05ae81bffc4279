@@ -52,6 +52,24 @@
       "parentUuid": "b7da7d4c_922b4500",
       "revId": "bbd4ae6206d161675d73dc417c05ae81bffc4279",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b47a172_138a7bc9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-27T20:23:56Z",
+      "side": 1,
+      "message": "\u003e not really, you need to write into the stream whenever pipeline cache is released which can happen in different pipeline executables in different contexts simultaneously\n\nBut only after `if (should_we_even_dump_the_cache)` check. So unless the dump is enabled, no mutex is going to be taken. So yes, if you enable this debug feature there\u0027d be a cost, but does it matter?",
+      "parentUuid": "37a76084_9a11b92d",
+      "revId": "bbd4ae6206d161675d73dc417c05ae81bffc4279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
