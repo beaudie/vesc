@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41ed1140_356c9d08",
+        "filename": "src/libANGLE/renderer/metal/RenderTargetMtl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-03-27T15:54:39Z",
+      "side": 1,
+      "message": "Talked in chat. I think it\u0027s worth just storing the mtl::Format here directly. It\u0027s a small struct.",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 31
+      },
+      "revId": "244f0e36a3c4eb5df14055bd98cf36dabb450149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
