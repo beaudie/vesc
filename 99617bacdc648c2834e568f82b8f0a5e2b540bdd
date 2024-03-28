@@ -217,6 +217,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15d43ffb_46891bc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-28T14:40:39Z",
+      "side": 1,
+      "message": "Except we don\u0027t want to enable it in general, just for testing. So it should be like this: https://chromium-review.googlesource.com/c/angle/angle/+/5359654 but only for swiftshader. I\u0027m gonna do that now and see if the bots are green. The actual work is in fixing the problems it discovers more than just enabling it.",
+      "parentUuid": "7a3e96fa_ce7d300b",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbdb173_ab588d5d",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
