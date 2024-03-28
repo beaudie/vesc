@@ -253,6 +253,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a74cb48c_108e6fee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-28T17:04:45Z",
+      "side": 1,
+      "message": "Geoff is looking into those tests too, apparently they are too strict about the depth test. Not sure if that\u0027s all of them, but expect some fixes!",
+      "parentUuid": "091264d2_5698386b",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbdb173_ab588d5d",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
