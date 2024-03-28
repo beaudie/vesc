@@ -684,11 +684,13 @@ angle::Result CommandQueue::enqueueBarrier()
 
 angle::Result CommandQueue::flush()
 {
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
     return mImpl->flush();
 }
 
 angle::Result CommandQueue::finish()
 {
+    std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
     return mImpl->finish();
 }
 
