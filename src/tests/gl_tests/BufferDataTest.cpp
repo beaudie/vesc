@@ -1243,6 +1243,34 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+TEST_P(BufferDataTestES3, ArrayVsElement)
+{
+    GLBuffer bufa;
+    GLubyte data[20];
+    glBindBuffer(GL_ARRAY_BUFFER, bufa);
+    glBufferData(GL_ARRAY_BUFFER, 20, (const GLubyte *)data, GL_DYNAMIC_DRAW);
+    void *pa = glMapBufferRange(GL_ARRAY_BUFFER, 0, 20,
+                                GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_RANGE_BIT |
+                                    GL_MAP_FLUSH_EXPLICIT_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
+
+    GLBuffer bufe;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufe);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 20, (const GLubyte *)data, GL_DYNAMIC_DRAW);
+    void *pe = glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER, 0, 20,
+                                GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_RANGE_BIT |
+                                    GL_MAP_FLUSH_EXPLICIT_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
+
+    glBindBuffer(GL_ARRAY_BUFFER, bufa);
+    glFlushMappedBufferRange(GL_ARRAY_BUFFER, 0, 20);
+    memcpy(pa, data, 20);
+    glUnmapBuffer(GL_ARRAY_BUFFER);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufe);
+    glFlushMappedBufferRange(GL_ELEMENT_ARRAY_BUFFER, 0, 20);
+    memcpy(pe, data, 20);
+    glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+}
+
 // Ensures that calling glBufferData on a mapped buffer results in an unmapped buffer
 TEST_P(BufferDataTestES3, BufferDataUnmap)
 {
