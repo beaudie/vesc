@@ -235,6 +235,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "091264d2_5698386b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-28T16:21:03Z",
+      "side": 1,
+      "message": "FYI - the failures in that change on the linux bots -\n```\nMultisampledRenderToTextureES31Test.BlitFramebufferAttachment1/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture\nMultisampledRenderToTextureES31Test.BlitFramebufferAttachment1/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture_AsyncCommandQueue\nMultisampledRenderToTextureES31Test.MixedMultisampledAndMultisampledRenderToTexture/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture\nMultisampledRenderToTextureES31Test.MixedMultisampledAndMultisampledRenderToTexture/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture_AsyncCommandQueue\nMultisampledRenderToTextureES31Test.RenderbufferBlitFramebufferAttachment1/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture\nMultisampledRenderToTextureES31Test.RenderbufferBlitFramebufferAttachment1/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture_AsyncCommandQueue\nMultisampledRenderToTextureES31Test.RenderbufferDrawCopyThenBlendAllAttachmentsMixed/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture\nMultisampledRenderToTextureES31Test.RenderbufferDrawCopyThenBlendAllAttachmentsMixed/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture_AsyncCommandQueue\nMultisampledRenderToTextureES3Test.BlitFramebufferTest/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture\nMultisampledRenderToTextureES3Test.BlitFramebufferTest/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture_AsyncCommandQueue\nMultisampledRenderToTextureES3Test.DrawCopyDrawAttachDepthStencilClearThenDraw/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture\nMultisampledRenderToTextureES3Test.DrawCopyDrawAttachDepthStencilClearThenDraw/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture_AsyncCommandQueue\nMultisampledRenderToTextureES3Test.RenderbufferBlitFramebufferTest/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture\nMultisampledRenderToTextureES3Test.RenderbufferBlitFramebufferTest/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture_AsyncCommandQueue\nMultisampledRenderToTextureES3Test.RenderbufferDrawCopyDrawAttachDepthStencilClearThenDraw/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture\nMultisampledRenderToTextureES3Test.RenderbufferDrawCopyDrawAttachDepthStencilClearThenDraw/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture_AsyncCommandQueue\nMultisampledRenderToTextureES3Test.RenderbufferUnresolveColorAndDepthThenTwoColors/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture\nMultisampledRenderToTextureES3Test.RenderbufferUnresolveColorAndDepthThenTwoColors/ES3_Vulkan_SwiftShader_EnableMultisampledRenderToTexture_AsyncCommandQueue\nMultithreadingTestES3.CreateFramebufferFetchMidRenderPass/ES3_Vulkan_SwiftShader_NoPreferMonolithicPipelinesOverLibraries\n```\nare failing for us as well and we are skipping it for now",
+      "parentUuid": "15d43ffb_46891bc4",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbdb173_ab588d5d",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
