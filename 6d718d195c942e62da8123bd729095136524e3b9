@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28dd3d39_ced4f387",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-28T13:56:12Z",
+      "side": 1,
+      "message": "Yeap, they are queried from GL, so the function can restore the state afterwards.",
+      "parentUuid": "aeee583d_ca35b00c",
+      "range": {
+        "startLine": 2484,
+        "startChar": 0,
+        "endLine": 2487,
+        "endChar": 44
+      },
+      "revId": "6d718d195c942e62da8123bd729095136524e3b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "752d27bd_c9aca3d2",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-28T00:11:55Z",
       "side": 1,
       "message": "*One resolve FBO and texture?",
+      "range": {
+        "startLine": 7133,
+        "startChar": 14,
+        "endLine": 7133,
+        "endChar": 30
+      },
+      "revId": "6d718d195c942e62da8123bd729095136524e3b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc44f9d_f977b32f",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-28T13:56:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "752d27bd_c9aca3d2",
       "range": {
         "startLine": 7133,
         "startChar": 14,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97fd7f3b_11760975",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-28T13:56:12Z",
+      "side": 1,
+      "message": "Oh yes, thanks for catching this",
+      "parentUuid": "917dc2cf_a6e77ad7",
+      "range": {
+        "startLine": 7449,
+        "startChar": 8,
+        "endLine": 7449,
+        "endChar": 26
+      },
+      "revId": "6d718d195c942e62da8123bd729095136524e3b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9677d63a_f76b481e",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-03-28T00:11:55Z",
       "side": 1,
       "message": "`GL_DEPTH_STENCIL_ATTACHMENT`?",
+      "range": {
+        "startLine": 7658,
+        "startChar": 50,
+        "endLine": 7658,
+        "endChar": 69
+      },
+      "revId": "6d718d195c942e62da8123bd729095136524e3b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3129ab02_8a1c2e90",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7658,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-28T13:56:12Z",
+      "side": 1,
+      "message": "No, this is unbinding the depth attachment, and the stencil attachment is changed in the next line.\n\nGL is weird in this way, you can bind depth and stencil separately, but if both are bound, they must be the same 😐",
+      "parentUuid": "9677d63a_f76b481e",
       "range": {
         "startLine": 7658,
         "startChar": 50,
