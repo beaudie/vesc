@@ -199,6 +199,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a3e96fa_ce7d300b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-03-28T12:14:14Z",
+      "side": 1,
+      "message": "this should enable emulated MSRTT on swiftshader -\n```\n     ANGLE_FEATURE_CONDITION(\u0026mFeatures, allowMultisampledRenderToTextureEmulation,\n-                            isTileBasedRenderer || isSamsung);\n+                            isTileBasedRenderer || isSamsung || isSwiftShader);\n```",
+      "parentUuid": "6fcbfb88_b501dde8",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbdb173_ab588d5d",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
