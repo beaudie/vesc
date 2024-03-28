@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd83e873_e2555b04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-03-28T23:16:45Z",
+      "side": 1,
+      "message": "lgtm+2\n\nVerified from looking at ContextMtl::drawElementsInstanced that there\u0027s no behavioral change.",
+      "revId": "59f623740bda56d1bcfed763e9217adf7c8d3db7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
