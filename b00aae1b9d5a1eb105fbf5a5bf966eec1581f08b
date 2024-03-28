@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01250a9e_716c470e",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7205,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-03-28T18:36:43Z",
+      "side": 1,
+      "message": "Discussed offline: `the old render pass with resolve is used` means `the old renderpass with resolve object is used for the new render pass`.",
+      "revId": "b00aae1b9d5a1eb105fbf5a5bf966eec1581f08b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
