@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeee583d_ca35b00c",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-28T00:11:55Z",
+      "side": 1,
+      "message": "Question: Wouldn\u0027t these values be overwritten by the `glGet*()` functions?",
+      "range": {
+        "startLine": 2484,
+        "startChar": 0,
+        "endLine": 2487,
+        "endChar": 44
+      },
+      "revId": "6d718d195c942e62da8123bd729095136524e3b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "752d27bd_c9aca3d2",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7133,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-28T00:11:55Z",
+      "side": 1,
+      "message": "*One resolve FBO and texture?",
+      "range": {
+        "startLine": 7133,
+        "startChar": 14,
+        "endLine": 7133,
+        "endChar": 30
+      },
+      "revId": "6d718d195c942e62da8123bd729095136524e3b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "917dc2cf_a6e77ad7",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7449,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-28T00:11:55Z",
+      "side": 1,
+      "message": "Should there be another `drawQuad()` (with resolve) in the test?",
+      "range": {
+        "startLine": 7449,
+        "startChar": 8,
+        "endLine": 7449,
+        "endChar": 26
+      },
+      "revId": "6d718d195c942e62da8123bd729095136524e3b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9677d63a_f76b481e",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7658,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-03-28T00:11:55Z",
+      "side": 1,
+      "message": "`GL_DEPTH_STENCIL_ATTACHMENT`?",
+      "range": {
+        "startLine": 7658,
+        "startChar": 50,
+        "endLine": 7658,
+        "endChar": 69
+      },
+      "revId": "6d718d195c942e62da8123bd729095136524e3b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
