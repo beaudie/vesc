@@ -93,6 +93,9 @@ void ToLower(std::string *str);
 // Convert to upper-case.
 void ToUpper(std::string *str);
 
+// Count the number of occurrences of a char
+size_t CountChar(std::string_view str, const char c);
+
 // Replaces the substring 'substring' in 'str' with 'replacement'. Returns true if successful.
 bool ReplaceSubstring(std::string *str,
                       const std::string &substring,

@@ -249,6 +249,11 @@ void ToUpper(std::string *str)
     }
 }
 
+size_t CountChar(std::string_view str, const char c)
+{
+    return std::count(str.begin(), str.end(), c);
+}
+
 bool ReplaceSubstring(std::string *str,
                       const std::string &substring,
                       const std::string &replacement)
