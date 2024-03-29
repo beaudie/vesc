@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05aca823_b97fee43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-29T17:40:18Z",
+      "side": 1,
+      "message": "Actually I think the reason is you are compiling with armv5 which is 32 bit architecture. std::atomic\u003cuint64_t\u003e will use lock on 32 bit architecture. But again, I am expecting ANGLE vulkan backend will mostly used on 64 bit platform. If not, it will still function, just a bit slow due to lock.",
+      "parentUuid": "88ce668d_d6652c69",
+      "revId": "ce8ce6f81eff8a84e2ea59930cb995b1107181e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e8fddf44_97df4483",
         "filename": "src/libANGLE/renderer/serial_utils.h",
         "patchSetId": 2
