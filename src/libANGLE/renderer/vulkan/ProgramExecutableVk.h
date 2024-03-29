@@ -106,6 +106,11 @@ struct DefaultUniformBlockVk final : private angle::NonCopyable
     std::vector<sh::BlockMemberInfo> uniformLayout;
 };
 
+namespace
+{
+class WarmUpTaskCommon;
+}  // namespace
+
 // Performance and resource counters.
 using DescriptorSetCountList   = angle::PackedEnumMap<DescriptorSetIndex, uint32_t>;
 using ImmutableSamplerIndexMap = angle::HashMap<vk::YcbcrConversionDesc, uint32_t>;
@@ -309,19 +314,14 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     const ShaderInterfaceVariableInfoMap &getVariableInfoMap() const { return mVariableInfoMap; }
 
-    angle::Result prepareForWarmUpPipelineCache(
-        vk::Context *context,
+    angle::Result warmUpPipelineCache(
+        vk::Renderer *renderer,
         vk::PipelineRobustness pipelineRobustness,
         vk::PipelineProtectedAccess pipelineProtectedAccess,
-        bool *isComputeOut,
-        angle::FixedVector<bool, 2> *surfaceRotationVariationsOut,
-        vk::GraphicsPipelineDesc *graphicsPipelineDescOut,
-        vk::RenderPass *renderPassOut);
-
+        std::vector<std::shared_ptr<LinkSubTask>> *postLinkSubTasksOut);
     angle::Result warmUpComputePipelineCache(vk::Context *context,
                                              vk::PipelineRobustness pipelineRobustness,
                                              vk::PipelineProtectedAccess pipelineProtectedAccess);
-
     angle::Result warmUpGraphicsPipelineCache(vk::Context *context,
                                               vk::PipelineRobustness pipelineRobustness,
                                               vk::PipelineProtectedAccess pipelineProtectedAccess,
@@ -329,6 +329,15 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                               const bool isSurfaceRotated,
                                               const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
                                               const vk::RenderPass &renderPass);
+    void waitForPostLinkTasks(const gl::Context *context) override
+    {
+        ContextVk *contextVk = vk::GetImpl(context);
+        waitForPostLinkTasksImpl(contextVk);
+    }
+
+    void waitForPostLinkTasksIfNecessary(
+        ContextVk *contextVk,
+        const vk::GraphicsPipelineDesc &currentGraphicsPipelineDesc);
 
     angle::Result mergePipelineCacheToRenderer(vk::Context *context) const;
 
@@ -462,6 +471,15 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                              const vk::RenderPass &compatibleRenderPass,
                                              const vk::GraphicsPipelineDesc **descPtrOut,
                                              vk::PipelineHelper **pipelineOut);
+    angle::Result prepareForWarmUpPipelineCache(
+        vk::Context *context,
+        vk::PipelineRobustness pipelineRobustness,
+        vk::PipelineProtectedAccess pipelineProtectedAccess,
+        bool *isComputeOut,
+        angle::FixedVector<bool, 2> *surfaceRotationVariationsOut,
+        vk::GraphicsPipelineDesc *graphicsPipelineDescOut,
+        vk::RenderPass *renderPassOut);
+    void waitForPostLinkTasksImpl(ContextVk *contextVk);
 
     angle::Result getOrAllocateDescriptorSet(vk::Context *context,
                                              UpdateDescriptorSetsBuilder *updateBuilder,
@@ -536,6 +554,9 @@ class ProgramExecutableVk : public ProgramExecutableImpl
     // With VK_EXT_graphics_pipeline_library, this cache is used for the "shaders" subset of the
     // pipeline.
     vk::PipelineCache mPipelineCache;
+
+    vk::GraphicsPipelineDesc mWarmUpGraphicsPipelineDesc;
+    std::vector<std::shared_ptr<rx::WarmUpTaskCommon>> mPostLinkSubTasks;
 
     // The "layout" information for descriptorSets
     vk::WriteDescriptorDescs mShaderResourceWriteDescriptorDescs;
