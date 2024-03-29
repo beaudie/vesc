@@ -38,6 +38,7 @@ class ProgramVk : public ProgramImpl
     void setSeparable(bool separable) override;
 
     angle::Result link(const gl::Context *context, std::shared_ptr<LinkTask> *linkTaskOut) override;
+    void waitForPostLinkTasks(const gl::Context *context) override;
     GLboolean validate(const gl::Caps &caps) override;
 
     const ProgramExecutableVk *getExecutable() const
