@@ -101,14 +101,18 @@ class ProgramMtl::LinkTaskMtl final : public LinkTask
     {}
     ~LinkTaskMtl() override = default;
 
-    std::vector<std::shared_ptr<LinkSubTask>> link(const gl::ProgramLinkedResources &resources,
-                                                   const gl::ProgramMergedVaryings &mergedVaryings,
-                                                   bool *areSubTasksOptionalOut) override
+    void link(const gl::ProgramLinkedResources &resources,
+              const gl::ProgramMergedVaryings &mergedVaryings,
+              std::vector<std::shared_ptr<LinkSubTask>> *linkSubTasksOut,
+              std::vector<std::shared_ptr<LinkSubTask>> *postLinkSubTasksOut) override
     {
-        std::vector<std::shared_ptr<LinkSubTask>> subTasks;
-        mResult                 = mProgram->linkJobImpl(mContext, resources, &subTasks);
-        *areSubTasksOptionalOut = false;
-        return subTasks;
+        ASSERT(linkSubTasksOut);
+        ASSERT(postLinkSubTasksOut);
+        linkSubTasksOut->clear();
+        postLinkSubTasksOut->clear();
+
+        mResult = mProgram->linkJobImpl(mContext, resources, linkSubTasksOut);
+        return;
     }
 
     angle::Result getResult(const gl::Context *context, gl::InfoLog &infoLog) override
