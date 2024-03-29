@@ -452,7 +452,7 @@ class Program final : public LabeledObject, public angle::Subject
         return mState.getFragmentOutputIndexes();
     }
 
-    bool needsSync() const { return !mPostLinkTasks.empty(); }
+    bool needsSync() const { return mPostLinkTasksPending; }
 
     angle::Result syncState(const Context *context);
 
@@ -539,14 +539,9 @@ class Program final : public LabeledObject, public angle::Subject
 
     bool mLinked;
     std::unique_ptr<LinkingState> mLinkingState;
+    bool mPostLinkTasksPending;
 
     egl::BlobCache::Key mProgramHash;
-
-    // Optional link tasks that may still be running after a link has succeeded.  These tasks are
-    // not waited on in |resolveLink| as they are optimization passes.  Instead, they are waited on
-    // when the program is first used.
-    std::vector<std::shared_ptr<rx::LinkSubTask>> mPostLinkTasks;
-    std::vector<std::shared_ptr<angle::WaitableEvent>> mPostLinkTaskWaitableEvents;
 
     unsigned int mRefCount;
 

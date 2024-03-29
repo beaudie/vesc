@@ -493,7 +493,7 @@ class ProgramD3D::LinkTaskD3D final : public LinkLoadTaskD3D
 
     std::vector<std::shared_ptr<LinkSubTask>> link(const gl::ProgramLinkedResources &resources,
                                                    const gl::ProgramMergedVaryings &mergedVaryings,
-                                                   bool *canSubTasksRunPostLinkOut) override;
+                                                   bool *hasPostLinkTasksOut) override;
 
   private:
     const gl::Version mClientVersion;
@@ -505,7 +505,7 @@ class ProgramD3D::LinkTaskD3D final : public LinkLoadTaskD3D
 std::vector<std::shared_ptr<LinkSubTask>> ProgramD3D::LinkTaskD3D::link(
     const gl::ProgramLinkedResources &resources,
     const gl::ProgramMergedVaryings &mergedVaryings,
-    bool *canSubTasksRunPostLinkOut)
+    bool *hasPostLinkTasksOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "LinkTaskD3D::link");
 
@@ -540,7 +540,7 @@ std::vector<std::shared_ptr<LinkSubTask>> ProgramD3D::LinkTaskD3D::link(
             mProvokingVertex));
     }
 
-    *canSubTasksRunPostLinkOut = false;
+    *hasPostLinkTasksOut = false;
     return subTasks;
 }
 
@@ -552,7 +552,7 @@ class ProgramD3D::LoadTaskD3D final : public LinkLoadTaskD3D
     {}
     ~LoadTaskD3D() override = default;
 
-    std::vector<std::shared_ptr<LinkSubTask>> load(bool *canSubTasksRunPostLinkOut) override
+    std::vector<std::shared_ptr<LinkSubTask>> load(bool *hasPostLinkTasksOut) override
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "LoadTaskD3D::load");
 
