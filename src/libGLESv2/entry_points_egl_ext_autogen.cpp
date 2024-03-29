@@ -10,7 +10,9 @@
 
 #include "libGLESv2/entry_points_egl_ext_autogen.h"
 
-#include "libANGLE/capture/capture_egl_autogen.h"
+#if defined(ANGLE_CAPTURE_ENABLED)
+#    include "libANGLE/capture/capture_egl_autogen.h"
+#endif
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/egl_context_lock_impl.h"

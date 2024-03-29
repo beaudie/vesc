@@ -19,6 +19,10 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/entry_points_utils.h"
 
+#if !ANGLE_CAPTURE_ENABLED
+#    error Frame capture must be enabled to include this file.
+#endif  // !ANGLE_CAPTURE_ENABLED
+
 namespace gl
 {
 enum class BigGLEnum;

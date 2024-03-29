@@ -14,19 +14,23 @@
 #include "common/gl_enum_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
-#include "libANGLE/capture/capture_gles_ext_autogen.h"
 #include "libANGLE/context_private_call_gles_autogen.h"
+#if defined(ANGLE_CAPTURE_ENABLE)
+#    include "libANGLE/capture/capture_gles_ext_autogen.h"
+#endif
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/validationESEXT.h"
 #include "libGLESv2/global_state.h"
 
 using namespace gl;
 
-#include "libANGLE/capture/capture_gles_1_0_autogen.h"
-#include "libANGLE/capture/capture_gles_2_0_autogen.h"
-#include "libANGLE/capture/capture_gles_3_0_autogen.h"
-#include "libANGLE/capture/capture_gles_3_1_autogen.h"
-#include "libANGLE/capture/capture_gles_3_2_autogen.h"
+#if defined(ANGLE_CAPTURE_ENABLED)
+#    include "libANGLE/capture/capture_gles_1_0_autogen.h"
+#    include "libANGLE/capture/capture_gles_2_0_autogen.h"
+#    include "libANGLE/capture/capture_gles_3_0_autogen.h"
+#    include "libANGLE/capture/capture_gles_3_1_autogen.h"
+#    include "libANGLE/capture/capture_gles_3_2_autogen.h"
+#endif
 #include "libANGLE/validationES1.h"
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"

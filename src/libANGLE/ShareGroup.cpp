@@ -18,7 +18,9 @@
 #include "common/debug.h"
 #include "common/platform_helpers.h"
 #include "libANGLE/Context.h"
-#include "libANGLE/capture/FrameCapture.h"
+#if defined(ANGLE_CAPTURE_ENABLED)
+#    include "libANGLE/capture/FrameCapture.h"
+#endif
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/ShareGroupImpl.h"
 
@@ -52,8 +54,11 @@ void ShareGroupState::removeSharedContext(gl::Context *context)
 // ShareGroup
 ShareGroup::ShareGroup(rx::EGLImplFactory *factory)
     : mRefCount(1),
-      mImplementation(factory->createShareGroup(mState)),
+      mImplementation(factory->createShareGroup(mState))
+#if defined(ANGLE_CAPTURE_ENABLED)
+      ,
       mFrameCaptureShared(new angle::FrameCaptureShared)
+#endif
 {}
 
 ShareGroup::~ShareGroup()

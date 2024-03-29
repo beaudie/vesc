@@ -1124,7 +1124,9 @@ TEMPLATE_SOURCES_INCLUDES = """\
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/context_private_call_gles_autogen.h"
+#if defined(ANGLE_CAPTURE_ENABLE)
 #include "libANGLE/capture/capture_{header_version}_autogen.h"
+#endif
 #include "libANGLE/validation{validation_header_version}.h"
 #include "libANGLE/entry_points_utils.h"
 #include "libGLESv2/global_state.h"
@@ -1142,11 +1144,13 @@ GLES_EXT_HEADER_INCLUDES = TEMPLATE_HEADER_INCLUDES.format(
 
 GLES_EXT_SOURCE_INCLUDES = TEMPLATE_SOURCES_INCLUDES.format(
     header_version="gles_ext", validation_header_version="ESEXT") + """
+#if defined(ANGLE_CAPTURE_ENABLED)
 #include "libANGLE/capture/capture_gles_1_0_autogen.h"
 #include "libANGLE/capture/capture_gles_2_0_autogen.h"
 #include "libANGLE/capture/capture_gles_3_0_autogen.h"
 #include "libANGLE/capture/capture_gles_3_1_autogen.h"
 #include "libANGLE/capture/capture_gles_3_2_autogen.h"
+#endif
 #include "libANGLE/validationES1.h"
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
@@ -1169,7 +1173,9 @@ TEMPLATE_DESKTOP_GL_SOURCE_INCLUDES = """\
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/context_private_call_gles_autogen.h"
 #include "libANGLE/context_private_call_gl_autogen.h"
+#if defined(ANGLE_CAPTURE_ENABLED)
 #include "libANGLE/capture/capture_gl_{1}_autogen.h"
+#endif
 #include "libANGLE/validationEGL.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES1.h"
@@ -1193,8 +1199,9 @@ EGL_HEADER_INCLUDES = """\
 EGL_SOURCE_INCLUDES = """\
 #include "libGLESv2/entry_points_egl_autogen.h"
 #include "libGLESv2/entry_points_egl_ext_autogen.h"
-
+#if defined(ANGLE_CAPTURE_ENABLED)
 #include "libANGLE/capture/capture_egl_autogen.h"
+#endif
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/egl_context_lock_impl.h"
@@ -1214,7 +1221,9 @@ EGL_EXT_HEADER_INCLUDES = """\
 EGL_EXT_SOURCE_INCLUDES = """\
 #include "libGLESv2/entry_points_egl_ext_autogen.h"
 
+#if defined(ANGLE_CAPTURE_ENABLED)
 #include "libANGLE/capture/capture_egl_autogen.h"
+#endif
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/egl_context_lock_impl.h"

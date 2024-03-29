@@ -902,7 +902,6 @@ angle_source_set("angle_version") {
       ":libGL",
       ":libGLESv1_CM",
       ":libGLESv2",
-      ":libGLESv2_capture_complement",
     ]
     if (angle_enable_vulkan) {
       visibility += [
@@ -1155,24 +1154,6 @@ angle_source_set("libANGLE_no_vulkan") {
   }
 }
 
-config("angle_frame_capture_disabled") {
-  defines = [ "ANGLE_CAPTURE_ENABLED=0" ]
-}
-
-angle_source_set("angle_frame_capture_mock") {
-  public_deps = [ ":libANGLE_headers" ]
-  public_configs = [ ":angle_frame_capture_disabled" ]
-  sources = [
-    "src/common/frame_capture_utils.h",
-    "src/common/frame_capture_utils_autogen.h",
-    "src/common/gl_enum_utils_autogen.h",
-    "src/libANGLE/capture/FrameCapture.h",
-    "src/libANGLE/capture/FrameCapture_mock.cpp",
-    "src/libANGLE/capture/serialize.h",
-    "src/libANGLE/capture/serialize_mock.cpp",
-  ]
-}
-
 angle_source_set("angle_gl_enum_utils") {
   deps = [ ":angle_common" ]
   sources = [
@@ -1280,8 +1261,7 @@ if (angle_has_rapidjson) {
   }
 }
 
-assert(angle_has_frame_capture || !angle_with_capture_by_default)
-if (angle_has_frame_capture) {
+if (angle_with_capture_by_default) {
   config("angle_frame_capture_enabled") {
     defines = [ "ANGLE_CAPTURE_ENABLED=1" ]
   }
@@ -1290,27 +1270,23 @@ if (angle_has_frame_capture) {
 template("libANGLE_template") {
   angle_source_set("${target_name}") {
     public_deps = invoker.public_deps + [ ":libANGLE_no_vulkan" ]
-    public_configs = [ ":angle_frame_capture_disabled" ]
-
-    # gl_enum_utils defaults included in with_capture build
-    deps = [ ":angle_frame_capture_mock" ]
     if (angle_enable_trace || is_debug) {
-      deps += [ ":angle_gl_enum_utils" ]
+      public_deps += [ ":angle_gl_enum_utils" ]
     }
   }
 
-  if (angle_has_frame_capture) {
+  if (angle_with_capture_by_default) {
     angle_source_set("${target_name}_with_capture") {
       public_deps = invoker.public_deps + [
-                      ":angle_gl_enum_utils",
                       ":libANGLE_no_vulkan",
+                      ":libangle_headers",
                     ]
       deps = [
         ":angle_capture_common",
         ":angle_compression",
       ]
       public_configs = [ ":angle_frame_capture_enabled" ]
-      sources = libangle_capture_sources
+      sources = [ libangle_capture_sources ]
 
       if (angle_has_rapidjson) {
         public_deps += [ ":angle_json_serializer" ]
@@ -1462,11 +1438,7 @@ template("angle_libGLESv2") {
 }
 
 angle_libGLESv2("libGLESv2") {
-  if (angle_with_capture_by_default) {
-    deps = [ ":libANGLE_with_capture" ]
-  } else {
-    deps = [ ":libANGLE" ]
-  }
+  deps = [ ":libANGLE" ]
 }
 
 if (angle_enable_vulkan) {
@@ -1476,19 +1448,6 @@ if (angle_enable_vulkan) {
       deps = [ ":libANGLE_vulkan_secondaries_with_capture" ]
     } else {
       deps = [ ":libANGLE_vulkan_secondaries" ]
-    }
-  }
-}
-
-# Output capture lib when `angle_with_capture_by_default` disabled, vice versa.
-if (angle_has_frame_capture) {
-  angle_libGLESv2("libGLESv2_capture_complement") {
-    if (angle_with_capture_by_default) {
-      deps = [ ":libANGLE" ]
-      output_name += "_no_capture"
-    } else {
-      deps = [ ":libANGLE_with_capture" ]
-      output_name += "_with_capture"
     }
   }
 }

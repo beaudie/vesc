@@ -37,7 +37,9 @@
 #include "libANGLE/Stream.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Thread.h"
-#include "libANGLE/capture/FrameCapture.h"
+#if defined(ANGLE_CAPTURE_ENABLED)
+#    include "libANGLE/capture/FrameCapture.h"
+#endif
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/renderer/DeviceImpl.h"
 #include "libANGLE/renderer/DisplayImpl.h"

@@ -28,7 +28,9 @@
 #include "libANGLE/Uniform.h"
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/Version.h"
-#include "libANGLE/capture/FrameCapture.h"
+#if defined(ANGLE_CAPTURE_ENABLED)
+#    include "libANGLE/capture/FrameCapture.h"
+#endif
 #include "libANGLE/features.h"
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/queryconversions.h"
@@ -2170,6 +2172,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
                            "on this driver.");
     }
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     if (context->getShareGroup()->getFrameCaptureShared()->enabled())
     {
         // Serialize the source for each stage for re-use during capture
@@ -2192,6 +2195,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
             }
         }
     }
+#endif
 
     // Need to wait for post-link tasks because they may be writing to caches that |serialize| would
     // read from.  In the Vulkan backend, that would be the VkPipelineCache contents.
@@ -2285,6 +2289,7 @@ bool Program::deserialize(const Context *context, BinaryInputStream &stream)
         mState.mExecutable->mTransformFeedbackVaryingNames = mState.mTransformFeedbackVaryingNames;
     }
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     if (context->getShareGroup()->getFrameCaptureShared()->enabled())
     {
         // Extract the source for each stage from the program binary
@@ -2301,6 +2306,7 @@ bool Program::deserialize(const Context *context, BinaryInputStream &stream)
         context->getShareGroup()->getFrameCaptureShared()->setProgramSources(id(),
                                                                              std::move(sources));
     }
+#endif
 
     return true;
 }

@@ -14,8 +14,10 @@
 #include "common/gl_enum_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
-#include "libANGLE/capture/capture_gles_3_1_autogen.h"
 #include "libANGLE/context_private_call_gles_autogen.h"
+#if defined(ANGLE_CAPTURE_ENABLE)
+#    include "libANGLE/capture/capture_gles_3_1_autogen.h"
+#endif
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/validationES31.h"
 #include "libGLESv2/global_state.h"

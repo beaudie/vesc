@@ -74,7 +74,9 @@ class ShareGroup final : angle::NonCopyable
 
     rx::UniqueSerial generateFramebufferSerial() { return mFramebufferSerialFactory.generate(); }
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     angle::FrameCaptureShared *getFrameCaptureShared() { return mFrameCaptureShared.get(); }
+#endif
 
     void finishAllContexts();
 
@@ -90,8 +92,10 @@ class ShareGroup final : angle::NonCopyable
     rx::ShareGroupImpl *mImplementation;
     rx::UniqueSerialFactory mFramebufferSerialFactory;
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     // Note: we use a raw pointer here so we can exclude frame capture sources from the build.
     std::unique_ptr<angle::FrameCaptureShared> mFrameCaptureShared;
+#endif
 
     ShareGroupState mState;
 };

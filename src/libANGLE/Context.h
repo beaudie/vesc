@@ -44,8 +44,10 @@
 namespace angle
 {
 class Closure;
+#if defined(ANGLE_CAPTURE_ENABLED)
 class FrameCapture;
 class FrameCaptureShared;
+#endif
 struct FrontendFeatures;
 class WaitableEvent;
 }  // namespace angle
@@ -772,7 +774,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     const angle::FrontendFeatures &getFrontendFeatures() const;
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     angle::FrameCapture *getFrameCapture() const { return mFrameCapture.get(); }
+#endif
 
     const VertexArrayMap &getVertexArraysForCapture() const { return mVertexArrayMap; }
     const QueryMap &getQueriesForCapture() const { return mQueryMap; }
@@ -998,8 +1002,10 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     mutable Optional<angle::ScratchBuffer> mScratchBuffer;
     mutable Optional<angle::ScratchBuffer> mZeroFilledBuffer;
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     // Note: we use a raw pointer here so we can exclude frame capture sources from the build.
     std::unique_ptr<angle::FrameCapture> mFrameCapture;
+#endif
 
     // Cache representation of the serialized context string.
     mutable std::string mCachedSerializedStateString;

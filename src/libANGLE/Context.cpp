@@ -42,10 +42,13 @@
 #include "libANGLE/Semaphore.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
+#include "libANGLE/Thread.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexArray.h"
-#include "libANGLE/capture/FrameCapture.h"
-#include "libANGLE/capture/serialize.h"
+#if defined(ANGLE_CAPTURE_ENABLED)
+#    include "libANGLE/capture/FrameCapture.h"
+#    include "libANGLE/capture/serialize.h"
+#endif
 #include "libANGLE/context_private_call_gles_autogen.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
@@ -616,7 +619,9 @@ Context::Context(egl::Display *display,
       mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
       mProgramObserverBinding(this, kProgramSubjectIndex),
       mProgramPipelineObserverBinding(this, kProgramPipelineSubjectIndex),
+#if defined(ANGLE_CAPTURE_ENABLED)
       mFrameCapture(new angle::FrameCapture),
+#endif
       mRefCount(0),
       mOverlay(mImplementation.get()),
       mIsExternal(GetIsExternal(attribs)),
@@ -829,8 +834,10 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // that still have it current.
     ASSERT(mIsDestroyed == true && mRefCount == 0);
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     // Dump frame capture if enabled.
     getShareGroup()->getFrameCaptureShared()->onDestroyContext(this);
+#endif
 
     // Remove context from the capture share group
     getShareGroup()->removeSharedContext(this);
@@ -966,7 +973,9 @@ egl::Error Context::makeCurrent(egl::Display *display,
 
     ANGLE_TRY(unsetDefaultFramebuffer());
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     getShareGroup()->getFrameCaptureShared()->onMakeCurrent(this, drawSurface);
+#endif
 
     // TODO(jmadill): Rework this when we support ContextImpl
     mState.setAllDirtyBits();
@@ -3458,6 +3467,7 @@ const GLubyte *Context::getString(GLenum name) const
         case GL_REQUESTABLE_EXTENSIONS_ANGLE:
             return reinterpret_cast<const GLubyte *>(mRequestableExtensionString);
 
+#if defined(ANGLE_CAPTURE_ENABLED)
         case GL_SERIALIZED_CONTEXT_STRING_ANGLE:
             if (angle::SerializeContextToString(this, &mCachedSerializedStateString) ==
                 angle::Result::Continue)
@@ -3468,7 +3478,7 @@ const GLubyte *Context::getString(GLenum name) const
             {
                 return nullptr;
             }
-
+#endif
         default:
             UNREACHABLE();
             return nullptr;
@@ -4133,6 +4143,7 @@ void Context::initCaps()
 #endif
     }
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     // If we're capturing application calls for replay, apply some feature limits to increase
     // portability of the trace.
     if (getShareGroup()->getFrameCaptureShared()->enabled() ||
@@ -4260,7 +4271,7 @@ void Context::initCaps()
         // Test if we require shadow memory for coherent buffer tracking
         getShareGroup()->getFrameCaptureShared()->determineMemoryProtectionSupport(this);
     }
-
+#endif
     // Disable support for OES_get_program_binary
     if (mDisplay->getFrontendFeatures().disableProgramBinary.enabled)
     {
@@ -5743,6 +5754,7 @@ void *Context::mapBufferRange(BufferBinding target,
         return nullptr;
     }
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     // TODO: (anglebug.com/7821): Modify return value in entry point layer
     angle::FrameCaptureShared *frameCaptureShared = getShareGroup()->getFrameCaptureShared();
     if (frameCaptureShared->enabled())
@@ -5753,6 +5765,9 @@ void *Context::mapBufferRange(BufferBinding target,
     {
         return buffer->getMapPointer();
     }
+#else
+    return buffer->getMapPointer();
+#endif
 }
 
 void Context::flushMappedBufferRange(BufferBinding /*target*/,
@@ -9282,9 +9297,13 @@ std::shared_ptr<angle::WaitableEvent> Context::postCompileLinkTask(
     // If the job is thread-safe, but it's still not going to be threaded, then it's performed as an
     // unlocked tail call to allow other threads to proceed.  This is only possible if the results
     // of the call are not immediately needed in the same entry point call.
+
+    bool frameCaptureEnabled = false;
+#if defined(ANGLE_CAPTURE_ENABLED)
+    frameCaptureEnabled = getShareGroup()->getFrameCaptureShared()->enabled();
+#endif
     if (isThreadSafe && !workerPool->isAsync() &&
-        resultExpectancy == angle::JobResultExpectancy::Future &&
-        !getShareGroup()->getFrameCaptureShared()->enabled())
+        resultExpectancy == angle::JobResultExpectancy::Future && !frameCaptureEnabled)
     {
         std::shared_ptr<angle::AsyncWaitableEvent> event =
             std::make_shared<angle::AsyncWaitableEvent>();
@@ -9544,8 +9563,10 @@ egl::Error Context::unsetDefaultFramebuffer()
 
 void Context::onPreSwap()
 {
+#if defined(ANGLE_CAPTURE_ENABLED)
     // Dump frame capture if enabled.
     getShareGroup()->getFrameCaptureShared()->onEndFrame(this);
+#endif
 }
 
 void Context::getTexImage(TextureTarget target,

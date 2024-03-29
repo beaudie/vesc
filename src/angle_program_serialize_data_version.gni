@@ -79,6 +79,6 @@ if (angle_enable_metal) {
   }
 }
 
-if (angle_has_frame_capture) {
+if (angle_with_capture_by_default) {
   angle_code_affecting_program_serialize += libangle_capture_sources
 }

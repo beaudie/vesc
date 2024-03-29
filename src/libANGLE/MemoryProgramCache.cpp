@@ -22,7 +22,9 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Uniform.h"
-#include "libANGLE/capture/FrameCapture.h"
+#if defined(ANGLE_CAPTURE_ENABLED)
+#    include "libANGLE/capture/FrameCapture.h"
+#endif
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "platform/PlatformMethods.h"
@@ -100,8 +102,10 @@ void MemoryProgramCache::ComputeHash(const Context *context,
     }
     hashStream.writeInt(program->getTransformFeedbackBufferMode());
 
+#if defined(ANGLE_CAPTURE_ENABLED)
     // Include the status of FrameCapture, which adds source strings to the binary
     hashStream.writeBool(context->getShareGroup()->getFrameCaptureShared()->enabled());
+#endif
 
     // Call the secure SHA hashing function.
     const std::vector<uint8_t> &programKey = hashStream.getData();
