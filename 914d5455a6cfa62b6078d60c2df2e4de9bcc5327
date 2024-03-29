@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f755d085_0e4005b0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3109,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-03-29T22:07:11Z",
+      "side": 1,
+      "message": "Can\u0027t you just do this:\n`mState.hasBeenBoundToMSRTTFramebuffer() !\u003d (mImageCreateFlags \u0026 VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT) !\u003d0 `and get rid of wasBoundToMSRTTFramebuffer as well as mHasBeenBoundToMSRTTFramebuffer? That way less things to track.",
+      "range": {
+        "startLine": 3109,
+        "startChar": 8,
+        "endLine": 3109,
+        "endChar": 69
+      },
+      "revId": "914d5455a6cfa62b6078d60c2df2e4de9bcc5327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
