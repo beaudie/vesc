@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd3aafda_6379281e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T01:29:32Z",
+      "side": 1,
+      "message": "nit: `FramebufferTexture2DMultisampleEXT`\n\n`FramebufferTexture2DMultisample` doesn\u0027t exist",
+      "range": {
+        "startLine": 17,
+        "startChar": 9,
+        "endLine": 17,
+        "endChar": 40
+      },
+      "revId": "0a504a5656754715a4bb630de2050dfb49b22b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d32b6a3d_3cae4d6e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T01:29:32Z",
+      "side": 1,
+      "message": "suggest: `mHasBeenBoundToMSRTTFramebuffer`\n\nOtherwise it sounds like it\u0027s any multisampled FBO",
+      "revId": "0a504a5656754715a4bb630de2050dfb49b22b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c997332b_90ad287d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T01:29:32Z",
+      "side": 1,
+      "message": "Just one naming nit",
+      "revId": "0a504a5656754715a4bb630de2050dfb49b22b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41ea846b_d0e93b4b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6337,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T01:29:32Z",
+      "side": 1,
+      "message": "Similarly:\n\n```suggestion\n        textureObj-\u003eonBindToMSRTTFramebuffer();\n```",
+      "range": {
+        "startLine": 6337,
+        "startChar": 20,
+        "endLine": 6337,
+        "endChar": 42
+      },
+      "revId": "0a504a5656754715a4bb630de2050dfb49b22b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3678a096_b9e94ea6",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T01:29:32Z",
+      "side": 1,
+      "message": "And\n\n```suggestion\n        DIRTY_BIT_BOUND_TO_MSRTT_FRAMEBUFFER,\n```",
+      "revId": "0a504a5656754715a4bb630de2050dfb49b22b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46a78709_d495550a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3062,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T01:29:32Z",
+      "side": 1,
+      "message": "MSRTT\n```suggestion\n    // Create a new image if it is bound to a MSRTT framebuffer (only if it did not already\n```",
+      "range": {
+        "startLine": 3062,
+        "startChar": 46,
+        "endLine": 3062,
+        "endChar": 57
+      },
+      "revId": "0a504a5656754715a4bb630de2050dfb49b22b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cadbc85_262d09e0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T01:29:32Z",
+      "side": 1,
+      "message": "```suggestion\n    // is bound to an MSRTT framebuffer.\n```",
+      "revId": "0a504a5656754715a4bb630de2050dfb49b22b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93a13d45_b2c396be",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T01:29:32Z",
+      "side": 1,
+      "message": "```suggestion\n    bool mHasBeenBoundToMSRTTFramebuffer;\n```",
+      "revId": "0a504a5656754715a4bb630de2050dfb49b22b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aabacec_dd04608d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T01:29:32Z",
+      "side": 1,
+      "message": "```suggestion\n    // it will be used (if available) when recreating the image if it is bound to an MSRTT\n```",
+      "revId": "0a504a5656754715a4bb630de2050dfb49b22b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
