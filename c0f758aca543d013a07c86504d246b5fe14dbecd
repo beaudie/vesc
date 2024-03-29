@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bde0059_96543b39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T18:48:43Z",
+      "side": 1,
+      "message": "Thank you for reworking this. Front-end LGTM",
+      "revId": "c0f758aca543d013a07c86504d246b5fe14dbecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91db22f7_9f0755c8",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T18:48:43Z",
+      "side": 1,
+      "message": "nit: I don\u0027t know about this backend, but elsewhere we came to realize `bool` args always lead to unreadable code. Having an `enum class` just to give the true and false meaningful names is the recommendation in vulkan/ at least.",
+      "range": {
+        "startLine": 171,
+        "startChar": 36,
+        "endLine": 171,
+        "endChar": 40
+      },
+      "revId": "c0f758aca543d013a07c86504d246b5fe14dbecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "184c36e1_879efd84",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-29T18:48:43Z",
+      "side": 1,
+      "message": "This looks fishy. You don\u0027t want to do the whole sync, do you? Then you can refactor that out of `syncState` and have this call that directly.",
+      "revId": "c0f758aca543d013a07c86504d246b5fe14dbecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
