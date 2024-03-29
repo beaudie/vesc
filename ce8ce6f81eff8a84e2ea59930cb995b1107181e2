@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d0b3ffa_e806f6a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3367591
+      },
+      "writtenOn": "2024-03-29T08:05:29Z",
+      "side": 1,
+      "message": "Hi,\n\nI came across a compile error while trying to bump webkitgtk on buildroot.\n\n\n```\nFAILED: Source/ThirdParty/ANGLE/CMakeFiles/ANGLE.dir/src/libANGLE/renderer/gl/RenderbufferGL.cpp.o \n/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/bin/arm-linux-g++ --sysroot\u003d/home/thomas/br-test-pkg/bootlin-armv5-uclibc/host/arm-buildroot-linux-uclibcgnueabi/sysroot -DANGLE_ENABLE_ESSL -DANGLE_ENABLE_GLSL -DANGLE_ENABLE_OPENGL -DANGLE_PLATFORM_LINUX -DBUILDING_GTK__\u003d1 -DBUILDING_WEBKIT\u003d1 -DBUILDING_WITH_CMAKE\u003d1 -DEGL_EGL_PROTOTYPES\u003d0 -DEGL_NO_PLATFORM_SPECIFIC_TYPES -DGETTEXT_PACKAGE\u003d\\\"WebKitGTK-4.1\\\" -DGL_GLES_PROTOTYPES\u003d0 -DHAVE_CONFIG_H\u003d1 -DJSC_GLIB_API_ENABLED -DLIBANGLE_IMPLEMENTATION -DPAS_BMALLOC\u003d1 -DUSE_SYSTEM_EGL -I/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/WebKit -I/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/include -I/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/include/KHR -I/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src -I/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src/common/base -I/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src/common/third_party/xxhash -I/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/third_party/zlib/google -fdiagnostics-color\u003dalways -Wextra -Wall -pipe -fmax-errors\u003d20 -Wno-odr -Wno-stringop-overread -Wno-stringop-overflow -Wno-nonnull -Wno-array-bounds -Wno-expansion-to-defined -Wno-noexcept-type -Wno-psabi -Wno-misleading-indentation -Wno-maybe-uninitialized -Wundef -Wpointer-arith -Wmissing-format-attribute -Wformat-security -Wcast-align -Wno-tautological-compare -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS\u003d64 -O2 -g0 -fno-strict-aliasing -fno-exceptions -fno-rtti  -DNDEBUG -fPIC -fvisibility\u003dhidden -w -std\u003dc++20 -MD -MT Source/ThirdParty/ANGLE/CMakeFiles/ANGLE.dir/src/libANGLE/renderer/gl/RenderbufferGL.cpp.o -MF Source/ThirdParty/ANGLE/CMakeFiles/ANGLE.dir/src/libANGLE/renderer/gl/RenderbufferGL.cpp.o.d -o Source/ThirdParty/ANGLE/CMakeFiles/ANGLE.dir/src/libANGLE/renderer/gl/RenderbufferGL.cpp.o -c /home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src/libANGLE/renderer/gl/RenderbufferGL.cpp\nIn file included from /home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src/libANGLE/RefCountObject.h:20,\n                 from /home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src/libANGLE/angletypes.h:19,\n                 from /home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src/libANGLE/renderer/RenderbufferImpl.h:15,\n                 from /home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src/libANGLE/renderer/gl/RenderbufferGL.h:12,\n                 from /home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src/libANGLE/renderer/gl/RenderbufferGL.cpp:9:\n/home/thomas/br-test-pkg/bootlin-armv5-uclibc/build/webkitgtk-2.44.0/Source/ThirdParty/ANGLE/src/libANGLE/renderer/serial_utils.h:132:37: error: static assertion failed: Must always be lock free\n  132 |     static_assert(decltype(mValue)::is_always_lock_free, \"Must always be lock free\");\n      |                   ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~\n[824/6278] Building CXX object Source/ThirdParty/ANGLE/CMakeFiles/ANGLE.dir/src/libANGLE/renderer/gl/ShaderGL.cpp.o\n```\n\nAre there any compiler limitations that should be considered, or is this a bug?\n\n\nKind regards,\n\n\nThomas Devoogdt",
+      "revId": "ce8ce6f81eff8a84e2ea59930cb995b1107181e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8fddf44_97df4483",
