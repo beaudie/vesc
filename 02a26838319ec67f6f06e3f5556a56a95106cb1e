@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c01e6f18_1a055853",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-03-29T12:48:44Z",
+      "side": 1,
+      "message": "Geoff, wranglers, PTAL.\n\nThis also works around the cast warnings I\u0027ve mentioned in\nhttps://chromium-review.googlesource.com/c/chromium/src/+/5405904/3#message-03bc465bc9cccbf1b2ec446acfb288cc1df453f4\nbut we\u0027ll need to find a way to deal with these eventually.\n-Wno-cast-function-type worked for me locally.",
+      "revId": "02a26838319ec67f6f06e3f5556a56a95106cb1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
