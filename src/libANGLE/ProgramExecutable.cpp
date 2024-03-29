@@ -820,6 +820,9 @@ void ProgramExecutable::reset()
     mSamplerBindings.clear();
     mSamplerBoundTextureUnits.clear();
     mImageBindings.clear();
+
+    mPostLinkSubTasks.clear();
+    mPostLinkSubTaskWaitableEvents.clear();
 }
 
 void ProgramExecutable::load(gl::BinaryInputStream *stream)
@@ -3150,6 +3153,16 @@ void ProgramExecutable::setBaseInstanceUniform(GLuint baseInstance)
     mCachedBaseInstance   = baseInstance;
     GLint baseInstanceInt = baseInstance;
     mImplementation->setUniform1iv(mPod.baseInstanceLocation, 1, &baseInstanceInt);
+}
+
+void ProgramExecutable::waitForPostLinkTasks(const Context *context)
+{
+    if (mPostLinkSubTasks.empty())
+    {
+        return;
+    }
+
+    mImplementation->waitForPostLinkTasks(context);
 }
 
 void InstallExecutable(const Context *context,
