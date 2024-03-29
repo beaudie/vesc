@@ -65,9 +65,9 @@ class LinkTask
     virtual std::vector<std::shared_ptr<LinkSubTask>> link(
         const gl::ProgramLinkedResources &resources,
         const gl::ProgramMergedVaryings &mergedVaryings,
-        bool *canSubTasksRunPostLinkOut);
+        bool *hasPostLinkTasksOut);
     // Used for load()
-    virtual std::vector<std::shared_ptr<LinkSubTask>> load(bool *canSubTasksRunPostLinkOut);
+    virtual std::vector<std::shared_ptr<LinkSubTask>> load(bool *hasPostLinkTasksOut);
     virtual angle::Result getResult(const gl::Context *context, gl::InfoLog &infoLog) = 0;
 
     // Used by the GL backend to query whether the driver is linking in parallel internally.
@@ -92,7 +92,8 @@ class ProgramImpl : angle::NonCopyable
     virtual void prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders) {}
     virtual angle::Result link(const gl::Context *context,
                                std::shared_ptr<LinkTask> *linkTaskOut) = 0;
-    virtual GLboolean validate(const gl::Caps &caps)                   = 0;
+    virtual void waitForPostLinkTasks(const gl::Context *context) {}
+    virtual GLboolean validate(const gl::Caps &caps) = 0;
 
     // Implementation-specific method for ignoring unreferenced uniforms. Some implementations may
     // perform more extensive analysis and ignore some locations that ANGLE doesn't detect as
