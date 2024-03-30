@@ -1350,7 +1350,7 @@ angle::Result ProgramExecutableVk::initGraphicsShaderPrograms(
     return angle::Result::Continue;
 }
 
-angle::Result ProgramExecutableVk::createGraphicsPipelineImpl(
+angle::Result ProgramExecutableVk::initProgramThenCreateGraphicsPipeline(
     vk::Context *context,
     ProgramTransformOptions transformOptions,
     vk::GraphicsPipelineSubset pipelineSubset,
@@ -1364,12 +1364,44 @@ angle::Result ProgramExecutableVk::createGraphicsPipelineImpl(
     vk::ShaderProgramHelper *shaderProgram = nullptr;
     ANGLE_TRY(initGraphicsShaderPrograms(context, transformOptions, &shaderProgram));
 
-    const uint8_t programIndex = GetGraphicsProgramIndex(transformOptions);
+    return createGraphicsPipelineImpl(context, transformOptions, pipelineSubset, pipelineCache,
+                                      source, desc, compatibleRenderPass, descPtrOut, pipelineOut);
+}
 
-    // Set specialization constants.  These are also a part of GraphicsPipelineDesc, so that a
-    // change in specialization constants also results in a new pipeline.
+angle::Result ProgramExecutableVk::createGraphicsPipelineImpl(
+    vk::Context *context,
+    ProgramTransformOptions transformOptions,
+    vk::GraphicsPipelineSubset pipelineSubset,
+    vk::PipelineCacheAccess *pipelineCache,
+    PipelineSource source,
+    const vk::GraphicsPipelineDesc &desc,
+    const vk::RenderPass &compatibleRenderPass,
+    const vk::GraphicsPipelineDesc **descPtrOut,
+    vk::PipelineHelper **pipelineOut)
+{
+    // This method assumes that all the state necessary to create a graphics pipeline has already
+    // been setup by the caller. Assert that all required state is valid so all that is left will
+    // be the call to `vkCreateGraphicsPipelines`
+
+    // Make sure program index is within range
+    const uint8_t programIndex = GetGraphicsProgramIndex(transformOptions);
+    ASSERT(programIndex >= 0 && programIndex < ProgramTransformOptions::kPermutationCount);
+
+    // Make sure the program is valid
+    vk::ShaderProgramHelper *shaderProgram = mGraphicsProgramInfos[programIndex].getShaderProgram();
+    ASSERT(shaderProgram);
+
+    // Make sure the program contains valid shader modules for all linked shader stages
+    ProgramInfo &programInfo = mGraphicsProgramInfos[programIndex];
+    for (gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
+    {
+        ASSERT(programInfo.valid(shaderType));
+    }
+
+    // Generate spec consts, a change in which results in a new pipeline.
     vk::SpecializationConstants specConsts = MakeSpecConsts(transformOptions, desc);
 
+    // Choose appropriate pipeline cache based on pipeline subset
     if (pipelineSubset == vk::GraphicsPipelineSubset::Complete)
     {
         CompleteGraphicsPipelineCache &pipelines = mCompleteGraphicsPipelines[programIndex];
@@ -1450,9 +1482,9 @@ angle::Result ProgramExecutableVk::createGraphicsPipeline(
     ANGLE_TRY(contextVk->getRenderPassCache().getCompatibleRenderPass(
         contextVk, desc.getRenderPassDesc(), &compatibleRenderPass));
 
-    ANGLE_TRY(createGraphicsPipelineImpl(contextVk, transformOptions, pipelineSubset, pipelineCache,
-                                         source, desc, *compatibleRenderPass, descPtrOut,
-                                         pipelineOut));
+    ANGLE_TRY(initProgramThenCreateGraphicsPipeline(
+        contextVk, transformOptions, pipelineSubset, pipelineCache, source, desc,
+        *compatibleRenderPass, descPtrOut, pipelineOut));
 
     if (useProgramPipelineCache &&
         contextVk->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)
