@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c6da162_e7cda69e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-30T02:00:13Z",
+      "side": 1,
+      "message": "The MSRTT tests are known to be too strict, Geoff\u0027s noticed them with the GL backend, Mohan\u0027s noticed them on their devices, and enabling them on SwiftShader also shows the same issues. Feel free to +2, and I\u0027ll land this once the tests are fixed (Geoff\u0027s working on them I believe)",
+      "revId": "17eec440aae127a78a2c4dfd7b3f7cf179f2aed7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
