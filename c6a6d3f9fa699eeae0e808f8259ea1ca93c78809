@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0c176aa_124b76a7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-03-31T23:13:09Z",
+      "side": 0,
+      "message": "There\u0027s a race condition introduced by this removal. `glGetProgramBinary` is used with `nullptr` once to get the length, and again to get the binary. If the post-link task finishes in between, the application sees the binary length has changed.  Applications may not be able to handle that. Besides, a program binary that doesn\u0027t include the warmup is fairly useless.\n\nI understand if you want to remove this wait, and that\u0027s fair. Implementing anglebug.com/7393 would fix this race condition _and_ let you remove the wait.",
+      "revId": "c6a6d3f9fa699eeae0e808f8259ea1ca93c78809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
