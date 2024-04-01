@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82e073be_5f484f5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-04-01T19:33:46Z",
+      "side": 1,
+      "message": "I defer to Shabi\u0027s review, but lgtm from my standpoint.",
+      "revId": "1723e64a74d02cd5396d82925c309e4d761de098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cfea295_eb4ddf55",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-04-01T19:33:46Z",
+      "side": 1,
+      "message": "Is there a compile-time assert that can be made in this source file against enum values in other files to guard against the case that those enums are updated in an incompatible way with this code?",
+      "revId": "1723e64a74d02cd5396d82925c309e4d761de098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86050200_6e1376f0",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2438,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-04-01T19:33:46Z",
+      "side": 1,
+      "message": "Took me a minute to realize this is the negation of the earlier test. :)",
+      "revId": "1723e64a74d02cd5396d82925c309e4d761de098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
