@@ -2124,8 +2124,8 @@ angle::Result ContextVk::createGraphicsPipeline()
                 {
                     ASSERT(mCurrentGraphicsPipelineShaders->valid());
                     shouldRecreatePipeline = !mCurrentGraphicsPipelineShaders->findTransition(
-                        mGraphicsPipelineLibraryTransition, *mGraphicsPipelineDesc,
-                        &mCurrentGraphicsPipelineShaders);
+                        mGraphicsPipelineLibraryTransition & kShadersTransitionBitsMask,
+                        *mGraphicsPipelineDesc, &mCurrentGraphicsPipelineShaders);
                 }
 
                 if (shouldRecreatePipeline)
