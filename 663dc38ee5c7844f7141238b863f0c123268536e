@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "663dc38ee5c7844f7141238b863f0c123268536e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52ce6ea1_9859a39a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-01T20:22:10Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org do you know what this error means -\u003e https://chromium-swarm.appspot.com/task?id\u003d68b403df3177ca11\u0026o\u003dtrue\u0026w\u003dtrue\n```\n[ RUN      ] ProgramPipelineTest.GenerateProgramPipelineObject/ES3_Vulkan_SwiftShader_EnableParallelCompileAndLink\nFATAL: WorkerThread.cpp:130 (~AsyncWorkerPool): \t! Assert failed in ~AsyncWorkerPool (../../src/common/WorkerThread.cpp:130): thread.get_id() !\u003d std::this_thread::get_id()\n\nSignal 4 [Illegal instruction]:\nWriting test results to /b/s/w/itftlzj6v9/.angle.Ln1Tat\nBacktrace:\n```",
+      "revId": "663dc38ee5c7844f7141238b863f0c123268536e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
