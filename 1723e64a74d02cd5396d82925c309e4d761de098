@@ -37,6 +37,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5b49a47f_fb1cda62",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-04-01T20:26:52Z",
+      "side": 1,
+      "message": "Done. Although these special numbers are used only in this file (starting from L918).",
+      "parentUuid": "0cfea295_eb4ddf55",
+      "revId": "1723e64a74d02cd5396d82925c309e4d761de098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "86050200_6e1376f0",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 1
