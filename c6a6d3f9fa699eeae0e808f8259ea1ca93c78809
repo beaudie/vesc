@@ -34,6 +34,24 @@
       "parentUuid": "b0c176aa_124b76a7",
       "revId": "c6a6d3f9fa699eeae0e808f8259ea1ca93c78809",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7810fdb_824bd1e6",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-01T12:39:19Z",
+      "side": 0,
+      "message": "just realized you might be talking about non-vulkan backends that have post-link tasks (maybe the WIP webgpu backend?)\n\nWe could expand `ProgramExecutableImpl::waitForPostLinkTasks(...)` to take in `gl::Command`? Then the front end can have these waits all over the place but the backend can be selective about which wait it will actually honor?",
+      "parentUuid": "7a2ed7e1_37f24ac5",
+      "revId": "c6a6d3f9fa699eeae0e808f8259ea1ca93c78809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
