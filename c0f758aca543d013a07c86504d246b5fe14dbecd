@@ -37,6 +37,46 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f897fa80_21aafece",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-04-01T09:39:27Z",
+      "side": 1,
+      "message": "Have a few nits? PTAL",
+      "revId": "c0f758aca543d013a07c86504d246b5fe14dbecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d755e15_c8f3f271",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-04-01T09:39:27Z",
+      "side": 1,
+      "message": "is there any reason why this shouldn\u0027t be in ContextMtl::setupDrawImpl()?",
+      "range": {
+        "startLine": 536,
+        "startChar": 14,
+        "endLine": 536,
+        "endChar": 43
+      },
+      "revId": "c0f758aca543d013a07c86504d246b5fe14dbecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "91db22f7_9f0755c8",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
         "patchSetId": 4
@@ -84,6 +124,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "61b4347f_a3246ca7",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-04-01T09:39:27Z",
+      "side": 1,
+      "message": "nit: I think we could change `checkProgram` to `disableIncompatibleAttachments` to make it clearer.",
+      "parentUuid": "5df31c03_7cde507e",
+      "range": {
+        "startLine": 171,
+        "startChar": 36,
+        "endLine": 171,
+        "endChar": 40
+      },
+      "revId": "c0f758aca543d013a07c86504d246b5fe14dbecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "184c36e1_879efd84",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 4
@@ -113,6 +177,29 @@
       "side": 1,
       "message": "Since the passed dirty bits value is zero, most of the `syncState` is skipped. The rest of that function needs to be executed though.\n\nOverall, I think that we shouldn\u0027t optimize ANGLE for this rare and partly undefined code path. Apps that trigger it would get a perf warning.",
       "parentUuid": "184c36e1_879efd84",
+      "revId": "c0f758aca543d013a07c86504d246b5fe14dbecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb632b4d_2044a60e",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-04-01T09:39:27Z",
+      "side": 1,
+      "message": "nit: \n```suggestion\n    // update the Metal context\u0027s incompatible attachments cache before preparing a render pass.\n```",
+      "range": {
+        "startLine": 787,
+        "startChar": 32,
+        "endLine": 787,
+        "endChar": 43
+      },
       "revId": "c0f758aca543d013a07c86504d246b5fe14dbecd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
