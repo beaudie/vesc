@@ -52,6 +52,24 @@
       "parentUuid": "e04b5e4c_e036a293",
       "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d53a9d_c1d01255",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-02T15:47:04Z",
+      "side": 1,
+      "message": "The file _should be_ opened in binary mode, there is no point in decoding the file into text just to encode it on the next line (`chunk.encode()` before this CL). It looks like there is something that is concerning you about opening files in binary mode, but I\u0027m not sure what it is?..",
+      "parentUuid": "d20ffb00_0c7c271e",
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
