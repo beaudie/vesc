@@ -16,6 +16,24 @@
       "message": "Naming nit\n\n```suggestion\n    static constexpr uint32_t kBinaryVersion \u003d 2;\n```",
       "revId": "23578545997fe548c3a58de4cea26801d50d6b46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "742a8e63_57438ba6",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-02T18:03:35Z",
+      "side": 1,
+      "message": "Yeah I like that better - will update",
+      "parentUuid": "bc3fed99_913a2dc0",
+      "revId": "23578545997fe548c3a58de4cea26801d50d6b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
