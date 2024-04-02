@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3445c6a8_2cdd1f64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T17:16:33Z",
+      "side": 1,
+      "message": "I can rest easy at night now, thanks 😊",
+      "revId": "d39c0ee41f5faf3dd19e0d14babc36afcd2c5c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24ff86ce_c2c39de2",
