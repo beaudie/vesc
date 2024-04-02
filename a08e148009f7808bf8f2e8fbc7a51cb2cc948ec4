@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a492f9a8_a9f83d02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-02T11:58:57Z",
+      "side": 1,
+      "message": "Rolling Dawn to ToT to address the request on \"Angle \u003c\u003e Dawn circular dependency\" thread.",
+      "revId": "a08e148009f7808bf8f2e8fbc7a51cb2cc948ec4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
