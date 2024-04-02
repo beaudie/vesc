@@ -101,6 +101,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d321fa8_9ce0acfb",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-02T20:07:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8c6deed_7f9d14b9",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 30
+      },
+      "revId": "d39c0ee41f5faf3dd19e0d14babc36afcd2c5c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5ffbaa1_21bea066",
