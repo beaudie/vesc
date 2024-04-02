@@ -16,6 +16,24 @@
       "message": "The fix for \"unicode\" is open as binary, right? Maybe move that part of the comment up?",
       "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e04b5e4c_e036a293",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-02T15:33:28Z",
+      "side": 1,
+      "message": "This is just a warning if anyone decides to do something else other than crlf-\u003elf on Windows, so I think this is the right place for it.\nOpening file in text mode to calculate md5 is weird in the first place. I think it was done this way to get around crlf. Now there is explicit crlf handling in binary mode and nothing else.",
+      "parentUuid": "971fa4aa_5d3966c9",
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
