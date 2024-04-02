@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb08306c_274f1554",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T13:52:16Z",
+      "side": 1,
+      "message": "Thanks! If I\u0027m not mistaken, the only thing that can race with the main thread now is `GraphicsPipelineCache\u003cHash\u003e::addToCache` called from the warm up thread. We could probably defer that call so it can be done in the main thread to fix it.",
+      "revId": "1181c196a5568155530bd4b70a3457326b6c53d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
