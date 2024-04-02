@@ -34,6 +34,24 @@
       "parentUuid": "971fa4aa_5d3966c9",
       "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d20ffb00_0c7c271e",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T15:36:08Z",
+      "side": 1,
+      "message": "I\u0027m not objecting to anything, just saying that the open as binary applies to not just windows, so the comment can move up to be clearer.",
+      "parentUuid": "e04b5e4c_e036a293",
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
