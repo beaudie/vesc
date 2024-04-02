@@ -111,6 +111,30 @@
       },
       "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71b3af93_017e723a",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-02T16:17:10Z",
+      "side": 1,
+      "message": "Yeah but we\u0027re not opening in binary mode just to avoid unicode differences, we\u0027re doing it to avoid any interpretation of the bytes as text (including \u0027\\r\\n\u0027 or \u0027\\0\u0027 or anything else). That\u0027s essentially how `/usr/bin/md5sum` would compute the md5 of the file. The reason we need to do crlf handling is because on Windows this file (vk.xml) ends up having \\r\\n in it (with git global crlf set to false). This file comes from a different repo and I\u0027m not sure if configuration of that repo might apply. In an ideal world we wouldn\u0027t need the crlf handling hack and would just open the file in binary mode and calculate the md5, but Windows tooling behavior makes it hard due to all that magical crlf conversions that can happen at different stages of file\u0027s life.\n\nI\u0027m not sure how I can make this comment more clear, but IMO opening the file in binary mode is the right thing to do in the first place, so I don\u0027t think we need a comment explaining that.",
+      "parentUuid": "e10c41b9_2210b79b",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 38
+      },
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
