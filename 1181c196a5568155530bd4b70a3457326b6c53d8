@@ -16,6 +16,24 @@
       "message": "Thanks! If I\u0027m not mistaken, the only thing that can race with the main thread now is `GraphicsPipelineCache\u003cHash\u003e::addToCache` called from the warm up thread. We could probably defer that call so it can be done in the main thread to fix it.",
       "revId": "1181c196a5568155530bd4b70a3457326b6c53d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13a87184_04198d25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T14:26:29Z",
+      "side": 1,
+      "message": "An alternative could be to be even more explicit; like the warmup-prepare function could already call `addToCache` with a null pipeline, and let warmup directly call a `createWarmUpPipeline` that creates the pipeline and updates the handle without otherwise affecting the map. That works since the backend waits for the warmup task if the desc matches (and the same map location is accessed).",
+      "parentUuid": "eb08306c_274f1554",
+      "revId": "1181c196a5568155530bd4b70a3457326b6c53d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
