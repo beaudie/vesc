@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60586804_98342fca",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4010,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T17:48:49Z",
+      "side": 1,
+      "message": "```suggestion\n    // Draw red into the multisampled color buffer.  An unresolve operation is needed.\n    ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());\n    ANGLE_GL_PROGRAM(drawBlue, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());\n    glEnable(GL_DEPTH_TEST);\n    glDepthFunc(GL_LEQUAL);\n    drawQuad(drawRed, essl1_shaders::PositionAttrib(), -0.05f);\n    drawQuad(drawBlue, essl1_shaders::PositionAttrib(), 0.05f);\n    ASSERT_GL_NO_ERROR();\n```\n\nSame suggestion for `blitFramebufferTestCommon`",
+      "range": {
+        "startLine": 4005,
+        "startChar": 0,
+        "endLine": 4010,
+        "endChar": 25
+      },
+      "revId": "9ec5d4d9fbeeba3724562d6668a85f824ef000a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
