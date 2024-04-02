@@ -196,6 +196,13 @@ struct FrontendFeatures : FeatureSetBase
         &members, ""
     };
 
+    FeatureInfo disableBlendFuncExtendedForWebgl = {
+        "disableBlendFuncExtendedForWebgl",
+        FeatureCategory::FrontendFeatures,
+        "Disable EXT_blend_func_extended but only for WebGL due to edge case conformance issues with multiple draw buffers.",
+        &members, "http://anglebug.com/8646"
+    };
+
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;

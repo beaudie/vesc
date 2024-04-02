@@ -2371,11 +2371,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, dontUseLoopsToInitializeVariables,
                             (!isMesa && isQualcomm) || (isIntel && IsApple()));
 
-    // Adreno drivers do not support glBindFragDataLocation* with MRT
     // Intel macOS condition ported from gpu_driver_bug_list.json (#327)
     ANGLE_FEATURE_CONDITION(features, disableBlendFuncExtended,
-                            (!isMesa && isQualcomm) ||
-                                (IsApple() && isIntel && GetMacOSVersion() < OSVersion(10, 14, 0)));
+                            IsApple() && isIntel && GetMacOSVersion() < OSVersion(10, 14, 0));
 
     ANGLE_FEATURE_CONDITION(features, unsizedSRGBReadPixelsDoesntTransform, !isMesa && isQualcomm);
 
@@ -2705,6 +2703,9 @@ void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFea
     // ANGLE supports delaying post-compile and post-link operations until that is done.
     ANGLE_FEATURE_CONDITION(features, compileJobIsThreadSafe, false);
     ANGLE_FEATURE_CONDITION(features, linkJobIsThreadSafe, false);
+
+    // Adreno drivers do not support glBindFragDataLocation* with MRT
+    ANGLE_FEATURE_CONDITION(features, disableBlendFuncExtendedForWebgl, isQualcomm && !isMesa);
 }
 
 void ReInitializeFeaturesAtGPUSwitch(const FunctionsGL *functions, angle::FeaturesGL *features)
