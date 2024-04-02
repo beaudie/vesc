@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a9cffb4_d81b2ac1",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T17:02:12Z",
+      "side": 1,
+      "message": "Given the cast to `uint8_t`:\n\n```suggestion\n{\n    static_assert(IMPLEMENTATION_MAX_DRAW_BUFFERS \u003c\u003d 8);\n```",
+      "revId": "497878286a010f2998aec14c34c3aeb10c21104b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
