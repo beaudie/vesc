@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e20b4d27_c3f84d7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-02T19:50:37Z",
+      "side": 1,
+      "message": "\u003e What was the side effect of this mistake?\n\nunnecessary cache misses since we were using bits unrelated to shader subset",
+      "parentUuid": "693169c8_f02c27c1",
+      "revId": "9acdff487047723bc4e6a2bcc4e68f1baa5af1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee1e020d_54d1e719",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-04-02T17:09:07Z",
       "side": 1,
       "message": "Some refactoring would be nice:\n\n```suggestion\n            const vk::GraphicsPipelineTransitionBits shadersTransitionBits \u003d mGraphicsPipelineLibraryTransition \u0026 kShadersTransitionBitsMask;\n\n            // Recreate the shaders subset if necessary\n```",
+      "range": {
+        "startLine": 2117,
+        "startChar": 0,
+        "endLine": 2118,
+        "endChar": 55
+      },
+      "revId": "9acdff487047723bc4e6a2bcc4e68f1baa5af1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc792c54_7a8d81dc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2118,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-02T19:50:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee1e020d_54d1e719",
       "range": {
         "startLine": 2117,
         "startChar": 0,
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87e5ea84_53a6e98c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2120,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-02T19:50:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7ebc453_29860e1b",
+      "revId": "9acdff487047723bc4e6a2bcc4e68f1baa5af1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d22192bc_36985f2f",
@@ -75,6 +135,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6a76140_c1fb6cfb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-02T19:50:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d22192bc_36985f2f",
+      "revId": "9acdff487047723bc4e6a2bcc4e68f1baa5af1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4972fcb_79cc855e",
@@ -88,6 +166,24 @@
       "writtenOn": "2024-04-02T17:09:07Z",
       "side": 1,
       "message": "```suggestion\n                            shadersTransitionBits,\n```",
+      "revId": "9acdff487047723bc4e6a2bcc4e68f1baa5af1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7601b7b2_68f12209",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-02T19:50:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4972fcb_79cc855e",
       "revId": "9acdff487047723bc4e6a2bcc4e68f1baa5af1c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
