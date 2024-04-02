@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24ff86ce_c2c39de2",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T17:16:16Z",
+      "side": 1,
+      "message": "Please use RAII in these cases (i.e. `unique_ptr` here)",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 30
+      },
+      "revId": "d39c0ee41f5faf3dd19e0d14babc36afcd2c5c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5ffbaa1_21bea066",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T17:16:16Z",
+      "side": 1,
+      "message": "Move under `private`?",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 49
+      },
+      "revId": "d39c0ee41f5faf3dd19e0d14babc36afcd2c5c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
