@@ -22,6 +22,30 @@
       },
       "revId": "4c81510cab3c3cc56262c3914defdb09915d2d01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1a13de4_12e7772c",
+        "filename": "src/libANGLE/renderer/vulkan/CLPlatformVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-02T22:32:42Z",
+      "side": 1,
+      "message": "Going to fix this as Platform ctor check in another CL.\n\nDone.",
+      "parentUuid": "e38a4e31_f061de64",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 28
+      },
+      "revId": "4c81510cab3c3cc56262c3914defdb09915d2d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
