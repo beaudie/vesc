@@ -1443,6 +1443,39 @@ void WriteTessEvaluationShaderLayoutQualifiers(TInfoSinkBase &out,
     }
 }
 
+void WriteFragmentShaderLayoutQualifiers(TInfoSinkBase &out,
+                                         const AdvancedBlendEquations &advancedBlendEquations)
+{
+    if (advancedBlendEquations.any())
+    {
+        out << "layout (";
+
+        bool firstQualifier = true;
+        if (advancedBlendEquations.all())
+        {
+            out << AdvancedBlendEquations::GetAllEquationsLayoutString();
+            firstQualifier = false;
+        }
+        else
+        {
+            for (gl::BlendEquationType blendEquation :
+                 gl::BlendEquationBitSet(advancedBlendEquations.bits()))
+            {
+                if (!firstQualifier)
+                {
+                    out << ", ";
+                }
+
+                out << AdvancedBlendEquations::GetLayoutString(
+                    static_cast<uint32_t>(blendEquation));
+                firstQualifier = false;
+            }
+        }
+
+        out << ") out;\n";
+    }
+}
+
 // If SH_SCALARIZE_VEC_AND_MAT_CONSTRUCTOR_ARGS is enabled, layout qualifiers are spilled whenever
 // variables with specified layout qualifiers are copied. Additional checks are needed against the
 // type and storage qualifier of the variable to verify that layout qualifiers have to be outputted.
