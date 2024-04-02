@@ -16,6 +16,29 @@
       "message": "hi all,\nplease help to review the changes\n\nhailin",
       "revId": "2018259aa5636764d27550f285d8556dd4241129",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fb75f90_6f45e098",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-02T17:13:34Z",
+      "side": 1,
+      "message": "Needs a bug number that has enough information in the bug explaining the reason.",
+      "range": {
+        "startLine": 1476,
+        "startChar": 8,
+        "endLine": 1482,
+        "endChar": 9
+      },
+      "revId": "2018259aa5636764d27550f285d8556dd4241129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
