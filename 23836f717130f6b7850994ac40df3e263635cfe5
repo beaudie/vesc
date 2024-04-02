@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "971fa4aa_5d3966c9",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T15:27:47Z",
+      "side": 1,
+      "message": "The fix for \"unicode\" is open as binary, right? Maybe move that part of the comment up?",
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
