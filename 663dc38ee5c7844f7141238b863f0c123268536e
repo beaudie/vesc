@@ -33,6 +33,47 @@
       "message": "@syoussefi@chromium.org do you know what this error means -\u003e https://chromium-swarm.appspot.com/task?id\u003d68b403df3177ca11\u0026o\u003dtrue\u0026w\u003dtrue\n```\n[ RUN      ] ProgramPipelineTest.GenerateProgramPipelineObject/ES3_Vulkan_SwiftShader_EnableParallelCompileAndLink\nFATAL: WorkerThread.cpp:130 (~AsyncWorkerPool): \t! Assert failed in ~AsyncWorkerPool (../../src/common/WorkerThread.cpp:130): thread.get_id() !\u003d std::this_thread::get_id()\n\nSignal 4 [Illegal instruction]:\nWriting test results to /b/s/w/itftlzj6v9/.angle.Ln1Tat\nBacktrace:\n```",
       "revId": "663dc38ee5c7844f7141238b863f0c123268536e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b459e5bf_d2e12ac9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T16:57:45Z",
+      "side": 1,
+      "message": "Yes, you can ignore it for now, we\u0027re looking into it.\n\nIt means there\u0027s still a post-link task running on display destruction, but that\u0027s not supposed to happen. Seems like display destruction doesn\u0027t do what I thought it does.",
+      "parentUuid": "52ce6ea1_9859a39a",
+      "revId": "663dc38ee5c7844f7141238b863f0c123268536e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95a9d27f_37e6c1b1",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T16:57:45Z",
+      "side": 1,
+      "message": "Please move this down to line 543 or around there. The init part (create new executable, notify observers etc) should be at the top.",
+      "range": {
+        "startLine": 514,
+        "startChar": 0,
+        "endLine": 519,
+        "endChar": 0
+      },
+      "revId": "663dc38ee5c7844f7141238b863f0c123268536e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
