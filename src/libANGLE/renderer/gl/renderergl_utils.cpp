@@ -2162,6 +2162,12 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->tiledRenderingQCOM = !features.disableTiledRendering.enabled &&
                                      functions->hasGLESExtension("GL_QCOM_tiled_rendering");
 
+    extensions->blendEquationAdvancedKHR =
+        functions->hasGLExtension("GL_NV_blend_equation_advanced") ||
+        functions->hasGLExtension("GL_KHR_blend_equation_advanced") ||
+        functions->isAtLeastGLES(gl::Version(3, 2)) ||
+        functions->hasGLESExtension("GL_KHR_blend_equation_advanced");
+
     // PVRTC1 textures must be squares on Apple platforms.
     if (IsApple())
     {
