@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "573fb727_04733869",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300106
+      },
+      "writtenOn": "2024-04-02T20:06:48Z",
+      "side": 1,
+      "message": "Sorry, apparently gerrit changes the uploader if I chain something to this even if it\u0027s the exact same commit at the same position :-S",
+      "revId": "59914a30bf938590329abd2c5448be0d1b271451",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
