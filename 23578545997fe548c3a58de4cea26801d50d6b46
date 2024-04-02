@@ -34,6 +34,24 @@
       "parentUuid": "bc3fed99_913a2dc0",
       "revId": "23578545997fe548c3a58de4cea26801d50d6b46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a49b7011_1e85ecef",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-02T21:22:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "742a8e63_57438ba6",
+      "revId": "23578545997fe548c3a58de4cea26801d50d6b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
