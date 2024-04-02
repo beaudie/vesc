@@ -70,6 +70,47 @@
       "parentUuid": "d20ffb00_0c7c271e",
       "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c727ae0_264bb220",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T15:55:09Z",
+      "side": 1,
+      "message": "No objections there, it was just a tiny suggestion. Let me clarify (see other comment)",
+      "parentUuid": "20d53a9d_c1d01255",
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e10c41b9_2210b79b",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T15:55:09Z",
+      "side": 1,
+      "message": "```suggestion\n    # Open in binary to avoid unicode differences between platforms\n    with open(fname, \u0027rb\u0027) as f:\n        if sys.platform.startswith(\u0027win\u0027) or sys.platform \u003d\u003d \u0027cygwin\u0027:\n            # Beware: Windows crlf + git behavior\n            hash_md5.update(f.read().replace(b\u0027\\r\\n\u0027, b\u0027\\n\u0027))\n        else:\n            for chunk in iter(lambda: f.read(4096), b\u0027\u0027):\n                hash_md5.update(chunk)\n```",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 38
+      },
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
