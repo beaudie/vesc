@@ -179,6 +179,7 @@ void CLPlatformVk::Initialize(CreateFuncs &createFuncs)
         CLPlatformVk::Ptr platformVk = CLPlatformVk::Ptr(new (std::nothrow) CLPlatformVk(platform));
         if (platformVk == nullptr || IsError(platformVk->initBackendRenderer()))
         {
+            ERR() << "Failed to create CLPlatformVk object!";
             return Ptr(nullptr);
         }
         return Ptr(std::move(platformVk));
