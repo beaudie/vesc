@@ -81,6 +81,7 @@ enum class Feature
     DisableB5G6R5Support,
     DisableBaseInstanceVertex,
     DisableBlendFuncExtended,
+    DisableBlendFuncExtendedForWebgl,
     DisableClipControl,
     DisableDrawBuffersIndexed,
     DisableFlippingBlitWithCommand,

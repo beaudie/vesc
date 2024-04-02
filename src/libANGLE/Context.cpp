@@ -3879,6 +3879,11 @@ Extensions Context::generateSupportedExtensions() const
     supportedExtensions.extensionPackEs31aANDROID =
         CanSupportAEP(getClientVersion(), supportedExtensions);
 
+    if (isWebGL() && mDisplay->getFrontendFeatures().disableBlendFuncExtendedForWebgl.enabled)
+    {
+        supportedExtensions.blendFuncExtendedEXT = false;
+    }
+
     return supportedExtensions;
 }
 
