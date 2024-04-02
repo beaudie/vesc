@@ -52,6 +52,24 @@
       "parentUuid": "7a2ed7e1_37f24ac5",
       "revId": "c6a6d3f9fa699eeae0e808f8259ea1ca93c78809",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaa2efa7_4b5a5a49",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T16:03:03Z",
+      "side": 0,
+      "message": "I was talking about Vulkan.\n\n\u003e That eventually ends up in ProgramExecutableVk::save which does have the call to wait for post-link tasks\n\nThanks, I see it now.\n\n\u003e This gives the backends the option to choose whether they want to take the hit of a stall and save the vulkan pipeline or just skip saving it\n\nNot sure how you\u0027d manage to skip that (without caching the binary). But ok giving the backend the option is fine. Until that race is prevented when the wait is skipped, could you please `ASSERT` after `save()` that no post-link tasks are running?",
+      "parentUuid": "e7810fdb_824bd1e6",
+      "revId": "c6a6d3f9fa699eeae0e808f8259ea1ca93c78809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

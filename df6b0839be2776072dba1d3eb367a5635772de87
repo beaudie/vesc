@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d466554_90c18cb4",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T16:03:03Z",
+      "side": 1,
+      "message": "Please `ASSERT` that one of the two vectors is empty.\n\nBecause otherwise logically the post-link tasks need to be scheduled after the link subtasks are finished.",
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "106efef3_273131c3",
+        "filename": "src/libANGLE/renderer/ProgramImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T16:03:03Z",
+      "side": 1,
+      "message": "Please add a comment that only one list can be populated. Same with `load()`.",
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25d12ab_c99d75f0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T16:03:03Z",
+      "side": 1,
+      "message": "Can move to line 780 to make it more explicit it\u0027s about waiting for the cache to be populated.\n\nAlso slightly smaller wait ;)",
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dc4ca6b_e27e7de4",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T16:03:03Z",
+      "side": 1,
+      "message": "nit: You can avoid this copy by having the caller pass in a `vk::GraphicsPipelineDesc **` and make it point to `mWarmUpGraphicsPipelineDesc`.",
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a52b63_0880bbb8",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T16:03:03Z",
+      "side": 1,
+      "message": "Could you please split this optimization into a separate CL? Like I mentioned in the next CL, the `addToCache` function would race with the main thread if this path is taken.",
+      "range": {
+        "startLine": 1011,
+        "startChar": 0,
+        "endLine": 1022,
+        "endChar": 5
+      },
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dc47c99_b29dce3d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-02T16:03:03Z",
+      "side": 1,
+      "message": "Shouldn\u0027t get into a situation where there are already tasks in the list, so better assert it:\n\n```suggestion\n    ASSERT(linkSubTasksOut \u0026\u0026 linkSubTasksOut-\u003eempty());\n    ASSERT(postLinkSubTasksOut \u0026\u0026 postLinkSubTasksOut-\u003eempty());\n```\n\nSame suggestion for the other backends.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 33
+      },
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
