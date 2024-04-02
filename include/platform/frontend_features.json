@@ -201,6 +201,14 @@
                 "Force the minimum GL_MAX_VERTEX_ATTRIBS that the context's client version allows."
             ],
             "issue": ""
+        },
+        {
+            "name": "disable_blend_func_extended_for_webgl",
+            "category": "Features",
+            "description": [
+                "Disable EXT_blend_func_extended but only for WebGL due to edge case conformance issues with multiple draw buffers."
+            ],
+            "issue": "http://anglebug.com/8646"
         }
     ]
 }
