@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c01addd_33e8cce8",
+        "filename": "src/libANGLE/renderer/vulkan/RefCountedEvent.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-03T19:28:14Z",
+      "side": 1,
+      "message": "RefCountedEventGarbageObjects",
+      "range": {
+        "startLine": 141,
+        "startChar": 6,
+        "endLine": 141,
+        "endChar": 30
+      },
+      "revId": "2ba07f223ef6f24ea46c61781e54efda50778e0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
