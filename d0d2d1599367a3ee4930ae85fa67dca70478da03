@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1504b60f_1fbadd1c",
+        "filename": "src/compiler/translator/BaseTypes.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T17:15:55Z",
+      "side": 1,
+      "message": "This looks wrong? should it be this?\n\n```suggestion\n    constexpr gl::BlendEquationBitSet kAll \u003d kAdvancedBlendBits | kAdvancedBlendHslBits;\n    return (gl::BlendEquationBitSet(mEnabledBlendEquations) \u0026 kAll) \u003d\u003d kAll;\n```",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 33
+      },
+      "revId": "d0d2d1599367a3ee4930ae85fa67dca70478da03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b1f2df5_57b0c771",
+        "filename": "src/compiler/translator/glsl/OutputGLSLBase.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T17:15:55Z",
+      "side": 1,
+      "message": "nit: A little trick to make it simpler:\n\n```suggestion\n        if (advancedBlendEquations.all())\n        {\n            out \u003c\u003c AdvancedBlendEquations::GetAllEquationsLayoutString();\n        }\n        else\n        {\n            const char *delimiter \u003d \"\";\n            for (gl::BlendEquationType blendEquation :\n                 gl::BlendEquationBitSet(advancedBlendEquations.bits()))\n            {\n                out \u003c\u003c delimiter \u003c\u003c AdvancedBlendEquations::GetLayoutString(\n                    static_cast\u003cuint32_t\u003e(blendEquation));\n                delimiter \u003d \", \";\n            }\n        }\n```",
+      "range": {
+        "startLine": 1453,
+        "startChar": 0,
+        "endLine": 1473,
+        "endChar": 9
+      },
+      "revId": "d0d2d1599367a3ee4930ae85fa67dca70478da03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
