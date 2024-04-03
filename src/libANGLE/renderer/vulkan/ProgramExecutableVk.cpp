@@ -1024,7 +1024,19 @@ void ProgramExecutableVk::waitForPostLinkTasksIfNecessary(
         return;
     }
 
-    // Wait unconditionally for now.
+    const vk::GraphicsPipelineSubset subset =
+        contextVk->getFeatures().supportsGraphicsPipelineLibrary.enabled
+            ? vk::GraphicsPipelineSubset::Shaders
+            : vk::GraphicsPipelineSubset::Complete;
+
+    if (mWarmUpGraphicsPipelineDesc.hash(subset) != currentGraphicsPipelineDesc.hash(subset))
+    {
+        INFO() << "GraphicsPipelineDesc used for draw differs from the one used for warmup.";
+        INFO() << "Not waiting for warmUp tasks to complete.";
+
+        return;
+    }
+
     waitForPostLinkTasksImpl(contextVk);
 }
 
