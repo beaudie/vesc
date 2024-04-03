@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c94d551_36a1c8f3",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-03T18:15:22Z",
+      "side": 1,
+      "message": "Since mDisplay already stores the device and the queue should each Context track their own as well? At least for the devices it might make more sense with relying on mDisplay-\u003egetDevice() since only the display initializes a device anyways?",
+      "range": {
+        "startLine": 277,
+        "startChar": 17,
+        "endLine": 277,
+        "endChar": 28
+      },
+      "revId": "9e9df1bb19250bd3b57bd9dd9710d5c2da727653",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4e72e0d5_687cc00a",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.h",
         "patchSetId": 6
