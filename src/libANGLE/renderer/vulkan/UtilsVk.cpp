@@ -1822,7 +1822,7 @@ angle::Result UtilsVk::setupComputeProgram(
     ANGLE_TRY(renderer->getPipelineCache(contextVk, &pipelineCache));
     ANGLE_TRY(programAndPipelines->program.getOrCreateComputePipeline(
         contextVk, &programAndPipelines->pipelines, &pipelineCache, pipelineLayout.get(),
-        contextVk->getComputePipelineFlags(), PipelineSource::Utils, &pipeline));
+        contextVk->getComputePipelineFlags(), PipelineSource::Utils, &pipeline, nullptr, nullptr));
     commandBufferHelper->retainResource(pipeline);
 
     vk::OutsideRenderPassCommandBuffer *commandBuffer = &commandBufferHelper->getCommandBuffer();
