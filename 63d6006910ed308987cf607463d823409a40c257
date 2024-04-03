@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c5ed1f0_093aeadd",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-04-03T14:14:11Z",
+      "side": 1,
+      "message": "This extension is supported on NV and Mesa drivers so please consider using `hasExtension` here and updating the non-ES GLSL emitter accordingly. This would increase test coverage and may make debugging easier.",
+      "range": {
+        "startLine": 2160,
+        "startChar": 19,
+        "endLine": 2160,
+        "endChar": 35
+      },
+      "revId": "63d6006910ed308987cf607463d823409a40c257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
