@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c104904d_4978870c",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-04-03T21:27:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fb89983_3a6c3678",
+      "range": {
+        "startLine": 277,
+        "startChar": 17,
+        "endLine": 277,
+        "endChar": 28
+      },
+      "revId": "9e9df1bb19250bd3b57bd9dd9710d5c2da727653",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e72e0d5_687cc00a",
@@ -78,6 +102,30 @@
       "writtenOn": "2024-04-03T14:08:42Z",
       "side": 1,
       "message": "Please move to `ContextWgpu.cpp` in an anonymous namespace.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 3
+      },
+      "revId": "9e9df1bb19250bd3b57bd9dd9710d5c2da727653",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0dd932e_af41f204",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-04-03T21:27:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e72e0d5_687cc00a",
       "range": {
         "startLine": 30,
         "startChar": 0,
