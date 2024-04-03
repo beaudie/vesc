@@ -1652,7 +1652,6 @@ void CommandBufferHelperCommon::resetImpl(Context *context)
 {
     ASSERT(!mAcquireNextImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
-    ASSERT(!mIsAnyHostVisibleBufferWritten);
 
     ASSERT(mRefCountedEvents.mask.none());
     ASSERT(mRefCountedEventCollector.empty());
