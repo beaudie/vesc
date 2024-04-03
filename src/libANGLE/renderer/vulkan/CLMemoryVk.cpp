@@ -286,15 +286,25 @@ angle::Result CLImageVk::createStagingBuffer(size_t size)
         ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
     }
 
+    mStagingBufferInitialized = true;
     return angle::Result::Continue;
 }
 
 angle::Result CLImageVk::copyStagingFrom(void *ptr, size_t offset, size_t size)
 {
     uint8_t *ptrOut;
-    uint8_t *ptrIn = (uint8_t *)ptr;
+    uint8_t *ptrIn = static_cast<uint8_t *>(ptr);
     ANGLE_TRY(getStagingBuffer().map(mContext, &ptrOut));
     std::memcpy(ptrOut, ptrIn + offset, size);
+    getStagingBuffer().unmap(mContext->getRenderer());
+    return angle::Result::Continue;
+}
+
+angle::Result CLImageVk::copyStagingTo(void *ptr, size_t offset, size_t size)
+{
+    uint8_t *ptrOut;
+    ANGLE_TRY(getStagingBuffer().map(mContext, &ptrOut));
+    std::memcpy(ptr, ptrOut + offset, size);
     getStagingBuffer().unmap(mContext->getRenderer());
     return angle::Result::Continue;
 }
@@ -304,8 +314,8 @@ CLImageVk::CLImageVk(const cl::Image &image)
       mFormat(angle::FormatID::NONE),
       mArrayLayers(1),
       mImageSize(0),
-      mNumberChannels(0),
-      mBytesPerChannel(0)
+      mElementSize(0),
+      mStagingBufferInitialized(false)
 {}
 
 CLImageVk::~CLImageVk()
@@ -363,53 +373,21 @@ angle::Result CLImageVk::create(void *hostPtr)
             break;
     }
 
-    switch (format.image_channel_order)
+    mElementSize = cl::GetElementSize(format);
+
+    if (desc.slicePitch > 0)
     {
-        case CL_R:
-        case CL_A:
-        case CL_DEPTH:
-        case CL_LUMINANCE:
-        case CL_INTENSITY:
-            mNumberChannels = 1;
-            break;
-        case CL_RG:
-        case CL_RA:
-        case CL_Rx:
-            mNumberChannels = 2;
-            break;
-        case CL_RGB:
-        case CL_RGx:
-            mNumberChannels = 3;
-            break;
-        default:
-            mNumberChannels = 4;
-            break;
+        mImageSize = (desc.slicePitch * mExtent.depth);
+    }
+    else if (desc.rowPitch > 0)
+    {
+        mImageSize = (desc.rowPitch * mExtent.height * mExtent.depth);
+    }
+    else
+    {
+        mImageSize = (mExtent.height * mExtent.width * mExtent.depth * mElementSize);
     }
 
-    switch (format.image_channel_data_type)
-    {
-        case CL_SNORM_INT8:
-        case CL_UNORM_INT8:
-        case CL_SIGNED_INT8:
-        case CL_UNSIGNED_INT8:
-            mBytesPerChannel = 1;
-            break;
-        case CL_SNORM_INT16:
-        case CL_UNORM_INT16:
-        case CL_SIGNED_INT16:
-        case CL_UNSIGNED_INT16:
-        case CL_HALF_FLOAT:
-        case CL_UNORM_SHORT_565:
-        case CL_UNORM_SHORT_555:
-            mBytesPerChannel = 2;
-            break;
-        default:
-            mBytesPerChannel = 4;
-            break;
-    }
-
-    mImageSize =
-        (mExtent.height * mExtent.width * mExtent.depth * mNumberChannels * mBytesPerChannel);
     if ((desc.type == cl::MemObjectType::Image1D_Array) ||
         (desc.type == cl::MemObjectType::Image2D_Array))
     {
