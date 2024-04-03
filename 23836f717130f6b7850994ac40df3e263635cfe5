@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "843aae28_e5f1f0c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-03T13:36:23Z",
+      "side": 1,
+      "message": "Thanks for looking into this, Roman!",
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "971fa4aa_5d3966c9",
@@ -86,6 +103,29 @@
       "side": 1,
       "message": "No objections there, it was just a tiny suggestion. Let me clarify (see other comment)",
       "parentUuid": "20d53a9d_c1d01255",
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "941d49c6_0fdca189",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-03T13:36:23Z",
+      "side": 1,
+      "message": "Why is this done in chunks here, but not on Windows?\nCan it be the same everywhere?",
+      "range": {
+        "startLine": 148,
+        "startChar": 16,
+        "endLine": 148,
+        "endChar": 21
+      },
       "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
