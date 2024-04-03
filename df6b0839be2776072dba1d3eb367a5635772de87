@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "711404d4_9c3d90b1",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-03T20:34:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c1a1e76_3bda066f",
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "106efef3_273131c3",
@@ -247,6 +265,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f06575b7_26d5ac0f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-03T20:34:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f7935d4_8cad3fa6",
+      "range": {
+        "startLine": 1011,
+        "startChar": 0,
+        "endLine": 1022,
+        "endChar": 5
+      },
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2dc47c99_b29dce3d",
@@ -308,6 +350,30 @@
       "side": 1,
       "message": "Could you please do the same with the other backends?",
       "parentUuid": "0e9edb53_ecfc4835",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 33
+      },
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddd94023_16ba3f5a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-03T20:34:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f3479ee_035cb0aa",
       "range": {
         "startLine": 77,
         "startChar": 0,
