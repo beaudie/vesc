@@ -17,7 +17,14 @@ CLEventVk::CLEventVk(const cl::Event &event)
     : CLEventImpl(event), mStatus(isUserEvent() ? CL_SUBMITTED : CL_QUEUED)
 {}
 
-CLEventVk::~CLEventVk() {}
+CLEventVk::~CLEventVk()
+{
+    if (!isUserEvent())
+    {
+        // Remove reference from associated command queue
+        mEvent.getCommandQueue()->getImpl<CLCommandQueueVk>().removeAssociatedEvent(this);
+    }
+}
 
 angle::Result CLEventVk::getCommandExecutionStatus(cl_int &executionStatus)
 {
