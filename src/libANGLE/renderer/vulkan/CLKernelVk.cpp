@@ -30,7 +30,14 @@ CLKernelVk::CLKernelVk(const cl::Kernel &kernel,
       mArgs(args)
 {}
 
-CLKernelVk::~CLKernelVk() = default;
+CLKernelVk::~CLKernelVk()
+{
+    for (vk::BindingPointer<vk::DescriptorSetLayout, vk::AtomicRefCounted<vk::DescriptorSetLayout>>
+             &dsLayouts : mDescriptorSetLayouts)
+    {
+        dsLayouts.reset();
+    }
+}
 
 angle::Result CLKernelVk::setArg(cl_uint argIndex, size_t argSize, const void *argValue)
 {

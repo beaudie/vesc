@@ -38,6 +38,14 @@ class CLDeviceVk : public CLDeviceImpl
                                    CreateFuncs &subDevices,
                                    cl_uint *numDevicesRet) override;
 
+    bool isVkDeviceExtensionEnabled(const char *extension) const
+    {
+        const vk::ExtensionNameList &enabledDeviceExtensions =
+            mRenderer->getEnabledDeviceExtensions();
+        return std::find(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(),
+                         extension) != enabledDeviceExtensions.end();
+    }
+
     // Returns runtime-selected LWS value
     std::array<uint32_t, 3> selectWorkGroupSize(const cl::NDRange &ndrange) const;
 
