@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e0201fa_582719ce",
+        "filename": "src/compiler/translator/BaseTypes.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-04-03T17:35:00Z",
+      "side": 1,
+      "message": "Given the `ASSERT` above, this `\u0026` is redundant.",
+      "range": {
+        "startLine": 48,
+        "startChar": 60,
+        "endLine": 48,
+        "endChar": 80
+      },
+      "revId": "5618360373d8ce95b659792de95dad91f20b9550",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
