@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6344da8_3d9321fb",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T14:08:42Z",
+      "side": 1,
+      "message": "Fine for a start, but beware that what you\u0027d really want (because GL) is to create the WebGPU render pass _at the end_ of the render pass. There are a few decisions to be made at the end that you just cannot make at the start.\n\nSo in the end what things should look like is:\n\n- Start render pass by creating a *secondary* command encoder. Looking at the docs, I _think_ this is `GPURenderBundle`, but not sure.\n- Record into the secondary command encoder\n- When a render pass closes for any reason (there are many of them, and some tracking to know when to do them)\n  - Determine the load/store ops\n  - Determine resolve attachments if any\n  - ...\n  - Create the actual render pass\n  - Start the render pass\n  - Execute the secondary command encoder\n  - End the render pass\n\nIf you\u0027re lucky, webgpu is flexible enough to let you make all those decisions at the end and let you execute the secondary command encoder. If you\u0027re unlucky (for example because webgpu forces you to know something you can\u0027t know just to be able to record in the secondary), then you\u0027d have to buffer all the commands before you can actually replay them (like `vulkan/SecondaryCommandBuffer.h`)",
+      "revId": "9e9df1bb19250bd3b57bd9dd9710d5c2da727653",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e72e0d5_687cc00a",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T14:08:42Z",
+      "side": 1,
+      "message": "Please move to `ContextWgpu.cpp` in an anonymous namespace.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 3
+      },
+      "revId": "9e9df1bb19250bd3b57bd9dd9710d5c2da727653",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
