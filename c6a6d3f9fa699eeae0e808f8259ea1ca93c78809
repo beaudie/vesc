@@ -88,6 +88,24 @@
       "parentUuid": "eaa2efa7_4b5a5a49",
       "revId": "c6a6d3f9fa699eeae0e808f8259ea1ca93c78809",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b21eefa_93da0d6d",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T17:40:30Z",
+      "side": 0,
+      "message": "\u003e we disable implicit program binary caching\n\nThis is not about the implicit cache, but GL program binary.\n\n\u003e Could you be specific about what the race condition would be?\n\nOf course. First, see the \"Ref\" comment. In `ProgramExecutableVk::save`, we serialize the contents of `mPipelineCache`. Depending on whether the warm up task is finished or not, the cache could either be empty or not.\n\nNow imagine the following scenario:\n\n- App calls `glGetProgramiv(program, GL_PROGRAM_BINARY_LENGTH_OES, \u0026programLength);`.  The warm up task is not finished, and the returned length in `programLength` is calculated based on an empty `mPipelineCache`.\n\n- The warm up task finishes, `mPipelineCache` now has something int\n\n- App calls `glGetProgramBinary(program, programLength, ...);`.  The call fails because the provided `programLength` is too small.",
+      "parentUuid": "0a26519e_b49ace92",
+      "revId": "c6a6d3f9fa699eeae0e808f8259ea1ca93c78809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

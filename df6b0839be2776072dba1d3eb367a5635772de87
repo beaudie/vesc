@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c1a1e76_3bda066f",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T17:40:30Z",
+      "side": 1,
+      "message": "My suggestion is not to design for something that may never happen. Calling them \"post-link\" tasks is nice because it\u0027s clear why we don\u0027t wait on them when link is resolved. \"Async link task\" sounds like it\u0027s still part of the link.\n\nIf we ever hit such a situation in the future (including if we want some tasks to be scheduled after others), we can always adjust the code based on the reality of that situation :)",
+      "parentUuid": "4a880216_32fb2991",
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "106efef3_273131c3",
         "filename": "src/libANGLE/renderer/ProgramImpl.h",
         "patchSetId": 10
@@ -102,6 +120,23 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "c25d12ab_c99d75f0",
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8b584b3_4ad3c577",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T17:40:30Z",
+      "side": 1,
+      "message": "Ref (regarding GL program binary race)",
       "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -190,6 +225,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f7935d4_8cad3fa6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T17:40:30Z",
+      "side": 1,
+      "message": "Well you fixed the race^ in the next CL already, so this is not an issue after the next CL lands. Given that the fix is landing after this change, you\u0027d still need to split this optimization to be landed after that.\n\n^ https://chromium-review.googlesource.com/c/angle/angle/+/5408796/comments/eb08306c_274f1554",
+      "parentUuid": "30abd2dd_82921126",
+      "range": {
+        "startLine": 1011,
+        "startChar": 0,
+        "endLine": 1022,
+        "endChar": 5
+      },
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2dc47c99_b29dce3d",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 10
@@ -225,6 +284,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "2dc47c99_b29dce3d",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 33
+      },
+      "revId": "df6b0839be2776072dba1d3eb367a5635772de87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f3479ee_035cb0aa",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T17:40:30Z",
+      "side": 1,
+      "message": "Could you please do the same with the other backends?",
+      "parentUuid": "0e9edb53_ecfc4835",
       "range": {
         "startLine": 77,
         "startChar": 0,
