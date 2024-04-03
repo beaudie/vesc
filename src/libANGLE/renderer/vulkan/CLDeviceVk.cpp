@@ -246,4 +246,43 @@ angle::Result CLDeviceVk::createSubDevices(const cl_device_partition_property *p
     ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
 }
 
+std::array<uint32_t, 3> CLDeviceVk::selectWorkGroupSize(const cl::NDRange &ndrange) const
+{
+    // Start at (1,1,1), which is always valid.
+    std::array<uint32_t, 3> localSize = {1, 1, 1};
+
+    auto props = mRenderer->getPhysicalDeviceProperties();
+
+    // Cap the total work-group size to the Vulkan device's limit.
+    uint32_t maxSize = static_cast<uint32_t>(mInfoSizeT.at(cl::DeviceInfo::MaxWorkGroupSize));
+    maxSize          = std::min(maxSize, UINT32_C(64));
+
+    // Increase the work-group size until we hit device limits.
+    bool changed = false;
+    do
+    {
+        changed = false;
+
+        // Alternate between increasing the X/Y/Z.
+        for (cl_uint i = 0; i < ndrange.workDimensions; i++)
+        {
+            // Double the dimension if we can.
+            std::array<uint32_t, 3> newLocalSize = localSize;
+            newLocalSize[i] *= 2;
+
+            // TODO: Add support for non-uniform WGS
+            // http://angleproject:8631
+            if (ndrange.gws[i] % newLocalSize[i] == 0 &&
+                newLocalSize[i] <= props.limits.maxComputeWorkGroupCount[i] &&
+                newLocalSize[0] * newLocalSize[1] * newLocalSize[2] <= maxSize)
+            {
+                localSize = newLocalSize;
+                changed   = true;
+            }
+        }
+    } while (changed);
+
+    return localSize;
+}
+
 }  // namespace rx
