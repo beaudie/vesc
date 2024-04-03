@@ -70,6 +70,24 @@
       "parentUuid": "e7810fdb_824bd1e6",
       "revId": "c6a6d3f9fa699eeae0e808f8259ea1ca93c78809",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a26519e_b49ace92",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-03T16:32:49Z",
+      "side": 0,
+      "message": "\u003e Not sure how you\u0027d manage to skip that (without caching the binary)\n\nwe disable implicit program binary caching\n\n\u003e Until that race is prevented when the wait is skipped, could you please ASSERT after save() that no post-link tasks are running?\n\ndepending on backend\u0027s choice, `ProgramExecutableVk::save` will do the right thing on the 1st call to serialize (ignore warmup pipelines or not) and will make the same choice on the 2nd call as well. Could you be specific about what the race condition would be?",
+      "parentUuid": "eaa2efa7_4b5a5a49",
+      "revId": "c6a6d3f9fa699eeae0e808f8259ea1ca93c78809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
