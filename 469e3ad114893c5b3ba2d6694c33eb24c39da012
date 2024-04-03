@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21e5aefe_416c8cb4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7294,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T14:18:10Z",
+      "side": 1,
+      "message": "nit: I believe you don\u0027t need this `std::move` because the object inside is already a temporary (https://stackoverflow.com/a/32236683)",
+      "range": {
+        "startLine": 7294,
+        "startChar": 8,
+        "endLine": 7294,
+        "endChar": 18
+      },
+      "revId": "469e3ad114893c5b3ba2d6694c33eb24c39da012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
