@@ -117,6 +117,30 @@
       },
       "revId": "d0d2d1599367a3ee4930ae85fa67dca70478da03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e2a81b3_dd095367",
+        "filename": "src/compiler/translator/glsl/OutputGLSLBase.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-03T18:08:18Z",
+      "side": 1,
+      "message": "If we ever add more layout qualifiers to this function, it will matter so I figure it will protect us against future bugs.",
+      "parentUuid": "6c9006b9_f020f050",
+      "range": {
+        "startLine": 1453,
+        "startChar": 0,
+        "endLine": 1473,
+        "endChar": 9
+      },
+      "revId": "d0d2d1599367a3ee4930ae85fa67dca70478da03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
