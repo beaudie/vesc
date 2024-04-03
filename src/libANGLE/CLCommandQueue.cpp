@@ -551,7 +551,10 @@ angle::Result CommandQueue::enqueueNDRangeKernel(cl_kernel kernel,
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
 
-    ANGLE_TRY(mImpl->enqueueNDRangeKernel(krnl, ndrange, waitEvents, eventCreateFuncPtr));
+    {
+        std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+        ANGLE_TRY(mImpl->enqueueNDRangeKernel(krnl, ndrange, waitEvents, eventCreateFuncPtr));
+    }
 
     CheckCreateEvent(*this, CL_COMMAND_NDRANGE_KERNEL, eventCreateFunc, event);
     return angle::Result::Continue;
@@ -568,7 +571,10 @@ angle::Result CommandQueue::enqueueTask(cl_kernel kernel,
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
 
-    ANGLE_TRY(mImpl->enqueueTask(krnl, waitEvents, eventCreateFuncPtr));
+    {
+        std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
+        ANGLE_TRY(mImpl->enqueueTask(krnl, waitEvents, eventCreateFuncPtr));
+    }
 
     CheckCreateEvent(*this, CL_COMMAND_TASK, eventCreateFunc, event);
     return angle::Result::Continue;

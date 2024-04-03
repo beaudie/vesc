@@ -279,6 +279,7 @@ class CommandQueue final : public _cl_command_queue, public Object
     angle::SynchronizedValue<CommandQueueProperties> mProperties;
     const cl_uint mSize = kNoSize;
     rx::CLCommandQueueImpl::Ptr mImpl;
+    std::mutex mCommandQueueMutex;
 
     friend class Object;
 };
