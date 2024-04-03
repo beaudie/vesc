@@ -62,6 +62,9 @@ using ProgramPtrs  = std::vector<ProgramPtr>;
 
 using CompiledWorkgroupSize = std::array<uint32_t, 3>;
 
+template <typename T>
+using EventStatusMap = std::array<T, 3>;
+
 struct ImageDescriptor
 {
     MemObjectType type;
