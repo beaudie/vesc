@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fb89983_3a6c3678",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-03T19:04:02Z",
+      "side": 1,
+      "message": "Good point, a `getDevice()` function that does `return mDisplay-\u003egetDevice()` works.",
+      "parentUuid": "9c94d551_36a1c8f3",
+      "range": {
+        "startLine": 277,
+        "startChar": 17,
+        "endLine": 277,
+        "endChar": 28
+      },
+      "revId": "9e9df1bb19250bd3b57bd9dd9710d5c2da727653",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4e72e0d5_687cc00a",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.h",
         "patchSetId": 6
