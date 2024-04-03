@@ -251,6 +251,13 @@ class CLCommandQueueVk : public CLCommandQueueImpl
         return angle::Result::Continue;
     }
 
+    angle::Result copyImageToFromBuffer(CLImageVk &imageVk,
+                                        vk::BufferHelper &buffer,
+                                        const cl::MemOffsets &origin,
+                                        const cl::Coordinate &region,
+                                        size_t bufferOffset,
+                                        bool writeToBuffer);
+
     CLContextVk *mContext;
     const CLDeviceVk *mDevice;
 
