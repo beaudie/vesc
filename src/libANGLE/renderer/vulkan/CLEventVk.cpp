@@ -6,28 +6,50 @@
 // CLEventVk.cpp: Implements the class methods for CLEventVk.
 
 #include "libANGLE/renderer/vulkan/CLEventVk.h"
+#include "libANGLE/renderer/vulkan/CLCommandQueueVk.h"
 
 #include "libANGLE/cl_utils.h"
 
 namespace rx
 {
 
-CLEventVk::CLEventVk(const cl::Event &event, const cl::EventPtrs &depEvents)
-    : CLEventImpl(event), mStatus(isUserEvent() ? CL_SUBMITTED : CL_QUEUED), mDepEvents(depEvents)
+CLEventVk::CLEventVk(const cl::Event &event)
+    : CLEventImpl(event), mStatus(isUserEvent() ? CL_SUBMITTED : CL_QUEUED)
 {}
 
-CLEventVk::~CLEventVk() = default;
+CLEventVk::~CLEventVk() {}
+
+angle::Result CLEventVk::getCommandExecutionStatus(cl_int &executionStatus)
+{
+    auto status     = mStatus.synchronize();
+    executionStatus = *status;
+    return angle::Result::Continue;
+}
 
 angle::Result CLEventVk::setUserEventStatus(cl_int executionStatus)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    ASSERT(isUserEvent());
+
+    // Not much to do here other than storing the user supplied state.
+    // Error checking and single call enforcement is responsibility of the front end.
+    ANGLE_TRY(setStatusAndExecuteCallback(executionStatus));
+
+    // User event set and callback(s) finished - notify those waiting
+    mUserEventCondition.notify_all();
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLEventVk::setCallback(cl::Event &event, cl_int commandExecCallbackType)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    ASSERT(commandExecCallbackType >= CL_COMPLETE);
+    ASSERT(commandExecCallbackType < CL_QUEUED);
+
+    // Not much to do, acknowledge the presence of callback and returns
+    auto haveCallbacks                         = mHaveCallbacks.synchronize();
+    haveCallbacks->at(commandExecCallbackType) = true;
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLEventVk::getProfilingInfo(cl::ProfilingInfo name,
@@ -37,6 +59,39 @@ angle::Result CLEventVk::getProfilingInfo(cl::ProfilingInfo name,
 {
     UNIMPLEMENTED();
     ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+}
+
+angle::Result CLEventVk::waitForUserEventStatus()
+{
+    ASSERT(isUserEvent());
+
+    cl_int status = CL_QUEUED;
+    std::unique_lock<std::mutex> ul(mUserEventMutex);
+    ANGLE_TRY(getCommandExecutionStatus(status));
+    if (status > CL_COMPLETE)
+    {
+        // User is responsible for setting the user-event object, we need to wait for that event
+        // (We dont care what the outcome is, just need to wait until that event triggers)
+        INFO() << "Waiting for user-event (" << &mEvent
+               << ") to be set! (aka clSetUserEventStatus)";
+        mUserEventCondition.wait(ul);
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result CLEventVk::setStatusAndExecuteCallback(cl_int status)
+{
+    mStatus = status;
+
+    if (status >= CL_COMPLETE && status < CL_QUEUED && mHaveCallbacks->at(status))
+    {
+        getFrontendObject().callback(status);
+        auto haveCallbacks        = mHaveCallbacks.synchronize();
+        haveCallbacks->at(status) = false;
+    }
+
+    return angle::Result::Continue;
 }
 
 }  // namespace rx
