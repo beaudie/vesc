@@ -8,11 +8,20 @@
 #include "libANGLE/renderer/vulkan/CLCommandQueueVk.h"
 #include "libANGLE/renderer/vulkan/CLContextVk.h"
 #include "libANGLE/renderer/vulkan/CLDeviceVk.h"
+#include "libANGLE/renderer/vulkan/CLKernelVk.h"
+#include "libANGLE/renderer/vulkan/CLMemoryVk.h"
+#include "libANGLE/renderer/vulkan/CLProgramVk.h"
+#include "libANGLE/renderer/vulkan/cl_types.h"
 #include "libANGLE/renderer/vulkan/vk_renderer.h"
 
+#include "libANGLE/CLBuffer.h"
 #include "libANGLE/CLCommandQueue.h"
 #include "libANGLE/CLContext.h"
+#include "libANGLE/CLEvent.h"
+#include "libANGLE/CLKernel.h"
 #include "libANGLE/cl_utils.h"
+
+#include "spirv/unified1/NonSemanticClspvReflection.h"
 
 namespace rx
 {
@@ -21,17 +30,9 @@ CLCommandQueueVk::CLCommandQueueVk(const cl::CommandQueue &commandQueue)
     : CLCommandQueueImpl(commandQueue),
       mContext(&commandQueue.getContext().getImpl<CLContextVk>()),
       mDevice(&commandQueue.getDevice().getImpl<CLDeviceVk>()),
-      mComputePassCommands(nullptr)
+      mComputePassCommands(nullptr),
+      mCurrentQueueSerialIndex(kInvalidQueueSerialIndex)
 {}
-
-CLCommandQueueVk::~CLCommandQueueVk()
-{
-    VkDevice vkDevice = mContext->getDevice();
-
-    // Recycle the current command buffers
-    mContext->getRenderer()->recycleOutsideRenderPassCommandBufferHelper(&mComputePassCommands);
-    mCommandPool.outsideRenderPassPool.destroy(vkDevice);
-}
 
 angle::Result CLCommandQueueVk::init()
 {
@@ -46,7 +47,30 @@ angle::Result CLCommandQueueVk::init()
                                 &mOutsideRenderPassCommandsAllocator, &mComputePassCommands),
                             CL_OUT_OF_RESOURCES);
 
+    // Generate initial QueueSerial for command buffer helper
+    ANGLE_CL_IMPL_TRY_ERROR(
+        mContext->getRenderer()->allocateQueueSerialIndex(&mCurrentQueueSerialIndex),
+        CL_OUT_OF_RESOURCES);
+    mComputePassCommands->setQueueSerial(
+        mCurrentQueueSerialIndex,
+        mContext->getRenderer()->generateQueueSerial(mCurrentQueueSerialIndex));
+
     return angle::Result::Continue;
+}
+
+CLCommandQueueVk::~CLCommandQueueVk()
+{
+    VkDevice vkDevice = mContext->getDevice();
+
+    if (mCurrentQueueSerialIndex != kInvalidQueueSerialIndex)
+    {
+        mContext->getRenderer()->releaseQueueSerialIndex(mCurrentQueueSerialIndex);
+        mCurrentQueueSerialIndex = kInvalidQueueSerialIndex;
+    }
+
+    // Recycle the current command buffers
+    mContext->getRenderer()->recycleOutsideRenderPassCommandBufferHelper(&mComputePassCommands);
+    mCommandPool.outsideRenderPassPool.destroy(vkDevice);
 }
 
 angle::Result CLCommandQueueVk::setProperty(cl::CommandQueueProperties properties, cl_bool enable)
@@ -280,16 +304,43 @@ angle::Result CLCommandQueueVk::enqueueNDRangeKernel(const cl::Kernel &kernel,
                                                      const cl::EventPtrs &waitEvents,
                                                      CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    ANGLE_TRY(enqueueWaitForEvents(waitEvents));
+
+    vk::PipelineCacheAccess pipelineCache;
+    vk::PipelineHelper *pipelineHelper = nullptr;
+    CLKernelVk &kernelImpl             = kernel.getImpl<CLKernelVk>();
+
+    // Fetch or create compute pipeline - then bind it to command buffer
+    ANGLE_CL_IMPL_TRY_ERROR(mContext->getRenderer()->getPipelineCache(mContext, &pipelineCache),
+                            CL_OUT_OF_RESOURCES);
+    ANGLE_TRY(kernelImpl.getOrCreateComputePipeline(&pipelineCache, ndrange,
+                                                    mCommandQueue.getDevice(), &pipelineHelper));
+    mComputePassCommands->retainResource(pipelineHelper);
+
+    // Here, we create-update-bind the kernel's descriptor set, put push-constants in cmd
+    // buffer, capture kernel resources, and handle kernel execution dependencies
+    ANGLE_TRY(processKernelResources(kernelImpl, ndrange));
+    mComputePassCommands->getCommandBuffer().bindComputePipeline(pipelineHelper->getPipeline());
+
+    // ANCLE currently does not support non-uniform WGS. Expand-out groupCountN calculations here to
+    // account for that once we support.
+    mComputePassCommands->getCommandBuffer().dispatch((ndrange.gws[0] / ndrange.lws[0]),
+                                                      (ndrange.gws[1] / ndrange.lws[1]),
+                                                      (ndrange.gws[2] / ndrange.lws[2]));
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueTask(const cl::Kernel &kernel,
                                             const cl::EventPtrs &waitEvents,
                                             CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    constexpr size_t globalWorkSize[3] = {1, 0, 0};
+    constexpr size_t localWorkSize[3]  = {1, 0, 0};
+    cl::NDRange ndrange(1, nullptr, globalWorkSize, localWorkSize);
+    return enqueueNDRangeKernel(kernel, ndrange, waitEvents, eventCreateFunc);
 }
 
 angle::Result CLCommandQueueVk::enqueueNativeKernel(cl::UserFunc userFunc,
@@ -343,6 +394,157 @@ angle::Result CLCommandQueueVk::flush()
 }
 
 angle::Result CLCommandQueueVk::finish()
+{
+    UNIMPLEMENTED();
+    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+}
+
+angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk, cl::NDRange &ndrange)
+{
+    const CLProgramVk::DeviceProgramData *devProgramData =
+        kernelVk.getProgram()->getDeviceProgramData(mCommandQueue.getDevice().getNative());
+    ASSERT(devProgramData != nullptr);
+
+    // Allocate descriptor set
+    ANGLE_TRY(kernelVk.getProgram()->allocateDescriptorSet(
+        kernelVk.getDescriptorSetLayouts()[DescriptorSetIndex::ShaderResource].get(),
+        &kernelVk.getDescriptorSet()));
+
+    // Push global offset data
+    const VkPushConstantRange *globalOffsetRange = devProgramData->getGlobalOffsetRange();
+    if (globalOffsetRange != nullptr)
+    {
+        mComputePassCommands->getCommandBuffer().pushConstants(
+            kernelVk.getPipelineLayout().get(), VK_SHADER_STAGE_COMPUTE_BIT,
+            globalOffsetRange->offset, globalOffsetRange->size, ndrange.offset.data());
+    }
+
+    // Push global size data
+    const VkPushConstantRange *globalSizeRange = devProgramData->getGlobalSizeRange();
+    if (globalSizeRange != nullptr)
+    {
+        mComputePassCommands->getCommandBuffer().pushConstants(
+            kernelVk.getPipelineLayout().get(), VK_SHADER_STAGE_COMPUTE_BIT,
+            globalSizeRange->offset, globalSizeRange->size, ndrange.gws.data());
+    }
+
+    // Process each kernel argument/resource
+    for (const auto &arg : kernelVk.getArgs())
+    {
+        switch (arg.type)
+        {
+            case NonSemanticClspvReflectionArgumentUniform:
+            case NonSemanticClspvReflectionArgumentStorageBuffer:
+            {
+                cl::Memory *clMem = cl::Buffer::Cast(*static_cast<const cl_mem *>(arg.handle));
+                CLBufferVk &vkMem = clMem->getImpl<CLBufferVk>();
+
+                mMemoryCaptures.emplace_back(clMem);
+
+                // Handle possible resource RAW hazard
+                if (clMem->getFlags().isSet(CL_MEM_READ_WRITE))
+                {
+                    if (mDependencyTracker.contains(clMem) ||
+                        mDependencyTracker.size() == kMaxDependencyTrackerSize)
+                    {
+                        ANGLE_TRY(enqueueBarrier());
+                        mDependencyTracker.clear();
+                    }
+                    mDependencyTracker.insert(clMem);
+                }
+
+                // Update buffer/descriptor info
+                VkDescriptorBufferInfo &bufferInfo =
+                    mUpdateDescriptorSetsBuilder.allocDescriptorBufferInfo();
+                bufferInfo.range  = clMem->getSize();
+                bufferInfo.offset = clMem->getOffset();
+                bufferInfo.buffer = vkMem.isSubBuffer()
+                                        ? vkMem.getParent()->getBuffer().getBuffer().getHandle()
+                                        : vkMem.getBuffer().getBuffer().getHandle();
+                VkWriteDescriptorSet &writeDescriptorSet =
+                    mUpdateDescriptorSetsBuilder.allocWriteDescriptorSet();
+                writeDescriptorSet.descriptorCount = 1;
+                writeDescriptorSet.descriptorType =
+                    arg.type == NonSemanticClspvReflectionArgumentUniform
+                        ? VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+                        : VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+                writeDescriptorSet.pBufferInfo = &bufferInfo;
+                writeDescriptorSet.sType       = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                writeDescriptorSet.dstSet      = kernelVk.getDescriptorSet();
+                writeDescriptorSet.dstBinding  = arg.descriptorBinding;
+                break;
+            }
+            case NonSemanticClspvReflectionArgumentPodPushConstant:
+            {
+                mComputePassCommands->getCommandBuffer().pushConstants(
+                    kernelVk.getPipelineLayout().get(), VK_SHADER_STAGE_COMPUTE_BIT,
+                    arg.pushConstOffset, arg.pushConstantSize, arg.handle);
+                break;
+            }
+            case NonSemanticClspvReflectionArgumentSampler:
+            case NonSemanticClspvReflectionArgumentPodUniform:
+            case NonSemanticClspvReflectionArgumentStorageImage:
+            case NonSemanticClspvReflectionArgumentSampledImage:
+            case NonSemanticClspvReflectionArgumentPointerUniform:
+            case NonSemanticClspvReflectionArgumentPodStorageBuffer:
+            case NonSemanticClspvReflectionArgumentUniformTexelBuffer:
+            case NonSemanticClspvReflectionArgumentStorageTexelBuffer:
+            case NonSemanticClspvReflectionArgumentPointerPushConstant:
+            default:
+            {
+                UNIMPLEMENTED();
+                break;
+            }
+        }
+    }
+
+    mContext->getPerfCounters().writeDescriptorSets =
+        mUpdateDescriptorSetsBuilder.flushDescriptorSetUpdates(
+            mContext->getRenderer()->getDevice());
+
+    mComputePassCommands->getCommandBuffer().bindDescriptorSets(
+        kernelVk.getPipelineLayout().get(), VK_PIPELINE_BIND_POINT_COMPUTE,
+        DescriptorSetIndex::Internal, 1, &kernelVk.getDescriptorSet(), 0, nullptr);
+
+    return angle::Result::Continue;
+}
+
+angle::Result CLCommandQueueVk::flushComputePassCommands()
+{
+    UNIMPLEMENTED();
+    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+}
+
+angle::Result CLCommandQueueVk::submitCommands()
+{
+    UNIMPLEMENTED();
+    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+}
+
+angle::Result CLCommandQueueVk::createEvent(CLEventImpl::CreateFunc *createFunc)
+{
+    if (createFunc != nullptr)
+    {
+        *createFunc = [this](const cl::Event &event) {
+            auto eventVk = new (std::nothrow) CLEventVk(event);
+            if (eventVk == nullptr)
+            {
+                ERR() << "Failed to create event obj!";
+                ANGLE_CL_SET_ERROR(CL_OUT_OF_HOST_MEMORY);
+                return CLEventImpl::Ptr(nullptr);
+            }
+            eventVk->setQueueSerial(mComputePassCommands->getQueueSerial());
+
+            // Save a reference to this event
+            mEventsAssociated.insert(eventVk);
+
+            return CLEventImpl::Ptr(eventVk);
+        };
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result CLCommandQueueVk::finishInternal()
 {
     UNIMPLEMENTED();
     ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);

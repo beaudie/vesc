@@ -3467,13 +3467,16 @@ class ShaderProgramHelper : angle::NonCopyable
                                               const SpecializationConstants &specConsts,
                                               PipelineHelper *pipeline) const;
 
-    angle::Result getOrCreateComputePipeline(vk::Context *context,
-                                             ComputePipelineCache *computePipelines,
-                                             PipelineCacheAccess *pipelineCache,
-                                             const PipelineLayout &pipelineLayout,
-                                             ComputePipelineFlags pipelineFlags,
-                                             PipelineSource source,
-                                             PipelineHelper **pipelineOut) const;
+    angle::Result getOrCreateComputePipeline(
+        vk::Context *context,
+        ComputePipelineCache *computePipelines,
+        PipelineCacheAccess *pipelineCache,
+        const PipelineLayout &pipelineLayout,
+        ComputePipelineFlags pipelineFlags,
+        PipelineSource source,
+        PipelineHelper **pipelineOut,
+        const char *shaderName                   = "main",
+        VkSpecializationInfo *specializationInfo = nullptr) const;
 
   private:
     ShaderModuleMap mShaders;

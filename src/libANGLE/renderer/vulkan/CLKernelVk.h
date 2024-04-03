@@ -10,6 +10,7 @@
 
 #include "libANGLE/renderer/vulkan/cl_types.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 #include "libANGLE/renderer/CLKernelImpl.h"
@@ -76,12 +77,17 @@ class CLKernelVk : public CLKernelImpl
 
     angle::Result createInfo(CLKernelImpl::Info *infoOut) const override;
 
-    const CLProgramVk *getProgram() { return mProgram; }
+    CLProgramVk *getProgram() { return mProgram; }
     const std::string &getKernelName() { return mName; }
     const CLKernelArguments &getArgs() { return mArgs; }
     VkDescriptorSet &getDescriptorSet() { return mDescriptorSet; }
     vk::AtomicBindingPointer<vk::PipelineLayout> &getPipelineLayout() { return mPipelineLayout; }
     vk::DescriptorSetLayoutPointerArray &getDescriptorSetLayouts() { return mDescriptorSetLayouts; }
+
+    angle::Result getOrCreateComputePipeline(vk::PipelineCacheAccess *pipelineCache,
+                                             cl::NDRange &ndrange,
+                                             const cl::Device &device,
+                                             vk::PipelineHelper **pipelineOut);
 
   private:
     CLProgramVk *mProgram;
@@ -90,6 +96,8 @@ class CLKernelVk : public CLKernelImpl
     std::string mAttributes;
     CLKernelArguments mArgs;
     VkDescriptorSet mDescriptorSet{VK_NULL_HANDLE};
+    vk::ShaderProgramHelper mShaderProgramHelper;
+    vk::ComputePipelineCache mComputePipelineCache;
     vk::AtomicBindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts{};
 };
