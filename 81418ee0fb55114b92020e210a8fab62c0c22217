@@ -33,6 +33,24 @@
       "message": "it looks like these tests are failing due to this change -\n```\nwebgl2_conformance_gl_passthrough_tests on Intel GPU on Linux failed because of:\n\nconformance/textures/image_bitmap_from_image_bitmap/tex-2d-rgba-rgba-unsigned_byte.html\n\nconformance/uniforms/uniform-default-values.html\n\nconformance2/textures/canvas/tex-2d-srgb8-rgb-unsigned_byte.html\n\nconformance2/textures/image/tex-2d-r11f_g11f_b10f-rgb-float.html\n\nwebgl_conformance_gl_passthrough_tests on Intel GPU on Linux failed because of:\n\nconformance/rendering/framebuffer-switch.html\n\nconformance/uniforms/uniform-default-values.html\n```\n\nany help debugging them is appreciated",
       "revId": "81418ee0fb55114b92020e210a8fab62c0c22217",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46cf0177_c6967f2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T13:31:08Z",
+      "side": 1,
+      "message": "Weird, I\u0027ll take a look",
+      "parentUuid": "9101c47b_44f2da18",
+      "revId": "81418ee0fb55114b92020e210a8fab62c0c22217",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
