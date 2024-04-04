@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb00d32e_d019a40d",
+        "filename": "src/libANGLE/CLCommandQueue.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-04T12:31:04Z",
+      "side": 1,
+      "message": "Can this be const ref? I don\u0027t see anywhere using it as non-const.",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 55
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d71ec608_e764ce96",
+        "filename": "src/libANGLE/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-04T12:31:04Z",
+      "side": 1,
+      "message": "Can these be size_t? I see them cast back and forth a few times.",
+      "range": {
+        "startLine": 121,
+        "startChar": 15,
+        "endLine": 121,
+        "endChar": 23
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
