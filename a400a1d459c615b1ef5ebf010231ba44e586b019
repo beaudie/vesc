@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bbb1ce2_657d4057",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-04T21:26:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "232bb21e_be410238",
+      "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8073f151_f4a69ad1",
@@ -71,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0c71e45_7bb5a790",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-04T21:26:27Z",
+      "side": 1,
+      "message": "thanks a ton for helping debug this shabi, really appreciate it!",
+      "parentUuid": "2371f49f_dd5f31ae",
+      "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92df1959_ebc3fce5",
@@ -84,6 +120,24 @@
       "writtenOn": "2024-04-04T19:12:50Z",
       "side": 1,
       "message": "We don\u0027t actually need the `mPostLinkSubTasks` member, do we? First of all, in the PPO case, the task is not scheduled but `waitForPostLinkTasksImpl` thinks there are tasks to wait on. That\u0027s at least a potential false positive with the perf warning.\n\nIt looks like this is cached only so `waitForPostLinkTasksImpl` knows if there are tasks, but that can already be queried from `mExecutable`, no?",
+      "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b499272_6847c649",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-04T21:26:27Z",
+      "side": 1,
+      "message": "\u003e in the PPO case, the task is not scheduled but waitForPostLinkTasksImpl thinks there are tasks to wait on\n\nnice catch, i missed clearing `mPostLinkSubTasks` after the inline calls. Done\n\n\u003e It looks like this is cached only so waitForPostLinkTasksImpl\n\nyes, the primary reason for this duplication is that `LinkSubTask::getResult` needs a `gl::Context *context` which we dont have access to in `ContextVk::handleDirtyGraphicsPipelineDesc` which is the only caller of `waitForPostLinkTasksImpl`",
+      "parentUuid": "92df1959_ebc3fce5",
       "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
