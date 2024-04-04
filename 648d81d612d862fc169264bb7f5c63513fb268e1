@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92a7ae8f_e44a2d13",
+        "filename": "src/libANGLE/CLCommandQueue.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T16:41:52Z",
+      "side": 1,
+      "message": "Agreed as well - we do modify the ndrange object once we get to\n`CLCommandQueueVk::enqueueNDRangeKernel` (when we update LWS if needed).\n\nBut I think I want to refactor that so that we can keep ndrange here as a\nconst ref. and instead keep updated state in the kernel object. Let me work\non that.",
+      "parentUuid": "dcd67e99_e8da2f1f",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 55
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "098c980e_8257064a",
         "filename": "src/libANGLE/cl_types.h",
         "patchSetId": 1
@@ -73,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2238b5c_41ed1508",
+        "filename": "src/libANGLE/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T16:41:52Z",
+      "side": 1,
+      "message": "Agreed - will update",
+      "parentUuid": "098c980e_8257064a",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 24
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d71ec608_e764ce96",
         "filename": "src/libANGLE/cl_types.h",
         "patchSetId": 1
@@ -84,6 +132,30 @@
       "writtenOn": "2024-04-04T12:31:04Z",
       "side": 1,
       "message": "Can these be size_t? I see them cast back and forth a few times.",
+      "range": {
+        "startLine": 121,
+        "startChar": 15,
+        "endLine": 121,
+        "endChar": 23
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b99abd6f_c4119f2e",
+        "filename": "src/libANGLE/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T16:41:52Z",
+      "side": 1,
+      "message": "+1 (aligns better to spec as well). Will update chain.",
+      "parentUuid": "d71ec608_e764ce96",
       "range": {
         "startLine": 121,
         "startChar": 15,
