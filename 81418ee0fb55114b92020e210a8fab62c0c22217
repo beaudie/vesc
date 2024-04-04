@@ -87,6 +87,24 @@
       "parentUuid": "a3c90478_bf380a52",
       "revId": "81418ee0fb55114b92020e210a8fab62c0c22217",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2017e2a4_754a932f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T19:47:00Z",
+      "side": 1,
+      "message": "So I minimized that test and added some logs to ProgramGL.cpp to see what gets called when in the hopes of figuring something out. I can\u0027t say I\u0027ve discovered the exact issue yet, but I do see that with this change we are storing the binary to cache one extra time per link!\n\nI\u0027m going to dig into that more, but would you do me a favor and split this change so that we can have the mechanical change where the tasks are moved to program executable isolated? That should make the functional change in this CL much easier to review and debug.",
+      "parentUuid": "d922d766_0b047920",
+      "revId": "81418ee0fb55114b92020e210a8fab62c0c22217",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
