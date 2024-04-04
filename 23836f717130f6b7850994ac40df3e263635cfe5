@@ -130,6 +130,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "425f6455_9dc529f3",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-04T14:09:46Z",
+      "side": 1,
+      "message": "My understanding is that the chunk thing is the typical implementation so I kept that as is (modulo text-\u003ebinary mode).\nThe reason it\u0027s not done in chunks in the windows implementation above is that we\u0027re now reading _bytes_ not characters, so a chunk boundary could fall between \\r and \\n and I am using the simplest way I can think of to get around that which I think works just fine here.\n\nI had briefly thought of the idea to _always_ replace \\r\\n with \\n regardless of the platform. A theoretical example where this could make a would be repo/git misconfiguration such that we have \\r\\n in text files on Linux.. but that sounds like something we\u0027d rather fix that in the repo itself.\n\nLMK if you have strong preferences, for now I\u0027ll land as is.",
+      "parentUuid": "941d49c6_0fdca189",
+      "range": {
+        "startLine": 148,
+        "startChar": 16,
+        "endLine": 148,
+        "endChar": 21
+      },
+      "revId": "23836f717130f6b7850994ac40df3e263635cfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e10c41b9_2210b79b",
