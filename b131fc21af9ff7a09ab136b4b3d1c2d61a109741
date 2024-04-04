@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "810ea934_95201b21",
+        "filename": "extensions/EGL_ANGLE_metal_texture_client_buffer.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-04-04T05:40:46Z",
+      "side": 1,
+      "message": "Based on EGL_ANGLE_d3d_texture_client_buffer.txt, I made this extension reference EGL_ANGLE_iosurface_client_buffer. (d3d_texture_client_buffer mentions EGL_TEXTURE_INTERNAL_FORMAT_ANGLE but doesn\u0027t define it as a new token).",
+      "parentUuid": "5a890138_6041e0fd",
+      "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "964fc6cc_e378f7a4",
@@ -116,6 +134,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17d31f6a_e581a717",
+        "filename": "src/tests/gl_tests/ImageTestMetal.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-04-04T05:40:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "053d9f7e_02fa093e",
+      "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "926cfb0d_56b9836f",
@@ -129,6 +165,24 @@
       "writtenOn": "2024-02-27T03:01:21Z",
       "side": 1,
       "message": "What would you think about adding another test which uses the re-cast texture for rendering?",
+      "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7548aca_59595a17",
+        "filename": "src/tests/gl_tests/ImageTestMetal.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-04-04T05:40:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "926cfb0d_56b9836f",
       "revId": "b131fc21af9ff7a09ab136b4b3d1c2d61a109741",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
