@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6518a116_a789c949",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T20:28:34Z",
+      "side": 1,
+      "message": "I can confirm the second save was being done after the uniform is set. ANGLE doesn\u0027t put the uniform values in the binary (no implementation should) and this looks like a mesa bug where the uniform value is part of the binary.\n\nLucky for us because it caught a perf regression!",
+      "parentUuid": "8073f151_f4a69ad1",
+      "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92df1959_ebc3fce5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 16
