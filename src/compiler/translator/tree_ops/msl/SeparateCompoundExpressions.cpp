@@ -245,6 +245,10 @@ class Separator : public TIntermRebuild
         {
             return true;
         }
+        if (!expr.hasSideEffects())
+        {
+            return true;
+        }
         return false;
     }
 
@@ -422,7 +426,20 @@ class Separator : public TIntermRebuild
 
         TIntermTyped *left  = node.getLeft();
         TIntermTyped *right = node.getRight();
-
+        switch (op)
+        {
+            case TOperator::EOpEqual:
+            case TOperator::EOpNotEqual:
+            case TOperator::EOpLessThan:
+            case TOperator::EOpGreaterThan:
+            case TOperator::EOpLessThanEqual:
+            case TOperator::EOpGreaterThanEqual:
+                pullMappedExpr(right, true);
+                pullMappedExpr(left, true);
+                return node;
+            default:
+                break;
+        }
         if (op == TOperator::EOpLogicalAnd || op == TOperator::EOpLogicalOr)
         {
             const Name name = mIdGen.createNewName();
