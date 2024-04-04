@@ -108,6 +108,24 @@
       "parentUuid": "cd66e390_4d4c95a8",
       "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91699e22_150824e8",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T17:58:19Z",
+      "side": 1,
+      "message": "Acknowledged, I thought \"work size\" was just shorthand for \"workgroup size\" 😄\n\nNever mind!",
+      "parentUuid": "d9418d78_1f6cd26a",
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
