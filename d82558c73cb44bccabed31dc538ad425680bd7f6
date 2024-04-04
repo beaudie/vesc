@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d9772a6_cfa27672",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-04-04T19:58:59Z",
+      "side": 1,
+      "message": "Please update before submitting.",
+      "revId": "d82558c73cb44bccabed31dc538ad425680bd7f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
