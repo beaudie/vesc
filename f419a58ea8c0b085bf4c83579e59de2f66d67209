@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59eca65e_7f81c288",
+        "filename": "src/libANGLE/renderer/vulkan/CLEventVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T18:51:55Z",
+      "side": 1,
+      "message": "\u003e Can there be jumps in the status?\n\nGood question. No, not in our implementation. Once we submit/flush our batched `vkCmd*` commands, we track execution status sequentially though all CL exec states (CPU side).\n\nEither done with same host-thread `clFinish` or from a spawned ANGLE worker thread so that host-thread is unblocked `clFlush`.\n\nI CC\u0027ed you on the WIP CL that covers the routine for this, specifically this method:\n`CLCommandQueueVk::finishInternal()`",
+      "parentUuid": "67c446b5_009a0f41",
+      "revId": "f419a58ea8c0b085bf4c83579e59de2f66d67209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af374820_b7046f0a",
         "filename": "src/libANGLE/renderer/vulkan/CLEventVk.h",
         "patchSetId": 2
