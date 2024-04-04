@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "381b15ee_f8b4db7a",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T23:54:30Z",
+      "side": 1,
+      "message": "Sure thing! Done.",
+      "parentUuid": "b8920e0b_5a059887",
+      "revId": "e789bf20edc745628661eecfddc7e2495649fc9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00202f5c_427d2320",
@@ -83,6 +101,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d33614a0_2ec51657",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T23:54:30Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "00202f5c_427d2320",
+      "range": {
+        "startLine": 35,
+        "startChar": 9,
+        "endLine": 36,
+        "endChar": 14
+      },
+      "revId": "e789bf20edc745628661eecfddc7e2495649fc9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89230ca4_3df8c9bb",
@@ -96,6 +138,30 @@
       "writtenOn": "2024-04-04T17:56:36Z",
       "side": 1,
       "message": "Please deduplicate by making these call a helper",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 9
+      },
+      "revId": "e789bf20edc745628661eecfddc7e2495649fc9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f994f65_6a3a51c0",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T23:54:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89230ca4_3df8c9bb",
       "range": {
         "startLine": 158,
         "startChar": 0,
