@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7f017c1_0c67d553",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2950,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-04-04T19:50:23Z",
+      "side": 0,
+      "message": "This is a different feature that probably should not be removed.",
+      "range": {
+        "startLine": 2945,
+        "startChar": 0,
+        "endLine": 2950,
+        "endChar": 0
+      },
+      "revId": "91a57128bc3fd56a77ef544a42f56f1b99320dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
