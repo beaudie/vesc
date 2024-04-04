@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62fe267d_d7fa0b75",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T20:58:46Z",
+      "side": 1,
+      "message": "Thanks for the update, don\u0027t forget to remove this function!\n\nAlso feel free to squash with the previous CL and save the bots a bit of time. It\u0027s common to introduce a feature in the same CL that uses it.",
+      "parentUuid": "b8920e0b_5a059887",
+      "revId": "e789bf20edc745628661eecfddc7e2495649fc9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00202f5c_427d2320",
         "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
         "patchSetId": 2
