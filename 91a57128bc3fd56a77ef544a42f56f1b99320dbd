@@ -46,6 +46,30 @@
       },
       "revId": "91a57128bc3fd56a77ef544a42f56f1b99320dbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "759d2b8f_e1d81691",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2950,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T20:21:05Z",
+      "side": 0,
+      "message": "Oops, `\\cdepth.*clip.*enable` matched this :-S\n\nLooks like the code that actually enabled the ext was deleted already. Thanks for the comment!",
+      "parentUuid": "9a33b4d1_27992b3d",
+      "range": {
+        "startLine": 2945,
+        "startChar": 0,
+        "endLine": 2950,
+        "endChar": 0
+      },
+      "revId": "91a57128bc3fd56a77ef544a42f56f1b99320dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
