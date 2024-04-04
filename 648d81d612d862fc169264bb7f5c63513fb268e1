@@ -26,6 +26,53 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dcd67e99_e8da2f1f",
+        "filename": "src/libANGLE/CLCommandQueue.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T13:46:13Z",
+      "side": 1,
+      "message": "+1\n\nAnd for future reference, while chromium relaxed this requirement, in AGNLE we still tend to use either `const \u0026` (if value is unchanged) or pointers (if value is changed), and generally don\u0027t allow non-const references (basically it\u0027s hard to tell at call site if it can be modified)",
+      "parentUuid": "bb00d32e_d019a40d",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 55
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "098c980e_8257064a",
+        "filename": "src/libANGLE/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T13:46:13Z",
+      "side": 1,
+      "message": "Easy to write, but in the long run confusing to readers. Please avoid abbreviations.\n\n```suggestion\n    NDRange(cl_uint workDimensionsIn,\n            const size_t *globalWorkOffsetIn,\n            const size_t *globalWorkSizeIn,\n            const size_t *localWorkSizeIn)\n        : workDimensions(workDimensionsIn),\n          nullLocalWorkSize(localWorkSizeIn \u003d\u003d nullptr),\n          globalWorkOffset({0, 0, 0}),\n          globalWorkSize({1, 1, 1}),\n          localWorkSize({1, 1, 1})\n```",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 24
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d71ec608_e764ce96",
         "filename": "src/libANGLE/cl_types.h",
         "patchSetId": 1
