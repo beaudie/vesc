@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36df2575_3adbf837",
+        "filename": "src/libANGLE/CLCommandQueue.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T23:35:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92a7ae8f_e44a2d13",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 55
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "098c980e_8257064a",
@@ -119,6 +143,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "126974d6_114162e5",
+        "filename": "src/libANGLE/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T23:35:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2238b5c_41ed1508",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 24
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d71ec608_e764ce96",
@@ -156,6 +204,30 @@
       "side": 1,
       "message": "+1 (aligns better to spec as well). Will update chain.",
       "parentUuid": "d71ec608_e764ce96",
+      "range": {
+        "startLine": 121,
+        "startChar": 15,
+        "endLine": 121,
+        "endChar": 23
+      },
+      "revId": "648d81d612d862fc169264bb7f5c63513fb268e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec7eee82_ecbb8e70",
+        "filename": "src/libANGLE/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T23:35:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b99abd6f_c4119f2e",
       "range": {
         "startLine": 121,
         "startChar": 15,
