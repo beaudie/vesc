@@ -34,6 +34,24 @@
       "parentUuid": "15f8b439_2a146b45",
       "revId": "c7af5ef4ffa447cc04998ef64e5816c7135dedb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "712413cb_a429c2e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T18:06:12Z",
+      "side": 1,
+      "message": "Driving by: the remaining diffs look like typical precision diffs, nothing that looks worrying.",
+      "parentUuid": "80cc4f81_63d4bb0f",
+      "revId": "c7af5ef4ffa447cc04998ef64e5816c7135dedb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
