@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8073f151_f4a69ad1",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T19:54:25Z",
+      "side": 1,
+      "message": "Ah well, the extra cache part was easy at least. Previously, this was skipped if there were no post-link tasks. Now it\u0027s done unconditionally.\n\nAdding `if (mState.mExecutable-\u003emPostLinkSubTasks.empty()) { return; }` to the beginning of this function makes the test pass.\n\nThe test is linking a program, verifying sampler uniform is 0, changes the uniform and relinks the program, expecting it to be reset. It could be a bug in mesa somehow, or maybe this is being called after the test has changed the sampler uniform and the second save is storing the non-default uniform value. The relink is loading the binary, so it would load the wrong value in that case. That sounds like an ANGLE bug TBH, but strange that it doesn\u0027t reproduce on Nvidia.",
+      "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92df1959_ebc3fce5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 16
