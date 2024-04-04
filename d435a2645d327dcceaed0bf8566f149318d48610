@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1d5aaa6_56c6ba3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2024-04-04T16:58:09Z",
+      "side": 1,
+      "message": "Sorry this took absolutely forever to upload, I completely forgot about --bypass-hooks and was fighting with git cl.\n\nThere\u0027s still a number of failures, this doesn\u0027t quite correctly skip hoisting if-statements.",
+      "revId": "d435a2645d327dcceaed0bf8566f149318d48610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
