@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f1580a5_0578ebab",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T15:23:22Z",
+      "side": 1,
+      "message": "```suggestion\n    const VkPhysicalDeviceProperties \u0026props \u003d mRenderer-\u003egetPhysicalDeviceProperties();\n```",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 8
+      },
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f57c7a1_28de084b",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T15:23:22Z",
+      "side": 1,
+      "message": "TIL `UINT32_C` exists. But no need for it (if 64u is not 32-bits, we\u0027ll have a _lot_ of build failures everywhere):\n\n```suggestion\n    maxSize          \u003d std::min(maxSize, 64u);\n```",
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3168b9d8_bbcec1ed",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T15:23:22Z",
+      "side": 1,
+      "message": "```suggestion\n            // http://anglebug.com/8631\n```",
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3114e88_64bf2fe7",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T15:23:22Z",
+      "side": 1,
+      "message": "Probably can avoid the loop with a few `ctz`s and `clz`s, but no big deal",
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd66e390_4d4c95a8",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T15:23:22Z",
+      "side": 1,
+      "message": "Not called anywhere?\n\nAnyway, sounds like it should be called `selectLocalWorkGroupSize`",
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
