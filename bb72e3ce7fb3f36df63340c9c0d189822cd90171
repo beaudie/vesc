@@ -90,6 +90,24 @@
       "message": "Not called anywhere?\n\nAnyway, sounds like it should be called `selectLocalWorkGroupSize`",
       "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9418d78_1f6cd26a",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T16:42:29Z",
+      "side": 1,
+      "message": "You\u0027re correct - just staging this change, will be used in this one here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5406614/8\n\nI can squash if you want them together?\n\n\u003e Anyway, sounds like it should be called selectLocalWorkGroupSize\n\nAh, naming is a bit funky. \n\n`local_work_size (LWS) \u003d\u003d workgroup_size (WGS)` from my understanding of the spec:\n```\nlocal_work_size points to an array of work_dim unsigned values \nthat describe the number of work-items that make up a work-group \n(also referred to as the size of the work-group)\n```",
+      "parentUuid": "cd66e390_4d4c95a8",
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
