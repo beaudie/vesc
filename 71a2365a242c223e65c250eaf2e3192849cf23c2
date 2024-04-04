@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "71a2365a242c223e65c250eaf2e3192849cf23c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a704014_ba19a78f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T01:33:24Z",
+      "side": 1,
+      "message": "You might want to consider making this an `ANGLE_PERF_WARNING`, both because it\u0027s warning about an inefficiency introduced by the warmup feature (wasted pipeline creation), and more importantly because it stops spamming after logging it a few times.",
+      "range": {
+        "startLine": 1034,
+        "startChar": 0,
+        "endLine": 1035,
+        "endChar": 62
+      },
+      "revId": "71a2365a242c223e65c250eaf2e3192849cf23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
