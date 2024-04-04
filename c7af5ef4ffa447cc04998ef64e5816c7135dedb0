@@ -16,6 +16,24 @@
       "message": "I triaged the vast majority of the new images, as they were visually indistinguishable from the existing good images. There were 5 that I left untriaged since there were noticeable differences when switching between the new and existing images. Nothing looked major, but still would be good for someone more familiar with the tests to take a look.",
       "revId": "c7af5ef4ffa447cc04998ef64e5816c7135dedb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80cc4f81_63d4bb0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-04T17:57:22Z",
+      "side": 1,
+      "message": "Hmm, I somehow didn\u0027t see your comment before, probably since the CL is still WIP?\nSorry you had to go through these manually.\nI\u0027ve now added Use-Permissive-Angle-Pixel-Comparison footer that you\u0027ve helped implement for this purpose.\nI was curious if it will auto triage everything.",
+      "parentUuid": "15f8b439_2a146b45",
+      "revId": "c7af5ef4ffa447cc04998ef64e5816c7135dedb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
