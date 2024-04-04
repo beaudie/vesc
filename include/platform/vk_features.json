@@ -1472,6 +1472,13 @@
                 "enable additional blend factors for dithering"
             ],
             "issue": "https://issuetracker.google.com/328837151"
+        },
+        {
+            "name": "supports_shader_non_semantic_info",
+            "category": "Features",
+            "description": [
+                "Enable non-semantic info inside shader module via VK_KHR_shader_non_semantic_info extension"
+            ]
         }
     ]
 }

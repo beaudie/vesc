@@ -1352,6 +1352,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://issuetracker.google.com/328837151"
     };
 
+    FeatureInfo supportsShaderNonSemanticInfo = {
+        "supportsShaderNonSemanticInfo",
+        FeatureCategory::VulkanFeatures,
+        "Enable non-semantic info inside shader module via VK_KHR_shader_non_semantic_info extension",
+        &members,
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
