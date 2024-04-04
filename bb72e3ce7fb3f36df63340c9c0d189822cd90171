@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7928901_33614a56",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T20:42:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f1580a5_0578ebab",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 8
+      },
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f57c7a1_28de084b",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e32738b0_c797c77a",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T20:42:30Z",
+      "side": 1,
+      "message": "Ya, agreed.\n\nDone.",
+      "parentUuid": "6f57c7a1_28de084b",
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3168b9d8_bbcec1ed",
@@ -54,6 +96,24 @@
       "writtenOn": "2024-04-04T15:23:22Z",
       "side": 1,
       "message": "```suggestion\n            // http://anglebug.com/8631\n```",
+      "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "701ef5f7_d56514cf",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-04T20:42:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3168b9d8_bbcec1ed",
       "revId": "bb72e3ce7fb3f36df63340c9c0d189822cd90171",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
