@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9e453f3_7971a6b5",
+        "filename": "src/libANGLE/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T20:53:03Z",
+      "side": 1,
+      "message": "You can use this in NDRange now!",
+      "revId": "0956e97e231ae112d524538109db43b655ce04e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ebc815_b555e065",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T20:53:03Z",
+      "side": 1,
+      "message": "nit: When you get a chance for a follow up clean up (this and other places with WGS):\n\n```suggestion\n        cl::WorkgroupSize getCompiledWorkGroupSize(const std::string \u0026kernelName) const\n```",
+      "revId": "0956e97e231ae112d524538109db43b655ce04e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
