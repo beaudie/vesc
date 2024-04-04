@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8920e0b_5a059887",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T17:56:36Z",
+      "side": 1,
+      "message": "Before this sort of search spirals out of control, the way to do this is to add a feature to `vk_features.json`, initialize it as needed in `vk_renderer.cpp` and then you can check `renderer-\u003egetFeatures().supportsShaderNonSemanticInfo.enabled`.\n\nHaving a feature gives you a lot of other abilities, like the fact that you can toggle it with an envvar for testing, to make sure the path where it\u0027s not supported works while testing on a device that does support the extension.",
+      "revId": "e789bf20edc745628661eecfddc7e2495649fc9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00202f5c_427d2320",
         "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
         "patchSetId": 2
@@ -19,6 +36,53 @@
         "startChar": 9,
         "endLine": 36,
         "endChar": 14
+      },
+      "revId": "e789bf20edc745628661eecfddc7e2495649fc9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea51a85f_b6ec04c2",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T17:56:36Z",
+      "side": 1,
+      "message": "Another possibility is to do `using SomeGoodName \u003d vk::BindingPointer\u003cvk::DescriptorSetLayout, vk::AtomicRefCounted\u003cvk::DescriptorSetLayout\u003e\u003e;` in a header somewhere and use that. We do that a lot elsewhere",
+      "parentUuid": "00202f5c_427d2320",
+      "range": {
+        "startLine": 35,
+        "startChar": 9,
+        "endLine": 36,
+        "endChar": 14
+      },
+      "revId": "e789bf20edc745628661eecfddc7e2495649fc9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89230ca4_3df8c9bb",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T17:56:36Z",
+      "side": 1,
+      "message": "Please deduplicate by making these call a helper",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 9
       },
       "revId": "e789bf20edc745628661eecfddc7e2495649fc9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
