@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2371f49f_dd5f31ae",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T21:00:57Z",
+      "side": 1,
+      "message": "This would have caught the bug: https://chromium-review.googlesource.com/c/angle/angle/+/5426396\n\nIt doesn\u0027t catch the save-after-save when linking, but at least it catches save-after-load when there\u0027s a cache hit. That test is tricky enough that I can\u0027t reliably check for the double save.",
+      "parentUuid": "6518a116_a789c949",
+      "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92df1959_ebc3fce5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 16
