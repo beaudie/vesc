@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "232bb21e_be410238",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T19:12:50Z",
+      "side": 1,
+      "message": "This is unused right? Can be deleted?",
+      "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92df1959_ebc3fce5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T19:12:50Z",
+      "side": 1,
+      "message": "We don\u0027t actually need the `mPostLinkSubTasks` member, do we? First of all, in the PPO case, the task is not scheduled but `waitForPostLinkTasksImpl` thinks there are tasks to wait on. That\u0027s at least a potential false positive with the perf warning.\n\nIt looks like this is cached only so `waitForPostLinkTasksImpl` knows if there are tasks, but that can already be queried from `mExecutable`, no?",
+      "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

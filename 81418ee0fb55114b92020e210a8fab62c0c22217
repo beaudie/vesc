@@ -69,6 +69,24 @@
       "parentUuid": "46cf0177_c6967f2e",
       "revId": "81418ee0fb55114b92020e210a8fab62c0c22217",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d922d766_0b047920",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-04T19:12:50Z",
+      "side": 1,
+      "message": "I can reproduce at least the uniforms/uniform-default-values.html failure on my Intel/Linux laptop. Looks like the test is failing a check that \"re-linking should reset to defaults\". I\u0027m still investigating. In the meantime, commented on a couple other things I noticed in the change.",
+      "parentUuid": "a3c90478_bf380a52",
+      "revId": "81418ee0fb55114b92020e210a8fab62c0c22217",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
