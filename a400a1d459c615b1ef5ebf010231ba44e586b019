@@ -140,6 +140,24 @@
       "parentUuid": "92df1959_ebc3fce5",
       "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd4125a4_b8dabd33",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-05T14:45:55Z",
+      "side": 1,
+      "message": "Acknowledged, let\u0027s follow up in the next CLs. I think what you\u0027re saying is basically that you want the backend-specific type of the task instead of the generic one. It sounds like it\u0027s enough to have another `getResult` that gets `ContextImpl` or even just downcasting the task to the real type, and avoid the task duplication (and possible future mess ups)",
+      "parentUuid": "4b499272_6847c649",
+      "revId": "a400a1d459c615b1ef5ebf010231ba44e586b019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
