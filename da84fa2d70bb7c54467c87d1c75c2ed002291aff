@@ -16,6 +16,24 @@
       "message": "If you want to add more details:\n\n```\nA race condition caused the worker pool to sometimes be destroyed from a worker thread instead of the main thread.\n\nThe race condition triggered in the following scenario:\n\n- The MainLinkLoadTask holds on to the worker pool\n  - This is necessary for the main task to spawn further tasks asynchronously\n- The reference to the worker pool in MainLinkLoadTask is released by its destructor\n- The worker thread dequeues a task (i.e. MainLinkLoadTask) to execute and holds a reference to it.\n- Once the task is run by the worker thread, the worker thread signals its completion\n  - (1) At this point, the scope holding the reference to the task closes and the task is released.  However, this is done after signaling the task\u0027s completion.\n- On program destruction, the program ensures that all its tasks are complete\n  - This uses the signal coming from the worker thread\n- (2) On display destruction, the worker pool is destroyed (by dereferencing it through the shared_ptr)\n- The destructor of the worker pool waits for the worker thread, with the expectation that this wait is done in the main thread.\n\nThe race condition led to the assert firing when (2) was done before (1). Because the task is already signaled complete, the main thread considers it done and goes ahead with the destruction of the display. However, until the scope of the worker thread closes, the task itself is still not destroyed. Since the task is holding a reference to the worker pool, that prevents the worker pool from getting destroyed too.\n\nOnce the display is destroyed, the worker thread closes its scope, causing the task to be destroyed. In turn, this leads to the worker pool itself to be destroyed. On destruction, the worker pool would wait for the worker thread to end which is a deadlock. Fortunately, this was caught earlier with an ASSERT that wanted to ensure destruction happens on the main thread.\n\nIn this change, the worker thread ensures it releases the task before signalling it complete, avoiding this issue. Other possible solutions would have been:\n\n- Release the worker pool from MainLinkLoadTask as soon as the subtasks are scheduled\n- Explicitly call a \"destroy\" method on the pool, instead of relying on the destructor to clean up.\n```",
       "revId": "da84fa2d70bb7c54467c87d1c75c2ed002291aff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3c6a3d9_7329cef2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-05T18:36:48Z",
+      "side": 1,
+      "message": "Thank you Shabi! Added to the description.",
+      "parentUuid": "140c54ed_00dcba88",
+      "revId": "da84fa2d70bb7c54467c87d1c75c2ed002291aff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
