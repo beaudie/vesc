@@ -121,6 +121,24 @@
       "parentUuid": "19c935b8_3990c51c",
       "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd318e8c_8dc2b8e6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-05T19:01:36Z",
+      "side": 1,
+      "message": "shabi - this is the only open item here, what do you want done?",
+      "parentUuid": "03d9fa9e_f6fd20bd",
+      "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
