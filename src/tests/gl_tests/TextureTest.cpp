@@ -13455,6 +13455,552 @@ TEST_P(Texture2DTestES3, TexImageFormatMismatch)
     glDrawElementsInstanced(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0, 1);
 }
 
+// Tests the ubyte vertex attr memory usage at draw (array buffer is 4M).
+TEST_P(Texture2DTestES3, MemoryAtDrawWithUbyteAttrAnd4MBuffer)
+{
+    // Shaders
+    const char *const kVert[] = {
+        R"(#version 300 es
+layout(location = 0) in vec4 a_val;
+
+void main()
+{
+    gl_Position = a_val;
+}
+)",
+    };
+    const char *const kFrag[] = {
+        R"(#version 300 es
+precision mediump float;
+layout(location = 0) out vec4 g_FragColor;
+
+void main()
+{
+    g_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}
+)",
+    };
+
+    // Buffers
+    constexpr GLsizei kAttrDataSize = 1 << 22;
+    std::vector<GLubyte> zeroData(kAttrDataSize, 0);
+    GLBuffer bufferAttrib, bufferElem;
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+    glBufferData(GL_ARRAY_BUFFER, kAttrDataSize, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferElem);
+    glBufferData(GL_ARRAY_BUFFER, 256, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+
+    // Program
+    GLuint program;
+    GLuint vs, fs;
+    program = glCreateProgram();
+    vs      = glCreateShader(GL_VERTEX_SHADER);
+    fs      = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(vs, 1, kVert, nullptr);
+    glShaderSource(fs, 1, kFrag, nullptr);
+    glCompileShader(vs);
+    glCompileShader(fs);
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glBindAttribLocation(program, 0, "a_val");
+    glLinkProgram(program);
+
+    glUseProgram(program);
+    glDetachShader(program, vs);
+    glDeleteShader(vs);
+    glDetachShader(program, fs);
+    glDeleteShader(fs);
+
+    // Vertex array
+    GLVertexArray vertexArray;
+    glBindVertexArray(vertexArray);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferElem);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+
+    // The following wants to use RGBA8_USCALED.
+    glVertexAttribPointer(0, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
+
+    // Prepare to draw.
+    glUseProgram(program);
+    glBindVertexArray(vertexArray);
+
+    // Draw.
+    {
+        WARN() << "Wait 6 seconds before drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+    {
+        glDrawElementsInstanced(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0, 1);
+    }
+    {
+        WARN() << "Wait 6 seconds after drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+}
+
+// Tests the ubyte vertex attr memory usage at draw (array buffer is 2M).
+TEST_P(Texture2DTestES3, MemoryAtDrawWithUbyteAttrAnd2MBuffer)
+{
+    // Shaders
+    const char *const kVert[] = {
+        R"(#version 300 es
+layout(location = 0) in vec4 a_val;
+
+void main()
+{
+    gl_Position = a_val;
+}
+)",
+    };
+    const char *const kFrag[] = {
+        R"(#version 300 es
+precision mediump float;
+layout(location = 0) out vec4 g_FragColor;
+
+void main()
+{
+    g_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}
+)",
+    };
+
+    // Buffers
+    constexpr GLsizei kAttrDataSize = 1 << 21;
+    std::vector<GLubyte> zeroData(kAttrDataSize, 0);
+    GLBuffer bufferAttrib, bufferElem;
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+    glBufferData(GL_ARRAY_BUFFER, kAttrDataSize, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferElem);
+    glBufferData(GL_ARRAY_BUFFER, 256, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+
+    // Program
+    GLuint program;
+    GLuint vs, fs;
+    program = glCreateProgram();
+    vs      = glCreateShader(GL_VERTEX_SHADER);
+    fs      = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(vs, 1, kVert, nullptr);
+    glShaderSource(fs, 1, kFrag, nullptr);
+    glCompileShader(vs);
+    glCompileShader(fs);
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glBindAttribLocation(program, 0, "a_val");
+    glLinkProgram(program);
+
+    glUseProgram(program);
+    glDetachShader(program, vs);
+    glDeleteShader(vs);
+    glDetachShader(program, fs);
+    glDeleteShader(fs);
+
+    // Vertex array
+    GLVertexArray vertexArray;
+    glBindVertexArray(vertexArray);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferElem);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+
+    // The following wants to use RGBA8_USCALED.
+    glVertexAttribPointer(0, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
+
+    // Prepare to draw.
+    glUseProgram(program);
+    glBindVertexArray(vertexArray);
+
+    // Draw.
+    {
+        WARN() << "Wait 6 seconds before drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+    {
+        glDrawElementsInstanced(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0, 1);
+    }
+    {
+        WARN() << "Wait 6 seconds after drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+}
+
+// Tests the ubyte vertex attr memory usage at draw (array buffer is 8K).
+TEST_P(Texture2DTestES3, MemoryAtDrawWithUbyteAttrAnd8KBuffer)
+{
+    // Shaders
+    const char *const kVert[] = {
+        R"(#version 300 es
+layout(location = 0) in vec4 a_val;
+
+void main()
+{
+    gl_Position = a_val;
+}
+)",
+    };
+    const char *const kFrag[] = {
+        R"(#version 300 es
+precision mediump float;
+layout(location = 0) out vec4 g_FragColor;
+
+void main()
+{
+    g_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}
+)",
+    };
+
+    // Buffers
+    constexpr GLsizei kAttrDataSize = 1 << 13;
+    std::vector<GLubyte> zeroData(kAttrDataSize, 0);
+    GLBuffer bufferAttrib, bufferElem;
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+    glBufferData(GL_ARRAY_BUFFER, kAttrDataSize, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferElem);
+    glBufferData(GL_ARRAY_BUFFER, 256, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+
+    // Program
+    GLuint program;
+    GLuint vs, fs;
+    program = glCreateProgram();
+    vs      = glCreateShader(GL_VERTEX_SHADER);
+    fs      = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(vs, 1, kVert, nullptr);
+    glShaderSource(fs, 1, kFrag, nullptr);
+    glCompileShader(vs);
+    glCompileShader(fs);
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glBindAttribLocation(program, 0, "a_val");
+    glLinkProgram(program);
+
+    glUseProgram(program);
+    glDetachShader(program, vs);
+    glDeleteShader(vs);
+    glDetachShader(program, fs);
+    glDeleteShader(fs);
+
+    // Vertex array
+    GLVertexArray vertexArray;
+    glBindVertexArray(vertexArray);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferElem);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+
+    // The following wants to use RGBA8_USCALED.
+    glVertexAttribPointer(0, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
+
+    // Prepare to draw.
+    glUseProgram(program);
+    glBindVertexArray(vertexArray);
+
+    // Draw.
+    {
+        WARN() << "Wait 6 seconds before drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+    {
+        glDrawElementsInstanced(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0, 1);
+    }
+    {
+        WARN() << "Wait 6 seconds after drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+}
+
+// Tests the sbyte vertex attr memory usage at draw (array buffer is 4M).
+TEST_P(Texture2DTestES3, MemoryAtDrawWithSbyteAttrAnd4MBuffer)
+{
+    // Shaders
+    const char *const kVert[] = {
+        R"(#version 300 es
+layout(location = 0) in vec4 a_val;
+
+void main()
+{
+    gl_Position = a_val;
+}
+)",
+    };
+    const char *const kFrag[] = {
+        R"(#version 300 es
+precision mediump float;
+layout(location = 0) out vec4 g_FragColor;
+
+void main()
+{
+    g_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}
+)",
+    };
+
+    // Buffers
+    constexpr GLsizei kAttrDataSize = 1 << 22;
+    std::vector<GLubyte> zeroData(kAttrDataSize, 0);
+    GLBuffer bufferAttrib, bufferElem;
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+    glBufferData(GL_ARRAY_BUFFER, kAttrDataSize, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferElem);
+    glBufferData(GL_ARRAY_BUFFER, 256, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+
+    // Program
+    GLuint program;
+    GLuint vs, fs;
+    program = glCreateProgram();
+    vs      = glCreateShader(GL_VERTEX_SHADER);
+    fs      = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(vs, 1, kVert, nullptr);
+    glShaderSource(fs, 1, kFrag, nullptr);
+    glCompileShader(vs);
+    glCompileShader(fs);
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glBindAttribLocation(program, 0, "a_val");
+    glLinkProgram(program);
+
+    glUseProgram(program);
+    glDetachShader(program, vs);
+    glDeleteShader(vs);
+    glDetachShader(program, fs);
+    glDeleteShader(fs);
+
+    // Vertex array
+    GLVertexArray vertexArray;
+    glBindVertexArray(vertexArray);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferElem);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+
+    // The following wants to use RGBA8_SSCALED.
+    glVertexAttribPointer(0, 4, GL_BYTE, GL_FALSE, 0, 0);
+
+    // Prepare to draw.
+    glUseProgram(program);
+    glBindVertexArray(vertexArray);
+
+    // Draw.
+    {
+        WARN() << "Wait 6 seconds before drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+    {
+        glDrawElementsInstanced(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0, 1);
+    }
+    {
+        WARN() << "Wait 6 seconds after drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+}
+
+// Tests the 32-bit float vertex attr memory usage at draw (array buffer is 4M).
+TEST_P(Texture2DTestES3, MemoryAtDrawWithFloatAttrAnd4MBuffer)
+{
+    // Shaders
+    const char *const kVert[] = {
+        R"(#version 300 es
+layout(location = 0) in vec4 a_val;
+
+void main()
+{
+    gl_Position = a_val;
+}
+)",
+    };
+    const char *const kFrag[] = {
+        R"(#version 300 es
+precision mediump float;
+layout(location = 0) out vec4 g_FragColor;
+
+void main()
+{
+    g_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}
+)",
+    };
+
+    // Buffers
+    constexpr GLsizei kAttrDataSize = 1 << 22;
+    std::vector<GLubyte> zeroData(kAttrDataSize, 0);
+    GLBuffer bufferAttrib, bufferElem;
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+    glBufferData(GL_ARRAY_BUFFER, kAttrDataSize, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferElem);
+    glBufferData(GL_ARRAY_BUFFER, 256, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+
+    // Program
+    GLuint program;
+    GLuint vs, fs;
+    program = glCreateProgram();
+    vs      = glCreateShader(GL_VERTEX_SHADER);
+    fs      = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(vs, 1, kVert, nullptr);
+    glShaderSource(fs, 1, kFrag, nullptr);
+    glCompileShader(vs);
+    glCompileShader(fs);
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glBindAttribLocation(program, 0, "a_val");
+    glLinkProgram(program);
+
+    glUseProgram(program);
+    glDetachShader(program, vs);
+    glDeleteShader(vs);
+    glDetachShader(program, fs);
+    glDeleteShader(fs);
+
+    // Vertex array
+    GLVertexArray vertexArray;
+    glBindVertexArray(vertexArray);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferElem);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+
+    // The following wants to use RGBA32F.
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // Prepare to draw.
+    glUseProgram(program);
+    glBindVertexArray(vertexArray);
+
+    // Draw.
+    {
+        WARN() << "Wait 6 seconds before drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+    {
+        glDrawElementsInstanced(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0, 1);
+    }
+    {
+        WARN() << "Wait 6 seconds after drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+}
+
+// Tests the 16-bit float vertex attr memory usage at draw (array buffer is 4M).
+TEST_P(Texture2DTestES3, MemoryAtDrawWithHalffloatAttrAnd4MBuffer)
+{
+    // Shaders
+    const char *const kVert[] = {
+        R"(#version 300 es
+layout(location = 0) in vec4 a_val;
+
+void main()
+{
+    gl_Position = a_val;
+}
+)",
+    };
+    const char *const kFrag[] = {
+        R"(#version 300 es
+precision mediump float;
+layout(location = 0) out vec4 g_FragColor;
+
+void main()
+{
+    g_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}
+)",
+    };
+
+    // Buffers
+    constexpr GLsizei kAttrDataSize = 1 << 22;
+    std::vector<GLubyte> zeroData(kAttrDataSize, 0);
+    GLBuffer bufferAttrib, bufferElem;
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+    glBufferData(GL_ARRAY_BUFFER, kAttrDataSize, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferElem);
+    glBufferData(GL_ARRAY_BUFFER, 256, reinterpret_cast<const GLubyte *>(&zeroData[0]),
+                 GL_STATIC_DRAW);
+
+    // Program
+    GLuint program;
+    GLuint vs, fs;
+    program = glCreateProgram();
+    vs      = glCreateShader(GL_VERTEX_SHADER);
+    fs      = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(vs, 1, kVert, nullptr);
+    glShaderSource(fs, 1, kFrag, nullptr);
+    glCompileShader(vs);
+    glCompileShader(fs);
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glBindAttribLocation(program, 0, "a_val");
+    glLinkProgram(program);
+
+    glUseProgram(program);
+    glDetachShader(program, vs);
+    glDeleteShader(vs);
+    glDetachShader(program, fs);
+    glDeleteShader(fs);
+
+    // Vertex array
+    GLVertexArray vertexArray;
+    glBindVertexArray(vertexArray);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferElem);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, bufferAttrib);
+
+    // The following wants to use RGBA16F.
+    glVertexAttribPointer(0, 4, GL_HALF_FLOAT, GL_FALSE, 0, 0);
+
+    // Prepare to draw.
+    glUseProgram(program);
+    glBindVertexArray(vertexArray);
+
+    // Draw.
+    {
+        WARN() << "Wait 6 seconds before drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+    {
+        glDrawElementsInstanced(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0, 1);
+    }
+    {
+        WARN() << "Wait 6 seconds after drawing...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 6.0)
+            ;
+    }
+}
+
 // Checks that drawing incomplete zero texture buffer does not crash.
 TEST_P(TextureBufferTestES31, DrawIncompleteZeroTexture)
 {
