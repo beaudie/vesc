@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56fbd09a_5aa2d4e0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-05T14:58:17Z",
+      "side": 1,
+      "message": "Based on suggestion from earlier CLs:\n\n```suggestion\n    if (currentGraphicsPipelineDesc !\u003d nullptr \u0026\u0026 mWarmUpGraphicsPipelineDesc.hash(subset) !\u003d *currentGraphicsPipelineDesc.hash(subset))\n```",
+      "revId": "14166dd32603d91783f7a76f4d7600b00f62859e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
