@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f9f292d_a7d7c2d3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-05T14:53:05Z",
+      "side": 1,
+      "message": "Ok yeah I see it now, I suggest just getting the list from the front-end object and casting the task pointer to `WarmUpTaskCommon` and call this on that. Then get rid of the duplicate `mPostLinkSubTasks`.",
+      "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19c935b8_3990c51c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-05T14:53:05Z",
+      "side": 1,
+      "message": "nit: The impl funciton is also doing an early out with the same condition. Perhaps make the one in the impl function an ASSERT instead.",
+      "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
