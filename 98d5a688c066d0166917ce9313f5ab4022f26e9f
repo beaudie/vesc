@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eb339c8_e7ed294d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-05T16:00:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f9f292d_a7d7c2d3",
+      "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d4d52f6_e0502d5c",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0084ace_7470372d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-05T16:00:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d4d52f6_e0502d5c",
+      "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19c935b8_3990c51c",
@@ -65,6 +101,24 @@
       "writtenOn": "2024-04-05T14:53:05Z",
       "side": 1,
       "message": "nit: The impl funciton is also doing an early out with the same condition. Perhaps make the one in the impl function an ASSERT instead.",
+      "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03d9fa9e_f6fd20bd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-05T16:00:44Z",
+      "side": 1,
+      "message": "`ProgramExecutableVk::save` calls into `waitForPostLinkTasksImpl` unconditionally, we would just be moving the if-check to a different place. do you still want it done?",
+      "parentUuid": "19c935b8_3990c51c",
       "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
