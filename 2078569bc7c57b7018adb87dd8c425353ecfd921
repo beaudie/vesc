@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "2078569bc7c57b7018adb87dd8c425353ecfd921",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "510a9163_a66a6f63",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-05T14:57:28Z",
+      "side": 1,
+      "message": "Based on suggestion from the previous CL:\n\n```suggestion\n        executableVk-\u003ewaitForPostLinkTasksIfNecessary(this, nullptr);\n```",
+      "revId": "2078569bc7c57b7018adb87dd8c425353ecfd921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
