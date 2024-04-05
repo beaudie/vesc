@@ -188,6 +188,13 @@ void AsyncWorkerPool::threadLoop()
         // in traces.
         (*closure)();
         waitable->markAsReady();
+
+        static int n = 0;
+        n++;
+        if (n == 3)
+        {
+            usleep(100000);
+        }
     }
 }
 

@@ -32,6 +32,7 @@ class RendererTest : public ANGLETest<>
 // Print vendor, renderer, version and extension strings. Useful for debugging.
 TEST_P(RendererTest, Strings)
 {
+    usleep(1000000);
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
     std::cout << "Version: " << glGetString(GL_VERSION) << std::endl;
