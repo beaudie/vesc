@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d4d52f6_e0502d5c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-05T14:56:40Z",
+      "side": 1,
+      "message": "I see in the next CLs this function is also called for compute, and `{}` is passed in here. Later, the graphics desc is compared with the warm up desc even for compute.\n\nI suggest instead to make this a pointer, and pass in `nullptr` for the compute case. Then skip the check if the passed in pointer is `nullptr`.",
+      "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19c935b8_3990c51c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 1
