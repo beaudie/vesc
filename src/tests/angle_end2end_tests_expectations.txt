@@ -1321,6 +1321,28 @@ b/328156792 PINEAPPLE VULKAN : VulkanPerformanceCounterTest.InRenderpassFlushSho
 b/328156792 PINEAPPLE VULKAN : VulkanPerformanceCounterTest.RenderToTexture* = SKIP
 b/328156792 PINEAPPLE VULKAN : WebGL2GLSLTest.InitUninitializedLocals/* = SKIP
 
+// Samsung GalaxyS24
+b/328156792 GALAXYS24 VULKAN : ClearTest.Stencil8Scissored/* = SKIP
+b/328156792 GALAXYS24 VULKAN : FramebufferTest_ES31.DepthStencilResolveThenChangeAttachmentThenResolveAgain/* = SKIP
+b/328156792 GALAXYS24 VULKAN : GLSLTest_ES31.ArrayOfArrayOfSamplerInStructDynamicIndex/* = SKIP
+b/328156792 GALAXYS24 VULKAN : ImageTest.SourceAHBTarget2DMSRTTInteraction/* = SKIP
+b/328156792 GALAXYS24 VULKAN : ImageTestES3.RGBAHBUploadDataColorspace/* = SKIP
+b/328156792 GALAXYS24 VULKAN : MultisampledRenderToTexture*/* = SKIP
+b/328156792 GALAXYS24 VULKAN : OcclusionQueriesTestES3.UnresolveNotCounted/* = SKIP
+b/328156792 GALAXYS24 VULKAN : PackUnpackTest.PackUnpackHalfNormal/* = SKIP
+b/328156792 GALAXYS24 VULKAN : PackUnpackTest.PackUnpackSnormNormal/* = SKIP
+b/328156792 GALAXYS24 VULKAN : PackUnpackTest.PackUnpackUnormNormal/* = SKIP
+b/328156792 GALAXYS24 VULKAN : ProgramPipelineTest31.SampleTextureAThenTextureB/* = SKIP
+b/328156792 GALAXYS24 VULKAN : StateChangeTestES3.RasterizerDiscard/* = SKIP
+b/328156792 GALAXYS24 VULKAN : Texture2DTestES3Foveation.DrawWithMsaaFramebuffer/* = SKIP
+b/328156792 GALAXYS24 VULKAN : TransformFeedbackTest.DrawWithoutTransformFeedbackThenWith/* = SKIP
+b/328156792 GALAXYS24 VULKAN : TransformFeedbackTestIOBlocks.Interleaved/* = SKIP
+b/328156792 GALAXYS24 VULKAN : VulkanPerformanceCounterTest.RenderToTextureDepthStencilRenderbufferShouldNotLoad/* = SKIP
+b/328156792 GALAXYS24 VULKAN : VulkanPerformanceCounterTest.RenderToTextureDepthStencilTextureShouldNotLoad/* = SKIP
+b/328156792 GALAXYS24 VULKAN : VulkanPerformanceCounterTest.RenderToTextureUninitializedAndUnusedDepthStencil/* = SKIP
+// VVL failure
+b/328156792 GALAXYS24 VULKAN : PixelLocalStorageTest.FragmentReject_stencil/* = SKIP
+
 // MaliG710 crashes
 8212 MALIG710 VULKAN : BufferSubDataTest.MapInvalidateThenBufferSubData/* = SKIP
 8212 MALIG710 VULKAN : ImageTest.SourceNativeClientBufferTargetRenderbuffer/* = SKIP
