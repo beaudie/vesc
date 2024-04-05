@@ -51,6 +51,24 @@
       "message": "nit: When you get a chance for a follow up clean up (this and other places with WGS):\n\n```suggestion\n        cl::WorkgroupSize getCompiledWorkGroupSize(const std::string \u0026kernelName) const\n```",
       "revId": "0956e97e231ae112d524538109db43b655ce04e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5af0ac30_50f5791c",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-05T00:00:57Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org - Yep, I cleaned this up (squashed) in the upcoming enqueue NDR + Task CLs.\n\nDone.",
+      "parentUuid": "30ebc815_b555e065",
+      "revId": "0956e97e231ae112d524538109db43b655ce04e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
