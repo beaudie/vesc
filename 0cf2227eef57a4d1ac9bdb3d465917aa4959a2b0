@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0e62bc3b_28a06bbb",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-05T00:15:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6026881_1a46e460",
+      "revId": "0cf2227eef57a4d1ac9bdb3d465917aa4959a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f76ba5a2_81135db7",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 1
