@@ -12,8 +12,22 @@
 
 #include "libANGLE/renderer/BufferImpl.h"
 
+#include "libANGLE/renderer/wgpu/wgpu_helpers.h"
+
+#include <dawn/webgpu_cpp.h>
+
 namespace rx
 {
+
+enum class WebGPUBufferUsage
+{
+    VertexOrIndex,
+    Uniform,
+    MapRead,
+    MapWrite,
+
+    Count,
+};
 
 class BufferWgpu : public BufferImpl
 {
@@ -21,13 +35,6 @@ class BufferWgpu : public BufferImpl
     BufferWgpu(const gl::BufferState &state);
     ~BufferWgpu() override;
 
-    angle::Result setDataWithUsageFlags(const gl::Context *context,
-                                        gl::BufferBinding target,
-                                        GLeglClientBufferEXT clientBuffer,
-                                        const void *data,
-                                        size_t size,
-                                        gl::BufferUsage usage,
-                                        GLbitfield flags) override;
     angle::Result setData(const gl::Context *context,
                           gl::BufferBinding target,
                           const void *data,
@@ -58,8 +65,23 @@ class BufferWgpu : public BufferImpl
                                 bool primitiveRestartEnabled,
                                 gl::IndexRange *outRange) override;
 
-    uint8_t *getDataPtr();
-    const uint8_t *getDataPtr() const;
+  private:
+    struct PerUsageBuffer
+    {
+        webgpu::BufferHelper buffer;
+        WebGPUBufferUsage usage;
+        size_t serial = 0;
+    };
+
+    PerUsageBuffer &getBuffer(WebGPUBufferUsage usage);
+
+    // Get the buffer with the latest data. May return null if there are no buffers allocated yet.
+    PerUsageBuffer *getLatestBuffer();
+
+    std::array<PerUsageBuffer, static_cast<size_t>(WebGPUBufferUsage::Count)> mBuffers;
+    size_t mCurrentSerial = 1;
+
+    size_t mSize = 0;
 };
 
 }  // namespace rx

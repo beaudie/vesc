@@ -95,9 +95,7 @@ angle::Result FramebufferWgpu::readPixels(const gl::Context *context,
     GLubyte *pixels = nullptr;
     if (packBuffer != nullptr)
     {
-        BufferWgpu *packBufferGL = GetImplAs<BufferWgpu>(packBuffer);
-        pixels                   = reinterpret_cast<GLubyte *>(packBufferGL->getDataPtr());
-        pixels += reinterpret_cast<intptr_t>(ptrOrOffset);
+        UNREACHABLE();
     }
     else
     {
