@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6f85232_7423679f",
+        "filename": "src/libANGLE/renderer/vulkan/CLEventVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-05T00:15:07Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4c6693ba_714f6eb1",
+      "revId": "f419a58ea8c0b085bf4c83579e59de2f66d67209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af374820_b7046f0a",
@@ -91,6 +109,30 @@
       "side": 1,
       "message": "+1 looks like a miss on my part, will update",
       "parentUuid": "af374820_b7046f0a",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 49
+      },
+      "revId": "f419a58ea8c0b085bf4c83579e59de2f66d67209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b96e5331_d064e338",
+        "filename": "src/libANGLE/renderer/vulkan/CLEventVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-05T00:15:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "beee6d41_0779a917",
       "range": {
         "startLine": 56,
         "startChar": 4,
