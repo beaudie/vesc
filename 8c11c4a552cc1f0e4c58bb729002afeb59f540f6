@@ -16,6 +16,24 @@
       "message": "Retaining the useful part of the comment\n\n```suggestion\n        // In the Vulkan backend, the only subtasks are pipeline warm up, which is not required for\n        // link.  Running as a post-link task, the expensive warm up is run in a thread without\n        // holding up the link results.\n        angle::Result result \u003d linkImpl(resources, mergedVaryings, postLinkSubTasksOut);\n```",
       "revId": "8c11c4a552cc1f0e4c58bb729002afeb59f540f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b120e846_5d27a4b2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-05T15:59:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b14c659c_53d64483",
+      "revId": "8c11c4a552cc1f0e4c58bb729002afeb59f540f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
