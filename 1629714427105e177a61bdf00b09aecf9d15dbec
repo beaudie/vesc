@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7586e29e_7405de4f",
+        "filename": "src/libANGLE/renderer/vulkan/CLEventVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-05T01:40:44Z",
+      "side": 1,
+      "message": "```suggestion\n    cl_int status     \u003d mStatus.synchronize();\n```",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 8
+      },
+      "revId": "1629714427105e177a61bdf00b09aecf9d15dbec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a9bfccb_1b3c97ac",
+        "filename": "src/libANGLE/renderer/vulkan/CLEventVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-05T01:40:44Z",
+      "side": 1,
+      "message": "Experience shows having names for types that are seemingly easy to just construct out of generic types helps in the long run. That\u0027s why don\u0027t use `std::pair` for example.\n\nIn this case, you can define:\n\n```\ntemplate\u003ctypename T\u003e\nusing EventStatusMap \u003d std::array\u003cT, 3\u003e;\n```\n\nfor example in `angletypes.h` (in a new namespace `cl`?) and do `cl::EventStatusMap\u003cbool\u003e`. It makes it clear what the key is for example, and avoids the need to repeat `3` elsewhere.\n\nThen you can have the `auto`s in the cpp be an explicit helpful name 😊",
+      "range": {
+        "startLine": 56,
+        "startChar": 29,
+        "endLine": 56,
+        "endChar": 48
+      },
+      "revId": "1629714427105e177a61bdf00b09aecf9d15dbec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
