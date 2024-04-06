@@ -139,6 +139,24 @@
       "parentUuid": "03d9fa9e_f6fd20bd",
       "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4949d03_6e46ab8e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-06T02:04:28Z",
+      "side": 1,
+      "message": "Acknowledged, never mind.",
+      "parentUuid": "cd318e8c_8dc2b8e6",
+      "revId": "98d5a688c066d0166917ce9313f5ab4022f26e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
