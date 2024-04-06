@@ -13,7 +13,9 @@
 
 #include <atomic>
 #include <mutex>
+#include <semaphore>
 #include <thread>
+#include "util/OSWindow.h"
 
 namespace angle
 {
@@ -3847,6 +3849,370 @@ TEST_P(MultithreadingTest, ProgramLinkAndBind)
     ASSERT_NE(currentStep, Step::Abort);
 }
 
+class MultiThreadingMultiConfigTest : public ANGLETest<>
+{
+  protected:
+    MultiThreadingMultiConfigTest() : mDisplay(EGL_NO_DISPLAY), mOSWindow(nullptr) {}
+
+    // Called before running each individual test
+    void testSetUp() override
+    {
+        mOSWindow = OSWindow::New();
+        mOSWindow->initialize("MultiThreadingMultiConfigTest", 32, 32);
+
+        GLenum platformType = GetParam().getRenderer();
+        GLenum deviceType   = GetParam().getDeviceType();
+
+        std::vector<EGLint> displayAttributes;
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+        displayAttributes.push_back(platformType);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE);
+        displayAttributes.push_back(EGL_DONT_CARE);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE);
+        displayAttributes.push_back(EGL_DONT_CARE);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
+        displayAttributes.push_back(deviceType);
+        displayAttributes.push_back(EGL_NONE);
+
+        mDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE,
+                                            reinterpret_cast<void *>(mOSWindow->getNativeDisplay()),
+                                            displayAttributes.data());
+        ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
+
+        EGLint majorVersion, minorVersion;
+        ASSERT_TRUE(eglInitialize(mDisplay, &majorVersion, &minorVersion) == EGL_TRUE);
+
+        eglBindAPI(EGL_OPENGL_ES_API);
+        ASSERT_EGL_SUCCESS();
+
+        EGLint configAttributes[] = {EGL_RED_SIZE,   8, EGL_GREEN_SIZE,   8, EGL_BLUE_SIZE, 8,
+                                     EGL_ALPHA_SIZE, 8, EGL_STENCIL_SIZE, 8, EGL_NONE};
+        EGLint configCount;
+        eglChooseConfig(mDisplay, configAttributes, nullptr, 0, &configCount);
+        ASSERT_EGL_SUCCESS();
+        std::vector<EGLConfig> matchingEGLConfigs(configCount);
+        eglChooseConfig(mDisplay, configAttributes, matchingEGLConfigs.data(),
+                        matchingEGLConfigs.size(), &configCount);
+
+        for (EGLConfig eglConfig : matchingEGLConfigs)
+        {
+            EGLint configDepthSize = 0;
+            eglGetConfigAttrib(mDisplay, eglConfig, EGL_DEPTH_SIZE, &configDepthSize);
+            if (configDepthSize == 0)
+            {
+                mEGLConfigs.push_back(eglConfig);
+            }
+        }
+
+        // debug message
+        for (std::vector<EGLConfig>::iterator it = mEGLConfigs.begin(); it != mEGLConfigs.end();
+             ++it)
+        {
+            EGLint configAlphaSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_ALPHA_SIZE, &configAlphaSize);
+            EGLint configAlphaMaskSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_ALPHA_MASK_SIZE, &configAlphaMaskSize);
+            EGLint configBindToTextureRGB = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_BIND_TO_TEXTURE_RGB, &configBindToTextureRGB);
+            EGLint configBindToTextureRGBA = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_BIND_TO_TEXTURE_RGBA, &configBindToTextureRGBA);
+            EGLint configBlueSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_BLUE_SIZE, &configBlueSize);
+            EGLint configBufferSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_BUFFER_SIZE, &configBufferSize);
+            EGLint configColorBufferType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_COLOR_BUFFER_TYPE, &configColorBufferType);
+            EGLint configCaveat = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_CONFIG_CAVEAT, &configCaveat);
+            EGLint configID = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_CONFIG_ID, &configID);
+            EGLint configConformant = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_CONFORMANT, &configConformant);
+            EGLint configDepthSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_DEPTH_SIZE, &configDepthSize);
+            EGLint configGreenSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_GREEN_SIZE, &configGreenSize);
+            EGLint configLevel = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_LEVEL, &configLevel);
+            EGLint configLuminance = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_LUMINANCE_SIZE, &configLuminance);
+            EGLint configMaxPbufferWidth = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MAX_PBUFFER_WIDTH, &configMaxPbufferWidth);
+            EGLint configMaxPbufferHeight = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MAX_PBUFFER_HEIGHT, &configMaxPbufferHeight);
+            EGLint configMaxPbufferPixels = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MAX_PBUFFER_PIXELS, &configMaxPbufferPixels);
+            EGLint configMaxSwapInterval = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MAX_SWAP_INTERVAL, &configMaxSwapInterval);
+            EGLint configMinSwapInterval = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_MIN_SWAP_INTERVAL, &configMinSwapInterval);
+            EGLint configNativeRendeable = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_NATIVE_RENDERABLE, &configNativeRendeable);
+            EGLint configNativeVisualID = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_NATIVE_VISUAL_ID, &configNativeVisualID);
+            EGLint configNativeVisualType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_NATIVE_VISUAL_TYPE, &configNativeVisualType);
+            EGLint configRedSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_RED_SIZE, &configRedSize);
+            EGLint configRenderableType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_RENDERABLE_TYPE, &configRenderableType);
+            EGLint configSampleBuffers = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_SAMPLE_BUFFERS, &configSampleBuffers);
+            EGLint configSamples = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_SAMPLES, &configSamples);
+            EGLint configStencilSize = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_STENCIL_SIZE, &configStencilSize);
+            EGLint configSurfaceType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_SURFACE_TYPE, &configSurfaceType);
+            EGLint configTransparentType = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_TRANSPARENT_TYPE, &configTransparentType);
+            EGLint configTransparentRed = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_TRANSPARENT_RED_VALUE, &configTransparentRed);
+            EGLint configTransparentGreen = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_TRANSPARENT_GREEN_VALUE, &configTransparentGreen);
+            EGLint configTransparentBlue = 0;
+            eglGetConfigAttrib(mDisplay, *it, EGL_TRANSPARENT_BLUE_VALUE, &configTransparentBlue);
+
+            INFO() << "configID: " << configID << " configAlphaSize: " << configAlphaSize
+                   << " configAlphaMaskSize: " << configAlphaMaskSize
+                   << " configBindToTextureRGB: " << configBindToTextureRGB
+                   << " configBindToTextureRGBA: " << configBindToTextureRGBA
+                   << " configBlueSize: " << configBlueSize
+                   << " configBufferSize: " << configBufferSize
+                   << " configColorBufferType: " << configColorBufferType
+                   << " configCaveat: " << configCaveat << " configConformant: " << configConformant
+                   << " configDepthSize: " << configDepthSize
+                   << " configGreenSize: " << configGreenSize << " configLevel: " << configLevel
+                   << " configLuminance: " << configLuminance
+                   << " configMaxPbufferWidth: " << configMaxPbufferWidth
+                   << " configMaxPbufferHeight: " << configMaxPbufferHeight
+                   << " configMaxPbufferPixels: " << configMaxPbufferPixels
+                   << " configMaxSwapInterval: " << configMaxSwapInterval
+                   << " configMinSwapInterval: " << configMinSwapInterval
+                   << " configNativeRendeable: " << configNativeRendeable
+                   << " configNativeVisualID: " << configNativeVisualID
+                   << " configNativeVisualType: " << configNativeVisualType
+                   << " configRedSize: " << configRedSize
+                   << " configRenderableType: " << configRenderableType
+                   << " configSampleBuffers: " << configSampleBuffers
+                   << " configSamples: " << configSamples
+                   << " configStencilSize: " << configStencilSize
+                   << " configSurfaceType: " << configSurfaceType
+                   << " configTransparentType: " << configTransparentType
+                   << " configTransparentRed: " << configTransparentRed
+                   << " configTransparentGreen: " << configTransparentGreen
+                   << " configTransparentBlue: " << configTransparentBlue;
+        }
+
+        ASSERT_EGL_SUCCESS();
+    }
+
+    // Called before running each individual test
+    void testTearDown() override
+    {
+        if (mDisplay == EGL_NO_DISPLAY)
+        {
+            return;
+        }
+
+        eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+        if (mDisplay != EGL_NO_DISPLAY)
+        {
+            eglTerminate(mDisplay);
+            mDisplay = EGL_NO_DISPLAY;
+        }
+
+        mOSWindow->destroy();
+        OSWindow::Delete(&mOSWindow);
+    }
+
+    std::vector<EGLConfig> mEGLConfigs;
+
+    EGLDisplay mDisplay;
+    OSWindow *mOSWindow;
+};
+
+// Test to repro a memory corrupted bug
+TEST_P(MultiThreadingMultiConfigTest, MultiThreadMultiContextSingleSurfaceClear)
+{
+    const EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE};
+
+    for (std::vector<EGLConfig>::iterator iter = mEGLConfigs.begin(); iter != mEGLConfigs.end();
+         ++iter)
+    {
+        EGLint configID = 0;
+        eglGetConfigAttrib(mDisplay, *iter, EGL_CONFIG_ID, &configID);
+        INFO() << "Debug message ================== configID is: " << configID;
+        EGLContext ctx1 = eglCreateContext(mDisplay, *iter, EGL_NO_CONTEXT, contextAttribs);
+        EGLContext ctx2 = eglCreateContext(mDisplay, *iter, EGL_NO_CONTEXT, contextAttribs);
+        EGLContext ctx3 = eglCreateContext(mDisplay, *iter, EGL_NO_CONTEXT, contextAttribs);
+
+        EGLint pBufferSurfaceAttributes[] = {EGL_WIDTH, 16, EGL_HEIGHT, 16, EGL_NONE};
+        EGLSurface surface = eglCreatePbufferSurface(mDisplay, *iter, pBufferSurfaceAttributes);
+        EXPECT_EGL_SUCCESS();
+
+        // clear the surface to white
+        eglMakeCurrent(mDisplay, surface, surface, ctx1);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glFinish();
+        //        EXPECT_PIXEL_NEAR(8, 8, 255, 255, 255, 255, 1.0);
+
+        eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+        std::binary_semaphore semaphore0(0);
+        std::binary_semaphore semaphore1(0);
+        std::binary_semaphore semaphore2(0);
+        std::binary_semaphore semaphore3(0);
+        std::binary_semaphore semaphore4(0);
+        std::binary_semaphore semaphore5(0);
+        std::binary_semaphore semaphore6(0);
+
+        std::thread t1 = std::thread([&]() {
+            semaphore0.acquire();
+            eglMakeCurrent(mDisplay, surface, surface, ctx1);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(0, 0, 4, 4);
+            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(0, 4, 4, 4);
+            glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glFinish();
+            eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+            semaphore1.release();
+            semaphore3.acquire();
+            eglMakeCurrent(mDisplay, surface, surface, ctx1);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(4, 0, 4, 4);
+            glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(4, 4, 4, 4);
+            glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glFinish();
+            eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+            // TODO add code to signal semaphore4
+            semaphore4.release();
+            eglReleaseThread();
+        });
+
+        std::thread t2 = std::thread([&]() {
+            semaphore1.acquire();
+            eglMakeCurrent(mDisplay, surface, surface, ctx2);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(0, 8, 4, 4);
+            glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(0, 12, 4, 4);
+            glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glFinish();
+            eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+            semaphore2.release();
+            semaphore4.acquire();
+            eglMakeCurrent(mDisplay, surface, surface, ctx2);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(4, 8, 4, 4);
+            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(4, 12, 4, 4);
+            glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glFinish();
+            eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+            semaphore5.release();
+            eglReleaseThread();
+        });
+
+        std::thread t3 = std::thread([&]() {
+            semaphore2.acquire();
+            eglMakeCurrent(mDisplay, surface, surface, ctx3);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(8, 0, 4, 4);
+            glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(8, 4, 4, 4);
+            glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glFinish();
+            eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+            semaphore3.release();
+            semaphore5.acquire();
+            eglMakeCurrent(mDisplay, surface, surface, ctx3);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(12, 0, 4, 4);
+            glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(12, 4, 4, 4);
+            glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+            glFinish();
+            eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+            semaphore6.release();
+            eglReleaseThread();
+        });
+
+        semaphore0.release();
+        semaphore6.acquire();
+
+        //        // Read pixels using the first context
+        //        eglMakeCurrent(mDisplay, surface, surface, ctx1);
+        //
+        //        // Verify thread1 clear values
+        //        EXPECT_PIXEL_NEAR(2, 2, 255, 0, 0, 255, 1.0);
+        //        EXPECT_PIXEL_NEAR(2, 6, 0, 255, 0, 255, 1.0);
+        //        EXPECT_PIXEL_NEAR(6, 2, 0, 0, 255, 255, 1.0);
+        //        EXPECT_PIXEL_NEAR(6, 6, 255, 255, 0, 255, 1.0);
+        //
+        //        // Verify thread2 clear values
+        //        EXPECT_PIXEL_NEAR(2, 10, 255, 0, 255, 255, 1.0);
+        //        EXPECT_PIXEL_NEAR(2, 14, 0, 255, 255, 255, 1.0);
+        //        EXPECT_PIXEL_NEAR(6, 10, 255, 0, 0, 255, 1.0);
+        //        EXPECT_PIXEL_NEAR(6, 14, 0, 255, 0, 255, 1.0);
+        //
+        //        // Verify thread3 clear values
+        //        EXPECT_PIXEL_NEAR(10, 2, 0, 0, 255, 255, 1.0);
+        //        EXPECT_PIXEL_NEAR(10, 6, 255, 255, 0, 255, 1.0);
+        //        EXPECT_PIXEL_NEAR(14, 2, 255, 0, 255, 255, 1.0);
+        //        EXPECT_PIXEL_NEAR(14, 6, 0, 255, 255, 255, 1.0);
+        //
+        //        EXPECT_PIXEL_NEAR(12, 12, 255, 255, 255, 255, 1.0);
+
+        eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+        t1.join();
+        t2.join();
+        t3.join();
+
+        eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+        eglDestroySurface(mDisplay, surface);
+        eglDestroyContext(mDisplay, ctx1);
+        eglDestroyContext(mDisplay, ctx2);
+        eglDestroyContext(mDisplay, ctx3);
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(
     MultithreadingTest,
     ES2_OPENGL(),
@@ -3904,5 +4270,7 @@ ANGLE_INSTANTIATE_TEST(
         .enable(Feature::PreferMonolithicPipelinesOverLibraries)
         .enable(Feature::SlowDownMonolithicPipelineCreationForTesting),
     ES3_D3D11());
+
+ANGLE_INSTANTIATE_TEST(MultiThreadingMultiConfigTest, WithNoFixture(ES3_VULKAN()));
 
 }  // namespace angle
