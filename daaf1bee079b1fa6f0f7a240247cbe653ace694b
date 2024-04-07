@@ -16,6 +16,29 @@
       "message": "PTAL - trivial change",
       "revId": "daaf1bee079b1fa6f0f7a240247cbe653ace694b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4870bff7_b2995c69",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-07T04:21:22Z",
+      "side": 1,
+      "message": "there is an optimization that can be done here - since we know the pipeline being created by warmup is going to be discarded shortly we could add an atomic flag to indicate early termination of the warmup task, in which case it can exit without actually creating any pipeline",
+      "range": {
+        "startLine": 592,
+        "startChar": 4,
+        "endLine": 592,
+        "endChar": 28
+      },
+      "revId": "daaf1bee079b1fa6f0f7a240247cbe653ace694b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
