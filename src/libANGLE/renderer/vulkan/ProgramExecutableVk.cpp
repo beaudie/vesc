@@ -620,6 +620,7 @@ void ProgramExecutableVk::resetLayout(ContextVk *contextVk)
     }
     for (ShadersGraphicsPipelineCache &pipelines : mShadersGraphicsPipelines)
     {
+        WARN() << "releasing " << &pipelines << std::endl;
         pipelines.release(contextVk);
     }
     for (vk::PipelineHelper &pipeline : mComputePipelines)
@@ -1388,6 +1389,7 @@ angle::Result ProgramExecutableVk::initGraphicsShaderProgramsForWarmUp(
         ASSERT(subset == vk::GraphicsPipelineSubset::Shaders);
         ShadersGraphicsPipelineCache &pipelines = mShadersGraphicsPipelines[programIndex];
         pipelines.populate(mWarmUpGraphicsPipelineDesc, vk::Pipeline());
+        WARN() << "populating " << &pipelines << " with placeholder pipeline" << std::endl;
     }
 
     return initGraphicsShaderPrograms(context, transformOptions, shaderProgramOut);
