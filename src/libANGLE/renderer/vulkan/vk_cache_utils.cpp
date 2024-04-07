@@ -7353,6 +7353,8 @@ void GraphicsPipelineCache<Hash>::update(const vk::GraphicsPipelineDesc &desc,
     // Note: this function is only used by WarmUp tasks to replace placeholder pipelines
     // with valid ones when available.
 
+    WARN() << "updating " << this << " with valid pipeline" << std::endl;
+
     auto item = mPayload.find(desc);
     ASSERT(item != mPayload.end());
 

@@ -614,10 +614,12 @@ void ProgramExecutableVk::resetLayout(ContextVk *contextVk)
     // Initialize with an invalid BufferSerial
     mCurrentDefaultUniformBufferSerial = vk::BufferSerial();
 
+    WARN() << "releasing complete pipeline cache " << std::endl;
     for (CompleteGraphicsPipelineCache &pipelines : mCompleteGraphicsPipelines)
     {
         pipelines.release(contextVk);
     }
+    WARN() << "releasing shaders pipeline cache " << std::endl;
     for (ShadersGraphicsPipelineCache &pipelines : mShadersGraphicsPipelines)
     {
         pipelines.release(contextVk);
@@ -879,6 +881,7 @@ angle::Result ProgramExecutableVk::prepareForWarmUpPipelineCache(
 
         *isComputeOut               = true;
         mWarmUpGraphicsPipelineDesc = {};
+        WARN() << "resetting mWarmUpGraphicsPipelineDesc" << std::endl;
         return angle::Result::Continue;
     }
 
@@ -901,6 +904,7 @@ angle::Result ProgramExecutableVk::prepareForWarmUpPipelineCache(
         context, mWarmUpGraphicsPipelineDesc.getRenderPassDesc(), ops, renderPassOut, nullptr));
 
     *graphicsPipelineDescOut = &mWarmUpGraphicsPipelineDesc;
+    WARN() << "setting mWarmUpGraphicsPipelineDesc" << std::endl;
 
     // Variations that definitely matter:
     //
@@ -1017,6 +1021,7 @@ void ProgramExecutableVk::waitForPostLinkTasksImpl(ContextVk *contextVk)
     }
 
     mWarmUpGraphicsPipelineDesc = {};
+    WARN() << "resetting mWarmUpGraphicsPipelineDesc" << std::endl;
     mExecutable->onPostLinkTasksComplete();
 }
 
@@ -1034,6 +1039,7 @@ void ProgramExecutableVk::waitForPostLinkTasksIfNecessary(
             ? vk::GraphicsPipelineSubset::Shaders
             : vk::GraphicsPipelineSubset::Complete;
 
+    WARN() << "comparing mWarmUpGraphicsPipelineDesc to drawcall's" << std::endl;
     if (currentGraphicsPipelineDesc &&
         (mWarmUpGraphicsPipelineDesc.hash(subset) != currentGraphicsPipelineDesc->hash(subset)))
     {
@@ -1382,12 +1388,16 @@ angle::Result ProgramExecutableVk::initGraphicsShaderProgramsForWarmUp(
     {
         CompleteGraphicsPipelineCache &pipelines = mCompleteGraphicsPipelines[programIndex];
         pipelines.populate(mWarmUpGraphicsPipelineDesc, vk::Pipeline());
+        WARN() << "populating complete pipeline cache " << &pipelines
+               << " with placeholder pipeline" << std::endl;
     }
     else
     {
         ASSERT(subset == vk::GraphicsPipelineSubset::Shaders);
         ShadersGraphicsPipelineCache &pipelines = mShadersGraphicsPipelines[programIndex];
         pipelines.populate(mWarmUpGraphicsPipelineDesc, vk::Pipeline());
+        WARN() << "populating shaders pipeline cache " << &pipelines << " with placeholder pipeline"
+               << std::endl;
     }
 
     return initGraphicsShaderPrograms(context, transformOptions, shaderProgramOut);

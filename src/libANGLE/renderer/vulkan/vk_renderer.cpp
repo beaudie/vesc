@@ -5130,6 +5130,7 @@ void Renderer::initializeFrontendFeatures(angle::FrontendFeatures *features) con
     ANGLE_FEATURE_CONDITION(features, forceGlErrorChecking, (IsAndroid() && isSwiftShader));
 
     ANGLE_FEATURE_CONDITION(features, cacheCompiledShader, true);
+    ANGLE_FEATURE_CONDITION(features, disableProgramCaching, true);
 
     // https://issuetracker.google.com/292285899
     ANGLE_FEATURE_CONDITION(features, uncurrentEglSurfaceUponSurfaceDestroy, true);
