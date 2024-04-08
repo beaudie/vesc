@@ -7253,9 +7253,11 @@ angle::Result GraphicsPipelineCache<Hash>::createPipeline(
 
     if (source == PipelineSource::WarmUp)
     {
-        // ProgramExecutableVk::prepareForWarmUpPipelineCache should have inserted a placeholder
-        // entry in the cache, we just need to update it with the newly created Pipeline.
-        update(desc, std::move(newPipeline));
+        // Warm up task will pass in the placeholder PipelineHelper created in
+        // ProgramExecutableVk::warmUpPipelineCache. Update that with the newly created
+        // pipeline.
+        **pipelineOut =
+            vk::PipelineHelper(std::move(newPipeline), vk::CacheLookUpFeedback::WarmUpMiss);
     }
     else
     {
@@ -7331,7 +7333,8 @@ void GraphicsPipelineCache<Hash>::addToCache(PipelineSource source,
 
 template <typename Hash>
 void GraphicsPipelineCache<Hash>::populate(const vk::GraphicsPipelineDesc &desc,
-                                           vk::Pipeline &&pipeline)
+                                           vk::Pipeline &&pipeline,
+                                           vk::PipelineHelper **pipelineHelperOut)
 {
     auto item = mPayload.find(desc);
     if (item != mPayload.end())
@@ -7344,26 +7347,11 @@ void GraphicsPipelineCache<Hash>::populate(const vk::GraphicsPipelineDesc &desc,
     // 2. VulkanPipelineCachePerfTest
     mPayload.emplace(std::piecewise_construct, std::forward_as_tuple(desc),
                      std::forward_as_tuple(std::move(pipeline), vk::CacheLookUpFeedback::None));
-}
 
-template <typename Hash>
-void GraphicsPipelineCache<Hash>::update(const vk::GraphicsPipelineDesc &desc,
-                                         vk::Pipeline &&pipeline)
-{
-    // Note: this function is only used by WarmUp tasks to replace placeholder pipelines
-    // with valid ones when available.
-
-    auto item = mPayload.find(desc);
-    ASSERT(item != mPayload.end());
-
-    const vk::GraphicsPipelineDesc *placeholderDesc = &item->first;
-    vk::PipelineHelper *placeholderPipeline         = &item->second;
-    ASSERT(memcmp(placeholderDesc, &desc, sizeof(vk::GraphicsPipelineDesc)) == 0);
-    ASSERT(!placeholderPipeline->valid());
-
-    *placeholderPipeline =
-        vk::PipelineHelper(std::move(pipeline), vk::CacheLookUpFeedback::WarmUpMiss);
-    ASSERT(mPayload[desc].valid());
+    if (pipelineHelperOut)
+    {
+        *pipelineHelperOut = &mPayload[desc];
+    }
 }
 
 // Instantiate the pipeline cache functions
@@ -7394,7 +7382,8 @@ template angle::Result GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>::
     vk::PipelineHelper **pipelineOut);
 template void GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>::populate(
     const vk::GraphicsPipelineDesc &desc,
-    vk::Pipeline &&pipeline);
+    vk::Pipeline &&pipeline,
+    vk::PipelineHelper **pipelineHelperOut);
 
 template void GraphicsPipelineCache<GraphicsPipelineDescVertexInputHash>::destroy(
     vk::Context *context);
@@ -7413,7 +7402,8 @@ template angle::Result GraphicsPipelineCache<GraphicsPipelineDescVertexInputHash
     vk::PipelineHelper **pipelineOut);
 template void GraphicsPipelineCache<GraphicsPipelineDescVertexInputHash>::populate(
     const vk::GraphicsPipelineDesc &desc,
-    vk::Pipeline &&pipeline);
+    vk::Pipeline &&pipeline,
+    vk::PipelineHelper **pipelineHelperOut);
 
 template void GraphicsPipelineCache<GraphicsPipelineDescShadersHash>::destroy(vk::Context *context);
 template void GraphicsPipelineCache<GraphicsPipelineDescShadersHash>::release(vk::Context *context);
@@ -7430,7 +7420,8 @@ template angle::Result GraphicsPipelineCache<GraphicsPipelineDescShadersHash>::c
     vk::PipelineHelper **pipelineOut);
 template void GraphicsPipelineCache<GraphicsPipelineDescShadersHash>::populate(
     const vk::GraphicsPipelineDesc &desc,
-    vk::Pipeline &&pipeline);
+    vk::Pipeline &&pipeline,
+    vk::PipelineHelper **pipelineHelperOut);
 
 template void GraphicsPipelineCache<GraphicsPipelineDescFragmentOutputHash>::destroy(
     vk::Context *context);
@@ -7450,7 +7441,8 @@ GraphicsPipelineCache<GraphicsPipelineDescFragmentOutputHash>::createPipeline(
     vk::PipelineHelper **pipelineOut);
 template void GraphicsPipelineCache<GraphicsPipelineDescFragmentOutputHash>::populate(
     const vk::GraphicsPipelineDesc &desc,
-    vk::Pipeline &&pipeline);
+    vk::Pipeline &&pipeline,
+    vk::PipelineHelper **pipelineHelperOut);
 
 // DescriptorSetLayoutCache implementation.
 DescriptorSetLayoutCache::DescriptorSetLayoutCache() = default;
