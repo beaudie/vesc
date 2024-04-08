@@ -331,6 +331,27 @@ class WarmUpTaskCommon : public vk::Context, public LinkSubTask
         return angle::Result::Continue;
     }
 
+    virtual vk::GraphicsPipelineSubset getPipelineSubset() const
+    {
+        UNREACHABLE();
+        return vk::GraphicsPipelineSubset::Complete;
+    }
+    virtual bool isSurfaceRotated() const
+    {
+        UNREACHABLE();
+        return false;
+    }
+    virtual const vk::GraphicsPipelineDesc *getGraphicsPipelineDesc() const
+    {
+        UNREACHABLE();
+        return nullptr;
+    }
+    virtual vk::PipelineHelper *getWarmUpPipelineHelper()
+    {
+        UNREACHABLE();
+        return nullptr;
+    }
+
   protected:
     void mergeProgramExecutablePipelineCacheToRenderer()
     {
@@ -396,18 +417,24 @@ class WarmUpGraphicsTask : public WarmUpTaskCommon
           mPipelineSubset(subset),
           mIsSurfaceRotated(isSurfaceRotated),
           mGraphicsPipelineDesc(graphicsPipelineDesc),
+          mWarmUpPipelineHelper(nullptr),
           mCompatibleRenderPass(compatibleRenderPass)
     {
         ASSERT(mCompatibleRenderPass);
         mCompatibleRenderPass->addRef();
     }
-    ~WarmUpGraphicsTask() override = default;
+    ~WarmUpGraphicsTask() override
+    {
+        // Destroy warm up PipelineHelper
+        mWarmUpPipelineHelper->destroy(mRenderer->getDevice());
+        SafeDelete(mWarmUpPipelineHelper);
+    }
 
     void operator()() override
     {
         angle::Result result = mExecutableVk->warmUpGraphicsPipelineCache(
             this, mPipelineRobustness, mPipelineProtectedAccess, mPipelineSubset, mIsSurfaceRotated,
-            mGraphicsPipelineDesc, mCompatibleRenderPass->get());
+            mGraphicsPipelineDesc, mCompatibleRenderPass->get(), &mWarmUpPipelineHelper);
         ASSERT((result == angle::Result::Continue) == (mErrorCode == VK_SUCCESS));
 
         // Release reference to shared renderpass. If this is the last reference -
@@ -423,10 +450,19 @@ class WarmUpGraphicsTask : public WarmUpTaskCommon
         }
     }
 
+    vk::GraphicsPipelineSubset getPipelineSubset() const override { return mPipelineSubset; }
+    bool isSurfaceRotated() const override { return mIsSurfaceRotated; }
+    const vk::GraphicsPipelineDesc *getGraphicsPipelineDesc() const override
+    {
+        return &mGraphicsPipelineDesc;
+    }
+    vk::PipelineHelper *getWarmUpPipelineHelper() override { return mWarmUpPipelineHelper; }
+
   private:
     vk::GraphicsPipelineSubset mPipelineSubset;
     bool mIsSurfaceRotated;
     vk::GraphicsPipelineDesc mGraphicsPipelineDesc;
+    vk::PipelineHelper *mWarmUpPipelineHelper;
 
     // Temporary objects to clean up at the end
     SharedRenderPass *mCompatibleRenderPass;
@@ -966,23 +1002,27 @@ angle::Result ProgramExecutableVk::warmUpGraphicsPipelineCache(
     vk::GraphicsPipelineSubset subset,
     const bool isSurfaceRotated,
     const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
-    const vk::RenderPass &renderPass)
+    const vk::RenderPass &renderPass,
+    vk::PipelineHelper **warmUpPipelineOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramExecutableVk::warmUpGraphicsPipelineCache");
+
+    ASSERT(warmUpPipelineOut);
+    ASSERT(*warmUpPipelineOut == nullptr);
 
     // No synchronization necessary since mPipelineCache is internally synchronized.
     vk::PipelineCacheAccess pipelineCache;
     pipelineCache.init(&mPipelineCache, nullptr);
 
     const vk::GraphicsPipelineDesc *descPtr  = nullptr;
-    vk::PipelineHelper *pipeline             = nullptr;
     ProgramTransformOptions transformOptions = {};
     transformOptions.surfaceRotation         = isSurfaceRotated;
 
     ANGLE_TRY(createGraphicsPipelineImpl(context, transformOptions, subset, &pipelineCache,
                                          PipelineSource::WarmUp, graphicsPipelineDesc, renderPass,
-                                         &descPtr, &pipeline));
+                                         &descPtr, warmUpPipelineOut));
 
+    ASSERT(*warmUpPipelineOut != nullptr && (*warmUpPipelineOut)->valid());
     return angle::Result::Continue;
 }
 
@@ -1003,6 +1043,28 @@ void ProgramExecutableVk::waitForPostLinkTasksImpl(ContextVk *contextVk)
     for (const std::shared_ptr<rx::LinkSubTask> &task : postLinkSubTasks)
     {
         rx::WarmUpTaskCommon *warmUpTask = static_cast<rx::WarmUpTaskCommon *>(task.get());
+
+        // ProgramExecutableVk::prepareForWarmUpPipelineCache should have inserted a placeholder
+        // entry in the cache, we need to update it with the newly created Pipeline.
+        ProgramTransformOptions transformOptions   = {};
+        vk::GraphicsPipelineSubset subset          = warmUpTask->getPipelineSubset();
+        transformOptions.surfaceRotation           = warmUpTask->isSurfaceRotated();
+        const uint8_t programIndex                 = GetGraphicsProgramIndex(transformOptions);
+        const vk::GraphicsPipelineDesc *warmUpDesc = warmUpTask->getGraphicsPipelineDesc();
+        vk::PipelineHelper *warmUpPipelineHelper   = warmUpTask->getWarmUpPipelineHelper();
+        if (subset == vk::GraphicsPipelineSubset::Complete)
+        {
+            CompleteGraphicsPipelineCache &pipelines = mCompleteGraphicsPipelines[programIndex];
+            pipelines.update(*warmUpDesc, warmUpPipelineHelper);
+        }
+        else
+        {
+            ASSERT(subset == vk::GraphicsPipelineSubset::Shaders);
+            ShadersGraphicsPipelineCache &pipelines = mShadersGraphicsPipelines[programIndex];
+            pipelines.update(*warmUpDesc, warmUpPipelineHelper);
+        }
+        ASSERT(!warmUpPipelineHelper->valid());
+
         // As these tasks can be run post-link, their results are ignored.  Failure is harmless, but
         // more importantly the error (effectively due to a link event) may not be allowed through
         // the entry point that results in this call.

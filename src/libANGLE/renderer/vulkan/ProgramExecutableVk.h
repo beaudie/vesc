@@ -497,7 +497,8 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                               vk::GraphicsPipelineSubset subset,
                                               const bool isSurfaceRotated,
                                               const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
-                                              const vk::RenderPass &renderPass);
+                                              const vk::RenderPass &renderPass,
+                                              vk::PipelineHelper **warmUpPipelineOut);
     void waitForPostLinkTasksImpl(ContextVk *contextVk);
 
     angle::Result getOrAllocateDescriptorSet(vk::Context *context,
