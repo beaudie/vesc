@@ -7208,11 +7208,17 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
         VkPipelineStageFlags dstStageMask = GetImageLayoutDstStageMask(context, transitionTo);
 
         if (transitionFrom.layout == transitionTo.layout &&
-            IsGraphicsShaderAccessLayout(transitionTo) && mBarrierQueueSerial == queueSerial)
+            IsGraphicsShaderAccessLayout(transitionTo) &&
+            (mBarrierQueueSerial == queueSerial || !HasResourceWriteAccess(transitionTo.type)))
         {
-            // We already are at the requested layout, and the barrier was inserted in the same
-            // render pass. In this case, we only need to insert the memory barrier for the new
-            // shader stage.
+            // We already are at the requested layout. If the barrier was already inserted in the
+            // same render pass (i.e, mBarrierQueueSerial == queueSerial), then we only need to
+            // insert the memory barrier from previous non shader access layout to the new shader
+            // stage. Because the barriers are deferred, this new memoryBarrier is effectively
+            // merged into the first barrier call with the layout change. If the barrier was
+            // inserted in different render pass but it is shader read only access, then we also
+            // only insert the memory barrier from the non shader access layout to this new shader
+            // stage read to avoid the read to read barrier.
             bool hasNewShaderStage = (mCurrentShaderStageMask & dstStageMask) != dstStageMask;
             if (hasNewShaderStage)
             {
