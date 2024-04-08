@@ -105,9 +105,16 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
 
     if (contextVk->getFeatures().warmUpPipelineCacheAtLink.enabled)
     {
-        ANGLE_TRY(executableVk->warmUpPipelineCache(
-            contextVk->getRenderer(), contextVk->pipelineRobustness(),
-            contextVk->pipelineProtectedAccess(), vk::GraphicsPipelineSubset::Complete, nullptr));
+        vk::PipelineRobustness robustness           = contextVk->pipelineRobustness();
+        vk::PipelineProtectedAccess protectedAccess = contextVk->pipelineProtectedAccess();
+
+        // Needs to be done in main thread to prevent unsafe access to members of
+        // ProgramExecutableVk
+        executableVk->setupWarmUpPipelineHelpers(contextVk, robustness, protectedAccess);
+
+        ANGLE_TRY(executableVk->warmUpPipelineCache(contextVk->getRenderer(), robustness,
+                                                    protectedAccess,
+                                                    vk::GraphicsPipelineSubset::Complete, nullptr));
     }
 
     return result;

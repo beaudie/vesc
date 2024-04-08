@@ -316,6 +316,9 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     const ShaderInterfaceVariableInfoMap &getVariableInfoMap() const { return mVariableInfoMap; }
 
+    void setupWarmUpPipelineHelpers(ContextVk *contextVk,
+                                    vk::PipelineRobustness pipelineRobustness,
+                                    vk::PipelineProtectedAccess pipelineProtectedAccess);
     angle::Result warmUpPipelineCache(
         vk::Renderer *renderer,
         vk::PipelineRobustness pipelineRobustness,
@@ -457,10 +460,6 @@ class ProgramExecutableVk : public ProgramExecutableImpl
     angle::Result initGraphicsShaderPrograms(vk::Context *context,
                                              ProgramTransformOptions transformOptions,
                                              vk::ShaderProgramHelper **shaderProgramOut);
-    angle::Result initGraphicsShaderProgramsForWarmUp(vk::Context *context,
-                                                      vk::GraphicsPipelineSubset subset,
-                                                      ProgramTransformOptions transformOptions,
-                                                      vk::ShaderProgramHelper **shaderProgramOut);
     angle::Result initProgramThenCreateGraphicsPipeline(vk::Context *context,
                                                         ProgramTransformOptions transformOptions,
                                                         vk::GraphicsPipelineSubset pipelineSubset,
@@ -497,7 +496,8 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                               vk::GraphicsPipelineSubset subset,
                                               const bool isSurfaceRotated,
                                               const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
-                                              const vk::RenderPass &renderPass);
+                                              const vk::RenderPass &renderPass,
+                                              vk::PipelineHelper *placeholderPipelineHelper);
     void waitForPostLinkTasksImpl(ContextVk *contextVk);
 
     angle::Result getOrAllocateDescriptorSet(vk::Context *context,
@@ -575,6 +575,9 @@ class ProgramExecutableVk : public ProgramExecutableImpl
     vk::PipelineCache mPipelineCache;
 
     vk::GraphicsPipelineDesc mWarmUpGraphicsPipelineDesc;
+
+    static constexpr size_t kWarmUpSurfaceRotationVariationsCount = 2;
+    std::array<vk::PipelineHelper *, kWarmUpSurfaceRotationVariationsCount> mWarmUpPipelineHelpers;
 
     // The "layout" information for descriptorSets
     vk::WriteDescriptorDescs mShaderResourceWriteDescriptorDescs;

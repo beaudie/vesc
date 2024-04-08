@@ -91,14 +91,14 @@ uint32_t GetInterfaceBlockArraySize(const std::vector<gl::InterfaceBlock> &block
     return arraySize;
 }
 
-void SetupDefaultPipelineState(const vk::Context *context,
+void SetupDefaultPipelineState(const ContextVk *contextVk,
                                const gl::ProgramExecutable &glExecutable,
                                gl::PrimitiveMode mode,
                                vk::PipelineRobustness pipelineRobustness,
                                vk::PipelineProtectedAccess pipelineProtectedAccess,
                                vk::GraphicsPipelineDesc *graphicsPipelineDescOut)
 {
-    graphicsPipelineDescOut->initDefaults(context, vk::GraphicsPipelineSubset::Complete,
+    graphicsPipelineDescOut->initDefaults(contextVk, vk::GraphicsPipelineSubset::Complete,
                                           pipelineRobustness, pipelineProtectedAccess);
     graphicsPipelineDescOut->setTopology(mode);
     graphicsPipelineDescOut->setRenderPassSampleCount(1);
@@ -391,11 +391,13 @@ class WarmUpGraphicsTask : public WarmUpTaskCommon
                        vk::GraphicsPipelineSubset subset,
                        const bool isSurfaceRotated,
                        const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
-                       SharedRenderPass *compatibleRenderPass)
+                       SharedRenderPass *compatibleRenderPass,
+                       vk::PipelineHelper *placeholderPipelineHelper)
         : WarmUpTaskCommon(renderer, executableVk, pipelineRobustness, pipelineProtectedAccess),
           mPipelineSubset(subset),
           mIsSurfaceRotated(isSurfaceRotated),
           mGraphicsPipelineDesc(graphicsPipelineDesc),
+          mWarmUpPipelineHelper(placeholderPipelineHelper),
           mCompatibleRenderPass(compatibleRenderPass)
     {
         ASSERT(mCompatibleRenderPass);
@@ -407,7 +409,7 @@ class WarmUpGraphicsTask : public WarmUpTaskCommon
     {
         angle::Result result = mExecutableVk->warmUpGraphicsPipelineCache(
             this, mPipelineRobustness, mPipelineProtectedAccess, mPipelineSubset, mIsSurfaceRotated,
-            mGraphicsPipelineDesc, mCompatibleRenderPass->get());
+            mGraphicsPipelineDesc, mCompatibleRenderPass->get(), mWarmUpPipelineHelper);
         ASSERT((result == angle::Result::Continue) == (mErrorCode == VK_SUCCESS));
 
         // Release reference to shared renderpass. If this is the last reference -
@@ -427,6 +429,7 @@ class WarmUpGraphicsTask : public WarmUpTaskCommon
     vk::GraphicsPipelineSubset mPipelineSubset;
     bool mIsSurfaceRotated;
     vk::GraphicsPipelineDesc mGraphicsPipelineDesc;
+    vk::PipelineHelper *mWarmUpPipelineHelper;
 
     // Temporary objects to clean up at the end
     SharedRenderPass *mCompatibleRenderPass;
@@ -568,7 +571,8 @@ ProgramExecutableVk::ProgramExecutableVk(const gl::ProgramExecutable *executable
       mImmutableSamplersMaxDescriptorCount(1),
       mUniformBufferDescriptorType(VK_DESCRIPTOR_TYPE_MAX_ENUM),
       mDynamicUniformDescriptorOffsets{},
-      mWarmUpGraphicsPipelineDesc{}
+      mWarmUpGraphicsPipelineDesc{},
+      mWarmUpPipelineHelpers{nullptr}
 {
     mDescriptorSets.fill(VK_NULL_HANDLE);
     for (std::shared_ptr<DefaultUniformBlockVk> &defaultBlock : mDefaultUniformBlocks)
@@ -795,61 +799,48 @@ void ProgramExecutableVk::clearVariableInfoMap()
     mVariableInfoMap.clear();
 }
 
-angle::Result ProgramExecutableVk::warmUpPipelineCache(
-    vk::Renderer *renderer,
+void ProgramExecutableVk::setupWarmUpPipelineHelpers(
+    ContextVk *contextVk,
     vk::PipelineRobustness pipelineRobustness,
-    vk::PipelineProtectedAccess pipelineProtectedAccess,
-    vk::GraphicsPipelineSubset subset,
-    std::vector<std::shared_ptr<LinkSubTask>> *postLinkSubTasksOut)
+    vk::PipelineProtectedAccess pipelineProtectedAccess)
 {
-    ASSERT(!postLinkSubTasksOut || postLinkSubTasksOut->empty());
+    // It is only at drawcall time that we will have complete information required to build the
+    // graphics pipeline descriptor. Use the most "commonly seen" state values and create the
+    // pipeline.
+    gl::PrimitiveMode mode = (mExecutable->hasLinkedShaderStage(gl::ShaderType::TessControl) ||
+                              mExecutable->hasLinkedShaderStage(gl::ShaderType::TessEvaluation))
+                                 ? gl::PrimitiveMode::Patches
+                                 : gl::PrimitiveMode::TriangleStrip;
+    SetupDefaultPipelineState(contextVk, *mExecutable, mode, pipelineRobustness,
+                              pipelineProtectedAccess, &mWarmUpGraphicsPipelineDesc);
 
-    bool isCompute                                        = false;
-    angle::FixedVector<bool, 2> surfaceRotationVariations = {false};
-    vk::GraphicsPipelineDesc *graphicsPipelineDesc        = nullptr;
-    vk::RenderPass compatibleRenderPass;
+    const vk::GraphicsPipelineSubset subset =
+        contextVk->getFeatures().supportsGraphicsPipelineLibrary.enabled
+            ? vk::GraphicsPipelineSubset::Shaders
+            : vk::GraphicsPipelineSubset::Complete;
 
-    rx::WarmUpTaskCommon prepForWarmUpContext(renderer);
-    ANGLE_TRY(prepareForWarmUpPipelineCache(
-        &prepForWarmUpContext, pipelineRobustness, pipelineProtectedAccess, subset, &isCompute,
-        &surfaceRotationVariations, &graphicsPipelineDesc, &compatibleRenderPass));
-
-    std::vector<std::shared_ptr<rx::LinkSubTask>> warmUpSubTasks;
-    if (isCompute)
+    const angle::FixedVector<bool, 2> surfaceRotationVariations = {false, true};
+    ProgramTransformOptions transformOptions                    = {};
+    for (bool surfaceRotation : surfaceRotationVariations)
     {
-        ASSERT(!compatibleRenderPass.valid());
-
-        warmUpSubTasks.push_back(std::make_shared<rx::WarmUpComputeTask>(
-            renderer, this, pipelineRobustness, pipelineProtectedAccess));
-    }
-    else
-    {
-        SharedRenderPass *sharedRenderPass = new SharedRenderPass(std::move(compatibleRenderPass));
-        for (bool surfaceRotation : surfaceRotationVariations)
+        // Add a placeholder entry in GraphicsPipelineCache
+        transformOptions.surfaceRotation  = surfaceRotation;
+        const uint8_t programIndex        = GetGraphicsProgramIndex(transformOptions);
+        const uint8_t pipelineHelperIndex = surfaceRotation ? 1 : 0;
+        if (subset == vk::GraphicsPipelineSubset::Complete)
         {
-            warmUpSubTasks.push_back(std::make_shared<rx::WarmUpGraphicsTask>(
-                renderer, this, pipelineRobustness, pipelineProtectedAccess, subset,
-                surfaceRotation, *graphicsPipelineDesc, sharedRenderPass));
+            CompleteGraphicsPipelineCache &pipelines = mCompleteGraphicsPipelines[programIndex];
+            pipelines.populate(mWarmUpGraphicsPipelineDesc, vk::Pipeline(),
+                               &mWarmUpPipelineHelpers[pipelineHelperIndex]);
+        }
+        else
+        {
+            ASSERT(subset == vk::GraphicsPipelineSubset::Shaders);
+            ShadersGraphicsPipelineCache &pipelines = mShadersGraphicsPipelines[programIndex];
+            pipelines.populate(mWarmUpGraphicsPipelineDesc, vk::Pipeline(),
+                               &mWarmUpPipelineHelpers[pipelineHelperIndex]);
         }
     }
-
-    // If the caller hasn't provided a valid async task container, inline the warmUp tasks.
-    if (postLinkSubTasksOut)
-    {
-        *postLinkSubTasksOut = std::move(warmUpSubTasks);
-    }
-    else
-    {
-        for (std::shared_ptr<rx::LinkSubTask> &task : warmUpSubTasks)
-        {
-            (*task)();
-        }
-        warmUpSubTasks.clear();
-    }
-
-    ASSERT(warmUpSubTasks.empty());
-
-    return angle::Result::Continue;
 }
 
 angle::Result ProgramExecutableVk::prepareForWarmUpPipelineCache(
@@ -882,15 +873,10 @@ angle::Result ProgramExecutableVk::prepareForWarmUpPipelineCache(
         return angle::Result::Continue;
     }
 
-    // It is only at drawcall time that we will have complete information required to build the
-    // graphics pipeline descriptor. Use the most "commonly seen" state values and create the
-    // pipeline.
-    gl::PrimitiveMode mode = (mExecutable->hasLinkedShaderStage(gl::ShaderType::TessControl) ||
-                              mExecutable->hasLinkedShaderStage(gl::ShaderType::TessEvaluation))
-                                 ? gl::PrimitiveMode::Patches
-                                 : gl::PrimitiveMode::TriangleStrip;
-    SetupDefaultPipelineState(context, *mExecutable, mode, pipelineRobustness,
-                              pipelineProtectedAccess, &mWarmUpGraphicsPipelineDesc);
+    // mWarmUpPipelineHelpers must have been setup in setupWarmUpPipelineHelpers(...) by the main
+    // thread. Assert that they are valid.
+    ASSERT(mWarmUpPipelineHelpers[0] != nullptr && mWarmUpPipelineHelpers[1] != nullptr);
+    *graphicsPipelineDescOut = &mWarmUpGraphicsPipelineDesc;
 
     // Create a temporary compatible RenderPass.  The render pass cache in ContextVk cannot be used
     // because this function may be called from a worker thread.
@@ -899,8 +885,6 @@ angle::Result ProgramExecutableVk::prepareForWarmUpPipelineCache(
         mWarmUpGraphicsPipelineDesc.getRenderPassDesc(), &ops);
     ANGLE_TRY(RenderPassCache::MakeRenderPass(
         context, mWarmUpGraphicsPipelineDesc.getRenderPassDesc(), ops, renderPassOut, nullptr));
-
-    *graphicsPipelineDescOut = &mWarmUpGraphicsPipelineDesc;
 
     // Variations that definitely matter:
     //
@@ -924,9 +908,67 @@ angle::Result ProgramExecutableVk::prepareForWarmUpPipelineCache(
         // Initialize graphics programs.
         transformOptions.surfaceRotation       = rotation;
         vk::ShaderProgramHelper *shaderProgram = nullptr;
-        ANGLE_TRY(
-            initGraphicsShaderProgramsForWarmUp(context, subset, transformOptions, &shaderProgram));
+        ANGLE_TRY(initGraphicsShaderPrograms(context, transformOptions, &shaderProgram));
     }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ProgramExecutableVk::warmUpPipelineCache(
+    vk::Renderer *renderer,
+    vk::PipelineRobustness pipelineRobustness,
+    vk::PipelineProtectedAccess pipelineProtectedAccess,
+    vk::GraphicsPipelineSubset subset,
+    std::vector<std::shared_ptr<LinkSubTask>> *postLinkSubTasksOut)
+{
+    ASSERT(!postLinkSubTasksOut || postLinkSubTasksOut->empty());
+
+    bool isCompute                                        = false;
+    angle::FixedVector<bool, 2> surfaceRotationVariations = {false};
+    vk::GraphicsPipelineDesc *graphicsPipelineDesc        = nullptr;
+    vk::RenderPass compatibleRenderPass;
+
+    rx::WarmUpTaskCommon prepForWarmUpContext(renderer);
+    ANGLE_TRY(prepareForWarmUpPipelineCache(
+        &prepForWarmUpContext, pipelineRobustness, pipelineProtectedAccess, subset, &isCompute,
+        &surfaceRotationVariations, &graphicsPipelineDesc, &compatibleRenderPass));
+
+    std::vector<std::shared_ptr<rx::LinkSubTask>> warmUpSubTasks;
+    if (isCompute)
+    {
+        ASSERT(!compatibleRenderPass.valid());
+
+        warmUpSubTasks.push_back(std::make_shared<rx::WarmUpComputeTask>(
+            renderer, this, pipelineRobustness, pipelineProtectedAccess));
+    }
+    else
+    {
+        SharedRenderPass *sharedRenderPass = new SharedRenderPass(std::move(compatibleRenderPass));
+        for (bool surfaceRotation : surfaceRotationVariations)
+        {
+            const uint8_t pipelineHelperIndex = surfaceRotation ? 1 : 0;
+            warmUpSubTasks.push_back(std::make_shared<rx::WarmUpGraphicsTask>(
+                renderer, this, pipelineRobustness, pipelineProtectedAccess, subset,
+                surfaceRotation, *graphicsPipelineDesc, sharedRenderPass,
+                mWarmUpPipelineHelpers[pipelineHelperIndex]));
+        }
+    }
+
+    // If the caller hasn't provided a valid async task container, inline the warmUp tasks.
+    if (postLinkSubTasksOut)
+    {
+        *postLinkSubTasksOut = std::move(warmUpSubTasks);
+    }
+    else
+    {
+        for (std::shared_ptr<rx::LinkSubTask> &task : warmUpSubTasks)
+        {
+            (*task)();
+        }
+        warmUpSubTasks.clear();
+    }
+
+    ASSERT(warmUpSubTasks.empty());
 
     return angle::Result::Continue;
 }
@@ -966,23 +1008,26 @@ angle::Result ProgramExecutableVk::warmUpGraphicsPipelineCache(
     vk::GraphicsPipelineSubset subset,
     const bool isSurfaceRotated,
     const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
-    const vk::RenderPass &renderPass)
+    const vk::RenderPass &renderPass,
+    vk::PipelineHelper *placeholderPipelineHelper)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramExecutableVk::warmUpGraphicsPipelineCache");
+
+    ASSERT(placeholderPipelineHelper && !placeholderPipelineHelper->valid());
 
     // No synchronization necessary since mPipelineCache is internally synchronized.
     vk::PipelineCacheAccess pipelineCache;
     pipelineCache.init(&mPipelineCache, nullptr);
 
     const vk::GraphicsPipelineDesc *descPtr  = nullptr;
-    vk::PipelineHelper *pipeline             = nullptr;
     ProgramTransformOptions transformOptions = {};
     transformOptions.surfaceRotation         = isSurfaceRotated;
 
     ANGLE_TRY(createGraphicsPipelineImpl(context, transformOptions, subset, &pipelineCache,
                                          PipelineSource::WarmUp, graphicsPipelineDesc, renderPass,
-                                         &descPtr, &pipeline));
+                                         &descPtr, &placeholderPipelineHelper));
 
+    ASSERT(placeholderPipelineHelper->valid());
     return angle::Result::Continue;
 }
 
@@ -1003,6 +1048,7 @@ void ProgramExecutableVk::waitForPostLinkTasksImpl(ContextVk *contextVk)
     for (const std::shared_ptr<rx::LinkSubTask> &task : postLinkSubTasks)
     {
         rx::WarmUpTaskCommon *warmUpTask = static_cast<rx::WarmUpTaskCommon *>(task.get());
+
         // As these tasks can be run post-link, their results are ignored.  Failure is harmless, but
         // more importantly the error (effectively due to a link event) may not be allowed through
         // the entry point that results in this call.
@@ -1017,6 +1063,7 @@ void ProgramExecutableVk::waitForPostLinkTasksImpl(ContextVk *contextVk)
     }
 
     mWarmUpGraphicsPipelineDesc = {};
+    mWarmUpPipelineHelpers.fill(nullptr);
     mExecutable->onPostLinkTasksComplete();
 }
 
@@ -1368,29 +1415,6 @@ angle::Result ProgramExecutableVk::initGraphicsShaderPrograms(
     ASSERT(*shaderProgramOut);
 
     return angle::Result::Continue;
-}
-
-angle::Result ProgramExecutableVk::initGraphicsShaderProgramsForWarmUp(
-    vk::Context *context,
-    vk::GraphicsPipelineSubset subset,
-    ProgramTransformOptions transformOptions,
-    vk::ShaderProgramHelper **shaderProgramOut)
-{
-    // Add a placeholder entry in GraphicsPipelineCache
-    const uint8_t programIndex = GetGraphicsProgramIndex(transformOptions);
-    if (subset == vk::GraphicsPipelineSubset::Complete)
-    {
-        CompleteGraphicsPipelineCache &pipelines = mCompleteGraphicsPipelines[programIndex];
-        pipelines.populate(mWarmUpGraphicsPipelineDesc, vk::Pipeline());
-    }
-    else
-    {
-        ASSERT(subset == vk::GraphicsPipelineSubset::Shaders);
-        ShadersGraphicsPipelineCache &pipelines = mShadersGraphicsPipelines[programIndex];
-        pipelines.populate(mWarmUpGraphicsPipelineDesc, vk::Pipeline());
-    }
-
-    return initGraphicsShaderPrograms(context, transformOptions, shaderProgramOut);
 }
 
 angle::Result ProgramExecutableVk::initProgramThenCreateGraphicsPipeline(

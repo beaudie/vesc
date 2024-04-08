@@ -387,12 +387,18 @@ void ProgramVk::setSeparable(bool separable)
 
 angle::Result ProgramVk::link(const gl::Context *context, std::shared_ptr<LinkTask> *linkTaskOut)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk                        = vk::GetImpl(context);
+    ProgramExecutableVk *executableVk           = vk::GetImpl(&mState.getExecutable());
+    vk::PipelineRobustness robustness           = contextVk->pipelineRobustness();
+    vk::PipelineProtectedAccess protectedAccess = contextVk->pipelineProtectedAccess();
 
-    *linkTaskOut = std::shared_ptr<LinkTask>(new LinkTaskVk(
-        contextVk->getRenderer(), contextVk->getPipelineLayoutCache(),
-        contextVk->getDescriptorSetLayoutCache(), mState, context->getState().isGLES1(),
-        contextVk->pipelineRobustness(), contextVk->pipelineProtectedAccess()));
+    // Needs to be done in main thread to prevent unsafe access to ProgramExecutableVk members.
+    executableVk->setupWarmUpPipelineHelpers(contextVk, robustness, protectedAccess);
+
+    *linkTaskOut = std::shared_ptr<LinkTask>(
+        new LinkTaskVk(contextVk->getRenderer(), contextVk->getPipelineLayoutCache(),
+                       contextVk->getDescriptorSetLayoutCache(), mState,
+                       context->getState().isGLES1(), robustness, protectedAccess));
 
     return angle::Result::Continue;
 }
