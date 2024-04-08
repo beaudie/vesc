@@ -95,6 +95,8 @@ struct ImageMemoryBarrierData
     // mask bits, we pick the lowest stage as the index since it is the first stage that needs
     // barrier.
     PipelineStage barrierIndex;
+    // True if it is one of the shader access layouts.
+    bool isGraphicsShaderAccessLayout;
 };
 
 constexpr VkPipelineStageFlags kPreFragmentStageFlags =
@@ -123,6 +125,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::InvalidEnum,
+            false,
         },
     },
     {
@@ -138,6 +141,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ColorAttachmentOutput,
+            false,
         },
     },
     {
@@ -153,6 +157,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            false,
         },
     },
     {
@@ -168,6 +173,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            false,
         },
     },
     {
@@ -183,6 +189,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            false,
         },
     },
     {
@@ -198,6 +205,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            false,
         },
     },
     {
@@ -213,6 +221,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
+            false,
         },
     },
     {
@@ -228,6 +237,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            false,
         },
     },
     {
@@ -243,6 +253,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            false,
         },
     },
     {
@@ -258,6 +269,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
+            false,
         },
     },
     {
@@ -273,6 +285,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::EarlyFragmentTest,
+            true,
         },
     },
 
@@ -289,6 +302,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::EarlyFragmentTest,
+            true,
         },
     },
     {
@@ -304,6 +318,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::VertexShader,
+            true,
         },
     },
     {
@@ -319,6 +334,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            true,
         },
     },
     {
@@ -335,6 +351,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            true,
         },
     },
     {
@@ -350,6 +367,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            true,
         },
     },
     {
@@ -366,6 +384,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            true,
         },
     },
     {
@@ -382,6 +401,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ColorAttachmentOutput,
+            false,
         },
     },
     {
@@ -398,6 +418,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            false,
         },
     },
     {
@@ -423,6 +444,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::BottomOfPipe,
+            false,
         },
     },
     {
@@ -439,6 +461,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_MEMORY_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::BottomOfPipe,
+            false,
         },
     },
     {
@@ -463,6 +486,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_MEMORY_WRITE_BIT,
             ResourceAccess::ReadOnly,
             PipelineStage::InvalidEnum,
+            false,
         },
     },
     {
@@ -479,6 +503,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::TopOfPipe,
+            false,
         },
     },
     {
@@ -495,6 +520,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::TopOfPipe,
+            false,
         },
     },
     {
@@ -510,6 +536,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::Transfer,
+            false,
         },
     },
     {
@@ -525,6 +552,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::Transfer,
+            false,
         },
     },
     {
@@ -540,6 +568,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::Transfer,
+            false,
         },
     },
     {
@@ -557,6 +586,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::InvalidEnum,
+            false,
         },
     },
     {
@@ -572,6 +602,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::VertexShader,
+            true,
         },
     },
     {
@@ -587,6 +618,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
+            true,
         },
     },
     {
@@ -603,6 +635,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            true,
         },
     },
     {
@@ -619,6 +652,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            true,
         },
     },
     {
@@ -634,6 +668,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::FragmentShadingRate,
+            false,
         },
     },
     {
@@ -649,6 +684,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::FragmentShader,
+            true,
         },
     },
     {
@@ -664,6 +700,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            true,
         },
     },
     {
@@ -679,6 +716,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::ComputeShader,
+            false,
         },
     },
     {
@@ -694,6 +732,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ComputeShader,
+            false,
         },
     },
     {
@@ -710,6 +749,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            true,
         },
     },
     {
@@ -726,6 +766,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            true,
         },
     },
     {
@@ -742,6 +783,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::ComputeShader,
+            false,
         },
     },
 };
@@ -914,12 +956,9 @@ VkClearValue GetRobustResourceClearValue(const angle::Format &intendedFormat,
     return clearValue;
 }
 
-bool IsShaderReadOnlyLayout(const ImageMemoryBarrierData &imageLayout)
+bool IsGraphicsShaderAccessLayout(const ImageMemoryBarrierData &imageLayout)
 {
-    // We also use VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL for texture sample from depth
-    // texture. See GetImageReadLayout() for detail.
-    return imageLayout.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ||
-           imageLayout.layout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
+    return imageLayout.isGraphicsShaderAccessLayout;
 }
 
 bool IsAnySubresourceContentDefined(const gl::TexLevelArray<angle::BitSet8<8>> &contentDefined)
@@ -5539,8 +5578,8 @@ void ImageHelper::resetCachedProperties()
     mCurrentLayout               = ImageLayout::Undefined;
     mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
     mIsReleasedToExternal        = false;
-    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
-    mCurrentShaderReadStageMask  = 0;
+    mLastNonShaderAccessLayout   = ImageLayout::Undefined;
+    mCurrentShaderStageMask      = 0;
     mFirstAllocatedLevel         = gl::LevelIndex(0);
     mLayerCount                  = 0;
     mLevelCount                  = 0;
@@ -5849,11 +5888,11 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.pQueueFamilyIndices   = nullptr;
     imageInfo.initialLayout         = ConvertImageLayoutToVkImageLayout(context, initialLayout);
 
-    mCurrentLayout               = initialLayout;
-    mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
-    mIsReleasedToExternal        = false;
-    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
-    mCurrentShaderReadStageMask  = 0;
+    mCurrentLayout             = initialLayout;
+    mCurrentQueueFamilyIndex   = std::numeric_limits<uint32_t>::max();
+    mIsReleasedToExternal      = false;
+    mLastNonShaderAccessLayout = ImageLayout::Undefined;
+    mCurrentShaderStageMask    = 0;
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
@@ -6999,11 +7038,11 @@ void ImageHelper::barrierImpl(Context *context,
 
     // There might be other shaderRead operations there other than the current layout.
     VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
-    if (mCurrentShaderReadStageMask)
+    if (mCurrentShaderStageMask)
     {
-        srcStageMask |= mCurrentShaderReadStageMask;
-        mCurrentShaderReadStageMask  = 0;
-        mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+        srcStageMask |= mCurrentShaderStageMask;
+        mCurrentShaderStageMask    = 0;
+        mLastNonShaderAccessLayout = ImageLayout::Undefined;
     }
     commandBuffer->imageBarrier(srcStageMask, GetImageLayoutDstStageMask(context, transitionTo),
                                 imageMemoryBarrier);
@@ -7168,26 +7207,23 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
         VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
         VkPipelineStageFlags dstStageMask = GetImageLayoutDstStageMask(context, transitionTo);
 
-        if (transitionFrom.layout == transitionTo.layout && IsShaderReadOnlyLayout(transitionTo) &&
-            mBarrierQueueSerial == queueSerial)
+        if (transitionFrom.layout == transitionTo.layout &&
+            IsGraphicsShaderAccessLayout(transitionTo) && mBarrierQueueSerial == queueSerial)
         {
-            // If we are switching between different shader stage reads of the same render pass,
-            // then there is no actual layout change or access type change. We only need a barrier
-            // if we are making a read that is from a new stage. Also note that we do barrier
-            // against previous non-shaderRead layout. We do not barrier between one shaderRead and
-            // another shaderRead.
-            bool isNewReadStage = (mCurrentShaderReadStageMask & dstStageMask) != dstStageMask;
-            if (isNewReadStage)
+            // We already are at the requested layout, and the barrier was inserted in the same
+            // render pass. In this case, we only need to insert the memory barrier for the new
+            // shader stage.
+            bool hasNewShaderStage = (mCurrentShaderStageMask & dstStageMask) != dstStageMask;
+            if (hasNewShaderStage)
             {
                 const ImageMemoryBarrierData &layoutData =
-                    kImageMemoryBarrierData[mLastNonShaderReadOnlyLayout];
+                    kImageMemoryBarrierData[mLastNonShaderAccessLayout];
                 barrier->mergeMemoryBarrier(GetImageLayoutSrcStageMask(context, layoutData),
                                             dstStageMask, layoutData.srcAccessMask,
                                             transitionTo.dstAccessMask);
-                barrierModified     = true;
-                mBarrierQueueSerial = queueSerial;
-                // Accumulate new read stage.
-                mCurrentShaderReadStageMask |= dstStageMask;
+                barrierModified = true;
+                // Accumulate new shader stages.
+                mCurrentShaderStageMask |= dstStageMask;
             }
         }
         else
@@ -7196,25 +7232,22 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
             initImageMemoryBarrierStruct(context, aspectMask, newLayout,
                                          context->getRenderer()->getQueueFamilyIndex(),
                                          &imageMemoryBarrier);
-            // if we transition from shaderReadOnly, we must add in stashed shader stage masks since
-            // there might be outstanding shader reads from stages other than current layout. We do
-            // not insert barrier between one shaderRead to another shaderRead
-            if (mCurrentShaderReadStageMask)
+            // Add extra shader stages if any
+            if (mCurrentShaderStageMask)
             {
-                srcStageMask |= mCurrentShaderReadStageMask;
-                mCurrentShaderReadStageMask  = 0;
-                mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+                srcStageMask |= mCurrentShaderStageMask;
+                mCurrentShaderStageMask = 0;
             }
             barrier->mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
             barrierModified     = true;
             mBarrierQueueSerial = queueSerial;
 
-            // If we are transition into shaderRead layout, remember the last
-            // non-shaderRead layout here.
-            if (IsShaderReadOnlyLayout(transitionTo))
+            // If we are transition into shader access layout, remember the last
+            // non shader access layout here.
+            if (IsGraphicsShaderAccessLayout(transitionTo))
             {
-                mLastNonShaderReadOnlyLayout = mCurrentLayout;
-                mCurrentShaderReadStageMask  = dstStageMask;
+                mLastNonShaderAccessLayout = mCurrentLayout;
+                mCurrentShaderStageMask    = dstStageMask;
             }
         }
         mCurrentLayout = newLayout;
@@ -7593,12 +7626,12 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
 
     // This is just changing the internal state of the image helper so that the next call
     // to changeLayout will use this layout as the "oldLayout" argument.
-    // mLastNonShaderReadOnlyLayout is used to ensure previous write are made visible to reads,
-    // since the only write here is transfer, hence mLastNonShaderReadOnlyLayout is set to
+    // mLastNonShaderAccessLayout is used to ensure previous write are made visible to reads,
+    // since the only write here is transfer, hence mLastNonShaderAccessLayout is set to
     // ImageLayout::TransferDst.
-    mLastNonShaderReadOnlyLayout = ImageLayout::TransferDst;
-    mCurrentShaderReadStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-    mCurrentLayout               = ImageLayout::FragmentShaderReadOnly;
+    mLastNonShaderAccessLayout = ImageLayout::TransferDst;
+    mCurrentShaderStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    mCurrentLayout             = ImageLayout::FragmentShaderReadOnly;
 
     return angle::Result::Continue;
 }
@@ -8951,27 +8984,27 @@ void ImageHelper::stageSelfAsSubresourceUpdates(
 
     // Barrier information.  Note: mLevelCount is set to levelCount so that only the necessary
     // levels are transitioned when flushing the update.
-    prevImage->get().mIntendedFormatID            = mIntendedFormatID;
-    prevImage->get().mActualFormatID              = mActualFormatID;
-    prevImage->get().mCurrentLayout               = mCurrentLayout;
-    prevImage->get().mCurrentQueueFamilyIndex     = mCurrentQueueFamilyIndex;
-    prevImage->get().mLastNonShaderReadOnlyLayout = mLastNonShaderReadOnlyLayout;
-    prevImage->get().mCurrentShaderReadStageMask  = mCurrentShaderReadStageMask;
-    prevImage->get().mLevelCount                  = levelCount;
-    prevImage->get().mLayerCount                  = mLayerCount;
-    prevImage->get().mImageSerial                 = mImageSerial;
-    prevImage->get().mAllocationSize              = mAllocationSize;
-    prevImage->get().mMemoryAllocationType        = mMemoryAllocationType;
-    prevImage->get().mMemoryTypeIndex             = mMemoryTypeIndex;
+    prevImage->get().mIntendedFormatID          = mIntendedFormatID;
+    prevImage->get().mActualFormatID            = mActualFormatID;
+    prevImage->get().mCurrentLayout             = mCurrentLayout;
+    prevImage->get().mCurrentQueueFamilyIndex   = mCurrentQueueFamilyIndex;
+    prevImage->get().mLastNonShaderAccessLayout = mLastNonShaderAccessLayout;
+    prevImage->get().mCurrentShaderStageMask    = mCurrentShaderStageMask;
+    prevImage->get().mLevelCount                = levelCount;
+    prevImage->get().mLayerCount                = mLayerCount;
+    prevImage->get().mImageSerial               = mImageSerial;
+    prevImage->get().mAllocationSize            = mAllocationSize;
+    prevImage->get().mMemoryAllocationType      = mMemoryAllocationType;
+    prevImage->get().mMemoryTypeIndex           = mMemoryTypeIndex;
 
     // Reset information for current (invalid) image.
-    mCurrentLayout               = ImageLayout::Undefined;
-    mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
-    mIsReleasedToExternal        = false;
-    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
-    mCurrentShaderReadStageMask  = 0;
-    mImageSerial                 = kInvalidImageSerial;
-    mMemoryAllocationType        = MemoryAllocationType::InvalidEnum;
+    mCurrentLayout             = ImageLayout::Undefined;
+    mCurrentQueueFamilyIndex   = std::numeric_limits<uint32_t>::max();
+    mIsReleasedToExternal      = false;
+    mLastNonShaderAccessLayout = ImageLayout::Undefined;
+    mCurrentShaderStageMask    = 0;
+    mImageSerial               = kInvalidImageSerial;
+    mMemoryAllocationType      = MemoryAllocationType::InvalidEnum;
 
     setEntireContentUndefined();
 
