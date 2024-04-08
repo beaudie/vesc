@@ -16,6 +16,24 @@
       "message": "IIUC, the whole point of this change is so that this line doesn\u0027t include a map look up, right?\n\nLet\u0027s make this much simpler then; when preparing for warm up, you can return a pointer to the placeholder map entry. If you pass that in this function, you can directly set it from the thread. You could reuse the `pipelineOut` member for that even, since warm up doesn\u0027t need the pipeline to be returned.",
       "revId": "334c8e96ae5c51c7d5d8847f0426ba6f45378a71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e38133ca_7d338fb8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7257,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-08T16:28:45Z",
+      "side": 1,
+      "message": "\u003e Let\u0027s make this much simpler then\n\nindeed, thanks for the suggestion\n\nDone",
+      "parentUuid": "c7e2d0f0_f65f8da6",
+      "revId": "334c8e96ae5c51c7d5d8847f0426ba6f45378a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
