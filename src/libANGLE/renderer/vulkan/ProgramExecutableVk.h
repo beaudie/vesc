@@ -457,10 +457,6 @@ class ProgramExecutableVk : public ProgramExecutableImpl
     angle::Result initGraphicsShaderPrograms(vk::Context *context,
                                              ProgramTransformOptions transformOptions,
                                              vk::ShaderProgramHelper **shaderProgramOut);
-    angle::Result initGraphicsShaderProgramsForWarmUp(vk::Context *context,
-                                                      vk::GraphicsPipelineSubset subset,
-                                                      ProgramTransformOptions transformOptions,
-                                                      vk::ShaderProgramHelper **shaderProgramOut);
     angle::Result initProgramThenCreateGraphicsPipeline(vk::Context *context,
                                                         ProgramTransformOptions transformOptions,
                                                         vk::GraphicsPipelineSubset pipelineSubset,
@@ -497,7 +493,8 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                               vk::GraphicsPipelineSubset subset,
                                               const bool isSurfaceRotated,
                                               const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
-                                              const vk::RenderPass &renderPass);
+                                              const vk::RenderPass &renderPass,
+                                              vk::PipelineHelper *placeholderPipelineHelper);
     void waitForPostLinkTasksImpl(ContextVk *contextVk);
 
     angle::Result getOrAllocateDescriptorSet(vk::Context *context,
