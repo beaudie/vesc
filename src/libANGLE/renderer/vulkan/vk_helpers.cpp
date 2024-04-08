@@ -914,11 +914,12 @@ VkClearValue GetRobustResourceClearValue(const angle::Format &intendedFormat,
     return clearValue;
 }
 
-bool IsShaderReadOnlyLayout(const ImageMemoryBarrierData &imageLayout)
+bool IsShaderAccessLayout(const ImageMemoryBarrierData &imageLayout)
 {
     // We also use VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL for texture sample from depth
     // texture. See GetImageReadLayout() for detail.
     return imageLayout.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ||
+           imageLayout.layout == VK_IMAGE_LAYOUT_GENERAL ||
            imageLayout.layout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
 }
 
@@ -5539,8 +5540,8 @@ void ImageHelper::resetCachedProperties()
     mCurrentLayout               = ImageLayout::Undefined;
     mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
     mIsReleasedToExternal        = false;
-    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
-    mCurrentShaderReadStageMask  = 0;
+    mLastNonShaderAccessLayout   = ImageLayout::Undefined;
+    mCurrentShaderStageMask      = 0;
     mFirstAllocatedLevel         = gl::LevelIndex(0);
     mLayerCount                  = 0;
     mLevelCount                  = 0;
@@ -5849,11 +5850,11 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.pQueueFamilyIndices   = nullptr;
     imageInfo.initialLayout         = ConvertImageLayoutToVkImageLayout(context, initialLayout);
 
-    mCurrentLayout               = initialLayout;
-    mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
-    mIsReleasedToExternal        = false;
-    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
-    mCurrentShaderReadStageMask  = 0;
+    mCurrentLayout             = initialLayout;
+    mCurrentQueueFamilyIndex   = std::numeric_limits<uint32_t>::max();
+    mIsReleasedToExternal      = false;
+    mLastNonShaderAccessLayout = ImageLayout::Undefined;
+    mCurrentShaderStageMask    = 0;
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
@@ -6999,11 +7000,11 @@ void ImageHelper::barrierImpl(Context *context,
 
     // There might be other shaderRead operations there other than the current layout.
     VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
-    if (mCurrentShaderReadStageMask)
+    if (mCurrentShaderStageMask)
     {
-        srcStageMask |= mCurrentShaderReadStageMask;
-        mCurrentShaderReadStageMask  = 0;
-        mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+        srcStageMask |= mCurrentShaderStageMask;
+        mCurrentShaderStageMask    = 0;
+        mLastNonShaderAccessLayout = ImageLayout::Undefined;
     }
     commandBuffer->imageBarrier(srcStageMask, GetImageLayoutDstStageMask(context, transitionTo),
                                 imageMemoryBarrier);
@@ -7168,7 +7169,7 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
         VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
         VkPipelineStageFlags dstStageMask = GetImageLayoutDstStageMask(context, transitionTo);
 
-        if (transitionFrom.layout == transitionTo.layout && IsShaderReadOnlyLayout(transitionTo) &&
+        if (transitionFrom.layout == transitionTo.layout && IsShaderAccessLayout(transitionTo) &&
             mBarrierQueueSerial == queueSerial)
         {
             // If we are switching between different shader stage reads of the same render pass,
@@ -7176,18 +7177,17 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
             // if we are making a read that is from a new stage. Also note that we do barrier
             // against previous non-shaderRead layout. We do not barrier between one shaderRead and
             // another shaderRead.
-            bool isNewReadStage = (mCurrentShaderReadStageMask & dstStageMask) != dstStageMask;
-            if (isNewReadStage)
+            bool hasNewShaderStage = (mCurrentShaderStageMask & dstStageMask) != dstStageMask;
+            if (hasNewShaderStage)
             {
                 const ImageMemoryBarrierData &layoutData =
-                    kImageMemoryBarrierData[mLastNonShaderReadOnlyLayout];
+                    kImageMemoryBarrierData[mLastNonShaderAccessLayout];
                 barrier->mergeMemoryBarrier(GetImageLayoutSrcStageMask(context, layoutData),
                                             dstStageMask, layoutData.srcAccessMask,
                                             transitionTo.dstAccessMask);
-                barrierModified     = true;
-                mBarrierQueueSerial = queueSerial;
+                barrierModified = true;
                 // Accumulate new read stage.
-                mCurrentShaderReadStageMask |= dstStageMask;
+                mCurrentShaderStageMask |= dstStageMask;
             }
         }
         else
@@ -7199,11 +7199,11 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
             // if we transition from shaderReadOnly, we must add in stashed shader stage masks since
             // there might be outstanding shader reads from stages other than current layout. We do
             // not insert barrier between one shaderRead to another shaderRead
-            if (mCurrentShaderReadStageMask)
+            if (mCurrentShaderStageMask)
             {
-                srcStageMask |= mCurrentShaderReadStageMask;
-                mCurrentShaderReadStageMask  = 0;
-                mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+                srcStageMask |= mCurrentShaderStageMask;
+                mCurrentShaderStageMask    = 0;
+                mLastNonShaderAccessLayout = ImageLayout::Undefined;
             }
             barrier->mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
             barrierModified     = true;
@@ -7211,10 +7211,10 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
 
             // If we are transition into shaderRead layout, remember the last
             // non-shaderRead layout here.
-            if (IsShaderReadOnlyLayout(transitionTo))
+            if (IsShaderAccessLayout(transitionTo))
             {
-                mLastNonShaderReadOnlyLayout = mCurrentLayout;
-                mCurrentShaderReadStageMask  = dstStageMask;
+                mLastNonShaderAccessLayout = mCurrentLayout;
+                mCurrentShaderStageMask    = dstStageMask;
             }
         }
         mCurrentLayout = newLayout;
@@ -7593,12 +7593,12 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
 
     // This is just changing the internal state of the image helper so that the next call
     // to changeLayout will use this layout as the "oldLayout" argument.
-    // mLastNonShaderReadOnlyLayout is used to ensure previous write are made visible to reads,
-    // since the only write here is transfer, hence mLastNonShaderReadOnlyLayout is set to
+    // mLastNonShaderAccessLayout is used to ensure previous write are made visible to reads,
+    // since the only write here is transfer, hence mLastNonShaderAccessLayout is set to
     // ImageLayout::TransferDst.
-    mLastNonShaderReadOnlyLayout = ImageLayout::TransferDst;
-    mCurrentShaderReadStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-    mCurrentLayout               = ImageLayout::FragmentShaderReadOnly;
+    mLastNonShaderAccessLayout = ImageLayout::TransferDst;
+    mCurrentShaderStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    mCurrentLayout             = ImageLayout::FragmentShaderReadOnly;
 
     return angle::Result::Continue;
 }
@@ -8951,27 +8951,27 @@ void ImageHelper::stageSelfAsSubresourceUpdates(
 
     // Barrier information.  Note: mLevelCount is set to levelCount so that only the necessary
     // levels are transitioned when flushing the update.
-    prevImage->get().mIntendedFormatID            = mIntendedFormatID;
-    prevImage->get().mActualFormatID              = mActualFormatID;
-    prevImage->get().mCurrentLayout               = mCurrentLayout;
-    prevImage->get().mCurrentQueueFamilyIndex     = mCurrentQueueFamilyIndex;
-    prevImage->get().mLastNonShaderReadOnlyLayout = mLastNonShaderReadOnlyLayout;
-    prevImage->get().mCurrentShaderReadStageMask  = mCurrentShaderReadStageMask;
-    prevImage->get().mLevelCount                  = levelCount;
-    prevImage->get().mLayerCount                  = mLayerCount;
-    prevImage->get().mImageSerial                 = mImageSerial;
-    prevImage->get().mAllocationSize              = mAllocationSize;
-    prevImage->get().mMemoryAllocationType        = mMemoryAllocationType;
-    prevImage->get().mMemoryTypeIndex             = mMemoryTypeIndex;
+    prevImage->get().mIntendedFormatID          = mIntendedFormatID;
+    prevImage->get().mActualFormatID            = mActualFormatID;
+    prevImage->get().mCurrentLayout             = mCurrentLayout;
+    prevImage->get().mCurrentQueueFamilyIndex   = mCurrentQueueFamilyIndex;
+    prevImage->get().mLastNonShaderAccessLayout = mLastNonShaderAccessLayout;
+    prevImage->get().mCurrentShaderStageMask    = mCurrentShaderStageMask;
+    prevImage->get().mLevelCount                = levelCount;
+    prevImage->get().mLayerCount                = mLayerCount;
+    prevImage->get().mImageSerial               = mImageSerial;
+    prevImage->get().mAllocationSize            = mAllocationSize;
+    prevImage->get().mMemoryAllocationType      = mMemoryAllocationType;
+    prevImage->get().mMemoryTypeIndex           = mMemoryTypeIndex;
 
     // Reset information for current (invalid) image.
-    mCurrentLayout               = ImageLayout::Undefined;
-    mCurrentQueueFamilyIndex     = std::numeric_limits<uint32_t>::max();
-    mIsReleasedToExternal        = false;
-    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
-    mCurrentShaderReadStageMask  = 0;
-    mImageSerial                 = kInvalidImageSerial;
-    mMemoryAllocationType        = MemoryAllocationType::InvalidEnum;
+    mCurrentLayout             = ImageLayout::Undefined;
+    mCurrentQueueFamilyIndex   = std::numeric_limits<uint32_t>::max();
+    mIsReleasedToExternal      = false;
+    mLastNonShaderAccessLayout = ImageLayout::Undefined;
+    mCurrentShaderStageMask    = 0;
+    mImageSerial               = kInvalidImageSerial;
+    mMemoryAllocationType      = MemoryAllocationType::InvalidEnum;
 
     setEntireContentUndefined();
 
