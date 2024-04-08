@@ -2990,8 +2990,8 @@ class ImageHelper final : public Resource, public angle::Subject
     ImageLayout mCurrentLayout;
     uint32_t mCurrentQueueFamilyIndex;
     // For optimizing transition between different shader readonly layouts
-    ImageLayout mLastNonShaderReadOnlyLayout;
-    VkPipelineStageFlags mCurrentShaderReadStageMask;
+    ImageLayout mLastNonShaderAccessLayout;
+    VkPipelineStageFlags mCurrentShaderStageMask;
     // Track how it is being used by current open renderpass.
     RenderPassUsageFlags mRenderPassUsageFlags;
     // The QueueSerial that associated with the last barrier.
