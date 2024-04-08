@@ -914,15 +914,6 @@ VkClearValue GetRobustResourceClearValue(const angle::Format &intendedFormat,
     return clearValue;
 }
 
-bool IsShaderAccessLayout(const ImageMemoryBarrierData &imageLayout)
-{
-    // We also use VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL for texture sample from depth
-    // texture. See GetImageReadLayout() for detail.
-    return imageLayout.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ||
-           imageLayout.layout == VK_IMAGE_LAYOUT_GENERAL ||
-           imageLayout.layout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-}
-
 bool IsAnySubresourceContentDefined(const gl::TexLevelArray<angle::BitSet8<8>> &contentDefined)
 {
     for (const angle::BitSet8<8> &levelContentDefined : contentDefined)
@@ -7169,8 +7160,7 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
         VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
         VkPipelineStageFlags dstStageMask = GetImageLayoutDstStageMask(context, transitionTo);
 
-        if (transitionFrom.layout == transitionTo.layout && IsShaderAccessLayout(transitionTo) &&
-            mBarrierQueueSerial == queueSerial)
+        if (transitionFrom.layout == transitionTo.layout && mBarrierQueueSerial == queueSerial)
         {
             // If we are switching between different shader stage reads of the same render pass,
             // then there is no actual layout change or access type change. We only need a barrier
@@ -7202,8 +7192,7 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
             if (mCurrentShaderStageMask)
             {
                 srcStageMask |= mCurrentShaderStageMask;
-                mCurrentShaderStageMask    = 0;
-                mLastNonShaderAccessLayout = ImageLayout::Undefined;
+                mCurrentShaderStageMask = 0;
             }
             barrier->mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
             barrierModified     = true;
@@ -7211,11 +7200,8 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
 
             // If we are transition into shaderRead layout, remember the last
             // non-shaderRead layout here.
-            if (IsShaderAccessLayout(transitionTo))
-            {
-                mLastNonShaderAccessLayout = mCurrentLayout;
-                mCurrentShaderStageMask    = dstStageMask;
-            }
+            mLastNonShaderAccessLayout = mCurrentLayout;
+            mCurrentShaderStageMask    = dstStageMask;
         }
         mCurrentLayout = newLayout;
     }
