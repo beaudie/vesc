@@ -63,6 +63,30 @@
       },
       "revId": "daaf1bee079b1fa6f0f7a240247cbe653ace694b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "170e68f9_a1d5a634",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-08T12:48:05Z",
+      "side": 1,
+      "message": "Actually re-link already waits for the tasks, looks this is only problem when an immutable sampler changes.\n\nDefinitely worth having a test for (and also unlikely to need optimization)",
+      "parentUuid": "8c85edbc_c1c58d94",
+      "range": {
+        "startLine": 592,
+        "startChar": 4,
+        "endLine": 592,
+        "endChar": 28
+      },
+      "revId": "daaf1bee079b1fa6f0f7a240247cbe653ace694b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
