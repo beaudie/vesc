@@ -15,12 +15,17 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/wgpu/wgpu_utils.h"
 
+namespace rx
+{
+
+class ContextWgpu;
+
 namespace webgpu
 {
 
 struct QueuedDataUpload
 {
-    wgpu::ImageCopyBuffer copyBuffer;
+    wgpu::ImageCopyBuffer buffer;
     gl::LevelIndex targetLevel;
 };
 
@@ -41,15 +46,22 @@ class ImageHelper
     ~ImageHelper();
 
     angle::Result initImage(wgpu::Device &device,
-                            wgpu::TextureUsage usage,
-                            wgpu::TextureDimension dimension,
-                            wgpu::Extent3D size,
-                            wgpu::TextureFormat format,
-                            std::uint32_t mipLevelCount,
-                            std::uint32_t sampleCount,
-                            std::size_t ViewFormatCount);
+                            gl::LevelIndex firstAllocatedLevel,
+                            wgpu::TextureDescriptor textureDescriptor);
 
-    void flushStagedUpdates(wgpu::Device &device);
+    void flushStagedUpdates(wgpu::Device &device, wgpu::Queue &queue);
+
+    wgpu::TextureDescriptor createTextureDescriptor(wgpu::TextureUsage usage,
+                                                    wgpu::TextureDimension dimension,
+                                                    wgpu::Extent3D size,
+                                                    wgpu::TextureFormat format,
+                                                    std::uint32_t mipLevelCount,
+                                                    std::uint32_t sampleCount,
+                                                    std::size_t viewFormatCount);
+
+    angle::Result stageTextureUpload(wgpu::Device &device,
+                                     const gl::Extents &glExtents,
+                                     const gl::ImageIndex &index);
 
     LevelIndex toWgpuLevel(gl::LevelIndex levelIndexGl) const;
     gl::LevelIndex toGlLevel(LevelIndex levelIndexWgpu) const;
@@ -67,6 +79,50 @@ class ImageHelper
 
     std::vector<QueuedDataUpload> mBufferQueue;
 };
-}  // namespace webgpu
 
+struct BufferMapState
+{
+    wgpu::MapMode mode;
+    size_t offset;
+    size_t size;
+};
+
+class BufferHelper : public angle::NonCopyable
+{
+  public:
+    BufferHelper();
+    ~BufferHelper();
+
+    bool valid() const { return mBuffer != nullptr; }
+    void reset();
+
+    angle::Result initBuffer(wgpu::Device device,
+                             size_t size,
+                             wgpu::BufferUsage usage,
+                             bool mappedAtCreation);
+
+    angle::Result mapImmediate(ContextWgpu *context,
+                               wgpu::MapMode mode,
+                               size_t offset,
+                               size_t size);
+    angle::Result unmap();
+
+    uint8_t *getMapWritePointer(size_t offset, size_t size) const;
+
+    const std::optional<BufferMapState> &getMappedState() const;
+
+    bool canMapForRead() const;
+    bool canMapForWrite() const;
+
+    wgpu::Buffer &getBuffer();
+    uint64_t size() const;
+
+  private:
+    wgpu::Buffer mBuffer;
+
+    std::optional<BufferMapState> mMappedState;
+};
+
+}  // namespace webgpu
+}  // namespace rx
 #endif  // LIBANGLE_RENDERER_WGPU_WGPU_HELPERS_H_

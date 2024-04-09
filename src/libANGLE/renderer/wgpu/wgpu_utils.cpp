@@ -7,6 +7,11 @@
 #include "libANGLE/renderer/wgpu/wgpu_utils.h"
 
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/renderer/wgpu/ContextWgpu.h"
+#include "libANGLE/renderer/wgpu/DisplayWgpu.h"
+
+namespace rx
+{
 
 namespace webgpu
 {
@@ -33,6 +38,68 @@ void EnsureCapsInitialized(const wgpu::Device &device, gl::Caps *nativeCaps)
     nativeCaps->maxVertexAttributes = rx::LimitToInt(limitsWgpu.limits.maxVertexAttributes);
 
     nativeCaps->maxTextureBufferSize = rx::LimitToInt(limitsWgpu.limits.maxBufferSize);
+}
+ContextWgpu *GetImpl(const gl::Context *context)
+{
+    return GetImplAs<ContextWgpu>(context);
+}
+
+DisplayWgpu *GetDisplay(const gl::Context *context)
+{
+    ContextWgpu *contextWgpu = GetImpl(context);
+    return contextWgpu->getDisplay();
+}
+
+wgpu::Device GetDevice(const gl::Context *context)
+{
+    DisplayWgpu *display = GetDisplay(context);
+    return display->getDevice();
+}
+
+wgpu::Instance GetInstance(const gl::Context *context)
+{
+    DisplayWgpu *display = GetDisplay(context);
+    return display->getInstance();
+}
+
+bool IsError(wgpu::WaitStatus waitStatus)
+{
+    return waitStatus != wgpu::WaitStatus::Success;
+}
+
+template <typename LargerInt>
+GLint LimitToInt(const LargerInt physicalDeviceValue)
+{
+    static_assert(sizeof(LargerInt) >= sizeof(int32_t), "Incorrect usage of LimitToInt");
+
+    // Limit to INT_MAX / 2 instead of INT_MAX.  If the limit is queried as float, the imprecision
+    // in floating point can cause the value to exceed INT_MAX.  This trips dEQP up.
+    return static_cast<GLint>(std::min(
+        physicalDeviceValue, static_cast<LargerInt>(std::numeric_limits<int32_t>::max() / 2)));
+}
+
+void ensureCapsInitialized(gl::Caps &nativeCaps, const wgpu::Device &device)
+{
+    wgpu::SupportedLimits limitsWgpu = {};
+    device.GetLimits(&limitsWgpu);
+
+    nativeCaps.maxElementIndex       = std::numeric_limits<GLuint>::max() - 1;
+    nativeCaps.max3DTextureSize      = LimitToInt(limitsWgpu.limits.maxTextureDimension3D);
+    nativeCaps.max2DTextureSize      = LimitToInt(limitsWgpu.limits.maxTextureDimension2D);
+    nativeCaps.maxArrayTextureLayers = LimitToInt(limitsWgpu.limits.maxTextureArrayLayers);
+    nativeCaps.maxCubeMapTextureSize = LimitToInt(limitsWgpu.limits.maxTextureDimension3D);
+    nativeCaps.maxRenderbufferSize   = LimitToInt(limitsWgpu.limits.maxBufferSize);
+
+    nativeCaps.maxDrawBuffers       = LimitToInt(limitsWgpu.limits.maxColorAttachments);
+    nativeCaps.maxFramebufferWidth  = LimitToInt(limitsWgpu.limits.maxBufferSize);
+    nativeCaps.maxFramebufferHeight = LimitToInt(limitsWgpu.limits.maxBufferSize);
+    nativeCaps.maxColorAttachments  = LimitToInt(limitsWgpu.limits.maxColorAttachments);
+
+    nativeCaps.maxVertexAttribStride = LimitToInt(limitsWgpu.limits.maxVertexBufferArrayStride);
+
+    nativeCaps.maxVertexAttributes = LimitToInt(limitsWgpu.limits.maxVertexAttributes);
+
+    nativeCaps.maxTextureBufferSize = LimitToInt(limitsWgpu.limits.maxBufferSize);
 }
 }  // namespace webgpu
 
@@ -70,6 +137,15 @@ wgpu::Extent3D getExtent3D(const gl::Extents &glExtent)
     return wgpuExtent;
 }
 
+wgpu::Origin3D getOffset3D(const gl::Offset &offsetGL)
+{
+    wgpu::Origin3D offsetWgpu;
+    offsetWgpu.x = offsetGL.x;
+    offsetWgpu.y = offsetGL.y;
+    offsetWgpu.z = offsetGL.z;
+    return offsetWgpu;
+}
+
 wgpu::TextureDimension getWgpuTextureDimension(gl::TextureType glTextureType)
 {
     wgpu::TextureDimension dimension = {};
@@ -96,3 +172,4 @@ wgpu::TextureDimension getWgpuTextureDimension(gl::TextureType glTextureType)
     return dimension;
 }
 }  // namespace gl_wgpu
+}  // namespace rx
