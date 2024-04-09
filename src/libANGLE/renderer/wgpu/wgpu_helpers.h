@@ -24,6 +24,12 @@ struct QueuedDataUpload
     gl::LevelIndex targetLevel;
 };
 
+struct WgpuUserdata
+{
+    bool mapComplete = false;
+    WGPUBufferMapAsyncStatus status;
+};
+
 // Stores subset of information required to create a wgpu::Texture
 struct TextureInfo
 {
@@ -41,15 +47,22 @@ class ImageHelper
     ~ImageHelper();
 
     angle::Result initImage(wgpu::Device &device,
-                            wgpu::TextureUsage usage,
-                            wgpu::TextureDimension dimension,
-                            wgpu::Extent3D size,
-                            wgpu::TextureFormat format,
-                            std::uint32_t mipLevelCount,
-                            std::uint32_t sampleCount,
-                            std::size_t ViewFormatCount);
+                            gl::LevelIndex firstAllocatedLevel,
+                            wgpu::TextureDescriptor textureDescriptor);
 
-    void flushStagedUpdates(wgpu::Device &device);
+    void flushStagedUpdates(wgpu::Device &device, wgpu::Queue &queue);
+
+    wgpu::TextureDescriptor createTextureDescriptor(wgpu::TextureUsage usage,
+                                                    wgpu::TextureDimension dimension,
+                                                    wgpu::Extent3D size,
+                                                    wgpu::TextureFormat format,
+                                                    std::uint32_t mipLevelCount,
+                                                    std::uint32_t sampleCount,
+                                                    std::size_t viewFormatCount);
+
+    angle::Result stageTextureUpload(wgpu::Device &device,
+                                     const gl::Extents &glExtents,
+                                     const gl::ImageIndex &index);
 
     LevelIndex toWgpuLevel(gl::LevelIndex levelIndexGl) const;
     gl::LevelIndex toGlLevel(LevelIndex levelIndexWgpu) const;

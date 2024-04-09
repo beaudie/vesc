@@ -171,6 +171,14 @@ class TextureWgpu : public TextureImpl
                                const gl::ImageIndex &index,
                                const gl::Extents &size);
 
+    angle::Result setSubImageImpl(const gl::Context *context,
+                                  const gl::ImageIndex &index,
+                                  const gl::Box &area);
+
+    angle::Result initializeImage(const gl::Context *context,
+                                  const gl::ImageIndex &index,
+                                  const gl::Extents &size);
+
     angle::Result redefineLevel(const gl::Context *context,
                                 const gl::ImageIndex &index,
                                 const gl::Extents &size);
