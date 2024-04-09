@@ -10,6 +10,7 @@
 #include <dawn/webgpu_cpp.h>
 #include <stdint.h>
 
+#include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/angletypes.h"
 
@@ -26,6 +27,7 @@ enum class RenderPassClosureReason
     InvalidEnum,
     EnumCount = InvalidEnum,
 };
+void EnsureCapsInitialized(const wgpu::Device &device, gl::Caps *nativeCaps);
 
 }  // namespace webgpu
 
