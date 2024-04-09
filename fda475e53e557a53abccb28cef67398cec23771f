@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ca90b9a_96222623",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-09T13:06:44Z",
+      "side": 0,
+      "message": "this caused compute warm up tasks to not get scheduled, thanks to jonah for catching the bug internally",
+      "range": {
+        "startLine": 825,
+        "startChar": 8,
+        "endLine": 825,
+        "endChar": 39
+      },
+      "revId": "fda475e53e557a53abccb28cef67398cec23771f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
