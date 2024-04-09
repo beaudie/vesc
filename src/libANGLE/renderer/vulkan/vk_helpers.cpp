@@ -7168,8 +7168,7 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
         VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
         VkPipelineStageFlags dstStageMask = GetImageLayoutDstStageMask(context, transitionTo);
 
-        if (transitionFrom.layout == transitionTo.layout && IsShaderReadOnlyLayout(transitionTo) &&
-            mBarrierQueueSerial == queueSerial)
+        if (transitionFrom.layout == transitionTo.layout && IsShaderReadOnlyLayout(transitionTo))
         {
             // If we are switching between different shader stage reads of the same render pass,
             // then there is no actual layout change or access type change. We only need a barrier
