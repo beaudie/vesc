@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e20c974_5ad0dbaa",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T17:38:42Z",
+      "side": 1,
+      "message": "This can\u0027t be done in the thread (inserts in the hash map), what was the reason for removing `initGraphicsShaderProgramsForWarmUp`?",
+      "revId": "3abdf67e55c84f16fb195bc050fd8027f1bd0ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c6b70b6_cff3498a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7353,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T17:38:42Z",
+      "side": 1,
+      "message": "nit: `emplace` returns an iterator, please use that to get the payload instead of doing the lookup twice.",
+      "revId": "3abdf67e55c84f16fb195bc050fd8027f1bd0ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
