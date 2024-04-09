@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ad5a8a5_34643cbc",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-09T20:20:35Z",
+      "side": 1,
+      "message": "well, if i need to take into account the fact that `LinkTaskVk::linkImpl` can happen in an async thread then i need to move things around a bit",
+      "parentUuid": "e76b859f_c624b3b2",
+      "revId": "3abdf67e55c84f16fb195bc050fd8027f1bd0ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c6b70b6_cff3498a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 9
