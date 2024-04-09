@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af05f09_357f1d2f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-09T20:18:45Z",
+      "side": 1,
+      "message": "irrespective of whether the warmup task was scheduled or not the program binary will get saved, although without the warmup pipeline cache blob. Outside of a whitebox like test how do you propose the test be structured to catch the \"early return\" bug?",
+      "parentUuid": "c76643da_8d72c386",
+      "revId": "cc99607f89a282fbb33729015b8da167a8827566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "dde9080b_4409a4fe",
