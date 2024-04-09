@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e76b859f_c624b3b2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T18:00:06Z",
+      "side": 1,
+      "message": "Oh yes. The tasks are made to be run in parallel. In the vulkan backend in particular, we don\u0027t enable `parallelShaderCompileKHR` because we saw link happening in the context thread ends up still being faster, but that\u0027s not set in stone (and you may want to experiment with it too). The `enableParallelCompileAndLink` feature can be used to easily toggle that. The fact that it runs in an unlocked tail call is an optimization for when that extension is disabled (default) and helps apps that link in a separate context/thread.\n\nWe do run tests with `enableParallelCompileAndLink` enabled, FYI.",
+      "parentUuid": "9e4589b1_045fab32",
+      "revId": "3abdf67e55c84f16fb195bc050fd8027f1bd0ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c6b70b6_cff3498a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 9
