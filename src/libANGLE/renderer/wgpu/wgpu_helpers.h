@@ -13,6 +13,7 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/ImageIndex.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/wgpu/ContextWgpu.h"
 #include "libANGLE/renderer/wgpu/wgpu_utils.h"
 
 namespace rx
@@ -62,6 +63,24 @@ class ImageHelper
     angle::Result stageTextureUpload(wgpu::Device &device,
                                      const gl::Extents &glExtents,
                                      const gl::ImageIndex &index);
+
+    angle::Result readPackPixelBuffer(const gl::Rectangle &area,
+                                      const rx::PackPixelsParams &packPixelsParams,
+                                      const angle::Format &aspectFormat,
+                                      const uint8_t *readPixelBuffer,
+                                      void *pixels);
+
+    static angle::Result getReadPixelsParams(rx::ContextWgpu *contextWgpu,
+                                             const gl::PixelPackState &packState,
+                                             gl::Buffer *packBuffer,
+                                             GLenum format,
+                                             GLenum type,
+                                             const gl::Rectangle &area,
+                                             const gl::Rectangle &clippedArea,
+                                             rx::PackPixelsParams *paramsOut,
+                                             GLuint *skipBytesOut);
+
+    uint8_t *getReadPixelBuffer(rx::ContextWgpu *contextWgpu, size_t allocationSize);
 
     LevelIndex toWgpuLevel(gl::LevelIndex levelIndexGl) const;
     gl::LevelIndex toGlLevel(LevelIndex levelIndexWgpu) const;

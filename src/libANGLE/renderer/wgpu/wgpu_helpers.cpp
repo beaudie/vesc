@@ -5,6 +5,7 @@
 //
 
 #include "libANGLE/renderer/wgpu/wgpu_helpers.h"
+#include "libANGLE/formatutils.h"
 
 #include "libANGLE/renderer/wgpu/ContextWgpu.h"
 #include "libANGLE/renderer/wgpu/DisplayWgpu.h"
@@ -88,6 +89,49 @@ angle::Result ImageHelper::stageTextureUpload(wgpu::Device &device,
     imageCopyBuffer.buffer      = bufferHelper.getBuffer();
     QueuedDataUpload dataUpload = {imageCopyBuffer, levelGL};
     mBufferQueue.push_back(dataUpload);
+    return angle::Result::Continue;
+}
+
+angle::Result ImageHelper::readPackPixelBuffer(const gl::Rectangle &area,
+                                               const rx::PackPixelsParams &packPixelsParams,
+                                               const angle::Format &aspectFormat,
+                                               const uint8_t *readPixelBuffer,
+                                               void *pixels)
+{
+    PackPixels(packPixelsParams, aspectFormat, area.width * aspectFormat.pixelBytes,
+               readPixelBuffer, static_cast<uint8_t *>(pixels));
+    return angle::Result::Continue;
+}
+
+// static
+angle::Result ImageHelper::getReadPixelsParams(rx::ContextWgpu *contextWgpu,
+                                               const gl::PixelPackState &packState,
+                                               gl::Buffer *packBuffer,
+                                               GLenum format,
+                                               GLenum type,
+                                               const gl::Rectangle &area,
+                                               const gl::Rectangle &clippedArea,
+                                               rx::PackPixelsParams *paramsOut,
+                                               GLuint *skipBytesOut)
+{
+    const gl::InternalFormat &sizedFormatInfo = gl::GetInternalFormatInfo(format, type);
+
+    GLuint outputPitch = 0;
+    ANGLE_CHECK_GL_MATH(contextWgpu,
+                        sizedFormatInfo.computeRowPitch(type, area.width, packState.alignment,
+                                                        packState.rowLength, &outputPitch));
+    ANGLE_CHECK_GL_MATH(contextWgpu, sizedFormatInfo.computeSkipBytes(
+                                         type, outputPitch, 0, packState, false, skipBytesOut));
+
+    *skipBytesOut += (clippedArea.x - area.x) * sizedFormatInfo.pixelBytes +
+                     (clippedArea.y - area.y) * outputPitch;
+
+    angle::FormatID angleFormatID =
+        angle::Format::InternalFormatToID(sizedFormatInfo.sizedInternalFormat);
+    const angle::Format &angleFormat = angle::Format::Get(angleFormatID);
+
+    *paramsOut = rx::PackPixelsParams(clippedArea, angleFormat, outputPitch,
+                                      packState.reverseRowOrder, packBuffer, 0);
     return angle::Result::Continue;
 }
 
@@ -216,5 +260,45 @@ uint64_t BufferHelper::size() const
     return mBuffer ? mBuffer.GetSize() : 0;
 }
 
+uint8_t *ImageHelper::getReadPixelBuffer(rx::ContextWgpu *contextWgpu, size_t allocationSize)
+{
+    wgpu::Device device          = contextWgpu->getDisplay()->getDevice();
+    wgpu::CommandEncoder encoder = device.CreateCommandEncoder();
+    wgpu::Queue queue            = contextWgpu->getDisplay()->getQueue();
+    BufferHelper bufferHelper;
+
+    angle::Result result;
+    result = bufferHelper.initBuffer(
+        device, allocationSize, wgpu::BufferUsage::MapRead | wgpu::BufferUsage::CopyDst, false);
+    if (result != angle::Result::Continue)
+    {
+        return nullptr;
+    }
+    wgpu::TextureDataLayout textureDataLayout;
+    textureDataLayout.offset       = toWgpuLevel(mFirstAllocatedLevel).get();
+    textureDataLayout.bytesPerRow  = mTexture.GetWidth();
+    textureDataLayout.rowsPerImage = mTexture.GetHeight();
+
+    wgpu::ImageCopyBuffer copyBuffer;
+    copyBuffer.buffer = bufferHelper.getBuffer();
+    copyBuffer.layout = textureDataLayout;
+
+    wgpu::ImageCopyTexture copyTexture;
+    copyTexture.texture  = mTexture;
+    copyTexture.mipLevel = toWgpuLevel(mFirstAllocatedLevel).get();
+
+    encoder.CopyTextureToBuffer(&copyTexture, &copyBuffer, &mTextureDescriptor.size);
+
+    wgpu::CommandBuffer commandBuffer = encoder.Finish();
+    queue.Submit(1, &commandBuffer);
+
+    result = bufferHelper.mapImmediate(contextWgpu, wgpu::MapMode::Read, 0, allocationSize);
+    if (result != angle::Result::Continue)
+    {
+        return nullptr;
+    }
+    return static_cast<uint8_t *>(bufferHelper.getBuffer().GetMappedRange(
+        toWgpuLevel(mFirstAllocatedLevel).get(), allocationSize));
+}
 }  // namespace webgpu
 }  // namespace rx
