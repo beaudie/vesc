@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5318b494_05eb9316",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T18:56:02Z",
+      "side": 1,
+      "message": "Would you please augment this comment about why this also works for two render passes?",
+      "range": {
+        "startLine": 7173,
+        "startChar": 66,
+        "endLine": 7173,
+        "endChar": 95
+      },
+      "revId": "e00dee648a33d83cb960d1a9666dc8e23c1e5579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e17be1cb_678b8c8e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7183,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T18:56:02Z",
+      "side": 1,
+      "message": "Say the first render pass needs Transfer-\u003eFS, the second render pass needs Transfer-\u003eVS.\n\nIIUC, the barrier is reset when executed. So, after the first render pass, the Transfer-\u003eFS is gone, and the old layout is forgotten. How does this code generate the Transfer-\u003eVS barrier?",
+      "range": {
+        "startLine": 7183,
+        "startChar": 16,
+        "endLine": 7183,
+        "endChar": 23
+      },
+      "revId": "e00dee648a33d83cb960d1a9666dc8e23c1e5579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
