@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4a07dec_68e48496",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T16:33:59Z",
+      "side": 1,
+      "message": "Is this just to work around app bugs with missing `glMemoryBarrier`? Because it should not be possible to have the image be used as shader write in two different draw calls in the same render pass.",
+      "revId": "5f4e90dc19b782fcd906cba172bf945b5d7c2219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0354f61e_be20041d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T16:33:59Z",
+      "side": 1,
+      "message": "The `true`/`false`s here are hard to interpret when reading the code (without context). Please use a `class enum` to make it obvious.",
+      "revId": "5f4e90dc19b782fcd906cba172bf945b5d7c2219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
