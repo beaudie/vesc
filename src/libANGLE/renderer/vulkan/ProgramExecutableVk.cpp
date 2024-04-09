@@ -303,6 +303,7 @@ void ReadFromDefaultUniformBlock(int componentCount,
         memcpy(dst, readPtr, elementSize);
     }
 }
+}  // namespace
 
 class WarmUpTaskCommon : public vk::Context, public LinkSubTask
 {
@@ -452,7 +453,6 @@ class WarmUpGraphicsTask : public WarmUpTaskCommon
     // Temporary objects to clean up at the end
     SharedRenderPass *mCompatibleRenderPass;
 };
-}  // namespace
 
 DefaultUniformBlockVk::DefaultUniformBlockVk() = default;
 
