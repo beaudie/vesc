@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b3fc7f8_78c2e0bc",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-09T22:25:36Z",
+      "side": 1,
+      "message": "ok, this is how it looks. safety at the cost of a bit of ugliness. WDYT?",
+      "parentUuid": "4ad5a8a5_34643cbc",
+      "revId": "3abdf67e55c84f16fb195bc050fd8027f1bd0ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c6b70b6_cff3498a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 9
@@ -85,6 +103,24 @@
       "writtenOn": "2024-04-09T17:38:42Z",
       "side": 1,
       "message": "nit: `emplace` returns an iterator, please use that to get the payload instead of doing the lookup twice.",
+      "revId": "3abdf67e55c84f16fb195bc050fd8027f1bd0ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9156850_65c5a036",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7353,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-09T22:25:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c6b70b6_cff3498a",
       "revId": "3abdf67e55c84f16fb195bc050fd8027f1bd0ec9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
