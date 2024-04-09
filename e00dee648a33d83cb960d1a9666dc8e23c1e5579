@@ -69,6 +69,30 @@
       },
       "revId": "e00dee648a33d83cb960d1a9666dc8e23c1e5579",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee1fd5d4_1dd34f79",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7183,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T22:42:08Z",
+      "side": 1,
+      "message": "For posterity: anglebug.com/6663",
+      "parentUuid": "0bf8dfa3_13c2c606",
+      "range": {
+        "startLine": 7183,
+        "startChar": 16,
+        "endLine": 7183,
+        "endChar": 23
+      },
+      "revId": "e00dee648a33d83cb960d1a9666dc8e23c1e5579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
