@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a370e84c_ff3d2e3e",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-09T21:12:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23ce9fb9_88a500e5",
+      "revId": "a3922063e2a53f2bb7d777f4eef033f3184623f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c190e1b5_30a70f7b",
@@ -65,6 +83,30 @@
       "writtenOn": "2024-04-09T17:55:48Z",
       "side": 1,
       "message": "Should be `maxTextureDimension2D`? Physically, a cube map is a 2D array.",
+      "range": {
+        "startLine": 31,
+        "startChar": 68,
+        "endLine": 31,
+        "endChar": 89
+      },
+      "revId": "a3922063e2a53f2bb7d777f4eef033f3184623f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "173e908b_9020d1bc",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-09T21:12:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c190e1b5_30a70f7b",
       "range": {
         "startLine": 31,
         "startChar": 68,
@@ -98,6 +140,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8309926_668e7f18",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-09T21:12:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd50ea52_f074f6af",
+      "range": {
+        "startLine": 32,
+        "startChar": 68,
+        "endLine": 32,
+        "endChar": 81
+      },
+      "revId": "a3922063e2a53f2bb7d777f4eef033f3184623f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f9c3eb2_04e75a18",
@@ -111,6 +177,30 @@
       "writtenOn": "2024-04-09T17:55:48Z",
       "side": 1,
       "message": "Also not the same thing, `maxTextureDimension2D` is likely the correct one.",
+      "range": {
+        "startLine": 35,
+        "startChar": 67,
+        "endLine": 35,
+        "endChar": 80
+      },
+      "revId": "a3922063e2a53f2bb7d777f4eef033f3184623f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e12ff299_87b5ea38",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-09T21:12:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f9c3eb2_04e75a18",
       "range": {
         "startLine": 35,
         "startChar": 67,
@@ -144,6 +234,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0a91b44_7a9e837a",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-09T21:12:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a492f0e5_04d0225a",
+      "range": {
+        "startLine": 36,
+        "startChar": 67,
+        "endLine": 36,
+        "endChar": 80
+      },
+      "revId": "a3922063e2a53f2bb7d777f4eef033f3184623f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62297efc_8e536c70",
@@ -157,6 +271,30 @@
       "writtenOn": "2024-04-09T17:55:48Z",
       "side": 1,
       "message": "`CamelCase`\n\nAlso, we usually put inputs first, then output (and the output is usually a pointer instead of ref; at call site it makes it clearer that the function may modify it).",
+      "range": {
+        "startLine": 33,
+        "startChar": 5,
+        "endLine": 33,
+        "endChar": 26
+      },
+      "revId": "a3922063e2a53f2bb7d777f4eef033f3184623f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be86111b_990fdb48",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-09T21:12:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62297efc_8e536c70",
       "range": {
         "startLine": 33,
         "startChar": 5,
