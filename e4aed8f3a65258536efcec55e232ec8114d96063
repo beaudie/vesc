@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11ee4f56_aa8be0c9",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T16:27:09Z",
+      "side": 1,
+      "message": "This should be `mImage-\u003etoWgpuLevel(levelIndex).get()`. It would save you a lot of pain to keep in mind that the GL and WGPU indices don\u0027t have the same \"zero\". The `gl::LevelIndex` and `webgpu::LeveLIndex` types help, but at the API borders like this, you just gotta be careful.",
+      "range": {
+        "startLine": 413,
+        "startChar": 42,
+        "endLine": 413,
+        "endChar": 52
+      },
+      "revId": "e4aed8f3a65258536efcec55e232ec8114d96063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
