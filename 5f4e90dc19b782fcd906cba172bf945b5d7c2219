@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d5562ec9_fec1f628",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-09T18:59:43Z",
+      "side": 1,
+      "message": "Ok let me know, I did fix such bugs in the past with deqp tests, we can fix that too.\n\nIf using VkEvents leads this to deadlock (instead of garbage) though, we need to work around that. The change is fine, it makes things cleaner, just saying don\u0027t set a goal of making this pattern work correctly.",
+      "parentUuid": "b079df71_1afa293d",
+      "revId": "5f4e90dc19b782fcd906cba172bf945b5d7c2219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0354f61e_be20041d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
