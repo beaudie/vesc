@@ -45,6 +45,30 @@
       },
       "revId": "e00dee648a33d83cb960d1a9666dc8e23c1e5579",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bf8dfa3_13c2c606",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7183,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-09T20:38:53Z",
+      "side": 1,
+      "message": "It is from mLastNonShaderReadOnlyLayout.\n\nHad an offline discussion on this. I agree that the problem here is that Trasnfer-\u003eVS barrier does not have layout transition, and it may race against the Transfer-\u003eFS which does the layout change.",
+      "parentUuid": "e17be1cb_678b8c8e",
+      "range": {
+        "startLine": 7183,
+        "startChar": 16,
+        "endLine": 7183,
+        "endChar": 23
+      },
+      "revId": "e00dee648a33d83cb960d1a9666dc8e23c1e5579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
