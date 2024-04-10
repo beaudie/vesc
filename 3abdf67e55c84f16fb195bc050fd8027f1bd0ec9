@@ -110,6 +110,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8508fe60_b388aeff",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-10T01:48:19Z",
+      "side": 1,
+      "message": "Oof, I was going to say `linkImpl` should be the one calling `populate` ... and now I see that\u0027s exactly what your original reply to the comment was. 😓\n\nA bit of confusion since `warmUpPipelineCache` is not actually doing the warm up anymore, it\u0027s setting up the warm up task.\n\nSorry, let me backtrack. Your original change was good (patchset 9). I\u0027d only ask to rename the function to `getPipelineCacheWarmUpTask`.\n\n---\n\nRegarding all the parallel link stuff, the `linkImpl` is part of the link, which means threaded or not, we wait on it before resolving the link. No pipeline can be created in the meantime, so access to the hash map is safe regardless of where it\u0027s run. I originally mistakenly thought that this function is called from the post-link task.",
+      "parentUuid": "bef5de2d_f75ccfdc",
+      "revId": "3abdf67e55c84f16fb195bc050fd8027f1bd0ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c6b70b6_cff3498a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 9
