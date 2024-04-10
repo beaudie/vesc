@@ -16,6 +16,24 @@
       "message": "What is an \"uncaptured error\"? Typically errors should bubble up as either GL errors or device loss, not just logged and forgotten.",
       "revId": "ea6870f5ac8e6a4cd0986bb25b06a46e4b955a51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9de54d4c_6ceba8d1",
+        "filename": "src/libANGLE/renderer/wgpu/DisplayWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-10T18:31:25Z",
+      "side": 1,
+      "message": "So initially I had assumed device related errors would also immediately bubble up or end with device loss, but it looks like any errors to wgpu calls aren\u0027t handled by default. E.g., I now at least see logs for errors when calling CopyBufferToTexture.\n\nI do see there\u0027s also a PushErrorScope() and PopErrorScope() method for devices, and error scopes can be `Validation` `OutOfMemory` or `Internal`, I\u0027ll see if I can add an error scope at device creation then manually handle errors for wgpu calls afterwards. Device loss errors are handled separately, there\u0027s a `SetDeviceLostCallback` we\u0027ll need to use for that.\n\nAlternately I could modify this error callback set the userdata and have the display hold some type of ErrorSet similar to what contexts already do.",
+      "parentUuid": "87f5e748_a2bb6820",
+      "revId": "ea6870f5ac8e6a4cd0986bb25b06a46e4b955a51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
