@@ -16,6 +16,24 @@
       "message": "Maybe just disable it here?",
       "revId": "c632fae01ced6712d31c4665288eb306a980fb10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81b11701_8cda7936",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2162,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-10T16:33:26Z",
+      "side": 0,
+      "message": "The crashes appear to happen when calling glBlendEquation and not necessarily related to this extension.",
+      "parentUuid": "2970f592_31e232ca",
+      "revId": "c632fae01ced6712d31c4665288eb306a980fb10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
