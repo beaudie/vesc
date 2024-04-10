@@ -34,6 +34,24 @@
       "parentUuid": "87f5e748_a2bb6820",
       "revId": "ea6870f5ac8e6a4cd0986bb25b06a46e4b955a51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8738d8ee_86b40806",
+        "filename": "src/libANGLE/renderer/wgpu/DisplayWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-10T19:51:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9de54d4c_6ceba8d1",
+      "revId": "ea6870f5ac8e6a4cd0986bb25b06a46e4b955a51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
