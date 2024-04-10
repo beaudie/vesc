@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b429757b_5ba23620",
+        "filename": "src/tests/egl_tests/EGLBlobCacheTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-10T20:04:38Z",
+      "side": 1,
+      "message": "No. If the extension doesn\u0027t exist, the program binary is expected to always be ready.\n\nIt\u0027s rather irrelevant in the end, these tests are too ingrained in ANGLE behavior, they\u0027d never pass on native drivers (if ever run). I kept it as `if` in case some backends decide to not expose the extension. (they would still pass the tests).",
+      "parentUuid": "3217c9ef_5075f00a",
+      "range": {
+        "startLine": 131,
+        "startChar": 8,
+        "endLine": 131,
+        "endChar": 72
+      },
+      "revId": "4fedab9d78a515277e34f453a55a0e385b8c1b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0efbc1eb_dd380408",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-04-10T18:56:05Z",
       "side": 1,
       "message": "why 0? should atleast be a few ms?",
+      "range": {
+        "startLine": 140,
+        "startChar": 21,
+        "endLine": 140,
+        "endChar": 22
+      },
+      "revId": "4fedab9d78a515277e34f453a55a0e385b8c1b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97b6dfed_0c0fec24",
+        "filename": "src/tests/egl_tests/EGLBlobCacheTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-10T20:04:38Z",
+      "side": 1,
+      "message": "It\u0027s just test code, so doesn\u0027t really matter? FWIW, `angle::Sleep(0)` translates to `sched_yield()`.",
+      "parentUuid": "0efbc1eb_dd380408",
       "range": {
         "startLine": 140,
         "startChar": 21,

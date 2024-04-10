@@ -22,6 +22,30 @@
       },
       "revId": "46e47ce16814906d33ec4bde73882f8d6015710a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "884a90a9_a60500f8",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3742,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-10T20:04:38Z",
+      "side": 0,
+      "message": "No, but `syncDirtyObject` is never called with them, so I removed them too. The new `default: UNREACHABLE();` code would catch if they are ever needed.",
+      "parentUuid": "9cc8e16d_d4e5599a",
+      "range": {
+        "startLine": 3730,
+        "startChar": 0,
+        "endLine": 3742,
+        "endChar": 18
+      },
+      "revId": "46e47ce16814906d33ec4bde73882f8d6015710a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
