@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "299497db_059df188",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-10T21:03:38Z",
+      "side": 1,
+      "message": "The GL caps come from ContextImpl. They can be pre-computed and cached in the display for WebGPU if we want.",
+      "parentUuid": "120a312a_5f690d1f",
+      "revId": "a3922063e2a53f2bb7d777f4eef033f3184623f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23ce9fb9_88a500e5",
