@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2461f220_90627671",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-10T17:02:54Z",
+      "side": 1,
+      "message": "First draft is very WIP, just using ifdefs everywhere.\n\nWill work in a pinch for non-capture builds.",
+      "revId": "0759f23e6f2be09223011a532610c21600330641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
