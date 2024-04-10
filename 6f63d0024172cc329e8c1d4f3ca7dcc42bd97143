@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed5ffcb9_125eff44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-10T20:21:24Z",
+      "side": 1,
+      "message": "Mohan, just saw your comment in anglebug.com/8663#c5, that\u0027s a good idea, but let\u0027s land this first and I\u0027ll see about changing the behavior. In particular, I need this fixed ASAP before the next Chrome beta branch in a few days so the bug with missing caching doesn\u0027t get to users.",
+      "revId": "6f63d0024172cc329e8c1d4f3ca7dcc42bd97143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc1eba82_b8042324",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3763,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-10T20:21:24Z",
+      "side": 1,
+      "message": "Note: trading one `if` here for this `if` removed, so this is not adding any costs we didn\u0027t already have: https://chromium-review.googlesource.com/c/angle/angle/+/5440302/4/src/libANGLE/State.cpp#b3787",
+      "revId": "6f63d0024172cc329e8c1d4f3ca7dcc42bd97143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
