@@ -128,6 +128,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8cb96750_f75bff2b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-10T02:11:23Z",
+      "side": 1,
+      "message": "\u003e A bit of confusion since warmUpPipelineCache is not actually doing the warm up anymore\n\nindeed, the dedicated `warmUp[Compute, Graphics]PipelineCache` methods actually do the warm up\n\n\u003e Your original change was good (patchset 9). I\u0027d only ask to rename\n\nok, will first revert to PS9, so we reestablish the baseline, and then do the renaming\n\n\u003e I originally mistakenly thought that this function is called from the post-link task\n\nyeah, sorry i should have chosen a better name",
+      "parentUuid": "8508fe60_b388aeff",
+      "revId": "3abdf67e55c84f16fb195bc050fd8027f1bd0ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c6b70b6_cff3498a",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 9
