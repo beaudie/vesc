@@ -9715,7 +9715,7 @@ void ImageHelper::pruneSupersededUpdatesForLevel(ContextVk *contextVk,
         if (boundingBox[aspectIndex].contains(currentUpdateBox))
         {
             ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_LOW,
-                                  "Dropped update that is superseded by a more recent one");
+                                  "Dropped texture update that is superseded by a more recent one");
 
             // Release the superseded update
             update.release(contextVk->getRenderer());
