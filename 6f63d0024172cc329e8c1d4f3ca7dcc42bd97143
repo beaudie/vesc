@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fac1218_62d02d6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-10T22:00:44Z",
+      "side": 1,
+      "message": "just curious -\n\n\u003e I need this fixed ASAP before the next Chrome beta branch\n\nunless chrome bots enables `disableProgramCaching` the only reason you have a time pressure is because of this -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5440302, correct?\n\ni say this because it is not possible for a program to be marked dirty (which it will be for the first draw) but `Program::waitForPostLinkTasks` to not be called unless `disableProgramCaching` is enabled\n\nI guess my question is, why such a hurry to get rid of `Program::syncState`?",
+      "parentUuid": "ed5ffcb9_125eff44",
+      "revId": "6f63d0024172cc329e8c1d4f3ca7dcc42bd97143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "dc1eba82_b8042324",
