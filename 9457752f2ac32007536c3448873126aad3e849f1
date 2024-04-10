@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5df854e4_b557f1b9",
+        "filename": "src/libANGLE/renderer/wgpu/BufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-10T21:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8307b762_9424179e",
+      "revId": "9457752f2ac32007536c3448873126aad3e849f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a698924_6cd2a5d2",
@@ -37,6 +55,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "93b01b08_d5bf85bb",
+        "filename": "src/libANGLE/renderer/wgpu/BufferWgpu.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-10T21:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a698924_6cd2a5d2",
+      "revId": "9457752f2ac32007536c3448873126aad3e849f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3e08181c_7fcca843",
         "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
         "patchSetId": 6
@@ -48,6 +84,24 @@
       "writtenOn": "2024-04-09T17:29:48Z",
       "side": 1,
       "message": "nit: You may find you\u0027ll end up with duplicate `GetImpl`s this way. The `ContextWgpu` is going to end up being useful for other reasons over time, so you might as well `GetImpl` and put it in `contextWgpu`, then call whatever you need (like `getDevice()`) on it.",
+      "revId": "9457752f2ac32007536c3448873126aad3e849f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "745798b4_445838b8",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-10T21:20:01Z",
+      "side": 1,
+      "message": "Ack. Will move some helpers around.",
+      "parentUuid": "3e08181c_7fcca843",
       "revId": "9457752f2ac32007536c3448873126aad3e849f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
