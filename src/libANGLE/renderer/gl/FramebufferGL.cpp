@@ -1303,6 +1303,16 @@ gl::FramebufferStatus FramebufferGL::checkStatus(const gl::Context *context) con
     return gl::FramebufferStatus::Complete();
 }
 
+angle::Result FramebufferGL::ensureAttachmentsInitialized(
+    const gl::Context *context,
+    const gl::DrawBufferMask &colorAttachments,
+    bool depth,
+    bool stencil)
+{
+    BlitGL *blitter = GetBlitGL(context);
+    return blitter->clearFramebuffer(context, colorAttachments, depth, stencil, this);
+}
+
 angle::Result FramebufferGL::syncState(const gl::Context *context,
                                        GLenum binding,
                                        const gl::Framebuffer::DirtyBits &dirtyBits,
