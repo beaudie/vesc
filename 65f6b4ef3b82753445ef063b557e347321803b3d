@@ -39,6 +39,30 @@
       },
       "revId": "65f6b4ef3b82753445ef063b557e347321803b3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49eeabf4_0c082ec1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7677,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-04-11T20:06:43Z",
+      "side": 1,
+      "message": "Your suggestion on assert was spot on :). Done.",
+      "parentUuid": "67bbb071_73c2ab93",
+      "range": {
+        "startLine": 7675,
+        "startChar": 0,
+        "endLine": 7677,
+        "endChar": 68
+      },
+      "revId": "65f6b4ef3b82753445ef063b557e347321803b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
