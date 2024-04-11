@@ -34,6 +34,24 @@
       "parentUuid": "50766da5_ca18bc53",
       "revId": "3448edb26d337bea81ba8ab4c8ebf762c7531f9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43e35945_68683d9e",
+        "filename": "src/libANGLE/renderer/wgpu/BufferWgpu.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-11T14:38:46Z",
+      "side": 1,
+      "message": "Acknowledged, chatted offline. For posterity, it\u0027ll be good to make this connection clearer.",
+      "parentUuid": "6f106086_8d287a6b",
+      "revId": "3448edb26d337bea81ba8ab4c8ebf762c7531f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
