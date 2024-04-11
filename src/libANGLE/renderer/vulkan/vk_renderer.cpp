@@ -572,12 +572,14 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessagesWithoutLoadStoreOpNon
 // Messages that are only generated with MSRTT emulation.  Some of these are syncval bugs (discussed
 // in https://gitlab.khronos.org/vulkan/vulkan/-/issues/3840)
 constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessagesWithMSRTTEmulation[] = {
+#if 0
     // False positive: https://gitlab.khronos.org/vulkan/vulkan/-/issues/3840
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
         "during depth/stencil resolve read",
         "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ",
     },
+#endif
     // Unknown whether ANGLE or syncval bug.
     {
         "SYNC-HAZARD-WRITE-AFTER-WRITE",
@@ -4306,16 +4308,6 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsDepthStencilResolve,
                             mFeatures.supportsRenderpass2.enabled &&
                                 mDepthStencilResolveProperties.supportedDepthResolveModes != 0);
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsDepthStencilIndependentResolveNone,
-                            mFeatures.supportsDepthStencilResolve.enabled &&
-                                mDepthStencilResolveProperties.independentResolveNone);
-    // Disable optimizing depth/stencil resolve through glBlitFramebuffer for buggy drivers:
-    //
-    // - Nvidia: http://anglebug.com/8658
-    // - Pixel4: http://anglebug.com/8659
-    //
-    ANGLE_FEATURE_CONDITION(&mFeatures, disableDepthStencilResolveThroughAttachment,
-                            isNvidia || isQualcommProprietary);
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsMultisampledRenderToSingleSampled,
