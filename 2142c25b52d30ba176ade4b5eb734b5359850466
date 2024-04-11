@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "417f98f0_7befc749",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-11T03:11:09Z",
+      "side": 1,
+      "message": "Repro syncval error with `ANGLE_FEATURE_OVERRIDES_ENABLED\u003dallowMultisampledRenderToTextureEmulation ./angle_end2end_tests --gtest_filter\u003dMultisampledRenderToTextureES3Test.BlitFramebufferTest/ES3_Vulkan_SwiftShader`",
+      "revId": "2142c25b52d30ba176ade4b5eb734b5359850466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
