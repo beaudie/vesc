@@ -711,6 +711,8 @@ class FrameCaptureShared final : angle::NonCopyable
 
     std::mutex &getFrameCaptureMutex() { return mFrameCaptureMutex; }
 
+    bool midExecutionSetupComplete() { return !mActiveFrameIndices.empty(); }
+
   private:
     void writeJSON(const gl::Context *context);
     void writeCppReplayIndexFiles(const gl::Context *context, bool writeResetContextCall);
