@@ -10,8 +10,45 @@
 namespace rx
 {
 
+namespace
+{
+angle::Result InitAttachment(const gl::Context *context,
+                             const gl::FramebufferAttachment *attachment)
+{
+    ASSERT(attachment->isAttached());
+    ASSERT(attachment->initState() == gl::InitState::MayNeedInit);
+    return attachment->initializeContents(context);
+}
+}  // namespace
+
 angle::Result FramebufferImpl::onLabelUpdate(const gl::Context *context)
 {
+    return angle::Result::Continue;
+}
+
+angle::Result FramebufferImpl::ensureAttachmentsInitialized(
+    const gl::Context *context,
+    const gl::DrawBufferMask &colorAttachments,
+    bool depth,
+    bool stencil)
+{
+    // Default implementation iterates over the attachments and individulally initializes them
+
+    for (auto colorIndex : colorAttachments)
+    {
+        ANGLE_TRY(InitAttachment(context, mState.getColorAttachment(colorIndex)));
+    }
+
+    if (depth)
+    {
+        ANGLE_TRY(InitAttachment(context, mState.getDepthAttachment()));
+    }
+
+    if (stencil)
+    {
+        ANGLE_TRY(InitAttachment(context, mState.getStencilAttachment()));
+    }
+
     return angle::Result::Continue;
 }
 
