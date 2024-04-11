@@ -2676,6 +2676,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // https://crbug.com/40279678
     ANGLE_FEATURE_CONDITION(features, useIntermediateTextureForGenerateMipmap,
                             IsPixel7OrPixel8(functions));
+
+    // https://anglebug.com/8642
+    ANGLE_FEATURE_CONDITION(features, initializeSparseAttachmentsSeparately, IsApple());
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
