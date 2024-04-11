@@ -739,6 +739,13 @@ struct FeaturesGL : FeatureSetBase
         &members, "https://crbug.com/40279678"
     };
 
+    FeatureInfo initializeSparseAttachmentsSeparately = {
+        "initializeSparseAttachmentsSeparately",
+        FeatureCategory::OpenGLWorkarounds,
+        "Instead of calling glClearBuffer on disabled draw buffers for initialization, initialize the attachments indivdually with glClear.",
+        &members, "https://anglebug.com/8642"
+    };
+
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

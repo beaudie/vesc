@@ -801,6 +801,14 @@
                 "Some drivers lose context when repeatedly generating mipmaps on textures that were used as framebuffers."
             ],
             "issue": "https://crbug.com/40279678"
+        },
+        {
+            "name": "initialize_sparse_attachments_separately",
+            "category": "Workarounds",
+            "description": [
+                "Instead of calling glClearBuffer on disabled draw buffers for initialization, initialize the attachments indivdually with glClear."
+            ],
+            "issue": "https://anglebug.com/8642"
         }
     ]
 }
