@@ -1052,7 +1052,7 @@ angle::Result BlitGL::clearRenderbuffer(const gl::Context *context,
 }
 
 angle::Result BlitGL::clearFramebuffer(const gl::Context *context,
-                                       bool colorClear,
+                                       const gl::DrawBufferMask &colorAttachments,
                                        bool depthClear,
                                        bool stencilClear,
                                        FramebufferGL *source)
@@ -1061,10 +1061,65 @@ angle::Result BlitGL::clearFramebuffer(const gl::Context *context,
 
     // Clear all attachments
     GLbitfield clearMask = 0;
-    ANGLE_TRY(SetClearState(mStateManager, colorClear, depthClear, stencilClear, &clearMask));
+    ANGLE_TRY(
+        SetClearState(mStateManager, colorAttachments.any(), depthClear, stencilClear, &clearMask));
 
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, source->getFramebufferID());
-    ANGLE_GL_TRY(context, mFunctions->clear(clearMask));
+
+    // If we're not clearing all attached color attachments, we need to clear them individually with
+    // glClearBuffer*
+    if ((clearMask & GL_COLOR_BUFFER_BIT) &&
+        colorAttachments != source->getState().getColorAttachmentsMask())
+    {
+        for (size_t colorAttachmentIdx : colorAttachments)
+        {
+            const gl::FramebufferAttachment *attachment =
+                source->getState().getColorAttachment(colorAttachmentIdx);
+            switch (attachment->getComponentType())
+            {
+                case GL_UNSIGNED_NORMALIZED:
+                case GL_SIGNED_NORMALIZED:
+                case GL_FLOAT:
+                {
+                    constexpr GLfloat clearValue[] = {0, 0, 0, 0};
+                    ANGLE_GL_TRY(context,
+                                 mFunctions->clearBufferfv(
+                                     GL_COLOR, static_cast<GLint>(colorAttachmentIdx), clearValue));
+                }
+                break;
+
+                case GL_INT:
+                {
+                    constexpr GLint clearValue[] = {0, 0, 0, 0};
+                    ANGLE_GL_TRY(context,
+                                 mFunctions->clearBufferiv(
+                                     GL_COLOR, static_cast<GLint>(colorAttachmentIdx), clearValue));
+                }
+                break;
+
+                case GL_UNSIGNED_INT:
+                {
+                    constexpr GLuint clearValue[] = {0, 0, 0, 0};
+                    ANGLE_GL_TRY(context,
+                                 mFunctions->clearBufferuiv(
+                                     GL_COLOR, static_cast<GLint>(colorAttachmentIdx), clearValue));
+                }
+                break;
+
+                default:
+                    UNREACHABLE();
+                    break;
+            }
+        }
+
+        // Remove color buffer bit and clear the rest of the attachments with glClear
+        clearMask = clearMask & ~GL_COLOR_BUFFER_BIT;
+    }
+
+    if (clearMask != 0)
+    {
+        ANGLE_GL_TRY(context, mFunctions->clear(clearMask));
+    }
 
     return angle::Result::Continue;
 }
