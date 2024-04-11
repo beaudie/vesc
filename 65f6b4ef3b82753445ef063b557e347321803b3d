@@ -16,6 +16,29 @@
       "message": "👍",
       "revId": "65f6b4ef3b82753445ef063b557e347321803b3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67bbb071_73c2ab93",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7677,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-11T17:44:42Z",
+      "side": 1,
+      "message": "Avoid shortcircuit:\n\n```suggestion\n    const bool outsideRenderPassWritesToBuffer \u003d mOutsideRenderPassCommands-\u003egetAndResetHasHostVisibleBufferWrite();\n    const bool renderPassWritesToBuffer \u003d mRenderPassCommands-\u003egetAndResetHasHostVisibleBufferWrite();\n    if (mIsAnyHostVisibleBufferWritten || outsideRenderPassWritesToBuffer || renderPassWritesToBuffer)\n```",
+      "range": {
+        "startLine": 7675,
+        "startChar": 0,
+        "endLine": 7677,
+        "endChar": 68
+      },
+      "revId": "65f6b4ef3b82753445ef063b557e347321803b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
