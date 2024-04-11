@@ -572,12 +572,14 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessagesWithoutLoadStoreOpNon
 // Messages that are only generated with MSRTT emulation.  Some of these are syncval bugs (discussed
 // in https://gitlab.khronos.org/vulkan/vulkan/-/issues/3840)
 constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessagesWithMSRTTEmulation[] = {
+#if 0
     // False positive: https://gitlab.khronos.org/vulkan/vulkan/-/issues/3840
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
         "during depth/stencil resolve read",
         "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ",
     },
+#endif
     // Unknown whether ANGLE or syncval bug.
     {
         "SYNC-HAZARD-WRITE-AFTER-WRITE",
