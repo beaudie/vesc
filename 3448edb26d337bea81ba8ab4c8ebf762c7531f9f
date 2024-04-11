@@ -16,6 +16,24 @@
       "message": "Doesn\u0027t look like this can work. For one thing, `GetDefaultWGPUBufferUsageForBinding(target)` doesn\u0027t depend on `has_data`, so the `ASSERT` above can easily fire. But more importantly, IIUC you said if the buffer is mappable it\u0027s otherwise useless, so you wouldn\u0027t be able to directly map the buffer and update it.\n\nAll this to say you\u0027d want a temp mappable buffer here and stage a gpu copy instead. Or like `queue.WriteBuffer` as done in `setSubData`. Why not actually call `setSubData(Impl)`?",
       "revId": "3448edb26d337bea81ba8ab4c8ebf762c7531f9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f106086_8d287a6b",
+        "filename": "src/libANGLE/renderer/wgpu/BufferWgpu.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-11T13:21:45Z",
+      "side": 1,
+      "message": "The initBuffer call above passes the mapOnCreation flag so the buffer will be mapped even if it doesn\u0027t have the map flag. I don\u0027t think the assert will be hit given that.\n\nI figured if we need to allocate a staging buffer the entire size of the data, we might as well re-allocate the main buffer with mapOnCreation.",
+      "parentUuid": "50766da5_ca18bc53",
+      "revId": "3448edb26d337bea81ba8ab4c8ebf762c7531f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
