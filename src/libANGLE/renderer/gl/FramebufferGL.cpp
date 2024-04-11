@@ -1303,6 +1303,25 @@ gl::FramebufferStatus FramebufferGL::checkStatus(const gl::Context *context) con
     return gl::FramebufferStatus::Complete();
 }
 
+angle::Result FramebufferGL::ensureAttachmentsInitialized(
+    const gl::Context *context,
+    const gl::DrawBufferMask &colorAttachments,
+    bool depth,
+    bool stencil)
+{
+    const angle::FeaturesGL &features = GetFeaturesGL(context);
+    if (features.initializeSparseAttachmentsSeparately.enabled)
+    {
+        // Fall back to the default implementation when there are gaps in the enabled draw buffers
+        // on some drivers.
+        return FramebufferImpl::ensureAttachmentsInitialized(context, colorAttachments, depth,
+                                                             stencil);
+    }
+
+    BlitGL *blitter = GetBlitGL(context);
+    return blitter->clearFramebuffer(context, colorAttachments, depth, stencil, this);
+}
+
 angle::Result FramebufferGL::syncState(const gl::Context *context,
                                        GLenum binding,
                                        const gl::Framebuffer::DirtyBits &dirtyBits,
