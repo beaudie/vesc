@@ -727,6 +727,8 @@ class ProgramExecutable final : public angle::Subject
     {
         mPostLinkSubTasks.clear();
         mPostLinkSubTaskWaitableEvents.clear();
+
+        onStateChange(angle::SubjectIndex::ProgramPostLinkTasksComplete);
     }
 
     void waitForPostLinkTasks(const Context *context);

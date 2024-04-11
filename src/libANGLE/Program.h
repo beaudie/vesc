@@ -331,7 +331,7 @@ struct ProgramVaryingRef
 
 using ProgramMergedVaryings = std::vector<ProgramVaryingRef>;
 
-class Program final : public LabeledObject, public angle::Subject
+class Program final : public LabeledObject, public angle::Subject, public angle::ObserverInterface
 {
   public:
     Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, ShaderProgramID handle);
@@ -478,6 +478,9 @@ class Program final : public LabeledObject, public angle::Subject
         return mState.getSharedExecutable();
     }
 
+    // ObserverInterface implementation.
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
+
   private:
     class MainLinkLoadTask;
     class MainLoadTask;
@@ -534,6 +537,8 @@ class Program final : public LabeledObject, public angle::Subject
     rx::UniqueSerial mSerial;
     ProgramState mState;
     rx::ProgramImpl *mProgram;
+
+    angle::ObserverBinding mExecutableObserverBinding;
 
     bool mValidated;
     // Flag to indicate that the program can be deleted when no longer in use

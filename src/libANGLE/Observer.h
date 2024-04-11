@@ -79,6 +79,9 @@ enum class SubjectMessage
                                             gl::IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS -
                                             1,
 
+    // Indicates that a program's post-link tasks are done,
+    ProgramPostLinkTasksComplete,
+
     // Indicates a Storage of back-end in gl::Texture has been released.
     StorageReleased,
 

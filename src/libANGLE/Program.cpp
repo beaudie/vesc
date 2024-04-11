@@ -44,6 +44,11 @@ namespace gl
 
 namespace
 {
+enum SubjectIndexes : angle::SubjectIndex
+{
+    kExecutableSubjectIndex = 0
+};
+
 void InitUniformBlockLinker(const ProgramState &state, UniformBlockLinker *blockLinker)
 {
     for (ShaderType shaderType : AllShaderTypes())
@@ -725,6 +730,7 @@ Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, Shad
     : mSerial(factory->generateSerial()),
       mState(factory),
       mProgram(factory->createProgram(mState)),
+      mExecutableObserverBinding(this, kExecutableSubjectIndex),
       mValidated(false),
       mDeleteStatus(false),
       mIsBinaryCached(true),
@@ -887,6 +893,8 @@ void Program::makeNewExecutable(const Context *context)
 
     // If caching is disabled, consider it cached!
     mIsBinaryCached = context->getFrontendFeatures().disableProgramCaching.enabled;
+
+    mExecutableObserverBinding.bind(mState.mExecutable.get());
 }
 
 void Program::setupExecutableForLink(const Context *context)
@@ -2362,5 +2370,19 @@ void Program::dumpProgramInfo(const Context *context) const
 
     writeFile(path.c_str(), dump.c_str(), dump.length());
     INFO() << "Dumped program: " << path;
+}
+
+void Program::onSubjectStateChange(angle::SubjectIndex index,
+                                   angle::SubjectMessage message) override
+{
+    switch (message)
+    {
+        case angle::SubjectIndex::ProgramPostLinkTasksComplete:
+            // No access to context :|
+            cacheProgramBinaryIfNotAlready(TODO);
+            break;
+        default:
+            break;
+    }
 }
 }  // namespace gl
