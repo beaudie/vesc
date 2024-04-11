@@ -22,6 +22,30 @@
       },
       "revId": "e4aed8f3a65258536efcec55e232ec8114d96063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bda79b6_919c3af1",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-04-11T21:25:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11ee4f56_aa8be0c9",
+      "range": {
+        "startLine": 413,
+        "startChar": 42,
+        "endLine": 413,
+        "endChar": 52
+      },
+      "revId": "e4aed8f3a65258536efcec55e232ec8114d96063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
