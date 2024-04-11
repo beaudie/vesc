@@ -89,7 +89,7 @@ def run_test(test_name, overwrite_expected):
         test_args = ['--gtest_filter=%s' % test_name, '--angle-per-test-capture-label']
         extra_env = {
             'ANGLE_CAPTURE_ENABLED': '1',
-            'ANGLE_CAPTURE_FRAME_START': '2',
+            'ANGLE_CAPTURE_FRAME_START': '3',
             'ANGLE_CAPTURE_FRAME_END': '5',
             'ANGLE_CAPTURE_OUT_DIR': temp_dir,
             'ANGLE_CAPTURE_COMPRESSION': '0',
