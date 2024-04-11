@@ -201,6 +201,7 @@ enum class Feature
     HasTextureSwizzle,
     InitFragmentOutputVariables,
     InitializeCurrentVertexAttributes,
+    InitializeSparseAttachmentsSeparately,
     InjectAsmStatementIntoLoopBodies,
     IntelDisableFastMath,
     IntelExplicitBoolCastWorkaround,
