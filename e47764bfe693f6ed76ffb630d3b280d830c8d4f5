@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eccd76ba_731cb9cd",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:38:50Z",
+      "side": 1,
+      "message": "Nevermind, it\u0027s in the next CL!",
+      "parentUuid": "8f09c680_8f75f668",
+      "revId": "e47764bfe693f6ed76ffb630d3b280d830c8d4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9362c58d_35d08fb7",
