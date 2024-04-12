@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5437bd1_2db2958c",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:30:33Z",
+      "side": 1,
+      "message": "This looks unusual, why finish in a thread, instead of like, call `submitCommands()` only?",
+      "revId": "79803b9781ea552f4c959a31efcd1a918b5c13cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "380dd4c8_1e13e29b",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:30:33Z",
+      "side": 1,
+      "message": "There seems to be a confusion with serials, which is likely going to lead to bugs. IIUC, this is what happens:\n\n- At some point, `mComputePassCommands` has serial N\n- Commands are recorded to `mComputePassCommands` (all resources would think they are used in serial N)\n- `flushComputePassCommands` is called, which sets `mComputePassCommands`\u0027s serial to N+1\n- `submitCommands` is called with `mComputePassCommands`\u0027s serial, which is N+1\n\nIn the above, the resources think they are used in serial N, but the renderer is tracking the submission that uses them as serial N+1. If later the resource is destroyed, it could happily get deleted if serial N is finished, even if serial N+1 is still ongoing on the GPU\n\nIf you look at ContextVk, we solve this by tracking the last flushed and last submitted serials (`mLastFlushedQueueSerial` and `mLastSubmittedQueueSerial` respectively).\n\nIn the above scenario, `flushComputePassCommands` would set `mLastFlushedQueueSerial` to N before changing `mComputePassCommands`\u0027s serial to N+1. Then `submitCommands` would making a submission with `flushComputePassCommands` (N), and record `mLastSubmittedQueueSerial` as the same (also N).\n\nThen for example the `finishInternal` function below would also wait on `mLastSubmittedQueueSerial` (N) instead of mComputePassCommands\u0027s serial (N+1).",
+      "revId": "79803b9781ea552f4c959a31efcd1a918b5c13cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
