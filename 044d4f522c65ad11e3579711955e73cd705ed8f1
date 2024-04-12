@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12dfa4d7_97679d30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T18:08:52Z",
+      "side": 1,
+      "message": "Not sure yet why there are still failures. I suspect something wrong with the queue serial tracking.\n\nIf possible, you can try to split the diagnostic and host-visible buffer changes into its own CL and as many contextVk removals we can do with that alone into its own CL, that would likely land right away, and we can have a smaller change to focus on for the failures.",
+      "revId": "044d4f522c65ad11e3579711955e73cd705ed8f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f57909de_f9ad6db8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7608,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T18:08:52Z",
+      "side": 1,
+      "message": "After the last change, I think this can be reverted to:\n\n```suggestion\n    if (mIsAnyHostVisibleBufferWritten)\n```\n\nBecause the `flushCommandsAndEndRenderPassWithoutSubmit` call above would already propagate the host-visible buffer write bit. In fact, the outside and rp commands here should be empty (they were just flushed!)",
+      "range": {
+        "startLine": 7603,
+        "startChar": 0,
+        "endLine": 7608,
+        "endChar": 33
+      },
+      "revId": "044d4f522c65ad11e3579711955e73cd705ed8f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
