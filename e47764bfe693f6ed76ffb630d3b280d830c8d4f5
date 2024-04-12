@@ -51,6 +51,24 @@
       "message": "Fine for now, but especially for CL, I suspect you\u0027ll want to use VkEvents. This creates a GPU bubble (and there\u0027s nothing to fill the gap since everything is compute). That could be avoided with VkEvents if the application does this:\n\n1. Dispatch\n2. Signal event\n3. Dispatch\n4. Wait event \u003c-- turned into pipeline barrier here\n5. Dispatch\n\nThen the dispatch in step 3 can run in parallel with the dispatch in step 5, including over the time the last dispatch spends waiting.",
       "revId": "e47764bfe693f6ed76ffb630d3b280d830c8d4f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57ab87dc_17374680",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T20:47:29Z",
+      "side": 1,
+      "message": "Yup - actually, Gowtham and I talked about this as a future TODO for us.\n\nAgreed in your example as well. Just a few OpenCL nuances to work through before we get there.",
+      "parentUuid": "9362c58d_35d08fb7",
+      "revId": "e47764bfe693f6ed76ffb630d3b280d830c8d4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
