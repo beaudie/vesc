@@ -22,6 +22,177 @@
       },
       "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d22bc144_efd4e2be",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:11:03Z",
+      "side": 1,
+      "message": "```suggestion\n                // Retain this resource until its associated dispatch completes\n```",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7440c4b7_5b0515ec",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:11:03Z",
+      "side": 1,
+      "message": "Should this be based on `arg.type \u003d\u003d NonSemanticClspvReflectionArgumentUniform` instead?",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c14c6333_52178179",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:11:03Z",
+      "side": 1,
+      "message": "You might want to consider using dynamic offsets; if you ever cache these desc sets, that\u0027ll come in handy.",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2499e794_2954410b",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:11:03Z",
+      "side": 1,
+      "message": "FYI (and minor optimization), when the max size is known and small, you can use our `angle::FixedVector\u003cT, N\u003e` to get the array on the stack.\n\nFY(Future)I, we also have `angle::FastVector\u003cT, N\u003e` that doesn\u0027t have a fixed size, but uses a fixed storage for up to N elements (i.e. no allocation for the most common cases where the size ends up smaller than N).",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 53
+      },
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfbd007a_5dde6cac",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:11:03Z",
+      "side": 1,
+      "message": "```suggestion\n        const std::array\u003cuint32_t, 3\u003e \u0026specConstantWorkgroupSizeIDs \u003d\n```",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cf5d177_9b3f209b",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:11:03Z",
+      "side": 1,
+      "message": "Should these calculate ciel instead of floor? Or is workgroupSize guaranteed to divide globalWorkSize?\n\nAlso, per our style:\n\n```suggestion\n    (*workgroupCountOut)[0] \u003d static_cast\u003cuint32_t\u003e(ndrange.globalWorkSize[0] / workgroupSize[0]);\n    (*workgroupCountOut)[1] \u003d static_cast\u003cuint32_t\u003e(ndrange.globalWorkSize[1] / workgroupSize[1]);\n    (*workgroupCountOut)[2] \u003d static_cast\u003cuint32_t\u003e(ndrange.globalWorkSize[2] / workgroupSize[2]);\n```",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 87
+      },
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4422abc_8f3e2970",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:11:03Z",
+      "side": 1,
+      "message": "```suggestion\n        .mapEntryCount \u003d static_cast\u003cuint32_t\u003e(mapEntries.size()),\n```",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75b0ffe7_003acc0e",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:11:03Z",
+      "side": 1,
+      "message": "nit: to avoid repeating the type (and mistakes if type ever changes):\n\n```suggestion\n        .dataSize      \u003d specConstantData.size() * sizeof(specConstantData[0]),\n```",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ded02c74_9db2ad89",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 3481,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:11:03Z",
+      "side": 1,
+      "message": "Please avoid default values for args per our style.\n\n```suggestion\n        const char *shaderName,\n        VkSpecializationInfo *specializationInfo) const;\n```",
+      "range": {
+        "startLine": 3480,
+        "startChar": 0,
+        "endLine": 3481,
+        "endChar": 66
+      },
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
