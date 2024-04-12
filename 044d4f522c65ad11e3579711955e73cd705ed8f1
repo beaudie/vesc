@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86721637_25cd2390",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-04-12T18:56:12Z",
+      "side": 1,
+      "message": "On the split -- sure will split this into two patches.\n\nOn the failures -- I didnt see the earlier assert anymore but the CopyBufferToImage seems to be present.",
+      "parentUuid": "12dfa4d7_97679d30",
+      "revId": "044d4f522c65ad11e3579711955e73cd705ed8f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f57909de_f9ad6db8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -31,6 +49,30 @@
       "writtenOn": "2024-04-12T18:08:52Z",
       "side": 1,
       "message": "After the last change, I think this can be reverted to:\n\n```suggestion\n    if (mIsAnyHostVisibleBufferWritten)\n```\n\nBecause the `flushCommandsAndEndRenderPassWithoutSubmit` call above would already propagate the host-visible buffer write bit. In fact, the outside and rp commands here should be empty (they were just flushed!)",
+      "range": {
+        "startLine": 7603,
+        "startChar": 0,
+        "endLine": 7608,
+        "endChar": 33
+      },
+      "revId": "044d4f522c65ad11e3579711955e73cd705ed8f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ba19e6c_996d3312",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7608,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-04-12T18:56:12Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f57909de_f9ad6db8",
       "range": {
         "startLine": 7603,
         "startChar": 0,
