@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb22163b_38f268e6",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:34:38Z",
+      "side": 1,
+      "message": "Should there be an implicit `flush` here? I\u0027m guessing a bit here, but if this is similar to Vulkan\u0027s semaphore waits (i.e. the primary command buffer waits for the semaphore before executing), then this can lead to GPU bubbles at best (and deadlock perhaps too).\n\nLike, again thinking in GL/Vk terms (so sorry if it doesn\u0027t apply), if you have this:\n\n1. dispatch, dispatch, dispatch\n2. enqueue wait for event\n3. dispatch, dispatch, dispatch\n\nThen if this is reordering the wait to before the dispatches in step 1, they will be done later than they could be.",
+      "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93aae0c4_49a6d638",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:34:38Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this wait for the event\u0027s serial instead?",
+      "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
