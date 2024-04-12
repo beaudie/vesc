@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e7906d1_76892e49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T01:53:55Z",
+      "side": 1,
+      "message": "Need a `Bug: ` tag so it passes presubmit. If you follow the standalone setup instructions and use `git cl upload`, it would complain about this locally before upload.",
+      "revId": "5fd236e9ac44d43d2e28b1fd54dca9b55808ec7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
