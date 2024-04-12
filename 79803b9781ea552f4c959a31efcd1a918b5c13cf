@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88f9a437_cae852b9",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T19:36:55Z",
+      "side": 1,
+      "message": "Yeah, we had an internal discussion on this as well.\n\nHowever, there are cases where we need to perform \"final syncs\" or event status updating.\n\nOne example is `enqueueReadBuffer`, AFAIK there is no direct analogous Vulkan (`vkCmd*`) command for this. In this OpenCL API, user gives an alloced hostptr that the buffer is read into once cmd is finished. Since we batch cmds, we could have multiple of these read cmds in one batch.\n\nHow we workaround this is by doing a `vkCmdCopyBuffer` command to a \"temp staging buffer\". After we launch the cmd batch and wait for fence, we then perform a sync routine to `memcpy` these tracked staging buffer(s) to its corresponding hostptr.\n\nThe other case is when we also update cmd event\u0027s in the batch to `CL_COMPLETE` after fence wait when the user created a `cl_event` object for the associated cmd they previously enqueued.\n\nBoth above cases require us to wait for that fence before proceeding.\n`clFlush` is meant to be non-blocking version of `clFinish` API.\n\nIf we forgo this launch-thread, and do exactly what you mentioned above,\nthere\u0027s no way to perform any of the above two ops without fence wait\nafter we `submitCommands()`.",
+      "parentUuid": "a5437bd1_2db2958c",
+      "revId": "79803b9781ea552f4c959a31efcd1a918b5c13cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "380dd4c8_1e13e29b",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
         "patchSetId": 19
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-12T14:30:33Z",
       "side": 1,
       "message": "There seems to be a confusion with serials, which is likely going to lead to bugs. IIUC, this is what happens:\n\n- At some point, `mComputePassCommands` has serial N\n- Commands are recorded to `mComputePassCommands` (all resources would think they are used in serial N)\n- `flushComputePassCommands` is called, which sets `mComputePassCommands`\u0027s serial to N+1\n- `submitCommands` is called with `mComputePassCommands`\u0027s serial, which is N+1\n\nIn the above, the resources think they are used in serial N, but the renderer is tracking the submission that uses them as serial N+1. If later the resource is destroyed, it could happily get deleted if serial N is finished, even if serial N+1 is still ongoing on the GPU\n\nIf you look at ContextVk, we solve this by tracking the last flushed and last submitted serials (`mLastFlushedQueueSerial` and `mLastSubmittedQueueSerial` respectively).\n\nIn the above scenario, `flushComputePassCommands` would set `mLastFlushedQueueSerial` to N before changing `mComputePassCommands`\u0027s serial to N+1. Then `submitCommands` would making a submission with `flushComputePassCommands` (N), and record `mLastSubmittedQueueSerial` as the same (also N).\n\nThen for example the `finishInternal` function below would also wait on `mLastSubmittedQueueSerial` (N) instead of mComputePassCommands\u0027s serial (N+1).",
+      "revId": "79803b9781ea552f4c959a31efcd1a918b5c13cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4010d85_8197fc3b",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T19:36:55Z",
+      "side": 1,
+      "message": "\u003e If you look at ContextVk, we solve this by tracking the last flushed and last submitted serials (mLastFlushedQueueSerial and mLastSubmittedQueueSerial respectively)\n\nAh okay - I see (I think I remember seeing this in the past when we first looked into implementing this).\n\nAlthough I think we actually don\u0027t rely too much on these serials for our initial/current submission/flush flow \n(i.e. just used to satisfy `submitCommand` call as well as kind-of serve as our batch count).\n\nBut agreed on future bug(s) waiting to happen (esp. if we start updating CL execution to rely more towards serials). Will update here.",
+      "parentUuid": "380dd4c8_1e13e29b",
       "revId": "79803b9781ea552f4c959a31efcd1a918b5c13cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
