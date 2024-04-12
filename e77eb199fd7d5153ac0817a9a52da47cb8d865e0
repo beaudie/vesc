@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd139b3f_2b2dae48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-04-12T17:07:53Z",
+      "side": 1,
+      "message": "First shot -- this passes the modified CapturedTest and Modern Combat 5 traces. I added the case to CapturedTest for easier debugging but if the upcoming MC5 trace is sufficient we could drop those changes.",
+      "revId": "e77eb199fd7d5153ac0817a9a52da47cb8d865e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
