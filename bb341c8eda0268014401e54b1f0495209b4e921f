@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b912071e_001d2317",
+        "filename": "src/libANGLE/CLCommandQueue.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T03:46:40Z",
+      "side": 1,
+      "message": "On second thought, not a fan of enforcing this at the frontend.\n\nWill push another patchset to move this back to the VK backend.",
+      "range": {
+        "startLine": 555,
+        "startChar": 8,
+        "endLine": 555,
+        "endChar": 60
+      },
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
