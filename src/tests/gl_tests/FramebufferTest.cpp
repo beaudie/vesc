@@ -7866,6 +7866,46 @@ void main()
     EXPECT_PIXEL_RECT_EQ(0, 0, kWidth * 2, kHeight * 2, GLColor::yellow);
     ASSERT_GL_NO_ERROR();
 }
+
+// Test that render to a framebuffer with a color attachment and stencil attachment works
+TEST_P(FramebufferTest, ColorAndStencilOnlyAttachment)
+{
+    constexpr int kWidth  = 16;
+    constexpr int kHeight = 16;
+
+    // Create a Framebuffer with two attachments:
+    // GL_COLOR_ATTACHMENT0: RGBA4 renderBuffer
+    // GL_STENCIL_ATTACHMENT: GL_STENCIL_INDEX8 attachment
+    GLFramebuffer fbo;
+    GLRenderbuffer colorBuffer;
+    GLRenderbuffer stencilBuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, kWidth, kHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, stencilBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, kWidth, kHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              stencilBuffer);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(program);
+    GLint colorLoc = glGetUniformLocation(program, angle::essl1_shaders::ColorUniform());
+    ASSERT_NE(colorLoc, -1);
+    glUniform4fv(colorLoc, 1, GLColor::green.toNormalizedVector().data());
+    glDisable(GL_STENCIL_TEST);
+    drawQuad(program, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::green);
+
+    GLColor color(0, 0, 0, 0);
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &color);
+    ASSERT(color == GLColor::green);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 ANGLE_INSTANTIATE_TEST_ES2_AND(AddMockTextureNoRenderTargetTest,
                                ES2_D3D9().enable(Feature::AddMockTextureNoRenderTarget),
                                ES2_D3D11().enable(Feature::AddMockTextureNoRenderTarget));
