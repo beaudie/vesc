@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6eebe3b_5cbedc0f",
+        "filename": "src/libANGLE/CLCommandQueue.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b912071e_001d2317",
+      "range": {
+        "startLine": 555,
+        "startChar": 8,
+        "endLine": 555,
+        "endChar": 60
+      },
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d22bc144_efd4e2be",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-04-12T14:11:03Z",
       "side": 1,
       "message": "```suggestion\n                // Retain this resource until its associated dispatch completes\n```",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "656e4743_07fe87f1",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d22bc144_efd4e2be",
       "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce2fbc4e_25caf5f7",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "Looking for resource(s) that a shader/kernel could both read and write to here.\n\nCorrect me if I\u0027m wrong, but I thought UBO\u0027s are readonly inside of a shader?\n(Unlike SSBOs which can also be written to inside of a shader/kernel)\n\nAny reason to not use top-level API buffer flags here?",
+      "parentUuid": "7440c4b7_5b0515ec",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c14c6333_52178179",
@@ -71,6 +131,24 @@
       "writtenOn": "2024-04-12T14:11:03Z",
       "side": 1,
       "message": "You might want to consider using dynamic offsets; if you ever cache these desc sets, that\u0027ll come in handy.",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a756e1fe_aabd3893",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "👍",
+      "parentUuid": "c14c6333_52178179",
       "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -98,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "572a8045_f87abf06",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "+1 - will update these guys.\n\nDone.",
+      "parentUuid": "2499e794_2954410b",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 53
+      },
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfbd007a_5dde6cac",
@@ -111,6 +213,24 @@
       "writtenOn": "2024-04-12T14:11:03Z",
       "side": 1,
       "message": "```suggestion\n        const std::array\u003cuint32_t, 3\u003e \u0026specConstantWorkgroupSizeIDs \u003d\n```",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc863b89_30317959",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "+1\n\nDone",
+      "parentUuid": "bfbd007a_5dde6cac",
       "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -140,6 +260,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2b8bdcba_fc28ce54",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "Forgor C++ style cast, will update.\n\n\u003e Or is workgroupSize guaranteed to divide globalWorkSize\n\nYes, that is correct (this is referred to in OpenCL as `Uniform WGS`).\nUser is responsible to query support, and provide uniform values.\n```\nOtherwise, when non-uniform work-groups are not supported, \nthe size of each work-group must be uniform.\nIf local_work_size is specified, the values specified in \nglobal_work_size[0], …​, global_work_size[work_dim - 1] must \nbe evenly divisible by the corresponding values specified in \nlocal_work_size[0], …​, local_work_size[work_dim - 1]\n```\n\nWe currently do not support `Non-Uniform WGS` at the moment (optional for 3.0)\nhttps://registry.khronos.org/OpenCL/specs/3.0-unified/html/OpenCL_API.html#_non_uniform_work_groups\n\nDefinitely on our todo list to support in the future.",
+      "parentUuid": "0cf5d177_9b3f209b",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 87
+      },
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4422abc_8f3e2970",
         "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
         "patchSetId": 18
@@ -151,6 +295,24 @@
       "writtenOn": "2024-04-12T14:11:03Z",
       "side": 1,
       "message": "```suggestion\n        .mapEntryCount \u003d static_cast\u003cuint32_t\u003e(mapEntries.size()),\n```",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71912f8c_244efa19",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4422abc_8f3e2970",
       "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -172,6 +334,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d345183a_1824e95d",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "+1\n\nDone",
+      "parentUuid": "75b0ffe7_003acc0e",
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ded02c74_9db2ad89",
@@ -185,6 +365,30 @@
       "writtenOn": "2024-04-12T14:11:03Z",
       "side": 1,
       "message": "Please avoid default values for args per our style.\n\n```suggestion\n        const char *shaderName,\n        VkSpecializationInfo *specializationInfo) const;\n```",
+      "range": {
+        "startLine": 3480,
+        "startChar": 0,
+        "endLine": 3481,
+        "endChar": 66
+      },
+      "revId": "bb341c8eda0268014401e54b1f0495209b4e921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81f9b1b2_e0433cc6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 3481,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-12T18:59:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ded02c74_9db2ad89",
       "range": {
         "startLine": 3480,
         "startChar": 0,
