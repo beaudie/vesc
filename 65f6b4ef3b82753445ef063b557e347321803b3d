@@ -63,6 +63,30 @@
       },
       "revId": "65f6b4ef3b82753445ef063b557e347321803b3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76700ab6_fd471867",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7677,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-12T14:52:08Z",
+      "side": 1,
+      "message": "This should fix the CI (without it, `mIsAnyHostVisibleBufferWritten` is never set and the flag is lost for intermediate command buffers that are already flushed):\n\n```\ndiff --git a/src/libANGLE/renderer/vulkan/ContextVk.cpp b/src/libANGLE/renderer/vulkan/ContextVk.cpp\nindex f74f41bb1..c0103770b 100644\n--- a/src/libANGLE/renderer/vulkan/ContextVk.cpp\n+++ b/src/libANGLE/renderer/vulkan/ContextVk.cpp\n@@ -8010,6 +8010,11 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl\n         addGarbage(\u0026tempFramebuffer);\n     }\n \n+    if (mRenderPassCommands-\u003egetAndResetHasHostVisibleBufferWrite())\n+    {\n+        mIsAnyHostVisibleBufferWritten \u003d true;\n+    }\n+\n     ANGLE_TRY(mRenderer-\u003eflushRenderPassCommands(this, getProtectionType(), mContextPriority,\n                                                  *renderPass, framebufferOverride,\n                                                  \u0026mRenderPassCommands));\n@@ -8271,6 +8276,11 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()\n \n     flushDescriptorSetUpdates();\n \n+    if (mOutsideRenderPassCommands-\u003egetAndResetHasHostVisibleBufferWrite())\n+    {\n+        mIsAnyHostVisibleBufferWritten \u003d true;\n+    }\n+\n     // Save the queueSerial before calling flushOutsideRPCommands, which may return a new\n     // mOutsideRenderPassCommands\n     ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastFlushedQueueSerial,\n```",
+      "parentUuid": "49eeabf4_0c082ec1",
+      "range": {
+        "startLine": 7675,
+        "startChar": 0,
+        "endLine": 7677,
+        "endChar": 68
+      },
+      "revId": "65f6b4ef3b82753445ef063b557e347321803b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
