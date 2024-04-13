@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e3cdb25f_a55faa2a",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-13T03:05:22Z",
+      "side": 1,
+      "message": "\u003e we need to clFinish that other queue before we launch our current queue here\n\nOk I clearly don\u0027t know the details of CL events here, but that sounds inefficient. You should be able to `clFlush` the other queue before this one, not `clFinish` ...",
+      "parentUuid": "8824ba3c_5f5b8841",
+      "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93aae0c4_49a6d638",
         "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
         "patchSetId": 20
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "As mentioned from parent CL\u0027s (flush/finish) comment, our current/initial implementation does not rely too much on serials (this can change in the future).\n\n`clWaitForEvents` is blocking call here. Given following example:\n```\ncl_events ndrEvents[2] \u003d { CL_QUEUED, CL_QUEUED };\nclEnqueueNDRangeKernel(..., ndrEvents[0]);\nclEnqueueNDRangeKernel(..., ndrEvents[1]);\n\nclWaitForEvents(2, ndrEvents);\n```\n\nIf we only just wait for event serial, we would block/timeout here since\nwe did not `clFinish` for that event\u0027s command queue.\nhttps://registry.khronos.org/OpenCL/specs/3.0-unified/html/OpenCL_API.html#clWaitForEvents\n```\nThis function waits on the host thread for commands identified by event \nobjects in event_list to complete. A command is considered complete \nif its execution status is CL_COMPLETE or a negative value. \nThe events specified in event_list act as synchronization points.\n```\nCalling finish here is to guarantee event(s) attempt to get to that \n`CL_COMPLETE` state. (or some negative value if something went horribly wrong).",
       "parentUuid": "93aae0c4_49a6d638",
+      "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a135aa_a313185a",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-13T03:05:22Z",
+      "side": 1,
+      "message": "Right, that\u0027s where the \"wait for the event\u0027s serial\" actually comes in. Basically what we have a `finishQueueSerial` that waits until the commands up to a serial is finished. `clFinish` is basically `finishQueueSerial(lastSerial)`.\n\nTo re-iterate what I wrote in an earlier CL about `clFlush`, you _can_ actually have work associated with a submission to be done once we deem that submission finished (checked at various points, such as periodically or when a sync object is queried). See for example how `SyncHelper::getStatus` calls `renderer-\u003echeckCompletedCommands`. In that call, if serial N is finished, you can make sure the events associated with that submission are set to CL_COMPLETE.",
+      "parentUuid": "9996a82c_03523d5e",
       "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
