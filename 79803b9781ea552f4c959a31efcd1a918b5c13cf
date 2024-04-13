@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c6c6d99_e301b247",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-13T02:57:54Z",
+      "side": 1,
+      "message": "\u003e If we forgo this launch-thread, and do exactly what you mentioned above,\nthere\u0027s no way to perform any of the above two ops without fence wait\nafter we submitCommands()\n\nIIUC, after `clFlush`, the app doesn\u0027t have a guarantee that any of the above has actually happened _yet_, is that correct? Like there should be something the app uses to query / block / etc until the commands actually executed. I\u0027d expect _that\u0027s_ the moment you can do all the above.\n\nLike with GL, what happens is this:\n\n- App does glFenceSync, this is effectively a flush\n- Flush results in vkQueueSubmit associated with a serial, together with some garbage to clean up etc\n- If app queries sync status, we check if the serial is finished (by checking an internal fence). If it is, we do the post-submission processing (like garbage collection) before returning the status to the user\n\nYou should be able to effectively do the same thing here? That is `clFlush` results in `submitCommands()` which has associated \"extra work\" to be done when submission is finished. Whatever mechanism the app uses to actually check if submission is finished (later) would make sure the extra work is done.",
+      "parentUuid": "88f9a437_cae852b9",
+      "revId": "79803b9781ea552f4c959a31efcd1a918b5c13cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "380dd4c8_1e13e29b",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
         "patchSetId": 19
