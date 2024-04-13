@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13e817b1_50e87991",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1913,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-13T02:24:10Z",
+      "side": 1,
+      "message": "FWIW the reason it wasn\u0027t done on Android previously is, as the comment says:\n\n\u003e Changing CWD and setting environment variables makes no sense on Android\n\nOk to leave it like this though, we already don\u0027t have a handle on all the syncval errors, and I\u0027m not ready to add a bunch more coming from our Android devices.",
+      "revId": "6c6aa754efd1739f090f88853e01954b42ae3a9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
