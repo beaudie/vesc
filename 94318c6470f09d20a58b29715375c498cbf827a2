@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc2502ec_73f19686",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 11723,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-13T02:47:46Z",
+      "side": 1,
+      "message": "super nit: ok to have the GL sides pass in `\"main\"` instead of nullptr.",
+      "revId": "94318c6470f09d20a58b29715375c498cbf827a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
