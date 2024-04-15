@@ -218,7 +218,7 @@ class ChildProcessesManager():
         cmd = [sys.executable, self._autoninja_path, '-C', build_dir, target]
         with self._ninja_lock:
             self._logger.info(' '.join(cmd))
-            return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
+            return self.RunSubprocess(cmd, pipe_stdout=False)
 
 
 def GetTestsListForFilter(args, test_path, filter, logger):
@@ -898,6 +898,8 @@ def main(args):
             logger.error(output)
             child_processes_manager.KillAll()
             return EXIT_FAILURE
+
+        print('Capture build time: %.1fs' % (time.time() - start_time))
         # get a list of tests
         test_path = os.path.join(capture_build_dir, args.test_suite)
         test_list = GetTestsListForFilter(args, test_path, args.filter, logger)
