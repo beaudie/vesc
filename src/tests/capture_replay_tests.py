@@ -52,7 +52,7 @@ STATUS_MESSAGE_PERIOD = 20  # in seconds
 SUBPROCESS_TIMEOUT = 600  # in seconds
 DEFAULT_RESULT_FILE = "results.txt"
 DEFAULT_LOG_LEVEL = "info"
-DEFAULT_MAX_JOBS = 8
+DEFAULT_MAX_JOBS = 2
 DEFAULT_MAX_NINJA_JOBS = 1
 REPLAY_BINARY = "capture_replay_tests"
 if sys.platform == "win32":
@@ -898,6 +898,8 @@ def main(args):
             logger.error(output)
             child_processes_manager.KillAll()
             return EXIT_FAILURE
+
+        print('Capture build time: %.1fs', time.time() - start_time)
         # get a list of tests
         test_path = os.path.join(capture_build_dir, args.test_suite)
         test_list = GetTestsListForFilter(args, test_path, args.filter, logger)
