@@ -6383,21 +6383,21 @@ template class SharedCacheKeyManager<SharedFramebufferCacheKey>;
 template class SharedCacheKeyManager<SharedDescriptorSetCacheKey>;
 
 // PipelineCacheAccess implementation.
-std::unique_lock<std::mutex> PipelineCacheAccess::getLock()
+std::unique_lock<angle::Mutex> PipelineCacheAccess::getLock()
 {
     if (mMutex == nullptr)
     {
-        return std::unique_lock<std::mutex>();
+        return std::unique_lock<angle::Mutex>();
     }
 
-    return std::unique_lock<std::mutex>(*mMutex);
+    return std::unique_lock<angle::Mutex>(*mMutex);
 }
 
 VkResult PipelineCacheAccess::createGraphicsPipeline(vk::Context *context,
                                                      const VkGraphicsPipelineCreateInfo &createInfo,
                                                      vk::Pipeline *pipelineOut)
 {
-    std::unique_lock<std::mutex> lock = getLock();
+    std::unique_lock<angle::Mutex> lock = getLock();
 
     return pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache);
 }
@@ -6406,7 +6406,7 @@ VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
                                                     const VkComputePipelineCreateInfo &createInfo,
                                                     vk::Pipeline *pipelineOut)
 {
-    std::unique_lock<std::mutex> lock = getLock();
+    std::unique_lock<angle::Mutex> lock = getLock();
 
     return pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache);
 }
@@ -6415,7 +6415,7 @@ void PipelineCacheAccess::merge(Renderer *renderer, const vk::PipelineCache &pip
 {
     ASSERT(isThreadSafe());
 
-    std::unique_lock<std::mutex> lock = getLock();
+    std::unique_lock<angle::Mutex> lock = getLock();
 
     mPipelineCache->merge(renderer->getDevice(), 1, pipelineCache.ptr());
 }
@@ -7480,7 +7480,7 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     vk::AtomicBindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
 {
     // Note: this function may be called without holding the share group lock.
-    std::unique_lock<std::mutex> lock(mMutex);
+    std::unique_lock<angle::Mutex> lock(mMutex);
 
     auto iter = mPayload.find(desc);
     if (iter != mPayload.end())
@@ -7543,7 +7543,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     vk::AtomicBindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
 {
     // Note: this function may be called without holding the share group lock.
-    std::unique_lock<std::mutex> lock(mMutex);
+    std::unique_lock<angle::Mutex> lock(mMutex);
 
     auto iter = mPayload.find(desc);
     if (iter != mPayload.end())

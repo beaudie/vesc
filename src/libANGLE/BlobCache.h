@@ -13,6 +13,7 @@
 #include <array>
 #include <cstring>
 
+#include "common/Mutex.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/SizedMRUCache.h"
 #include "libANGLE/angletypes.h"
@@ -126,13 +127,13 @@ class BlobCache final : angle::NonCopyable
 
     bool isCachingEnabled() const { return areBlobCacheFuncsSet() || maxSize() > 0; }
 
-    std::mutex &getMutex() { return mBlobCacheMutex; }
+    angle::Mutex &getMutex() { return mBlobCacheMutex; }
 
   private:
     // This internal cache is used only if the application is not providing caching callbacks
     using CacheEntry = std::pair<angle::MemoryBuffer, CacheSource>;
 
-    mutable std::mutex mBlobCacheMutex;
+    mutable angle::Mutex mBlobCacheMutex;
     angle::SizedMRUCache<BlobCache::Key, CacheEntry> mBlobCache;
 
     EGLSetBlobFuncANDROID mSetBlobFunc;
