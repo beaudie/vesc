@@ -13,6 +13,7 @@ libangle_common_headers = [
   "src/common/FixedQueue.h",
   "src/common/FixedVector.h",
   "src/common/MemoryBuffer.h",
+  "src/common/Mutex.h",
   "src/common/Optional.h",
   "src/common/PackedEGLEnums_autogen.h",
   "src/common/PackedEnums.h",
@@ -66,6 +67,7 @@ libangle_common_headers = [
 libangle_common_sources = libangle_common_headers + [
                             "src/common/Float16ToFloat32.cpp",
                             "src/common/MemoryBuffer.cpp",
+                            "src/common/Mutex.cpp",
                             "src/common/PackedEGLEnums_autogen.cpp",
                             "src/common/PackedEnums.cpp",
                             "src/common/PackedGLEnums_autogen.cpp",
