@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65d1227f_ca24f5f7",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-15T17:47:19Z",
+      "side": 1,
+      "message": "Leave a TODO then, that looks like a big rework that could perhaps be done after conformance.",
+      "parentUuid": "482f4bb1_65c9c5d5",
+      "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93aae0c4_49a6d638",
         "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
         "patchSetId": 20
