@@ -540,6 +540,10 @@ angle_common_lib("angle_common") {
   if (angle_enable_cl) {
     sources += libangle_common_cl_sources
   }
+
+  if (is_win && build_with_chromium) {
+    defines = [ "ANGLE_WINDOWS_NO_FUTEX=1" ]
+  }
 }
 
 angle_common_lib("angle_common_shader_state") {
@@ -1094,6 +1098,11 @@ angle_source_set("libANGLE_no_vulkan") {
       "gdi32.lib",
       "user32.lib",
     ]
+
+    if (!build_with_chromium) {
+      # Needed for futex support
+      libs += [ "synchronization.lib" ]
+    }
   }
 
   if (angle_enable_d3d11) {
