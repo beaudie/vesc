@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "defb958e_86d99d49",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-15T14:41:52Z",
+      "side": 1,
+      "message": "Ah okay, I see your point here.\n\n\u003e IIUC, after clFlush, the app doesn\u0027t have a guarantee that any of the above has actually happened yet, is that correct? Like there should be something the app uses to query / block / etc until the commands actually executed.\n\nYes, you are correct. In OpenCL, user would need to use `clGetEventInfo` and query the `CL_EVENT_COMMAND_EXECUTION_STATUS` parameter for synchronization after `clFlush`. Mainly for us, there are two areas we need to do driver-side sync/handling after fence:\n\n- Ensure we trigger all registered callbacks for `CL_RUNNING` -\u003e `CL_COMPLETE`\n- Call our `sync*()` routines for any pending resource memcpy\u0027s back to user\u0027s hostptr\n\n\u003e Whatever mechanism the app uses to actually check if submission is finished (later) would make sure the extra work is done.\n\nCorrect, although we would now be coupling above actions to an event query.\nLike performance wise, if user queued up lots of callbacks and resource reads,\ndoes it make more sense to bundle that in the clFlush submission thread vs. doing it in same event query thread once event makes it to CL_COMPLETE?\n\nI\u0027m still leaning towards former (submission-thread) approach (at least for now - given our existing CTS passrate/testing on it so far). Otherwise, I\u0027m fine to either approach here.",
+      "parentUuid": "0c6c6d99_e301b247",
+      "revId": "79803b9781ea552f4c959a31efcd1a918b5c13cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "380dd4c8_1e13e29b",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
         "patchSetId": 19
