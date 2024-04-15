@@ -1515,6 +1515,7 @@ void CommandBufferHelperCommon::resetImpl()
 {
     ASSERT(!mAcquireNextImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
+    ASSERT(!mIsAnyHostVisibleBufferWritten);
 }
 
 template <class DerivedT>
@@ -1614,8 +1615,7 @@ void CommandBufferHelperCommon::assertCanBeRecycledImpl()
     ASSERT(!DerivedT::ExecutesInline() || derived->getCommandBuffer().empty());
 }
 
-void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
-                                            VkAccessFlags writeAccessType,
+void CommandBufferHelperCommon::bufferWrite(VkAccessFlags writeAccessType,
                                             PipelineStage writeStage,
                                             BufferHelper *buffer)
 {
@@ -1627,12 +1627,11 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
         mPipelineBarrierMask.set(writeStage);
     }
 
-    // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to
-    // make the results visible to the host.  The buffer may be mapped by the application in the
-    // future.
+    // Host-visible buffers may be mapped by the application. To make sure barrier are inserted at
+    // the end of the frame, mark the host-visilble writes here.
     if (buffer->isHostVisible())
     {
-        contextVk->onHostVisibleBufferWrite();
+        mIsAnyHostVisibleBufferWritten = true;
     }
 }
 
@@ -1752,6 +1751,14 @@ void CommandBufferHelperCommon::addCommandDiagnosticsCommon(std::ostringstream *
     *out << "\\l";
 }
 
+void CommandBufferHelperCommon::setBufferReadQueueSerial(BufferHelper *buffer)
+{
+    if (buffer->getResourceUse() >= mQueueSerial)
+    {
+        buffer->setQueueSerial(mQueueSerial);
+    }
+}
+
 // OutsideRenderPassCommandBufferHelper implementation.
 OutsideRenderPassCommandBufferHelper::OutsideRenderPassCommandBufferHelper() {}
 
@@ -1787,24 +1794,6 @@ angle::Result OutsideRenderPassCommandBufferHelper::reset(
     mQueueSerial = QueueSerial();
 
     return initializeCommandBuffer(context);
-}
-
-void OutsideRenderPassCommandBufferHelper::setBufferReadQueueSerial(ContextVk *contextVk,
-                                                                    BufferHelper *buffer)
-{
-    if (contextVk->isRenderPassStartedAndUsesBuffer(*buffer))
-    {
-        // We should not run into situation that RP is writing to it while we are reading it here
-        ASSERT(!contextVk->isRenderPassStartedAndUsesBufferForWrite(*buffer));
-        // A buffer could have read accessed by both renderPassCommands and
-        // outsideRenderPassCommands and there is no need to endRP or flush. In this case, the
-        // renderPassCommands' read will override the outsideRenderPassCommands' read, since its
-        // queueSerial must be greater than outsideRP.
-    }
-    else
-    {
-        buffer->setQueueSerial(mQueueSerial);
-    }
 }
 
 void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
