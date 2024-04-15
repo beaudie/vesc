@@ -11,6 +11,8 @@
 #define LIBANGLE_RENDERER_WGPU_TEXTUREWGPU_H_
 
 #include "libANGLE/renderer/TextureImpl.h"
+#include "libANGLE/renderer/wgpu/ContextWgpu.h"
+#include "libANGLE/renderer/wgpu/RenderTargetWgpu.h"
 #include "libANGLE/renderer/wgpu/wgpu_helpers.h"
 
 namespace rx
@@ -168,8 +170,24 @@ class TextureWgpu : public TextureImpl
 
   private:
     angle::Result setImageImpl(const gl::Context *context,
+                               GLenum internalFormat,
+                               GLenum type,
                                const gl::ImageIndex &index,
-                               const gl::Extents &size);
+                               const gl::Extents &size,
+                               const gl::PixelUnpackState &unpack,
+                               const uint8_t *pixels);
+
+    angle::Result setSubImageImpl(const gl::Context *context,
+                                  GLenum internalFormat,
+                                  GLenum type,
+                                  const gl::ImageIndex &index,
+                                  const gl::Box &area,
+                                  const gl::PixelUnpackState &unpack,
+                                  const uint8_t *pixels);
+
+    angle::Result initializeImage(const gl::Context *context,
+                                  const gl::ImageIndex &index,
+                                  const gl::Extents &size);
 
     angle::Result redefineLevel(const gl::Context *context,
                                 const gl::ImageIndex &index,
