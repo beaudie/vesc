@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0513a550_9adb7227",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-15T20:18:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "65d1227f_ca24f5f7",
+      "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93aae0c4_49a6d638",
