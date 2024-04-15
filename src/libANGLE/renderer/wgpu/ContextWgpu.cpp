@@ -158,6 +158,8 @@ ContextWgpu::ContextWgpu(const gl::State &state, gl::ErrorSet *errorSet, Display
 
     InitMinimumTextureCapsMap(maxClientVersion, mExtensions, &mTextureCaps);
 
+    webgpu::EnsureCapsInitialized(mDisplay->getDevice(), &mCaps);
+
     if (mExtensions.shaderPixelLocalStorageANGLE)
     {
         mPLSOptions.type             = ShPixelLocalStorageType::FramebufferFetch;
@@ -174,6 +176,7 @@ void ContextWgpu::onDestroy(const gl::Context *context)
 
 angle::Result ContextWgpu::initialize(const angle::ImageLoadContext &imageLoadContext)
 {
+    mImageLoadContext = imageLoadContext;
     return angle::Result::Continue;
 }
 

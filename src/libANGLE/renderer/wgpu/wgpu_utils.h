@@ -10,6 +10,7 @@
 #include <dawn/webgpu_cpp.h>
 #include <stdint.h>
 
+#include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/angletypes.h"
 
@@ -17,7 +18,7 @@
     do                                                                                       \
     {                                                                                        \
         auto ANGLE_LOCAL_VAR = command;                                                      \
-        if (ANGLE_UNLIKELY(::rx::webgpu::IsError(ANGLE_LOCAL_VAR)))                          \
+        if (ANGLE_UNLIKELY(::rx::webgpu::IsWgpuError(ANGLE_LOCAL_VAR)))                      \
         {                                                                                    \
             (context)->handleError(GL_INVALID_OPERATION, "Internal WebGPU error.", __FILE__, \
                                    ANGLE_FUNCTION, __LINE__);                                \
@@ -43,14 +44,15 @@ enum class RenderPassClosureReason
     InvalidEnum,
     EnumCount = InvalidEnum,
 };
+void EnsureCapsInitialized(const wgpu::Device &device, gl::Caps *nativeCaps);
 
 ContextWgpu *GetImpl(const gl::Context *context);
 DisplayWgpu *GetDisplay(const gl::Context *context);
 wgpu::Device GetDevice(const gl::Context *context);
 wgpu::Instance GetInstance(const gl::Context *context);
 
-bool IsError(wgpu::WaitStatus waitStatus);
-bool IsError(WGPUBufferMapAsyncStatus mapBufferStatus);
+bool IsWgpuError(wgpu::WaitStatus waitStatus);
+bool IsWgpuError(WGPUBufferMapAsyncStatus mapBufferStatus);
 }  // namespace webgpu
 
 namespace wgpu_gl
