@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa90956a_171278a4",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-15T18:58:54Z",
+      "side": 1,
+      "message": "\u003e Every task that is blocked here on a \"finish()\" call is using up a worker task and putting it to sleep. After a few flushes, we are left with no worker threads, even if no worker is actually doing anything!\n\nAh okay - I see your point there.\n\n\u003e So maybe this code is fine, but please add a warning that this is a hack to be cleaned up\n\n+1 Agreed, will add that. Yeah I think long-term https://anglebug.com/8669 looks best where we could perhaps register ops/data to be performed in `checkAndCleanupCompletedCommands` in an async queue. \n\n\u003e do you mean the application has registered these callbacks? That is, could the application spin wait until the event is CL_COMPLETE without making any calls to OpenCL at all?\n\nYup - `clSetEventCallback`. The app still makes calls (polls) via `clGetEventInfo` for `CL_COMPLETE`.\n\n\u003e we should make that a Vulkan extension so you can avoid the double copy\n\n+1, there already is an existing extension where one can supply hostptr during create buffer call. When we create the staging buffer, we would take advantage of that and would remove need to track memcpy after (assuming Vk Impl. supports the extension). I believe it was: `VK_KHR_external_memory`, where the option for resource could be fd, hostptr, AHB, etc.\nhttps://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkExternalMemoryHandleTypeFlagBits.html",
+      "parentUuid": "5c1fc9c4_c673dd8a",
+      "revId": "79803b9781ea552f4c959a31efcd1a918b5c13cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "380dd4c8_1e13e29b",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
         "patchSetId": 19
