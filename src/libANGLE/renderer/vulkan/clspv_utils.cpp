@@ -282,7 +282,25 @@ void ProcessPrintfStatement(unsigned char *&data,
     std::printf("%s", printfOutput.c_str());
 }
 
-}  // namespace
+std::string GetSpvVersionAsClspvString(const vk::Renderer *rendererVk)
+{
+    switch (rendererVk->getSpirvVersion())
+    {
+        default:
+        case SPV_ENV_VULKAN_1_0:
+            return "1.0";
+        case SPV_ENV_VULKAN_1_1:
+            return "1.3";
+        case SPV_ENV_VULKAN_1_1_SPIRV_1_4:
+            return "1.4";
+        case SPV_ENV_VULKAN_1_2:
+            return "1.5";
+        case SPV_ENV_VULKAN_1_3:
+            return "1.6";
+    }
+}
+
+}  // anonymous namespace
 
 // Process the data recorded into printf storage buffer along with the info in printfino descriptor
 // and write it to stdout.
@@ -326,6 +344,9 @@ std::string ClspvGetCompilerOptions(const CLDeviceVk *device)
         ASSERT(false);
     }
     options += addressBits == 64 ? " -arch=spir64" : " -arch=spir";
+
+    // select SPIR-V version target
+    options += std::format(" --spv-version={}", GetSpvVersionAsClspvString(rendererVk));
 
     // Other internal Clspv compiler flags that are needed/required
     options += " --long-vector";

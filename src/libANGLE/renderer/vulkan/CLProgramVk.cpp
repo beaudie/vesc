@@ -884,7 +884,7 @@ bool CLProgramVk::buildInternal(const cl::DevicePtrs &devices,
         // the shader module
         if (deviceProgramData.binaryType == CL_PROGRAM_BINARY_TYPE_EXECUTABLE)
         {
-            spvtools::SpirvTools spvTool(SPV_ENV_UNIVERSAL_1_5);
+            spvtools::SpirvTools spvTool(mContext->getRenderer()->getSpirvVersion());
             bool parseRet = spvTool.Parse(
                 deviceProgramData.binary,
                 [](const spv_endianness_t endianess, const spv_parsed_header_t &instruction) {
@@ -954,7 +954,7 @@ bool CLProgramVk::buildInternal(const cl::DevicePtrs &devices,
 angle::spirv::Blob CLProgramVk::stripReflection(const DeviceProgramData *deviceProgramData)
 {
     angle::spirv::Blob binaryStripped;
-    spvtools::Optimizer opt(SPV_ENV_UNIVERSAL_1_5);
+    spvtools::Optimizer opt(mContext->getRenderer()->getSpirvVersion());
     opt.RegisterPass(spvtools::CreateStripReflectInfoPass());
     spvtools::OptimizerOptions optOptions;
     optOptions.set_run_validator(false);
