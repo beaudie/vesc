@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b003ef8_626fefe0",
+        "filename": "src/common/Mutex.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-15T20:28:11Z",
+      "side": 1,
+      "message": "Also mention it can\u0027t be used with condition variables?",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 79
+      },
+      "revId": "4f35b6cf1ae5f253aa154b3f78cd5439dbaeccba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbbfacdc_881db7f8",
+        "filename": "src/common/Mutex.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-15T20:28:11Z",
+      "side": 1,
+      "message": "I know naming is hard but we should probably pick a slightly less generic name given the limitations. Some ideas:\n`FastMutex`\n`Mtx`\n`Mutex3`",
+      "range": {
+        "startLine": 47,
+        "startChar": 6,
+        "endLine": 47,
+        "endChar": 11
+      },
+      "revId": "4f35b6cf1ae5f253aa154b3f78cd5439dbaeccba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2565a2fa_0af1bbf2",
         "filename": "src/common/Mutex.h",
         "patchSetId": 6
