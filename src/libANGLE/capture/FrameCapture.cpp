@@ -6537,7 +6537,7 @@ CoherentBufferTracker::~CoherentBufferTracker()
 
 PageFaultHandlerRangeType CoherentBufferTracker::handleWrite(uintptr_t address)
 {
-    std::lock_guard<std::mutex> lock(mMutex);
+    std::lock_guard<angle::SimpleMutex> lock(mMutex);
     auto pagesInBuffers = getBufferPagesForAddress(address);
 
     if (pagesInBuffers.empty())
@@ -6634,7 +6634,7 @@ bool CoherentBufferTracker::haveBuffer(gl::BufferID id)
 
 void CoherentBufferTracker::onEndFrame()
 {
-    std::lock_guard<std::mutex> lock(mMutex);
+    std::lock_guard<angle::SimpleMutex> lock(mMutex);
 
     if (!mEnabled)
     {
@@ -6676,7 +6676,7 @@ void CoherentBufferTracker::disable()
 
 uintptr_t CoherentBufferTracker::addBuffer(gl::BufferID id, uintptr_t start, size_t size)
 {
-    std::lock_guard<std::mutex> lock(mMutex);
+    std::lock_guard<angle::SimpleMutex> lock(mMutex);
 
     if (haveBuffer(id))
     {
@@ -6765,7 +6765,7 @@ PageSharingType CoherentBufferTracker::doesBufferSharePage(gl::BufferID id)
 
 void CoherentBufferTracker::removeBuffer(gl::BufferID id)
 {
-    std::lock_guard<std::mutex> lock(mMutex);
+    std::lock_guard<angle::SimpleMutex> lock(mMutex);
 
     if (!haveBuffer(id))
     {
@@ -7324,7 +7324,7 @@ void FrameCaptureShared::maybeCaptureCoherentBuffers(const gl::Context *context)
         return;
     }
 
-    std::lock_guard<std::mutex> lock(mCoherentBufferTracker.mMutex);
+    std::lock_guard<angle::SimpleMutex> lock(mCoherentBufferTracker.mMutex);
 
     for (const auto &pair : mCoherentBufferTracker.mBuffers)
     {
