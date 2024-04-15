@@ -108,6 +108,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d2c5802_19a52401",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-15T19:10:58Z",
+      "side": 1,
+      "message": "\u003e The app still makes calls (polls) via clGetEventInfo for CL_COMPLETE\n\nOk cool, so we have a way to (be slow) and do the status update and memcpys on the `clGetEventInfo` call. That I imagine could be the fallback for when `VK_KHR_external_memory` is missing, and we can stop worrying about https://anglebug.com/8669 specifically.",
+      "parentUuid": "aa90956a_171278a4",
+      "revId": "79803b9781ea552f4c959a31efcd1a918b5c13cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "380dd4c8_1e13e29b",
