@@ -1734,6 +1734,7 @@ const gl::ColorGeneric AdjustBorderColor(const angle::ColorGeneric &borderColorG
 
     return adjustedBorderColor;
 }
+
 template const gl::ColorGeneric AdjustBorderColor<true>(
     const angle::ColorGeneric &borderColorGeneric,
     const angle::Format &format,

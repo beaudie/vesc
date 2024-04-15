@@ -13,6 +13,7 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/ImageIndex.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/wgpu/ContextWgpu.h"
 #include "libANGLE/renderer/wgpu/wgpu_utils.h"
 
 namespace rx
@@ -25,7 +26,7 @@ namespace webgpu
 
 struct QueuedDataUpload
 {
-    wgpu::ImageCopyBuffer copyBuffer;
+    wgpu::ImageCopyBuffer buffer;
     gl::LevelIndex targetLevel;
 };
 
@@ -46,15 +47,28 @@ class ImageHelper
     ~ImageHelper();
 
     angle::Result initImage(wgpu::Device &device,
-                            wgpu::TextureUsage usage,
-                            wgpu::TextureDimension dimension,
-                            wgpu::Extent3D size,
-                            wgpu::TextureFormat format,
-                            std::uint32_t mipLevelCount,
-                            std::uint32_t sampleCount,
-                            std::size_t ViewFormatCount);
+                            gl::LevelIndex firstAllocatedLevel,
+                            wgpu::TextureDescriptor textureDescriptor);
 
-    void flushStagedUpdates(wgpu::Device &device);
+    void flushStagedUpdates(wgpu::Device &device, wgpu::Queue &queue);
+
+    wgpu::TextureDescriptor createTextureDescriptor(wgpu::TextureUsage usage,
+                                                    wgpu::TextureDimension dimension,
+                                                    wgpu::Extent3D size,
+                                                    wgpu::TextureFormat format,
+                                                    std::uint32_t mipLevelCount,
+                                                    std::uint32_t sampleCount,
+                                                    std::size_t viewFormatCount);
+
+    angle::Result stageTextureUpload(ContextWgpu *contextWgpu,
+                                     const gl::Extents &glExtents,
+                                     GLuint inputRowPitch,
+                                     GLuint inputDepthPitch,
+                                     uint32_t outputRowPitch,
+                                     uint32_t outputDepthPitch,
+                                     uint32_t allocationSize,
+                                     const gl::ImageIndex &index,
+                                     const uint8_t *pixels);
 
     LevelIndex toWgpuLevel(gl::LevelIndex levelIndexGl) const;
     gl::LevelIndex toGlLevel(LevelIndex levelIndexWgpu) const;
@@ -72,7 +86,6 @@ class ImageHelper
 
     std::vector<QueuedDataUpload> mBufferQueue;
 };
-
 struct BufferMapState
 {
     wgpu::MapMode mode;
