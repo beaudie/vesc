@@ -16,6 +16,24 @@
       "message": "Austin, there is no rush to land this, but wanted to give you a heads up about this. It should reduce the overhead of locking in CL, but I want to make sure this is not regressing anything (so if you can try it before it lands and confirm, that would be great)",
       "revId": "0ba4f885fab114db7e3ca601a8a49a2c4e311531",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36f25f6e_4d02d5d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-15T18:30:38Z",
+      "side": 1,
+      "message": "Thanks Shahbaz - will cherry-pick and give it a go",
+      "parentUuid": "266ec9a8_7c74afd0",
+      "revId": "0ba4f885fab114db7e3ca601a8a49a2c4e311531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
