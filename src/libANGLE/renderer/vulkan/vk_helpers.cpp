@@ -3071,7 +3071,7 @@ void RenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
 template <typename CommandBufferHelperT>
 void CommandBufferRecycler<CommandBufferHelperT>::onDestroy()
 {
-    std::unique_lock<std::mutex> lock(mMutex);
+    std::unique_lock<angle::Mutex> lock(mMutex);
     for (CommandBufferHelperT *commandBufferHelper : mCommandBufferHelperFreeList)
     {
         SafeDelete(commandBufferHelper);
@@ -3089,7 +3089,7 @@ angle::Result CommandBufferRecycler<CommandBufferHelperT>::getCommandBufferHelpe
     SecondaryCommandMemoryAllocator *commandsAllocator,
     CommandBufferHelperT **commandBufferHelperOut)
 {
-    std::unique_lock<std::mutex> lock(mMutex);
+    std::unique_lock<angle::Mutex> lock(mMutex);
     if (mCommandBufferHelperFreeList.empty())
     {
         CommandBufferHelperT *commandBuffer = new CommandBufferHelperT();
@@ -3131,7 +3131,7 @@ void CommandBufferRecycler<CommandBufferHelperT>::recycleCommandBufferHelper(
     (*commandBuffer)->markOpen();
 
     {
-        std::unique_lock<std::mutex> lock(mMutex);
+        std::unique_lock<angle::Mutex> lock(mMutex);
         mCommandBufferHelperFreeList.push_back(*commandBuffer);
     }
 

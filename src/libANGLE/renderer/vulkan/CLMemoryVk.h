@@ -8,6 +8,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_CLMEMORYVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CLMEMORYVK_H_
 
+#include "common/Mutex.h"
+
 #include "libANGLE/renderer/vulkan/cl_types.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
@@ -50,7 +52,7 @@ class CLMemoryVk : public CLMemoryImpl
     CLContextVk *mContext;
     vk::Renderer *mRenderer;
     vk::Allocation mAllocation;
-    std::mutex mMapLock;
+    angle::Mutex mMapLock;
     uint8_t *mMapPtr;
     uint32_t mMapCount;
     CLMemoryVk *mParent;

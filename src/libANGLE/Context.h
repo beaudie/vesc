@@ -17,6 +17,7 @@
 
 #include "angle_gl.h"
 #include "common/MemoryBuffer.h"
+#include "common/Mutex.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "libANGLE/Caps.h"
@@ -654,7 +655,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     MemoryProgramCache *getMemoryProgramCache() const { return mMemoryProgramCache; }
     MemoryShaderCache *getMemoryShaderCache() const { return mMemoryShaderCache; }
 
-    std::mutex &getProgramCacheMutex() const;
+    angle::Mutex &getProgramCacheMutex() const;
 
     bool hasBeenCurrent() const { return mHasBeenCurrent; }
     egl::Display *getDisplay() const { return mDisplay; }

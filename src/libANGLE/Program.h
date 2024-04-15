@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 
+#include "common/Mutex.h"
 #include "common/Optional.h"
 #include "common/angleutils.h"
 #include "common/mathutil.h"
@@ -561,7 +562,7 @@ class Program final : public LabeledObject, public angle::Subject
     // backends.
     ShaderMap<Shader *> mAttachedShaders;
 
-    std::mutex mHistogramMutex;
+    angle::Mutex mHistogramMutex;
 };
 }  // namespace gl
 

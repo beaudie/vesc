@@ -1398,7 +1398,7 @@ void OneOffCommandPool::init(vk::ProtectionType protectionType)
 
 void OneOffCommandPool::destroy(VkDevice device)
 {
-    std::unique_lock<std::mutex> lock(mMutex);
+    std::unique_lock<angle::Mutex> lock(mMutex);
     for (PendingOneOffCommands &pending : mPendingCommands)
     {
         pending.commandBuffer.releaseHandle();
@@ -1410,7 +1410,7 @@ void OneOffCommandPool::destroy(VkDevice device)
 angle::Result OneOffCommandPool::getCommandBuffer(vk::Context *context,
                                                   vk::PrimaryCommandBuffer *commandBufferOut)
 {
-    std::unique_lock<std::mutex> lock(mMutex);
+    std::unique_lock<angle::Mutex> lock(mMutex);
 
     if (!mPendingCommands.empty() &&
         context->getRenderer()->hasResourceUseFinished(mPendingCommands.front().use))
@@ -1457,7 +1457,7 @@ angle::Result OneOffCommandPool::getCommandBuffer(vk::Context *context,
 void OneOffCommandPool::releaseCommandBuffer(const QueueSerial &submitQueueSerial,
                                              vk::PrimaryCommandBuffer &&primary)
 {
-    std::unique_lock<std::mutex> lock(mMutex);
+    std::unique_lock<angle::Mutex> lock(mMutex);
     mPendingCommands.push_back({vk::ResourceUse(submitQueueSerial), std::move(primary)});
 }
 
@@ -5048,7 +5048,7 @@ angle::Result Renderer::ensurePipelineCacheInitialized(vk::Context *context)
         return angle::Result::Continue;
     }
 
-    std::unique_lock<std::mutex> lock(mPipelineCacheMutex);
+    std::unique_lock<angle::Mutex> lock(mPipelineCacheMutex);
 
     // If another thread initialized it first don't redo it
     if (mPipelineCacheInitialized)
@@ -5074,7 +5074,7 @@ angle::Result Renderer::getPipelineCache(vk::Context *context,
 {
     ANGLE_TRY(ensurePipelineCacheInitialized(context));
 
-    std::mutex *pipelineCacheMutex =
+    angle::Mutex *pipelineCacheMutex =
         (context->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)
             ? &mPipelineCacheMutex
             : nullptr;
@@ -5518,7 +5518,7 @@ void Renderer::setGlobalDebugAnnotator(bool *installedAnnotatorOut)
     {
         if (installDebugAnnotatorVk)
         {
-            std::unique_lock<std::mutex> lock(gl::GetDebugMutex());
+            std::unique_lock<angle::Mutex> lock(gl::GetDebugMutex());
             gl::InitializeDebugAnnotations(&mAnnotator);
         }
     }
@@ -5840,7 +5840,7 @@ void Renderer::logCacheStats() const
         return;
     }
 
-    std::unique_lock<std::mutex> localLock(mCacheStatsMutex);
+    std::unique_lock<angle::Mutex> localLock(mCacheStatsMutex);
 
     int cacheType = 0;
     INFO() << "Vulkan object cache hit ratios: ";
@@ -5907,13 +5907,13 @@ angle::Result Renderer::getFormatDescriptorCountForExternalFormat(vk::Context *c
 
 void Renderer::onAllocateHandle(vk::HandleType handleType)
 {
-    std::unique_lock<std::mutex> localLock(mActiveHandleCountsMutex);
+    std::unique_lock<angle::Mutex> localLock(mActiveHandleCountsMutex);
     mActiveHandleCounts.onAllocate(handleType);
 }
 
 void Renderer::onDeallocateHandle(vk::HandleType handleType)
 {
-    std::unique_lock<std::mutex> localLock(mActiveHandleCountsMutex);
+    std::unique_lock<angle::Mutex> localLock(mActiveHandleCountsMutex);
     mActiveHandleCounts.onDeallocate(handleType);
 }
 

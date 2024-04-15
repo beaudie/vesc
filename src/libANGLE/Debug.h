@@ -10,6 +10,7 @@
 #define LIBANGLE_DEBUG_H_
 
 #include "angle_gl.h"
+#include "common/Mutex.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "libANGLE/AttributeMap.h"
@@ -129,7 +130,7 @@ class Debug : angle::NonCopyable
     };
 
     bool mOutputEnabled;
-    mutable std::mutex mMutex;
+    mutable angle::Mutex mMutex;
     GLDEBUGPROCKHR mCallbackFunction;
     const void *mCallbackUserParam;
     mutable std::deque<Message> mMessages;
