@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ee38df5_f4ff0db6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-15T18:05:04Z",
+      "side": 1,
+      "message": "My plan is to land the first CL first, monitor the stability of the unit test on the bots (so far, many runs without an issue) for a week, then land this change and again monitor on the bots. I want to let this release to the wild in Chrome as a low-risk change (not many devices on ANGLE/Vulkan, little threading risk) and wait for a week before landing further changes too.",
+      "revId": "c97dccb847a0c2ffd6f8f7d7fea3c744a09c5e29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
