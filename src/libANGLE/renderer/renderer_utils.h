@@ -472,6 +472,7 @@ enum class PipelineType
     InvalidEnum = 2,
     EnumCount   = 2,
 };
+
 }  // namespace rx
 
 // MultiDraw macro patterns
