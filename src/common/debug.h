@@ -33,6 +33,11 @@ typedef _Return_type_success_(return >= 0) long HRESULT;
 #    define TRACE_OUTPUT_FILE "angle_debug.txt"
 #endif
 
+namespace angle
+{
+class Mutex;
+}
+
 namespace gl
 {
 class Context;
@@ -122,7 +127,7 @@ bool DebugAnnotationsInitialized();
 
 void InitializeDebugMutexIfNeeded();
 
-std::mutex &GetDebugMutex();
+angle::Mutex &GetDebugMutex();
 
 namespace priv
 {

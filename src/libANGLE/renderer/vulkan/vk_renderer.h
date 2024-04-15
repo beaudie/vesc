@@ -17,6 +17,7 @@
 #include <queue>
 #include <thread>
 
+#include "common/Mutex.h"
 #include "common/PackedEnums.h"
 #include "common/WorkerThread.h"
 #include "common/angleutils.h"
@@ -125,7 +126,7 @@ class OneOffCommandPool : angle::NonCopyable
 
   private:
     vk::ProtectionType mProtectionType;
-    std::mutex mMutex;
+    angle::Mutex mMutex;
     vk::CommandPool mCommandPool;
     struct PendingOneOffCommands
     {
@@ -503,7 +504,7 @@ class Renderer : angle::NonCopyable
     // Accumulate cache stats for a specific cache
     void accumulateCacheStats(VulkanCacheType cache, const CacheStats &stats)
     {
-        std::unique_lock<std::mutex> localLock(mCacheStatsMutex);
+        std::unique_lock<angle::Mutex> localLock(mCacheStatsMutex);
         mVulkanCacheStats[cache].accumulate(stats);
     }
     // Log cache stats for all caches
@@ -976,7 +977,7 @@ class Renderer : angle::NonCopyable
     //    requires external synchronization when mPipelineCache is the dstCache of
     //    vkMergePipelineCaches. Lock the mutex if mergeProgramPipelineCachesToGlobalCache is
     //    enabled
-    std::mutex mPipelineCacheMutex;
+    angle::Mutex mPipelineCacheMutex;
     vk::PipelineCache mPipelineCache;
     uint32_t mPipelineCacheVkUpdateTimeout;
     size_t mPipelineCacheSizeAtLastSync;
@@ -1020,7 +1021,7 @@ class Renderer : angle::NonCopyable
     SamplerYcbcrConversionCache mYuvConversionCache;
     angle::HashMap<VkFormat, uint32_t> mVkFormatDescriptorCountMap;
     vk::ActiveHandleCounter mActiveHandleCounts;
-    std::mutex mActiveHandleCountsMutex;
+    angle::Mutex mActiveHandleCountsMutex;
 
     // Tracks resource serials.
     vk::ResourceSerialFactory mResourceSerialFactory;
@@ -1038,7 +1039,7 @@ class Renderer : angle::NonCopyable
 
     // Stats about all Vulkan object caches
     VulkanCacheStats mVulkanCacheStats;
-    mutable std::mutex mCacheStatsMutex;
+    mutable angle::Mutex mCacheStatsMutex;
 
     // A mask to filter out Vulkan pipeline stages that are not supported, applied in situations
     // where multiple stages are prespecified (for example with image layout transitions):

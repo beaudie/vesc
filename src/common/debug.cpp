@@ -30,6 +30,7 @@
 #endif
 
 #include "anglebase/no_destructor.h"
+#include "common/Mutex.h"
 #include "common/Optional.h"
 #include "common/angleutils.h"
 #include "common/entry_points_enum_autogen.h"
@@ -43,7 +44,7 @@ namespace
 
 DebugAnnotator *g_debugAnnotator = nullptr;
 
-std::mutex *g_debugMutex = nullptr;
+angle::Mutex *g_debugMutex = nullptr;
 
 constexpr std::array<const char *, LOG_NUM_SEVERITIES> g_logSeverityNames = {
     {"EVENT", "INFO", "WARN", "ERR", "FATAL"}};
@@ -123,11 +124,11 @@ void InitializeDebugMutexIfNeeded()
 {
     if (g_debugMutex == nullptr)
     {
-        g_debugMutex = new std::mutex();
+        g_debugMutex = new angle::Mutex();
     }
 }
 
-std::mutex &GetDebugMutex()
+angle::Mutex &GetDebugMutex()
 {
     ASSERT(g_debugMutex);
     return *g_debugMutex;
@@ -181,10 +182,10 @@ LogMessage::LogMessage(const char *file, const char *function, int line, LogSeve
 LogMessage::~LogMessage()
 {
     {
-        std::unique_lock<std::mutex> lock;
+        std::unique_lock<angle::Mutex> lock;
         if (g_debugMutex != nullptr)
         {
-            lock = std::unique_lock<std::mutex>(*g_debugMutex);
+            lock = std::unique_lock<angle::Mutex>(*g_debugMutex);
         }
 
         if (DebugAnnotationsInitialized() && (mSeverity > LOG_INFO))
