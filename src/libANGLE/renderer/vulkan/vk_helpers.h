@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_VULKAN_VK_HELPERS_H_
 
 #include "common/MemoryBuffer.h"
+#include "common/SimpleMutex.h"
 #include "libANGLE/renderer/vulkan/MemoryTracking.h"
 #include "libANGLE/renderer/vulkan/Suballocation.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
@@ -1901,7 +1902,7 @@ class CommandBufferRecycler
     void recycleCommandBufferHelper(CommandBufferHelperT **commandBuffer);
 
   private:
-    std::mutex mMutex;
+    angle::SimpleMutex mMutex;
     std::vector<CommandBufferHelperT *> mCommandBufferHelperFreeList;
 };
 
