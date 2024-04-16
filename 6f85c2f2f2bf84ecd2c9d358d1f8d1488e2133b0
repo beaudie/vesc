@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90e52be1_6282cbed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-16T22:13:01Z",
+      "side": 1,
+      "message": "Note: if there are reasons not to do it this way, I don\u0027t mind dropping the change (perf improvement is measurable but fairly minor)",
+      "revId": "6f85c2f2f2bf84ecd2c9d358d1f8d1488e2133b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
