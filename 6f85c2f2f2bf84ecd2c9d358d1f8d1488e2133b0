@@ -16,6 +16,24 @@
       "message": "Note: if there are reasons not to do it this way, I don\u0027t mind dropping the change (perf improvement is measurable but fairly minor)",
       "revId": "6f85c2f2f2bf84ecd2c9d358d1f8d1488e2133b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e69d88d_6ddd8e64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-16T23:52:46Z",
+      "side": 1,
+      "message": "One thing you could make it more robust is create a new type for index that itself is just a uint16_t. That way compiler will able tocomplain if we somehow passed in GLenum as index or vice versus. Not sure if it will interfere with the pod struct, but I thought it will work?",
+      "parentUuid": "90e52be1_6282cbed",
+      "revId": "6f85c2f2f2bf84ecd2c9d358d1f8d1488e2133b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
