@@ -176,8 +176,24 @@ class TextureWgpu : public TextureImpl
 
   private:
     angle::Result setImageImpl(const gl::Context *context,
+                               GLenum internalFormat,
+                               GLenum type,
                                const gl::ImageIndex &index,
-                               const gl::Extents &size);
+                               const gl::Extents &size,
+                               const gl::PixelUnpackState &unpack,
+                               const uint8_t *pixels);
+
+    angle::Result setSubImageImpl(const gl::Context *context,
+                                  GLenum internalFormat,
+                                  GLenum type,
+                                  const gl::ImageIndex &index,
+                                  const gl::Box &area,
+                                  const gl::PixelUnpackState &unpack,
+                                  const uint8_t *pixels);
+
+    angle::Result initializeImage(const gl::Context *context,
+                                  const gl::ImageIndex &index,
+                                  const gl::Extents &size);
 
     angle::Result redefineLevel(const gl::Context *context,
                                 const gl::ImageIndex &index,
@@ -187,7 +203,7 @@ class TextureWgpu : public TextureImpl
                                       GLuint layerCount,
                                       gl::LevelIndex levelIndex,
                                       gl::RenderToTextureImageIndex renderToTextureIndex);
-    webgpu::ImageHelper *mImage;
+    webgpu::ImageHelper *mImage = nullptr;
 
     // Render targets stored as array of vector of vectors
     //

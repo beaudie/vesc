@@ -38,12 +38,12 @@ wgpu::Instance GetInstance(const gl::Context *context)
     return display->getInstance();
 }
 
-bool IsError(wgpu::WaitStatus waitStatus)
+bool IsWgpuError(wgpu::WaitStatus waitStatus)
 {
     return waitStatus != wgpu::WaitStatus::Success;
 }
 
-bool IsError(WGPUBufferMapAsyncStatus mapBufferStatus)
+bool IsWgpuError(WGPUBufferMapAsyncStatus mapBufferStatus)
 {
     return mapBufferStatus != WGPUBufferMapAsyncStatus_Success;
 }
