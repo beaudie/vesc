@@ -831,9 +831,12 @@ angle::Result CLCommandQueueVk::processWaitlist(const cl::EventPtrs &waitEvents)
             {
                 // As long as there is at least one dependant command in same queue,
                 // we just need to insert one execution barrier
+                VkMemoryBarrier memoryBarrier = {
+                    VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr, VK_ACCESS_SHADER_WRITE_BIT,
+                    VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT};
                 mComputePassCommands->getCommandBuffer().pipelineBarrier(
                     VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
-                    0, nullptr, 0, nullptr, 0, nullptr);
+                    1, &memoryBarrier, 0, nullptr, 0, nullptr);
 
                 insertedBarrier = true;
             }
