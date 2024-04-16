@@ -205,7 +205,12 @@ inline constexpr UniformTypeInfo::UniformTypeInfo(GLenum type,
       isImageType(isImageType)
 {}
 
+enum class UniformTypeIndex : uint16_t
+{
+};
 const UniformTypeInfo &GetUniformTypeInfo(GLenum uniformType);
+UniformTypeIndex GetUniformTypeIndex(GLenum uniformType);
+const UniformTypeInfo &GetUniformTypeInfoFromIndex(UniformTypeIndex index);
 
 const char *GetGenericErrorMessage(GLenum error);
 
