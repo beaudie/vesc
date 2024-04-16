@@ -406,15 +406,19 @@ angle::Result TextureWgpu::redefineLevel(const gl::Context *context,
                                          const gl::Extents &size)
 {
     gl::LevelIndex levelIndexGL(index.getLevelIndex());
-    if (mImage && levelIndexGL >= mImage->getFirstAllocatedLevel() &&
-        levelIndexGL <
-            (mImage->getFirstAllocatedLevel() + mImage->getTextureDescriptor().mipLevelCount))
+    if (mImage)
     {
-        bool dimensionChanged = mImage->getTextureDescriptor().dimension !=
-                                gl_wgpu::getWgpuTextureDimension(index.getType());
-        if (dimensionChanged || size != wgpu_gl::getExtents(mImage->getTextureDescriptor().size))
+        if (levelIndexGL >= mImage->getFirstAllocatedLevel() &&
+            levelIndexGL <
+                (mImage->getFirstAllocatedLevel() + mImage->getTextureDescriptor().mipLevelCount))
         {
-            mImage = nullptr;
+            bool dimensionChanged = mImage->getTextureDescriptor().dimension !=
+                                    gl_wgpu::getWgpuTextureDimension(index.getType());
+            if (dimensionChanged ||
+                size != wgpu_gl::getExtents(mImage->getTextureDescriptor().size))
+            {
+                mImage = nullptr;
+            }
         }
     }
 
@@ -455,7 +459,7 @@ void TextureWgpu::initSingleLayerRenderTargets(ContextWgpu *contextWgpu,
         textureViewDesc.aspect          = wgpu::TextureAspect::All;
         textureViewDesc.baseArrayLayer  = layerIndex;
         textureViewDesc.arrayLayerCount = 1;
-        textureViewDesc.baseMipLevel    = mImage->toWgpuLevel(levelIndex).get();
+        textureViewDesc.baseMipLevel    = levelIndex.get();
         textureViewDesc.mipLevelCount   = 1;
         switch (mImage->getTextureDescriptor().dimension)
         {
@@ -475,8 +479,8 @@ void TextureWgpu::initSingleLayerRenderTargets(ContextWgpu *contextWgpu,
         textureViewDesc.format        = mImage->getTextureDescriptor().format;
         wgpu::TextureView textureView = mImage->getTexture().CreateView(&textureViewDesc);
 
-        renderTargets[layerIndex].set(textureView, mImage->toWgpuLevel(levelIndex), layerIndex,
-                                      mImage->toWgpuTextureFormat());
+        renderTargets[layerIndex].set(mImage, textureView, mImage->toWgpuLevel(levelIndex),
+                                      layerIndex, mImage->toWgpuTextureFormat());
     }
 }
 
