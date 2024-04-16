@@ -33,6 +33,7 @@
 #include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
 #include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
 #include "libANGLE/renderer/vulkan/vk_resource.h"
+#include "vulkan/vulkan_core.h"
 
 namespace angle
 {
@@ -867,9 +868,11 @@ class Renderer : angle::NonCopyable
 
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
     VkPhysicalDeviceVulkan11Properties mPhysicalDevice11Properties;
+    VkPhysicalDeviceVulkan12Properties mPhysicalDevice12Properties;
 
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
     VkPhysicalDeviceVulkan11Features mPhysicalDevice11Features;
+    VkPhysicalDeviceVulkan12Features mPhysicalDevice12Features;
 
     VkPhysicalDeviceLineRasterizationFeaturesEXT mLineRasterizationFeatures;
     VkPhysicalDeviceProvokingVertexFeaturesEXT mProvokingVertexFeatures;
@@ -925,6 +928,8 @@ class Renderer : angle::NonCopyable
     VkPhysicalDeviceExternalFormatResolveFeaturesANDROID mExternalFormatResolveFeatures;
     VkPhysicalDeviceExternalFormatResolvePropertiesANDROID mExternalFormatResolveProperties;
 #endif
+    VkPhysicalDevice8BitStorageFeatures m8BitStorageFeatures;
+    VkPhysicalDevice16BitStorageFeatures m16BitStorageFeatures;
 
     angle::PackedEnumBitSet<gl::ShadingRate, uint8_t> mSupportedFragmentShadingRates;
     angle::PackedEnumMap<gl::ShadingRate, VkSampleCountFlags>

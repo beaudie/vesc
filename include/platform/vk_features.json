@@ -1488,6 +1488,55 @@
                 "Enable non-semantic info inside shader module via VK_KHR_shader_non_semantic_info extension"
             ],
             "issue": "http://anglebug.com/8549"
+        },
+        {
+            "name": "supports_8_bit_storage_buffer",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_KHR_8bit_storage extension and has the StorageBuffer8BitAccess feature"
+            ]
+        },
+        {
+            "name": "supports_8_bit_uniform_and_storage_buffer",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_KHR_8bit_storage extension and has the UniformAndStorageBuffer8BitAccess feature"
+            ]
+        },
+        {
+            "name": "supports_8_bit_push_constant",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_KHR_8bit_storage extension and has the StoragePushConstant8 feature"
+            ]
+        },
+        {
+            "name": "supports_16_bit_storage_buffer",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_KHR_16bit_storage extension and has the StorageBuffer16BitAccess feature"
+            ]
+        },
+        {
+            "name": "supports_16_bit_uniform_and_storage_buffer",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_KHR_16bit_storage extension and has the UniformAndStorageBuffer16BitAccess feature"
+            ]
+        },
+        {
+            "name": "supports_16_bit_push_constant",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_KHR_16bit_storage extension and has the StoragePushConstant16 feature"
+            ]
+        },
+        {
+            "name": "supports_16_bit_input_output",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_KHR_16bit_storage extension and has the StorageInputOutput16 feature"
+            ]
         }
     ]
 }

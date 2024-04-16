@@ -35,6 +35,7 @@
 #include "libANGLE/renderer/vulkan/vk_resource.h"
 #include "libANGLE/trace.h"
 #include "platform/PlatformMethods.h"
+#include "vulkan/vulkan_core.h"
 
 // Consts
 namespace
@@ -2413,6 +2414,10 @@ void Renderer::appendDeviceExtensionFeaturesPromotedTo11(
         vk::AddToPNextChain(deviceFeatures, &mMultiviewFeatures);
         vk::AddToPNextChain(deviceProperties, &mMultiviewProperties);
     }
+    if (ExtensionFound(VK_KHR_16BIT_STORAGE_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceFeatures, &m16BitStorageFeatures);
+    }
 }
 
 // The following features and properties used by ANGLE have been promoted to Vulkan 1.2:
@@ -2470,6 +2475,11 @@ void Renderer::appendDeviceExtensionFeaturesPromotedTo12(
     {
         vk::AddToPNextChain(deviceFeatures, &mTimelineSemaphoreFeatures);
     }
+
+    if (ExtensionFound(VK_KHR_8BIT_STORAGE_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceFeatures, &m8BitStorageFeatures);
+    }
 }
 
 // The following features and properties used by ANGLE have been promoted to Vulkan 1.3:
@@ -2507,6 +2517,12 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
 
     mPhysicalDevice11Features       = {};
     mPhysicalDevice11Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES;
+
+    mPhysicalDevice12Properties       = {};
+    mPhysicalDevice12Properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES;
+
+    mPhysicalDevice12Features       = {};
+    mPhysicalDevice12Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
 
     mLineRasterizationFeatures = {};
     mLineRasterizationFeatures.sType =
@@ -2670,6 +2686,14 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     mHostImageCopyProperties.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_IMAGE_COPY_PROPERTIES_EXT;
 
+    // use KHR if its not already reported as part of promoted 12 features
+    m8BitStorageFeatures       = {};
+    m8BitStorageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR;
+
+    // use KHR if its not already reported as part of promoted 11 features
+    m16BitStorageFeatures       = {};
+    m16BitStorageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES_KHR;
+
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures = {};
     mExternalFormatResolveFeatures.sType =
@@ -2702,6 +2726,8 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     // Clean up pNext chains
     mPhysicalDevice11Properties.pNext                       = nullptr;
     mPhysicalDevice11Features.pNext                         = nullptr;
+    mPhysicalDevice12Properties.pNext                       = nullptr;
+    mPhysicalDevice12Features.pNext                         = nullptr;
     mLineRasterizationFeatures.pNext                        = nullptr;
     mMemoryReportFeatures.pNext                             = nullptr;
     mProvokingVertexFeatures.pNext                          = nullptr;
@@ -2744,6 +2770,8 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     mTimelineSemaphoreFeatures.pNext                        = nullptr;
     mHostImageCopyFeatures.pNext                            = nullptr;
     mHostImageCopyProperties.pNext                          = nullptr;
+    m8BitStorageFeatures.pNext                              = nullptr;
+    m16BitStorageFeatures.pNext                             = nullptr;
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures.pNext   = nullptr;
     mExternalFormatResolveProperties.pNext = nullptr;
@@ -3104,6 +3132,14 @@ void Renderer::enableDeviceExtensionsPromotedTo11(const vk::ExtensionNameList &d
     {
         vk::AddToPNextChain(&mEnabledFeatures, &mProtectedMemoryFeatures);
     }
+
+    if (mFeatures.supports16BitStorageBuffer.enabled ||
+        mFeatures.supports16BitUniformAndStorageBuffer.enabled ||
+        mFeatures.supports16BitPushConstant.enabled || mFeatures.supports16BitInputOutput.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_KHR_16BIT_STORAGE_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &m16BitStorageFeatures);
+    }
 }
 
 // See comment above appendDeviceExtensionFeaturesPromotedTo12.  Additional extensions are enabled
@@ -3163,6 +3199,14 @@ void Renderer::enableDeviceExtensionsPromotedTo12(const vk::ExtensionNameList &d
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mTimelineSemaphoreFeatures);
+    }
+
+    if (mFeatures.supports8BitStorageBuffer.enabled ||
+        mFeatures.supports8BitUniformAndStorageBuffer.enabled ||
+        mFeatures.supports8BitPushConstant.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_KHR_8BIT_STORAGE_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &m8BitStorageFeatures);
     }
 }
 
@@ -4971,6 +5015,37 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsTimelineSemaphore,
                             mTimelineSemaphoreFeatures.timelineSemaphore == VK_TRUE);
 
+    // 8bit storage features
+    ANGLE_FEATURE_CONDITION(&mFeatures, supports8BitStorageBuffer,
+                            m8BitStorageFeatures.storageBuffer8BitAccess == VK_TRUE ||
+                                mPhysicalDevice12Features.storageBuffer8BitAccess == VK_TRUE);
+
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supports8BitUniformAndStorageBuffer,
+        m8BitStorageFeatures.uniformAndStorageBuffer8BitAccess == VK_TRUE ||
+            mPhysicalDevice12Features.uniformAndStorageBuffer8BitAccess == VK_TRUE);
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, supports8BitPushConstant,
+                            m8BitStorageFeatures.storagePushConstant8 == VK_TRUE ||
+                                mPhysicalDevice12Features.storagePushConstant8 == VK_TRUE);
+
+    // 16bit storage features
+    ANGLE_FEATURE_CONDITION(&mFeatures, supports16BitStorageBuffer,
+                            m16BitStorageFeatures.storageBuffer16BitAccess == VK_TRUE ||
+                                mPhysicalDevice11Features.storageBuffer16BitAccess == VK_TRUE);
+
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supports16BitUniformAndStorageBuffer,
+        m16BitStorageFeatures.uniformAndStorageBuffer16BitAccess == VK_TRUE ||
+            mPhysicalDevice11Features.uniformAndStorageBuffer16BitAccess == VK_TRUE);
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, supports16BitPushConstant,
+                            m16BitStorageFeatures.storagePushConstant16 == VK_TRUE ||
+                                mPhysicalDevice11Features.storagePushConstant16 == VK_TRUE);
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, supports16BitInputOutput,
+                            m16BitStorageFeatures.storageInputOutput16 == VK_TRUE ||
+                                mPhysicalDevice11Features.storageInputOutput16 == VK_TRUE);
 #if defined(ANGLE_PLATFORM_ANDROID)
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExternalFormatResolve,
                             mExternalFormatResolveFeatures.externalFormatResolve == VK_TRUE);

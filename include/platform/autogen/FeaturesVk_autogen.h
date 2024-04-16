@@ -1366,6 +1366,55 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/8549"
     };
 
+    FeatureInfo supports8BitStorageBuffer = {
+        "supports8BitStorageBuffer",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_8bit_storage extension and has the StorageBuffer8BitAccess feature",
+        &members,
+    };
+
+    FeatureInfo supports8BitUniformAndStorageBuffer = {
+        "supports8BitUniformAndStorageBuffer",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_8bit_storage extension and has the UniformAndStorageBuffer8BitAccess feature",
+        &members,
+    };
+
+    FeatureInfo supports8BitPushConstant = {
+        "supports8BitPushConstant",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_8bit_storage extension and has the StoragePushConstant8 feature",
+        &members,
+    };
+
+    FeatureInfo supports16BitStorageBuffer = {
+        "supports16BitStorageBuffer",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_16bit_storage extension and has the StorageBuffer16BitAccess feature",
+        &members,
+    };
+
+    FeatureInfo supports16BitUniformAndStorageBuffer = {
+        "supports16BitUniformAndStorageBuffer",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_16bit_storage extension and has the UniformAndStorageBuffer16BitAccess feature",
+        &members,
+    };
+
+    FeatureInfo supports16BitPushConstant = {
+        "supports16BitPushConstant",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_16bit_storage extension and has the StoragePushConstant16 feature",
+        &members,
+    };
+
+    FeatureInfo supports16BitInputOutput = {
+        "supports16BitInputOutput",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_KHR_16bit_storage extension and has the StorageInputOutput16 feature",
+        &members,
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
