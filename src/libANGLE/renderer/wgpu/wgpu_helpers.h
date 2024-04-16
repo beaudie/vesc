@@ -13,6 +13,7 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/ImageIndex.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/wgpu/ContextWgpu.h"
 #include "libANGLE/renderer/wgpu/wgpu_utils.h"
 
 namespace rx
@@ -25,7 +26,7 @@ namespace webgpu
 
 struct QueuedDataUpload
 {
-    wgpu::ImageCopyBuffer copyBuffer;
+    wgpu::ImageCopyBuffer buffer;
     gl::LevelIndex targetLevel;
 };
 
@@ -46,15 +47,45 @@ class ImageHelper
     ~ImageHelper();
 
     angle::Result initImage(wgpu::Device &device,
-                            wgpu::TextureUsage usage,
-                            wgpu::TextureDimension dimension,
-                            wgpu::Extent3D size,
-                            wgpu::TextureFormat format,
-                            std::uint32_t mipLevelCount,
-                            std::uint32_t sampleCount,
-                            std::size_t ViewFormatCount);
+                            gl::LevelIndex firstAllocatedLevel,
+                            wgpu::TextureDescriptor textureDescriptor);
 
-    void flushStagedUpdates(wgpu::Device &device);
+    void flushStagedUpdates(wgpu::Device &device, wgpu::Queue &queue);
+
+    wgpu::TextureDescriptor createTextureDescriptor(wgpu::TextureUsage usage,
+                                                    wgpu::TextureDimension dimension,
+                                                    wgpu::Extent3D size,
+                                                    wgpu::TextureFormat format,
+                                                    std::uint32_t mipLevelCount,
+                                                    std::uint32_t sampleCount,
+                                                    std::size_t viewFormatCount);
+
+    angle::Result stageTextureUpload(ContextWgpu *contextWgpu,
+                                     const gl::Extents &glExtents,
+                                     GLuint inputRowPitch,
+                                     GLuint inputDepthPitch,
+                                     uint32_t outputRowPitch,
+                                     uint32_t outputDepthPitch,
+                                     uint32_t allocationSize,
+                                     const gl::ImageIndex &index,
+                                     const uint8_t *pixels);
+
+    static angle::Result getReadPixelsParams(rx::ContextWgpu *contextWgpu,
+                                             const gl::PixelPackState &packState,
+                                             gl::Buffer *packBuffer,
+                                             GLenum format,
+                                             GLenum type,
+                                             const gl::Rectangle &area,
+                                             const gl::Rectangle &clippedArea,
+                                             rx::PackPixelsParams *paramsOut,
+                                             GLuint *skipBytesOut);
+
+    angle::Result readPixels(rx::ContextWgpu *contextWgpu,
+                             size_t allocationSize,
+                             const gl::Rectangle &area,
+                             const rx::PackPixelsParams &packPixelsParams,
+                             const angle::Format &aspectFormat,
+                             void *pixels);
 
     LevelIndex toWgpuLevel(gl::LevelIndex levelIndexGl) const;
     gl::LevelIndex toGlLevel(LevelIndex levelIndexWgpu) const;
@@ -68,11 +99,10 @@ class ImageHelper
     wgpu::Texture mTexture;
     wgpu::TextureDescriptor mTextureDescriptor = {};
 
-    gl::LevelIndex mFirstAllocatedLevel;
+    gl::LevelIndex mFirstAllocatedLevel = gl::LevelIndex(0);
 
     std::vector<QueuedDataUpload> mBufferQueue;
 };
-
 struct BufferMapState
 {
     wgpu::MapMode mode;
@@ -107,6 +137,7 @@ class BufferHelper : public angle::NonCopyable
     angle::Result unmap();
 
     uint8_t *getMapWritePointer(size_t offset, size_t size) const;
+    const uint8_t *getMapReadPointer(size_t offset, size_t size) const;
 
     const std::optional<BufferMapState> &getMappedState() const;
 
