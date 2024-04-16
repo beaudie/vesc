@@ -33,6 +33,24 @@
       "message": "Does this need a (global) memory barrier too?\n\nRegardless, I just realized, this is going to end up degrading performance if more than one buffer is causing a barrier. You can just set a flag here and do the barirer only once after the loop if necessary.",
       "revId": "40ab0c2332362d466a4d10691793fd30f13047a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07f6ed57_949e06e1",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-16T16:17:34Z",
+      "side": 1,
+      "message": "+1 to both, good catches.\n\nDone.",
+      "parentUuid": "27b6ccd9_3e1b30cb",
+      "revId": "40ab0c2332362d466a4d10691793fd30f13047a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
