@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2429cbf1_7ee24cf4",
+        "filename": "src/common/Mutex.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-16T14:30:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b003ef8_626fefe0",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 79
+      },
+      "revId": "4f35b6cf1ae5f253aa154b3f78cd5439dbaeccba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbbfacdc_881db7f8",
@@ -71,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d481f6b7_175c1768",
+        "filename": "src/common/Mutex.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-16T14:30:52Z",
+      "side": 1,
+      "message": "I went with `SimpleMutex` (because it\u0027s a mutex with few features)",
+      "parentUuid": "39653b09_685736f9",
+      "range": {
+        "startLine": 47,
+        "startChar": 6,
+        "endLine": 47,
+        "endChar": 11
+      },
+      "revId": "4f35b6cf1ae5f253aa154b3f78cd5439dbaeccba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2565a2fa_0af1bbf2",
@@ -84,6 +132,30 @@
       "writtenOn": "2024-04-15T20:23:50Z",
       "side": 1,
       "message": "For readability, I think it makes sense to define two classes, Futex and StdMutex and based on the macro do a `using Mutex \u003d ...`",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 19
+      },
+      "revId": "4f35b6cf1ae5f253aa154b3f78cd5439dbaeccba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "897e2b0b_60c5b30f",
+        "filename": "src/common/Mutex.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-16T14:30:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2565a2fa_0af1bbf2",
       "range": {
         "startLine": 49,
         "startChar": 0,
