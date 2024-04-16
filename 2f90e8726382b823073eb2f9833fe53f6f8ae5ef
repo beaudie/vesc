@@ -16,6 +16,24 @@
       "message": "```suggestion\n            // currently all are host visible so nothing to do\n```",
       "revId": "2f90e8726382b823073eb2f9833fe53f6f8ae5ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eaa6ca6_afc24413",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-16T15:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "739cf637_a584ac00",
+      "revId": "2f90e8726382b823073eb2f9833fe53f6f8ae5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
