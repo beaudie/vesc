@@ -406,15 +406,25 @@ angle::Result TextureWgpu::redefineLevel(const gl::Context *context,
                                          const gl::Extents &size)
 {
     gl::LevelIndex levelIndexGL(index.getLevelIndex());
-    if (mImage && levelIndexGL >= mImage->getFirstAllocatedLevel() &&
-        levelIndexGL <
-            (mImage->getFirstAllocatedLevel() + mImage->getTextureDescriptor().mipLevelCount))
+    if (mImage)
     {
+<<<<<<< HEAD
         bool dimensionChanged = mImage->getTextureDescriptor().dimension !=
                                 gl_wgpu::getWgpuTextureDimension(index.getType());
         if (dimensionChanged || size != wgpu_gl::getExtents(mImage->getTextureDescriptor().size))
+=======
+        if (levelIndexGL >= mImage->getFirstAllocatedLevel() &&
+            levelIndexGL <
+                (mImage->getFirstAllocatedLevel() + mImage->getTextureDescriptor().mipLevelCount))
+>>>>>>> a89009031 (Add error callback for webgpu device)
         {
-            mImage = nullptr;
+            bool dimensionChanged = mImage->getTextureDescriptor().dimension !=
+                                    gl_wgpu::getWgpuTextureDimension(index.getType());
+            if (dimensionChanged ||
+                size != wgpu_gl::getExtents(mImage->getTextureDescriptor().size))
+            {
+                mImage = nullptr;
+            }
         }
     }
 
@@ -423,6 +433,64 @@ angle::Result TextureWgpu::redefineLevel(const gl::Context *context,
         return angle::Result::Continue;
     }
     return initializeImage(context, index, size);
+<<<<<<< HEAD
+=======
+}
+
+void TextureWgpu::initSingleLayerRenderTargets(ContextWgpu *contextWgpu,
+                                               GLuint layerCount,
+                                               gl::LevelIndex levelIndex,
+                                               gl::RenderToTextureImageIndex renderToTextureIndex)
+{
+    std::vector<std::vector<RenderTargetWgpu>> &allLevelsRenderTargets =
+        mSingleLayerRenderTargets[renderToTextureIndex];
+
+    if (allLevelsRenderTargets.size() <= static_cast<uint32_t>(levelIndex.get()))
+    {
+        allLevelsRenderTargets.resize(levelIndex.get() + 1);
+    }
+
+    std::vector<RenderTargetWgpu> &renderTargets = allLevelsRenderTargets[levelIndex.get()];
+
+    // Lazy init. Check if already initialized.
+    if (!renderTargets.empty())
+    {
+        return;
+    }
+
+    // There are |layerCount| render targets, one for each layer
+    renderTargets.resize(layerCount);
+
+    for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
+    {
+        wgpu::TextureViewDescriptor textureViewDesc;
+        textureViewDesc.aspect = wgpu::TextureAspect::All;
+        textureViewDesc.baseArrayLayer = layerIndex;
+        textureViewDesc.arrayLayerCount = 1;
+        textureViewDesc.baseMipLevel = levelIndex.get();
+        textureViewDesc.mipLevelCount = 1;
+        switch (mImage->getTextureDescriptor().dimension)
+        {
+            case wgpu::TextureDimension::Undefined:
+                textureViewDesc.dimension = wgpu::TextureViewDimension::Undefined;
+                break;
+            case wgpu::TextureDimension::e1D:
+                textureViewDesc.dimension = wgpu::TextureViewDimension::e1D;
+                break;
+            case wgpu::TextureDimension::e2D:
+                textureViewDesc.dimension = wgpu::TextureViewDimension::e2D;
+                break;
+            case wgpu::TextureDimension::e3D:
+                textureViewDesc.dimension = wgpu::TextureViewDimension::e3D;
+                break;
+        }
+        textureViewDesc.format = mImage->getTextureDescriptor().format;
+        wgpu::TextureView textureView = mImage->getTexture().CreateView(&textureViewDesc);
+
+        renderTargets[layerIndex].set(mImage, textureView, mImage->toWgpuLevel(levelIndex),
+                                      layerIndex, mImage->toWgpuTextureFormat());
+    }
+>>>>>>> a89009031 (Add error callback for webgpu device)
 }
 
 void TextureWgpu::initSingleLayerRenderTargets(ContextWgpu *contextWgpu,

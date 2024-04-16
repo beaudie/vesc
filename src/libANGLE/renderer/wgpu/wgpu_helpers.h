@@ -70,7 +70,23 @@ class ImageHelper
                                      const gl::ImageIndex &index,
                                      const uint8_t *pixels);
 
-    LevelIndex toWgpuLevel(gl::LevelIndex levelIndexGl) const;
+    static angle::Result getReadPixelsParams(rx::ContextWgpu *contextWgpu,
+                                             const gl::PixelPackState &packState,
+                                             gl::Buffer *packBuffer,
+                                             GLenum format,
+                                             GLenum type,
+                                             const gl::Rectangle &area,
+                                             const gl::Rectangle &clippedArea,
+                                             rx::PackPixelsParams *paramsOut,
+                                             GLuint *skipBytesOut);
+
+    angle::Result readPixels(rx::ContextWgpu *contextWgpu,
+                             size_t allocationSize,
+                             const gl::Rectangle &area,
+                             const rx::PackPixelsParams &packPixelsParams,
+                             const angle::Format &aspectFormat,
+                             void *pixels);
+    f LevelIndex toWgpuLevel(gl::LevelIndex levelIndexGl) const;
     gl::LevelIndex toGlLevel(LevelIndex levelIndexWgpu) const;
     wgpu::Texture &getTexture() { return mTexture; }
     TextureInfo getWgpuTextureInfo(const gl::ImageIndex &index);
@@ -120,6 +136,7 @@ class BufferHelper : public angle::NonCopyable
     angle::Result unmap();
 
     uint8_t *getMapWritePointer(size_t offset, size_t size) const;
+    const uint8_t *getMapReadPointer(size_t offset, size_t size) const;
 
     const std::optional<BufferMapState> &getMappedState() const;
 
