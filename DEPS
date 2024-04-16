@@ -43,7 +43,7 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '0abb3a90f21c148a4c604b933e3635c51f97fba0',
+  'chromium_revision': '71303418b7bfe66d0b7994e2b46201013d7f36bc',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -432,7 +432,7 @@ deps = {
     'packages': [
       {
         'package': 'gn/gn/linux-${{arch}}',
-        'version': 'git_revision:d823fd85da3fb83146f734377da454473b93a2b2',
+        'version': 'git_revision:155c53952ec2dc324b0438ce5b9bd4a286577d25',
       }
     ],
     'dep_type': 'cipd',
@@ -443,7 +443,7 @@ deps = {
     'packages': [
       {
         'package': 'gn/gn/mac-${{arch}}',
-        'version': 'git_revision:d823fd85da3fb83146f734377da454473b93a2b2',
+        'version': 'git_revision:155c53952ec2dc324b0438ce5b9bd4a286577d25',
       }
     ],
     'dep_type': 'cipd',
@@ -465,7 +465,7 @@ deps = {
     'packages': [
       {
         'package': 'gn/gn/windows-amd64',
-        'version': 'git_revision:d823fd85da3fb83146f734377da454473b93a2b2',
+        'version': 'git_revision:155c53952ec2dc324b0438ce5b9bd4a286577d25',
       }
     ],
     'dep_type': 'cipd',
@@ -473,7 +473,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@87207dd4456c47523600430f8079dfa3283bd4da',
+    'url': '{chromium_git}/chromium/src/testing@dd8bd54e996d22322e3716e68e3ed0d2a311d5dc',
     'condition': 'not build_with_chromium',
   },
 
@@ -1009,7 +1009,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': Var('chromium_git') + '/chromium/src/tools/perf@bcadedd54713e60d65460608aaae4a58356fb4b9',
+    'url': Var('chromium_git') + '/chromium/src/tools/perf@5ef5d3935a576d66c101f97862ff4f8da093c15e',
     'condition': 'not build_with_chromium',
   },
 
