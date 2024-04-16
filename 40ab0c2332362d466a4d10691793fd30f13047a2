@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3adc70b0_05deb2a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-16T13:28:04Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "40ab0c2332362d466a4d10691793fd30f13047a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27b6ccd9_3e1b30cb",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-16T13:28:04Z",
+      "side": 1,
+      "message": "Does this need a (global) memory barrier too?\n\nRegardless, I just realized, this is going to end up degrading performance if more than one buffer is causing a barrier. You can just set a flag here and do the barirer only once after the loop if necessary.",
+      "revId": "40ab0c2332362d466a4d10691793fd30f13047a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
