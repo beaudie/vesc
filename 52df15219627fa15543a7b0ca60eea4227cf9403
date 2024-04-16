@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c839d84_1cc524f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-16T17:08:57Z",
+      "side": 1,
+      "message": "Thanks for taking care of this Yuly. Here\u0027s an pre-LGTM while you\u0027re looking at the failures.",
+      "revId": "52df15219627fa15543a7b0ca60eea4227cf9403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
