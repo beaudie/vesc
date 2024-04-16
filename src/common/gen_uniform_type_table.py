@@ -80,8 +80,9 @@ constexpr std::array<UniformTypeInfo, {total_count}> kInfoTable =
 {{{{
 {uniform_type_info_data}
 }}}};
+}}  // anonymous namespace
 
-size_t GetTypeInfoIndex(GLenum uniformType)
+size_t GetUniformTypeIndex(GLenum uniformType)
 {{
     switch (uniformType)
     {{
@@ -91,12 +92,17 @@ size_t GetTypeInfoIndex(GLenum uniformType)
             return 0;
     }}
 }}
-}}  // anonymous namespace
 
 const UniformTypeInfo &GetUniformTypeInfo(GLenum uniformType)
 {{
-    ASSERT(kInfoTable[GetTypeInfoIndex(uniformType)].type == uniformType);
-    return kInfoTable[GetTypeInfoIndex(uniformType)];
+    ASSERT(kInfoTable[GetUniformTypeIndex(uniformType)].type == uniformType);
+    return kInfoTable[GetUniformTypeIndex(uniformType)];
+}}
+
+const UniformTypeInfo &GetUniformTypeInfoFromIndex(size_t index)
+{{
+    ASSERT(index >= 0 && index < {total_count});
+    return kInfoTable[index];
 }}
 
 }}  // namespace gl

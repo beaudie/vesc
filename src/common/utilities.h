@@ -206,6 +206,8 @@ inline constexpr UniformTypeInfo::UniformTypeInfo(GLenum type,
 {}
 
 const UniformTypeInfo &GetUniformTypeInfo(GLenum uniformType);
+size_t GetUniformTypeIndex(GLenum uniformType);
+const UniformTypeInfo &GetUniformTypeInfoFromIndex(size_t index);
 
 const char *GetGenericErrorMessage(GLenum error);
 
