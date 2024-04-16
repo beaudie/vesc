@@ -16,6 +16,24 @@
       "message": "Thanks for taking care of this Yuly. Here\u0027s an pre-LGTM while you\u0027re looking at the failures.",
       "revId": "52df15219627fa15543a7b0ca60eea4227cf9403",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fdd5b3c_4aeb12ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-16T17:13:29Z",
+      "side": 1,
+      "message": "Hmmm, seems like we\u0027ve reached a point where we can\u0027t roll Chromium anymore.\nhttps://chromium-review.googlesource.com/c/chromium/src/+/5401625 needs us to roll `build`, which we can\u0027t do, since it breaks pinned abseil-cpp.",
+      "parentUuid": "5c839d84_1cc524f4",
+      "revId": "52df15219627fa15543a7b0ca60eea4227cf9403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
