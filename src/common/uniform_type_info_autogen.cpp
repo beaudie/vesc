@@ -203,8 +203,9 @@ constexpr std::array<UniformTypeInfo, 77> kInfoTable = {
       false, false},
      {GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT, GL_INT, GL_NONE, GL_NONE, GL_NONE, SamplerFormat::Float, 1, 1,
       1, sizeof(GLint), sizeof(GLint) * 4, sizeof(GLint) * 1, true, false, false}}};
+}  // anonymous namespace
 
-size_t GetTypeInfoIndex(GLenum uniformType)
+size_t GetUniformTypeIndex(GLenum uniformType)
 {
     switch (uniformType)
     {
@@ -367,12 +368,17 @@ size_t GetTypeInfoIndex(GLenum uniformType)
             return 0;
     }
 }
-}  // anonymous namespace
 
 const UniformTypeInfo &GetUniformTypeInfo(GLenum uniformType)
 {
-    ASSERT(kInfoTable[GetTypeInfoIndex(uniformType)].type == uniformType);
-    return kInfoTable[GetTypeInfoIndex(uniformType)];
+    ASSERT(kInfoTable[GetUniformTypeIndex(uniformType)].type == uniformType);
+    return kInfoTable[GetUniformTypeIndex(uniformType)];
+}
+
+const UniformTypeInfo &GetUniformTypeInfoFromIndex(size_t index)
+{
+    ASSERT(index >= 0 && index < 77);
+    return kInfoTable[index];
 }
 
 }  // namespace gl
