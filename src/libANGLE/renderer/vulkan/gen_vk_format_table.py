@@ -180,7 +180,7 @@ def gen_format_case(angle, internal_format, vk_json_data):
 
         fallbacks += compressed
 
-        if format in vk_map:
+        if format in vk_map and format not in fallbacks:
             fallbacks = [format] + fallbacks
 
         return (fallbacks, len(fallbacks) - len(compressed))
