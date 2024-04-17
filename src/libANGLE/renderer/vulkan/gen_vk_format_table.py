@@ -173,6 +173,8 @@ def gen_format_case(angle, internal_format, vk_json_data):
         fallbacks = vk_fallbacks.get(format, {}).get(type, [])
         if not isinstance(fallbacks, list):
             fallbacks = [fallbacks]
+        for item in fallbacks:
+            print("****** fallback check 2 " + item)
 
         compressed = vk_fallbacks.get(format, {}).get(type + "_compressed", [])
         if not isinstance(compressed, list):
@@ -180,12 +182,20 @@ def gen_format_case(angle, internal_format, vk_json_data):
 
         fallbacks += compressed
 
-        if format in vk_map:
+        for item in fallbacks:
+            print("****** fallback check 3 " + item)
+
+        if format in vk_map and format not in fallbacks:
             fallbacks = [format] + fallbacks
+
+        for item in fallbacks:
+            print("****** fallback check 4 " + item)
 
         return (fallbacks, len(fallbacks) - len(compressed))
 
     def image_args(format):
+        if format == "S8_UINT":
+            print("Yuxin Debug format is S8_UINT")
         return dict(
             image="angle::FormatID::" + format,
             image_initializer=angle_format.get_internal_format_initializer(
@@ -208,6 +218,9 @@ def gen_format_case(angle, internal_format, vk_json_data):
             args.update(image_template=image_basic_template)
         args.update(image_args(images[0]))
     elif len(images) > 1:
+        print("======================printing images")
+        for image in images:
+            print(image)
         args.update(
             image_template=image_fallback_template,
             image_list=", ".join(image_struct_template.format(**image_args(i)) for i in images))
