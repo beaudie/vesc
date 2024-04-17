@@ -16,6 +16,24 @@
       "message": "nit: Are any tests to cover the code added?",
       "revId": "6d215319e397701b68d740ff448d6c9897a1adb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97dd5fed_88fab117",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-04-17T20:34:27Z",
+      "side": 1,
+      "message": "From the comment https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d8151#c1 I guess we have a tracer test to cover the code path.",
+      "parentUuid": "f094282a_19e860b7",
+      "revId": "6d215319e397701b68d740ff448d6c9897a1adb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
