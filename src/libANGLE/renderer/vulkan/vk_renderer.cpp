@@ -247,14 +247,9 @@ constexpr const char *kSkippedMessages[] = {
     // https://anglebug.com/7291
     "VUID-vkCmdBlitImage-srcImage-00240",
     // https://anglebug.com/8242
+    // VVL bug: https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/7858
     "VUID-vkCmdDraw-None-08608",
     "VUID-vkCmdDrawIndexed-None-08608",
-    "VUID-vkCmdDraw-None-09000",
-    "VUID-vkCmdDrawIndexed-None-09000",
-    "VUID-vkCmdDraw-None-09002",
-    "VUID-vkCmdDrawIndexed-None-09002",
-    "VUID-vkCmdDraw-None-09003",
-    "VUID-vkCmdDrawIndexed-None-09003",
     // https://anglebug.com/8334
     "VUID-VkDescriptorImageInfo-imageView-07796",
     // https://issuetracker.google.com/303441816
