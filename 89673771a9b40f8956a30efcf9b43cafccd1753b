@@ -16,6 +16,24 @@
       "message": "Isn\u0027t that it will become very slow?\nThe cached memory should still work. if not working, it means something is broken.",
       "revId": "89673771a9b40f8956a30efcf9b43cafccd1753b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f2ae058_6405de6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-17T23:45:14Z",
+      "side": 1,
+      "message": "It does make a noticeable performance slowdown, but the current results are visibly incorrect.\n\nThis is the same workaround we use on Mali though, right?\n\nI agree something is likely broken since this happens on two vendors now.  I don\u0027t mean for this to be a permanent fix.  Just adding another vendor to the already temporary workaround.",
+      "parentUuid": "f6557b4b_b16e62fd",
+      "revId": "89673771a9b40f8956a30efcf9b43cafccd1753b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
