@@ -34,6 +34,24 @@
       "parentUuid": "f094282a_19e860b7",
       "revId": "6d215319e397701b68d740ff448d6c9897a1adb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d1c325_a1ce05c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-17T20:51:28Z",
+      "side": 1,
+      "message": "Bunch of tests. Evidence of this fix is removal of VU suppressions",
+      "parentUuid": "97dd5fed_88fab117",
+      "revId": "6d215319e397701b68d740ff448d6c9897a1adb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
