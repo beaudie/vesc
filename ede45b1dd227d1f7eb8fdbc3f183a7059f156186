@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "49520c6d_c242c9e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-17T21:03:56Z",
+      "side": 1,
+      "message": "I think the problem is not the performance improvement, but driver sees garbage data in the dynamic state and hitting assertion. Is the assertion fixed by src/libANGLE/renderer/vulkan/UtilsVk.cpp line 3400?",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 14
+      },
+      "revId": "ede45b1dd227d1f7eb8fdbc3f183a7059f156186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ddd7ed71_291923db",
