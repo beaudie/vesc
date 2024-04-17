@@ -52,6 +52,24 @@
       "parentUuid": "8f2ae058_6405de6b",
       "revId": "89673771a9b40f8956a30efcf9b43cafccd1753b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bf9f212_b0ab87d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-17T23:53:54Z",
+      "side": 1,
+      "message": "The comment on the feature says:\n```\n    // For some reason, if we use cached staging buffer for read pixels, a lot of tests fail on ARM,\n    // even though we do have invlaid() call there. Temporary keep the old behavior for ARM until we\n    // can root cause it.\n```\nThat sounds just like what we\u0027re seeing on PowerVR.",
+      "parentUuid": "b4fb4e1a_95d70b5e",
+      "revId": "89673771a9b40f8956a30efcf9b43cafccd1753b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
