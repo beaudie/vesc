@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8291f70c_f3c4802e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-17T22:13:30Z",
+      "side": 1,
+      "message": "thanks, landing this",
+      "revId": "7ddad31e4eabbc0bd68055482ff931f492e64de6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a899c72e_5415d5bd",
@@ -14,6 +31,24 @@
       "writtenOn": "2024-04-17T21:02:22Z",
       "side": 1,
       "message": "If you want to optimize things further here (in a follow up), there is a lot of padding here, and the `VkSampler` doesn\u0027t apply to half of the entries either.\n\nIf you rearrange things like this, you can get a desc that\u0027s much smaller (and faster to hash):\n\n```\nstruct PackedDescriptorSetBinding\n{\n        uint8_t type;    // Stores a packed VkDescriptorType descriptorType.\n        uint8_t stages;  // Stores a packed VkShaderStageFlags.\n        uint16_t count;  // Stores a packed uint32_t descriptorCount.\n};\n\n    std::array\u003cPackedDescriptorSetBinding, kMaxDescriptorSetLayoutBindings\u003e\n        mPackedDescriptorSetLayout;\n    gl::ActiveTextureArray\u003cVkSampler\u003e mImmutableSamplers;\n```\n\nYou probably still have to round kMaxDescriptorSetLayoutCount up to a multiple of 64 though.",
+      "revId": "7ddad31e4eabbc0bd68055482ff931f492e64de6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b953a20b_b138ab2d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-17T22:13:30Z",
+      "side": 1,
+      "message": "done -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5464162",
+      "parentUuid": "a899c72e_5415d5bd",
       "revId": "7ddad31e4eabbc0bd68055482ff931f492e64de6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
