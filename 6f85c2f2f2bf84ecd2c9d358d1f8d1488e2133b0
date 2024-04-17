@@ -34,6 +34,23 @@
       "parentUuid": "90e52be1_6282cbed",
       "revId": "6f85c2f2f2bf84ecd2c9d358d1f8d1488e2133b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "560ed331_94dfb1fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-17T02:45:16Z",
+      "side": 1,
+      "message": "LGTM with Charlie\u0027s idea of making the type strong",
+      "revId": "6f85c2f2f2bf84ecd2c9d358d1f8d1488e2133b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
