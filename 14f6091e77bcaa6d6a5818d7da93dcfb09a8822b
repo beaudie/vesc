@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2db72ed7_10fc8d5c",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-17T02:39:19Z",
+      "side": 1,
+      "message": "This is both out of place and incorrect. For one, this function is uploading a subsection of the image, so area and index have no bearing on the actual size and mip count of the image.\n\nIn GL, unfortunate as it is, it\u0027s frequently the case that applications use `glTexImage*` to define the image level by level. So we can\u0027t really afford to create the image as soon as we see a level specified. Following the way we\u0027ve dealt with this in vulkan/:\n\n- Make sure TextureWgpu always has an `mImage` allocated. This image is not actually initialized\n- When data is uploaded (like with `setImage` or `setSubImage`), stage the update in a GPU buffer ready to be copied to the image, but stash it in an update list in the ImageHelper (See `SubresourceUpdate` in vk_helpers.cpp and the per-mip vector of it)\n- In TextureWgpu::syncState, initialize the image with an appropriate mip range (which depends on many factors, see `TextureVk::respecifyImageStorageIfNecessary`) and then flush the updates to that range.\n  - Because GL allows applications to define mips arbitrarily, you shouldn\u0027t expect to be able to flush _all_ staged updates; just the ones that apply to the allocated range of the image.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 5
+      },
+      "revId": "14f6091e77bcaa6d6a5818d7da93dcfb09a8822b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba585c43_cf8ebc24",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-17T02:39:19Z",
+      "side": 1,
+      "message": "Add `wgpu::TextureUsages::TextureBinding` while you\u0027re at it!",
+      "revId": "14f6091e77bcaa6d6a5818d7da93dcfb09a8822b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
