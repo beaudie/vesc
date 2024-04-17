@@ -1429,8 +1429,7 @@ angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *contextVk,
         &mDescriptorSetLayouts[function][DescriptorSetIndex::Internal]));
 
     vk::DescriptorSetLayoutBindingVector bindingVector;
-    std::vector<VkSampler> immutableSamplers;
-    descriptorSetDesc.unpackBindings(&bindingVector, &immutableSamplers);
+    descriptorSetDesc.unpackBindings(&bindingVector);
     std::vector<VkDescriptorPoolSize> descriptorPoolSizes;
 
     for (const VkDescriptorSetLayoutBinding &binding : bindingVector)
