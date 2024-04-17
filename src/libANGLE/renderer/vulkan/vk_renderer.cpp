@@ -493,10 +493,6 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
 constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessagesWithVkEvent[] = {
     {"SYNC-HAZARD-WRITE-AFTER-READ",
      "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
-     "SYNC_PRESENT_ENGINE_SYNCVAL_PRESENT_ACQUIRE_READ_SYNCVAL",
-     "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
-    {"SYNC-HAZARD-WRITE-AFTER-READ",
-     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
      "SYNC_RESOLVE_TRANSFER_READ",
      "vkCmdWaitEvents():  Hazard WRITE_AFTER_READ for image barrier"},
     // ClearTestES3.RepeatedClear/ES3_Vulkan_ForceFallbackFormat
