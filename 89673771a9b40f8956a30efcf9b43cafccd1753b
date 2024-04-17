@@ -70,6 +70,24 @@
       "parentUuid": "b4fb4e1a_95d70b5e",
       "revId": "89673771a9b40f8956a30efcf9b43cafccd1753b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c9b5386_aa1e43ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-17T23:55:24Z",
+      "side": 1,
+      "message": "I guess you are right. Given you are seeing on both mali and PVR, likely it is a angle bug here.",
+      "parentUuid": "3bf9f212_b0ab87d1",
+      "revId": "89673771a9b40f8956a30efcf9b43cafccd1753b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
