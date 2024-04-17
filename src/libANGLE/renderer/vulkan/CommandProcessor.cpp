@@ -551,7 +551,8 @@ CommandProcessor::CommandProcessor(vk::Renderer *renderer, CommandQueue *command
       mTaskQueue(kMaxCommandProcessorTasksLimit),
       mCommandQueue(commandQueue),
       mTaskThreadShouldExit(false),
-      mNeedCommandsAndGarbageCleanup(false)
+      mNeedCommandsAndGarbageCleanup(false),
+      mGarbageCleanupInProgress(false)
 {
     std::lock_guard<std::mutex> queueLock(mErrorMutex);
     while (!mErrors.empty())
@@ -607,7 +608,13 @@ void CommandProcessor::requestCommandsAndGarbageCleanup()
     {
         // request clean up in async thread
         std::unique_lock<std::mutex> enqueueLock(mTaskEnqueueMutex);
+        mGarbageCleanupInProgress = true;
         mWorkAvailableCondition.notify_one();
+    }
+
+    while (mGarbageCleanupInProgress.load(std::memory_order_relaxed))
+    {
+        // Waiting for garbage cleanup to finish
     }
 }
 
@@ -691,6 +698,9 @@ angle::Result CommandProcessor::processTasksImpl(bool *exitThread)
                 ANGLE_TRY(mCommandQueue->retireFinishedCommands(this));
             }
             mRenderer->cleanupGarbage();
+
+            // Garbage has been cleaned up.
+            mGarbageCleanupInProgress = false;
         }
     }
     *exitThread = true;

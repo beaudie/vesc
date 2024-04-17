@@ -684,6 +684,7 @@ class CommandProcessor : public Context
     std::thread mTaskThread;
     bool mTaskThreadShouldExit;
     std::atomic<bool> mNeedCommandsAndGarbageCleanup;
+    std::atomic<bool> mGarbageCleanupInProgress;
 };
 }  // namespace vk
 
