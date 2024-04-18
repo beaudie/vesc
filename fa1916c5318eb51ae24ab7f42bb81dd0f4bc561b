@@ -51,6 +51,24 @@
       "parentUuid": "ba7b051e_be0b4c23",
       "revId": "fa1916c5318eb51ae24ab7f42bb81dd0f4bc561b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de8c3428_b1496f57",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4190,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-18T20:31:26Z",
+      "side": 1,
+      "message": "\u003e \u003e We are supposed to reset the subpass every time the render pass closes\n\n\u003e not really? i mean if the updated renderpass also contains unresolve attachments then subpass index doesnt need to be reset\n\n`onRenderPassFinished` does that, so yes really. If the new render pass has unresolve, the subpass index still has to be reset because the unresolve commands should be recorded to subpass 0.\n\nI understand there\u0027s a bug, I\u0027m afraid this is hiding a bigger problem. Do you think you can figure out why the `resetSubpass` call in `ContextVk::onRenderPassFinished` is not taking care of this? Is that function just not called? Is it called but `mRenderPassCommandBuffer` is nullptr? What happens if you move the `resetSubpass` call out of the `if` in that function?",
+      "parentUuid": "9cb4b6d4_69fbc46c",
+      "revId": "fa1916c5318eb51ae24ab7f42bb81dd0f4bc561b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
