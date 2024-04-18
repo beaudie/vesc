@@ -4181,6 +4181,14 @@ void GraphicsPipelineDesc::updateRenderPassDesc(GraphicsPipelineTransitionBits *
     {
         transition->set(kFirstBit + bit);
     }
+
+    // Update subpass index as well
+    const bool hasUnresolveAttachment = renderPassDesc.getColorUnresolveAttachmentMask().any() ||
+                                        renderPassDesc.hasDepthStencilUnresolveAttachment();
+    if (!hasUnresolveAttachment)
+    {
+        resetSubpass(transition);
+    }
 }
 
 void GraphicsPipelineDesc::setRenderPassSampleCount(GLint samples)
