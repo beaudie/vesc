@@ -492,11 +492,6 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessagesWithVkEvent[] = {
      "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
      "SYNC_IMAGE_LAYOUT_TRANSITION",
      "command: vkCmdWaitEvents"},
-    // VulkanUniformUpdatesTest.DescriptorPoolUniformAndTextureRegeneration/ES2_Vulkan
-    {"SYNC-HAZARD-WRITE-AFTER-PRESENT",
-     "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
-     "SYNC_PRESENT_ENGINE_SYNCVAL_PRESENT_PRESENTED_SYNCVAL",
-     "vkCmdWaitEvents():  Hazard WRITE_AFTER_PRESENT for image barrier"},
     // KHR-GLES2.texture_3d.copy_sub_image.rgba
     {"SYNC-HAZARD-WRITE-AFTER-READ",
      "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
