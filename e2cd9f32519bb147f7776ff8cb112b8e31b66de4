@@ -22,6 +22,29 @@
       },
       "revId": "e2cd9f32519bb147f7776ff8cb112b8e31b66de4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75c921ae_2b5fdf10",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-04-18T01:01:37Z",
+      "side": 1,
+      "message": "Suggestion: Before this line, assert that `format` is no longer in `fallbacks`?\n```suggestion\n            assert format not in fallbacks\n            fallbacks \u003d [format] + fallbacks\n```",
+      "range": {
+        "startLine": 186,
+        "startChar": 12,
+        "endLine": 186,
+        "endChar": 44
+      },
+      "revId": "e2cd9f32519bb147f7776ff8cb112b8e31b66de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
