@@ -46,6 +46,30 @@
       },
       "revId": "1cf71cf2a080b6391a392aaf18837aa8b47c2e94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "906bd40a_6718889d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-18T17:03:59Z",
+      "side": 1,
+      "message": "You are right. But I think that can be fixed as well by change how PipelineLayoutDesc calculate `hash` and `\u003d\u003d`. I will leave it for future exercise then, but I still believe what I proposed will be better.",
+      "parentUuid": "bfc1ee97_5d69f385",
+      "range": {
+        "startLine": 1042,
+        "startChar": 0,
+        "endLine": 1042,
+        "endChar": 57
+      },
+      "revId": "1cf71cf2a080b6391a392aaf18837aa8b47c2e94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
