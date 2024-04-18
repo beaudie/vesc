@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a77e979_33361f40",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-18T01:41:01Z",
+      "side": 1,
+      "message": "I don\u0027t know if this shows up in measurements, but if it does, an easy improvement is to hash the count + only the portion that\u0027s valid. Typically that\u0027ll be much smaller than the max size.",
+      "range": {
+        "startLine": 4312,
+        "startChar": 0,
+        "endLine": 4313,
+        "endChar": 57
+      },
+      "revId": "dea979ee34979bd3d06ef6e98f5076915f893aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
