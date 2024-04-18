@@ -33,6 +33,24 @@
       "message": "We are supposed to reset the subpass every time the render pass closes (`onRenderPassFinished`). If we are closing a render pass without that call, it\u0027s a problem. Could you please give some details of how this is happening? The test runs fine on swiftshader",
       "revId": "fa1916c5318eb51ae24ab7f42bb81dd0f4bc561b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cb4b6d4_69fbc46c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4190,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-18T20:16:20Z",
+      "side": 1,
+      "message": "\u003e We are supposed to reset the subpass every time the render pass closes\n\nnot really? i mean if the updated renderpass also contains unresolve attachments then subpass index doesnt need to be reset\n\n\u003e The test runs fine on swiftshader\n\nthen there is still a gap between swiftshader and our ICD\n\nthis is the validation error we see internally before the test fails -\n```\nVkGraphicsPipelineCreateInfo-renderPass-06046 ] Object 0: handle \u003d 0xde10000000de1,\ntype \u003d VK_OBJECT_TYPE_RENDER_PASS; | MessageID \u003d 0x9391d499 |\nvkCreateGraphicsPipelines(): pCreateInfos[0].subpass (1) is out of range for this\nrenderpass (0..0). The Vulkan spec states: If renderPass is not VK_NULL_HANDLE,\nsubpass must be a valid subpass within renderPass\n(https://www.khronos.org/registry/vulkan/specs/1.3-\nextensions/html/vkspec.html#VUID-VkGraphicsPipelineCreateInfo-renderPass-06046)\n```",
+      "parentUuid": "ba7b051e_be0b4c23",
+      "revId": "fa1916c5318eb51ae24ab7f42bb81dd0f4bc561b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
