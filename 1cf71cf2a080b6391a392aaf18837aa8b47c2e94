@@ -22,6 +22,30 @@
       },
       "revId": "1cf71cf2a080b6391a392aaf18837aa8b47c2e94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfc1ee97_5d69f385",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-18T16:57:04Z",
+      "side": 1,
+      "message": "i believe alignment restrictions require fix sized layouts so it can be packed into PipelineLayoutDesc? otherwise i see no reason why `mPackedDescriptorSetLayout` should have been an array to begin with",
+      "parentUuid": "a48f65e3_c24bfe58",
+      "range": {
+        "startLine": 1042,
+        "startChar": 0,
+        "endLine": 1042,
+        "endChar": 57
+      },
+      "revId": "1cf71cf2a080b6391a392aaf18837aa8b47c2e94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
