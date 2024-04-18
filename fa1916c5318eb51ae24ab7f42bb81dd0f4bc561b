@@ -16,6 +16,23 @@
       "message": "PTAL - trivial change",
       "revId": "fa1916c5318eb51ae24ab7f42bb81dd0f4bc561b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba7b051e_be0b4c23",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4190,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-18T19:02:01Z",
+      "side": 1,
+      "message": "We are supposed to reset the subpass every time the render pass closes (`onRenderPassFinished`). If we are closing a render pass without that call, it\u0027s a problem. Could you please give some details of how this is happening? The test runs fine on swiftshader",
+      "revId": "fa1916c5318eb51ae24ab7f42bb81dd0f4bc561b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
