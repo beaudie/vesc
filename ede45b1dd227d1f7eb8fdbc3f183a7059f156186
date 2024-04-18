@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db84b7f_73e553dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-18T01:36:57Z",
+      "side": 1,
+      "message": "Yes, that\u0027s the fix. Do we need to manually verify this?",
+      "parentUuid": "49520c6d_c242c9e8",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 14
+      },
+      "revId": "ede45b1dd227d1f7eb8fdbc3f183a7059f156186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ddd7ed71_291923db",
