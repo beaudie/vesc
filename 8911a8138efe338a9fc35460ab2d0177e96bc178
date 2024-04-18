@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f051fae_cf252e81",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-18T20:27:16Z",
+      "side": 1,
+      "message": "```suggestion\n    // Default implementation iterates over the attachments and individually initializes them\n```",
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c67119bd_43d924c2",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-18T20:27:16Z",
+      "side": 1,
+      "message": "Use anonymous function instead? We generally don\u0027t use lambdas if we don\u0027t have to (\"type erasure\" makes them slow)",
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f317634_87b34e6b",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-18T20:27:16Z",
+      "side": 1,
+      "message": "Any reason not to use glDrawBuffers so you can always use glClear?",
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9073a685_de0dee71",
+        "filename": "src/libANGLE/renderer/gl/SurfaceGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-18T20:27:16Z",
+      "side": 1,
+      "message": "nit: IIRC this should work\n\n```suggestion\n            gl::DrawBufferMask colorAttachments \u003d {0};\n```",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 36
+      },
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
