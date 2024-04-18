@@ -281,6 +281,7 @@ constexpr const char *kSkippedMessages[] = {
     "Undefined-Value-ShaderFragmentOutputMismatch",
     // MultithreadingTestES3.RenderThenSampleInNewContextWithDifferentPriority/ES3_Vulkan.
     "UNASSIGNED-SubmitValidation-WaitEvents-WrongQueue",
+    "VUID-VkSwapchainCreateInfoKHR-presentMode-02839",
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
