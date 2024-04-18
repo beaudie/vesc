@@ -135,6 +135,30 @@
       },
       "revId": "1cf71cf2a080b6391a392aaf18837aa8b47c2e94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77db3b93_1880b92d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-18T20:14:55Z",
+      "side": 1,
+      "message": "\u003e this will need to be a follow up change\n\nYes of course, I already assumed that based on Charlie\u0027s response",
+      "parentUuid": "3b419129_02960808",
+      "range": {
+        "startLine": 1042,
+        "startChar": 0,
+        "endLine": 1042,
+        "endChar": 57
+      },
+      "revId": "1cf71cf2a080b6391a392aaf18837aa8b47c2e94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
