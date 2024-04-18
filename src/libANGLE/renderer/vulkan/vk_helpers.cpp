@@ -920,8 +920,7 @@ bool IsShaderReadOnlyLayout(const ImageMemoryBarrierData &imageLayout)
     // We also use VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL for texture sample from depth
     // texture. See GetImageReadLayout() for detail.
     return imageLayout.layout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ||
-           imageLayout.layout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ||
-           imageLayout.layout == VK_IMAGE_LAYOUT_GENERAL;
+           imageLayout.layout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
 }
 
 bool IsAnySubresourceContentDefined(const gl::TexLevelArray<angle::BitSet8<8>> &contentDefined)
