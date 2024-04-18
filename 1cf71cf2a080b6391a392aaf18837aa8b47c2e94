@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65779cd9_89fa53cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-18T20:13:13Z",
+      "side": 1,
+      "message": "thanks, landing this for now with an open item for future work that i will track internally",
+      "revId": "1cf71cf2a080b6391a392aaf18837aa8b47c2e94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a48f65e3_c24bfe58",
@@ -86,6 +103,30 @@
       "side": 1,
       "message": "Mohan talk with @a.annestrand@samsung.com about this, he was similarly asking why we don\u0027t use `angle::FastVector` here. In particular, the CL\u0027s limit is different from GL\u0027s, so we either have to make this even larger or make it templated.\n\nBut if someone makes this an `angle::FastVector` following Charlie\u0027s suggestion, it also solves the problem for CL.",
       "parentUuid": "906bd40a_6718889d",
+      "range": {
+        "startLine": 1042,
+        "startChar": 0,
+        "endLine": 1042,
+        "endChar": 57
+      },
+      "revId": "1cf71cf2a080b6391a392aaf18837aa8b47c2e94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b419129_02960808",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-18T20:13:13Z",
+      "side": 1,
+      "message": "\u003e make it templated\n\nthis separation between GL and CL can be a stop gap for now until we work on a full refactor\n\n\u003e But if someone makes this an angle::FastVector following Charlie\u0027s suggestion\n\nif there are no objections, this will need to be a follow up change",
+      "parentUuid": "4e80ea2d_e44773ec",
       "range": {
         "startLine": 1042,
         "startChar": 0,
