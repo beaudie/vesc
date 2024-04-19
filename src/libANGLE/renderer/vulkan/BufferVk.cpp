@@ -204,7 +204,7 @@ angle::Result GetMemoryTypeIndex(ContextVk *contextVk,
                                  uint32_t *memoryTypeIndexOut)
 {
     vk::Renderer *renderer         = contextVk->getRenderer();
-    const vk::Allocator &allocator = renderer->getAllocator();
+    const vk::Allocator &allocator = renderer->getBufferAllocator();
 
     bool persistentlyMapped = renderer->getFeatures().persistentlyMappedBuffers.enabled;
     VkBufferUsageFlags defaultBufferUsageFlags = GetDefaultBufferUsageFlags(renderer);

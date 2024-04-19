@@ -1547,7 +1547,8 @@ void Renderer::onDestroy(vk::Context *context)
     mRenderPassCommandBufferRecycler.onDestroy();
 
     mImageMemorySuballocator.destroy(this);
-    mAllocator.destroy();
+    mImageAllocator.destroy();
+    mBufferAllocator.destroy();
 
     // When the renderer is being destroyed, it is possible to check if all the allocated memory
     // throughout the execution has been freed.
@@ -2052,17 +2053,11 @@ angle::Result Renderer::initialize(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
+angle::Result Renderer::initializeBufferMemoryAllocator(vk::Context *context)
 {
-    // This number matches Chromium and was picked by looking at memory usage of
-    // Android apps. The allocator will start making blocks at 1/8 the max size
-    // and builds up block size as needed before capping at the max set here.
-    mPreferredLargeHeapBlockSize = 4 * 1024 * 1024;
-
-    // Create VMA allocator
     ANGLE_VK_TRY(context,
-                 mAllocator.init(mPhysicalDevice, mDevice, mInstance, mApplicationInfo.apiVersion,
-                                 mPreferredLargeHeapBlockSize));
+                 mBufferAllocator.init(mPhysicalDevice, mDevice, mInstance,
+                                       mApplicationInfo.apiVersion, mPreferredLargeHeapBlockSize));
 
     // Figure out the alignment for default buffer allocations
     VkBufferCreateInfo createInfo    = {};
@@ -2104,7 +2099,7 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
     requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     preferredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     ANGLE_VK_TRY(context,
-                 mAllocator.findMemoryTypeIndexForBufferInfo(
+                 mBufferAllocator.findMemoryTypeIndexForBufferInfo(
                      createInfo, requiredFlags, preferredFlags, persistentlyMapped,
                      &mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::UnCachedCoherent]));
     ASSERT(mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::UnCachedCoherent] !=
@@ -2123,7 +2118,7 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
         preferredFlags = VK_MEMORY_PROPERTY_HOST_CACHED_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     }
     ANGLE_VK_TRY(context,
-                 mAllocator.findMemoryTypeIndexForBufferInfo(
+                 mBufferAllocator.findMemoryTypeIndexForBufferInfo(
                      createInfo, requiredFlags, preferredFlags, persistentlyMapped,
                      &mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedPreferCoherent]));
     ASSERT(mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedPreferCoherent] !=
@@ -2133,7 +2128,7 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
     requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
     preferredFlags = 0;
     ANGLE_VK_TRY(context,
-                 mAllocator.findMemoryTypeIndexForBufferInfo(
+                 mBufferAllocator.findMemoryTypeIndexForBufferInfo(
                      createInfo, requiredFlags, preferredFlags, persistentlyMapped,
                      &mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedNonCoherent]));
     ASSERT(mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedNonCoherent] !=
@@ -2157,7 +2152,7 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
     createInfo.usage = vk::kVertexBufferUsageFlags;
     requiredFlags    = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     preferredFlags   = 0;
-    ANGLE_VK_TRY(context, mAllocator.findMemoryTypeIndexForBufferInfo(
+    ANGLE_VK_TRY(context, mBufferAllocator.findMemoryTypeIndexForBufferInfo(
                               createInfo, requiredFlags, preferredFlags, persistentlyMapped,
                               &mDeviceLocalVertexConversionBufferMemoryTypeIndex));
     ASSERT(mDeviceLocalVertexConversionBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
@@ -2176,6 +2171,85 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
          static_cast<size_t>(mPhysicalDeviceProperties.limits.nonCoherentAtomSize),
          static_cast<size_t>(defaultBufferMemoryRequirements.alignment)});
     ASSERT(gl::isPow2(mVertexConversionBufferAlignment));
+
+    return angle::Result::Continue;
+}
+
+angle::Result Renderer::initializeImageMemoryAllocator(vk::Context *context)
+{
+    // To minimize fragmentation in the VMA image suballocation, we should account for the possible
+    // overhead from images on some platforms. If such an overhead exists, we add extra space to the
+    // VMA image suballocation blocks to account for them.
+    //
+    // The large block size will be set to an amount in which eight single-level images with the
+    // theoretical size of 1/8 of the large block can be suballocated without the need to allocate a
+    // new block. To achieve this, we create a temporary image with such expected size to check the
+    // overhead. If there is no overhead for each image, no extra space will be added to the VMA
+    // image blocks either.
+    constexpr VkExtent3D testImageExtents = {256, 512, 1};
+    constexpr VkFormat testImageFormat    = VK_FORMAT_R8G8B8A8_UNORM;
+    constexpr uint32_t kRGBA8PixelSize    = 4;
+    constexpr VkDeviceSize expectedTestImageSize =
+        testImageExtents.width * testImageExtents.height * testImageExtents.depth * kRGBA8PixelSize;
+
+    constexpr VkDeviceSize kExpectedSuballocationCount = 8;
+    ASSERT(kExpectedSuballocationCount == mPreferredLargeHeapBlockSize / expectedTestImageSize);
+
+    // Create a temporary image with the theoretical size of 1/8 of the VMA image block.
+    VkImageCreateInfo createInfo = {};
+    createInfo.sType             = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    createInfo.flags             = 0;
+    createInfo.imageType         = VK_IMAGE_TYPE_2D;
+    createInfo.format            = testImageFormat;
+    createInfo.extent            = testImageExtents;
+    createInfo.mipLevels         = 1;
+    createInfo.arrayLayers       = 1;
+    createInfo.samples           = VK_SAMPLE_COUNT_1_BIT;
+    createInfo.tiling            = VK_IMAGE_TILING_OPTIMAL;
+    createInfo.usage             = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    createInfo.sharingMode       = VK_SHARING_MODE_EXCLUSIVE;
+    createInfo.queueFamilyIndexCount = 0;
+    createInfo.pQueueFamilyIndices   = nullptr;
+    createInfo.initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
+    // TODO: Add more usage?
+
+    vk::DeviceScoped<vk::Image> tempImage(mDevice);
+    tempImage.get().init(mDevice, createInfo);
+
+    // The VMA image block size is fine-tuned based on the memory requirement of the test image.
+    VkMemoryRequirements defaultImageMemoryRequirements;
+    tempImage.get().getMemoryRequirements(mDevice, &defaultImageMemoryRequirements);
+    VkDeviceSize actualTestImageSize = defaultImageMemoryRequirements.size;
+    VkDeviceSize imageAlignment      = defaultImageMemoryRequirements.alignment;
+    ASSERT(expectedTestImageSize <= actualTestImageSize);
+
+    VkDeviceSize preferredLargeImageBlockSize =
+        roundUp(actualTestImageSize, imageAlignment) * kExpectedSuballocationCount;
+    VkDeviceSize imageOverhead = actualTestImageSize - expectedTestImageSize;
+    if (imageOverhead > 0)
+    {
+        VkDeviceSize extraBlockOverhead = imageAlignment * kExpectedSuballocationCount;
+        preferredLargeImageBlockSize += extraBlockOverhead;
+    }
+
+    // Initialize the VMA image allocator based on the new preferred image block size.
+    ANGLE_VK_TRY(context,
+                 mImageAllocator.init(mPhysicalDevice, mDevice, mInstance,
+                                      mApplicationInfo.apiVersion, preferredLargeImageBlockSize));
+    return angle::Result::Continue;
+}
+
+angle::Result Renderer::initializeMemoryAllocators(vk::Context *context)
+{
+    // TODO: Update this comment?
+    // This number matches Chromium and was picked by looking at memory usage of
+    // Android apps. The allocator will start making blocks at 1/8 the max size
+    // and builds up block size as needed before capping at the max set here.
+    mPreferredLargeHeapBlockSize = 4 * 1024 * 1024;
+
+    // Create buffer and image VMA allocators
+    ANGLE_TRY(initializeBufferMemoryAllocator(context));
+    ANGLE_TRY(initializeImageMemoryAllocator(context));
 
     return angle::Result::Continue;
 }
@@ -3570,7 +3644,7 @@ angle::Result Renderer::createDeviceAndQueue(vk::Context *context, uint32_t queu
     }
     mSupportedVulkanPipelineStageMask = ~unsupportedStages;
 
-    ANGLE_TRY(initializeMemoryAllocator(context));
+    ANGLE_TRY(initializeMemoryAllocators(context));
 
     // Log the memory heap stats when the device has been initialized (when debugging).
     mMemoryAllocationTracker.onDeviceInit();
@@ -5292,10 +5366,11 @@ void Renderer::outputVmaStatString()
     // Output the VMA stats string
     // This JSON string can be passed to VmaDumpVis.py to generate a visualization of the
     // allocations the VMA has performed.
+    // TODO: Do the same for images.
     char *statsString;
-    mAllocator.buildStatsString(&statsString, true);
+    mBufferAllocator.buildStatsString(&statsString, true);
     INFO() << std::endl << statsString << std::endl;
-    mAllocator.freeStatsString(statsString);
+    mBufferAllocator.freeStatsString(statsString);
 }
 
 angle::Result Renderer::queueSubmitOneOff(vk::Context *context,
@@ -5977,7 +6052,7 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(
     ASSERT(image && image->valid());
     ASSERT(allocationOut && !allocationOut->valid());
     Renderer *renderer         = context->getRenderer();
-    const Allocator &allocator = renderer->getAllocator();
+    const Allocator &allocator = renderer->getImageAllocator();
 
     // Avoid device-local and host-visible combinations if possible. Here, "preferredFlags" is
     // expected to be the same as "requiredFlags" except in the device-local bit.
@@ -6015,7 +6090,7 @@ VkResult ImageMemorySuballocator::mapMemoryAndInitWithNonZeroValue(Renderer *ren
                                                                    VkMemoryPropertyFlags flags)
 {
     ASSERT(allocation && allocation->valid());
-    const Allocator &allocator = renderer->getAllocator();
+    const Allocator &allocator = renderer->getImageAllocator();
 
     void *mappedMemoryData;
     VkResult result = vma::MapMemory(allocator.getHandle(), allocation->mHandle, &mappedMemoryData);

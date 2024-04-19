@@ -472,7 +472,7 @@ void StagingBuffer::destroy(Renderer *renderer)
 {
     VkDevice device = renderer->getDevice();
     mBuffer.destroy(device);
-    mAllocation.destroy(renderer->getAllocator());
+    mAllocation.destroy(renderer->getBufferAllocator());
     mSize = 0;
 }
 
@@ -492,7 +492,7 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
     Renderer *renderer         = context->getRenderer();
-    const Allocator &allocator = renderer->getAllocator();
+    const Allocator &allocator = renderer->getBufferAllocator();
 
     uint32_t memoryTypeIndex = 0;
     ANGLE_VK_TRY(context,
@@ -739,7 +739,8 @@ void GarbageObject::destroy(Renderer *renderer)
             vkDestroyQueryPool(device, (VkQueryPool)mHandle, nullptr);
             break;
         case HandleType::Allocation:
-            vma::FreeMemory(renderer->getAllocator().getHandle(), (VmaAllocation)mHandle);
+            // TODO: Is it only images?
+            vma::FreeMemory(renderer->getImageAllocator().getHandle(), (VmaAllocation)mHandle);
             break;
         default:
             UNREACHABLE();
