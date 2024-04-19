@@ -2609,12 +2609,20 @@ void ProgramExecutable::setUniform1fv(UniformLocation location, GLsizei count, c
 
 void ProgramExecutable::setUniform2fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 2, &rx::ProgramExecutableImpl::setUniform2fv>(location, count, v);
+    size_t copySz = count * sizeof(GLfloat) * 2;
+    GLint offs    = (GLint)mUniformData.size();
+    mUniformData.resize(mUniformData.size() + copySz);
+    memcpy(mUniformData.data() + offs, v, copySz);
+    mUniformEntries.emplace_back(location.value, count, offs);
 }
 
 void ProgramExecutable::setUniform3fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 3, &rx::ProgramExecutableImpl::setUniform3fv>(location, count, v);
+    size_t copySz = count * sizeof(GLfloat) * 3;
+    GLint offs    = (GLint)mUniformData.size();
+    mUniformData.resize(mUniformData.size() + copySz);
+    memcpy(mUniformData.data() + offs, v, copySz);
+    mUniformEntries.emplace_back(location.value, count, offs);
 }
 
 void ProgramExecutable::setUniform4fv(UniformLocation location, GLsizei count, const GLfloat *v)

@@ -3487,7 +3487,6 @@ void GL_APIENTRY GL_Uniform2f(GLint location, GLfloat v0, GLfloat v1)
     if (context)
     {
         UniformLocation locationPacked = PackParam<UniformLocation>(location);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateUniform2f(context, angle::EntryPoint::GLUniform2f, locationPacked, v0, v1));
@@ -3593,7 +3592,6 @@ void GL_APIENTRY GL_Uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2
     if (context)
     {
         UniformLocation locationPacked = PackParam<UniformLocation>(location);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() || ValidateUniform3f(context, angle::EntryPoint::GLUniform3f,
                                                             locationPacked, v0, v1, v2));
