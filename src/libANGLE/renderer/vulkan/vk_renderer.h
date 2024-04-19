@@ -208,7 +208,8 @@ class Renderer : angle::NonCopyable
     const VkPhysicalDeviceFeatures2KHR &getEnabledFeatures() const { return mEnabledFeatures; }
     VkDevice getDevice() const { return mDevice; }
 
-    const vk::Allocator &getAllocator() const { return mAllocator; }
+    const vk::Allocator &getBufferAllocator() const { return mBufferAllocator; }
+    const vk::Allocator &getImageAllocator() const { return mImageAllocator; }
     vk::ImageMemorySuballocator &getImageMemorySuballocator() { return mImageMemorySuballocator; }
 
     angle::Result checkQueueForSurfacePresent(vk::Context *context,
@@ -805,8 +806,10 @@ class Renderer : angle::NonCopyable
     bool hasFormatFeatureBits(angle::FormatID formatID,
                               const VkFormatFeatureFlags featureBits) const;
 
-    // Initialize VMA allocator and buffer suballocator related data.
-    angle::Result initializeMemoryAllocator(vk::Context *context);
+    // Initialize VMA allocators and buffer suballocator related data.
+    angle::Result initializeMemoryAllocators(vk::Context *context);
+    angle::Result initializeBufferMemoryAllocator(vk::Context *context);
+    angle::Result initializeImageMemoryAllocator(vk::Context *context);
 
     // Query and cache supported fragment shading rates
     void queryAndCacheFragmentShadingRates();
@@ -952,7 +955,8 @@ class Renderer : angle::NonCopyable
     // A cache of VkFormatProperties as queried from the device over time.
     mutable angle::FormatMap<VkFormatProperties> mFormatProperties;
 
-    vk::Allocator mAllocator;
+    vk::Allocator mBufferAllocator;
+    vk::Allocator mImageAllocator;
 
     // Used to allocate memory for images using VMA, utilizing suballocation.
     vk::ImageMemorySuballocator mImageMemorySuballocator;
@@ -1172,7 +1176,7 @@ void DestroyGarbage(Renderer *renderer, vk::Allocation *object, ArgsT... objects
 {
     if (object->valid())
     {
-        object->destroy(renderer->getAllocator());
+        object->destroy(renderer->getImageAllocator());
     }
     DestroyGarbage(renderer, objectsIn...);
 }

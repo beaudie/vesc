@@ -292,7 +292,7 @@ vk::BufferPool *ShareGroupVk::getDefaultBufferPool(vk::Renderer *renderer,
 {
     if (!mDefaultBufferPools[memoryTypeIndex])
     {
-        const vk::Allocator &allocator = renderer->getAllocator();
+        const vk::Allocator &allocator = renderer->getBufferAllocator();
         VkBufferUsageFlags usageFlags  = GetDefaultBufferUsageFlags(renderer);
 
         VkMemoryPropertyFlags memoryPropertyFlags;

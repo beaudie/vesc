@@ -3577,7 +3577,7 @@ void BufferPool::pruneEmptyBuffers(Renderer *renderer)
 VkResult BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes)
 {
     Renderer *renderer         = context->getRenderer();
-    const Allocator &allocator = renderer->getAllocator();
+    const Allocator &allocator = renderer->getBufferAllocator();
 
     VkDeviceSize heapSize =
         renderer->getMemoryProperties().getHeapSizeForMemoryType(mMemoryTypeIndex);
@@ -3666,7 +3666,7 @@ VkResult BufferPool::allocateBuffer(Context *context,
         createInfo.pQueueFamilyIndices   = nullptr;
 
         VkMemoryPropertyFlags memoryPropertyFlags;
-        const Allocator &allocator = context->getRenderer()->getAllocator();
+        const Allocator &allocator = context->getRenderer()->getBufferAllocator();
         allocator.getMemoryTypeProperties(mMemoryTypeIndex, &memoryPropertyFlags);
 
         DeviceScoped<Buffer> buffer(context->getDevice());
@@ -4993,7 +4993,7 @@ angle::Result BufferHelper::init(Context *context,
                                  VkMemoryPropertyFlags memoryPropertyFlags)
 {
     Renderer *renderer         = context->getRenderer();
-    const Allocator &allocator = renderer->getAllocator();
+    const Allocator &allocator = renderer->getBufferAllocator();
 
     initializeBarrierTracker(context);
 
@@ -6491,7 +6491,7 @@ void ImageHelper::destroy(Renderer *renderer)
 
     mImage.destroy(device);
     mDeviceMemory.destroy(device);
-    mVmaAllocation.destroy(renderer->getAllocator());
+    mVmaAllocation.destroy(renderer->getImageAllocator());
     mCurrentLayout        = ImageLayout::Undefined;
     mImageType            = VK_IMAGE_TYPE_2D;
     mLayerCount           = 0;
