@@ -723,13 +723,13 @@ class AtomicRefCounted : angle::NonCopyable
     void addRef()
     {
         ASSERT(mRefCount != std::numeric_limits<uint32_t>::max());
-        mRefCount.fetch_add(1, std::memory_order_acq_rel);
+        mRefCount.fetch_add(1, std::memory_order_relaxed);
     }
 
     void releaseRef()
     {
         ASSERT(isReferenced());
-        mRefCount.fetch_sub(1, std::memory_order_acq_rel);
+        mRefCount.fetch_sub(1, std::memory_order_relaxed);
     }
 
     unsigned int getAndReleaseRef()
@@ -738,7 +738,7 @@ class AtomicRefCounted : angle::NonCopyable
         return mRefCount.fetch_sub(1, std::memory_order_acq_rel);
     }
 
-    bool isReferenced() const { return mRefCount.load(std::memory_order_consume) != 0; }
+    bool isReferenced() const { return mRefCount.load(std::memory_order_relaxed) != 0; }
 
     T &get() { return mObject; }
     const T &get() const { return mObject; }

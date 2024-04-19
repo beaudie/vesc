@@ -1912,7 +1912,7 @@ angle::Result Renderer::initialize(vk::Context *context,
     // Fine grain control of validation layer features
     const char *name                     = "VK_LAYER_KHRONOS_validation";
     const VkBool32 setting_validate_core = VK_TRUE;
-    const VkBool32 setting_validate_sync = IsAndroid() ? VK_FALSE : VK_TRUE;
+    const VkBool32 setting_validate_sync = IsAndroid() ? VK_FALSE : VK_FALSE;
     const VkBool32 setting_thread_safety = VK_TRUE;
     // http://anglebug.com/7050 - Shader validation caching is broken on Android
     const VkBool32 setting_check_shaders = IsAndroid() ? VK_FALSE : VK_TRUE;
