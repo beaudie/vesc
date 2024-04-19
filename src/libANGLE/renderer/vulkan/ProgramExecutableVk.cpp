@@ -2006,6 +2006,40 @@ angle::Result ProgramExecutableVk::updateUniforms(
     TransformFeedbackVk *transformFeedbackVk)
 {
     ASSERT(hasDirtyUniforms());
+    {
+        for (size_t i = 0; i < mExecutable->mUniformEntries.size(); i++)
+        {
+            GLint location   = mExecutable->mUniformEntries[i].location;
+            GLint count      = mExecutable->mUniformEntries[i].count;
+            const GLfloat *v = (GLfloat *)(mExecutable->mUniformData.data() +
+                                           mExecutable->mUniformEntries[i].offset);
+
+            const gl::VariableLocation &locationInfo = mExecutable->getUniformLocations()[location];
+            const gl::LinkedUniform &linkedUniform = mExecutable->getUniforms()[locationInfo.index];
+
+            ASSERT(!linkedUniform.isSampler());
+
+            for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
+            {
+                DefaultUniformBlockVk &uniformBlock   = *mDefaultUniformBlocks[shaderType];
+                const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
+
+                // Assume an offset of -1 means the block is unused.
+                if (layoutInfo.offset == -1)
+                {
+                    continue;
+                }
+
+                const GLint componentCount = linkedUniform.getElementComponents();
+                UpdateDefaultUniformBlock(count, locationInfo.arrayIndex, componentCount, v,
+                                          layoutInfo, &uniformBlock.uniformData);
+                mDefaultUniformBlocksDirty.set(shaderType);
+            }
+        }
+
+        mExecutable->mUniformEntries.clear();
+        mExecutable->mUniformData.clear();
+    }
 
     vk::BufferHelper *defaultUniformBuffer;
     bool anyNewBufferAllocated          = false;

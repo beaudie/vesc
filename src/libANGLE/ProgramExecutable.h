@@ -644,6 +644,28 @@ class ProgramExecutable final : public angle::Subject
     void copyOutputsFromProgram(const ProgramExecutable &executable);
     void copyUniformsFromProgramMap(const ShaderMap<SharedProgramExecutable> &executables);
 
+    ANGLE_INLINE void setUniform2f(UniformLocation location, const GLfloat x, const GLfloat y)
+    {
+        GLint offs = (GLint)mUniformData.size();
+        mUniformData.resize(mUniformData.size() + 2 * sizeof(GLfloat));
+        *(GLfloat *)(mUniformData.data() + offs)                   = x;
+        *(GLfloat *)(mUniformData.data() + offs + sizeof(GLfloat)) = y;
+        mUniformEntries.emplace_back(location.value, 1, offs);
+    }
+
+    ANGLE_INLINE void setUniform3f(UniformLocation location,
+                                   const GLfloat x,
+                                   const GLfloat y,
+                                   const GLfloat z)
+    {
+        GLint offs = (GLint)mUniformData.size();
+        mUniformData.resize(mUniformData.size() + 3 * sizeof(GLfloat));
+        *(GLfloat *)(mUniformData.data() + offs)                       = x;
+        *(GLfloat *)(mUniformData.data() + offs + sizeof(GLfloat))     = y;
+        *(GLfloat *)(mUniformData.data() + offs + 2 * sizeof(GLfloat)) = z;
+        mUniformEntries.emplace_back(location.value, 1, offs);
+    }
+
     void setUniform1fv(UniformLocation location, GLsizei count, const GLfloat *v);
     void setUniform2fv(UniformLocation location, GLsizei count, const GLfloat *v);
     void setUniform3fv(UniformLocation location, GLsizei count, const GLfloat *v);
@@ -993,6 +1015,17 @@ class ProgramExecutable final : public angle::Subject
     // been modified.
     UniformBufferBindingArray<ProgramUniformBlockMask> mUniformBufferBindingToUniformBlocks;
 
+  public:
+    mutable angle::FastVector<uint8_t, 1024> mUniformData;
+    struct UniformEntry
+    {
+        GLint location;
+        GLsizei count;
+        GLint offset;
+    };
+    mutable angle::FastVector<UniformEntry, 128> mUniformEntries;
+
+  private:
     // Cache for sampler validation
     mutable Optional<bool> mCachedValidateSamplersResult;
 
