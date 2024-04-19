@@ -1688,6 +1688,14 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
             vk::AddToPNextChain(&swapchainInfo, &compatibleModesInfo);
         }
+
+        // Vulkan spec says "The per-present mode image counts may be less-than or greater-than the
+        // image counts returned when VkSurfacePresentModeEXT is not provided.". Use the per present
+        // mode imageCount here. Otherwise we may get into
+        // VUID-VkSwapchainCreateInfoKHR-presentMode-02839.
+        mSurfaceCaps                = surfaceCaps2.surfaceCapabilities;
+        mMinImageCount              = GetMinImageCount(mSurfaceCaps);
+        swapchainInfo.minImageCount = mMinImageCount;
     }
     else
     {
