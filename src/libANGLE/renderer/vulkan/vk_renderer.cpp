@@ -4679,7 +4679,8 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // For some reason, if we use cached staging buffer for read pixels, a lot of tests fail on ARM,
     // even though we do have invlaid() call there. Temporary keep the old behavior for ARM until we
     // can root cause it.
-    ANGLE_FEATURE_CONDITION(&mFeatures, requireCachedBitForStagingBuffer, !isARM && !isPowerVR);
+    ANGLE_FEATURE_CONDITION(&mFeatures, requireCachedBitForStagingBuffer,
+                            true /*!isARM && !isPowerVR*/);
 
     // Multiple dynamic state issues on ARM have been fixed.
     // http://issuetracker.google.com/285124778
