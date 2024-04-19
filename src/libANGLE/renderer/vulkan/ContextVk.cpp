@@ -7247,8 +7247,8 @@ angle::Result ContextVk::initImageAllocation(vk::ImageHelper *imageHelper,
     {
         uint32_t pendingMemoryTypeIndex;
         if (vma::FindMemoryTypeIndexForImageInfo(
-                mRenderer->getAllocator().getHandle(), &imageHelper->getVkImageCreateInfo(), flags,
-                flags, allocateDedicatedMemory, &pendingMemoryTypeIndex) == VK_SUCCESS)
+                mRenderer->getImageAllocator().getHandle(), &imageHelper->getVkImageCreateInfo(),
+                flags, flags, allocateDedicatedMemory, &pendingMemoryTypeIndex) == VK_SUCCESS)
         {
             mRenderer->getMemoryAllocationTracker()->setPendingMemoryAlloc(
                 allocationType, memoryRequirements.size, pendingMemoryTypeIndex);
