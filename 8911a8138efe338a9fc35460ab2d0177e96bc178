@@ -54,6 +54,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8ca821f9_4059bd1e",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-04-20T06:21:33Z",
+      "side": 1,
+      "message": "The spec says:\n\u003e The result of clearing integer color buffers with `glClear` is undefined.",
+      "parentUuid": "7f317634_87b34e6b",
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3810dc9a_7fe6a878",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-04-20T06:21:33Z",
+      "side": 1,
+      "message": "This branch is skipped when all uninitialized attachments are enabled and used. If some of them use integer formats, the `glClear` call below would cause UB.",
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9073a685_de0dee71",
         "filename": "src/libANGLE/renderer/gl/SurfaceGL.cpp",
         "patchSetId": 13
