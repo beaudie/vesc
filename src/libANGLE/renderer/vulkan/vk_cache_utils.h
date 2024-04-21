@@ -984,17 +984,9 @@ class GraphicsPipelineDesc final
 constexpr size_t kGraphicsPipelineDescSize = sizeof(GraphicsPipelineDesc);
 static_assert(kGraphicsPipelineDescSize == kGraphicsPipelineDescSumOfSizes, "Size mismatch");
 
-constexpr uint32_t kMaxDescriptorSetLayoutBindings =
-    std::max(gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES,
-             gl::IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS);
-
+constexpr size_t kDefaultDescriptorSetLayoutCount = 4;
 using DescriptorSetLayoutBindingVector =
-    angle::FixedVector<VkDescriptorSetLayoutBinding, kMaxDescriptorSetLayoutBindings>;
-
-// Technically this needs to only be kMaxDescriptorSetLayoutBindings but due to struct padding
-// issues round up size to 64.
-constexpr uint32_t kMaxDescriptorSetLayoutCount = roundUpPow2(kMaxDescriptorSetLayoutBindings, 64u);
-using DescriptorSetLayoutIndexMask              = angle::BitSet<kMaxDescriptorSetLayoutCount>;
+    angle::FastVector<VkDescriptorSetLayoutBinding, kDefaultDescriptorSetLayoutCount>;
 
 // A packed description of a descriptor set layout. Use similarly to RenderPassDesc and
 // GraphicsPipelineDesc. Currently we only need to differentiate layouts based on sampler and ubo
@@ -1018,7 +1010,7 @@ class DescriptorSetLayoutDesc final
 
     void unpackBindings(DescriptorSetLayoutBindingVector *bindings) const;
 
-    bool empty() const { return !mValidDescriptorSetLayoutIndexMask.any(); }
+    bool empty() const { return mBindingIndices.empty(); }
 
   private:
     // There is a small risk of an issue if the sampler cache is evicted but not the descriptor
@@ -1029,28 +1021,36 @@ class DescriptorSetLayoutDesc final
         uint8_t type;    // Stores a packed VkDescriptorType descriptorType.
         uint8_t stages;  // Stores a packed VkShaderStageFlags.
         uint16_t count;  // Stores a packed uint32_t descriptorCount.
+
+        bool operator==(const PackedDescriptorSetBinding &other) const
+        {
+            return count == other.count && type == other.type && stages == other.stages;
+        }
     };
 
     // 1x 32bit
     static_assert(sizeof(PackedDescriptorSetBinding) == 4, "Unexpected size");
 
-    // This is a compact representation of a descriptor set layout.
-    std::array<PackedDescriptorSetBinding, kMaxDescriptorSetLayoutBindings>
-        mPackedDescriptorSetLayout;
-    gl::ActiveTextureArray<VkSampler> mImmutableSamplers;
-
-    DescriptorSetLayoutIndexMask mValidDescriptorSetLayoutIndexMask;
+    angle::FastVector<size_t, kDefaultDescriptorSetLayoutCount> mBindingIndices;
+    angle::FastVector<PackedDescriptorSetBinding, kDefaultDescriptorSetLayoutCount>
+        mDescriptorSetLayouts;
+    angle::FastVector<VkSampler, kDefaultDescriptorSetLayoutCount> mImmutableSamplers;
 };
 
 // The following are for caching descriptor set layouts. Limited to max three descriptor set
 // layouts. This can be extended in the future.
-constexpr size_t kMaxDescriptorSetLayouts = 3;
+constexpr size_t kMaxDescriptorSetLayouts = ToUnderlying(DescriptorSetIndex::EnumCount);
 
 struct PackedPushConstantRange
 {
     uint8_t offset;
     uint8_t size;
     uint16_t stageMask;
+
+    bool operator==(const PackedPushConstantRange &other) const
+    {
+        return stageMask == other.stageMask && size == other.size && offset == other.offset;
+    }
 };
 
 static_assert(sizeof(PackedPushConstantRange) == sizeof(uint32_t), "Unexpected Size");
