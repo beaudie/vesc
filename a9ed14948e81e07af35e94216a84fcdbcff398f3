@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de81b16b_574fa5a2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-21T16:50:50Z",
+      "side": 1,
+      "message": "need to remove this",
+      "range": {
+        "startLine": 994,
+        "startChar": 0,
+        "endLine": 997,
+        "endChar": 94
+      },
+      "revId": "a9ed14948e81e07af35e94216a84fcdbcff398f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d863c91f_2638230f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-21T16:50:50Z",
+      "side": 1,
+      "message": "if we have a guesstimate from all the trace workloads i can change this into a `angle::FastVector`. im leaning toward `4` as initial count?",
+      "revId": "a9ed14948e81e07af35e94216a84fcdbcff398f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
