@@ -1029,28 +1029,36 @@ class DescriptorSetLayoutDesc final
         uint8_t type;    // Stores a packed VkDescriptorType descriptorType.
         uint8_t stages;  // Stores a packed VkShaderStageFlags.
         uint16_t count;  // Stores a packed uint32_t descriptorCount.
+
+        bool operator==(const PackedDescriptorSetBinding &other) const
+        {
+            return count == other.count && type == other.type && stages == other.stages;
+        }
     };
 
     // 1x 32bit
     static_assert(sizeof(PackedDescriptorSetBinding) == 4, "Unexpected size");
 
     // This is a compact representation of a descriptor set layout.
-    std::array<PackedDescriptorSetBinding, kMaxDescriptorSetLayoutBindings>
-        mPackedDescriptorSetLayout;
-    gl::ActiveTextureArray<VkSampler> mImmutableSamplers;
-
+    std::vector<PackedDescriptorSetBinding> mPackedDescriptorSetLayout;
+    std::vector<VkSampler> mImmutableSamplers;
     DescriptorSetLayoutIndexMask mValidDescriptorSetLayoutIndexMask;
 };
 
 // The following are for caching descriptor set layouts. Limited to max three descriptor set
 // layouts. This can be extended in the future.
-constexpr size_t kMaxDescriptorSetLayouts = 3;
+constexpr size_t kMaxDescriptorSetLayouts = ToUnderlying(DescriptorSetIndex::EnumCount);
 
 struct PackedPushConstantRange
 {
     uint8_t offset;
     uint8_t size;
     uint16_t stageMask;
+
+    bool operator==(const PackedPushConstantRange &other) const
+    {
+        return stageMask == other.stageMask && size == other.size && offset == other.offset;
+    }
 };
 
 static_assert(sizeof(PackedPushConstantRange) == sizeof(uint32_t), "Unexpected Size");
