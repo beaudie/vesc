@@ -4274,10 +4274,8 @@ bool operator==(const AttachmentOpsArray &lhs, const AttachmentOpsArray &rhs)
 
 // DescriptorSetLayoutDesc implementation.
 DescriptorSetLayoutDesc::DescriptorSetLayoutDesc()
-    : mPackedDescriptorSetLayout{}, mValidDescriptorSetLayoutIndexMask()
-{
-    mImmutableSamplers.fill(VK_NULL_HANDLE);
-}
+    : mBindingIndices{}, mDescriptorSetLayouts{}, mImmutableSamplers{}
+{}
 
 DescriptorSetLayoutDesc::~DescriptorSetLayoutDesc() = default;
 
@@ -4288,20 +4286,26 @@ DescriptorSetLayoutDesc &DescriptorSetLayoutDesc::operator=(const DescriptorSetL
 
 size_t DescriptorSetLayoutDesc::hash() const
 {
-    size_t genericHash = angle::ComputeGenericHash(mValidDescriptorSetLayoutIndexMask);
-    for (size_t bindingIndex : mValidDescriptorSetLayoutIndexMask)
-    {
-        genericHash ^= angle::ComputeGenericHash(mPackedDescriptorSetLayout[bindingIndex]) ^
-                       angle::ComputeGenericHash(mImmutableSamplers[bindingIndex]);
-    }
-    return genericHash;
+    size_t validDescriptorSetLayoutCount = mBindingIndices.size();
+    ASSERT(mDescriptorSetLayouts.size() == validDescriptorSetLayoutCount);
+    ASSERT(mImmutableSamplers.size() == validDescriptorSetLayoutCount);
+
+    size_t bindingIndicesHash = angle::ComputeGenericHash(
+        mBindingIndices.data(), validDescriptorSetLayoutCount * sizeof(size_t));
+    size_t descriptorSetLayoutsHash = angle::ComputeGenericHash(
+        mDescriptorSetLayouts.data(),
+        validDescriptorSetLayoutCount * sizeof(PackedDescriptorSetBinding));
+    size_t immutableSamplersHash = angle::ComputeGenericHash(
+        mImmutableSamplers.data(), validDescriptorSetLayoutCount * sizeof(VkSampler));
+
+    return bindingIndicesHash ^ descriptorSetLayoutsHash ^ immutableSamplersHash;
 }
 
 bool DescriptorSetLayoutDesc::operator==(const DescriptorSetLayoutDesc &other) const
 {
-    return memcmp(&mPackedDescriptorSetLayout, &other.mPackedDescriptorSetLayout,
-                  sizeof(mPackedDescriptorSetLayout)) == 0 &&
-           memcmp(&mImmutableSamplers, &other.mImmutableSamplers, sizeof(mImmutableSamplers)) == 0;
+    return mBindingIndices == other.mBindingIndices &&
+           mDescriptorSetLayouts == other.mDescriptorSetLayouts &&
+           mImmutableSamplers == other.mImmutableSamplers;
 }
 
 void DescriptorSetLayoutDesc::update(uint32_t bindingIndex,
@@ -4313,40 +4317,45 @@ void DescriptorSetLayoutDesc::update(uint32_t bindingIndex,
     ASSERT(static_cast<size_t>(descriptorType) < std::numeric_limits<uint16_t>::max());
     ASSERT(count < std::numeric_limits<uint16_t>::max());
 
-    PackedDescriptorSetBinding &packedBinding = mPackedDescriptorSetLayout[bindingIndex];
+    mBindingIndices.push_back(bindingIndex);
 
+    PackedDescriptorSetBinding packedBinding = {};
     SetBitField(packedBinding.type, descriptorType);
     SetBitField(packedBinding.count, count);
     SetBitField(packedBinding.stages, stages);
+    mDescriptorSetLayouts.push_back(std::move(packedBinding));
 
+    VkSampler immutableSamplerHandle = VK_NULL_HANDLE;
     if (immutableSampler)
     {
         ASSERT(count == 1);
-        ASSERT(bindingIndex < gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES);
-
-        mImmutableSamplers[bindingIndex] = immutableSampler->getHandle();
+        immutableSamplerHandle = immutableSampler->getHandle();
     }
-
-    mValidDescriptorSetLayoutIndexMask.set(bindingIndex, count > 0);
+    mImmutableSamplers.push_back(immutableSamplerHandle);
 }
 
 void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *bindings) const
 {
-    for (size_t bindingIndex : mValidDescriptorSetLayoutIndexMask)
+    size_t validDescriptorSetLayoutCount = mBindingIndices.size();
+    ASSERT(mDescriptorSetLayouts.size() == validDescriptorSetLayoutCount);
+    ASSERT(mImmutableSamplers.size() == validDescriptorSetLayoutCount);
+
+    // Unpack all valid descriptor set layouts
+    for (size_t position = 0; position < mBindingIndices.size(); position++)
     {
-        const PackedDescriptorSetBinding &packedBinding = mPackedDescriptorSetLayout[bindingIndex];
+        const PackedDescriptorSetBinding &packedBinding = mDescriptorSetLayouts[position];
         ASSERT(packedBinding.count != 0);
 
         VkDescriptorSetLayoutBinding binding = {};
-        binding.binding                      = static_cast<uint32_t>(bindingIndex);
+        binding.binding                      = static_cast<uint32_t>(mBindingIndices[position]);
         binding.descriptorCount              = packedBinding.count;
         binding.descriptorType               = static_cast<VkDescriptorType>(packedBinding.type);
         binding.stageFlags = static_cast<VkShaderStageFlags>(packedBinding.stages);
-        if (mImmutableSamplers[bindingIndex] != VK_NULL_HANDLE)
+
+        if (mImmutableSamplers[position] != VK_NULL_HANDLE)
         {
             ASSERT(packedBinding.count == 1);
-            ASSERT(bindingIndex < gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES);
-            binding.pImmutableSamplers = &mImmutableSamplers[bindingIndex];
+            binding.pImmutableSamplers = &mImmutableSamplers[position];
         }
 
         bindings->push_back(binding);
@@ -4371,12 +4380,18 @@ PipelineLayoutDesc &PipelineLayoutDesc::operator=(const PipelineLayoutDesc &rhs)
 
 size_t PipelineLayoutDesc::hash() const
 {
-    return angle::ComputeGenericHash(*this);
+    size_t genericHash = angle::ComputeGenericHash(mPushConstantRange);
+    for (const DescriptorSetLayoutDesc &descriptorSetLayoutDesc : mDescriptorSetLayouts)
+    {
+        genericHash ^= descriptorSetLayoutDesc.hash();
+    }
+    return genericHash;
 }
 
 bool PipelineLayoutDesc::operator==(const PipelineLayoutDesc &other) const
 {
-    return memcmp(this, &other, sizeof(PipelineLayoutDesc)) == 0;
+    return mPushConstantRange == other.mPushConstantRange &&
+           mDescriptorSetLayouts == other.mDescriptorSetLayouts;
 }
 
 void PipelineLayoutDesc::updateDescriptorSetLayout(DescriptorSetIndex setIndex,
