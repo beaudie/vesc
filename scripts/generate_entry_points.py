@@ -3059,6 +3059,10 @@ def get_context_lock(api, cmd_name):
     if api == apis.GLES and cmd_name.startswith("glEGLImage"):
         return "SCOPED_EGL_IMAGE_SHARE_CONTEXT_LOCK(context, imagePacked);"
 
+    if api == apis.GLES and cmd_name.startswith(
+            "glUniform") and "Matrix" not in cmd_name and cmd_name != "glUniform1iv":
+        return "// Note: no share context lock"
+
     return "SCOPED_SHARE_CONTEXT_LOCK(context);"
 
 

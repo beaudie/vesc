@@ -1554,7 +1554,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     }
 
     ProgramExecutableVk *executableVk = vk::GetImpl(mState.getProgramExecutable());
-    if (executableVk->hasDirtyUniforms())
+    if (executableVk->hasDirtyUniforms() || !mState.getProgramExecutable()->mUniformData.empty())
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_UNIFORMS);
     }
