@@ -72,6 +72,7 @@ void ProgramPipelineState::useProgramStage(const Context *context,
             InstallExecutable(context, shaderProgram->getSharedExecutable(),
                               &mExecutable->mPPOProgramExecutables[shaderType]);
         }
+        mExecutable->mIsPPO = true;
         shaderProgram->addRef();
     }
     else
@@ -501,6 +502,7 @@ angle::Result ProgramPipeline::link(const Context *context)
     SharedProgramExecutable newExecutable =
         std::make_shared<ProgramExecutable>(context->getImplementation(), &mState.mInfoLog);
     newExecutable->mPPOProgramExecutables = std::move(mState.mExecutable->mPPOProgramExecutables);
+    newExecutable->mIsPPO                 = mState.mExecutable->mIsPPO;
 
     InstallExecutable(context, newExecutable, &mState.mExecutable);
     onStateChange(angle::SubjectMessage::ProgramUnlinked);
