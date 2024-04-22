@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1f95dc4_13012687",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4292,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-22T12:51:40Z",
+      "side": 1,
+      "message": "`validDescriptorSetLayoutCount` wouldn\u0027t help uniquely qualify things be itself but i can add it to the hash if there is a valid reason",
+      "parentUuid": "e3b61ad2_4cb1e263",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab548b0b_15d89548",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2cb50c92_4c7d67b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4320,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-22T12:51:40Z",
+      "side": 1,
+      "message": "\u003e but it\u0027s making the ordering of update matter...`mBindingIndices.back() \u003c bindingIndex`\n\nthe reason i switched to recording indices themselves is because apps (dEQP) in this case call into `update` with out-of-order bindingIndex (1 -\u003e 2 -\u003e 0)\n\n\u003e so we don\u0027t end up with unnecessary cache misses\n\u003e It also makes sure we never call update in the middle after the fact (which breaks this model)\n\nthen we need to change to a \"bindingIndex \u003c-\u003e PackedDescriptorSetBinding\" ordered map",
+      "parentUuid": "ab548b0b_15d89548",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb6556df_95af5189",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 7
@@ -48,6 +84,24 @@
       "writtenOn": "2024-04-22T09:31:48Z",
       "side": 1,
       "message": "I think there\u0027s a confusion here. This is not about how many desc sets there are, but rather how many bindings in each desc set there could be. Having 10~20 textures in one draw is probably very common, so this value is too small.\n\nThe previous name was also clearer, this could be `kDefaultDescriptSetLayoutBindings`",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57e9c885_ea949643",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-22T12:51:40Z",
+      "side": 1,
+      "message": "\u003e I think there\u0027s a confusion here\n\nagree, naming could have been better `kDefaultDescriptorSetLayoutBindingsCount`\n\n\u003e Having 10~20 textures in one draw is probably very common, so this value is too small\n\nim do not have data to confirm this, so open to suggestions",
+      "parentUuid": "bb6556df_95af5189",
       "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e25d1634_115395e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-22T12:51:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ab661bc_23591ed4",
+      "range": {
+        "startLine": 1034,
+        "startChar": 22,
+        "endLine": 1034,
+        "endChar": 28
+      },
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a68fc433_64c0d141",
@@ -88,6 +166,24 @@
       "writtenOn": "2024-04-22T09:31:48Z",
       "side": 1,
       "message": "Related to the same comment on `kDefaultDescriptorSetLayoutCount`, this is not the list of layouts, but rather the list of bindings inside the layout. `mDescriptSetLayout` is more appropriate.",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e8bf56d_8af3029a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-22T12:51:40Z",
+      "side": 1,
+      "message": "will change this to `mDescriptorSetLayoutBindings` as well",
+      "parentUuid": "a68fc433_64c0d141",
       "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
