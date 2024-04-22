@@ -120,6 +120,9 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     void destroy(const gl::Context *context) override;
 
+    bool supportsUnifromBatching() override { return true; }
+    void flushBatchedUniforms() override;
+
     void save(ContextVk *contextVk, bool isSeparable, gl::BinaryOutputStream *stream);
     angle::Result load(ContextVk *contextVk,
                        bool isSeparable,

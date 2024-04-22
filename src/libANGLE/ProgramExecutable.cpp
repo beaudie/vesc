@@ -732,6 +732,7 @@ ProgramExecutable::ProgramExecutable(rx::GLImplFactory *factory, InfoLog *infoLo
 {
     memset(&mPod, 0, sizeof(mPod));
     reset();
+    mSupportsUniformBatching = mImplementation->supportsUnifromBatching();
 }
 
 ProgramExecutable::~ProgramExecutable()
@@ -2594,6 +2595,7 @@ GLuint ProgramExecutable::getImageUniformBinding(const VariableLocation &uniform
 
 template <typename UniformT,
           GLint UniformSize,
+          GLenum entryPointType,
           void (rx::ProgramExecutableImpl::*SetUniformFunc)(GLint, GLsizei, const UniformT *)>
 void ProgramExecutable::setUniformGeneric(UniformLocation location,
                                           GLsizei count,
@@ -2606,28 +2608,84 @@ void ProgramExecutable::setUniformGeneric(UniformLocation location,
 
     const VariableLocation &locationInfo = mUniformLocations[location.value];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, UniformSize, v);
-    (mImplementation->*SetUniformFunc)(location.value, clampedCount, v);
-    onStateChange(angle::SubjectMessage::ProgramUniformUpdated);
+
+    if (!mSupportsUniformBatching)
+    {
+        (mImplementation->*SetUniformFunc)(location.value, clampedCount, v);
+        onStateChange(angle::SubjectMessage::ProgramUniformUpdated);
+        return;
+    }
+
+    GLint offs = (GLint)mUniformData.size();
+    mUniformData.resize(mUniformData.size() + sizeof(UniformEntry));
+
+    if constexpr (std::is_same<UniformT, GLfloat>::value)
+    {
+        GLint sz = UniformSize * clampedCount * sizeof(GLfloat);
+        mUniformData.resize(mUniformData.size() + sz);
+
+        UniformEntry *p   = (UniformEntry *)(mUniformData.data() + offs);
+        p->type           = UniformEntryType::FLOATV;
+        p->location       = location.value;
+        p->entryPointType = entryPointType;
+        p->varData.count  = clampedCount;
+        p->varData.length = sz;
+        memcpy(&p->varData.data, v, sz);
+    }
+    else if constexpr (std::is_same<UniformT, GLint>::value)
+    {
+        GLint sz = UniformSize * clampedCount * sizeof(GLint);
+        mUniformData.resize(mUniformData.size() + sz);
+
+        UniformEntry *p   = (UniformEntry *)(mUniformData.data() + offs);
+        p->type           = UniformEntryType::INTV;
+        p->location       = location.value;
+        p->entryPointType = entryPointType;
+        p->varData.count  = clampedCount;
+        p->varData.length = sz;
+        memcpy(&p->varData.data, v, sz);
+    }
+    else if constexpr (std::is_same<UniformT, GLuint>::value)
+    {
+        GLint sz = UniformSize * clampedCount * sizeof(GLuint);
+        mUniformData.resize(mUniformData.size() + sz);
+
+        UniformEntry *p   = (UniformEntry *)(mUniformData.data() + offs);
+        p->type           = UniformEntryType::UINTV;
+        p->location       = location.value;
+        p->entryPointType = entryPointType;
+        p->varData.count  = clampedCount;
+        p->varData.length = sz;
+        memcpy(&p->varData.data, v, sz);
+    }
+    else
+    {
+        UNREACHABLE();
+    }
 }
 
 void ProgramExecutable::setUniform1fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 1, &rx::ProgramExecutableImpl::setUniform1fv>(location, count, v);
+    setUniformGeneric<GLfloat, 1, GL_FLOAT, &rx::ProgramExecutableImpl::setUniform1fv>(location,
+                                                                                       count, v);
 }
 
 void ProgramExecutable::setUniform2fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 2, &rx::ProgramExecutableImpl::setUniform2fv>(location, count, v);
+    setUniformGeneric<GLfloat, 2, GL_FLOAT_VEC2, &rx::ProgramExecutableImpl::setUniform2fv>(
+        location, count, v);
 }
 
 void ProgramExecutable::setUniform3fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 3, &rx::ProgramExecutableImpl::setUniform3fv>(location, count, v);
+    setUniformGeneric<GLfloat, 3, GL_FLOAT_VEC3, &rx::ProgramExecutableImpl::setUniform3fv>(
+        location, count, v);
 }
 
 void ProgramExecutable::setUniform4fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 4, &rx::ProgramExecutableImpl::setUniform4fv>(location, count, v);
+    setUniformGeneric<GLfloat, 4, GL_FLOAT_VEC4, &rx::ProgramExecutableImpl::setUniform4fv>(
+        location, count, v);
 }
 
 void ProgramExecutable::setUniform1iv(Context *context,
@@ -2657,37 +2715,44 @@ void ProgramExecutable::setUniform1iv(Context *context,
 
 void ProgramExecutable::setUniform2iv(UniformLocation location, GLsizei count, const GLint *v)
 {
-    setUniformGeneric<GLint, 2, &rx::ProgramExecutableImpl::setUniform2iv>(location, count, v);
+    setUniformGeneric<GLint, 2, GL_INT_VEC2, &rx::ProgramExecutableImpl::setUniform2iv>(location,
+                                                                                        count, v);
 }
 
 void ProgramExecutable::setUniform3iv(UniformLocation location, GLsizei count, const GLint *v)
 {
-    setUniformGeneric<GLint, 3, &rx::ProgramExecutableImpl::setUniform3iv>(location, count, v);
+    setUniformGeneric<GLint, 3, GL_INT_VEC3, &rx::ProgramExecutableImpl::setUniform3iv>(location,
+                                                                                        count, v);
 }
 
 void ProgramExecutable::setUniform4iv(UniformLocation location, GLsizei count, const GLint *v)
 {
-    setUniformGeneric<GLint, 4, &rx::ProgramExecutableImpl::setUniform4iv>(location, count, v);
+    setUniformGeneric<GLint, 4, GL_INT_VEC4, &rx::ProgramExecutableImpl::setUniform4iv>(location,
+                                                                                        count, v);
 }
 
 void ProgramExecutable::setUniform1uiv(UniformLocation location, GLsizei count, const GLuint *v)
 {
-    setUniformGeneric<GLuint, 1, &rx::ProgramExecutableImpl::setUniform1uiv>(location, count, v);
+    setUniformGeneric<GLuint, 1, GL_UNSIGNED_INT, &rx::ProgramExecutableImpl::setUniform1uiv>(
+        location, count, v);
 }
 
 void ProgramExecutable::setUniform2uiv(UniformLocation location, GLsizei count, const GLuint *v)
 {
-    setUniformGeneric<GLuint, 2, &rx::ProgramExecutableImpl::setUniform2uiv>(location, count, v);
+    setUniformGeneric<GLuint, 2, GL_UNSIGNED_INT_VEC2, &rx::ProgramExecutableImpl::setUniform2uiv>(
+        location, count, v);
 }
 
 void ProgramExecutable::setUniform3uiv(UniformLocation location, GLsizei count, const GLuint *v)
 {
-    setUniformGeneric<GLuint, 3, &rx::ProgramExecutableImpl::setUniform3uiv>(location, count, v);
+    setUniformGeneric<GLuint, 3, GL_UNSIGNED_INT_VEC3, &rx::ProgramExecutableImpl::setUniform3uiv>(
+        location, count, v);
 }
 
 void ProgramExecutable::setUniform4uiv(UniformLocation location, GLsizei count, const GLuint *v)
 {
-    setUniformGeneric<GLuint, 4, &rx::ProgramExecutableImpl::setUniform4uiv>(location, count, v);
+    setUniformGeneric<GLuint, 4, GL_UNSIGNED_INT_VEC4, &rx::ProgramExecutableImpl::setUniform4uiv>(
+        location, count, v);
 }
 
 template <typename UniformT,
@@ -2795,6 +2860,10 @@ void ProgramExecutable::getUniformfv(const Context *context,
                                      UniformLocation location,
                                      GLfloat *v) const
 {
+    if (mSupportsUniformBatching && !mUniformData.empty())
+    {
+        mImplementation->flushBatchedUniforms();
+    }
     const VariableLocation &uniformLocation = mUniformLocations[location.value];
     const LinkedUniform &uniform            = mUniforms[uniformLocation.index];
 
@@ -2825,6 +2894,11 @@ void ProgramExecutable::getUniformiv(const Context *context,
                                      UniformLocation location,
                                      GLint *v) const
 {
+    if (mSupportsUniformBatching && !mUniformData.empty())
+    {
+        mImplementation->flushBatchedUniforms();
+    }
+
     const VariableLocation &uniformLocation = mUniformLocations[location.value];
     const LinkedUniform &uniform            = mUniforms[uniformLocation.index];
 
@@ -2855,6 +2929,11 @@ void ProgramExecutable::getUniformuiv(const Context *context,
                                       UniformLocation location,
                                       GLuint *v) const
 {
+    if (mSupportsUniformBatching && !mUniformData.empty())
+    {
+        mImplementation->flushBatchedUniforms();
+    }
+
     const VariableLocation &uniformLocation = mUniformLocations[location.value];
     const LinkedUniform &uniform            = mUniforms[uniformLocation.index];
 

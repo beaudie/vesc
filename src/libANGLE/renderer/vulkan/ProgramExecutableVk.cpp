@@ -2006,6 +2006,51 @@ void ProgramExecutableVk::setAllDefaultUniformsDirty()
     }
 }
 
+void ProgramExecutableVk::flushBatchedUniforms()
+{
+    if (mExecutable->mUniformData.empty())
+    {
+        return;
+    }
+
+    using UniformEntry     = gl::ProgramExecutable::UniformEntry;
+    using UniformEntryType = gl::ProgramExecutable::UniformEntryType;
+    for (size_t offs = 0; offs < mExecutable->mUniformData.size();)
+    {
+        UniformEntry *p = (UniformEntry *)(mExecutable->mUniformData.data() + offs);
+        if (p->type == UniformEntryType::FLOAT)
+        {
+            setUniformImpl(p->location, 1, p->floatData, p->entryPointType);
+            offs += sizeof(UniformEntry);
+        }
+        else if (p->type == UniformEntryType::FLOATV)
+        {
+            setUniformImpl(p->location, p->varData.count, (GLfloat *)&p->varData.data,
+                           p->entryPointType);
+            offs += sizeof(UniformEntry) + p->varData.length;
+        }
+        else if (p->type == UniformEntryType::INTV)
+        {
+            setUniformImpl(p->location, p->varData.count, (GLint *)&p->varData.data,
+                           p->entryPointType);
+            offs += sizeof(UniformEntry) + p->varData.length;
+        }
+        else if (p->type == UniformEntryType::UINTV)
+        {
+            setUniformImpl(p->location, p->varData.count, (GLuint *)&p->varData.data,
+                           p->entryPointType);
+            offs += sizeof(UniformEntry) + p->varData.length;
+        }
+        else
+        {
+            UNREACHABLE();
+        }
+    }
+
+    mExecutable->mUniformData.clear();
+    mExecutable->onStateChange(angle::SubjectMessage::ProgramUniformUpdated);
+}
+
 angle::Result ProgramExecutableVk::updateUniforms(
     vk::Context *context,
     UpdateDescriptorSetsBuilder *updateBuilder,
@@ -2015,7 +2060,8 @@ angle::Result ProgramExecutableVk::updateUniforms(
     bool isTransformFeedbackActiveUnpaused,
     TransformFeedbackVk *transformFeedbackVk)
 {
-    ASSERT(hasDirtyUniforms());
+    ASSERT(hasDirtyUniforms() || !mExecutable->mUniformData.empty());
+    flushBatchedUniforms();
 
     vk::BufferHelper *defaultUniformBuffer;
     bool anyNewBufferAllocated          = false;
