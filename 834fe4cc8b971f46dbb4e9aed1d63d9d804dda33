@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d7ca670_bb8b6260",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-22T15:56:59Z",
+      "side": 1,
+      "message": "Hey Mark, sending some feedback, but we can also chat in our meeting.",
+      "revId": "834fe4cc8b971f46dbb4e9aed1d63d9d804dda33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dfa9d57_cead5b81",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-22T15:56:59Z",
+      "side": 1,
+      "message": "The connection is hard to follow here.  `MaybeResetDefaultUniforms` is called at the end of capture, after we\u0027ve cycled through all the frames, getting ready to write them out.  This is long after MEC Setup has completed, and it should most definitely have entries in it.\n\nCould we instead add logic to `ProgramNeedsReset` to detect \"This program wasn\u0027t linked at the beginning of capture, don\u0027t Reset its uniforms\"?",
+      "range": {
+        "startLine": 1597,
+        "startChar": 12,
+        "endLine": 1597,
+        "endChar": 59
+      },
+      "revId": "834fe4cc8b971f46dbb4e9aed1d63d9d804dda33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a757df98_87e723aa",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4716,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-22T15:56:59Z",
+      "side": 1,
+      "message": "I believe this is checking whether it \"has been linked\".",
+      "range": {
+        "startLine": 4716,
+        "startChar": 22,
+        "endLine": 4716,
+        "endChar": 42
+      },
+      "revId": "834fe4cc8b971f46dbb4e9aed1d63d9d804dda33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cb4df22_33f05eed",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-22T15:56:59Z",
+      "side": 1,
+      "message": "So this is saying \"Active frames have been added to our vector, therefore MEC Setup has competed\".",
+      "range": {
+        "startLine": 714,
+        "startChar": 47,
+        "endLine": 714,
+        "endChar": 66
+      },
+      "revId": "834fe4cc8b971f46dbb4e9aed1d63d9d804dda33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c542d84f_4efa78dd",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-22T15:56:59Z",
+      "side": 1,
+      "message": "I know we\u0027re targeting a specific situation, but I\u0027m curious if we could generalize it such that we handle the case where `glShaderSource` and `glAttachShader` were also deferred.  Then it becomes a bare `glCreateShader` call in Setup.  This might be overkill, but it would be good to get an indicator in the future saying \"Hey, we don\u0027t handle this situation either!\", like an assert.",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 22
+      },
+      "revId": "834fe4cc8b971f46dbb4e9aed1d63d9d804dda33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
