@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3b61ad2_4cb1e263",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4292,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-22T09:31:48Z",
+      "side": 1,
+      "message": "Don\u0027t need to hash `validDescriptorSetLayoutCount`, do we? I guess not, but haven\u0027t thought too deeply about it",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab548b0b_15d89548",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-22T09:31:48Z",
+      "side": 1,
+      "message": "This is easy, I agree, but it\u0027s making the ordering of `update` matter. Could you please `ASSERT(mBindingIndices.empty() || mBindingIndices.back() \u003c bindingIndex)` if possible? That would make sure we always call this function in the correct order so we don\u0027t end up with unnecessary cache misses. It also makes sure we never call update in the middle after the fact (which breaks this model).\n\nIf all that holds, then `update` should be called `add`. If that assert doesn\u0027t hold, then adding indices in this way is incorrect.",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb6556df_95af5189",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-22T09:31:48Z",
+      "side": 1,
+      "message": "I think there\u0027s a confusion here. This is not about how many desc sets there are, but rather how many bindings in each desc set there could be. Having 10~20 textures in one draw is probably very common, so this value is too small.\n\nThe previous name was also clearer, this could be `kDefaultDescriptSetLayoutBindings`",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ab661bc_23591ed4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-22T09:31:48Z",
+      "side": 1,
+      "message": "Is this `size_t` because of `ComputeGenericHash`? Can it be smaller like uint32_t or uint16_t?",
+      "range": {
+        "startLine": 1034,
+        "startChar": 22,
+        "endLine": 1034,
+        "endChar": 28
+      },
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a68fc433_64c0d141",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-22T09:31:48Z",
+      "side": 1,
+      "message": "Related to the same comment on `kDefaultDescriptorSetLayoutCount`, this is not the list of layouts, but rather the list of bindings inside the layout. `mDescriptSetLayout` is more appropriate.",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
