@@ -3088,6 +3088,24 @@ def get_egl_entry_point_labeled_object(ep_to_object, cmd_stripped, params, packe
     return "Get%sIfValid(%s, %s)" % (category, display_param, found_param)
 
 
+def disable_share_group_lock(api, cmd_name):
+    if cmd_name == 'glBindBuffer':
+        # This function looks up the ID in the buffer manager,
+        # access to which is thread-safe for buffers.
+        return True
+
+    if api == apis.GLES and cmd_name.startswith(
+        ('glUniform1', 'glUniform2', 'glUniform3', 'glUniform4')):
+        if cmd_name in ['glUniform1i', 'glUniform1iv']:
+            # Keep locked if might set samplers
+            return False
+        else:
+            # Thread safe via frontend batching
+            return True
+
+    return False
+
+
 def get_context_lock(api, cmd_name):
     # EGLImage related commands need to access EGLImage and Display which should
     # be protected with global lock
@@ -3095,13 +3113,10 @@ def get_context_lock(api, cmd_name):
     if api == apis.GLES and cmd_name.startswith("glEGLImage"):
         return "SCOPED_EGL_IMAGE_SHARE_CONTEXT_LOCK(context, imagePacked);"
 
-    # The following commands do not need to hold the share group lock.  Both
+    # Certain commands do not need to hold the share group lock.  Both
     # validation and their implementation in the context are limited to
     # context-local state.
-    #
-    # - glBindBuffer: This function looks up the ID in the buffer manager,
-    #   access to which is thread-safe for buffers.
-    if cmd_name in ['glBindBuffer']:
+    if disable_share_group_lock(api, cmd_name):
         return ""
 
     return "SCOPED_SHARE_CONTEXT_LOCK(context);"
