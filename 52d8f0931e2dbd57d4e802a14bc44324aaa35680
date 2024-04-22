@@ -16,6 +16,23 @@
       "message": "Hello Geoff, Shahbaz, could you please review this cherry-pick to the 123 branch?",
       "revId": "52d8f0931e2dbd57d4e802a14bc44324aaa35680",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1a4298e_d444330d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-04-22T17:48:56Z",
+      "side": 1,
+      "message": "Tests passing locally:\n\nCompleted batch with config: ES3_Vulkan_EnableParallelCompileAndLink\n[1/18] GLSLTest_ES3.ArrayLengthInVectorConstructor/ES3_Vulkan_EnableParallelCompileAndLink (588.0 ms)\n[2/18] GLSLTest_ES3.ArrayLengthInVectorConstructorComplex/ES3_Vulkan_EnableParallelCompileAndLink (129.2 ms)\nCompleted batch with config: ES3_Vulkan_SwiftShader_EnableParallelCompileAndLink\n[3/18] GLSLTest_ES3.ArrayLengthInVectorConstructor/ES3_Vulkan_SwiftShader_EnableParallelCompileAndLink (484.6 ms)\n[4/18] GLSLTest_ES3.ArrayLengthInVectorConstructorComplex/ES3_Vulkan_SwiftShader_EnableParallelCompileAndLink (167.3 ms)\nCompleted batch with config: ES3_Vulkan_AvoidOpSelectWithMismatchingRelaxedPrecision\n[5/18] GLSLTest_ES3.ArrayLengthInVectorConstructor/ES3_Vulkan_AvoidOpSelectWithMismatchingRelaxedPrecision (323.9 ms)\n[6/18] GLSLTest_ES3.ArrayLengthInVectorConstructorComplex/ES3_Vulkan_AvoidOpSelectWithMismatchingRelaxedPrecision (129.9 ms)\nCompleted batch with config: ES3_OpenGL\n[7/18] GLSLTest_ES3.ArrayLengthInVectorConstructor/ES3_OpenGL (204.0 ms)\n[8/18] GLSLTest_ES3.ArrayLengthInVectorConstructorComplex/ES3_OpenGL (44.9 ms)\nCompleted batch with config: ES3_OpenGL_ScalarizeVecAndMatConstructorArgs\n[9/18] GLSLTest_ES3.ArrayLengthInVectorConstructor/ES3_OpenGL_ScalarizeVecAndMatConstructorArgs (167.0 ms)\n[10/18] GLSLTest_ES3.ArrayLengthInVectorConstructorComplex/ES3_OpenGL_ScalarizeVecAndMatConstructorArgs (16.8 ms)\nCompleted batch with config: ES3_Vulkan_SwiftShader_AsyncCommandQueue\n[11/18] GLSLTest_ES3.ArrayLengthInVectorConstructor/ES3_Vulkan_SwiftShader_AsyncCommandQueue (715.0 ms)\n[12/18] GLSLTest_ES3.ArrayLengthInVectorConstructorComplex/ES3_Vulkan_SwiftShader_AsyncCommandQueue (166.2 ms)\nCompleted batch with config: ES3_Vulkan\n[13/18] GLSLTest_ES3.ArrayLengthInVectorConstructor/ES3_Vulkan (271.7 ms)\n[14/18] GLSLTest_ES3.ArrayLengthInVectorConstructorComplex/ES3_Vulkan (116.3 ms)\nCompleted batch with config: ES3_Vulkan_AsyncCommandQueue\n[15/18] GLSLTest_ES3.ArrayLengthInVectorConstructor/ES3_Vulkan_AsyncCommandQueue (276.4 ms)\n[16/18] GLSLTest_ES3.ArrayLengthInVectorConstructorComplex/ES3_Vulkan_AsyncCommandQueue (103.6 ms)\nCompleted batch with config: ES3_Vulkan_SwiftShader\n[17/18] GLSLTest_ES3.ArrayLengthInVectorConstructor/ES3_Vulkan_SwiftShader (260.7 ms)\n[18/18] GLSLTest_ES3.ArrayLengthInVectorConstructorComplex/ES3_Vulkan_SwiftShader (173.7 ms)\nWriting test results to output.json",
+      "revId": "52d8f0931e2dbd57d4e802a14bc44324aaa35680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
