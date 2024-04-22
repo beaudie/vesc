@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8dc7550_493908fc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4320,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-22T15:57:37Z",
+      "side": 1,
+      "message": "or at the very least, a map container that has its `hash` and `\u003d\u003d` that is insertion order agnostic",
+      "parentUuid": "506135b2_7a0450da",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb6556df_95af5189",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 7
