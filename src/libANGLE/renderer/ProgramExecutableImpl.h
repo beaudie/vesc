@@ -31,6 +31,9 @@ class ProgramExecutableImpl : angle::NonCopyable
 
     virtual void destroy(const gl::Context *context) {}
 
+    virtual bool supportsUnifromBatching() { return false; }
+    virtual void flushBatchedUniforms() {}
+
     virtual void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;
     virtual void setUniform2fv(GLint location, GLsizei count, const GLfloat *v) = 0;
     virtual void setUniform3fv(GLint location, GLsizei count, const GLfloat *v) = 0;
