@@ -644,6 +644,34 @@ class ProgramExecutable final : public angle::Subject
     void copyOutputsFromProgram(const ProgramExecutable &executable);
     void copyUniformsFromProgramMap(const ShaderMap<SharedProgramExecutable> &executables);
 
+    // ANGLE_INLINE void setUniform2f(UniformLocation location, const GLfloat x, const GLfloat y)
+    // {
+    //     GLint offs = (GLint)mUniformData.size();
+    //     mUniformData.resize(mUniformData.size() + sizeof(UniformEntry));
+    //     UniformEntry *p   = (UniformEntry *)(mUniformData.data() + offs);
+    //     p->type           = UniformEntryType::FLOAT;
+    //     p->location       = location.value;
+    //     p->entryPointType = GL_FLOAT_VEC2;
+    //     p->floatData[0]   = x;
+    //     p->floatData[1]   = y;
+    // }
+
+    // ANGLE_INLINE void setUniform3f(UniformLocation location,
+    //                                const GLfloat x,
+    //                                const GLfloat y,
+    //                                const GLfloat z)
+    // {
+    //     GLint offs = (GLint)mUniformData.size();
+    //     mUniformData.resize(mUniformData.size() + sizeof(UniformEntry));
+    //     UniformEntry *p   = (UniformEntry *)(mUniformData.data() + offs);
+    //     p->type           = UniformEntryType::FLOAT;
+    //     p->location       = location.value;
+    //     p->entryPointType = GL_FLOAT_VEC3;
+    //     p->floatData[0]   = x;
+    //     p->floatData[1]   = y;
+    //     p->floatData[2]   = z;
+    // }
+
     void setUniform1fv(UniformLocation location, GLsizei count, const GLfloat *v);
     void setUniform2fv(UniformLocation location, GLsizei count, const GLfloat *v);
     void setUniform3fv(UniformLocation location, GLsizei count, const GLfloat *v);
@@ -715,6 +743,8 @@ class ProgramExecutable final : public angle::Subject
     {
         return mPPOProgramExecutables;
     }
+
+    bool IsPPO() const { return mIsPPO; }
 
     // Post-link task helpers
     const std::vector<std::shared_ptr<rx::LinkSubTask>> &getPostLinkSubTasks() const
@@ -819,6 +849,7 @@ class ProgramExecutable final : public angle::Subject
 
     template <typename UniformT,
               GLint UniformSize,
+              GLenum entryPointType,
               void (rx::ProgramExecutableImpl::*SetUniformFunc)(GLint, GLsizei, const UniformT *)>
     void setUniformGeneric(UniformLocation location, GLsizei count, const UniformT *v);
 
@@ -1001,7 +1032,42 @@ class ProgramExecutable final : public angle::Subject
     // PPO only: installed executables from the programs.  Note that these may be different from the
     // programs' current executables, because they may have been unsuccessfully relinked.
     ShaderMap<SharedProgramExecutable> mPPOProgramExecutables;
+    bool mIsPPO;
 
+  public:
+    // mutable std::vector<uint8_t> mUniformData;
+    enum class UniformEntryType : uint8_t
+    {
+        FLOAT  = 1,
+        INT    = 2,
+        UINT   = 3,
+        FLOATV = 4,
+        INTV   = 5,
+        UINTV  = 6,
+    };
+    struct UniformVarDataHeader
+    {
+        GLsizei count;
+        GLsizei length;
+        uint8_t data;
+    };
+    struct UniformEntry
+    {
+        UniformEntryType type;
+        GLint location;
+        GLenum entryPointType;
+        union
+        {
+            UniformVarDataHeader varData;
+            GLfloat floatData[4];
+            GLint intData[4];
+            GLuint uintData[4];
+        };
+    };
+    bool mSupportsUniformBatching;
+    mutable angle::FastVector<uint8_t, 1024> mUniformData;
+
+  private:
     // Cache for sampler validation
     mutable Optional<bool> mCachedValidateSamplersResult;
 

@@ -120,6 +120,9 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     void destroy(const gl::Context *context) override;
 
+    bool supportsUnifromBatching() override { return true; }
+    void flushBatchedUniforms() override;
+
     void save(ContextVk *contextVk, bool isSeparable, gl::BinaryOutputStream *stream);
     angle::Result load(ContextVk *contextVk,
                        bool isSeparable,
@@ -297,10 +300,14 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     bool updateAndCheckDirtyGraphicsUniforms()
     {
-        if (ANGLE_LIKELY(mDefaultUniformBlocksDirty.any()))
+        if (ANGLE_LIKELY(!mExecutable->IsPPO()))
         {
-            // Fast path for non-PPO, but PPO also gets here due to setAllDefaultUniformsDirty()
-            return true;
+            if (!mExecutable->mUniformData.empty())
+            {
+                flushBatchedUniforms();
+            }
+
+            return mDefaultUniformBlocksDirty.any();
         }
 
         const auto &ppoExecutables = mExecutable->getPPOProgramExecutables();
@@ -309,6 +316,10 @@ class ProgramExecutableVk : public ProgramExecutableImpl
             for (gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
             {
                 ProgramExecutableVk *executableVk = vk::GetImpl(ppoExecutables[shaderType].get());
+                if (!ppoExecutables[shaderType]->mUniformData.empty())
+                {
+                    executableVk->flushBatchedUniforms();
+                }
                 if (executableVk->mDefaultUniformBlocksDirty.test(shaderType))
                 {
                     mDefaultUniformBlocksDirty.set(shaderType);
@@ -323,10 +334,14 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     bool updateAndCheckDirtyComputeUniforms()
     {
-        if (ANGLE_LIKELY(mDefaultUniformBlocksDirty.any()))
+        if (ANGLE_LIKELY(!mExecutable->IsPPO()))
         {
-            // Fast path for non-PPO, but PPO also gets here due to setAllDefaultUniformsDirty()
-            return true;
+            if (!mExecutable->mUniformData.empty())
+            {
+                flushBatchedUniforms();
+            }
+
+            return mDefaultUniformBlocksDirty.any();
         }
 
         const auto &ppoExecutables      = mExecutable->getPPOProgramExecutables();
@@ -334,6 +349,10 @@ class ProgramExecutableVk : public ProgramExecutableImpl
         if (ANGLE_UNLIKELY(ppoExecutables[shaderType].get() != nullptr))
         {
             ProgramExecutableVk *executableVk = vk::GetImpl(ppoExecutables[shaderType].get());
+            if (!ppoExecutables[shaderType]->mUniformData.empty())
+            {
+                executableVk->flushBatchedUniforms();
+            }
             if (executableVk->mDefaultUniformBlocksDirty.test(shaderType))
             {
                 mDefaultUniformBlocksDirty.set(shaderType);
