@@ -16,6 +16,24 @@
       "message": "I can see a future where people keep using `None` and I\u0027d have to tell them to reference a bug. I\u0027d either mark this with `EXCEPTIONAL ONLY` or just hide it (as we did) to stop abuse.",
       "revId": "8150d344aa0f9111e91060a0bfd1607501046275",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eb83cc5_fa13786e",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-22T16:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b933b607_f9179faf",
+      "revId": "8150d344aa0f9111e91060a0bfd1607501046275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
