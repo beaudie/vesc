@@ -7348,8 +7348,8 @@ void Context::uniform1iv(UniformLocation location, GLsizei count, const GLint *v
 
 void Context::uniform2f(UniformLocation location, GLfloat x, GLfloat y)
 {
-    GLfloat xy[2]    = {x, y};
     Program *program = getActiveLinkedProgram();
+    GLfloat xy[2]    = {x, y};
     program->getExecutable().setUniform2fv(location, 1, xy);
 }
 
@@ -7374,8 +7374,8 @@ void Context::uniform2iv(UniformLocation location, GLsizei count, const GLint *v
 
 void Context::uniform3f(UniformLocation location, GLfloat x, GLfloat y, GLfloat z)
 {
-    GLfloat xyz[3]   = {x, y, z};
     Program *program = getActiveLinkedProgram();
+    GLfloat xyz[3]   = {x, y, z};
     program->getExecutable().setUniform3fv(location, 1, xyz);
 }
 

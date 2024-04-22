@@ -3104,6 +3104,11 @@ def get_context_lock(api, cmd_name):
     if cmd_name in ['glBindBuffer']:
         return ""
 
+    if api == apis.GLES and cmd_name.startswith(
+            "glUniform") and "Matrix" not in cmd_name and cmd_name not in ("glUniform1iv",
+                                                                           "glUniform1i"):
+        return "// Note: no share context lock"
+
     return "SCOPED_SHARE_CONTEXT_LOCK(context);"
 
 
