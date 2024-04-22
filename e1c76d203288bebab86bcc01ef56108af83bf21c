@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbbe2009_c77d6f23",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4320,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-22T19:27:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8dc7550_493908fc",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb6556df_95af5189",
@@ -138,6 +156,24 @@
       "side": 1,
       "message": "\u003e I think there\u0027s a confusion here\n\nagree, naming could have been better `kDefaultDescriptorSetLayoutBindingsCount`\n\n\u003e Having 10~20 textures in one draw is probably very common, so this value is too small\n\nim do not have data to confirm this, so open to suggestions",
       "parentUuid": "bb6556df_95af5189",
+      "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92a0f52c_fa7e7be5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-22T19:27:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57e9c885_ea949643",
       "revId": "e1c76d203288bebab86bcc01ef56108af83bf21c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
