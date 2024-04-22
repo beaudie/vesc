@@ -2584,12 +2584,11 @@ GLuint ProgramExecutable::getImageUniformBinding(const VariableLocation &uniform
     return boundImageUnits[uniformLocation.arrayIndex];
 }
 
-template <typename UniformT,
-          GLint UniformSize,
-          void (rx::ProgramExecutableImpl::*SetUniformFunc)(GLint, GLsizei, const UniformT *)>
+template <typename UniformT, GLint UniformSize>
 void ProgramExecutable::setUniformGeneric(UniformLocation location,
                                           GLsizei count,
-                                          const UniformT *v)
+                                          const UniformT *v,
+                                          GLenum entryPointType)
 {
     if (shouldIgnoreUniform(location))
     {
@@ -2598,28 +2597,73 @@ void ProgramExecutable::setUniformGeneric(UniformLocation location,
 
     const VariableLocation &locationInfo = mUniformLocations[location.value];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, UniformSize, v);
-    (mImplementation->*SetUniformFunc)(location.value, clampedCount, v);
-    onStateChange(angle::SubjectMessage::ProgramUniformUpdated);
+
+    GLint offs = (GLint)mUniformData.size();
+    mUniformData.resize(mUniformData.size() + sizeof(UniformEntry));
+
+    if constexpr (std::is_same<UniformT, GLfloat>::value)
+    {
+        GLint sz = UniformSize * clampedCount * sizeof(GLfloat);
+        mUniformData.resize(mUniformData.size() + sz);
+
+        UniformEntry *p   = (UniformEntry *)(mUniformData.data() + offs);
+        p->type           = UniformEntryType::FLOATV;
+        p->location       = location.value;
+        p->entryPointType = entryPointType;
+        p->varData.count  = count;
+        p->varData.length = sz;
+        memcpy(&p->varData.data, v, sz);
+    }
+    else if constexpr (std::is_same<UniformT, GLint>::value)
+    {
+        GLint sz = UniformSize * clampedCount * sizeof(GLint);
+        mUniformData.resize(mUniformData.size() + sz);
+
+        UniformEntry *p   = (UniformEntry *)(mUniformData.data() + offs);
+        p->type           = UniformEntryType::INTV;
+        p->location       = location.value;
+        p->entryPointType = entryPointType;
+        p->varData.count  = count;
+        p->varData.length = sz;
+        memcpy(&p->varData.data, v, sz);
+    }
+    else if constexpr (std::is_same<UniformT, GLuint>::value)
+    {
+        GLint sz = UniformSize * clampedCount * sizeof(GLuint);
+        mUniformData.resize(mUniformData.size() + sz);
+
+        UniformEntry *p   = (UniformEntry *)(mUniformData.data() + offs);
+        p->type           = UniformEntryType::UINTV;
+        p->location       = location.value;
+        p->entryPointType = entryPointType;
+        p->varData.count  = count;
+        p->varData.length = sz;
+        memcpy(&p->varData.data, v, sz);
+    }
+    else
+    {
+        UNREACHABLE();
+    }
 }
 
 void ProgramExecutable::setUniform1fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 1, &rx::ProgramExecutableImpl::setUniform1fv>(location, count, v);
+    setUniformGeneric<GLfloat, 1>(location, count, v, GL_FLOAT);
 }
 
 void ProgramExecutable::setUniform2fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 2, &rx::ProgramExecutableImpl::setUniform2fv>(location, count, v);
+    setUniformGeneric<GLfloat, 2>(location, count, v, GL_FLOAT_VEC2);
 }
 
 void ProgramExecutable::setUniform3fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 3, &rx::ProgramExecutableImpl::setUniform3fv>(location, count, v);
+    setUniformGeneric<GLfloat, 3>(location, count, v, GL_FLOAT_VEC3);
 }
 
 void ProgramExecutable::setUniform4fv(UniformLocation location, GLsizei count, const GLfloat *v)
 {
-    setUniformGeneric<GLfloat, 4, &rx::ProgramExecutableImpl::setUniform4fv>(location, count, v);
+    setUniformGeneric<GLfloat, 4>(location, count, v, GL_FLOAT_VEC4);
 }
 
 void ProgramExecutable::setUniform1iv(Context *context,
@@ -2649,37 +2693,37 @@ void ProgramExecutable::setUniform1iv(Context *context,
 
 void ProgramExecutable::setUniform2iv(UniformLocation location, GLsizei count, const GLint *v)
 {
-    setUniformGeneric<GLint, 2, &rx::ProgramExecutableImpl::setUniform2iv>(location, count, v);
+    setUniformGeneric<GLint, 2>(location, count, v, GL_INT_VEC2);
 }
 
 void ProgramExecutable::setUniform3iv(UniformLocation location, GLsizei count, const GLint *v)
 {
-    setUniformGeneric<GLint, 3, &rx::ProgramExecutableImpl::setUniform3iv>(location, count, v);
+    setUniformGeneric<GLint, 3>(location, count, v, GL_INT_VEC3);
 }
 
 void ProgramExecutable::setUniform4iv(UniformLocation location, GLsizei count, const GLint *v)
 {
-    setUniformGeneric<GLint, 4, &rx::ProgramExecutableImpl::setUniform4iv>(location, count, v);
+    setUniformGeneric<GLint, 4>(location, count, v, GL_INT_VEC4);
 }
 
 void ProgramExecutable::setUniform1uiv(UniformLocation location, GLsizei count, const GLuint *v)
 {
-    setUniformGeneric<GLuint, 1, &rx::ProgramExecutableImpl::setUniform1uiv>(location, count, v);
+    setUniformGeneric<GLuint, 1>(location, count, v, GL_UNSIGNED_INT);
 }
 
 void ProgramExecutable::setUniform2uiv(UniformLocation location, GLsizei count, const GLuint *v)
 {
-    setUniformGeneric<GLuint, 2, &rx::ProgramExecutableImpl::setUniform2uiv>(location, count, v);
+    setUniformGeneric<GLuint, 2>(location, count, v, GL_UNSIGNED_INT_VEC2);
 }
 
 void ProgramExecutable::setUniform3uiv(UniformLocation location, GLsizei count, const GLuint *v)
 {
-    setUniformGeneric<GLuint, 3, &rx::ProgramExecutableImpl::setUniform3uiv>(location, count, v);
+    setUniformGeneric<GLuint, 3>(location, count, v, GL_UNSIGNED_INT_VEC3);
 }
 
 void ProgramExecutable::setUniform4uiv(UniformLocation location, GLsizei count, const GLuint *v)
 {
-    setUniformGeneric<GLuint, 4, &rx::ProgramExecutableImpl::setUniform4uiv>(location, count, v);
+    setUniformGeneric<GLuint, 4>(location, count, v, GL_UNSIGNED_INT_VEC4);
 }
 
 template <typename UniformT,
