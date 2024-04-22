@@ -39,6 +39,23 @@
       "message": "Great find!",
       "revId": "36ecc5d8c6291f734fa072e7c6f422264da7da5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08cc47eb_12f46320",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-22T13:43:44Z",
+      "side": 1,
+      "message": "Thanks Charlie!  Confirmed this works for me locally as well.\n\nI do wonder if there are other spots we should be calling invalidate, but I don\u0027t have any immediate suggestions.",
+      "revId": "36ecc5d8c6291f734fa072e7c6f422264da7da5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
