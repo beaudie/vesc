@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc8a857d_e8ff4587",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-22T22:23:18Z",
+      "side": 1,
+      "message": "im not sure why the tests are failing on android / pixel bots, internal CI doesnt show them fail with our Vulkan ICD. is there a known issue with that bot?",
+      "revId": "6d0b3b1272581e79bff16ada06ea64e0d2309ae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
