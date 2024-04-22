@@ -34,6 +34,24 @@
       "parentUuid": "b933b607_f9179faf",
       "revId": "8150d344aa0f9111e91060a0bfd1607501046275",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6222d4f_d3bd426c",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-22T16:35:19Z",
+      "side": 1,
+      "message": "oops didn\u0027t remove from cl description.. but that\u0027s hidden enough :D",
+      "parentUuid": "0eb83cc5_fa13786e",
+      "revId": "8150d344aa0f9111e91060a0bfd1607501046275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
