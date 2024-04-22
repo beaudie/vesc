@@ -74,6 +74,11 @@ constexpr uint32_t kMinDefaultUniformBufferSize = 16 * 1024u;
 // between performance and memory usage.
 constexpr uint32_t kPreferredDefaultUniformBufferSize = 64 * 1024u;
 
+// This number was picked by looking at memory usage of Android apps. The allocator will start
+// making blocks at 1/8 the max size and builds up block size as needed before capping at the
+// max set here. The block size will be fine-tuned based on the overhead for a test image.
+constexpr VkDeviceSize kPreferredVMABlockSize = 4 * 1024 * 1024;
+
 // Maximum size to use VMA image suballocation. Any allocation greater than or equal to this
 // value will use a dedicated VkDeviceMemory.
 constexpr size_t kImageSizeThresholdForDedicatedMemoryAllocation = 4 * 1024 * 1024;
@@ -2054,12 +2059,8 @@ angle::Result Renderer::initialize(vk::Context *context,
 
 angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
 {
-    // This number matches Chromium and was picked by looking at memory usage of
-    // Android apps. The allocator will start making blocks at 1/8 the max size
-    // and builds up block size as needed before capping at the max set here.
-    mPreferredLargeHeapBlockSize = 4 * 1024 * 1024;
-
-    // Create VMA allocator
+    // Create VMA allocator after determining the preferred large block size.
+    ANGLE_TRY(calculateVMAPreferredBlockSize(context));
     ANGLE_VK_TRY(context,
                  mAllocator.init(mPhysicalDevice, mDevice, mInstance, mApplicationInfo.apiVersion,
                                  mPreferredLargeHeapBlockSize));
@@ -2176,6 +2177,60 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
          static_cast<size_t>(mPhysicalDeviceProperties.limits.nonCoherentAtomSize),
          static_cast<size_t>(defaultBufferMemoryRequirements.alignment)});
     ASSERT(gl::isPow2(mVertexConversionBufferAlignment));
+
+    return angle::Result::Continue;
+}
+
+angle::Result Renderer::calculateVMAPreferredBlockSize(vk::Context *context)
+{
+    // To minimize fragmentation in the VMA image suballocation, we should account for the possible
+    // overhead from images on some platforms. If such an overhead exists, we add extra space to the
+    // VMA image suballocation blocks to account for them.
+    //
+    // The large block size will be set to an amount in which eight single-level images with the
+    // theoretical size of 1/8 of the large block (kPreferredVMABlockSize) can be suballocated
+    // without the need to allocate a new block. To achieve this, we create a temporary image with
+    // such expected size to check the overhead. If there is no overhead for the image, no extra
+    // space will be added to the VMA image blocks.
+    constexpr VkExtent3D kTempImageExtents        = {256, 512, 1};
+    constexpr VkFormat kTempImageFormat           = VK_FORMAT_R8G8B8A8_UNORM;
+    constexpr uint32_t kRGBA8PixelSize            = 4;
+    constexpr VkDeviceSize kExpectedTempImageSize = kTempImageExtents.width *
+                                                    kTempImageExtents.height *
+                                                    kTempImageExtents.depth * kRGBA8PixelSize;
+
+    constexpr VkDeviceSize kExpectedSuballocationCount = 8;
+    static_assert(kExpectedSuballocationCount == kPreferredVMABlockSize / kExpectedTempImageSize);
+
+    // Create a temporary image with the theoretical size of 1/8 of the VMA image block.
+    VkImageCreateInfo createInfo = {};
+    createInfo.sType             = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    createInfo.flags             = 0;
+    createInfo.imageType         = VK_IMAGE_TYPE_2D;
+    createInfo.format            = kTempImageFormat;
+    createInfo.extent            = kTempImageExtents;
+    createInfo.mipLevels         = 1;
+    createInfo.arrayLayers       = 1;
+    createInfo.samples           = VK_SAMPLE_COUNT_1_BIT;
+    createInfo.tiling            = VK_IMAGE_TILING_OPTIMAL;
+    createInfo.usage             = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    createInfo.sharingMode       = VK_SHARING_MODE_EXCLUSIVE;
+    createInfo.queueFamilyIndexCount = 0;
+    createInfo.pQueueFamilyIndices   = nullptr;
+    createInfo.initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
+
+    vk::DeviceScoped<vk::Image> tempImage(mDevice);
+    tempImage.get().init(mDevice, createInfo);
+
+    // The VMA image block size is fine-tuned based on the memory requirement of the temp image.
+    VkMemoryRequirements tempImageMemoryRequirements;
+    tempImage.get().getMemoryRequirements(mDevice, &tempImageMemoryRequirements);
+    VkDeviceSize actualTempImageSize = tempImageMemoryRequirements.size;
+    VkDeviceSize imageAlignment      = tempImageMemoryRequirements.alignment;
+    ASSERT(kExpectedTempImageSize <= actualTempImageSize);
+
+    mPreferredLargeHeapBlockSize =
+        roundUp(actualTempImageSize, imageAlignment) * kExpectedSuballocationCount;
 
     return angle::Result::Continue;
 }
@@ -5294,7 +5349,7 @@ void Renderer::outputVmaStatString()
     // allocations the VMA has performed.
     char *statsString;
     mAllocator.buildStatsString(&statsString, true);
-    INFO() << std::endl << statsString << std::endl;
+    INFO() << std::endl << "VMA Allocation Stats:" << std::endl << statsString << std::endl;
     mAllocator.freeStatsString(statsString);
 }
 
