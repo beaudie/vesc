@@ -120,6 +120,9 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     void destroy(const gl::Context *context) override;
 
+    bool supportsUnifromBatching() override { return true; }
+    void flushBatchedUniforms() override;
+
     void save(ContextVk *contextVk, bool isSeparable, gl::BinaryOutputStream *stream);
     angle::Result load(ContextVk *contextVk,
                        bool isSeparable,
@@ -297,24 +300,29 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     bool updateAndCheckDirtyGraphicsUniforms()
     {
-        if (ANGLE_LIKELY(mDefaultUniformBlocksDirty.any()))
+        if (ANGLE_LIKELY(!mExecutable->IsPPO()))
         {
-            // Fast path for non-PPO, but PPO also gets here due to setAllDefaultUniformsDirty()
-            return true;
+            if (!mExecutable->mUniformData.empty())
+            {
+                flushBatchedUniforms();
+            }
+
+            return mDefaultUniformBlocksDirty.any();
         }
 
         const auto &ppoExecutables = mExecutable->getPPOProgramExecutables();
-        if (ANGLE_UNLIKELY(ppoExecutables[gl::ShaderType::Vertex].get() != nullptr))
+        for (gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
         {
-            for (gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
+            ProgramExecutableVk *executableVk = vk::GetImpl(ppoExecutables[shaderType].get());
+            if (!ppoExecutables[shaderType]->mUniformData.empty())
             {
-                ProgramExecutableVk *executableVk = vk::GetImpl(ppoExecutables[shaderType].get());
-                if (executableVk->mDefaultUniformBlocksDirty.test(shaderType))
-                {
-                    mDefaultUniformBlocksDirty.set(shaderType);
-                    // Note: this relies on onProgramBind marking everything as dirty
-                    executableVk->mDefaultUniformBlocksDirty.reset(shaderType);
-                }
+                executableVk->flushBatchedUniforms();
+            }
+            if (executableVk->mDefaultUniformBlocksDirty.test(shaderType))
+            {
+                mDefaultUniformBlocksDirty.set(shaderType);
+                // Note: this relies on onProgramBind marking everything as dirty
+                executableVk->mDefaultUniformBlocksDirty.reset(shaderType);
             }
         }
 
@@ -323,23 +331,28 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     bool updateAndCheckDirtyComputeUniforms()
     {
-        if (ANGLE_LIKELY(mDefaultUniformBlocksDirty.any()))
+        if (ANGLE_LIKELY(!mExecutable->IsPPO()))
         {
-            // Fast path for non-PPO, but PPO also gets here due to setAllDefaultUniformsDirty()
-            return true;
+            if (!mExecutable->mUniformData.empty())
+            {
+                flushBatchedUniforms();
+            }
+
+            return mDefaultUniformBlocksDirty.any();
         }
 
-        const auto &ppoExecutables      = mExecutable->getPPOProgramExecutables();
-        const gl::ShaderType shaderType = gl::ShaderType::Compute;
-        if (ANGLE_UNLIKELY(ppoExecutables[shaderType].get() != nullptr))
+        const auto &ppoExecutables        = mExecutable->getPPOProgramExecutables();
+        const gl::ShaderType shaderType   = gl::ShaderType::Compute;
+        ProgramExecutableVk *executableVk = vk::GetImpl(ppoExecutables[shaderType].get());
+        if (!ppoExecutables[shaderType]->mUniformData.empty())
         {
-            ProgramExecutableVk *executableVk = vk::GetImpl(ppoExecutables[shaderType].get());
-            if (executableVk->mDefaultUniformBlocksDirty.test(shaderType))
-            {
-                mDefaultUniformBlocksDirty.set(shaderType);
-                // Note: this relies on onProgramBind marking everything as dirty
-                executableVk->mDefaultUniformBlocksDirty.reset(shaderType);
-            }
+            executableVk->flushBatchedUniforms();
+        }
+        if (executableVk->mDefaultUniformBlocksDirty.test(shaderType))
+        {
+            mDefaultUniformBlocksDirty.set(shaderType);
+            // Note: this relies on onProgramBind marking everything as dirty
+            executableVk->mDefaultUniformBlocksDirty.reset(shaderType);
         }
 
         return mDefaultUniformBlocksDirty.any();
