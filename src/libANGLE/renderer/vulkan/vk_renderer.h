@@ -807,6 +807,7 @@ class Renderer : angle::NonCopyable
 
     // Initialize VMA allocator and buffer suballocator related data.
     angle::Result initializeMemoryAllocator(vk::Context *context);
+    angle::Result calculateVMAPreferredBlockSize(vk::Context *context);
 
     // Query and cache supported fragment shading rates
     void queryAndCacheFragmentShadingRates();
