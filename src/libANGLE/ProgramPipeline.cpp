@@ -82,6 +82,7 @@ void ProgramPipelineState::useProgramStage(const Context *context,
             InstallExecutable(context, shaderProgram->getSharedExecutable(),
                               &mExecutable->mPPOProgramExecutables[shaderType]);
         }
+        mExecutable->mIsPPO = true;
         shaderProgram->addRef();
     }
     else

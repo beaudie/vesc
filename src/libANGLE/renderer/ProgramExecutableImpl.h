@@ -31,6 +31,12 @@ class ProgramExecutableImpl : angle::NonCopyable
 
     virtual void destroy(const gl::Context *context) {}
 
+    // Uniform batching simplifies lock-less thread safety as many uniform calls can be just batched
+    // in the frontend, and a flush to the backend happens during the draw call. A backend claiming
+    // to be thread safe should enable batching and implement flushing.
+    virtual bool supportsUnifromBatching() { return false; }
+    virtual void flushBatchedUniforms() {}
+
     virtual void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;
     virtual void setUniform2fv(GLint location, GLsizei count, const GLfloat *v) = 0;
     virtual void setUniform3fv(GLint location, GLsizei count, const GLfloat *v) = 0;

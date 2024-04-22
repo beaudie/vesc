@@ -821,6 +821,7 @@ class ProgramExecutable final : public angle::Subject
 
     template <typename UniformT,
               GLint UniformSize,
+              GLenum entryPointType,
               void (rx::ProgramExecutableImpl::*SetUniformFunc)(GLint, GLsizei, const UniformT *)>
     void setUniformGeneric(UniformLocation location, GLsizei count, const UniformT *v);
 
@@ -1006,6 +1007,39 @@ class ProgramExecutable final : public angle::Subject
     // Flag for an easy check for PPO without inspecting mPPOProgramExecutables
     bool mIsPPO;
 
+  public:
+    enum class UniformEntryType : uint8_t
+    {
+        FLOAT  = 1,
+        INT    = 2,
+        UINT   = 3,
+        FLOATV = 4,
+        INTV   = 5,
+        UINTV  = 6,
+    };
+    struct UniformVarDataHeader
+    {
+        GLsizei count;
+        GLsizei length;
+        uint8_t data;
+    };
+    struct UniformEntry
+    {
+        UniformEntryType type;
+        GLint location;
+        GLenum entryPointType;
+        union
+        {
+            UniformVarDataHeader varData;
+            GLfloat floatData[4];
+            GLint intData[4];
+            GLuint uintData[4];
+        };
+    };
+    bool mSupportsUniformBatching;
+    mutable angle::FastVector<uint8_t, 1024> mUniformData;
+
+  private:
     // Cache for sampler validation
     mutable Optional<bool> mCachedValidateSamplersResult;
 
