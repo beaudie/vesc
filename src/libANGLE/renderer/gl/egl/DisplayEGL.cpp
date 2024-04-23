@@ -183,11 +183,27 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
 
     for (const egl::AttributeMap &attribs : contextAttribLists)
     {
-        // If robustness is supported, try to create a context with robustness enabled. If it fails,
-        // fall back to creating a context without the robustness parameters. We've seen devices
-        // that expose the robustness extensions but fail to create robust contexts.
+        if (mRequestNoErrorContexts)
+        {
+            egl::AttributeMap attribsWithNoError(attribs);
+
+            attribsWithNoError.insert(EGL_CONTEXT_OPENGL_NO_ERROR_KHR, EGL_TRUE);
+
+            native_egl::AttributeVector attribVector = attribsWithNoError.toIntVector();
+            EGLContext context = mEGL->createContext(mConfig, shareContext, attribVector.data());
+            if (context != EGL_NO_CONTEXT)
+            {
+                *outContext = context;
+                return egl::NoError();
+            }
+        }
+
         if (mHasEXTCreateContextRobustness)
         {
+            // If robustness is supported, try to create a context with robustness enabled. If it
+            // fails, fall back to creating a context without the robustness parameters. We've seen
+            // devices that expose the robustness extensions but fail to create robust contexts.
+
             egl::AttributeMap attribsWithRobustness(attribs);
 
             attribsWithRobustness.insert(EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY,
@@ -360,6 +376,12 @@ egl::Error DisplayEGL::initialize(egl::Display *display)
                    << "eglCreatePbufferSurface failed with " << egl::Error(mEGL->getError());
         }
     }
+
+#if defined(ANGLE_ENABLE_ASSERTS)
+    mRequestNoErrorContexts = false;
+#else
+    mRequestNoErrorContexts = mEGL->hasExtension("EGL_KHR_create_context_no_error");
+#endif
 
     ANGLE_TRY(createRenderer(EGL_NO_CONTEXT, true, false, &mRenderer));
 

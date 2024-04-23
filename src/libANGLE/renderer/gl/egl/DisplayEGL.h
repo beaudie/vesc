@@ -175,6 +175,8 @@ class DisplayEGL : public DisplayGL
 
     EGLSurface mMockPbuffer = EGL_NO_SURFACE;
 
+    bool mRequestNoErrorContexts = false;
+
     // Supported DRM formats
     bool mSupportsDmaBufImportModifiers = false;
     bool mNoOpDmaBufImportModifiers     = false;
