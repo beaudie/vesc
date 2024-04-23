@@ -16,6 +16,24 @@
       "message": "Sorry this slipped through, agreed this forward declaration doesn\u0027t make much sense. But not sure how this is building now? ProgramExecutableVk references `rx::WarmUpTaskCommon` below!\n\nCould you please do it similar to how `Program.cpp` does it? You can move the forward declaration to the `ProgramExecutableVk` class itself, under `private:`. Then prefix the classes with `ProgramExecutableVk::` in the .cpp file.",
       "revId": "6fe8a399dd7fd5dd7fe2d8e4eae81a5b5f586aa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53ce42df_f005a91e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-04-23T19:43:13Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "f07e416a_b70424d7",
+      "revId": "6fe8a399dd7fd5dd7fe2d8e4eae81a5b5f586aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
