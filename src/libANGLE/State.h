@@ -1468,25 +1468,6 @@ class State : angle::NonCopyable
     static_assert(state::DIRTY_OBJECT_READ_ATTACHMENTS < state::DIRTY_OBJECT_READ_FRAMEBUFFER,
                   "init order");
 
-    static_assert(state::DIRTY_OBJECT_ACTIVE_TEXTURES == 0,
-                  "check DIRTY_OBJECT_ACTIVE_TEXTURES index");
-    static_assert(state::DIRTY_OBJECT_TEXTURES_INIT == 1, "check DIRTY_OBJECT_TEXTURES_INIT index");
-    static_assert(state::DIRTY_OBJECT_IMAGES_INIT == 2, "check DIRTY_OBJECT_IMAGES_INIT index");
-    static_assert(state::DIRTY_OBJECT_READ_ATTACHMENTS == 3,
-                  "check DIRTY_OBJECT_READ_ATTACHMENTS index");
-    static_assert(state::DIRTY_OBJECT_DRAW_ATTACHMENTS == 4,
-                  "check DIRTY_OBJECT_DRAW_ATTACHMENTS index");
-    static_assert(state::DIRTY_OBJECT_READ_FRAMEBUFFER == 5,
-                  "check DIRTY_OBJECT_READ_FRAMEBUFFER index");
-    static_assert(state::DIRTY_OBJECT_DRAW_FRAMEBUFFER == 6,
-                  "check DIRTY_OBJECT_DRAW_FRAMEBUFFER index");
-    static_assert(state::DIRTY_OBJECT_VERTEX_ARRAY == 7, "check DIRTY_OBJECT_VERTEX_ARRAY index");
-    static_assert(state::DIRTY_OBJECT_TEXTURES == 8, "check DIRTY_OBJECT_TEXTURES index");
-    static_assert(state::DIRTY_OBJECT_IMAGES == 9, "check DIRTY_OBJECT_IMAGES index");
-    static_assert(state::DIRTY_OBJECT_SAMPLERS == 10, "check DIRTY_OBJECT_SAMPLERS index");
-    static_assert(state::DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT == 11,
-                  "check DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT index");
-
     // Dispatch table for buffer update functions.
     static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
 
