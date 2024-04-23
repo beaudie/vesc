@@ -3123,11 +3123,11 @@ def get_unlocked_tail_call(api, cmd_name):
     #   in tail call
     #
     if (cmd_name in [
-            'eglDestroySurface', 'eglMakeCurrent', 'eglReleaseThread', 'eglCreateWindowSurface',
-            'eglCreatePlatformWindowSurface', 'eglCreatePlatformWindowSurfaceEXT',
-            'eglPrepareSwapBuffersANGLE', 'eglSwapBuffers', 'eglSwapBuffersWithDamageKHR',
-            'eglSwapBuffersWithFrameTokenANGLE', 'glFinishFenceNV', 'glCompileShader',
-            'glLinkProgram'
+            'eglCreateSyncKHR', 'eglDestroySurface', 'eglMakeCurrent', 'eglReleaseThread',
+            'eglCreateWindowSurface', 'eglCreatePlatformWindowSurface',
+            'eglCreatePlatformWindowSurfaceEXT', 'eglPrepareSwapBuffersANGLE',
+            'eglSwapBuffersWithDamageKHR', 'eglSwapBuffersWithFrameTokenANGLE', 'glFinishFenceNV',
+            'glCompileShader', 'glLinkProgram'
     ] or cmd_name.startswith('glTexImage2D') or cmd_name.startswith('glTexImage3D') or
             cmd_name.startswith('glTexSubImage2D') or cmd_name.startswith('glTexSubImage3D') or
             cmd_name.startswith('glCompressedTexImage2D') or
@@ -3136,7 +3136,19 @@ def get_unlocked_tail_call(api, cmd_name):
             cmd_name.startswith('glCompressedTexSubImage3D')):
         return 'egl::Display::GetCurrentThreadUnlockedTailCall()->run(nullptr);'
 
-    if cmd_name in ['eglClientWaitSyncKHR', 'eglClientWaitSync', 'glClientWaitSync']:
+    if cmd_name in [
+            'eglClientWaitSyncKHR',
+            'eglClientWaitSync',
+            'eglCreateSyncKHR',
+            'eglCreateSync',
+            'eglDestroySyncKHR',
+            'eglDestroySync',
+            'eglSwapBuffers',
+            'eglSwapBuffersWithDamageKHR',
+            'eglWaitSyncKHR',
+            'eglWaitSync',
+            'glClientWaitSync',
+    ]:
         return 'egl::Display::GetCurrentThreadUnlockedTailCall()->run(&returnValue);'
 
     # Otherwise assert that no tail calls where generated
