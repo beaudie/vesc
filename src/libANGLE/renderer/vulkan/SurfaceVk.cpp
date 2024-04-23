@@ -1824,9 +1824,34 @@ bool WindowSurfaceVk::isMultiSampled() const
 angle::Result WindowSurfaceVk::queryAndAdjustSurfaceCaps(ContextVk *contextVk,
                                                          VkSurfaceCapabilitiesKHR *surfaceCaps)
 {
-    const VkPhysicalDevice &physicalDevice = contextVk->getRenderer()->getPhysicalDevice();
-    ANGLE_VK_TRY(contextVk,
-                 vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, surfaceCaps));
+    vk::Renderer *renderer                 = contextVk->getRenderer();
+    const VkPhysicalDevice &physicalDevice = renderer->getPhysicalDevice();
+
+    if (renderer->getFeatures().supportsSwapchainMaintenance1.enabled)
+    {
+        VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo2 = {};
+        surfaceInfo2.sType   = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+        surfaceInfo2.surface = mSurface;
+
+        VkSurfacePresentModeEXT surfacePresentMode = {};
+        surfacePresentMode.sType                   = VK_STRUCTURE_TYPE_SURFACE_PRESENT_MODE_EXT;
+        surfacePresentMode.presentMode =
+            vk::ConvertPresentModeToVkPresentMode(mDesiredSwapchainPresentMode);
+        vk::AddToPNextChain(&surfaceInfo2, &surfacePresentMode);
+
+        VkSurfaceCapabilities2KHR surfaceCaps2 = {};
+        surfaceCaps2.sType                     = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
+
+        ANGLE_VK_TRY(contextVk, vkGetPhysicalDeviceSurfaceCapabilities2KHR(
+                                    renderer->getPhysicalDevice(), &surfaceInfo2, &surfaceCaps2));
+        *surfaceCaps = surfaceCaps2.surfaceCapabilities;
+    }
+    else
+    {
+        ANGLE_VK_TRY(contextVk, vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface,
+                                                                          surfaceCaps));
+    }
+
     if (surfaceCaps->currentExtent.width == kSurfaceSizedBySwapchain)
     {
         ASSERT(surfaceCaps->currentExtent.height == kSurfaceSizedBySwapchain);
