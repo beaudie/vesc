@@ -721,6 +721,14 @@ class Texture final : public RefCountObject<TextureID>,
     // Texture bound to MSRTT framebuffer.
     void onBindToMSRTTFramebuffer();
 
+    enum class ImageMipLevels
+    {
+        EnabledLevels                 = 0,
+        FullMipChainForGenerateMipmap = 1,
+
+        InvalidEnum = 2,
+    };
+
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
 

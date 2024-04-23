@@ -464,6 +464,11 @@ GLint LimitToInt(const LargerInt physicalDeviceValue)
         physicalDeviceValue, static_cast<LargerInt>(std::numeric_limits<int32_t>::max() / 2)));
 }
 
+bool HasAnyRedefinedLevels(const gl::CubeFaceArray<gl::TexLevelMask> &redefinedLevels);
+bool IsLevelRedefined(const gl::CubeFaceArray<gl::TexLevelMask> &redefinedLevels,
+                      gl::TextureType textureType,
+                      gl::LevelIndex level);
+
 enum class PipelineType
 {
     Graphics = 0,
@@ -472,6 +477,7 @@ enum class PipelineType
     InvalidEnum = 2,
     EnumCount   = 2,
 };
+
 }  // namespace rx
 
 // MultiDraw macro patterns
