@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e4affed_47fce476",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-23T17:03:28Z",
+      "side": 1,
+      "message": "Made a bunch of changes based on this feedback I\u0027ll highlight here, also let me know if you want me to split this CL up even more as it\u0027s now much larger.\n\n* I copied over a lot of the logic from `TextureVk::respecifyImageStorageIfNecessary` but removed a lot regarding tracking vulkan specific usage flags as I didn\u0027t see similar flags in webgpu. I also am for now just resetting mImage (see `ImageHelper::resetImage` for what\u0027s being reset) instead of fully respecifying the storage as I saw that required copying textures and it\u0027s not implemented yet, so I\u0027m leaving that as a TODO\n* The bulk of the new changes are in `TextureWgpu::respecifyImageStorageIfNecessary` and various methods it calls. I also moved `hasAnyRedefinedLevels` and `isRedefinedLevel` out of TextureVk and into render_utils. \n* Updated `ImageHelper::initImage` to now get called when syncing the state, and in `TextureWgpu::getAttachmentRenderTarget`. Flushing updates also happens in both places for now as I do think it makes more sense to keep deferring clears out of scope for this specific CL, but I want to add it after we confirm the initial implementation of clears is working.\n* Staged updates are currently fairly simple as they\u0027re stored in a `wgpu::ImageCopyBuffer` along with the target mip level, `ImageHelper::flushStagedUpdates` already checks that a staged update is within the allocated mip range, but now that initialization happens after `TextureWgpu::respecifyImageStorageIfNecessary` the allocated range should be correct and not based on whatever updates were staged earlier, like they were in the previous patchset.",
+      "parentUuid": "2db72ed7_10fc8d5c",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 5
+      },
+      "revId": "14f6091e77bcaa6d6a5818d7da93dcfb09a8822b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba585c43_cf8ebc24",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
         "patchSetId": 12
@@ -37,6 +61,24 @@
       "writtenOn": "2024-04-17T02:39:19Z",
       "side": 1,
       "message": "Add `wgpu::TextureUsages::TextureBinding` while you\u0027re at it!",
+      "revId": "14f6091e77bcaa6d6a5818d7da93dcfb09a8822b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b985d3fd_7d23b784",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-23T17:03:28Z",
+      "side": 1,
+      "message": "I got rid of this helper method and moved creating the TextureDescriptor to `TextureWgpu::initializeImage`, added `wgpu::TextureUsage::TextureBinding` there",
+      "parentUuid": "ba585c43_cf8ebc24",
       "revId": "14f6091e77bcaa6d6a5818d7da93dcfb09a8822b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
