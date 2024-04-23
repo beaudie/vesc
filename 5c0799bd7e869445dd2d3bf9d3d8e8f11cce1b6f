@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fd425dc_76cafcc1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-23T16:53:15Z",
+      "side": 1,
+      "message": "I am not sure if use unordered_map is a better than std::vector (or just use angle::FastVector) here. You can survey all app traces and pick the initial size so that it is big enough for most/all apps. I think majority usage will be small number of bindings, so this complexity with unordered_map may not worth it.\n\nSame thing applies to mImmutableSamplers.",
+      "range": {
+        "startLine": 1030,
+        "startChar": 4,
+        "endLine": 1030,
+        "endChar": 22
+      },
+      "revId": "5c0799bd7e869445dd2d3bf9d3d8e8f11cce1b6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1ca3d6b_35449d78",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-23T16:53:15Z",
+      "side": 1,
+      "message": "You can make this struct union with uint32_t and this becomes uint32_t comparison.",
+      "range": {
+        "startLine": 1044,
+        "startChar": 8,
+        "endLine": 1044,
+        "endChar": 19
+      },
+      "revId": "5c0799bd7e869445dd2d3bf9d3d8e8f11cce1b6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
