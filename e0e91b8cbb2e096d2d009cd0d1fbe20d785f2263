@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fa6b45b_11f4bfc0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-04-23T01:30:18Z",
+      "side": 1,
+      "message": "Does:\n\nBug: chromium/335744344\n\nwork? Would prefer this if it does.",
+      "revId": "e0e91b8cbb2e096d2d009cd0d1fbe20d785f2263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d229960b_f1ab2aa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-04-23T01:30:18Z",
+      "side": 1,
+      "message": "lgtm+2\n\nSmall fix, well tested, so let me approve this directly. Thanks for your quick fix. One question about the commit message.",
+      "revId": "e0e91b8cbb2e096d2d009cd0d1fbe20d785f2263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
