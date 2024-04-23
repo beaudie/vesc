@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d2a7e8d_104b5e4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-23T17:31:13Z",
+      "side": 1,
+      "message": "\u003e I think majority usage will be small number of bindings\n\ni started with that assumption but shabi mentioned something different. let me know if you have a reasonable initial size in mind\n\n\u003e Same thing applies to mImmutableSamplers\n\ni want to squash these 2 maps into a single \"bindingIndex \u003c-\u003e std::pair\u003cPackedDescriptorSetBinding, VkSampler\u003e\" map",
+      "parentUuid": "0fd425dc_76cafcc1",
+      "range": {
+        "startLine": 1030,
+        "startChar": 4,
+        "endLine": 1030,
+        "endChar": 22
+      },
+      "revId": "5c0799bd7e869445dd2d3bf9d3d8e8f11cce1b6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a1ca3d6b_35449d78",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 15
