@@ -26,7 +26,10 @@ void SyncEGL::onDestroy(const egl::Display *display)
 {
     if (mSync != EGL_NO_SYNC_KHR)
     {
-        mEGL->destroySyncKHR(mSync);
+        egl::Display::GetCurrentThreadUnlockedTailCall()->add(
+            [egl = mEGL, sync = mSync](void *resultOut) {
+                *static_cast<EGLBoolean *>(resultOut) = egl->destroySyncKHR(sync);
+            });
         mSync = EGL_NO_SYNC_KHR;
     }
 }
@@ -49,11 +52,17 @@ egl::Error SyncEGL::initialize(const egl::Display *display,
     }
     nativeAttribs.push_back(EGL_NONE);
 
-    mSync = mEGL->createSyncKHR(type, nativeAttribs.data());
-    if (mSync == EGL_NO_SYNC_KHR)
-    {
-        return egl::Error(mEGL->getError(), "eglCreateSync failed to create sync object");
-    }
+    egl::Display::GetCurrentThreadUnlockedTailCall()->add(
+        [this, attribs = nativeAttribs](void *resultOut) {
+            mSync = mEGL->createSyncKHR(type, attribs.data());
+
+            // If sync creation failed, force the return value of eglCreateSync to EGL_NO_SYNC. This
+            // won't delete this sync object but a driver error is unexpected at this point.
+            if (mSync == EGL_NO_SYNC_KHR)
+            {
+                *static_cast<EGLSync *>(resultOut) = EGL_NO_SYNC_KHR;
+            }
+        });
 
     return egl::NoError();
 }
@@ -65,14 +74,14 @@ egl::Error SyncEGL::clientWait(const egl::Display *display,
                                EGLint *outResult)
 {
     ASSERT(mSync != EGL_NO_SYNC_KHR);
-    EGLint result = mEGL->clientWaitSyncKHR(mSync, flags, timeout);
 
-    if (result == EGL_FALSE)
-    {
-        return egl::Error(mEGL->getError(), "eglClientWaitSync failed");
-    }
+    // If we need to perform a CPU wait don't set the resultOut parameter passed into the
+    // method, instead set the parameter passed into the unlocked tail call.
+    egl::Display::GetCurrentThreadUnlockedTailCall()->add(
+        [egl = mEGL, sync = mSync, flags, timeout](void *resultOut) {
+            *static_cast<EGLint *>(resultOut) = egl->clientWaitSyncKHR(sync, flags, timeout);
+        });
 
-    *outResult = result;
     return egl::NoError();
 }
 
@@ -81,12 +90,11 @@ egl::Error SyncEGL::serverWait(const egl::Display *display,
                                EGLint flags)
 {
     ASSERT(mSync != EGL_NO_SYNC_KHR);
-    EGLint result = mEGL->waitSyncKHR(mSync, flags);
 
-    if (result == EGL_FALSE)
-    {
-        return egl::Error(mEGL->getError(), "eglWaitSync failed");
-    }
+    egl::Display::GetCurrentThreadUnlockedTailCall()->add(
+        [egl = mEGL, sync = mSync, flags](void *resultOut) {
+            *static_cast<EGLBoolean *>(resultOut) = egl->waitSyncKHR(sync, flags);
+        });
 
     return egl::NoError();
 }
