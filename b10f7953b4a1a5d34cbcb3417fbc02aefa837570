@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "8345dc49_d8baed77",
         "filename": "android/angle_apk.gni",
@@ -20,10 +21,10 @@
         "endChar": 46
       },
       "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "f5f13e5a_cbe4ceae",
         "filename": "android/angle_apk.gni",
@@ -44,10 +45,10 @@
         "endChar": 46
       },
       "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "9b08b81c_968525f2",
         "filename": "android/angle_apk.gni",
@@ -68,10 +69,34 @@
         "endChar": 46
       },
       "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c730a4f2_69bfbeb9",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1576907
+      },
+      "writtenOn": "2024-04-23T12:32:02Z",
+      "side": 1,
+      "message": "\u003e Yeah, as you saw we need a well known package name to reference when opening the developer options fragment layout, which will be shared by each of the version of this APK.   This was the cleanest way I could get it to generate and build everything, but we can certainly revisit it when things settle down and we\u0027ve got a better idea of how thing work.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1354101/comment/8345dc49_d8baed77/",
+      "parentUuid": "9b08b81c_968525f2",
+      "range": {
+        "startLine": 21,
+        "startChar": 22,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "a0c3348b_86771db8",
         "filename": "android/angle_apk.gni",
@@ -91,10 +116,10 @@
         "endChar": 5
       },
       "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "0048cd79_261470b6",
         "filename": "android/angle_apk.gni",
@@ -115,8 +140,31 @@
         "endChar": 5
       },
       "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c148a935_e1935c23",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1576907
+      },
+      "writtenOn": "2024-04-23T12:32:02Z",
+      "side": 1,
+      "message": "\u003e We are hoping there will only ever be the Google and AOSP versions of ANGLE, and that everyone uses the Google version so they can get our updates from the Play Store.   I think we currently only expect to build AOSP and Google APKs from the public version of ANGLE, but we could certainly add additional builds if it makes sense (though I\u0027m not sure how they would be signed, uploaded, etc.).\n\u003e \n\u003e However, I think we expect there may be additional APKs generated for other vendors.   If that\u0027s the case, I believe our expectation is that they will fork ANGLE to add their secret sauce they don\u0027t want to make public and merge into ANGLE.   In that case, they would likely replace our \"google_apk\" with their \"oem_apk\", rather than building an additional (Google) APK they don\u0027t want/need.\n\u003e \n\u003e Either way, I think this is a clean starting point to indicate the differences between the builds of ANGLE.   I mentioned to Cody that I expect there to be additional differences between the Google and AOSP versions of ANGLE, like the rules file that determines where to run it.   We may not want to make any assumptions about devices/GPUs/apps/etc. in the AOSP version so it truly can be run anywhere, but be more restricting in the Google version for stability/performance reasons.   As with my other comment, we can always clean things up in the future if it makes sense or we get more feedback.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1354101/comment/a0c3348b_86771db8/",
+      "parentUuid": "0048cd79_261470b6",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 5
+      },
+      "revId": "b10f7953b4a1a5d34cbcb3417fbc02aefa837570",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

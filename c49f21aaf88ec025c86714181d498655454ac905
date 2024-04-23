@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "e2c202db_824ff4d9",
         "filename": "android/AndroidManifest.xml.jinja2",
@@ -20,10 +21,10 @@
         "endChar": 38
       },
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "a43c9ad2_3d67f28a",
         "filename": "android/AndroidManifest.xml.jinja2",
@@ -44,10 +45,10 @@
         "endChar": 38
       },
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "76329b93_7d3286e9",
         "filename": "android/angle_apk.gni",
@@ -67,10 +68,10 @@
         "endChar": 58
       },
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "f3f2e4c7_6944272b",
         "filename": "android/angle_apk.gni",
@@ -91,10 +92,34 @@
         "endChar": 58
       },
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4597b7fc_5877569f",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1576907
+      },
+      "writtenOn": "2024-04-23T12:32:02Z",
+      "side": 1,
+      "message": "\u003e That does look nicer. Done.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1354101/comment/76329b93_7d3286e9/",
+      "parentUuid": "f3f2e4c7_6944272b",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 58
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "0bde9b03_853dcf5d",
         "filename": "android/angle_apk.gni",
@@ -114,10 +139,10 @@
         "endChar": 32
       },
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "fd261f0c_85de804c",
         "filename": "android/angle_apk.gni",
@@ -138,10 +163,34 @@
         "endChar": 32
       },
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a245e32_31b25e7b",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1576907
+      },
+      "writtenOn": "2024-04-23T12:32:02Z",
+      "side": 1,
+      "message": "\u003e I like how BUILD.gn is set up now, where it just tells the Android build what targets to build and what they are called, while leaving the details up to the Android build itself.   I think moving the subdirectory into BUILD.gn spreads out the details for how an Android build is done (and the overall structure of the Android code) outside of the Android environment too much, so I\u0027m going to keep the target check here.\n\u003e \n\u003e I\u0027d actually like to take what\u0027s here even further and have BUILD.gn just know the target names and have angle_apk.gni configure the package names based on the target.   This would let BUILD.gn be completely naive about Android and let us entirely encapsulate the details where they are needed.   That\u0027s outside of the scope of my changes though.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1354101/comment/0bde9b03_853dcf5d/",
+      "parentUuid": "fd261f0c_85de804c",
+      "range": {
+        "startLine": 76,
+        "startChar": 25,
+        "endLine": 76,
+        "endChar": 32
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "5baf3010_e7a1e3e4",
         "filename": "android/src/com/android/angle/common/GlobalSettings.java",
@@ -155,10 +204,10 @@
       "side": 1,
       "message": "nit: blank line can be removed",
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "7d2340a1_c06b5750",
         "filename": "android/src/com/android/angle/common/GlobalSettings.java",
@@ -173,10 +222,10 @@
       "message": "Done",
       "parentUuid": "5baf3010_e7a1e3e4",
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "64b1204b_7765e993",
         "filename": "android/src/com/android/angle/common/MainFragment.java",
@@ -196,10 +245,10 @@
         "endChar": 78
       },
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "cf200524_9c4afdd4",
         "filename": "android/src/com/android/angle/common/MainFragment.java",
@@ -220,8 +269,31 @@
         "endChar": 78
       },
       "revId": "c49f21aaf88ec025c86714181d498655454ac905",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e57c28c_f8082810",
+        "filename": "android/src/com/android/angle/common/MainFragment.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1576907
+      },
+      "writtenOn": "2024-04-23T12:32:02Z",
+      "side": 1,
+      "message": "\u003e Ah, oops, should have been cleaned up when GlobalSettings.java was created.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1354101/comment/64b1204b_7765e993/",
+      "parentUuid": "cf200524_9c4afdd4",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 78
+      },
+      "revId": "c49f21aaf88ec025c86714181d498655454ac905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
