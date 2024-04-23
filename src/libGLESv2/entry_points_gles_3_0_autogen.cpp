@@ -408,7 +408,7 @@ GLenum GL_APIENTRY GL_ClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 tim
         GenerateContextLostErrorOnCurrentGlobalContext();
         returnValue = GetDefaultReturnValue<angle::EntryPoint::GLClientWaitSync, GLenum>();
     }
-    egl::Display::GetCurrentThreadUnlockedTailCall()->run(&returnValue);
+    ASSERT(!egl::Display::GetCurrentThreadUnlockedTailCall()->any());
     return returnValue;
 }
 
