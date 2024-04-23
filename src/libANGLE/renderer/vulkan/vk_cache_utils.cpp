@@ -7468,6 +7468,15 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
         return angle::Result::Continue;
     }
 
+    if (desc.empty())
+    {
+        auto insertedItem = mPayload.emplace(desc, vk::DescriptorSetLayout());
+        vk::RefCountedDescriptorSetLayout &insertedLayout = insertedItem.first->second;
+        descriptorSetLayoutOut->set(&insertedLayout);
+
+        return angle::Result::Continue;
+    }
+
     mCacheStats.missAndIncrementSize();
     // We must unpack the descriptor set layout description.
     vk::DescriptorSetLayoutBindingVector bindingVector;
@@ -7537,11 +7546,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     {
         if (layoutPtr.valid())
         {
-            VkDescriptorSetLayout setLayout = layoutPtr.get().getHandle();
-            if (setLayout != VK_NULL_HANDLE)
-            {
-                setLayoutHandles.push_back(setLayout);
-            }
+            setLayoutHandles.push_back(layoutPtr.get().getHandle());
         }
     }
 
