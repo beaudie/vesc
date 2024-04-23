@@ -43,7 +43,7 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '39c16b7a37406d313976455738e4185a6e9e8d03',
+  'chromium_revision': '1369509d3ba53eef0130782d147b8ebaaad18076',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -88,7 +88,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': 'e939ac77bb9471acc10f49e82cfe65790068c3d1',
+  'catapult_revision': '4066874f50a7808fce4e0a6a92979a2b2b4d3257',
 
   # the commit queue can handle CLs rolling Fuchsia sdk
   # and whatever else without interference from each other.
@@ -414,12 +414,12 @@ vars = {
 deps = {
 
   'build': {
-    'url': Var('chromium_git') + '/chromium/src/build.git@f381a5d258f0eada4da4c4d5b542bc6359160171',
+    'url': Var('chromium_git') + '/chromium/src/build.git@c7d168ab6d2622e714b19a5e65b940a505a04990',
     'condition': 'not build_with_chromium',
   },
 
   'buildtools': {
-    'url': Var('chromium_git') + '/chromium/src/buildtools.git@5eb927f0a922dfacf10cfa84ee76f39dcf2a7311',
+    'url': Var('chromium_git') + '/chromium/src/buildtools.git@571c37f17dd4d1de37cc2efb6b32ff1032e47be2',
     'condition': 'not build_with_chromium',
   },
 
@@ -473,7 +473,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@844489d5bf7389c5eaf4c8f5de6792dedfc0f691',
+    'url': '{chromium_git}/chromium/src/testing@fdc7df36c567db7711bb8d78cf584fbc4db13e09',
     'condition': 'not build_with_chromium',
   },
 
@@ -655,7 +655,7 @@ deps = {
   },
 
   'third_party/depot_tools': {
-    'url': Var('chromium_git') + '/chromium/tools/depot_tools.git@6ba67afd6fb7718743af91b847ddf1907f3ee9a6',
+    'url': Var('chromium_git') + '/chromium/tools/depot_tools.git@401216ed9b726f82c4d9927ce82e97a134457088',
     'condition': 'not build_with_chromium',
   },
 
@@ -871,7 +871,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/r8',
-              'version': 'jiR3Cmr6zLjEDaMOALv35_EoVDJbl5Mdza1IRQLevjAC',
+              'version': 'mhSwabeiU2ueQeYkj0X1JTg-6ZdtQgiVVXM1bo0yu4IC',
           },
       ],
       'condition': 'checkout_android and not build_with_chromium',
@@ -958,12 +958,12 @@ deps = {
   },
 
   'tools/android': {
-    'url': Var('chromium_git') + '/chromium/src/tools/android@31ab5f9786b2a9f16af8cdde21eabc27606dbd46',
+    'url': Var('chromium_git') + '/chromium/src/tools/android@628a8e6856fbd0f8ca188de19724ae963e3483db',
     'condition': 'checkout_android and not build_with_chromium',
   },
 
   'tools/clang': {
-    'url': Var('chromium_git') + '/chromium/src/tools/clang.git@e0d0c28dbe379471d0e61c017291665a80310492',
+    'url': Var('chromium_git') + '/chromium/src/tools/clang.git@bca0c9f60a365ef2294c42e216420c561093f06f',
     'condition': 'not build_with_chromium',
   },
 
@@ -994,7 +994,7 @@ deps = {
   },
 
   'tools/mb': {
-    'url': Var('chromium_git') + '/chromium/src/tools/mb@8f37fed0b77117dee23a82a66217fb4881fbc889',
+    'url': Var('chromium_git') + '/chromium/src/tools/mb@918fef0e469d158c691256dea091c5df4674fb1d',
     'condition': 'not build_with_chromium',
   },
 
@@ -1009,7 +1009,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': Var('chromium_git') + '/chromium/src/tools/perf@8bf48ae26975dcbb083aea81d280edb90efad270',
+    'url': Var('chromium_git') + '/chromium/src/tools/perf@3f41393fee08650dd70f699546cadb4dcddf2674',
     'condition': 'not build_with_chromium',
   },
 
@@ -1027,7 +1027,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/linux-amd64',
-          'version': 'SQswrvGi674ASEtZKS6NGrcxzcOAx9fdEvxSUwNCVkIC',
+          'version': 'ZpyLtfuztdYI-RCkvm6kXlmx8ec1wYyrwXNI-lQEJKwC',
         },
       ],
       'dep_type': 'cipd',
@@ -1038,7 +1038,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/windows-amd64',
-          'version': '4Y2pcWzsEQOJJ76XA1eaNSwef4YuyOrnQ-lSK1-71PkC',
+          'version': 'LT6gNudC207ke0t4qv9IW_s27hoPIafnwpcfrzR8FzMC',
         },
       ],
       'dep_type': 'cipd',
@@ -1049,7 +1049,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/mac-amd64',
-          'version': 'vuB-Klm2s3uWsshi6g4r4l4fZox0RrWCgtSRKTxev3QC',
+          'version': 'FpwpXsMPl8Mets8uet3zfFw8nNBpl69xJoTYESLUjl8C',
         },
       ],
       'dep_type': 'cipd',
@@ -1060,7 +1060,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/mac-arm64',
-          'version': 'sqWmO8LOK7GgLCYuZo_PWkn6BcuBSgv16TPYoV44QUsC',
+          'version': 'GuJOsvx5V5z8DvAM_HOVy6eBydQ0sO7dVso_p_L7KTgC',
         },
       ],
       'dep_type': 'cipd',
