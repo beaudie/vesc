@@ -16,6 +16,24 @@
       "message": "IIUC, this CL would produce double underscores in the generated output. The `IdGen::createNewName` function has the following comment:\n\u003e Double underscores are only allowed in C++ (and thus Metal) vendor identifiers, so here we take care not to introduce any.",
       "revId": "6fe8a399dd7fd5dd7fe2d8e4eae81a5b5f586aa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "390cd993_ff937fd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-04-23T16:52:51Z",
+      "side": 1,
+      "message": "I think the idea is that all internal symbols are of form:\n`ANGLE_{name}`\n\nDouble underscore [prefixes] would be produced with form:\n`_{name}`\n\nThis CL should not do this.",
+      "parentUuid": "812c6f4e_c0c5430d",
+      "revId": "6fe8a399dd7fd5dd7fe2d8e4eae81a5b5f586aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
