@@ -673,7 +673,7 @@ void TextureWgpu::initSingleLayerRenderTargets(ContextWgpu *contextWgpu,
         textureViewDesc.aspect          = wgpu::TextureAspect::All;
         textureViewDesc.baseArrayLayer  = layerIndex;
         textureViewDesc.arrayLayerCount = 1;
-        textureViewDesc.baseMipLevel    = mImage->toWgpuLevel(levelIndex).get();
+        textureViewDesc.baseMipLevel    = levelIndex.get();
         textureViewDesc.mipLevelCount   = 1;
         switch (mImage->getTextureDescriptor().dimension)
         {
