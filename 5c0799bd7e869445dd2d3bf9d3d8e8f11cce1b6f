@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "82269058_a9efc443",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-23T17:48:16Z",
+      "side": 1,
+      "message": "I don\u0027t have a reasonable size in mind. My suggestion is you pick number based on app traces: Add statistics here and then run all app traces and print out the max size and make decision based on that.",
+      "parentUuid": "8d2a7e8d_104b5e4f",
+      "range": {
+        "startLine": 1030,
+        "startChar": 4,
+        "endLine": 1030,
+        "endChar": 22
+      },
+      "revId": "5c0799bd7e869445dd2d3bf9d3d8e8f11cce1b6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a1ca3d6b_35449d78",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 15
