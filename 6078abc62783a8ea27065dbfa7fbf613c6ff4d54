@@ -177,6 +177,24 @@
       "parentUuid": "96a135aa_a313185a",
       "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fb0dcdc_a17edbe6",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-23T17:32:44Z",
+      "side": 1,
+      "message": "Hey @syoussefi@chromium.org - getting back to this. I tried looking into `Flush + ResourceUse wait`, however I\u0027m running into issues here. Since we launch `clFlush` on worker thread, we regularly hit case where we have not submitted yet when calling renderer wait routine shortly after (hitting asserts).\n\nI think once we make `clFlush` not use a submission thread and rather register post-fence ops + call submit commands, then I think we can go with this approach.\n\nTill then, is it reasonable to keep as-is and add a TODO here for this routine? I plan to rework all of this in the near future.",
+      "parentUuid": "20d808e5_93cc2420",
+      "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
