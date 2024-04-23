@@ -34,6 +34,24 @@
       "parentUuid": "812c6f4e_c0c5430d",
       "revId": "6fe8a399dd7fd5dd7fe2d8e4eae81a5b5f586aa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d784fe8c_e3ed6a56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-04-23T17:04:25Z",
+      "side": 1,
+      "message": "From the translated shaders of the new test with the CL applied:\n```\nstruct ANGLE_FragmentOutMod\n{\n  metal::float4 ANGLE__e_0 [[color(0)]];\n  metal::float4 ANGLE__e_1 [[color(1)]];\n```\n\nalso\n```\nmetal::float2 ANGLE_s160d(float ANGLE_s160e, float ANGLE_s160f)\n{\n  metal::float2 ANGLE__1 \u003d metal::float2(ANGLE_s160e, ANGLE_s160f);\n  return ANGLE__1;;\n}\n```",
+      "parentUuid": "390cd993_ff937fd4",
+      "revId": "6fe8a399dd7fd5dd7fe2d8e4eae81a5b5f586aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
