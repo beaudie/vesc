@@ -654,6 +654,36 @@ b/308668391 PIXEL4ORXL VULKAN : ImageTest.SourceYUVAHBTargetExternalRGBSampleNoD
 8598 PIXEL6 VULKAN : VulkanPerformanceCounterTest.RenderToTextureDepthStencilRenderbufferShouldNotLoad/* = SKIP
 8598 PIXEL6 VULKAN : VulkanPerformanceCounterTest.RenderToTextureDepthStencilTextureShouldNotLoad/* = SKIP
 8598 PIXEL6 VULKAN : VulkanPerformanceCounterTest.RenderToTextureUninitializedAndUnusedDepthStencil/* = SKIP
+// New failures after AP1A.240405.002 upgrade
+b/336847261 PIXEL6 VULKAN : StateChangeTestES3.LineWidth/* = SKIP
+b/336847261 PIXEL6 VULKAN : ExternalBufferTestES31.BufferSubData/* = SKIP
+b/336847261 PIXEL6 VULKAN : ExternalBufferTestES31.MapBufferDoesNotCauseOrphaning/* = SKIP
+b/336847261 PIXEL6 VULKAN : ExternalBufferTestES31.SubDataDoesNotCauseOrphaning/* = SKIP
+b/336847261 PIXEL6 VULKAN : FramebufferTest_ES31.MultipleTextureMultisampleResolveWithBlitMultipleResolves/* = SKIP
+b/336847261 PIXEL6 VULKAN : FramebufferTest_ES31.MultipleTextureMultisampleResolveWithBlitMultipleResolvesAttachment1First/* = SKIP
+b/336847261 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachments/* = SKIP
+b/336847261 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveWithBlitThenDrawAttachment1/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTest.SourceAHBTarget2DExternalCycleThroughRgbAndYuvSources/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTest.SourceAHBTarget2DExternalCycleThroughRgbAndYuvTargets/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTest.SourceAHBTarget2DExternalCycleThroughYuvSourcesNoData/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTest.SourceAHBTarget2DExternalCycleThroughYuvTargetsNoData/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTest.SourceYUVAHBTargetExternalRGBSampleInitData/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTest.SourceYUVAHBTargetExternalRGBSampleNoData/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTestES3.ClearYUVAHB/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTestES3.RenderToYUVAHB/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTestES3.SourceYUVAHBTargetExternalYUVSample/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTestES3.SourceYUVAHBTargetExternalYUVSampleLinearFiltering/* = SKIP
+b/336847261 PIXEL6 VULKAN : ImageTestES3.YUVValidation/* = SKIP
+b/336847261 PIXEL6 VULKAN : MultithreadingTestES3.SimultaneousUploadAndDraw/* = SKIP
+b/336847261 PIXEL6 VULKAN : OcclusionQueriesTestES3.UnresolveNotCounted/* = SKIP
+b/336847261 PIXEL6 VULKAN : TransformFeedback*/ES3_Vulkan_NoSupportsTransformFeedbackExtension = SKIP
+b/336847261 PIXEL6 VULKAN : TransformFeedbackTestIOBlocks.Separate/* = SKIP
+b/336847261 PIXEL6 VULKAN : VulkanPerformanceCounterTest.MappingGpuReadOnlyBufferGhostsBuffer_Copy/* = SKIP
+b/336847261 PIXEL6 VULKAN : VulkanPerformanceCounterTest.MappingGpuReadOnlyBufferGhostsBuffer_SubData/* = SKIP
+b/336847261 PIXEL6 VULKAN : VulkanPerformanceCounterTest.RenderToTextureDepthStencilRenderbufferShouldNotLoad/* = SKIP
+b/336847261 PIXEL6 VULKAN : VulkanPerformanceCounterTest.RenderToTextureDepthStencilTextureShouldNotLoad/* = SKIP
+b/336847261 PIXEL6 VULKAN : VulkanPerformanceCounterTest.RenderToTextureUninitializedAndUnusedDepthStencil/* = SKIP
+b/336847261 PIXEL6 VULKAN : WebGLCompatibilityTest.FramebufferFloatColorAttachmentMRT/* = SKIP
 
 // ARM drivers cannot support xfb emulation because they lack support for the
 // vertexPipelineStoresAndAtomics Vulkan feature.  The tests that force-enable this feature are
