@@ -1498,6 +1498,14 @@
                 "is enabled when the former is the case."
             ],
             "issue": "http://anglebug.com/8601"
+        },
+        {
+            "name": "use_vkEvent_for_image_barrier",
+            "category": "Features",
+            "description": [
+                "Uses VkEvent instead of VkCmdPipelineBarrier for image barriers"
+            ],
+            "issue": "https://issuetracker.google.com/336844257"
         }
     ]
 }

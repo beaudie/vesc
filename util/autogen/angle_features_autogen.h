@@ -398,6 +398,7 @@ enum class Feature
     UseSystemMemoryForConstantBuffers,
     UseUnusedBlocksWithStandardOrSharedLayout,
     UseVertexInputBindingStrideDynamicState,
+    UseVkEventForImageBarrier,
     UseVmaForImageSuballocation,
     VaryingsRequireMatchingPrecisionInSpirv,
     VertexIDDoesNotIncludeBaseVertex,
