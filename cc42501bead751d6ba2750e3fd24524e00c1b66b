@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c2f37bf_b4c45c9d",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-24T14:11:58Z",
+      "side": 1,
+      "message": "Can\u0027t we do this in `testSetUp` rather than shift all the frames?",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 218,
+        "endChar": 25
+      },
+      "revId": "cc42501bead751d6ba2750e3fd24524e00c1b66b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
