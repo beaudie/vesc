@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8395dc0_d087efe1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-24T16:17:23Z",
+      "side": 1,
+      "message": "shelving this until decouple support is upstreamed for 2 reasons -\n\n1. https://registry.khronos.org/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-VkGraphicsPipelineCreateInfo-flags-06682 - set layout handle cant be null unless pre-rast and fragment subsets are decoupled\n\n2. https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-VkPipelineLayoutCreateInfo-graphicsPipelineLibrary-06753 - only if GPL is supported can the set layout handles be null",
+      "revId": "356ff9623c1b2212c18d01c800bb106934235b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
