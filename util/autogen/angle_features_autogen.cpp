@@ -75,6 +75,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::CopyTextureToBufferForReadOptimization, "copyTextureToBufferForReadOptimization"},
     {Feature::CorruptProgramBinaryForTesting, "corruptProgramBinaryForTesting"},
     {Feature::DecodeEncodeSRGBForGenerateMipmap, "decodeEncodeSRGBForGenerateMipmap"},
+    {Feature::DecoupledPrerastFragmentPipelineCompilation, "decoupledPrerastFragmentPipelineCompilation"},
     {Feature::DeferFlushUntilEndRenderPass, "deferFlushUntilEndRenderPass"},
     {Feature::DepthStencilBlitExtraCopy, "depthStencilBlitExtraCopy"},
     {Feature::DisableAnisotropicFiltering, "disableAnisotropicFiltering"},

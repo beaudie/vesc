@@ -1488,6 +1488,14 @@
                 "Enable non-semantic info inside shader module via VK_KHR_shader_non_semantic_info extension"
             ],
             "issue": "http://anglebug.com/8549"
+        },
+        {
+            "name": "decoupled_prerast_fragment_pipeline_compilation",
+            "category": "Features",
+            "description": [
+                "Support for decoupled pipeline compilation of pre-rasterization and fragment shader subsets"
+            ],
+            "issue": "http://anglebug.com/8601"
         }
     ]
 }

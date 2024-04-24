@@ -1366,6 +1366,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/8549"
     };
 
+    FeatureInfo decoupledPrerastFragmentPipelineCompilation = {
+        "decoupledPrerastFragmentPipelineCompilation",
+        FeatureCategory::VulkanFeatures,
+        "Support for decoupled pipeline compilation of pre-rasterization and fragment shader subsets",
+        &members, "http://anglebug.com/8601"
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
