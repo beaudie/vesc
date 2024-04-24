@@ -33,6 +33,24 @@
       "message": "Ah, it\u0027s hard to analyze the failures on https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-exp-test/151/overview, because the CI is also red https://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/5011/overview.\n\nI don\u0027t see VUID-VkSwapchainCreateInfoKHR-presentMode-02839 anymore.\n\nBut it looks like there are failures on this CL that are not on CI, e.g.\nUNASSIGNED-CoreValidation-DrawState-InvalidImageLayout\nin https://chromium-swarm.appspot.com/task?id\u003d691e4a86d90ea610\nLooks suspicious, PTAL.",
       "revId": "a11e32c658a7ec60d9f71e28a87b64cff61df695",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "089e01a4_3d50949b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-24T00:01:32Z",
+      "side": 1,
+      "message": "Yea, the failure actually is not due to UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout, tyhat VVL error is actually different bug, and was present even before this CL. The actual failure is because there is one more place in WindowSurfaceVk::queryAndAdjustSurfaceCaps() we are still using the basic version of query which end up returning the different minImageCount which triggers swapChain recreation and content gets lost. This is now fixed with new patch.",
+      "parentUuid": "6bb31383_805264fb",
+      "revId": "a11e32c658a7ec60d9f71e28a87b64cff61df695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
