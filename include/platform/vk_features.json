@@ -1488,6 +1488,14 @@
                 "Enable non-semantic info inside shader module via VK_KHR_shader_non_semantic_info extension"
             ],
             "issue": "http://anglebug.com/8549"
+        },
+        {
+            "name": "use_vkEvent_for_image_barrier",
+            "category": "Features",
+            "description": [
+                "Uses VkEvent instead of VkCmdPipelineBarrier for image barriers"
+            ],
+            "issue": "https://issuetracker.google.com/336844257"
         }
     ]
 }
