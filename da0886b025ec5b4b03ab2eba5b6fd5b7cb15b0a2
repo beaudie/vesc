@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "da0886b025ec5b4b03ab2eba5b6fd5b7cb15b0a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f90a0ac_c608d2c5",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T12:25:57Z",
+      "side": 1,
+      "message": "I have a feeling your new decoupled form would end up as default, so save yourself some time and invert this: `combine_all_shaders_in_pipeline_library`.",
+      "range": {
+        "startLine": 1493,
+        "startChar": 0,
+        "endLine": 1497,
+        "endChar": 14
+      },
+      "revId": "da0886b025ec5b4b03ab2eba5b6fd5b7cb15b0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
