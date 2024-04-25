@@ -464,7 +464,10 @@ void EGLAPIENTRY EGL_{name}({params})
 
         {{
             ANGLE_EGL_SCOPED_CONTEXT_LOCK({name}, thread{comma_if_needed_context_lock}{internal_context_lock_params});
-            ANGLE_EGL_VALIDATE_VOID(thread, {name}, {labeled_object}, {internal_params});
+            if (IsValidationEnabled())
+            {{
+                ANGLE_EGL_VALIDATE_VOID(thread, {name}, {labeled_object}, {internal_params});
+            }}
 
             {name}(thread{comma_if_needed}{internal_params});
         }}
@@ -489,7 +492,10 @@ TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN = """\
 
         {{
             ANGLE_EGL_SCOPED_CONTEXT_LOCK({name}, thread{comma_if_needed_context_lock}{internal_context_lock_params});
-            ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+            if (IsValidationEnabled())
+            {{
+                ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+            }}
 
             returnValue = {name}(thread{comma_if_needed}{internal_params});
         }}
@@ -512,7 +518,10 @@ TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_NO_LOCKS = """\
 
     {packed_gl_enum_conversions}
 
-    ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+    if (IsValidationEnabled())
+    {{
+        ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+    }}
 
     returnValue = {name}(thread{comma_if_needed}{internal_params});
 
@@ -998,6 +1007,7 @@ FORMAT_DICT = {
     "GLushort": "%u",
     "int": "%d",
     # EGL-specific types
+    "EGLBoolean": "%u",
     "EGLConfig": POINTER_FORMAT,
     "EGLContext": POINTER_FORMAT,
     "EGLDisplay": POINTER_FORMAT,
