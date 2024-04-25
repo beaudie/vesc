@@ -34,6 +34,24 @@
       "parentUuid": "a6f6c261_599f30bb",
       "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d9ecbfd_d53f53ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T13:32:59Z",
+      "side": 1,
+      "message": "It\u0027s `constexpr` limitations. Or rather older C++ limitations. If you change the initializer to designated initializers, like this it would work (and no need for assert):\n\n```\n    static constexpr DirtyObjectHandler kDirtyObjectHandlers[state::DIRTY_OBJECT_MAX] \u003d {\n        [state::DIRTY_OBJECT_ACTIVE_TEXTURES] \u003d \u0026State::syncActiveTextures,\n        ...\n```",
+      "parentUuid": "40c3ffde_e1e0d3cd",
+      "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
