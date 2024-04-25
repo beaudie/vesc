@@ -190,6 +190,13 @@ VkResult VerifyExtensionsPresent(const vk::ExtensionNameList &haystack,
     return VK_ERROR_EXTENSION_NOT_PRESENT;
 }
 
+// This is called by Renderer::initialize to determine if syncVal should be enabled. We may not know
+// the actual driverID yet.
+bool ShouldUseEventForImageBarrier()
+{
+    return true;
+}
+
 // Array of Validation error/warning messages that will be ignored, should include bugID
 constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/8401
@@ -284,6 +291,8 @@ constexpr const char *kSkippedMessages[] = {
     // https://issuetracker.google.com/336847261
     "VUID-VkImageCreateInfo-pNext-02397",
     "VUID-vkCmdDraw-None-06550",
+    // https://issuetracker.google.com/337135577
+    "UNASSIGNED-SubmitValidation-WaitEvents-WrongQueue",
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
@@ -291,6 +300,12 @@ constexpr const char *kSkippedMessages[] = {
 constexpr const char *kNoListRestartSkippedMessages[] = {
     // http://anglebug.com/3832
     "VUID-VkPipelineInputAssemblyStateCreateInfo-topology-06252",
+};
+
+// VVL appears has a bug tracking stageMask on VkEvent with secondary command buffer.
+// https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/7849
+constexpr const char *kSkippedMessagesWithVulkanSecondaryCommandBuffer[] = {
+    "VUID-vkCmdWaitEvents-srcStageMask-parameter",
 };
 
 // Some syncval errors are resolved in the presence of the NONE load or store render pass ops.  For
@@ -1907,7 +1922,11 @@ angle::Result Renderer::initialize(vk::Context *context,
     // Fine grain control of validation layer features
     const char *name                     = "VK_LAYER_KHRONOS_validation";
     const VkBool32 setting_validate_core = VK_TRUE;
-    const VkBool32 setting_validate_sync = IsAndroid() ? VK_FALSE : VK_TRUE;
+    // SyncVal is very slow (https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/7285)
+    // for VkEvent which causes a few tests fail on the bots. Disable syncVal if VkEvent is enabled
+    // for now.
+    const VkBool32 setting_validate_sync =
+        IsAndroid() || ShouldUseEventForImageBarrier() ? VK_FALSE : VK_TRUE;
     const VkBool32 setting_thread_safety = VK_TRUE;
     // http://anglebug.com/7050 - Shader validation caching is broken on Android
     const VkBool32 setting_check_shaders = IsAndroid() ? VK_FALSE : VK_TRUE;
@@ -3653,6 +3672,16 @@ void Renderer::initializeValidationMessageSuppressions()
             kNoListRestartSkippedMessages + ArraySize(kNoListRestartSkippedMessages));
     }
 
+    if (getFeatures().useVkEventForImageBarrier.enabled &&
+        (!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
+         !vk::RenderPassCommandBuffer::ExecutesInline()))
+    {
+        mSkippedValidationMessages.insert(
+            mSkippedValidationMessages.end(), kSkippedMessagesWithVulkanSecondaryCommandBuffer,
+            kSkippedMessagesWithVulkanSecondaryCommandBuffer +
+                ArraySize(kSkippedMessagesWithVulkanSecondaryCommandBuffer));
+    }
+
     // Build the list of syncval errors that are currently expected and should be skipped.
     mSkippedSyncvalMessages.insert(mSkippedSyncvalMessages.end(), kSkippedSyncvalMessages,
                                    kSkippedSyncvalMessages + ArraySize(kSkippedSyncvalMessages));
@@ -5057,9 +5086,7 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExternalFormatResolve, false);
 #endif
 
-    // Disable use of VkCmdWaitEvent for image barriers for now.
-    // https://issuetracker.google.com/336844257
-    ANGLE_FEATURE_CONDITION(&mFeatures, useVkEventForImageBarrier, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useVkEventForImageBarrier, ShouldUseEventForImageBarrier());
 
     // Disable memory report feature overrides if extension is not supported.
     if ((mFeatures.logMemoryReportCallbacks.enabled || mFeatures.logMemoryReportStats.enabled) &&
