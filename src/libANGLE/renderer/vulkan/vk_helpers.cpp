@@ -1507,10 +1507,18 @@ void CommandBufferHelperCommon::initializeImpl()
     mCommandAllocator.init();
 }
 
-void CommandBufferHelperCommon::resetImpl()
+void CommandBufferHelperCommon::resetImpl(Context *context)
 {
     ASSERT(!mAcquireNextImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
+
+    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
+    // so the event itself will not gets destroyed until the last refCount goes away.
+    if (!mRefCountedEventGarbage.empty())
+    {
+        context->getRenderer()->collectRefCountedEventGarbage(mQueueSerial,
+                                                              std::move(mRefCountedEventGarbage));
+    }
 }
 
 template <class DerivedT>
@@ -1693,6 +1701,46 @@ void CommandBufferHelperCommon::updateImageLayoutAndBarrier(Context *context,
     }
 }
 
+void CommandBufferHelperCommon::retainImage(Context *context, ImageHelper *image)
+{
+    image->setQueueSerial(mQueueSerial);
+
+    if (context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled)
+    {
+        image->setCurrentRefCountedEvent(context, mRefCountedEvents);
+    }
+}
+
+template <typename CommandBufferT>
+void CommandBufferHelperCommon::flushSetEventsImpl(Context *context, CommandBufferT *commandBuffer)
+{
+    if (mRefCountedEvents.mask.none())
+    {
+        return;
+    }
+
+    // Add VkCmdSetEvent here to track the completion of this renderPass.
+    for (ImageLayout layout : mRefCountedEvents.mask)
+    {
+        RefCountedEvent &refCountedEvent = mRefCountedEvents.map[layout];
+        ASSERT(refCountedEvent.valid());
+        const ImageMemoryBarrierData &layoutData =
+            kImageMemoryBarrierData[refCountedEvent.getImageLayout()];
+        commandBuffer->setEvent(refCountedEvent.getEvent().getHandle(),
+                                GetImageLayoutDstStageMask(context, layoutData));
+        // We no longer need event, so garbage collect it.
+        mRefCountedEventGarbage.add(&refCountedEvent);
+    }
+    mRefCountedEvents.mask.reset();
+}
+
+template void CommandBufferHelperCommon::flushSetEventsImpl<priv::SecondaryCommandBuffer>(
+    Context *context,
+    priv::SecondaryCommandBuffer *commandBuffer);
+template void CommandBufferHelperCommon::flushSetEventsImpl<VulkanSecondaryCommandBuffer>(
+    Context *context,
+    VulkanSecondaryCommandBuffer *commandBuffer);
+
 void CommandBufferHelperCommon::addCommandDiagnosticsCommon(std::ostringstream *out)
 {
     mPipelineBarriers.addDiagnosticsString(*out);
@@ -1723,7 +1771,7 @@ angle::Result OutsideRenderPassCommandBufferHelper::reset(
     Context *context,
     SecondaryCommandBufferCollector *commandBufferCollector)
 {
-    resetImpl();
+    resetImpl(context);
 
     // Collect/Reset the command buffer
     commandBufferCollector->collectCommandBuffer(std::move(mCommandBuffer));
@@ -1760,13 +1808,17 @@ void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
 {
     imageReadImpl(contextVk, aspectFlags, imageLayout, image);
 
-    if (!contextVk->isRenderPassStartedAndUsesImage(*image))
+    if (contextVk->isRenderPassStartedAndUsesImage(*image))
     {
         // Usually an image can only used by a RenderPassCommands or OutsideRenderPassCommands
         // because the layout will be different, except with image sampled from compute shader. In
         // this case, the renderPassCommands' read will override the outsideRenderPassCommands'
-        // read, since its queueSerial must be greater than outsideRP.
-        image->setQueueSerial(mQueueSerial);
+        // read, since its queueSerial must be greater than outsideRP. So dont update queueSerial
+        // here.
+    }
+    else
+    {
+        retainImage(contextVk, image);
     }
 }
 
@@ -1779,7 +1831,22 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                       ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    retainImage(contextVk, image);
+}
+
+void OutsideRenderPassCommandBufferHelper::trackImageWithEvent(Context *context, ImageHelper *image)
+{
+    image->setCurrentRefCountedEvent(context, mRefCountedEvents);
+    flushSetEventsImpl(context, &mCommandBuffer);
+}
+
+void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context,
+                                                                ImageHelper *srcImage,
+                                                                ImageHelper *dstImage)
+{
+    srcImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
+    dstImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
+    flushSetEventsImpl(context, &mCommandBuffer);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
@@ -1986,7 +2053,7 @@ angle::Result RenderPassCommandBufferHelper::reset(
     Context *context,
     SecondaryCommandBufferCollector *commandBufferCollector)
 {
-    resetImpl();
+    resetImpl(context);
 
     for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorAttachmentsCount;
          ++index)
@@ -2039,7 +2106,7 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
     imageReadImpl(contextVk, aspectFlags, imageLayout, image);
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
-    image->setQueueSerial(mQueueSerial);
+    retainImage(contextVk, image);
 }
 
 void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
@@ -2051,7 +2118,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    retainImage(contextVk, image);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
@@ -2266,6 +2333,15 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
     {
         // Note: the color image will have its flags reset after load/store ops are determined.
         image->resetRenderPassUsageFlags();
+    }
+
+    if (context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled)
+    {
+        // Even if there is no layout change, we always have to update event. In case of feedback
+        // loop, the sampler code should already set the event, which means we will be set it twice
+        // here. But since they uses the same layout and event is refCounted, it should work just
+        // fine.
+        image->setCurrentRefCountedEvent(context, mRefCountedEvents);
     }
 }
 
@@ -2818,6 +2894,9 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
         mCommandBuffers[subpass].executeCommands(&primary);
     }
     primary.endRenderPass();
+
+    // Call VkCmdSetEvent to track the completion of this renderPass.
+    flushSetEventsImpl(context, &primary);
 
     // Restart the command buffer.
     return reset(context, &commandsState->secondaryCommands);
@@ -6002,6 +6081,7 @@ void ImageHelper::releaseImage(Renderer *renderer)
         renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize, mMemoryTypeIndex,
                                   mVmaAllocation.getHandle());
     }
+    mCurrentEvent.release(renderer->getDevice());
 
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory, &mVmaAllocation);
     mViewFormats.clear();
@@ -6477,6 +6557,7 @@ void ImageHelper::destroy(Renderer *renderer)
                                   mVmaAllocation.getHandle());
     }
 
+    mCurrentEvent.release(device);
     mImage.destroy(device);
     mDeviceMemory.destroy(device);
     mVmaAllocation.destroy(renderer->getAllocator());
@@ -7213,6 +7294,26 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
     *semaphoreOut = mAcquireNextImageSemaphore.release();
 }
 
+void ImageHelper::setCurrentRefCountedEvent(Context *context, ImageLayoutEventMaps &layoutEventMaps)
+{
+    ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled);
+
+    // Create the event if we have not yet so. Otherwise just use the already created event. This
+    // means all images used in the same render pass that has the same layout will be tracked by the
+    // same event.
+    if (!layoutEventMaps.map[mCurrentLayout].valid())
+    {
+        layoutEventMaps.map[mCurrentLayout].init(context, mCurrentLayout);
+        layoutEventMaps.mask.set(mCurrentLayout);
+    }
+
+    // If there is already an event, release it first.
+    mCurrentEvent.release(context->getDevice());
+    // Copy the event to mCurrentEvent so that we can wait for it in future. This will add extra
+    // refcount to the underlying VkEvent.
+    mCurrentEvent = layoutEventMaps.map[mCurrentLayout];
+}
+
 void ImageHelper::clearColor(Context *context,
                              const VkClearColorValue &color,
                              LevelIndex baseMipLevelVk,
@@ -7475,6 +7576,8 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         UNIMPLEMENTED();
         ANGLE_VK_CHECK(contextVk, false, VK_ERROR_FEATURE_NOT_PRESENT);
     }
+
+    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, dstImage);
 
     return angle::Result::Continue;
 }
@@ -9364,6 +9467,12 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
         *levelUpdates = std::move(updatesToKeep);
     }
 
+    if (commandBuffer != nullptr)
+    {
+        // Track completion of this copy operation.
+        contextVk->trackImageWithOutsideRenderPassEvent(this);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -9828,6 +9937,8 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
 
     commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(contextVk), bufferHandle, regionCount,
                                      &regions);
+    // Track completion of this copy.
+    contextVk->trackImageWithOutsideRenderPassEvent(this);
 
     return angle::Result::Continue;
 }
