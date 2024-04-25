@@ -39,6 +39,30 @@
       },
       "revId": "da0886b025ec5b4b03ab2eba5b6fd5b7cb15b0a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ee74479_7d0ba5ff",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-25T22:19:17Z",
+      "side": 1,
+      "message": "not sure if it makes too much of a difference but done",
+      "parentUuid": "3f90a0ac_c608d2c5",
+      "range": {
+        "startLine": 1493,
+        "startChar": 0,
+        "endLine": 1497,
+        "endChar": 14
+      },
+      "revId": "da0886b025ec5b4b03ab2eba5b6fd5b7cb15b0a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
