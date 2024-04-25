@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "656b2964_efe3ae48",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T05:11:15Z",
+      "side": 1,
+      "message": "This is out of place, maybe put it in renderer_utils.h?",
+      "revId": "4fe9941bccf17719fa04261604e0d8bfc59c9dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd172b3b_11dfdf21",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T05:11:15Z",
+      "side": 1,
+      "message": "Since the scope has changed:\n\n```suggestion\nbool TextureHasAnyRedefinedLevels(const gl::CubeFaceArray\u003cgl::TexLevelMask\u003e \u0026redefinedLevels);\nbool IsTextureLevelRedefined(const gl::CubeFaceArray\u003cgl::TexLevelMask\u003e \u0026redefinedLevels,\n                             gl::TextureType textureType,\n                             gl::LevelIndex level);\n```",
+      "range": {
+        "startLine": 467,
+        "startChar": 0,
+        "endLine": 470,
+        "endChar": 44
+      },
+      "revId": "4fe9941bccf17719fa04261604e0d8bfc59c9dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccb36d9f_797bab5c",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T05:11:15Z",
+      "side": 1,
+      "message": "Since you moved the other helpers for redefining levels, you might as well move this to renderer_utils. It could be a helper that gets the necessary input (so you don\u0027t pass the `mImage`) and updates `mRedefinedLevels` and returns whether the image should be reset.\n\n(remember to please use `enum class` instead of passing `bool`)",
+      "range": {
+        "startLine": 444,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 13
+      },
+      "revId": "4fe9941bccf17719fa04261604e0d8bfc59c9dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dcb3cd0_c701ec78",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T05:11:15Z",
+      "side": 1,
+      "message": "Another good candidate to deduplicate with Vulkan",
+      "range": {
+        "startLine": 578,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 76
+      },
+      "revId": "4fe9941bccf17719fa04261604e0d8bfc59c9dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
