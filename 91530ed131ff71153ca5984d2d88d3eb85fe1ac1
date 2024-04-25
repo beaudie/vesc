@@ -88,6 +88,24 @@
       "parentUuid": "166c42f7_f44f95d4",
       "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eef1dda0_65354fbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-25T15:16:35Z",
+      "side": 1,
+      "message": "I don\u0027t.. I still think this assert is useless the way it is done as it doesn\u0027t even mention `kDirtyObjectHandlers`, it just compares values with ints.",
+      "parentUuid": "9c79aea4_42f1e6c6",
+      "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
