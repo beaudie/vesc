@@ -1204,6 +1204,11 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         {
             skipTest("TODO: http://anglebug.com/5943 GL_INVALID_ENUM on Windows/Intel");
         }
+
+        if (isIntelLinuxNative)
+        {
+            skipTest("https://anglebug.com/8682 fails on newer OS/driver");
+        }
     }
 
     if (traceNameIs("pokemon_go"))
@@ -1531,6 +1536,10 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
     if (traceNameIs("minetest"))
     {
+        if (isIntelLinuxNative)
+        {
+            skipTest("https://anglebug.com/8682 fails on newer OS/driver");
+        }
         addExtensionPrerequisite("GL_EXT_texture_format_BGRA8888");
         addIntegerPrerequisite(GL_MAX_TEXTURE_UNITS, 4);
     }
@@ -1649,6 +1658,11 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
     if (traceNameIs("street_fighter_iv_ce"))
     {
+        if (isIntelLinuxNative)
+        {
+            skipTest("https://anglebug.com/8682 fails on newer OS/driver");
+        }
+
         if (mParams->isSwiftshader())
         {
             skipTest("https://anglebug.com/8243 Too slow on Swiftshader (large keyframe)");
@@ -1680,6 +1694,30 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     {
         addExtensionPrerequisite("GL_OES_EGL_image_external");
         addIntegerPrerequisite(GL_MAX_TEXTURE_SIZE, 16383);
+    }
+
+    if (traceNameIs("dr_driving"))
+    {
+        if (isIntelLinuxNative)
+        {
+            skipTest("https://anglebug.com/8682 fails on newer OS/driver");
+        }
+    }
+
+    if (traceNameIs("plague_inc"))
+    {
+        if (isIntelLinuxNative)
+        {
+            skipTest("https://anglebug.com/8682 fails on newer OS/driver");
+        }
+    }
+
+    if (traceNameIs("sonic_the_hedgehog"))
+    {
+        if (isIntelLinuxNative)
+        {
+            skipTest("https://anglebug.com/8682 fails on newer OS/driver");
+        }
     }
 
     if (IsGalaxyS22())

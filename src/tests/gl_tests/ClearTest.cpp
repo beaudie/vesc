@@ -483,6 +483,9 @@ TEST_P(ClearTest, ChangeFramebufferAttachmentFromRGBAtoRGB)
     // http://anglebug.com/5165
     ANGLE_SKIP_TEST_IF(IsMac() && IsDesktopOpenGL() && IsIntel());
 
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
+
     ANGLE_GL_PROGRAM(program, angle::essl1_shaders::vs::Simple(),
                      angle::essl1_shaders::fs::UniformColor());
     setupQuadVertexBuffer(0.5f, 1.0f);

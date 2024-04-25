@@ -2439,6 +2439,9 @@ TEST_P(TransformFeedbackTest, BufferOutOfMemory)
     // The GL back-end throws an internal error that we can't deal with in this test.
     ANGLE_SKIP_TEST_IF(IsOpenGL());
 
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsVulkan());
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 

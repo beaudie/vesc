@@ -327,6 +327,9 @@ TEST_P(ClipControlTest, OriginFragCoord)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_clip_control"));
 
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
+
     const char kFS[] = R"(precision mediump float;
 void main()
 {
