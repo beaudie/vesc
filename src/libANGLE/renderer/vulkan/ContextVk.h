@@ -588,6 +588,15 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return angle::Result::Continue;
     }
 
+    void trackImageWithOutsideRenderPassEvent(vk::ImageHelper *image)
+    {
+        mOutsideRenderPassCommands->trackImageWithEvent(this, image);
+    }
+    void trackImagesWithOutsideRenderPassEvent(vk::ImageHelper *srcImage, vk::ImageHelper *dstImage)
+    {
+        mOutsideRenderPassCommands->trackImagesWithEvent(this, srcImage, dstImage);
+    }
+
     angle::Result submitStagedTextureUpdates()
     {
         // Staged updates are recorded in outside RP cammand buffer, submit them.

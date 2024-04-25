@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/vulkan/Suballocation.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#include "libANGLE/renderer/vulkan/vk_ref_counted_event.h"
 
 #include <functional>
 
@@ -166,6 +167,14 @@ ImageLayout GetImageLayoutFromGLImageLayout(Context *context, GLenum layout);
 GLenum ConvertImageLayoutToGLImageLayout(ImageLayout imageLayout);
 
 VkImageLayout ConvertImageLayoutToVkImageLayout(Context *context, ImageLayout imageLayout);
+
+struct ImageLayoutEventMaps
+{
+    // The list of RefCountedEvents that have be tracked. The mask is used to accelerate the
+    // loop of map
+    angle::PackedEnumMap<ImageLayout, RefCountedEvent> map;
+    angle::PackedEnumBitSet<ImageLayout, uint64_t> mask;
+};
 
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
 // you will always write to a previously unused portion. After a series of writes, you must flush
@@ -1322,6 +1331,14 @@ class CommandBufferHelperCommon : angle::NonCopyable
         writeResource->setWriteQueueSerial(mQueueSerial);
     }
 
+    template <typename CommandBufferT>
+    void setEventsImpl(Context *context, CommandBufferT *commandBuffer);
+
+    RefCountedEventGarbageObjects *getRefCountedEventCollector()
+    {
+        return &mRefCountedEventGarbage;
+    }
+
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
     void setAcquireNextImageSemaphore(VkSemaphore semaphore)
@@ -1340,7 +1357,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     void initializeImpl();
 
-    void resetImpl();
+    void resetImpl(Context *context);
 
     template <class DerivedT>
     angle::Result attachCommandPoolImpl(Context *context, SecondaryCommandPool *commandPool);
@@ -1413,6 +1430,11 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     // Only used for swapChain images
     Semaphore mAcquireNextImageSemaphore;
+
+    // The list of RefCountedEvents that have be tracked
+    ImageLayoutEventMaps mRefCountedEvents;
+    // The list of RefCountedEvents that should be garbage collected when it gets reset.
+    RefCountedEventGarbageObjects mRefCountedEventGarbage;
 };
 
 class SecondaryCommandBufferCollector;
@@ -1479,6 +1501,10 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
                     VkImageAspectFlags aspectFlags,
                     ImageLayout imageLayout,
                     ImageHelper *image);
+
+    void setEvents(Context *context) { setEventsImpl(context, &mCommandBuffer); }
+    void trackImageWithEvent(Context *context, ImageHelper *image);
+    void trackImagesWithEvent(Context *context, ImageHelper *srcImage, ImageHelper *dstImage);
 
     angle::Result flushToPrimary(Context *context, CommandsState *commandsState);
 
@@ -2684,6 +2710,9 @@ class ImageHelper final : public Resource, public angle::Subject
 
     size_t getLevelUpdateCount(gl::LevelIndex level) const;
 
+    // Create event if needed and record the event in ImageHelper::mCurrentEvent.
+    void setCurrentRefCountedEvent(Context *context, ImageLayoutEventMaps &layoutEventMaps);
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -3027,6 +3056,10 @@ class ImageHelper final : public Resource, public angle::Subject
     RenderPassUsageFlags mRenderPassUsageFlags;
     // The QueueSerial that associated with the last barrier.
     QueueSerial mBarrierQueueSerial;
+
+    // The current refCounted event. When barrier or layout change is needed, we should wait for
+    // this event.
+    RefCountedEvent mCurrentEvent;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
