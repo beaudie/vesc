@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c275bf56_30e19909",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-25T16:52:29Z",
+      "side": 1,
+      "message": "Nice suggestion - unfortunately `cl::MemoryPtr` template type is not trivially destructible (since we rely on it to call dtors for captured CL objects once their refcount goes to 0) so we can\u0027t use it in this case.\n```\n// This class does not call destructors when resizing down (for performance reasons).\nstatic_assert(std::is_trivially_destructible_v\u003cvalue_type\u003e);\n```",
+      "parentUuid": "3afaee0f_492df64f",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 62
+      },
+      "revId": "0f000968387ea4cbf252e57c3b57741037492a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b37676b4_1792dede",
         "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
         "patchSetId": 28
@@ -77,6 +101,30 @@
       "writtenOn": "2024-04-25T09:35:43Z",
       "side": 1,
       "message": "super nit: we tend to avoid implicit cast to bool:\n\n```suggestion\n        constexpr VkBufferUsageFlags kWritableUsage \u003d VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;\n        return (getVkUsageFlags() \u0026 kWritableUsage) !\u003d 0;\n```",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 87
+      },
+      "revId": "0f000968387ea4cbf252e57c3b57741037492a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8218d593_c66bbe83",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-25T16:52:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b37676b4_1792dede",
       "range": {
         "startLine": 46,
         "startChar": 0,
