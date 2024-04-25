@@ -281,6 +281,8 @@ constexpr const char *kSkippedMessages[] = {
     "Undefined-Value-ShaderFragmentOutputMismatch",
     // https://issuetracker.google.com/336652255
     "UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout",
+    // https://anglebug.com/8680
+    "VUID-VkSwapchainCreateInfoKHR-presentMode-02839",
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
