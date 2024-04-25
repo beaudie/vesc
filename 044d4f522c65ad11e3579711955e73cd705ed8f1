@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5bc8dea9_26a87e27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-04-25T21:00:46Z",
+      "side": 1,
+      "message": "Broke this into two and kept the non-conflicting one in this change -- https://chromium-review.googlesource.com/c/angle/angle/+/5492319/1 -- to not lose the comments in here.",
+      "parentUuid": "86721637_25cd2390",
+      "revId": "044d4f522c65ad11e3579711955e73cd705ed8f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f57909de_f9ad6db8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
