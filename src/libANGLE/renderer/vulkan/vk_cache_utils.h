@@ -1015,6 +1015,13 @@ class DescriptorSetLayoutDesc final
 
     bool empty() const { return mDescriptorSetLayoutBindings.empty(); }
 
+    size_t size() const { return mDescriptorSetLayoutBindings.size(); }
+
+    mutable size_t mDescriptorSetLayoutHashedBytes;
+    mutable size_t mDescriptorSetLayoutHashTime;
+    mutable size_t mDescriptorSetLayoutComparedBytes;
+    mutable size_t mDescriptorSetLayoutComparisonTime;
+
   private:
     // There is a small risk of an issue if the sampler cache is evicted but not the descriptor
     // cache we would have an invalid handle here. Thus propose follow-up work:

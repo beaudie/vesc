@@ -748,6 +748,24 @@ class Renderer : angle::NonCopyable
         return mPipelineCacheGraphDumpPath.c_str();
     }
 
+    void updateMaxDescriptorSetLayoutBindingCount(size_t newMaxCount)
+    {
+        mMaxDescriptorSetLayoutBindingCount =
+            std::max(mMaxDescriptorSetLayoutBindingCount.load(), newMaxCount);
+    }
+    void recordDescriptorSetLayoutCacheHit() { mDescriptorSetLayoutCacheHitCount++; }
+    void recordDescriptorSetLayoutCacheMiss() { mDescriptorSetLayoutCacheMissCount++; }
+    void updateDescriptorSetLayoutHashBytes(size_t size) { mDescriptorSetLayoutHashedBytes+= size; }
+    void updateDescriptorSetLayoutHashTime(size_t time) { mDescriptorSetLayoutHashTime += time; }
+    void updateDescriptorSetLayoutComparedBytes(size_t size)
+    {
+        mDescriptorSetLayoutComparedBytes += size;
+    }
+    void updateDescriptorSetLayoutComparisonTime(size_t time)
+    {
+        mDescriptorSetLayoutComparisonTime += time;
+    }
+
   private:
     angle::Result setupDevice(vk::Context *context,
                               const angle::FeatureOverrides &featureOverrides,
@@ -1083,6 +1101,14 @@ class Renderer : angle::NonCopyable
     std::ostringstream mPipelineCacheGraph;
     bool mDumpPipelineCacheGraph;
     std::string mPipelineCacheGraphDumpPath;
+
+    std::atomic<size_t> mMaxDescriptorSetLayoutBindingCount;
+    std::atomic<size_t> mDescriptorSetLayoutCacheHitCount;
+    std::atomic<size_t> mDescriptorSetLayoutCacheMissCount;
+    std::atomic<size_t> mDescriptorSetLayoutHashedBytes;
+    std::atomic<size_t> mDescriptorSetLayoutHashTime;
+    std::atomic<size_t> mDescriptorSetLayoutComparedBytes;
+    std::atomic<size_t> mDescriptorSetLayoutComparisonTime;
 };
 
 ANGLE_INLINE Serial Renderer::generateQueueSerial(SerialIndex index)

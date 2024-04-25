@@ -4274,7 +4274,11 @@ bool operator==(const AttachmentOpsArray &lhs, const AttachmentOpsArray &rhs)
 
 // DescriptorSetLayoutDesc implementation.
 DescriptorSetLayoutDesc::DescriptorSetLayoutDesc()
-    : mDescriptorSetLayoutBindings{}, mImmutableSamplers{}
+    : mDescriptorSetLayoutHashedBytes(0),
+      mDescriptorSetLayoutHashTime(0),
+      mDescriptorSetLayoutComparedBytes(0),
+      mDescriptorSetLayoutComparisonTime(0),
+      mDescriptorSetLayoutBindings{}, mImmutableSamplers{}
 {}
 
 DescriptorSetLayoutDesc::~DescriptorSetLayoutDesc() = default;
@@ -4284,8 +4288,13 @@ DescriptorSetLayoutDesc::DescriptorSetLayoutDesc(const DescriptorSetLayoutDesc &
 DescriptorSetLayoutDesc &DescriptorSetLayoutDesc::operator=(const DescriptorSetLayoutDesc &other) =
     default;
 
+#include <chrono>
+typedef std::chrono::high_resolution_clock Clock;
+
 size_t DescriptorSetLayoutDesc::hash() const
 {
+    auto t1 = Clock::now();
+
     size_t validDescriptorSetLayoutBindingsCount = mDescriptorSetLayoutBindings.size();
     size_t validImmutableSamplersCount           = mImmutableSamplers.size();
 
@@ -4305,13 +4314,30 @@ size_t DescriptorSetLayoutDesc::hash() const
                                                  validImmutableSamplersCount * sizeof(VkSampler));
     }
 
+    auto t2 = Clock::now();
+    mDescriptorSetLayoutHashTime += (t2 - t1).count();
+    mDescriptorSetLayoutHashedBytes +=
+        validDescriptorSetLayoutBindingsCount * sizeof(mDescriptorSetLayoutBindings[0]);
+    mDescriptorSetLayoutHashedBytes +=
+        validImmutableSamplersCount * sizeof(mImmutableSamplers[0]);
+
     return genericHash;
 }
 
 bool DescriptorSetLayoutDesc::operator==(const DescriptorSetLayoutDesc &other) const
 {
-    return mDescriptorSetLayoutBindings == other.mDescriptorSetLayoutBindings &&
+    auto t1 = Clock::now();
+
+    const bool result = mDescriptorSetLayoutBindings == other.mDescriptorSetLayoutBindings &&
            mImmutableSamplers == other.mImmutableSamplers;
+
+    auto t2 = Clock::now();
+    mDescriptorSetLayoutComparisonTime += (t2 - t1).count();
+    mDescriptorSetLayoutComparedBytes +=
+        mDescriptorSetLayoutBindings.size() * sizeof(mDescriptorSetLayoutBindings[0])
+        + mImmutableSamplers.size() * sizeof(mImmutableSamplers[0]);
+
+    return result;
 }
 
 void DescriptorSetLayoutDesc::update(uint32_t bindingIndex,
@@ -7475,6 +7501,8 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     const vk::DescriptorSetLayoutDesc &desc,
     vk::AtomicBindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
 {
+    vk::Renderer *rendererVk = context->getRenderer();
+
     // Note: this function may be called without holding the share group lock.
     std::unique_lock<angle::SimpleMutex> lock(mMutex);
 
@@ -7484,8 +7512,19 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
         vk::RefCountedDescriptorSetLayout &layout = iter->second;
         descriptorSetLayoutOut->set(&layout);
         mCacheStats.hit();
+        rendererVk->recordDescriptorSetLayoutCacheHit();
+        rendererVk->updateDescriptorSetLayoutHashBytes(desc.mDescriptorSetLayoutHashedBytes);
+        desc.mDescriptorSetLayoutHashedBytes = 0;
+        rendererVk->updateDescriptorSetLayoutHashTime(desc.mDescriptorSetLayoutHashTime);
+        desc.mDescriptorSetLayoutHashTime = 0;
+        rendererVk->updateDescriptorSetLayoutComparedBytes(desc.mDescriptorSetLayoutComparedBytes);
+        desc.mDescriptorSetLayoutComparedBytes = 0;
+        rendererVk->updateDescriptorSetLayoutComparisonTime(desc.mDescriptorSetLayoutComparisonTime);
+        desc.mDescriptorSetLayoutComparisonTime = 0;
         return angle::Result::Continue;
     }
+
+    rendererVk->updateMaxDescriptorSetLayoutBindingCount(desc.size());
 
     // Descriptor set layout handle is allowed to be VK_NULL_HANDLE iff
     // VK_EXT_graphics_pipeline_library is supported and pre-rasterization and fragment shader
@@ -7516,6 +7555,16 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     auto insertedItem = mPayload.emplace(desc, std::move(newLayout));
     vk::RefCountedDescriptorSetLayout &insertedLayout = insertedItem.first->second;
     descriptorSetLayoutOut->set(&insertedLayout);
+
+    rendererVk->recordDescriptorSetLayoutCacheMiss();
+    rendererVk->updateDescriptorSetLayoutHashBytes(desc.mDescriptorSetLayoutHashedBytes);
+    desc.mDescriptorSetLayoutHashedBytes = 0;
+    rendererVk->updateDescriptorSetLayoutHashTime(desc.mDescriptorSetLayoutHashTime);
+    desc.mDescriptorSetLayoutHashTime = 0;
+    rendererVk->updateDescriptorSetLayoutComparedBytes(desc.mDescriptorSetLayoutComparedBytes);
+    desc.mDescriptorSetLayoutComparedBytes = 0;
+    rendererVk->updateDescriptorSetLayoutComparisonTime(desc.mDescriptorSetLayoutComparisonTime);
+    desc.mDescriptorSetLayoutComparisonTime = 0;
 
     return angle::Result::Continue;
 }

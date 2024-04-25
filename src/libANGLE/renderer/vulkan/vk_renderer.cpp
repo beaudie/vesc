@@ -1498,7 +1498,14 @@ Renderer::Renderer()
       mCommandProcessor(this, &mCommandQueue),
       mSupportedVulkanPipelineStageMask(0),
       mSupportedVulkanShaderStageMask(0),
-      mMemoryAllocationTracker(MemoryAllocationTracker(this))
+      mMemoryAllocationTracker(MemoryAllocationTracker(this)),
+      mMaxDescriptorSetLayoutBindingCount(0),
+      mDescriptorSetLayoutCacheHitCount(0),
+      mDescriptorSetLayoutCacheMissCount(0),
+      mDescriptorSetLayoutHashedBytes(0),
+      mDescriptorSetLayoutHashTime(0),
+      mDescriptorSetLayoutComparedBytes(0),
+      mDescriptorSetLayoutComparisonTime(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1530,6 +1537,12 @@ bool Renderer::hasSharedGarbage()
 
 void Renderer::onDestroy(vk::Context *context)
 {
+    std::cout << "STATS: " << mMaxDescriptorSetLayoutBindingCount << ", "
+              << mDescriptorSetLayoutCacheHitCount << ", " << mDescriptorSetLayoutCacheMissCount
+              << ", " << mDescriptorSetLayoutHashedBytes << ", " << mDescriptorSetLayoutHashTime
+              << ", " << mDescriptorSetLayoutComparedBytes << ", "
+              << mDescriptorSetLayoutComparisonTime << std::endl;
+
     if (isDeviceLost())
     {
         handleDeviceLost();
