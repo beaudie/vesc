@@ -22,9 +22,7 @@
       'android-arm64-exp-pixel6': {  # android-arm64-pixel6 below for android-arm64-test
         'os_type': 'android',
         'mixins': [
-          'android_u',
-          'oriole',
-          'gpu-swarming-pool',
+          'pixel_6_AP1A_240405_002',
           'limited_capacity_bot',
         ],
         'test_suites': {

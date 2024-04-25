@@ -53,6 +53,17 @@ ADDITIONAL_MIXINS = {
             }
         }
     },
+    'pixel_6_AP1A_240405_002': {
+        'swarming': {
+            'dimensions': {
+                "device_os": "AP1A.240405.002",
+                "device_os_type": "userdebug",
+                "device_type": "oriole",
+                "os": "Android",
+                "pool": "chromium.tests.gpu"
+            }
+        }
+    },
     'timeout_120m': {
         'swarming': {
             'hard_timeout': 7200,
