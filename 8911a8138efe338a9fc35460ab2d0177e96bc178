@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b6d4d1f_68083bcf",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-25T14:55:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f051fae_cf252e81",
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c67119bd_43d924c2",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-18T20:27:16Z",
       "side": 1,
       "message": "Use anonymous function instead? We generally don\u0027t use lambdas if we don\u0027t have to (\"type erasure\" makes them slow)",
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1172639c_d0aac4e9",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-25T14:55:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c67119bd_43d924c2",
       "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -70,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63257b24_c2e07283",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-25T14:55:26Z",
+      "side": 1,
+      "message": "glClear-ing the integer buffers appears to work across the board but I agree it\u0027s undefined.\n\nI want to avoid modifying the framebuffer\u0027s internal state in this call so I went ahead and updated to call glClearBuffer for integer attachments.",
+      "parentUuid": "8ca821f9_4059bd1e",
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3810dc9a_7fe6a878",
@@ -87,6 +141,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b720b38d_83e7fbdf",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-25T14:55:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3810dc9a_7fe6a878",
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9073a685_de0dee71",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-04-18T20:27:16Z",
       "side": 1,
       "message": "nit: IIRC this should work\n\n```suggestion\n            gl::DrawBufferMask colorAttachments \u003d {0};\n```",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 36
+      },
+      "revId": "8911a8138efe338a9fc35460ab2d0177e96bc178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa287fde_7b41ba74",
+        "filename": "src/libANGLE/renderer/gl/SurfaceGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-25T14:55:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9073a685_de0dee71",
       "range": {
         "startLine": 50,
         "startChar": 0,
