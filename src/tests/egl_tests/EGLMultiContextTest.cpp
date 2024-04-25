@@ -401,6 +401,9 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
 // even after thread A is destroyed.
 TEST_P(EGLMultiContextTest, ReuseUnterminatedDisplay)
 {
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
+
     // Release all resources in parent thread
     getEGLWindow()->destroyGL();
 
