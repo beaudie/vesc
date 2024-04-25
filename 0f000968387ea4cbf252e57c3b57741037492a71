@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3afaee0f_492df64f",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-25T14:33:49Z",
+      "side": 1,
+      "message": "Given that these buffers are a fixed max size, we have a nice helper container for that: `angle::FastVector\u003cType, MaxSize\u003e` which won\u0027t do any allocations assuming you can make sure the size is never exceeded.",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 62
+      },
+      "revId": "0f000968387ea4cbf252e57c3b57741037492a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b37676b4_1792dede",
         "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
         "patchSetId": 28
