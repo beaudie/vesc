@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae3bda76_f7784658",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T05:22:53Z",
+      "side": 1,
+      "message": "Experimentally, if you set the VMA block size to 1MB, how does that affect these numbers?",
+      "revId": "92d010ba96689456b23b8e20d3fade97231fcbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
