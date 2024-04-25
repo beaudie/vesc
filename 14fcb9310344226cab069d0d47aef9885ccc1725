@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d49579ad_8884c9d6",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T15:16:37Z",
+      "side": 1,
+      "message": "Can we also link to an internal place where the record keeping happens?",
+      "revId": "14fcb9310344226cab069d0d47aef9885ccc1725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
