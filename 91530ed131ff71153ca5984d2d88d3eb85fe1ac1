@@ -16,6 +16,24 @@
       "message": "The reason for the asserts is `kDirtyObjectHandlers`. If the ordering doesn\u0027t match the handlers in that array, things would blow up.\n\nYou could move the asserts to just above the definition of `kDirtyObjectHandlers` and add a comment instead?",
       "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40c3ffde_e1e0d3cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-25T13:06:31Z",
+      "side": 1,
+      "message": "I don\u0027t think we do this in other places though. Instead, I think we assign handlers like `a[e_value] \u003d e_handler`. Should we do it like this here too?",
+      "parentUuid": "a6f6c261_599f30bb",
+      "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
