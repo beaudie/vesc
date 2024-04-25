@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ce3c26d_4079c1dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-25T14:12:35Z",
+      "side": 1,
+      "message": "Thank you very much for fixing this on a short notice and unblocking me from testing the OS upgrade!",
+      "revId": "449fd96cc98ede3bb608f5c0a56b7fceb5d56646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cadcf43_82654be8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4678,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-25T14:12:35Z",
+      "side": 1,
+      "message": "Looks like we need a TODO bug to verify it is fixed in later versions, otherwise we\u0027ll never re-enable it.",
+      "range": {
+        "startLine": 4678,
+        "startChar": 54,
+        "endLine": 4678,
+        "endChar": 56
+      },
+      "revId": "449fd96cc98ede3bb608f5c0a56b7fceb5d56646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
