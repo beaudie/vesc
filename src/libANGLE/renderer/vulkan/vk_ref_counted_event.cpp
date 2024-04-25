@@ -90,12 +90,16 @@ void RefCountedEvent::releaseImpl(Renderer *renderer, RecyclerT *recycler)
     const bool isLastReference = mHandle->getAndReleaseRef() == 1;
     if (isLastReference)
     {
+#if false
         // When async submission is enabled, recycler will be null when release call comes from
         // CommandProcessor. But in that case it will not be the last reference since garbage
         // collector should have one reference count and will never release that reference count
         // until GPU finished.
         ASSERT(recycler != nullptr);
         recycler->recycle(std::move(*this));
+#else
+        destroy(renderer->getDevice());
+#endif
         ASSERT(mHandle == nullptr);
     }
     else
