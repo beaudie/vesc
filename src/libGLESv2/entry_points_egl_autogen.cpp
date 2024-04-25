@@ -46,8 +46,11 @@ EGLBoolean EGLAPIENTRY EGL_ChooseConfig(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(ChooseConfig, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, ChooseConfig, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, attrib_listPacked, configs, config_size, num_config);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, ChooseConfig, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, attrib_listPacked, configs, config_size, num_config);
+            }
 
             returnValue = ChooseConfig(thread, dpyPacked, attrib_listPacked, configs, config_size,
                                        num_config);
@@ -79,8 +82,11 @@ EGLBoolean EGLAPIENTRY EGL_CopyBuffers(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CopyBuffers, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, CopyBuffers, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, surfacePacked, target);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CopyBuffers, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, surfacePacked, target);
+            }
 
             returnValue = CopyBuffers(thread, dpyPacked, surfacePacked, target);
         }
@@ -114,8 +120,11 @@ EGLContext EGLAPIENTRY EGL_CreateContext(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CreateContext, thread, dpyPacked, share_contextPacked);
-            ANGLE_EGL_VALIDATE(thread, CreateContext, GetDisplayIfValid(dpyPacked), EGLContext,
-                               dpyPacked, configPacked, share_contextPacked, attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CreateContext, GetDisplayIfValid(dpyPacked), EGLContext,
+                                   dpyPacked, configPacked, share_contextPacked, attrib_listPacked);
+            }
 
             returnValue = CreateContext(thread, dpyPacked, configPacked, share_contextPacked,
                                         attrib_listPacked);
@@ -148,8 +157,11 @@ EGLSurface EGLAPIENTRY EGL_CreatePbufferSurface(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CreatePbufferSurface, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, CreatePbufferSurface, GetDisplayIfValid(dpyPacked),
-                               EGLSurface, dpyPacked, configPacked, attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CreatePbufferSurface, GetDisplayIfValid(dpyPacked),
+                                   EGLSurface, dpyPacked, configPacked, attrib_listPacked);
+            }
 
             returnValue = CreatePbufferSurface(thread, dpyPacked, configPacked, attrib_listPacked);
         }
@@ -182,8 +194,11 @@ EGLSurface EGLAPIENTRY EGL_CreatePixmapSurface(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CreatePixmapSurface, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, CreatePixmapSurface, GetDisplayIfValid(dpyPacked),
-                               EGLSurface, dpyPacked, configPacked, pixmap, attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CreatePixmapSurface, GetDisplayIfValid(dpyPacked),
+                                   EGLSurface, dpyPacked, configPacked, pixmap, attrib_listPacked);
+            }
 
             returnValue =
                 CreatePixmapSurface(thread, dpyPacked, configPacked, pixmap, attrib_listPacked);
@@ -217,8 +232,11 @@ EGLSurface EGLAPIENTRY EGL_CreateWindowSurface(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CreateWindowSurface, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, CreateWindowSurface, GetDisplayIfValid(dpyPacked),
-                               EGLSurface, dpyPacked, configPacked, win, attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CreateWindowSurface, GetDisplayIfValid(dpyPacked),
+                                   EGLSurface, dpyPacked, configPacked, win, attrib_listPacked);
+            }
 
             returnValue =
                 CreateWindowSurface(thread, dpyPacked, configPacked, win, attrib_listPacked);
@@ -246,8 +264,11 @@ EGLBoolean EGLAPIENTRY EGL_DestroyContext(EGLDisplay dpy, EGLContext ctx)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(DestroyContext, thread, dpyPacked, ctxPacked);
-            ANGLE_EGL_VALIDATE(thread, DestroyContext, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, ctxPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, DestroyContext, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, ctxPacked);
+            }
 
             returnValue = DestroyContext(thread, dpyPacked, ctxPacked);
         }
@@ -273,8 +294,11 @@ EGLBoolean EGLAPIENTRY EGL_DestroySurface(EGLDisplay dpy, EGLSurface surface)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(DestroySurface, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, DestroySurface, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, surfacePacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, DestroySurface, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, surfacePacked);
+            }
 
             returnValue = DestroySurface(thread, dpyPacked, surfacePacked);
         }
@@ -305,8 +329,11 @@ EGLBoolean EGLAPIENTRY EGL_GetConfigAttrib(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(GetConfigAttrib, thread, dpyPacked, attribute);
-            ANGLE_EGL_VALIDATE(thread, GetConfigAttrib, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, configPacked, attribute, value);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, GetConfigAttrib, GetDisplayIfValid(dpyPacked),
+                                   EGLBoolean, dpyPacked, configPacked, attribute, value);
+            }
 
             returnValue = GetConfigAttrib(thread, dpyPacked, configPacked, attribute, value);
         }
@@ -337,8 +364,11 @@ EGLBoolean EGLAPIENTRY EGL_GetConfigs(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(GetConfigs, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, GetConfigs, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, configs, config_size, num_config);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, GetConfigs, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, configs, config_size, num_config);
+            }
 
             returnValue = GetConfigs(thread, dpyPacked, configs, config_size, num_config);
         }
@@ -358,7 +388,10 @@ EGLDisplay EGLAPIENTRY EGL_GetCurrentDisplay()
 
     EGL_EVENT(GetCurrentDisplay, "");
 
-    ANGLE_EGL_VALIDATE(thread, GetCurrentDisplay, nullptr, EGLDisplay);
+    if (IsValidationEnabled())
+    {
+        ANGLE_EGL_VALIDATE(thread, GetCurrentDisplay, nullptr, EGLDisplay);
+    }
 
     returnValue = GetCurrentDisplay(thread);
 
@@ -376,7 +409,10 @@ EGLSurface EGLAPIENTRY EGL_GetCurrentSurface(EGLint readdraw)
 
     EGL_EVENT(GetCurrentSurface, "readdraw = %d", readdraw);
 
-    ANGLE_EGL_VALIDATE(thread, GetCurrentSurface, nullptr, EGLSurface, readdraw);
+    if (IsValidationEnabled())
+    {
+        ANGLE_EGL_VALIDATE(thread, GetCurrentSurface, nullptr, EGLSurface, readdraw);
+    }
 
     returnValue = GetCurrentSurface(thread, readdraw);
 
@@ -397,7 +433,10 @@ EGLDisplay EGLAPIENTRY EGL_GetDisplay(EGLNativeDisplayType display_id)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(GetDisplay, thread);
-            ANGLE_EGL_VALIDATE(thread, GetDisplay, nullptr, EGLDisplay, display_id);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, GetDisplay, nullptr, EGLDisplay, display_id);
+            }
 
             returnValue = GetDisplay(thread, display_id);
         }
@@ -416,7 +455,10 @@ EGLint EGLAPIENTRY EGL_GetError()
 
     EGL_EVENT(GetError, "");
 
-    ANGLE_EGL_VALIDATE(thread, GetError, nullptr, EGLint);
+    if (IsValidationEnabled())
+    {
+        ANGLE_EGL_VALIDATE(thread, GetError, nullptr, EGLint);
+    }
 
     returnValue = GetError(thread);
 
@@ -437,8 +479,11 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY EGL_GetProcAddress(const ch
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(GetProcAddress, thread);
-            ANGLE_EGL_VALIDATE(thread, GetProcAddress, nullptr,
-                               __eglMustCastToProperFunctionPointerType, procname);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, GetProcAddress, nullptr,
+                                   __eglMustCastToProperFunctionPointerType, procname);
+            }
 
             returnValue = GetProcAddress(thread, procname);
         }
@@ -464,8 +509,11 @@ EGLBoolean EGLAPIENTRY EGL_Initialize(EGLDisplay dpy, EGLint *major, EGLint *min
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(Initialize, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, Initialize, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, major, minor);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, Initialize, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, major, minor);
+            }
 
             returnValue = Initialize(thread, dpyPacked, major, minor);
         }
@@ -498,8 +546,11 @@ EGLBoolean EGLAPIENTRY EGL_MakeCurrent(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(MakeCurrent, thread, dpyPacked, ctxPacked);
-            ANGLE_EGL_VALIDATE(thread, MakeCurrent, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, drawPacked, readPacked, ctxPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, MakeCurrent, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, drawPacked, readPacked, ctxPacked);
+            }
 
             returnValue = MakeCurrent(thread, dpyPacked, drawPacked, readPacked, ctxPacked);
         }
@@ -531,8 +582,11 @@ EGLBoolean EGLAPIENTRY EGL_QueryContext(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(QueryContext, thread, dpyPacked, ctxPacked, attribute);
-            ANGLE_EGL_VALIDATE(thread, QueryContext, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, ctxPacked, attribute, value);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, QueryContext, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, ctxPacked, attribute, value);
+            }
 
             returnValue = QueryContext(thread, dpyPacked, ctxPacked, attribute, value);
         }
@@ -557,8 +611,11 @@ const char *EGLAPIENTRY EGL_QueryString(EGLDisplay dpy, EGLint name)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(QueryString, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, QueryString, GetDisplayIfValid(dpyPacked), const char *,
-                               dpyPacked, name);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, QueryString, GetDisplayIfValid(dpyPacked), const char *,
+                                   dpyPacked, name);
+            }
 
             returnValue = QueryString(thread, dpyPacked, name);
         }
@@ -592,8 +649,11 @@ EGLBoolean EGLAPIENTRY EGL_QuerySurface(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(QuerySurface, thread, dpyPacked, attribute);
-            ANGLE_EGL_VALIDATE(thread, QuerySurface, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, surfacePacked, attribute, value);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, QuerySurface, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, surfacePacked, attribute, value);
+            }
 
             returnValue = QuerySurface(thread, dpyPacked, surfacePacked, attribute, value);
         }
@@ -620,8 +680,11 @@ EGLBoolean EGLAPIENTRY EGL_SwapBuffers(EGLDisplay dpy, EGLSurface surface)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(SwapBuffers, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, SwapBuffers, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, surfacePacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, SwapBuffers, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, surfacePacked);
+            }
 
             returnValue = SwapBuffers(thread, dpyPacked, surfacePacked);
         }
@@ -645,8 +708,11 @@ EGLBoolean EGLAPIENTRY EGL_Terminate(EGLDisplay dpy)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(Terminate, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, Terminate, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, Terminate, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked);
+            }
 
             returnValue = Terminate(thread, dpyPacked);
         }
@@ -668,7 +734,10 @@ EGLBoolean EGLAPIENTRY EGL_WaitGL()
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(WaitGL, thread);
-            ANGLE_EGL_VALIDATE(thread, WaitGL, nullptr, EGLBoolean);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, WaitGL, nullptr, EGLBoolean);
+            }
 
             returnValue = WaitGL(thread);
         }
@@ -690,7 +759,10 @@ EGLBoolean EGLAPIENTRY EGL_WaitNative(EGLint engine)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(WaitNative, thread);
-            ANGLE_EGL_VALIDATE(thread, WaitNative, nullptr, EGLBoolean, engine);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, WaitNative, nullptr, EGLBoolean, engine);
+            }
 
             returnValue = WaitNative(thread, engine);
         }
@@ -717,8 +789,11 @@ EGLBoolean EGLAPIENTRY EGL_BindTexImage(EGLDisplay dpy, EGLSurface surface, EGLi
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(BindTexImage, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, BindTexImage, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, surfacePacked, buffer);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, BindTexImage, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, surfacePacked, buffer);
+            }
 
             returnValue = BindTexImage(thread, dpyPacked, surfacePacked, buffer);
         }
@@ -746,8 +821,11 @@ EGLBoolean EGLAPIENTRY EGL_ReleaseTexImage(EGLDisplay dpy, EGLSurface surface, E
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(ReleaseTexImage, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, ReleaseTexImage, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, surfacePacked, buffer);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, ReleaseTexImage, GetDisplayIfValid(dpyPacked),
+                                   EGLBoolean, dpyPacked, surfacePacked, buffer);
+            }
 
             returnValue = ReleaseTexImage(thread, dpyPacked, surfacePacked, buffer);
         }
@@ -779,8 +857,11 @@ EGLBoolean EGLAPIENTRY EGL_SurfaceAttrib(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(SurfaceAttrib, thread, dpyPacked, attribute);
-            ANGLE_EGL_VALIDATE(thread, SurfaceAttrib, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, surfacePacked, attribute, value);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, SurfaceAttrib, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, surfacePacked, attribute, value);
+            }
 
             returnValue = SurfaceAttrib(thread, dpyPacked, surfacePacked, attribute, value);
         }
@@ -805,8 +886,11 @@ EGLBoolean EGLAPIENTRY EGL_SwapInterval(EGLDisplay dpy, EGLint interval)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(SwapInterval, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, SwapInterval, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, interval);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, SwapInterval, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, interval);
+            }
 
             returnValue = SwapInterval(thread, dpyPacked, interval);
         }
@@ -829,7 +913,10 @@ EGLBoolean EGLAPIENTRY EGL_BindAPI(EGLenum api)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(BindAPI, thread);
-            ANGLE_EGL_VALIDATE(thread, BindAPI, nullptr, EGLBoolean, api);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, BindAPI, nullptr, EGLBoolean, api);
+            }
 
             returnValue = BindAPI(thread, api);
         }
@@ -863,9 +950,12 @@ EGLSurface EGLAPIENTRY EGL_CreatePbufferFromClientBuffer(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CreatePbufferFromClientBuffer, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, CreatePbufferFromClientBuffer, GetDisplayIfValid(dpyPacked),
-                               EGLSurface, dpyPacked, buftype, buffer, configPacked,
-                               attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CreatePbufferFromClientBuffer,
+                                   GetDisplayIfValid(dpyPacked), EGLSurface, dpyPacked, buftype,
+                                   buffer, configPacked, attrib_listPacked);
+            }
 
             returnValue = CreatePbufferFromClientBuffer(thread, dpyPacked, buftype, buffer,
                                                         configPacked, attrib_listPacked);
@@ -889,7 +979,10 @@ EGLenum EGLAPIENTRY EGL_QueryAPI()
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(QueryAPI, thread);
-            ANGLE_EGL_VALIDATE(thread, QueryAPI, nullptr, EGLenum);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, QueryAPI, nullptr, EGLenum);
+            }
 
             returnValue = QueryAPI(thread);
         }
@@ -911,7 +1004,10 @@ EGLBoolean EGLAPIENTRY EGL_ReleaseThread()
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(ReleaseThread, thread);
-            ANGLE_EGL_VALIDATE(thread, ReleaseThread, nullptr, EGLBoolean);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, ReleaseThread, nullptr, EGLBoolean);
+            }
 
             returnValue = ReleaseThread(thread);
         }
@@ -933,7 +1029,10 @@ EGLBoolean EGLAPIENTRY EGL_WaitClient()
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(WaitClient, thread);
-            ANGLE_EGL_VALIDATE(thread, WaitClient, nullptr, EGLBoolean);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, WaitClient, nullptr, EGLBoolean);
+            }
 
             returnValue = WaitClient(thread);
         }
@@ -953,7 +1052,10 @@ EGLContext EGLAPIENTRY EGL_GetCurrentContext()
 
     EGL_EVENT(GetCurrentContext, "");
 
-    ANGLE_EGL_VALIDATE(thread, GetCurrentContext, nullptr, EGLContext);
+    if (IsValidationEnabled())
+    {
+        ANGLE_EGL_VALIDATE(thread, GetCurrentContext, nullptr, EGLContext);
+    }
 
     returnValue = GetCurrentContext(thread);
 
@@ -980,8 +1082,11 @@ EGLint EGLAPIENTRY EGL_ClientWaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(ClientWaitSync, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, ClientWaitSync, GetDisplayIfValid(dpyPacked), EGLint,
-                               dpyPacked, syncPacked, flags, timeout);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, ClientWaitSync, GetDisplayIfValid(dpyPacked), EGLint,
+                                   dpyPacked, syncPacked, flags, timeout);
+            }
 
             returnValue = ClientWaitSync(thread, dpyPacked, syncPacked, flags, timeout);
         }
@@ -1016,8 +1121,11 @@ EGLImage EGLAPIENTRY EGL_CreateImage(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CreateImage, thread, dpyPacked, ctxPacked);
-            ANGLE_EGL_VALIDATE(thread, CreateImage, GetDisplayIfValid(dpyPacked), EGLImage,
-                               dpyPacked, ctxPacked, target, buffer, attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CreateImage, GetDisplayIfValid(dpyPacked), EGLImage,
+                                   dpyPacked, ctxPacked, target, buffer, attrib_listPacked);
+            }
 
             returnValue =
                 CreateImage(thread, dpyPacked, ctxPacked, target, buffer, attrib_listPacked);
@@ -1052,9 +1160,12 @@ EGLSurface EGLAPIENTRY EGL_CreatePlatformPixmapSurface(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CreatePlatformPixmapSurface, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, CreatePlatformPixmapSurface, GetDisplayIfValid(dpyPacked),
-                               EGLSurface, dpyPacked, configPacked, native_pixmap,
-                               attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CreatePlatformPixmapSurface,
+                                   GetDisplayIfValid(dpyPacked), EGLSurface, dpyPacked,
+                                   configPacked, native_pixmap, attrib_listPacked);
+            }
 
             returnValue = CreatePlatformPixmapSurface(thread, dpyPacked, configPacked,
                                                       native_pixmap, attrib_listPacked);
@@ -1089,9 +1200,12 @@ EGLSurface EGLAPIENTRY EGL_CreatePlatformWindowSurface(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CreatePlatformWindowSurface, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, CreatePlatformWindowSurface, GetDisplayIfValid(dpyPacked),
-                               EGLSurface, dpyPacked, configPacked, native_window,
-                               attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CreatePlatformWindowSurface,
+                                   GetDisplayIfValid(dpyPacked), EGLSurface, dpyPacked,
+                                   configPacked, native_window, attrib_listPacked);
+            }
 
             returnValue = CreatePlatformWindowSurface(thread, dpyPacked, configPacked,
                                                       native_window, attrib_listPacked);
@@ -1120,8 +1234,11 @@ EGLSync EGLAPIENTRY EGL_CreateSync(EGLDisplay dpy, EGLenum type, const EGLAttrib
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(CreateSync, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, CreateSync, GetDisplayIfValid(dpyPacked), EGLSync, dpyPacked,
-                               type, attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, CreateSync, GetDisplayIfValid(dpyPacked), EGLSync,
+                                   dpyPacked, type, attrib_listPacked);
+            }
 
             returnValue = CreateSync(thread, dpyPacked, type, attrib_listPacked);
         }
@@ -1148,8 +1265,11 @@ EGLBoolean EGLAPIENTRY EGL_DestroyImage(EGLDisplay dpy, EGLImage image)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(DestroyImage, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, DestroyImage, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, imagePacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, DestroyImage, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, imagePacked);
+            }
 
             returnValue = DestroyImage(thread, dpyPacked, imagePacked);
         }
@@ -1175,8 +1295,11 @@ EGLBoolean EGLAPIENTRY EGL_DestroySync(EGLDisplay dpy, EGLSync sync)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(DestroySync, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, DestroySync, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, syncPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, DestroySync, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, syncPacked);
+            }
 
             returnValue = DestroySync(thread, dpyPacked, syncPacked);
         }
@@ -1205,8 +1328,11 @@ EGLDisplay EGLAPIENTRY EGL_GetPlatformDisplay(EGLenum platform,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(GetPlatformDisplay, thread);
-            ANGLE_EGL_VALIDATE(thread, GetPlatformDisplay, nullptr, EGLDisplay, platform,
-                               native_display, attrib_listPacked);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, GetPlatformDisplay, nullptr, EGLDisplay, platform,
+                                   native_display, attrib_listPacked);
+            }
 
             returnValue = GetPlatformDisplay(thread, platform, native_display, attrib_listPacked);
         }
@@ -1238,8 +1364,11 @@ EGLBoolean EGLAPIENTRY EGL_GetSyncAttrib(EGLDisplay dpy,
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(GetSyncAttrib, thread, dpyPacked, attribute);
-            ANGLE_EGL_VALIDATE(thread, GetSyncAttrib, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, syncPacked, attribute, value);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, GetSyncAttrib, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, syncPacked, attribute, value);
+            }
 
             returnValue = GetSyncAttrib(thread, dpyPacked, syncPacked, attribute, value);
         }
@@ -1266,8 +1395,11 @@ EGLBoolean EGLAPIENTRY EGL_WaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(WaitSync, thread, dpyPacked);
-            ANGLE_EGL_VALIDATE(thread, WaitSync, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, syncPacked, flags);
+            if (IsValidationEnabled())
+            {
+                ANGLE_EGL_VALIDATE(thread, WaitSync, GetDisplayIfValid(dpyPacked), EGLBoolean,
+                                   dpyPacked, syncPacked, flags);
+            }
 
             returnValue = WaitSync(thread, dpyPacked, syncPacked, flags);
         }
