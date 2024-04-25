@@ -70,6 +70,24 @@
       "parentUuid": "4d9ecbfd_d53f53ad",
       "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c79aea4_42f1e6c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T15:14:37Z",
+      "side": 1,
+      "message": "Yeah looks like C++(20?) didn\u0027t pick _that_ part of designated initializers. :|\n\nWell, now you know why we have this assert.",
+      "parentUuid": "166c42f7_f44f95d4",
+      "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
