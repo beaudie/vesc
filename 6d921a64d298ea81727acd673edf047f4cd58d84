@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f03da4aa_f3977410",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-25T14:15:18Z",
+      "side": 1,
+      "message": "Maybe it\u0027s better to suppress VUID-VkImageCreateInfo-pNext-02397?\nI can take care of this.\nI didn\u0027t suppress the tests earlier since I was hoping maybe the other CL fixes some.",
+      "range": {
+        "startLine": 661,
+        "startChar": 0,
+        "endLine": 671,
+        "endChar": 63
+      },
+      "revId": "6d921a64d298ea81727acd673edf047f4cd58d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
