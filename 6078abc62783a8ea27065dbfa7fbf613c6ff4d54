@@ -195,6 +195,24 @@
       "parentUuid": "20d808e5_93cc2420",
       "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcfc1246_39cae671",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T04:42:00Z",
+      "side": 1,
+      "message": "Thanks for looking into it. This will eventually be critical for perf I imagine, so I trust you\u0027ll get back to it. Fine to land as-is for now.\n\nFYI, somehow we don\u0027t have that problem with async thread in the GL paths, so hopefully it won\u0027t be too hard to figure it out.",
+      "parentUuid": "4fb0dcdc_a17edbe6",
+      "revId": "6078abc62783a8ea27065dbfa7fbf613c6ff4d54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
