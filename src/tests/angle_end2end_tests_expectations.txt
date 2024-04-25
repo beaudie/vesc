@@ -1409,6 +1409,26 @@ b/292285899 PIXEL4ORXL GLES : EGLSurfaceTest.DestroyAndRecreateWhileCurrent/* = 
 8485 WGPU : RendererTest.SimpleOperation/* = SKIP
 8582 WGPU : ClearTest.* = SKIP
 
+// Linux/UHD 630 failures caused by OS/driver upgrade.
+8683 LINUX INTEL OPENGL AtomicCounterBufferTest31.AtomicCounterReadCompute/ES3_1_OpenGL
+8683 LINUX INTEL OPENGL ClipControlTest.OriginFragCoord/ES2_OpenGL
+8683 LINUX INTEL OPENGL ClipControlTest.OriginFragCoord/ES3_OpenGL
+8683 LINUX INTEL OPENGL CubeMapTextureTest.SampleCoordinateTransformGrad/ES2_Vulkan
+8683 LINUX INTEL OPENGL EGLMultiContextTest.ReuseUnterminatedDisplay/ES3_1_OpenGL
+8683 LINUX INTEL OPENGL GLSLTest.FragCoordConsistency/ES2_OpenGL
+8683 LINUX INTEL OPENGL GLSLTest.FragCoordConsistency/ES3_OpenGL
+8683 LINUX INTEL OPENGL GLSLTest.FragCoordConsistency/ES3_OpenGL_ScalarizeVecAndMatConstructorArgs
+8683 LINUX INTEL OPENGL GLSLTest_ES31.StructAndArrayEqualOperator/ES3_1_OpenGL
+8683 LINUX INTEL OPENGL TransformFeedbackTest.BufferOutOfMemory/ES3_Vulkan
+8683 LINUX INTEL OPENGL TransformFeedbackTest.BufferOutOfMemory/ES3_Vulkan_EnableParallelCompileAndLink
+8683 LINUX INTEL OPENGL TransformFeedbackTest.BufferOutOfMemory/ES3_Vulkan_NoSupportsTransformFeedbackExtension
+8683 LINUX INTEL OPENGL WEBGLVideoTextureTest.VerifySamplerVideoWEBGL/ES2_OpenGL
+8683 LINUX INTEL OPENGL WEBGLVideoTextureTest.VerifySamplerVideoWEBGL/ES3_OpenGL
+8683 LINUX INTEL OPENGL WEBGLVideoTextureTest.VerifySamplerVideoWEBGLAsParameter/ES2_OpenGL
+8683 LINUX INTEL OPENGL WEBGLVideoTextureTest.VerifySamplerVideoWEBGLAsParameter/ES3_OpenGL
+8683 LINUX INTEL OPENGL WEBGLVideoTextureTest.VerifyStateManagerKnowsBindingVideoImage/ES2_OpenGL
+8683 LINUX INTEL OPENGL WEBGLVideoTextureTest.VerifyStateManagerKnowsBindingVideoImage/ES3_OpenGL
+
 // Slow tests, should appear last in this file
 5076 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
 5076 : GLSLTest.VerifyMaxFragmentUniformVectors* = TIMEOUT
