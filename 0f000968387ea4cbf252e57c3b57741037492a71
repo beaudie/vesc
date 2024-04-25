@@ -88,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66c1bfca_4e04bbf4",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-04-25T21:07:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c275bf56_30e19909",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 62
+      },
+      "revId": "0f000968387ea4cbf252e57c3b57741037492a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b37676b4_1792dede",
