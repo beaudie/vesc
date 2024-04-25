@@ -1492,6 +1492,8 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
                                                 imageType);
     }
 
+    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, mImage);
+
     return angle::Result::Continue;
 }
 
@@ -2209,6 +2211,8 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     commandBuffer->copyBufferToImage(srcBuffer->getBuffer().getHandle(), mImage->getImage(),
                                      mImage->getCurrentLayout(contextVk), 1, &region);
 
+    contextVk->trackImageWithOutsideRenderPassEvent(mImage);
+
     return angle::Result::Continue;
 }
 
@@ -2317,6 +2321,8 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
                 contextVk, mImage, srcView, mImage, destLevelViews, sampler.get().get(), params));
         }
     }
+
+    contextVk->trackImageWithOutsideRenderPassEvent(mImage);
 
     return angle::Result::Continue;
 }
@@ -2522,6 +2528,8 @@ angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
     // Stage the staging image in the destination
     dstImage->stageSubresourceUpdatesFromAllImageLevels(stagingImage.release(),
                                                         previousFirstAllocateLevel);
+
+    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, &stagingImage->get());
 
     return angle::Result::Continue;
 }
