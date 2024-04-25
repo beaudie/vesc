@@ -403,6 +403,9 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterReadCompute)
     // http://anglebug.com/2925
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
+
     constexpr char kComputeShaderSource[] = R"(#version 310 es
 layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
 

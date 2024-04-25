@@ -277,6 +277,9 @@ TEST_P(CubeMapTextureTest, SampleCoordinateTransformGrad)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_texture_lod"));
 
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsVulkan());
+
     constexpr char kFS[] = R"(#extension GL_EXT_shader_texture_lod : require
 precision mediump float;
 
