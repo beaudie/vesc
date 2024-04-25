@@ -22,6 +22,30 @@
       },
       "revId": "6d921a64d298ea81727acd673edf047f4cd58d84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9ec4301_fd770e07",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-25T14:32:33Z",
+      "side": 1,
+      "message": "Okay, I\u0027ll abandon this.  The list of skipped tests on this device is alarming.  Needs a triage pass from our team.  I\u0027ll work to get that going.",
+      "parentUuid": "f03da4aa_f3977410",
+      "range": {
+        "startLine": 661,
+        "startChar": 0,
+        "endLine": 671,
+        "endChar": 63
+      },
+      "revId": "6d921a64d298ea81727acd673edf047f4cd58d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
