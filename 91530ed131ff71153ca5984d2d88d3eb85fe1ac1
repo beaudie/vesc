@@ -106,6 +106,24 @@
       "parentUuid": "9c79aea4_42f1e6c6",
       "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "516482d1_bb2e8735",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T15:23:46Z",
+      "side": 1,
+      "message": "That\u0027s why I asked to move it next to `kDirtyObjectHandlers` and add an explanation.",
+      "parentUuid": "eef1dda0_65354fbe",
+      "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
