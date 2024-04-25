@@ -701,7 +701,7 @@ class AtomicRefCounted : angle::NonCopyable
     unsigned int getAndReleaseRef()
     {
         ASSERT(isReferenced());
-        return mRefCount.fetch_sub(1, std::memory_order_relaxed);
+        return mRefCount.fetch_sub(1, std::memory_order_acq_rel);
     }
 
     bool isReferenced() const { return mRefCount.load(std::memory_order_relaxed) != 0; }
