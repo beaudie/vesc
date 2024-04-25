@@ -464,7 +464,14 @@ void EGLAPIENTRY EGL_{name}({params})
 
         {{
             ANGLE_EGL_SCOPED_CONTEXT_LOCK({name}, thread{comma_if_needed_context_lock}{internal_context_lock_params});
-            ANGLE_EGL_VALIDATE_VOID(thread, {name}, {labeled_object}, {internal_params});
+            if (IsValidationEnabled())
+            {{
+                ANGLE_EGL_VALIDATE_VOID(thread, {name}, {labeled_object}, {internal_params});
+            }}
+            else
+            {{
+                {attrib_map_init}
+            }}
 
             {name}(thread{comma_if_needed}{internal_params});
         }}
@@ -489,7 +496,14 @@ TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN = """\
 
         {{
             ANGLE_EGL_SCOPED_CONTEXT_LOCK({name}, thread{comma_if_needed_context_lock}{internal_context_lock_params});
-            ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+            if (IsValidationEnabled())
+            {{
+                ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+            }}
+            else
+            {{
+                {attrib_map_init}
+            }}
 
             returnValue = {name}(thread{comma_if_needed}{internal_params});
         }}
@@ -512,7 +526,14 @@ TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_NO_LOCKS = """\
 
     {packed_gl_enum_conversions}
 
-    ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+    if (IsValidationEnabled())
+    {{
+        ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+    }}
+    else
+    {{
+        {attrib_map_init}
+    }}
 
     returnValue = {name}(thread{comma_if_needed}{internal_params});
 
@@ -998,6 +1019,7 @@ FORMAT_DICT = {
     "GLushort": "%u",
     "int": "%d",
     # EGL-specific types
+    "EGLBoolean": "%u",
     "EGLConfig": POINTER_FORMAT,
     "EGLContext": POINTER_FORMAT,
     "EGLDisplay": POINTER_FORMAT,
@@ -1905,6 +1927,7 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
     ]
 
     packed_gl_enum_conversions = []
+    attrib_map_init = []
 
     for param in params:
         name = just_the_name(param)
@@ -1916,6 +1939,9 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
                 "\n        " + internal_type + " " + internal_name + " = PackParam<" +
                 internal_type + ">(" + name + ");"
             ]
+
+            if 'AttributeMap' in internal_type:
+                attrib_map_init.append(internal_name + ".initializeWithoutValidation();")
 
     pass_params = [param_print_argument(api, command_node, param) for param in params]
     format_params = [param_format_string(param) for param in params]
@@ -1939,6 +1965,8 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
             ", ".join(params),
         "internal_params":
             ", ".join(internal_params),
+        "attrib_map_init":
+            "\n".join(attrib_map_init),
         "context_private_internal_params":
             ", ".join(
                 ["context->getMutablePrivateState()", "context->getMutablePrivateStateCache()"] +

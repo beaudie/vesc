@@ -1053,4 +1053,11 @@ void ReleaseExternalContextANGLE(Thread *thread, egl::Display *display)
 
     thread->setSuccess();
 }
+
+void SetValidationEnabledANGLE(Thread *thread, EGLBoolean validationState)
+{
+    SetValidationEnabled(validationState != EGL_FALSE);
+    thread->setSuccess();
+}
+
 }  // namespace egl
