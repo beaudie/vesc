@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6c62668_648e79ba",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T09:35:43Z",
+      "side": 1,
+      "message": "For future reference, this would eventually be optimized to `finishToSerial`",
+      "revId": "0f000968387ea4cbf252e57c3b57741037492a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b46d1dc_4333c5ea",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T09:35:43Z",
+      "side": 1,
+      "message": "If the buffer is mappable and is otherwise unused, the copy can be done straight on the CPU and (`blocking` or not) there is no reason to wait.\n\nAn optimization to remember for the future.",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "0f000968387ea4cbf252e57c3b57741037492a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b37676b4_1792dede",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-25T09:35:43Z",
+      "side": 1,
+      "message": "super nit: we tend to avoid implicit cast to bool:\n\n```suggestion\n        constexpr VkBufferUsageFlags kWritableUsage \u003d VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;\n        return (getVkUsageFlags() \u0026 kWritableUsage) !\u003d 0;\n```",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 87
+      },
+      "revId": "0f000968387ea4cbf252e57c3b57741037492a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
