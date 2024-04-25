@@ -6619,6 +6619,8 @@ angle::Result ContextVk::dispatchCompute(const gl::Context *context,
     ANGLE_TRY(setupDispatch(context));
 
     mOutsideRenderPassCommands->getCommandBuffer().dispatch(numGroupsX, numGroupsY, numGroupsZ);
+    // Track completion of compute.
+    mOutsideRenderPassCommands->flushSetEvents(this);
 
     return angle::Result::Continue;
 }
@@ -6645,6 +6647,9 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
 
     mOutsideRenderPassCommands->getCommandBuffer().dispatchIndirect(buffer.getBuffer(),
                                                                     buffer.getOffset() + indirect);
+
+    // Track completion of compute.
+    mOutsideRenderPassCommands->flushSetEvents(this);
 
     return angle::Result::Continue;
 }
@@ -8259,6 +8264,9 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     flushDescriptorSetUpdates();
 
+    // Track completion of this command buffer.
+    mOutsideRenderPassCommands->flushSetEvents(this);
+
     // Save the queueSerial before calling flushOutsideRPCommands, which may return a new
     // mOutsideRenderPassCommands
     ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastFlushedQueueSerial,
@@ -8582,7 +8590,7 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
 
         imageAccess.image->recordReadBarrier(this, imageAccess.aspectFlags, imageAccess.imageLayout,
                                              mOutsideRenderPassCommands);
-        mOutsideRenderPassCommands->retainResource(imageAccess.image);
+        mOutsideRenderPassCommands->retainImage(this, imageAccess.image);
     }
 
     for (const vk::CommandBufferImageSubresourceAccess &imageReadAccess :
@@ -8595,7 +8603,7 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
             this, imageReadAccess.access.aspectFlags, imageReadAccess.access.imageLayout,
             imageReadAccess.levelStart, imageReadAccess.levelCount, imageReadAccess.layerStart,
             imageReadAccess.layerCount, mOutsideRenderPassCommands);
-        mOutsideRenderPassCommands->retainResource(image);
+        mOutsideRenderPassCommands->retainImage(this, image);
     }
 
     for (const vk::CommandBufferImageSubresourceAccess &imageWrite : access.getWriteImages())
@@ -8607,7 +8615,7 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
                                   imageWrite.access.imageLayout, imageWrite.levelStart,
                                   imageWrite.levelCount, imageWrite.layerStart,
                                   imageWrite.layerCount, mOutsideRenderPassCommands);
-        mOutsideRenderPassCommands->retainResource(image);
+        mOutsideRenderPassCommands->retainImage(this, image);
         image->onWrite(imageWrite.levelStart, imageWrite.levelCount, imageWrite.layerStart,
                        imageWrite.layerCount, imageWrite.access.aspectFlags);
     }
