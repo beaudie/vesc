@@ -46,6 +46,9 @@ TEST_P(WEBGLVideoTextureTest, VerifySamplerVideoWEBGL)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_WEBGL_video_texture"));
 
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
+
     constexpr char kVS[] = R"(
 attribute vec2 position;
 varying mediump vec2 texCoord;
@@ -89,6 +92,9 @@ void main()
 TEST_P(WEBGLVideoTextureTest, VerifySamplerVideoWEBGLAsParameter)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_WEBGL_video_texture"));
+
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
 
     constexpr char kVS[] = R"(
 attribute vec2 position;
@@ -138,6 +144,9 @@ void main()
 TEST_P(WEBGLVideoTextureTest, VerifyStateManagerKnowsBindingVideoImage)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_WEBGL_video_texture"));
+
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
 
     constexpr char kVS[] = R"(
 attribute vec2 position;

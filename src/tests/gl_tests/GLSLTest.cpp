@@ -3365,6 +3365,9 @@ void main()
 // Test that == and != for structs and array types work.
 TEST_P(GLSLTest_ES31, StructAndArrayEqualOperator)
 {
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
+
     constexpr char kFS[] = R"(#version 310 es
 precision highp float;
 out vec4 color;
@@ -10176,6 +10179,9 @@ bool SubrectEquals(const std::vector<GLColor> &bigArray,
 // Tests that FragCoord behaves the same betweeen a user FBO and the back buffer.
 TEST_P(GLSLTest, FragCoordConsistency)
 {
+    // Fails on newer OS/driver. https://anglebug.com/8683
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
+
     constexpr char kFragCoordShader[] = R"(uniform mediump vec2 viewportSize;
 void main()
 {
