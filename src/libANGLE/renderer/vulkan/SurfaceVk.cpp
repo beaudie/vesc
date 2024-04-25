@@ -2190,6 +2190,7 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
     vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBufferHelper));
 
+    std::vector<vk::ImageHelper *> accessedImages;
     if (mColorImageMS.valid() && !imageResolved)
     {
         // Transition the multisampled image to TRANSFER_SRC for resolve.
@@ -2213,14 +2214,18 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
         mColorImageMS.resolve(image.image.get(), resolveRegion,
                               &commandBufferHelper->getCommandBuffer());
         contextVk->getPerfCounters().swapchainResolveOutsideSubpass++;
+        accessedImages.push_back(&mColorImageMS);
+        accessedImages.push_back(image.image.get());
     }
 
-    if (renderer->getFeatures().supportsPresentation.enabled)
+    if (renderer->getFeatures().supportsPresentation.enabled &&
+        image.image->getCurrentImageLayout() != vk::ImageLayout::Present)
     {
-        // This does nothing if it's already in the requested layout
         image.image->recordReadBarrier(contextVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                        vk::ImageLayout::Present, commandBufferHelper);
+        accessedImages.push_back(image.image.get());
     }
+    contextVk->trackImagesWithOutsideRenderPassEvent(accessedImages);
 
     // The overlay is drawn after this.  This ensures that drawing the overlay does not interfere
     // with other functionality, especially counters used to validate said functionality.
