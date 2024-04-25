@@ -52,6 +52,24 @@
       "parentUuid": "40c3ffde_e1e0d3cd",
       "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "166c42f7_f44f95d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-25T13:41:51Z",
+      "side": 1,
+      "message": "That produces:\n```\nerror: array designators are a C99 extension [-Werror,-Wc99-designator]\n```",
+      "parentUuid": "4d9ecbfd_d53f53ad",
+      "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
