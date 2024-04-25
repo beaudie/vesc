@@ -1105,6 +1105,8 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
                              dstImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
                              gl_vk::GetFilter(filter));
 
+    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, dstImage);
+
     return angle::Result::Continue;
 }
 
@@ -2010,6 +2012,8 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
 
         perfCounters.resolveImageCommands++;
     }
+
+    contextVk->trackImageWithOutsideRenderPassEvent(srcImage);
 
     return angle::Result::Continue;
 }
