@@ -124,6 +124,24 @@
       "parentUuid": "eef1dda0_65354fbe",
       "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95f07d07_c430e96b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-25T16:49:40Z",
+      "side": 1,
+      "message": "Updated with constexpr std::array that I think makes it difficult to makes mistakes without relying on comments, PTAL",
+      "parentUuid": "516482d1_bb2e8735",
+      "revId": "91530ed131ff71153ca5984d2d88d3eb85fe1ac1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
