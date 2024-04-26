@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "825d713b_abb9eda5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-04-26T19:35:13Z",
+      "side": 1,
+      "message": "Geoff\u0027s LGTM\u0027d this and it\u0027s passing all tests, so CQ\u0027ing. Dan, feel free to ping us more often on Slack to get CLs like this one landed more promptly.",
+      "revId": "1e0a4232435dc630572be12d27a4603f82249c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
