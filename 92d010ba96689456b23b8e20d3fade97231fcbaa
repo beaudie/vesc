@@ -34,6 +34,24 @@
       "parentUuid": "ae3bda76_f7784658",
       "revId": "92d010ba96689456b23b8e20d3fade97231fcbaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87a59d59_3ca40851",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:23:52Z",
+      "side": 1,
+      "message": "Thanks! My only concern with this change is that the calculation in `calculateVMAPreferredBlockSize` may be too specific to one app. Like it\u0027s trying to fit a 256x512 RGBA images perfectly in VMA blocks, but that may very well not apply to most apps. Have you made sure this doesn\u0027t regress memory elsewhere?\n\nFWIW, _most_ of an application\u0027s images are typically in compressed formats. If this adds padding for such images where there wasn\u0027t any before, that\u0027d be significant.",
+      "parentUuid": "fcd2cea8_d974e9ce",
+      "revId": "92d010ba96689456b23b8e20d3fade97231fcbaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
