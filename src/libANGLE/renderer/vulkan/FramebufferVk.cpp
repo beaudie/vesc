@@ -1105,8 +1105,6 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
                              dstImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
                              gl_vk::GetFilter(filter));
 
-    contextVk->flushOutsideRenderPassSetEvents();
-
     return angle::Result::Continue;
 }
 
