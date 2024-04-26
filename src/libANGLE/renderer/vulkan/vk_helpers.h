@@ -1336,7 +1336,11 @@ class CommandBufferHelperCommon : angle::NonCopyable
     void retainImage(Context *context, ImageHelper *image);
 
     // Returns true if event already existed in this command buffer.
-    bool hasRefCountedEvent(const RefCountedEvent &event) const;
+    bool hasRefCountedEvent(const RefCountedEvent &event) const
+    {
+        ASSERT(event.valid());
+        return mRefCountedEvents.map[event.getImageLayout()] == event;
+    }
 
     // Issue VkCmdSetEvent call for events in this command buffer.
     template <typename CommandBufferT>

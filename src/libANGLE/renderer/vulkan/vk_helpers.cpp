@@ -1732,20 +1732,6 @@ void CommandBufferHelperCommon::retainImage(Context *context, ImageHelper *image
     }
 }
 
-bool CommandBufferHelperCommon::hasRefCountedEvent(const RefCountedEvent &event) const
-{
-    ASSERT(event.valid());
-    for (ImageLayout layout : mRefCountedEvents.mask)
-    {
-        const RefCountedEvent &refCountedEvent = mRefCountedEvents.map[layout];
-        if (refCountedEvent.getHandle() == event.getHandle())
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 template <typename CommandBufferT>
 void CommandBufferHelperCommon::flushSetEventsImpl(Context *context, CommandBufferT *commandBuffer)
 {
@@ -7213,10 +7199,18 @@ void ImageHelper::recordWriteBarrier(Context *context,
 {
     if (isWriteBarrierNecessary(newLayout, levelStart, levelCount, layerStart, layerCount))
     {
-        ASSERT(!mCurrentEvent.valid() || !commands->hasRefCountedEvent(mCurrentEvent));
+        // We may have situations that WAW without flushSetEvents call (for example, a repeated
+        // staged update on the same texture level). In that case use pipelineBarrier so that we
+        // dont end up wait for a event that has not being set. We could also flushSetEvents here,
+        // but since the two operations are supposedly very close to each other, pipelineBarrier may
+        // just works fine.
+        BarrierType barrierType =
+            !mCurrentEvent.valid() || commands->hasRefCountedEvent(mCurrentEvent)
+                ? BarrierType::Pipeline
+                : BarrierType::Event;
         VkSemaphore acquireNextImageSemaphore;
         barrierImpl(context, aspectMask, newLayout, context->getRenderer()->getQueueFamilyIndex(),
-                    BarrierType::Event, commands->getRefCountedEventCollector(),
+                    barrierType, commands->getRefCountedEventCollector(),
                     &commands->getCommandBuffer(), &acquireNextImageSemaphore);
 
         if (acquireNextImageSemaphore != VK_NULL_HANDLE)
@@ -7242,6 +7236,7 @@ void ImageHelper::recordReadSubresourceBarrier(Context *context,
     if (isReadSubresourceBarrierNecessary(newLayout, levelStart, levelCount, layerStart,
                                           layerCount))
     {
+        ASSERT(!mCurrentEvent.valid() || !commands->hasRefCountedEvent(mCurrentEvent));
         VkSemaphore acquireNextImageSemaphore;
         barrierImpl(context, aspectMask, newLayout, context->getRenderer()->getQueueFamilyIndex(),
                     BarrierType::Event, commands->getRefCountedEventCollector(),
@@ -7262,16 +7257,22 @@ void ImageHelper::recordReadBarrier(Context *context,
                                     ImageLayout newLayout,
                                     OutsideRenderPassCommandBufferHelper *commands)
 {
-    ASSERT(!mCurrentEvent.valid() || !commands->hasRefCountedEvent(mCurrentEvent));
     if (!isReadBarrierNecessary(newLayout))
     {
         return;
     }
 
     VkSemaphore acquireNextImageSemaphore;
+    // We may have unflushed SetEvent just a bit earlier and now try to read from it. We will either
+    // have to force flushSetEvent here or just fallback to pipelineBarrier. To avoid excessive
+    // setEvents, I am using pipelineBarrier here. We can adjust if it turns out have negative
+    // performance impact.
+    BarrierType barrierType = !mCurrentEvent.valid() || commands->hasRefCountedEvent(mCurrentEvent)
+                                  ? BarrierType::Pipeline
+                                  : BarrierType::Event;
     barrierImpl(context, aspectMask, newLayout, context->getRenderer()->getQueueFamilyIndex(),
-                BarrierType::Event, commands->getRefCountedEventCollector(),
-                &commands->getCommandBuffer(), &acquireNextImageSemaphore);
+                barrierType, commands->getRefCountedEventCollector(), &commands->getCommandBuffer(),
+                &acquireNextImageSemaphore);
 
     if (acquireNextImageSemaphore != VK_NULL_HANDLE)
     {
