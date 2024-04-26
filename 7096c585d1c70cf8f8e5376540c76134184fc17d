@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6886d35b_d5e5feca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-26T19:30:25Z",
+      "side": 1,
+      "message": "Green on Pixel 6 AP1A.240405.002 in previous PS https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-exp-test/158/overview.",
+      "revId": "7096c585d1c70cf8f8e5376540c76134184fc17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
