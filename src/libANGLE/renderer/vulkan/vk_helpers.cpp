@@ -7214,6 +7214,7 @@ void ImageHelper::recordWriteBarrier(Context *context,
 {
     if (isWriteBarrierNecessary(newLayout, levelStart, levelCount, layerStart, layerCount))
     {
+        ASSERT(!mCurrentEvent.valid() || !commands->hasSetEventPending(mCurrentEvent));
         // We may have situations that WAW without flushSetEvents call (for example, a repeated
         // staged update on the same texture level). In that case use pipelineBarrier so that we
         // dont end up wait for a event that has not being set. We could also flushSetEvents here,
@@ -7278,6 +7279,8 @@ void ImageHelper::recordReadBarrier(Context *context,
     }
 
     VkSemaphore acquireNextImageSemaphore;
+
+    ASSERT(!mCurrentEvent.valid() || !commands->hasSetEventPending(mCurrentEvent));
     // We may have unflushed SetEvent just a bit earlier and now try to read from it. We will either
     // have to force flushSetEvent here or just fallback to pipelineBarrier. To avoid excessive
     // setEvents, I am using pipelineBarrier here. We can adjust if it turns out have negative
