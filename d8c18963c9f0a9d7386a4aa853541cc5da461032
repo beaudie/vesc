@@ -202,6 +202,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8fe12614_4072e411",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2526,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T17:13:29Z",
+      "side": 1,
+      "message": "Yes, that\u0027s typically the case. It\u0027s rare to see an extension functionality supported only in core but not as extension. As long as your driver is happy with VkPhysicalDevice8BitStorageFeatures, we\u0027re good 😊",
+      "parentUuid": "f425623e_ae002cc6",
+      "range": {
+        "startLine": 2521,
+        "startChar": 0,
+        "endLine": 2526,
+        "endChar": 0
+      },
+      "revId": "d8c18963c9f0a9d7386a4aa853541cc5da461032",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac9cc991_f3a86ecd",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
         "patchSetId": 1
