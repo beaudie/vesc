@@ -62,6 +62,17 @@ bool MemoryBuffer::resize(size_t size)
     return true;
 }
 
+void MemoryBuffer::trim(size_t size)
+{
+    if (size == mSize)
+    {
+        return;
+    }
+
+    ASSERT(size < mSize);
+    mSize = size;
+}
+
 void MemoryBuffer::fill(uint8_t datum)
 {
     if (!empty())
