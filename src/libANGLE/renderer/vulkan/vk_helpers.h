@@ -1517,10 +1517,6 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     // Issues VkCmdSetEvent calls.
     void flushSetEvents(Context *context) { flushSetEventsImpl(context, &mCommandBuffer); }
 
-    // Create event if needed and tracks image with this event.
-    void trackImageWithEvent(Context *context, ImageHelper *image);
-    void trackImagesWithEvent(Context *context, ImageHelper *srcImage, ImageHelper *dstImage);
-
     angle::Result flushToPrimary(Context *context, CommandsState *commandsState);
 
     void setGLMemoryBarrierIssued()
