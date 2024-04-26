@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7360c13e_cb185b96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2695,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T20:51:41Z",
+      "side": 1,
+      "message": "Stale comments\n\n```suggestion\n    m8BitStorageFeatures       \u003d {};\n    m8BitStorageFeatures.sType \u003d VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR;\n\n    m16BitStorageFeatures       \u003d {};\n    m16BitStorageFeatures.sType \u003d VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES_KHR;\n```",
+      "range": {
+        "startLine": 2689,
+        "startChar": 0,
+        "endLine": 2695,
+        "endChar": 95
+      },
+      "revId": "e34cdb73dd58873e1b25cb02bef13355e06a897a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
