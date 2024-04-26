@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc8b0f22_745cf615",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:04:22Z",
+      "side": 1,
+      "message": "Nice, glad there\u0027s finally a solution!",
+      "revId": "1c31dafbf9ec1d45b58ca062562a07d6df62e3ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16adb8de_f7e99c10",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:04:22Z",
+      "side": 1,
+      "message": "```suggestion\n            // Work around C++\u0027s lack of array element support in designated initializers\n            std::array\u003cDirtyObjectHandler, state::DIRTY_OBJECT_MAX\u003e handlers{};\n```",
+      "revId": "1c31dafbf9ec1d45b58ca062562a07d6df62e3ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c51c4dad_c8f21fc3",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:04:22Z",
+      "side": 1,
+      "message": "How about moving this to assert so it doesn\u0027t actually exist??\n\n```suggestion\n    static_assert([]() {\n        for (auto handler : kDirtyObjectHandlers)\n        {\n            if (handler \u003d\u003d nullptr)\n            {\n                return false;\n            }\n        }\n        return true;\n    }(), \"kDirtyObjectHandlers missing a handler\");\n```",
+      "range": {
+        "startLine": 1472,
+        "startChar": 0,
+        "endLine": 1483,
+        "endChar": 88
+      },
+      "revId": "1c31dafbf9ec1d45b58ca062562a07d6df62e3ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
