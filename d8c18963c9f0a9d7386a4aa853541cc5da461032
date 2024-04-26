@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09ce19fc_5d09f4f4",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1539,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:17:35Z",
+      "side": 1,
+      "message": "Super tiny nit, just fixing the Vulkan feature names\n\n```suggestion\n        },\n        {\n            \"name\": \"supports_8_bit_storage_buffer\",\n            \"category\": \"Features\",\n            \"description\": [\n                \"VkDevice supports the VK_KHR_8bit_storage extension and has the storageBuffer8BitAccess feature\"\n            ]\n        },\n        {\n            \"name\": \"supports_8_bit_uniform_and_storage_buffer\",\n            \"category\": \"Features\",\n            \"description\": [\n                \"VkDevice supports the VK_KHR_8bit_storage extension and has the uniformAndStorageBuffer8BitAccess feature\"\n            ]\n        },\n        {\n            \"name\": \"supports_8_bit_push_constant\",\n            \"category\": \"Features\",\n            \"description\": [\n                \"VkDevice supports the VK_KHR_8bit_storage extension and has the storagePushConstant8 feature\"\n            ]\n        },\n        {\n            \"name\": \"supports_16_bit_storage_buffer\",\n            \"category\": \"Features\",\n            \"description\": [\n                \"VkDevice supports the VK_KHR_16bit_storage extension and has the storageBuffer16BitAccess feature\"\n            ]\n        },\n        {\n            \"name\": \"supports_16_bit_uniform_and_storage_buffer\",\n            \"category\": \"Features\",\n            \"description\": [\n                \"VkDevice supports the VK_KHR_16bit_storage extension and has the uniformAndStorageBuffer16BitAccess feature\"\n            ]\n        },\n        {\n            \"name\": \"supports_16_bit_push_constant\",\n            \"category\": \"Features\",\n            \"description\": [\n                \"VkDevice supports the VK_KHR_16bit_storage extension and has the storagePushConstant16 feature\"\n            ]\n        },\n        {\n            \"name\": \"supports_16_bit_input_output\",\n            \"category\": \"Features\",\n            \"description\": [\n                \"VkDevice supports the VK_KHR_16bit_storage extension and has the storageInputOutput16 feature\"\n            ]\n```",
+      "range": {
+        "startLine": 1491,
+        "startChar": 0,
+        "endLine": 1539,
+        "endChar": 13
+      },
+      "revId": "d8c18963c9f0a9d7386a4aa853541cc5da461032",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b48d2fe_ce184c0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:17:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this",
+      "revId": "d8c18963c9f0a9d7386a4aa853541cc5da461032",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "836fccd4_e412434e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:17:35Z",
+      "side": 1,
+      "message": "Please update this comment too",
+      "revId": "d8c18963c9f0a9d7386a4aa853541cc5da461032",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6dbca6a_ae7a45a3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2433,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:17:35Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "d8c18963c9f0a9d7386a4aa853541cc5da461032",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32af6d3e_7800445d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2526,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:17:35Z",
+      "side": 1,
+      "message": "I think you can remove `mPhysicalDevice12Features/Properties`. I don\u0027t see these actually queried (which makes sense given that we create a 1.1 instance).",
+      "range": {
+        "startLine": 2521,
+        "startChar": 0,
+        "endLine": 2526,
+        "endChar": 0
+      },
+      "revId": "d8c18963c9f0a9d7386a4aa853541cc5da461032",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac9cc991_f3a86ecd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-26T11:17:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this?",
+      "revId": "d8c18963c9f0a9d7386a4aa853541cc5da461032",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
