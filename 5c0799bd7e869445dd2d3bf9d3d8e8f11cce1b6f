@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e93c9bcc_779a1de1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-28T02:32:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82269058_a9efc443",
+      "range": {
+        "startLine": 1030,
+        "startChar": 4,
+        "endLine": 1030,
+        "endChar": 22
+      },
+      "revId": "5c0799bd7e869445dd2d3bf9d3d8e8f11cce1b6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1ca3d6b_35449d78",
@@ -85,6 +109,30 @@
       "writtenOn": "2024-04-23T16:53:15Z",
       "side": 1,
       "message": "You can make this struct union with uint32_t and this becomes uint32_t comparison.",
+      "range": {
+        "startLine": 1044,
+        "startChar": 8,
+        "endLine": 1044,
+        "endChar": 19
+      },
+      "revId": "5c0799bd7e869445dd2d3bf9d3d8e8f11cce1b6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dc61487_5145b22a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-28T02:32:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1ca3d6b_35449d78",
       "range": {
         "startLine": 1044,
         "startChar": 8,
