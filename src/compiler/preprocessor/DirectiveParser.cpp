@@ -755,6 +755,7 @@ void DirectiveParser::parseVersion(Token *token)
                 }
                 if (valid)
                 {
+                    mShaderVersionString = token->text;
                     if (sh::IsDesktopGLSpec(mSettings.shaderSpec))
                     {
                         state = VERSION_PROFILE_GL;
@@ -991,7 +992,7 @@ int DirectiveParser::parseExpressionIfdef(Token *token)
 
 void DirectiveParser::handleVersion(const SourceLocation &location)
 {
-    PredefineMacro(mMacroSet, "__VERSION__", mShaderVersion);
+    PredefineMacro(mMacroSet, "__VERSION__", mShaderVersionString.c_str());
     mDirectiveHandler->handleVersion(location, mShaderVersion, mSettings.shaderSpec, mMacroSet);
     mHandledVersion = true;
 }

@@ -54,7 +54,7 @@ class Preprocessor : angle::NonCopyable
     // is null terminated.
     bool init(size_t count, const char *const string[], const int length[]);
     // Adds a pre-defined macro.
-    void predefineMacro(const char *name, int value);
+    void predefineMacro(const char *name, const char *value);
 
     void lex(Token *token);
 

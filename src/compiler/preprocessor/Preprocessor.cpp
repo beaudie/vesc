@@ -53,14 +53,14 @@ Preprocessor::~Preprocessor()
 bool Preprocessor::init(size_t count, const char *const string[], const int length[])
 {
     // Add standard pre-defined macros.
-    predefineMacro("__LINE__", 0);
-    predefineMacro("__FILE__", 0);
-    predefineMacro("GL_ES", 1);
+    predefineMacro("__LINE__", "0");
+    predefineMacro("__FILE__", "0");
+    predefineMacro("GL_ES", "1");
 
     return mImpl->tokenizer.init(count, string, length);
 }
 
-void Preprocessor::predefineMacro(const char *name, int value)
+void Preprocessor::predefineMacro(const char *name, const char *value)
 {
     PredefineMacro(&mImpl->macroSet, name, value);
 }

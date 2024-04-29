@@ -80,6 +80,7 @@ class DirectiveParser : public Lexer
     Diagnostics *mDiagnostics;
     DirectiveHandler *mDirectiveHandler;
     int mShaderVersion;
+    std::string mShaderVersionString;
     const PreprocessorSettings mSettings;
 };
 
