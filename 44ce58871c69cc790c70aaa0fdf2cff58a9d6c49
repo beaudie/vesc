@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68c9ca11_ae8a69e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T19:11:47Z",
+      "side": 0,
+      "message": "I\u0027d like to again point out that before, doing updates to binding 0 then 1, or 1 then 0 ended up with the same desc. Now they end up with two different descs. If instead you\u0027d do this (UNTESTED CODE):\n\n```\nif (bindingIndex \u003e\u003d mPackedDescriptorSetLayout.size())\n{\n    mPackedDescriptorSetLayout.resize(bindingIndex + 1);\n}\nPackedDescriptorSetBinding \u0026packedBinding \u003d mPackedDescriptorSetLayout[bindingIndex];\n```\n\nyou can bring back that behavior. I can\u0027t really guess what works better though, if the updates to bindings are consistent, what this CL has gives better packing and is better. If they are not consistent, then the suggestion results in better cache hits.\n\nDo you think you could run an experiment to see if the cache hit rate is reduced with this change?\n\n---\n\nFWIW, making `bindingIndex` implicit (by placing the entry in the corresponding slot), you can also reduce the `PackedDescriptorSetBinding` struct back to 32-bit for a small CPU perf gain. Also good to measure.",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
