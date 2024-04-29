@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e1eb6eb_d1f1d2e8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T16:04:45Z",
+      "side": 1,
+      "message": "There are a lot of these manual trackings, and it\u0027s easy to miss them. How about adding `ContextVk` to the constructor of `CommandBufferAccess`, and let it automatically call this function (or a more generic version that takes the list of images) on destructor? Then you don\u0027t have to ever call this manually for outside RP commands.",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8d31bf0_ba72a6b3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T16:04:45Z",
+      "side": 1,
+      "message": "Doesn\u0027t setting an event here cause the same problem? That is, the image\u0027s event is the one for render pass, but then gets overridden to the outside RP\u0027s event?",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1982f377_bcf16430",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T16:04:45Z",
+      "side": 1,
+      "message": "nit: Not setting `VK_EVENT_CREATE_DEVICE_ONLY_BIT`? I know it\u0027s coming from sync2, but is it incompatible with 1.0 events?",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb9572f1_3b4b7c23",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T16:04:45Z",
+      "side": 1,
+      "message": "WrappedObject is supposed to be a wrapper for basic Vulkan types. You probably don\u0027t want that here. When ref counted event is passed where a wrapped object is needed (like garbage lists?), couldn\u0027t you take out the `Event` and pass that instead?",
+      "range": {
+        "startLine": 58,
+        "startChar": 37,
+        "endLine": 58,
+        "endChar": 50
+      },
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "320909a1_75539fb4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T16:04:45Z",
+      "side": 1,
+      "message": "```suggestion\n    // Release one reference count to the underline Event object and destroy if this is the\n```",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f85379e_e0946d5d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T16:04:45Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this, because all access is under the sharegroup lock, no? Even for EGL images we \"merge\" our share groups so that shouldn\u0027t be a problem (we should rework that by the way, but EGL images will eventually have to be under _some_ lock in the end).",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
