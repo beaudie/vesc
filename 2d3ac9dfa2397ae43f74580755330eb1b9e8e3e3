@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4be475ad_1f415c3c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-29T22:50:04Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/5499379",
+      "parentUuid": "1c727359_38d5f0d3",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb9572f1_3b4b7c23",
@@ -167,6 +185,30 @@
       "side": 1,
       "message": "Related thread: https://chromium-review.googlesource.com/c/angle/angle/+/5490203/comment/9f85379e_e0946d5d/\n\nWhy not have the refcount release done _before_ adding to garbage list? You can avoid adding multiple copies of the same event to garbage list (only to find out the event doesn\u0027t end up getting deleted). You can also avoid making the atomic decrement `acq_rel`. At that point, you don\u0027t really need this to be a `WrappedObject` either. It looks to me like the convenience of using this class comes at perf cost and code complications that\u0027s probably not worth it.",
       "parentUuid": "ebd6335e_6db203ac",
+      "range": {
+        "startLine": 58,
+        "startChar": 37,
+        "endLine": 58,
+        "endChar": 50
+      },
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c2a7e41_45dab3d4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-29T22:50:04Z",
+      "side": 1,
+      "message": "Right, the alternative way is you only add to garbage list when last refCount goes away. But this means we have to check against mUse before release refcount. Since events are created and destroyed rather frequently (because it has to track every GPU usage), the concern here is that we may end up have excessive check against mUse. The current design is try to mitigate check of mUse by having GPU hold one reference to RefCountEvent. That reference count only gets decremented when GPU\u0027s reference is completed. And that tracking is associated with command buffer instead of image, which means all event garbage are collected per command buffer and mUse check is only once per command buffer instead of once per image use. (i.e, try to achieve the batch the GPU completion check for all events used by one submission, sort of similar to ContextVk::mCurrentGarbage). So this is done this way for the performance reason. Now the question is check against mUse or atomic decrement of the RefCountEvent which is more expensive? I think mUse should be more expensive. Sometimes mUse could have more than one entry. And mUse check also involves atomic operations. Also note that we might able to get rid of (or at least reduce) the atomic decrement acq_rel once we have the event recylcer in place so that events can recycle per context or share group which does not need the lock or atomic. \n\nI can add more comment here.",
+      "parentUuid": "d8d4a39a_b04ac04c",
       "range": {
         "startLine": 58,
         "startChar": 37,
