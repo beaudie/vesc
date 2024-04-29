@@ -14,13 +14,13 @@
 
 #include <dawn/webgpu_cpp.h>
 
+namespace rx
+{
 struct TranslatedWGPUShaderModule
 {
     wgpu::ShaderModule module;
 };
 
-namespace rx
-{
 class ProgramExecutableWgpu : public ProgramExecutableImpl
 {
   public:
