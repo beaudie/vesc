@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13459d3a_afa863d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7474,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T13:39:29Z",
+      "side": 1,
+      "message": "This being `false` does not mean GPL is supported. Why isn\u0027t this failing on the bots that don\u0027t have GPL? Is the comment wrong, or are we missing tests?",
+      "range": {
+        "startLine": 7474,
+        "startChar": 32,
+        "endLine": 7474,
+        "endChar": 66
+      },
+      "revId": "6c22f0a17176386ca1fda0812469ce8fb4a30913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
