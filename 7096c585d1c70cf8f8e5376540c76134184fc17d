@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "195fe046_91dcb554",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-29T16:06:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6cc28f39_3fac030d",
+      "range": {
+        "startLine": 285,
+        "startChar": 5,
+        "endLine": 285,
+        "endChar": 39
+      },
+      "revId": "7096c585d1c70cf8f8e5376540c76134184fc17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f954dc97_f9b1fba7",
@@ -78,6 +102,30 @@
       "side": 1,
       "message": "The MSRTT failures might be fixed, we recently fixed some bugs there. The perf counter tests are unexpected because they should really be about how we create the render pass (and so mostly device agnostic). No idea about the others.\n\nWe should organize a fix-it again!",
       "parentUuid": "f954dc97_f9b1fba7",
+      "range": {
+        "startLine": 658,
+        "startChar": 28,
+        "endLine": 658,
+        "endChar": 65
+      },
+      "revId": "7096c585d1c70cf8f8e5376540c76134184fc17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a5d7e54_e5058043",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-04-29T16:06:38Z",
+      "side": 1,
+      "message": "I can try re-enabling MSRTT tests once I get all experimental devices on AP1A.240405.002",
+      "parentUuid": "53f490fc_ebcf3135",
       "range": {
         "startLine": 658,
         "startChar": 28,
