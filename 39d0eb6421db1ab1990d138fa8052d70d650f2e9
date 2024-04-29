@@ -16,6 +16,24 @@
       "message": "This is circumventing robustness, isn\u0027t it?\n\nShouldn\u0027t we instead add `EGL_CONTEXT_OPENGL_NO_ERROR_KHR` to attribs, and let robustness get a chance to also add attribs before we create the first context? I imagine the fallback order would be:\n\n- No error + Robustness\n- Robustness\n- No error\n- Nothing\n\nBecause robustness is more important?",
       "revId": "39d0eb6421db1ab1990d138fa8052d70d650f2e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f27152fd_498385c8",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-29T15:43:56Z",
+      "side": 1,
+      "message": "no error + robustness are incompatible, the spec says to ignore no error if robustness is also requested.\n\nI\u0027m interested in what the real-world effects are going to be, Chrome already just crashes on context loss. Unclear what the driver does in that case with no error.\n\nI\u0027ll add a killswitch before landing.",
+      "parentUuid": "49e233df_128a2e7b",
+      "revId": "39d0eb6421db1ab1990d138fa8052d70d650f2e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
