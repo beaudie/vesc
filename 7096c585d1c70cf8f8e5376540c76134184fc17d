@@ -16,6 +16,52 @@
       "message": "Green on Pixel 6 AP1A.240405.002 in previous PS https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-exp-test/158/overview.",
       "revId": "7096c585d1c70cf8f8e5376540c76134184fc17d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cc28f39_3fac030d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-29T14:31:53Z",
+      "side": 1,
+      "message": "This involves `VkExternalFormatANDROID` so we need to get it debugged.  Okay for suppressing to get bots unblocked.",
+      "range": {
+        "startLine": 285,
+        "startChar": 5,
+        "endLine": 285,
+        "endChar": 39
+      },
+      "revId": "7096c585d1c70cf8f8e5376540c76134184fc17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f954dc97_f9b1fba7",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-29T14:31:53Z",
+      "side": 1,
+      "message": "We can land this to get the bots green(er) but we need to circle back here.  Per discussion, we think the lines in `gacha_life` actually look more correct, so this could be a test issue.\n\nActually, this list of skips is uncomfortably long, so I think we\u0027ll put some effort into shrinking it soon.",
+      "range": {
+        "startLine": 658,
+        "startChar": 28,
+        "endLine": 658,
+        "endChar": 65
+      },
+      "revId": "7096c585d1c70cf8f8e5376540c76134184fc17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
