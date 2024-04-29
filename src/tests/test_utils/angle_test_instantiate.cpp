@@ -372,8 +372,7 @@ bool IsNVIDIA()
 
 bool IsQualcomm()
 {
-    return IsNexus5X() || IsNexus9() || IsPixelXL() || IsPixel2() || IsPixel2XL() || IsPixel4() ||
-           IsPixel4XL();
+    return HasSystemVendorID(kVendorID_Qualcomm);
 }
 
 bool HasMesa()
