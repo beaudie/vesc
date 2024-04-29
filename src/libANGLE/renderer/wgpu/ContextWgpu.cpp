@@ -639,4 +639,15 @@ angle::Result ContextWgpu::flush()
     return angle::Result::Continue;
 }
 
+angle::Result ContextWgpu::createRenderPipeline()
+{
+    ASSERT(mState.getProgramExecutable() != nullptr);
+    ProgramExecutableWgpu *executable = webgpu::GetImpl(mState.getProgramExecutable());
+    ASSERT(executable);
+
+    ANGLE_TRY(executable->getRenderPipeline(this, mRenderPipelineDesc, &mCurrentGraphicsPipeline));
+
+    return angle::Result::Continue;
+}
+
 }  // namespace rx

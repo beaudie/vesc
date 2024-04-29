@@ -15,6 +15,7 @@
 #include "image_util/loadimage.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/wgpu/DisplayWgpu.h"
+#include "libANGLE/renderer/wgpu/wgpu_pipeline_state.h"
 #include "libANGLE/renderer/wgpu/wgpu_utils.h"
 
 namespace rx
@@ -267,6 +268,20 @@ class ContextWgpu : public ContextImpl
     angle::Result flush();
 
   private:
+    // Dirty bits.
+    enum DirtyBitType : size_t
+    {
+        // The pipeline has changed and needs to be recreated.
+        DIRTY_BIT_PIPELINE_DESC,
+
+        DIRTY_BIT_MAX,
+    };
+    using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
+
+    DirtyBits mGraphicsDirtyBits;
+
+    angle::Result createRenderPipeline();
+
     gl::Caps mCaps;
     gl::TextureCapsMap mTextureCaps;
     gl::Extensions mExtensions;
@@ -280,6 +295,9 @@ class ContextWgpu : public ContextImpl
     wgpu::CommandEncoder mCurrentCommandEncoder;
     wgpu::RenderPassEncoder mCurrentRenderPass;
     wgpu::RenderPassDescriptor mCurrentRenderPassDesc;
+
+    webgpu::RenderPipelineDesc mRenderPipelineDesc;
+    wgpu::RenderPipeline mCurrentGraphicsPipeline;
 };
 
 }  // namespace rx

@@ -26,6 +26,18 @@
         }                                                                                    \
     } while (0)
 
+#define ANGLE_GL_OBJECTS_X(PROC) \
+    PROC(Buffer)                 \
+    PROC(Context)                \
+    PROC(Framebuffer)            \
+    PROC(Query)                  \
+    PROC(Program)                \
+    PROC(ProgramExecutable)      \
+    PROC(Sampler)                \
+    PROC(Texture)                \
+    PROC(TransformFeedback)      \
+    PROC(VertexArray)
+
 namespace rx
 {
 
@@ -34,6 +46,41 @@ class DisplayWgpu;
 
 namespace webgpu
 {
+template <typename T>
+struct ImplTypeHelper;
+
+// clang-format off
+#define ANGLE_IMPL_TYPE_HELPER_GL(OBJ) \
+template<>                             \
+struct ImplTypeHelper<gl::OBJ>         \
+{                                      \
+    using ImplType = OBJ##Wgpu;         \
+};
+// clang-format on
+
+ANGLE_GL_OBJECTS_X(ANGLE_IMPL_TYPE_HELPER_GL)
+
+template <>
+struct ImplTypeHelper<egl::Display>
+{
+    using ImplType = DisplayWgpu;
+};
+
+template <>
+struct ImplTypeHelper<egl::Image>
+{
+    using ImplType = ImageWgpu;
+};
+
+template <typename T>
+using GetImplType = typename ImplTypeHelper<T>::ImplType;
+
+template <typename T>
+GetImplType<T> *GetImpl(const T *glObject)
+{
+    return GetImplAs<GetImplType<T>>(glObject);
+}
+
 // WebGPU image level index.
 using LevelIndex = gl::LevelIndexWrapper<uint32_t>;
 
@@ -46,7 +93,6 @@ enum class RenderPassClosureReason
 };
 void EnsureCapsInitialized(const wgpu::Device &device, gl::Caps *nativeCaps);
 
-ContextWgpu *GetImpl(const gl::Context *context);
 DisplayWgpu *GetDisplay(const gl::Context *context);
 wgpu::Device GetDevice(const gl::Context *context);
 wgpu::Instance GetInstance(const gl::Context *context);
