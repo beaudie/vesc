@@ -16,6 +16,46 @@
       "message": "PTAL at a small optimization",
       "revId": "3278dbebcef7f1d6101b22fbfdb721a4bd146a77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d300eae_c8d092bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-29T21:04:41Z",
+      "side": 1,
+      "message": "Nice, good idea.  More readable this way too.",
+      "revId": "3278dbebcef7f1d6101b22fbfdb721a4bd146a77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f260b4ed_e5545624",
+        "filename": "src/compiler/translator/glsl/BuiltInFunctionEmulatorGLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-04-29T21:04:41Z",
+      "side": 1,
+      "message": "nits:\n\nTo match the previous exactly, these need a newline at the end of vec constructor.\n\nIt would be even more readable with a newline after each `atan_emu` call to avoid wrapping, but no biggy either way.",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 15
+      },
+      "revId": "3278dbebcef7f1d6101b22fbfdb721a4bd146a77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
