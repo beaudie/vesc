@@ -155,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8d4a39a_b04ac04c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T19:45:20Z",
+      "side": 1,
+      "message": "Related thread: https://chromium-review.googlesource.com/c/angle/angle/+/5490203/comment/9f85379e_e0946d5d/\n\nWhy not have the refcount release done _before_ adding to garbage list? You can avoid adding multiple copies of the same event to garbage list (only to find out the event doesn\u0027t end up getting deleted). You can also avoid making the atomic decrement `acq_rel`. At that point, you don\u0027t really need this to be a `WrappedObject` either. It looks to me like the convenience of using this class comes at perf cost and code complications that\u0027s probably not worth it.",
+      "parentUuid": "ebd6335e_6db203ac",
+      "range": {
+        "startLine": 58,
+        "startChar": 37,
+        "endLine": 58,
+        "endChar": 50
+      },
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "320909a1_75539fb4",
         "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
         "patchSetId": 13
