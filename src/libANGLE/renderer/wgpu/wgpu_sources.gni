@@ -50,6 +50,15 @@ wgpu_backend_sources = [
   "VertexArrayWgpu.h",
   "wgpu_helpers.cpp",
   "wgpu_helpers.h",
+  "wgpu_pipeline_state.cpp",
+  "wgpu_pipeline_state.h",
   "wgpu_utils.cpp",
   "wgpu_utils.h",
 ]
+
+if (is_win) {
+  wgpu_backend_sources += [
+    "win32/WindowSurfaceWgpuWin32.cpp",
+    "win32/WindowSurfaceWgpuWin32.h",
+  ]
+}
