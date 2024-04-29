@@ -52,6 +52,24 @@
       "parentUuid": "fed62161_da3b5800",
       "revId": "75684ed7c97fcdc549d9239ff94b457db2bc4feb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a14f966_52da986a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T16:25:20Z",
+      "side": 1,
+      "message": "Yeah it looks particularly bad for GL that\u0027s just forwarding the call. We could think of turning the tail call into an unlocked call to the backend to do the job, which would pass through a couple calls including a virtual call, and still have no guarantee someone in the call chain isn\u0027t accessing something badly. I really don\u0027t have a better solution 😞",
+      "parentUuid": "70c49a01_0ba5d642",
+      "revId": "75684ed7c97fcdc549d9239ff94b457db2bc4feb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
