@@ -52,6 +52,24 @@
       "parentUuid": "f27152fd_498385c8",
       "revId": "39d0eb6421db1ab1990d138fa8052d70d650f2e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d864c5f3_21479bec",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-29T16:11:06Z",
+      "side": 1,
+      "message": "We rely on KHR_robust_buffer_access_behavior (which depends on robustness) when it\u0027s available, but only for WebGL. Otherwise we fall back to index buffer readbacks. I suspect that the performance we gain for no error on raster work outweighs the WebGL cost.",
+      "parentUuid": "9a5db777_5a881e63",
+      "revId": "39d0eb6421db1ab1990d138fa8052d70d650f2e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
