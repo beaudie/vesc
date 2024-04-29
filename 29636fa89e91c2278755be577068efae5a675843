@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a26ea4ce_004c3058",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 4305,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-29T17:21:40Z",
+      "side": 1,
+      "message": "` descriptorSetLayoutBindingsHash ^\u003d ...`\n\nThat way if validImmutableSamplersCount is 0, mImmutableSamplers will not affect the hash at all. Right now it will end up with `^0` which is a bit odd, even though it is not wrong.",
+      "range": {
+        "startLine": 4305,
+        "startChar": 8,
+        "endLine": 4305,
+        "endChar": 32
+      },
+      "revId": "29636fa89e91c2278755be577068efae5a675843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
