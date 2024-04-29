@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c912c6_72ff1175",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 84
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T19:01:26Z",
+      "side": 1,
+      "message": "Duplicate assert\n\n```suggestion\n    paramStruct-\u003eevent        \u003d event;\n```",
+      "range": {
+        "startLine": 1757,
+        "startChar": 0,
+        "endLine": 1758,
+        "endChar": 38
+      },
+      "revId": "3776f6c1705114b37a0ad53507332bcd6e6b6c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de1ff6a9_2024b1e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 84
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T19:01:26Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right, why are the src and dst stage/access the same?",
+      "range": {
+        "startLine": 137,
+        "startChar": 27,
+        "endLine": 137,
+        "endChar": 73
+      },
+      "revId": "3776f6c1705114b37a0ad53507332bcd6e6b6c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06656e23_8fbcb9ef",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 84
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T19:01:26Z",
+      "side": 1,
+      "message": "Comment doesn\u0027t match the code",
+      "revId": "3776f6c1705114b37a0ad53507332bcd6e6b6c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ed69db4_53678b64",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 84
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T19:01:26Z",
+      "side": 1,
+      "message": "I see this is used in one place, but still can\u0027t make sense of it. Is it trying to add the event preemptively to the garbage list in case the real event gets released later? Why not add to garbage list at that later point?",
+      "revId": "3776f6c1705114b37a0ad53507332bcd6e6b6c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
