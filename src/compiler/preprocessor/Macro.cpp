@@ -25,11 +25,11 @@ bool Macro::equals(const Macro &other) const
            (replacements == other.replacements);
 }
 
-void PredefineMacro(MacroSet *macroSet, const char *name, int value)
+void PredefineMacro(MacroSet *macroSet, const char *name, const char *value)
 {
     Token token;
     token.type = Token::CONST_INT;
-    token.text = ToString(value);
+    token.text = value;
 
     std::shared_ptr<Macro> macro = std::make_shared<Macro>();
     macro->predefined            = true;

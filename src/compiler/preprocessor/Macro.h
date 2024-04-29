@@ -46,7 +46,7 @@ struct Macro
 
 typedef std::map<std::string, std::shared_ptr<Macro>> MacroSet;
 
-void PredefineMacro(MacroSet *macroSet, const char *name, int value);
+void PredefineMacro(MacroSet *macroSet, const char *name, const char *value);
 
 }  // namespace pp
 

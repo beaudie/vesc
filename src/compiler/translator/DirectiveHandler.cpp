@@ -298,7 +298,7 @@ void TDirectiveHandler::handleVersion(const angle::pp::SourceLocation &loc,
                 {
                     continue;
                 }
-                PredefineMacro(macro_set, GetExtensionNameString(iter.first), 1);
+                PredefineMacro(macro_set, GetExtensionNameString(iter.first), "1");
             }
         }
     }
