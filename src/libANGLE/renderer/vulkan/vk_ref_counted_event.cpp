@@ -55,7 +55,7 @@ void RefCountedEventGarbageObjects::add(std::vector<RefCountedEvent> *events)
     }
 }
 
-void RefCountedEventGarbageObjects::addDuplicate(const RefCountedEvent &event)
+void RefCountedEventGarbageObjects::add(const RefCountedEvent &event)
 {
     RefCountedEvent localEventCopy = event;
     mGarbageObjects.emplace_back(GetGarbage(&localEventCopy));
