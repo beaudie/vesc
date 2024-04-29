@@ -991,7 +991,7 @@ int DirectiveParser::parseExpressionIfdef(Token *token)
 
 void DirectiveParser::handleVersion(const SourceLocation &location)
 {
-    PredefineMacro(mMacroSet, "__VERSION__", mShaderVersion);
+    PredefineMacro(mMacroSet, "__VERSION__", std::to_string(mShaderVersion).c_str());
     mDirectiveHandler->handleVersion(location, mShaderVersion, mSettings.shaderSpec, mMacroSet);
     mHandledVersion = true;
 }
