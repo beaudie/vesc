@@ -16,6 +16,24 @@
       "message": "I\u0027d like to again point out that before, doing updates to binding 0 then 1, or 1 then 0 ended up with the same desc. Now they end up with two different descs. If instead you\u0027d do this (UNTESTED CODE):\n\n```\nif (bindingIndex \u003e\u003d mPackedDescriptorSetLayout.size())\n{\n    mPackedDescriptorSetLayout.resize(bindingIndex + 1);\n}\nPackedDescriptorSetBinding \u0026packedBinding \u003d mPackedDescriptorSetLayout[bindingIndex];\n```\n\nyou can bring back that behavior. I can\u0027t really guess what works better though, if the updates to bindings are consistent, what this CL has gives better packing and is better. If they are not consistent, then the suggestion results in better cache hits.\n\nDo you think you could run an experiment to see if the cache hit rate is reduced with this change?\n\n---\n\nFWIW, making `bindingIndex` implicit (by placing the entry in the corresponding slot), you can also reduce the `PackedDescriptorSetBinding` struct back to 32-bit for a small CPU perf gain. Also good to measure.",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c48195b2_85d5b935",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-29T19:52:45Z",
+      "side": 0,
+      "message": "\u003e If instead you\u0027d do this ... mPackedDescriptorSetLayout.resize(bindingIndex + 1);\n\napps are free to choose any bindingIndex, so an app can have only 2 bindings with `bindingIndex \u003d\u003d {3, 45}` in which case we will end up alloc\u0027ing a `FastVector` of size 46 instead of 2. do we want that?\n\n\u003e if the updates to bindings are consistent\n\n`ProgramExecutableVk::createPipelineLayout` is where most of the work happens but we rely on vectors built in various other locations so guaranteeing consistent ordering is not easy. If we need to have order agnostic cache hits and have optimal space consumption I guess we are back to some sort of map (but this was causing failures with pixel bots which i did not look into much)\n\n\u003e what this CL has gives better packing and is better\n\nyeah, for \u003e 90% traces we can fit `mPackedDescriptorSetLayout` in a single cache line",
+      "parentUuid": "68c9ca11_ae8a69e8",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
