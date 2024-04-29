@@ -147,7 +147,7 @@ class RefCountedEventGarbageObjects final
 
     // Make a copy of event (which adds another refcount to the VkEvent) and add the copied event to
     // the garbages
-    void addDuplicate(const RefCountedEvent &event);
+    void add(const RefCountedEvent &event);
 
     bool empty() const { return mGarbageObjects.empty(); }
 

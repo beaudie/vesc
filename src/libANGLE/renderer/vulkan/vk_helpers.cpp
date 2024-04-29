@@ -7084,6 +7084,7 @@ void ImageHelper::barrierImpl(Context *context,
 
     if (mCurrentLayout == ImageLayout::SharedPresent)
     {
+        ASSERT(!mCurrentEvent.valid());
         const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
 
         VkMemoryBarrier memoryBarrier = {};
@@ -7116,7 +7117,13 @@ void ImageHelper::barrierImpl(Context *context,
         barrierType = BarrierType::Pipeline;
     }
 
-    if (barrierType == BarrierType::Event && mCurrentEvent.valid())
+    if (!mCurrentEvent.valid())
+    {
+        // Fallback to pipelineBarrier if there is no event tracking image.
+        barrierType = BarrierType::Pipeline;
+    }
+
+    if (barrierType == BarrierType::Event)
     {
         // If there is an event, we use the waitEvent to do layout change. Once we have waited, the
         // event gets garbage collected (which is GPU completion tracked) to avoid waited again in
@@ -7290,6 +7297,12 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
     ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled ||
            !mCurrentEvent.valid());
 
+    if (!mCurrentEvent.valid())
+    {
+        // Fallback to pipelineBarrier if there is no event tracking image.
+        barrierType = BarrierType::Pipeline;
+    }
+
     // Once you transition to ImageLayout::SharedPresent, you never transition out of it.
     if (mCurrentLayout == ImageLayout::SharedPresent)
     {
@@ -7313,7 +7326,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         ASSERT(HasResourceWriteAccess(layoutData.type));
 
         // No layout change, only memory barrier is required
-        if (barrierType == BarrierType::Event && mCurrentEvent.valid())
+        if (barrierType == BarrierType::Event)
         {
             eventBarriers->addMemoryEvent(context, mCurrentEvent,
                                           GetImageLayoutDstStageMask(context, layoutData),
@@ -7328,12 +7341,9 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
                 GetImageLayoutDstStageMask(context, layoutData), layoutData.srcAccessMask,
                 layoutData.dstAccessMask);
 
-            if (mCurrentEvent.valid())
-            {
-                // Release it. No need to garbage collect since we did not use the event here. ALl
-                // previous use of event should garbage tracked already.
-                mCurrentEvent.release(context->getDevice());
-            }
+            // Release it. No need to garbage collect since we did not use the event here. ALl
+            // previous use of event should garbage tracked already.
+            mCurrentEvent.release(context->getDevice());
         }
         mBarrierQueueSerial = queueSerial;
     }
@@ -7363,7 +7373,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             {
                 eventBarriers->addMemoryEvent(context, mLastNonShaderReadOnlyEvent, dstStageMask,
                                               transitionTo.dstAccessMask);
-                garbageObjects->addDuplicate(mLastNonShaderReadOnlyEvent);
+                garbageObjects->add(mLastNonShaderReadOnlyEvent);
             }
             else
             {
@@ -7447,7 +7457,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
                 }
             }
 
-            if (barrierType == BarrierType::Event && mCurrentEvent.valid())
+            if (barrierType == BarrierType::Event)
             {
                 eventBarriers->addImageEvent(context, mCurrentEvent, dstStageMask,
                                              imageMemoryBarrier);
@@ -7456,8 +7466,9 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
                 if (IsShaderReadOnlyLayout(transitionTo))
                 {
                     mLastNonShaderReadOnlyEvent.release(context->getDevice());
-                    mLastNonShaderReadOnlyEvent = mCurrentEvent;
-                    mCurrentShaderReadStageMask = dstStageMask;
+                    mLastNonShaderReadOnlyEvent  = mCurrentEvent;
+                    mLastNonShaderReadOnlyLayout = mCurrentLayout;
+                    mCurrentShaderReadStageMask  = dstStageMask;
                 }
                 garbageObjects->add(&mCurrentEvent);
             }
@@ -7469,6 +7480,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
                 // non-shaderRead layout here.
                 if (IsShaderReadOnlyLayout(transitionTo))
                 {
+                    mLastNonShaderReadOnlyEvent.release(context->getDevice());
                     mLastNonShaderReadOnlyLayout = mCurrentLayout;
                     mCurrentShaderReadStageMask  = dstStageMask;
                 }
