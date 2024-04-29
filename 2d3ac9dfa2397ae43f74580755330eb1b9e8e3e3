@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "069d5d90_15723682",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-29T17:06:05Z",
+      "side": 1,
+      "message": "There are two reasons here:\n1) Have access automatically call it won\u0027t work here because there are quite some places we end up calling getOutsideRenderPassCommands() and then call into util function and that util function calls getOutsideRenderPassCommands again. You then run into situation that you try to wait for a event that has not been set. ImageHelper::flushSTagedUpdatesImpl also has similar situations as well. If you want to go down this roite, you basically have to ensure we call getOutsideRenderPassCommands onky once and deconstructor only triggers *after* enture operation is done. That is hardly the case for utility functions.\n2) For performance reason we do prefer manual inserting the tracking so that we have the full control of how fine grain event tracking should we use. We want one event track the entire big operation. For example we want one event for flushStagedUpdates of all levels instead of one per level.\n\nThe other thing is that it is totally okay to miss them. If you want to track one operation with event but forgot to add it, the only downside should be you end up using pipelineBarrier instead of event. That is in next CL.",
+      "parentUuid": "4e1eb6eb_d1f1d2e8",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8d31bf0_ba72a6b3",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c727359_38d5f0d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-29T17:06:05Z",
+      "side": 1,
+      "message": "It should use device only. I was using device only initially but some how missed that during the evolution process. I intended to use device only here. Will fix it soon.",
+      "parentUuid": "1982f377_bcf16430",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb9572f1_3b4b7c23",
         "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
         "patchSetId": 13
@@ -65,6 +101,30 @@
       "writtenOn": "2024-04-29T16:04:45Z",
       "side": 1,
       "message": "WrappedObject is supposed to be a wrapper for basic Vulkan types. You probably don\u0027t want that here. When ref counted event is passed where a wrapped object is needed (like garbage lists?), couldn\u0027t you take out the `Event` and pass that instead?",
+      "range": {
+        "startLine": 58,
+        "startChar": 37,
+        "endLine": 58,
+        "endChar": 50
+      },
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebd6335e_6db203ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-29T17:06:05Z",
+      "side": 1,
+      "message": "Its mostly for garbage list, but it also provides the convenience that wrappedObject comes with it. For garbage list, you can not just pass `Event`. Garbage needs to take the `RefCountedEvent` and decrement the refcount instead of destroy event. I am trying to conceptually treating the RefCountedEvent a vulkan object here. Someday maybe we can have a VKEvent3 that does not require us to do refcounting and that will all handled in the driver.",
+      "parentUuid": "cb9572f1_3b4b7c23",
       "range": {
         "startLine": 58,
         "startChar": 37,
@@ -105,6 +165,24 @@
       "writtenOn": "2024-04-29T16:04:45Z",
       "side": 1,
       "message": "Shouldn\u0027t need this, because all access is under the sharegroup lock, no? Even for EGL images we \"merge\" our share groups so that shouldn\u0027t be a problem (we should rework that by the way, but EGL images will eventually have to be under _some_ lock in the end).",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "366163f2_1e53497b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-29T17:06:05Z",
+      "side": 1,
+      "message": "The problem is garbage clean up in separate thread and will decrement the refcount.",
+      "parentUuid": "9f85379e_e0946d5d",
       "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
