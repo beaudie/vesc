@@ -34,6 +34,24 @@
       "parentUuid": "49e233df_128a2e7b",
       "revId": "39d0eb6421db1ab1990d138fa8052d70d650f2e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a5db777_5a881e63",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T15:51:13Z",
+      "side": 1,
+      "message": "Aren\u0027t we heavily dependent on robustness for security?",
+      "parentUuid": "f27152fd_498385c8",
+      "revId": "39d0eb6421db1ab1990d138fa8052d70d650f2e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
