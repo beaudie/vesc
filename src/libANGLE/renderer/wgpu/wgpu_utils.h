@@ -102,6 +102,8 @@ wgpu::Instance GetInstance(const gl::Context *context);
 
 bool IsWgpuError(wgpu::WaitStatus waitStatus);
 bool IsWgpuError(WGPUBufferMapAsyncStatus mapBufferStatus);
+
+bool IsStripPrimitiveTopology(wgpu::PrimitiveTopology topology);
 }  // namespace webgpu
 
 namespace wgpu_gl
@@ -115,6 +117,12 @@ namespace gl_wgpu
 webgpu::LevelIndex getLevelIndex(gl::LevelIndex levelGl, gl::LevelIndex baseLevel);
 wgpu::TextureDimension getWgpuTextureDimension(gl::TextureType glTextureType);
 wgpu::Extent3D getExtent3D(const gl::Extents &glExtent);
+
+wgpu::PrimitiveTopology GetPrimitiveTopology(gl::PrimitiveMode mode);
+
+wgpu::IndexFormat GetIndexFormat(gl::DrawElementsType drawElementsTYpe);
+wgpu::FrontFace GetFrontFace(GLenum frontFace);
+wgpu::CullMode GetCullMode(gl::CullFaceMode mode, bool cullFaceEnabled);
 }  // namespace gl_wgpu
 
 }  // namespace rx

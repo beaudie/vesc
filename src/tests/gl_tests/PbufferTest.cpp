@@ -1050,7 +1050,7 @@ TEST_P(PbufferColorspaceTest, CreateSurfaceWithColorspace)
     }
 }
 
-ANGLE_INSTANTIATE_TEST_ES2(PbufferTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND(PbufferTest, ES2_WEBGPU());
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(PbufferColorspaceTest);
 ANGLE_INSTANTIATE_TEST_ES3_AND(PbufferColorspaceTest,
