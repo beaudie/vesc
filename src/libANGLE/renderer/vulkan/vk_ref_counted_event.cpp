@@ -34,7 +34,7 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
     mHandle                      = new AtomicRefCounted<EventAndLayout>;
     VkEventCreateInfo createInfo = {};
     createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
-    createInfo.flags             = 0;
+    createInfo.flags             = context->getRenderer()->getRefCountedEventCreateFlags();
     mHandle->get().event.init(context->getDevice(), createInfo);
     mHandle->addRef();
     mHandle->get().imageLayout = layout;

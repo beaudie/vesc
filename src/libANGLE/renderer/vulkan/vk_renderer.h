@@ -527,6 +527,11 @@ class Renderer : angle::NonCopyable
         return mSupportedVulkanShaderStageMask;
     }
 
+    VkEventCreateFlags getRefCountedEventCreateFlags() const
+    {
+        return mRefCountedEventCreateFlagBits;
+    }
+
     angle::Result getFormatDescriptorCountForVkFormat(vk::Context *context,
                                                       VkFormat format,
                                                       uint32_t *descriptorCountOut);
@@ -935,6 +940,7 @@ class Renderer : angle::NonCopyable
 #endif
     VkPhysicalDevice8BitStorageFeatures m8BitStorageFeatures;
     VkPhysicalDevice16BitStorageFeatures m16BitStorageFeatures;
+    VkPhysicalDeviceSynchronization2Features mSynchronization2Features;
 
     angle::PackedEnumBitSet<gl::ShadingRate, uint8_t> mSupportedFragmentShadingRates;
     angle::PackedEnumMap<gl::ShadingRate, VkSampleCountFlags>
@@ -1063,6 +1069,8 @@ class Renderer : angle::NonCopyable
     // stages.
     VkPipelineStageFlags mSupportedVulkanPipelineStageMask;
     VkShaderStageFlags mSupportedVulkanShaderStageMask;
+
+    VkEventCreateFlags mRefCountedEventCreateFlagBits;
 
     // Use thread pool to compress cache data.
     std::shared_ptr<angle::WaitableEvent> mCompressEvent;
