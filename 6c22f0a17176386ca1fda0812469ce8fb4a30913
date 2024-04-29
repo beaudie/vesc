@@ -70,6 +70,30 @@
       },
       "revId": "6c22f0a17176386ca1fda0812469ce8fb4a30913",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e602088b_33d35d58",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7474,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-29T15:49:39Z",
+      "side": 1,
+      "message": "fyi - once we upstream the decoupling feature we will set `combineAllShadersInPipelineLibrary` to `!GPL` and it should work as expected",
+      "parentUuid": "3e3c5518_0da4f4f0",
+      "range": {
+        "startLine": 7474,
+        "startChar": 32,
+        "endLine": 7474,
+        "endChar": 66
+      },
+      "revId": "6c22f0a17176386ca1fda0812469ce8fb4a30913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
