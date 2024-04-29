@@ -62,6 +62,30 @@
       },
       "revId": "7096c585d1c70cf8f8e5376540c76134184fc17d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53f490fc_ebcf3135",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-29T14:45:21Z",
+      "side": 1,
+      "message": "The MSRTT failures might be fixed, we recently fixed some bugs there. The perf counter tests are unexpected because they should really be about how we create the render pass (and so mostly device agnostic). No idea about the others.\n\nWe should organize a fix-it again!",
+      "parentUuid": "f954dc97_f9b1fba7",
+      "range": {
+        "startLine": 658,
+        "startChar": 28,
+        "endLine": 658,
+        "endChar": 65
+      },
+      "revId": "7096c585d1c70cf8f8e5376540c76134184fc17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
