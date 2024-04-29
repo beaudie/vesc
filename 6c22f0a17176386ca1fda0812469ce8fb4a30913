@@ -22,6 +22,30 @@
       },
       "revId": "6c22f0a17176386ca1fda0812469ce8fb4a30913",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3210a89f_f6833ef2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7474,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-04-29T13:44:11Z",
+      "side": 1,
+      "message": "\u003e This being false does not mean GPL is supported\n\n`combineAllShadersInPipelineLibrary` will be true if either GPL is not supported at all or if GPL is supported but not decoupled pre-rast and frag shader pipeline compilation\n\n`combineAllShadersInPipelineLibrary` is set to true by default in upstream (we have it set to false internally)",
+      "parentUuid": "13459d3a_afa863d1",
+      "range": {
+        "startLine": 7474,
+        "startChar": 32,
+        "endLine": 7474,
+        "endChar": 66
+      },
+      "revId": "6c22f0a17176386ca1fda0812469ce8fb4a30913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
