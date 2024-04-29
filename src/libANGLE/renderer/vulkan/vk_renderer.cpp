@@ -1504,6 +1504,7 @@ Renderer::Renderer()
       mCommandProcessor(this, &mCommandQueue),
       mSupportedVulkanPipelineStageMask(0),
       mSupportedVulkanShaderStageMask(0),
+      mRefCountedEventCreateFlagBits(0),
       mMemoryAllocationTracker(MemoryAllocationTracker(this))
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
@@ -2530,6 +2531,11 @@ void Renderer::appendDeviceExtensionFeaturesPromotedTo13(
     {
         vk::AddToPNextChain(deviceFeatures, &mExtendedDynamicState2Features);
     }
+
+    if (ExtensionFound(VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceFeatures, &mSynchronization2Features);
+    }
 }
 
 void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceExtensionNames)
@@ -2709,6 +2715,9 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     m16BitStorageFeatures       = {};
     m16BitStorageFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES_KHR;
 
+    mSynchronization2Features       = {};
+    mSynchronization2Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SYNCHRONIZATION_2_FEATURES;
+
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures = {};
     mExternalFormatResolveFeatures.sType =
@@ -2785,6 +2794,7 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     mHostImageCopyProperties.pNext                          = nullptr;
     m8BitStorageFeatures.pNext                              = nullptr;
     m16BitStorageFeatures.pNext                             = nullptr;
+    mSynchronization2Features.pNext                         = nullptr;
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures.pNext   = nullptr;
     mExternalFormatResolveProperties.pNext = nullptr;
@@ -3242,6 +3252,12 @@ void Renderer::enableDeviceExtensionsPromotedTo13(const vk::ExtensionNameList &d
         mEnabledDeviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mExtendedDynamicState2Features);
     }
+
+    if (mFeatures.supportsSynchronization2.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mSynchronization2Features);
+    }
 }
 
 angle::Result Renderer::enableDeviceExtensions(vk::Context *context,
@@ -3621,6 +3637,12 @@ angle::Result Renderer::createDeviceAndQueue(vk::Context *context, uint32_t queu
         mSupportedVulkanShaderStageMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
     }
     mSupportedVulkanPipelineStageMask = ~unsupportedStages;
+
+    if (mFeatures.supportsSynchronization2.enabled)
+    {
+        // Use device only for performance reasons.
+        mRefCountedEventCreateFlagBits |= VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR;
+    }
 
     ANGLE_TRY(initializeMemoryAllocator(context));
 
@@ -5078,6 +5100,9 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
 #else
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExternalFormatResolve, false);
 #endif
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsSynchronization2,
+                            mSynchronization2Features.synchronization2 == VK_TRUE);
 
     // Disable use of VkCmdWaitEvent for image barriers for now.
     // https://issuetracker.google.com/336844257
