@@ -80,10 +80,21 @@ class FramebufferWgpu : public FramebufferImpl
 
     RenderTargetWgpu *getReadPixelsRenderTarget(const angle::Format &format) const;
 
+    const gl::DrawBuffersArray<wgpu::TextureFormat> &getCurrentColorAttachmentFormats() const
+    {
+        return mCurrentColorAttachmentFormats;
+    }
+    wgpu::TextureFormat getCurrentDepthStencilAttachmentFormat() const
+    {
+        return mCurrentDepthStencilFormat;
+    }
+
   private:
     RenderTargetCache<RenderTargetWgpu> mRenderTargetCache;
     wgpu::RenderPassDescriptor mCurrentRenderPassDesc;
     std::vector<wgpu::RenderPassColorAttachment> mCurrentColorAttachments;
+    gl::DrawBuffersArray<wgpu::TextureFormat> mCurrentColorAttachmentFormats;
+    wgpu::TextureFormat mCurrentDepthStencilFormat = wgpu::TextureFormat::Undefined;
 };
 
 }  // namespace rx
