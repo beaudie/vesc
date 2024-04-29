@@ -56,6 +56,30 @@
       },
       "revId": "3278dbebcef7f1d6101b22fbfdb721a4bd146a77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53c38f35_e0333043",
+        "filename": "src/compiler/translator/glsl/BuiltInFunctionEmulatorGLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-04-29T21:35:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f260b4ed_e5545624",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 15
+      },
+      "revId": "3278dbebcef7f1d6101b22fbfdb721a4bd146a77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
