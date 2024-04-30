@@ -801,6 +801,14 @@
                 "Some drivers lose context when repeatedly generating mipmaps on textures that were used as framebuffers."
             ],
             "issue": "https://crbug.com/40279678"
+        },
+        {
+            "name": "disable_egl_fence_sync",
+            "category": "Workarounds",
+            "description": [
+                "EGL fence sync objects do not work on the Android emulator despite the extension string being exposed."
+            ],
+            "issue": "https://crbug.com/337886037"
         }
     ]
 }

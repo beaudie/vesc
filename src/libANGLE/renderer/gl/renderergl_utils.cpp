@@ -2676,6 +2676,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // https://crbug.com/40279678
     ANGLE_FEATURE_CONDITION(features, useIntermediateTextureForGenerateMipmap,
                             IsPixel7OrPixel8(functions));
+
+    // https://crbug.com/337886037, https://crbug.com/40259037
+    ANGLE_FEATURE_CONDITION(features, disableEglFenceSync, IsAndroidEmulator(functions));
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

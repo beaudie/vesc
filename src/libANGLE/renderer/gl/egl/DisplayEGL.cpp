@@ -870,9 +870,10 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->getFrameTimestamps = mEGL->hasExtension("EGL_ANDROID_get_frame_timestamps");
 
     outExtensions->fenceSync =
-        eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_fence_sync");
-    outExtensions->waitSync =
-        eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_wait_sync");
+        !mRenderer->getFeatures().disableEglFenceSync.enabled &&
+        (eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_fence_sync"));
+    outExtensions->waitSync = outExtensions->fenceSync && (eglVersion >= gl::Version(1, 5) ||
+                                                           mEGL->hasExtension("EGL_KHR_wait_sync"));
 
     outExtensions->getNativeClientBufferANDROID =
         mEGL->hasExtension("EGL_ANDROID_get_native_client_buffer");

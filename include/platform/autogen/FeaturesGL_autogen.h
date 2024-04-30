@@ -739,6 +739,13 @@ struct FeaturesGL : FeatureSetBase
         &members, "https://crbug.com/40279678"
     };
 
+    FeatureInfo disableEglFenceSync = {
+        "disableEglFenceSync",
+        FeatureCategory::OpenGLWorkarounds,
+        "EGL fence sync objects do not work on the Android emulator despite the extension string being exposed.",
+        &members, "https://crbug.com/337886037"
+    };
+
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
