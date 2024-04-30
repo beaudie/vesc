@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fabfe9e5_22512fb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-30T14:00:52Z",
+      "side": 1,
+      "message": "Thank you. I assume you meant to put that change in review, I did that and let it land.\n\nDo you think you can also split the host-visible buffer changes into its own CL?",
+      "parentUuid": "5bc8dea9_26a87e27",
+      "revId": "044d4f522c65ad11e3579711955e73cd705ed8f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f57909de_f9ad6db8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
