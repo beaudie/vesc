@@ -34,6 +34,24 @@
       "parentUuid": "68c9ca11_ae8a69e8",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fc6f97c_7184160b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-04-30T00:15:21Z",
+      "side": 0,
+      "message": "I actually was thinking what Shabi described above as well. Basically keep the way how it works as before but get rid of excessive zeros at the end. I didn\u0027t realize this CL is doing slightly different ways, but if data shows new way is better I am fine too. \n\n\"apps are free to choose any bindingIndex\", true, but is any real app actually doing that way? The point here is to optimize the actual usage pattern we are seeing in real app.",
+      "parentUuid": "c48195b2_85d5b935",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
