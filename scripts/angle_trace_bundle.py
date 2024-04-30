@@ -24,10 +24,13 @@
 
 import argparse
 import json
+import logging
 import os
 import subprocess
 import sys
 import zipfile
+from pathlib import Path
+
 
 # {gn_dir}/angle_trace_tests has vpython in wrapper shebangs, call our runner directly
 RUN_TESTS_TEMPLATE = r'''#!/bin/bash
@@ -45,6 +48,79 @@ cd "$(dirname "$0")"
 ./_run_tests.sh --filter='TraceTest.{trace_name}' --verbose --fixed-test-time-with-warmup 10
 '''
 
+GENERATE_SCREENSHOTS_TEMPLATE = r'''#!/bin/bash
+cd "$(dirname "$0")"
+adb shell mkdir -p /sdcard/angle_screenshots
+./_run_tests.sh --filter='TraceTest*' --verbose --run-to-key-frame --screenshot-dir /sdcard/angle_screenshots
+adb pull /sdcard/angle_screenshots
+'''
+
+COMPARE_GOLDENS_TEMPLATE = r'''#!/bin/bash
+
+# Directory Paths
+goldens_dir="angle_goldens"
+screenshots_dir="angle_screenshots"
+diff_dir="screenshot_diffs"
+
+# Create diffs directory if it doesn't exist
+mkdir -p "$diff_dir"
+
+# Check for ImageMagick
+if ! command -v compare &> /dev/null; then
+    echo "ImageMagick's 'compare' tool not found. Please install it:"
+    echo "  sudo apt-get install imagemagick"
+    exit 1
+fi
+
+# Error Flag
+error_flag=0
+
+# Signal handler for SIGINT (Ctrl+C)
+trap "echo 'Exiting...'; exit 1" SIGINT
+
+# Iterate through PNG images in goldens_dir
+for golden_img in "$goldens_dir"/*.png; do
+    filename=$(basename "$golden_img")
+    screenshot_img="$screenshots_dir/$filename"
+
+    # Check if image exists in screenshots_dir
+    if [[ ! -f "$screenshot_img" ]]; then
+        echo "Error: Image $filename not found in $screenshots_dir"
+        error_flag=1
+        continue
+    fi
+
+    # Compare images
+    echo "Comparing: $filename"
+    compare -metric AE -fuzz 5% "$golden_img" "$screenshot_img" "$diff_dir/diff-$filename"
+    result=$?
+    echo
+
+    if [[ $result -ne 0 ]]; then
+        echo "Images differ: $filename (AE: $result)"
+        error_flag=1
+    fi
+done
+
+# Iterate through PNG images in screenshots_dir to check for extras
+for screenshot_img in "$screenshots_dir"/*.png; do
+    filename=$(basename "$screenshot_img")
+    golden_img="$goldens_dir/$filename"
+
+    if [[ ! -f "$golden_img" ]]; then
+        echo "Error: Image $filename found in $screenshots_dir but not in $goldens_dir"
+        error_flag=1
+    fi
+done
+
+if [[ $error_flag -eq 1 ]]; then
+    echo "Errors were found during image comparison."
+    exit 1
+else
+    echo "All images compared successfully!"
+    exit 0
+fi
+'''
 
 def main():
     parser = argparse.ArgumentParser()
@@ -53,7 +129,11 @@ def main():
     parser.add_argument(
         '--include-unstripped-libs', action='store_true', help='include lib.unstripped')
     parser.add_argument('--trace-name', help='trace to run from run_script.sh')
+    parser.add_argument('-l', '--log', help='Logging level.', default='info')
+    parser.add_argument('--goldens', help='directory containing golden images')
     args, _ = parser.parse_known_args()
+
+    logging.basicConfig(level=args.log.upper())
 
     gn_dir = os.path.join(os.path.normpath(args.gn_dir), '')
     assert os.path.sep == '/' and gn_dir.endswith('/')
@@ -104,6 +184,28 @@ def main():
         if args.trace_name:
             addScript('run_trace.sh',
                       RUN_TRACE_TEMPLATE.format(gn_dir=gn_dir, trace_name=args.trace_name))
+
+        if args.goldens:
+            logging.info('Checking args.goldens %s' % args.goldens)
+
+            # Include script to run traces (all or subset) and compare with goldens
+            addScript('generate_screenshots.sh',
+                      GENERATE_SCREENSHOTS_TEMPLATE.format(gn_dir=gn_dir))
+            addScript('compare_goldens.sh', COMPARE_GOLDENS_TEMPLATE.format(gn_dir=gn_dir))
+
+            # Create an empty directory to hold goldens
+            goldens_dir = "angle_goldens/"
+            fzip.writestr(goldens_dir, "")
+
+            # Include PNG files from goldens dir
+            directory_path = Path(args.goldens)
+            for file_path in directory_path.iterdir():
+                if file_path.suffix != ".png":
+                    logging.info('Skipping %s' % file_path.name)
+                    continue
+
+                logging.info('Adding %s to bundle' % file_path.name)
+                fzip.write(file_path, arcname=goldens_dir + file_path.name)
 
     return 0
 
