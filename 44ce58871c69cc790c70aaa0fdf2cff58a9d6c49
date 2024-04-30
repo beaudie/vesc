@@ -52,6 +52,24 @@
       "parentUuid": "c48195b2_85d5b935",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01db6a15_39c012ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-30T13:57:43Z",
+      "side": 0,
+      "message": "\u003e but is any real app actually doing that way? The point here is to optimize the actual usage pattern we are seeing in real app.\n\nExactly, which is why I suggested this:\n\n\u003e Do you think you could run an experiment to see if the cache hit rate is reduced with this change?\n\nIf cache hit rate is not affected by this change, I\u0027m fine with this better packing. If it is affected, we\u0027ll have to measure the trade off.",
+      "parentUuid": "0fc6f97c_7184160b",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
