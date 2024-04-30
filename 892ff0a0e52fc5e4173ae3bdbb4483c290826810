@@ -52,6 +52,24 @@
       "parentUuid": "b8fd0a70_6b160ccb",
       "revId": "892ff0a0e52fc5e4173ae3bdbb4483c290826810",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7b15ae1_3ff3f4dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-04-30T16:11:48Z",
+      "side": 1,
+      "message": "Amirali, should we keep the existing checks for devices we\u0027re not sure about and add `|| HasSystemVendorID()`?",
+      "parentUuid": "7b2c724f_90625a2b",
+      "revId": "892ff0a0e52fc5e4173ae3bdbb4483c290826810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
