@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36a02090_97973e13",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-30T18:01:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "656b2964_efe3ae48",
+      "revId": "4fe9941bccf17719fa04261604e0d8bfc59c9dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd172b3b_11dfdf21",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-04-25T05:11:15Z",
       "side": 1,
       "message": "Since the scope has changed:\n\n```suggestion\nbool TextureHasAnyRedefinedLevels(const gl::CubeFaceArray\u003cgl::TexLevelMask\u003e \u0026redefinedLevels);\nbool IsTextureLevelRedefined(const gl::CubeFaceArray\u003cgl::TexLevelMask\u003e \u0026redefinedLevels,\n                             gl::TextureType textureType,\n                             gl::LevelIndex level);\n```",
+      "range": {
+        "startLine": 467,
+        "startChar": 0,
+        "endLine": 470,
+        "endChar": 44
+      },
+      "revId": "4fe9941bccf17719fa04261604e0d8bfc59c9dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cd91393_919bdc55",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-30T18:01:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd172b3b_11dfdf21",
       "range": {
         "startLine": 467,
         "startChar": 0,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7892503_176c4cfd",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-30T18:01:46Z",
+      "side": 1,
+      "message": "I added `TextureRedefineLevel` to renderer_utils. I\u0027m not super sure where I should pass an `enum class` instead of a `bool` though? The bools I\u0027m passing into the method currently come from other methods that return a bool (ex: `IsTextureLevelInAllocatedImage` in `TextureVk`).",
+      "parentUuid": "ccb36d9f_797bab5c",
+      "range": {
+        "startLine": 444,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 13
+      },
+      "revId": "4fe9941bccf17719fa04261604e0d8bfc59c9dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4dcb3cd0_c701ec78",
         "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
         "patchSetId": 13
@@ -77,6 +143,30 @@
       "writtenOn": "2024-04-25T05:11:15Z",
       "side": 1,
       "message": "Another good candidate to deduplicate with Vulkan",
+      "range": {
+        "startLine": 578,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 76
+      },
+      "revId": "4fe9941bccf17719fa04261604e0d8bfc59c9dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5441e97_a3b52c41",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-04-30T18:01:46Z",
+      "side": 1,
+      "message": "Added `maybeRemoveLevels` to renderer_utils to de-dupe this bit of code.",
+      "parentUuid": "4dcb3cd0_c701ec78",
       "range": {
         "startLine": 578,
         "startChar": 0,
