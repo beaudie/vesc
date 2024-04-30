@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aa45fab_0ec50fd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-30T13:37:07Z",
+      "side": 1,
+      "message": "Could you please split this and land the part where the extension is enabled? When I was trying to make ANGLE create a Vulkan 1.3 instance, I hit VVL errors with synchronization that turned out to be because sync2 changed some logic. It would be good to verify that just enabling the extension is not going to affect us (independently from the events changes)",
+      "revId": "ef64f2b921f80990745f731b400606a5c3249b2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "514f47d4_b5b8868e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3649,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-04-30T13:37:07Z",
+      "side": 1,
+      "message": "No need to cache this, just `supportsSynchronization2.enabled ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR : 0` when needed?",
+      "revId": "ef64f2b921f80990745f731b400606a5c3249b2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
