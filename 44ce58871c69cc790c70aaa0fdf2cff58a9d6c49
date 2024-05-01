@@ -286,6 +286,24 @@
       "parentUuid": "6025dce1_db184917",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a704933b_f78df35e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-01T22:26:21Z",
+      "side": 0,
+      "message": "The packed case I think implicit binding should be better (you also get rid of mask bits), because the hash data is half the size. Given that mohan\u0027s data indicates it is packed (From the log I don\u0027t think it is conclusive though since you only logged max index, but I tend to believe they will be packed for most apps), I think implicit binding is better both for simplicity and smaller hash data. So my vote goes to implicit hash. But the difference we are talking here is not big either, so if Mohan insists this way, I will be fine to make mohan happy as well;-)",
+      "parentUuid": "f6149e7f_37e61b75",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
