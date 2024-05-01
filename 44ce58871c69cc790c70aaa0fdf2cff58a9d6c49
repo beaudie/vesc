@@ -232,6 +232,24 @@
       "parentUuid": "9f79894f_d66a4270",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d963c0a4_d56e03ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-01T21:06:45Z",
+      "side": 0,
+      "message": "\u003e Could you please put up the CL\n\nhttps://anglebug.com/8677#c9\n\n\u003e Given your claim that `cout \u003c\u003c \"sparse binding\"` wasn\u0027t produced\n\nall that means is if the max bindings count for a trace was 10 then there was no `DescriptorSetLayoutDesc` that had a bindingIndex \u003e 10. It does not mean that all `DescriptorSetLayoutDesc` had valid entries for all 10 indices.\n\nit could be that the trace created 100 `DescriptorSetLayoutDesc` out of which only 10 had bindings count \u003d\u003d 10 and the rest of them had binding count \u003d\u003d 3 which were sparse like `{0, 5, 9}`",
+      "parentUuid": "2520758c_c67cea96",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
