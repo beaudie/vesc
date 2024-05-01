@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e20f504_7ff4bdb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-01T19:00:32Z",
+      "side": 1,
+      "message": "Sorry for the delay",
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8ed8f5f_2a6fd0c3",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-01T19:00:32Z",
+      "side": 1,
+      "message": "nit: capitalize",
+      "range": {
+        "startLine": 1841,
+        "startChar": 5,
+        "endLine": 1841,
+        "endChar": 22
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69aa2df6_4a3b9506",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-01T19:00:32Z",
+      "side": 1,
+      "message": "Unused",
+      "range": {
+        "startLine": 282,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 55
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "918781a7_2bf64f33",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-01T19:00:32Z",
+      "side": 1,
+      "message": "Unused",
+      "range": {
+        "startLine": 383,
+        "startChar": 1,
+        "endLine": 384,
+        "endChar": 55
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
