@@ -2222,6 +2222,16 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
                                        vk::ImageLayout::Present, commandBufferHelper);
     }
 
+    std::vector<vk::ImageHelper *> images = {image.image.get()};
+    if (mColorImageMS.valid() && !imageResolved)
+    {
+        contextVk->trackImagesWithOutsideRenderPassEvent(image.image.get(), &mColorImageMS);
+    }
+    else
+    {
+        contextVk->trackImageWithOutsideRenderPassEvent(image.image.get());
+    }
+
     // The overlay is drawn after this.  This ensures that drawing the overlay does not interfere
     // with other functionality, especially counters used to validate said functionality.
     const bool shouldDrawOverlay = overlayHasEnabledWidget(contextVk);
