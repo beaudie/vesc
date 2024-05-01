@@ -137,7 +137,8 @@ void EventBarrierArray::addMemoryEvent(Context *context,
     // VUID-vkCmdWaitEvents-srcStageMask-01158 requirements.
     VkAccessFlags accessMask;
     VkPipelineStageFlags stageFlags = GetRefCountedEventStageMask(context, waitEvent, &accessMask);
-    mBarriers.emplace_back(stageFlags, stageFlags, accessMask, accessMask,
+    ASSERT(stageFlags == dstStageMask && accessMask == dstAccess);
+    mBarriers.emplace_back(stageFlags, dstStageMask, accessMask, dstAccess,
                            waitEvent.getEvent().getHandle());
 }
 
