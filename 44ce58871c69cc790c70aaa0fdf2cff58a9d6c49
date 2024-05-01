@@ -88,6 +88,24 @@
       "parentUuid": "01db6a15_39c012ee",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b378ba06_63586ef1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-01T13:51:50Z",
+      "side": 0,
+      "message": "Nice! Do you think you could do another experiment with my suggestion to make bindingIndex implicit? In particular, the `PackedDescriptorSetBinding` can become 32-bit instead of 64-bit, and if apps do keep their bindings packed (as one would imagine they would) then the hash could be even faster:\n\n```\n        struct\n        {\n            uint8_t type;                  // Stores a packed VkDescriptorType descriptorType.\n            uint8_t stages;                // Stores a packed VkShaderStageFlags.\n            uint16_t count : 15;           // Stores a packed uint32_t descriptorCount\n            uint16_t hasImmutableSampler : 1; // Whether this binding has an immutable sampler\n        };\n```",
+      "parentUuid": "32a3de54_5eb638eb",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
