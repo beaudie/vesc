@@ -1869,6 +1869,8 @@ void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context
 {
     srcImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
     dstImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
+    ASSERT(GetRefCountedEventStageMask(context, srcImage->getCurrentEvent()) ==
+           GetRefCountedEventStageMask(context, dstImage->getCurrentEvent()));
     flushSetEventsImpl(context, &mCommandBuffer);
 }
 
@@ -1876,9 +1878,12 @@ void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(
     Context *context,
     const std::vector<ImageHelper *> images)
 {
+    VkPipelineStageFlags stageMask =
+        GetRefCountedEventStageMask(context, images.front()->getCurrentEvent());
     for (ImageHelper *image : images)
     {
         image->setCurrentRefCountedEvent(context, mRefCountedEvents);
+        ASSERT(stageMask == GetRefCountedEventStageMask(context, image->getCurrentEvent()));
     }
     flushSetEventsImpl(context, &mCommandBuffer);
 }
@@ -7014,6 +7019,7 @@ void ImageHelper::acquireFromExternal(Context *context,
     {
         changeLayoutAndQueue(context, getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     // It is unknown how the external has modified the image, so assume every subresource has
@@ -7042,6 +7048,7 @@ void ImageHelper::releaseToExternal(Context *context,
     {
         changeLayoutAndQueue(context, getAspectFlags(), desiredLayout, externalQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     mIsReleasedToExternal = true;
