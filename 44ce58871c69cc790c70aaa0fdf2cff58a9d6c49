@@ -160,6 +160,24 @@
       "parentUuid": "205ced8c_086f08d4",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8763061_01559349",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-01T17:26:25Z",
+      "side": 0,
+      "message": "\u003e make bindingIndex implicit\n\nthis would require us to retain the bitset that tracks valid binding indices",
+      "parentUuid": "57d59ef0_fcdb690b",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
