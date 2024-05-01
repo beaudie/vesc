@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac6610eb_650a2bf2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-01T16:19:49Z",
+      "side": 1,
+      "message": "Thanks, will address that in a follow up CL.",
+      "parentUuid": "fd052ff4_b3ade225",
+      "range": {
+        "startLine": 981,
+        "startChar": 0,
+        "endLine": 982,
+        "endChar": 53
+      },
+      "revId": "26ced66748823012b56eb662ddfe49277157daa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "adbfc967_57f251f0",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-01T14:59:59Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 986,
+        "startChar": 0,
+        "endLine": 987,
+        "endChar": 54
+      },
+      "revId": "26ced66748823012b56eb662ddfe49277157daa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3de00b7_6c149eeb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-01T16:19:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adbfc967_57f251f0",
       "range": {
         "startLine": 986,
         "startChar": 0,
