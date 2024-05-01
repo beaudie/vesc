@@ -602,6 +602,13 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
             mOutsideRenderPassCommands->trackImagesWithEvent(this, srcImage, dstImage);
         }
     }
+    void trackImagesWithOutsideRenderPassEvent(const std::vector<vk::ImageHelper *> images)
+    {
+        if (mRenderer->getFeatures().useVkEventForImageBarrier.enabled)
+        {
+            mOutsideRenderPassCommands->trackImagesWithEvent(this, images);
+        }
+    }
 
     angle::Result submitStagedTextureUpdates()
     {

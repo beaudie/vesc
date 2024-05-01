@@ -1105,8 +1105,6 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
                              dstImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
                              gl_vk::GetFilter(filter));
 
-    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, dstImage);
-
     return angle::Result::Continue;
 }
 
@@ -1340,11 +1338,16 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     commonParams.flipY                  = flipY;
     commonParams.rotation               = rotation;
 
+    // Stash all images that involved with blit so that we can track them all once.
+    std::vector<vk::ImageHelper *> accessedImages;
+
     if (blitColorBuffer)
     {
         RenderTargetVk *readRenderTarget      = srcFramebufferVk->getColorReadRenderTarget();
         UtilsVk::BlitResolveParameters params = commonParams;
         params.srcLayer                       = readRenderTarget->getLayerIndex();
+
+        accessedImages.push_back(&readRenderTarget->getImageForCopy());
 
         // Multisampled images are not allowed to have mips.
         ASSERT(!isColorResolve || readRenderTarget->getLevelIndex() == gl::LevelIndex(0));
@@ -1377,6 +1380,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                 AreSrcAndDstColorChannelsBlitCompatible(readRenderTarget, drawRenderTarget);
             areFormatsIdentical = areFormatsIdentical &&
                                   AreSrcAndDstFormatsIdentical(readRenderTarget, drawRenderTarget);
+            accessedImages.push_back(&drawRenderTarget->getImageForWrite());
         }
 
         // Now that all flipping is done, adjust the offsets for resolve and prerotation
@@ -1485,6 +1489,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
         // Multisampled images are not allowed to have mips.
         ASSERT(!isDepthStencilResolve || readRenderTarget->getLevelIndex() == gl::LevelIndex(0));
+        accessedImages.push_back(&readRenderTarget->getImageForCopy());
+        accessedImages.push_back(&drawRenderTarget->getImageForWrite());
 
         // Similarly, only blit if there's been no clipping or rotating.
         bool canBlitWithCommand =
@@ -1637,6 +1643,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             }
         }
     }
+    contextVk->trackImagesWithOutsideRenderPassEvent(accessedImages);
 
     return angle::Result::Continue;
 }
@@ -1845,6 +1852,8 @@ angle::Result FramebufferVk::generateFragmentShadingRateWithCPU(
     dataUpload->copyBufferToImage(buffer->getBuffer().getHandle(),
                                   mFragmentShadingRateImage.getImage(),
                                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy);
+
+    contextVk->trackImageWithOutsideRenderPassEvent(&mFragmentShadingRateImage);
     return angle::Result::Continue;
 }
 
@@ -1999,6 +2008,7 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
     resolveRegion.extent.depth                  = 1;
 
     angle::VulkanPerfCounters &perfCounters = contextVk->getPerfCounters();
+    std::vector<vk::ImageHelper *> images   = {srcImage};
     for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
     {
         RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
@@ -2011,15 +2021,9 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
         srcImage->resolve(&dstImage, resolveRegion, commandBuffer);
 
         perfCounters.resolveImageCommands++;
+        images.push_back(&dstImage);
     }
-
-    contextVk->trackImageWithOutsideRenderPassEvent(srcImage);
-    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
-    {
-        RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
-        vk::ImageHelper &dstImage        = drawRenderTarget->getImageForWrite();
-        contextVk->trackImageWithOutsideRenderPassEvent(&dstImage);
-    }
+    contextVk->trackImagesWithOutsideRenderPassEvent(images);
 
     return angle::Result::Continue;
 }

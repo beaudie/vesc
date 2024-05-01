@@ -1522,6 +1522,7 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     // Call SetEvent and have image's current event pointing to it.
     void trackImageWithEvent(Context *context, ImageHelper *image);
     void trackImagesWithEvent(Context *context, ImageHelper *srcImage, ImageHelper *dstImage);
+    void trackImagesWithEvent(Context *context, const std::vector<ImageHelper *> images);
 
     // Issues VkCmdSetEvent calls.
     void flushSetEvents(Context *context) { flushSetEventsImpl(context, &mCommandBuffer); }
@@ -2736,6 +2737,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // Create event if needed and record the event in ImageHelper::mCurrentEvent.
     void setCurrentRefCountedEvent(Context *context, ImageLayoutEventMaps &layoutEventMaps);
+    const RefCountedEvent &getCurrentEvent() const { return mCurrentEvent; }
 
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS

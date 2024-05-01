@@ -1873,6 +1873,17 @@ void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context
     flushSetEventsImpl(context, &mCommandBuffer);
 }
 
+void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(
+    Context *context,
+    const std::vector<ImageHelper *> images)
+{
+    for (ImageHelper *image : images)
+    {
+        image->setCurrentRefCountedEvent(context, mRefCountedEvents);
+    }
+    flushSetEventsImpl(context, &mCommandBuffer);
+}
+
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
                                                                    CommandsState *commandsState)
 {
@@ -2360,15 +2371,6 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
         // Note: the color image will have its flags reset after load/store ops are determined.
         image->resetRenderPassUsageFlags();
     }
-
-    if (context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled)
-    {
-        // Even if there is no layout change, we always have to update event. In case of feedback
-        // loop, the sampler code should already set the event, which means we will be set it twice
-        // here. But since they uses the same layout and event is refCounted, it should work just
-        // fine.
-        image->setCurrentRefCountedEvent(context, mRefCountedEvents);
-    }
 }
 
 void RenderPassCommandBufferHelper::finalizeColorImageLoadStore(
@@ -2725,40 +2727,57 @@ angle::Result RenderPassCommandBufferHelper::endRenderPass(ContextVk *contextVk)
 {
     ANGLE_TRY(endRenderPassCommandBuffer(contextVk));
 
+    std::vector<ImageHelper *> images;
+
     for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorAttachmentsCount;
          ++index)
     {
         if (mColorAttachments[index].getImage() != nullptr)
         {
             finalizeColorImageLayoutAndLoadStore(contextVk, index);
+            images.push_back(mColorAttachments[index].getImage());
         }
         if (mColorResolveAttachments[index].getImage() != nullptr)
         {
             finalizeColorImageLayout(contextVk, mColorResolveAttachments[index].getImage(), index,
                                      true);
+            images.push_back(mColorResolveAttachments[index].getImage());
         }
     }
 
     if (mFragmentShadingRateAtachment.getImage() != nullptr)
     {
         finalizeFragmentShadingRateImageLayout(contextVk);
+        images.push_back(mFragmentShadingRateAtachment.getImage());
     }
 
-    if (mDepthStencilAttachmentIndex == kAttachmentIndexInvalid)
+    if (mDepthStencilAttachmentIndex != kAttachmentIndexInvalid)
     {
-        return angle::Result::Continue;
+        // Do depth stencil layout change and load store optimization.
+        ASSERT(mDepthAttachment.getImage() == mStencilAttachment.getImage());
+        ASSERT(mDepthResolveAttachment.getImage() == mStencilResolveAttachment.getImage());
+        if (mDepthAttachment.getImage() != nullptr)
+        {
+            finalizeDepthStencilImageLayoutAndLoadStore(contextVk);
+            images.push_back(mDepthAttachment.getImage());
+        }
+        if (mDepthResolveAttachment.getImage() != nullptr)
+        {
+            finalizeDepthStencilResolveImageLayout(contextVk);
+            images.push_back(mDepthResolveAttachment.getImage());
+        }
     }
 
-    // Do depth stencil layout change and load store optimization.
-    ASSERT(mDepthAttachment.getImage() == mStencilAttachment.getImage());
-    ASSERT(mDepthResolveAttachment.getImage() == mStencilResolveAttachment.getImage());
-    if (mDepthAttachment.getImage() != nullptr)
+    // Even if there is no layout change, we always have to update event. In case of feedback
+    // loop, the sampler code should already set the event, which means we will be set it twice
+    // here. But since they uses the same layout and event is refCounted, it should work just
+    // fine.
+    if (contextVk->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled)
     {
-        finalizeDepthStencilImageLayoutAndLoadStore(contextVk);
-    }
-    if (mDepthResolveAttachment.getImage() != nullptr)
-    {
-        finalizeDepthStencilResolveImageLayout(contextVk);
+        for (ImageHelper *image : images)
+        {
+            image->setCurrentRefCountedEvent(contextVk, mRefCountedEvents);
+        }
     }
 
     return angle::Result::Continue;
@@ -6991,6 +7010,7 @@ void ImageHelper::acquireFromExternal(Context *context,
     {
         changeLayoutAndQueue(context, getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     // It is unknown how the external has modified the image, so assume every subresource has
@@ -7019,6 +7039,7 @@ void ImageHelper::releaseToExternal(Context *context,
     {
         changeLayoutAndQueue(context, getAspectFlags(), desiredLayout, externalQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     mIsReleasedToExternal = true;
@@ -7900,9 +7921,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
     mCurrentShaderReadStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
     mCurrentLayout               = ImageLayout::FragmentShaderReadOnly;
 
-    // Since we just used pipelineBarrier to wait, release all events so that we dont wait for them
-    // again.
-    mCurrentEvent.release(contextVk->getDevice());
+    contextVk->trackImageWithOutsideRenderPassEvent(this);
 
     return angle::Result::Continue;
 }
@@ -10773,12 +10792,15 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
 
             copyCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(contextVk),
                                                  packBuffer.getBuffer().getHandle(), 1, &region);
+            contextVk->trackImageWithOutsideRenderPassEvent(this);
             return angle::Result::Continue;
         }
         if (canCopyWithComputeForReadPixels(packPixelsParams, readFormat, pixelsOffset))
         {
-            return readPixelsWithCompute(contextVk, src, packPixelsParams, srcOffset, srcExtent,
-                                         pixelsOffset, srcSubresource);
+            ANGLE_TRY(readPixelsWithCompute(contextVk, src, packPixelsParams, srcOffset, srcExtent,
+                                            pixelsOffset, srcSubresource));
+            contextVk->trackImageWithOutsideRenderPassEvent(this);
+            return angle::Result::Continue;
         }
     }
 
@@ -10823,6 +10845,7 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
 
     readbackCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(contextVk),
                                              bufferHandle, 1, &region);
+    contextVk->trackImageWithOutsideRenderPassEvent(this);
 
     ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_HIGH, "GPU stall due to ReadPixels");
 
