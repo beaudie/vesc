@@ -267,6 +267,12 @@ class ContextWgpu : public ContextImpl
 
     angle::Result flush();
 
+    wgpu::RenderPassDescriptor &getRenderPassDesc() { return mCurrentRenderPassDesc; }
+    std::vector<wgpu::RenderPassColorAttachment> &getCurrentColorAttachments()
+    {
+        return mCurrentColorAttachments;
+    }
+
   private:
     gl::Caps mCaps;
     gl::TextureCapsMap mTextureCaps;
@@ -281,6 +287,7 @@ class ContextWgpu : public ContextImpl
     wgpu::CommandEncoder mCurrentCommandEncoder;
     wgpu::RenderPassEncoder mCurrentRenderPass;
     wgpu::RenderPassDescriptor mCurrentRenderPassDesc;
+    std::vector<wgpu::RenderPassColorAttachment> mCurrentColorAttachments;
 };
 
 }  // namespace rx

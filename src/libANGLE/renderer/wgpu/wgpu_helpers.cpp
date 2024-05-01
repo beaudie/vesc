@@ -15,7 +15,11 @@ namespace rx
 {
 namespace webgpu
 {
-ImageHelper::ImageHelper() {}
+ImageHelper::ImageHelper()
+{
+
+    mViewFormats.push_back(wgpu::TextureFormat::RGBA8Uint);
+}
 
 ImageHelper::~ImageHelper() {}
 
@@ -74,7 +78,8 @@ wgpu::TextureDescriptor ImageHelper::createTextureDescriptor(wgpu::TextureUsage 
     textureDescriptor.format                  = format;
     textureDescriptor.mipLevelCount           = mipLevelCount;
     textureDescriptor.sampleCount             = sampleCount;
-    textureDescriptor.viewFormatCount         = viewFormatCount;
+    textureDescriptor.viewFormatCount         = mViewFormats.size();
+    textureDescriptor.viewFormats = reinterpret_cast<wgpu::TextureFormat *>(mViewFormats.data());
     return textureDescriptor;
 }
 
@@ -177,7 +182,6 @@ angle::Result ImageHelper::readPixels(rx::ContextWgpu *contextWgpu,
     wgpu::CommandEncoder encoder = device.CreateCommandEncoder();
     wgpu::Queue queue            = contextWgpu->getDisplay()->getQueue();
     BufferHelper bufferHelper;
-
     ANGLE_TRY(bufferHelper.initBuffer(device, allocationSize,
                                       wgpu::BufferUsage::MapRead | wgpu::BufferUsage::CopyDst,
                                       MapAtCreation::No));
@@ -202,7 +206,6 @@ angle::Result ImageHelper::readPixels(rx::ContextWgpu *contextWgpu,
     wgpu::CommandBuffer commandBuffer = encoder.Finish();
     queue.Submit(1, &commandBuffer);
     encoder = nullptr;
-
     ANGLE_TRY(bufferHelper.mapImmediate(contextWgpu, wgpu::MapMode::Read, 0, allocationSize));
     const uint8_t *readPixelBuffer =
         bufferHelper.getMapReadPointer(toWgpuLevel(mFirstAllocatedLevel).get(), allocationSize);

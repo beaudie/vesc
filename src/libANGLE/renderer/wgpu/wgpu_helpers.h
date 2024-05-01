@@ -98,6 +98,7 @@ class ImageHelper
     wgpu::Texture mTexture;
     wgpu::TextureDescriptor mTextureDescriptor = {};
     bool mInitialized                          = false;
+    std::vector<wgpu::TextureFormat> mViewFormats;
 
     gl::LevelIndex mFirstAllocatedLevel = gl::LevelIndex(0);
 

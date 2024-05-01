@@ -57,7 +57,7 @@ angle::Result FramebufferWgpu::clear(const gl::Context *context, GLbitfield mask
     gl::ColorF colorClearValue = context->getState().getColorClearValue();
 
     std::vector<wgpu::RenderPassColorAttachment> colorAttachments(
-        mState.getEnabledDrawBuffers().count());
+        mState.getEnabledDrawBuffers().count() - 1);
     for (size_t enabledDrawBuffer : mState.getEnabledDrawBuffers())
     {
         wgpu::RenderPassColorAttachment colorAttachment;
@@ -71,12 +71,12 @@ angle::Result FramebufferWgpu::clear(const gl::Context *context, GLbitfield mask
         colorAttachment.clearValue.b = colorClearValue.blue;
         colorAttachment.clearValue.a = colorClearValue.alpha;
         colorAttachments.push_back(colorAttachment);
+        contextWgpu->getCurrentColorAttachments().push_back(colorAttachment);
     }
 
     wgpu::RenderPassDescriptor renderPassDesc;
-    renderPassDesc.colorAttachmentCount = colorAttachments.size();
-    renderPassDesc.colorAttachments     = colorAttachments.data();
-
+    renderPassDesc.colorAttachmentCount = contextWgpu->getCurrentColorAttachments().size();
+    renderPassDesc.colorAttachments     = contextWgpu->getCurrentColorAttachments().data();
     // TODO(anglebug.com/8582): optimize this implementation.
     ANGLE_TRY(contextWgpu->ensureRenderPassStarted(renderPassDesc));
     ANGLE_TRY(contextWgpu->endRenderPass(webgpu::RenderPassClosureReason::NewRenderPass));
