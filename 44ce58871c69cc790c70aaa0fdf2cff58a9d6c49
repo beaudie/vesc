@@ -124,6 +124,24 @@
       "parentUuid": "b378ba06_63586ef1",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "205ced8c_086f08d4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-01T17:10:04Z",
+      "side": 0,
+      "message": "\u003e i am going to collect that data before making the change\n\ni added this logging pseudo-code -\n```\nif (max_binding_index \u003e mDescriptorSetLayoutBindings.size())\n{\n    cout \u003c\u003c \"sparse binding\"\n}\n```\nand no trace emitted this log, so it looks like all traces have packed bindings",
+      "parentUuid": "6c08b5fb_c7d1d1de",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
