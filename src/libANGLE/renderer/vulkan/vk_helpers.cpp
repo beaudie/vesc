@@ -7015,6 +7015,7 @@ void ImageHelper::acquireFromExternal(Context *context,
     {
         changeLayoutAndQueue(context, getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     // It is unknown how the external has modified the image, so assume every subresource has
@@ -7043,6 +7044,7 @@ void ImageHelper::releaseToExternal(Context *context,
     {
         changeLayoutAndQueue(context, getAspectFlags(), desiredLayout, externalQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     mIsReleasedToExternal = true;
