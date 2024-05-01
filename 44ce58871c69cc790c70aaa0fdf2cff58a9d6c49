@@ -268,6 +268,24 @@
       "parentUuid": "d963c0a4_d56e03ac",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6149e7f_37e61b75",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-01T21:58:16Z",
+      "side": 0,
+      "message": "Well the argument goes both ways, if there\u0027s a future app that uses bindings `{1,2,3,4,5,6,7,8,9,10}` but every time it ends up with a different order of indices, you\u0027ll end up with 3628800 (10!) descriptor sets instead of 1.\n\nI\u0027m fine with the change as is, but I still think it\u0027s worth following up with the above change and see _some_ benefit.\n\nLeaving +2 to @cclao@google.com in case he disagrees.",
+      "parentUuid": "6025dce1_db184917",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
