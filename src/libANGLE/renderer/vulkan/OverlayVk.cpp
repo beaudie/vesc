@@ -102,6 +102,7 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
                                           mFontImage.getImage(),
                                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy);
     }
+    contextVk->trackImageWithOutsideRenderPassEvent(&mFontImage);
 
     return angle::Result::Continue;
 }
