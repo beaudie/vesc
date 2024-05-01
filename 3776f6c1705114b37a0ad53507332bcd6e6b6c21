@@ -95,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51c93a4a_99799fee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 84
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-01T23:14:46Z",
+      "side": 1,
+      "message": "Added assertion and fixed comment.",
+      "parentUuid": "2a1cae51_20dd2a48",
+      "range": {
+        "startLine": 137,
+        "startChar": 27,
+        "endLine": 137,
+        "endChar": 73
+      },
+      "revId": "3776f6c1705114b37a0ad53507332bcd6e6b6c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06656e23_8fbcb9ef",
@@ -161,6 +185,24 @@
       "side": 1,
       "message": "This is try to make a copy of RefCountedEvent and add that copy into garbage list. If you look at the place we use it, we still want to keep it in ImageHelper, but we used it in command buffer, so we need to make a copy of event and garbage collect that refcount. I do not like the name here, will try to do it more elegantly.",
       "parentUuid": "1ed69db4_53678b64",
+      "revId": "3776f6c1705114b37a0ad53507332bcd6e6b6c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f71cba1_66fcb78c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 84
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-01T23:14:46Z",
+      "side": 1,
+      "message": "Renamed to `add(const RefCountedEvent \u0026event)` which will internally make an extra reference count of the event and add to the garbage list.",
+      "parentUuid": "dae6fb8e_f56008d2",
       "revId": "3776f6c1705114b37a0ad53507332bcd6e6b6c21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
