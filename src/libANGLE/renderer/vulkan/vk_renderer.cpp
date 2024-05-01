@@ -4583,8 +4583,8 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
 
     // vkCmdClearAttachments races with draw calls on Qualcomm hardware as observed on Pixel2 and
     // Pixel4.  https://issuetracker.google.com/issues/166809097
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferDrawClearOverVkCmdClearAttachments,
-                            isQualcommProprietary);
+    // TODO: Temporarily set to false.
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferDrawClearOverVkCmdClearAttachments, false);
 
     // r32f image emulation is done unconditionally so VK_FORMAT_FEATURE_STORAGE_*_ATOMIC_BIT is not
     // required.
