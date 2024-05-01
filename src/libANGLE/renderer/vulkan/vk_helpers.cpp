@@ -1641,7 +1641,7 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
     buffer->setWriteQueueSerial(mQueueSerial);
 
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
-    buffer->recordWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers, writeStage);
+    buffer->recordWriteBarrier(writeAccessType, stageBits, writeStage, &mPipelineBarriers);
 
     // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to
     // make the results visible to the host.  The buffer may be mapped by the application in the
@@ -1670,7 +1670,7 @@ void CommandBufferHelperCommon::bufferReadImpl(VkAccessFlags readAccessType,
                                                BufferHelper *buffer)
 {
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
-    buffer->recordReadBarrier(readAccessType, stageBits, &mPipelineBarriers, readStage);
+    buffer->recordReadBarrier(readAccessType, stageBits, readStage, &mPipelineBarriers);
     ASSERT(!usesBufferForWrite(*buffer));
 }
 
@@ -5521,8 +5521,8 @@ bool BufferHelper::isReleasedToExternal() const
 
 void BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
                                      VkPipelineStageFlags readStage,
-                                     PipelineBarrierArray *barriers,
-                                     PipelineStage stageIndex)
+                                     PipelineStage stageIndex,
+                                     PipelineBarrierArray *barriers)
 {
     // If there was a prior write and we are making a read that is either a new access type or from
     // a new stage, we need a barrier
@@ -5540,8 +5540,8 @@ void BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
 
 void BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
                                       VkPipelineStageFlags writeStage,
-                                      PipelineBarrierArray *barriers,
-                                      PipelineStage stageIndex)
+                                      PipelineStage stageIndex,
+                                      PipelineBarrierArray *barriers)
 {
     // We don't need to check mCurrentReadStages here since if it is not zero, mCurrentReadAccess
     // must not be zero as well. stage is finer grain than accessType.
