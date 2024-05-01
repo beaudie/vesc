@@ -70,6 +70,24 @@
       "parentUuid": "0fc6f97c_7184160b",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32a3de54_5eb638eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-01T12:46:34Z",
+      "side": 0,
+      "message": "i have added the data here -\u003e https://anglebug.com/8677#c7\n\nThere are no changes in cache hit / miss count but there is a sizable reduction in hashed bytes and hashing times",
+      "parentUuid": "01db6a15_39c012ee",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
