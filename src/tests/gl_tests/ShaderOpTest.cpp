@@ -85,5 +85,54 @@ void main()
     EXPECT_PIXEL_COLOR_NEAR(64, 64, GLColor(255, 125, 125, 190), kPixelColorThreshhold);
 }
 
+// Test to reproduce a dEQP failure on QDC:
+// Simplified test from dEQP-GLES2.functional.shaders.random.all_features.fragment.12
+TEST_P(ShaderOpTest, FragmentAllFeaturesOps)
+{
+    const char *vertSrc = R"(
+attribute vec4 pos;
+
+void main()
+{
+    gl_Position = pos;
+}
+)";
+    const char *fragSrc = R"(
+precision mediump float;
+const bool a = (ivec2(-5.0, 9.0) - ivec2(-7.0, -3)).s > 0;
+int k = (5) * (1);
+const ivec2 n = ivec2(inversesqrt(log2(2.0)), a).st;
+uniform mediump int o;
+const float r = -2.375 * exp2(acos(1.0)) - sqrt(sqrt(16.0));
+
+void main()
+{
+    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    if (o >= k * n.r + (int(2.0)))
+        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+}
+)";
+    ANGLE_GL_PROGRAM(program, vertSrc, fragSrc);
+    glUseProgram(program);
+    EXPECT_GL_NO_ERROR();
+
+    std::array<GLfloat, 16> attribPosData = {1, 1,  0.5, 1, -1, 1,  0.5, 1,
+                                             1, -1, 0.5, 1, -1, -1, 0.5, 1};
+    GLint attribPosLoc                    = glGetAttribLocation(1, "pos");
+    ASSERT(attribPosLoc >= 0);
+    glEnableVertexAttribArray(attribPosLoc);
+    glVertexAttribPointer(attribPosLoc, 4, GL_FLOAT, GL_FALSE, 0, attribPosData.data());
+    EXPECT_GL_NO_ERROR();
+
+    GLint uniformOLocation = glGetUniformLocation(program, "o");
+    ASSERT(uniformOLocation >= 0);
+    GLint uniformOValue = 4;
+    glUniform1i(uniformOLocation, uniformOValue);
+
+    const uint16_t indices[] = {0, 1, 2, 2, 1, 3};
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, &indices[0]);
+    EXPECT_GL_NO_ERROR();
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ShaderOpTest);
 ANGLE_INSTANTIATE_TEST_ES2(ShaderOpTest);
