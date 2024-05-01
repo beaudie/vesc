@@ -250,6 +250,24 @@
       "parentUuid": "2520758c_c67cea96",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6025dce1_db184917",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-01T21:13:21Z",
+      "side": 0,
+      "message": "there is 1 additional issue i need to bring up with \"but is any real app actually doing that way?\" -\n\nif there is a new app that has sparse bindings like `{1, 45}` and that app / game becomes the-hot-thing that year we cannot afford to update the driver to improve efficiency of just 1 app. From a productization point of view i am leaning towards not intentionally creating a potential path of inefficiency when the benefits aren\u0027t proportional to \u003e 90% of traces. i hope that makes some sense?",
+      "parentUuid": "d963c0a4_d56e03ac",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
