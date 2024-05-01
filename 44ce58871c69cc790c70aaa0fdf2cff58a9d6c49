@@ -106,6 +106,24 @@
       "parentUuid": "32a3de54_5eb638eb",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c08b5fb_c7d1d1de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-01T16:06:36Z",
+      "side": 0,
+      "message": "\u003e the PackedDescriptorSetBinding can become 32-bit instead of 64-bit\n\nwe will pull in the full cache line so the advantage would only be for apps that have binding count \u003e 8?\n\n\u003e if apps do keep their bindings packed\n\ni have only logged the max binding count not the binding indices themselves, so im not sure if they are indeed packed. i am going to collect that data before making the change",
+      "parentUuid": "b378ba06_63586ef1",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
