@@ -196,6 +196,24 @@
       "parentUuid": "b8763061_01559349",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f79894f_d66a4270",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-01T20:39:24Z",
+      "side": 0,
+      "message": "got data comparing explicit and implicit binding index here -\u003e https://anglebug.com/8677#c8\n\ni think the for-loop with implicit binding indices kills the performance of hashing compared to the block hashing of explicit binding indices",
+      "parentUuid": "c9015b20_6d0384e8",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
