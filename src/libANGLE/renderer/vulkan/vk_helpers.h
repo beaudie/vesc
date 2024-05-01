@@ -2734,6 +2734,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // Create event if needed and record the event in ImageHelper::mCurrentEvent.
     void setCurrentRefCountedEvent(Context *context, ImageLayoutEventMaps &layoutEventMaps);
+    const RefCountedEvent &getCurrentEvent() const { return mCurrentEvent; }
 
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS

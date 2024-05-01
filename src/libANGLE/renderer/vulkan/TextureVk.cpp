@@ -2885,6 +2885,7 @@ angle::Result TextureVk::performImageQueueTransferIfNecessary(ContextVk *context
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
         mImage->changeLayoutAndQueue(contextVk, mImage->getAspectFlags(), newLayout,
                                      rendererQueueFamilyIndex, commandBuffer);
+        ASSERT(!mImage->getCurrentEvent().valid());
         ANGLE_TRY(contextVk->onEGLImageQueueChange());
     }
 

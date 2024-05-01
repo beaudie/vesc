@@ -1869,6 +1869,8 @@ void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context
 {
     srcImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
     dstImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
+    ASSERT(GetRefCountedEventStageMask(context, srcImage->getCurrentEvent()) ==
+           GetRefCountedEventStageMask(context, dstImage->getCurrentEvent()));
     flushSetEventsImpl(context, &mCommandBuffer);
 }
 
@@ -1880,6 +1882,20 @@ void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(
     {
         image->setCurrentRefCountedEvent(context, mRefCountedEvents);
     }
+
+    VkPipelineStageFlags stageMask = 0;
+    for (size_t i = 0; i < images.size(); ++i)
+    {
+        if (i == 0)
+        {
+            stageMask = GetRefCountedEventStageMask(context, images[i]->getCurrentEvent());
+        }
+        else
+        {
+            ASSERT(stageMask == GetRefCountedEventStageMask(context, images[i]->getCurrentEvent()));
+        }
+    }
+
     flushSetEventsImpl(context, &mCommandBuffer);
 }
 
@@ -1896,9 +1912,9 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *cont
 
     // When using Vulkan secondary command buffers and "asyncCommandQueue" is enabled, command
     // buffer MUST be already ended in the detachCommandPool() (called in the CommandProcessor).
-    // After the detach, nothing is written to the buffer (the barriers above are written directly
-    // to the primary buffer).
-    // Note: RenderPass Command Buffers are explicitly ended in the endRenderPass().
+    // After the detach, nothing is written to the buffer (the barriers above are written
+    // directly to the primary buffer). Note: RenderPass Command Buffers are explicitly ended in
+    // the endRenderPass().
     if (ExecutesInline() || !renderer->isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(endCommandBuffer(context));
@@ -2126,7 +2142,8 @@ angle::Result RenderPassCommandBufferHelper::reset(
     // Reset the image views used for imageless framebuffer (if any)
     mFramebuffer.reset();
 
-    // Invalidate the queue serial here. We will get a new queue serial when we begin renderpass.
+    // Invalidate the queue serial here. We will get a new queue serial when we begin
+    // renderpass.
     mQueueSerial = QueueSerial();
 
     return initializeCommandBuffer(context);
@@ -2190,9 +2207,9 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(gl::LevelIndex level,
     ASSERT(!usesImage(*image));
     ASSERT(!resolveImage || !usesImage(*resolveImage));
 
-    // Because depthStencil buffer's read/write property can change while we build renderpass, we
-    // defer the image layout changes until endRenderPass time or when images going away so that we
-    // only insert layout change barrier once.
+    // Because depthStencil buffer's read/write property can change while we build renderpass,
+    // we defer the image layout changes until endRenderPass time or when images going away so
+    // that we only insert layout change barrier once.
     image->setQueueSerial(mQueueSerial);
 
     mDepthAttachment.init(image, imageSiblingSerial, level, layerStart, layerCount,
@@ -2293,10 +2310,10 @@ void RenderPassCommandBufferHelper::updateStartedRenderPassWithDepthStencilMode(
         resolveAttachment->getImage() == nullptr &&
         (dsUsageFlags.test(readOnlyAttachmentUsage) || !renderPassHasWriteOrClear);
 
-    // If readOnlyMode is false, we are switching out of read only mode due to depth/stencil write.
-    // We must not be in the read only feedback loop mode because the logic in
-    // DIRTY_BIT_READ_ONLY_DEPTH_FEEDBACK_LOOP_MODE should ensure we end the previous renderpass and
-    // a new renderpass will start with feedback loop disabled.
+    // If readOnlyMode is false, we are switching out of read only mode due to depth/stencil
+    // write. We must not be in the read only feedback loop mode because the logic in
+    // DIRTY_BIT_READ_ONLY_DEPTH_FEEDBACK_LOOP_MODE should ensure we end the previous renderpass
+    // and a new renderpass will start with feedback loop disabled.
     ASSERT(readOnlyMode || !dsUsageFlags.test(readOnlyAttachmentUsage));
 
     ImageHelper *depthStencilImage = mDepthAttachment.getImage();
@@ -2334,10 +2351,11 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
     }
     else
     {
-        // When color is unresolved, use a layout that includes fragment shader reads.  This is done
-        // for all color resolve attachments even if they are not all unresolved for simplicity.  In
-        // particular, the GL color index is not available (only the packed index) at this point,
-        // but that is needed to query whether the attachment is unresolved or not.
+        // When color is unresolved, use a layout that includes fragment shader reads.  This is
+        // done for all color resolve attachments even if they are not all unresolved for
+        // simplicity.  In particular, the GL color index is not available (only the packed
+        // index) at this point, but that is needed to query whether the attachment is
+        // unresolved or not.
         const bool hasUnresolve =
             isResolveImage && mRenderPassDesc.getColorUnresolveAttachmentMask().any();
         imageLayout = hasUnresolve ? ImageLayout::MSRTTEmulationColorUnresolveAndResolve
@@ -2357,9 +2375,9 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
         ASSERT(packedAttachmentIndex == kAttachmentIndexZero);
         // Use finalLayout instead of extra barrier for layout change to present
         mImageOptimizeForPresent->setCurrentImageLayout(ImageLayout::Present);
-        // TODO(syoussefi):  We currently don't store the layout of the resolve attachments, so once
-        // multisampled backbuffers are optimized to use resolve attachments, this information needs
-        // to be stored somewhere.  http://anglebug.com/7150
+        // TODO(syoussefi):  We currently don't store the layout of the resolve attachments, so
+        // once multisampled backbuffers are optimized to use resolve attachments, this
+        // information needs to be stored somewhere.  http://anglebug.com/7150
         SetBitField(mAttachmentOps[packedAttachmentIndex].finalLayout,
                     mImageOptimizeForPresent->getCurrentImageLayout());
         mImageOptimizeForPresent = nullptr;
@@ -2777,10 +2795,10 @@ angle::Result RenderPassCommandBufferHelper::endRenderPass(ContextVk *contextVk)
 
     if (contextVk->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled)
     {
-        // Even if there is no layout change, we always have to update event. In case of feedback
-        // loop, the sampler code should already set the event, which means we will be set it twice
-        // here. But since they uses the same layout and event is refCounted, it should work just
-        // fine.
+        // Even if there is no layout change, we always have to update event. In case of
+        // feedback loop, the sampler code should already set the event, which means we will be
+        // set it twice here. But since they uses the same layout and event is refCounted, it
+        // should work just fine.
         trackImagesWithEvent(contextVk, accessedImages);
     }
 
@@ -2797,22 +2815,22 @@ angle::Result RenderPassCommandBufferHelper::nextSubpass(ContextVk *contextVk,
 {
     if (ExecutesInline())
     {
-        // When using ANGLE secondary command buffers, the commands are inline and are executed on
-        // the primary command buffer.  This means that vkCmdNextSubpass can be intermixed with the
-        // rest of the commands, and there is no need to split command buffers.
+        // When using ANGLE secondary command buffers, the commands are inline and are executed
+        // on the primary command buffer.  This means that vkCmdNextSubpass can be intermixed
+        // with the rest of the commands, and there is no need to split command buffers.
         //
         // Note also that the command buffer handle doesn't change in this case.
         getCommandBuffer().nextSubpass(VK_SUBPASS_CONTENTS_INLINE);
         return angle::Result::Continue;
     }
 
-    // When using Vulkan secondary command buffers, each subpass's contents must be recorded in a
-    // separate command buffer that is vkCmdExecuteCommands'ed in the primary command buffer.
+    // When using Vulkan secondary command buffers, each subpass's contents must be recorded in
+    // a separate command buffer that is vkCmdExecuteCommands'ed in the primary command buffer.
     // vkCmdNextSubpass calls must also be issued in the primary command buffer.
     //
-    // To support this, a list of command buffers are kept, one for each subpass.  When moving to
-    // the next subpass, the previous command buffer is ended and a new one is initialized and
-    // begun.
+    // To support this, a list of command buffers are kept, one for each subpass.  When moving
+    // to the next subpass, the previous command buffer is ended and a new one is initialized
+    // and begun.
 
     // Accumulate command count for tracking purposes.
     mPreviousSubpassesCmdCount = getRenderPassWriteCommandCount();
@@ -2861,7 +2879,8 @@ void RenderPassCommandBufferHelper::invalidateRenderPassColorAttachment(
 {
     // Color write is enabled if:
     //
-    // - Draw buffer is enabled (this is implicit, as invalidate only affects enabled draw buffers)
+    // - Draw buffer is enabled (this is implicit, as invalidate only affects enabled draw
+    // buffers)
     // - Color output is not entirely masked
     // - Rasterizer-discard is not enabled
     const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
@@ -2895,8 +2914,9 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
                                                             const RenderPass &renderPass,
                                                             VkFramebuffer framebufferOverride)
 {
-    // |framebufferOverride| must only be provided if the initial framebuffer the render pass was
-    // started with is not usable (due to the addition of resolve attachments after the fact).
+    // |framebufferOverride| must only be provided if the initial framebuffer the render pass
+    // was started with is not usable (due to the addition of resolve attachments after the
+    // fact).
     ASSERT(framebufferOverride == VK_NULL_HANDLE ||
            mFramebuffer.needsNewFramebufferWithResolveAttachments());
     // When a new framebuffer had to be created because of addition of resolve attachments, it's
@@ -3242,8 +3262,8 @@ void SecondaryCommandBufferCollector::collectCommandBuffer(
 
 void SecondaryCommandBufferCollector::retireCommandBuffers()
 {
-    // Note: we currently free the command buffers individually, but we could potentially reset the
-    // entire command pool.  https://issuetracker.google.com/issues/166793850
+    // Note: we currently free the command buffers individually, but we could potentially reset
+    // the entire command pool.  https://issuetracker.google.com/issues/166793850
     for (VulkanSecondaryCommandBuffer &commandBuffer : mCollectedCommandBuffers)
     {
         commandBuffer.destroy();
@@ -3293,7 +3313,8 @@ void DynamicBuffer::init(Renderer *renderer,
         mMemoryPropertyFlags |= VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
     }
 
-    // Check that we haven't overridden the initial size of the buffer in setMinimumSizeForTesting.
+    // Check that we haven't overridden the initial size of the buffer in
+    // setMinimumSizeForTesting.
     if (mInitialSize == 0)
     {
         mInitialSize         = initialSize;
@@ -3393,8 +3414,9 @@ angle::Result DynamicBuffer::allocate(Context *context,
 
     const size_t minRequiredBlockSize = std::max(mInitialSize, sizeToAllocate);
 
-    // The average required buffer size in recent history is used to determine whether the currently
-    // used buffer size needs to be reduced (when it goes below 1/8 of the current buffer size).
+    // The average required buffer size in recent history is used to determine whether the
+    // currently used buffer size needs to be reduced (when it goes below 1/8 of the current
+    // buffer size).
     constexpr uint32_t kDecayCoeffPercent = 20;
     static_assert(kDecayCoeffPercent >= 0 && kDecayCoeffPercent <= 100);
     mSizeInRecentHistory = (mSizeInRecentHistory * kDecayCoeffPercent +
@@ -3453,8 +3475,8 @@ void DynamicBuffer::updateQueueSerialAndReleaseInFlightBuffers(ContextVk *contex
     for (std::unique_ptr<BufferHelper> &bufferHelper : mInFlightBuffers)
     {
         // This function is used only for internal buffers, and they are all read-only.
-        // It's possible this may change in the future, but there isn't a good way to detect that,
-        // unfortunately.
+        // It's possible this may change in the future, but there isn't a good way to detect
+        // that, unfortunately.
         bufferHelper->setQueueSerial(queueSerial);
 
         // We only keep free buffers that have the same size. Note that bufferHelper's size is
@@ -3500,9 +3522,10 @@ void DynamicBuffer::requireAlignment(Renderer *renderer, size_t alignment)
         ASSERT(gl::isPow2(prevAlignment));
     }
 
-    // We need lcm(prevAlignment, alignment).  Usually, one divides the other so std::max() could be
-    // used instead.  Only known case where this assumption breaks is for 3-component types with
-    // 16- or 32-bit channels, so that's special-cased to avoid a full-fledged lcm implementation.
+    // We need lcm(prevAlignment, alignment).  Usually, one divides the other so std::max()
+    // could be used instead.  Only known case where this assumption breaks is for 3-component
+    // types with 16- or 32-bit channels, so that's special-cased to avoid a full-fledged lcm
+    // implementation.
 
     if (gl::isPow2(prevAlignment * alignment))
     {
@@ -3605,9 +3628,9 @@ void BufferPool::pruneEmptyBuffers(Renderer *renderer)
     {
         if (block->isEmpty())
         {
-            // We will always free empty buffers that has smaller size. Or if the empty buffer has
-            // been found empty for long enough time, or we accumulated too many empty buffers, we
-            // also free it.
+            // We will always free empty buffers that has smaller size. Or if the empty buffer
+            // has been found empty for long enough time, or we accumulated too many empty
+            // buffers, we also free it.
             if (block->getMemorySize() < mSize)
             {
                 mTotalMemorySize -= block->getMemorySize();
@@ -3636,14 +3659,14 @@ void BufferPool::pruneEmptyBuffers(Renderer *renderer)
         mBufferBlocks = std::move(compactedBlocks);
     }
 
-    // Decide how many empty buffers to keep around and trim down the excessive empty buffers. We
-    // keep track of how many buffers are needed since last prune. Assume we are in stable state,
-    // which means we may still need that many empty buffers in next prune cycle. To reduce chance
-    // to call into vulkan driver to allocate new buffers, we try to keep that many empty buffers
-    // around, subject to the maximum cap. If we overestimate, next cycle they used fewer buffers,
-    // we will trim excessive empty buffers at next prune call. Or if we underestimate, we will end
-    // up have to call into vulkan driver allocate new buffers, but next cycle we should correct
-    // ourselves to keep enough number of empty buffers around.
+    // Decide how many empty buffers to keep around and trim down the excessive empty buffers.
+    // We keep track of how many buffers are needed since last prune. Assume we are in stable
+    // state, which means we may still need that many empty buffers in next prune cycle. To
+    // reduce chance to call into vulkan driver to allocate new buffers, we try to keep that
+    // many empty buffers around, subject to the maximum cap. If we overestimate, next cycle
+    // they used fewer buffers, we will trim excessive empty buffers at next prune call. Or if
+    // we underestimate, we will end up have to call into vulkan driver allocate new buffers,
+    // but next cycle we should correct ourselves to keep enough number of empty buffers around.
     size_t buffersToKeep = std::min(mNumberOfNewBuffersNeededSinceLastPrune,
                                     static_cast<size_t>(kMaxTotalEmptyBufferBytes / mSize));
     while (mEmptyBufferBlocks.size() > buffersToKeep)
@@ -3667,8 +3690,8 @@ VkResult BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeInByte
     // First ensure we are not exceeding the heapSize to avoid the validation error.
     VK_RESULT_CHECK(sizeInBytes <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
 
-    // Double the size until meet the requirement. This also helps reducing the fragmentation. Since
-    // this is global pool, we have less worry about memory waste.
+    // Double the size until meet the requirement. This also helps reducing the fragmentation.
+    // Since this is global pool, we have less worry about memory waste.
     VkDeviceSize newSize = mSize;
     while (newSize < sizeInBytes)
     {
@@ -3773,9 +3796,9 @@ VkResult BufferPool::allocateBuffer(Context *context,
         return VK_SUCCESS;
     }
 
-    // We always allocate from reverse order so that older buffers have a chance to be empty. The
-    // assumption is that to allocate from new buffers first may have a better chance to leave the
-    // older buffers completely empty and we may able to free it.
+    // We always allocate from reverse order so that older buffers have a chance to be empty.
+    // The assumption is that to allocate from new buffers first may have a better chance to
+    // leave the older buffers completely empty and we may able to free it.
     for (auto iter = mBufferBlocks.rbegin(); iter != mBufferBlocks.rend();)
     {
         std::unique_ptr<BufferBlock> &block = *iter;
@@ -3910,8 +3933,8 @@ angle::Result DescriptorPoolHelper::init(Context *context,
 {
     Renderer *renderer = context->getRenderer();
 
-    // If there are descriptorSet garbage, they no longer relevant since the entire pool is going to
-    // be destroyed.
+    // If there are descriptorSet garbage, they no longer relevant since the entire pool is
+    // going to be destroyed.
     mDescriptorSetCacheManager.destroyKeys(renderer);
     mDescriptorSetGarbageList.clear();
 
@@ -4150,9 +4173,9 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
 angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 {
     Renderer *renderer = context->getRenderer();
-    // Eviction logic: Before we allocate a new pool, check to see if there is any existing pool is
-    // not bound to program and is GPU compete. We destroy one pool in exchange for allocate a new
-    // pool to keep total descriptorPool count under control.
+    // Eviction logic: Before we allocate a new pool, check to see if there is any existing pool
+    // is not bound to program and is GPU compete. We destroy one pool in exchange for allocate
+    // a new pool to keep total descriptorPool count under control.
     for (size_t poolIndex = 0; poolIndex < mDescriptorPools.size();)
     {
         if (!mDescriptorPools[poolIndex]->get().valid())
@@ -4176,8 +4199,8 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
     static constexpr size_t kMaxPools = 99999;
     ANGLE_VK_CHECK(context, mDescriptorPools.size() < kMaxPools, VK_ERROR_TOO_MANY_OBJECTS);
 
-    // This pool is getting hot, so grow its max size to try and prevent allocating another pool in
-    // the future.
+    // This pool is getting hot, so grow its max size to try and prevent allocating another pool
+    // in the future.
     if (mMaxSetsPerPool < kMaxSetsPerPoolMax)
     {
         mMaxSetsPerPool *= mMaxSetsPerPoolMultiplier;
@@ -4225,9 +4248,10 @@ void DynamicDescriptorPool::destroyCachedDescriptorSet(Renderer *renderer,
 void DynamicDescriptorPool::checkAndReleaseUnusedPool(Renderer *renderer,
                                                       RefCountedDescriptorPoolHelper *pool)
 {
-    // If pool still contains any valid descriptorSet cache, then don't destroy it. Note that even
-    // if pool has no valid descriptorSet, pool itself may still be bound to a program until it gets
-    // unbound when next descriptorSet gets allocated. We always keep at least one pool around.
+    // If pool still contains any valid descriptorSet cache, then don't destroy it. Note that
+    // even if pool has no valid descriptorSet, pool itself may still be bound to a program
+    // until it gets unbound when next descriptorSet gets allocated. We always keep at least one
+    // pool around.
     if (mDescriptorPools.size() < 2 || pool->get().hasValidDescriptorSet() || pool->isReferenced())
     {
         return;
@@ -4386,7 +4410,8 @@ DynamicQueryPool::~DynamicQueryPool() = default;
 
 angle::Result DynamicQueryPool::init(ContextVk *contextVk, VkQueryType type, uint32_t poolSize)
 {
-    // SecondaryCommandBuffer's ResetQueryPoolParams would like the query index to fit in 24 bits.
+    // SecondaryCommandBuffer's ResetQueryPoolParams would like the query index to fit in 24
+    // bits.
     ASSERT(poolSize < (1 << 24));
 
     ANGLE_TRY(initEntryPool(contextVk, poolSize));
@@ -4457,9 +4482,9 @@ void QueryResult::setResults(uint64_t *results, uint32_t queryCount)
 {
     ASSERT(mResults[0] == 0 && mResults[1] == 0);
 
-    // Accumulate the query results.  For multiview, where multiple query indices are used to return
-    // the results, it's undefined how the results are distributed between indices, but the sum is
-    // guaranteed to be the desired result.
+    // Accumulate the query results.  For multiview, where multiple query indices are used to
+    // return the results, it's undefined how the results are distributed between indices, but
+    // the sum is guaranteed to be the desired result.
     for (uint32_t query = 0; query < queryCount; ++query)
     {
         for (uint32_t perQueryIndex = 0; perQueryIndex < mIntsPerResult; ++perQueryIndex)
@@ -4671,8 +4696,8 @@ angle::Result QueryHelper::getUint64ResultNonBlocking(ContextVk *contextVk,
     ASSERT(valid());
     VkResult result;
 
-    // Ensure that we only wait if we have inserted a query in command buffer. Otherwise you will
-    // wait forever and trigger GPU timeout.
+    // Ensure that we only wait if we have inserted a query in command buffer. Otherwise you
+    // will wait forever and trigger GPU timeout.
     if (hasSubmittedCommands())
     {
         constexpr VkQueryResultFlags kFlags = VK_QUERY_RESULT_64_BIT;
@@ -4915,13 +4940,13 @@ angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
 
     if (contextVk->getState().isPrimitiveRestartEnabled())
     {
-        // If primitive restart, new index buffer is 135% the size of the original index buffer. The
-        // smallest lineloop with primitive restart is 3 indices (point 1, point 2 and restart
-        // value) when converted to linelist becomes 4 vertices. Expansion of 4/3. Any larger
-        // lineloops would have less overhead and require less extra space. Any incomplete
-        // primitives can be dropped or left incomplete and thus not increase the size of the
-        // destination index buffer. Since we don't know the number of indices being used we'll use
-        // the size of the index buffer as allocated as the index count.
+        // If primitive restart, new index buffer is 135% the size of the original index buffer.
+        // The smallest lineloop with primitive restart is 3 indices (point 1, point 2 and
+        // restart value) when converted to linelist becomes 4 vertices. Expansion of 4/3. Any
+        // larger lineloops would have less overhead and require less extra space. Any
+        // incomplete primitives can be dropped or left incomplete and thus not increase the
+        // size of the destination index buffer. Since we don't know the number of indices being
+        // used we'll use the size of the index buffer as allocated as the index count.
         size_t numInputIndices    = static_cast<size_t>(indexBuffer->getSize() / unitSize);
         size_t numNewInputIndices = ((numInputIndices * 4) / 3) + 1;
         allocateBytes             = static_cast<size_t>(numNewInputIndices * unitSize);
@@ -5341,9 +5366,10 @@ const Buffer &BufferHelper::getBufferForVertexArray(ContextVk *contextVk,
 
     if (!mBufferWithUserSize.valid())
     {
-        // Allocate buffer that is backed by sub-range of the memory for vertex array usage. This is
-        // only needed when robust resource init is enabled so that vulkan driver will know the
-        // exact size of the vertex buffer it is supposedly to use and prevent out of bound access.
+        // Allocate buffer that is backed by sub-range of the memory for vertex array usage.
+        // This is only needed when robust resource init is enabled so that vulkan driver will
+        // know the exact size of the vertex buffer it is supposedly to use and prevent out of
+        // bound access.
         VkBufferCreateInfo createInfo    = {};
         createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         createInfo.flags                 = 0;
@@ -5524,8 +5550,8 @@ void BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
                                      PipelineStage stageIndex,
                                      PipelineBarrierArray *barriers)
 {
-    // If there was a prior write and we are making a read that is either a new access type or from
-    // a new stage, we need a barrier
+    // If there was a prior write and we are making a read that is either a new access type or
+    // from a new stage, we need a barrier
     if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
                                      ((mCurrentReadStages & readStage) != readStage)))
     {
@@ -5543,8 +5569,8 @@ void BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
                                       PipelineStage stageIndex,
                                       PipelineBarrierArray *barriers)
 {
-    // We don't need to check mCurrentReadStages here since if it is not zero, mCurrentReadAccess
-    // must not be zero as well. stage is finer grain than accessType.
+    // We don't need to check mCurrentReadStages here since if it is not zero,
+    // mCurrentReadAccess must not be zero as well. stage is finer grain than accessType.
     ASSERT((!mCurrentReadStages && !mCurrentReadAccess) ||
            (mCurrentReadStages && mCurrentReadAccess));
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
@@ -5704,9 +5730,9 @@ void ImageHelper::setEntireContentUndefined()
         levelContentDefined.reset();
     }
 
-    // Note: this function is typically called during init/release, but also when importing an image
-    // from Vulkan, so unlike invalidateSubresourceContentImpl, it doesn't attempt to make sure
-    // emulated formats have a clear staged.
+    // Note: this function is typically called during init/release, but also when importing an
+    // image from Vulkan, so unlike invalidateSubresourceContentImpl, it doesn't attempt to make
+    // sure emulated formats have a clear staged.
 }
 
 void ImageHelper::setContentDefined(LevelIndex levelStart,
@@ -5905,8 +5931,8 @@ angle::Result ImageHelper::initExternal(Context *context,
     ASSERT(textureType != gl::TextureType::CubeMap || mLayerCount == gl::kCubeFaceCount);
     ASSERT(textureType != gl::TextureType::CubeMapArray || mLayerCount % gl::kCubeFaceCount == 0);
 
-    // If externalImageCreateInfo is provided, use that directly.  Otherwise derive the necessary
-    // pNext chain.
+    // If externalImageCreateInfo is provided, use that directly.  Otherwise derive the
+    // necessary pNext chain.
     const void *imageCreateInfoPNext = externalImageCreateInfo;
     VkImageFormatListCreateInfoKHR imageFormatListInfoStorage;
     ImageListFormats imageListFormatsStorage;
@@ -5938,8 +5964,8 @@ angle::Result ImageHelper::initExternal(Context *context,
     {
         ASSERT(mYcbcrConversionDesc.valid());
 
-        // The Vulkan spec states: If the pNext chain includes a VkExternalFormatANDROID structure
-        // whose externalFormat member is not 0, flags must not include
+        // The Vulkan spec states: If the pNext chain includes a VkExternalFormatANDROID
+        // structure whose externalFormat member is not 0, flags must not include
         // VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT
         if (!IsYUVExternalFormat(actualFormatID))
         {
@@ -6089,8 +6115,8 @@ void ImageHelper::deriveImageViewFormatFromCreateInfoPNext(VkImageCreateInfo &im
         pNextChain = pNextChain->pNext;
     }
 
-    // Clear formatOut in case it has leftovers from previous VkImage in the case of releaseImage
-    // followed by initExternal.
+    // Clear formatOut in case it has leftovers from previous VkImage in the case of
+    // releaseImage followed by initExternal.
     std::fill(formatOut.begin(), formatOut.begin() + formatOut.max_size(), VK_FORMAT_UNDEFINED);
     if (pNextChain != nullptr)
     {
@@ -6208,8 +6234,8 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
     Renderer *renderer = context->getRenderer();
     if ((flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0)
     {
-        // Wipe memory to an invalid value when the 'allocateNonZeroMemory' feature is enabled. The
-        // invalid values ensures our testing doesn't assume zero-initialized memory.
+        // Wipe memory to an invalid value when the 'allocateNonZeroMemory' feature is enabled.
+        // The invalid values ensures our testing doesn't assume zero-initialized memory.
         constexpr int kNonZeroInitValue = 0x3F;
         if (renderer->getFeatures().useVmaForImageSuballocation.enabled)
         {
@@ -6297,8 +6323,8 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
         subresource.baseArrayLayer          = 0;
         subresource.layerCount              = mLayerCount;
 
-        // Arbitrary value to initialize the memory with.  Note: the given uint value, reinterpreted
-        // as float is about 0.7.
+        // Arbitrary value to initialize the memory with.  Note: the given uint value,
+        // reinterpreted as float is about 0.7.
         constexpr uint32_t kInitValue   = 0x3F345678;
         constexpr float kInitValueFloat = 0.12345f;
 
@@ -6352,7 +6378,8 @@ VkResult ImageHelper::initMemory(Context *context,
 {
     mMemoryAllocationType = allocationType;
 
-    // To allocate memory here, if possible, we use the image memory suballocator which uses VMA.
+    // To allocate memory here, if possible, we use the image memory suballocator which uses
+    // VMA.
     ASSERT(excludedFlags < VK_MEMORY_PROPERTY_FLAG_BITS_MAX_ENUM);
     Renderer *renderer = context->getRenderer();
     if (renderer->getFeatures().useVmaForImageSuballocation.enabled)
@@ -6485,9 +6512,9 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
 {
     angle::FormatID actualFormat = mActualFormatID;
 
-    // If we are initializing an imageview for use with EXT_srgb_write_control, we need to override
-    // the format to its linear counterpart. Formats that cannot be reinterpreted are exempt from
-    // this requirement.
+    // If we are initializing an imageview for use with EXT_srgb_write_control, we need to
+    // override the format to its linear counterpart. Formats that cannot be reinterpreted are
+    // exempt from this requirement.
     if (srgbWriteControlMode == gl::SrgbWriteControlMode::Linear)
     {
         angle::FormatID linearFormat = ConvertToLinear(actualFormat);
@@ -6658,8 +6685,8 @@ void ImageHelper::init2DWeakReference(Context *context,
     mLayerCount              = 1;
     mLevelCount              = 1;
 
-    // The view formats and usage flags are used for imageless framebuffers. Here, the former is set
-    // similar to deriveImageViewFormatFromCreateInfoPNext() when there is no pNext from a
+    // The view formats and usage flags are used for imageless framebuffers. Here, the former is
+    // set similar to deriveImageViewFormatFromCreateInfoPNext() when there is no pNext from a
     // VkImageCreateInfo object.
     setImageFormatsFromActualFormat(GetVkFormatFromFormatID(actualFormatID), mViewFormats);
 
@@ -6766,16 +6793,16 @@ angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
     ASSERT(!IsAnySubresourceContentDefined(mContentDefined));
     ASSERT(!IsAnySubresourceContentDefined(mStencilContentDefined));
 
-    // The image is used as either color or depth/stencil attachment.  Additionally, its memory is
-    // lazily allocated as the contents are discarded at the end of the renderpass and with tiling
-    // GPUs no actual backing memory is required.
+    // The image is used as either color or depth/stencil attachment.  Additionally, its memory
+    // is lazily allocated as the contents are discarded at the end of the renderpass and with
+    // tiling GPUs no actual backing memory is required.
     //
-    // Note that the Vulkan image is created with or without VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT
-    // based on whether the memory that will be used to create the image would have
-    // VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT.  TRANSIENT is provided if there is any memory that
-    // supports LAZILY_ALLOCATED.  However, based on actual image requirements, such a memory may
-    // not be suitable for the image.  We don't support such a case, which will result in the
-    // |initMemory| call below failing.
+    // Note that the Vulkan image is created with or without
+    // VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT based on whether the memory that will be used to
+    // create the image would have VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT.  TRANSIENT is
+    // provided if there is any memory that supports LAZILY_ALLOCATED.  However, based on actual
+    // image requirements, such a memory may not be suitable for the image.  We don't support
+    // such a case, which will result in the |initMemory| call below failing.
     const bool hasLazilyAllocatedMemory = memoryProperties.hasLazilyAllocatedMemory();
 
     const VkImageUsageFlags kLazyFlags =
@@ -6799,8 +6826,8 @@ angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
                            isRobustResourceInitEnabled, hasProtectedContent,
                            YcbcrConversionDesc{}));
 
-    // Remove the emulated format clear from the multisampled image if any.  There is one already
-    // staged on the resolve image if needed.
+    // Remove the emulated format clear from the multisampled image if any.  There is one
+    // already staged on the resolve image if needed.
     removeStagedUpdates(context, getFirstAllocatedLevel(), getLastAllocatedLevel());
 
     const VkMemoryPropertyFlags kMultisampledMemoryFlags =
@@ -6808,9 +6835,9 @@ angle::Result ImageHelper::initImplicitMultisampledRenderToTexture(
         (hasLazilyAllocatedMemory ? VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT : 0) |
         (hasProtectedContent ? VK_MEMORY_PROPERTY_PROTECTED_BIT : 0);
 
-    // If this ever fails, it can be retried without the LAZILY_ALLOCATED flag (which will probably
-    // still fail), but ideally that means GL_EXT_multisampled_render_to_texture should not be
-    // advertized on this platform in the first place.
+    // If this ever fails, it can be retried without the LAZILY_ALLOCATED flag (which will
+    // probably still fail), but ideally that means GL_EXT_multisampled_render_to_texture should
+    // not be advertized on this platform in the first place.
     ANGLE_TRY(initMemoryAndNonZeroFillIfNeeded(
         context, hasProtectedContent, memoryProperties, kMultisampledMemoryFlags,
         vk::MemoryAllocationType::ImplicitMultisampledRenderToTextureImage));
@@ -6912,9 +6939,9 @@ bool ImageHelper::isReadBarrierNecessary(ImageLayout newLayout) const
 
     // RAR (read-after-read) is not a hazard and doesn't require a barrier.
     //
-    // RAW (read-after-write) hazards always require a memory barrier.  This can only happen if the
-    // layout (same as new layout) is writable which in turn is only possible if the image is
-    // simultaneously bound for shader write (i.e. the layout is GENERAL or SHARED_PRESENT).
+    // RAW (read-after-write) hazards always require a memory barrier.  This can only happen if
+    // the layout (same as new layout) is writable which in turn is only possible if the image
+    // is simultaneously bound for shader write (i.e. the layout is GENERAL or SHARED_PRESENT).
     const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
     return HasResourceWriteAccess(layoutData.type);
 }
@@ -6925,9 +6952,9 @@ bool ImageHelper::isReadSubresourceBarrierNecessary(ImageLayout newLayout,
                                                     uint32_t layerStart,
                                                     uint32_t layerCount) const
 {
-    // In case an image has both read and write permissions, the written subresources since the last
-    // barrier should be checked to avoid RAW and WAR hazards. However, if a layout change is
-    // necessary regardless, there is no need to check the written subresources.
+    // In case an image has both read and write permissions, the written subresources since the
+    // last barrier should be checked to avoid RAW and WAR hazards. However, if a layout change
+    // is necessary regardless, there is no need to check the written subresources.
     if (mCurrentLayout != newLayout)
     {
         return true;
@@ -6963,8 +6990,8 @@ bool ImageHelper::isWriteBarrierNecessary(ImageLayout newLayout,
         return true;
     }
 
-    // If we are writing to the same parts of the image (level/layer), we need a barrier. Otherwise,
-    // it can be done in parallel.
+    // If we are writing to the same parts of the image (level/layer), we need a barrier.
+    // Otherwise, it can be done in parallel.
     ImageLayerWriteMask layerMask = GetImageLayerWriteMask(layerStart, layerCount);
     for (uint32_t levelOffset = 0; levelOffset < levelCount; levelOffset++)
     {
@@ -7008,12 +7035,13 @@ void ImageHelper::acquireFromExternal(Context *context,
     mCurrentQueueFamilyIndex = externalQueueFamilyIndex;
     mIsReleasedToExternal    = false;
 
-    // Only change the layout and queue if the layout is anything by Undefined.  If it is undefined,
-    // leave it to transition out as the image is used later.
+    // Only change the layout and queue if the layout is anything by Undefined.  If it is
+    // undefined, leave it to transition out as the image is used later.
     if (currentLayout != ImageLayout::Undefined)
     {
         changeLayoutAndQueue(context, getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     // It is unknown how the external has modified the image, so assume every subresource has
@@ -7036,12 +7064,13 @@ void ImageHelper::releaseToExternal(Context *context,
 {
     ASSERT(!mIsReleasedToExternal);
 
-    // A layout change is unnecessary if the image that was previously acquired was never used by
-    // GL!
+    // A layout change is unnecessary if the image that was previously acquired was never used
+    // by GL!
     if (mCurrentQueueFamilyIndex != externalQueueFamilyIndex || mCurrentLayout != desiredLayout)
     {
         changeLayoutAndQueue(context, getAspectFlags(), desiredLayout, externalQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     mIsReleasedToExternal = true;
@@ -7109,8 +7138,8 @@ void ImageHelper::barrierImpl(Context *context,
 
     if (mCurrentLayout == ImageLayout::SharedPresent)
     {
-        // For now we always use pipelineBarrier for singlebuffer mode. We could use event here in
-        // future.
+        // For now we always use pipelineBarrier for singlebuffer mode. We could use event here
+        // in future.
         mCurrentEvent.release(context->getDevice());
 
         const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
@@ -7138,8 +7167,8 @@ void ImageHelper::barrierImpl(Context *context,
 
     if (mCurrentQueueFamilyIndex != newQueueFamilyIndex && barrierType == BarrierType::Event)
     {
-        // VkCmdWaitEvent requires the srcQueueFamilyIndex and dstQueueFamilyIndex members of any
-        // element of pBufferMemoryBarriers or pImageMemoryBarriers must be equal
+        // VkCmdWaitEvent requires the srcQueueFamilyIndex and dstQueueFamilyIndex members of
+        // any element of pBufferMemoryBarriers or pImageMemoryBarriers must be equal
         // (VUID-vkCmdWaitEvents-srcQueueFamilyIndex-02803).
         barrierType = BarrierType::Pipeline;
     }
@@ -7152,9 +7181,9 @@ void ImageHelper::barrierImpl(Context *context,
 
     if (barrierType == BarrierType::Event)
     {
-        // If there is an event, we use the waitEvent to do layout change. Once we have waited, the
-        // event gets garbage collected (which is GPU completion tracked) to avoid waited again in
-        // future. We always use DstStageMask since that is what setEvent used and
+        // If there is an event, we use the waitEvent to do layout change. Once we have waited,
+        // the event gets garbage collected (which is GPU completion tracked) to avoid waited
+        // again in future. We always use DstStageMask since that is what setEvent used and
         // VUID-vkCmdWaitEvents-srcStageMask-01158 requires they must match.
         VkPipelineStageFlags srcStageMask = GetRefCountedEventStageMask(context, mCurrentEvent);
         commandBuffer->imageWaitEvent(mCurrentEvent.getEvent().getHandle(), srcStageMask,
@@ -7180,10 +7209,10 @@ void ImageHelper::barrierImpl(Context *context,
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
     resetSubresourcesWrittenSinceBarrier();
 
-    // We must release the event so that new event will be created and added. If we did not add new
-    // event, because mCurrentEvent have been released, next barrier will automatically fallback to
-    // pipelineBarrier. Otherwise if we keep mCurrentEvent here we may accidentally end up waiting
-    // for an old event which creates sync hazard.
+    // We must release the event so that new event will be created and added. If we did not add
+    // new event, because mCurrentEvent have been released, next barrier will automatically
+    // fallback to pipelineBarrier. Otherwise if we keep mCurrentEvent here we may accidentally
+    // end up waiting for an old event which creates sync hazard.
     ASSERT(!mCurrentEvent.valid());
 }
 
@@ -7260,8 +7289,8 @@ void ImageHelper::recordReadSubresourceBarrier(Context *context,
                                                uint32_t layerCount,
                                                OutsideRenderPassCommandBufferHelper *commands)
 {
-    // This barrier is used for an image with both read/write permissions, including during mipmap
-    // generation and self-copy.
+    // This barrier is used for an image with both read/write permissions, including during
+    // mipmap generation and self-copy.
     if (isReadSubresourceBarrierNecessary(newLayout, levelStart, levelCount, layerStart,
                                           layerCount))
     {
@@ -7346,8 +7375,8 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         }
 
         const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
-        // RAR is not a hazard and doesn't require a barrier, especially as the image layout hasn't
-        // changed.  The following asserts that such a barrier is not attempted.
+        // RAR is not a hazard and doesn't require a barrier, especially as the image layout
+        // hasn't changed.  The following asserts that such a barrier is not attempted.
         ASSERT(HasResourceWriteAccess(layoutData.type));
 
         // No layout change, only memory barrier is required
@@ -7383,10 +7412,10 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             mBarrierQueueSerial == queueSerial)
         {
             // If we are switching between different shader stage reads of the same render pass,
-            // then there is no actual layout change or access type change. We only need a barrier
-            // if we are making a read that is from a new stage. Also note that we do barrier
-            // against previous non-shaderRead layout. We do not barrier between one shaderRead and
-            // another shaderRead.
+            // then there is no actual layout change or access type change. We only need a
+            // barrier if we are making a read that is from a new stage. Also note that we do
+            // barrier against previous non-shaderRead layout. We do not barrier between one
+            // shaderRead and another shaderRead.
             bool isNewReadStage = (mCurrentShaderReadStageMask & dstStageMask) != dstStageMask;
             if (!isNewReadStage)
             {
@@ -7439,38 +7468,38 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             if (transitionFrom.layout == transitionTo.layout &&
                 IsShaderReadOnlyLayout(transitionTo))
             {
-                // If we are transiting within shaderReadOnly layout, i.e. reading from different
-                // shader stages, VkEvent can't handle this right now. In order for VkEvent to
-                // handle this properly we have to wait for the previous shaderReadOnly layout
-                // transition event and add a new memoryBarrier. But we may have lost that event
-                // already if it has been used in a new render pass (because we have to update the
-                // event even if there is no barrier needed). To workaround this issue we fall back
-                // to pipelineBarrier for now.
+                // If we are transiting within shaderReadOnly layout, i.e. reading from
+                // different shader stages, VkEvent can't handle this right now. In order for
+                // VkEvent to handle this properly we have to wait for the previous
+                // shaderReadOnly layout transition event and add a new memoryBarrier. But we
+                // may have lost that event already if it has been used in a new render pass
+                // (because we have to update the event even if there is no barrier needed). To
+                // workaround this issue we fall back to pipelineBarrier for now.
                 barrierType = BarrierType::Pipeline;
             }
             else if (mBarrierQueueSerial == queueSerial)
             {
                 // If we already inserted a barrier in this render pass, force to use
-                // pipelineBarrier. Otherwise we will end up inserting a VkCmdWaitEvent that has not
-                // been set (See https://issuetracker.google.com/333419317 for example).
+                // pipelineBarrier. Otherwise we will end up inserting a VkCmdWaitEvent that has
+                // not been set (See https://issuetracker.google.com/333419317 for example).
                 barrierType = BarrierType::Pipeline;
             }
 
-            // if we transition from shaderReadOnly, we must add in stashed shader stage masks since
-            // there might be outstanding shader reads from stages other than current layout. We do
-            // not insert barrier between one shaderRead to another shaderRead
+            // if we transition from shaderReadOnly, we must add in stashed shader stage masks
+            // since there might be outstanding shader reads from stages other than current
+            // layout. We do not insert barrier between one shaderRead to another shaderRead
             if (mCurrentShaderReadStageMask)
             {
                 if ((mCurrentShaderReadStageMask & srcStageMask) != mCurrentShaderReadStageMask)
                 {
-                    // mCurrentShaderReadStageMask has more bits than srcStageMask. This means it
-                    // has been used by more than one shader stage in the same render pass. These
-                    // two usages are tracked by two different ImageLayout, even though underline
-                    // VkImageLayout is the same. This means two different RefCountedEvents since
-                    // each RefCountedEvent is associated with one ImageLayout. When we transit out
-                    // of this layout, we must wait for all reads to finish. But Right now
-                    // ImageHelper only keep track of the last read. To workaround this problem we
-                    // use pipelineBarrier in this case.
+                    // mCurrentShaderReadStageMask has more bits than srcStageMask. This means
+                    // it has been used by more than one shader stage in the same render pass.
+                    // These two usages are tracked by two different ImageLayout, even though
+                    // underline VkImageLayout is the same. This means two different
+                    // RefCountedEvents since each RefCountedEvent is associated with one
+                    // ImageLayout. When we transit out of this layout, we must wait for all
+                    // reads to finish. But Right now ImageHelper only keep track of the last
+                    // read. To workaround this problem we use pipelineBarrier in this case.
                     barrierType = BarrierType::Pipeline;
                     srcStageMask |= mCurrentShaderReadStageMask;
                 }
@@ -7518,10 +7547,10 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
     }
 
     *semaphoreOut = mAcquireNextImageSemaphore.release();
-    // We must release the event so that new event will be created and added. If we did not add new
-    // event, because mCurrentEvent have been released, next barrier will automatically fallback to
-    // pipelineBarrier. Otherwise if we keep mCurrentEvent here we may accidentally end up waiting
-    // for an old event which creates sync hazard.
+    // We must release the event so that new event will be created and added. If we did not add
+    // new event, because mCurrentEvent have been released, next barrier will automatically
+    // fallback to pipelineBarrier. Otherwise if we keep mCurrentEvent here we may accidentally
+    // end up waiting for an old event which creates sync hazard.
     ASSERT(!mCurrentEvent.valid());
 }
 
@@ -7529,9 +7558,9 @@ void ImageHelper::setCurrentRefCountedEvent(Context *context, ImageLayoutEventMa
 {
     ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled);
 
-    // Create the event if we have not yet so. Otherwise just use the already created event. This
-    // means all images used in the same render pass that has the same layout will be tracked by the
-    // same event.
+    // Create the event if we have not yet so. Otherwise just use the already created event.
+    // This means all images used in the same render pass that has the same layout will be
+    // tracked by the same event.
     if (!layoutEventMaps.map[mCurrentLayout].valid())
     {
         layoutEventMaps.map[mCurrentLayout].init(context, mCurrentLayout);
@@ -7884,9 +7913,9 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
         mipDepth  = nextMipDepth;
     }
 
-    // Transition all mip level to the same layout so we can declare our whole image layout to one
-    // ImageLayout. FragmentShaderReadOnly is picked here since this is the most reasonable usage
-    // after glGenerateMipmap call.
+    // Transition all mip level to the same layout so we can declare our whole image layout to
+    // one ImageLayout. FragmentShaderReadOnly is picked here since this is the most reasonable
+    // usage after glGenerateMipmap call.
     barrier.oldLayout     = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
     barrier.newLayout     = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
@@ -8113,11 +8142,12 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         }
         if (!stencilOnly && storageFormat.id == angle::FormatID::D32_FLOAT_S8X24_UINT)
         {
-            // If depth is D32FLOAT_S8, we must pack D32F tightly (no stencil) for CopyBufferToImage
+            // If depth is D32FLOAT_S8, we must pack D32F tightly (no stencil) for
+            // CopyBufferToImage
             outputRowPitch = sizeof(float) * glExtents.width;
 
-            // The generic load functions don't handle tightly packing D32FS8 to D32F & S8 so call
-            // special case load functions.
+            // The generic load functions don't handle tightly packing D32FS8 to D32F & S8 so
+            // call special case load functions.
             switch (type)
             {
                 case GL_UNSIGNED_INT:
@@ -8170,8 +8200,8 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
 
     const uint8_t *source = pixels + static_cast<ptrdiff_t>(inputSkipBytes);
 
-    // If possible, copy the buffer to the image directly on the host, to avoid having to use a temp
-    // image (and do a double copy).
+    // If possible, copy the buffer to the image directly on the host, to avoid having to use a
+    // temp image (and do a double copy).
     if (applyUpdate != ApplyImageUpdate::Defer && !loadFunctionInfo.requiresConversion &&
         inputRowPitch == outputRowPitch && inputDepthPitch == outputDepthPitch)
     {
@@ -8294,9 +8324,10 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
 
     if (HasBothDepthAndStencilAspects(aspectFlags))
     {
-        // We still have both depth and stencil aspect bits set. That means we have a destination
-        // buffer that is packed depth stencil and that the application is only loading one aspect.
-        // Figure out which aspect the user is touching and remove the unused aspect bit.
+        // We still have both depth and stencil aspect bits set. That means we have a
+        // destination buffer that is packed depth stencil and that the application is only
+        // loading one aspect. Figure out which aspect the user is touching and remove the
+        // unused aspect bit.
         if (formatInfo.stencilBits > 0)
         {
             aspectFlags &= ~VK_IMAGE_ASPECT_DEPTH_BIT;
@@ -8353,9 +8384,10 @@ angle::Result ImageHelper::updateSubresourceOnHost(Context *context,
 
     // The image should not have any pending updates to this subresource.
     //
-    // TODO: if there are any pending updates, see if they can be pruned given the incoming update.
-    // This would most likely be the case where a clear is automatically staged for robustness or
-    // other reasons, which would now be superseded by the data upload.  http://anglebug.com/8341
+    // TODO: if there are any pending updates, see if they can be pruned given the incoming
+    // update. This would most likely be the case where a clear is automatically staged for
+    // robustness or other reasons, which would now be superseded by the data upload.
+    // http://anglebug.com/8341
     const gl::LevelIndex updateLevelGL(index.getLevelIndex());
     const uint32_t layerIndex = index.hasLayer() ? index.getLayerIndex() : 0;
     const uint32_t layerCount = index.getLayerCount();
@@ -8364,8 +8396,8 @@ angle::Result ImageHelper::updateSubresourceOnHost(Context *context,
         return angle::Result::Continue;
     }
 
-    // The image should be in a layout this is copiable.  If UNDEFINED, it can be transitioned to a
-    // layout that is copyable.
+    // The image should be in a layout this is copiable.  If UNDEFINED, it can be transitioned
+    // to a layout that is copyable.
     const VkImageAspectFlags aspectMask = getAspectFlags();
     if (mCurrentLayout == ImageLayout::Undefined)
     {
@@ -8398,12 +8430,12 @@ angle::Result ImageHelper::updateSubresourceOnHost(Context *context,
     onWrite(updateLevelGL, 1, baseArrayLayer, layerCount, aspectMask);
     *copiedOut = true;
 
-    // Perform the copy without holding the lock.  This is important for applications that perform
-    // the copy on a separate thread, and doing all the work while holding the lock effectively
-    // destroys all parallelism.  Note that the texture may not be used by the other thread without
-    // appropriate synchronization (such as through glFenceSync), and because the copy is happening
-    // in this call (just without holding the lock), the sync function won't be called until the
-    // copy is done.
+    // Perform the copy without holding the lock.  This is important for applications that
+    // perform the copy on a separate thread, and doing all the work while holding the lock
+    // effectively destroys all parallelism.  Note that the texture may not be used by the other
+    // thread without appropriate synchronization (such as through glFenceSync), and because the
+    // copy is happening in this call (just without holding the lock), the sync function won't
+    // be called until the copy is done.
     auto doCopy = [context, image = mImage.getHandle(), source, memoryRowLength, memoryImageHeight,
                    aspectMask, levelVk = toVkLevel(updateLevelGL), isArray, baseArrayLayer,
                    layerCount, offset, glExtents,
@@ -8445,16 +8477,17 @@ angle::Result ImageHelper::updateSubresourceOnHost(Context *context,
 
     switch (applyUpdate)
     {
-        // If possible, perform the copy in an unlocked tail call.  Then the other threads of the
-        // application are free to draw.
+        // If possible, perform the copy in an unlocked tail call.  Then the other threads of
+        // the application are free to draw.
         case ApplyImageUpdate::ImmediatelyInUnlockedTailCall:
             egl::Display::GetCurrentThreadUnlockedTailCall()->add(doCopy);
             break;
 
         // In some cases, the copy cannot be delayed.  For example because the contents are
-        // immediately needed (such as when the generate mipmap hint is set), or because unlocked
-        // tail calls are not allowed (this is the case with incomplete textures which are lazily
-        // created at draw, but unlocked tail calls are avoided on draw calls due to overhead).
+        // immediately needed (such as when the generate mipmap hint is set), or because
+        // unlocked tail calls are not allowed (this is the case with incomplete textures which
+        // are lazily created at draw, but unlocked tail calls are avoided on draw calls due to
+        // overhead).
         case ApplyImageUpdate::Immediately:
             doCopy(nullptr);
             break;
@@ -8678,9 +8711,9 @@ void ImageHelper::invalidateSubresourceContentImpl(ContextVk *contextVk,
         return;
     }
 
-    // If the color format is emulated and has extra channels, those channels need to stay cleared.
-    // On some devices, it's cheaper to skip invalidating the framebuffer attachment, while on
-    // others it's cheaper to invalidate but then re-clear the image.
+    // If the color format is emulated and has extra channels, those channels need to stay
+    // cleared. On some devices, it's cheaper to skip invalidating the framebuffer attachment,
+    // while on others it's cheaper to invalidate but then re-clear the image.
     //
     // For depth/stencil formats, each channel is separately invalidated, so the invalidate is
     // simply skipped for the emulated channel on all devices.
@@ -8733,8 +8766,8 @@ void ImageHelper::invalidateSubresourceContentImpl(ContextVk *contextVk,
         GetContentDefinedLayerRangeBits(layerIndex, layerCount, kMaxContentDefinedLayerCount);
     *contentDefinedMask &= static_cast<uint8_t>(~layerRangeBits);
 
-    // If there are emulated channels, stage a clear to make sure those channels continue to contain
-    // valid values.
+    // If there are emulated channels, stage a clear to make sure those channels continue to
+    // contain valid values.
     if (hasEmulatedChannels && aspect == VK_IMAGE_ASPECT_COLOR_BIT)
     {
         VkClearValue clearValue;
@@ -8781,23 +8814,23 @@ void ImageHelper::restoreSubresourceContentImpl(gl::LevelIndex level,
     switch (aspect)
     {
         case VK_IMAGE_ASPECT_DEPTH_BIT:
-            // Emulated depth channel should never have been marked invalid, so it can retain its
-            // cleared value.
+            // Emulated depth channel should never have been marked invalid, so it can retain
+            // its cleared value.
             ASSERT(!hasEmulatedDepthChannel() ||
                    (contentDefinedMask->bits() & layerRangeBits) == layerRangeBits);
             break;
         case VK_IMAGE_ASPECT_STENCIL_BIT:
-            // Emulated stencil channel should never have been marked invalid, so it can retain its
-            // cleared value.
+            // Emulated stencil channel should never have been marked invalid, so it can retain
+            // its cleared value.
             ASSERT(!hasEmulatedStencilChannel() ||
                    (contentDefinedMask->bits() & layerRangeBits) == layerRangeBits);
             break;
         case VK_IMAGE_ASPECT_COLOR_BIT:
-            // This function is called on attachments during a render pass when it's determined that
-            // they should no longer be considered invalidated.  For an attachment with emulated
-            // format that has extra channels, invalidateSubresourceContentImpl may have proactively
-            // inserted a clear so that the extra channels continue to have defined values.  That
-            // clear should be removed.
+            // This function is called on attachments during a render pass when it's determined
+            // that they should no longer be considered invalidated.  For an attachment with
+            // emulated format that has extra channels, invalidateSubresourceContentImpl may
+            // have proactively inserted a clear so that the extra channels continue to have
+            // defined values.  That clear should be removed.
             if (hasEmulatedImageChannels())
             {
                 removeSingleStagedClearAfterInvalidate(level, layerIndex, layerCount);
@@ -8808,8 +8841,8 @@ void ImageHelper::restoreSubresourceContentImpl(gl::LevelIndex level,
             break;
     }
 
-    // Additionally, as the resource has been rewritten to in the render pass, its no longer cleared
-    // to the cached value.
+    // Additionally, as the resource has been rewritten to in the render pass, its no longer
+    // cleared to the cached value.
     mCurrentSingleClearValue.reset();
 
     *contentDefinedMask |= layerRangeBits;
@@ -8942,8 +8975,8 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     // 2- copy the source image region to the pixel buffer using a cpu readback
     if (loadFunction.requiresConversion)
     {
-        // When a conversion is required, we need to use the loadFunction to read from a temporary
-        // buffer instead so its an even slower path.
+        // When a conversion is required, we need to use the loadFunction to read from a
+        // temporary buffer instead so its an even slower path.
         size_t bufferSize =
             storageFormat.pixelBytes * clippedRectangle.width * clippedRectangle.height;
         angle::MemoryBuffer *memoryBuffer = nullptr;
@@ -9081,8 +9114,8 @@ angle::Result ImageHelper::stageResourceClearWithFormat(ContextVk *contextVk,
 
     if (imageFormat.isBlock)
     {
-        // This only supports doing an initial clear to 0, not clearing to a specific encoded RGBA
-        // value
+        // This only supports doing an initial clear to 0, not clearing to a specific encoded
+        // RGBA value
         ASSERT((clearValue.color.int32[0] == 0) && (clearValue.color.int32[1] == 0) &&
                (clearValue.color.int32[2] == 0) && (clearValue.color.int32[3] == 0));
 
@@ -9169,13 +9202,14 @@ void ImageHelper::stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled, b
 
     const VkImageAspectFlags aspectFlags = getAspectFlags();
 
-    // If the image has an emulated channel and robust resource init is not enabled, always clear
-    // it. These channels will be masked out in future writes, and shouldn't contain uninitialized
-    // values.
+    // If the image has an emulated channel and robust resource init is not enabled, always
+    // clear it. These channels will be masked out in future writes, and shouldn't contain
+    // uninitialized values.
     //
     // For external images, we cannot clear the image entirely, as it may contain data in the
-    // non-emulated channels.  For depth/stencil images, clear is already per aspect, but for color
-    // images we would need to take a special path where we only clear the emulated channels.
+    // non-emulated channels.  For depth/stencil images, clear is already per aspect, but for
+    // color images we would need to take a special path where we only clear the emulated
+    // channels.
 
     // Block images are not cleared, since no emulated channels are present if decoded.
     if (isExternalImage && getIntendedFormat().isBlock)
@@ -9253,16 +9287,16 @@ void ImageHelper::stageSelfAsSubresourceUpdates(
         return;
     }
 
-    // Because we are cloning this object to another object, we must finalize the layout if it is
-    // being used by current renderpass as attachment. Otherwise we are copying the incorrect layout
-    // since it is determined at endRenderPass time.
+    // Because we are cloning this object to another object, we must finalize the layout if it
+    // is being used by current renderpass as attachment. Otherwise we are copying the incorrect
+    // layout since it is determined at endRenderPass time.
     contextVk->finalizeImageLayout(this, {});
 
     std::unique_ptr<RefCounted<ImageHelper>> prevImage =
         std::make_unique<RefCounted<ImageHelper>>();
 
-    // Move the necessary information for staged update to work, and keep the rest as part of this
-    // object.
+    // Move the necessary information for staged update to work, and keep the rest as part of
+    // this object.
 
     // Usage info
     prevImage->get().Resource::operator=(std::move(*this));
@@ -9432,8 +9466,8 @@ angle::Result ImageHelper::flushStagedClearEmulatedChannelsUpdates(ContextVk *co
             continue;
         }
 
-        // If found, ClearEmulatedChannelsOnly should be flushed before the others and removed from
-        // the update list.
+        // If found, ClearEmulatedChannelsOnly should be flushed before the others and removed
+        // from the update list.
         ASSERT(update->updateSource == UpdateSource::ClearEmulatedChannelsOnly);
         uint32_t updateBaseLayer, updateLayerCount;
         update->getDestSubresource(mLayerCount, &updateBaseLayer, &updateLayerCount);
@@ -9443,9 +9477,10 @@ angle::Result ImageHelper::flushStagedClearEmulatedChannelsUpdates(ContextVk *co
         ANGLE_TRY(clearEmulatedChannels(contextVk, update->data.clear.colorMaskFlags,
                                         update->data.clear.value, updateMipLevelVk, updateBaseLayer,
                                         updateLayerCount));
-        // Do not call onWrite. Even though some channels of the image are cleared, don't consider
-        // the contents defined. Also, since clearing emulated channels is a one-time thing that's
-        // superseded by Clears, |mCurrentSingleClearValue| is irrelevant and can't have a value.
+        // Do not call onWrite. Even though some channels of the image are cleared, don't
+        // consider the contents defined. Also, since clearing emulated channels is a one-time
+        // thing that's superseded by Clears, |mCurrentSingleClearValue| is irrelevant and can't
+        // have a value.
         ASSERT(!mCurrentSingleClearValue.valid());
 
         levelUpdates->erase(update);
@@ -9474,9 +9509,9 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(getActualFormat());
 
     // Start in TransferDst.  Don't yet mark any subresource as having defined contents; that is
-    // done with fine granularity as updates are applied.  This is achieved by specifying a layer
-    // that is outside the tracking range. Under some circumstances, ComputeWrite is also required.
-    // This need not be applied if the only updates are ClearEmulatedChannels.
+    // done with fine granularity as updates are applied.  This is achieved by specifying a
+    // layer that is outside the tracking range. Under some circumstances, ComputeWrite is also
+    // required. This need not be applied if the only updates are ClearEmulatedChannels.
     CommandBufferAccess transferAccess;
     OutsideRenderPassCommandBufferHelper *commandBuffer = nullptr;
     bool transCoding = renderer->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
@@ -9523,9 +9558,9 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
             const LevelIndex updateMipLevelVk = toVkLevel(updateMipLevelGL);
 
             // Additionally, if updates to this level are specifically asked to be skipped, skip
-            // them. This can happen when recreating an image that has been partially incompatibly
-            // redefined, in which case only updates to the levels that haven't been redefined
-            // should be flushed.
+            // them. This can happen when recreating an image that has been partially
+            // incompatibly redefined, in which case only updates to the levels that haven't
+            // been redefined should be flushed.
             if (areUpdateLayersOutsideRange || skipLevelsAllFaces.test(updateMipLevelGL.get()))
             {
                 updatesToKeep.emplace_back(std::move(update));
@@ -9578,16 +9613,18 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                 }
             }
 
-            // When a barrier is necessary when uploading updates to a level, we could instead move
-            // to the next level and continue uploads in parallel.  Once all levels need a barrier,
-            // a single barrier can be issued and we could continue with the rest of the updates
-            // from the first level. In case of multiple layer updates within the same level, a
-            // barrier might be needed if there are multiple updates in the same parts of the image.
+            // When a barrier is necessary when uploading updates to a level, we could instead
+            // move to the next level and continue uploads in parallel.  Once all levels need a
+            // barrier, a single barrier can be issued and we could continue with the rest of
+            // the updates from the first level. In case of multiple layer updates within the
+            // same level, a barrier might be needed if there are multiple updates in the same
+            // parts of the image.
             ImageLayout barrierLayout =
                 transCoding ? ImageLayout::TransferDstAndComputeWrite : ImageLayout::TransferDst;
             if (updateLayerCount >= kMaxParallelLayerWrites)
             {
-                // If there are more subresources than bits we can track, always insert a barrier.
+                // If there are more subresources than bits we can track, always insert a
+                // barrier.
                 recordWriteBarrier(contextVk, aspectFlags, barrierLayout, updateMipLevelGL, 1,
                                    updateBaseLayer, updateLayerCount, commandBuffer);
                 mSubresourcesWrittenSinceBarrier[updateMipLevelGL.get()].set();
@@ -9620,8 +9657,8 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                     // Remember the latest operation is a clear call.
                     mCurrentSingleClearValue = update.data.clear;
 
-                    // Do not call onWrite as it removes mCurrentSingleClearValue, but instead call
-                    // setContentDefined directly.
+                    // Do not call onWrite as it removes mCurrentSingleClearValue, but instead
+                    // call setContentDefined directly.
                     setContentDefined(updateMipLevelVk, 1, updateBaseLayer, updateLayerCount,
                                       update.data.clear.aspectFlags);
                     break;
@@ -9726,8 +9763,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     const gl::TexLevelMask skipLevelsAllFaces = AggregateSkipLevels(skipLevels);
     removeSupersededUpdates(contextVk, skipLevelsAllFaces);
 
-    // If a clear is requested and we know it was previously cleared with the same value, we drop
-    // the clear.
+    // If a clear is requested and we know it was previously cleared with the same value, we
+    // drop the clear.
     if (mCurrentSingleClearValue.valid())
     {
         std::vector<SubresourceUpdate> *levelUpdates =
@@ -9752,16 +9789,16 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
     ASSERT(validateSubresourceUpdateRefCountsConsistent());
 
-    // Process the clear emulated channels from the updates first. They are expected to be at the
-    // beginning of the level updates.
+    // Process the clear emulated channels from the updates first. They are expected to be at
+    // the beginning of the level updates.
     bool otherUpdatesToFlushOut = false;
     clipLevelToUpdateListUpperLimit(&levelGLEnd);
     ANGLE_TRY(flushStagedClearEmulatedChannelsUpdates(contextVk, levelGLStart, levelGLEnd,
                                                       &otherUpdatesToFlushOut));
 
-    // If updates remain after processing ClearEmulatedChannelsOnly updates, we should acquire the
-    // outside command buffer and apply the necessary barriers. Otherwise, this function can return
-    // early, skipping the next loop.
+    // If updates remain after processing ClearEmulatedChannelsOnly updates, we should acquire
+    // the outside command buffer and apply the necessary barriers. Otherwise, this function can
+    // return early, skipping the next loop.
     if (otherUpdatesToFlushOut)
     {
         ANGLE_TRY(flushStagedUpdatesImpl(contextVk, levelGLStart, levelGLEnd, layerStart, layerEnd,
@@ -10000,11 +10037,11 @@ void ImageHelper::pruneSupersededUpdatesForLevel(ContextVk *contextVk,
     }
 
     // Start from the most recent update and define a boundingBox that covers the region to be
-    // updated. Walk through all earlier updates and if its update region is contained within the
-    // boundingBox, mark it as superseded, otherwise reset the boundingBox and continue.
+    // updated. Walk through all earlier updates and if its update region is contained within
+    // the boundingBox, mark it as superseded, otherwise reset the boundingBox and continue.
     //
-    // Color, depth and stencil are the only types supported for now. The boundingBox for color and
-    // depth types is at index 0 and index 1 has the boundingBox for stencil type.
+    // Color, depth and stencil are the only types supported for now. The boundingBox for color
+    // and depth types is at index 0 and index 1 has the boundingBox for stencil type.
     VkDeviceSize supersededUpdateSize  = 0;
     std::array<gl::Box, 2> boundingBox = {gl::Box(gl::kOffsetZero, gl::Extents())};
 
@@ -10101,8 +10138,8 @@ void ImageHelper::removeSupersededUpdates(ContextVk *contextVk,
             continue;
         }
 
-        // ClearEmulatedChannelsOnly updates can only be in the beginning of the list of updates.
-        // They don't entirely clear the image, so they cannot supersede any update.
+        // ClearEmulatedChannelsOnly updates can only be in the beginning of the list of
+        // updates. They don't entirely clear the image, so they cannot supersede any update.
         ASSERT(verifyEmulatedClearsAreBeforeOtherUpdates(*levelUpdates));
 
         pruneSupersededUpdatesForLevel(contextVk, levelGL, PruneReason::MinimizeWorkBeforeFlush);
@@ -10489,7 +10526,8 @@ bool ImageHelper::canCopyWithComputeForReadPixels(const PackPixelsParams &packPi
     ASSERT(mActualFormatID != angle::FormatID::NONE && mIntendedFormatID != angle::FormatID::NONE);
     const angle::Format *writeFormat = packPixelsParams.destFormat;
 
-    // For now, only float formats are supported with 4-byte 4-channel normalized pixels for output.
+    // For now, only float formats are supported with 4-byte 4-channel normalized pixels for
+    // output.
     const bool isFloat =
         !readFormat->isSint() && !readFormat->isUint() && !readFormat->hasDepthOrStencilBits();
     const bool isFourByteOutput   = writeFormat->pixelBytes == 4 && writeFormat->channelCount == 4;
@@ -11014,9 +11052,9 @@ ImageHelper::SubresourceUpdate::SubresourceUpdate(SubresourceUpdate &&other)
 
 ImageHelper::SubresourceUpdate &ImageHelper::SubresourceUpdate::operator=(SubresourceUpdate &&other)
 {
-    // Given that the update is a union of three structs, we can't use std::swap on the fields.  For
-    // example, |this| may be an Image update and |other| may be a Buffer update.
-    // The following could work:
+    // Given that the update is a union of three structs, we can't use std::swap on the fields.
+    // For example, |this| may be an Image update and |other| may be a Buffer update. The
+    // following could work:
     //
     // SubresourceUpdate oldThis;
     // Set oldThis to this->field based on updateSource
@@ -11572,8 +11610,9 @@ angle::Result ImageViewHelper::initSRGBReadViewsImpl(ContextVk *contextVk,
                                                      VkImageUsageFlags imageUsageFlags)
 {
     // When we select the linear/srgb counterpart formats, we must first make sure they're
-    // actually supported by the ICD. If they are not supported by the ICD, then we treat that as if
-    // there is no counterpart format. (In this case, the relevant extension should not be exposed)
+    // actually supported by the ICD. If they are not supported by the ICD, then we treat that
+    // as if there is no counterpart format. (In this case, the relevant extension should not be
+    // exposed)
     angle::FormatID srgbOverrideFormat = ConvertToSRGB(image.getActualFormatID());
     ASSERT((srgbOverrideFormat == angle::FormatID::NONE) ||
            (HasNonRenderableTextureFormatSupport(contextVk->getRenderer(), srgbOverrideFormat)));
@@ -11948,9 +11987,9 @@ angle::Result BufferViewHelper::getView(Context *context,
         return angle::Result::Continue;
     }
 
-    // If the size is not a multiple of pixelBytes, remove the extra bytes.  The last element cannot
-    // be read anyway, and this is a requirement of Vulkan (for size to be a multiple of format
-    // texel block size).
+    // If the size is not a multiple of pixelBytes, remove the extra bytes.  The last element
+    // cannot be read anyway, and this is a requirement of Vulkan (for size to be a multiple of
+    // format texel block size).
     const angle::Format &bufferFormat = format.getActualBufferFormat(false);
     const GLuint pixelBytes           = bufferFormat.pixelBytes;
     VkDeviceSize size                 = mSize - mSize % pixelBytes;
@@ -12068,8 +12107,8 @@ angle::Result ShaderProgramHelper::getOrCreateComputePipeline(
     VkPipelineRobustnessCreateInfoEXT robustness = {};
     robustness.sType = VK_STRUCTURE_TYPE_PIPELINE_ROBUSTNESS_CREATE_INFO_EXT;
 
-    // Enable robustness on the pipeline if needed.  Note that the global robustBufferAccess feature
-    // must be disabled by default.
+    // Enable robustness on the pipeline if needed.  Note that the global robustBufferAccess
+    // feature must be disabled by default.
     if (pipelineFlags[ComputePipelineFlag::Robust])
     {
         ASSERT(context->getFeatures().supportsPipelineRobustness.enabled);
@@ -12098,8 +12137,8 @@ angle::Result ShaderProgramHelper::getOrCreateComputePipeline(
     VkPipelineCreationFeedbackCreateInfo feedbackInfo = {};
     feedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO;
     feedbackInfo.pPipelineCreationFeedback = &feedback;
-    // Note: see comment in GraphicsPipelineDesc::initializePipeline about why per-stage feedback is
-    // specified even though unused.
+    // Note: see comment in GraphicsPipelineDesc::initializePipeline about why per-stage
+    // feedback is specified even though unused.
     feedbackInfo.pipelineStageCreationFeedbackCount = 1;
     feedbackInfo.pPipelineStageCreationFeedbacks    = &perStageFeedback;
 
