@@ -178,6 +178,24 @@
       "parentUuid": "57d59ef0_fcdb690b",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9015b20_6d0384e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-01T17:56:07Z",
+      "side": 0,
+      "message": "Yeah we don\u0027t use inline uniform blocks yet.\n\n\u003e this would require us to retain the bitset that tracks valid binding indices\n\nAn invalid `type` (which is otherwise a `VkDescriptorType`) could indicate that? As you said, every app has their bindings packed, so the bitset is not really going to help us with perf either.",
+      "parentUuid": "b8763061_01559349",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
