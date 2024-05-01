@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f276d31_876ee6fe",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1838,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-01T19:19:06Z",
+      "side": 1,
+      "message": "Just return a bool instead, this function is not doing anything that can fail",
+      "range": {
+        "startLine": 1834,
+        "startChar": 0,
+        "endLine": 1838,
+        "endChar": 35
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8ed8f5f_2a6fd0c3",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 15
@@ -37,6 +60,70 @@
         "endLine": 1841,
         "endChar": 22
       },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "953f8db9_f5d54be2",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-01T19:19:06Z",
+      "side": 1,
+      "message": "Also needs a better name, like `TextureRedefineGenerateMipmapLevels`",
+      "parentUuid": "f8ed8f5f_2a6fd0c3",
+      "range": {
+        "startLine": 1841,
+        "startChar": 5,
+        "endLine": 1841,
+        "endChar": 22
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdc8c46c_4dd6dfca",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-01T19:19:06Z",
+      "side": 1,
+      "message": "Per our style:\n\n```suggestion\n                                   gl::CubeFaceArray\u003cgl::TexLevelMask\u003e *redefinedLevels,\n                                   bool *shouldReleaseImageOut);\n```",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 481,
+        "endChar": 61
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "753c1326_2de83b5f",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-01T19:19:06Z",
+      "side": 1,
+      "message": "Per our style:\n\n```suggestion\n                       gl::CubeFaceArray\u003cgl::TexLevelMask\u003e *redefinedLevels);\n```",
       "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
