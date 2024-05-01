@@ -214,6 +214,24 @@
       "parentUuid": "c9015b20_6d0384e8",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2520758c_c67cea96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-01T20:46:19Z",
+      "side": 0,
+      "message": "Thank you. Could you please put up the CL that implements the implicit binding index? Given your claim that `cout \u003c\u003c \"sparse binding\"` wasn\u0027t produced, I expected implicit binding to halve the hash size. Also not sure why you would use a for-loop, you still have an array you can hash completely (including gaps in it, if any, which you\u0027d initialize to something fixed)",
+      "parentUuid": "9f79894f_d66a4270",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
