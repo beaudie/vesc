@@ -7015,6 +7015,7 @@ void ImageHelper::acquireFromExternal(Context *context,
     {
         changeLayoutAndQueue(context, getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     // It is unknown how the external has modified the image, so assume every subresource has
@@ -7043,6 +7044,7 @@ void ImageHelper::releaseToExternal(Context *context,
     {
         changeLayoutAndQueue(context, getAspectFlags(), desiredLayout, externalQueueFamilyIndex,
                              commandBuffer);
+        ASSERT(!mCurrentEvent.valid());
     }
 
     mIsReleasedToExternal = true;
@@ -7924,9 +7926,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
     mCurrentShaderReadStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
     mCurrentLayout               = ImageLayout::FragmentShaderReadOnly;
 
-    // Since we just used pipelineBarrier to wait, release all events so that we dont wait for them
-    // again.
-    mCurrentEvent.release(contextVk->getDevice());
+    contextVk->trackImageWithOutsideRenderPassEvent(this);
 
     return angle::Result::Continue;
 }
