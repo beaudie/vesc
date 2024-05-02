@@ -176,6 +176,7 @@ void ContextWgpu::onDestroy(const gl::Context *context)
 
 angle::Result ContextWgpu::initialize(const angle::ImageLoadContext &imageLoadContext)
 {
+    mImageLoadContext = imageLoadContext;
     return angle::Result::Continue;
 }
 
@@ -601,10 +602,8 @@ void ContextWgpu::handleError(GLenum errorCode,
 
 angle::Result ContextWgpu::ensureRenderPassStarted(const wgpu::RenderPassDescriptor &desc)
 {
-    if (!mCurrentCommandEncoder)
-    {
-        mCurrentCommandEncoder = getDevice().CreateCommandEncoder(nullptr);
-    }
+
+    mCurrentCommandEncoder = getDevice().CreateCommandEncoder(nullptr);
     if (mCurrentRenderPass)
     {
         // TODO(anglebug.com/8582): this should eventually ignore load and store operations so we
@@ -617,7 +616,6 @@ angle::Result ContextWgpu::ensureRenderPassStarted(const wgpu::RenderPassDescrip
     }
     mCurrentRenderPass     = mCurrentCommandEncoder.BeginRenderPass(&desc);
     mCurrentRenderPassDesc = desc;
-
     return angle::Result::Continue;
 }
 

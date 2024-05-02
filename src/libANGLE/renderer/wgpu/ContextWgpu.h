@@ -261,10 +261,17 @@ class ContextWgpu : public ContextImpl
     DisplayWgpu *getDisplay() { return mDisplay; }
     wgpu::Device &getDevice() { return mDisplay->getDevice(); }
     wgpu::Queue &getQueue() { return mDisplay->getQueue(); }
+    angle::ImageLoadContext &getImageLoadContext() { return mImageLoadContext; }
     angle::Result ensureRenderPassStarted(const wgpu::RenderPassDescriptor &desc);
     angle::Result endRenderPass(webgpu::RenderPassClosureReason closure_reason);
 
     angle::Result flush();
+
+    wgpu::RenderPassDescriptor &getRenderPassDesc() { return mCurrentRenderPassDesc; }
+    std::vector<wgpu::RenderPassColorAttachment> &getCurrentColorAttachments()
+    {
+        return mCurrentColorAttachments;
+    }
 
   private:
     gl::Caps mCaps;
@@ -280,6 +287,7 @@ class ContextWgpu : public ContextImpl
     wgpu::CommandEncoder mCurrentCommandEncoder;
     wgpu::RenderPassEncoder mCurrentRenderPass;
     wgpu::RenderPassDescriptor mCurrentRenderPassDesc;
+    std::vector<wgpu::RenderPassColorAttachment> mCurrentColorAttachments;
 };
 
 }  // namespace rx

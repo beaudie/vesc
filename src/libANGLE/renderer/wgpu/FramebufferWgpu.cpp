@@ -57,7 +57,7 @@ angle::Result FramebufferWgpu::clear(const gl::Context *context, GLbitfield mask
     gl::ColorF colorClearValue = context->getState().getColorClearValue();
 
     std::vector<wgpu::RenderPassColorAttachment> colorAttachments(
-        mState.getEnabledDrawBuffers().count());
+        mState.getEnabledDrawBuffers().count() - 1);
     for (size_t enabledDrawBuffer : mState.getEnabledDrawBuffers())
     {
         wgpu::RenderPassColorAttachment colorAttachment;
@@ -71,12 +71,12 @@ angle::Result FramebufferWgpu::clear(const gl::Context *context, GLbitfield mask
         colorAttachment.clearValue.b = colorClearValue.blue;
         colorAttachment.clearValue.a = colorClearValue.alpha;
         colorAttachments.push_back(colorAttachment);
+        contextWgpu->getCurrentColorAttachments().push_back(colorAttachment);
     }
 
     wgpu::RenderPassDescriptor renderPassDesc;
-    renderPassDesc.colorAttachmentCount = colorAttachments.size();
-    renderPassDesc.colorAttachments     = colorAttachments.data();
-
+    renderPassDesc.colorAttachmentCount = contextWgpu->getCurrentColorAttachments().size();
+    renderPassDesc.colorAttachments     = contextWgpu->getCurrentColorAttachments().data();
     // TODO(anglebug.com/8582): optimize this implementation.
     ANGLE_TRY(contextWgpu->ensureRenderPassStarted(renderPassDesc));
     ANGLE_TRY(contextWgpu->endRenderPass(webgpu::RenderPassClosureReason::NewRenderPass));
@@ -139,38 +139,25 @@ angle::Result FramebufferWgpu::readPixels(const gl::Context *context,
     // Clip read area to framebuffer.
     const gl::Extents fbSize = getState().getReadPixelsAttachment(format)->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
-    gl::Rectangle area;
-    if (!ClipRectangle(origArea, fbRect, &area))
+    gl::Rectangle clippedArea;
+    if (!ClipRectangle(origArea, fbRect, &clippedArea))
     {
         // nothing to read
         return angle::Result::Continue;
     }
 
-    // Compute size of unclipped rows and initial skip
-    const gl::InternalFormat &glFormat = gl::GetInternalFormatInfo(format, type);
-
     ContextWgpu *contextWgpu = GetImplAs<ContextWgpu>(context);
+    GLuint outputSkipBytes   = 0;
+    PackPixelsParams params;
+    const angle::Format &angleFormat = GetFormatFromFormatType(format, type);
+    ANGLE_TRY(webgpu::ImageHelper::getReadPixelsParams(contextWgpu, pack, packBuffer, format, type,
+                                                       origArea, clippedArea, &params,
+                                                       &outputSkipBytes));
 
-    GLuint rowBytes = 0;
-    ANGLE_CHECK_GL_MATH(contextWgpu, glFormat.computeRowPitch(type, origArea.width, pack.alignment,
-                                                              pack.rowLength, &rowBytes));
-
-    GLuint skipBytes = 0;
-    ANGLE_CHECK_GL_MATH(contextWgpu,
-                        glFormat.computeSkipBytes(type, rowBytes, 0, pack, false, &skipBytes));
-    pixels += skipBytes;
-
-    // Skip OOB region up to first in bounds pixel
-    int leftClip = area.x - origArea.x;
-    int topClip  = area.y - origArea.y;
-    pixels += leftClip * glFormat.pixelBytes + topClip * rowBytes;
-
-    // Write the in-bounds readpixels data with non-zero values
-    for (GLint y = area.y; y < area.y + area.height; ++y)
-    {
-        memset(pixels, 42, glFormat.pixelBytes * area.width);
-        pixels += rowBytes;
-    }
+    RenderTargetWgpu *renderTarget = getReadPixelsRenderTarget(format);
+    size_t allocationSize = angleFormat.pixelBytes * params.area.width * params.area.height;
+    ANGLE_TRY(renderTarget->getImage()->readPixels(contextWgpu, allocationSize, params.area, params,
+                                                   angleFormat, pixels));
 
     return angle::Result::Continue;
 }
@@ -250,6 +237,19 @@ angle::Result FramebufferWgpu::getSamplePosition(const gl::Context *context,
                                                  GLfloat *xy) const
 {
     return angle::Result::Continue;
+}
+
+RenderTargetWgpu *FramebufferWgpu::getReadPixelsRenderTarget(GLenum format) const
+{
+    switch (format)
+    {
+        case GL_DEPTH_COMPONENT:
+        case GL_STENCIL_INDEX_OES:
+        case GL_DEPTH_STENCIL_OES:
+            return mRenderTargetCache.getDepthStencil();
+        default:
+            return mRenderTargetCache.getColorRead(mState);
+    }
 }
 
 }  // namespace rx
