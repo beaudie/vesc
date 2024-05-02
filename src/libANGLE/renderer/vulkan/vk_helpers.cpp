@@ -1906,6 +1906,9 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *cont
     ASSERT(mIsCommandBufferEnded);
     mCommandBuffer.executeCommands(&commandsState->primaryCommands);
 
+    // Call VkCmdSetEvent to track the completion of this renderPass.
+    flushSetEventsImpl(context, &primary);
+
     // Restart the command buffer.
     return reset(context, &commandsState->secondaryCommands);
 }
