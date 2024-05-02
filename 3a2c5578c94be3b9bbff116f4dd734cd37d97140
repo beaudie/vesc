@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fecd8d91_63c4cc9c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 8268,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-02T18:57:41Z",
+      "side": 1,
+      "message": "For consistency, could we move this to the `execute` function of the outside RP commands? The RP commands do this in `execute`.",
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb977cac_12e6c069",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-02T18:57:41Z",
+      "side": 1,
+      "message": "```suggestion\n    void trackImagesWithOutsideRenderPassEvent(const std::vector\u003cvk::ImageHelper *\u003e \u0026images)\n```",
+      "range": {
+        "startLine": 605,
+        "startChar": 83,
+        "endLine": 605,
+        "endChar": 84
+      },
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc34f1ff_c764b2c1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-02T18:57:41Z",
+      "side": 1,
+      "message": "Since we automatically fall back to pipeline barriers, should we not do this for the swapchain images and keep the code simpler? Does this help performance?",
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c5bb80d_fcaa8ae0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 10639,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-02T18:57:41Z",
+      "side": 1,
+      "message": "Another place where events seem pointless, we are about to vkQueueWaitIdle",
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dfa8484_7fff2fab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-02T18:57:41Z",
+      "side": 1,
+      "message": "```suggestion\n    RefCountedEventGarbageObjects *getRefCountedEventGarbage()\n```",
+      "range": {
+        "startLine": 1342,
+        "startChar": 35,
+        "endLine": 1342,
+        "endChar": 62
+      },
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

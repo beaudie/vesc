@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b006027_145efa7b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-02T18:57:41Z",
+      "side": 1,
+      "message": "Acknowledged, discussed offline",
+      "parentUuid": "069d5d90_15723682",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8d31bf0_ba72a6b3",
@@ -243,6 +261,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7869772c_852167df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-02T18:57:41Z",
+      "side": 1,
+      "message": "Acknowledged, discussed offline",
+      "parentUuid": "f6b80c57_aaf7cc06",
+      "range": {
+        "startLine": 58,
+        "startChar": 37,
+        "endLine": 58,
+        "endChar": 50
+      },
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "320909a1_75539fb4",
@@ -309,6 +351,24 @@
       "side": 1,
       "message": "The problem is garbage clean up in separate thread and will decrement the refcount.",
       "parentUuid": "9f85379e_e0946d5d",
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5befc638_ff346a8b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-02T18:57:41Z",
+      "side": 1,
+      "message": "Acknowledged, a comment would be nice so we remember to revert it once recycler is in place.",
+      "parentUuid": "366163f2_1e53497b",
       "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
