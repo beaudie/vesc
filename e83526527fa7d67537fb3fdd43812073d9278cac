@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52e69715_cab4386f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-02T15:53:30Z",
+      "side": 1,
+      "message": "I\u0027m a bit concerned with anglebug.com/8682, since this looks like a problem with this Intel driver, and I\u0027m not sure if maybe the failures happen in just random tests.\n\nBut let\u0027s try this and see, maybe I worry too much.",
+      "revId": "e83526527fa7d67537fb3fdd43812073d9278cac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
