@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "651bb649_55da2a3a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T21:36:52Z",
+      "side": 1,
+      "message": "Good point. Fixed using angle::FixedVector.",
+      "parentUuid": "6e2ffc0d_c669b12f",
+      "range": {
+        "startLine": 1390,
+        "startChar": 12,
+        "endLine": 1390,
+        "endChar": 42
+      },
+      "revId": "d8a65cf3326f1420f532365425d12b4eee85f7a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58d6806c_ad65dbd4",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-02T20:35:48Z",
       "side": 1,
       "message": "Same as above.",
+      "range": {
+        "startLine": 2009,
+        "startChar": 4,
+        "endLine": 2009,
+        "endChar": 34
+      },
+      "revId": "d8a65cf3326f1420f532365425d12b4eee85f7a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c70db6_6c6b4bc2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T21:36:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58d6806c_ad65dbd4",
       "range": {
         "startLine": 2009,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e63d6bfc_a24f634a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1859,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T21:36:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d20ec944_55d237c1",
+      "range": {
+        "startLine": 1854,
+        "startChar": 4,
+        "endLine": 1859,
+        "endChar": 5
+      },
+      "revId": "d8a65cf3326f1420f532365425d12b4eee85f7a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff690df5_54e96cbf",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-05-02T20:35:48Z",
       "side": 1,
       "message": "This also looks bounded in size and can use angle::FastVector",
+      "range": {
+        "startLine": 2705,
+        "startChar": 4,
+        "endLine": 2705,
+        "endChar": 30
+      },
+      "revId": "d8a65cf3326f1420f532365425d12b4eee85f7a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bcc8401_48b0c362",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T21:36:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff690df5_54e96cbf",
       "range": {
         "startLine": 2705,
         "startChar": 4,
