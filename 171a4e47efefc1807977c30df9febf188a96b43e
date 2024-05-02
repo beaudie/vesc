@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fd7c061_feeac74f",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1838,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-02T16:31:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f276d31_876ee6fe",
+      "range": {
+        "startLine": 1834,
+        "startChar": 0,
+        "endLine": 1838,
+        "endChar": 35
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8ed8f5f_2a6fd0c3",
@@ -88,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e482810d_aa1f0d20",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-02T16:31:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "953f8db9_f5d54be2",
+      "range": {
+        "startLine": 1841,
+        "startChar": 5,
+        "endLine": 1841,
+        "endChar": 22
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdc8c46c_4dd6dfca",
@@ -101,6 +149,30 @@
       "writtenOn": "2024-05-01T19:19:06Z",
       "side": 1,
       "message": "Per our style:\n\n```suggestion\n                                   gl::CubeFaceArray\u003cgl::TexLevelMask\u003e *redefinedLevels,\n                                   bool *shouldReleaseImageOut);\n```",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 481,
+        "endChar": 61
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a388aad_86ee0c33",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-02T16:31:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdc8c46c_4dd6dfca",
       "range": {
         "startLine": 480,
         "startChar": 0,
@@ -128,6 +200,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a20cd2bc_8cf6cf1e",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-02T16:31:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "753c1326_2de83b5f",
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69aa2df6_4a3b9506",
@@ -151,6 +241,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18897b78_b0c113d1",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-02T16:31:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69aa2df6_4a3b9506",
+      "range": {
+        "startLine": 282,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 55
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "918781a7_2bf64f33",
@@ -164,6 +278,30 @@
       "writtenOn": "2024-05-01T19:00:32Z",
       "side": 1,
       "message": "Unused",
+      "range": {
+        "startLine": 383,
+        "startChar": 1,
+        "endLine": 384,
+        "endChar": 55
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe24abe5_80db2d73",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-02T16:31:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "918781a7_2bf64f33",
       "range": {
         "startLine": 383,
         "startChar": 1,
