@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d1650f0_e7acb05e",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-02T18:05:13Z",
+      "side": 1,
+      "message": "omg 🤦‍♀️",
+      "parentUuid": "7e83fdd5_328f941c",
+      "range": {
+        "startLine": 1808,
+        "startChar": 0,
+        "endLine": 1812,
+        "endChar": 20
+      },
+      "revId": "faaf8701229fcd6cd003f0f4a76c6c7534770ea2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43aac260_0e6ad4e0",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-02T17:25:05Z",
       "side": 1,
       "message": "nit: also `if (x) return true; else return false;` is also just `return x;`. For clarity, you could keep the name:\n\n```suggestion\n    const bool shouldReleaseImage \u003d !isCompatibleRedefinition \u0026\u0026 isUpdateToSingleLevelImage \u0026\u0026 !isCubeMap;\n    return shouldReleaseImage;\n```",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1840,
+        "endChar": 17
+      },
+      "revId": "faaf8701229fcd6cd003f0f4a76c6c7534770ea2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd962a1b_c6fd0c48",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1840,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-02T18:05:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43aac260_0e6ad4e0",
       "range": {
         "startLine": 1836,
         "startChar": 0,
