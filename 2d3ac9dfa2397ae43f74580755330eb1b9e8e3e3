@@ -221,6 +221,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6b80c57_aaf7cc06",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T16:39:41Z",
+      "side": 1,
+      "message": "Comment added in vk_ref_counted_event.h in class RefCountedEventGarbageObjects",
+      "parentUuid": "8c2a7e41_45dab3d4",
+      "range": {
+        "startLine": 58,
+        "startChar": 37,
+        "endLine": 58,
+        "endChar": 50
+      },
+      "revId": "2d3ac9dfa2397ae43f74580755330eb1b9e8e3e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "320909a1_75539fb4",
         "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
         "patchSetId": 13
