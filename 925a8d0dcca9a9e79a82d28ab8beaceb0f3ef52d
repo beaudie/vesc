@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fabb6015_f1f36498",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 100
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-02T20:38:47Z",
+      "side": 1,
+      "message": "high-level LGTM",
+      "revId": "925a8d0dcca9a9e79a82d28ab8beaceb0f3ef52d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
