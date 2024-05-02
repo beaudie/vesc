@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a213a05_2647961c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 8268,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T20:10:02Z",
+      "side": 1,
+      "message": "I think I did exactly what you said before, but ran into problems with vulkan secondary command buffer where the endCommandBuffer get called early. I need to try this again on debug CL to reproduce exact the problem again.",
+      "parentUuid": "fecd8d91_63c4cc9c",
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb977cac_12e6c069",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 22
