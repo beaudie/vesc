@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bebe27d4_ffdbfa09",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T19:59:01Z",
+      "side": 1,
+      "message": "Good catch!",
+      "parentUuid": "bb977cac_12e6c069",
+      "range": {
+        "startLine": 605,
+        "startChar": 83,
+        "endLine": 605,
+        "endChar": 84
+      },
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc34f1ff_c764b2c1",
@@ -54,6 +78,24 @@
       "writtenOn": "2024-05-02T18:57:41Z",
       "side": 1,
       "message": "Since we automatically fall back to pipeline barriers, should we not do this for the swapchain images and keep the code simpler? Does this help performance?",
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01d18541_3238a22a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T19:59:01Z",
+      "side": 1,
+      "message": "Yes removed.",
+      "parentUuid": "fc34f1ff_c764b2c1",
       "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e4ce46d_fe820aad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 10639,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T19:59:01Z",
+      "side": 1,
+      "message": "Agree. Removed.",
+      "parentUuid": "4c5bb80d_fcaa8ae0",
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8dfa8484_7fff2fab",
@@ -88,6 +148,30 @@
       "writtenOn": "2024-05-02T18:57:41Z",
       "side": 1,
       "message": "```suggestion\n    RefCountedEventGarbageObjects *getRefCountedEventGarbage()\n```",
+      "range": {
+        "startLine": 1342,
+        "startChar": 35,
+        "endLine": 1342,
+        "endChar": 62
+      },
+      "revId": "3a2c5578c94be3b9bbff116f4dd734cd37d97140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac51d806_76ab3582",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-02T19:59:01Z",
+      "side": 1,
+      "message": "This actually is not being used. Removed.",
+      "parentUuid": "8dfa8484_7fff2fab",
       "range": {
         "startLine": 1342,
         "startChar": 35,
