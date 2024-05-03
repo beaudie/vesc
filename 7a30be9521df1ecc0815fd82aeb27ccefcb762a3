@@ -16,6 +16,41 @@
       "message": "Is this a fix or an optimization? If it\u0027s a fix, could you please make sure a regression test is added?",
       "revId": "7a30be9521df1ecc0815fd82aeb27ccefcb762a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "896c8a77_fd8caf61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-03T19:17:02Z",
+      "side": 1,
+      "message": "thanks, landing this",
+      "revId": "7a30be9521df1ecc0815fd82aeb27ccefcb762a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19b69d86_a779d831",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-03T19:17:02Z",
+      "side": 1,
+      "message": "its a fix for our platform, tests are already present -\n```\nVulkanPerformanceCounterTest.bufferDataWithSizeFollowedByZeroAndThenSizeAgainShouldReuseStorage/*\nVulkanPerformanceCounterTest.BufferSubDataShouldNotTriggerSyncState_*/*\n```\nthose tests failed on our platform due to additional `vertexArraySyncStateCalls`",
+      "parentUuid": "7dd7537a_80f691c9",
+      "revId": "7a30be9521df1ecc0815fd82aeb27ccefcb762a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
