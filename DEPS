@@ -948,6 +948,11 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
+  'third_party/lunarg-vulkantools/src': {
+    'url': '{chromium_git}/external/github.com/LunarG/VulkanTools@27ebab7411bf59f9e9e42a5f6946a03eb9e425b8',
+    'condition': 'not build_with_chromium',
+  },
+
   'third_party/spirv-cross/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/SPIRV-Cross@b8fcf307f1f347089e3c46eb4451d27f32ebc8d3',
     'condition': 'not build_with_chromium',

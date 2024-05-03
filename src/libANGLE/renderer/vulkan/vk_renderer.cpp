@@ -1812,6 +1812,9 @@ angle::Result Renderer::initialize(vk::Context *context,
     }
 
     VulkanLayerVector enabledInstanceLayerNames;
+#if defined(ANGLE_ENABLE_LUNARG_APIDUMP_LAYER)
+    enabledInstanceLayerNames.push_back("VK_LAYER_LUNARG_api_dump");
+#endif
     if (mEnableValidationLayers)
     {
         const bool layersRequested = useValidationLayers == UseValidationLayers::Yes;
