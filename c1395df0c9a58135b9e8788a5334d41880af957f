@@ -130,6 +130,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5323b2c3_7358709e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 2446,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T20:28:34Z",
+      "side": 1,
+      "message": "Removed in https://chromium-review.googlesource.com/c/angle/angle/+/5503645",
+      "parentUuid": "e5de220b_16e721f8",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ff98dca_7072bc69",
