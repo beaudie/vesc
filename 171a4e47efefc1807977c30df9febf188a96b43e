@@ -359,6 +359,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efbf1ae5_6b091f5b",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T18:19:53Z",
+      "side": 1,
+      "message": "Yeah a bunch of the params here look like they should have just been members of ImageHelper.",
+      "parentUuid": "6f7048bb_1a123c6d",
+      "range": {
+        "startLine": 57,
+        "startChar": 37,
+        "endLine": 57,
+        "endChar": 60
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d32e721_419fc9b8",
