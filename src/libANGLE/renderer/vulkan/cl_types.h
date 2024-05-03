@@ -18,6 +18,18 @@ class CLDeviceVk;
 class CLPlatformVk;
 class CLProgramVk;
 
+// Specialization constant IDs
+enum SpecConstantID
+{
+    WorkgroupSizeX,
+    WorkgroupSizeY,
+    WorkgroupSizeZ,
+    WorkDimension,
+    GlobalOffsetX,
+    GlobalOffsetY,
+    GlobalOffsetZ
+};
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_CL_TYPES_H_

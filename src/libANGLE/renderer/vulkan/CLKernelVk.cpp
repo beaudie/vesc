@@ -144,21 +144,6 @@ angle::Result CLKernelVk::getOrCreateComputePipeline(vk::PipelineCacheAccess *pi
             // Local work size (LWS) was valid, use that as WGS
             workgroupSize = ndrange.localWorkSize;
         }
-
-        // If at least one of the kernels does not use the reqd_work_group_size attribute, the
-        // Vulkan SPIR-V produced by the compiler will contain specialization constants
-        const std::array<uint32_t, 3> &specConstantWorkgroupSizeIDs =
-            devProgramData->reflectionData.specConstantWorkgroupSizeIDs;
-        ASSERT(ndrange.workDimensions <= 3);
-        for (cl_uint i = 0; i < ndrange.workDimensions; ++i)
-        {
-            mapEntries.push_back(
-                VkSpecializationMapEntry{.constantID = specConstantWorkgroupSizeIDs.at(i),
-                                         .offset     = constantDataOffset,
-                                         .size       = sizeof(uint32_t)});
-            constantDataOffset += sizeof(uint32_t);
-            specConstantData.push_back(workgroupSize[i]);
-        }
     }
 
     // Calculate the workgroup count
@@ -171,6 +156,41 @@ angle::Result CLKernelVk::getOrCreateComputePipeline(vk::PipelineCacheAccess *pi
     (*workgroupCountOut)[1] = static_cast<uint32_t>((ndrange.globalWorkSize[1] / workgroupSize[1]));
     (*workgroupCountOut)[2] = static_cast<uint32_t>((ndrange.globalWorkSize[2] / workgroupSize[2]));
 
+    // Populate program specialization constants (if any)
+    for (const auto &specConstant : devProgramData->reflectionData.specConstants)
+    {
+        switch (specConstant.first)
+        {
+            case SpecConstantID::WorkDimension:
+                specConstantData.push_back(ndrange.workDimensions);
+                break;
+            case SpecConstantID::WorkgroupSizeX:
+                specConstantData.push_back(ndrange.localWorkSize[0]);
+                break;
+            case SpecConstantID::WorkgroupSizeY:
+                specConstantData.push_back(ndrange.localWorkSize[1]);
+                break;
+            case SpecConstantID::WorkgroupSizeZ:
+                specConstantData.push_back(ndrange.localWorkSize[2]);
+                break;
+            case SpecConstantID::GlobalOffsetX:
+                specConstantData.push_back(ndrange.globalWorkOffset[0]);
+                break;
+            case SpecConstantID::GlobalOffsetY:
+                specConstantData.push_back(ndrange.globalWorkOffset[1]);
+                break;
+            case SpecConstantID::GlobalOffsetZ:
+                specConstantData.push_back(ndrange.globalWorkOffset[2]);
+                break;
+            default:
+                UNIMPLEMENTED();
+                continue;
+        }
+        mapEntries.push_back(VkSpecializationMapEntry{.constantID = specConstant.second,
+                                                      .offset     = constantDataOffset,
+                                                      .size       = sizeof(uint32_t)});
+        constantDataOffset += sizeof(uint32_t);
+    }
     VkSpecializationInfo computeSpecializationInfo{
         .mapEntryCount = static_cast<uint32_t>(mapEntries.size()),
         .pMapEntries   = mapEntries.data(),
