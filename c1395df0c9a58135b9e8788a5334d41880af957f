@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f18d2e4d_d0b03854",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T18:39:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af3745b3_ec2286c2",
+      "range": {
+        "startLine": 1102,
+        "startChar": 0,
+        "endLine": 1103,
+        "endChar": 100
+      },
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08601bd7_47bcbfde",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-03T18:06:01Z",
       "side": 1,
       "message": "Same dedup:\n\n```suggestion\n    const ImageMemoryBarrierData \u0026barrierData \u003d kImageMemoryBarrierData[event.getImageLayout()];\n    *accessMask                               \u003d barrierData.dstAccessMask;\n    return GetImageLayoutDstStageMask(context, barrierData);\n```",
+      "range": {
+        "startLine": 1109,
+        "startChar": 0,
+        "endLine": 1111,
+        "endChar": 100
+      },
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce658d65_7acb68be",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T18:39:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08601bd7_47bcbfde",
       "range": {
         "startLine": 1109,
         "startChar": 0,
@@ -66,6 +114,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5de220b_16e721f8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 2446,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T18:39:56Z",
+      "side": 1,
+      "message": "Let me follow up with a debug CL first. I am not sure if this is still needed.",
+      "parentUuid": "10b01111_1dbf15c7",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ff98dca_7072bc69",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 102
@@ -77,6 +143,24 @@
       "writtenOn": "2024-05-03T18:06:01Z",
       "side": 1,
       "message": "Is this necessary to pass? I see most places pass event, and looks like the few places that pass `Pipeline` already would have fallen back to `Pipeline` (I think).\n\nI mean, _logically_ speaking, shouldn\u0027t this function always try `Event` if it can, and fallback to `Pipeline` if it can\u0027t? When would an event be available and usable but the caller would specifically ask for a pipeline barrier?",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "395d9668_9995aed3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 7104,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T18:39:56Z",
+      "side": 1,
+      "message": "Logically, you are correct. This is more of a safety thing so that caller has a way to force pipelineBarrier. Let me also follow up with debug CL to ensure when we request pipelineBarrier event actually is invalid.",
+      "parentUuid": "8ff98dca_7072bc69",
       "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -100,6 +184,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "363b8ff9_67b5d7ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 7145,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T18:39:56Z",
+      "side": 1,
+      "message": "That is handled in the next CL where the VVL is suppressed with a bug. VkEvent will be ignored in that case, so there wont be deadlock. I am not sure if two different queue case is working properly overall. I think we need insert semaphore between two queues to ensure two queues are synchronized properly, and I think pipelineBarrier is also broken in same way as well just VVL is not checking it.",
+      "parentUuid": "def1a721_25f99718",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "18c7daf5_7cceefff",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 102
@@ -111,6 +213,24 @@
       "writtenOn": "2024-05-03T18:06:01Z",
       "side": 1,
       "message": "Maybe set `barrierType \u003d BarrierType::Pipeline` here to clarify there\u0027s a fallback happening here? I see `barrierType` is not used after this, so it won\u0027t do anything, but it would be clearer",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "858086df_836bfdfe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 7415,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T18:39:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18c7daf5_7cceefff",
       "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -138,6 +258,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b52ddd8_97e0e210",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 7519,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T18:39:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "503c87ae_55e6f005",
+      "range": {
+        "startLine": 7491,
+        "startChar": 0,
+        "endLine": 7519,
+        "endChar": 13
+      },
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5afa1912_c942c2ab",
@@ -151,6 +295,24 @@
       "writtenOn": "2024-05-03T18:06:01Z",
       "side": 1,
       "message": "```suggestion\n        // dstStageMask. Otherwise we will end up with two waitEvent calls that wait for the same\n```",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0faec48_acba86d2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T18:39:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5afa1912_c942c2ab",
       "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
