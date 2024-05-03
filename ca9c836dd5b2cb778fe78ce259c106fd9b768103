@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65086e88_e5122f38",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-03T21:14:19Z",
+      "side": 1,
+      "message": "could you link https://gcc.gnu.org/wiki/Visibility here?",
+      "range": {
+        "startLine": 297,
+        "startChar": 40,
+        "endLine": 297,
+        "endChar": 50
+      },
+      "revId": "ca9c836dd5b2cb778fe78ce259c106fd9b768103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
