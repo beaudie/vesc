@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a2f35a0_6566b79c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-03T16:48:12Z",
+      "side": 1,
+      "message": "Roman, let me know if this CL gives you anxiety or if you\u0027re okay with expanding its scope.",
+      "revId": "11050e6691b828a8f12ec3d26b6989ff87c40c47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
