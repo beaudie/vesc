@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "13fea923_cf66e609",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-03T21:55:08Z",
+      "side": 1,
+      "message": "That CL doesn\u0027t require this CL to be submitted. And the bug mentioned in this CL is not the root cause of b/337214693.\n\nHowever, that CL increases the chance of blit \u0026 render encoders coexisting hence this bug would become more prominent. I think it could cause incorrect fence signal \u0026 wait in chrome surfacing even more. Hence I would prefer this CL and that CL being submitted together.",
+      "parentUuid": "55fc0223_b54afc40",
+      "revId": "5cc395e2255a665ea4c38dde6026b8f00441f28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3cd08853_cfbee1c1",
