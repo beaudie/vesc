@@ -16,6 +16,29 @@
       "message": "Roman, let me know if this CL gives you anxiety or if you\u0027re okay with expanding its scope.",
       "revId": "11050e6691b828a8f12ec3d26b6989ff87c40c47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "493b4e47_769254ae",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-03T17:23:13Z",
+      "side": 1,
+      "message": "Could you remove unused format args? Looks like only `RUN_TESTS_TEMPLATE` needs `gn_dir` and then it got copy-pasted everywhere :)",
+      "range": {
+        "startLine": 193,
+        "startChar": 51,
+        "endLine": 193,
+        "endChar": 73
+      },
+      "revId": "11050e6691b828a8f12ec3d26b6989ff87c40c47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
