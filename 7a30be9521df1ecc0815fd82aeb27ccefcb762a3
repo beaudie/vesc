@@ -69,6 +69,24 @@
       "parentUuid": "19b69d86_a779d831",
       "revId": "7a30be9521df1ecc0815fd82aeb27ccefcb762a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a94a0c6_5a086101",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-03T19:49:43Z",
+      "side": 1,
+      "message": "\u003e could you please instantiate that suite with .enable(Feature::PadBuffersToMaxVertexAttribStride)\n\ndone -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5512875\n\n\u003e check that indeed the tests would fail with that variation before this fix\n\non our platform `padBuffersToMaxVertexAttribStride` is `true` and this was the result of the test before the fix landed -\n```\n[ RUN      ] VulkanPerformanceCounterTest.BufferSubDataShouldNotTriggerSyncState_SubData/ES3_Vulkan\n../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:5503: Failure\nExpected equality of these values:\n  getPerfCounters().vertexArraySyncStateCalls\n    Which is: 2\n  1u\n    Which is: 1\n```",
+      "parentUuid": "6fd55f15_4292fcc9",
+      "revId": "7a30be9521df1ecc0815fd82aeb27ccefcb762a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
