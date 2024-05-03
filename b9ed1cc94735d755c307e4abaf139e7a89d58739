@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55310fb0_ab710c53",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-03T20:39:06Z",
+      "side": 1,
+      "message": "typo: tracking",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "151383e3_ab7644af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-03T20:39:06Z",
+      "side": 1,
+      "message": "I\u0027m having a hard time reasoning about the correctness of this change. Will the command encoders always be used with stack discipline? I\u0027m thinking about a scenario where the previous render encoder is ended before the blit or compute encoder is.\n\nWould it be more obviously correct if the active encoder were split up into two fields - an active render encoder, and an active blit or compute encoder?",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "197d69c2_544a4e2f",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-03T20:39:06Z",
+      "side": 1,
+      "message": "defer -\u003e deferred",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "753219e8_34359aaf",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-03T20:39:06Z",
+      "side": 1,
+      "message": "If the same command encoder is re-pushed, are the pending debug signs still supposed to be added? They were previously.",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecfdc9bd_cdfc1c5c",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-03T20:39:06Z",
+      "side": 1,
+      "message": "I see that the if-test of whether \"this\" was equal to the currently active command encoder was hoisted up here. What is the likelihood that command encoders will be left around in mCmdBuffer\u0027s vector because they were reset in the wrong order?",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
