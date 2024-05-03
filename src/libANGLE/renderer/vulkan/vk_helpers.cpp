@@ -7105,6 +7105,8 @@ void ImageHelper::barrierImpl(Context *context,
     // mCurrentEvent must be invalid if useVkEventForImageBarrieris disabled.
     ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled ||
            !mCurrentEvent.valid());
+    // We should not have a valid mCurrentEvent if we requested for pipelineBarrier .
+    ASSERT(barrierType != BarrierType::Pipeline || !mCurrentEvent.valid());
 
     // Release the ANI semaphore to caller to add to the command submission.
     *acquireNextImageSemaphoreOut = mAcquireNextImageSemaphore.release();
