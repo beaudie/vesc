@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea593acf_98b4d8f0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-03T22:20:21Z",
+      "side": 1,
+      "message": "Got it, thanks. Let\u0027s add comments to these bugs pointing at each other to make the association clearer. It\u0027s too bad ANGLE isn\u0027t on Buganizer yet because we can\u0027t make Chromium bugs dependent on ANGLE ones right now.\n\nCan you think of a way to write a test for this change?",
+      "parentUuid": "13fea923_cf66e609",
+      "revId": "5cc395e2255a665ea4c38dde6026b8f00441f28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3cd08853_cfbee1c1",
