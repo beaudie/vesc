@@ -44,7 +44,8 @@ class CLProgramVk : public CLProgramImpl
         angle::HashMap<std::string, std::string> kernelAttributes;
         angle::HashMap<std::string, std::array<uint32_t, 3>> kernelCompileWorkgroupSize;
         angle::HashMap<uint32_t, VkPushConstantRange> pushConstants;
-        std::array<uint32_t, 3> specConstantWorkgroupSizeIDs{0, 0, 0};
+        angle::PackedEnumMap<SpecConstantID, uint32_t> specConstants;
+        angle::PackedEnumBitSet<SpecConstantID, uint32_t> specConstantsUsed;
         CLKernelArgsMap kernelArgsMap;
     };
 
