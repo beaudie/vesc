@@ -564,6 +564,16 @@ bool CommandQueue::resourceHasPendingWorks(const Resource *resource) const
     return mCommittedBufferSerial.load() < resource->getCommandBufferQueueSerial();
 }
 
+bool CommandQueue::resourceHasPendingRenderWorks(const Resource *resource) const
+{
+    if (!resource)
+    {
+        return false;
+    }
+
+    return mCommittedBufferSerial.load() < resource->getLastReadingRenderEncoderSerial();
+}
+
 bool CommandQueue::isSerialCompleted(uint64_t serial) const
 {
     return mCompletedBufferSerial.load() >= serial;
@@ -864,7 +874,7 @@ void CommandBuffer::clearResourceListAndSize()
     mWorkingResourceSize = 0;
 }
 
-void CommandBuffer::setWriteDependency(const ResourceRef &resource)
+void CommandBuffer::setWriteDependency(const ResourceRef &resource, bool isRenderCommand)
 {
     if (!resource)
     {
@@ -878,17 +888,17 @@ void CommandBuffer::setWriteDependency(const ResourceRef &resource)
         return;
     }
 
-    resource->setUsedByCommandBufferWithQueueSerial(mQueueSerial, true);
+    resource->setUsedByCommandBufferWithQueueSerial(mQueueSerial, true, isRenderCommand);
     setResourceUsedByCommandBuffer(resource);
 }
 
-void CommandBuffer::setReadDependency(const ResourceRef &resource)
+void CommandBuffer::setReadDependency(const ResourceRef &resource, bool isRenderCommand)
 {
-    setReadDependency(resource.get());
+    setReadDependency(resource.get(), isRenderCommand);
     setResourceUsedByCommandBuffer(resource);
 }
 
-void CommandBuffer::setReadDependency(Resource *resource)
+void CommandBuffer::setReadDependency(Resource *resource, bool isRenderCommand)
 {
     if (!resource)
     {
@@ -902,7 +912,7 @@ void CommandBuffer::setReadDependency(Resource *resource)
         return;
     }
 
-    resource->setUsedByCommandBufferWithQueueSerial(mQueueSerial, false);
+    resource->setUsedByCommandBufferWithQueueSerial(mQueueSerial, false, isRenderCommand);
 }
 
 bool CommandBuffer::needsFlushForDrawCallLimits() const
@@ -1170,13 +1180,13 @@ void CommandEncoder::set(id<MTLCommandEncoder> metalCmdEncoder)
 
 CommandEncoder &CommandEncoder::markResourceBeingWrittenByGPU(const BufferRef &buffer)
 {
-    cmdBuffer().setWriteDependency(buffer);
+    cmdBuffer().setWriteDependency(buffer, isRenderEncoder());
     return *this;
 }
 
 CommandEncoder &CommandEncoder::markResourceBeingWrittenByGPU(const TextureRef &texture)
 {
-    cmdBuffer().setWriteDependency(texture);
+    cmdBuffer().setWriteDependency(texture, isRenderEncoder());
     return *this;
 }
 
@@ -1452,7 +1462,7 @@ inline void RenderCommandEncoder::initAttachmentWriteDependencyAndScissorRect(
     TextureRef texture = attachment.texture;
     if (texture)
     {
-        cmdBuffer().setWriteDependency(texture);
+        cmdBuffer().setWriteDependency(texture, /*isRenderCommand=*/true);
 
         const MipmapNativeLevel &mipLevel = attachment.level;
 
@@ -1467,7 +1477,7 @@ inline void RenderCommandEncoder::initWriteDependency(const TextureRef &texture)
 {
     if (texture)
     {
-        cmdBuffer().setWriteDependency(texture);
+        cmdBuffer().setWriteDependency(texture, /*isRenderCommand=*/true);
     }
 }
 
@@ -1794,7 +1804,7 @@ RenderCommandEncoder &RenderCommandEncoder::setBuffer(gl::ShaderType shaderType,
         return *this;
     }
 
-    cmdBuffer().setReadDependency(buffer);
+    cmdBuffer().setReadDependency(buffer, /*isRenderCommand=*/true);
 
     id<MTLBuffer> mtlBuffer = (buffer ? buffer->get() : nil);
 
@@ -1811,8 +1821,7 @@ RenderCommandEncoder &RenderCommandEncoder::setBufferForWrite(gl::ShaderType sha
         return *this;
     }
 
-    buffer->setLastWritingRenderEncoderSerial(mSerial);
-    cmdBuffer().setWriteDependency(buffer);
+    cmdBuffer().setWriteDependency(buffer, /*isRenderCommand=*/true);
 
     id<MTLBuffer> mtlBuffer = (buffer ? buffer->get() : nil);
 
@@ -1918,7 +1927,7 @@ RenderCommandEncoder &RenderCommandEncoder::setTexture(gl::ShaderType shaderType
         return *this;
     }
 
-    cmdBuffer().setReadDependency(texture);
+    cmdBuffer().setReadDependency(texture, /*isRenderCommand=*/true);
 
     id<MTLTexture> mtlTexture = (texture ? texture->get() : nil);
 
@@ -1945,7 +1954,7 @@ RenderCommandEncoder &RenderCommandEncoder::setRWTexture(gl::ShaderType shaderTy
         return *this;
     }
 
-    cmdBuffer().setWriteDependency(texture);
+    cmdBuffer().setWriteDependency(texture, /*isRenderCommand=*/true);
     return setTexture(shaderType, texture, index);
 }
 
@@ -2016,7 +2025,7 @@ RenderCommandEncoder &RenderCommandEncoder::drawIndexed(MTLPrimitiveType primiti
     }
 
     mHasDrawCalls = true;
-    cmdBuffer().setReadDependency(indexBuffer);
+    cmdBuffer().setReadDependency(indexBuffer, /*isRenderCommand=*/true);
 
     mCommands.push(CmdType::DrawIndexed)
         .push(primitiveType)
@@ -2044,7 +2053,7 @@ RenderCommandEncoder &RenderCommandEncoder::drawIndexedInstanced(MTLPrimitiveTyp
     }
 
     mHasDrawCalls = true;
-    cmdBuffer().setReadDependency(indexBuffer);
+    cmdBuffer().setReadDependency(indexBuffer, /*isRenderCommand=*/true);
 
     mCommands.push(CmdType::DrawIndexedInstanced)
         .push(primitiveType)
@@ -2076,7 +2085,7 @@ RenderCommandEncoder &RenderCommandEncoder::drawIndexedInstancedBaseVertexBaseIn
     }
 
     mHasDrawCalls = true;
-    cmdBuffer().setReadDependency(indexBuffer);
+    cmdBuffer().setReadDependency(indexBuffer, /*isRenderCommand=*/true);
 
     mCommands.push(CmdType::DrawIndexedInstancedBaseVertexBaseInstance)
         .push(primitiveType)
@@ -2115,7 +2124,7 @@ RenderCommandEncoder &RenderCommandEncoder::useResource(const BufferRef &resourc
         return *this;
     }
 
-    cmdBuffer().setReadDependency(resource);
+    cmdBuffer().setReadDependency(resource, /*isRenderCommand=*/true);
 
     mCommands.push(CmdType::UseResource)
         .push([resource->get() ANGLE_MTL_RETAIN])
@@ -2142,7 +2151,7 @@ RenderCommandEncoder &RenderCommandEncoder::memoryBarrierWithResource(const Buff
         return *this;
     }
 
-    cmdBuffer().setWriteDependency(resource);
+    cmdBuffer().setWriteDependency(resource, /*isRenderCommand=*/true);
 
     mCommands.push(CmdType::MemoryBarrierWithResource)
         .push([resource->get() ANGLE_MTL_RETAIN])
@@ -2311,8 +2320,8 @@ BlitCommandEncoder &BlitCommandEncoder::copyBuffer(const BufferRef &src,
         return *this;
     }
 
-    cmdBuffer().setReadDependency(src);
-    cmdBuffer().setWriteDependency(dst);
+    cmdBuffer().setReadDependency(src, /*isRenderCommand=*/false);
+    cmdBuffer().setWriteDependency(dst, /*isRenderCommand=*/false);
 
     [get() copyFromBuffer:src->get()
              sourceOffset:srcOffset
@@ -2339,8 +2348,8 @@ BlitCommandEncoder &BlitCommandEncoder::copyBufferToTexture(const BufferRef &src
         return *this;
     }
 
-    cmdBuffer().setReadDependency(src);
-    cmdBuffer().setWriteDependency(dst);
+    cmdBuffer().setReadDependency(src, /*isRenderCommand=*/false);
+    cmdBuffer().setWriteDependency(dst, /*isRenderCommand=*/false);
 
     [get() copyFromBuffer:src->get()
                sourceOffset:srcOffset
@@ -2373,8 +2382,8 @@ BlitCommandEncoder &BlitCommandEncoder::copyTextureToBuffer(const TextureRef &sr
         return *this;
     }
 
-    cmdBuffer().setReadDependency(src);
-    cmdBuffer().setWriteDependency(dst);
+    cmdBuffer().setReadDependency(src, /*isRenderCommand=*/false);
+    cmdBuffer().setWriteDependency(dst, /*isRenderCommand=*/false);
 
     [get() copyFromTexture:src->get()
                      sourceSlice:srcSlice
@@ -2404,8 +2413,8 @@ BlitCommandEncoder &BlitCommandEncoder::copyTexture(const TextureRef &src,
         return *this;
     }
 
-    cmdBuffer().setReadDependency(src);
-    cmdBuffer().setWriteDependency(dst);
+    cmdBuffer().setReadDependency(src, /*isRenderCommand=*/false);
+    cmdBuffer().setWriteDependency(dst, /*isRenderCommand=*/false);
 
     MTLOrigin origin = MTLOriginMake(0, 0, 0);
     for (uint32_t slice = 0; slice < sliceCount; ++slice)
@@ -2454,7 +2463,7 @@ BlitCommandEncoder &BlitCommandEncoder::generateMipmapsForTexture(const TextureR
         return *this;
     }
 
-    cmdBuffer().setWriteDependency(texture);
+    cmdBuffer().setWriteDependency(texture, /*isRenderCommand=*/false);
     [get() generateMipmapsForTexture:texture->get()];
 
     return *this;
@@ -2471,7 +2480,7 @@ BlitCommandEncoder &BlitCommandEncoder::synchronizeResource(Buffer *buffer)
     {
         // Only MacOS has separated storage for resource on CPU and GPU and needs explicit
         // synchronization
-        cmdBuffer().setReadDependency(buffer);
+        cmdBuffer().setReadDependency(buffer, /*isRenderCommand=*/false);
 
         [get() synchronizeResource:buffer->get()];
     }
@@ -2488,7 +2497,7 @@ BlitCommandEncoder &BlitCommandEncoder::synchronizeResource(Texture *texture)
 #if TARGET_OS_OSX || TARGET_OS_MACCATALYST
     // Only MacOS has separated storage for resource on CPU and GPU and needs explicit
     // synchronization
-    cmdBuffer().setReadDependency(texture);
+    cmdBuffer().setReadDependency(texture, /*isRenderCommand=*/false);
     if (texture->get().parentTexture)
     {
         [get() synchronizeResource:texture->get().parentTexture];
@@ -2549,7 +2558,7 @@ ComputeCommandEncoder &ComputeCommandEncoder::setBuffer(const BufferRef &buffer,
         return *this;
     }
 
-    cmdBuffer().setReadDependency(buffer);
+    cmdBuffer().setReadDependency(buffer, /*isRenderCommand=*/false);
 
     [get() setBuffer:(buffer ? buffer->get() : nil) offset:offset atIndex:index];
 
@@ -2565,7 +2574,7 @@ ComputeCommandEncoder &ComputeCommandEncoder::setBufferForWrite(const BufferRef 
         return *this;
     }
 
-    cmdBuffer().setWriteDependency(buffer);
+    cmdBuffer().setWriteDependency(buffer, /*isRenderCommand=*/false);
     return setBuffer(buffer, offset, index);
 }
 
@@ -2604,7 +2613,7 @@ ComputeCommandEncoder &ComputeCommandEncoder::setTexture(const TextureRef &textu
         return *this;
     }
 
-    cmdBuffer().setReadDependency(texture);
+    cmdBuffer().setReadDependency(texture, /*isRenderCommand=*/false);
     [get() setTexture:(texture ? texture->get() : nil) atIndex:index];
 
     return *this;
@@ -2617,7 +2626,7 @@ ComputeCommandEncoder &ComputeCommandEncoder::setTextureForWrite(const TextureRe
         return *this;
     }
 
-    cmdBuffer().setWriteDependency(texture);
+    cmdBuffer().setWriteDependency(texture, /*isRenderCommand=*/false);
     return setTexture(texture, index);
 }
 
