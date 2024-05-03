@@ -322,6 +322,24 @@
       "parentUuid": "a704933b_f78df35e",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa4d8d3a_9bcca8d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-03T01:17:42Z",
+      "side": 0,
+      "message": "\u003e Also not sure why you would use a for-loop, you still have an array you can hash completely (including gaps in it, if any, which you\u0027d initialize to something fixed)\n\nok, i added a white box test for functionality. Will need the for-loop in both `hash()` and `\u003d\u003d` to pass that test but this costs us time. On the other hand hashing the gaps will need more work in `FastVector` resize\n\nCan we land this change and others can pick up suggested optimizations in a follow up CL?",
+      "parentUuid": "463e95c5_a48ad180",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
