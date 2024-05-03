@@ -95,6 +95,11 @@ angle_sample("hello_triangle") {
   sources = [ "hello_triangle/HelloTriangle.cpp" ]
 }
 
+angle_sample("naked_egl") {
+  sources = [ "naked_egl/NakedEGL.cpp" ]
+  configs = [ "../:library_name_config" ]
+}
+
 angle_sample("hello_triangle_gl") {
   sources = [ "hello_triangle_gl/HelloTriangleGL.cpp" ]
 }
