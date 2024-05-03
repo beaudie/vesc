@@ -938,7 +938,7 @@ void CommandBuffer::restart()
 
 void CommandBuffer::insertDebugSign(const std::string &marker)
 {
-    mtl::CommandEncoder *currentEncoder = mActiveCommandEncoder;
+    mtl::CommandEncoder *currentEncoder = getCurrentCommandEncoder();
     if (currentEncoder)
     {
         ANGLE_MTL_OBJC_SCOPE
@@ -987,7 +987,9 @@ uint64_t CommandBuffer::queueEventSignal(id<MTLEvent> event, uint64_t value)
 
     ASSERT(readyImpl());
 
-    if (mActiveCommandEncoder)
+    CommandEncoder *currentEncoder = getCurrentCommandEncoder();
+
+    if (currentEncoder)
     {
         // We cannot set event when there is an active render pass, defer the setting until the pass
         // end.
@@ -1007,7 +1009,7 @@ void CommandBuffer::serverWaitEvent(id<MTLEvent> event, uint64_t value)
 {
     std::lock_guard<std::mutex> lg(mLock);
     ASSERT(readyImpl());
-    ASSERT(!mActiveCommandEncoder);
+    ASSERT(mActiveCommandEncoders.empty());
     setPendingEvents();
     [get() encodeWaitForEvent:event value:value];
 }
@@ -1019,9 +1021,15 @@ void CommandBuffer::set(id<MTLCommandBuffer> metalBuffer)
     ParentClass::set(metalBuffer);
 }
 
-void CommandBuffer::setActiveCommandEncoder(CommandEncoder *encoder)
+void CommandBuffer::pushCommandEncoder(CommandEncoder *encoder)
 {
-    mActiveCommandEncoder = encoder;
+    // Avoid duplication.
+    if (getCurrentCommandEncoder() == encoder)
+    {
+        return;
+    }
+
+    mActiveCommandEncoders.push_back(encoder);
     for (std::string &marker : mPendingDebugSigns)
     {
         ANGLE_MTL_OBJC_SCOPE
@@ -1033,20 +1041,29 @@ void CommandBuffer::setActiveCommandEncoder(CommandEncoder *encoder)
     mPendingDebugSigns.clear();
 }
 
-void CommandBuffer::invalidateActiveCommandEncoder(CommandEncoder *encoder)
+void CommandBuffer::popCommandEncoder()
 {
-    if (mActiveCommandEncoder == encoder)
+    mActiveCommandEncoders.pop_back();
+    if (mActiveCommandEncoders.empty())
     {
-        mActiveCommandEncoder = nullptr;
-
         // No active command encoder, we can safely encode event signalling now.
         setPendingEvents();
     }
 }
 
+CommandEncoder *CommandBuffer::getCurrentCommandEncoder() const
+{
+    if (mActiveCommandEncoders.empty())
+    {
+        return nullptr;
+    }
+
+    return mActiveCommandEncoders.back();
+}
+
 void CommandBuffer::cleanup()
 {
-    mActiveCommandEncoder = nullptr;
+    mActiveCommandEncoders.clear();
 
     ParentClass::set(nil);
 }
@@ -1068,8 +1085,8 @@ bool CommandBuffer::commitImpl()
         return false;
     }
 
-    // End the current encoder
-    forceEndingCurrentEncoder();
+    // End the current encoders
+    forceEndingAllEncoders();
 
     // Encoding any pending event's signalling.
     setPendingEvents();
@@ -1086,12 +1103,12 @@ bool CommandBuffer::commitImpl()
     return true;
 }
 
-void CommandBuffer::forceEndingCurrentEncoder()
+void CommandBuffer::forceEndingAllEncoders()
 {
-    if (mActiveCommandEncoder)
+    while (!mActiveCommandEncoders.empty())
     {
-        mActiveCommandEncoder->endEncoding();
-        mActiveCommandEncoder = nullptr;
+        mActiveCommandEncoders.back()->endEncoding();
+        popCommandEncoder();
     }
 }
 
@@ -1109,7 +1126,7 @@ void CommandBuffer::setPendingEvents()
 #if ANGLE_MTL_EVENT_AVAILABLE
 void CommandBuffer::setEventImpl(id<MTLEvent> event, uint64_t value)
 {
-    ASSERT(!mActiveCommandEncoder);
+    ASSERT(mActiveCommandEncoders.empty());
     [get() encodeSignalEvent:event value:value];
 }
 #endif  // #if ANGLE_MTL_EVENT_AVAILABLE
@@ -1121,18 +1138,21 @@ void CommandBuffer::pushDebugGroupImpl(const std::string &marker)
         NSString *label = cppLabelToObjC(marker);
         [get() pushDebugGroup:label];
 
-        if (mActiveCommandEncoder)
+        CommandEncoder *encoder = getCurrentCommandEncoder();
+
+        if (encoder)
         {
-            mActiveCommandEncoder->pushDebugGroup(label);
+            encoder->pushDebugGroup(label);
         }
     }
 }
 
 void CommandBuffer::popDebugGroupImpl()
 {
-    if (mActiveCommandEncoder)
+    CommandEncoder *encoder = getCurrentCommandEncoder();
+    if (encoder)
     {
-        mActiveCommandEncoder->popDebugGroup();
+        encoder->popDebugGroup();
     }
     [get() popDebugGroup];
 }
@@ -1157,7 +1177,10 @@ void CommandEncoder::reset()
 {
     ParentClass::reset();
 
-    mCmdBuffer.invalidateActiveCommandEncoder(this);
+    if (this == mCmdBuffer.getCurrentCommandEncoder())
+    {
+        mCmdBuffer.popCommandEncoder();
+    }
 }
 
 void CommandEncoder::set(id<MTLCommandEncoder> metalCmdEncoder)
@@ -1165,7 +1188,7 @@ void CommandEncoder::set(id<MTLCommandEncoder> metalCmdEncoder)
     ParentClass::set(metalCmdEncoder);
 
     // Set this as active encoder
-    cmdBuffer().setActiveCommandEncoder(this);
+    cmdBuffer().pushCommandEncoder(this);
 }
 
 CommandEncoder &CommandEncoder::markResourceBeingWrittenByGPU(const BufferRef &buffer)
@@ -1613,7 +1636,7 @@ RenderCommandEncoder &RenderCommandEncoder::restart(const RenderPassDesc &desc,
 
     // Since we defer the native encoder creation, we need to explicitly tell command buffer that
     // this object is the active encoder:
-    cmdBuffer().setActiveCommandEncoder(this);
+    cmdBuffer().pushCommandEncoder(this);
 
     return *this;
 }
