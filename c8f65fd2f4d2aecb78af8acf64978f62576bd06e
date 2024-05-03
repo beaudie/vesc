@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06ed5205_27e34b37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T20:49:08Z",
+      "side": 1,
+      "message": "Please reorder after the change that sets DEVICE_ONLY",
+      "revId": "c8f65fd2f4d2aecb78af8acf64978f62576bd06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f2fc71_dacb7604",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T20:49:08Z",
+      "side": 1,
+      "message": "Like I said in the other CL, even though we are already doing it wrong with pipeline barriers, the danger with events is that wrong usage could end up as deadlock (instead of corruption).\n\nCould we remove this suppression, add a bool in Display like `anyNonDefaultPriorityContextCreated`, and if that\u0027s set _always_ fallback to pipeline barriers?",
+      "revId": "c8f65fd2f4d2aecb78af8acf64978f62576bd06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
