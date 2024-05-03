@@ -2443,7 +2443,7 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilImageLayout(Context *con
         imageLayout = depthStencilImage->getCurrentImageLayout();
         // TODO: Use pipelineBarrier for now. Otherwise we may end up waitForEvents on the event
         // that has not been set.
-        barrierType = BarrierType::Pipeline;
+        // barrierType = BarrierType::Pipeline;
 
         if ((isDepthAttachmentAndSampler && !isReadOnlyDepth) ||
             (isStencilAttachmentAndSampler && !isReadOnlyStencil))
