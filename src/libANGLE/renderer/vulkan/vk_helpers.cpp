@@ -6988,7 +6988,7 @@ void ImageHelper::changeLayoutAndQueue(Context *context,
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
     VkSemaphore acquireNextImageSemaphore;
-    barrierImpl(context, aspectMask, newLayout, newQueueFamilyIndex, BarrierType::Pipeline, nullptr,
+    barrierImpl(context, aspectMask, newLayout, newQueueFamilyIndex, BarrierType::Event, nullptr,
                 commandBuffer, &acquireNextImageSemaphore);
     // SwapChain image should not get here.
     ASSERT(acquireNextImageSemaphore == VK_NULL_HANDLE);
@@ -7105,6 +7105,8 @@ void ImageHelper::barrierImpl(Context *context,
     // mCurrentEvent must be invalid if useVkEventForImageBarrieris disabled.
     ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled ||
            !mCurrentEvent.valid());
+    // We should not have a valid mCurrentEvent if we requested for pipelineBarrier .
+    ASSERT(barrierType != BarrierType::Pipeline || !mCurrentEvent.valid());
 
     // Release the ANI semaphore to caller to add to the command submission.
     *acquireNextImageSemaphoreOut = mAcquireNextImageSemaphore.release();
