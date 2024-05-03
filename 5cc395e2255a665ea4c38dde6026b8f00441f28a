@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55fc0223_b54afc40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-03T21:48:38Z",
+      "side": 1,
+      "message": "Does https://chromium-review.googlesource.com/c/angle/angle/+/5514948 , from crbug.com/337214693, rely on this CL?",
+      "revId": "5cc395e2255a665ea4c38dde6026b8f00441f28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cd08853_cfbee1c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-03T21:48:38Z",
+      "side": 1,
+      "message": "lgtm\n\nThanks, it\u0027s much clearer to me that this is correct. I also looked at CommandEncoder::endEncoding -\u003e CommandEncoder::reset which calls CommandBuffer::invalidateActiveCommandEncoder which is why this CL fixes the bug.",
+      "revId": "5cc395e2255a665ea4c38dde6026b8f00441f28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
