@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5c2f1f6_94b042cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-03T13:04:58Z",
+      "side": 1,
+      "message": "PTAL - trivial optimization",
+      "revId": "a6ddb47fecc11bac6e8c2c33f0fa55411c5c38c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
