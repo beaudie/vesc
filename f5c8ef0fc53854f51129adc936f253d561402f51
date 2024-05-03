@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4647dd6b_ba514885",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-03T18:19:13Z",
+      "side": 1,
+      "message": "Brian, PTAL.\nLet\u0027s lend this before https://chromium-review.googlesource.com/c/chromium/src/+/5512627 for a smooth Chromium-\u003eANGLE roll.\nThen we can switch these to Chromium mixins after they rolled.",
+      "revId": "f5c8ef0fc53854f51129adc936f253d561402f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
