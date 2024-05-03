@@ -340,6 +340,24 @@
       "parentUuid": "463e95c5_a48ad180",
       "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "277a0ea7_ac0756db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T01:44:36Z",
+      "side": 0,
+      "message": "Yes let\u0027s do that. If you have a debug change you used to gather data in your reports, I\u0027d appreciate if you could share it.",
+      "parentUuid": "fa4d8d3a_9bcca8d8",
+      "revId": "44ce58871c69cc790c70aaa0fdf2cff58a9d6c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
