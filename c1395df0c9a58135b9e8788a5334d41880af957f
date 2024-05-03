@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af3745b3_ec2286c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T18:06:01Z",
+      "side": 1,
+      "message": "Code dedup:\n\n```suggestion\n    return GetImageLayoutDstStageMask(context, kImageMemoryBarrierData[event.getImageLayout()]);\n```",
+      "range": {
+        "startLine": 1102,
+        "startChar": 0,
+        "endLine": 1103,
+        "endChar": 100
+      },
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08601bd7_47bcbfde",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T18:06:01Z",
+      "side": 1,
+      "message": "Same dedup:\n\n```suggestion\n    const ImageMemoryBarrierData \u0026barrierData \u003d kImageMemoryBarrierData[event.getImageLayout()];\n    *accessMask                               \u003d barrierData.dstAccessMask;\n    return GetImageLayoutDstStageMask(context, barrierData);\n```",
+      "range": {
+        "startLine": 1109,
+        "startChar": 0,
+        "endLine": 1111,
+        "endChar": 100
+      },
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10b01111_1dbf15c7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 2446,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T18:06:01Z",
+      "side": 1,
+      "message": "Please mark TODO with a bugid. Or just remove `TODO: ` if you don\u0027t think we\u0027d ever get to this,",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ff98dca_7072bc69",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 7104,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T18:06:01Z",
+      "side": 1,
+      "message": "Is this necessary to pass? I see most places pass event, and looks like the few places that pass `Pipeline` already would have fallen back to `Pipeline` (I think).\n\nI mean, _logically_ speaking, shouldn\u0027t this function always try `Event` if it can, and fallback to `Pipeline` if it can\u0027t? When would an event be available and usable but the caller would specifically ask for a pipeline barrier?",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "def1a721_25f99718",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 7145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T18:06:01Z",
+      "side": 1,
+      "message": "There\u0027s another problem we\u0027re not dealing with right now. If there are multiple queues (because of EGL priority), events don\u0027t work because they can\u0027t signal between queues. That same problem exists with pipeline barriers too, which we have conveniently ignored, but at most that would lead to corruption. Events could lead to deadlock.\n\nNot sure what an easy way to avoid that would be; like maybe always fallback to `Pipeline` if there are any non-default-priority contexts instantiated ever?\n\n(events are not set by default, so this can very well be a follow up)",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18c7daf5_7cceefff",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 7415,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T18:06:01Z",
+      "side": 1,
+      "message": "Maybe set `barrierType \u003d BarrierType::Pipeline` here to clarify there\u0027s a fallback happening here? I see `barrierType` is not used after this, so it won\u0027t do anything, but it would be clearer",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "503c87ae_55e6f005",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 7519,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T18:06:01Z",
+      "side": 1,
+      "message": "Small dedup:\n\n```suggestion\n            // If we are transitioning into shader-read layout, remember the last\n            // non-shader-read layout here.\n            const bool isShaderReadOnly \u003d IsShaderReadOnlyLayout(transitionTo);\n            if (isShaderReadOnly)\n            {\n                mLastNonShaderReadOnlyEvent.release(context-\u003egetDevice());\n                mLastNonShaderReadOnlyLayout \u003d mCurrentLayout;\n                mCurrentShaderReadStageMask  \u003d dstStageMask;\n            }\n\n            if (barrierType \u003d\u003d BarrierType::Event)\n            {\n                eventBarriers-\u003eaddImageEvent(context, mCurrentEvent, dstStageMask,\n                                             imageMemoryBarrier);\n                if (isShaderReadOnly)\n                {\n                    mLastNonShaderReadOnlyEvent  \u003d mCurrentEvent;\n                }\n                garbageObjects-\u003eadd(\u0026mCurrentEvent);\n            }\n            else\n            {\n                pipelineBarriers-\u003emergeImageBarrier(transitionTo.barrierIndex, srcStageMask,\n                                                    dstStageMask, imageMemoryBarrier);\n                mCurrentEvent.release(context-\u003egetDevice());\n            }\n```",
+      "range": {
+        "startLine": 7491,
+        "startChar": 0,
+        "endLine": 7519,
+        "endChar": 13
+      },
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5afa1912_c942c2ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 102
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-03T18:06:01Z",
+      "side": 1,
+      "message": "```suggestion\n        // dstStageMask. Otherwise we will end up with two waitEvent calls that wait for the same\n```",
+      "revId": "c1395df0c9a58135b9e8788a5334d41880af957f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
