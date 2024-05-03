@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cb8143e_4e94dc40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-03T21:36:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55310fb0_ab710c53",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "151383e3_ab7644af",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-05-03T20:39:06Z",
       "side": 1,
       "message": "I\u0027m having a hard time reasoning about the correctness of this change. Will the command encoders always be used with stack discipline? I\u0027m thinking about a scenario where the previous render encoder is ended before the blit or compute encoder is.\n\nWould it be more obviously correct if the active encoder were split up into two fields - an active render encoder, and an active blit or compute encoder?",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baeee987_44aa81bb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-03T21:36:47Z",
+      "side": 1,
+      "message": "You are right, your suggestion is better. I have changed to use separate pointers for blit/compute \u0026 render encoder.",
+      "parentUuid": "151383e3_ab7644af",
       "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b21aae71_809a9843",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-03T21:36:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "197d69c2_544a4e2f",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "753219e8_34359aaf",
@@ -69,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83f91a12_d240666a",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-03T21:36:47Z",
+      "side": 1,
+      "message": "Reverted to old behavior with separate active encoders.",
+      "parentUuid": "753219e8_34359aaf",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecfdc9bd_cdfc1c5c",
@@ -82,6 +154,24 @@
       "writtenOn": "2024-05-03T20:39:06Z",
       "side": 1,
       "message": "I see that the if-test of whether \"this\" was equal to the currently active command encoder was hoisted up here. What is the likelihood that command encoders will be left around in mCmdBuffer\u0027s vector because they were reset in the wrong order?",
+      "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ff09f5f_6e972018",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-03T21:36:47Z",
+      "side": 1,
+      "message": "Changed to use separate active encoders as you suggested instead of using stack.",
+      "parentUuid": "ecfdc9bd_cdfc1c5c",
       "revId": "b9ed1cc94735d755c307e4abaf139e7a89d58739",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
