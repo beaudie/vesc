@@ -179,9 +179,12 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     CommandQueue &cmdQueue() { return mCmdQueue; }
     const CommandQueue &cmdQueue() const { return mCmdQueue; }
 
-    // Private use only
-    void setActiveCommandEncoder(CommandEncoder *encoder);
-    void invalidateActiveCommandEncoder(CommandEncoder *encoder);
+    // Private use only. Note: due to render command encoder being a defer
+    // encoder, it can coexist with blit/compute encoder. Thus, more than
+    // one encoders can exist at a time.
+    void pushCommandEncoder(CommandEncoder *encoder);
+    void popCommandEncoder();
+    CommandEncoder *getCurrentCommandEncoder() const;
 
     bool needsFlushForDrawCallLimits() const;
 
@@ -193,7 +196,7 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
 
     bool readyImpl() const;
     bool commitImpl();
-    void forceEndingCurrentEncoder();
+    void forceEndingAllEncoders();
 
     void setPendingEvents();
 #if ANGLE_MTL_EVENT_AVAILABLE
@@ -210,7 +213,7 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
 
     CommandQueue &mCmdQueue;
 
-    CommandEncoder *mActiveCommandEncoder = nullptr;
+    std::vector<CommandEncoder *> mActiveCommandEncoders;
 
     uint64_t mQueueSerial = 0;
 
