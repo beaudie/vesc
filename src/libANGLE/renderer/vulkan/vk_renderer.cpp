@@ -1538,7 +1538,8 @@ Renderer::~Renderer() {}
 
 bool Renderer::hasSharedGarbage()
 {
-    return !mSharedGarbageList.empty() || !mSuballocationGarbageList.empty();
+    return !mSharedGarbageList.empty() || !mSuballocationGarbageList.empty() ||
+           !mRefCountedEventGarbageList.empty();
 }
 
 void Renderer::onDestroy(vk::Context *context)

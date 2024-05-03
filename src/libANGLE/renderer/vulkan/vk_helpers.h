@@ -1348,7 +1348,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     template <typename CommandBufferT>
     void flushSetEventsImpl(Context *context, CommandBufferT *commandBuffer);
 
-    RefCountedEventGarbageObjects *getRefCountedEventGarbage() { return &mRefCountedEventGarbage; }
+    RefCountedEventCollector *getRefCountedEventCollector() { return &mRefCountedEventCollector; }
 
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
@@ -1449,7 +1449,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // The list of RefCountedEvents that have be tracked
     ImageLayoutEventMaps mRefCountedEvents;
     // The list of RefCountedEvents that should be garbage collected when it gets reset.
-    RefCountedEventGarbageObjects mRefCountedEventGarbage;
+    RefCountedEventCollector mRefCountedEventCollector;
 };
 
 class SecondaryCommandBufferCollector;
@@ -2555,7 +2555,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                 const QueueSerial &queueSerial,
                                 PipelineBarrierArray *pipelineBarriers,
                                 EventBarrierArray *eventBarriers,
-                                RefCountedEventGarbageObjects *garbageCollector,
+                                RefCountedEventCollector *eventCollector,
                                 VkSemaphore *semaphoreOut);
 
     // Performs an ownership transfer from an external instance or API.
@@ -2852,7 +2852,7 @@ class ImageHelper final : public Resource, public angle::Subject
                      ImageLayout newLayout,
                      uint32_t newQueueFamilyIndex,
                      BarrierType barrierType,
-                     RefCountedEventGarbageObjects *garbageObjects,
+                     RefCountedEventCollector *eventCollector,
                      CommandBufferT *commandBuffer,
                      VkSemaphore *acquireNextImageSemaphoreOut);
 

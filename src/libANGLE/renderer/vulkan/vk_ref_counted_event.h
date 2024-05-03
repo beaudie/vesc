@@ -17,6 +17,7 @@
 #include "common/PackedEnums.h"
 #include "common/debug.h"
 #include "libANGLE/renderer/serial_utils.h"
+#include "libANGLE/renderer/vulkan/vk_resource.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
 
@@ -46,26 +47,19 @@ struct EventAndLayout
     ImageLayout imageLayout;
 };
 
+// Wrapper for RefCountedEventAndLayoutHandle.
 // The VkCmdSetEvent is called after VkCmdEndRenderPass and all images that used at the given
 // pipeline stage (i.e, they have the same stageMask) will be tracked by the same event. This means
 // there will be multiple objects pointing to the same event. Events are thus reference counted so
 // that we do not destroy it while other objects still referencing to it.
-using RefCountedEventAndLayoutHandle = AtomicRefCounted<EventAndLayout> *;
-
-void ReleaseRefcountedEvent(VkDevice device, RefCountedEventAndLayoutHandle atomicRefCountedEvent);
-
-// Wrapper for RefCountedEventAndLayoutHandle.
-class RefCountedEvent final : public WrappedObject<RefCountedEvent, RefCountedEventAndLayoutHandle>
+class RefCountedEvent final
 {
   public:
     RefCountedEvent() = default;
+    ~RefCountedEvent() { ASSERT(mHandle == nullptr); }
 
     // Move constructor moves reference of the underline object from other to this.
-    RefCountedEvent(RefCountedEvent &&other)
-    {
-        mHandle       = other.mHandle;
-        other.mHandle = nullptr;
-    }
+    RefCountedEvent(RefCountedEvent &&other) { std::swap(mHandle, other.mHandle); }
 
     // Copy constructor adds reference to the underline object.
     RefCountedEvent(const RefCountedEvent &other)
@@ -105,12 +99,19 @@ class RefCountedEvent final : public WrappedObject<RefCountedEvent, RefCountedEv
     // very last reference.
     void release(VkDevice device)
     {
-        if (!valid())
+        if (mHandle != nullptr)
         {
-            return;
+            const bool isLastReference = mHandle->getAndReleaseRef() == 1;
+            if (isLastReference)
+            {
+                destroy(device);
+                SafeDelete(mHandle);
+            }
+            else
+            {
+                mHandle = nullptr;
+            }
         }
-        ReleaseRefcountedEvent(device, mHandle);
-        mHandle = nullptr;
     }
 
     bool valid() const { return mHandle != nullptr; }
@@ -128,13 +129,19 @@ class RefCountedEvent final : public WrappedObject<RefCountedEvent, RefCountedEv
         ASSERT(valid());
         return mHandle->get().imageLayout;
     }
-};
 
-template <>
-struct HandleTypeHelper<RefCountedEvent>
-{
-    constexpr static HandleType kHandleType = HandleType::RefCountedEvent;
+  private:
+    void destroy(VkDevice device)
+    {
+        ASSERT(mHandle != nullptr);
+        ASSERT(!mHandle->isReferenced());
+        mHandle->get().event.destroy(device);
+        SafeDelete(mHandle);
+    }
+
+    AtomicRefCounted<EventAndLayout> *mHandle;
 };
+using RefCountedEventCollector = std::vector<RefCountedEvent>;
 
 // This class tracks a vector of RefcountedEvent garbage. For performance reason, instead of
 // individually tracking each VkEvent garbage, we collect all events that are accessed in the
@@ -143,24 +150,63 @@ struct HandleTypeHelper<RefCountedEvent>
 // decrement the refCount and destroy event only when last refCount goes away. Basically all GPU
 // usage will use one refCount and that refCount ensures we never destroy event until GPU is
 // finished.
-class RefCountedEventGarbageObjects final
+class RefCountedEventsGarbage final
 {
   public:
+    RefCountedEventsGarbage()  = default;
+    ~RefCountedEventsGarbage() = default;
+
+    RefCountedEventsGarbage(const QueueSerial &queueSerial,
+                            RefCountedEventCollector &&refCountedEvents)
+        : mLifetime(queueSerial)
+    {
+        ASSERT(!refCountedEvents.empty());
+        mRefCountedEvents.swap(mRefCountedEvents);
+    }
+
+    RefCountedEventsGarbage(RefCountedEventsGarbage &&other)
+        : mLifetime(other.mLifetime), mRefCountedEvents(std::move(other.mRefCountedEvents))
+    {}
+
+    RefCountedEventsGarbage &operator=(RefCountedEventsGarbage &&other)
+    {
+        mLifetime         = other.mLifetime;
+        mRefCountedEvents = std::move(other.mRefCountedEvents);
+        return *this;
+    }
+
+    bool destroyIfComplete(Renderer *renderer);
+    bool hasResourceUseSubmitted(Renderer *renderer) const;
+    VkDeviceSize getSize() const { return mRefCountedEvents.size(); }
+
     // Move event to the garbage list
-    void add(RefCountedEvent *event);
+    void add(RefCountedEvent &&event) { mRefCountedEvents.emplace_back(std::move(event)); }
+
     // Move the vector of events to the garbage list
-    void add(std::vector<RefCountedEvent> *events);
+    void add(RefCountedEventCollector &&events)
+    {
+        mRefCountedEvents.reserve(mRefCountedEvents.size() + events.size());
+        while (!events.empty())
+        {
+            mRefCountedEvents.emplace_back(events.back());
+            events.pop_back();
+        }
+    }
 
     // Make a copy of event (which adds another refcount to the VkEvent) and add the copied event to
     // the garbages
-    void add(const RefCountedEvent &event);
+    void add(const RefCountedEvent &event)
+    {
+        RefCountedEvent localEventCopy = event;
+        mRefCountedEvents.emplace_back(localEventCopy);
+        ASSERT(!localEventCopy.valid());
+    }
 
-    bool empty() const { return mGarbageObjects.empty(); }
-
-    GarbageObjects &&release() { return std::move(mGarbageObjects); }
+    bool empty() const { return mRefCountedEvents.empty(); }
 
   private:
-    GarbageObjects mGarbageObjects;
+    ResourceUse mLifetime;
+    RefCountedEventCollector mRefCountedEvents;
 };
 
 // This wraps data and API for vkCmdWaitEvent call
