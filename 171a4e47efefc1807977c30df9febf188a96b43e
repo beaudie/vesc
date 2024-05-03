@@ -335,6 +335,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f7048bb_1a123c6d",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-03T18:11:27Z",
+      "side": 1,
+      "message": "Heh, funny enough I am about to modify it in a follow up CL that fixes glClears. `wgpu::TextureDescriptor` also has a `viewFormats` param that I think stores possible formats that can be used when CreateView is called. The follow up CL will store that in the ImageHelper class",
+      "parentUuid": "122f3e46_74d5e05a",
+      "range": {
+        "startLine": 57,
+        "startChar": 37,
+        "endLine": 57,
+        "endChar": 60
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d32e721_419fc9b8",
@@ -348,6 +372,30 @@
       "writtenOn": "2024-05-03T07:15:53Z",
       "side": 1,
       "message": "I\u0027m guessing this struct is for more complicated format conversions in the future? Otherwise why not just call the angle::LoadToNative\u003cGLubyte, 4\u003e() directly?",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 25
+      },
+      "revId": "171a4e47efefc1807977c30df9febf188a96b43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9365ade8_2bac6873",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-03T18:11:27Z",
+      "side": 1,
+      "message": "Yeah, this\u0027ll eventually need to be more complicated so I wanted to make it a LoadImageFunctionInfo from the get-go.",
+      "parentUuid": "3d32e721_419fc9b8",
       "range": {
         "startLine": 96,
         "startChar": 4,
