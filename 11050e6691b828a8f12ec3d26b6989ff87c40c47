@@ -63,6 +63,30 @@
       },
       "revId": "11050e6691b828a8f12ec3d26b6989ff87c40c47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b0ca5b_4b34f013",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-03T19:01:19Z",
+      "side": 1,
+      "message": "I thought of that too, it would be good to have `compare_goldens.sh` specifically (as it\u0027s rather large) as an actual file the tree. It could have argv which would be passed via a templated wrapper. This way changes to it can be easily tested by running the script locally without having to go through the bundler. But this isn\u0027t really a blocker for this CL, current state is fine IMO for its purpose and we can improve later. That\u0027s why I\u0027m only suggesting to drop the `gn_dir` arg",
+      "parentUuid": "2e3fe929_e19f2c51",
+      "range": {
+        "startLine": 193,
+        "startChar": 51,
+        "endLine": 193,
+        "endChar": 73
+      },
+      "revId": "11050e6691b828a8f12ec3d26b6989ff87c40c47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
