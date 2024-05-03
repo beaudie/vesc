@@ -33,6 +33,24 @@
       "message": "Like I said in the other CL, even though we are already doing it wrong with pipeline barriers, the danger with events is that wrong usage could end up as deadlock (instead of corruption).\n\nCould we remove this suppression, add a bool in Display like `anyNonDefaultPriorityContextCreated`, and if that\u0027s set _always_ fallback to pipeline barriers?",
       "revId": "c8f65fd2f4d2aecb78af8acf64978f62576bd06e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "680e7ad6_8beb57ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-03T21:29:51Z",
+      "side": 1,
+      "message": "According to error message in VVL, it will be ignored. I dont think driver will implement in a way that causes dead lock. I do want to address this issue, but was thinking to do in separate CL in a nicer way. The way I am thinking right now is that adding a enable boolean flag in Context and then change the check if feature is enabled to check Context\u0027s enable flag. By default Context\u0027s flag will inherit form Renderer\u0027s feature flag. But as soon as we detect a different queue will be used, we will disable context\u0027s flag. So it will be slightly complicated, would like to  have a separate CL.",
+      "parentUuid": "b6f2fc71_dacb7604",
+      "revId": "c8f65fd2f4d2aecb78af8acf64978f62576bd06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
