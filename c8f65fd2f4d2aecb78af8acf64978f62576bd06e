@@ -51,6 +51,24 @@
       "parentUuid": "b6f2fc71_dacb7604",
       "revId": "c8f65fd2f4d2aecb78af8acf64978f62576bd06e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ea26ac4_d673d08b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-04T01:15:29Z",
+      "side": 1,
+      "message": "Acknowledged, follow up CL is fine",
+      "parentUuid": "680e7ad6_8beb57ed",
+      "revId": "c8f65fd2f4d2aecb78af8acf64978f62576bd06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
