@@ -309,6 +309,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mMaxExpressionComplexity(static_cast<size_t>(options.limitExpressionComplexity
                                                        ? resources.MaxExpressionComplexity
                                                        : std::numeric_limits<size_t>::max())),
+      mMaxStatementDepth(static_cast<size_t>(resources.MaxStatementDepth)),
       mMinProgramTexelOffset(resources.MinProgramTexelOffset),
       mMaxProgramTexelOffset(resources.MaxProgramTexelOffset),
       mMinProgramTextureGatherOffset(resources.MinProgramTextureGatherOffset),
@@ -1363,6 +1364,15 @@ bool TParseContext::checkIsValidTypeAndQualifierForArray(const TSourceLoc &index
         return false;
     }
     return checkIsValidQualifierForArray(indexLocation, elementType);
+}
+
+// Check nesting level isn't too deep
+void TParseContext::checkNestingLevel(const TSourceLoc &line)
+{
+    if (static_cast<size_t>(mLoopNestingLevel) > mMaxStatementDepth)
+    {
+        error(line, "expression is too deeply nested", "");
+    }
 }
 
 // Enforce non-initializer type/qualifier rules.
