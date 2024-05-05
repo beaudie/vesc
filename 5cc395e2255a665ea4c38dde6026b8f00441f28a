@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "06b16a9e_3bd894d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-05T18:10:55Z",
+      "side": 1,
+      "message": "I\u0027m not able to create a realworld issue for this bug. But the logic was clearly wrong anw. For example:\n- For the following GL operations:\n  - draw A\n  - upload a texture.\n  - draw B\n  - glFenceSync.\n  ....\n  - wait for sync.\n  - do something based on the result of draw B.\n- If we create a blit encoder and don\u0027t break the render pass, the result command buffer would contain something like these (prior to the fix in this CL):\n  - blit command, signal event command, draw A + draw B.\n- Whereas the correct order should be:\n  - blit command, draw A + draw B, signal event command.\n  \nI created a test for the above scenario here https://chromium-review.googlesource.com/c/angle/angle/+/5514529/\n\nHowever, it seems metal does have some internal resource tracking logic that can work without the mtl events. Or maybe the location of event signaling doesn\u0027t matter: Whether we place the signaling at the beginning, at the middle, or the end of the command buffer, metal will just signal the event when every commands in it finish.",
+      "parentUuid": "ea593acf_98b4d8f0",
+      "revId": "5cc395e2255a665ea4c38dde6026b8f00441f28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3cd08853_cfbee1c1",
