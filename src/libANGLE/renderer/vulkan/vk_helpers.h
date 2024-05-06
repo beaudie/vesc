@@ -1522,7 +1522,7 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     void trackImagesWithEvent(Context *context, ImageHelper *srcImage, ImageHelper *dstImage);
     void trackImagesWithEvent(Context *context, const ImageHelperPtr *images, size_t count);
 
-    // Issues VkCmdSetEvent calls.
+    // Issues SetEvent calls to the command buffer.
     void flushSetEvents(Context *context) { flushSetEventsImpl(context, &mCommandBuffer); }
 
     angle::Result flushToPrimary(Context *context, CommandsState *commandsState);
@@ -1873,6 +1873,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void updateDepthStencilReadOnlyMode(RenderPassUsageFlags dsUsageFlags,
                                         VkImageAspectFlags dsAspectFlags);
 
+    void flushSetEvents(Context *context);
+
   private:
     uint32_t getSubpassCommandBufferCount() const { return mCurrentSubpassCommandBufferIndex + 1; }
 
@@ -1910,6 +1912,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void finalizeFragmentShadingRateImageLayout(Context *context);
 
     void trackImagesWithEvent(Context *context, const ImageHelperPtr *images, size_t count);
+    void executeSetEvents(Context *context, PrimaryCommandBuffer *primary);
 
     // When using Vulkan secondary command buffers, each subpass must be recorded in a separate
     // command buffer.  Currently ANGLE produces render passes with at most 2 subpasses.
