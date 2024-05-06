@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53d2b40_32cbc6f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-06T10:54:06Z",
+      "side": 1,
+      "message": "Update: my test case in other CL can actually prove that this bug is a real problem now. Originally when I ran it a few times without the fix here, it could still run successfully. However, now I have tried to run it repeatedly, the bug really did surface.",
+      "parentUuid": "06b16a9e_3bd894d5",
+      "revId": "5cc395e2255a665ea4c38dde6026b8f00441f28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3cd08853_cfbee1c1",
