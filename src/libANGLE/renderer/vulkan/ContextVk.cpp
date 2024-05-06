@@ -1227,7 +1227,10 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
     mPerfMonitorCounters.push_back(vulkanGroup);
 }
 
-ContextVk::~ContextVk() {}
+ContextVk::~ContextVk()
+{
+    ASSERT(mRefCountedEventGarbageList.empty());
+}
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
@@ -4017,6 +4020,13 @@ void ContextVk::clearAllGarbage()
         garbage.destroy(mRenderer);
     }
     mCurrentGarbage.clear();
+
+    for (vk::RefCountedEventsGarbage &garbage : mRefCountedEventGarbageList)
+    {
+        bool destroyed = garbage.destroyIfComplete(mRenderer);
+        ASSERT(destroyed);
+    }
+    mRefCountedEventGarbageList.clear();
 }
 
 void ContextVk::handleDeviceLost()
@@ -8002,9 +8012,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
     // so the event itself will not gets destroyed until the last refCount goes away.
     if (!mRenderPassCommands->getRefCountedEventCollector()->empty())
     {
-        mRenderer->collectRefCountedEventsGarbage(
-            mLastFlushedQueueSerial,
-            std::move(*mRenderPassCommands->getRefCountedEventCollector()));
+        addRefCountedEventsGarbage(mLastFlushedQueueSerial,
+                                   std::move(*mRenderPassCommands->getRefCountedEventCollector()));
     }
 
     // If a new framebuffer is used to accommodate resolve attachments that have been added after
@@ -8294,7 +8303,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     // so the event itself will not gets destroyed until the last refCount goes away.
     if (!mOutsideRenderPassCommands->getRefCountedEventCollector()->empty())
     {
-        mRenderer->collectRefCountedEventsGarbage(
+        addRefCountedEventsGarbage(
             mLastFlushedQueueSerial,
             std::move(*mOutsideRenderPassCommands->getRefCountedEventCollector()));
     }
