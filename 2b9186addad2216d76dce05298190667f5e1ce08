@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dfc45bc_d379850a",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-06T20:21:54Z",
+      "side": 1,
+      "message": "```suggestion\n    const std::vector\u003cGLColor\u003e pixelData(kSize * kSize, GLColor::blue);\n```",
+      "range": {
+        "startLine": 484,
+        "startChar": 0,
+        "endLine": 484,
+        "endChar": 65
+      },
+      "revId": "2b9186addad2216d76dce05298190667f5e1ce08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
