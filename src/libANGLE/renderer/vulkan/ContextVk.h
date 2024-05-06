@@ -479,6 +479,13 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         }
     }
 
+    void addRefCountedEventsGarbage(const QueueSerial &queueSerial,
+                                    vk::RefCountedEventCollector &&refCountedEvents)
+    {
+        ASSERT(!refCountedEvents.empty());
+        mRefCountedEventGarbageList.emplace_back(queueSerial, std::move(refCountedEvents));
+    }
+
     angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                           const vk::RenderPass **renderPassOut);
     angle::Result getRenderPassWithOps(const vk::RenderPassDesc &desc,
@@ -1588,6 +1595,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // submission queueSerial. Note: Resource based shared object should always be added to
     // renderer's mSharedGarbageList.
     vk::GarbageObjects mCurrentGarbage;
+    std::vector<vk::RefCountedEventsGarbage> mRefCountedEventGarbageList;
 
     RenderPassCache mRenderPassCache;
 
