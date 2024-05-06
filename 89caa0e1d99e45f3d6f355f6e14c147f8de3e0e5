@@ -52,6 +52,24 @@
       "parentUuid": "4b48d05e_fe792ac1",
       "revId": "89caa0e1d99e45f3d6f355f6e14c147f8de3e0e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1be04167_baf11239",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-06T16:40:09Z",
+      "side": 1,
+      "message": "Feel free to move outside of the class as a workaround for now: https://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d114962#c1\nmaybe inside class constructor as it\u0027s private.. or whatever works",
+      "parentUuid": "a22e4e06_45d5bfac",
+      "revId": "89caa0e1d99e45f3d6f355f6e14c147f8de3e0e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
