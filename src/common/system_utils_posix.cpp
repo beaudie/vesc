@@ -62,6 +62,7 @@ std::string GetModulePath(void *moduleOrSymbol)
 
 void *OpenPosixLibrary(const std::string &fullPath, int extraFlags, std::string *errorOut)
 {
+    INFO() << "dlopen(" << fullPath.c_str() << ")";
     void *module = dlopen(fullPath.c_str(), RTLD_NOW | extraFlags);
     if (module)
     {

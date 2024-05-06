@@ -8,6 +8,7 @@
 
 bool load()
 {
+    INFO() << "Loading " ANGLE_EGL_LIBRARY_NAME;
     auto egl = angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir);
     INFO() << "Loaded EGL: " << egl;
     PFNEGLGETPROCADDRESSPROC getProcAddress;
@@ -122,12 +123,14 @@ void main()
 }
 )";
 
+    INFO() << "GL version: " << glGetString(GL_VERSION)
+           << ", renderer: " << glGetString(GL_RENDERER);
+
     auto program = CompileProgram(vertSrc, fragSrc);
     INFO() << "Compiled program: " << program;
 
-    // If I uncomment the following line, the program no longer crashes
-    //    glDeleteProgram(program);
-
+    // If I uncomment the following lines, the program no longer crashes
+    // glDeleteProgram(program);
     eglTerminate(egl_display);
 
     return 0;
