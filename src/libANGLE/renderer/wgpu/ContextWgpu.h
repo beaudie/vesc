@@ -280,7 +280,6 @@ class ContextWgpu : public ContextImpl
 
     wgpu::CommandEncoder mCurrentCommandEncoder;
     wgpu::RenderPassEncoder mCurrentRenderPass;
-    wgpu::RenderPassDescriptor mCurrentRenderPassDesc;
 };
 
 }  // namespace rx
