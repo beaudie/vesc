@@ -16,6 +16,47 @@
       "message": "PTAL - if you want i can include data comparing the latency of the 2 algos",
       "revId": "b8c3365d7ca5be508e5b55a40d4e2229938e73e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f438cfe3_6014363d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-06T14:26:19Z",
+      "side": 1,
+      "message": "Sure, that\u0027s always welcome. Best put in the CL description.",
+      "parentUuid": "68a44c39_0f10849c",
+      "revId": "b8c3365d7ca5be508e5b55a40d4e2229938e73e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c915f69_9c7f8166",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-06T14:26:19Z",
+      "side": 1,
+      "message": "Just `++` is fine?\n\n```suggestion\nconstexpr uint32_t kPipelineCacheVersion \u003d 2\n```",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 57
+      },
+      "revId": "b8c3365d7ca5be508e5b55a40d4e2229938e73e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
