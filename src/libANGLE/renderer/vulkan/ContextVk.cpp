@@ -1209,6 +1209,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
         mPipelineDirtyBitsMask.reset(gl::state::DIRTY_BIT_VERTEX_ARRAY_BINDING);
     }
 
+    // Stash the mRefCountedEventRecycler in vk::Context for ImageHelper to conveniently access
+    mShareGroupRefCountedEventGarbageRecycler = mShareGroupVk->getRefCountedEventGarbageRecycler();
+
     angle::PerfMonitorCounterGroup vulkanGroup;
     vulkanGroup.name = "vulkan";
 
@@ -7689,10 +7692,13 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     // fush/finish/swap.
     if ((renderPassClosureReason == RenderPassClosureReason::GLFlush ||
          renderPassClosureReason == RenderPassClosureReason::GLFinish ||
-         renderPassClosureReason == RenderPassClosureReason::EGLSwapBuffers) &&
-        mShareGroupVk->isDueForBufferPoolPrune(mRenderer))
+         renderPassClosureReason == RenderPassClosureReason::EGLSwapBuffers))
     {
-        mShareGroupVk->pruneDefaultBufferPools(mRenderer);
+        if (mShareGroupVk->isDueForBufferPoolPrune(mRenderer))
+        {
+            mShareGroupVk->pruneDefaultBufferPools(mRenderer);
+        }
+        mShareGroupVk->cleanupRefCountedEventGarbage(mRenderer);
     }
 
     // Since we just flushed, deferred flush is no longer deferred.
@@ -7991,7 +7997,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     // Track completion of this command buffer.
     mRenderPassCommands->flushSetEvents(this);
-    mRenderPassCommands->collectRefCountedEventsGarbage(mRenderer);
+    mRenderPassCommands->collectRefCountedEventsGarbage(
+        mShareGroupVk->getRefCountedEventGarbageRecycler());
 
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
@@ -8275,7 +8282,8 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     // Track completion of this command buffer.
     mOutsideRenderPassCommands->flushSetEvents(this);
-    mOutsideRenderPassCommands->collectRefCountedEventsGarbage(mRenderer);
+    mOutsideRenderPassCommands->collectRefCountedEventsGarbage(
+        mShareGroupVk->getRefCountedEventGarbageRecycler());
 
     // Save the queueSerial before calling flushOutsideRPCommands, which may return a new
     // mOutsideRenderPassCommands
