@@ -96,6 +96,11 @@ class ShareGroupVk : public ShareGroupImpl
         vk::WaitableMonolithicPipelineCreationTask *taskOut);
     void waitForCurrentMonolithicPipelineCreationTask();
 
+    vk::RefCountedEventGarbageRecycler *getRefCountedEventGarbageRecycler()
+    {
+        return &mRefCountedEventGarbageRecycler;
+    }
+
   private:
     angle::Result updateContextsPriority(ContextVk *contextVk, egl::ContextPriority newPriority);
 
@@ -141,6 +146,9 @@ class ShareGroupVk : public ShareGroupImpl
 
     // Texture update manager used to flush uploaded mutable textures.
     TextureUpload mTextureUpload;
+
+    // Holds RefCountedEvent that are free and ready to reuse
+    vk::RefCountedEventGarbageRecycler mRefCountedEventGarbageRecycler;
 };
 }  // namespace rx
 

@@ -99,6 +99,10 @@ class RefCountedEvent final
     void init(Context *context, ImageLayout layout);
 
     // Release one reference count to the underline Event object and destroy or recycle the handle
+    // to the context share group's recycler if this is the very last reference.
+    void release(Context *context);
+
+    // Release one reference count to the underline Event object and destroy or recycle the handle
     // to renderer's recycler if this is the very last reference.
     void release(Renderer *renderer);
 
@@ -166,9 +170,8 @@ class RefCountedEventsGarbage final
         return *this;
     }
 
-    bool destroyIfComplete(Renderer *renderer);
-    bool hasResourceUseSubmitted(Renderer *renderer) const;
-    VkDeviceSize getSize() const { return mRefCountedEvents.size(); }
+    void destroy(Renderer *renderer);
+    bool recycleIfComplete(Context *context);
 
     // Move event to the garbage list
     void add(RefCountedEvent &&event) { mRefCountedEvents.emplace_back(std::move(event)); }
@@ -243,6 +246,30 @@ class RefCountedEventRecycler final
   private:
     angle::SimpleMutex mMutex;
     Recycler<RefCountedEvent> mFreeStack;
+};
+
+// Thread unsafe event recycler
+class RefCountedEventGarbageRecycler final
+{
+  public:
+    RefCountedEventGarbageRecycler() = default;
+    ~RefCountedEventGarbageRecycler();
+
+    void destroy(Renderer *renderer);
+    void cleanup(Context *context);
+
+    void collectGarbage(const QueueSerial &queueSerial, RefCountedEventCollector &&refCountedEvents)
+    {
+        mGarbageQueue.emplace(queueSerial, std::move(refCountedEvents));
+    }
+
+    void recycle(RefCountedEvent &&garbageObject) { mFreeStack.recycle(std::move(garbageObject)); }
+
+    bool fetch(Context *context, RefCountedEvent *outObject);
+
+  private:
+    Recycler<RefCountedEvent> mFreeStack;
+    std::queue<RefCountedEventsGarbage> mGarbageQueue;
 };
 
 // This wraps data and API for vkCmdWaitEvent call
