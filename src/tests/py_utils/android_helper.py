@@ -442,6 +442,18 @@ def _SetCaptureProps(env, device_out_dir):
     _AdbShell('\n'.join(shell_cmds))
 
 
+def _DumpLogcat():
+    logging.info('---This is a test')
+    output = _AdbRun(['logcat', '-d']).decode()
+    logging.info('logcat:\n%s', output)
+    logging.info('---This was a test')
+
+
+def _DumpLogcatIfFailed():
+    logging.warning('Test failed; dumping logcat')
+    _DumpLogcat()
+
+
 def _RunInstrumentation(flags):
     with _TempDeviceFile() as temp_device_file:
         cmd = r'''
@@ -514,7 +526,10 @@ def RunTests(test_suite, args, stdoutfile=None, log_output=True):
     result = 0
     output = b''
     output_json = {}
+    _ = _AdbRun(['logcat', '-c']).decode()
+
     try:
+        logging.info('This is a test 0')
         with contextlib.ExitStack() as stack:
             device_test_output_path = stack.enter_context(_TempDeviceFile())
             args.append('--isolated-script-test-output=' + device_test_output_path)
@@ -536,6 +551,7 @@ def RunTests(test_suite, args, stdoutfile=None, log_output=True):
                 try:
                     test_output = _ReadDeviceFile(device_test_output_path)
                 except subprocess.CalledProcessError:
+                    _DumpLogcatIfFailed()
                     logging.error('Unable to read test json output. Stdout:\n%s', output.decode())
                     result = 1
                     return result, output.decode(), None
@@ -550,6 +566,7 @@ def RunTests(test_suite, args, stdoutfile=None, log_output=True):
             interrupted = output_json.get('interrupted', True)  # Normally set to False
             if num_failures != 0 or interrupted or output_json.get('is_unexpected', False):
                 logging.error('Tests failed: %s', test_output.decode())
+                _DumpLogcatIfFailed()
                 result = 1
 
             if test_output_dir:
@@ -565,6 +582,7 @@ def RunTests(test_suite, args, stdoutfile=None, log_output=True):
             with open(stdoutfile, 'wb') as f:
                 f.write(output)
     except Exception as e:
+        _DumpLogcatIfFailed()
         logging.exception(e)
         result = 1
 
