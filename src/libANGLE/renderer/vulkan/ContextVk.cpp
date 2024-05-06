@@ -7989,11 +7989,23 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     flushDescriptorSetUpdates();
 
+    // Track completion of this command buffer.
+    mRenderPassCommands->flushSetEvents(this);
+
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
     ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastFlushedQueueSerial,
                                                    mRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mRenderPassCommands->getQueueSerial();
+
+    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
+    // so the event itself will not gets destroyed until the last refCount goes away.
+    if (!mRenderPassCommands->getRefCountedEventCollector()->empty())
+    {
+        mRenderer->collectRefCountedEventsGarbage(
+            mLastFlushedQueueSerial,
+            std::move(*mRenderPassCommands->getRefCountedEventCollector()));
+    }
 
     // If a new framebuffer is used to accommodate resolve attachments that have been added after
     // the fact, create a temp one now and add it to garbage list.
@@ -8269,11 +8281,23 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     flushDescriptorSetUpdates();
 
+    // Track completion of this command buffer.
+    mOutsideRenderPassCommands->flushSetEvents(this);
+
     // Save the queueSerial before calling flushOutsideRPCommands, which may return a new
     // mOutsideRenderPassCommands
     ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastFlushedQueueSerial,
                                                    mOutsideRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mOutsideRenderPassCommands->getQueueSerial();
+
+    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
+    // so the event itself will not gets destroyed until the last refCount goes away.
+    if (!mOutsideRenderPassCommands->getRefCountedEventCollector()->empty())
+    {
+        mRenderer->collectRefCountedEventsGarbage(
+            mLastFlushedQueueSerial,
+            std::move(*mOutsideRenderPassCommands->getRefCountedEventCollector()));
+    }
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, getProtectionType(), mContextPriority,
                                                 &mOutsideRenderPassCommands));

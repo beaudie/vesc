@@ -1526,13 +1526,8 @@ void CommandBufferHelperCommon::resetImpl(Context *context)
     ASSERT(!mAcquireNextImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
 
-    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
-    // so the event itself will not gets destroyed until the last refCount goes away.
-    if (!mRefCountedEventCollector.empty())
-    {
-        context->getRenderer()->collectRefCountedEventsGarbage(
-            mQueueSerial, std::move(mRefCountedEventCollector));
-    }
+    ASSERT(mRefCountedEvents.mask.none());
+    ASSERT(mRefCountedEventCollector.empty());
 }
 
 template <class DerivedT>
@@ -2691,6 +2686,41 @@ void RenderPassCommandBufferHelper::trackImagesWithEvent(Context *context,
     }
 }
 
+void RenderPassCommandBufferHelper::flushSetEvents(Context *context)
+{
+    // For render pass the VkCmdSetEvent calls are actually delayed after we call
+    // VkCmdEndRenderPass. VkCmdEndRenderPass are called in the primary command buffer, which means
+    // VkCmdSetEvent also has to called on primary command buffer. Because of this we simply make a
+    // local copy of the events and garbage collect them so that the garbage collector will work
+    // properly. Note that garbage are ResourceUse tracked so they will not actually destroy
+    // anything until GPU finishes. could be added to the garbage list. The mRefCountedEvents is
+    // still kept another copy for flushToPrimary to use. Also note that a copy just means making
+    // extra reference count so should be cheap.
+    for (ImageLayout layout : mRefCountedEvents.mask)
+    {
+        RefCountedEvent localRefCountedEvent = mRefCountedEvents.map[layout];
+        ASSERT(localRefCountedEvent.valid());
+        mRefCountedEventCollector.emplace_back(std::move(localRefCountedEvent));
+    }
+}
+
+void RenderPassCommandBufferHelper::executeSetEvents(Context *context,
+                                                     PrimaryCommandBuffer *primary)
+{
+    // Add VkCmdSetEvent here to track the completion of this renderPass.
+    for (ImageLayout layout : mRefCountedEvents.mask)
+    {
+        RefCountedEvent &refCountedEvent = mRefCountedEvents.map[layout];
+        ASSERT(refCountedEvent.valid());
+        const ImageMemoryBarrierData &layoutData =
+            kImageMemoryBarrierData[refCountedEvent.getImageLayout()];
+        primary->setEvent(refCountedEvent.getEvent().getHandle(),
+                          GetImageLayoutDstStageMask(context, layoutData));
+        refCountedEvent.release(context->getDevice());
+    }
+    mRefCountedEvents.mask.reset();
+}
+
 angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     ContextVk *contextVk,
     RenderPassFramebuffer &&framebuffer,
@@ -2954,8 +2984,8 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     }
     primary.endRenderPass();
 
-    // Call VkCmdSetEvent to track the completion of this renderPass.
-    flushSetEventsImpl(context, &primary);
+    // Now issue VkCmdSetEvents to primary command buffer
+    executeSetEvents(context, &primary);
 
     // Restart the command buffer.
     return reset(context, &commandsState->secondaryCommands);
