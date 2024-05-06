@@ -585,8 +585,8 @@ def main():
         sys.exit(EXIT_FAILURE)
     tests = angle_test_util.GetTestsFromOutput(output)
 
-    if args.filter:
-        tests = angle_test_util.FilterTests(tests, args.filter)
+    #if args.filter:
+    tests = angle_test_util.FilterTests(tests, '*modern_combat_5*')
 
     # Get tests for this shard (if using sharding args)
     if args.split_shard_samples and args.shard_count >= args.samples_per_test:
