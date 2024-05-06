@@ -7989,6 +7989,10 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     flushDescriptorSetUpdates();
 
+    // Track completion of this command buffer.
+    mRenderPassCommands->flushSetEvents(this);
+    mRenderPassCommands->collectRefCountedEventsGarbage(mRenderer);
+
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
     ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastFlushedQueueSerial,
@@ -8268,6 +8272,10 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     }
 
     flushDescriptorSetUpdates();
+
+    // Track completion of this command buffer.
+    mOutsideRenderPassCommands->flushSetEvents(this);
+    mOutsideRenderPassCommands->collectRefCountedEventsGarbage(mRenderer);
 
     // Save the queueSerial before calling flushOutsideRPCommands, which may return a new
     // mOutsideRenderPassCommands
