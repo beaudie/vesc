@@ -22,6 +22,30 @@
       },
       "revId": "2b9186addad2216d76dce05298190667f5e1ce08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1fbfbdc_4a6f00dd",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-06T21:24:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dfc45bc_d379850a",
+      "range": {
+        "startLine": 484,
+        "startChar": 0,
+        "endLine": 484,
+        "endChar": 65
+      },
+      "revId": "2b9186addad2216d76dce05298190667f5e1ce08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
