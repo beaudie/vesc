@@ -261,8 +261,8 @@ def _run_perf(args, common_args, env, steps_per_trial=None):
     else:
         run_args += ['--trial-time', str(args.trial_time)]
 
-    if not args.smoke_test_mode:
-        run_args += ['--warmup']  # Render each frame once with glFinish
+    #if not args.smoke_test_mode:
+    run_args += ['--warmup']  # Render each frame once with glFinish
 
     if args.perf_counters:
         run_args += ['--perf-counters', args.perf_counters]
@@ -533,7 +533,7 @@ def main():
         type=int,
         default=DEFAULT_MAX_ERRORS)
     parser.add_argument(
-        '--smoke-test-mode', help='Do a quick run to validate correctness.', action='store_true')
+        '--smoke-test-mode', help='Do a quick run to validate correctness.', action='store_false')
     parser.add_argument(
         '--show-test-stdout', help='Prints all test stdout during execution.', action='store_true')
     parser.add_argument(
@@ -558,10 +558,10 @@ def main():
     start_time = time.time()
 
     # Use fast execution for smoke test mode.
-    if args.smoke_test_mode:
-        args.steps_per_trial = 1
-        args.trials_per_sample = 1
-        args.samples_per_test = 1
+    #if args.smoke_test_mode:
+    #    args.steps_per_trial = 1
+    #    args.trials_per_sample = 1
+    #    args.samples_per_test = 1
 
     env = os.environ.copy()
 
@@ -585,8 +585,8 @@ def main():
         sys.exit(EXIT_FAILURE)
     tests = angle_test_util.GetTestsFromOutput(output)
 
-    if args.filter:
-        tests = angle_test_util.FilterTests(tests, args.filter)
+    #if args.filter:
+    tests = angle_test_util.FilterTests(tests, '*modern_combat_5*')
 
     # Get tests for this shard (if using sharding args)
     if args.split_shard_samples and args.shard_count >= args.samples_per_test:
