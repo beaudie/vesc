@@ -323,6 +323,8 @@ angle::Result TextureWgpu::getAttachmentRenderTarget(const gl::Context *context,
     GetRenderTargetLayerCountAndIndex(mImage, imageIndex, &layerIndex, &layerCount,
                                       &imageLayerCount);
 
+    ContextWgpu *contextWgpu = GetImplAs<ContextWgpu>(context);
+
     // NOTE: Multisampling not yet supported
     ASSERT(samples <= 1);
     const gl::RenderToTextureImageIndex renderToTextureIndex =
@@ -361,7 +363,7 @@ angle::Result TextureWgpu::setImageImpl(const gl::Context *context,
                                         const gl::PixelUnpackState &unpack,
                                         const uint8_t *pixels)
 {
-    ANGLE_TRY(redefineLevel(context, index, size));
+    // ANGLE_TRY(redefineLevel(context, index, size));
     return setSubImageImpl(context, internalFormat, type, index, gl::Box(gl::kOffsetZero, size),
                            unpack, pixels);
 }
@@ -605,6 +607,43 @@ angle::Result TextureWgpu::maybeUpdateBaseMaxLevels(ContextWgpu *contextWgpu)
 
     return angle::Result::Continue;
 }
+
+uint32_t TextureWgpu::getMipLevelCount(gl::Texture::ImageMipLevels mipLevels) const
+{
+    switch (mipLevels)
+    {
+        // Returns level count from base to max that has been specified, i.e, enabled.
+        case gl::Texture::ImageMipLevels::EnabledLevels:
+            return mState.getEnabledLevelCount();
+        // Returns all mipmap levels from base to max regardless if an image has been specified or
+        // not.
+        case gl::Texture::ImageMipLevels::FullMipChainForGenerateMipmap:
+            return getMaxLevelCount() - mState.getEffectiveBaseLevel();
+
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+uint32_t TextureWgpu::getMaxLevelCount() const
+{
+    // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
+    return mState.getMipmapMaxLevel() + 1;
+}
+/*
+angle::Result TextureWgpu::respecifyImageStorageIfNecessary(ContextVk *contextVk,
+                                                            gl::Command source)
+{
+    // Before redefining the image for any reason, check to see if it's about to go through mipmap
+    // generation.  In that case, drop every staged change for the subsequent mips after base, and
+    // make sure the image is created with the complete mip chain.
+    const bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
+    if (isGenerateMipmap)
+    {
+        prepareForGenerateMipmap(contextVk);
+    }
+}*/
 
 void TextureWgpu::initSingleLayerRenderTargets(ContextWgpu *contextWgpu,
                                                GLuint layerCount,
