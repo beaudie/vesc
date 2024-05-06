@@ -21,7 +21,8 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
     ASSERT(layout != ImageLayout::Undefined);
 
     // First try with recycler. If that failed, then create a new event.
-    if (!context->getRenderer()->getRefCountedEventRecycler()->fetch(this))
+    if (!context->getRefCountedEventGarbageRecycler()->fetch(context, this) &&
+        !context->getRenderer()->getRefCountedEventRecycler()->fetch(this))
     {
         mHandle                      = new AtomicRefCounted<EventAndLayout>;
         VkEventCreateInfo createInfo = {};
@@ -35,6 +36,14 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
 
     mHandle->addRef();
     mHandle->get().imageLayout = layout;
+}
+
+void RefCountedEvent::release(Context *context)
+{
+    if (mHandle != nullptr)
+    {
+        releaseImpl(context->getRenderer(), context->getRefCountedEventGarbageRecycler());
+    }
 }
 
 void RefCountedEvent::release(Renderer *renderer)
@@ -70,22 +79,85 @@ void RefCountedEvent::destroy(VkDevice device)
 }
 
 // RefCountedEventsGarbage implementation.
-bool RefCountedEventsGarbage::destroyIfComplete(Renderer *renderer)
+bool RefCountedEventsGarbage::releaseIfComplete(Context *context)
 {
-    if (!renderer->hasResourceUseFinished(mLifetime))
+    if (!context->getRenderer()->hasResourceUseFinished(mLifetime))
     {
         return false;
     }
 
-    RefCountedEventRecycler *recycler = renderer->getRefCountedEventRecycler();
-    recycler->releaseOrRecycle(renderer, std::move(mRefCountedEvents));
-
+    for (RefCountedEvent &event : mRefCountedEvents)
+    {
+        ASSERT(event.valid());
+        event.release(context);
+        ASSERT(!event.valid());
+    }
+    mRefCountedEvents.clear();
     return true;
 }
 
-bool RefCountedEventsGarbage::hasResourceUseSubmitted(Renderer *renderer) const
+void RefCountedEventsGarbage::destroy(Renderer *renderer)
 {
-    return renderer->hasResourceUseSubmitted(mLifetime);
+    ASSERT(renderer->hasResourceUseFinished(mLifetime));
+    for (RefCountedEvent &event : mRefCountedEvents)
+    {
+        ASSERT(event.valid());
+        event.destroy(renderer->getDevice());
+    }
+    mRefCountedEvents.clear();
+}
+
+// RefCountedEventGarbageRecycler implementation.
+RefCountedEventGarbageRecycler::~RefCountedEventGarbageRecycler()
+{
+    ASSERT(mFreeStack.empty());
+    ASSERT(mGarbageQueue.empty());
+}
+
+void RefCountedEventGarbageRecycler::destroy(Renderer *renderer)
+{
+    while (!mGarbageQueue.empty())
+    {
+        mGarbageQueue.front().destroy(renderer);
+        mGarbageQueue.pop();
+    }
+
+    mFreeStack.destroy(renderer->getDevice());
+}
+
+void RefCountedEventGarbageRecycler::cleanup(Context *context)
+{
+    while (!mGarbageQueue.empty())
+    {
+        bool destroyed = mGarbageQueue.front().releaseIfComplete(context);
+        if (destroyed)
+        {
+            mGarbageQueue.pop();
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+
+bool RefCountedEventGarbageRecycler::fetch(Context *context, RefCountedEvent *outObject)
+{
+    if (!mFreeStack.empty())
+    {
+        mFreeStack.fetch(outObject);
+        return true;
+    }
+    else
+    {
+        cleanup(context);
+        if (!mFreeStack.empty())
+        {
+            mFreeStack.fetch(outObject);
+            return true;
+        }
+    }
+    return false;
 }
 
 // EventBarrier implementation.
