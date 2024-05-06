@@ -1351,6 +1351,16 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     RefCountedEventCollector *getRefCountedEventCollector() { return &mRefCountedEventCollector; }
 
+    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
+    // so the event itself will not gets destroyed until the last refCount goes away.
+    void collectRefCountedEventsGarbage(RefCountedEventRecycler *recycler)
+    {
+        if (!mRefCountedEventCollector.empty())
+        {
+            recycler->collectGarbage(mQueueSerial, std::move(mRefCountedEventCollector));
+        }
+    }
+
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
     void setAcquireNextImageSemaphore(VkSemaphore semaphore)

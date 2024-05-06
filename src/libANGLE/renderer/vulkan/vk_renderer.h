@@ -339,14 +339,6 @@ class Renderer : angle::NonCopyable
         mSuballocationGarbageList.add(this, std::move(garbage));
     }
 
-    void collectRefCountedEventsGarbage(const QueueSerial &queueSerial,
-                                        vk::RefCountedEventCollector &&refCountedEvents)
-    {
-        ASSERT(!refCountedEvents.empty());
-        vk::RefCountedEventsGarbage garbage(queueSerial, std::move(refCountedEvents));
-        mRefCountedEventGarbageList.add(this, std::move(garbage));
-    }
-
     angle::Result getPipelineCache(vk::Context *context, vk::PipelineCacheAccess *pipelineCacheOut);
     angle::Result mergeIntoPipelineCache(vk::Context *context,
                                          const vk::PipelineCache &pipelineCache);
@@ -748,7 +740,10 @@ class Renderer : angle::NonCopyable
         return mPipelineCacheGraphDumpPath.c_str();
     }
 
-    vk::RefCountedEventRecycler *getRefCountedEventRecycler() { return &mRefCountedEventRecycler; }
+    vk::ThreadSafeRefCountedEventRecycler *getRefCountedEventRecycler()
+    {
+        return &mRefCountedEventRecycler;
+    }
 
   private:
     angle::Result setupDevice(vk::Context *context,
@@ -959,10 +954,8 @@ class Renderer : angle::NonCopyable
     vk::SharedGarbageList<vk::BufferSuballocationGarbage> mSuballocationGarbageList;
     // Holds orphaned BufferBlocks when ShareGroup gets destroyed
     vk::BufferBlockGarbageList mOrphanedBufferBlockList;
-    // Holds RefCountedEvent garbage
-    vk::SharedGarbageList<vk::RefCountedEventsGarbage> mRefCountedEventGarbageList;
     // Holds RefCountedEvent that are free and ready to reuse
-    vk::RefCountedEventRecycler mRefCountedEventRecycler;
+    vk::ThreadSafeRefCountedEventRecycler mRefCountedEventRecycler;
 
     VkDeviceSize mPendingGarbageSizeLimit;
 
