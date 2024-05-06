@@ -102,6 +102,10 @@ class RefCountedEvent final
     // to renderer's recycler if this is the very last reference.
     void release(Renderer *renderer);
 
+    // Release one reference count to the underline Event object and destroy or recycle the handle
+    // to the context share group's recycler if this is the very last reference.
+    void release(Context *context);
+
     // Destroy the event and mHandle. Caller must ensure there is no outstanding reference to the
     // mHandle.
     void destroy(VkDevice device);
@@ -126,6 +130,8 @@ class RefCountedEvent final
     // Release one reference count to the underline Event object and destroy or recycle the handle
     // to the provided recycler if this is the very last reference.
     friend class RefCountedEventRecycler;
+    friend class RefCountedEventsGarbage;
+    friend class RefCountedEventGarbageRecycler;
     template <typename RecyclerT>
     void releaseImpl(Renderer *renderer, RecyclerT *recycler);
 
@@ -166,9 +172,12 @@ class RefCountedEventsGarbage final
         return *this;
     }
 
-    bool destroyIfComplete(Renderer *renderer);
-    bool hasResourceUseSubmitted(Renderer *renderer) const;
-    VkDeviceSize getSize() const { return mRefCountedEvents.size(); }
+    void destroy(Renderer *renderer);
+
+    // Check the queue serial and release the events to context if GPU finished. Note that release
+    // to context may end up recycle the object instead of destroy. Returns true if it is GPU
+    // finished.
+    bool releaseIfComplete(Renderer *renderer, RefCountedEventGarbageRecycler *recycler);
 
     // Move event to the garbage list
     void add(RefCountedEvent &&event) { mRefCountedEvents.emplace_back(std::move(event)); }
@@ -196,7 +205,10 @@ class RefCountedEventsGarbage final
 
     bool empty() const { return mRefCountedEvents.empty(); }
 
+    size_t size() const { return mRefCountedEvents.size(); }
+
   private:
+    friend class RefCountedEventGarbageRecycler;
     ResourceUse mLifetime;
     RefCountedEventCollector mRefCountedEvents;
 };
@@ -207,6 +219,8 @@ class RefCountedEventRecycler final
   public:
     void recycle(RefCountedEvent &&garbageObject)
     {
+        ASSERT(garbageObject.valid());
+        ASSERT(!garbageObject.mHandle->isReferenced());
         std::lock_guard<angle::SimpleMutex> lock(mMutex);
         mFreeStack.recycle(std::move(garbageObject));
     }
@@ -231,6 +245,8 @@ class RefCountedEventRecycler final
             return false;
         }
         mFreeStack.fetch(outObject);
+        ASSERT(outObject->valid());
+        ASSERT(!outObject->mHandle->isReferenced());
         return true;
     }
 
@@ -243,6 +259,45 @@ class RefCountedEventRecycler final
   private:
     angle::SimpleMutex mMutex;
     Recycler<RefCountedEvent> mFreeStack;
+};
+
+// Thread unsafe event recycler
+class RefCountedEventGarbageRecycler final
+{
+  public:
+    RefCountedEventGarbageRecycler() : mGarbageCount(0) {}
+    ~RefCountedEventGarbageRecycler();
+
+    // Release all garbage and free events.
+    void destroy(Renderer *renderer);
+
+    // Walk the garbage list and move completed garbage to free list
+    void cleanup(Renderer *renderer);
+
+    // Wait for all submitted garbage to finish and then cleanup.
+    void finishAndCleanup(Context *context);
+
+    void collectGarbage(const QueueSerial &queueSerial, RefCountedEventCollector &&refCountedEvents)
+    {
+        mGarbageCount += refCountedEvents.size();
+        mGarbageQueue.emplace(queueSerial, std::move(refCountedEvents));
+    }
+
+    void recycle(RefCountedEvent &&garbageObject)
+    {
+        ASSERT(garbageObject.valid());
+        ASSERT(!garbageObject.mHandle->isReferenced());
+        mFreeStack.recycle(std::move(garbageObject));
+    }
+
+    bool fetch(RefCountedEvent *outObject);
+
+    size_t getGarbageCount() const { return mGarbageCount; }
+
+  private:
+    Recycler<RefCountedEvent> mFreeStack;
+    std::queue<RefCountedEventsGarbage> mGarbageQueue;
+    size_t mGarbageCount;
 };
 
 // This wraps data and API for vkCmdWaitEvent call
