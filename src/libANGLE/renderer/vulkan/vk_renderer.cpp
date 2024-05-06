@@ -1507,8 +1507,7 @@ Renderer::~Renderer() {}
 
 bool Renderer::hasSharedGarbage()
 {
-    return !mSharedGarbageList.empty() || !mSuballocationGarbageList.empty() ||
-           !mRefCountedEventGarbageList.empty();
+    return !mSharedGarbageList.empty() || !mSuballocationGarbageList.empty();
 }
 
 void Renderer::onDestroy(vk::Context *context)
@@ -1525,8 +1524,6 @@ void Renderer::onDestroy(vk::Context *context)
     cleanupGarbage();
     ASSERT(!hasSharedGarbage());
     ASSERT(mOrphanedBufferBlockList.empty());
-
-    mRefCountedEventRecycler.destroy(mDevice);
 
     for (OneOffCommandPool &oneOffCommandPool : mOneOffCommandPoolMap)
     {
@@ -5535,8 +5532,6 @@ void Renderer::cleanupGarbage()
     // Note: do this after clean up mSuballocationGarbageList so that we will have more chances to
     // find orphaned blocks being empty.
     mOrphanedBufferBlockList.pruneEmptyBufferBlocks(this);
-    // Clean up event garbages
-    mRefCountedEventGarbageList.cleanupSubmittedGarbage(this);
 }
 
 void Renderer::cleanupPendingSubmissionGarbage()
@@ -5544,7 +5539,6 @@ void Renderer::cleanupPendingSubmissionGarbage()
     // Check if pending garbage is still pending. If not, move them to the garbage list.
     mSharedGarbageList.cleanupUnsubmittedGarbage(this);
     mSuballocationGarbageList.cleanupUnsubmittedGarbage(this);
-    mRefCountedEventGarbageList.cleanupUnsubmittedGarbage(this);
 }
 
 void Renderer::onNewValidationMessage(const std::string &message)

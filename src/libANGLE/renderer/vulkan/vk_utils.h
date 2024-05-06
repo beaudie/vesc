@@ -278,6 +278,7 @@ class [[nodiscard]] ScopedQueueSerialIndex final : angle::NonCopyable
     QueueSerialIndexAllocator *mIndexAllocator;
 };
 
+class RefCountedEventRecycler;
 // Abstracts error handling. Implemented by ContextVk for GL, DisplayVk for EGL, worker threads,
 // CLContextVk etc.
 class Context : angle::NonCopyable
@@ -296,6 +297,7 @@ class Context : angle::NonCopyable
 
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     angle::VulkanPerfCounters &getPerfCounters() { return mPerfCounters; }
+    RefCountedEventRecycler *getRefCountedEventRecycler() { return nullptr; }
 
   protected:
     Renderer *const mRenderer;

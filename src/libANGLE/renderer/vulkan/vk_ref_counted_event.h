@@ -98,8 +98,9 @@ class RefCountedEvent final
     // Create VkEvent and associated it with given layout
     void init(Context *context, ImageLayout layout);
 
-    // Release one reference count to the underline Event object and destroy if this is the
-    // very last reference.
+    // Release one reference count to the underline Event object and recycle/destroy if this is the
+    // very last reference. We will try to recycle the event if possible.
+    void release(Context *context);
     void release(Renderer *renderer);
 
     bool valid() const { return mHandle != nullptr; }
@@ -164,9 +165,8 @@ class RefCountedEventsGarbage final
         return *this;
     }
 
-    bool destroyIfComplete(Renderer *renderer);
-    bool hasResourceUseSubmitted(Renderer *renderer) const;
-    VkDeviceSize getSize() const { return mRefCountedEvents.size(); }
+    void destroy(Renderer *renderer);
+    bool recycleIfComplete(Context *context);
 
     // Move event to the garbage list
     void add(RefCountedEvent &&event) { mRefCountedEvents.emplace_back(std::move(event)); }
@@ -199,34 +199,34 @@ class RefCountedEventsGarbage final
     RefCountedEventCollector mRefCountedEvents;
 };
 
-// Thread safe event recycler
+// Thread unsafe event recycler
 class RefCountedEventRecycler final
 {
   public:
-    void recycle(RefCountedEvent &&garbageObject)
+    RefCountedEventRecycler() = default;
+    ~RefCountedEventRecycler();
+
+    void destroy(Renderer *renderer);
+    void cleanup(Context *context);
+
+    void collectGarbage(const QueueSerial &queueSerial, RefCountedEventCollector &&refCountedEvents)
     {
-        std::lock_guard<angle::SimpleMutex> lock(mMutex);
-        mFreeList.recycle(std::move(garbageObject));
+        mGarbageQueue.emplace(queueSerial, std::move(refCountedEvents));
     }
+
+    void recycle(RefCountedEvent &&garbageObject) { mFreeStack.recycle(std::move(garbageObject)); }
 
     void fetch(RefCountedEvent *outObject)
     {
-        std::lock_guard<angle::SimpleMutex> lock(mMutex);
-        if (!mFreeList.empty())
+        if (!mFreeStack.empty())
         {
-            mFreeList.fetch(outObject);
+            mFreeStack.fetch(outObject);
         }
     }
 
-    void destroy(VkDevice device)
-    {
-        std::lock_guard<angle::SimpleMutex> lock(mMutex);
-        mFreeList.destroy(device);
-    }
-
   private:
-    angle::SimpleMutex mMutex;
-    Recycler<RefCountedEvent> mFreeList;
+    Recycler<RefCountedEvent> mFreeStack;
+    std::queue<RefCountedEventsGarbage> mGarbageQueue;
 };
 
 // This wraps data and API for vkCmdWaitEvent call
