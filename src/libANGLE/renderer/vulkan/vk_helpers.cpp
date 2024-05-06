@@ -1755,12 +1755,12 @@ template void CommandBufferHelperCommon::flushSetEventsImpl<VulkanSecondaryComma
     Context *context,
     VulkanSecondaryCommandBuffer *commandBuffer);
 
-void CommandBufferHelperCommon::collectRefCountedEventsGarbage(Renderer *renderer)
+void CommandBufferHelperCommon::collectRefCountedEventsGarbage(
+    RefCountedEventGarbageRecycler *garbageRecycler)
 {
     if (!mRefCountedEventCollector.empty())
     {
-        renderer->collectRefCountedEventsGarbage(mQueueSerial,
-                                                 std::move(mRefCountedEventCollector));
+        garbageRecycler->collectGarbage(mQueueSerial, std::move(mRefCountedEventCollector));
     }
 }
 
@@ -2724,7 +2724,7 @@ void RenderPassCommandBufferHelper::executeSetEvents(Context *context,
                           GetImageLayoutDstStageMask(context, layoutData));
         // Note that these events are already added to the garbage collector before command buffer
         // leaves ContextVk, so we just need to release the event after use.
-        refCountedEvent.release(context->getRenderer());
+        refCountedEvent.release(context);
     }
     mRefCountedEvents.mask.reset();
 }
@@ -7155,7 +7155,7 @@ void ImageHelper::barrierImpl(Context *context,
     {
         // For now we always use pipelineBarrier for singlebuffer mode. We could use event here in
         // future.
-        mCurrentEvent.release(context->getRenderer());
+        mCurrentEvent.release(context);
 
         const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
         VkMemoryBarrier memoryBarrier            = {};
@@ -7212,7 +7212,7 @@ void ImageHelper::barrierImpl(Context *context,
         }
         commandBuffer->imageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
         // We use pipelineBarrier here, no needs to wait for events any more.
-        mCurrentEvent.release(context->getRenderer());
+        mCurrentEvent.release(context);
     }
 
     mCurrentLayout           = newLayout;
@@ -7406,7 +7406,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
 
             // Release it. No need to garbage collect since we did not use the event here. ALl
             // previous use of event should garbage tracked already.
-            mCurrentEvent.release(context->getRenderer());
+            mCurrentEvent.release(context);
         }
         mBarrierQueueSerial = queueSerial;
     }
@@ -7521,7 +7521,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
                 mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
                 if (mLastNonShaderReadOnlyEvent.valid())
                 {
-                    mLastNonShaderReadOnlyEvent.release(context->getRenderer());
+                    mLastNonShaderReadOnlyEvent.release(context);
                 }
             }
 
@@ -7530,7 +7530,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             const bool isShaderReadOnly = IsShaderReadOnlyLayout(transitionTo);
             if (isShaderReadOnly)
             {
-                mLastNonShaderReadOnlyEvent.release(context->getRenderer());
+                mLastNonShaderReadOnlyEvent.release(context);
                 mLastNonShaderReadOnlyLayout = mCurrentLayout;
                 mCurrentShaderReadStageMask  = dstStageMask;
             }
@@ -7549,7 +7549,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             {
                 pipelineBarriers->mergeImageBarrier(transitionTo.barrierIndex, srcStageMask,
                                                     dstStageMask, imageMemoryBarrier);
-                mCurrentEvent.release(context->getRenderer());
+                mCurrentEvent.release(context);
             }
 
             mBarrierQueueSerial = queueSerial;
@@ -7570,7 +7570,7 @@ void ImageHelper::setCurrentRefCountedEvent(Context *context, ImageLayoutEventMa
     ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled);
 
     // If there is already an event, release it first.
-    mCurrentEvent.release(context->getRenderer());
+    mCurrentEvent.release(context);
 
     // Create the event if we have not yet so. Otherwise just use the already created event. This
     // means all images used in the same render pass that has the same layout will be tracked by the

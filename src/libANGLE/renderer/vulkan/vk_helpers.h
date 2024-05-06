@@ -1353,7 +1353,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
     // so the event itself will not gets destroyed until the last refCount goes away.
-    void collectRefCountedEventsGarbage(Renderer *renderer);
+    void collectRefCountedEventsGarbage(RefCountedEventGarbageRecycler *garbageRecycler);
 
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
