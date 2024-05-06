@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0529ed37_cf960970",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-05-06T08:04:26Z",
+      "side": 1,
+      "message": "This breaks GCC build:\n\n```cpp\n../../third_party/angle/src/libANGLE/State.h: At global scope:\n../../third_party/angle/src/libANGLE/State.h:1483:10: error: non-constant condition for static assertion\n 1474 |         []() {\n      |         ~~~~~~\n 1475 |             for (auto handler : kDirtyObjectHandlers)\n      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n 1476 |             {\n      |             ~\n 1477 |                 if (handler \u003d\u003d nullptr)\n      |                 ~~~~~~~~~~~~~~~~~~~~~~~\n 1478 |                 {\n      |                 ~\n 1479 |                     return false;\n      |                     ~~~~~~~~~~~~~\n 1480 |                 }\n      |                 ~\n 1481 |             }\n      |             ~\n 1482 |             return true;\n      |             ~~~~~~~~~~~~\n 1483 |         }(),\n      |         ~^~\n../../third_party/angle/src/libANGLE/State.h:1483:10:   in ‘constexpr’ expansion of ‘\u003clambda closure object\u003egl::State::\u003clambda()\u003e().gl::State::\u003clambda()\u003e()’\n../../third_party/angle/src/libANGLE/State.h:1483:10: error: ‘handler’ is not a constant expression\n```\n\nNot sure why this happens only on GCC",
+      "revId": "89caa0e1d99e45f3d6f355f6e14c147f8de3e0e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
