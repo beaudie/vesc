@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "477ab503_acd0dba9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-07T17:19:54Z",
+      "side": 1,
+      "message": "👍 thanks for the info",
+      "parentUuid": "d0211399_4aaec9a6",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 32
+      },
+      "revId": "62eb8fbeec7c0e4b93028afe188f9d291f8e4686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "de737e77_617ddc3e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
