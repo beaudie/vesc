@@ -20,33 +20,67 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
     ASSERT(mHandle == nullptr);
     ASSERT(layout != ImageLayout::Undefined);
 
-    mHandle                      = new AtomicRefCounted<EventAndLayout>;
-    VkEventCreateInfo createInfo = {};
-    createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
-    // Use device only for performance reasons.
-    createInfo.flags = context->getFeatures().supportsSynchronization2.enabled
-                           ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
-                           : 0;
-    mHandle->get().event.init(context->getDevice(), createInfo);
+    // First try with recycler. If that failed, then create a new event.
+    if (!context->getRenderer()->getRefCountedEventRecycler()->fetch(this))
+    {
+        mHandle                      = new AtomicRefCounted<EventAndLayout>;
+        VkEventCreateInfo createInfo = {};
+        createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
+        // Use device only for performance reasons.
+        createInfo.flags = context->getFeatures().supportsSynchronization2.enabled
+                               ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
+                               : 0;
+        mHandle->get().event.init(context->getDevice(), createInfo);
+    }
+
     mHandle->addRef();
     mHandle->get().imageLayout = layout;
+}
+
+void RefCountedEvent::release(Renderer *renderer)
+{
+    if (mHandle != nullptr)
+    {
+        releaseImpl(renderer, renderer->getRefCountedEventRecycler());
+    }
+}
+
+template <typename RecyclerT>
+void RefCountedEvent::releaseImpl(Renderer *renderer, RecyclerT *recycler)
+{
+    ASSERT(mHandle != nullptr);
+    const bool isLastReference = mHandle->getAndReleaseRef() == 1;
+    if (isLastReference)
+    {
+        recycler->recycle(std::move(*this));
+        ASSERT(mHandle == nullptr);
+    }
+    else
+    {
+        mHandle = nullptr;
+    }
+}
+
+void RefCountedEvent::destroy(VkDevice device)
+{
+    ASSERT(mHandle != nullptr);
+    ASSERT(!mHandle->isReferenced());
+    mHandle->get().event.destroy(device);
+    SafeDelete(mHandle);
 }
 
 // RefCountedEventsGarbage implementation.
 bool RefCountedEventsGarbage::destroyIfComplete(Renderer *renderer)
 {
-    if (renderer->hasResourceUseFinished(mLifetime))
+    if (!renderer->hasResourceUseFinished(mLifetime))
     {
-        for (RefCountedEvent &event : mRefCountedEvents)
-        {
-            ASSERT(event.valid());
-            event.release(renderer->getDevice());
-            ASSERT(!event.valid());
-        }
-        mRefCountedEvents.clear();
-        return true;
+        return false;
     }
-    return false;
+
+    RefCountedEventRecycler *recycler = renderer->getRefCountedEventRecycler();
+    recycler->releaseOrRecycle(renderer, std::move(mRefCountedEvents));
+
+    return true;
 }
 
 bool RefCountedEventsGarbage::hasResourceUseSubmitted(Renderer *renderer) const
