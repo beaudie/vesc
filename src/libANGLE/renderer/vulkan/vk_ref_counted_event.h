@@ -15,6 +15,7 @@
 #include <queue>
 
 #include "common/PackedEnums.h"
+#include "common/SimpleMutex.h"
 #include "common/debug.h"
 #include "libANGLE/renderer/serial_utils.h"
 #include "libANGLE/renderer/vulkan/vk_resource.h"
@@ -99,21 +100,7 @@ class RefCountedEvent final
 
     // Release one reference count to the underline Event object and destroy if this is the
     // very last reference.
-    void release(VkDevice device)
-    {
-        if (mHandle != nullptr)
-        {
-            const bool isLastReference = mHandle->getAndReleaseRef() == 1;
-            if (isLastReference)
-            {
-                destroy(device);
-            }
-            else
-            {
-                mHandle = nullptr;
-            }
-        }
-    }
+    void release(Renderer *renderer);
 
     bool valid() const { return mHandle != nullptr; }
 
@@ -131,7 +118,6 @@ class RefCountedEvent final
         return mHandle->get().imageLayout;
     }
 
-  private:
     void destroy(VkDevice device)
     {
         ASSERT(mHandle != nullptr);
@@ -140,6 +126,7 @@ class RefCountedEvent final
         SafeDelete(mHandle);
     }
 
+  private:
     AtomicRefCounted<EventAndLayout> *mHandle;
 };
 using RefCountedEventCollector = std::vector<RefCountedEvent>;
@@ -210,6 +197,36 @@ class RefCountedEventsGarbage final
   private:
     ResourceUse mLifetime;
     RefCountedEventCollector mRefCountedEvents;
+};
+
+// Thread safe event recycler
+class RefCountedEventRecycler final
+{
+  public:
+    void recycle(RefCountedEvent &&garbageObject)
+    {
+        std::lock_guard<angle::SimpleMutex> lock(mMutex);
+        mFreeList.recycle(std::move(garbageObject));
+    }
+
+    void fetch(RefCountedEvent *outObject)
+    {
+        std::lock_guard<angle::SimpleMutex> lock(mMutex);
+        if (!mFreeList.empty())
+        {
+            mFreeList.fetch(outObject);
+        }
+    }
+
+    void destroy(VkDevice device)
+    {
+        std::lock_guard<angle::SimpleMutex> lock(mMutex);
+        mFreeList.destroy(device);
+    }
+
+  private:
+    angle::SimpleMutex mMutex;
+    Recycler<RefCountedEvent> mFreeList;
 };
 
 // This wraps data and API for vkCmdWaitEvent call
