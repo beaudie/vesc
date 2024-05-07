@@ -192,6 +192,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1aea981a_f5617a3d",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-07T18:30:23Z",
+      "side": 1,
+      "message": "`rowsPerImage` looks like it\u0027s not a byte count so it should probably be just `area.height`.",
+      "parentUuid": "d33eb316_8184c875",
+      "range": {
+        "startLine": 170,
+        "startChar": 38,
+        "endLine": 170,
+        "endChar": 60
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00fb24fc_e2918320",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
         "patchSetId": 14
