@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d0211399_4aaec9a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-07T17:18:13Z",
+      "side": 1,
+      "message": "All good, that bot I was referring to just had a hardware issue with the CPU. zlib does have a non-SIMD fallback but on modern platforms you\u0027ll generally have something like `-msse4.2` in cflags which enables the efficient implementation.",
+      "parentUuid": "9dc73fb0_4b1aed51",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 32
+      },
+      "revId": "62eb8fbeec7c0e4b93028afe188f9d291f8e4686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "de737e77_617ddc3e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
