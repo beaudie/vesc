@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fd0972d_f5280899",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T10:11:38Z",
+      "side": 1,
+      "message": "This ends up unused, should it be? Maybe assert it\u0027s zero if we don\u0027t want to complicate the CL? I think otherwise ImageHelper::readPixels() would be more complicated too right? Because then we might be writing into just a part of the `pixels` buffer that was passed in.",
+      "range": {
+        "startLine": 155,
+        "startChar": 56,
+        "endLine": 155,
+        "endChar": 71
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00fb24fc_e2918320",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T10:11:38Z",
+      "side": 1,
+      "message": "This feels odd, isn\u0027t this a byte offset being assigned a mip level?",
+      "range": {
+        "startLine": 185,
+        "startChar": 22,
+        "endLine": 185,
+        "endChar": 77
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60a6760b_317d3e75",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T10:11:38Z",
+      "side": 1,
+      "message": "If this is always supposed to be 256 can we comment why?",
+      "range": {
+        "startLine": 186,
+        "startChar": 83,
+        "endLine": 186,
+        "endChar": 94
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "023e9cad_4ba1908d",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T10:11:38Z",
+      "side": 1,
+      "message": "Should copyTexture.origin be set to (area.x, area.y) here",
+      "range": {
+        "startLine": 193,
+        "startChar": 10,
+        "endLine": 193,
+        "endChar": 26
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
