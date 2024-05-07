@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1996b10c_91104b73",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T15:39:04Z",
+      "side": 1,
+      "message": "Oh, actually it should be used because it won\u0027t complicate the CL that much. It just needs to be added to pixels via\n```\nANGLE_TRY(renderTarget-\u003egetImage()-\u003ereadPixels(contextWgpu, allocationSize, params.area, params,\nangleFormat, static_cast\u003cuint8_t *\u003e(pixels) + outputSkipBytes));\n```\n\nI also realized I can de-dupe some of the code in getReadPixelsParams \u0027cause I swiped it from vk_helpers.",
+      "parentUuid": "1fd0972d_f5280899",
+      "range": {
+        "startLine": 155,
+        "startChar": 56,
+        "endLine": 155,
+        "endChar": 71
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00fb24fc_e2918320",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
         "patchSetId": 14
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-07T10:11:38Z",
       "side": 1,
       "message": "This feels odd, isn\u0027t this a byte offset being assigned a mip level?",
+      "range": {
+        "startLine": 185,
+        "startChar": 22,
+        "endLine": 185,
+        "endChar": 77
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca1a8032_8e1a89a3",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T15:39:04Z",
+      "side": 1,
+      "message": "Ah, yes, you\u0027re right. I think actually we might not need to set the offset for the buffer we\u0027re copying too because it defaults to 0.",
+      "parentUuid": "00fb24fc_e2918320",
       "range": {
         "startLine": 185,
         "startChar": 22,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a8adfd4_e07464d5",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T15:39:04Z",
+      "side": 1,
+      "message": "Yes wgpu requires that the bytesPerRow be a multiple of 256. roundUp() rounds based on an alignment, which is what the 256 represents so it\u0027s not always going to be 256 but some multiple of it. I\u0027ll add a comment explaining this.",
+      "parentUuid": "60a6760b_317d3e75",
+      "range": {
+        "startLine": 186,
+        "startChar": 83,
+        "endLine": 186,
+        "endChar": 94
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "023e9cad_4ba1908d",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
         "patchSetId": 14
@@ -83,6 +155,30 @@
       "writtenOn": "2024-05-07T10:11:38Z",
       "side": 1,
       "message": "Should copyTexture.origin be set to (area.x, area.y) here",
+      "range": {
+        "startLine": 193,
+        "startChar": 10,
+        "endLine": 193,
+        "endChar": 26
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "315cd8d0_de751397",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T15:39:04Z",
+      "side": 1,
+      "message": "Oops, yes it should.",
+      "parentUuid": "023e9cad_4ba1908d",
       "range": {
         "startLine": 193,
         "startChar": 10,
