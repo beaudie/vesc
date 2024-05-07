@@ -16,6 +16,115 @@
       "message": "Looks good with a last fix!",
       "revId": "9313bf66b7f5a16159b1b502cc43b4a4bd1fdb23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44b94d41_0ff2bb48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T21:00:15Z",
+      "side": 1,
+      "message": "LGTM % the unresolved comments. I had some questions along the way that I answered myself so I just left them as resolved comments that I can look back at.",
+      "revId": "9313bf66b7f5a16159b1b502cc43b4a4bd1fdb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "446a91f7_a201d44b",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T21:00:15Z",
+      "side": 1,
+      "message": "Should we maybe use CheckedNumeric to be safe from overflows? I\u0027m not sure how sanity checked all the inputs are here",
+      "range": {
+        "startLine": 543,
+        "startChar": 21,
+        "endLine": 544,
+        "endChar": 60
+      },
+      "revId": "9313bf66b7f5a16159b1b502cc43b4a4bd1fdb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b54f6ae1_ba17cb37",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T21:00:15Z",
+      "side": 1,
+      "message": "When we roundUp and then read in, what happens to the other bytes? Are they initialized? When we do PackPixels later, can we ever end up copying uninitialized bytes?\n\nAnswer for me: It looks like PackPixels memcpy\u0027s row by row, and only copies `params.area.width * sourceFormat.pixelBytes` so that should avoid uninit copies.",
+      "range": {
+        "startLine": 173,
+        "startChar": 34,
+        "endLine": 173,
+        "endChar": 41
+      },
+      "revId": "9313bf66b7f5a16159b1b502cc43b4a4bd1fdb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bbd7071_137c1ea9",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T21:00:15Z",
+      "side": 1,
+      "message": "This looks like a texture mip level used as an offset into a buffer?",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 78
+      },
+      "revId": "9313bf66b7f5a16159b1b502cc43b4a4bd1fdb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef3fce9_ac4ee9bb",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T21:00:15Z",
+      "side": 1,
+      "message": "I was also wondering if clippedArea is smaller than area, how we correctly copy into a smaller rectangular region of the `pixels` buffer. But sizedFormatInfo.computeRowPitch() is calculated with the `area.width` rather than `clippedArea.width` and then PackPixels will copy row-by-row, incrementing `pixels` by the outputPitch on every iteraion.",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 207,
+        "endChar": 14
+      },
+      "revId": "9313bf66b7f5a16159b1b502cc43b4a4bd1fdb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
