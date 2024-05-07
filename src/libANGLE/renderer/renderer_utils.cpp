@@ -531,6 +531,26 @@ void PackPixels(const PackPixelsParams &params,
     }
 }
 
+void GetPackPixelsParams(const gl::InternalFormat &sizedFormatInfo,
+                         GLuint outputPitch,
+                         const gl::PixelPackState &packState,
+                         gl::Buffer *packBuffer,
+                         const gl::Rectangle &area,
+                         const gl::Rectangle &clippedArea,
+                         rx::PackPixelsParams *paramsOut,
+                         GLuint *skipBytesOut)
+{
+    *skipBytesOut += (clippedArea.x - area.x) * sizedFormatInfo.pixelBytes +
+                     (clippedArea.y - area.y) * outputPitch;
+
+    angle::FormatID angleFormatID =
+        angle::Format::InternalFormatToID(sizedFormatInfo.sizedInternalFormat);
+    const angle::Format &angleFormat = angle::Format::Get(angleFormatID);
+
+    *paramsOut = rx::PackPixelsParams(clippedArea, angleFormat, outputPitch,
+                                      packState.reverseRowOrder, packBuffer, 0);
+}
+
 bool FastCopyFunctionMap::has(angle::FormatID formatID) const
 {
     return (get(formatID) != nullptr);
