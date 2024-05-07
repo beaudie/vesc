@@ -13,6 +13,10 @@
 
 #include <string>
 
+#if defined(__GNUC__) || defined(__clang__)
+#    define ANGLE_UNLIKELY(x) __builtin_expect(!!(x), 0)
+#endif  // defined(__GNUC__) || defined(__clang__)
+
 namespace
 {
 void UpdateResourceMap(GLuint *resourceMap, GLuint id, GLsizei readBufferOffset)
@@ -49,6 +53,20 @@ EGLClientBuffer GetClientBuffer(EGLenum target, uintptr_t key)
         {
             const auto &iData = gClientBufferMap.find(key);
             return iData != gClientBufferMap.end() ? iData->second : nullptr;
+        }
+    }
+}
+
+void NullBufferCheck(GLuint bufferID)
+{
+    if (ANGLE_UNLIKELY(gMappedBufferData[gBufferMap[bufferID]] == nullptr))
+    {
+        if (gMappedBufferData[gBufferMap[bufferID]] == nullptr)
+        {
+            fprintf(stderr,
+                    "NULL ClientBuffer (did glMapBufferRange return nullptr?) "
+                    "bufferID=%d gBufferMap[bufferID]=%d\n",
+                    bufferID, gBufferMap[bufferID]);
         }
     }
 }
@@ -378,6 +396,7 @@ BufferHandleMap gMappedBufferData;
 
 void UpdateClientBufferData(GLuint bufferID, const void *source, GLsizei size)
 {
+    NullBufferCheck(bufferID);
     memcpy(gMappedBufferData[gBufferMap[bufferID]], source, size);
 }
 
@@ -386,6 +405,7 @@ void UpdateClientBufferDataWithOffset(GLuint bufferID,
                                       GLsizei size,
                                       GLsizei offset)
 {
+    NullBufferCheck(bufferID);
     uintptr_t dest = reinterpret_cast<uintptr_t>(gMappedBufferData[gBufferMap[bufferID]]) + offset;
     memcpy(reinterpret_cast<void *>(dest), source, size);
 }
