@@ -20,16 +20,42 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
     ASSERT(mHandle == nullptr);
     ASSERT(layout != ImageLayout::Undefined);
 
-    mHandle                      = new AtomicRefCounted<EventAndLayout>;
-    VkEventCreateInfo createInfo = {};
-    createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
-    // Use device only for performance reasons.
-    createInfo.flags = context->getFeatures().supportsSynchronization2.enabled
-                           ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
-                           : 0;
-    mHandle->get().event.init(context->getDevice(), createInfo);
+    // First try with recycler
+    RefCountedEventRecycler *recycler = context->getRenderer()->getRefCountedEventRecycler();
+    recycler->fetch(this);
+
+    // Create a new event if failed to get from recycler
+    if (!valid())
+    {
+        mHandle                      = new AtomicRefCounted<EventAndLayout>;
+        VkEventCreateInfo createInfo = {};
+        createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
+        // Use device only for performance reasons.
+        createInfo.flags = context->getFeatures().supportsSynchronization2.enabled
+                               ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
+                               : 0;
+        mHandle->get().event.init(context->getDevice(), createInfo);
+    }
+
     mHandle->addRef();
     mHandle->get().imageLayout = layout;
+}
+
+void RefCountedEvent::release(Renderer *renderer)
+{
+    if (mHandle != nullptr)
+    {
+        const bool isLastReference = mHandle->getAndReleaseRef() == 1;
+        if (isLastReference)
+        {
+            renderer->getRefCountedEventRecycler()->recycle(std::move(*this));
+            ASSERT(mHandle == nullptr);
+        }
+        else
+        {
+            mHandle = nullptr;
+        }
+    }
 }
 
 // RefCountedEventsGarbage implementation.
@@ -40,7 +66,7 @@ bool RefCountedEventsGarbage::destroyIfComplete(Renderer *renderer)
         for (RefCountedEvent &event : mRefCountedEvents)
         {
             ASSERT(event.valid());
-            event.release(renderer->getDevice());
+            event.release(renderer);
             ASSERT(!event.valid());
         }
         mRefCountedEvents.clear();
