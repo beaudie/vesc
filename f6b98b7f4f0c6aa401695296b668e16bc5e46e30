@@ -119,6 +119,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5754335c_75fd58a9",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T20:57:13Z",
+      "side": 1,
+      "message": "Hah fair, I think at least the RenderPassDescriptor params are all ref counted by webgpu. I added a TODO to reset `mCurrentColorAttachments` when the state is synced",
+      "parentUuid": "0f7fdc29_ec761aab",
+      "range": {
+        "startLine": 136,
+        "startChar": 8,
+        "endLine": 136,
+        "endChar": 60
+      },
+      "revId": "f6b98b7f4f0c6aa401695296b668e16bc5e46e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96395418_1a8ef9a6",
@@ -132,6 +156,24 @@
       "writtenOn": "2024-05-07T00:24:31Z",
       "side": 1,
       "message": "Missed a part of the suggestion:\n\n```suggestion\n    std::vector\u003cGLColor\u003e pixelData(kSize * kSize, GLColor::blue);\n```",
+      "revId": "f6b98b7f4f0c6aa401695296b668e16bc5e46e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eca4b989_a12cf89b",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T20:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96395418_1a8ef9a6",
       "revId": "f6b98b7f4f0c6aa401695296b668e16bc5e46e30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
