@@ -4071,8 +4071,13 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
         return;
     }
 
-    constexpr uint32_t kPixel2DriverWithRelaxedPrecision        = 0x801EA000;
+    // TODO: Should be replaced?
+    constexpr uint32_t kPixel2DriverWithRelaxedPrecision = 0x801EA000;
+    //    const QualcommDriverVersion kPixel2DriverWithRelaxedPrecision        =
+    //    QualcommDriverVersion(512, 490, 0);
     constexpr uint32_t kPixel4DriverWithWorkingSpecConstSupport = 0x80201000;
+    //    const QualcommDriverVersion kPixel4DriverWithWorkingSpecConstSupport =
+    //    QualcommDriverVersion(512, 513, 0);
 
     const bool isAMD      = IsAMD(mPhysicalDeviceProperties.vendorID);
     const bool isApple    = IsAppleGPU(mPhysicalDeviceProperties.vendorID);
@@ -4106,6 +4111,10 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // Parse the ARM driver version to be readable/comparable
     const ARMDriverVersion armDriverVersion =
         ParseARMDriverVersion(mPhysicalDeviceProperties.driverVersion);
+
+    // Parse the Qualcomm driver version.
+    const QualcommDriverVersion qualcommDriverVersion =
+        ParseQualcommDriverVersion(mPhysicalDeviceProperties.driverVersion);
 
     // Parse the Intel driver version. (Currently it only supports the Windows driver.)
     const IntelDriverVersion intelDriverVersion =
@@ -4585,8 +4594,9 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
 
     // vkCmdClearAttachments races with draw calls on Qualcomm hardware as observed on Pixel2 and
     // Pixel4.  https://issuetracker.google.com/issues/166809097
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferDrawClearOverVkCmdClearAttachments,
-                            isQualcommProprietary);
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, preferDrawClearOverVkCmdClearAttachments,
+        isQualcommProprietary && qualcommDriverVersion < QualcommDriverVersion(512, 762, 12));
 
     // r32f image emulation is done unconditionally so VK_FORMAT_FEATURE_STORAGE_*_ATOMIC_BIT is not
     // required.

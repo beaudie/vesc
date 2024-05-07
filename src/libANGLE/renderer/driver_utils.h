@@ -163,6 +163,22 @@ inline bool IsSwiftshader(uint32_t vendorId, uint32_t deviceId)
 
 std::string GetVendorString(uint32_t vendorId);
 
+class QualcommDriverVersion
+{
+  public:
+    QualcommDriverVersion(uint32_t buildNumber);
+    QualcommDriverVersion(uint32_t majorVersion, uint32_t minorVersion, uint32_t patch);
+    bool operator==(const QualcommDriverVersion &) const;
+    bool operator!=(const QualcommDriverVersion &) const;
+    bool operator<(const QualcommDriverVersion &) const;
+    bool operator>=(const QualcommDriverVersion &) const;
+
+  private:
+    uint32_t mBuildNumber;
+};
+
+QualcommDriverVersion ParseQualcommDriverVersion(uint32_t driverVersion);
+
 // For Linux, Intel graphics driver version is the Mesa version. The version number has three
 // fields: major revision, minor revision and release number.
 // For Windows, The version number includes 3rd and 4th fields. Please refer the details at

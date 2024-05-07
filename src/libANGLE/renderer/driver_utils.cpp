@@ -140,6 +140,41 @@ const uint16_t IntelGen12[] = {
 
 }  // anonymous namespace
 
+QualcommDriverVersion::QualcommDriverVersion(uint32_t buildNumber) : mBuildNumber(buildNumber) {}
+
+QualcommDriverVersion::QualcommDriverVersion(uint32_t majorVersion,
+                                             uint32_t minorVersion,
+                                             uint32_t patch)
+{
+    // The following format is used:
+    // < Major | Minor (10 bits) | Patch (12 bits) >
+    constexpr uint32_t kMinorVersionMask = angle::BitMask<uint32_t>(10);
+    constexpr uint32_t kPatchMask        = angle::BitMask<uint32_t>(12);
+    ASSERT(minorVersion <= kMinorVersionMask && patch <= kPatchMask);
+
+    mBuildNumber = (majorVersion << 22) | (minorVersion << 12) | patch;
+}
+
+bool QualcommDriverVersion::operator==(const QualcommDriverVersion &version) const
+{
+    return mBuildNumber == version.mBuildNumber;
+}
+
+bool QualcommDriverVersion::operator!=(const QualcommDriverVersion &version) const
+{
+    return !(*this == version);
+}
+
+bool QualcommDriverVersion::operator<(const QualcommDriverVersion &version) const
+{
+    return mBuildNumber < version.mBuildNumber;
+}
+
+bool QualcommDriverVersion::operator>=(const QualcommDriverVersion &version) const
+{
+    return !(*this < version);
+}
+
 IntelDriverVersion::IntelDriverVersion(uint32_t buildNumber) : mBuildNumber(buildNumber) {}
 
 IntelDriverVersion::IntelDriverVersion(uint32_t majorVersion, uint32_t minorVersion)
@@ -303,6 +338,16 @@ IntelDriverVersion ParseIntelWindowsDriverVersion(uint32_t driverVersion)
     constexpr uint32_t kMinorVersionMask = angle::BitMask<uint32_t>(14);
     return IntelDriverVersion(driverVersion >> 18, driverVersion & kMinorVersionMask);
 #endif
+}
+
+QualcommDriverVersion ParseQualcommDriverVersion(uint32_t driverVersion)
+{
+    // Qualcomm driver versions are built with the following macro:
+    // (Major << 22) | (Minor << 12) | (Patch)
+    constexpr uint32_t kMinorVersionMask = angle::BitMask<uint32_t>(10);
+    constexpr uint32_t kPatchMask        = angle::BitMask<uint32_t>(12);
+    return QualcommDriverVersion(driverVersion >> 22, (driverVersion >> 12) & kMinorVersionMask,
+                                 driverVersion & kPatchMask);
 }
 
 ARMDriverVersion ParseARMDriverVersion(uint32_t driverVersion)
