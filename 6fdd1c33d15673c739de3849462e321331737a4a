@@ -50,6 +50,76 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5cececc7_b7a03971",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-07T15:50:02Z",
+      "side": 1,
+      "message": "We likely want to call `readPixels` with `pixels + skipBytes`.",
+      "parentUuid": "1fd0972d_f5280899",
+      "range": {
+        "startLine": 155,
+        "startChar": 56,
+        "endLine": 155,
+        "endChar": 71
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5953795a_2bf19e23",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-07T15:50:02Z",
+      "side": 1,
+      "message": "You can pass the `angle::Format` struct here. It has a `hasDepthOrStencilBits` method to help with this.",
+      "range": {
+        "startLine": 242,
+        "startChar": 61,
+        "endLine": 242,
+        "endChar": 74
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "819e2e02_29916ca8",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-07T15:50:02Z",
+      "side": 1,
+      "message": "I think we want to avoid passing `allocationSize` here and just calculate it locally.  It doesn\u0027t currently take into account that we\u0027re padding all rows to 256 bytes so it may be too small. You should be able calculate it here with `bytesPerRow * area.height` where `bytesPerRow` is the padded width.",
+      "range": {
+        "startLine": 170,
+        "startChar": 38,
+        "endLine": 170,
+        "endChar": 60
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00fb24fc_e2918320",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
         "patchSetId": 14
@@ -84,6 +154,30 @@
       "writtenOn": "2024-05-07T15:39:04Z",
       "side": 1,
       "message": "Ah, yes, you\u0027re right. I think actually we might not need to set the offset for the buffer we\u0027re copying too because it defaults to 0.",
+      "parentUuid": "00fb24fc_e2918320",
+      "range": {
+        "startLine": 185,
+        "startChar": 22,
+        "endLine": 185,
+        "endChar": 77
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7903bb9_8f92930f",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-07T15:50:02Z",
+      "side": 1,
+      "message": "This is the offset put the data in the resulting buffer. Since we\u0027re allocating new buffer for it here, we probably want 0.",
       "parentUuid": "00fb24fc_e2918320",
       "range": {
         "startLine": 185,
@@ -144,6 +238,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da10c379_1d76f657",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-07T15:50:02Z",
+      "side": 1,
+      "message": "Yea a constant somewhere in this file would be great.",
+      "parentUuid": "60a6760b_317d3e75",
+      "range": {
+        "startLine": 186,
+        "startChar": 83,
+        "endLine": 186,
+        "endChar": 94
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "023e9cad_4ba1908d",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
         "patchSetId": 14
@@ -184,6 +302,29 @@
         "startChar": 10,
         "endLine": 193,
         "endChar": 26
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e440c579_13fa7bd0",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-07T15:50:02Z",
+      "side": 1,
+      "message": "`inputPitch` here is the pitch of the data in the buffer we just copied to so it needs to take into account the 256 alignment.",
+      "range": {
+        "startLine": 209,
+        "startChar": 47,
+        "endLine": 209,
+        "endChar": 83
       },
       "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
