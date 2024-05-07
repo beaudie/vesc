@@ -16,6 +16,57 @@
       "message": "Drive-by +1",
       "revId": "bccae65553e84b173c5619b5b47b201c87f98178",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4764441c_9afd9865",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-05-07T10:51:11Z",
+      "side": 1,
+      "message": "This mode change should be reverted..",
+      "revId": "bccae65553e84b173c5619b5b47b201c87f98178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "853cfaba_4a3ca455",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-05-07T10:51:11Z",
+      "side": 1,
+      "message": "Probably safe to remove this comment.",
+      "revId": "bccae65553e84b173c5619b5b47b201c87f98178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9298bd9e_a583dc59",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-05-07T10:51:11Z",
+      "side": 1,
+      "message": "\"statement\" rather than \"expression\"?\n(rememeber to adjust the tests if you change)",
+      "revId": "bccae65553e84b173c5619b5b47b201c87f98178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
