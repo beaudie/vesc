@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96395418_1a8ef9a6",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-07T00:24:31Z",
+      "side": 1,
+      "message": "Missed a part of the suggestion:\n\n```suggestion\n    std::vector\u003cGLColor\u003e pixelData(kSize * kSize, GLColor::blue);\n```",
+      "revId": "f6b98b7f4f0c6aa401695296b668e16bc5e46e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
