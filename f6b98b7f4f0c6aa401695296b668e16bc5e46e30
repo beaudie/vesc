@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5c4b0c75_2f929ea9",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T10:34:15Z",
+      "side": 1,
+      "message": "Maybe rename to startRenderPass() if this always starts a new RenderPass?",
+      "range": {
+        "startLine": 543,
+        "startChar": 27,
+        "endLine": 543,
+        "endChar": 50
+      },
+      "revId": "f6b98b7f4f0c6aa401695296b668e16bc5e46e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9e7a922_ca1e467c",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T10:34:15Z",
+      "side": 1,
+      "message": "So when should `mCurrentColorAttachments` end up getting cleared? I would\u0027ve thought after flush(), but then the previous code would\u0027ve worked right?",
+      "range": {
+        "startLine": 136,
+        "startChar": 8,
+        "endLine": 136,
+        "endChar": 60
+      },
+      "revId": "f6b98b7f4f0c6aa401695296b668e16bc5e46e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96395418_1a8ef9a6",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 10
