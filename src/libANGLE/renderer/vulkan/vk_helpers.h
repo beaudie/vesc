@@ -1350,6 +1350,14 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     RefCountedEventCollector *getRefCountedEventCollector() { return &mRefCountedEventCollector; }
 
+    void collectRefCountedEventsGarbage(RefCountedEventsGarbageList *refCountedEventGarbageList)
+    {
+        if (!mRefCountedEventCollector.empty())
+        {
+            refCountedEventGarbageList->emplace(mQueueSerial, std::move(mRefCountedEventCollector));
+        }
+    }
+
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
     void setAcquireNextImageSemaphore(VkSemaphore semaphore)

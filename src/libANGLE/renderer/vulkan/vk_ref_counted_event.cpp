@@ -20,28 +20,37 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
     ASSERT(mHandle == nullptr);
     ASSERT(layout != ImageLayout::Undefined);
 
-    mHandle                      = new AtomicRefCounted<EventAndLayout>;
-    VkEventCreateInfo createInfo = {};
-    createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
-    // Use device only for performance reasons.
-    createInfo.flags = context->getFeatures().supportsSynchronization2.enabled
-                           ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
-                           : 0;
-    mHandle->get().event.init(context->getDevice(), createInfo);
+    // First try to fetch from recycler
+    if (context->getRefCountedEventRecycler()->fetch(this))
+    {
+        ASSERT(mHandle != nullptr);
+        ASSERT(!mHandle->isReferenced());
+    }
+    else
+    {
+        mHandle                      = new AtomicRefCounted<EventAndLayout>;
+        VkEventCreateInfo createInfo = {};
+        createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
+        // Use device only for performance reasons.
+        createInfo.flags = context->getFeatures().supportsSynchronization2.enabled
+                               ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
+                               : 0;
+        mHandle->get().event.init(context->getDevice(), createInfo);
+    }
+
     mHandle->addRef();
     mHandle->get().imageLayout = layout;
 }
 
 // RefCountedEventsGarbage implementation.
-bool RefCountedEventsGarbage::destroyIfComplete(Renderer *renderer)
+bool RefCountedEventsGarbage::destroyIfComplete(Renderer *renderer,
+                                                RefCountedEventRecycler *recycler)
 {
     if (renderer->hasResourceUseFinished(mLifetime))
     {
         for (RefCountedEvent &event : mRefCountedEvents)
         {
-            ASSERT(event.valid());
-            event.release(renderer->getDevice());
-            ASSERT(!event.valid());
+            recycler->emplace(std::move(event));
         }
         mRefCountedEvents.clear();
         return true;

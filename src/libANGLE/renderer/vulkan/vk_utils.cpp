@@ -370,9 +370,14 @@ VkImageAspectFlags GetFormatAspectFlags(const angle::Format &format)
 }
 
 // Context implementation.
-Context::Context(Renderer *renderer) : mRenderer(renderer), mPerfCounters{} {}
+Context::Context(Renderer *renderer)
+    : mRenderer(renderer), mRefCountedEventRecycler(nullptr), mPerfCounters{}
+{}
 
-Context::~Context() {}
+Context::~Context()
+{
+    ASSERT(mRefCountedEventRecycler == nullptr);
+}
 
 VkDevice Context::getDevice() const
 {
