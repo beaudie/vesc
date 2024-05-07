@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f19cee76_96ffe3c7",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T16:15:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c4b0c75_2f929ea9",
+      "range": {
+        "startLine": 543,
+        "startChar": 27,
+        "endLine": 543,
+        "endChar": 50
+      },
+      "revId": "f6b98b7f4f0c6aa401695296b668e16bc5e46e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9e7a922_ca1e467c",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-07T10:34:15Z",
       "side": 1,
       "message": "So when should `mCurrentColorAttachments` end up getting cleared? I would\u0027ve thought after flush(), but then the previous code would\u0027ve worked right?",
+      "range": {
+        "startLine": 136,
+        "startChar": 8,
+        "endLine": 136,
+        "endChar": 60
+      },
+      "revId": "f6b98b7f4f0c6aa401695296b668e16bc5e46e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0b76718_c719a009",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T16:15:35Z",
+      "side": 1,
+      "message": "Yeah we can\u0027t clear it right after the flush. I think we\u0027ll need to clear it in `FramebufferWgpu::syncState`. VK does something similar with an `updateRenderPassDesc` (https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/FramebufferVk.cpp;l\u003d2546). We\u0027ll want to clear `mCurrentColorAttachments` and push back any color values we can get from the current context\u0027s state. I was going to save doing this for when I added support for deferring clears, but I can just add a simple method to update `mCurrentColorAttachments` in syncState in this CL if you think it makes sense?",
+      "parentUuid": "c9e7a922_ca1e467c",
       "range": {
         "startLine": 136,
         "startChar": 8,
