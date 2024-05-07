@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d931392_f33a7a58",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T21:40:25Z",
+      "side": 1,
+      "message": "Good idea, `outputPitch` does go through a ANGLE_CHECK_GL_MATH, and the `clippedArea` is also checked to ensure it\u0027s clipped to the framebuffer, but I don\u0027t see `area` getting gut checked anywhere so worth using a CheckedNumeric here to be safe.",
+      "parentUuid": "446a91f7_a201d44b",
+      "range": {
+        "startLine": 543,
+        "startChar": 21,
+        "endLine": 544,
+        "endChar": 60
+      },
+      "revId": "9313bf66b7f5a16159b1b502cc43b4a4bd1fdb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b54f6ae1_ba17cb37",
@@ -94,6 +118,30 @@
       "writtenOn": "2024-05-07T21:00:15Z",
       "side": 1,
       "message": "This looks like a texture mip level used as an offset into a buffer?",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 78
+      },
+      "revId": "9313bf66b7f5a16159b1b502cc43b4a4bd1fdb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8ddc02e_dbc29db1",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T21:40:25Z",
+      "side": 1,
+      "message": "Whoops, it is and it should just be a 0 offset.",
+      "parentUuid": "7bbd7071_137c1ea9",
       "range": {
         "startLine": 206,
         "startChar": 39,
