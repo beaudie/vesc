@@ -214,6 +214,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b856c492_6f9660be",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T21:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1aea981a_f5617a3d",
+      "range": {
+        "startLine": 170,
+        "startChar": 38,
+        "endLine": 170,
+        "endChar": 60
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00fb24fc_e2918320",
@@ -370,6 +394,30 @@
       "side": 1,
       "message": "Yea a constant somewhere in this file would be great.",
       "parentUuid": "60a6760b_317d3e75",
+      "range": {
+        "startLine": 186,
+        "startChar": 83,
+        "endLine": 186,
+        "endChar": 94
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0ced6d6_dd5ce525",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-07T21:00:45Z",
+      "side": 1,
+      "message": "Oh, just to double check, you meant to agree that a comment would be great, yeah?",
+      "parentUuid": "da10c379_1d76f657",
       "range": {
         "startLine": 186,
         "startChar": 83,
