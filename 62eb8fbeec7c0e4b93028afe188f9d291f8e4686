@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6b1d04c_eba55567",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-07T16:34:41Z",
+      "side": 1,
+      "message": "That\u0027s quite impressive! fwiw zlib heavily uses SIMD instructions for crc, we found a linux bot where this SIMD stuff specifically was broken so it was failing gunzip until the CPU got swapped to a new one and that fixed everything :]",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 32
+      },
+      "revId": "62eb8fbeec7c0e4b93028afe188f9d291f8e4686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de737e77_617ddc3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-07T16:34:41Z",
+      "side": 1,
+      "message": "```\n    size of blob  - 20308078 bytes\n    ComputeCRC16  - 0.433155 sec\n    zlib::crc32_z - 0.002547 sec",
+      "revId": "62eb8fbeec7c0e4b93028afe188f9d291f8e4686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
