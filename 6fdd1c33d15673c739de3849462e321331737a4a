@@ -430,6 +430,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bff4bdea_20353cfe",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-07T22:54:03Z",
+      "side": 1,
+      "message": "Constant + comment sounds good 😊\n\nSpec link is: https://www.w3.org/TR/webgpu/#abstract-opdef-validating-gpuimagecopybuffer",
+      "parentUuid": "c0ced6d6_dd5ce525",
+      "range": {
+        "startLine": 186,
+        "startChar": 83,
+        "endLine": 186,
+        "endChar": 94
+      },
+      "revId": "6fdd1c33d15673c739de3849462e321331737a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "023e9cad_4ba1908d",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
         "patchSetId": 14
