@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c155dea1_5407ed91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3426581
+      },
+      "writtenOn": "2024-05-07T16:52:56Z",
+      "side": 1,
+      "message": "Addressed Kimmo\u0027s comments.",
+      "revId": "c0420f283fb3659ff13539217adbf88b868ce0ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
