@@ -1209,6 +1209,11 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
         mPipelineDirtyBitsMask.reset(gl::state::DIRTY_BIT_VERTEX_ARRAY_BINDING);
     }
 
+    if (getFeatures().useEventForImageBarrier.enabled)
+    {
+        mRefCountedEventRecycler = new RefCountedEventRecycler;
+    }
+
     angle::PerfMonitorCounterGroup vulkanGroup;
     vulkanGroup.name = "vulkan";
 
@@ -1313,6 +1318,12 @@ void ContextVk::onDestroy(const gl::Context *context)
     }
 
     mImageLoadContext = {};
+
+    if (mRefCountedEventRecycler != nullptr)
+    {
+        mRefCountedEventRecycler->destroy(getDevice());
+        SafeDelete(mRefCountedEventRecycler);
+    }
 }
 
 VertexArrayVk *ContextVk::getVertexArray() const
@@ -4021,12 +4032,8 @@ void ContextVk::clearAllGarbage()
     }
     mCurrentGarbage.clear();
 
-    for (vk::RefCountedEventsGarbage &garbage : mRefCountedEventGarbageList)
-    {
-        bool destroyed = garbage.destroyIfComplete(mRenderer);
-        ASSERT(destroyed);
-    }
-    mRefCountedEventGarbageList.clear();
+    mRefCountedEventGarbageList.cleanup(mRenderer, mRefCountedEventRecycler);
+    ASSERT(mRefCountedEventGarbageList.empty());
 }
 
 void ContextVk::handleDeviceLost()
@@ -8001,20 +8008,13 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     // Track completion of this command buffer.
     mRenderPassCommands->flushSetEvents(this);
+    mRenderPassCommands->collectRefCountedEventsGarbage(&mRefCountedEventGarbageList);
 
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
     ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastFlushedQueueSerial,
                                                    mRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mRenderPassCommands->getQueueSerial();
-
-    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
-    // so the event itself will not gets destroyed until the last refCount goes away.
-    if (!mRenderPassCommands->getRefCountedEventCollector()->empty())
-    {
-        addRefCountedEventsGarbage(mLastFlushedQueueSerial,
-                                   std::move(*mRenderPassCommands->getRefCountedEventCollector()));
-    }
 
     // If a new framebuffer is used to accommodate resolve attachments that have been added after
     // the fact, create a temp one now and add it to garbage list.
@@ -8292,21 +8292,13 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     // Track completion of this command buffer.
     mOutsideRenderPassCommands->flushSetEvents(this);
+    mOutsideRenderPassCommands->collectRefCountedEventsGarbage(&mRefCountedEventGarbageList);
 
     // Save the queueSerial before calling flushOutsideRPCommands, which may return a new
     // mOutsideRenderPassCommands
     ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastFlushedQueueSerial,
                                                    mOutsideRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mOutsideRenderPassCommands->getQueueSerial();
-
-    // Clean up event garbage. Note that ImageHelper object may still holding reference count to it,
-    // so the event itself will not gets destroyed until the last refCount goes away.
-    if (!mOutsideRenderPassCommands->getRefCountedEventCollector()->empty())
-    {
-        addRefCountedEventsGarbage(
-            mLastFlushedQueueSerial,
-            std::move(*mOutsideRenderPassCommands->getRefCountedEventCollector()));
-    }
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, getProtectionType(), mContextPriority,
                                                 &mOutsideRenderPassCommands));

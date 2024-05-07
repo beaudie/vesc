@@ -131,7 +131,6 @@ class RefCountedEvent final
         return mHandle->get().imageLayout;
     }
 
-  private:
     void destroy(VkDevice device)
     {
         ASSERT(mHandle != nullptr);
@@ -140,9 +139,45 @@ class RefCountedEvent final
         SafeDelete(mHandle);
     }
 
+  private:
     AtomicRefCounted<EventAndLayout> *mHandle;
 };
 using RefCountedEventCollector = std::vector<RefCountedEvent>;
+
+class RefCountedEventRecycler final
+{
+  public:
+    void destroy(VkDevice device)
+    {
+        while (!mQueue.empty())
+        {
+            mQueue.front().destroy(device);
+            mQueue.pop();
+        }
+    }
+
+    bool fetch(RefCountedEvent *refCountedEvent)
+    {
+        if (!mQueue.empty())
+        {
+            *refCountedEvent = std::move(mQueue.front());
+            mQueue.pop();
+            return true;
+        }
+        return false;
+    }
+
+    void emplace(RefCountedEvent &&refCountedEvent)
+    {
+        ASSERT(refCountedEvent.valid());
+        mQueue.emplace(std::move(refCountedEvent));
+    }
+
+    bool empty() const { return mQueue.empty(); }
+
+  private:
+    std::queue<RefCountedEvent> mQueue;
+};
 
 // This class tracks a vector of RefcountedEvent garbage. For performance reason, instead of
 // individually tracking each VkEvent garbage, we collect all events that are accessed in the
@@ -177,7 +212,7 @@ class RefCountedEventsGarbage final
         return *this;
     }
 
-    bool destroyIfComplete(Renderer *renderer);
+    bool destroyIfComplete(Renderer *renderer, RefCountedEventRecycler *recycler);
     bool hasResourceUseSubmitted(Renderer *renderer) const;
     VkDeviceSize getSize() const { return mRefCountedEvents.size(); }
 
@@ -210,6 +245,36 @@ class RefCountedEventsGarbage final
   private:
     ResourceUse mLifetime;
     RefCountedEventCollector mRefCountedEvents;
+};
+
+class RefCountedEventsGarbageList final
+{
+  public:
+    void cleanup(Renderer *renderer, RefCountedEventRecycler *recycler)
+    {
+        while (!mQueue.empty())
+        {
+            bool destroyed = mQueue.front().destroyIfComplete(renderer, recycler);
+            if (destroyed)
+            {
+                mQueue.pop();
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    void emplace(const QueueSerial &queueSerial, RefCountedEventCollector &&refCountedEvents)
+    {
+        mQueue.emplace(queueSerial, std::move(refCountedEvents));
+    }
+
+    bool empty() const { return mQueue.empty(); }
+
+  private:
+    std::queue<RefCountedEventsGarbage> mQueue;
 };
 
 // This wraps data and API for vkCmdWaitEvent call
