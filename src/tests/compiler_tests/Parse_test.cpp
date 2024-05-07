@@ -307,7 +307,7 @@ void main() {
     shader << "; }";
     EXPECT_FALSE(compile(shader.str()));
     EXPECT_TRUE(foundErrorInIntermediateTree());
-    EXPECT_TRUE(foundInIntermediateTree("expression is too deeply nested"));
+    EXPECT_TRUE(foundInIntermediateTree("statement is too deeply nested"));
 }
 
 TEST_F(ParseTest, DeeplyNestedForExpresionsNoCrash)
@@ -324,7 +324,7 @@ void main() {
     shader << "; }";
     EXPECT_FALSE(compile(shader.str()));
     EXPECT_TRUE(foundErrorInIntermediateTree());
-    EXPECT_TRUE(foundInIntermediateTree("expression is too deeply nested"));
+    EXPECT_TRUE(foundInIntermediateTree("statement is too deeply nested"));
 }
 
 TEST_F(ParseTest, DeeplyNestedDoWhileExpresionsNoCrash)
@@ -345,5 +345,5 @@ void main() {
     shader << "}";
     EXPECT_FALSE(compile(shader.str()));
     EXPECT_TRUE(foundErrorInIntermediateTree());
-    EXPECT_TRUE(foundInIntermediateTree("expression is too deeply nested"));
+    EXPECT_TRUE(foundInIntermediateTree("statement is too deeply nested"));
 }
