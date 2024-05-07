@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc802453_cb4528eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-07T19:13:18Z",
+      "side": 1,
+      "message": "LGTM, thanks for pushing on this.",
+      "revId": "8ac580bc0668854cba858b10ea7e2c59dc17b40d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7baf2b89_c8863af6",
+        "filename": "include/platform/autogen/FeaturesVk_autogen.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-07T19:13:18Z",
+      "side": 1,
+      "message": "This is confusing given the feature name, but I guess the latter requires the former.",
+      "range": {
+        "startLine": 1164,
+        "startChar": 31,
+        "endLine": 1164,
+        "endChar": 92
+      },
+      "revId": "8ac580bc0668854cba858b10ea7e2c59dc17b40d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
