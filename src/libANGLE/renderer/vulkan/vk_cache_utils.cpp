@@ -4278,7 +4278,8 @@ DescriptorSetLayoutDesc::DescriptorSetLayoutDesc()
       mDescriptorSetLayoutHashTime(0),
       mDescriptorSetLayoutComparedBytes(0),
       mDescriptorSetLayoutComparisonTime(0),
-      mDescriptorSetLayoutBindings{}, mImmutableSamplers{}
+      mDescriptorSetLayoutBindings{},
+      mImmutableSamplers{}
 {}
 
 DescriptorSetLayoutDesc::~DescriptorSetLayoutDesc() = default;
@@ -4318,8 +4319,7 @@ size_t DescriptorSetLayoutDesc::hash() const
     mDescriptorSetLayoutHashTime += (t2 - t1).count();
     mDescriptorSetLayoutHashedBytes +=
         validDescriptorSetLayoutBindingsCount * sizeof(mDescriptorSetLayoutBindings[0]);
-    mDescriptorSetLayoutHashedBytes +=
-        validImmutableSamplersCount * sizeof(mImmutableSamplers[0]);
+    mDescriptorSetLayoutHashedBytes += validImmutableSamplersCount * sizeof(mImmutableSamplers[0]);
 
     return genericHash;
 }
@@ -4329,13 +4329,13 @@ bool DescriptorSetLayoutDesc::operator==(const DescriptorSetLayoutDesc &other) c
     auto t1 = Clock::now();
 
     const bool result = mDescriptorSetLayoutBindings == other.mDescriptorSetLayoutBindings &&
-           mImmutableSamplers == other.mImmutableSamplers;
+                        mImmutableSamplers == other.mImmutableSamplers;
 
     auto t2 = Clock::now();
     mDescriptorSetLayoutComparisonTime += (t2 - t1).count();
     mDescriptorSetLayoutComparedBytes +=
-        mDescriptorSetLayoutBindings.size() * sizeof(mDescriptorSetLayoutBindings[0])
-        + mImmutableSamplers.size() * sizeof(mImmutableSamplers[0]);
+        mDescriptorSetLayoutBindings.size() * sizeof(mDescriptorSetLayoutBindings[0]) +
+        mImmutableSamplers.size() * sizeof(mImmutableSamplers[0]);
 
     return result;
 }
@@ -4350,34 +4350,49 @@ void DescriptorSetLayoutDesc::update(uint32_t bindingIndex,
     ASSERT(count < std::numeric_limits<uint16_t>::max());
     ASSERT(bindingIndex < std::numeric_limits<uint16_t>::max());
 
-    PackedDescriptorSetBinding packedBinding = {};
+    if (bindingIndex >= mDescriptorSetLayoutBindings.size())
+    {
+        PackedDescriptorSetBinding invalid = {};
+        invalid.type                       = PackedDescriptorSetBinding::kInvalidType;
+        mDescriptorSetLayoutBindings.resize(bindingIndex + 1, invalid);
+    }
+
+    PackedDescriptorSetBinding &packedBinding = mDescriptorSetLayoutBindings[bindingIndex];
     SetBitField(packedBinding.type, descriptorType);
     SetBitField(packedBinding.count, count);
     SetBitField(packedBinding.stages, stages);
-    SetBitField(packedBinding.bindingIndex, bindingIndex);
     SetBitField(packedBinding.hasImmutableSampler, 0);
 
     if (immutableSampler)
     {
+        if (bindingIndex >= mImmutableSamplers.size())
+        {
+            mImmutableSamplers.resize(bindingIndex + 1);
+        }
+
         ASSERT(count == 1);
         SetBitField(packedBinding.hasImmutableSampler, 1);
-        mImmutableSamplers.push_back(immutableSampler->getHandle());
+        mImmutableSamplers[bindingIndex] = immutableSampler->getHandle();
     }
-
-    mDescriptorSetLayoutBindings.push_back(std::move(packedBinding));
 }
 
 void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *bindings) const
 {
-    size_t immutableSamplersIndex = 0;
-
     // Unpack all valid descriptor set layout bindings
-    for (const PackedDescriptorSetBinding &packedBinding : mDescriptorSetLayoutBindings)
+    for (size_t bindingIndex = 0; bindingIndex < mDescriptorSetLayoutBindings.size();
+         ++bindingIndex)
     {
+        const PackedDescriptorSetBinding &packedBinding =
+            mDescriptorSetLayoutBindings[bindingIndex];
+        if (packedBinding.type == PackedDescriptorSetBinding::kInvalidType)
+        {
+            continue;
+        }
+
         ASSERT(packedBinding.count != 0);
 
         VkDescriptorSetLayoutBinding binding = {};
-        binding.binding                      = static_cast<uint32_t>(packedBinding.bindingIndex);
+        binding.binding                      = static_cast<uint32_t>(bindingIndex);
         binding.descriptorCount              = packedBinding.count;
         binding.descriptorType               = static_cast<VkDescriptorType>(packedBinding.type);
         binding.stageFlags = static_cast<VkShaderStageFlags>(packedBinding.stages);
@@ -4385,7 +4400,7 @@ void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *b
         if (packedBinding.hasImmutableSampler)
         {
             ASSERT(packedBinding.count == 1);
-            binding.pImmutableSamplers = &mImmutableSamplers[immutableSamplersIndex++];
+            binding.pImmutableSamplers = &mImmutableSamplers[bindingIndex];
         }
 
         bindings->push_back(binding);
@@ -7519,7 +7534,8 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
         desc.mDescriptorSetLayoutHashTime = 0;
         rendererVk->updateDescriptorSetLayoutComparedBytes(desc.mDescriptorSetLayoutComparedBytes);
         desc.mDescriptorSetLayoutComparedBytes = 0;
-        rendererVk->updateDescriptorSetLayoutComparisonTime(desc.mDescriptorSetLayoutComparisonTime);
+        rendererVk->updateDescriptorSetLayoutComparisonTime(
+            desc.mDescriptorSetLayoutComparisonTime);
         desc.mDescriptorSetLayoutComparisonTime = 0;
         return angle::Result::Continue;
     }

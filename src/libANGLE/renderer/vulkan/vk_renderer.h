@@ -755,7 +755,10 @@ class Renderer : angle::NonCopyable
     }
     void recordDescriptorSetLayoutCacheHit() { mDescriptorSetLayoutCacheHitCount++; }
     void recordDescriptorSetLayoutCacheMiss() { mDescriptorSetLayoutCacheMissCount++; }
-    void updateDescriptorSetLayoutHashBytes(size_t size) { mDescriptorSetLayoutHashedBytes+= size; }
+    void updateDescriptorSetLayoutHashBytes(size_t size)
+    {
+        mDescriptorSetLayoutHashedBytes += size;
+    }
     void updateDescriptorSetLayoutHashTime(size_t time) { mDescriptorSetLayoutHashTime += time; }
     void updateDescriptorSetLayoutComparedBytes(size_t size)
     {
