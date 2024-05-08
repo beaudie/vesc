@@ -25,7 +25,6 @@ class ANGLE_UTIL_EXPORT WaylandWindow : public OSWindow
     ~WaylandWindow() override;
 
     void disableErrorMessageDialog() override;
-    void destroy() override;
 
     void resetNativeWindow() override;
     EGLNativeWindowType getNativeWindow() const override;
@@ -52,6 +51,7 @@ class ANGLE_UTIL_EXPORT WaylandWindow : public OSWindow
     static void RegistryHandleGlobalRemove(void *data, struct wl_registry *registry, uint32_t name);
 
     bool initializeImpl(const std::string &name, int width, int height) override;
+    void destroyImpl() override;
 
     static const struct wl_registry_listener registryListener;
 

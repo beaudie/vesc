@@ -280,7 +280,6 @@ class ANGLE_UTIL_EXPORT X11Window : public OSWindow
     ~X11Window() override;
 
     void disableErrorMessageDialog() override;
-    void destroy() override;
 
     void resetNativeWindow() override;
     EGLNativeWindowType getNativeWindow() const override;
@@ -299,6 +298,7 @@ class ANGLE_UTIL_EXPORT X11Window : public OSWindow
 
   private:
     bool initializeImpl(const std::string &name, int width, int height) override;
+    void destroyImpl() override;
     void processEvent(const XEvent &event);
 
     Atom WM_DELETE_WINDOW;
@@ -436,7 +436,7 @@ bool X11Window::initializeImpl(const std::string &name, int width, int height)
 
 void X11Window::disableErrorMessageDialog() {}
 
-void X11Window::destroy()
+void X11Window::destroyImpl()
 {
     if (mWindow)
     {

@@ -18,7 +18,6 @@ class AndroidWindow : public OSWindow
     ~AndroidWindow() override;
 
     void disableErrorMessageDialog() override;
-    void destroy() override;
 
     void resetNativeWindow() override;
     EGLNativeWindowType getNativeWindow() const override;
@@ -38,6 +37,7 @@ class AndroidWindow : public OSWindow
 
   private:
     bool initializeImpl(const std::string &name, int width, int height) override;
+    void destroyImpl() override;
 };
 
 #endif /* UTIL_ANDROID_WINDOW_H_ */

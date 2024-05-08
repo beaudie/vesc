@@ -64,7 +64,7 @@ bool AndroidWindow::initializeImpl(const std::string &name, int width, int heigh
 {
     return resize(width, height);
 }
-void AndroidWindow::destroy() {}
+void AndroidWindow::destroyImpl() {}
 
 void AndroidWindow::disableErrorMessageDialog() {}
 

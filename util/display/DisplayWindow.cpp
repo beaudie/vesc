@@ -27,7 +27,7 @@ bool DisplayWindow::initializeImpl(const std::string &name, int width, int heigh
 
 void DisplayWindow::disableErrorMessageDialog() {}
 
-void DisplayWindow::destroy() {}
+void DisplayWindow::destroyImpl() {}
 
 void DisplayWindow::resetNativeWindow() {}
 

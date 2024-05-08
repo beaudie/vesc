@@ -36,7 +36,6 @@ class OSXWindow : public OSWindow
     ~OSXWindow() override;
 
     void disableErrorMessageDialog() override;
-    void destroy() override;
 
     void resetNativeWindow() override;
     EGLNativeWindowType getNativeWindow() const override;
@@ -56,6 +55,7 @@ class OSXWindow : public OSWindow
 
   private:
     bool initializeImpl(const std::string &name, int width, int height) override;
+    void destroyImpl() override;
 
     NSWindow *mWindow;
     WindowDelegate *mDelegate;
