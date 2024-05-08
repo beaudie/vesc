@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a601c1b_392e3938",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-08T20:04:46Z",
+      "side": 1,
+      "message": "Should we call this something like `CompareRenderPassColorAttachment` to differentiate it more from `RenderPassColorAttachmentsEqual`?",
+      "range": {
+        "startLine": 24,
+        "startChar": 5,
+        "endLine": 24,
+        "endChar": 35
+      },
+      "revId": "cfc97e5e54e88c8447d0151137e714a620407ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
