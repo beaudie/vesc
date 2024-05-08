@@ -829,7 +829,7 @@ void ANGLETestBase::ANGLETestTearDown()
     else
     {
         mFixture->eglWindow->destroyContext();
-        mFixture->eglWindow->destroySurface();
+        // mFixture->eglWindow->destroySurface();
     }
 
     Event myEvent;
