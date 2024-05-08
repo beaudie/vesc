@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5de2e42c_e90a0849",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-08T15:23:39Z",
+      "side": 1,
+      "message": "The premise makes me slightly ill, but this seems like a natural mirror to `GL_KHR_no_error`",
+      "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b10aa98f_08678ae0",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-08T15:23:39Z",
+      "side": 1,
+      "message": "Why have an else clause for these?  Is this a part of validation that should be hoisted and unconditional?",
+      "range": {
+        "startLine": 473,
+        "startChar": 16,
+        "endLine": 473,
+        "endChar": 33
+      },
+      "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
