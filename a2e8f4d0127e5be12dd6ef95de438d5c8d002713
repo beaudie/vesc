@@ -81,6 +81,87 @@
       },
       "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a6f40ed_2615114a",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-08T15:47:12Z",
+      "side": 1,
+      "message": "Should we add a test for that too? (Disable validation and pass in a no-EGL_NONE attrib list)",
+      "parentUuid": "22710ef2_285bfe8a",
+      "range": {
+        "startLine": 473,
+        "startChar": 16,
+        "endLine": 473,
+        "endChar": 33
+      },
+      "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9040f7b0_3605929a",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-08T15:47:12Z",
+      "side": 1,
+      "message": "ditto\n\n```suggestion\nbool g_EGLValidationEnabled \u003d true;\n```",
+      "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd736a8c_9283eae6",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-08T15:47:12Z",
+      "side": 1,
+      "message": "Maybe a little clearer out of context?\n\n```suggestion\nvoid SetEGLValidationEnabled(bool enabled);\nbool IsEGLValidationEnabled();\n```",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 27
+      },
+      "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61e4fe78_e471269c",
+        "filename": "src/tests/egl_tests/EGLNoErrorTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-08T15:47:12Z",
+      "side": 1,
+      "message": "```suggestion\n// Validation errors become undefined behaviour with this extension. Simply test turning validation\n```",
+      "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
