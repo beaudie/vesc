@@ -117,7 +117,7 @@ angle::Result FramebufferWgpu::clear(const gl::Context *context, GLbitfield mask
     {
         wgpu::RenderPassColorAttachment colorAttachment;
         colorAttachment.view =
-            mRenderTargetCache.getColorDraw(mState, enabledDrawBuffer)->getTexture();
+            mRenderTargetCache.getColorDraw(mState, enabledDrawBuffer)->getTextureView();
         colorAttachment.depthSlice   = wgpu::kDepthSliceUndefined;
         colorAttachment.loadOp       = wgpu::LoadOp::Clear;
         colorAttachment.storeOp      = wgpu::StoreOp::Store;

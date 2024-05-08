@@ -365,6 +365,12 @@ bool OSWindow::initialize(const std::string &name, int width, int height)
     return mValid;
 }
 
+void OSWindow::destroy()
+{
+    destroyImpl();
+    mValid = false;
+}
+
 int OSWindow::getX() const
 {
     return mX;

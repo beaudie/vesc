@@ -19,7 +19,6 @@ class IOSWindow : public OSWindow
     ~IOSWindow() override {}
 
     void disableErrorMessageDialog() override {}
-    void destroy() override {}
 
     void resetNativeWindow() override {}
     EGLNativeWindowType getNativeWindow() const override;
@@ -41,6 +40,7 @@ class IOSWindow : public OSWindow
 
   private:
     bool initializeImpl(const std::string &name, int width, int height) override;
+    void destroyImpl() override {}
 };
 
 #endif  // UTIL_IOS_WINDOW_H_

@@ -690,7 +690,7 @@ bool OSXWindow::initializeImpl(const std::string &name, int width, int height)
 
 void OSXWindow::disableErrorMessageDialog() {}
 
-void OSXWindow::destroy()
+void OSXWindow::destroyImpl()
 {
     AllWindows().erase(this);
 
