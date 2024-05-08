@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b148cd0_4ed77813",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-08T22:29:51Z",
+      "side": 0,
+      "message": "Sorry, ignore this, we are constructing these render pass descs ourselves and won\u0027t be editing nextInchain. 😊",
+      "parentUuid": "9aa88a8b_101e4053",
+      "range": {
+        "startLine": 59,
+        "startChar": 14,
+        "endLine": 59,
+        "endChar": 25
+      },
+      "revId": "36cd4c1f076df866fdabf1796c81b6840f8c204f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95cfeec3_c7f3118d",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-08T22:08:41Z",
       "side": 0,
       "message": "I take it that it\u0027s safe to ignore these :)",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 89
+      },
+      "revId": "36cd4c1f076df866fdabf1796c81b6840f8c204f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee64aee9_b6edacd9",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-08T22:29:51Z",
+      "side": 0,
+      "message": "Ignore this comment too.",
+      "parentUuid": "95cfeec3_c7f3118d",
       "range": {
         "startLine": 77,
         "startChar": 4,

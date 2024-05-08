@@ -22,6 +22,29 @@
       },
       "revId": "cfc97e5e54e88c8447d0151137e714a620407ae5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5592d44_af625732",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-08T22:29:51Z",
+      "side": 1,
+      "message": "Delete this comment as it\u0027s about clearing `mCurrentColorAttachments`.",
+      "range": {
+        "startLine": 128,
+        "startChar": 8,
+        "endLine": 128,
+        "endChar": 60
+      },
+      "revId": "cfc97e5e54e88c8447d0151137e714a620407ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
