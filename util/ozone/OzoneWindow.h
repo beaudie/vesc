@@ -20,7 +20,6 @@ class OzoneWindow : public OSWindow
     ~OzoneWindow() override;
 
     void disableErrorMessageDialog() override;
-    void destroy() override;
 
     void resetNativeWindow() override;
     EGLNativeWindowType getNativeWindow() const override;
@@ -38,6 +37,7 @@ class OzoneWindow : public OSWindow
 
   private:
     bool initializeImpl(const std::string &name, int width, int height) override;
+    void destroyImpl() override;
 
     struct Native
     {

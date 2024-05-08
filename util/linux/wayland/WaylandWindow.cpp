@@ -93,7 +93,7 @@ bool WaylandWindow::initializeImpl(const std::string &name, int width, int heigh
 
 void WaylandWindow::disableErrorMessageDialog() {}
 
-void WaylandWindow::destroy()
+void WaylandWindow::destroyImpl()
 {
     if (mWindow)
     {

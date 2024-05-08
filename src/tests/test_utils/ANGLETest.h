@@ -568,6 +568,7 @@ class ANGLETestBase
                   bool useTessellationPatches,
                   GLuint numInstances);
 
+    void createOSWindow();
     void initOSWindow();
 
     struct TestFixture

@@ -77,7 +77,7 @@ bool ScenicWindow::initializeImpl(const std::string &name, int width, int height
 
 void ScenicWindow::disableErrorMessageDialog() {}
 
-void ScenicWindow::destroy()
+void ScenicWindow::destroyImpl()
 {
     mFuchsiaEGLWindow.reset();
 }

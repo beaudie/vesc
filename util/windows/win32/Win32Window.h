@@ -21,7 +21,6 @@ class Win32Window : public OSWindow
     Win32Window();
     ~Win32Window() override;
 
-    void destroy() override;
     void disableErrorMessageDialog() override;
 
     bool takeScreenshot(uint8_t *pixelData) override;
@@ -44,6 +43,7 @@ class Win32Window : public OSWindow
 
   private:
     bool initializeImpl(const std::string &name, int width, int height) override;
+    void destroyImpl() override;
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
     std::string mParentClassName;

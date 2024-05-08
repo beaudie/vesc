@@ -582,7 +582,7 @@ void Win32Window::disableErrorMessageDialog()
     _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 }
 
-void Win32Window::destroy()
+void Win32Window::destroyImpl()
 {
     if (mNativeDisplay)
     {
@@ -687,7 +687,7 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
         bitmapInfo.biClrUsed       = 0;
         bitmapInfo.biClrImportant  = 0;
         int getBitsResult          = GetDIBits(screenDC, tmpBitmap, 0, mHeight, pixelData,
-                                      reinterpret_cast<BITMAPINFO *>(&bitmapInfo), DIB_RGB_COLORS);
+                                               reinterpret_cast<BITMAPINFO *>(&bitmapInfo), DIB_RGB_COLORS);
         error                      = (getBitsResult == 0);
     }
 

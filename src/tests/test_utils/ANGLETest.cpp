@@ -514,16 +514,20 @@ ANGLETestBase::ANGLETestBase(const PlatformParameters &params)
     if (!params.noFixture)
     {
         mFixture = &insertIter.first->second;
-        initOSWindow();
+        createOSWindow();
+    }
+
+    // Force windows to be re-created when running WebGPU tests on Windows. The WebGPU DXGI swap
+    // chain is not fully released by the time a new one is created for the same window which causes
+    // errors.
+    if (IsWindows() && withMethods.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_WEBGPU_ANGLE)
+    {
+        mForceNewDisplay = true;
     }
 }
 
-void ANGLETestBase::initOSWindow()
+void ANGLETestBase::createOSWindow()
 {
-    std::stringstream windowNameStream;
-    windowNameStream << "ANGLE Tests - " << *mCurrentParams;
-    std::string windowName = windowNameStream.str();
-
     if (IsAndroid())
     {
         // Only one window per test application on Android, shared among all fixtures
@@ -537,17 +541,32 @@ void ANGLETestBase::initOSWindow()
         {
             FATAL() << "Failed to create a new window";
         }
-        mFixture->osWindow->disableErrorMessageDialog();
-        if (!mFixture->osWindow->initialize(windowName.c_str(), 128, 128))
-        {
-            std::cerr << "Failed to initialize OS Window.\n";
-        }
+
+        initOSWindow();
 
         if (IsAndroid())
         {
             // Initialize the single window on Andoird only once
             mOSWindowSingleton = mFixture->osWindow;
         }
+    }
+}
+
+void ANGLETestBase::initOSWindow()
+{
+    if (!mFixture->osWindow || mFixture->osWindow->valid())
+    {
+        return;
+    }
+
+    std::stringstream windowNameStream;
+    windowNameStream << "ANGLE Tests - " << *mCurrentParams;
+    std::string windowName = windowNameStream.str();
+
+    mFixture->osWindow->disableErrorMessageDialog();
+    if (!mFixture->osWindow->initialize(windowName.c_str(), 128, 128))
+    {
+        std::cerr << "Failed to initialize OS Window.\n";
     }
 
     if (!mFixture->osWindow->valid())
@@ -672,6 +691,8 @@ void ANGLETestBase::ANGLETestSetUp()
     {
         SetupEnvironmentVarsForCaptureReplay();
     }
+
+    initOSWindow();
 
     if (!mFixture->osWindow->valid())
     {
@@ -830,14 +851,18 @@ void ANGLETestBase::ANGLETestTearDown()
     {
         mFixture->eglWindow->destroyContext();
         mFixture->eglWindow->destroySurface();
+        mFixture->osWindow->destroy();
     }
 
-    Event myEvent;
-    while (mFixture->osWindow->popEvent(&myEvent))
+    if (mFixture->osWindow->valid())
     {
-        if (myEvent.Type == Event::EVENT_CLOSED)
+        Event myEvent;
+        while (mFixture->osWindow->popEvent(&myEvent))
         {
-            exit(0);
+            if (myEvent.Type == Event::EVENT_CLOSED)
+            {
+                exit(0);
+            }
         }
     }
 }

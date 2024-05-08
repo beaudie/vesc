@@ -31,7 +31,7 @@ bool OzoneWindow::initializeImpl(const std::string &name, int width, int height)
 
 void OzoneWindow::disableErrorMessageDialog() {}
 
-void OzoneWindow::destroy() {}
+void OzoneWindow::destroyImpl() {}
 
 void OzoneWindow::resetNativeWindow() {}
 

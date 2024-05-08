@@ -90,9 +90,10 @@ class DisplayWgpu : public DisplayImpl
 
     void populateFeatureList(angle::FeatureList *features) override {}
 
+    wgpu::Adapter &getAdapter() { return mAdapter; }
     wgpu::Device &getDevice() { return mDevice; }
     wgpu::Queue &getQueue() { return mQueue; }
-    wgpu::Instance getInstance() const;
+    wgpu::Instance &getInstance() { return mInstance; }
 
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
@@ -100,7 +101,8 @@ class DisplayWgpu : public DisplayImpl
 
     egl::Error createWgpuDevice();
 
-    std::unique_ptr<dawn::native::Instance> mInstance;
+    wgpu::Adapter mAdapter;
+    wgpu::Instance mInstance;
     wgpu::Device mDevice;
     wgpu::Queue mQueue;
 };

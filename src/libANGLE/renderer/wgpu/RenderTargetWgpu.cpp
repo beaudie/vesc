@@ -19,36 +19,18 @@ RenderTargetWgpu::~RenderTargetWgpu()
 }
 
 RenderTargetWgpu::RenderTargetWgpu(RenderTargetWgpu &&other)
-    : mImage(other.mImage),
-      mTexture(std::move(other.mTexture)),
-      mLevelIndex(other.mLevelIndex),
-      mLayerIndex(other.mLayerIndex),
-      mFormat(other.mFormat)
+    : mImageHelper(other.mImageHelper), mTextureView(std::move(other.mTextureView))
 {}
 
-void RenderTargetWgpu::set(webgpu::ImageHelper *image,
-                           const wgpu::TextureView &texture,
-                           const webgpu::LevelIndex level,
-                           uint32_t layer,
-                           const wgpu::TextureFormat &format)
+void RenderTargetWgpu::set(webgpu::ImageHelper *imageHelper, const wgpu::TextureView &textureView)
 {
-    mImage      = image;
-    mTexture    = texture;
-    mLevelIndex = level;
-    mLayerIndex = layer;
-    mFormat     = &format;
-}
-
-void RenderTargetWgpu::setTexture(const wgpu::TextureView &texture)
-{
-    mTexture = texture;
+    mImageHelper = imageHelper;
+    mTextureView = textureView;
 }
 
 void RenderTargetWgpu::reset()
 {
-    mTexture    = nullptr;
-    mLevelIndex = webgpu::LevelIndex(0);
-    mLayerIndex = 0;
-    mFormat     = nullptr;
+    mImageHelper = nullptr;
+    mTextureView = nullptr;
 }
 }  // namespace rx
