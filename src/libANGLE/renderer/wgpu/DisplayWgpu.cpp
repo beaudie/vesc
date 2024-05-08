@@ -161,13 +161,13 @@ SurfaceImpl *DisplayWgpu::createWindowSurface(const egl::SurfaceState &state,
                                               EGLNativeWindowType window,
                                               const egl::AttributeMap &attribs)
 {
-    return new SurfaceWgpu(state);
+    return CreateWgpuWindowSurface(state, window);
 }
 
 SurfaceImpl *DisplayWgpu::createPbufferSurface(const egl::SurfaceState &state,
                                                const egl::AttributeMap &attribs)
 {
-    return new SurfaceWgpu(state);
+    return new OffscreenSurfaceWgpu(state);
 }
 
 SurfaceImpl *DisplayWgpu::createPbufferFromClientBuffer(const egl::SurfaceState &state,
@@ -175,14 +175,16 @@ SurfaceImpl *DisplayWgpu::createPbufferFromClientBuffer(const egl::SurfaceState 
                                                         EGLClientBuffer buffer,
                                                         const egl::AttributeMap &attribs)
 {
-    return new SurfaceWgpu(state);
+    UNIMPLEMENTED();
+    return nullptr;
 }
 
 SurfaceImpl *DisplayWgpu::createPixmapSurface(const egl::SurfaceState &state,
                                               NativePixmapType nativePixmap,
                                               const egl::AttributeMap &attribs)
 {
-    return new SurfaceWgpu(state);
+    UNIMPLEMENTED();
+    return nullptr;
 }
 
 ImageImpl *DisplayWgpu::createImage(const egl::ImageState &state,
@@ -282,9 +284,16 @@ egl::Error DisplayWgpu::createWgpuDevice()
         fprintf(stderr, "Failed to find an adapter! Please try another adapter type.\n");
         return egl::EglNotInitialized();
     }
+    mAdapter = wgpu::Adapter(preferredAdapter->Get());
 
-    WGPUDeviceDescriptor deviceDesc = {};
-    mDevice = wgpu::Device::Acquire(preferredAdapter->CreateDevice(&deviceDesc));
+    std::vector<wgpu::FeatureName> requiredFeatures;
+    requiredFeatures.push_back(wgpu::FeatureName::SurfaceCapabilities);
+
+    wgpu::DeviceDescriptor deviceDesc;
+    deviceDesc.requiredFeatureCount = requiredFeatures.size();
+    deviceDesc.requiredFeatures     = requiredFeatures.data();
+
+    mDevice = mAdapter.CreateDevice(&deviceDesc);
     mDevice.SetUncapturedErrorCallback(
         [](WGPUErrorType type, const char *message, void *userdata) {
             ERR() << "Error: " << type << " - message: " << message;
