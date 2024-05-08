@@ -157,6 +157,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c13df84c_c0351af7",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-08T17:49:55Z",
+      "side": 1,
+      "message": "\u003e It would crash/read out of bounds with validation disabled when calling initializeWithoutValidation.\n\nAh got it, somehow I thought you\u0027re saying `initializeWithoutValidation` is still dealing with lack of EGL_NONE despite no validation. Comment sounds good.",
+      "parentUuid": "35732354_33d07412",
+      "range": {
+        "startLine": 473,
+        "startChar": 16,
+        "endLine": 473,
+        "endChar": 33
+      },
+      "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9040f7b0_3605929a",
         "filename": "src/libGLESv2/global_state.cpp",
         "patchSetId": 5
