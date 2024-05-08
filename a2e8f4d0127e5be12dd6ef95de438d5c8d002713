@@ -133,6 +133,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35732354_33d07412",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-08T17:44:10Z",
+      "side": 1,
+      "message": "\u003e Validation does that check and converts to a map\n\nOkay, so it looks like that call (`initializeWithoutValidation`) is buried in most of the validation calls, so it would be tricky to extricate.  Might be worth adding your explanation to python for future maintainers.",
+      "parentUuid": "a54f109c_3a7c931c",
+      "range": {
+        "startLine": 473,
+        "startChar": 16,
+        "endLine": 473,
+        "endChar": 33
+      },
+      "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9040f7b0_3605929a",
         "filename": "src/libGLESv2/global_state.cpp",
         "patchSetId": 5
