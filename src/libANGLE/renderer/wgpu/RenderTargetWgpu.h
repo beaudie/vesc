@@ -41,7 +41,7 @@ class RenderTargetWgpu final : public FramebufferAttachmentRenderTarget
     webgpu::LevelIndex getLevelIndex() const { return mLevelIndex; }
 
   private:
-    webgpu::ImageHelper *mImage;
+    webgpu::ImageHelper *mImage = nullptr;
     // TODO(liza): move TextureView into ImageHelper.
     wgpu::TextureView mTexture;
     webgpu::LevelIndex mLevelIndex{0};
