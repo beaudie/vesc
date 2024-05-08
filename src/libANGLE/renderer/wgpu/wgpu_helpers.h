@@ -45,6 +45,7 @@ class ImageHelper
     angle::Result initImage(wgpu::Device &device,
                             gl::LevelIndex firstAllocatedLevel,
                             wgpu::TextureDescriptor textureDescriptor);
+    angle::Result initExternal(wgpu::Texture externalTexture);
 
     void flushStagedUpdates(ContextWgpu *contextWgpu);
 
