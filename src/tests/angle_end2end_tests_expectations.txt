@@ -1415,7 +1415,18 @@ b/292285899 PIXEL4ORXL GLES : EGLSurfaceTest.DestroyAndRecreateWhileCurrent/* = 
 
 // WebGPU failures
 8485 WGPU : RendererTest.SimpleOperation/* = SKIP
-8582 WGPU : ClearTest.* = SKIP
+8582 WGPU : ClearTest.DefaultFramebuffer/* = SKIP
+8582 WGPU : ClearTest.ChangeFramebufferAttachmentFromRGBAtoRGB/* = SKIP
+8582 WGPU : ClearTest.RGB8WithMaskFramebuffer/* = SKIP
+8582 WGPU : ClearTest.ClearIssue/* = SKIP
+8582 WGPU : ClearTest.ClearStencilMask/* = SKIP
+8582 WGPU : ClearTest.EmptyScissor/* = SKIP
+8582 WGPU : ClearTest.MaskedClearThenDrawWithUniform/* = SKIP
+8582 WGPU : ClearTest.InceptionScissorClears/* = SKIP
+8582 WGPU : ClearTest.DrawThenInceptionScissorClears/* = SKIP
+8582 WGPU : ClearTest.ScissoredClearThenNonScissoredDraw/* = SKIP
+8582 WGPU : ClearTest.ClearThenScissoredMaskedClear/* = SKIP
+8582 WGPU : ClearTest.DrawThenChangeFBOBindingAndBackThenMaskedClear/* = SKIP
 8547 WGPU : Texture2DTest.Tex* = SKIP
 8547 WGPU : Texture2DTest.Upload* = SKIP
 8547 WGPU : Texture2DTest.*Superseding* = SKIP

@@ -656,8 +656,7 @@ void TextureWgpu::initSingleLayerRenderTargets(ContextWgpu *contextWgpu,
         textureViewDesc.format        = mImage->getTextureDescriptor().format;
         wgpu::TextureView textureView = mImage->getTexture().CreateView(&textureViewDesc);
 
-        renderTargets[layerIndex].set(mImage, textureView, mImage->toWgpuLevel(levelIndex),
-                                      layerIndex, mImage->toWgpuTextureFormat());
+        renderTargets[layerIndex].set(mImage, textureView);
     }
 }
 
