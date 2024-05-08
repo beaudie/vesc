@@ -58,7 +58,7 @@ egl::ConfigSet DisplayWgpu::generateConfigs()
 {
     egl::Config config;
     config.renderTargetFormat    = GL_RGBA8;
-    config.depthStencilFormat    = GL_DEPTH24_STENCIL8;
+    config.depthStencilFormat    = GL_NONE;
     config.bufferSize            = 32;
     config.redSize               = 8;
     config.greenSize             = 8;
@@ -70,7 +70,7 @@ egl::ConfigSet DisplayWgpu::generateConfigs()
     config.colorBufferType       = EGL_RGB_BUFFER;
     config.configCaveat          = EGL_NONE;
     config.conformant            = EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT;
-    config.depthSize             = 24;
+    config.depthSize             = 0;
     config.level                 = 0;
     config.matchNativePixmap     = EGL_NONE;
     config.maxPBufferWidth       = 0;
@@ -84,13 +84,15 @@ egl::ConfigSet DisplayWgpu::generateConfigs()
     config.renderableType        = EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT;
     config.sampleBuffers         = 0;
     config.samples               = 0;
-    config.stencilSize           = 8;
+    config.stencilSize           = 0;
     config.surfaceType           = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
     config.optimalOrientation    = 0;
     config.transparentType       = EGL_NONE;
     config.transparentRedValue   = 0;
     config.transparentGreenValue = 0;
     config.transparentBlueValue  = 0;
+
+    // TODO: support configs with depth stencil.
 
     egl::ConfigSet configSet;
     configSet.add(config);
@@ -161,13 +163,13 @@ SurfaceImpl *DisplayWgpu::createWindowSurface(const egl::SurfaceState &state,
                                               EGLNativeWindowType window,
                                               const egl::AttributeMap &attribs)
 {
-    return new SurfaceWgpu(state);
+    return CreateWgpuWindowSurface(state, window);
 }
 
 SurfaceImpl *DisplayWgpu::createPbufferSurface(const egl::SurfaceState &state,
                                                const egl::AttributeMap &attribs)
 {
-    return new SurfaceWgpu(state);
+    return new OffscreenSurfaceWgpu(state);
 }
 
 SurfaceImpl *DisplayWgpu::createPbufferFromClientBuffer(const egl::SurfaceState &state,
@@ -175,14 +177,16 @@ SurfaceImpl *DisplayWgpu::createPbufferFromClientBuffer(const egl::SurfaceState 
                                                         EGLClientBuffer buffer,
                                                         const egl::AttributeMap &attribs)
 {
-    return new SurfaceWgpu(state);
+    UNIMPLEMENTED();
+    return nullptr;
 }
 
 SurfaceImpl *DisplayWgpu::createPixmapSurface(const egl::SurfaceState &state,
                                               NativePixmapType nativePixmap,
                                               const egl::AttributeMap &attribs)
 {
-    return new SurfaceWgpu(state);
+    UNIMPLEMENTED();
+    return nullptr;
 }
 
 ImageImpl *DisplayWgpu::createImage(const egl::ImageState &state,
@@ -282,9 +286,16 @@ egl::Error DisplayWgpu::createWgpuDevice()
         fprintf(stderr, "Failed to find an adapter! Please try another adapter type.\n");
         return egl::EglNotInitialized();
     }
+    mAdapter = wgpu::Adapter::Acquire(preferredAdapter->Get());
 
-    WGPUDeviceDescriptor deviceDesc = {};
-    mDevice = wgpu::Device::Acquire(preferredAdapter->CreateDevice(&deviceDesc));
+    std::vector<wgpu::FeatureName> requiredFeatures;
+    requiredFeatures.push_back(wgpu::FeatureName::SurfaceCapabilities);
+
+    wgpu::DeviceDescriptor deviceDesc;
+    deviceDesc.requiredFeatureCount = requiredFeatures.size();
+    deviceDesc.requiredFeatures     = requiredFeatures.data();
+
+    mDevice = mAdapter.CreateDevice(&deviceDesc);
     mDevice.SetUncapturedErrorCallback(
         [](WGPUErrorType type, const char *message, void *userdata) {
             ERR() << "Error: " << type << " - message: " << message;
