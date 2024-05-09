@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d95f251_f955e1fd",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-09T14:45:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a601c1b_392e3938",
+      "range": {
+        "startLine": 24,
+        "startChar": 5,
+        "endLine": 24,
+        "endChar": 35
+      },
+      "revId": "cfc97e5e54e88c8447d0151137e714a620407ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5592d44_af625732",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-08T22:29:51Z",
       "side": 1,
       "message": "Delete this comment as it\u0027s about clearing `mCurrentColorAttachments`.",
+      "range": {
+        "startLine": 128,
+        "startChar": 8,
+        "endLine": 128,
+        "endChar": 60
+      },
+      "revId": "cfc97e5e54e88c8447d0151137e714a620407ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "026a7df0_39d5a576",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-09T14:45:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5592d44_af625732",
       "range": {
         "startLine": 128,
         "startChar": 8,
