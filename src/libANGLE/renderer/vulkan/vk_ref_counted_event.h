@@ -155,20 +155,20 @@ class RefCountedEventsGarbage final
 
     RefCountedEventsGarbage(const QueueSerial &queueSerial,
                             RefCountedEventCollector &&refCountedEvents)
-        : mLifetime(queueSerial), mRefCountedEvents(std::move(refCountedEvents))
+        : mQueueSerial(queueSerial), mRefCountedEvents(std::move(refCountedEvents))
     {
         ASSERT(refCountedEvents.empty());
         ASSERT(!mRefCountedEvents.empty());
     }
 
     RefCountedEventsGarbage(RefCountedEventsGarbage &&other)
-        : mLifetime(other.mLifetime), mRefCountedEvents(std::move(other.mRefCountedEvents))
+        : mQueueSerial(other.mQueueSerial), mRefCountedEvents(std::move(other.mRefCountedEvents))
     {}
 
     RefCountedEventsGarbage &operator=(RefCountedEventsGarbage &&other)
     {
         ASSERT(mRefCountedEvents.empty());
-        mLifetime         = other.mLifetime;
+        mQueueSerial      = other.mQueueSerial;
         mRefCountedEvents = std::move(other.mRefCountedEvents);
         return *this;
     }
@@ -210,7 +210,7 @@ class RefCountedEventsGarbage final
 
   private:
     friend class RefCountedEventGarbageRecycler;
-    ResourceUse mLifetime;
+    QueueSerial mQueueSerial;
     RefCountedEventCollector mRefCountedEvents;
 };
 
