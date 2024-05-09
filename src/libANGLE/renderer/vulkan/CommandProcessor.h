@@ -90,7 +90,7 @@ class SharedFence final
 class FenceRecycler
 {
   public:
-    FenceRecycler() {}
+    FenceRecycler() : mRecyler("FenceRecycler") {}
     ~FenceRecycler() {}
     void destroy(Context *context);
 

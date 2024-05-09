@@ -890,13 +890,15 @@ template <typename T>
 class Recycler final : angle::NonCopyable
 {
   public:
-    Recycler() = default;
+    Recycler(const char *name) : mMaxSize(0), mName(name) {}
+    ~Recycler() { WARN() << " Name:" << mName << " mMaxSize:" << mMaxSize; }
 
     void recycle(T &&garbageObject)
     {
         // Recycling invalid objects is pointless and potentially a bug.
         ASSERT(garbageObject.valid());
         mObjectFreeList.emplace_back(std::move(garbageObject));
+        mMaxSize = std::max(mMaxSize, mObjectFreeList.size());
     }
 
     void fetch(T *outObject)
@@ -917,8 +919,12 @@ class Recycler final : angle::NonCopyable
 
     bool empty() const { return mObjectFreeList.empty(); }
 
+    size_t size() const { return mObjectFreeList.size(); }
+
   private:
     std::vector<T> mObjectFreeList;
+    size_t mMaxSize;
+    std::string mName;
 };
 
 ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
