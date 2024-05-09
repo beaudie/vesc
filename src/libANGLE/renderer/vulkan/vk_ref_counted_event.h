@@ -257,6 +257,8 @@ class RefCountedEventRecycler final
         mFreeStack.destroy(device);
     }
 
+    size_t size() const { return mFreeStack.size(); }
+
   private:
     angle::SimpleMutex mMutex;
     Recycler<RefCountedEvent> mFreeStack;
@@ -266,7 +268,7 @@ class RefCountedEventRecycler final
 class RefCountedEventGarbageRecycler final
 {
   public:
-    RefCountedEventGarbageRecycler() : mGarbageCount(0) {}
+    RefCountedEventGarbageRecycler() : mCreateCount(0), mGarbageCount(0), mFetchCount(0) {}
     ~RefCountedEventGarbageRecycler();
 
     // Release all garbage and free events.
@@ -294,11 +296,13 @@ class RefCountedEventGarbageRecycler final
     bool fetch(RefCountedEvent *outObject);
 
     size_t getGarbageCount() const { return mGarbageCount; }
+    size_t mCreateCount;
 
   private:
     Recycler<RefCountedEvent> mFreeStack;
     std::queue<RefCountedEventsGarbage> mGarbageQueue;
     size_t mGarbageCount;
+    size_t mFetchCount;
 };
 
 // This wraps data and API for vkCmdWaitEvent call
