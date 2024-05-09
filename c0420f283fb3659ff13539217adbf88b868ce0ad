@@ -33,6 +33,24 @@
       "message": "There are intermittent test timeouts (first time on windows, then on Mac). I\u0027m not able to rerun only the failing tests—it seems I can only push a new commit to trigger running everything again.",
       "revId": "c0420f283fb3659ff13539217adbf88b868ce0ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b352dc4_ff9f3c89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-09T14:47:22Z",
+      "side": 1,
+      "message": "Yea, we have some flakyness on WebGL tests right now. Going to keep re-trying.",
+      "parentUuid": "d64c2ac3_69351e75",
+      "revId": "c0420f283fb3659ff13539217adbf88b868ce0ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
