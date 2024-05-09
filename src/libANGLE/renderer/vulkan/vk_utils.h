@@ -917,8 +917,10 @@ class Recycler final : angle::NonCopyable
 
     bool empty() const { return mObjectFreeList.empty(); }
 
+    size_t size() const { return mObjectFreeList.size(); }
+
   private:
-    std::vector<T> mObjectFreeList;
+    std::deque<T> mObjectFreeList;
 };
 
 ANGLE_ENABLE_STRUCT_PADDING_WARNINGS

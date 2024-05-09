@@ -205,6 +205,8 @@ class RefCountedEventsGarbage final
 
     bool empty() const { return mRefCountedEvents.empty(); }
 
+    size_t size() const { return mRefCountedEvents.size(); }
+
   private:
     QueueSerial mQueueSerial;
     RefCountedEventCollector mRefCountedEvents;
@@ -249,6 +251,8 @@ class RefCountedEventRecycler final
         mFreeStack.destroy(device);
     }
 
+    size_t size() const { return mFreeStack.size(); }
+
   private:
     angle::SimpleMutex mMutex;
     Recycler<RefCountedEvent> mFreeStack;
@@ -258,7 +262,7 @@ class RefCountedEventRecycler final
 class RefCountedEventGarbageRecycler final
 {
   public:
-    RefCountedEventGarbageRecycler() = default;
+    RefCountedEventGarbageRecycler() : mCreateCount(0), mGarbageCount(0), mFetchCount(0) {}
     ~RefCountedEventGarbageRecycler();
 
     // Release all garbage and free events.
@@ -269,6 +273,7 @@ class RefCountedEventGarbageRecycler final
 
     void collectGarbage(const QueueSerial &queueSerial, RefCountedEventCollector &&refCountedEvents)
     {
+        mGarbageCount += refCountedEvents.size();
         mGarbageQueue.emplace(queueSerial, std::move(refCountedEvents));
     }
 
@@ -276,9 +281,13 @@ class RefCountedEventGarbageRecycler final
 
     bool fetch(RefCountedEvent *outObject);
 
+    size_t mCreateCount;
+
   private:
     Recycler<RefCountedEvent> mFreeStack;
     std::queue<RefCountedEventsGarbage> mGarbageQueue;
+    size_t mGarbageCount;
+    size_t mFetchCount;
 };
 std::ostream &operator<<(std::ostream &os, const RefCountedEventGarbageRecycler &recycler);
 

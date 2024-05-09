@@ -32,6 +32,7 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
                                ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
                                : 0;
         mHandle->get().event.init(context->getDevice(), createInfo);
+        context->getRefCountedEventGarbageRecycler()->mCreateCount++;
     }
 
     mHandle->addRef();
@@ -122,6 +123,7 @@ void RefCountedEventGarbageRecycler::destroy(Renderer *renderer)
         mGarbageQueue.front().destroy(renderer);
         mGarbageQueue.pop();
     }
+    mGarbageCount = 0;
 
     mFreeStack.destroy(renderer->getDevice());
 }
@@ -135,9 +137,11 @@ void RefCountedEventGarbageRecycler::cleanup(Renderer *renderer)
 
     while (!mGarbageQueue.empty())
     {
+        size_t count  = mGarbageQueue.front().size();
         bool released = mGarbageQueue.front().releaseIfComplete(renderer, this);
         if (released)
         {
+            mGarbageCount -= count;
             mGarbageQueue.pop();
         }
         else
@@ -145,10 +149,16 @@ void RefCountedEventGarbageRecycler::cleanup(Renderer *renderer)
             break;
         }
     }
+
+    WARN() << " mGarbageQueue:" << mGarbageCount << " mFreeStack:" << mFreeStack.size()
+           << " mFetchCount:" << mFetchCount << " mCreateCount:" << mCreateCount;
+    mFetchCount  = 0;
+    mCreateCount = 0;
 }
 
 bool RefCountedEventGarbageRecycler::fetch(RefCountedEvent *outObject)
 {
+    mFetchCount++;
     if (!mFreeStack.empty())
     {
         mFreeStack.fetch(outObject);
