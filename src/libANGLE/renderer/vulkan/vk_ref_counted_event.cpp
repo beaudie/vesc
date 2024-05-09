@@ -122,6 +122,7 @@ void RefCountedEventGarbageRecycler::destroy(Renderer *renderer)
         mGarbageQueue.front().destroy(renderer);
         mGarbageQueue.pop();
     }
+    mEventGarbageCount = 0;
 
     mFreeStack.destroy(renderer->getDevice());
 }
@@ -133,9 +134,11 @@ void RefCountedEventGarbageRecycler::cleanup(Renderer *renderer)
 
     while (!mGarbageQueue.empty())
     {
+        size_t count  = mGarbageQueue.front().size();
         bool released = mGarbageQueue.front().releaseIfComplete(renderer, this);
         if (released)
         {
+            mEventGarbageCount -= count;
             mGarbageQueue.pop();
         }
         else
@@ -143,10 +146,30 @@ void RefCountedEventGarbageRecycler::cleanup(Renderer *renderer)
             break;
         }
     }
+
+    WARN() << " mGarbageQueue:" << mEventGarbageCount << " mFreeStack:" << mFreeStack.size()
+           << " mEventFetchCount:" << mEventFetchCount;
+
+    // Prune the free list, assuming mEventFetchCount is stable from frame to frame
+    if (mFreeStack.size() > mEventFetchCount)
+    {
+        renderer->getRefCountedEventRecycler()->destroy(renderer->getDevice());
+        mFreeStack.resize(renderer->getDevice(), mEventFetchCount);
+    }
+    else
+    {
+        size_t sizeToKeep = mEventFetchCount - mFreeStack.size();
+        if (renderer->getRefCountedEventRecycler()->size() > sizeToKeep)
+        {
+            renderer->getRefCountedEventRecycler()->resize(renderer->getDevice(), sizeToKeep);
+        }
+    }
+    mEventFetchCount = 0;
 }
 
 bool RefCountedEventGarbageRecycler::fetch(RefCountedEvent *outObject)
 {
+    mEventFetchCount++;
     if (!mFreeStack.empty())
     {
         mFreeStack.fetch(outObject);
