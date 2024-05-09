@@ -24,7 +24,7 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
     if (!context->getRefCountedEventGarbageRecycler()->fetch(this) &&
         !context->getRenderer()->getRefCountedEventRecycler()->fetch(this))
     {
-        mHandle                      = new AtomicRefCounted<EventAndLayout>;
+        mHandle                      = new RefCounted<EventAndLayout>;
         VkEventCreateInfo createInfo = {};
         createInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
         // Use device only for performance reasons.
