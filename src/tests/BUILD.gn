@@ -235,6 +235,11 @@ if (is_ios) {
   }
 }
 
+copy("api_dump_copy") {
+  sources = [ "$angle_root/libVkLayer_api_dump.so" ]
+  outputs = [ "$root_out_dir/libVkLayer_api_dump.so" ]
+}
+
 if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
   import("angle_end2end_tests.gni")
 
@@ -277,6 +282,7 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
 
     deps = [
       ":angle_common_test_utils_shared",
+      ":api_dump_copy",
       "$angle_root:angle_gl_enum_utils",
       "$angle_root:angle_image_util",
       "$angle_root:translator",
@@ -287,6 +293,8 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
     } else {
       data = [ "angle_end2end_tests_expectations.txt" ]
     }
+
+    loadable_modules = [ "$root_out_dir/libVkLayer_api_dump.so" ]
 
     if (angle_has_rapidjson) {
       deps += [ "$angle_root:angle_json_serializer" ]
