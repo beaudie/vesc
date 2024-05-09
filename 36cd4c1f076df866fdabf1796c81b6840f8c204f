@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7b9562f_cdb904bc",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-09T20:15:56Z",
+      "side": 0,
+      "message": "FWIW, of the three possible returned iterators, 2 of them don\u0027t even compile!",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 45
+      },
+      "revId": "36cd4c1f076df866fdabf1796c81b6840f8c204f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
