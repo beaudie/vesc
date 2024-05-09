@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fe48cb1_ec90b436",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8960,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-09T17:43:19Z",
+      "side": 0,
+      "message": "I guess technically it doesn\u0027t matter, you can always go from the integral to the derivative and back, but FYI these are reset so you can easily see the typical per-frame overhead and spikes (like with the graphs the Overlay has, even though we don\u0027t really use that much)",
+      "revId": "bcb6db5c1a05a5236ff458b07460b4766b11f44b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
