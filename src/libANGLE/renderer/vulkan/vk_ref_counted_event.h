@@ -225,6 +225,7 @@ class RefCountedEventsGarbage final
 class RefCountedEventRecycler final
 {
   public:
+    RefCountedEventRecycler() : mFreeStack("RefCountedEventRecycler") {}
     void recycle(RefCountedEvent &&garbageObject)
     {
         ASSERT(garbageObject.valid());
@@ -264,6 +265,8 @@ class RefCountedEventRecycler final
         mFreeStack.destroy(device);
     }
 
+    size_t size() const { return mFreeStack.size(); }
+
   private:
     angle::SimpleMutex mMutex;
     Recycler<RefCountedEvent> mFreeStack;
@@ -275,7 +278,11 @@ class RefCountedEventRecycler final
 class RefCountedEventsGarbageRecycler final
 {
   public:
-    RefCountedEventsGarbageRecycler() : mGarbageCount(0) {}
+    RefCountedEventsGarbageRecycler()
+        : mFreeStack("RefCountedEventGarbageRecycler"),
+          mGarbageCount(0),
+          mMaxGarbageCollectorSize(0)
+    {}
     ~RefCountedEventsGarbageRecycler();
 
     // Release all garbage and free events.
@@ -286,6 +293,7 @@ class RefCountedEventsGarbageRecycler final
 
     void collectGarbage(const QueueSerial &queueSerial, RefCountedEventCollector &&refCountedEvents)
     {
+        mMaxGarbageCollectorSize = std::max(mMaxGarbageCollectorSize, refCountedEvents.size());
         mGarbageCount += refCountedEvents.size();
         mGarbageQueue.emplace(queueSerial, std::move(refCountedEvents));
     }
@@ -305,6 +313,7 @@ class RefCountedEventsGarbageRecycler final
     Recycler<RefCountedEvent> mFreeStack;
     std::queue<RefCountedEventsGarbage> mGarbageQueue;
     size_t mGarbageCount;
+    size_t mMaxGarbageCollectorSize;
 };
 
 // This wraps data and API for vkCmdWaitEvent call

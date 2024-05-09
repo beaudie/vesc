@@ -890,13 +890,15 @@ template <typename T>
 class Recycler final : angle::NonCopyable
 {
   public:
-    Recycler() = default;
+    Recycler(const char *name) : mName(name), mMaxSize(0) {}
+    ~Recycler() {}
 
     void recycle(T &&garbageObject)
     {
         // Recycling invalid objects is pointless and potentially a bug.
         ASSERT(garbageObject.valid());
         mObjectFreeList.emplace_back(std::move(garbageObject));
+        mMaxSize = std::max(mMaxSize, mObjectFreeList.size());
     }
 
     void fetch(T *outObject)
@@ -916,6 +918,11 @@ class Recycler final : angle::NonCopyable
     }
 
     bool empty() const { return mObjectFreeList.empty(); }
+
+    size_t size() const { return mObjectFreeList.size(); }
+
+    std::string mName;
+    size_t mMaxSize;
 
   private:
     std::vector<T> mObjectFreeList;
