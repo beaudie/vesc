@@ -16,6 +16,23 @@
       "message": "Fixed ASAN.",
       "revId": "cd7c92d1db7745a4ea1d8373be70a610ae988c1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2970d3c_8de32202",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-09T18:40:42Z",
+      "side": 1,
+      "message": "Chatting offline with Geoff, he was against this.",
+      "revId": "cd7c92d1db7745a4ea1d8373be70a610ae988c1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
