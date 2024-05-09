@@ -143,6 +143,8 @@ RefCountedEventsGarbageRecycler::~RefCountedEventsGarbageRecycler()
 {
     ASSERT(mFreeStack.empty());
     ASSERT(mGarbageQueue.empty());
+    ALOG("Name:%s mFreeStack.mMaxSize:%u mMaxGarbageCollectorSize:%u\n", mFreeStack.mName.c_str(),
+         (uint32_t)mFreeStack.mMaxSize, (uint32_t)mMaxGarbageCollectorSize);
 }
 
 void RefCountedEventsGarbageRecycler::destroy(Renderer *renderer)
@@ -152,6 +154,7 @@ void RefCountedEventsGarbageRecycler::destroy(Renderer *renderer)
         mGarbageQueue.front().destroy(renderer);
         mGarbageQueue.pop();
     }
+    mGarbageCount = 0;
 
     mFreeStack.destroy(renderer->getDevice());
 }
