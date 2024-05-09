@@ -179,6 +179,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c00d0c_16b00aab",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-09T14:12:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c13df84c_c0351af7",
+      "range": {
+        "startLine": 473,
+        "startChar": 16,
+        "endLine": 473,
+        "endChar": 33
+      },
+      "revId": "a2e8f4d0127e5be12dd6ef95de438d5c8d002713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9040f7b0_3605929a",
