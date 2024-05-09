@@ -56,6 +56,7 @@ bool RefCountedEvent::init(Context *context, ImageLayout layout)
             }
         }
         mHandle->get().needsReset = false;
+        context->getRefCountedEventGarbageRecycler()->mCreateCount++;
     }
 
     mHandle->addRef();
@@ -152,6 +153,7 @@ void RefCountedEventsGarbageRecycler::destroy(Renderer *renderer)
         mGarbageQueue.front().destroy(renderer);
         mGarbageQueue.pop();
     }
+    mGarbageCount = 0;
 
     mFreeStack.destroy(renderer->getDevice());
 }
@@ -177,10 +179,16 @@ void RefCountedEventsGarbageRecycler::cleanup(Renderer *renderer)
             break;
         }
     }
+
+    WARN() << " mGarbageQueue:" << mGarbageCount << " mFreeStack:" << mFreeStack.size()
+           << " mFetchCount:" << mFetchCount << " mCreateCount:" << mCreateCount;
+    mFetchCount  = 0;
+    mCreateCount = 0;
 }
 
 bool RefCountedEventsGarbageRecycler::fetch(RefCountedEvent *outObject)
 {
+    mFetchCount++;
     if (!mFreeStack.empty())
     {
         mFreeStack.fetch(outObject);
