@@ -15,7 +15,7 @@ namespace rx
 {
 namespace vk
 {
-void RefCountedEvent::init(Context *context, ImageLayout layout)
+bool RefCountedEvent::init(Context *context, ImageLayout layout)
 {
     ASSERT(mHandle == nullptr);
     ASSERT(layout != ImageLayout::Undefined);
@@ -37,12 +37,19 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
             WARN() << " Waiting for some commands to finish to retry event creation";
             context->getRefCountedEventGarbageRecycler()->finishAndCleanup(context);
             result = mHandle->get().event.init(context->getDevice(), createInfo);
-            ASSERT(result == VK_SUCCESS);
+            if (result != VK_SUCCESS)
+            {
+                // If still fail to create, we just return. An invalid event will trigger
+                // pipelineBarrier code path
+                WARN() << " VkEvent creation failed, falling back to pipelineBarrier";
+                return false;
+            }
         }
     }
 
     mHandle->addRef();
     mHandle->get().imageLayout = layout;
+    return true;
 }
 
 void RefCountedEvent::release(Context *context)
@@ -89,7 +96,7 @@ void RefCountedEvent::destroy(VkDevice device)
 bool RefCountedEventsGarbage::releaseIfComplete(Renderer *renderer,
                                                 RefCountedEventGarbageRecycler *recycler)
 {
-    if (!renderer->hasResourceUseFinished(mLifetime))
+    if (!renderer->hasQueueSerialFinished(mQueueSerial))
     {
         return false;
     }
@@ -106,7 +113,7 @@ bool RefCountedEventsGarbage::releaseIfComplete(Renderer *renderer,
 
 void RefCountedEventsGarbage::destroy(Renderer *renderer)
 {
-    ASSERT(renderer->hasResourceUseFinished(mLifetime));
+    ASSERT(renderer->hasQueueSerialFinished(mQueueSerial));
     for (RefCountedEvent &event : mRefCountedEvents)
     {
         ASSERT(event.valid());
@@ -161,11 +168,11 @@ void RefCountedEventGarbageRecycler::finishAndCleanup(Context *context)
     Renderer *renderer = context->getRenderer();
     while (!mGarbageQueue.empty())
     {
-        if (!renderer->hasResourceUseSubmitted(mGarbageQueue.front().mLifetime))
+        if (!renderer->hasQueueSerialSubmitted(mGarbageQueue.front().mQueueSerial))
         {
             break;
         }
-        (void)renderer->finishResourceUse(context, mGarbageQueue.front().mLifetime);
+        (void)renderer->finishQueueSerial(context, mGarbageQueue.front().mQueueSerial);
         cleanup(context->getRenderer());
     }
 }
