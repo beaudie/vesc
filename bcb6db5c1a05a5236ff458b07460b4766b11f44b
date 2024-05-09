@@ -51,6 +51,24 @@
       "message": "It did not make sense for an async task to accumulate data from main thread, so switched the `from` and `to` here. I want to make sure i am not misunderstanding the intent here",
       "revId": "bcb6db5c1a05a5236ff458b07460b4766b11f44b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e684d56_9aa4eefc",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-09T19:52:06Z",
+      "side": 0,
+      "message": "Yeah that looks like a bug!",
+      "parentUuid": "f99fb36b_68d4ffee",
+      "revId": "bcb6db5c1a05a5236ff458b07460b4766b11f44b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
