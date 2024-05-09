@@ -89,7 +89,7 @@
       'gn_args': 'target_os="android"',
     },
     'angle': {
-      'gn_args': 'is_component_build=true',
+      'gn_args': 'is_component_build=true angle_enable_wgpu=false',
     },
     'arm': {
       'gn_args': 'target_cpu="arm"',
