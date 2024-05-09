@@ -1245,7 +1245,10 @@ group("angle_abseil") {
   if (angle_enable_abseil) {
     # When build_with_chromium=true we need to include "//third_party/abseil-cpp:absl" while
     # we can be more specific when building standalone ANGLE.
-    if (build_with_chromium) {
+    # Also use absl as a component in component build,
+    # to avoid same symbols being defined in multiple components.
+    # WebGPU build files workaround this problem by reducing dependencies.
+    if (build_with_chromium || (is_component_build && !angle_enable_wgpu)) {
       public_deps = [ "$angle_abseil_cpp_dir:absl" ]
     } else if (angle_enable_wgpu) {
       # Use Dawn's abseil build files when Dawn will also be built. Multiple build targets
