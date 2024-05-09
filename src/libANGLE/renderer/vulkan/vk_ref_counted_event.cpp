@@ -107,7 +107,7 @@ void RefCountedEvent::destroy(VkDevice device)
 bool RefCountedEventsGarbage::releaseIfComplete(Renderer *renderer,
                                                 RefCountedEventGarbageRecycler *recycler)
 {
-    if (!renderer->hasResourceUseFinished(mLifetime))
+    if (!renderer->hasQueueSerialFinished(mQueueSerial))
     {
         return false;
     }
@@ -124,7 +124,7 @@ bool RefCountedEventsGarbage::releaseIfComplete(Renderer *renderer,
 
 void RefCountedEventsGarbage::destroy(Renderer *renderer)
 {
-    ASSERT(renderer->hasResourceUseFinished(mLifetime));
+    ASSERT(renderer->hasQueueSerialFinished(mQueueSerial));
     for (RefCountedEvent &event : mRefCountedEvents)
     {
         ASSERT(event.valid());
@@ -179,11 +179,11 @@ void RefCountedEventGarbageRecycler::finishAndCleanup(Context *context)
     Renderer *renderer = context->getRenderer();
     while (!mGarbageQueue.empty())
     {
-        if (!renderer->hasResourceUseSubmitted(mGarbageQueue.front().mLifetime))
+        if (!renderer->hasQueueSerialSubmitted(mGarbageQueue.front().mQueueSerial))
         {
             break;
         }
-        (void)renderer->finishResourceUse(context, mGarbageQueue.front().mLifetime);
+        (void)renderer->finishQueueSerial(context, mGarbageQueue.front().mQueueSerial);
         cleanup(context->getRenderer());
     }
 }
