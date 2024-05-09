@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4082121a_b10569bd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8960,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-09T19:55:58Z",
+      "side": 0,
+      "message": "thanks, im going to handle this when we upstream the decoupling change since that needs updates to perf counters",
+      "parentUuid": "94236d71_3c6d17f2",
+      "revId": "bcb6db5c1a05a5236ff458b07460b4766b11f44b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f99fb36b_68d4ffee",
