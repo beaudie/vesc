@@ -50,7 +50,12 @@ bool RefCountedEvent::init(Context *context, ImageLayout layout)
                 return false;
             }
         }
+        mHandle->get().needsReset = false;
         context->getRefCountedEventGarbageRecycler()->mCreateCount++;
+    }
+    else
+    {
+        mHandle->get().needsReset = true;
     }
 
     mHandle->addRef();

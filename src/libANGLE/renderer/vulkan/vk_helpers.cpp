@@ -1740,8 +1740,12 @@ void CommandBufferHelperCommon::flushSetEventsImpl(Context *context, CommandBuff
         ASSERT(refCountedEvent.valid());
         const ImageMemoryBarrierData &layoutData =
             kImageMemoryBarrierData[refCountedEvent.getImageLayout()];
-        commandBuffer->setEvent(refCountedEvent.getEvent().getHandle(),
-                                GetImageLayoutDstStageMask(context, layoutData));
+        VkPipelineStageFlags stageMask = GetImageLayoutDstStageMask(context, layoutData);
+        if (refCountedEvent.needsReset())
+        {
+            commandBuffer->resetEvent(refCountedEvent.getEvent().getHandle(), stageMask);
+        }
+        commandBuffer->setEvent(refCountedEvent.getEvent().getHandle(), stageMask);
         // We no longer need event, so garbage collect it.
         mRefCountedEventCollector.emplace_back(std::move(refCountedEvent));
     }
