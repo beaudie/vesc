@@ -16,6 +16,24 @@
       "message": "Looks like you already documented all places that may access per context resource maps from other threads, is UnsafeResourceMapIter still needed? Seems a bit redundant to me, since they are actually accessed in a safe way.",
       "revId": "6a90c6d3fe1e28917498d35dc02d6fe32317036e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81dae2ad_38161708",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-10T18:42:12Z",
+      "side": 1,
+      "message": "Yes, the type itself is the documentation. It\u0027s there to make sure you can\u0027t iterate over the map (in the future) without being aware of the fact that it\u0027s not thread safe.",
+      "parentUuid": "9afc3ff0_38ca0933",
+      "revId": "6a90c6d3fe1e28917498d35dc02d6fe32317036e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
