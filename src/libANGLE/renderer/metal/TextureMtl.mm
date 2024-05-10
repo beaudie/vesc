@@ -900,6 +900,28 @@ angle::Result TextureMtl::onBaseMaxLevelsChanged(const gl::Context *context)
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
 
+    if (mCurrentBaseLevel == mState.getEffectiveBaseLevel() &&
+        mCurrentMaxLevel > mState.getEffectiveMaxLevel())
+    {
+        // invalidate out of bound render target levels
+        for (auto &sliceRenderTargets : mPerLayerRenderTargets)
+        {
+            GLuint oldMaxValidLevel = std::min(
+                mCurrentMaxLevel, static_cast<GLuint>(sliceRenderTargets.second.size() - 1));
+            for (GLuint level = mState.getEffectiveMaxLevel() + 1; level <= oldMaxValidLevel;
+                 ++level)
+            {
+                sliceRenderTargets.second[level].reset();
+            }
+        }
+
+        mCurrentMaxLevel = mState.getEffectiveMaxLevel();
+        return angle::Result::Continue;
+    }
+
+    mCurrentBaseLevel = mState.getEffectiveBaseLevel();
+    mCurrentMaxLevel  = mState.getEffectiveMaxLevel();
+
     // Release native texture but keep old image definitions so that it can be recreated from old
     // image definitions with different base level
     releaseTexture(false, true);
@@ -1326,6 +1348,9 @@ angle::Result TextureMtl::setEGLImageTarget(const gl::Context *context,
 
     mSlices = mNativeTexture->cubeFacesOrArrayLength();
 
+    mCurrentBaseLevel = mState.getEffectiveBaseLevel();
+    mCurrentMaxLevel  = mState.getEffectiveMaxLevel();
+
     ANGLE_TRY(ensureSamplerStateCreated(context));
 
     // Tell context to rebind textures
@@ -1488,6 +1513,12 @@ angle::Result TextureMtl::bindTexImage(const gl::Context *context, egl::Surface 
     auto pBuffer   = GetImplAs<OffscreenSurfaceMtl>(surface);
     mNativeTexture = pBuffer->getColorTexture();
     mFormat        = pBuffer->getColorFormat();
+
+    mSlices = mNativeTexture->cubeFacesOrArrayLength();
+
+    mCurrentBaseLevel = mState.getEffectiveBaseLevel();
+    mCurrentMaxLevel  = mState.getEffectiveMaxLevel();
+
     ANGLE_TRY(ensureSamplerStateCreated(context));
 
     // Tell context to rebind textures
