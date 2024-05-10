@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d5533fb_68a5cada",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4589,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-10T19:40:31Z",
+      "side": 1,
+      "message": "Commended about the type on the other file.\n\nAbout the constants, yes it\u0027d be better if they have more readable versions.",
+      "parentUuid": "76d71387_f635062f",
+      "range": {
+        "startLine": 4589,
+        "startChar": 75,
+        "endLine": 4589,
+        "endChar": 85
+      },
+      "revId": "99bbbc2ebfa7d89930cc0d33bafeb8649134a4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9b08698_a3de19e1",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 1

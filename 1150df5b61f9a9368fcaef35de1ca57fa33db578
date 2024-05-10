@@ -16,6 +16,40 @@
       "message": "Thanks",
       "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a965b803_a89e4eb0",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-10T19:40:31Z",
+      "side": 1,
+      "message": "FYI, it\u0027s not a coincidence that this matches up with the ARM one exactly. This scheme is Vulkan\u0027s own versioning scheme.\n\nCould you please deduplicate with the ARM one below by defining a \"ParseGenericVulkanDriverVersion\" that does this? These two would both just call that.\n\nAlso, while you\u0027re here please rename both this and the ARM one to say \"Parse...VulkanDriverVersion\". The GL driver versions don\u0027t necessarily follow this scheme (and these helpers are only used in vulkan/).",
+      "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70b40667_949dabce",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-10T19:40:31Z",
+      "side": 1,
+      "message": "Probably better to use `using QualcommDriverVersion \u003d angle::VersionTriple;` similar to how `ARMDriverVersion` is defined below.",
+      "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
