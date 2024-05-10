@@ -68,6 +68,23 @@
       "message": "Current plan is to:\n1. update abseil-cpp in Dawn\n2. fix Dawn GN files\n3. roll Dawn with the fixes together with Chromium roll\n\nI\u0027ll leave this landable in case the above fails.",
       "revId": "cd7c92d1db7745a4ea1d8373be70a610ae988c1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bdcedf5_45bb2733",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-10T20:31:21Z",
+      "side": 1,
+      "message": "Dawn is now updated to use our abseil build files: https://dawn-review.googlesource.com/c/dawn/+/187721\n\nNow rolling Dawn and updating our own build files: https://chromium-review.googlesource.com/c/angle/angle/+/5531113",
+      "revId": "cd7c92d1db7745a4ea1d8373be70a610ae988c1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
