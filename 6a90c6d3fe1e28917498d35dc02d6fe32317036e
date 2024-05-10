@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9afc3ff0_38ca0933",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-10T16:21:42Z",
+      "side": 1,
+      "message": "Looks like you already documented all places that may access per context resource maps from other threads, is UnsafeResourceMapIter still needed? Seems a bit redundant to me, since they are actually accessed in a safe way.",
+      "revId": "6a90c6d3fe1e28917498d35dc02d6fe32317036e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
