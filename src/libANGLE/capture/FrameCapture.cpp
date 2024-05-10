@@ -2405,9 +2405,9 @@ bool IsDefaultCurrentValue(const gl::VertexAttribCurrentValueData &currentValue)
            currentValue.Values.FloatValues[2] == 0.0f && currentValue.Values.FloatValues[3] == 1.0f;
 }
 
-bool IsQueryActive(const gl::State &glState, gl::QueryID &queryID)
+bool IsQueryActive(const gl::Context *context, gl::QueryID &queryID)
 {
-    const gl::ActiveQueryMap &activeQueries = glState.getActiveQueriesForCapture();
+    const gl::ActiveQueryMap &activeQueries = context->getActiveQueriesForCapture();
     for (const auto &activeQueryIter : activeQueries)
     {
         const gl::Query *activeQuery = activeQueryIter.get();
@@ -5398,7 +5398,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             cap(CaptureBeginQuery(replayState, true, queryType, queryID));
 
             // End the query if it was not active
-            if (!IsQueryActive(apiState, queryID))
+            if (!IsQueryActive(context, queryID))
             {
                 cap(CaptureEndQuery(replayState, true, queryType));
             }

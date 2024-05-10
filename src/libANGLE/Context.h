@@ -503,6 +503,7 @@ class StateCache final : angle::NonCopyable
 using VertexArrayMap       = ResourceMap<VertexArray, VertexArrayID>;
 using QueryMap             = ResourceMap<Query, QueryID>;
 using TransformFeedbackMap = ResourceMap<TransformFeedback, TransformFeedbackID>;
+using ActiveQueryMap       = angle::PackedEnumMap<QueryType, BindingPointer<Query>>;
 
 class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
 {
@@ -781,6 +782,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     {
         return mTransformFeedbackMap;
     }
+    const ActiveQueryMap &getActiveQueriesForCapture() const { return mActiveQueries; }
 
     void onPreSwap();
 
@@ -939,6 +941,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     QueryMap mQueryMap;
     HandleAllocator mQueryHandleAllocator;
+    ActiveQueryMap mActiveQueries;
 
     VertexArrayMap mVertexArrayMap;
     HandleAllocator mVertexArrayHandleAllocator;

@@ -65,7 +65,6 @@ using BufferBindingMap     = angle::PackedEnumMap<BufferBinding, T>;
 using BoundBufferMap       = BufferBindingMap<BindingPointer<Buffer>>;
 using TextureBindingVector = std::vector<BindingPointer<Texture>>;
 using TextureBindingMap    = angle::PackedEnumMap<TextureType, TextureBindingVector>;
-using ActiveQueryMap       = angle::PackedEnumMap<QueryType, BindingPointer<Query>>;
 
 class ActiveTexturesCache final : angle::NonCopyable
 {
@@ -1200,7 +1199,6 @@ class State : angle::NonCopyable
         return mProgramPipelineManager;
     }
     const SamplerBindingVector &getSamplerBindingsForCapture() const { return mSamplers; }
-    const ActiveQueryMap &getActiveQueriesForCapture() const { return mActiveQueries; }
     void initializeForCapture(const Context *context);
 
     bool hasConstantAlphaBlendFunc() const
@@ -1551,8 +1549,6 @@ class State : angle::NonCopyable
 
     // It would be nice to merge the image and observer binding. Same for textures.
     std::vector<ImageUnit> mImageUnits;
-
-    ActiveQueryMap mActiveQueries;
 
     // Stores the currently bound buffer for each binding point. It has an entry for the element
     // array buffer but it should not be used. Instead this bind point is owned by the current
