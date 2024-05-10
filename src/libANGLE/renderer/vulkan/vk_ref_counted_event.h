@@ -218,6 +218,7 @@ class RefCountedEventsGarbage final
 class RefCountedEventRecycler final
 {
   public:
+    RefCountedEventRecycler() : mFreeStack("RefCountedEventRecycler") {}
     void recycle(RefCountedEvent &&garbageObject)
     {
         ASSERT(garbageObject.valid());
@@ -268,7 +269,12 @@ class RefCountedEventRecycler final
 class RefCountedEventGarbageRecycler final
 {
   public:
-    RefCountedEventGarbageRecycler() : mCreateCount(0), mGarbageCount(0), mFetchCount(0) {}
+    RefCountedEventGarbageRecycler()
+        : mCreateCount(0),
+          mFreeStack("RefCountedEventGarbageRecycler"),
+          mGarbageCount(0),
+          mFetchCount(0)
+    {}
     ~RefCountedEventGarbageRecycler();
 
     // Release all garbage and free events.
