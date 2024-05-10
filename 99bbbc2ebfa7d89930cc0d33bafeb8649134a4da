@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76d71387_f635062f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4589,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-10T19:16:25Z",
+      "side": 1,
+      "message": "Sounds good. I have added `QualcommDriverVersion`. There are two things:\n\n* It looks similar to `ARMDriverVersion`. Maybe they could be derived from the same base class in a later CL?\n\n* There are places where similar devices use the version number directly (such as `kPixel4DriverWithWorkingSpecConstSupport`). Should they also be replaced? (If they are the same format)",
+      "parentUuid": "3d7c5bfd_47903918",
+      "range": {
+        "startLine": 4589,
+        "startChar": 75,
+        "endLine": 4589,
+        "endChar": 85
+      },
+      "revId": "99bbbc2ebfa7d89930cc0d33bafeb8649134a4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9b08698_a3de19e1",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-09T01:35:54Z",
       "side": 1,
       "message": "Couple of points:\n\n- It\u0027s VkCmdClearAttachment that is buggy, the draw is the workaround ;)\n- Even if complicated, it\u0027s better to have the condition in the `ANGLE_FEATURE_CONDITION` macro itself. That turns into a string that shows up in chrome://gpu and helps debugging when you can actually tell why a feature is on or off.\n\n```suggestion\n    ANGLE_FEATURE_CONDITION(\u0026mFeatures, preferDrawClearOverVkCmdClearAttachments,\n                            isQualcommProprietary \u0026\u0026 mPhysicalDeviceProperties.driverVersion \u003c 0x802FA00C);\n```",
+      "range": {
+        "startLine": 4588,
+        "startChar": 0,
+        "endLine": 4591,
+        "endChar": 70
+      },
+      "revId": "99bbbc2ebfa7d89930cc0d33bafeb8649134a4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30a985ea_886aa48b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4591,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-10T19:16:25Z",
+      "side": 1,
+      "message": "Thanks :) Updated.",
+      "parentUuid": "c9b08698_a3de19e1",
       "range": {
         "startLine": 4588,
         "startChar": 0,
