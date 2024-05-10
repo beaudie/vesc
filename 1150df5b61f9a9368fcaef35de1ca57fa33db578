@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d4b6537_2f6fa406",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-10T21:58:35Z",
+      "side": 1,
+      "message": "Thanks! Makes sense.\nDone.",
+      "parentUuid": "a965b803_a89e4eb0",
+      "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70b40667_949dabce",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-05-10T19:40:31Z",
       "side": 1,
       "message": "Probably better to use `using QualcommDriverVersion \u003d angle::VersionTriple;` similar to how `ARMDriverVersion` is defined below.",
+      "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afb75dcd_e5667085",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-10T21:58:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70b40667_949dabce",
       "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
