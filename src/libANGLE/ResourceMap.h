@@ -136,8 +136,9 @@ class ResourceMap final : angle::NonCopyable
     //
     // For the purpose of unit testing, |int| is considered private (not needing lock), and
     // |unsigned int| is considered shared (needing lock).
-    static constexpr bool kNeedsLock = std::is_same_v<IDType, unsigned int>;
-    using Mutex                      = typename SelectResourceMapMutex<kNeedsLock>::type;
+    static constexpr bool kNeedsLock =
+        std::is_same_v<IDType, BufferID> || std::is_same_v<IDType, unsigned int>;
+    using Mutex = typename SelectResourceMapMutex<kNeedsLock>::type;
 
     // Analysis of ANGLE's traces as well as Chrome usage reveals the following:
     //

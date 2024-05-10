@@ -3847,6 +3847,137 @@ TEST_P(MultithreadingTest, ProgramLinkAndBind)
     ASSERT_NE(currentStep, Step::Abort);
 }
 
+// Test that two contexts in share group can generate, delete and bind buffers for themselves in
+// parallel.
+TEST_P(MultithreadingTestES3, SimultaneousBufferBindAndGen)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+
+layout(std140) uniform Block
+{
+    vec4 colorIn;
+};
+
+out vec4 color;
+
+void main()
+{
+    color = colorIn;
+})";
+
+    constexpr int kSurfaceWidth  = 32;
+    constexpr int kSurfaceHeight = 128;
+
+    // Sync primitives
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    enum class Step
+    {
+        Start,
+        Thread0Ready,
+        Thread1Ready,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    auto threadFunc = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context, uint32_t index) {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
+
+        ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+
+        // Make sure the two threads start work around the same time
+        if (index == 0)
+        {
+            threadSynchronization.nextStep(Step::Thread0Ready);
+            ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread1Ready));
+        }
+        else
+        {
+            ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0Ready));
+            threadSynchronization.nextStep(Step::Thread1Ready);
+        }
+
+        std::vector<GLuint> buffers(kSurfaceWidth * kSurfaceHeight);
+
+        glEnable(GL_SCISSOR_TEST);
+        for (int y = 0; y < kSurfaceHeight; ++y)
+        {
+            for (int x = 0; x < kSurfaceWidth; ++x)
+            {
+                GLuint &buffer            = buffers[y * kSurfaceWidth + x];
+                const float bufferData[4] = {
+                    ((y * kSurfaceWidth + x + index * 100) % 255) / 255.0f,
+                    ((y * kSurfaceWidth + x + index * 100 + 1) % 255) / 255.0f,
+                    ((y * kSurfaceWidth + x + index * 100 + 2) % 255) / 255.0f,
+                    ((y * kSurfaceWidth + x + index * 100 + 3) % 255) / 255.0f,
+                };
+
+                // Generate one buffer per pixel and shade the pixel with it.
+                glGenBuffers(1, &buffer);
+                glBindBuffer(GL_UNIFORM_BUFFER, buffers[y * kSurfaceWidth + x]);
+                glBufferData(GL_UNIFORM_BUFFER, sizeof(bufferData), bufferData, GL_STATIC_DRAW);
+                glBindBufferBase(GL_UNIFORM_BUFFER, 0, buffer);
+
+                glScissor(x, y, 1, 1);
+                drawQuad(program, essl3_shaders::PositionAttrib(), 0);
+
+                if ((x + y) % 2 == 0)
+                {
+                    glDeleteBuffers(1, &buffer);
+                    buffer = 0;
+                }
+            }
+        }
+
+        // Verify the results
+        auto verify = [&](int x, int y) {
+            const GLColor expect((y * kSurfaceWidth + x + index * 100) % 255,
+                                 (y * kSurfaceWidth + x + index * 100 + 1) % 255,
+                                 (y * kSurfaceWidth + x + index * 100 + 2) % 255,
+                                 (y * kSurfaceWidth + x + index * 100 + 3) % 255);
+            EXPECT_PIXEL_COLOR_EQ(x, y, expect);
+        };
+
+        verify(0, 0);
+        verify(0, kSurfaceHeight - 1);
+        verify(kSurfaceWidth - 1, 0);
+        verify(kSurfaceWidth - 1, kSurfaceHeight - 1);
+        verify(kSurfaceWidth / 2, kSurfaceHeight / 2);
+
+        if (index == 0)
+        {
+            threadSynchronization.nextStep(Step::Finish);
+        }
+        else
+        {
+            ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+        }
+    };
+
+    auto thread0 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        threadFunc(dpy, surface, context, 0);
+    };
+    auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        threadFunc(dpy, surface, context, 1);
+    };
+
+    std::array<LockStepThreadFunc, 2> threadFuncs = {
+        std::move(thread0),
+        std::move(thread1),
+    };
+
+    RunLockStepThreadsWithSize(getEGLWindow(), kSurfaceWidth, kSurfaceHeight, threadFuncs.size(),
+                               threadFuncs.data());
+
+    ASSERT_NE(currentStep, Step::Abort);
+}
+
 ANGLE_INSTANTIATE_TEST(
     MultithreadingTest,
     ES2_OPENGL(),
