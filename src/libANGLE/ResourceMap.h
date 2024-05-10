@@ -11,6 +11,8 @@
 #ifndef LIBANGLE_RESOURCE_MAP_H_
 #define LIBANGLE_RESOURCE_MAP_H_
 
+#include <type_traits>
+
 #include "libANGLE/angletypes.h"
 
 namespace gl
@@ -101,6 +103,7 @@ class ResourceMap final : angle::NonCopyable
     // Size of one map element.
     static constexpr size_t kElementSize = sizeof(ResourceType *);
 
+    size_t mMaxFlatID;
     size_t mFlatResourcesSize;
     ResourceType **mFlatResources;
 
@@ -110,7 +113,8 @@ class ResourceMap final : angle::NonCopyable
 
 template <typename ResourceType, typename IDType>
 ResourceMap<ResourceType, IDType>::ResourceMap()
-    : mFlatResourcesSize(kInitialFlatResourcesSize),
+    : mMaxFlatID(0),
+      mFlatResourcesSize(kInitialFlatResourcesSize),
       mFlatResources(new ResourceType *[kInitialFlatResourcesSize])
 {
     memset(mFlatResources, kInvalidPointer, mFlatResourcesSize * kElementSize);
@@ -120,6 +124,24 @@ template <typename ResourceType, typename IDType>
 ResourceMap<ResourceType, IDType>::~ResourceMap()
 {
     ASSERT(empty());
+    const char *typeName = "<UNKNOWN>";
+    if (std::is_same_v<IDType, BufferID>) typeName = "Buffer";
+    else if (std::is_same_v<IDType, ContextID>) typeName = "Context";
+    else if (std::is_same_v<IDType, FenceNVID>) typeName = "FenceNV";
+    else if (std::is_same_v<IDType, FramebufferID>) typeName = "Framebuffer";
+    else if (std::is_same_v<IDType, MemoryObjectID>) typeName = "MemoryObject";
+    else if (std::is_same_v<IDType, PathID>) typeName = "Path";
+    else if (std::is_same_v<IDType, ProgramPipelineID>) typeName = "ProgramPipeline";
+    else if (std::is_same_v<IDType, QueryID>) typeName = "Query";
+    else if (std::is_same_v<IDType, RenderbufferID>) typeName = "Renderbuffer";
+    else if (std::is_same_v<IDType, SamplerID>) typeName = "Sampler";
+    else if (std::is_same_v<IDType, SemaphoreID>) typeName = "Semaphore";
+    else if (std::is_same_v<IDType, SyncID>) typeName = "Sync";
+    else if (std::is_same_v<IDType, TextureID>) typeName = "Texture";
+    else if (std::is_same_v<IDType, TransformFeedbackID>) typeName = "TransformFeedback";
+    else if (std::is_same_v<IDType, VertexArrayID>) typeName = "VertexArray";
+    else if (std::is_same_v<IDType, ShaderProgramID>) typeName = "ShaderProgram";
+    fprintf(stderr, "Flat resources size: %s, max flat size: %zu, max flat ID: %zu\n", typeName, mFlatResourcesSize, mMaxFlatID);
     delete[] mFlatResources;
 }
 
@@ -167,6 +189,7 @@ void ResourceMap<ResourceType, IDType>::assign(IDType id, ResourceType *resource
     GLuint handle = GetIDValue(id);
     if (handle < kFlatResourcesLimit)
     {
+        mMaxFlatID = std::max<size_t>(mMaxFlatID, handle);
         if (handle >= mFlatResourcesSize)
         {
             // Use power-of-two.
