@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "089fe0d2_86a584c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-11T16:21:14Z",
+      "side": 1,
+      "message": "Following up on https://chromium-review.googlesource.com/c/angle/angle/+/5531113/3#message-424674d7228ad1ef17ab3244a9254971d17e5c48",
+      "revId": "e1babb2288f775371ef14789ed68a7f40a75e67d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
