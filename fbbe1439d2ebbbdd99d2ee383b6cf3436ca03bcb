@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "963e5bd8_ff8ce7ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-11T14:05:45Z",
+      "side": 1,
+      "message": "Thank you, Geoff!",
+      "revId": "fbbe1439d2ebbbdd99d2ee383b6cf3436ca03bcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75b2fdca_1881d6d1",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-11T14:05:45Z",
+      "side": 1,
+      "message": "I think we also need (|| is_component_build), like it was before https://chromium-review.googlesource.com/c/angle/angle/+/5371323?\nSo that non-WebGPU standalone component build would work.\nI\u0027d like to land this and roll Chromium, so let\u0027s follow up.",
+      "range": {
+        "startLine": 1249,
+        "startChar": 31,
+        "endLine": 1249,
+        "endChar": 48
+      },
+      "revId": "fbbe1439d2ebbbdd99d2ee383b6cf3436ca03bcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
