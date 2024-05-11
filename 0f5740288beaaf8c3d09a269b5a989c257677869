@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf89847e_be580410",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-11T18:14:57Z",
+      "side": 1,
+      "message": "Did this actually happen or is this change speculative? If the event creation fails, we have much bigger problems, how about returning `angle::Result` and let the usual ANGLE_TRY deal with this?\n\nSo far, abiding by \"Fail Fast\" has worked out for us.",
+      "revId": "0f5740288beaaf8c3d09a269b5a989c257677869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
