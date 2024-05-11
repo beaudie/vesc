@@ -15,7 +15,7 @@ namespace rx
 {
 namespace vk
 {
-void RefCountedEvent::init(Context *context, ImageLayout layout)
+bool RefCountedEvent::init(Context *context, ImageLayout layout)
 {
     ASSERT(mHandle == nullptr);
     ASSERT(layout != ImageLayout::Undefined);
@@ -27,9 +27,24 @@ void RefCountedEvent::init(Context *context, ImageLayout layout)
     createInfo.flags = context->getFeatures().supportsSynchronization2.enabled
                            ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
                            : 0;
-    mHandle->get().event.init(context->getDevice(), createInfo);
+    VkResult result  = mHandle->get().event.init(context->getDevice(), createInfo);
+    if (result != VK_SUCCESS)
+    {
+        WARN() << "event.init failed. Clean up garbage and retry again";
+        // Proactively clean up garbage and retry
+        context->getRenderer()->cleanupGarbage();
+        result = mHandle->get().event.init(context->getDevice(), createInfo);
+        if (result != VK_SUCCESS)
+        {
+            // If still fail to create, we just return. An invalid event will trigger
+            // pipelineBarrier code path
+            WARN() << " event.init failed, falling back to pipelineBarrier";
+            return false;
+        }
+    }
     mHandle->addRef();
     mHandle->get().imageLayout = layout;
+    return true;
 }
 
 // RefCountedEventsGarbage implementation.
