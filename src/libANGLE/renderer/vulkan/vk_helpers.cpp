@@ -6140,8 +6140,8 @@ void ImageHelper::releaseImage(Renderer *renderer)
         renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize, mMemoryTypeIndex,
                                   mVmaAllocation.getHandle());
     }
-    mCurrentEvent.release(renderer->getDevice());
-    mLastNonShaderReadOnlyEvent.release(renderer->getDevice());
+    mCurrentEvent.release(renderer);
+    mLastNonShaderReadOnlyEvent.release(renderer);
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory, &mVmaAllocation);
     mViewFormats.clear();
     mUse.reset();
@@ -6621,8 +6621,8 @@ void ImageHelper::destroy(Renderer *renderer)
                                   mVmaAllocation.getHandle());
     }
 
-    mCurrentEvent.release(device);
-    mLastNonShaderReadOnlyEvent.release(device);
+    mCurrentEvent.release(renderer);
+    mLastNonShaderReadOnlyEvent.release(renderer);
     mImage.destroy(device);
     mDeviceMemory.destroy(device);
     mVmaAllocation.destroy(renderer->getAllocator());
@@ -7117,7 +7117,7 @@ void ImageHelper::barrierImpl(Context *context,
     {
         // For now we always use pipelineBarrier for singlebuffer mode. We could use event here in
         // future.
-        mCurrentEvent.release(context->getDevice());
+        mCurrentEvent.release(context->getRenderer());
 
         const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
         VkMemoryBarrier memoryBarrier            = {};
@@ -7174,7 +7174,7 @@ void ImageHelper::barrierImpl(Context *context,
         }
         commandBuffer->imageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
         // We use pipelineBarrier here, no needs to wait for events any more.
-        mCurrentEvent.release(context->getDevice());
+        mCurrentEvent.release(context->getRenderer());
     }
 
     mCurrentLayout           = newLayout;
@@ -7368,7 +7368,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
 
             // Release it. No need to garbage collect since we did not use the event here. ALl
             // previous use of event should garbage tracked already.
-            mCurrentEvent.release(context->getDevice());
+            mCurrentEvent.release(context->getRenderer());
         }
         mBarrierQueueSerial = queueSerial;
     }
@@ -7483,7 +7483,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
                 mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
                 if (mLastNonShaderReadOnlyEvent.valid())
                 {
-                    mLastNonShaderReadOnlyEvent.release(context->getDevice());
+                    mLastNonShaderReadOnlyEvent.release(context->getRenderer());
                 }
             }
 
@@ -7492,7 +7492,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             const bool isShaderReadOnly = IsShaderReadOnlyLayout(transitionTo);
             if (isShaderReadOnly)
             {
-                mLastNonShaderReadOnlyEvent.release(context->getDevice());
+                mLastNonShaderReadOnlyEvent.release(context->getRenderer());
                 mLastNonShaderReadOnlyLayout = mCurrentLayout;
                 mCurrentShaderReadStageMask  = dstStageMask;
             }
@@ -7511,7 +7511,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             {
                 pipelineBarriers->mergeImageBarrier(transitionTo.barrierIndex, srcStageMask,
                                                     dstStageMask, imageMemoryBarrier);
-                mCurrentEvent.release(context->getDevice());
+                mCurrentEvent.release(context->getRenderer());
             }
 
             mBarrierQueueSerial = queueSerial;
@@ -7531,17 +7531,22 @@ void ImageHelper::setCurrentRefCountedEvent(Context *context, ImageLayoutEventMa
 {
     ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled);
 
+    // If there is already an event, release it first.
+    mCurrentEvent.release(context->getRenderer());
+
     // Create the event if we have not yet so. Otherwise just use the already created event. This
     // means all images used in the same render pass that has the same layout will be tracked by the
     // same event.
     if (!layoutEventMaps.map[mCurrentLayout].valid())
     {
-        layoutEventMaps.map[mCurrentLayout].init(context, mCurrentLayout);
+        if (!layoutEventMaps.map[mCurrentLayout].init(context, mCurrentLayout))
+        {
+            // If VkEvent creation fail, we fallback to pipelineBarrier
+            return;
+        }
         layoutEventMaps.mask.set(mCurrentLayout);
     }
 
-    // If there is already an event, release it first.
-    mCurrentEvent.release(context->getDevice());
     // Copy the event to mCurrentEvent so that we can wait for it in future. This will add extra
     // refcount to the underlying VkEvent.
     mCurrentEvent = layoutEventMaps.map[mCurrentLayout];
@@ -10206,7 +10211,7 @@ angle::Result ImageHelper::copySurfaceImageToBuffer(DisplayVk *displayVk,
 
     // We may have a valid event here but we do not have a collector to collect it. Release the
     // event here to force pipelineBarrier.
-    mCurrentEvent.release(displayVk->getDevice());
+    mCurrentEvent.release(displayVk->getRenderer());
 
     PrimaryCommandBuffer primaryCommandBuffer;
     ANGLE_TRY(renderer->getCommandBufferOneOff(displayVk, ProtectionType::Unprotected,
@@ -10258,7 +10263,7 @@ angle::Result ImageHelper::copyBufferToSurfaceImage(DisplayVk *displayVk,
 
     // We may have a valid event here but we do not have a collector to collect it. Release the
     // event here to force pipelineBarrier.
-    mCurrentEvent.release(displayVk->getDevice());
+    mCurrentEvent.release(displayVk->getRenderer());
 
     PrimaryCommandBuffer commandBuffer;
     ANGLE_TRY(
