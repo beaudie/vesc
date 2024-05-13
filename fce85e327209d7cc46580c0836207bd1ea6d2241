@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fd42024_bc747977",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-13T18:49:21Z",
+      "side": 1,
+      "message": "If an event is recycled, somebody should call `vkCmdResetEvent`, no? If VVL isn\u0027t complaining about this, is there a chance the recycler is not working as intended and we\u0027re never getting `true` from `fetch`?",
+      "revId": "fce85e327209d7cc46580c0836207bd1ea6d2241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
