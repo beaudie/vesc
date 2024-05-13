@@ -36,6 +36,9 @@ class EGLSyncTest : public ANGLETest<>
     }
 };
 
+class EGLSyncLeakTest : public EGLSyncTest
+{};
+
 // Test error cases for all EGL_KHR_fence_sync functions
 TEST_P(EGLSyncTest, FenceSyncErrors)
 {
@@ -708,4 +711,27 @@ void main(void)
     EXPECT_EGL_TRUE(eglDestroyContext(display, context2));
 }
 
+// Test that leaked fences are cleaned up in a safe way. Regression test for sync objects using tail
+// calls for destruction.
+TEST_P(EGLSyncLeakTest, LeakSyncToDisplayDestruction)
+{
+    EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    EXPECT_EGL_TRUE(eglInitialize(display, nullptr, nullptr) != EGL_FALSE);
+
+    ANGLE_SKIP_TEST_IF(!IsEGLDisplayExtensionEnabled(display, "EGL_KHR_fence_sync"));
+    EGLSyncKHR sync = eglCreateSyncKHR(display, EGL_SYNC_FENCE_KHR, nullptr);
+    EXPECT_NE(sync, EGL_NO_SYNC_KHR);
+
+    EXPECT_EGL_TRUE(eglTerminate(display) != EGL_FALSE);
+    EXPECT_EGL_TRUE(eglInitialize(display, nullptr, nullptr) != EGL_FALSE);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(EGLSyncTest);
+ANGLE_INSTANTIATE_TEST(EGLSyncLeakTest,
+                       WithNoFixture(ES2_D3D9()),
+                       WithNoFixture(ES2_D3D11()),
+                       WithNoFixture(ES2_OPENGL()),
+                       WithNoFixture(ES2_VULKAN()),
+                       WithNoFixture(ES3_D3D11()),
+                       WithNoFixture(ES3_OPENGL()),
+                       WithNoFixture(ES3_VULKAN()));
