@@ -16,6 +16,47 @@
       "message": "Niiice",
       "revId": "9342e76adfce03aff54bc751e89e8a4957519184",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "906f939c_649c51ef",
+        "filename": "src/libGLESv2/entry_points_gles_2_0_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-13T18:38:56Z",
+      "side": 1,
+      "message": "`Context::bindBuffer` calls `bufferObject-\u003eonBind(this, target);`, which read_modify `mState.mWebGLType`. If two context in the same share group try to bind the same buffer to the different binding point, there will be race to set mWebGLType value. Maybe mWebGLType should be atomic?",
+      "range": {
+        "startLine": 130,
+        "startChar": 21,
+        "endLine": 130,
+        "endChar": 31
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "1c71cfb3_1d468fcf",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libGLESv2/entry_points_gles_2_0_autogen.cpp",
+              "range": {
+                "startLine": 1579,
+                "startChar": 0,
+                "endLine": 1579,
+                "endChar": 0
+              },
+              "replacement": "            context-\u003egetBuffer(target).onBind(context, target);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "9342e76adfce03aff54bc751e89e8a4957519184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
