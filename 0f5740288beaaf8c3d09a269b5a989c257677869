@@ -52,6 +52,24 @@
       "parentUuid": "f6afce80_856d8a1a",
       "revId": "0f5740288beaaf8c3d09a269b5a989c257677869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65f525eb_c2fdb6ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-13T17:28:37Z",
+      "side": 1,
+      "message": "There are other ways to proactively detect potential leaks (right now I added a WARN()). But an event failed to allocate itself is not a fatal error, and not a GL error since we have ways to continue. How about I add an ASSERT after WARN() so that our bots will fail the test, Would that be okay with you?",
+      "parentUuid": "1b0cc2b3_913cb787",
+      "revId": "0f5740288beaaf8c3d09a269b5a989c257677869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
