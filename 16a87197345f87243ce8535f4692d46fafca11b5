@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ee0fc5b_f813c28f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 7996,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-13T19:25:35Z",
+      "side": 1,
+      "message": "Since RPs behave so differently with events, how about we don\u0027t try to unify this? Like, have `flushSetEvents` be specific to the outsideRP commands class (which can also call `collectRefCountedEventsGarbage` itself), and have the `executeSetEvents` be internal to RP commands (also calling `collectRefCountedEventsGarbage` itself) and called automatically on `executeCommands` like it is now.",
+      "revId": "16a87197345f87243ce8535f4692d46fafca11b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d484581_bae06835",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2704,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-13T19:25:35Z",
+      "side": 1,
+      "message": "If the suggestion in the other comment is taken, wouldn\u0027t we able to remove this function and let `executeSetEvents` deal with everything?",
+      "revId": "16a87197345f87243ce8535f4692d46fafca11b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
