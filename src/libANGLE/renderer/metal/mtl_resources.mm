@@ -724,6 +724,17 @@ TextureRef Texture::createMipView(const MipmapNativeLevel &level)
     }
 }
 
+TextureRef Texture::createMipsView(const MipmapNativeLevel &baseLevel, uint32_t levels)
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        NSUInteger slices = cubeFacesOrArrayLength();
+        return TextureRef(new Texture(this, pixelFormat(), textureType(),
+                                      NSMakeRange(baseLevel.get(), levels),
+                                      NSMakeRange(0, slices)));
+    }
+}
+
 TextureRef Texture::createViewWithDifferentFormat(MTLPixelFormat format)
 {
     ASSERT(supportFormatView());
