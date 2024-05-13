@@ -16,6 +16,23 @@
       "message": "Roman, PTAL.\nThis should be safe for A4A, since these are only logged in our tests, like end2end and dEQP.\nMight worsen the Perf tests, though.\nI\u0027ll remove as soon as I understand how we get NULL window.",
       "revId": "40e34118f6d9cd2cd627a326a3c286f279bd7092",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f1b209c_f189e46f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-13T15:34:18Z",
+      "side": 1,
+      "message": "Comparing https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-test/19581/overview from this CL:\nTotal shards: 177\nTotal deduped shards: 0\nTotal runtime: 428m 49s\nTotal saved runtime from deduping: 0s\n\nWith https://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-test/5899/overview\nTotal shards: 175\nTotal deduped shards: 2\nTotal runtime: 433m 16s\nTotal saved runtime from deduping: 2m 22s\n\nI conclude there is no noticeable overhead from the additional logging and this is safe to land.\nThanks for reviewing, Roman!",
+      "revId": "40e34118f6d9cd2cd627a326a3c286f279bd7092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
