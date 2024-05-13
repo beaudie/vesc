@@ -502,7 +502,8 @@ Texture::Texture(ContextMtl *context,
 
 Texture::Texture(Texture *original, MTLPixelFormat pixelFormat)
     : Resource(original),
-      mColorWritableMask(original->mColorWritableMask)  // Share color write mask property
+      mColorWritableMask(original->mColorWritableMask),  // Share color write mask property
+      mParentTexture(original->weak_from_this())
 {
     ANGLE_MTL_OBJC_SCOPE
     {
@@ -520,7 +521,8 @@ Texture::Texture(Texture *original,
                  NSRange levels,
                  NSRange slices)
     : Resource(original),
-      mColorWritableMask(original->mColorWritableMask)  // Share color write mask property
+      mColorWritableMask(original->mColorWritableMask),  // Share color write mask property
+      mParentTexture(original->weak_from_this())
 {
     ANGLE_MTL_OBJC_SCOPE
     {
@@ -542,7 +544,8 @@ Texture::Texture(Texture *original,
                  NSRange slices,
                  const TextureSwizzleChannels &swizzle)
     : Resource(original),
-      mColorWritableMask(original->mColorWritableMask)  // Share color write mask property
+      mColorWritableMask(original->mColorWritableMask),  // Share color write mask property
+      mParentTexture(original->weak_from_this())
 {
 #if ANGLE_MTL_SWIZZLE_AVAILABLE
     ANGLE_MTL_OBJC_SCOPE
@@ -721,6 +724,17 @@ TextureRef Texture::createMipView(const MipmapNativeLevel &level)
         NSUInteger slices = cubeFacesOrArrayLength();
         return TextureRef(new Texture(this, pixelFormat(), textureType(),
                                       NSMakeRange(level.get(), 1), NSMakeRange(0, slices)));
+    }
+}
+
+TextureRef Texture::createMipsView(const MipmapNativeLevel &baseLevel, uint32_t levels)
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        NSUInteger slices = cubeFacesOrArrayLength();
+        return TextureRef(new Texture(this, pixelFormat(), textureType(),
+                                      NSMakeRange(baseLevel.get(), levels),
+                                      NSMakeRange(0, slices)));
     }
 }
 
@@ -956,6 +970,19 @@ TextureRef Texture::getStencilView()
     }
 
     return mStencilView;
+}
+
+TextureRef Texture::parentTexture()
+{
+    return mParentTexture.lock();
+}
+MipmapNativeLevel Texture::parentRelativeLevel()
+{
+    return mtl::GetNativeMipLevel(static_cast<uint32_t>(get().parentRelativeLevel), 0);
+}
+uint32_t Texture::parentRelativeSlice()
+{
+    return static_cast<uint32_t>(get().parentRelativeSlice);
 }
 
 void Texture::set(id<MTLTexture> metalTexture)
