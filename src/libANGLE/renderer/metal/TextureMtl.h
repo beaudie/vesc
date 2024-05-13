@@ -180,7 +180,6 @@ class TextureMtl : public TextureImpl
                                     GLenum format);
 
     const mtl::Format &getFormat() const { return mFormat; }
-    const mtl::TextureRef &getNativeTexture() const { return mNativeTexture; }
 
   private:
     void releaseTexture(bool releaseImages);
@@ -195,13 +194,13 @@ class TextureMtl : public TextureImpl
     angle::Result ensureImageCreated(const gl::Context *context, const gl::ImageIndex &index);
     // Ensure all image views at all faces/levels are retained.
     void retainImageDefinitions();
-    mtl::TextureRef createImageViewFromNativeTexture(GLuint cubeFaceOrZero,
-                                                     const mtl::MipmapNativeLevel &nativeLevel);
+    mtl::TextureRef createImageViewFromTextureStorage(GLuint cubeFaceOrZero, GLuint glLevel);
+    angle::Result createNativeViewFromBaseToMaxLevel();
     angle::Result ensureNativeLevelViewsCreated();
     angle::Result checkForEmulatedChannels(const gl::Context *context,
                                            const mtl::Format &mtlFormat,
                                            const mtl::TextureRef &texture);
-    mtl::MipmapNativeLevel getNativeLevel(const gl::ImageIndex &imageIndex) const;
+    // Get native level in mNativeTextureStorage.
     mtl::TextureRef &getImage(const gl::ImageIndex &imageIndex);
     ImageDefinitionMtl &getImageDefinition(const gl::ImageIndex &imageIndex);
     RenderTargetMtl &getRenderTarget(const gl::ImageIndex &imageIndex);
@@ -326,11 +325,17 @@ class TextureMtl : public TextureImpl
     angle::Result generateMipmapCPU(const gl::Context *context);
 
     bool needsFormatViewForPixelLocalStorage(const ShPixelLocalStorageOptions &) const;
+    bool isImmutableOrPBuffer() const;
 
     mtl::Format mFormat;
     egl::Surface *mBoundSurface = nullptr;
-    // The real texture used by Metal draw calls.
-    mtl::TextureRef mNativeTexture         = nil;
+    class NativeTextureWrapper;
+    // The real texture used by Metal.
+    // For non-immutable texture, this usually contains levels from GL base level -> GL max level).
+    // For immutable texture, this can contains levels outside (GL base level -> GL max level).
+    std::unique_ptr<NativeTextureWrapper> mNativeTextureStorage;
+    // The view of mNativeTextureStorage from (GL base level -> GL max level)
+    std::unique_ptr<NativeTextureWrapper> mNativeViewFromBaseToMaxLevel;
     id<MTLSamplerState> mMetalSamplerState = nil;
 
     // Number of slices
@@ -352,14 +357,11 @@ class TextureMtl : public TextureImpl
     // Views for glBindImageTexture.
     std::map<MTLPixelFormat, gl::TexLevelArray<mtl::TextureRef>> mShaderImageViews;
 
-    // Mipmap views are indexed by native level (ignored base level):
-    mtl::NativeTexLevelArray mNativeLevelViews;
+    // Mipmap views are indexed from (base GL level -> max GL level):
+    mtl::NativeTexLevelArray mNativeLevelViewsWithinBaseMax;
 
     // The swizzled or stencil view used for shader sampling.
     mtl::TextureRef mNativeSwizzleStencilSamplingView;
-
-    GLuint mCurrentBaseLevel = 0;
-    GLuint mCurrentMaxLevel  = 1000;
 };
 
 }  // namespace rx

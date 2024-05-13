@@ -225,6 +225,8 @@ class Texture final : public Resource,
     TextureRef createCubeFaceView(uint32_t face);
     // Create a view of one slice at a level.
     TextureRef createSliceMipView(uint32_t slice, const MipmapNativeLevel &level);
+    // Create a levels range view
+    TextureRef createMipsView(const MipmapNativeLevel &baseLevel, uint32_t levels);
     // Create a view of a level.
     TextureRef createMipView(const MipmapNativeLevel &level);
     // Create a view with different format
