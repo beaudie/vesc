@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48db18fe_515b1c98",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-13T16:05:59Z",
+      "side": 1,
+      "message": "What about refactoring the need for a mutex and the initial resource size into a single type above? Something like `std::numeric_limits`:\n\n```\ntemplate \u003ctypename ResourceType\u003e\nstruct ResourceMapParams\n{\n    using MutexType \u003d ResourceMapMutex;\n    static constexpr size_t InitialFlatResourcesSize \u003d 128; \n};\n\ntemplate \u003c\u003e\nstruct ResourceMapParams\u003cBufferID\u003e\n{\n    using MutexType \u003d ResourceMapMutex;\n    static constexpr size_t InitialFlatResourcesSize \u003d 6144; \n};\n\n...\n```\n\nThat way we can keep the comments with the specific values and remove this nested ternary expression.",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 95
+      },
+      "revId": "032977f23cf2d554f2fe147446b6035030f87011",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
