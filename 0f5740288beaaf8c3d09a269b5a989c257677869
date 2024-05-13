@@ -16,6 +16,24 @@
       "message": "Did this actually happen or is this change speculative? If the event creation fails, we have much bigger problems, how about returning `angle::Result` and let the usual ANGLE_TRY deal with this?\n\nSo far, abiding by \"Fail Fast\" has worked out for us.",
       "revId": "0f5740288beaaf8c3d09a269b5a989c257677869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6afce80_856d8a1a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-13T16:06:55Z",
+      "side": 1,
+      "message": "It happened when I had a leak in later CL. Under normal situation without bug, it is not expected to happen. But even if event fail to create, we are still able to continue with PipelineBarrier. That is why it returns bool not angle::Result.",
+      "parentUuid": "bf89847e_be580410",
+      "revId": "0f5740288beaaf8c3d09a269b5a989c257677869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
