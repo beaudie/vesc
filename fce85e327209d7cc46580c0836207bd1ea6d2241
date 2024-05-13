@@ -34,6 +34,24 @@
       "parentUuid": "1fd42024_bc747977",
       "revId": "fce85e327209d7cc46580c0836207bd1ea6d2241",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6b0bbf7_cae0c14c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-13T19:14:12Z",
+      "side": 1,
+      "message": "\u003e I do think we need to call vkCmdResetEvent.\n\nYeah, looks like otherwise the set event doesn\u0027t do anything:\n\n\u003e If event is already in the signaled state when vkCmdSetEvent2 is executed on the device, then vkCmdSetEvent2 has no effect, no event signal operation occurs, and no dependency is generated.\n\nWould be good to report this to VVL to complain about. Maybe VVL _does_ report it but under syncval and that\u0027s disabled?",
+      "parentUuid": "d9d0d38b_6db2413b",
+      "revId": "fce85e327209d7cc46580c0836207bd1ea6d2241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
