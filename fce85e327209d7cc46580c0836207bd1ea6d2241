@@ -52,6 +52,24 @@
       "parentUuid": "d9d0d38b_6db2413b",
       "revId": "fce85e327209d7cc46580c0836207bd1ea6d2241",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13136232_5c2834fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-13T22:23:36Z",
+      "side": 1,
+      "message": "Added vkCmdResetEvent call if it is recycled. Will file a ticket for VVL sync val.",
+      "parentUuid": "d9d0d38b_6db2413b",
+      "revId": "fce85e327209d7cc46580c0836207bd1ea6d2241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
