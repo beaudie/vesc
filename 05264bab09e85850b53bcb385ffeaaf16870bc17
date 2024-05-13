@@ -64,6 +64,30 @@
       },
       "revId": "05264bab09e85850b53bcb385ffeaaf16870bc17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "277dee15_25b5bef6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-13T18:42:16Z",
+      "side": 1,
+      "message": "The only possible return value are: VK_SUCCESS, VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY.",
+      "parentUuid": "63cc46c2_0332b6e7",
+      "range": {
+        "startLine": 46,
+        "startChar": 19,
+        "endLine": 46,
+        "endChar": 24
+      },
+      "revId": "05264bab09e85850b53bcb385ffeaaf16870bc17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
