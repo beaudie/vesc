@@ -34,6 +34,24 @@
       "parentUuid": "bf89847e_be580410",
       "revId": "0f5740288beaaf8c3d09a269b5a989c257677869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b0cc2b3_913cb787",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-13T17:18:15Z",
+      "side": 1,
+      "message": "Ok in that case, my preference is still to cause a GL error (via returning angle::Result::Stop) instead of continuing along. Otherwise the leak you mentioned would have been much harder to find.\n\nThat is until at least there is a legitimate app that actually hits a limitation here somehow.",
+      "parentUuid": "f6afce80_856d8a1a",
+      "revId": "0f5740288beaaf8c3d09a269b5a989c257677869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
