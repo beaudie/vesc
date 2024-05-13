@@ -1,0 +1,45 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba108a66_bd2e477d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-13T18:35:07Z",
+      "side": 1,
+      "message": "Question: Would there be any `VkResult` values that need specific handling? (e.g., `DEVICE_LOST`) Should `result` itself be returned?",
+      "range": {
+        "startLine": 46,
+        "startChar": 19,
+        "endLine": 46,
+        "endChar": 24
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "e77a678e_0dc3df75",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+              "range": {
+                "startLine": 44,
+                "startChar": 0,
+                "endLine": 47,
+                "endChar": 0
+              },
+              "replacement": "            // If still fail to create, we just return. An invalid event will trigger pipeline\n            // barrier code path.\n            return true;\n"
+            }
+          ]
+        }
+      ],
+      "revId": "05264bab09e85850b53bcb385ffeaaf16870bc17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
