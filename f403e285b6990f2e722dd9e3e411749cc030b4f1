@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6337e59_c6eaa142",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-13T17:45:15Z",
+      "side": 1,
+      "message": "lgtm too\n\nCC\u0027ing Alexey because he\u0027s been working on other texture-related bugs - though related to immutable textures.",
+      "revId": "f403e285b6990f2e722dd9e3e411749cc030b4f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
