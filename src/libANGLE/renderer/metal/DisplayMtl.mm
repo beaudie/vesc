@@ -1345,6 +1345,9 @@ void DisplayMtl::initializeFeatures()
     // of buffer uploads which require a flush to work around.
     ANGLE_FEATURE_CONDITION((&mFeatures), flushAfterStreamVertexData, isAMDBronzeDriver());
 
+    // AMDMTLBronzeDriver seems to have bug when uploading a buffer to a 3D texture's view.
+    ANGLE_FEATURE_CONDITION((&mFeatures), alwaysUploadToOriginalTexture, isAMDBronzeDriver());
+
     // TODO(anglebug.com/7952): GPUs that don't support Mac GPU family 2 or greater are
     // unsupported by the Metal backend.
     ANGLE_FEATURE_CONDITION((&mFeatures), requireGpuFamily2, true);

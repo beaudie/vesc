@@ -44,6 +44,7 @@ enum class Feature
     AlwaysResolveMultisampleRenderBuffers,
     AlwaysRunLinkSubJobsThreaded,
     AlwaysUnbindFramebufferTexture2D,
+    AlwaysUploadToOriginalTexture,
     AlwaysUseManagedStorageModeForBuffers,
     AlwaysUseSharedStorageModeForBuffers,
     AlwaysUseStagedBufferUpdates,
