@@ -44,6 +44,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::AlwaysResolveMultisampleRenderBuffers, "alwaysResolveMultisampleRenderBuffers"},
     {Feature::AlwaysRunLinkSubJobsThreaded, "alwaysRunLinkSubJobsThreaded"},
     {Feature::AlwaysUnbindFramebufferTexture2D, "alwaysUnbindFramebufferTexture2D"},
+    {Feature::AlwaysUploadToOriginalTexture, "alwaysUploadToOriginalTexture"},
     {Feature::AlwaysUseManagedStorageModeForBuffers, "alwaysUseManagedStorageModeForBuffers"},
     {Feature::AlwaysUseSharedStorageModeForBuffers, "alwaysUseSharedStorageModeForBuffers"},
     {Feature::AlwaysUseStagedBufferUpdates, "alwaysUseStagedBufferUpdates"},

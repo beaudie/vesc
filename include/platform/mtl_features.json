@@ -273,6 +273,14 @@
             "issue": "http://anglebug.com/7544"
         },
         {
+            "name": "always_upload_to_original_texture",
+            "category": "Features",
+            "description": [
+                "Always upload data to the original texture instead of via texture view in TextureMtl"
+            ],
+            "issue": "http://anglebug.com/8355"
+        },
+        {
             "name": "use_shadow_buffers_when_appropriate",
             "category": "Features",
             "description": [

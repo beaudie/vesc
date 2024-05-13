@@ -225,6 +225,8 @@ class Texture final : public Resource,
     TextureRef createCubeFaceView(uint32_t face);
     // Create a view of one slice at a level.
     TextureRef createSliceMipView(uint32_t slice, const MipmapNativeLevel &level);
+    // Create a levels range view
+    TextureRef createMipsView(const MipmapNativeLevel &baseLevel, uint32_t levels);
     // Create a view of a level.
     TextureRef createMipView(const MipmapNativeLevel &level);
     // Create a view with different format
@@ -238,6 +240,10 @@ class Texture final : public Resource,
     TextureRef createViewWithCompatibleFormat(MTLPixelFormat format);
     // Create a swizzled view
     TextureRef createSwizzleView(MTLPixelFormat format, const TextureSwizzleChannels &swizzle);
+    TextureRef createMipsSwizzleView(const MipmapNativeLevel &baseLevel,
+                                     uint32_t levels,
+                                     MTLPixelFormat format,
+                                     const TextureSwizzleChannels &swizzle);
 
     MTLTextureType textureType() const;
     MTLPixelFormat pixelFormat() const;
@@ -287,6 +293,10 @@ class Texture final : public Resource,
     TextureRef getStencilView();
     // Get linear color
     TextureRef getLinearColorView();
+
+    TextureRef parentTexture();
+    MipmapNativeLevel parentRelativeLevel();
+    uint32_t parentRelativeSlice();
 
     // Change the wrapped metal object. Special case for swapchain image
     void set(id<MTLTexture> metalTexture);
@@ -371,6 +381,8 @@ class Texture final : public Resource,
     TextureRef mStencilView;
     // Readable copy of texture
     TextureRef mReadCopy;
+
+    TextureWeakRef mParentTexture;
 
     size_t mEstimatedByteSize = 0;
 };

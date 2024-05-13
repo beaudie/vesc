@@ -277,6 +277,13 @@ struct FeaturesMtl : FeatureSetBase
         &members, "http://anglebug.com/7544"
     };
 
+    FeatureInfo alwaysUploadToOriginalTexture = {
+        "alwaysUploadToOriginalTexture",
+        FeatureCategory::MetalFeatures,
+        "Always upload data to the original texture instead of via texture view in TextureMtl",
+        &members, "http://anglebug.com/8355"
+    };
+
     FeatureInfo useShadowBuffersWhenAppropriate = {
         "useShadowBuffersWhenAppropriate",
         FeatureCategory::MetalFeatures,
