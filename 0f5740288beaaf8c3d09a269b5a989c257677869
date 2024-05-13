@@ -70,6 +70,24 @@
       "parentUuid": "1b0cc2b3_913cb787",
       "revId": "0f5740288beaaf8c3d09a269b5a989c257677869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac314c62_6967f4a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-13T17:30:03Z",
+      "side": 1,
+      "message": "Yes, ASSERT would work!",
+      "parentUuid": "65f525eb_c2fdb6ba",
+      "revId": "0f5740288beaaf8c3d09a269b5a989c257677869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
