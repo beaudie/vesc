@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6deda554_e35efe20",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-13T17:05:39Z",
+      "side": 1,
+      "message": "```suggestion\n    }\n    mPPOProgramExecutables.clear();\n```",
+      "revId": "815a601f022fec3a72f536b45555ca4048ef230b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4178c0e5_9279db41",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-13T17:05:39Z",
+      "side": 1,
+      "message": "You can simplify with something like this:\n\n```suggestion\n    // Make a new executable to hold the result of the link.\n    ... newExecutable \u003d std::make_shared\u003cProgramExecutable\u003e(context-\u003egetImplementation(), \u0026mState.mInfoLog);\n    newExecutable-\u003emPPOProgramExecutables \u003d std::move(mState.mExecutable-\u003emPPOProgramExecutables)\n\n    InstallExecutable(context, newExecutable, \u0026mState.mExecutable);\n    onStateChange(angle::SubjectMessage::ProgramUnlinked);\n```",
+      "range": {
+        "startLine": 500,
+        "startChar": 0,
+        "endLine": 510,
+        "endChar": 90
+      },
+      "revId": "815a601f022fec3a72f536b45555ca4048ef230b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
