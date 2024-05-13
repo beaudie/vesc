@@ -57,6 +57,30 @@
       ],
       "revId": "9342e76adfce03aff54bc751e89e8a4957519184",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ca7b2f0_21bbfb10",
+        "filename": "src/libGLESv2/entry_points_gles_2_0_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-13T18:46:35Z",
+      "side": 1,
+      "message": "Sharp eyes, though that variable is only ever accessed if webgl, where locking is not an issue. How about I make `onBind` do `if (!webgl) return;` instead?",
+      "parentUuid": "906f939c_649c51ef",
+      "range": {
+        "startLine": 130,
+        "startChar": 21,
+        "endLine": 130,
+        "endChar": 31
+      },
+      "revId": "9342e76adfce03aff54bc751e89e8a4957519184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
