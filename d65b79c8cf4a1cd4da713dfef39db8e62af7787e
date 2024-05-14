@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0ddf6cb_4fb910f3",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-14T19:39:04Z",
+      "side": 1,
+      "message": "If we always use original texture, do you prefer passing the original texture and its level directly here or getting them via view ref? The former would require refactoring a lot of places in this class, e.g. setPerSliceSubImage should take in a original texture + level instead of a level view.\n\nI would prefer the 2nd to unify the code to upload data to an image of an incomplete texture vs complete texture though.",
+      "parentUuid": "e2798737_4bf3b7e9",
+      "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5a1b0dd_24dc5943",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 8
