@@ -16,6 +16,24 @@
       "message": "Risky thing is getting here from `ImageHelper::copySurfaceImageToBuffer` which sends in a `DisplayVk` as the context. That gets called from `LockSurfaceImpl`. Are window surface images guaranteed not to use events? The reason I suggested the `ASSERT` in the other comment is to catch such situations.",
       "revId": "16a87197345f87243ce8535f4692d46fafca11b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "325e6861_d2542d0d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7215,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-14T18:46:41Z",
+      "side": 0,
+      "message": "Caller already released event in this case. But I also added assert in releaseImpl",
+      "parentUuid": "e2823461_ff5c4d81",
+      "revId": "16a87197345f87243ce8535f4692d46fafca11b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

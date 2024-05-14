@@ -16,6 +16,24 @@
       "message": "Since this is never expected to really happen, how about we just `UNREACHABLE()` right here, return false and then we can remove the `finishAndCleanup` function? That\u0027s basically untested code that will never get exercised.",
       "revId": "a4a07845b2358aea24d027ba21a01e7c5646dffd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0b08d03_de8f79dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-14T18:46:41Z",
+      "side": 1,
+      "message": "In theory you could get here. With per share group garbage list, there is no async thread doing clean up. If you have many many contexts, you could end up here. Or if smaller number of contexts but each context generates many commands really fast, you could also eventually exhaust the events in some extreme case. So add a safety net here to do the last effort to wait and clean up might get events creation success still provides value. But with normal usage, you are not expected to hit this, thus a WARN() message above to help easy debugging.",
+      "parentUuid": "af386ccc_fc402486",
+      "revId": "a4a07845b2358aea24d027ba21a01e7c5646dffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
