@@ -105,6 +105,30 @@
       },
       "revId": "9342e76adfce03aff54bc751e89e8a4957519184",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bc2ada5_0ef72c0b",
+        "filename": "src/libGLESv2/entry_points_gles_2_0_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-14T03:28:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fea58e9_3c843e5b",
+      "range": {
+        "startLine": 130,
+        "startChar": 21,
+        "endLine": 130,
+        "endChar": 31
+      },
+      "revId": "9342e76adfce03aff54bc751e89e8a4957519184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
