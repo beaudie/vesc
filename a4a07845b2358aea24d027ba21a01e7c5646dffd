@@ -34,6 +34,24 @@
       "parentUuid": "af386ccc_fc402486",
       "revId": "a4a07845b2358aea24d027ba21a01e7c5646dffd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d0defd6_28edceae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-14T20:45:41Z",
+      "side": 1,
+      "message": "Removed finishAndCleanup and just called cleanup. Since this is just a last effort before we fallback to pipelineBarrier thing, finish probably is unnecessary. Making cleanup call at least we tried some effort here. Again, this is only for extreme cases that no real app could ever hit.",
+      "parentUuid": "c0b08d03_de8f79dc",
+      "revId": "a4a07845b2358aea24d027ba21a01e7c5646dffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
