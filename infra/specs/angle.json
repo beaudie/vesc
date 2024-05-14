@@ -636,7 +636,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -662,7 +662,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -688,7 +688,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -713,7 +713,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -738,7 +738,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -764,7 +764,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -789,7 +789,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -814,7 +814,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -843,7 +843,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -871,7 +871,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -899,7 +899,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -927,7 +927,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -956,7 +956,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -985,7 +985,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -1013,7 +1013,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -1041,7 +1041,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -1069,7 +1069,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -1097,7 +1097,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -1123,7 +1123,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -1147,7 +1147,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
@@ -1181,7 +1181,7 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
