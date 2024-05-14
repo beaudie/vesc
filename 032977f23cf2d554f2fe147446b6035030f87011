@@ -22,6 +22,30 @@
       },
       "revId": "032977f23cf2d554f2fe147446b6035030f87011",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "286dd608_08d2e948",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-14T03:28:34Z",
+      "side": 1,
+      "message": "Good idea, done. Also fixed the static_assert below which was really supposed to make sure the limit is 2^N times higher than init value. Adjusted some values based on that.",
+      "parentUuid": "48db18fe_515b1c98",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 95
+      },
+      "revId": "032977f23cf2d554f2fe147446b6035030f87011",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
