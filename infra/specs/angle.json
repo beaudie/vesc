@@ -636,10 +636,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 4
         },
@@ -662,10 +663,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 4
         },
@@ -688,10 +690,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_565_no_depth_no_stencil_tests",
@@ -713,10 +716,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_multisample_tests",
@@ -738,10 +742,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 20
         },
@@ -764,10 +769,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles3_565_no_depth_no_stencil_tests",
@@ -789,10 +795,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles3_multisample_tests",
@@ -814,10 +821,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 12
         },
@@ -843,10 +851,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles2_tests",
@@ -871,10 +880,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles31_tests",
@@ -899,10 +909,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -927,10 +938,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -956,10 +968,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -985,10 +998,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -1013,10 +1027,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles3_tests",
@@ -1041,10 +1056,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_noctx_gles2_tests",
@@ -1069,10 +1085,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_noctx_gles32_tests",
@@ -1097,10 +1114,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_single_gles32_tests",
@@ -1123,10 +1141,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 8
         },
@@ -1147,10 +1166,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_unittests",
@@ -1181,10 +1201,11 @@
           "dimensions": {
             "device_os": "UP1A.231005.007",
             "device_os_type": "user",
-            "device_type": "s5e9925",
+            "device_type": "dm1q",
             "os": "Android",
             "pool": "chromium.tests.gpu"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 6
         },
