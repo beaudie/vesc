@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af386ccc_fc402486",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-14T15:03:05Z",
+      "side": 1,
+      "message": "Since this is never expected to really happen, how about we just `UNREACHABLE()` right here, return false and then we can remove the `finishAndCleanup` function? That\u0027s basically untested code that will never get exercised.",
+      "revId": "a4a07845b2358aea24d027ba21a01e7c5646dffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

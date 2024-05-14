@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45abad20_f8778576",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-14T15:03:05Z",
+      "side": 1,
+      "message": "```suggestion\n{\n    ASSERT(garbageRecycler !\u003d nullptr);\n```",
+      "revId": "399a6acbf4765f21d19c9c335564593707992749",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c151251e_82776f1b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-14T15:03:05Z",
+      "side": 1,
+      "message": "Not thread-safe, right?",
+      "revId": "399a6acbf4765f21d19c9c335564593707992749",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e0118eb_48a9133b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-14T15:03:05Z",
+      "side": 1,
+      "message": "nit: assuming the name is coming from `RefCountedEventsGarbage`:\n\n```suggestion\nclass RefCountedEventsGarbageRecycler final\n```",
+      "revId": "399a6acbf4765f21d19c9c335564593707992749",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
