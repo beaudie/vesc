@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc14bf00_22379bf1",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-14T19:56:33Z",
+      "side": 1,
+      "message": "I think it\u0027s reasonable to always get the texture and the level via the view. This way we\u0027ll be sure that this code is correct on all platforms.\n\nOut of curiosity, when are the nested views used, i.e., why is the loop needed here?",
+      "parentUuid": "a0ddf6cb_4fb910f3",
+      "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5a1b0dd_24dc5943",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 8
@@ -107,6 +125,24 @@
       "side": 1,
       "message": "This is not necessarily for intel issue only though. It\u0027s simply waste of memory to create a view that has same levels as the original texture.",
       "parentUuid": "a602e59f_abb343a8",
+      "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc701cac_09ad05ac",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-14T19:56:33Z",
+      "side": 1,
+      "message": "Sure, mentioning both reasons is fine. Since it\u0027s not just an optimization, pointing out the driver bug is important imo.",
+      "parentUuid": "c793ce7d_7222a689",
       "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
