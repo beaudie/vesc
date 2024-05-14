@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "384388bb_d9b9097d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-14T16:42:09Z",
+      "side": 1,
+      "message": "GL_bindBuffer may also trigger destroy of the previous bound buffer. I am looking at Buffer::onDestroy, looks like GL/Metal backend might end up calling into code path beyond current context. Have you checked that destroying a buffer is completely thread safe?",
+      "revId": "e08581ceda04a5126e7649473d6b56ea9a82b328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
