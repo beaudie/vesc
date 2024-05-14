@@ -16,6 +16,24 @@
       "message": "GL_bindBuffer may also trigger destroy of the previous bound buffer. I am looking at Buffer::onDestroy, looks like GL/Metal backend might end up calling into code path beyond current context. Have you checked that destroying a buffer is completely thread safe?",
       "revId": "e08581ceda04a5126e7649473d6b56ea9a82b328",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a4719d_d8ec9d14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-14T17:31:05Z",
+      "side": 1,
+      "message": "The GL and Metal backends don\u0027t claim to support multithreading. If they ever support it, they\u0027d have to figure out how to make it work (like how vulkan/ makes sure garbage collection etc is thread safe internally))",
+      "parentUuid": "384388bb_d9b9097d",
+      "revId": "e08581ceda04a5126e7649473d6b56ea9a82b328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
