@@ -95,6 +95,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c793ce7d_7222a689",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-14T19:42:27Z",
+      "side": 1,
+      "message": "This is not necessarily for intel issue only though. It\u0027s simply waste of memory to create a view that has same levels as the original texture.",
+      "parentUuid": "a602e59f_abb343a8",
+      "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17b7acff_e8de22db",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 8
