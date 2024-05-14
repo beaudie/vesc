@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee17d4d2_fadbb765",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 7996,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-14T00:13:49Z",
+      "side": 1,
+      "message": "Made flushSetEvents specific to outsideRP commands now. outsideRP commands calls flushSetEvents and collectRefCountedEventsGarbage (since flushSetEvents also called from other places like trackImageWithEvent). RenderPassCommands now only calls collectRefCountedEventsGarbage.  executeSetEvents already an private API to RP.",
+      "parentUuid": "7ee0fc5b_f813c28f",
+      "revId": "16a87197345f87243ce8535f4692d46fafca11b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d484581_bae06835",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-05-13T19:25:35Z",
       "side": 1,
       "message": "If the suggestion in the other comment is taken, wouldn\u0027t we able to remove this function and let `executeSetEvents` deal with everything?",
+      "revId": "16a87197345f87243ce8535f4692d46fafca11b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cba323a6_7bf17019",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2704,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-14T00:13:49Z",
+      "side": 1,
+      "message": "You still needs collectRefCountedEventsGarbage. By the time executeSetEvents gets called, we no longer have access to ContextVk. So garbages has to be collected while it is still visible to ContextVk. That is the main point of this CL.",
+      "parentUuid": "2d484581_bae06835",
       "revId": "16a87197345f87243ce8535f4692d46fafca11b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
