@@ -3560,10 +3560,8 @@ angle::Result Renderer::createDeviceAndQueue(vk::Context *context, uint32_t queu
 
     initDeviceExtensionEntryPoints();
 
-    vk::DeviceQueueMap graphicsQueueMap =
-        queueFamily.initializeQueueMap(mDevice, enableProtectedContent, 0, queueCount);
-
-    ANGLE_TRY(mCommandQueue.init(context, graphicsQueueMap));
+    ANGLE_TRY(
+        mCommandQueue.init(context, mDevice, queueFamily, enableProtectedContent, queueCount));
     ANGLE_TRY(mCommandProcessor.init());
 
     if (mFeatures.forceMaxUniformBufferSize16KB.enabled)

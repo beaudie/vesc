@@ -316,40 +316,52 @@ class QueueFamily final : angle::NonCopyable
     }
     uint32_t getDeviceQueueCount() const { return mProperties.queueCount; }
 
-    DeviceQueueMap initializeQueueMap(VkDevice device,
-                                      bool makeProtected,
-                                      uint32_t queueIndex,
-                                      uint32_t queueCount);
-
   private:
     VkQueueFamilyProperties mProperties;
     uint32_t mQueueFamilyIndex;
-
-    void getDeviceQueue(VkDevice device, bool makeProtected, uint32_t queueIndex, VkQueue *queue);
 };
 
-class DeviceQueueMap : public angle::PackedEnumMap<egl::ContextPriority, VkQueue>
+class DeviceQueueMap
 {
-    friend QueueFamily;
-
   public:
     DeviceQueueMap() : mQueueFamilyIndex(QueueFamily::kInvalidIndex), mIsProtected(false) {}
-    DeviceQueueMap(uint32_t queueFamilyIndex, bool isProtected)
-        : mQueueFamilyIndex(queueFamilyIndex), mIsProtected(isProtected)
-    {}
-    DeviceQueueMap(const DeviceQueueMap &other) = default;
     ~DeviceQueueMap();
-    DeviceQueueMap &operator=(const DeviceQueueMap &other);
+
+    void initialize(VkDevice device,
+                    const QueueFamily &queueFamily,
+                    bool makeProtected,
+                    uint32_t queueIndex,
+                    uint32_t queueCount);
+    void destroy();
 
     bool valid() const { return (mQueueFamilyIndex != QueueFamily::kInvalidIndex); }
-    uint32_t getQueueFamilyIndex() const { return mQueueFamilyIndex; }
     bool isProtected() const { return mIsProtected; }
-    egl::ContextPriority getDevicePriority(egl::ContextPriority priority) const;
+    egl::ContextPriority getDevicePriority(egl::ContextPriority priority) const
+    {
+        return mQueueAndIndices[priority].devicePriority;
+    }
+
+    uint32_t getQueueFamilyIndex() const { return mQueueFamilyIndex; }
+    DeviceQueueIndex getDeviceQueueIndex(egl::ContextPriority priority) const
+    {
+        return DeviceQueueIndex(mQueueFamilyIndex, mQueueAndIndices[priority].index);
+    }
+    const VkQueue &getQueue(egl::ContextPriority priority) const
+    {
+        return mQueueAndIndices[priority].queue;
+    }
 
   private:
     uint32_t mQueueFamilyIndex;
     bool mIsProtected;
-    angle::PackedEnumMap<egl::ContextPriority, egl::ContextPriority> mPriorities;
+    struct QueueAndIndex
+    {
+        egl::ContextPriority devicePriority;
+        VkQueue queue;
+        uint32_t index;
+    };
+    friend class QueueFamily;
+    angle::PackedEnumMap<egl::ContextPriority, QueueAndIndex> mQueueAndIndices;
 };
 
 // Note all public APIs of CommandQueue class must be thread safe.
@@ -359,20 +371,28 @@ class CommandQueue : angle::NonCopyable
     CommandQueue();
     ~CommandQueue();
 
-    angle::Result init(Context *context, const DeviceQueueMap &queueMap);
+    angle::Result init(Context *context,
+                       VkDevice device,
+                       const QueueFamily &queueFamily,
+                       bool enableProtectedContent,
+                       uint32_t queueCount);
     void destroy(Context *context);
 
     void handleDeviceLost(Renderer *renderer);
 
-    // These public APIs are inherently thread safe. Thread unsafe methods must be protected methods
-    // that are only accessed via ThreadSafeCommandQueue API.
+    // These public APIs are inherently thread safe. Thread unsafe methods must be protected
+    // methods that are only accessed via ThreadSafeCommandQueue API.
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority) const
     {
         return mQueueMap.getDevicePriority(priority);
     }
-    uint32_t getDeviceQueueIndex() const { return mQueueMap.getQueueFamilyIndex(); }
+    uint32_t getQueueFamilyIndex() const { return mQueueMap.getQueueFamilyIndex(); }
+    DeviceQueueIndex getDeviceQueueIndex(egl::ContextPriority priority) const
+    {
+        return mQueueMap.getDeviceQueueIndex(priority);
+    }
 
-    VkQueue getQueue(egl::ContextPriority priority) const { return mQueueMap[priority]; }
+    VkQueue getQueue(egl::ContextPriority priority) const { return mQueueMap.getQueue(priority); }
 
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
@@ -519,9 +539,9 @@ class CommandQueue : angle::NonCopyable
 
     // Protect multi-thread access to mInFlightCommands.pop and ensure ordering of submission.
     mutable angle::SimpleMutex mMutex;
-    // Protect multi-thread access to mInFlightCommands.push as well as does lock relay for mMutex
-    // so that we can release mMutex while doing potential lengthy vkQueueSubmit and vkQueuePresent
-    // call.
+    // Protect multi-thread access to mInFlightCommands.push as well as does lock relay for
+    // mMutex so that we can release mMutex while doing potential lengthy vkQueueSubmit and
+    // vkQueuePresent call.
     angle::SimpleMutex mQueueSubmitMutex;
     CommandBatchQueue mInFlightCommands;
     // Temporary storage for finished command batches that should be reset.
@@ -547,9 +567,9 @@ class CommandQueue : angle::NonCopyable
 };
 
 // CommandProcessor is used to dispatch work to the GPU when the asyncCommandQueue feature is
-// enabled. Issuing the |destroy| command will cause the worker thread to clean up it's resources
-// and shut down. This command is sent when the renderer instance shuts down. Tasks are defined by
-// the CommandQueue interface.
+// enabled. Issuing the |destroy| command will cause the worker thread to clean up it's
+// resources and shut down. This command is sent when the renderer instance shuts down. Tasks
+// are defined by the CommandQueue interface.
 
 class CommandProcessor : public Context
 {
@@ -666,8 +686,8 @@ class CommandProcessor : public Context
                      const VkPresentInfoKHR &presentInfo,
                      SwapchainStatus *swapchainStatus);
 
-    // The mutex lock that serializes dequeue from mTask and submit to mCommandQueue so that only
-    // one mTaskQueue consumer at a time
+    // The mutex lock that serializes dequeue from mTask and submit to mCommandQueue so that
+    // only one mTaskQueue consumer at a time
     angle::SimpleMutex mTaskDequeueMutex;
 
     CommandProcessorTaskQueue mTaskQueue;
@@ -676,8 +696,8 @@ class CommandProcessor : public Context
     std::condition_variable mWorkAvailableCondition;
     CommandQueue *const mCommandQueue;
 
-    // Tracks last serial that was enqueued to mTaskQueue . Note: this maybe different (always equal
-    // or smaller) from mLastSubmittedQueueSerial in CommandQueue since submission from
+    // Tracks last serial that was enqueued to mTaskQueue . Note: this maybe different (always
+    // equal or smaller) from mLastSubmittedQueueSerial in CommandQueue since submission from
     // CommandProcessor to CommandQueue occur in a separate thread.
     AtomicQueueSerialFixedArray mLastEnqueuedSerials;
 

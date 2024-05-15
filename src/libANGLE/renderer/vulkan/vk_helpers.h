@@ -1043,7 +1043,7 @@ class BufferHelper : public ReadWriteResource
     Buffer mBufferWithUserSize;
 
     // For memory barriers.
-    uint32_t mCurrentQueueFamilyIndex;
+    DeviceQueueIndex mCurrentDeviceQueueIndex;
     VkFlags mCurrentWriteAccess;
     VkFlags mCurrentReadAccess;
     VkPipelineStageFlags mCurrentWriteStages;
@@ -2526,7 +2526,7 @@ class ImageHelper final : public Resource, public angle::Subject
         // Since we are doing an out of order one off submission, there shouldn't be any pending
         // setEvent.
         ASSERT(!mCurrentEvent.valid());
-        barrierImpl(context, getAspectFlags(), newLayout, mCurrentQueueFamilyIndex, nullptr,
+        barrierImpl(context, getAspectFlags(), newLayout, mCurrentDeviceQueueIndex, nullptr,
                     commandBuffer, acquireNextImageSemaphoreOut);
     }
 
@@ -2550,13 +2550,13 @@ class ImageHelper final : public Resource, public angle::Subject
 
     bool isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const
     {
-        return mCurrentQueueFamilyIndex != newQueueFamilyIndex;
+        return mCurrentDeviceQueueIndex.familyIndex() != newQueueFamilyIndex;
     }
 
     void changeLayoutAndQueue(Context *context,
                               VkImageAspectFlags aspectMask,
                               ImageLayout newLayout,
-                              uint32_t newQueueFamilyIndex,
+                              DeviceQueueIndex newDeviceQueueIndex,
                               OutsideRenderPassCommandBuffer *commandBuffer);
 
     // Returns true if barrier has been generated
@@ -2862,7 +2862,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void barrierImpl(Context *context,
                      VkImageAspectFlags aspectMask,
                      ImageLayout newLayout,
-                     uint32_t newQueueFamilyIndex,
+                     DeviceQueueIndex newDeviceQueueIndex,
                      RefCountedEventCollector *eventCollector,
                      CommandBufferT *commandBuffer,
                      VkSemaphore *acquireNextImageSemaphoreOut);
@@ -3086,7 +3086,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // Current state.
     ImageLayout mCurrentLayout;
-    uint32_t mCurrentQueueFamilyIndex;
+    DeviceQueueIndex mCurrentDeviceQueueIndex;
     // For optimizing transition between different shader readonly layouts
     ImageLayout mLastNonShaderReadOnlyLayout;
     VkPipelineStageFlags mCurrentShaderReadStageMask;
