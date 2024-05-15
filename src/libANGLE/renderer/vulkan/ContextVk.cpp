@@ -1213,6 +1213,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
     mShareGroupRefCountedEventsGarbageRecycler =
         mShareGroupVk->getRefCountedEventsGarbageRecycler();
 
+    mQueueIndex = renderer->getQueueIndex(mContextPriority);
+
     angle::PerfMonitorCounterGroup vulkanGroup;
     vulkanGroup.name = "vulkan";
 

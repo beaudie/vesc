@@ -1041,7 +1041,7 @@ class BufferHelper : public ReadWriteResource
     Buffer mBufferWithUserSize;
 
     // For memory barriers.
-    uint32_t mCurrentQueueFamilyIndex;
+    QueueIndex mCurrentQueueIndex;
     VkFlags mCurrentWriteAccess;
     VkFlags mCurrentReadAccess;
     VkPipelineStageFlags mCurrentWriteStages;
@@ -2524,7 +2524,7 @@ class ImageHelper final : public Resource, public angle::Subject
         // Since we are doing an out of order one off submission, there shouldn't be any pending
         // setEvent.
         ASSERT(!mCurrentEvent.valid());
-        barrierImpl(context, getAspectFlags(), newLayout, mCurrentQueueFamilyIndex, nullptr,
+        barrierImpl(context, getAspectFlags(), newLayout, mCurrentQueueIndex, nullptr,
                     commandBuffer, acquireNextImageSemaphoreOut);
     }
 
@@ -2548,7 +2548,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     bool isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const
     {
-        return mCurrentQueueFamilyIndex != newQueueFamilyIndex;
+        return mCurrentQueueIndex.familyIndex() != newQueueFamilyIndex;
     }
 
     void changeLayoutAndQueue(Context *context,
@@ -2860,7 +2860,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void barrierImpl(Context *context,
                      VkImageAspectFlags aspectMask,
                      ImageLayout newLayout,
-                     uint32_t newQueueFamilyIndex,
+                     QueueIndex newQueueIndex,
                      RefCountedEventCollector *eventCollector,
                      CommandBufferT *commandBuffer,
                      VkSemaphore *acquireNextImageSemaphoreOut);
@@ -3084,7 +3084,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // Current state.
     ImageLayout mCurrentLayout;
-    uint32_t mCurrentQueueFamilyIndex;
+    QueueIndex mCurrentQueueIndex;
     // For optimizing transition between different shader readonly layouts
     ImageLayout mLastNonShaderReadOnlyLayout;
     VkPipelineStageFlags mCurrentShaderReadStageMask;

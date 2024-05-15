@@ -132,6 +132,37 @@ class Renderer;
 // Used for memory allocation tracking.
 enum class MemoryAllocationType;
 
+class QueueIndex final
+{
+  public:
+    constexpr QueueIndex() : mFamilyIndex(kInvalidQueueFamilyIndex), mIndex(kInvalidQueueIndex) {}
+    QueueIndex(uint32_t familyIndex) : mFamilyIndex(familyIndex), mIndex(kInvalidQueueIndex) {}
+
+    uint32_t familyIndex() const { return mFamilyIndex; }
+    uint32_t index() const { return mIndex; }
+
+    bool operator==(const QueueIndex &other) const { return mValue == other.mValue; }
+    QueueIndex operator=(const QueueIndex &other)
+    {
+        mValue = other.mValue;
+        return *this;
+    }
+
+  private:
+    static constexpr uint32_t kInvalidQueueFamilyIndex = std::numeric_limits<uint32_t>::max();
+    static constexpr uint32_t kInvalidQueueIndex       = std::numeric_limits<uint32_t>::max();
+    union
+    {
+        struct
+        {
+            uint32_t mFamilyIndex;
+            uint32_t mIndex;
+        };
+        uint64_t mValue;
+    };
+};
+static constexpr QueueIndex kInvalidQueueIndex = QueueIndex();
+
 // A packed attachment index interface with vulkan API
 class PackedAttachmentIndex final
 {
@@ -301,12 +332,14 @@ class Context : angle::NonCopyable
     {
         return mShareGroupRefCountedEventsGarbageRecycler;
     }
+    const QueueIndex &getQueueIndex() const { return mQueueIndex; }
 
   protected:
     Renderer *const mRenderer;
     // Stash the ShareGroupVk's RefCountedEventRecycler here ImageHelper to conveniently access
     RefCountedEventsGarbageRecycler *mShareGroupRefCountedEventsGarbageRecycler;
     angle::VulkanPerfCounters mPerfCounters;
+    QueueIndex mQueueIndex;
 };
 
 // Abstract global operations that are handled differently between EGL and OpenCL.
