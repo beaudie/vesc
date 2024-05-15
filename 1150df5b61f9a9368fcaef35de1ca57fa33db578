@@ -104,6 +104,24 @@
       "parentUuid": "afb75dcd_e5667085",
       "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b98e8b2e_0b3bc289",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-15T15:02:50Z",
+      "side": 1,
+      "message": "It\u0027s kinda nice, not to have the user (the vulkan backend) have to know which vendors follow the generic format and which ones are special.",
+      "parentUuid": "3ba07298_2fa647df",
+      "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
