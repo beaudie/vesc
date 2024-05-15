@@ -140,6 +140,24 @@
       "parentUuid": "b98e8b2e_0b3bc289",
       "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "859da7e2_743fe4d1",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-15T16:53:48Z",
+      "side": 1,
+      "message": "It\u0027s the API\u0027s versioning scheme, there\u0027s no indication that the driver version should follow the same scheme. Like, vulkaninfo\u0027s code has this:\n\n```\n    // Vendor specific driverVersion mapping scheme\n    // If one isn\u0027t present, fall back to the standard Vulkan scheme\n    std::string GetDriverVersionString() {\n        uint32_t v \u003d props.driverVersion;\n        if ((found_driver_props \u0026\u0026 driverID \u003d\u003d VK_DRIVER_ID_NVIDIA_PROPRIETARY) ||\n            (!found_driver_props \u0026\u0026 props.deviceID \u003d\u003d 4318)) {\n            return std::to_string((v \u003e\u003e 22) \u0026 0x3ff) + \".\" + std::to_string((v \u003e\u003e 14) \u0026 0x0ff) + \".\" +\n                   std::to_string((v \u003e\u003e 6) \u0026 0x0ff) + \".\" + std::to_string(v \u0026 0x003f);\n        } else if ((found_driver_props \u0026\u0026 driverID \u003d\u003d VK_DRIVER_ID_INTEL_PROPRIETARY_WINDOWS)\n#if defined(WIN32)\n                   || (!found_driver_props \u0026\u0026 props.deviceID \u003d\u003d 0x8086)  // only do the fallback check if running in windows\n#endif\n        ) {\n            return std::to_string(v \u003e\u003e 14) + \".\" + std::to_string(v \u0026 0x3fff);\n        } else {\n            // AMD uses the standard vulkan scheme\n            return APIVersion(v).str();\n        }\n    }\n```",
+      "parentUuid": "710c6ab9_fe84ae05",
+      "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
