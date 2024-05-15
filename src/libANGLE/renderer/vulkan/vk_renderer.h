@@ -228,6 +228,10 @@ class Renderer : angle::NonCopyable
     {
         return mQueueFamilyProperties[mCurrentQueueFamilyIndex];
     }
+    const DeviceQueueIndex getDeviceQueueIndex(egl::ContextPriority priority) const
+    {
+        return DeviceQueueIndex(mCurrentQueueFamilyIndex, mCommandQueue.getDeviceQueueIndex());
+    }
 
     const vk::MemoryProperties &getMemoryProperties() const { return mMemoryProperties; }
 
@@ -277,7 +281,7 @@ class Renderer : angle::NonCopyable
     {
         return mCommandQueue.getDriverPriority(priority);
     }
-    ANGLE_INLINE uint32_t getDeviceQueueIndex() { return mCommandQueue.getDeviceQueueIndex(); }
+    ANGLE_INLINE uint32_t getQueueFamilyIndex() { return mCommandQueue.getQueueFamilyIndex(); }
 
     VkQueue getQueue(egl::ContextPriority priority) { return mCommandQueue.getQueue(priority); }
 

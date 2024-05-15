@@ -132,6 +132,42 @@ class Renderer;
 // Used for memory allocation tracking.
 enum class MemoryAllocationType;
 
+// Encapsulate the graphics family index and VkQueue index (as seen in vkGetDeviceQueue API
+// arguments) into one integer so that we can easily pass around without introduce extra overhead..
+class DeviceQueueIndex final
+{
+  public:
+    constexpr DeviceQueueIndex()
+        : mFamilyIndex(kInvalidQueueFamilyIndex), mIndex(kInvalidQueueIndex)
+    {}
+    DeviceQueueIndex(uint32_t familyIndex) : mFamilyIndex(familyIndex), mIndex(kInvalidQueueIndex)
+    {}
+    DeviceQueueIndex(const DeviceQueueIndex &other) { *this = other; }
+
+    uint32_t familyIndex() const { return mFamilyIndex; }
+    uint32_t index() const { return mIndex; }
+
+    bool operator==(const DeviceQueueIndex &other) const { return mValue == other.mValue; }
+    DeviceQueueIndex &operator=(const DeviceQueueIndex &other)
+    {
+        mValue = other.mValue;
+        return *this;
+    }
+
+  private:
+    static constexpr uint32_t kInvalidQueueFamilyIndex = std::numeric_limits<uint32_t>::max();
+    static constexpr uint32_t kInvalidQueueIndex       = std::numeric_limits<uint32_t>::max();
+    union
+    {
+        struct
+        {
+            uint32_t mFamilyIndex;
+            uint32_t mIndex;
+        };
+        uint64_t mValue;
+    };
+};
+
 // A packed attachment index interface with vulkan API
 class PackedAttachmentIndex final
 {
@@ -301,12 +337,14 @@ class Context : angle::NonCopyable
     {
         return mShareGroupRefCountedEventsGarbageRecycler;
     }
+    const DeviceQueueIndex &getDeviceQueueIndex() const { return mDeviceQueueIndex; }
 
   protected:
     Renderer *const mRenderer;
     // Stash the ShareGroupVk's RefCountedEventRecycler here ImageHelper to conveniently access
     RefCountedEventsGarbageRecycler *mShareGroupRefCountedEventsGarbageRecycler;
     angle::VulkanPerfCounters mPerfCounters;
+    DeviceQueueIndex mDeviceQueueIndex;
 };
 
 // Abstract global operations that are handled differently between EGL and OpenCL.
