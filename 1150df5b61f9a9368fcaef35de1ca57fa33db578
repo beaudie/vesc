@@ -122,6 +122,24 @@
       "parentUuid": "3ba07298_2fa647df",
       "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "710c6ab9_fe84ae05",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-15T16:24:53Z",
+      "side": 1,
+      "message": "From your other comment \"This scheme is Vulkan\u0027s own versioning scheme.\" my takeaway was this will always be the same.  No big deal though, I don\u0027t mind specifying which vendor I\u0027m adding a vendor workaround for.",
+      "parentUuid": "b98e8b2e_0b3bc289",
+      "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
