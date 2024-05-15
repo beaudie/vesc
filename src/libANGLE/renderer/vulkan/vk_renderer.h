@@ -742,6 +742,9 @@ class Renderer : angle::NonCopyable
 
     vk::RefCountedEventRecycler *getRefCountedEventRecycler() { return &mRefCountedEventRecycler; }
 
+    bool warmUpTaskAlreadyInFlight(size_t warmUpTaskSignature);
+    void onWarmUpTaskComplete(size_t warmUpTaskSignature);
+
   private:
     angle::Result setupDevice(vk::Context *context,
                               const angle::FeatureOverrides &featureOverrides,
@@ -1079,6 +1082,10 @@ class Renderer : angle::NonCopyable
     std::ostringstream mPipelineCacheGraph;
     bool mDumpPipelineCacheGraph;
     std::string mPipelineCacheGraphDumpPath;
+
+    // Warm up task signature tracker to prevent duplicate warm up tasks across threads
+    std::mutex mWarmUpTaskSignaturesMutex;
+    std::unordered_set<size_t> mWarmUpTaskSignatures;
 };
 
 ANGLE_INLINE Serial Renderer::generateQueueSerial(SerialIndex index)

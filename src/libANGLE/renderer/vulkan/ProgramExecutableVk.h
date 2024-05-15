@@ -494,6 +494,7 @@ class ProgramExecutableVk : public ProgramExecutableImpl
     angle::Result warmUpGraphicsPipelineCache(vk::Context *context,
                                               vk::PipelineRobustness pipelineRobustness,
                                               vk::PipelineProtectedAccess pipelineProtectedAccess,
+                                              size_t taskSignature,
                                               vk::GraphicsPipelineSubset subset,
                                               const bool isSurfaceRotated,
                                               const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
