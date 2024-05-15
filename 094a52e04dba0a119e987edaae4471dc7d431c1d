@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87784dd3_9429e57d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-15T15:28:58Z",
+      "side": 1,
+      "message": "What\u0027s special about three? wouldn\u0027t `max({a, b, c, d, e, f})` work just fine?",
+      "revId": "094a52e04dba0a119e987edaae4471dc7d431c1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
