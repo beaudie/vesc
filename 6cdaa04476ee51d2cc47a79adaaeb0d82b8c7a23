@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8a6b7f2_854a8440",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4687,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-15T20:07:47Z",
+      "side": 1,
+      "message": "Should the non-Windows Intel also be limited until the new version supporting it?",
+      "range": {
+        "startLine": 4687,
+        "startChar": 44,
+        "endLine": 4687,
+        "endChar": 69
+      },
+      "revId": "6cdaa04476ee51d2cc47a79adaaeb0d82b8c7a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
