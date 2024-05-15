@@ -16,6 +16,24 @@
       "message": "Are the new ResourceMap unused?\nOtherwise, there could be crashes elsewhere once ANGLE rolls into Chromium.",
       "revId": "6fe270b8ef3d31f874568433475c268a51962bd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad6b4451_99857190",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-15T17:57:30Z",
+      "side": 1,
+      "message": "They _are_ used, but they are tested in much more intensive scenarios than Chrome (our traces) and they work fine. There may be a bug, I\u0027ll fix it ASAP. But if more tests start failing at least I\u0027d have more to go on? The scenario tested by this unittest has probably never happened in practice (but could artificially be made up)",
+      "parentUuid": "a8cc9b40_f269d66c",
+      "revId": "6fe270b8ef3d31f874568433475c268a51962bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
