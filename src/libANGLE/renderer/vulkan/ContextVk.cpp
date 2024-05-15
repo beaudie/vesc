@@ -1213,6 +1213,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
     mShareGroupRefCountedEventsGarbageRecycler =
         mShareGroupVk->getRefCountedEventsGarbageRecycler();
 
+    mDeviceQueueIndex = renderer->getDeviceQueueIndex(mContextPriority);
+
     angle::PerfMonitorCounterGroup vulkanGroup;
     vulkanGroup.name = "vulkan";
 
@@ -1408,10 +1410,10 @@ angle::Result ContextVk::initialize(const angle::ImageLoadContext &imageLoadCont
 
     // Assign initial command buffers from queue
     ANGLE_TRY(vk::OutsideRenderPassCommandBuffer::InitializeCommandPool(
-        this, &mCommandPools.outsideRenderPassPool, mRenderer->getDeviceQueueIndex(),
+        this, &mCommandPools.outsideRenderPassPool, mRenderer->getQueueFamilyIndex(),
         getProtectionType()));
     ANGLE_TRY(vk::RenderPassCommandBuffer::InitializeCommandPool(
-        this, &mCommandPools.renderPassPool, mRenderer->getDeviceQueueIndex(),
+        this, &mCommandPools.renderPassPool, mRenderer->getQueueFamilyIndex(),
         getProtectionType()));
     ANGLE_TRY(mRenderer->getOutsideRenderPassCommandBufferHelper(
         this, &mCommandPools.outsideRenderPassPool, &mOutsideRenderPassCommandsAllocator,
