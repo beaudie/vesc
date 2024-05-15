@@ -34,6 +34,24 @@
       "parentUuid": "a8cc9b40_f269d66c",
       "revId": "6fe270b8ef3d31f874568433475c268a51962bd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8860f8a3_04551ecc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-15T18:01:29Z",
+      "side": 1,
+      "message": "Aaah I know what it is. In a Chromium build, the ResourceMap is not thread-safe because Chrome disables ANGLE locks. So of course this fails.",
+      "parentUuid": "ad6b4451_99857190",
+      "revId": "6fe270b8ef3d31f874568433475c268a51962bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
