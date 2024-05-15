@@ -1812,11 +1812,10 @@ void DeviceQueueMap::initialize(VkDevice device,
     }
 }
 
-void QueueFamily::initialize(const VkQueueFamilyProperties &queueFamilyProperties,
-                             uint32_t queueFamilyIndex)
+void QueueFamily::initialize(const VkQueueFamilyProperties &queueFamilyProperties, uint32_t index)
 {
     mProperties       = queueFamilyProperties;
-    mQueueFamilyIndex = queueFamilyIndex;
+    mQueueFamilyIndex = index;
 }
 
 uint32_t QueueFamily::FindIndex(const std::vector<VkQueueFamilyProperties> &queueFamilyProperties,
