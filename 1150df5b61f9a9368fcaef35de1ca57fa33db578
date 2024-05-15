@@ -158,6 +158,24 @@
       "parentUuid": "710c6ab9_fe84ae05",
       "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d63d4b1_f56bc9f4",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-15T20:22:56Z",
+      "side": 1,
+      "message": "Thanks!\nI also agree with keeping the separation and specifying the vendor when initializing the features.",
+      "parentUuid": "859da7e2_743fe4d1",
+      "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
