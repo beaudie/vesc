@@ -4676,15 +4676,15 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // usable.  Additionally, the following platforms don't support INPUT_ATTACHMENT usage for the
     // swapchain, so they are excluded:
     //
-    // - Intel
+    // - Intel on windows
     //
     // The above platforms are not excluded if behind MESA Virtio-GPU Venus driver since WSI is
     // implemented with external memory there.
     //
     // Without VK_GOOGLE_surfaceless_query, there is no way to automatically deduce this support.
-    ANGLE_FEATURE_CONDITION(
-        &mFeatures, emulateAdvancedBlendEquations,
-        !mFeatures.supportsBlendOperationAdvanced.enabled && (isVenus || !isIntel));
+    ANGLE_FEATURE_CONDITION(&mFeatures, emulateAdvancedBlendEquations,
+                            !mFeatures.supportsBlendOperationAdvanced.enabled &&
+                                (isVenus || !(isIntel && IsWindows())));
 
     // http://anglebug.com/6933
     // Android expects VkPresentRegionsKHR rectangles with a bottom-left origin, while spec
