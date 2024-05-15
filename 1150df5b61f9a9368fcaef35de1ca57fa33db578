@@ -86,6 +86,24 @@
       "parentUuid": "70b40667_949dabce",
       "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ba07298_2fa647df",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-15T14:27:46Z",
+      "side": 1,
+      "message": "Is there a reason to have an ARM and Qualcomm separation here if they are the same thing, parsed the same way?  Maybe just `VulkanDriverVersion` and `ParseVulkanDriverVersion`",
+      "parentUuid": "afb75dcd_e5667085",
+      "revId": "1150df5b61f9a9368fcaef35de1ca57fa33db578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
