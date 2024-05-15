@@ -16,6 +16,24 @@
       "message": "What\u0027s special about three? wouldn\u0027t `max({a, b, c, d, e, f})` work just fine?",
       "revId": "094a52e04dba0a119e987edaae4471dc7d431c1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44e0c2ba_d7232a62",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-15T15:34:20Z",
+      "side": 1,
+      "message": "Yes, there\u0027s nothing special about three. It\u0027s just the CL description as it replaces all cases where a maximum of three values is selected via two nested calls.",
+      "parentUuid": "87784dd3_9429e57d",
+      "revId": "094a52e04dba0a119e987edaae4471dc7d431c1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
