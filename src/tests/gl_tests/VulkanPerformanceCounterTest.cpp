@@ -7121,6 +7121,84 @@ TEST_P(VulkanPerformanceCounterTest_SingleBuffer, SwapBuffersAfterFlushIgnored)
     EXPECT_EQ(getPerfCounters().commandQueueSubmitCallsTotal, expectedCommandQueueSubmitCalls);
 }
 
+// Verifies that a program linking the same shaders in 2 contexts doesn't result in
+// a pipeline cache miss in the 2nd context since ANGLE deduplicates warm up tasks.
+TEST_P(VulkanPerformanceCounterTest, ProgramLinkingSameShadersInDifferentContexts)
+{
+    ANGLE_SKIP_TEST_IF(!getEGLWindow()->isFeatureEnabled(Feature::WarmUpPipelineCacheAtLink));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+
+    EGLWindow *window   = getEGLWindow();
+    EGLDisplay display  = window->getDisplay();
+    EGLConfig config    = window->getConfig();
+    EGLSurface surface  = window->getSurface();
+    EGLContext context1 = window->getContext();
+
+    // Set up secondary context
+    EGLint contextAttributes[] = {
+        EGL_CONTEXT_MAJOR_VERSION_KHR,
+        GetParam().majorVersion,
+        EGL_CONTEXT_MINOR_VERSION_KHR,
+        GetParam().minorVersion,
+        EGL_NONE,
+    };
+    EGLContext context2 = eglCreateContext(display, config, EGL_NO_CONTEXT, contextAttributes);
+    ASSERT_NE(context2, EGL_NO_CONTEXT);
+
+    // Record cache miss count
+    GLuint context1InitialCacheMisses = getPerfCounters().pipelineCreationCacheMisses;
+    // Set up program in primary context
+    ANGLE_GL_PROGRAM(program1, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+
+    // Switch to secondary context and set up program
+    eglMakeCurrent(display, surface, surface, context2);
+
+    // Record cache miss count
+    GLuint context2InitialCacheMisses = getPerfCounters().pipelineCreationCacheMisses;
+    // Set up program in secondary context
+    ANGLE_GL_PROGRAM(program2, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+
+    // Restore primary context and draw
+    eglMakeCurrent(display, surface, surface, context1);
+
+    glUseProgram(program1);
+    ASSERT_GL_NO_ERROR();
+
+    glClearColor(1, 0, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(0);
+    program1.reset();
+
+    // Record cache miss count
+    GLuint context1CacheMissesAfterDraw = getPerfCounters().pipelineCreationCacheMisses;
+    GLuint expectedIncrease =
+        (getEGLWindow()->isFeatureEnabled(Feature::CombineAllShadersInPipelineLibrary) ? 1 : 2);
+    EXPECT_EQ(context1InitialCacheMisses + expectedIncrease, context1CacheMissesAfterDraw);
+
+    // Switch to secondary context and draw
+    eglMakeCurrent(display, surface, surface, context2);
+
+    glUseProgram(program2);
+    ASSERT_GL_NO_ERROR();
+
+    glClearColor(1, 0, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(0);
+    program2.reset();
+
+    // Record cache miss count
+    GLuint context2CacheMissesAfterDraw = getPerfCounters().pipelineCreationCacheMisses;
+    EXPECT_EQ(context2InitialCacheMisses, context2CacheMissesAfterDraw);
+
+    // Clean up
+    eglMakeCurrent(display, surface, surface, context1);
+    eglDestroyContext(display, context2);
+}
+
 // Verifies that we share Texture descriptor sets between programs.
 TEST_P(VulkanPerformanceCounterTest, TextureDescriptorsAreShared)
 {

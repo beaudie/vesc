@@ -303,6 +303,22 @@ void ReadFromDefaultUniformBlock(int componentCount,
         memcpy(dst, readPtr, elementSize);
     }
 }
+
+size_t GenerateWarmUpTaskSignature(const gl::ShaderBitSet shaderStages,
+                                   const gl::ShaderMap<angle::spirv::Blob> &spirvBlobs)
+{
+    size_t warmUpTaskSignature = 0;
+    for (gl::ShaderType shaderType : shaderStages)
+    {
+        const angle::spirv::Blob &blob = spirvBlobs[shaderType];
+        const uint8_t *data            = reinterpret_cast<const uint8_t *>(blob.data());
+        size_t size                    = blob.size() * sizeof(uint32_t);
+
+        warmUpTaskSignature ^= angle::ComputeGenericHash(data, size);
+    }
+
+    return warmUpTaskSignature;
+}
 }  // namespace
 
 class ProgramExecutableVk::WarmUpTaskCommon : public vk::Context, public LinkSubTask
@@ -419,12 +435,14 @@ class ProgramExecutableVk::WarmUpGraphicsTask : public WarmUpTaskCommon
                        ProgramExecutableVk *executableVk,
                        vk::PipelineRobustness pipelineRobustness,
                        vk::PipelineProtectedAccess pipelineProtectedAccess,
+                       size_t taskSignature,
                        vk::GraphicsPipelineSubset subset,
                        const bool isSurfaceRotated,
                        const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
                        SharedRenderPass *compatibleRenderPass,
                        vk::PipelineHelper *placeholderPipelineHelper)
         : WarmUpTaskCommon(renderer, executableVk, pipelineRobustness, pipelineProtectedAccess),
+          mTaskSignature(taskSignature),
           mPipelineSubset(subset),
           mIsSurfaceRotated(isSurfaceRotated),
           mGraphicsPipelineDesc(graphicsPipelineDesc),
@@ -439,8 +457,9 @@ class ProgramExecutableVk::WarmUpGraphicsTask : public WarmUpTaskCommon
     void operator()() override
     {
         angle::Result result = mExecutableVk->warmUpGraphicsPipelineCache(
-            this, mPipelineRobustness, mPipelineProtectedAccess, mPipelineSubset, mIsSurfaceRotated,
-            mGraphicsPipelineDesc, mCompatibleRenderPass->get(), mWarmUpPipelineHelper);
+            this, mPipelineRobustness, mPipelineProtectedAccess, mTaskSignature, mPipelineSubset,
+            mIsSurfaceRotated, mGraphicsPipelineDesc, mCompatibleRenderPass->get(),
+            mWarmUpPipelineHelper);
         ASSERT((result == angle::Result::Continue) == (mErrorCode == VK_SUCCESS));
 
         // Release reference to shared renderpass. If this is the last reference -
@@ -457,6 +476,7 @@ class ProgramExecutableVk::WarmUpGraphicsTask : public WarmUpTaskCommon
     }
 
   private:
+    size_t mTaskSignature;
     vk::GraphicsPipelineSubset mPipelineSubset;
     bool mIsSurfaceRotated;
     vk::GraphicsPipelineDesc mGraphicsPipelineDesc;
@@ -859,6 +879,17 @@ angle::Result ProgramExecutableVk::getPipelineCacheWarmUpTasks(
         SharedRenderPass *sharedRenderPass = new SharedRenderPass(std::move(compatibleRenderPass));
         for (bool surfaceRotation : surfaceRotationVariations)
         {
+            size_t warmUpTaskSignature = GenerateWarmUpTaskSignature(
+                mExecutable->getLinkedShaderStages(), mOriginalShaderInfo.getSpirvBlobs());
+            ASSERT(warmUpTaskSignature != 0);
+
+            if (renderer->warmUpTaskAlreadyInFlight(warmUpTaskSignature))
+            {
+                // Do not spawn a warm up task
+                WARN() << "Dropping duplicate warmup task" << std::endl;
+                continue;
+            }
+
             // Add a placeholder entry in GraphicsPipelineCache
             transformOptions.surfaceRotation   = surfaceRotation;
             const uint8_t programIndex         = GetGraphicsProgramIndex(transformOptions);
@@ -876,8 +907,15 @@ angle::Result ProgramExecutableVk::getPipelineCacheWarmUpTasks(
             }
 
             warmUpSubTasks.push_back(std::make_shared<WarmUpGraphicsTask>(
-                renderer, this, pipelineRobustness, pipelineProtectedAccess, subset,
-                surfaceRotation, *graphicsPipelineDesc, sharedRenderPass, pipelineHelper));
+                renderer, this, pipelineRobustness, pipelineProtectedAccess, warmUpTaskSignature,
+                subset, surfaceRotation, *graphicsPipelineDesc, sharedRenderPass, pipelineHelper));
+        }
+
+        if (warmUpSubTasks.empty())
+        {
+            ASSERT(!sharedRenderPass->isReferenced());
+            sharedRenderPass->get().destroy(renderer->getDevice());
+            SafeDelete(sharedRenderPass);
         }
     }
 
@@ -1010,6 +1048,7 @@ angle::Result ProgramExecutableVk::warmUpGraphicsPipelineCache(
     vk::Context *context,
     vk::PipelineRobustness pipelineRobustness,
     vk::PipelineProtectedAccess pipelineProtectedAccess,
+    size_t taskSignature,
     vk::GraphicsPipelineSubset subset,
     const bool isSurfaceRotated,
     const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
@@ -1033,6 +1072,10 @@ angle::Result ProgramExecutableVk::warmUpGraphicsPipelineCache(
                                          &descPtr, &placeholderPipelineHelper));
 
     ASSERT(placeholderPipelineHelper->valid());
+
+    // Notify renderer of completion
+    context->getRenderer()->onWarmUpTaskComplete(taskSignature);
+
     return angle::Result::Continue;
 }
 
