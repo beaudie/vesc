@@ -1499,6 +1499,8 @@ bool Renderer::hasSharedGarbage()
 
 void Renderer::onDestroy(vk::Context *context)
 {
+    ASSERT(mWarmUpTaskSignatures.empty());
+
     if (isDeviceLost())
     {
         handleDeviceLost();
@@ -6013,6 +6015,29 @@ angle::Result Renderer::finishOneCommandBatchAndCleanup(vk::Context *context, bo
 {
     return mCommandQueue.finishOneCommandBatchAndCleanup(context, getMaxFenceWaitTimeNs(),
                                                          anyBatchCleaned);
+}
+
+bool Renderer::warmUpTaskAlreadyInFlight(size_t warmUpTaskSignature)
+{
+    // Note: this function may be called without holding the share group lock.
+    std::unique_lock<std::mutex> lock(mWarmUpTaskSignaturesMutex);
+
+    if (mWarmUpTaskSignatures.contains(warmUpTaskSignature))
+    {
+        return true;
+    }
+
+    mWarmUpTaskSignatures.insert(warmUpTaskSignature);
+    return false;
+}
+
+void Renderer::onWarmUpTaskComplete(size_t warmUpTaskSignature)
+{
+    // Note: this function may be called without holding the share group lock.
+    std::unique_lock<std::mutex> lock(mWarmUpTaskSignaturesMutex);
+
+    ASSERT(mWarmUpTaskSignatures.contains(warmUpTaskSignature));
+    mWarmUpTaskSignatures.erase(warmUpTaskSignature);
 }
 
 // static
