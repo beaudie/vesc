@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a57d3865_71945c36",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-15T13:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d50af647_512aee41",
+      "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2798737_4bf3b7e9",
@@ -71,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28455dff_c3efe052",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-15T13:22:37Z",
+      "side": 1,
+      "message": "Some times a view could be created from a view. Even though currently there is no such creation in this file. That was just for futureproof anw. I removed the loop.",
+      "parentUuid": "dc14bf00_22379bf1",
+      "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5a1b0dd_24dc5943",
@@ -84,6 +120,30 @@
       "writtenOn": "2024-05-14T16:41:46Z",
       "side": 1,
       "message": "Please assert that `actualMip` is valid for the view (or maybe use the native texture here?).",
+      "range": {
+        "startLine": 1044,
+        "startChar": 0,
+        "endLine": 1047,
+        "endChar": 0
+      },
+      "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb441427_2434e884",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-15T13:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5a1b0dd_24dc5943",
       "range": {
         "startLine": 1044,
         "startChar": 0,
@@ -147,6 +207,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "801c71b5_885de4e1",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-15T13:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc701cac_09ad05ac",
+      "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17b7acff_e8de22db",
@@ -160,6 +238,24 @@
       "writtenOn": "2024-05-14T16:41:46Z",
       "side": 1,
       "message": "This could be replaced with an assertion as the texture type cannot be changed in GL after creation.",
+      "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2257ed2b_e32c297b",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 1955,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-15T13:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17b7acff_e8de22db",
       "revId": "d65b79c8cf4a1cd4da713dfef39db8e62af7787e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
