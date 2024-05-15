@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8cc9b40_f269d66c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-15T17:52:12Z",
+      "side": 1,
+      "message": "Are the new ResourceMap unused?\nOtherwise, there could be crashes elsewhere once ANGLE rolls into Chromium.",
+      "revId": "6fe270b8ef3d31f874568433475c268a51962bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
