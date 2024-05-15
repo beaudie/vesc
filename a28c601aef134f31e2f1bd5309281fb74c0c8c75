@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b76fd19_079ca37c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-15T20:09:20Z",
+      "side": 1,
+      "message": "Took 45 minutes to compile: https://ci.chromium.org/ui/p/angle/builders/try/win-msvc-dbg-compile/17999/overview\n\nMore importantly, msvc is not a compiler we recommend. With ANGLE as a GLES implementation we may be stuck, but we can nip any attempt to use it as a CL driver with that compiler in the bud.",
+      "revId": "a28c601aef134f31e2f1bd5309281fb74c0c8c75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
