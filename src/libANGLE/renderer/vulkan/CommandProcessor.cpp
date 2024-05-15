@@ -1063,18 +1063,12 @@ CommandQueue::~CommandQueue() = default;
 
 void CommandQueue::destroy(Context *context)
 {
+    vk::Renderer *renderer = context->getRenderer();
+
     std::lock_guard<angle::SimpleMutex> lock(mMutex);
     std::lock_guard<angle::SimpleMutex> enqueuelock(mQueueSubmitMutex);
-    // Force all commands to finish by flushing all queues.
-    for (VkQueue queue : mQueueMap)
-    {
-        if (queue != VK_NULL_HANDLE)
-        {
-            vkQueueWaitIdle(queue);
-        }
-    }
 
-    vk::Renderer *renderer = context->getRenderer();
+    mQueueMap.destroy();
 
     // Assigns an infinite "last completed" serial to force garbage to delete.
     mLastCompletedSerials.fill(Serial::Infinite());
@@ -1742,14 +1736,25 @@ DeviceQueueMap &DeviceQueueMap::operator=(const DeviceQueueMap &other)
     ASSERT(this != &other);
     if ((this != &other) && other.valid())
     {
-        mIndex                                    = other.mIndex;
-        mIsProtected                              = other.mIsProtected;
-        mPriorities[egl::ContextPriority::Low]    = other.mPriorities[egl::ContextPriority::Low];
-        mPriorities[egl::ContextPriority::Medium] = other.mPriorities[egl::ContextPriority::Medium];
-        mPriorities[egl::ContextPriority::High]   = other.mPriorities[egl::ContextPriority::High];
-        *static_cast<angle::PackedEnumMap<egl::ContextPriority, VkQueue> *>(this) = other;
+        mFamilyIndex = other.mFamilyIndex;
+        mIsProtected = other.mIsProtected;
+        mPriorities  = other.mPriorities;
+        mQueue       = other.mQueue;
+        mQueueIndex  = other.mQueueIndex;
     }
     return *this;
+}
+
+void DeviceQueueMap::destroy()
+{
+    // Force all commands to finish by flushing all queues.
+    for (VkQueue queue : mQueue)
+    {
+        if (queue != VK_NULL_HANDLE)
+        {
+            vkQueueWaitIdle(queue);
+        }
+    }
 }
 
 void QueueFamily::getDeviceQueue(VkDevice device,
@@ -1787,33 +1792,41 @@ DeviceQueueMap QueueFamily::initializeQueueMap(VkDevice device,
     ASSERT((queueIndex + queueCount) <= mProperties.queueCount);
     DeviceQueueMap queueMap(mIndex, makeProtected);
 
-    getDeviceQueue(device, makeProtected, queueIndex + kQueueIndexMedium,
-                   &queueMap[egl::ContextPriority::Medium]);
+    VkQueue queue = VK_NULL_HANDLE;
+    getDeviceQueue(device, makeProtected, queueIndex + kQueueIndexMedium, &queue);
     queueMap.mPriorities[egl::ContextPriority::Medium] = egl::ContextPriority::Medium;
+    queueMap.mQueue[egl::ContextPriority::Medium]      = queue;
+    queueMap.mQueueIndex[egl::ContextPriority::Medium] = queueIndex + kQueueIndexMedium;
 
     // If at least 2 queues, High has its own queue
     if (queueCount > 1)
     {
-        getDeviceQueue(device, makeProtected, queueIndex + kQueueIndexHigh,
-                       &queueMap[egl::ContextPriority::High]);
+        getDeviceQueue(device, makeProtected, queueIndex + kQueueIndexHigh, &queue);
         queueMap.mPriorities[egl::ContextPriority::High] = egl::ContextPriority::High;
+        queueMap.mQueue[egl::ContextPriority::High]      = queue;
+        queueMap.mQueueIndex[egl::ContextPriority::High] = queueIndex + kQueueIndexHigh;
     }
     else
     {
-        queueMap[egl::ContextPriority::High]             = queueMap[egl::ContextPriority::Medium];
         queueMap.mPriorities[egl::ContextPriority::High] = egl::ContextPriority::Medium;
+        queueMap.mQueue[egl::ContextPriority::High] = queueMap.mQueue[egl::ContextPriority::Medium];
+        queueMap.mQueueIndex[egl::ContextPriority::High] =
+            queueMap.mQueueIndex[egl::ContextPriority::Medium];
     }
     // If at least 3 queues, Low has its own queue. Adjust Low priority.
     if (queueCount > 2)
     {
-        getDeviceQueue(device, makeProtected, queueIndex + kQueueIndexLow,
-                       &queueMap[egl::ContextPriority::Low]);
+        getDeviceQueue(device, makeProtected, queueIndex + kQueueIndexLow, &queue);
         queueMap.mPriorities[egl::ContextPriority::Low] = egl::ContextPriority::Low;
+        queueMap.mQueue[egl::ContextPriority::Low]      = queue;
+        queueMap.mQueueIndex[egl::ContextPriority::Low] = queueIndex + kQueueIndexLow;
     }
     else
     {
-        queueMap[egl::ContextPriority::Low]             = queueMap[egl::ContextPriority::Medium];
         queueMap.mPriorities[egl::ContextPriority::Low] = egl::ContextPriority::Medium;
+        queueMap.mQueue[egl::ContextPriority::Low] = queueMap.mQueue[egl::ContextPriority::Medium];
+        queueMap.mQueueIndex[egl::ContextPriority::Low] =
+            queueMap.mQueueIndex[egl::ContextPriority::Medium];
     }
     return queueMap;
 }
