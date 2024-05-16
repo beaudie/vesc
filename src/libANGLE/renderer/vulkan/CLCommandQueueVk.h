@@ -264,7 +264,7 @@ class CLCommandQueueVk : public CLCommandQueueImpl
                                         const cl::MemOffsets &origin,
                                         const cl::Coordinate &region,
                                         size_t bufferOffset,
-                                        bool writeToBuffer);
+                                        ImageBufferCopyDirection writeToBuffer);
 
     CLContextVk *mContext;
     const CLDeviceVk *mDevice;
