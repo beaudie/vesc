@@ -218,13 +218,98 @@ uint32_t GetTimestampValidBits(const std::vector<VkQueueFamilyProperties> &queue
     }
     return timestampValidBits;
 }
+
+// Checks support for extensions expected to be in GLES 3.2. If any of those extensions are missing,
+// context version should be capped to GLES 3.1.
+bool CanSupportGLES32(const gl::Extensions &nativeExtensions)
+{
+    bool result = true;
+
+    // From the GLES 3.2 spec: Almost all features of the Android extension pack, incorporating by
+    // reference all of the following features - with the exception of the sRGB decode features of
+    // EXT_texture_sRGB_decode.
+    std::vector<bool> requiredExtensions = {
+        // From Android extension pack es31
+        nativeExtensions.debugKHR,
+        nativeExtensions.textureCompressionAstcLdrKHR,
+        nativeExtensions.blendEquationAdvancedKHR,
+        nativeExtensions.sampleShadingOES,
+        nativeExtensions.sampleVariablesOES,
+        nativeExtensions.shaderImageAtomicOES,
+        nativeExtensions.shaderMultisampleInterpolationOES,
+        nativeExtensions.textureStencil8OES,
+        nativeExtensions.textureStorageMultisample2dArrayOES,
+        // TODO: Replace the EXT with any() in some of the following few?
+        nativeExtensions.copyImageEXT,
+        nativeExtensions.drawBuffersIndexedEXT,
+        nativeExtensions.geometryShaderEXT,
+        nativeExtensions.gpuShader5EXT,
+        nativeExtensions.primitiveBoundingBoxEXT,
+        nativeExtensions.shaderIoBlocksEXT,
+        nativeExtensions.tessellationShaderEXT,
+        nativeExtensions.textureBorderClampEXT,
+        nativeExtensions.textureBufferEXT,
+        nativeExtensions.textureCubeMapArrayEXT,
+        // Others
+        nativeExtensions.colorBufferFloatEXT,
+        nativeExtensions.drawElementsBaseVertexEXT,
+        nativeExtensions.robustnessEXT,
+    };
+
+    // TODO: Debug mode for the strings?
+    constexpr const char *kRequiredExtensionStrings[] = {
+        // From Android extension pack es31
+        "debugKHR",
+        "textureCompressionAstcLdrKHR",
+        "blendEquationAdvancedKHR",
+        "sampleShadingOES",
+        "sampleVariablesOES",
+        "shaderImageAtomicOES",
+        "shaderMultisampleInterpolationOES",
+        "textureStencil8OES",
+        "textureStorageMultisample2dArrayOES",
+        // TODO: Replace the EXT with any() in the following few?
+        "copyImageEXT",
+        "drawBuffersIndexedEXT",
+        "geometryShaderEXT",
+        "gpuShader5EXT",
+        "primitiveBoundingBoxEXT",
+        "shaderIoBlocksEXT",
+        "tessellationShaderEXT",
+        "textureBorderClampEXT",
+        "textureBufferEXT",
+        "textureCubeMapArrayEXT",
+        // Others
+        "colorBufferFloatEXT",
+        "drawElementsBaseVertexEXT",
+        "robustnessEXT",
+    };
+    ASSERT(std::end(kRequiredExtensionStrings) - std::begin(kRequiredExtensionStrings) ==
+           requiredExtensions.size());
+
+    for (uint32_t index = 0; index < requiredExtensions.size(); index++)
+    {
+        if (!requiredExtensions[index])
+        {
+            INFO() << "The following unsupported extension is required for GLES 3.2: "
+                   << kRequiredExtensionStrings[index];
+            result = false;
+        }
+    }
+
+    return result;
+}
+
 }  // namespace
 }  // namespace vk
 
+// TODO: Why not merge the Renderer functions in the vk namespace?
 void vk::Renderer::ensureCapsInitialized() const
 {
     if (mCapsInitialized)
+    {
         return;
+    }
     mCapsInitialized = true;
 
     const VkPhysicalDeviceLimits &limitsVk = mPhysicalDeviceProperties.limits;
@@ -1196,6 +1281,12 @@ void vk::Renderer::ensureCapsInitialized() const
     mNativeExtensions.logicOpANGLE = mPhysicalDeviceFeatures.logicOp == VK_TRUE;
 
     mNativeExtensions.YUVTargetEXT = mFeatures.supportsExternalFormatResolve.enabled;
+
+    // GL_KHR_debug
+    mNativeExtensions.debugKHR = true;
+
+    // Determine possible support for GLES 3.2
+    mCanSupportGLES32 = CanSupportGLES32(mNativeExtensions);
 }
 
 namespace vk

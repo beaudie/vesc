@@ -836,6 +836,7 @@ class Renderer : angle::NonCopyable
     void *mLibVulkanLibrary;
 
     mutable bool mCapsInitialized;
+    mutable bool mCanSupportGLES32;
     mutable gl::Caps mNativeCaps;
     mutable gl::TextureCapsMap mNativeTextureCaps;
     mutable gl::Extensions mNativeExtensions;
