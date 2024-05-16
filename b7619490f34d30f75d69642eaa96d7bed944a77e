@@ -22,6 +22,30 @@
       },
       "revId": "b7619490f34d30f75d69642eaa96d7bed944a77e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6452b1cd_831b2152",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-16T23:24:23Z",
+      "side": 0,
+      "message": "The insert call actually moves the object. I added an assertion that events is empty.",
+      "parentUuid": "c1bc3a91_586c1142",
+      "range": {
+        "startLine": 201,
+        "startChar": 8,
+        "endLine": 201,
+        "endChar": 23
+      },
+      "revId": "b7619490f34d30f75d69642eaa96d7bed944a77e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
