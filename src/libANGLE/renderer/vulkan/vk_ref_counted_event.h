@@ -394,7 +394,11 @@ class EventBarrier : angle::NonCopyable
 class EventBarrierArray final
 {
   public:
-    bool isEmpty() const { return mBarriers.empty(); }
+    ~EventBarrierArray()
+    {
+        ASSERT(mBarriersQueue.empty());
+        ASSERT(mBarriersVector.empty());
+    }
 
     void execute(Renderer *renderer, PrimaryCommandBuffer *primary);
 
@@ -409,12 +413,17 @@ class EventBarrierArray final
                        VkPipelineStageFlags dstStageMask,
                        const VkImageMemoryBarrier &imageMemoryBarrier);
 
-    void reset() { ASSERT(mBarriers.empty()); }
+    void reset()
+    {
+        ASSERT(mBarriersQueue.empty());
+        ASSERT(mBarriersVector.empty());
+    }
 
     void addDiagnosticsString(std::ostringstream &out) const;
 
   private:
-    std::vector<EventBarrier> mBarriers;
+    std::deque<EventBarrier> mBarriersQueue;
+    std::vector<EventBarrier> mBarriersVector;
 };
 
 VkPipelineStageFlags GetRefCountedEventStageMask(Context *context, const RefCountedEvent &event);
