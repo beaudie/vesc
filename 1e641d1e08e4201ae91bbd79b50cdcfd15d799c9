@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "dccdd9aa_06dcfc4c",
+        "filename": ".gitmodules",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-16T18:03:04Z",
+      "side": 1,
+      "message": "No, we can\u0027t.\nThe way \"transitive deps\" roller works, it first need to check if there is a new version of vulkan-deps available, and then it rolls all the subrepos to match.\nSo we still need 1 main DEP on which the autoroll operates.",
+      "parentUuid": "b0c5d78a_4c490600",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 44
+      },
+      "revId": "1e641d1e08e4201ae91bbd79b50cdcfd15d799c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a9812b43_72328f82",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2024-05-16T17:59:03Z",
       "side": 1,
       "message": "Remove?",
+      "range": {
+        "startLine": 941,
+        "startChar": 0,
+        "endLine": 945,
+        "endChar": 0
+      },
+      "revId": "1e641d1e08e4201ae91bbd79b50cdcfd15d799c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abec4a61_4072344d",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-16T18:03:04Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "166acfc4_207d1417",
       "range": {
         "startLine": 941,
         "startChar": 0,
