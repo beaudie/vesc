@@ -76,7 +76,7 @@ namespace vk
 bool CanSupportTransformFeedbackExtension(
     const VkPhysicalDeviceTransformFeedbackFeaturesEXT &xfbFeatures);
 bool CanSupportTransformFeedbackEmulation(const VkPhysicalDeviceFeatures &features);
-bool CanSupportGPUShader5EXT(const VkPhysicalDeviceFeatures &features);
+bool CanSupportGLES32(const gl::Extensions &nativeExtensions);
 }  // namespace vk
 
 }  // namespace rx
