@@ -233,19 +233,6 @@ void EventBarrierArray::addMemoryEvent(Context *context,
                                        VkAccessFlags dstAccess)
 {
     ASSERT(waitEvent.valid());
-
-    for (EventBarrier &barrier : mBarriers)
-    {
-        // If the event is already in the waiting list, just add the new stageMask to the
-        // dstStageMask. Otherwise we will end up with two waitEvent calls that wait for the same
-        // VkEvent but for different dstStage and confuses VVL.
-        if (barrier.hasEvent(waitEvent.getEvent().getHandle()))
-        {
-            barrier.addAdditionalStageAccess(dstStageMask, dstAccess);
-            return;
-        }
-    }
-
     VkAccessFlags accessMask;
     VkPipelineStageFlags stageFlags = GetRefCountedEventStageMask(context, waitEvent, &accessMask);
     // Since this is used with WAW without layout change, dstStageMask should be the same as event's
