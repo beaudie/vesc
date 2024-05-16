@@ -84,9 +84,12 @@
       'linux-amd': {
         'os_type': 'linux',
         'mixins': [
-          'linux_amd_rx_5500_xt',
+          #'linux_amd_rx_5500_xt',
+          'linux_amd_7600',
         ],
         'test_suites': {
+          'gtest_tests': 'linux_nvidia_gtests',
+          'isolated_scripts': 'isolated_scripts_group_common',
         },
       },
       'linux-exp-intel': {
