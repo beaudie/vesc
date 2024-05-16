@@ -3795,8 +3795,8 @@ gl::Version Renderer::getMaxSupportedESVersion() const
         maxVersion = LimitVersionTo(maxVersion, {3, 1});
     }
 
-    // TODO: more extension checks for 3.2.  http://anglebug.com/5366
-    if (!mFeatures.exposeNonConformantExtensionsAndVersions.enabled)
+    // TODO: Move canSupportGLES32() to ensureCapsInitialized()?
+    if (!mFeatures.exposeNonConformantExtensionsAndVersions.enabled || !canSupportGLES32())
     {
         maxVersion = LimitVersionTo(maxVersion, {3, 1});
     }
