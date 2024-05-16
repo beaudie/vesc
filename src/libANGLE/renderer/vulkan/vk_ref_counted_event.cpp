@@ -239,8 +239,8 @@ void EventBarrierArray::addMemoryEvent(Context *context,
     // This should come down as WAW without layout change, dstStageMask should be the same as
     // event's stageMask. Otherwise you should get into addImageEvent.
     ASSERT(stageFlags == dstStageMask && accessMask == dstAccess);
-    mBarriers.emplace_back(stageFlags, dstStageMask, accessMask, dstAccess,
-                           waitEvent.getEvent().getHandle());
+    mBarriersQueue.emplace_back(stageFlags, dstStageMask, accessMask, dstAccess,
+                                waitEvent.getEvent().getHandle());
 }
 
 void EventBarrierArray::addImageEvent(Context *context,
@@ -250,16 +250,16 @@ void EventBarrierArray::addImageEvent(Context *context,
 {
     ASSERT(waitEvent.valid());
     VkPipelineStageFlags srcStageFlags = GetRefCountedEventStageMask(context, waitEvent);
-    mBarriers.emplace_back(srcStageFlags, dstStageMask, waitEvent.getEvent().getHandle(),
-                           imageMemoryBarrier);
+    mBarriersQueue.emplace_back(srcStageFlags, dstStageMask, waitEvent.getEvent().getHandle(),
+                                imageMemoryBarrier);
 }
 
 void EventBarrierArray::execute(Renderer *renderer, PrimaryCommandBuffer *primary)
 {
-    while (!mBarriers.empty())
+    while (!mBarriersQueue.empty())
     {
-        mBarriers.back().execute(primary);
-        mBarriers.pop_back();
+        mBarriersQueue.back().execute(primary);
+        mBarriersQueue.pop_back();
     }
     reset();
 }
@@ -267,7 +267,7 @@ void EventBarrierArray::execute(Renderer *renderer, PrimaryCommandBuffer *primar
 void EventBarrierArray::addDiagnosticsString(std::ostringstream &out) const
 {
     out << "Event Barrier: ";
-    for (const EventBarrier &barrier : mBarriers)
+    for (const EventBarrier &barrier : mBarriersQueue)
     {
         barrier.addDiagnosticsString(out);
     }
