@@ -308,7 +308,10 @@ class EventBarrier : angle::NonCopyable
   public:
     EventBarrier()
         : mSrcStageMask(0), mDstStageMask(0), mMemoryBarrierSrcAccess(0), mMemoryBarrierDstAccess(0)
-    {}
+    {
+        // mImageMemoryBarrier.image is used to indicate mImageMemoryBarrier structure valid or not.
+        mImageMemoryBarrier.image = VK_NULL_HANDLE;
+    }
 
     EventBarrier(VkPipelineStageFlags srcStageMask,
                  VkPipelineStageFlags dstStageMask,
@@ -318,9 +321,10 @@ class EventBarrier : angle::NonCopyable
         : mSrcStageMask(srcStageMask),
           mDstStageMask(dstStageMask),
           mMemoryBarrierSrcAccess(srcAccess),
-          mMemoryBarrierDstAccess(dstAccess)
+          mMemoryBarrierDstAccess(dstAccess),
+          mEvent(event)
     {
-        mEvents.push_back(event);
+        ASSERT(mEvent != VK_NULL_HANDLE);
     }
 
     EventBarrier(VkPipelineStageFlags srcStageMask,
@@ -330,12 +334,12 @@ class EventBarrier : angle::NonCopyable
         : mSrcStageMask(srcStageMask),
           mDstStageMask(dstStageMask),
           mMemoryBarrierSrcAccess(0),
-          mMemoryBarrierDstAccess(0)
+          mMemoryBarrierDstAccess(0),
+          mEvent(event),
+          mImageMemoryBarrier(imageMemoryBarrier)
     {
-        ASSERT(event != VK_NULL_HANDLE);
-        ASSERT(imageMemoryBarrier.pNext == nullptr);
-        mEvents.push_back(event);
-        mImageMemoryBarriers.push_back(imageMemoryBarrier);
+        ASSERT(mEvent != VK_NULL_HANDLE);
+        ASSERT(mImageMemoryBarrier.pNext == nullptr);
     }
 
     EventBarrier(EventBarrier &&other)
@@ -344,26 +348,19 @@ class EventBarrier : angle::NonCopyable
         mDstStageMask           = other.mDstStageMask;
         mMemoryBarrierSrcAccess = other.mMemoryBarrierSrcAccess;
         mMemoryBarrierDstAccess = other.mMemoryBarrierDstAccess;
-        std::swap(mEvents, other.mEvents);
-        std::swap(mImageMemoryBarriers, other.mImageMemoryBarriers);
+        std::swap(mEvent, other.mEvent);
+        std::swap(mImageMemoryBarrier, other.mImageMemoryBarrier);
         other.mSrcStageMask           = 0;
         other.mDstStageMask           = 0;
         other.mMemoryBarrierSrcAccess = 0;
         other.mMemoryBarrierDstAccess = 0;
     }
 
-    ~EventBarrier()
-    {
-        ASSERT(mImageMemoryBarriers.empty());
-        ASSERT(mEvents.empty());
-    }
+    ~EventBarrier() {}
 
-    bool isEmpty() const
-    {
-        return mEvents.empty() && mImageMemoryBarriers.empty() && mMemoryBarrierDstAccess == 0;
-    }
+    bool isEmpty() const { return mMemoryBarrierDstAccess == 0; }
 
-    bool hasEvent(const VkEvent &event) const;
+    bool hasEvent(const VkEvent &event) const { return mEvent == event; }
 
     void addAdditionalStageAccess(VkPipelineStageFlags dstStageMask, VkAccessFlags dstAccess)
     {
@@ -373,12 +370,6 @@ class EventBarrier : angle::NonCopyable
 
     void execute(PrimaryCommandBuffer *primary);
 
-    void reset()
-    {
-        mEvents.clear();
-        mImageMemoryBarriers.clear();
-    }
-
     void addDiagnosticsString(std::ostringstream &out) const;
 
   private:
@@ -387,8 +378,8 @@ class EventBarrier : angle::NonCopyable
     VkPipelineStageFlags mDstStageMask;
     VkAccessFlags mMemoryBarrierSrcAccess;
     VkAccessFlags mMemoryBarrierDstAccess;
-    std::vector<VkEvent> mEvents;
-    std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
+    VkEvent mEvent;
+    VkImageMemoryBarrier mImageMemoryBarrier;
 };
 
 class EventBarrierArray final
