@@ -750,6 +750,10 @@ class Renderer : angle::NonCopyable
                               angle::NativeWindowSystem nativeWindowSystem);
     angle::Result createDeviceAndQueue(vk::Context *context, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
+    // Checks support for extensions expected to be in GLES 3.2. If any of those extensions are
+    // missing, GLES3.2 must not be advertised.
+    bool canSupportGLES32() const;
+
     void initializeValidationMessageSuppressions();
 
     void queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceExtensionNames);
