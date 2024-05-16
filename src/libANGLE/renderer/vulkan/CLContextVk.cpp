@@ -119,14 +119,262 @@ angle::Result CLContextVk::createImage(const cl::Image &image,
     return angle::Result::Continue;
 }
 
+VkFormat CLContextVk::getVkFormatFromCL(cl_image_format format)
+{
+    switch (format.image_channel_order)
+    {
+        case CL_R:
+            switch (format.image_channel_data_type)
+            {
+                case CL_UNORM_INT8:
+                    return VK_FORMAT_R8_UNORM;
+                    break;
+                case CL_SNORM_INT8:
+                    return VK_FORMAT_R8_SNORM;
+                    break;
+                case CL_UNSIGNED_INT8:
+                    return VK_FORMAT_R8_UINT;
+                    break;
+                case CL_SIGNED_INT8:
+                    return VK_FORMAT_R8_SINT;
+                    break;
+                case CL_UNORM_INT16:
+                    return VK_FORMAT_R16_UNORM;
+                    break;
+                case CL_SNORM_INT16:
+                    return VK_FORMAT_R16_SNORM;
+                    break;
+                case CL_UNSIGNED_INT16:
+                    return VK_FORMAT_R16_UINT;
+                    break;
+                case CL_SIGNED_INT16:
+                    return VK_FORMAT_R16_SINT;
+                    break;
+                case CL_HALF_FLOAT:
+                    return VK_FORMAT_R16_SFLOAT;
+                    break;
+                case CL_UNSIGNED_INT32:
+                    return VK_FORMAT_R32_UINT;
+                    break;
+                case CL_SIGNED_INT32:
+                    return VK_FORMAT_R32_SINT;
+                    break;
+                case CL_FLOAT:
+                    return VK_FORMAT_R32_SFLOAT;
+                    break;
+                default:
+                    return VK_FORMAT_UNDEFINED;
+                    break;
+            }
+            break;
+        case CL_RG:
+            switch (format.image_channel_data_type)
+            {
+                case CL_UNORM_INT8:
+                    return VK_FORMAT_R8G8_UNORM;
+                    break;
+                case CL_SNORM_INT8:
+                    return VK_FORMAT_R8G8_SNORM;
+                    break;
+                case CL_UNSIGNED_INT8:
+                    return VK_FORMAT_R8G8_UINT;
+                    break;
+                case CL_SIGNED_INT8:
+                    return VK_FORMAT_R8G8_SINT;
+                    break;
+                case CL_UNORM_INT16:
+                    return VK_FORMAT_R16G16_UNORM;
+                    break;
+                case CL_SNORM_INT16:
+                    return VK_FORMAT_R16G16_SNORM;
+                    break;
+                case CL_UNSIGNED_INT16:
+                    return VK_FORMAT_R16G16_UINT;
+                    break;
+                case CL_SIGNED_INT16:
+                    return VK_FORMAT_R16G16_SINT;
+                    break;
+                case CL_HALF_FLOAT:
+                    return VK_FORMAT_R16G16_SFLOAT;
+                    break;
+                case CL_UNSIGNED_INT32:
+                    return VK_FORMAT_R32G32_UINT;
+                    break;
+                case CL_SIGNED_INT32:
+                    return VK_FORMAT_R32G32_SINT;
+                    break;
+                case CL_FLOAT:
+                    return VK_FORMAT_R32G32_SFLOAT;
+                    break;
+                default:
+                    return VK_FORMAT_UNDEFINED;
+                    break;
+            }
+            break;
+        case CL_RGB:
+            switch (format.image_channel_data_type)
+            {
+                case CL_UNORM_INT8:
+                    return VK_FORMAT_R8G8B8_UNORM;
+                    break;
+                case CL_SNORM_INT8:
+                    return VK_FORMAT_R8G8B8_SNORM;
+                    break;
+                case CL_UNSIGNED_INT8:
+                    return VK_FORMAT_R8G8B8_UINT;
+                    break;
+                case CL_SIGNED_INT8:
+                    return VK_FORMAT_R8G8B8_SINT;
+                    break;
+                case CL_UNORM_INT16:
+                    return VK_FORMAT_R16G16B16_UNORM;
+                    break;
+                case CL_SNORM_INT16:
+                    return VK_FORMAT_R16G16B16_SNORM;
+                    break;
+                case CL_UNSIGNED_INT16:
+                    return VK_FORMAT_R16G16B16_UINT;
+                    break;
+                case CL_SIGNED_INT16:
+                    return VK_FORMAT_R16G16B16_SINT;
+                    break;
+                case CL_HALF_FLOAT:
+                    return VK_FORMAT_R16G16B16_SFLOAT;
+                    break;
+                case CL_UNSIGNED_INT32:
+                    return VK_FORMAT_R32G32B32_UINT;
+                    break;
+                case CL_SIGNED_INT32:
+                    return VK_FORMAT_R32G32B32_SINT;
+                    break;
+                case CL_FLOAT:
+                    return VK_FORMAT_R32G32B32_SFLOAT;
+                    break;
+                default:
+                    return VK_FORMAT_UNDEFINED;
+                    break;
+            }
+            break;
+        case CL_RGBA:
+            switch (format.image_channel_data_type)
+            {
+                case CL_UNORM_INT8:
+                    return VK_FORMAT_R8G8B8A8_UNORM;
+                    break;
+                case CL_SNORM_INT8:
+                    return VK_FORMAT_R8G8B8A8_SNORM;
+                    break;
+                case CL_UNSIGNED_INT8:
+                    return VK_FORMAT_R8G8B8A8_UINT;
+                    break;
+                case CL_SIGNED_INT8:
+                    return VK_FORMAT_R8G8B8A8_SINT;
+                    break;
+                case CL_UNORM_INT16:
+                    return VK_FORMAT_R16G16B16A16_UNORM;
+                    break;
+                case CL_SNORM_INT16:
+                    return VK_FORMAT_R16G16B16A16_SNORM;
+                    break;
+                case CL_UNSIGNED_INT16:
+                    return VK_FORMAT_R16G16B16A16_UINT;
+                    break;
+                case CL_SIGNED_INT16:
+                    return VK_FORMAT_R16G16B16A16_SINT;
+                    break;
+                case CL_HALF_FLOAT:
+                    return VK_FORMAT_R16G16B16A16_SFLOAT;
+                    break;
+                case CL_UNSIGNED_INT32:
+                    return VK_FORMAT_R32G32B32A32_UINT;
+                    break;
+                case CL_SIGNED_INT32:
+                    return VK_FORMAT_R32G32B32A32_SINT;
+                    break;
+                case CL_FLOAT:
+                    return VK_FORMAT_R32G32B32A32_SFLOAT;
+                    break;
+                default:
+                    return VK_FORMAT_UNDEFINED;
+                    break;
+            }
+            break;
+        case CL_BGRA:
+            switch (format.image_channel_data_type)
+            {
+                case CL_UNORM_INT8:
+                    return VK_FORMAT_B8G8R8A8_UNORM;
+                    break;
+                default:
+                    return VK_FORMAT_UNDEFINED;
+                    break;
+            }
+            break;
+        case CL_sRGBA:
+            switch (format.image_channel_data_type)
+            {
+                case CL_UNORM_INT8:
+                    return VK_FORMAT_R8G8B8A8_SRGB;
+                    break;
+                default:
+                    return VK_FORMAT_UNDEFINED;
+                    break;
+            }
+            break;
+        default:
+            return VK_FORMAT_UNDEFINED;
+            break;
+    }
+
+    return VK_FORMAT_UNDEFINED;
+}
+
 angle::Result CLContextVk::getSupportedImageFormats(cl::MemFlags flags,
                                                     cl::MemObjectType imageType,
                                                     cl_uint numEntries,
                                                     cl_image_format *imageFormats,
                                                     cl_uint *numImageFormats)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    VkPhysicalDevice physicalDevice = getPlatform()->getRenderer()->getPhysicalDevice();
+    std::vector<cl_image_format> supportedFormats;
+    std::vector<cl_image_format> minSupportedFormats;
+    if (flags.isSet((CL_MEM_READ_ONLY | CL_MEM_WRITE_ONLY)))
+    {
+        minSupportedFormats.insert(
+            minSupportedFormats.end(), &mMinSupportedFormatsReadOrWrite[0],
+            &mMinSupportedFormatsReadOrWrite[(sizeof(mMinSupportedFormatsReadOrWrite) /
+                                              sizeof(mMinSupportedFormatsReadOrWrite[0]))]);
+    }
+    else
+    {
+        minSupportedFormats.insert(
+            minSupportedFormats.end(), &mMinSupportedFormatsReadAndWrite[0],
+            &mMinSupportedFormatsReadAndWrite[(sizeof(mMinSupportedFormatsReadAndWrite) /
+                                               sizeof(mMinSupportedFormatsReadAndWrite[0]))]);
+    }
+    for (size_t index = 0; index < minSupportedFormats.size(); index++)
+    {
+        VkFormatProperties formatProperties;
+        VkFormat vkFormat = getVkFormatFromCL(minSupportedFormats[index]);
+        ASSERT(vkFormat != VK_FORMAT_UNDEFINED);
+        vkGetPhysicalDeviceFormatProperties(physicalDevice, vkFormat, &formatProperties);
+        if ((formatProperties.linearTilingFeatures != 0) ||
+            (formatProperties.optimalTilingFeatures != 0))
+        {
+            supportedFormats.push_back(minSupportedFormats[index]);
+        }
+    }
+    if (numImageFormats != nullptr)
+    {
+        *numImageFormats = (cl_uint)supportedFormats.size();
+    }
+    if (imageFormats != nullptr)
+    {
+        memcpy(imageFormats, supportedFormats.data(),
+               sizeof(cl_image_format) * supportedFormats.size());
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLContextVk::createSampler(const cl::Sampler &sampler, CLSamplerImpl::Ptr *samplerOut)
