@@ -398,6 +398,11 @@ class EventBarrierArray final
 
     void execute(Renderer *renderer, PrimaryCommandBuffer *primary);
 
+    // Return true if we already has the wait for the event, false otherwise. If true is returned,
+    // the actual EventBarrier pointer contains the wait for event is returned in barrierOut
+    // argument.
+    bool hasEvent(const VkEvent &event, EventBarrier **barrierOut);
+
     void addMemoryEvent(Context *context,
                         const RefCountedEvent &waitEvent,
                         VkPipelineStageFlags dstStageMask,
