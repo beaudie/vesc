@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "316767ff_70190d2e",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-16T16:00:06Z",
+      "side": 1,
+      "message": "Could the function name indicate that it\u0027s _max possible_ GL level to avoid confusion with the current max GL level?",
+      "revId": "c87bb50349223bea70c1de550bb2603e5409af03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce71bfe8_6159d990",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-16T16:00:06Z",
+      "side": 1,
+      "message": "Might as well remove these lines.",
+      "range": {
+        "startLine": 772,
+        "startChar": 0,
+        "endLine": 776,
+        "endChar": 0
+      },
+      "revId": "c87bb50349223bea70c1de550bb2603e5409af03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
