@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68f9456e_43e66d36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-16T00:35:21Z",
+      "side": 1,
+      "message": "shabi - bot failures aside, we have encountered apps that perform a program link on different threads with the exact same shaders (either vert or frag or both) causing ANGLE to spawn multiple warmup tasks that end up compiling the same GPL pipelines.\n\nThis is an attempt to deduplicate such tasks and i would like to get your inputs before proceeding further",
+      "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
