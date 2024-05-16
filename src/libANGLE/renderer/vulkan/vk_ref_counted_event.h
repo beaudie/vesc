@@ -401,7 +401,8 @@ class EventBarrierArray final
     void addMemoryEvent(Context *context,
                         const RefCountedEvent &waitEvent,
                         VkPipelineStageFlags dstStageMask,
-                        VkAccessFlags dstAccess);
+                        VkAccessFlags dstAccess,
+                        int line);
 
     void addImageEvent(Context *context,
                        const RefCountedEvent &waitEvent,
