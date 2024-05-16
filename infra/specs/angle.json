@@ -3455,10 +3455,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_egl_tests",
@@ -3477,10 +3479,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -3500,10 +3504,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles2_tests",
@@ -3522,10 +3528,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles2_tests",
@@ -3544,10 +3552,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -3567,10 +3577,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_multisample_tests",
@@ -3589,10 +3601,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_rotate180_tests",
@@ -3611,10 +3625,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_rotate270_tests",
@@ -3633,10 +3649,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_rotate90_tests",
@@ -3655,10 +3673,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -3678,10 +3698,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -3701,10 +3723,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles3_multisample_tests",
@@ -3723,10 +3747,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -3746,10 +3772,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -3769,10 +3797,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -3792,10 +3822,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 4
         },
@@ -3818,10 +3850,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles2_tests",
@@ -3843,10 +3877,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles31_tests",
@@ -3868,10 +3904,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -3893,10 +3931,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -3919,10 +3959,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -3945,10 +3987,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -3970,10 +4014,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles3_tests",
@@ -3993,10 +4039,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -4017,10 +4065,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_gles1_conformance_tests",
@@ -4035,10 +4085,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_unittests",
@@ -4056,10 +4108,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_white_box_tests",
@@ -4079,10 +4133,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_capture_tests",
@@ -4104,10 +4160,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -4135,10 +4193,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_restricted_trace_gold_tests",
@@ -4163,10 +4223,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_restricted_trace_gold_tests",
@@ -4190,10 +4252,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -4218,10 +4282,12 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "gpu": "10de:2184-440.100",
-            "os": "Ubuntu-18.04.5|Ubuntu-18.04.6",
-            "pool": "chromium.tests.gpu"
+            "display_attached": "1",
+            "gpu": "1002:7480",
+            "os": "Ubuntu-22.04",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
