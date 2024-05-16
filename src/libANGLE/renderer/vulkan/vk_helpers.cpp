@@ -1652,6 +1652,7 @@ void CommandBufferHelperCommon::resetImpl(Context *context)
 {
     ASSERT(!mAcquireNextImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
+    ASSERT(!mIsAnyHostVisibleBufferWritten);
 
     ASSERT(mRefCountedEvents.mask.none());
     ASSERT(mRefCountedEventCollector.empty());
@@ -1768,6 +1769,7 @@ void CommandBufferHelperCommon::bufferWrite(VkAccessFlags writeAccessType,
     // future.
     if (buffer->isHostVisible())
     {
+        printf("mIsAnyHostVisibleBufferWritten  is set to true\n");
         mIsAnyHostVisibleBufferWritten = true;
     }
 }

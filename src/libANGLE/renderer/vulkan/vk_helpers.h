@@ -1354,6 +1354,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     bool getAndResetHasHostVisibleBufferWrite()
     {
         bool hostBufferWrite           = mIsAnyHostVisibleBufferWritten;
+        printf("mIsAnyHostVisibleBufferWritten  is set to false\n");
         mIsAnyHostVisibleBufferWritten = false;
         return hostBufferWrite;
     }
