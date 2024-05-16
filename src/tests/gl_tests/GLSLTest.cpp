@@ -19251,6 +19251,37 @@ Foo foo(float bar)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that double underscores user defined name is allowed
+TEST_P(GLSLTest_ES3, DoubleUnderscoresName)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 oColor;
+uniform __Data{float red;float green;};
+void main() {oColor=vec4(red,green,1,1);})";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    ASSERT_GL_NO_ERROR();
+}
+
+// Test that user defined name starts with "ANGLE" or "ANGLE_"
+TEST_P(GLSLTest_ES3, VariableNameStartsWithANGLE)
+{
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 oColor;
+uniform ANGLEData{float red;};
+uniform ANGLE_Data{float green;};
+void main() {oColor=vec4(red,green,1,1);})";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that underscores in array names work with out arrays.
 TEST_P(GLSLTest_ES3, UnderscoresWorkWithOutArrays)
 {
