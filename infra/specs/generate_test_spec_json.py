@@ -43,6 +43,16 @@ ADDITIONAL_MIXINS = {
             '--use-permissive-pixel-comparison=${use_permissive_angle_pixel_comparison}',
         ],
     },
+    'linux_amd_7600': {
+        'swarming': {
+            'dimensions': {
+                'gpu': '1002:7480',
+                'os': 'Ubuntu-22.04',
+                'display_attached': '1',
+                'pool': 'chromium.tests.gpu.experimental',
+            },
+        },
+    },
     'samsung_s22': {
         'swarming': {
             'dimensions': {
