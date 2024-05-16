@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0c5d78a_4c490600",
+        "filename": ".gitmodules",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-16T17:59:03Z",
+      "side": 1,
+      "message": "Should this be removed now?",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 44
+      },
+      "revId": "1e641d1e08e4201ae91bbd79b50cdcfd15d799c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a9812b43_72328f82",
@@ -14,6 +37,29 @@
       "writtenOn": "2024-05-16T17:45:26Z",
       "side": 1,
       "message": "Roman, Shabi, PTAL.",
+      "revId": "1e641d1e08e4201ae91bbd79b50cdcfd15d799c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "166acfc4_207d1417",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-16T17:59:03Z",
+      "side": 1,
+      "message": "Remove?",
+      "range": {
+        "startLine": 941,
+        "startChar": 0,
+        "endLine": 945,
+        "endChar": 0
+      },
       "revId": "1e641d1e08e4201ae91bbd79b50cdcfd15d799c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
