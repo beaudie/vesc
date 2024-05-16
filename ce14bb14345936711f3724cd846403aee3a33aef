@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66c04f9a_b9f9a73e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-16T23:35:36Z",
+      "side": 1,
+      "message": "\u003e mSourceHash\n\nthat hash includes a lot more than the shader source. things like ANGLE versions and ShBuiltInResources and so on. That will pollute the hash right?\n\n\u003e instead of doing an expensive hash over the whole SPIR-V\n\nit does take non-zero time but dont have data showing time consumed. Should I switch to using the zlib crc instead?",
+      "parentUuid": "22d26678_dab80db6",
+      "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdaf999e_8da7b71a",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "writtenOn": "2024-05-16T13:28:55Z",
       "side": 1,
       "message": "If you return a flag and set it in `LinkTaskVk`, you can have `getResult` instead use `ANGLE_PERF_WARNING`. That\u0027s both less spammy, and lets the application control how to deal with the message.\n\nThe warning could be more helpful, like \"Detected multiple programs with the same shaders, which is inefficient. Optimize by sharing the program between contexts\".\n\nOn a similar note, I suggest moving the `mWarmUpTaskSignatures` hash map to the share group (assuming the app you found is using share groups). It\u0027ll likely be rare to hit this with unshared contexts, but if you do, the app\u0027s need for duplicate work is legitimate (and the perf warning won\u0027t apply).",
+      "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "969ccca4_806ef9f2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-16T23:35:36Z",
+      "side": 1,
+      "message": "\u003e ANGLE_PERF_WARNING\n\nworking on it\n\nbut i really do wish there was an equivalent macro that doesnt require a context but instead works with a renderer",
+      "parentUuid": "bdaf999e_8da7b71a",
       "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1caff7dd_39d10b00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-16T23:35:36Z",
+      "side": 1,
+      "message": "indeed",
+      "parentUuid": "e31de431_965129a3",
+      "range": {
+        "startLine": 1087,
+        "startChar": 4,
+        "endLine": 1087,
+        "endChar": 14
+      },
+      "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a22cde4_5be572ca",
@@ -88,6 +148,24 @@
       "writtenOn": "2024-05-16T13:28:55Z",
       "side": 1,
       "message": "`angle::HashMap`",
+      "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea830428_e96fd641",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-16T23:35:36Z",
+      "side": 1,
+      "message": "why pay the cost of larger cpu overhead when a simple set would suffice?",
+      "parentUuid": "2a22cde4_5be572ca",
       "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
