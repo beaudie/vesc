@@ -22,6 +22,30 @@
       },
       "revId": "4e580a6155918b4fc5abd509c26db390258d1b36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb692ca_e937124b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-17T16:20:12Z",
+      "side": 1,
+      "message": "Thanks. That was stale comment.",
+      "parentUuid": "ea0d2087_794426d5",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 4
+      },
+      "revId": "4e580a6155918b4fc5abd509c26db390258d1b36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
