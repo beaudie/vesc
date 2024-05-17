@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7e7f5b1b_8741f150",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-17T20:50:11Z",
+      "side": 1,
+      "message": "I don\u0027t think there\u0027s anything wrong with ANGLE\u0027s implementation of the extension, but other drivers are not supporting it, so apps are using it wrong it seems.",
+      "revId": "072121822bdae5754cd227b81790d27db80189e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "df867f3e_79db73c0",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 2
