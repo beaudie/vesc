@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c054485_2b7b937d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-17T13:05:32Z",
+      "side": 1,
+      "message": "\u003e That will pollute the hash right?\n\nDoes it matter? The warmup signatures are not persistent, so all that info is constant in the same run of the app.\n\nYou _could_ technically end up with the same SPIR-V from different GLSL, but unless that happens in practice, best just use a hash that\u0027s already available and save some battery.",
+      "parentUuid": "66c04f9a_b9f9a73e",
+      "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bdaf999e_8da7b71a",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 3
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "\u003e ANGLE_PERF_WARNING\n\nworking on it\n\nbut i really do wish there was an equivalent macro that doesnt require a context but instead works with a renderer",
       "parentUuid": "bdaf999e_8da7b71a",
+      "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7df00dca_8aa50ca4",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-17T13:05:32Z",
+      "side": 1,
+      "message": "Thanks. We have to use the context because the message gets routed to the application via some GL debug extension (and needs the context)",
+      "parentUuid": "969ccca4_806ef9f2",
       "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -166,6 +202,24 @@
       "side": 1,
       "message": "why pay the cost of larger cpu overhead when a simple set would suffice?",
       "parentUuid": "2a22cde4_5be572ca",
+      "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58ea35c0_508ced45",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-17T13:05:32Z",
+      "side": 1,
+      "message": "Sorry, `angle::HashSet`. That would use abseil instead of std, which is currently our preference.",
+      "parentUuid": "ea830428_e96fd641",
       "revId": "ce14bb14345936711f3724cd846403aee3a33aef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
