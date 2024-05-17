@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cea9a614_941d8d92",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-05-17T07:46:14Z",
+      "side": 1,
+      "message": "For these two classes especially, the mapping from\nmBaseGLLevel + glLevel -\u003e mtl::MipmapNativeLevel seems to be the only real functionality they provide. It\u0027s not immediately clear why that wouldn\u0027t be possible to do at the level the glLevel is received..",
+      "revId": "c87bb50349223bea70c1de550bb2603e5409af03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ce71bfe8_6159d990",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 13
