@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fbc2fb2_218bf4df",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 19279,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-05-17T13:52:41Z",
+      "side": 1,
+      "message": "You need to populate the uniform data in order for the test to not crash. See, for example,ArrayOfStructContainingArrayOfSamplers",
+      "revId": "df4ef56694726f9a8bc9ae64960f0dec9644ad76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
