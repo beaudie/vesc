@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "218bcbec_7c5bef37",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-05-17T07:39:16Z",
+      "side": 1,
+      "message": "Not necessarily worthwhile comment as I\u0027m not too familiar with this code, but:\nI find the structure with CopyBufferToOriginalTextureIfDstIsAView, NativeTextureWrapper, NativeTextureWrapperWithViewSupport overly redundant and quite confusing.\n\nThe calls in general flow like:\n- GL frontend\n- mtl backend\n - convert to Metal types\n - work with Metal logic on Metal types\n- Metal\n\nNow with the addition of logic:\n  - If the TextureRef is View, convert it to parent texture and apply the GL base level mipmap to the level and slice\n\nIt seems that the code is firmly in Metal mode, but then falls back for one surprising case to fetch some extra GL level data (relative base level) from a side channel.\n\n\nTo me the format of following structure would be simpler:\n\n    TextureRef mStorage;\n    GLuint mStorageBaseLevel;\n    TextureRef mBaseToMaxView;\n\nThen for the calls incoming from GL to mtl:: level, the parameters would immediately mapped to mtl concepts, and then worked strictly with mtl concepts from there on. E.g. the slice/level adjustments would be done there.\n\nThis is just a comment about the understandability. I realize there must be multiple reasons for introducing the complexity here.",
+      "revId": "c87bb50349223bea70c1de550bb2603e5409af03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "316767ff_70190d2e",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 13
