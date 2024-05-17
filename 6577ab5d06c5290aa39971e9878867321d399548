@@ -1,0 +1,68 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db6e3117_ba763e6e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2731,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-17T00:14:55Z",
+      "side": 1,
+      "message": "NIT: `localRefCountedEvent` could still be used?",
+      "range": {
+        "startLine": 2731,
+        "startChar": 15,
+        "endLine": 2731,
+        "endChar": 44
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "11b227b7_9fb57aec",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+              "range": {
+                "startLine": 2731,
+                "startChar": 0,
+                "endLine": 2734,
+                "endChar": 0
+              },
+              "replacement": "        RefCountedEvent \u0026localRefCountedEvent \u003d mRefCountedEvents.map[layout];\n        ASSERT(localRefCountedEvent.valid());\n        mRefCountedEvents.VkEvents[layout] \u003d localRefCountedEvent.getEvent().getHandle();\n        mRefCountedEventCollector.emplace_back(std::move(localCountedEvent));\n"
+            }
+          ]
+        }
+      ],
+      "revId": "6577ab5d06c5290aa39971e9878867321d399548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4f89296_21242818",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-17T00:14:55Z",
+      "side": 1,
+      "message": "NIT: vkEvents?",
+      "range": {
+        "startLine": 179,
+        "startChar": 47,
+        "endLine": 179,
+        "endChar": 55
+      },
+      "revId": "6577ab5d06c5290aa39971e9878867321d399548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
