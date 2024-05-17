@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "241adf56_d9362eee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2024-05-17T21:25:08Z",
+      "side": 1,
+      "message": "The CQ failure looks to be unrelated. Let me fire a retry in case of glitch for the tested linux wsi platform, otherwise it\u0027d be some sort of regression in either:\n- angle falsely assume input attachement usage bit is availabe for wsi image (it\u0027s the case for Android, but might not be the case for linux/win)\n- the linux/win wsi platform setup regressed",
+      "revId": "072121822bdae5754cd227b81790d27db80189e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "df867f3e_79db73c0",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 2
