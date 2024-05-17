@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "26521ac4_5c262d15",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-17T12:35:51Z",
+      "side": 1,
+      "message": "It\u0027s known from the past that using gl directly in mtl textures were bug prone. Sometime we mistakenly used gl level to refer a level in mtl texture. Hence MipmapNativeLevel was introduced to make it clear that the intention was to refer a mtl texture\u0027s level.\n\nIn the past, mtl textures were allocated with mips from base GL level -\u003e max GL level. That worked for mutable textures. But for immutable textures, that\u0027s incorrect. For immutable textures, the mips are allocated by glTexStorage and base GL texture and max GL texture won\u0027t affect them.\n\nConsidering now when we refer a level in mNativeTextureStorage, we have to carefully calculate the MipmapNativeLevel, without NativeTextureWrapper, we would have to do this at every place:\n```\nauto nativeLevel \u003d mtl::GetNativeLevel(glLevel, immutable? 0 : baseGLLevel);\nauto mip \u003d mNativeTextureStorage-\u003ecreateMipView(nativeLevel);\n```\n\nWe have to do that for mViewFromBaseToMaxLevel too, what if we pass wrong native level to it?  mViewFromBaseToMaxLevel  has different native level calculation compared to  mNativeTextureStorage. What if we mistakenly calculate view\u0027s level using mNativeTextureStorage\u0027s method. The wrappers\u0027 purposes are to help reduce the mistakes.",
+      "parentUuid": "218bcbec_7c5bef37",
+      "revId": "c87bb50349223bea70c1de550bb2603e5409af03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "316767ff_70190d2e",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 13
