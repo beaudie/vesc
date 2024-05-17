@@ -16,6 +16,23 @@
       "message": "Just checking with you Yuly, I\u0027m right to assume the expectations are no longer applicable? Do we have AMD bots coming that would need these to be in place?",
       "revId": "149ea54c516a36b415115bb98d1c6a5903179e1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6651df3_d8edaf25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-17T17:55:04Z",
+      "side": 1,
+      "message": "We have new AMD machines, but I don\u0027t have time to set up testing on them.\nSounds OK to remove these and then add what actually fails.",
+      "revId": "149ea54c516a36b415115bb98d1c6a5903179e1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
