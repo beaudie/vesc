@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea0d2087_794426d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-17T02:05:14Z",
+      "side": 1,
+      "message": "Stale comment? Looks like `mImageMemoryBarrierCount` is used for that.",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 4
+      },
+      "revId": "4e580a6155918b4fc5abd509c26db390258d1b36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
