@@ -42,6 +42,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0f807d3_3b880bd5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2731,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-17T00:56:23Z",
+      "side": 1,
+      "message": "No. Previously I used local variable mainly try to make a copy. Now there is no need, since we extract the VkEvent out.",
+      "parentUuid": "db6e3117_ba763e6e",
+      "range": {
+        "startLine": 2731,
+        "startChar": 15,
+        "endLine": 2731,
+        "endChar": 44
+      },
+      "revId": "6577ab5d06c5290aa39971e9878867321d399548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4f89296_21242818",
@@ -55,6 +79,30 @@
       "writtenOn": "2024-05-17T00:14:55Z",
       "side": 1,
       "message": "NIT: vkEvents?",
+      "range": {
+        "startLine": 179,
+        "startChar": 47,
+        "endLine": 179,
+        "endChar": 55
+      },
+      "revId": "6577ab5d06c5290aa39971e9878867321d399548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "866e2d1b_4691777b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-17T00:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4f89296_21242818",
       "range": {
         "startLine": 179,
         "startChar": 47,
