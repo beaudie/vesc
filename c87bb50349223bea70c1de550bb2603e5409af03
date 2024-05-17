@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "397f63d0_f1591236",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-17T12:38:24Z",
+      "side": 1,
+      "message": "CopyBufferToOriginalTexture* was created because some metal devices have bug when copying a buffer to a texture view, so we have to retrieve the original texture and its relative level and copy directly there.\nIt\u0027s unrelated to wrappers.",
+      "parentUuid": "26521ac4_5c262d15",
+      "revId": "c87bb50349223bea70c1de550bb2603e5409af03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "316767ff_70190d2e",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 13
