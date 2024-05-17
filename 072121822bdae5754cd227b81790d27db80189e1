@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df867f3e_79db73c0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4657,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2024-05-17T20:48:35Z",
+      "side": 1,
+      "message": "I\u0027ve left the SS condition as is. Let me know if we\u0027d like to disable it for SS on Android as well (probably doesn\u0027t matter since there won\u0027t be games running atop ANGLE-on-SS)",
+      "range": {
+        "startLine": 4657,
+        "startChar": 41,
+        "endLine": 4657,
+        "endChar": 57
+      },
+      "revId": "072121822bdae5754cd227b81790d27db80189e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
