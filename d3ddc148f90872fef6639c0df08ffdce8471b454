@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2655a099_53bd796d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-05-17T07:55:12Z",
+      "side": 1,
+      "message": "*tries*.\n\nIt\u0027s not working around user-defined underscores. It\u0027s working around double underscores that would be introduced if user-defined symbols would contain underscore prefix or suffix.\n\nAnd it\u0027s not \"expected\" per se, rather that we choose to currently generate double underscores instead of having incorrect code like this.",
+      "revId": "d3ddc148f90872fef6639c0df08ffdce8471b454",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
