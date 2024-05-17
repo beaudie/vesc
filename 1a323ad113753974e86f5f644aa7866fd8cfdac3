@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4275f16c_90942586",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-17T00:31:48Z",
+      "side": 1,
+      "message": "Remove? It seems that it is only used in `EventBarrierArray::execute()`, where the array is emptied.",
+      "range": {
+        "startLine": 411,
+        "startChar": 26,
+        "endLine": 411,
+        "endChar": 35
+      },
+      "revId": "1a323ad113753974e86f5f644aa7866fd8cfdac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
