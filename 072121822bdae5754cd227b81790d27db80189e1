@@ -56,6 +56,30 @@
       },
       "revId": "072121822bdae5754cd227b81790d27db80189e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2543b48b_b89bded3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4657,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-18T00:15:29Z",
+      "side": 1,
+      "message": "The failures are because, not only are you disabling this on Android, but you are also _enabling_ it on desktop. This should make it pass the bots and satisfy your needs.\n\n```suggestion\n                            isSwiftShader);\n```",
+      "parentUuid": "df867f3e_79db73c0",
+      "range": {
+        "startLine": 4657,
+        "startChar": 41,
+        "endLine": 4657,
+        "endChar": 57
+      },
+      "revId": "072121822bdae5754cd227b81790d27db80189e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
