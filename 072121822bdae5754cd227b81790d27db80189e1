@@ -80,6 +80,30 @@
       },
       "revId": "072121822bdae5754cd227b81790d27db80189e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ea80d56_b47f2d75",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4657,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2024-05-18T00:23:41Z",
+      "side": 1,
+      "message": "oh my...Orz",
+      "parentUuid": "2543b48b_b89bded3",
+      "range": {
+        "startLine": 4657,
+        "startChar": 41,
+        "endLine": 4657,
+        "endChar": 57
+      },
+      "revId": "072121822bdae5754cd227b81790d27db80189e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
