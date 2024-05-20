@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c707b501_41b830ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3792,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-20T19:11:09Z",
+      "side": 0,
+      "message": "You can make `CanSupportGPUShader5EXT` private to `vk_caps_utils.cpp` now",
+      "range": {
+        "startLine": 3792,
+        "startChar": 9,
+        "endLine": 3792,
+        "endChar": 61
+      },
+      "revId": "4629bf6c815a323df87b2996ddee3f69dbb8a581",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e5cf1a9_beecc6ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-20T19:11:09Z",
+      "side": 1,
+      "message": "Please declare this in `vk_caps_utils.h` and let `getMaxSupportedESVersion()` call it. This avoids the mutable bool and a special case for GLES3.2.",
+      "revId": "6330350b2b8a5aba172125a8872f8e4fae64c438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ff4a3eb_9dde0df8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-20T19:11:09Z",
+      "side": 1,
+      "message": "No need. If GLES3.2 says it\u0027s a promotion of FooOES, then we should check for support for FooOES not FooEXT. If they are the same, we should just expose both (in which case checking for OES only is still valid).",
+      "revId": "6330350b2b8a5aba172125a8872f8e4fae64c438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "850d20a6_166b9cf9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-20T19:11:09Z",
+      "side": 1,
+      "message": "I wouldn\u0027t bother with the `INFO()` TBH, but if you really want it you can add it to a separate function (and call it at the end of `ensureCapsInitialized`) so when this is called from `getMaxSupportedESVersion` it doesn\u0027t get reprinted every time.",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 5
+      },
+      "revId": "6330350b2b8a5aba172125a8872f8e4fae64c438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aafb3b1a_215abdd5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-20T19:11:09Z",
+      "side": 1,
+      "message": "Yeah this should be done, I missed it. Please move to `namespace vk`",
+      "revId": "6330350b2b8a5aba172125a8872f8e4fae64c438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c078a61f_554569df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3779,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-20T19:11:09Z",
+      "side": 1,
+      "message": "Please call `ensureCapsInitialized()` if you\u0027re relying on that.",
+      "revId": "6330350b2b8a5aba172125a8872f8e4fae64c438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b150e0fa_408d6a1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-20T19:11:09Z",
+      "side": 1,
+      "message": "Shouldn\u0027t be anymore after this change.",
+      "revId": "6330350b2b8a5aba172125a8872f8e4fae64c438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
