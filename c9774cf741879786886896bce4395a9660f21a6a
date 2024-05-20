@@ -1,0 +1,68 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c254509d_364b9135",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-20T23:17:36Z",
+      "side": 1,
+      "message": "This should be `robustnessKHR`.",
+      "range": {
+        "startLine": 264,
+        "startChar": 25,
+        "endLine": 264,
+        "endChar": 38
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "b4e5a47b_ede170b4",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+              "range": {
+                "startLine": 264,
+                "startChar": 0,
+                "endLine": 265,
+                "endChar": 0
+              },
+              "replacement": "        nativeExtensions.robustnessKHR,\n"
+            }
+          ]
+        }
+      ],
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fa7ce4a_6b2f62ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-20T23:17:36Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 297,
+        "startChar": 9,
+        "endLine": 297,
+        "endChar": 22
+      },
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
