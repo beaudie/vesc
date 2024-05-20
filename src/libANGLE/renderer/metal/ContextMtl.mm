@@ -2249,14 +2249,17 @@ bool ContextMtl::requiresIndexRewrite(const gl::State &state, gl::PrimitiveMode 
 
 void ContextMtl::updateDrawFrameBufferBinding(const gl::Context *context)
 {
-    const gl::State &glState = getState();
-
+    const gl::State &glState           = getState();
     FramebufferMtl *newDrawFramebuffer = mtl::GetImpl(glState.getDrawFramebuffer());
-    if (newDrawFramebuffer != mDrawFramebuffer)
+
+    // The render pass is not closed if binding is changed to the same framebuffer as
+    // before.
+    if (newDrawFramebuffer == mDrawFramebuffer)
     {
-        // Reset this flag if the framebuffer has changed to not sync it twice
-        mForceResyncDrawFramebuffer = false;
+        return;
     }
+    // Reset this flag if the framebuffer has changed to not sync it twice
+    mForceResyncDrawFramebuffer = false;
 
     mDrawFramebuffer = newDrawFramebuffer;
 
