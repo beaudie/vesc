@@ -5398,22 +5398,6 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
     return angle::Result::Continue;
 }
 
-void ContextVk::updateFoveatedRendering()
-{
-    const bool previousFoveationMode = mGraphicsPipelineDesc->getRenderPassFoveation();
-    FramebufferVk *drawFramebufferVk = vk::GetImpl(mState.getDrawFramebuffer());
-    const bool currentFoveationMode  = drawFramebufferVk->isFoveationEnabled();
-    if (previousFoveationMode != currentFoveationMode)
-    {
-        // Perform required state changes
-        mGraphicsPipelineDesc->setRenderPassFoveation(currentFoveationMode);
-        invalidateCurrentGraphicsPipeline();
-        mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
-        // Opening a new renderpass will trigger an update to shading rate dynamic state.
-        ASSERT(getFeatures().supportsFragmentShadingRate.enabled);
-    }
-}
-
 angle::Result ContextVk::syncState(const gl::Context *context,
                                    const gl::state::DirtyBits dirtyBits,
                                    const gl::state::DirtyBits bitMask,
@@ -5705,7 +5689,6 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateScissor(glState);
                 updateDepthStencil(glState);
                 updateDither();
-                updateFoveatedRendering();
 
                 // Clear the blend funcs/equations for color attachment indices that no longer
                 // exist.
@@ -6433,9 +6416,6 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
     // Update dither based on attachment formats.
     updateDither();
 
-    // Updated foveated rendering
-    updateFoveatedRendering();
-
     // Attachments might have changed.
     updateMissingOutputsMask();
 
@@ -6451,6 +6431,9 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
 void ContextVk::onDrawFramebufferRenderPassDescChange(FramebufferVk *framebufferVk,
                                                       bool *renderPassDescChangedOut)
 {
+    ASSERT(getFeatures().supportsFragmentShadingRate.enabled ||
+           !framebufferVk->isFoveationEnabled());
+
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition,
                                                 framebufferVk->getRenderPassDesc());
 
