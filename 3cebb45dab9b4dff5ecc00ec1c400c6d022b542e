@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b90ce0c6_caad1f03",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-20T19:59:07Z",
+      "side": 1,
+      "message": "This logic doesn\u0027t work in some cases. Frontend can change draw framebuffer without notifying backend ContextMtl. Example:\n- glBindFramebuffer(1);\n- draw -\u003e ContextMtl gets notified and `mDrawFramebuffer` points to fbo 1.\n- glBindFramebuffer(2);\n- attach a texture to fbo 2.\n- readPixels -\u003e FrameBufferMtl::syncState() is called, but ContextMtl won\u0027t be notified by frontend. In [1] we indirectly notify ContextMtl about this but we don\u0027t change its `mDrawFramebuffer`. This consequently modifies current scissor rect to be within fbo 2\u0027s bounds [2]\n. glBindFramebuffer(1).\n- draw -\u003e `ContextMtl::updateDrawBufferBinding` is called, but because `mDrawFramebuffer` wasn\u0027t changed, the code early returns and misses the change to update the scissor rect to be fbo 1\u0027s bounds.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/FrameBufferMtl.mm;drc\u003dc0265133106c7647e90f9aaa4377d28190b1a6a9;l\u003d809\n[2] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/ContextMtl.mm;drc\u003dc0265133106c7647e90f9aaa4377d28190b1a6a9;l\u003d2278",
+      "revId": "3cebb45dab9b4dff5ecc00ec1c400c6d022b542e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
