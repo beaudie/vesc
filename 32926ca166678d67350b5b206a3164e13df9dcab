@@ -16,6 +16,29 @@
       "message": "Thanks!",
       "revId": "32926ca166678d67350b5b206a3164e13df9dcab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6d7744b_72d067fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-20T23:42:18Z",
+      "side": 1,
+      "message": "Can you explicitly say `ANDROID_extension_pack_es31a` in each of these?",
+      "range": {
+        "startLine": 236,
+        "startChar": 54,
+        "endLine": 236,
+        "endChar": 80
+      },
+      "revId": "32926ca166678d67350b5b206a3164e13df9dcab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -63,6 +63,74 @@
       },
       "revId": "c9774cf741879786886896bce4395a9660f21a6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5136193_685aaac4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-20T23:42:18Z",
+      "side": 1,
+      "message": "Can we call this in `getMaxSupportedESVersion` instead?",
+      "range": {
+        "startLine": 1296,
+        "startChar": 4,
+        "endLine": 1296,
+        "endChar": 33
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "1e2ba7da_5c07809d",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+              "range": {
+                "startLine": 1001,
+                "startChar": 0,
+                "endLine": 1004,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+              "range": {
+                "startLine": 1294,
+                "startChar": 0,
+                "endLine": 1297,
+                "endChar": 0
+              },
+              "replacement": ""
+            }
+          ]
+        }
+      ],
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab1405cc_9f3aeb17",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3795,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-20T23:42:18Z",
+      "side": 1,
+      "message": "This line would be good for logging the gap.",
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
