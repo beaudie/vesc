@@ -1915,7 +1915,8 @@ angle::Result FramebufferVk::updateFoveationState(ContextVk *contextVk,
     }
 
     mCurrentFramebufferDesc.updateFragmentShadingRate(serial);
-    mRenderPassDesc.setFragmentShadingAttachment(isFoveationEnabled);
+    // mRenderPassDesc will be updated later in updateRenderPassDesc() in case if
+    // mCurrentFramebufferDesc was changed.
     return angle::Result::Continue;
 }
 
