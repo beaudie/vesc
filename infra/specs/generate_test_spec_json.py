@@ -43,6 +43,15 @@ ADDITIONAL_MIXINS = {
             '--use-permissive-pixel-comparison=${use_permissive_angle_pixel_comparison}',
         ],
     },
+    'nvidia_4060_ti': {
+        'swarming': {
+            'dimensions': {
+                'gpu': '10de:2803',
+                'os': 'Ubuntu',
+                'pool': 'chromium.tests.gpu.experimental',
+            },
+        },
+    },
     'samsung_s22': {
         'swarming': {
             'dimensions': {

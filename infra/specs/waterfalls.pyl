@@ -158,7 +158,9 @@
       'linux-nvidia': {
         'os_type': 'linux',
         'mixins': [
-          'linux_nvidia_gtx_1660_stable',
+          #'linux_nvidia_gtx_1660_stable',
+          'nvidia_4060_ti',
+	  'limited_capacity_bot',
         ],
         'test_suites': {
           'gtest_tests': 'linux_nvidia_gtests',
