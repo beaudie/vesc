@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c79e4425_2dd189e7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7447,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-20T23:36:27Z",
+      "side": 1,
+      "message": "This is no longer relevant in the new patch.",
+      "parentUuid": "661cde32_37ba357c",
+      "range": {
+        "startLine": 7447,
+        "startChar": 87,
+        "endLine": 7447,
+        "endChar": 90
+      },
+      "revId": "e482d82aa7f9c9f413ddc2e71840e676e6de492e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64f1089f_c06b59af",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-20T18:24:04Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 7448,
+        "startChar": 73,
+        "endLine": 7448,
+        "endChar": 76
+      },
+      "revId": "e482d82aa7f9c9f413ddc2e71840e676e6de492e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51cd9083_0ba8ccc0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7448,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-20T23:36:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64f1089f_c06b59af",
       "range": {
         "startLine": 7448,
         "startChar": 73,
