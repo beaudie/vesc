@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "661cde32_37ba357c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7447,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-20T18:24:04Z",
+      "side": 1,
+      "message": "nit: Typo",
+      "range": {
+        "startLine": 7447,
+        "startChar": 87,
+        "endLine": 7447,
+        "endChar": 90
+      },
+      "revId": "e482d82aa7f9c9f413ddc2e71840e676e6de492e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64f1089f_c06b59af",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7448,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-20T18:24:04Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 7448,
+        "startChar": 73,
+        "endLine": 7448,
+        "endChar": 76
+      },
+      "revId": "e482d82aa7f9c9f413ddc2e71840e676e6de492e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
