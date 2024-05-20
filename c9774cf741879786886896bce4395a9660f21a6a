@@ -131,6 +131,24 @@
       "message": "This line would be good for logging the gap.",
       "revId": "c9774cf741879786886896bce4395a9660f21a6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05f9f51e_8dcae817",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3795,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-20T23:58:13Z",
+      "side": 1,
+      "message": "The logging used to be part of checking the extensions. However, it would log the gap each time `getMaxSupportedESVersion()` is called. It has now been moved to the end of `ensureCapsInitialized()` so it is called only once.",
+      "parentUuid": "ab1405cc_9f3aeb17",
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

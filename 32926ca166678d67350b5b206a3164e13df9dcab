@@ -39,6 +39,30 @@
       },
       "revId": "32926ca166678d67350b5b206a3164e13df9dcab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90e847ad_6489ec41",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-20T23:58:13Z",
+      "side": 1,
+      "message": "Added references to `ANDROID_extension_pack_es31a`.",
+      "parentUuid": "f6d7744b_72d067fd",
+      "range": {
+        "startLine": 236,
+        "startChar": 54,
+        "endLine": 236,
+        "endChar": 80
+      },
+      "revId": "32926ca166678d67350b5b206a3164e13df9dcab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
