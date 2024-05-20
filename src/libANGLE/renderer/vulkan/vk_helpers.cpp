@@ -7444,17 +7444,37 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
 
             ASSERT(!mLastNonShaderReadOnlyEvent.valid() ||
                    mLastNonShaderReadOnlyEvent.getImageLayout() == mLastNonShaderReadOnlyLayout);
-            // Because we already inserted a barrier in the same renderPass, we either has to add
-            // the new stage mask to the existing VkCmdWaitEvent call or has to fallback to
-            // pipelineBarrier. The former is a bit expensive due to the cost of searching for the
-            // event. Given this happens very rarely, we just always fallback to pipelineBarrier.
-            barrierType = BarrierType::Pipeline;
+            if (!mLastNonShaderReadOnlyEvent.valid())
+            {
+                barrierType = BarrierType::Pipeline;
+            }
 
-            const ImageMemoryBarrierData &layoutData =
-                kImageMemoryBarrierData[mLastNonShaderReadOnlyLayout];
-            pipelineBarriers->mergeMemoryBarrier(
-                transitionTo.barrierIndex, GetImageLayoutSrcStageMask(context, layoutData),
-                dstStageMask, layoutData.srcAccessMask, transitionTo.dstAccessMask);
+            if (barrierType == BarrierType::Event)
+            {
+                // If we already inserted a barrier in the same renderPass, we has to add
+                // the new stage mask to the existing VkCmdWaitEvent call, otherwise VVL will
+                // complain.
+                EventBarrier *barrier;
+                if (eventBarriers->hasEvent(mLastNonShaderReadOnlyEvent.getEvent().getHandle(),
+                                            &barrier))
+                {
+                    barrier->addAdditionalStageAccess(dstStageMask, transitionTo.dstAccessMask);
+                }
+                else
+                {
+                    eventBarriers->addMemoryEvent(context, mLastNonShaderReadOnlyEvent,
+                                                  dstStageMask, transitionTo.dstAccessMask);
+                }
+                eventCollector->emplace_back(mLastNonShaderReadOnlyEvent);
+            }
+            else
+            {
+                const ImageMemoryBarrierData &layoutData =
+                    kImageMemoryBarrierData[mLastNonShaderReadOnlyLayout];
+                pipelineBarriers->mergeMemoryBarrier(
+                    transitionTo.barrierIndex, GetImageLayoutSrcStageMask(context, layoutData),
+                    dstStageMask, layoutData.srcAccessMask, transitionTo.dstAccessMask);
+            }
 
             mBarrierQueueSerial = queueSerial;
             // Accumulate new read stage.

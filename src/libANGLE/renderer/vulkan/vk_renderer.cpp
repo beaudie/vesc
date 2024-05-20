@@ -1902,7 +1902,7 @@ angle::Result Renderer::initialize(vk::Context *context,
     // for VkEvent which causes a few tests fail on the bots. Disable syncVal if VkEvent is enabled
     // for now.
     const VkBool32 setting_validate_sync =
-        IsAndroid() || ShouldUseEventForImageBarrier() ? VK_FALSE : VK_TRUE;
+        IsAndroid() /*|| ShouldUseEventForImageBarrier()*/ ? VK_FALSE : VK_TRUE;
     const VkBool32 setting_thread_safety = VK_TRUE;
     // http://anglebug.com/7050 - Shader validation caching is broken on Android
     const VkBool32 setting_check_shaders = IsAndroid() ? VK_FALSE : VK_TRUE;

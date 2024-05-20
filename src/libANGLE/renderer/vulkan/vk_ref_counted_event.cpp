@@ -229,6 +229,22 @@ void EventBarrier::execute(PrimaryCommandBuffer *primary)
 }
 
 // EventBarrierArray implementation.
+bool EventBarrierArray::hasEvent(const VkEvent &event, EventBarrier **barrierOut)
+{
+    for (EventBarrier &barrier : mBarriers)
+    {
+        // If the event is already in the waiting list, just add the new stageMask to the
+        // dstStageMask. Otherwise we will end up with two waitEvent calls that wait for the same
+        // VkEvent but for different dstStage and confuses VVL.
+        if (barrier.hasEvent(event))
+        {
+            *barrierOut = &barrier;
+            return true;
+        }
+    }
+    return false;
+}
+
 void EventBarrierArray::addMemoryEvent(Context *context,
                                        const RefCountedEvent &waitEvent,
                                        VkPipelineStageFlags dstStageMask,
