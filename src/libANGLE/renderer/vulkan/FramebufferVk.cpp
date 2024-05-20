@@ -2472,7 +2472,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         // descriptor to reflect the new state.
         gl::SrgbWriteControlMode newSrgbWriteControlMode = mState.getWriteControlMode();
         mCurrentFramebufferDesc.setWriteControlMode(newSrgbWriteControlMode);
-        mRenderPassDesc.setWriteControlMode(newSrgbWriteControlMode);
+        // mRenderPassDesc will be updated later in updateRenderPassDesc() in case if
+        // mCurrentFramebufferDesc was changed.
     }
 
     if (shouldUpdateColorMaskAndBlend)
