@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9601da32_d3396ef8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7406,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-20T17:23:30Z",
+      "side": 1,
+      "message": "Forgot to remove the debug code",
+      "parentUuid": "c7528f61_3ce64d55",
+      "range": {
+        "startLine": 7406,
+        "startChar": 68,
+        "endLine": 7406,
+        "endChar": 76
+      },
+      "revId": "13d58125e02863587cecbf27aebe825edd1aece8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca1cced6_e978f88b",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-17T23:31:19Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 405,
+        "startChar": 24,
+        "endLine": 405,
+        "endChar": 32
+      },
+      "revId": "13d58125e02863587cecbf27aebe825edd1aece8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c011b594_dce02539",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-20T17:23:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca1cced6_e978f88b",
       "range": {
         "startLine": 405,
         "startChar": 24,
