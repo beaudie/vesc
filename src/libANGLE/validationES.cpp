@@ -2582,7 +2582,12 @@ bool ValidateGetQueryObjectValueBase(const Context *context,
     {
         ANGLE_VALIDATION_ERROR(GL_CONTEXT_LOST, kContextLost);
 
-        if (pname == GL_QUERY_RESULT_AVAILABLE_EXT)
+        // According to the KHR_robustness spec, if ES 3.0 or later is not supported, there is no
+        // special behavior for GL_QUERY_RESULT_AVAILABLE_EXT.
+        bool isQueryResultAvailableSpecialCase =
+            (context->getClientVersion() >= ES_3_2) ||
+            (context->getClientMajorVersion() >= 3 && context->getExtensions().robustnessKHR);
+        if (pname == GL_QUERY_RESULT_AVAILABLE_EXT && isQueryResultAvailableSpecialCase)
         {
             // Generate an error but still return true, the context still needs to return a
             // value in this case.
