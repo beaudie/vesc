@@ -678,8 +678,22 @@ bool ValidateBlendBarrierKHR(const Context *context, angle::EntryPoint entryPoin
 
 bool ValidateGetGraphicsResetStatusKHR(const Context *context, angle::EntryPoint entryPoint)
 {
-    UNIMPLEMENTED();
-    return false;
+    //    NOTE: when implemented in an OpenGL ES context, all entry points defined
+    //    by this extension must have a "KHR" suffix. When implemented in an
+    //    OpenGL context, all entry points must have NO suffix, as shown below.
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
+    if (!context->getExtensions().robustnessKHR)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    return true;
 }
 
 bool ValidateGetnUniformfvKHR(const Context *context,
@@ -689,8 +703,20 @@ bool ValidateGetnUniformfvKHR(const Context *context,
                               GLsizei bufSize,
                               const GLfloat *params)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
+    if (!context->getExtensions().robustnessKHR)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    return ValidateSizedGetUniform(context, entryPoint, programPacked, locationPacked, bufSize,
+                                   nullptr);
 }
 
 bool ValidateGetnUniformivKHR(const Context *context,
@@ -700,8 +726,20 @@ bool ValidateGetnUniformivKHR(const Context *context,
                               GLsizei bufSize,
                               const GLint *params)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
+    if (!context->getExtensions().robustnessKHR)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    return ValidateSizedGetUniform(context, entryPoint, programPacked, locationPacked, bufSize,
+                                   nullptr);
 }
 
 bool ValidateGetnUniformuivKHR(const Context *context,
@@ -711,8 +749,20 @@ bool ValidateGetnUniformuivKHR(const Context *context,
                                GLsizei bufSize,
                                const GLuint *params)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
+    if (!context->getExtensions().robustnessKHR)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    return ValidateSizedGetUniform(context, entryPoint, programPacked, locationPacked, bufSize,
+                                   nullptr);
 }
 
 bool ValidateReadnPixelsKHR(const Context *context,
@@ -726,8 +776,26 @@ bool ValidateReadnPixelsKHR(const Context *context,
                             GLsizei bufSize,
                             const void *data)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
+    if (!context->getExtensions().robustnessKHR)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_VALUE, kNegativeBufferSize);
+        return false;
+    }
+
+    return ValidateReadPixelsBase(context, entryPoint, x, y, width, height, format, type, bufSize,
+                                  nullptr, nullptr, nullptr, data);
 }
 
 bool ValidateBlendEquationSeparateiEXT(const PrivateState &state,
