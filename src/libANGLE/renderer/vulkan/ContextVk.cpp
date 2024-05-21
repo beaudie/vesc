@@ -1230,6 +1230,10 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
 
 #undef ANGLE_ADD_PERF_MONITOR_COUNTER_GROUP
 
+    vk::DeviceQueueIndex test1 = vk::kForeignDeviceQueueIndex;
+    ASSERT(test1.familyIndex() == VK_QUEUE_FAMILY_EXTERNAL);
+    WARN() << "kForeignDeviceQueueIndex.familyIndex = 0x" << std::hex << test1.familyIndex();
+
     mPerfMonitorCounters.push_back(vulkanGroup);
 }
 
