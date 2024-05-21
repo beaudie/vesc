@@ -155,22 +155,22 @@ class DeviceQueueIndex final
     }
 
     uint32_t familyIndex() const { return mFamilyIndex; }
-    uint32_t queueIndex() const { return mQueueIndex; }
 
     bool operator==(const DeviceQueueIndex &other) const { return mValue == other.mValue; }
     bool operator!=(const DeviceQueueIndex &other) const { return mValue != other.mValue; }
 
   private:
-    static constexpr uint32_t kInvalidQueueFamilyIndex = std::numeric_limits<uint32_t>::max();
-    static constexpr uint32_t kInvalidQueueIndex       = std::numeric_limits<uint32_t>::max();
+    static constexpr int16_t kInvalidQueueFamilyIndex = -1;
+    static constexpr int16_t kForeignQueueFamilyIndex = -2;
+    static constexpr int16_t kInvalidQueueIndex       = -1;
     union
     {
         struct
         {
-            uint32_t mFamilyIndex;
-            uint32_t mQueueIndex;
+            int16_t mFamilyIndex;
+            int16_t mQueueIndex;
         };
-        uint64_t mValue;
+        uint32_t mValue;
     };
 };
 static constexpr DeviceQueueIndex kInvalidDeviceQueueIndex = DeviceQueueIndex();

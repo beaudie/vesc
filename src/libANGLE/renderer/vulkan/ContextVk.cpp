@@ -1215,6 +1215,19 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
 
     mDeviceQueueIndex = renderer->getDeviceQueueIndex(mContextPriority);
 
+    /**********************/
+    vk::DeviceQueueIndex test1 = vk::kForeignDeviceQueueIndex;
+    vk::DeviceQueueIndex test2 = vk::kExternalDeviceQueueIndex;
+    vk::DeviceQueueIndex test3 = vk::kInvalidDeviceQueueIndex;
+    ASSERT(test1.familyIndex() == VK_QUEUE_FAMILY_FOREIGN_EXT);
+    ASSERT(test2.familyIndex() == VK_QUEUE_FAMILY_EXTERNAL);
+    ASSERT(test3.familyIndex() == VK_QUEUE_FAMILY_IGNORED);
+    WARN() << "kForeignDeviceQueueIndex.familyIndex = 0x" << std::hex << test1.familyIndex();
+    WARN() << "kExternalDeviceQueueIndex.familyIndex = 0x" << std::hex << test2.familyIndex();
+    WARN() << "kInvalidDeviceQueueIndex.familyIndex = 0x" << std::hex << test3.familyIndex();
+
+    /**********************/
+
     angle::PerfMonitorCounterGroup vulkanGroup;
     vulkanGroup.name = "vulkan";
 
