@@ -1354,6 +1354,7 @@ enum class SyncFenceScope
         auto ANGLE_LOCAL_VAR = command;                                                  \
         if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))                               \
         {                                                                                \
+    static int nqwe=0; nqwe++; if (nqwe > 0) { printf("qwe failed VK try %s %d\n", #command, ANGLE_LOCAL_VAR); __builtin_trap(); } \
             (context)->handleError(ANGLE_LOCAL_VAR, __FILE__, ANGLE_FUNCTION, __LINE__); \
             return angle::Result::Stop;                                                  \
         }                                                                                \

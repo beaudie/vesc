@@ -181,6 +181,7 @@ def main():
         swarming_args += ['-env', env]
 
     cmd_args += swarming_cmd
+    sys.exit(0)
 
     if unknown:
         cmd_args += unknown
