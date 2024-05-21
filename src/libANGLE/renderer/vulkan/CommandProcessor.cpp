@@ -1815,6 +1815,9 @@ void DeviceQueueMap::initialize(VkDevice device,
 void QueueFamily::initialize(const VkQueueFamilyProperties &queueFamilyProperties,
                              uint32_t queueFamilyIndex)
 {
+    ASSERT(kForeignDeviceQueueIndex.familyIndex() == VK_QUEUE_FAMILY_FOREIGN_EXT);
+    ASSERT(kExternalDeviceQueueIndex.familyIndex() == VK_QUEUE_FAMILY_EXTERNAL);
+    ASSERT(kInvalidDeviceQueueIndex.familyIndex() == VK_QUEUE_FAMILY_IGNORED);
     mProperties       = queueFamilyProperties;
     mQueueFamilyIndex = queueFamilyIndex;
 }
