@@ -70,6 +70,24 @@
       "parentUuid": "a22e4e06_45d5bfac",
       "revId": "89caa0e1d99e45f3d6f355f6e14c147f8de3e0e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9304f17_6b736536",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-21T21:49:08Z",
+      "side": 1,
+      "message": "Also failed on msvc c++17, I\u0027ll roll back for now.",
+      "parentUuid": "1be04167_baf11239",
+      "revId": "89caa0e1d99e45f3d6f355f6e14c147f8de3e0e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
