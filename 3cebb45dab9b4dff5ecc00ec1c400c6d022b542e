@@ -34,6 +34,24 @@
       "parentUuid": "b90ce0c6_caad1f03",
       "revId": "3cebb45dab9b4dff5ecc00ec1c400c6d022b542e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d16b8e3a_343b5ec6",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-05-21T08:31:28Z",
+      "side": 1,
+      "message": "Thanks for the feedback. I\u0027ll definitely add tests.\n\nI\u0027m trying to get the same point as vulkan/ where we can optimise the resolve from MSAA to use the MTLRenderPassDescriptor resolve pass, followed by skipping the MSAA store by issuing glInvalidateFramebuffer.\n\nPlease let me know if this is already being worked on for Metal to avoid double up.",
+      "parentUuid": "bff212a1_2b2a2715",
+      "revId": "3cebb45dab9b4dff5ecc00ec1c400c6d022b542e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
