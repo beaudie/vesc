@@ -289,8 +289,6 @@ constexpr const char *kSkippedMessages[] = {
     // https://issuetracker.google.com/336847261
     "VUID-VkImageCreateInfo-pNext-02397",
     "VUID-vkCmdDraw-None-06550",
-    // https://issuetracker.google.com/337135577
-    "UNASSIGNED-SubmitValidation-WaitEvents-WrongQueue",
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
@@ -3096,6 +3094,10 @@ void Renderer::enableDeviceExtensionsNotPromoted(const vk::ExtensionNameList &de
         vk::AddToPNextChain(&mEnabledFeatures, &mExternalFormatResolveFeatures);
     }
 #endif
+
+    DeviceQueueIndex test1 = kForeignDeviceQueueIndex;
+    ASSERT(test1.familyIndex() == VK_QUEUE_FAMILY_EXTERNAL);
+    WARN() << "kForeignDeviceQueueIndex.familyIndex = 0x" << std::hex << test1.familyIndex();
 }
 
 // See comment above appendDeviceExtensionFeaturesPromotedTo11.  Additional extensions are enabled
