@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "667ee9b4_9fc2fb85",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1683,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-21T22:12:17Z",
+      "side": 1,
+      "message": "Should `KHR` and `EXT` be the same? Or should `KHR` make sure the GLES version is not 1.1?",
+      "range": {
+        "startLine": 1683,
+        "startChar": 4,
+        "endLine": 1683,
+        "endChar": 58
+      },
+      "revId": "b9c508f287ba189bbcc512050b13068e26a106b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e59f77c0_c79bb177",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-21T22:12:17Z",
+      "side": 1,
+      "message": "From the spec:\n\n*\"NOTE: when implemented in an OpenGL ES context, all entry points defined by this extension must have a \"KHR\" suffix. When implemented in an OpenGL context, all entry points must have NO suffix, as shown below.\"*\n\nDoes this mean that GLES should produce an error if the no-suffix version is called? And GL for the KHR suffix?",
+      "range": {
+        "startLine": 679,
+        "startChar": 5,
+        "endLine": 679,
+        "endChar": 38
+      },
+      "revId": "b9c508f287ba189bbcc512050b13068e26a106b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
