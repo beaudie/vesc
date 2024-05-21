@@ -143,7 +143,7 @@ class DeviceQueueIndex final
     constexpr DeviceQueueIndex(uint32_t familyIndex)
         : mFamilyIndex(familyIndex), mQueueIndex(kInvalidQueueIndex)
     {}
-    DeviceQueueIndex(uint32_t familyIndex, uint32_t queueIndex)
+    DeviceQueueIndex(uint16_t familyIndex, uint16_t queueIndex)
         : mFamilyIndex(familyIndex), mQueueIndex(queueIndex)
     {}
     DeviceQueueIndex(const DeviceQueueIndex &other) { *this = other; }
@@ -161,16 +161,16 @@ class DeviceQueueIndex final
     bool operator!=(const DeviceQueueIndex &other) const { return mValue != other.mValue; }
 
   private:
-    static constexpr uint32_t kInvalidQueueFamilyIndex = std::numeric_limits<uint32_t>::max();
-    static constexpr uint32_t kInvalidQueueIndex       = std::numeric_limits<uint32_t>::max();
+    static constexpr uint16_t kInvalidQueueFamilyIndex = std::numeric_limits<uint16_t>::max();
+    static constexpr uint16_t kInvalidQueueIndex       = std::numeric_limits<uint16_t>::max();
     union
     {
         struct
         {
-            uint32_t mFamilyIndex;
-            uint32_t mQueueIndex;
+            uint16_t mFamilyIndex;
+            uint16_t mQueueIndex;
         };
-        uint64_t mValue;
+        uint32_t mValue;
     };
 };
 static constexpr DeviceQueueIndex kInvalidDeviceQueueIndex = DeviceQueueIndex();
