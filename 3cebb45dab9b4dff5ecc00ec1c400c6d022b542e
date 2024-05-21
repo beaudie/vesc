@@ -52,6 +52,24 @@
       "parentUuid": "bff212a1_2b2a2715",
       "revId": "3cebb45dab9b4dff5ecc00ec1c400c6d022b542e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe343825_dc2d5728",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-05-21T08:35:51Z",
+      "side": 1,
+      "message": "Also, I noticed that the Vulcan backend checks the queue serial, not that the same framebuffer is being rebound. The Metal backend has serials for buffers, not framebuffers. Is that correct?",
+      "parentUuid": "d16b8e3a_343b5ec6",
+      "revId": "3cebb45dab9b4dff5ecc00ec1c400c6d022b542e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
