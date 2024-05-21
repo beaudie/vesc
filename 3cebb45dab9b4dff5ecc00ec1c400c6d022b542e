@@ -70,6 +70,24 @@
       "parentUuid": "d16b8e3a_343b5ec6",
       "revId": "3cebb45dab9b4dff5ecc00ec1c400c6d022b542e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c930e2_60ba7eb1",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-21T14:33:17Z",
+      "side": 1,
+      "message": "Yes, ultimately you need to have a way to answer this question: \"is the current render pass the latest one from this framebuffer?\" We answer that by having the render pass have a serial, and the framebuffer tracking its _last_ render pass.\n\nThat comes in handy both with MSAA optim and invalidation.",
+      "parentUuid": "fe343825_dc2d5728",
+      "revId": "3cebb45dab9b4dff5ecc00ec1c400c6d022b542e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
