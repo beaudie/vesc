@@ -7372,9 +7372,10 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
     ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled ||
            !mCurrentEvent.valid());
 
-    if (!mCurrentEvent.valid())
+    if (!mCurrentEvent.valid() || mCurrentDeviceQueueIndex != context->getDeviceQueueIndex())
     {
-        // Fallback to pipelineBarrier if there is no event tracking image.
+        // Fallback to pipelineBarrier if there is no event tracking image, or the VkQueue has
+        // changed.
         barrierType = BarrierType::Pipeline;
     }
 
