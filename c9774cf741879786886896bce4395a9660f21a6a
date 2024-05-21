@@ -149,6 +149,24 @@
       "parentUuid": "ab1405cc_9f3aeb17",
       "revId": "c9774cf741879786886896bce4395a9660f21a6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78eb2eaa_c09c1215",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3795,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-21T01:45:31Z",
+      "side": 1,
+      "message": "Alright.  Its just kind of plopped in there at the end, so easy to lose, but better than printing it repeatedly I suppose.",
+      "parentUuid": "05f9f51e_8dcae817",
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
