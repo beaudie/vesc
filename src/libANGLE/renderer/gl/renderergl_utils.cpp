@@ -1673,12 +1673,14 @@ void GenerateCaps(const FunctionsGL *functions,
         functions->hasGLExtension("GL_NV_framebuffer_mixed_samples") ||
         functions->hasGLESExtension("GL_NV_framebuffer_mixed_samples");
 
+    // TODO: Should robustnessEXT and robustnessKHR be separate in value?
     extensions->robustnessEXT = functions->isAtLeastGL(gl::Version(4, 5)) ||
                                 functions->hasGLExtension("GL_KHR_robustness") ||
                                 functions->hasGLExtension("GL_ARB_robustness") ||
                                 functions->isAtLeastGLES(gl::Version(3, 2)) ||
                                 functions->hasGLESExtension("GL_KHR_robustness") ||
                                 functions->hasGLESExtension("GL_EXT_robustness");
+    extensions->robustnessKHR = extensions->robustnessEXT;
 
     extensions->robustBufferAccessBehaviorKHR =
         extensions->robustnessEXT &&
