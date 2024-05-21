@@ -395,11 +395,6 @@ bool ValidateGetDebugMessageLog(const Context *context,
     return true;
 }
 
-bool ValidateGetGraphicsResetStatus(const Context *context, angle::EntryPoint entryPoint)
-{
-    return true;
-}
-
 bool ValidateGetObjectLabel(const Context *context,
                             angle::EntryPoint entryPoint,
                             GLenum identifier,
@@ -518,6 +513,17 @@ bool ValidateGetTexParameterIuiv(const Context *context,
     return ValidateGetTexParameterBase(context, entryPoint, targetPacked, pname, nullptr);
 }
 
+bool ValidateGetGraphicsResetStatus(const Context *context, angle::EntryPoint entryPoint)
+{
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateGetnUniformfv(const Context *context,
                            angle::EntryPoint entryPoint,
                            ShaderProgramID program,
@@ -525,6 +531,12 @@ bool ValidateGetnUniformfv(const Context *context,
                            GLsizei bufSize,
                            const GLfloat *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return ValidateSizedGetUniform(context, entryPoint, program, location, bufSize, nullptr);
 }
 
@@ -535,6 +547,12 @@ bool ValidateGetnUniformiv(const Context *context,
                            GLsizei bufSize,
                            const GLint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return ValidateSizedGetUniform(context, entryPoint, program, location, bufSize, nullptr);
 }
 
@@ -545,7 +563,40 @@ bool ValidateGetnUniformuiv(const Context *context,
                             GLsizei bufSize,
                             const GLuint *params)
 {
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
     return ValidateSizedGetUniform(context, entryPoint, program, location, bufSize, nullptr);
+}
+
+bool ValidateReadnPixels(const Context *context,
+                         angle::EntryPoint entryPoint,
+                         GLint x,
+                         GLint y,
+                         GLsizei width,
+                         GLsizei height,
+                         GLenum format,
+                         GLenum type,
+                         GLsizei bufSize,
+                         const void *data)
+{
+    if (context->getClientVersion() < ES_3_2)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kES32Required);
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_VALUE, kNegativeBufferSize);
+        return false;
+    }
+
+    return ValidateReadPixelsBase(context, entryPoint, x, y, width, height, format, type, bufSize,
+                                  nullptr, nullptr, nullptr, data);
 }
 
 bool ValidateIsEnabledi(const PrivateState &state,
@@ -634,20 +685,6 @@ bool ValidatePushDebugGroup(const Context *context,
                             const GLchar *message)
 {
     return ValidatePushDebugGroupBase(context, entryPoint, source, id, length, message);
-}
-
-bool ValidateReadnPixels(const Context *context,
-                         angle::EntryPoint entryPoint,
-                         GLint x,
-                         GLint y,
-                         GLsizei width,
-                         GLsizei height,
-                         GLenum format,
-                         GLenum type,
-                         GLsizei bufSize,
-                         const void *data)
-{
-    return true;
 }
 
 bool ValidateSamplerParameterIiv(const Context *context,
