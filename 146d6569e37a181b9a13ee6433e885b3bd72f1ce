@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "870044d9_9b6d80c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-21T18:26:50Z",
+      "side": 1,
+      "message": "Just read Artem\u0027s comment, the fact that there\u0027s a race between reset and the following set is truly horrendous. So basically maybe we should be doing something like this:\n\n- Wait event, associate with Serial N\n- When N is finished, reset event, associate with Serial M\n- When M is finished, event is ready to be picked up from recycler\n\nThat would work without us having to add a pipeline barrier and killing parallelism elsewhere. I think it can be contained if the recycler, upon query for a new event, would take the outside RP commands and reset all its unreset events (with a new state to track this status) before checking to see if any can be recycled. Then the rest (queue serial check) would automatically take care of the rest of the details?",
+      "revId": "146d6569e37a181b9a13ee6433e885b3bd72f1ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
