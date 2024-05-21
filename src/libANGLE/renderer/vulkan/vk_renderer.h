@@ -228,6 +228,10 @@ class Renderer : angle::NonCopyable
     {
         return mQueueFamilyProperties[mCurrentQueueFamilyIndex];
     }
+    const DeviceQueueIndex getDeviceQueueIndex(egl::ContextPriority priority) const
+    {
+        return mCommandQueue.getDeviceQueueIndex(priority);
+    }
 
     const vk::MemoryProperties &getMemoryProperties() const { return mMemoryProperties; }
 
