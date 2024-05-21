@@ -16,6 +16,24 @@
       "message": "Thanks Roman. Adding the link to a timeout instance for future reference: https://ci.chromium.org/ui/p/angle/builders/try/linux-tsan-test/12609/overview.",
       "revId": "0bba8c707efa8a6eeee1e53fda0dec68e73d056e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6680dc4a_7ac3f4d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-21T18:30:31Z",
+      "side": 1,
+      "message": "thanks, copied to description",
+      "parentUuid": "a55e9221_8ad9395d",
+      "revId": "0bba8c707efa8a6eeee1e53fda0dec68e73d056e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
