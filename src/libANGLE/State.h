@@ -1446,43 +1446,6 @@ class State : angle::NonCopyable
     angle::Result syncSamplers(const Context *context, Command command);
     angle::Result syncProgramPipelineObject(const Context *context, Command command);
 
-    using DirtyObjectHandler = angle::Result (State::*)(const Context *context, Command command);
-
-    static constexpr std::array<DirtyObjectHandler, state::DIRTY_OBJECT_MAX> kDirtyObjectHandlers =
-        []() {
-            // Work around C++'s lack of array element support in designated initializers
-            std::array<DirtyObjectHandler, state::DIRTY_OBJECT_MAX> handlers{};
-
-            handlers[state::DIRTY_OBJECT_ACTIVE_TEXTURES]  = &State::syncActiveTextures;
-            handlers[state::DIRTY_OBJECT_TEXTURES_INIT]    = &State::syncTexturesInit;
-            handlers[state::DIRTY_OBJECT_IMAGES_INIT]      = &State::syncImagesInit;
-            handlers[state::DIRTY_OBJECT_READ_ATTACHMENTS] = &State::syncReadAttachments;
-            handlers[state::DIRTY_OBJECT_DRAW_ATTACHMENTS] = &State::syncDrawAttachments;
-            handlers[state::DIRTY_OBJECT_READ_FRAMEBUFFER] = &State::syncReadFramebuffer;
-            handlers[state::DIRTY_OBJECT_DRAW_FRAMEBUFFER] = &State::syncDrawFramebuffer;
-            handlers[state::DIRTY_OBJECT_VERTEX_ARRAY]     = &State::syncVertexArray;
-            handlers[state::DIRTY_OBJECT_TEXTURES]         = &State::syncTextures;
-            handlers[state::DIRTY_OBJECT_IMAGES]           = &State::syncImages;
-            handlers[state::DIRTY_OBJECT_SAMPLERS]         = &State::syncSamplers;
-            handlers[state::DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT] =
-                &State::syncProgramPipelineObject;
-
-            return handlers;
-        }();
-
-    static_assert(
-        []() {
-            for (auto handler : kDirtyObjectHandlers)
-            {
-                if (handler == nullptr)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }(),
-        "kDirtyObjectHandlers missing a handler");
-
     // Robust init must happen before Framebuffer init for the Vulkan back-end.
     static_assert(state::DIRTY_OBJECT_ACTIVE_TEXTURES < state::DIRTY_OBJECT_TEXTURES_INIT,
                   "init order");
@@ -1606,7 +1569,35 @@ ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
 
     for (size_t dirtyObject : dirtyObjects)
     {
-        ANGLE_TRY((this->*kDirtyObjectHandlers[dirtyObject])(context, command));
+        switch (dirtyObject)
+        {
+            case state::DIRTY_OBJECT_ACTIVE_TEXTURES:
+                ANGLE_TRY(syncActiveTextures(context, command));
+            case state::DIRTY_OBJECT_TEXTURES_INIT:
+                ANGLE_TRY(syncTexturesInit(context, command));
+            case state::DIRTY_OBJECT_IMAGES_INIT:
+                ANGLE_TRY(syncImagesInit(context, command));
+            case state::DIRTY_OBJECT_READ_ATTACHMENTS:
+                ANGLE_TRY(syncReadAttachments(context, command));
+            case state::DIRTY_OBJECT_DRAW_ATTACHMENTS:
+                ANGLE_TRY(syncDrawAttachments(context, command));
+            case state::DIRTY_OBJECT_READ_FRAMEBUFFER:
+                ANGLE_TRY(syncReadFramebuffer(context, command));
+            case state::DIRTY_OBJECT_DRAW_FRAMEBUFFER:
+                ANGLE_TRY(syncDrawFramebuffer(context, command));
+            case state::DIRTY_OBJECT_VERTEX_ARRAY:
+                ANGLE_TRY(syncVertexArray(context, command));
+            case state::DIRTY_OBJECT_TEXTURES:
+                ANGLE_TRY(syncTextures(context, command));
+            case state::DIRTY_OBJECT_IMAGES:
+                ANGLE_TRY(syncImages(context, command));
+            case state::DIRTY_OBJECT_SAMPLERS:
+                ANGLE_TRY(syncSamplers(context, command));
+            case state::DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT:
+                ANGLE_TRY(syncProgramPipelineObject(context, command));
+            default:
+                UNREACHABLE();
+        }
     }
 
     mDirtyObjects &= ~dirtyObjects;
