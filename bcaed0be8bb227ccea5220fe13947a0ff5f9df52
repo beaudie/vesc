@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "344dbb7b_2e0313a6",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-22T20:27:39Z",
+      "side": 1,
+      "message": "Do you need templates and foreach? Why not just have a single action, pass it the three libs, and let the script copy all three in one go?\n\n---\n\nEdit: that same script could also copy headers, though not sure why you need headers; the normal GL headers work fine (unless you are going to use an ANGLE extension)",
+      "range": {
+        "startLine": 1855,
+        "startChar": 0,
+        "endLine": 1860,
+        "endChar": 42
+      },
+      "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a697b76d_15c92538",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-22T20:27:39Z",
+      "side": 1,
+      "message": "Probably not a big deal, but I think this should be a `data_deps`",
+      "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
