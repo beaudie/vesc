@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f004bcb_babff560",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 3316531
+      },
+      "writtenOn": "2024-05-22T16:16:27Z",
+      "side": 1,
+      "message": "Migrated, I also added an example for how to use it with pkgconfig tool",
+      "parentUuid": "536667c5_7eca9e9b",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "2c5e513b59d60a81cd50893995a4783c98b0976b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "21e0a5c0_c700a667",
         "filename": "BUILD.gn",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-22T14:54:29Z",
       "side": 1,
       "message": "What makes this a trick?",
+      "range": {
+        "startLine": 1869,
+        "startChar": 0,
+        "endLine": 1869,
+        "endChar": 55
+      },
+      "revId": "2c5e513b59d60a81cd50893995a4783c98b0976b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a49063b_55ce38f4",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 3316531
+      },
+      "writtenOn": "2024-05-22T16:16:27Z",
+      "side": 1,
+      "message": "Mmh, I think this was actually a note for myself as I do not really know how outputs work for actions under the hood. I believe I need you guidance for which value to use here.",
+      "parentUuid": "21e0a5c0_c700a667",
       "range": {
         "startLine": 1869,
         "startChar": 0,
