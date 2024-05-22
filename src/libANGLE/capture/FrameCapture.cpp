@@ -14,6 +14,9 @@
 #include <fstream>
 #include <queue>
 #include <string>
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include <android/log.h>
+#endif
 
 #include "sys/stat.h"
 
@@ -8926,6 +8929,9 @@ void FrameCaptureShared::onEndFrame(gl::Context *context)
         SaveBinaryData(mCompression, mOutDirectory, kSharedContextId, mCaptureLabel, mBinaryData);
         mBinaryData.clear();
         mWroteIndexFile = true;
+#if defined(ANGLE_PLATFORM_ANDROID)
+        __android_log_print(ANDROID_LOG_INFO, "ANGLE", "Finished recording graphics API capture");
+#endif
     }
 
     reset();
