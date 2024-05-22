@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "536667c5_7eca9e9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-22T14:54:29Z",
+      "side": 1,
+      "message": "Can you migrate these to the top of install_target script?  Along with any other prose that can make this helpful for developers in the future. An exampe of the output along with how to use it would be helpful, even if it is obvious. This can serve as documentation.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "2c5e513b59d60a81cd50893995a4783c98b0976b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21e0a5c0_c700a667",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-22T14:54:29Z",
+      "side": 1,
+      "message": "What makes this a trick?",
+      "range": {
+        "startLine": 1869,
+        "startChar": 0,
+        "endLine": 1869,
+        "endChar": 55
+      },
+      "revId": "2c5e513b59d60a81cd50893995a4783c98b0976b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
