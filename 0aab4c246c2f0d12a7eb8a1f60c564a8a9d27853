@@ -1,0 +1,39 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a8f94e1_f5cc1dbb",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-05-22T21:24:10Z",
+      "side": 0,
+      "message": "should we also remove `getQueueFamilyIndex()` from `DeviceQueueMap` ?",
+      "fixSuggestions": [
+        {
+          "fixId": "10d3a674_efefe45e",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+              "range": {
+                "startLine": 338,
+                "startChar": 0,
+                "endLine": 339,
+                "endChar": 0
+              },
+              "replacement": ""
+            }
+          ]
+        }
+      ],
+      "revId": "0aab4c246c2f0d12a7eb8a1f60c564a8a9d27853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
