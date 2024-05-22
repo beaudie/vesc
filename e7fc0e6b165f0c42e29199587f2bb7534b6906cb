@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "206523c0_913f74d1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-22T14:43:19Z",
+      "side": 1,
+      "message": "A comment on what this `index` means would be useful for the future",
+      "revId": "e7fc0e6b165f0c42e29199587f2bb7534b6906cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
