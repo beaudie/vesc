@@ -141,11 +141,17 @@ class DeviceQueueIndex final
         : mFamilyIndex(kInvalidQueueFamilyIndex), mQueueIndex(kInvalidQueueIndex)
     {}
     constexpr DeviceQueueIndex(uint32_t familyIndex)
-        : mFamilyIndex(familyIndex), mQueueIndex(kInvalidQueueIndex)
-    {}
+        : mFamilyIndex((int8_t)familyIndex), mQueueIndex(kInvalidQueueIndex)
+    {
+        ASSERT(static_cast<uint32_t>(mFamilyIndex) == familyIndex);
+    }
     DeviceQueueIndex(uint32_t familyIndex, uint32_t queueIndex)
-        : mFamilyIndex(familyIndex), mQueueIndex(queueIndex)
-    {}
+        : mFamilyIndex((int8_t)familyIndex), mQueueIndex((int8_t)queueIndex)
+    {
+        // Ensure the value we actually don't truncate the useful bits.
+        ASSERT(static_cast<uint32_t>(mFamilyIndex) == familyIndex);
+        ASSERT(static_cast<uint32_t>(mQueueIndex) == queueIndex);
+    }
     DeviceQueueIndex(const DeviceQueueIndex &other) { *this = other; }
 
     DeviceQueueIndex &operator=(const DeviceQueueIndex &other)
@@ -161,16 +167,19 @@ class DeviceQueueIndex final
     bool operator!=(const DeviceQueueIndex &other) const { return mValue != other.mValue; }
 
   private:
-    static constexpr uint32_t kInvalidQueueFamilyIndex = std::numeric_limits<uint32_t>::max();
-    static constexpr uint32_t kInvalidQueueIndex       = std::numeric_limits<uint32_t>::max();
+    static constexpr int8_t kInvalidQueueFamilyIndex = -1;
+    static constexpr int8_t kInvalidQueueIndex       = -1;
+    // The expectation is that these indices are small numbers that could easily fit into int8_t.
+    // int8_t is used instead of uint8_t because we need to handle VK_QUEUE_FAMILY_FOREIGN_EXT and
+    // VK_QUEUE_FAMILY_EXTERNAL properly which are essentially are negative values.
     union
     {
         struct
         {
-            uint32_t mFamilyIndex;
-            uint32_t mQueueIndex;
+            int8_t mFamilyIndex;
+            int8_t mQueueIndex;
         };
-        uint64_t mValue;
+        uint16_t mValue;
     };
 };
 static constexpr DeviceQueueIndex kInvalidDeviceQueueIndex = DeviceQueueIndex();
