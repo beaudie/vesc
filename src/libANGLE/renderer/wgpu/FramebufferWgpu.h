@@ -80,10 +80,16 @@ class FramebufferWgpu : public FramebufferImpl
 
     RenderTargetWgpu *getReadPixelsRenderTarget(const angle::Format &format) const;
 
+    angle::Result startNewRenderPass(
+        std::vector<wgpu::RenderPassColorAttachment> newColorAttachments,
+        ContextWgpu *contextWgpu);
+
   private:
     RenderTargetCache<RenderTargetWgpu> mRenderTargetCache;
     wgpu::RenderPassDescriptor mCurrentRenderPassDesc;
     std::vector<wgpu::RenderPassColorAttachment> mCurrentColorAttachments;
+
+    webgpu::ClearValuesArray mDeferredClears;
 };
 
 }  // namespace rx

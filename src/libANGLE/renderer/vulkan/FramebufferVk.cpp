@@ -265,7 +265,7 @@ vk::FramebufferNonResolveAttachmentMask MakeUnresolveAttachmentMask(const vk::Re
     {
         // This mask only needs to know if the depth/stencil attachment needs to be unresolved, and
         // is agnostic of the aspect.
-        unresolveMask.set(vk::kUnpackedDepthIndex);
+        unresolveMask.set(kUnpackedDepthIndex);
     }
     return unresolveMask;
 }
@@ -791,7 +791,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         {
             VkClearValue dsClearValue = {};
             dsClearValue.depthStencil = clearDepthStencilValue;
-            clears.store(vk::kUnpackedDepthIndex, dsAspectFlags, dsClearValue);
+            clears.store(kUnpackedDepthIndex, dsAspectFlags, dsClearValue);
         }
 
         clearWithCommand(contextVk, scissoredRenderArea, ClearWithCommand::Always, &clears);
@@ -2088,11 +2088,11 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     // Remove deferred clears for the invalidated attachments.
     if (invalidateDepthBuffer)
     {
-        mDeferredClears.reset(vk::kUnpackedDepthIndex);
+        mDeferredClears.reset(kUnpackedDepthIndex);
     }
     if (invalidateStencilBuffer)
     {
-        mDeferredClears.reset(vk::kUnpackedStencilIndex);
+        mDeferredClears.reset(kUnpackedStencilIndex);
     }
     for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
     {
@@ -2344,8 +2344,7 @@ angle::Result FramebufferVk::flushDepthStencilAttachmentUpdates(const gl::Contex
 
     if (deferClears)
     {
-        return depthStencilRT->flushStagedUpdates(contextVk, &mDeferredClears,
-                                                  vk::kUnpackedDepthIndex,
+        return depthStencilRT->flushStagedUpdates(contextVk, &mDeferredClears, kUnpackedDepthIndex,
                                                   mCurrentFramebufferDesc.getLayerCount());
     }
 
@@ -2995,7 +2994,7 @@ void FramebufferVk::mergeClearsWithDeferredClears(
 
     if (dsAspectFlags != 0)
     {
-        mDeferredClears.store(vk::kUnpackedDepthIndex, dsAspectFlags, dsClearValue);
+        mDeferredClears.store(kUnpackedDepthIndex, dsAspectFlags, dsClearValue);
     }
 }
 
@@ -3120,13 +3119,13 @@ void FramebufferVk::restageDeferredClearsImpl(ContextVk *contextVk)
     if (mDeferredClears.testDepth())
     {
         dsAspectFlags |= VK_IMAGE_ASPECT_DEPTH_BIT;
-        mDeferredClears.reset(vk::kUnpackedDepthIndex);
+        mDeferredClears.reset(kUnpackedDepthIndex);
     }
 
     if (mDeferredClears.testStencil())
     {
         dsAspectFlags |= VK_IMAGE_ASPECT_STENCIL_BIT;
-        mDeferredClears.reset(vk::kUnpackedStencilIndex);
+        mDeferredClears.reset(kUnpackedStencilIndex);
     }
 
     // Go through deferred clears and stage the clears for future.
@@ -3211,7 +3210,7 @@ void FramebufferVk::clearWithCommand(ContextVk *contextVk,
         dsAspectFlags |= VK_IMAGE_ASPECT_DEPTH_BIT;
         // Explicitly mark a depth write because we are clearing the depth buffer.
         renderPassCommands->onDepthAccess(vk::ResourceAccess::ReadWrite);
-        clears->reset(vk::kUnpackedDepthIndex);
+        clears->reset(kUnpackedDepthIndex);
         ++contextVk->getPerfCounters().depthClearAttachments;
     }
 
@@ -3223,7 +3222,7 @@ void FramebufferVk::clearWithCommand(ContextVk *contextVk,
         dsAspectFlags |= VK_IMAGE_ASPECT_STENCIL_BIT;
         // Explicitly mark a stencil write because we are clearing the stencil buffer.
         renderPassCommands->onStencilAccess(vk::ResourceAccess::ReadWrite);
-        clears->reset(vk::kUnpackedStencilIndex);
+        clears->reset(kUnpackedStencilIndex);
         ++contextVk->getPerfCounters().stencilClearAttachments;
     }
 
@@ -3293,14 +3292,14 @@ void FramebufferVk::clearWithLoadOp(ContextVk *contextVk)
     {
         ASSERT(!renderPassCommands->hasAnyDepthAccess());
         dsAspects |= VK_IMAGE_ASPECT_DEPTH_BIT;
-        mDeferredClears.reset(vk::kUnpackedDepthIndex);
+        mDeferredClears.reset(kUnpackedDepthIndex);
     }
 
     if (mDeferredClears.testStencil())
     {
         ASSERT(!renderPassCommands->hasAnyStencilAccess());
         dsAspects |= VK_IMAGE_ASPECT_STENCIL_BIT;
-        mDeferredClears.reset(vk::kUnpackedStencilIndex);
+        mDeferredClears.reset(kUnpackedStencilIndex);
     }
 
     if (dsAspects != 0)
@@ -3450,14 +3449,14 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             {
                 depthLoadOp                   = vk::RenderPassLoadOp::Clear;
                 clearValue.depthStencil.depth = mDeferredClears.getDepthValue();
-                mDeferredClears.reset(vk::kUnpackedDepthIndex);
+                mDeferredClears.reset(kUnpackedDepthIndex);
             }
 
             if (mDeferredClears.testStencil())
             {
                 stencilLoadOp                   = vk::RenderPassLoadOp::Clear;
                 clearValue.depthStencil.stencil = mDeferredClears.getStencilValue();
-                mDeferredClears.reset(vk::kUnpackedStencilIndex);
+                mDeferredClears.reset(kUnpackedStencilIndex);
             }
 
             // Note the aspect is only depth here. That's intentional.

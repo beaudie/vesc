@@ -45,12 +45,49 @@ enum class RenderPassClosureReason
     EnumCount = InvalidEnum,
 };
 
+struct ClearValues
+{
+    wgpu::Color clearColor;
+    uint32_t depthSlice;
+};
+
+class ClearValuesArray final
+{
+  public:
+    ClearValuesArray();
+    ~ClearValuesArray();
+
+    ClearValuesArray(const ClearValuesArray &other);
+    ClearValuesArray &operator=(const ClearValuesArray &rhs);
+
+    void store(uint32_t index, ClearValues clearValues);
+    gl::DrawBufferMask getColorMask() const;
+    void reset(size_t index)
+    {
+        mValues[index] = {};
+        mEnabled.reset(index);
+    }
+    const ClearValues &operator[](size_t index) const { return mValues[index]; }
+
+    bool empty() const { return mEnabled.none(); }
+    bool any() const { return mEnabled.any(); }
+
+    bool test(size_t index) const { return mEnabled.test(index); }
+
+  private:
+    gl::AttachmentArray<ClearValues> mValues;
+    gl::AttachmentsMask mEnabled;
+};
+
 void EnsureCapsInitialized(const wgpu::Device &device, gl::Caps *nativeCaps);
 
 ContextWgpu *GetImpl(const gl::Context *context);
 DisplayWgpu *GetDisplay(const gl::Context *context);
 wgpu::Device GetDevice(const gl::Context *context);
 wgpu::Instance GetInstance(const gl::Context *context);
+wgpu::RenderPassColorAttachment CreateNewClearColorAttachment(wgpu::Color clearValue,
+                                                              uint32_t depthSlice,
+                                                              wgpu::TextureView textureView);
 
 bool IsWgpuError(wgpu::WaitStatus waitStatus);
 bool IsWgpuError(WGPUBufferMapAsyncStatus mapBufferStatus);
