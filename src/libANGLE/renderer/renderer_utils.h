@@ -47,6 +47,11 @@ namespace rx
 {
 class ContextImpl;
 
+constexpr size_t kUnpackedDepthIndex   = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+constexpr size_t kUnpackedStencilIndex = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1;
+constexpr uint32_t kUnpackedColorBuffersMask =
+    angle::BitMask<uint32_t>(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS);
+
 // The possible rotations of the surface/draw framebuffer, particularly for the Vulkan back-end on
 // Android.
 enum class SurfaceRotation
