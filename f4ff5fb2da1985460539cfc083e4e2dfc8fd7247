@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdf5739d_f31b9b9a",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-22T21:00:31Z",
+      "side": 1,
+      "message": "Unless you plan on pulling a lot of attachment pack/unpack related stuff out of Vulkan, duplicating these three in wgpu/ is not a bad idea. As it is, this is too specific to how vulkan/ works and doesn\u0027t make sense here.",
+      "revId": "f4ff5fb2da1985460539cfc083e4e2dfc8fd7247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3627739b_372452d3",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-22T21:00:31Z",
+      "side": 1,
+      "message": "nit: reset the entire thing once after the loop",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 52
+      },
+      "revId": "f4ff5fb2da1985460539cfc083e4e2dfc8fd7247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "803c3677_b06d12a0",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-22T21:00:31Z",
+      "side": 1,
+      "message": "`startNewRenderPass` shouldn\u0027t also end the render pass 😄\n\nFine for now, but this makes the rest of the code checking for a render pass being open or not goes meaningless",
+      "range": {
+        "startLine": 372,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 36
+      },
+      "revId": "f4ff5fb2da1985460539cfc083e4e2dfc8fd7247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8f6263c_f2089b72",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-22T21:00:31Z",
+      "side": 1,
+      "message": "Please either don\u0027t leave TODOs, or associate them with a bug: `http://anglebug.com/NNNNNNN`. In our experience, it always becomes confusing in the future as the context for the TODO is often lost.",
+      "revId": "f4ff5fb2da1985460539cfc083e4e2dfc8fd7247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
