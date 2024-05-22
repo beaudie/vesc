@@ -16,7 +16,6 @@
 #include "libANGLE/Surface.h"
 #include "libANGLE/Thread.h"
 #include "libANGLE/histogram_macros.h"
-#include "libANGLE/renderer/d3d/DeviceD3D.h"
 #include "libANGLE/renderer/d3d/EGLImageD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/SurfaceD3D.h"

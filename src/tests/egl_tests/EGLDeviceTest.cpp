@@ -357,11 +357,13 @@ class EGLDeviceQueryTest : public ANGLETest<>
         EGLAttrib angleDevice = 0;
         EXPECT_EGL_TRUE(
             eglQueryDisplayAttribEXT(getEGLWindow()->getDisplay(), EGL_DEVICE_EXT, &angleDevice));
-        extensionString = static_cast<const char *>(
-            eglQueryDeviceStringEXT(reinterpret_cast<EGLDeviceEXT>(angleDevice), EGL_EXTENSIONS));
-        if (strstr(extensionString, "EGL_ANGLE_device_d3d") == nullptr)
+        if (!IsEGLDeviceExtensionEnabled(reinterpret_cast<EGLDeviceEXT>(angleDevice),
+                                         "EGL_ANGLE_device_d3d9") &&
+            !IsEGLDeviceExtensionEnabled(reinterpret_cast<EGLDeviceEXT>(angleDevice),
+                                         "EGL_ANGLE_device_d3d11"))
         {
-            FAIL() << "ANGLE extension EGL_ANGLE_device_d3d was not found";
+            FAIL() << "ANGLE extensions EGL_ANGLE_device_d3d9 or EGL_ANGLE_device_d3d11 were not "
+                      "found";
         }
     }
 };
@@ -374,7 +376,8 @@ TEST_P(EGLDeviceQueryTest, QueryDevice)
 {
     EGLAttrib device      = 0;
     EGLAttrib angleDevice = 0;
-    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
+    if (IsEGLDeviceExtensionEnabled(reinterpret_cast<EGLDeviceEXT>(angleDevice),
+                                    "EGL_ANGLE_device_d3d11"))
     {
         EXPECT_EGL_TRUE(
             eglQueryDisplayAttribEXT(getEGLWindow()->getDisplay(), EGL_DEVICE_EXT, &angleDevice));
@@ -386,7 +389,8 @@ TEST_P(EGLDeviceQueryTest, QueryDevice)
         SafeRelease(dxgiDevice);
     }
 
-    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE)
+    if (IsEGLDeviceExtensionEnabled(reinterpret_cast<EGLDeviceEXT>(angleDevice),
+                                    "EGL_ANGLE_device_d3d9"))
     {
         EXPECT_EGL_TRUE(
             eglQueryDisplayAttribEXT(getEGLWindow()->getDisplay(), EGL_DEVICE_EXT, &angleDevice));
@@ -408,7 +412,8 @@ TEST_P(EGLDeviceQueryTest, QueryDeviceBadAttribute)
 {
     EGLAttrib device      = 0;
     EGLAttrib angleDevice = 0;
-    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
+    if (IsEGLDeviceExtensionEnabled(reinterpret_cast<EGLDeviceEXT>(angleDevice),
+                                    "EGL_ANGLE_device_d3d11"))
     {
         EXPECT_EGL_TRUE(
             eglQueryDisplayAttribEXT(getEGLWindow()->getDisplay(), EGL_DEVICE_EXT, &angleDevice));
@@ -416,7 +421,8 @@ TEST_P(EGLDeviceQueryTest, QueryDeviceBadAttribute)
                                                  EGL_D3D9_DEVICE_ANGLE, &device));
     }
 
-    if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE)
+    if (IsEGLDeviceExtensionEnabled(reinterpret_cast<EGLDeviceEXT>(angleDevice),
+                                    "EGL_ANGLE_device_d3d9"))
     {
         EXPECT_EGL_TRUE(
             eglQueryDisplayAttribEXT(getEGLWindow()->getDisplay(), EGL_DEVICE_EXT, &angleDevice));
