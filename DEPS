@@ -939,12 +939,12 @@ deps = {
   },
 
   'third_party/vulkan-deps': {
-    'url': Var('chromium_git') + '/vulkan-deps@2957dc1863e387da16264d89aa2dac2ad1d9860f',
+    'url': Var('chromium_git') + '/vulkan-deps@390e425450efc05dbce865c342483874fc93345d',
     'condition': 'not build_with_chromium',
   },
 
   'third_party/glslang/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/glslang@541733a66b1cf4465559c78a8bd857606ac76123',
+    'url': '{chromium_git}/external/github.com/KhronosGroup/glslang@af0641aa09f2e63da2423fd652d2cd57497c5b48',
     'condition': 'not build_with_chromium',
   },
 
@@ -959,7 +959,7 @@ deps = {
   },
 
   'third_party/spirv-tools/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/SPIRV-Tools@199038f10cbe56bf7cbfeb5472eb0a25af2f09f5',
+    'url': '{chromium_git}/external/github.com/KhronosGroup/SPIRV-Tools@ccf3e3c1035189bbb50793d1e249a2c0ba3388a3',
     'condition': 'not build_with_chromium',
   },
 
@@ -969,22 +969,22 @@ deps = {
   },
 
   'third_party/vulkan-loader/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Loader@a1a73779649c0bfdaba6b856f7c9c96be6fc75cb',
+    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Loader@455976ed9f85ca74f3842f6a1a4fbd5a159a8908',
     'condition': 'not build_with_chromium',
   },
 
   'third_party/vulkan-tools/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Tools@137b3612d62f1c92da16537e5497a60fcf13b6dc',
+    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Tools@d67a9d3a394e11c1c4c0f480124f5b7925cb1b4d',
     'condition': 'not build_with_chromium',
   },
 
   'third_party/vulkan-utility-libraries/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Utility-Libraries@777358fdad21132866be4a835327fbc28eabc1a4',
+    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Utility-Libraries@810074ebb68dfec81dee79f279b78f88d6c5c24f',
     'condition': 'not build_with_chromium',
   },
 
   'third_party/vulkan-validation-layers/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-ValidationLayers@dcc6123bf5b1b5746b52fc38aa8b8336cc4c1535',
+    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-ValidationLayers@7f5f14c1b138f657c668db11497d9e89e1006337',
     'condition': 'not build_with_chromium',
   },
 
