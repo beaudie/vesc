@@ -160,8 +160,8 @@ class DeviceQueueIndex final
         return *this;
     }
 
-    uint32_t familyIndex() const { return mFamilyIndex; }
-    uint32_t queueIndex() const { return mQueueIndex; }
+    constexpr uint32_t familyIndex() const { return mFamilyIndex; }
+    constexpr uint32_t queueIndex() const { return mQueueIndex; }
 
     bool operator==(const DeviceQueueIndex &other) const { return mValue == other.mValue; }
     bool operator!=(const DeviceQueueIndex &other) const { return mValue != other.mValue; }
@@ -187,6 +187,9 @@ static constexpr DeviceQueueIndex kForeignDeviceQueueIndex =
     DeviceQueueIndex(VK_QUEUE_FAMILY_FOREIGN_EXT);
 static constexpr DeviceQueueIndex kExternalDeviceQueueIndex =
     DeviceQueueIndex(VK_QUEUE_FAMILY_EXTERNAL);
+static_assert(kForeignDeviceQueueIndex.familyIndex() == VK_QUEUE_FAMILY_FOREIGN_EXT);
+static_assert(kExternalDeviceQueueIndex.familyIndex() == VK_QUEUE_FAMILY_EXTERNAL);
+static_assert(kInvalidDeviceQueueIndex.familyIndex() == VK_QUEUE_FAMILY_IGNORED);
 
 // A packed attachment index interface with vulkan API
 class PackedAttachmentIndex final
