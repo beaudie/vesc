@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb269ae8_dcea56f7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-22T20:50:02Z",
+      "side": 1,
+      "message": "Protected or not only affects the queueSubmit, it still goes into the same VkQueue. Only priority matters for which queue to submit (for now).",
+      "parentUuid": "f6fe44e4_de6dab13",
+      "revId": "c003b687ffb9f1188eeb21a52654b8b5348ab118",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d235c6a_702fe949",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd7a31c8_54874876",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-22T20:50:02Z",
+      "side": 1,
+      "message": "Will address in the follow up CL.",
+      "parentUuid": "8d235c6a_702fe949",
+      "range": {
+        "startLine": 147,
+        "startChar": 43,
+        "endLine": 147,
+        "endChar": 67
+      },
+      "revId": "c003b687ffb9f1188eeb21a52654b8b5348ab118",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5236ece3_52791108",
@@ -54,6 +96,24 @@
       "writtenOn": "2024-05-22T20:14:18Z",
       "side": 1,
       "message": "Ah I see foreign and external are -2 and -1, is that why you needed sign extend?\n\nIf we have special and small values for these queue families, we still don\u0027t really need an if everywhere right? Just some when we do queue family layout transitions.\n\nEven there, given that `mFamilyIndex` is practically always 0, and otherwise fits in 2 bits, we could even make `mFamilyIndex` take, say, 4 bits, have foreign/external be 13 and 14 (with invalid being 15), and have a fixed array to map it to the Vulkan value instead.\n\n(idea for your follow up change)",
+      "revId": "c003b687ffb9f1188eeb21a52654b8b5348ab118",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08edc684_ac0aeb7b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-22T20:50:02Z",
+      "side": 1,
+      "message": "Right. In the follow up CL https://chromium-review.googlesource.com/c/angle/angle/+/5560510  I changed to two int8_t.",
+      "parentUuid": "5236ece3_52791108",
       "revId": "c003b687ffb9f1188eeb21a52654b8b5348ab118",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
