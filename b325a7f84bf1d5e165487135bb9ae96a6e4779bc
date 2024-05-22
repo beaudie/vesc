@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "792ec0cf_ea711814",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-05-22T21:41:34Z",
+      "side": 1,
+      "message": "typo: `bny default` --\u003e `by default`",
+      "revId": "b325a7f84bf1d5e165487135bb9ae96a6e4779bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62743be5_a9235c4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5128,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-05-22T21:41:34Z",
+      "side": 1,
+      "message": "Do we want to initialize `mCurrentDeviceQueueIndex` to `kInvalidDeviceQueueIndex` in the constructor?",
+      "fixSuggestions": [
+        {
+          "fixId": "d83ea241_2f0f9165",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+              "range": {
+                "startLine": 5129,
+                "startChar": 0,
+                "endLine": 5135,
+                "endChar": 0
+              },
+              "replacement": "       mCurrentReadAccess(0),\n       mCurrentWriteStages(0),\n       mCurrentReadStages(0),\n       mSerial(),\n       mClientBuffer(nullptr),\n       mIsReleasedToExternal(false)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "b325a7f84bf1d5e165487135bb9ae96a6e4779bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2227489e_41d299d7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7085,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-05-22T21:41:34Z",
+      "side": 1,
+      "message": "`rendererDeviceQueueIndex` doesn\u0027t seem to be used in this function. Should we remove it from the parameters?",
+      "revId": "b325a7f84bf1d5e165487135bb9ae96a6e4779bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
