@@ -44,6 +44,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ed0c497_49eb2f53",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-22T22:37:31Z",
+      "side": 1,
+      "message": "Actually, the spec does not specifically mention `GL_KHR_robustness` itself as a new feature, but rather states this:\n*- Enabling robust buffer access as described in GL_KHR_robustness (preventing crashes), but without the additional behavior defined by GL\\_KHR\\_robust\\_buffer\\_access*\n\"Enabling robust buffer access\" for `GL_KHR_robustness` looks similar to what `GL_EXT_robustness` does for ES contexts. They only differ slightly for GL contexts.",
+      "parentUuid": "c254509d_364b9135",
+      "range": {
+        "startLine": 264,
+        "startChar": 25,
+        "endLine": 264,
+        "endChar": 38
+      },
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3fa7ce4a_6b2f62ac",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 9
