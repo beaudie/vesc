@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f2c7fa_13a1080b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-22T22:40:09Z",
+      "side": 1,
+      "message": "Updated the commit message.",
+      "parentUuid": "5de45b37_356a07fa",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "9bcb2973491ab952639c4630c6bff1a44983859d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08cf3da7_d969bc27",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-22T19:57:51Z",
       "side": 1,
       "message": "This appears to be unique to the KHR version too.",
+      "range": {
+        "startLine": 919,
+        "startChar": 4,
+        "endLine": 919,
+        "endChar": 23
+      },
+      "revId": "9bcb2973491ab952639c4630c6bff1a44983859d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a5fa8e9_ec8a475f",
+        "filename": "src/common/entry_points_enum_autogen.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-22T22:40:09Z",
+      "side": 1,
+      "message": "Added to the commit message.",
+      "parentUuid": "08cf3da7_d969bc27",
       "range": {
         "startLine": 919,
         "startChar": 4,
