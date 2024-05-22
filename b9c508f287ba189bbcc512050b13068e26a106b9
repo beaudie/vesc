@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aae9f932_310c8501",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1683,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-22T01:47:51Z",
+      "side": 1,
+      "message": "Probably should be\n\n```suggestion\n    extensions-\u003erobustnessKHR \u003d functions-\u003eisAtLeastGL(gl::Version(4, 5)) ||\n                                functions-\u003ehasGLExtension(\"GL_KHR_robustness\") ||\n                                functions-\u003ehasGLExtension(\"GL_ARB_robustness\") ||\n                                functions-\u003eisAtLeastGLES(gl::Version(3, 2)) ||\n                                functions-\u003ehasGLESExtension(\"GL_KHR_robustness\");\n```\n\n(maybe even without GL_ARB_robustness, don\u0027t know about the desktop GL ones). You need to check the spec for those other extensions and see which ones match the GLES GL_KHR_robustness.\n\n\u003e Should KHR make sure the GLES version is not 1.1?\n\nThe GLES driver should already not expose the ext for GLES 1",
+      "parentUuid": "667ee9b4_9fc2fb85",
+      "range": {
+        "startLine": 1683,
+        "startChar": 4,
+        "endLine": 1683,
+        "endChar": 58
+      },
+      "revId": "b9c508f287ba189bbcc512050b13068e26a106b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e59f77c0_c79bb177",
         "filename": "src/libANGLE/validationESEXT.cpp",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-21T22:12:17Z",
       "side": 1,
       "message": "From the spec:\n\n*\"NOTE: when implemented in an OpenGL ES context, all entry points defined by this extension must have a \"KHR\" suffix. When implemented in an OpenGL context, all entry points must have NO suffix, as shown below.\"*\n\nDoes this mean that GLES should produce an error if the no-suffix version is called? And GL for the KHR suffix?",
+      "range": {
+        "startLine": 679,
+        "startChar": 5,
+        "endLine": 679,
+        "endChar": 38
+      },
+      "revId": "b9c508f287ba189bbcc512050b13068e26a106b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6f9832a_cf514e54",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-22T01:47:51Z",
+      "side": 1,
+      "message": "No need to worry about desktop GL. For GLES, the no-suffix one would be the one that\u0027s promoted to ES3.2, no?",
+      "parentUuid": "e59f77c0_c79bb177",
       "range": {
         "startLine": 679,
         "startChar": 5,
