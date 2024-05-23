@@ -109,28 +109,79 @@ angle::Result FramebufferWgpu::clear(const gl::Context *context, GLbitfield mask
     // TODO(anglebug.com/8582): support clearing depth and stencil buffers.
     ASSERT(!clearDepth && !clearStencil && clearColor);
 
-    ContextWgpu *contextWgpu   = GetImplAs<ContextWgpu>(context);
-    gl::ColorF colorClearValue = context->getState().getColorClearValue();
-
+    ContextWgpu *contextWgpu             = GetImplAs<ContextWgpu>(context);
+    gl::ColorF colorClearValue           = context->getState().getColorClearValue();
+    gl::DrawBufferMask clearColorBuffers = mState.getEnabledDrawBuffers();
+    wgpu::Color clearValue;
+    clearValue.r = colorClearValue.red;
+    clearValue.g = colorClearValue.green;
+    clearValue.b = colorClearValue.blue;
+    clearValue.a = colorClearValue.alpha;
     std::vector<wgpu::RenderPassColorAttachment> colorAttachments;
-    for (size_t enabledDrawBuffer : mState.getEnabledDrawBuffers())
+    for (size_t enabledDrawBuffer : clearColorBuffers)
     {
-        wgpu::RenderPassColorAttachment colorAttachment;
-        colorAttachment.view =
-            mRenderTargetCache.getColorDraw(mState, enabledDrawBuffer)->getTexture();
-        colorAttachment.depthSlice   = wgpu::kDepthSliceUndefined;
-        colorAttachment.loadOp       = wgpu::LoadOp::Clear;
-        colorAttachment.storeOp      = wgpu::StoreOp::Store;
-        colorAttachment.clearValue.r = colorClearValue.red;
-        colorAttachment.clearValue.g = colorClearValue.green;
-        colorAttachment.clearValue.b = colorClearValue.blue;
-        colorAttachment.clearValue.a = colorClearValue.alpha;
-        colorAttachments.push_back(colorAttachment);
+        colorAttachments.push_back(webgpu::CreateNewClearColorAttachment(
+            clearValue, wgpu::kDepthSliceUndefined,
+            mRenderTargetCache.getColorDraw(mState, enabledDrawBuffer)->getTexture()));
     }
 
     // Attempt to end a render pass if one has already been started.
     ANGLE_UNUSED_VARIABLE(CompareDepthStencilRenderPassAttachments);
-    if (!CompareColorRenderPassAttachmentVectors(mCurrentColorAttachments, colorAttachments))
+
+    bool isActiveRenderPass =
+        !CompareColorRenderPassAttachmentVectors(mCurrentColorAttachments, colorAttachments) ||
+        contextWgpu->hasActiveRenderPass();
+
+    // If there is not currently an active render pass, merge clears with the deferred clears. This
+    // is to keep the clear paths simpler so they only need to consider the current or the deferred
+    // clears.
+    if (!isActiveRenderPass)
+    {
+        for (size_t enabledDrawBuffer : clearColorBuffers)
+        {
+            mDeferredClears.store(static_cast<uint32_t>(enabledDrawBuffer),
+                                  {clearValue, wgpu::kDepthSliceUndefined});
+        }
+    }
+
+    if (mDeferredClears.any())
+    {
+        if (isActiveRenderPass)
+        {
+            ANGLE_TRY(contextWgpu->endRenderPass(webgpu::RenderPassClosureReason::NewRenderPass));
+            mCurrentColorAttachments.clear();
+            for (size_t colorIndexGL : mState.getColorAttachmentsMask())
+            {
+                if (!mDeferredClears.test(colorIndexGL))
+                {
+                    continue;
+                }
+                mCurrentColorAttachments.push_back(webgpu::CreateNewClearColorAttachment(
+                    clearValue, wgpu::kDepthSliceUndefined,
+                    mRenderTargetCache.getColorDraw(mState, colorIndexGL)->getTexture()));
+            }
+            mCurrentRenderPassDesc.colorAttachmentCount = mCurrentColorAttachments.size();
+            mCurrentRenderPassDesc.colorAttachments     = mCurrentColorAttachments.data();
+            ANGLE_TRY(contextWgpu->startRenderPass(mCurrentRenderPassDesc));
+            ANGLE_TRY(contextWgpu->endRenderPass(webgpu::RenderPassClosureReason::NewRenderPass));
+            ANGLE_TRY(contextWgpu->flush());
+        }
+        else
+        {
+            for (size_t colorIndexGL : mDeferredClears.getColorMask())
+            {
+                RenderTargetWgpu *renderTarget =
+                    mRenderTargetCache.getColorDraw(mState, colorIndexGL);
+                renderTarget->getImage()->stageClear(
+                    renderTarget->getImage()->toGlLevel(renderTarget->getLevelIndex()),
+                    mDeferredClears[colorIndexGL]);
+            }
+            mDeferredClears.reset();
+        }
+        return angle::Result::Continue;
+    }
+
+    if (isActiveRenderPass)
     {
         ANGLE_TRY(contextWgpu->endRenderPass(webgpu::RenderPassClosureReason::NewRenderPass));
 
@@ -308,6 +359,22 @@ RenderTargetWgpu *FramebufferWgpu::getReadPixelsRenderTarget(const angle::Format
         return mRenderTargetCache.getDepthStencil();
     }
     return mRenderTargetCache.getColorRead(mState);
+}
+
+angle::Result FramebufferWgpu::startNewRenderPass(
+    std::vector<wgpu::RenderPassColorAttachment> newColorAttachments,
+    ContextWgpu *contextWgpu)
+{
+    // Flush out a render pass if there is an active one.
+    ANGLE_TRY(contextWgpu->endRenderPass(webgpu::RenderPassClosureReason::NewRenderPass));
+    ANGLE_TRY(contextWgpu->flush());
+
+    mCurrentColorAttachments                    = newColorAttachments;
+    mCurrentRenderPassDesc.colorAttachmentCount = mCurrentColorAttachments.size();
+    mCurrentRenderPassDesc.colorAttachments     = mCurrentColorAttachments.data();
+    ANGLE_TRY(contextWgpu->startRenderPass(mCurrentRenderPassDesc));
+
+    return angle::Result::Continue;
 }
 
 }  // namespace rx
