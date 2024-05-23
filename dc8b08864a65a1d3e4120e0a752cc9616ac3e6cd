@@ -63,6 +63,54 @@
       },
       "revId": "dc8b08864a65a1d3e4120e0a752cc9616ac3e6cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0fc2d6a_f02a8c22",
+        "filename": "src/common/spirv/spirv_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-23T18:06:09Z",
+      "side": 1,
+      "message": "You can find the format in the spec: https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html#_physical_layout_of_a_spir_v_module_and_instruction\n\nIt\u0027s 4 bytes, the middle two are major and minor.\n\n\u003e  It seems to be 4 bits major, 2 bits minor, and 2 bits patch/filler?\n\n_Almost_, except s/bits/nibbles (https://en.wikipedia.org/wiki/Nibble)",
+      "parentUuid": "88e2f7b3_46ebea79",
+      "range": {
+        "startLine": 129,
+        "startChar": 34,
+        "endLine": 129,
+        "endChar": 44
+      },
+      "revId": "dc8b08864a65a1d3e4120e0a752cc9616ac3e6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f17a760_36db2a67",
+        "filename": "src/common/spirv/spirv_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-23T18:06:09Z",
+      "side": 1,
+      "message": "It\u0027s in `namespace spirv` already.",
+      "parentUuid": "c34a75e1_8523e9c5",
+      "range": {
+        "startLine": 129,
+        "startChar": 19,
+        "endLine": 129,
+        "endChar": 31
+      },
+      "revId": "dc8b08864a65a1d3e4120e0a752cc9616ac3e6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
