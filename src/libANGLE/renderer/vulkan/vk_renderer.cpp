@@ -5534,6 +5534,8 @@ void Renderer::cleanupGarbage()
     // Note: do this after clean up mSuballocationGarbageList so that we will have more chances to
     // find orphaned blocks being empty.
     mOrphanedBufferBlockList.pruneEmptyBufferBlocks(this);
+    // Clean up RefCountedEvent that are done resetting
+    mRefCountedEventRecycler.cleanupResettingEvents(this);
 }
 
 void Renderer::cleanupPendingSubmissionGarbage()

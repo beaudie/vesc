@@ -21,12 +21,7 @@ bool RefCountedEvent::init(Context *context, ImageLayout layout)
     ASSERT(layout != ImageLayout::Undefined);
 
     // First try with recycler. We must issue VkCmdResetEvent before VkCmdSetEvent
-    if (context->getRefCountedEventsGarbageRecycler()->fetch(this) ||
-        context->getRenderer()->getRefCountedEventRecycler()->fetch(this))
-    {
-        mHandle->get().needsReset = true;
-    }
-    else
+    if (!context->getRenderer()->getRefCountedEventRecycler()->fetch(this))
     {
         // If failed to fetch from recycler, then create a new event.
         mHandle                      = new RefCounted<EventAndLayout>;
@@ -55,7 +50,6 @@ bool RefCountedEvent::init(Context *context, ImageLayout layout)
                 return false;
             }
         }
-        mHandle->get().needsReset = false;
     }
 
     mHandle->addRef();
@@ -95,9 +89,7 @@ void RefCountedEvent::releaseImpl(Renderer *renderer, RecyclerT *recycler)
         // collector should have one reference count and will never release that reference count
         // until GPU finished.
         ASSERT(recycler != nullptr);
-        // TODO: Disable recycler and immediately destroy the event for now until I figure out
-        // SYNC-vkCmdSetEvent-missingbarrier-reset.
-        destroy(renderer->getDevice());
+        recycler->emplace_back(std::move(*this));
         ASSERT(mHandle == nullptr);
     }
     else
@@ -114,9 +106,58 @@ void RefCountedEvent::destroy(VkDevice device)
     SafeDelete(mHandle);
 }
 
+// RefCountedEventCollector implementation.
+void RefCountedEventCollector::resetEvents(Context *context, PrimaryCommandBuffer *primaryCommands)
+{
+    for (RefCountedEvent &refCountedEvent : mEvents)
+    {
+        VkPipelineStageFlags stageMask = GetRefCountedEventStageMask(context, refCountedEvent);
+        primaryCommands->resetEvent(refCountedEvent.getEvent().getHandle(), stageMask);
+    }
+}
+
+// RefCountedEventRecycler implementation.
+void RefCountedEventRecycler::flushResetEvents(Context *context,
+                                               const QueueSerial &queueSerial,
+                                               PrimaryCommandBuffer *primaryCommands)
+{
+    RefCountedEventCollector *eventsToReset = nullptr;
+
+    {
+        std::lock_guard<angle::SimpleMutex> lock(mMutex);
+        if (!mReleasedStack.empty())
+        {
+            mResettingQueue.emplace(queueSerial, std::move(mReleasedStack));
+            eventsToReset = &mResettingQueue.back().mRefCountedEvents;
+        }
+    }
+
+    if (eventsToReset != nullptr)
+    {
+        eventsToReset->resetEvents(context, primaryCommands);
+    }
+}
+
+void RefCountedEventRecycler::cleanupResettingEvents(Renderer *renderer)
+{
+    std::lock_guard<angle::SimpleMutex> lock(mMutex);
+    while (!mResettingQueue.empty())
+    {
+        bool released = mResettingQueue.front().releaseIfComplete(renderer, &mResetStack);
+        if (released)
+        {
+            mResettingQueue.pop();
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+
 // RefCountedEventsGarbage implementation.
 bool RefCountedEventsGarbage::releaseIfComplete(Renderer *renderer,
-                                                RefCountedEventsGarbageRecycler *recycler)
+                                                RefCountedEventCollector *collector)
 {
     if (!renderer->hasQueueSerialFinished(mQueueSerial))
     {
@@ -126,7 +167,7 @@ bool RefCountedEventsGarbage::releaseIfComplete(Renderer *renderer,
     while (!mRefCountedEvents.empty())
     {
         ASSERT(mRefCountedEvents.back().valid());
-        mRefCountedEvents.back().releaseImpl(renderer, recycler);
+        mRefCountedEvents.back().releaseImpl(renderer, collector);
         ASSERT(!mRefCountedEvents.back().valid());
         mRefCountedEvents.pop_back();
     }
@@ -147,7 +188,7 @@ void RefCountedEventsGarbage::destroy(Renderer *renderer)
 // RefCountedEventsGarbageRecycler implementation.
 RefCountedEventsGarbageRecycler::~RefCountedEventsGarbageRecycler()
 {
-    ASSERT(mFreeStack.empty());
+    ASSERT(mReleasedStack.empty());
     ASSERT(mGarbageQueue.empty());
 }
 
@@ -159,7 +200,7 @@ void RefCountedEventsGarbageRecycler::destroy(Renderer *renderer)
         mGarbageQueue.pop();
     }
 
-    mFreeStack.destroy(renderer->getDevice());
+    mReleasedStack.destroy(renderer->getDevice());
 }
 
 void RefCountedEventsGarbageRecycler::cleanup(Renderer *renderer)
@@ -167,12 +208,13 @@ void RefCountedEventsGarbageRecycler::cleanup(Renderer *renderer)
     // Destroy free stack first. The garbage clean up process will add more events to the free
     // stack. If everything is stable between each frame, grabage should release enough events to
     // recycler for next frame's needs.
-    mFreeStack.destroy(renderer->getDevice());
+    mReleasedStack.destroy(renderer->getDevice());
 
+    RefCountedEventCollector eventsPendingReset;
     while (!mGarbageQueue.empty())
     {
         size_t count  = mGarbageQueue.front().size();
-        bool released = mGarbageQueue.front().releaseIfComplete(renderer, this);
+        bool released = mGarbageQueue.front().releaseIfComplete(renderer, &eventsPendingReset);
         if (released)
         {
             mGarbageCount -= count;
@@ -183,18 +225,12 @@ void RefCountedEventsGarbageRecycler::cleanup(Renderer *renderer)
             break;
         }
     }
-}
 
-bool RefCountedEventsGarbageRecycler::fetch(RefCountedEvent *outObject)
-{
-    if (!mFreeStack.empty())
+    if (!eventsPendingReset.empty())
     {
-        mFreeStack.fetch(outObject);
-        ASSERT(outObject->valid());
-        ASSERT(!outObject->mHandle->isReferenced());
-        return true;
+        renderer->getRefCountedEventRecycler()->insert(std::move(eventsPendingReset));
+        ASSERT(eventsPendingReset.empty());
     }
-    return false;
 }
 
 // EventBarrier implementation.

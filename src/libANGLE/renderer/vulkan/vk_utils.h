@@ -960,6 +960,13 @@ class Recycler final : angle::NonCopyable
         mObjectFreeList.emplace_back(std::move(garbageObject));
     }
 
+    void insert(Recycler<T> &&other)
+    {
+        mObjectFreeList.insert(mObjectFreeList.end(), other.mObjectFreeList.begin(),
+                               other.mObjectFreeList.end());
+        ASSERT(other.empty());
+    }
+
     void fetch(T *outObject)
     {
         ASSERT(!empty());
