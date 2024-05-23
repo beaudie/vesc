@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4456d27_beab13d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-23T16:20:55Z",
+      "side": 1,
+      "message": "PS2 does exact this, but msvc complains. That is why I changed to this. https://ci.chromium.org/ui/p/angle/builders/try/win-msvc-compile/18123/overview",
+      "parentUuid": "5f33ed8d_fb284964",
+      "revId": "3a1fe275041ab1859645fdb02991f21f32518ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82455f88_9d97d3c6",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 5
