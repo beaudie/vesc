@@ -46,7 +46,6 @@ struct EventAndLayout
     bool valid() const { return event.valid(); }
     Event event;
     ImageLayout imageLayout;
-    bool needsReset;
 };
 
 // The VkCmdSetEvent is called after VkCmdEndRenderPass and all images that used at the given
@@ -128,12 +127,6 @@ class RefCountedEvent final
         return mHandle->get().imageLayout;
     }
 
-    bool needsReset() const
-    {
-        ASSERT(valid());
-        return mHandle->get().needsReset;
-    }
-
   private:
     // Release one reference count to the underline Event object and destroy or recycle the handle
     // to the provided recycler if this is the very last reference.
@@ -185,7 +178,7 @@ class RefCountedEventsGarbage final
     // Check the queue serial and release the events to context if GPU finished. Note that release
     // to context may end up recycle the object instead of destroy. Returns true if it is GPU
     // finished.
-    bool releaseIfComplete(Renderer *renderer, RefCountedEventsGarbageRecycler *recycler);
+    bool releaseIfComplete(Renderer *renderer, Recycler<RefCountedEvent> *recycler);
 
     // Move event to the garbage list
     void add(RefCountedEvent &&event) { mRefCountedEvents.emplace_back(std::move(event)); }
@@ -226,7 +219,14 @@ class RefCountedEventRecycler final
         ASSERT(garbageObject.valid());
         ASSERT(!garbageObject.mHandle->isReferenced());
         std::lock_guard<angle::SimpleMutex> lock(mMutex);
-        mFreeStack.recycle(std::move(garbageObject));
+        mReleasedStack.recycle(std::move(garbageObject));
+    }
+
+    void insert(Recycler<RefCountedEvent> &&recycler)
+    {
+        ASSERT(!recycler.empty());
+        std::lock_guard<angle::SimpleMutex> lock(mMutex);
+        mReleasedStack.insert(std::move(recycler));
     }
 
     void releaseOrRecycle(Renderer *renderer, RefCountedEventCollector &&eventCollector)
@@ -236,7 +236,7 @@ class RefCountedEventRecycler final
         std::lock_guard<angle::SimpleMutex> lock(mMutex);
         while (!eventCollector.empty())
         {
-            eventCollector.back().releaseImpl(renderer, &mFreeStack);
+            eventCollector.back().releaseImpl(renderer, &mReleasedStack);
             eventCollector.pop_back();
         }
     }
@@ -244,11 +244,11 @@ class RefCountedEventRecycler final
     bool fetch(RefCountedEvent *outObject)
     {
         std::lock_guard<angle::SimpleMutex> lock(mMutex);
-        if (mFreeStack.empty())
+        if (mResetStack.empty())
         {
             return false;
         }
-        mFreeStack.fetch(outObject);
+        mResetStack.fetch(outObject);
         ASSERT(outObject->valid());
         ASSERT(!outObject->mHandle->isReferenced());
         return true;
@@ -257,12 +257,25 @@ class RefCountedEventRecycler final
     void destroy(VkDevice device)
     {
         std::lock_guard<angle::SimpleMutex> lock(mMutex);
-        mFreeStack.destroy(device);
+        mReleasedStack.destroy(device);
+        ASSERT(mResettingQueue.empty());
+        mResetStack.destroy(device);
     }
+
+    void flushResetEvents(Context *context,
+                          const QueueSerial &queueSerial,
+                          PrimaryCommandBuffer *primaryCommands);
+
+    void cleanupResettingEvents(Renderer *renderer);
 
   private:
     angle::SimpleMutex mMutex;
-    Recycler<RefCountedEvent> mFreeStack;
+    // RefCountedEvent list that has been released, needs to be reset.
+    Recycler<RefCountedEvent> mReleasedStack;
+    // RefCountedEvent list that is currently resetting.
+    std::queue<RefCountedEventsGarbage> mResettingQueue;
+    // RefCountedEvent list that already has been reset. Ready to be reused.
+    Recycler<RefCountedEvent> mResetStack;
 };
 
 // Not thread safe event garbage collection and recycler. Caller must ensure the thread safety. It
@@ -290,15 +303,13 @@ class RefCountedEventsGarbageRecycler final
     {
         ASSERT(garbageObject.valid());
         ASSERT(!garbageObject.mHandle->isReferenced());
-        mFreeStack.recycle(std::move(garbageObject));
+        mReleasedStack.recycle(std::move(garbageObject));
     }
-
-    bool fetch(RefCountedEvent *outObject);
 
     size_t getGarbageCount() const { return mGarbageCount; }
 
   private:
-    Recycler<RefCountedEvent> mFreeStack;
+    Recycler<RefCountedEvent> mReleasedStack;
     std::queue<RefCountedEventsGarbage> mGarbageQueue;
     size_t mGarbageCount;
 };

@@ -1741,10 +1741,6 @@ void CommandBufferHelperCommon::flushSetEventsImpl(Context *context, CommandBuff
         const ImageMemoryBarrierData &layoutData =
             kImageMemoryBarrierData[refCountedEvent.getImageLayout()];
         VkPipelineStageFlags stageMask = GetImageLayoutDstStageMask(context, layoutData);
-        if (refCountedEvent.needsReset())
-        {
-            commandBuffer->resetEvent(refCountedEvent.getEvent().getHandle(), stageMask);
-        }
         commandBuffer->setEvent(refCountedEvent.getEvent().getHandle(), stageMask);
         // We no longer need event, so garbage collect it.
         mRefCountedEventCollector.emplace_back(std::move(refCountedEvent));
@@ -1912,10 +1908,16 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *cont
         ANGLE_TRY(endCommandBuffer(context));
     }
     ASSERT(mIsCommandBufferEnded);
-    mCommandBuffer.executeCommands(&commandsState->primaryCommands);
+
+    PrimaryCommandBuffer &primaryCommands = commandsState->primaryCommands;
+    mCommandBuffer.executeCommands(&primaryCommands);
 
     // Call VkCmdSetEvent to track the completion of this renderPass.
-    flushSetEventsImpl(context, &commandsState->primaryCommands);
+    flushSetEventsImpl(context, &primaryCommands);
+
+    // Proactively reset all released events.
+    renderer->getRefCountedEventRecycler()->flushResetEvents(context, mQueueSerial,
+                                                             &primaryCommands);
 
     // Restart the command buffer.
     return reset(context, &commandsState->secondaryCommands);
