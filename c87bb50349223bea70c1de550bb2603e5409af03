@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "04a512fd_9157e6e9",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-23T18:25:30Z",
+      "side": 1,
+      "message": "It does seem like a lot of pass-through methods that we could maybe do away with. The ones that take mips and apply the offets are a good protection against using the wrong (gl vs metal) mip level unintentionally though.",
+      "parentUuid": "cea9a614_941d8d92",
+      "revId": "c87bb50349223bea70c1de550bb2603e5409af03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ce71bfe8_6159d990",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 13

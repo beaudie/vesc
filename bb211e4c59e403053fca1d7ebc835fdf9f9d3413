@@ -16,6 +16,69 @@
       "message": "Will review this ASAP, lots to think about :)",
       "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13c6f8fe_17d4f2d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-23T18:25:30Z",
+      "side": 1,
+      "message": "I think it looks good. Protects us against messing up mip levels which has bit us in some otherbackends.",
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4afd1b2c_f80a1f94",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-23T18:25:30Z",
+      "side": 1,
+      "message": "Small nit: I would just inline all these methods for readability.",
+      "range": {
+        "startLine": 820,
+        "startChar": 39,
+        "endLine": 820,
+        "endChar": 52
+      },
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46933e03_fbde5408",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-23T18:25:30Z",
+      "side": 1,
+      "message": "I wonder if we can avoid this condition. It makes sense because if the texture is redefined with glTexStorage2D then it shouldn\u0027t have any staged data yet but that probably means there\u0027s a bug if there is staged data. \n\nMaybe change this to an `ASSERT(!mState.getImmutableFormat())` before uploading? If we hit then we probably arn\u0027t clearing staged data at some point. May also mean we upload old data for non-immutable textures too.",
+      "range": {
+        "startLine": 1057,
+        "startChar": 8,
+        "endLine": 1057,
+        "endChar": 36
+      },
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
