@@ -4723,6 +4723,10 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // Use VMA for image suballocation.
     ANGLE_FEATURE_CONDITION(&mFeatures, useVmaForImageSuballocation, true);
 
+    // Emit SPIR-V 1.4 when supported
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsSPIRV14,
+                            ExtensionFound(VK_KHR_SPIRV_1_4_EXTENSION_NAME, deviceExtensionNames));
+
     // Retain debug info in SPIR-V blob.
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSPIRVDebugInfo, getEnableValidationLayers());
 

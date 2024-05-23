@@ -484,6 +484,7 @@ class SPIRVBuilder : angle::NonCopyable
 
     // The list of interface variables populated as the instructions are generated.  Used for the
     // OpEntryPoint instruction.
+    // With SPIR-V 1.4, this list includes all global variables.
     spirv::IdRefList mEntryPointInterfaceList;
 
     // Id of imported instructions, if used.

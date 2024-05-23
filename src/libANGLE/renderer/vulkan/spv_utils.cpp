@@ -924,6 +924,9 @@ void SpirvTransformerBase::onTransformBegin()
                           mSpirvBlobIn.begin() + spirv::kHeaderIndexInstructions);
 
     mCurrentWord = spirv::kHeaderIndexInstructions;
+
+    // TODO: extract SPIR-V version to make available to transformers.  Changes to transformations
+    // should be made conditional to version.
 }
 
 const uint32_t *SpirvTransformerBase::getCurrentInstruction(spv::Op *opCodeOut,
@@ -1338,26 +1341,8 @@ void SpirvInactiveVaryingRemover::modifyEntryPointInterfaceList(
     gl::ShaderType shaderType,
     spirv::IdRefList *interfaceList)
 {
-    // Filter out inactive varyings from entry point interface declaration.
-    size_t writeIndex = 0;
-    for (size_t index = 0; index < interfaceList->size(); ++index)
-    {
-        spirv::IdRef id((*interfaceList)[index]);
-        const ShaderInterfaceVariableInfo *info = variableInfoById[id];
-
-        ASSERT(info);
-
-        if (!info->activeStages[shaderType])
-        {
-            continue;
-        }
-
-        (*interfaceList)[writeIndex] = id;
-        ++writeIndex;
-    }
-
-    // Update the number of interface variables.
-    interfaceList->resize_down(writeIndex);
+    // Nothing to do, each inactive variable is replaced with a Private varaible, but its ID is
+    // retained and stays in the variable list.
 }
 
 TransformationState SpirvInactiveVaryingRemover::transformTypePointer(
@@ -1551,10 +1536,17 @@ void SpirvVaryingPrecisionFixer::writeInputPreamble(
 
 void SpirvVaryingPrecisionFixer::modifyEntryPointInterfaceList(spirv::IdRefList *interfaceList)
 {
-    // Modify interface list if any ID was replaced due to varying precision mismatch.
-    for (size_t index = 0; index < interfaceList->size(); ++index)
+    // The original variables are changed to Private and should remain in the list.  The new
+    // variables should be added to the variable list.
+    const size_t variableCount = interfaceList->size();
+    for (size_t index = 0; index < variableCount; ++index)
     {
-        (*interfaceList)[index] = getReplacementId((*interfaceList)[index]);
+        const spirv::IdRef id            = (*interfaceList)[index];
+        const spirv::IdRef replacementId = getReplacementId(id);
+        if (replacementId != id)
+        {
+            interfaceList->push_back(replacementId);
+        }
     }
 }
 
@@ -3029,9 +3021,12 @@ void SpirvSecondaryOutputTransformer::modifyEntryPointInterfaceList(
             continue;
         }
 
-        mArrayVariableId        = id;
-        mReplacementVariableId  = SpirvTransformerBase::GetNewId(blobOut);
-        (*interfaceList)[index] = mReplacementVariableId;
+        mArrayVariableId       = id;
+        mReplacementVariableId = SpirvTransformerBase::GetNewId(blobOut);
+
+        // The original variable is changed to Private and should remain in the list.  The new
+        // variable should be added to the variable list.
+        interfaceList->push_back(mReplacementVariableId);
         break;
     }
 }

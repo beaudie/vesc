@@ -6120,11 +6120,15 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         nonArrayTypeId         = mBuilder.getSpirvTypeData(elementType, nullptr).id;
     }
 
+    // Add interface variables to the list of entry point ids.  In SPIR-V 1.4, add all global
+    // variables.
+    if (isShaderInOut || (mCompileOptions.emitSpirv14 && mInGlobalScope))
+    {
+        mBuilder.addEntryPointGlobalVariableId(variableId);
+    }
+
     if (isShaderInOut)
     {
-        // Add in and out variables to the list of interface variables.
-        mBuilder.addEntryPointInterfaceVariableId(variableId);
-
         if (IsShaderIoBlock(type.getQualifier()) && type.isInterfaceBlock())
         {
             // For gl_PerVertex in particular, write the necessary BuiltIn decorations
