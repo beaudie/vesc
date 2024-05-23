@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3880a83_567bbb35",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-23T17:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdf5739d_f31b9b9a",
+      "revId": "f4ff5fb2da1985460539cfc083e4e2dfc8fd7247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3627739b_372452d3",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-05-22T21:00:31Z",
       "side": 1,
       "message": "nit: reset the entire thing once after the loop",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 52
+      },
+      "revId": "f4ff5fb2da1985460539cfc083e4e2dfc8fd7247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e72241_a0d516a2",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-23T17:59:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3627739b_372452d3",
       "range": {
         "startLine": 178,
         "startChar": 0,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ff05b1e_30c9730e",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-23T17:59:41Z",
+      "side": 1,
+      "message": "Oh d\u0027oh.\nI meant to actually put these two lines at the beginning of this method, so that any ongoing render pass is ended and flushed out. Does it still make sense to do that here?",
+      "parentUuid": "803c3677_b06d12a0",
+      "range": {
+        "startLine": 372,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 36
+      },
+      "revId": "f4ff5fb2da1985460539cfc083e4e2dfc8fd7247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e8f6263c_f2089b72",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
         "patchSetId": 3
@@ -77,6 +143,24 @@
       "writtenOn": "2024-05-22T21:00:31Z",
       "side": 1,
       "message": "Please either don\u0027t leave TODOs, or associate them with a bug: `http://anglebug.com/NNNNNNN`. In our experience, it always becomes confusing in the future as the context for the TODO is often lost.",
+      "revId": "f4ff5fb2da1985460539cfc083e4e2dfc8fd7247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f640d12_03db09d2",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-05-23T17:59:41Z",
+      "side": 1,
+      "message": "Ah thanks for the callout, I actually meant to remove this TODO fully anyways, but will make sure to avoid leaving them in the future or strictly associate them with a bug if necessary.",
+      "parentUuid": "e8f6263c_f2089b72",
       "revId": "f4ff5fb2da1985460539cfc083e4e2dfc8fd7247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
