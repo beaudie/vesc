@@ -16,6 +16,24 @@
       "message": "do we want to do the `static_cast\u003cint8_t\u003e` for `mQueueIndex`, too?",
       "revId": "d490e43a66f09f883cd76232e60783e83d1d7262",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a543a547_ff78e57b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-23T00:00:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e417ad1b_03ea2342",
+      "revId": "d490e43a66f09f883cd76232e60783e83d1d7262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
