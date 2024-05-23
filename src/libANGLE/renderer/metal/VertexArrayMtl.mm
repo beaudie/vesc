@@ -476,7 +476,7 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
                 cmdEncoder->setVertexBuffer(mCurrentArrayBuffers[v]->getCurrentBuffer(),
                                             bufferOffset, bufferIdx);
             }
-            else
+            else if (mCurrentArrayInlineDataPointers[v])
             {
                 // No buffer specified, use the client memory directly as inline constant data
                 ASSERT(mCurrentArrayInlineDataSizes[v] <= mInlineDataMaxSize);
@@ -630,8 +630,7 @@ angle::Result VertexArrayMtl::syncDirtyAttrib(const gl::Context *glContext,
 
     if (attrib.enabled)
     {
-        gl::Buffer *bufferGL            = binding.getBuffer().get();
-        const mtl::VertexFormat &format = contextMtl->getVertexFormat(attrib.format->id, false);
+        gl::Buffer *bufferGL = binding.getBuffer().get();
 
         if (bufferGL)
         {
@@ -640,7 +639,22 @@ angle::Result VertexArrayMtl::syncDirtyAttrib(const gl::Context *glContext,
             // even non-converted buffers need to be observed for potential
             // data rebinds.
             mContentsObservers->enableForBuffer(bufferGL, static_cast<uint32_t>(attribIndex));
-            bool needConversion =
+
+            if (bufferGL->getSize() == 0)
+            {
+                // A buffer with empty or missing storage.
+                // Use the current attribute value to avoid Metal crash.
+                mCurrentArrayBuffers[attribIndex]       = nullptr;
+                mCurrentArrayBufferOffsets[attribIndex] = 0;
+                mCurrentArrayBufferStrides[attribIndex] = 0;
+                mCurrentArrayBufferFormats[attribIndex] =
+                    &contextMtl->getVertexFormat(angle::FormatID::NONE, false);
+
+                return angle::Result::Continue;
+            }
+
+            const mtl::VertexFormat &format = contextMtl->getVertexFormat(attrib.format->id, false);
+            const bool needConversion =
                 format.actualFormatId != format.intendedFormatId ||
                 (binding.getOffset() % mtl::kVertexAttribBufferStrideAlignment) != 0 ||
                 (binding.getStride() < format.actualAngleFormat().pixelBytes) ||
