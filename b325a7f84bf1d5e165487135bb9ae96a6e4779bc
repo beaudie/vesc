@@ -122,6 +122,24 @@
       "parentUuid": "2227489e_41d299d7",
       "revId": "b325a7f84bf1d5e165487135bb9ae96a6e4779bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abee0985_cfd8ca1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7085,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-23T00:00:07Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/5561465",
+      "parentUuid": "34d2a847_4771b0f3",
+      "revId": "b325a7f84bf1d5e165487135bb9ae96a6e4779bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
