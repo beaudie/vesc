@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "370e4419_baaeca77",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 3444161
+      },
+      "writtenOn": "2024-05-23T02:34:30Z",
+      "side": 1,
+      "message": "Thanks for the tips.",
+      "parentUuid": "210d0d18_bcd9388a",
+      "revId": "fdab7efce7c3bdc6313959993bcd4f4235facf3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a69a3d0_4a4e5658",
@@ -66,6 +84,24 @@
       "writtenOn": "2024-05-23T02:31:41Z",
       "side": 1,
       "message": "lgtm\n\nSorry for not getting to this until now. Please avoid having me be the sole Google reviewer. You can include geofflang@ and Alexey, both CC\u0027d, as other reviewers for this code. Thanks.",
+      "revId": "fdab7efce7c3bdc6313959993bcd4f4235facf3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e14465f_47917a81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3444161
+      },
+      "writtenOn": "2024-05-23T02:34:30Z",
+      "side": 1,
+      "message": "Got it, thanks!",
+      "parentUuid": "bd9578cb_6b35e181",
       "revId": "fdab7efce7c3bdc6313959993bcd4f4235facf3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
