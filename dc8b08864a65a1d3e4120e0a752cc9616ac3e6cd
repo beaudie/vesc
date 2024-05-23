@@ -1,0 +1,68 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c34a75e1_8523e9c5",
+        "filename": "src/common/spirv/spirv_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-23T17:53:37Z",
+      "side": 1,
+      "message": "`kSPIRVVersion`?",
+      "range": {
+        "startLine": 129,
+        "startChar": 19,
+        "endLine": 129,
+        "endChar": 31
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "8b53dfc4_47271f27",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/common/spirv/spirv_types.h",
+              "range": {
+                "startLine": 129,
+                "startChar": 0,
+                "endLine": 132,
+                "endChar": 0
+              },
+              "replacement": "constexpr uint32_t kSPIRVVersion_1_0 \u003d 0x00010000;\nconstexpr uint32_t kSPIRVVersion_1_3 \u003d 0x00010300;\nconstexpr uint32_t kSPIRVVersion_1_4 \u003d 0x00010400;\n"
+            }
+          ]
+        }
+      ],
+      "revId": "dc8b08864a65a1d3e4120e0a752cc9616ac3e6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88e2f7b3_46ebea79",
+        "filename": "src/common/spirv/spirv_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-23T17:53:37Z",
+      "side": 1,
+      "message": "Question: What is the version format? It seems to be 4 bits major, 2 bits minor, and 2 bits patch/filler?",
+      "range": {
+        "startLine": 129,
+        "startChar": 34,
+        "endLine": 129,
+        "endChar": 44
+      },
+      "revId": "dc8b08864a65a1d3e4120e0a752cc9616ac3e6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
