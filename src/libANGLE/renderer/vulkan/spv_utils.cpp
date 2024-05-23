@@ -60,6 +60,12 @@ bool UniformNameIsIndexZero(const std::string &name)
     return true;
 }
 
+uint32_t SpvIsXfbBufferBlockId(spirv::IdRef id)
+{
+    return id >= sh::vk::spirv::ReservedIds::kIdXfbEmulationBufferVarZero &&
+           id < sh::vk::spirv::ReservedIds::kIdXfbEmulationBufferVarZero + 4;
+}
+
 template <typename OutputIter, typename ImplicitIter>
 uint32_t CountExplicitOutputs(OutputIter outputsBegin,
                               OutputIter outputsEnd,
@@ -855,6 +861,14 @@ bool IsNonSemanticInstruction(const uint32_t *instruction)
     return instruction[3] == sh::vk::spirv::kIdNonSemanticInstructionSet;
 }
 
+enum class EntryPointList
+{
+    // Prior to SPIR-V 1.4, only the Input and Output variables are listed in OpEntryPoint.
+    InterfaceVariables,
+    // Since SPIR-V 1.4, all global variables must be listed in OpEntryPoint.
+    GlobalVariables,
+};
+
 // Base class for SPIR-V transformations.
 class SpirvTransformerBase : angle::NonCopyable
 {
@@ -877,6 +891,8 @@ class SpirvTransformerBase : angle::NonCopyable
     static spirv::IdRef GetNewId(spirv::Blob *blob);
     spirv::IdRef getNewId();
 
+    EntryPointList entryPointList() const { return mEntryPointList; }
+
   protected:
     // Common utilities
     void onTransformBegin();
@@ -897,6 +913,8 @@ class SpirvTransformerBase : angle::NonCopyable
     bool mIsInFunctionSection = false;
 
     // Transformation state:
+
+    EntryPointList mEntryPointList = EntryPointList::InterfaceVariables;
 
     // Shader variable info per id, if id is a shader variable.
     std::vector<const ShaderInterfaceVariableInfo *> mVariableInfoById;
@@ -924,6 +942,10 @@ void SpirvTransformerBase::onTransformBegin()
                           mSpirvBlobIn.begin() + spirv::kHeaderIndexInstructions);
 
     mCurrentWord = spirv::kHeaderIndexInstructions;
+
+    mEntryPointList = mSpirvBlobIn[spirv::kHeaderIndexVersion] >= spirv::kVersion_1_4
+                          ? EntryPointList::GlobalVariables
+                          : EntryPointList::InterfaceVariables;
 }
 
 const uint32_t *SpirvTransformerBase::getCurrentInstruction(spv::Op *opCodeOut,
@@ -1275,6 +1297,7 @@ class SpirvInactiveVaryingRemover final : angle::NonCopyable
     void modifyEntryPointInterfaceList(
         const std::vector<const ShaderInterfaceVariableInfo *> &variableInfoById,
         gl::ShaderType shaderType,
+        EntryPointList entryPointList,
         spirv::IdRefList *interfaceList);
 
     bool isInactive(spirv::IdRef id) const { return mIsInactiveById[id]; }
@@ -1336,28 +1359,37 @@ TransformationState SpirvInactiveVaryingRemover::transformDecorate(
 void SpirvInactiveVaryingRemover::modifyEntryPointInterfaceList(
     const std::vector<const ShaderInterfaceVariableInfo *> &variableInfoById,
     gl::ShaderType shaderType,
+    EntryPointList entryPointList,
     spirv::IdRefList *interfaceList)
 {
-    // Filter out inactive varyings from entry point interface declaration.
-    size_t writeIndex = 0;
-    for (size_t index = 0; index < interfaceList->size(); ++index)
+    if (entryPointList == EntryPointList::InterfaceVariables)
     {
-        spirv::IdRef id((*interfaceList)[index]);
-        const ShaderInterfaceVariableInfo *info = variableInfoById[id];
-
-        ASSERT(info);
-
-        if (!info->activeStages[shaderType])
+        // Filter out inactive varyings from entry point interface declaration.
+        size_t writeIndex = 0;
+        for (size_t index = 0; index < interfaceList->size(); ++index)
         {
-            continue;
+            spirv::IdRef id((*interfaceList)[index]);
+            const ShaderInterfaceVariableInfo *info = variableInfoById[id];
+
+            ASSERT(info);
+
+            if (!info->activeStages[shaderType])
+            {
+                continue;
+            }
+
+            (*interfaceList)[writeIndex] = id;
+            ++writeIndex;
         }
 
-        (*interfaceList)[writeIndex] = id;
-        ++writeIndex;
+        // Update the number of interface variables.
+        interfaceList->resize_down(writeIndex);
     }
-
-    // Update the number of interface variables.
-    interfaceList->resize_down(writeIndex);
+    else
+    {
+        // Nothing to do if SPIR-V 1.4, each inactive variable is replaced with a Private varaible,
+        // but its ID is retained and stays in the variable list.
+    }
 }
 
 TransformationState SpirvInactiveVaryingRemover::transformTypePointer(
@@ -1442,7 +1474,8 @@ class SpirvVaryingPrecisionFixer final : angle::NonCopyable
                                           spv::StorageClass storageClass,
                                           spirv::Blob *blobOut);
 
-    void modifyEntryPointInterfaceList(spirv::IdRefList *interfaceList);
+    void modifyEntryPointInterfaceList(EntryPointList entryPointList,
+                                       spirv::IdRefList *interfaceList);
     void addDecorate(spirv::IdRef replacedId, spirv::Blob *blobOut);
     void writeInputPreamble(
         const std::vector<const ShaderInterfaceVariableInfo *> &variableInfoById,
@@ -1549,12 +1582,30 @@ void SpirvVaryingPrecisionFixer::writeInputPreamble(
     }
 }
 
-void SpirvVaryingPrecisionFixer::modifyEntryPointInterfaceList(spirv::IdRefList *interfaceList)
+void SpirvVaryingPrecisionFixer::modifyEntryPointInterfaceList(EntryPointList entryPointList,
+                                                               spirv::IdRefList *interfaceList)
 {
-    // Modify interface list if any ID was replaced due to varying precision mismatch.
-    for (size_t index = 0; index < interfaceList->size(); ++index)
+    // With SPIR-V 1.3, modify interface list if any ID was replaced due to varying precision
+    // mismatch.
+    //
+    // With SPIR-V 1.4, the original variables are changed to Private and should remain in the list.
+    // The new variables should be added to the variable list.
+    const size_t variableCount = interfaceList->size();
+    for (size_t index = 0; index < variableCount; ++index)
     {
-        (*interfaceList)[index] = getReplacementId((*interfaceList)[index]);
+        const spirv::IdRef id            = (*interfaceList)[index];
+        const spirv::IdRef replacementId = getReplacementId(id);
+        if (replacementId != id)
+        {
+            if (entryPointList == EntryPointList::InterfaceVariables)
+            {
+                (*interfaceList)[index] = replacementId;
+            }
+            else
+            {
+                interfaceList->push_back(replacementId);
+            }
+        }
     }
 }
 
@@ -1647,6 +1698,12 @@ class SpirvTransformFeedbackCodeGenerator final : angle::NonCopyable
                                           spirv::IdResultType typeId,
                                           spirv::IdResult id,
                                           spv::StorageClass storageClass);
+
+    void modifyEntryPointInterfaceList(
+        const std::vector<const ShaderInterfaceVariableInfo *> &variableInfoById,
+        gl::ShaderType shaderType,
+        EntryPointList entryPointList,
+        spirv::IdRefList *interfaceList);
 
     void writePendingDeclarations(
         const std::vector<const ShaderInterfaceVariableInfo *> &variableInfoById,
@@ -1912,7 +1969,8 @@ TransformationState SpirvTransformFeedbackCodeGenerator::transformVariable(
     // This function is currently called for inactive variables.
     ASSERT(!info.activeStages[shaderType]);
 
-    if (shaderType == gl::ShaderType::Vertex && storageClass == spv::StorageClassUniform)
+    if (shaderType == gl::ShaderType::Vertex && (storageClass == spv::StorageClassUniform ||
+                                                 storageClass == spv::StorageClassStorageBuffer))
     {
         // The ANGLEXfbN variables are unconditionally generated and may be inactive.  Remove these
         // variables in that case.
@@ -1982,6 +2040,39 @@ void SpirvTransformFeedbackCodeGenerator::writeIntConstant(uint32_t value,
     mIntNIds[value] = SpirvTransformerBase::GetNewId(blobOut);
     spirv::WriteConstant(blobOut, ID::Int, mIntNIds[value],
                          spirv::LiteralContextDependentNumber(value));
+}
+
+void SpirvTransformFeedbackCodeGenerator::modifyEntryPointInterfaceList(
+    const std::vector<const ShaderInterfaceVariableInfo *> &variableInfoById,
+    gl::ShaderType shaderType,
+    EntryPointList entryPointList,
+    spirv::IdRefList *interfaceList)
+{
+    if (entryPointList == EntryPointList::GlobalVariables)
+    {
+        // Filter out unused xfb blocks from entry point interface declaration.
+        size_t writeIndex = 0;
+        for (size_t index = 0; index < interfaceList->size(); ++index)
+        {
+            spirv::IdRef id((*interfaceList)[index]);
+            if (SpvIsXfbBufferBlockId(id))
+            {
+                const ShaderInterfaceVariableInfo *info = variableInfoById[id];
+                ASSERT(info);
+
+                if (!info->activeStages[shaderType])
+                {
+                    continue;
+                }
+            }
+
+            (*interfaceList)[writeIndex] = id;
+            ++writeIndex;
+        }
+
+        // Update the number of interface variables.
+        interfaceList->resize_down(writeIndex);
+    }
 }
 
 void SpirvTransformFeedbackCodeGenerator::writePendingDeclarations(
@@ -2565,6 +2656,7 @@ class SpirvMultisampleTransformer final : angle::NonCopyable
     TransformationState transformTypeImage(const uint32_t *instruction, spirv::Blob *blobOut);
 
     void modifyEntryPointInterfaceList(const SpirvNonSemanticInstructions &nonSemantic,
+                                       EntryPointList entryPointList,
                                        spirv::IdRefList *interfaceList,
                                        spirv::Blob *blobOut);
 
@@ -2727,6 +2819,7 @@ bool verifyEntryPointsContainsID(const spirv::IdRefList &interfaceList)
 
 void SpirvMultisampleTransformer::modifyEntryPointInterfaceList(
     const SpirvNonSemanticInstructions &nonSemantic,
+    EntryPointList entryPointList,
     spirv::IdRefList *interfaceList,
     spirv::Blob *blobOut)
 {
@@ -2975,6 +3068,7 @@ class SpirvSecondaryOutputTransformer final : angle::NonCopyable
 
     void modifyEntryPointInterfaceList(
         const std::vector<const ShaderInterfaceVariableInfo *> &variableInfoById,
+        EntryPointList entryPointList,
         spirv::IdRefList *interfaceList,
         spirv::Blob *blobOut);
 
@@ -3014,6 +3108,7 @@ void SpirvSecondaryOutputTransformer::visitTypePointer(spirv::IdResult id, spirv
 
 void SpirvSecondaryOutputTransformer::modifyEntryPointInterfaceList(
     const std::vector<const ShaderInterfaceVariableInfo *> &variableInfoById,
+    EntryPointList entryPointList,
     spirv::IdRefList *interfaceList,
     spirv::Blob *blobOut)
 {
@@ -3023,15 +3118,26 @@ void SpirvSecondaryOutputTransformer::modifyEntryPointInterfaceList(
         const spirv::IdRef id((*interfaceList)[index]);
         const ShaderInterfaceVariableInfo *info = variableInfoById[id];
 
-        ASSERT(info);
-        if (info->index != 1 || !info->isArray)
+        if (info == nullptr || info->index != 1 || !info->isArray)
         {
             continue;
         }
 
-        mArrayVariableId        = id;
-        mReplacementVariableId  = SpirvTransformerBase::GetNewId(blobOut);
-        (*interfaceList)[index] = mReplacementVariableId;
+        mArrayVariableId       = id;
+        mReplacementVariableId = SpirvTransformerBase::GetNewId(blobOut);
+
+        // With SPIR-V 1.3, modify interface list with the replacement ID.
+        //
+        // With SPIR-V 1.4, the original variable is changed to Private and should remain in the
+        // list.  The new variable should be added to the variable list.
+        if (entryPointList == EntryPointList::InterfaceVariables)
+        {
+            (*interfaceList)[index] = mReplacementVariableId;
+        }
+        else
+        {
+            interfaceList->push_back(mReplacementVariableId);
+        }
         break;
     }
 }
@@ -3879,21 +3985,23 @@ TransformationState SpirvTransformer::transformEntryPoint(const uint32_t *instru
     ASSERT(entryPointId == ID::EntryPoint);
 
     mInactiveVaryingRemover.modifyEntryPointInterfaceList(mVariableInfoById, mOptions.shaderType,
-                                                          &interfaceList);
+                                                          entryPointList(), &interfaceList);
 
     if (mOptions.shaderType == gl::ShaderType::Fragment)
     {
-        mSecondaryOutputTransformer.modifyEntryPointInterfaceList(mVariableInfoById, &interfaceList,
-                                                                  mSpirvBlobOut);
+        mSecondaryOutputTransformer.modifyEntryPointInterfaceList(
+            mVariableInfoById, entryPointList(), &interfaceList, mSpirvBlobOut);
     }
 
     if (mOptions.useSpirvVaryingPrecisionFixer)
     {
-        mVaryingPrecisionFixer.modifyEntryPointInterfaceList(&interfaceList);
+        mVaryingPrecisionFixer.modifyEntryPointInterfaceList(entryPointList(), &interfaceList);
     }
 
-    mMultisampleTransformer.modifyEntryPointInterfaceList(mNonSemanticInstructions, &interfaceList,
-                                                          mSpirvBlobOut);
+    mMultisampleTransformer.modifyEntryPointInterfaceList(
+        mNonSemanticInstructions, entryPointList(), &interfaceList, mSpirvBlobOut);
+    mXfbCodeGenerator.modifyEntryPointInterfaceList(mVariableInfoById, mOptions.shaderType,
+                                                    entryPointList(), &interfaceList);
 
     // Write the entry point with the inactive interface variables removed.
     spirv::WriteEntryPoint(mSpirvBlobOut, executionModel, ID::EntryPoint, name, interfaceList);
@@ -4541,6 +4649,12 @@ TransformationState SpirvVertexAttributeAliasingTransformer::transformEntryPoint
         {
             const spirv::IdRef vecId(vec0Id + offset);
             interfaceList.push_back(vecId);
+        }
+
+        // With SPIR-V 1.4, keep the Private variable in the interface list.
+        if (entryPointList() == EntryPointList::GlobalVariables)
+        {
+            interfaceList.push_back(matrixId);
         }
     }
 
