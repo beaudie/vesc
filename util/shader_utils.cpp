@@ -508,6 +508,16 @@ const char *Zero()
 })";
 }
 
+// A shader that sets gl_Position to zero and sets gl_PointSize to 1.
+const char *ZeroForPoints()
+{
+    return R"(void main()
+{
+    gl_Position = vec4(0);
+    gl_PointSize = 1.0;
+})";
+}
+
 // A shader that sets gl_Position to attribute a_position.
 const char *Simple()
 {

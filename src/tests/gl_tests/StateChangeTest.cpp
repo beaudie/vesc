@@ -1788,6 +1788,17 @@ void main()
 }
 )";
 
+constexpr char kSimpleVertexShaderForPoints[] = R"(attribute vec2 position;
+attribute vec4 color;
+varying vec4 vColor;
+void main()
+{
+    gl_Position = vec4(position, 0, 1);
+    gl_PointSize = 1.0;
+    vColor = color;
+}
+)";
+
 constexpr char kSimpleFragmentShader[] = R"(precision mediump float;
 varying vec4 vColor;
 void main()
@@ -2260,7 +2271,7 @@ TEST_P(SimpleStateChangeTest, DrawRepeatUnalignedVboChange)
     bindTextureToFbo(framebuffer, framebufferTexture);
 
     // set up program
-    ANGLE_GL_PROGRAM(program, kSimpleVertexShader, kSimpleFragmentShader);
+    ANGLE_GL_PROGRAM(program, kSimpleVertexShaderForPoints, kSimpleFragmentShader);
     glUseProgram(program);
     GLuint colorAttrLocation = glGetAttribLocation(program, "color");
     glEnableVertexAttribArray(colorAttrLocation);
@@ -7063,7 +7074,7 @@ TEST_P(SimpleStateChangeTestES3, BindingSameBuffer)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData), indexData, GL_STATIC_DRAW);
 
-    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Zero(), essl1_shaders::fs::Red());
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::ZeroForPoints(), essl1_shaders::fs::Red());
     glUseProgram(program);
 
     glDrawElements(GL_POINTS, 4, GL_UNSIGNED_SHORT, 0);
@@ -10226,7 +10237,7 @@ TEST_P(SimpleStateChangeTestES3, MultiviewAndQueries)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_OVR_multiview"));
 
-    ANGLE_GL_PROGRAM(prog, essl1_shaders::vs::Zero(), essl1_shaders::fs::Red());
+    ANGLE_GL_PROGRAM(prog, essl1_shaders::vs::ZeroForPoints(), essl1_shaders::fs::Red());
     glUseProgram(prog);
 
     const int PRE_QUERY_CNT = 63;

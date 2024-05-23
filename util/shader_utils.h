@@ -77,6 +77,9 @@ namespace vs
 // A shader that sets gl_Position to zero.
 ANGLE_UTIL_EXPORT const char *Zero();
 
+// A shader that sets gl_Position to zero and sets gl_PointSize to 1.
+ANGLE_UTIL_EXPORT const char *ZeroForPoints();
+
 // A shader that sets gl_Position to attribute a_position.
 ANGLE_UTIL_EXPORT const char *Simple();
 
