@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "468023f6_65e9bf0f",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-24T17:31:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6eadca7d_322bec80",
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4afd1b2c_f80a1f94",
@@ -82,6 +100,30 @@
       "writtenOn": "2024-05-23T18:25:30Z",
       "side": 1,
       "message": "Small nit: I would just inline all these methods for readability.",
+      "range": {
+        "startLine": 820,
+        "startChar": 39,
+        "endLine": 820,
+        "endChar": 52
+      },
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bfdea4f_9931fd0d",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-24T17:31:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4afd1b2c_f80a1f94",
       "range": {
         "startLine": 820,
         "startChar": 39,
@@ -115,6 +157,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "962af4b5_b8058b79",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-24T17:31:30Z",
+      "side": 1,
+      "message": "Done. Moved to ensureTextureCreated().",
+      "parentUuid": "46933e03_fbde5408",
+      "range": {
+        "startLine": 1057,
+        "startChar": 8,
+        "endLine": 1057,
+        "endChar": 36
+      },
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a10cb3c_8218df9e",
@@ -128,6 +194,24 @@
       "writtenOn": "2024-05-24T00:00:00Z",
       "side": 1,
       "message": "Are there any consequences from this reference being weak? I don\u0027t understand the full semantics here, but was a little surprised that this wouldn\u0027t keep the parent texture alive.",
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fffd6dd_ebaba9c0",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-24T17:31:30Z",
+      "side": 1,
+      "message": "It was to avoid cyclic references. A Texture object can hold a ref to its `mStencilView`. Had we stored the strong ref of parent texture in `mStencilView`, it would have been a cyclic reference.\n\nIt\u0027s mostly ok because `parentTexture` is only used in `TextureMtl` and `TextureMtl` keeps both parent and views alive for majority of the time. Only time when parent ref is dropped is when we redefine the texture\u0027s images. In that case, the mip views will be kept but the parent texture won\u0027t. The consequence of this case is that when uploading data to a level via `glTex*Image`, we will upload to the view instead of the parent texture. It\u0027s because we would have no way to retrieve the parent texture anymore (strong ref has been dropped). The bug of this case hasn\u0027t been observed yet.\n\nNevertheless, I have modified the code to not use weak ref in the latest patchset. We can store a strong ref to a parent texture now (with some tricks).",
+      "parentUuid": "4a10cb3c_8218df9e",
       "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
