@@ -5086,9 +5086,6 @@ TEST_P(ImageTestES3, SourceAHBMipTarget2DMipGenerateMipmap)
 // Create a depth format AHB backed EGL image and verify that the image's aspect is honored
 TEST_P(ImageTest, SourceAHBTarget2DDepth)
 {
-    // TODO - Support for depth formats in AHB is missing (http://anglebug.com/4818)
-    ANGLE_SKIP_TEST_IF(true);
-
     EGLWindow *window = getEGLWindow();
 
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
