@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be09969e_00272613",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 3316531
+      },
+      "writtenOn": "2024-05-24T09:47:22Z",
+      "side": 1,
+      "message": "About templates and actions: I am not really familiar with gn templates and actions therefore I tried taking inspiration from examples in other ANGLE gn scripts.\n\nAbout the single action, initially I found this approach unintuitive, so I based the gn part on a python script with one single responsibility, which is to install an ANGLE target associated to a well-defined dependency with a pkgconfig file.\n\nE.g. installing the EGL target is achieved by calling the script with:\n- a `--name`: used for naming the `*.pc` file\n- a list of libraries in `--libs` that go in the `*.pc` file, therefore used for linking by user projects which bring in that dependency.\n- a list of include directories in `--includes` which go in the `*.pc` file like the libraries.\n\nBringing everything together using one single script for all target seems to me like overcomplicating the script. First issue to solve for me would be to list all target names that should correspond to a `*.pc` file. Then I\u0027d need to list which libraries and include directories correspond to which target. Not sure it\u0027s worth it.\n\nAbout the headers: do you think I can use a different `config` for the targets?",
+      "parentUuid": "344dbb7b_2e0313a6",
+      "range": {
+        "startLine": 1855,
+        "startChar": 0,
+        "endLine": 1860,
+        "endChar": 42
+      },
+      "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a697b76d_15c92538",
         "filename": "BUILD.gn",
         "patchSetId": 2
@@ -37,6 +61,24 @@
       "writtenOn": "2024-05-22T20:27:39Z",
       "side": 1,
       "message": "Probably not a big deal, but I think this should be a `data_deps`",
+      "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9491bb4a_e338a367",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 3316531
+      },
+      "writtenOn": "2024-05-24T09:47:22Z",
+      "side": 1,
+      "message": "From [gn ref](https://gn.googlesource.com/gn/+/main/docs/reference.md#target-declarations-action_declare-a-target-that-runs-a-script-a-single-time-inputs) I guess data_deps can be used for runtime-deps so targets building can be parallelized\n\u003e data_deps will be built if the action is built, but may not have completed before all steps of the action are started\n\nThe install target needs dependencies to be built completely before running the script",
+      "parentUuid": "a697b76d_15c92538",
       "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
