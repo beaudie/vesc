@@ -68,6 +68,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "df8a1424_6185100d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-24T14:57:38Z",
+      "side": 1,
+      "message": "Ok, so checking for EXT is good?",
+      "parentUuid": "0ed0c497_49eb2f53",
+      "range": {
+        "startLine": 264,
+        "startChar": 25,
+        "endLine": 264,
+        "endChar": 38
+      },
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3fa7ce4a_6b2f62ac",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 9
