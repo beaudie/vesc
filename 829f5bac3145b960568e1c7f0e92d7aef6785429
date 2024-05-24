@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ecab99c_11544736",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2590,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-24T15:10:44Z",
+      "side": 1,
+      "message": "You can revert this. The reason the spec says there\u0027s no special behavior if ES2, is because ES2 doesn\u0027t have those functions to begin with.\n\nThe extension spec is the way it is because it\u0027s a _diff_, and it\u0027s a diff against _multiple specs_. So it talks about how GLES3.1 is modified, then strips part of it away (or changes the diff) for older versions just because like GLES2 is obviously a different spec so the diff doesn\u0027t apply!",
+      "range": {
+        "startLine": 2585,
+        "startChar": 0,
+        "endLine": 2590,
+        "endChar": 84
+      },
+      "revId": "829f5bac3145b960568e1c7f0e92d7aef6785429",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b64ab47b_e022f743",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3787,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-24T15:10:44Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 3782,
+        "startChar": 0,
+        "endLine": 3787,
+        "endChar": 63
+      },
+      "revId": "829f5bac3145b960568e1c7f0e92d7aef6785429",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
