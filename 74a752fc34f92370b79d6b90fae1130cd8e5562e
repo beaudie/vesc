@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d5a7832_37b4d84d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-24T15:47:34Z",
+      "side": 1,
+      "message": "Please use `Bug: angleproject:342603523` so we don\u0027t get a redirect message when clicking on it.",
+      "revId": "74a752fc34f92370b79d6b90fae1130cd8e5562e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d602d642_cdad5b3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-24T15:47:34Z",
+      "side": 1,
+      "message": "Seems legit. Would you be able to contribute a test? Actually in ImageTest.cpp, we have the `SourceAHBTarget2DDepth` test which is just skipped:\n\n```\n    // TODO - Support for depth formats in AHB is missing (http://anglebug.com/4818)\n    ANGLE_SKIP_TEST_IF(true);\n```\n\nMaybe you can enable that now!",
+      "revId": "74a752fc34f92370b79d6b90fae1130cd8e5562e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
