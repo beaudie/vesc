@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85fa1bf2_c085acec",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-24T15:12:01Z",
+      "side": 1,
+      "message": "I think this line could be changed to\n```\nif (attribEnabled \u0026\u0026 !mCurrentArrayBuffers[v] \u0026\u0026 !mCurrentArrayBuffers[v]-\u003egetCurrentBuffer() \u0026\u0026 !mCurrentArrayInlineDataPointers[v])\n```\n[1]",
+      "revId": "c081e862629490107d7ba9edac0bc5069e394e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f62a51b_edba69d8",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-24T15:12:01Z",
+      "side": 1,
+      "message": "nit: This mask could be overwritten by the condition at [1]. I.e if that condition is true, set the appropriate attribute bit to false. So we could skip the `mCurrentArrayInlineDataPointers[v]` check below?",
+      "range": {
+        "startLine": 468,
+        "startChar": 17,
+        "endLine": 468,
+        "endChar": 41
+      },
+      "revId": "c081e862629490107d7ba9edac0bc5069e394e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43211f30_4ed1154d",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-24T15:12:01Z",
+      "side": 1,
+      "message": "Is this still necessary if line at [1] is changed?",
+      "range": {
+        "startLine": 643,
+        "startChar": 0,
+        "endLine": 657,
+        "endChar": 1
+      },
+      "revId": "c081e862629490107d7ba9edac0bc5069e394e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
