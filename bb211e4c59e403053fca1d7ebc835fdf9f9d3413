@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b9bdb57_1688bfc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-24T00:00:00Z",
+      "side": 1,
+      "message": "Thank you Quyen for restructuring mutable and immutable textures\u0027 storage to solve these longstanding problems! One small question and one typo.",
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eadca7d_322bec80",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-24T00:00:00Z",
+      "side": 1,
+      "message": "typo: seamlessly",
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4afd1b2c_f80a1f94",
@@ -77,6 +111,23 @@
         "endLine": 1057,
         "endChar": 36
       },
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a10cb3c_8218df9e",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-24T00:00:00Z",
+      "side": 1,
+      "message": "Are there any consequences from this reference being weak? I don\u0027t understand the full semantics here, but was a little surprised that this wouldn\u0027t keep the parent texture alive.",
       "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
