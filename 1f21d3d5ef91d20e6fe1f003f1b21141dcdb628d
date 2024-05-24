@@ -63,6 +63,30 @@
       },
       "revId": "1f21d3d5ef91d20e6fe1f003f1b21141dcdb628d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "725e45bf_e54c93cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4716,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-24T02:57:03Z",
+      "side": 1,
+      "message": "Fine to leave it, just a heads up that we fixed this not being exposed on ANV",
+      "parentUuid": "00d397fe_874c5e91",
+      "range": {
+        "startLine": 4716,
+        "startChar": 52,
+        "endLine": 4716,
+        "endChar": 95
+      },
+      "revId": "1f21d3d5ef91d20e6fe1f003f1b21141dcdb628d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
