@@ -545,8 +545,34 @@ angle::Result CLCommandQueueVk::enqueueFillImage(const cl::Image &image,
                                                  const cl::EventPtrs &waitEvents,
                                                  CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    CLImageVk &imageVk = image.getImpl<CLImageVk>();
+    std::unique_ptr<uint8_t> packedFillColor(new uint8_t[imageVk.getElementSize()]);
+
+    imageVk.packPixels(fillColor, static_cast<void *>(packedFillColor.get()));
+
+    ANGLE_TRY(enqueueWaitForEvents(waitEvents));
+
+    if (imageVk.isStagingBufferInitialized() == false)
+    {
+        ANGLE_TRY(imageVk.createStagingBuffer(imageVk.getSize()));
+    }
+
+    ANGLE_TRY(copyImageToFromBuffer(imageVk, imageVk.getStagingBuffer(), origin, region, 0,
+                                    ImageBufferCopyDirection::ToBuffer));
+    ANGLE_TRY(finishInternal());
+
+    uint8_t *mapPointer = nullptr;
+    ANGLE_TRY(imageVk.map(mapPointer, 0));
+    imageVk.fillImageWithColor(region, mapPointer, static_cast<void *>(packedFillColor.get()));
+    imageVk.unmap();
+    mapPointer = nullptr;
+    ANGLE_TRY(copyImageToFromBuffer(imageVk, imageVk.getStagingBuffer(), origin, region, 0,
+                                    ImageBufferCopyDirection::ToImage));
+    ANGLE_TRY(finishInternal());
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueCopyImageToBuffer(const cl::Image &srcImage,

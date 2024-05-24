@@ -128,6 +128,8 @@ class CLImageVk : public CLMemoryVk
     vk::ImageView &getImageView() { return mImageView; }
     cl_image_format getImageFormat() { return mImageFormat; }
     cl::ImageDescriptor getDesc() { return mDesc; }
+    void packPixels(const void *fillColor, void *outData);
+    void fillImageWithColor(const cl::Coordinate &region, uint8_t *imagePtr, void *packedFillColor);
 
   private:
     angle::Result mapImpl() override;
@@ -147,6 +149,8 @@ class CLImageVk : public CLMemoryVk
     vk::ImageView mImageView;
     VkImageViewType mImageViewType;
 };
+
+cl_int normalizeFloatValue(float value, float maximum);
 
 }  // namespace rx
 

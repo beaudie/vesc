@@ -7,6 +7,8 @@
 
 #include "libANGLE/renderer/vulkan/CLMemoryVk.h"
 #include <cstdint>
+#include "CL/cl.h"
+#include "CL/cl_half.h"
 #include "common/aligned_memory.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/renderer/vulkan/CLContextVk.h"
@@ -496,6 +498,162 @@ bool CLImageVk::containsHostMemExtension()
                      "VK_EXT_external_memory_host") != enabledDeviceExtensions.end();
 }
 
+#define BOUND_WITHIN_LIMITS(value, minimum, maximum) \
+    (value < minimum ? minimum : (value > maximum ? maximum : value))
+
+void CLImageVk::packPixels(const void *fillColor, void *outData)
+{
+    size_t channelCount = cl::GetChannelCount(mImageFormat.image_channel_order);
+
+    switch (mImageFormat.image_channel_data_type)
+    {
+        case CL_UNORM_INT8:
+        {
+            float *srcVector = (float *)fillColor;
+            cl_uchar *ptr    = (cl_uchar *)outData;
+            if (mImageFormat.image_channel_order == CL_BGRA)
+            {
+                ptr[0] = (unsigned char)normalizeFloatValue(srcVector[2], 255.f);
+                ptr[1] = (unsigned char)normalizeFloatValue(srcVector[1], 255.f);
+                ptr[2] = (unsigned char)normalizeFloatValue(srcVector[0], 255.f);
+                ptr[3] = (unsigned char)normalizeFloatValue(srcVector[3], 255.f);
+            }
+            else
+            {
+                for (unsigned int i = 0; i < channelCount; i++)
+                    ptr[i] = (unsigned char)normalizeFloatValue(srcVector[i], 255.f);
+            }
+            break;
+        }
+        case CL_SIGNED_INT8:
+        {
+            int *srcVector = (int *)fillColor;
+            char *ptr      = (char *)outData;
+            for (unsigned int i = 0; i < channelCount; i++)
+                ptr[i] = (char)BOUND_WITHIN_LIMITS(srcVector[i], -128, 127);
+            break;
+        }
+        case CL_UNSIGNED_INT8:
+        {
+            unsigned int *srcVector = (unsigned int *)fillColor;
+            unsigned char *ptr      = (unsigned char *)outData;
+            for (unsigned int i = 0; i < channelCount; i++)
+                ptr[i] = (unsigned char)BOUND_WITHIN_LIMITS(srcVector[i], 0, 255);
+            break;
+        }
+        case CL_UNORM_INT16:
+        {
+            float *srcVector = (float *)fillColor;
+            cl_ushort *ptr   = (cl_ushort *)outData;
+            for (unsigned int i = 0; i < channelCount; i++)
+                ptr[i] = (unsigned short)normalizeFloatValue(srcVector[i], 65535.f);
+            break;
+        }
+        case CL_SIGNED_INT16:
+        {
+            int *srcVector = (int *)fillColor;
+            short *ptr     = (short *)outData;
+            for (unsigned int i = 0; i < channelCount; i++)
+                ptr[i] = (short)BOUND_WITHIN_LIMITS(srcVector[i], -32768, 32767);
+            break;
+        }
+        case CL_UNSIGNED_INT16:
+        {
+            unsigned int *srcVector = (unsigned int *)fillColor;
+            unsigned short *ptr     = (unsigned short *)outData;
+            for (unsigned int i = 0; i < channelCount; i++)
+                ptr[i] = (unsigned short)BOUND_WITHIN_LIMITS(srcVector[i], 0, 65535);
+            break;
+        }
+        case CL_HALF_FLOAT:
+        {
+            float *srcVector = (float *)fillColor;
+            cl_half *ptr     = (cl_half *)outData;
+            for (unsigned int i = 0; i < channelCount; i++)
+                ptr[i] = cl_half_from_float(srcVector[i], CL_HALF_RTE);
+            break;
+        }
+        case CL_SIGNED_INT32:
+        {
+            int *srcVector = (int *)fillColor;
+            int *ptr       = (int *)outData;
+            for (unsigned int i = 0; i < channelCount; i++)
+                ptr[i] = (int)srcVector[i];
+            break;
+        }
+        case CL_UNSIGNED_INT32:
+        {
+            unsigned int *srcVector = (unsigned int *)fillColor;
+            unsigned int *ptr       = (unsigned int *)outData;
+            for (unsigned int i = 0; i < channelCount; i++)
+                ptr[i] = (unsigned int)srcVector[i];
+            break;
+        }
+        case CL_FLOAT:
+        {
+            float *srcVector = (float *)fillColor;
+            cl_float *ptr    = (cl_float *)outData;
+            for (unsigned int i = 0; i < channelCount; i++)
+                ptr[i] = srcVector[i];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void CLImageVk::fillImageWithColor(const cl::Coordinate &region,
+                                   uint8_t *imagePtr,
+                                   void *packedFillColor)
+{
+    size_t imageRowPitch   = mDesc.rowPitch;
+    size_t imageSlicePitch = mDesc.slicePitch;
+    if (imageRowPitch == 0)
+    {
+        imageRowPitch = (region.x * mElementSize);
+    }
+
+    if (imageSlicePitch == 0)
+    {
+        switch (mDesc.type)
+        {
+            case cl::MemObjectType::Image1D:
+            case cl::MemObjectType::Image1D_Buffer:
+            case cl::MemObjectType::Image2D:
+                imageSlicePitch = 0;
+                break;
+            case cl::MemObjectType::Image2D_Array:
+            case cl::MemObjectType::Image3D:
+                imageSlicePitch = (region.y * imageRowPitch);
+                break;
+            case cl::MemObjectType::Image1D_Array:
+                imageSlicePitch = imageRowPitch;
+                break;
+            default:
+                ERR() << "Shouldn't be here";
+                ASSERT(false);
+                break;
+        }
+    }
+
+    uint8_t *ptr = imagePtr;
+    for (size_t z = 0; z < region.z; z++)
+    {
+        uint8_t *rowPtr = ptr;
+        for (size_t y = 0; y < region.y; y++)
+        {
+            uint8_t *pixelPtr = rowPtr;
+            for (size_t x = 0; x < region.x; x++)
+            {
+                memcpy(pixelPtr, packedFillColor, mElementSize);
+                pixelPtr += mElementSize;
+            }
+            rowPtr += imageRowPitch;
+        }
+        ptr += imageSlicePitch;
+    }
+}
+
 angle::Result CLImageVk::mapImpl()
 {
     ASSERT(!isMapped());
@@ -509,6 +667,37 @@ void CLImageVk::unmapImpl()
 {
     getStagingBuffer().unmap(mContext->getRenderer());
     mMappedMemory = nullptr;
+}
+
+cl_int normalizeFloatValue(float value, float maximum)
+{
+    if (value < 0)
+    {
+        return 0;
+    }
+    if (value > 1.f)
+    {
+        return static_cast<cl_int>(maximum);
+    }
+    float valueToRound = (value * maximum);
+    if (valueToRound >= -(float)CL_INT_MIN)
+    {
+        return CL_INT_MAX;
+    }
+    if (valueToRound <= (float)CL_INT_MIN)
+    {
+        return CL_INT_MIN;
+    }
+
+    if (fabsf(valueToRound) < 0x1.0p23f)
+    {
+        constexpr float magic[2] = {0x1.0p23f, -0x1.0p23f};
+        float magicVal           = magic[valueToRound < 0.0f];
+        valueToRound += magicVal;
+        valueToRound -= magicVal;
+    }
+
+    return static_cast<cl_int>(valueToRound);
 }
 
 }  // namespace rx
