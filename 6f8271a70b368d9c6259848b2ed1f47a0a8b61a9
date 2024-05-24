@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aab0541_f7378af6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-24T22:27:03Z",
+      "side": 1,
+      "message": "lgtm - test looks especially good, and really already covers my one question.",
+      "revId": "6f8271a70b368d9c6259848b2ed1f47a0a8b61a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e111f5bf_8e8e5fb0",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-24T22:27:03Z",
+      "side": 1,
+      "message": "Has a GL error been generated at a higher level if this assertion doesn\u0027t hold? For example, someone set up a VertexAttribPointer call earlier with a large offset when a larger buffer was bound, and later, the buffer was redefined to a smaller size?",
+      "revId": "6f8271a70b368d9c6259848b2ed1f47a0a8b61a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
