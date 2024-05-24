@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "39d7ad14_396f5929",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 3316531
+      },
+      "writtenOn": "2024-05-24T16:25:54Z",
+      "side": 1,
+      "message": "User projects would find both libraries and include dirs via pkgconfig, then they\u0027ll compile their sources including GL headers, if we do not install the headers, then compilation would fail. While headers are a requirement for the compilation step, libraries will be used in the linking step.",
+      "parentUuid": "7be96470_93f88d3f",
+      "range": {
+        "startLine": 1855,
+        "startChar": 0,
+        "endLine": 1860,
+        "endChar": 42
+      },
+      "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a697b76d_15c92538",
         "filename": "BUILD.gn",
         "patchSetId": 2
