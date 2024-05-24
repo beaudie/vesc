@@ -39,6 +39,30 @@
       },
       "revId": "1f21d3d5ef91d20e6fe1f003f1b21141dcdb628d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00d397fe_874c5e91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4716,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2024-05-24T02:42:47Z",
+      "side": 1,
+      "message": "Better leave it here for now since ANV is behind Venus atm, and we didn\u0027t forward it like for ARM yet. Dropping it from here is also fine, and I can patch up venus to forward host mesa driver version before the next angle uprev. Either way works for me ; )",
+      "parentUuid": "c1f4decc_7d278a61",
+      "range": {
+        "startLine": 4716,
+        "startChar": 52,
+        "endLine": 4716,
+        "endChar": 95
+      },
+      "revId": "1f21d3d5ef91d20e6fe1f003f1b21141dcdb628d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
