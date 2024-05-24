@@ -51,6 +51,24 @@
       "parentUuid": "e111f5bf_8e8e5fb0",
       "revId": "6f8271a70b368d9c6259848b2ed1f47a0a8b61a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d780af17_93311444",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-24T23:00:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6af1893a_4313118b",
+      "revId": "6f8271a70b368d9c6259848b2ed1f47a0a8b61a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
