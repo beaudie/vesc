@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7be96470_93f88d3f",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-24T14:31:14Z",
+      "side": 1,
+      "message": "Ah ok, if the script is producing multiple `.pc` files, it makes sense to invoke it once for each.\n\nFor headers, yes, maybe a separate target makes sense. But why do you need the headers? They are just GL headers.",
+      "parentUuid": "be09969e_00272613",
+      "range": {
+        "startLine": 1855,
+        "startChar": 0,
+        "endLine": 1860,
+        "endChar": 42
+      },
+      "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a697b76d_15c92538",
         "filename": "BUILD.gn",
         "patchSetId": 2
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "From [gn ref](https://gn.googlesource.com/gn/+/main/docs/reference.md#target-declarations-action_declare-a-target-that-runs-a-script-a-single-time-inputs) I guess data_deps can be used for runtime-deps so targets building can be parallelized\n\u003e data_deps will be built if the action is built, but may not have completed before all steps of the action are started\n\nThe install target needs dependencies to be built completely before running the script",
       "parentUuid": "a697b76d_15c92538",
+      "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33c10e38_cf3fb2fe",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-24T14:31:14Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9491bb4a_e338a367",
       "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
