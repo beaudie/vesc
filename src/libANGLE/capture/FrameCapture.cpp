@@ -62,10 +62,6 @@
 #    error Frame capture must be enabled to include this file.
 #endif  // !ANGLE_CAPTURE_ENABLED
 
-// This should be `INFO` level logging, but we want it to be output in all configurations, which
-// precludes us from using `INFO` itself
-#define CAPTURE_INFO() ERR()
-
 namespace angle
 {
 namespace
@@ -8930,7 +8926,7 @@ void FrameCaptureShared::onEndFrame(gl::Context *context)
         SaveBinaryData(mCompression, mOutDirectory, kSharedContextId, mCaptureLabel, mBinaryData);
         mBinaryData.clear();
         mWroteIndexFile = true;
-        CAPTURE_INFO() << "Finished recording graphics API capture";
+        INFO() << "Finished recording graphics API capture";
     }
 
     reset();
