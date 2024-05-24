@@ -214,6 +214,24 @@
       "parentUuid": "4a10cb3c_8218df9e",
       "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20150394_fe1b311f",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-24T18:45:40Z",
+      "side": 1,
+      "message": "Thanks for your reply and for the restructuring. I really didn\u0027t know the consequences of the weak ref, so hope that the changes you\u0027ve made in response (sharing the UsageRef and ColorWriteMask state, and keeping the strong reference to the parent texture) don\u0027t have any unwanted side-effects.",
+      "parentUuid": "7fffd6dd_ebaba9c0",
+      "revId": "bb211e4c59e403053fca1d7ebc835fdf9f9d3413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
