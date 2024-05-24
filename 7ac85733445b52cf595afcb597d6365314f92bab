@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cfa94dd_0359db6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-24T11:20:39Z",
+      "side": 1,
+      "message": "This causes antutu_refinery trace to fail on Mesa 23.2.1:\nhttps://ci.chromium.org/ui/p/angle/builders/ci/linux-exp-test/198/overview\n[ RUN      ] TraceTest.antutu_refinery\nAPI, Error, High: Desired resource size is greater than max texture size.\n../../src/tests/perf_tests/ANGLEPerfTest.h:131: Failure\nFailed\nFailing test because of unexpected error:\nDesired resource size is greater than max texture size.\n\nI could skip the test, but since this CL is related to Mesa \u003e 22, maybe there is a bug?",
+      "revId": "7ac85733445b52cf595afcb597d6365314f92bab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
