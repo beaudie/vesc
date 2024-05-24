@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7b4971b_80e252eb",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-24T15:52:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85fa1bf2_c085acec",
+      "revId": "c081e862629490107d7ba9edac0bc5069e394e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f62a51b_edba69d8",
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d95255d1_a022e2bf",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-24T15:52:30Z",
+      "side": 1,
+      "message": "If `dirty` is false, the [1] line won\u0027t be executed.",
+      "parentUuid": "4f62a51b_edba69d8",
+      "range": {
+        "startLine": 468,
+        "startChar": 17,
+        "endLine": 468,
+        "endChar": 41
+      },
+      "revId": "c081e862629490107d7ba9edac0bc5069e394e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "43211f30_4ed1154d",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 1
@@ -54,6 +96,30 @@
       "writtenOn": "2024-05-24T15:12:01Z",
       "side": 1,
       "message": "Is this still necessary if line at [1] is changed?",
+      "range": {
+        "startLine": 643,
+        "startChar": 0,
+        "endLine": 657,
+        "endChar": 1
+      },
+      "revId": "c081e862629490107d7ba9edac0bc5069e394e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "079e7bb2_52101aea",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-24T15:52:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43211f30_4ed1154d",
       "range": {
         "startLine": 643,
         "startChar": 0,
