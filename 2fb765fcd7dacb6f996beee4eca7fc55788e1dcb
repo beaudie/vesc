@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a3cde47_f23824f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 25
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-24T18:00:51Z",
+      "side": 1,
+      "message": "Looks like there\u0027s one more related bug: https://issues.angleproject.org/issues/42265945.",
+      "revId": "2fb765fcd7dacb6f996beee4eca7fc55788e1dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
