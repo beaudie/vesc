@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec59350b_6a38a40e",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-05-25T15:04:27Z",
+      "side": 1,
+      "message": "I think we should handle the case that stride \u003e `mCurrentArrayInlineDataSizes[v]` as well. It would happen for users that use raw vertex pointers. Note sure validation layer would complain in this case.",
+      "parentUuid": "2de85ef8_8020617f",
+      "range": {
+        "startLine": 460,
+        "startChar": 20,
+        "endLine": 460,
+        "endChar": 40
+      },
+      "revId": "6f8271a70b368d9c6259848b2ed1f47a0a8b61a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e111f5bf_8e8e5fb0",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 1
