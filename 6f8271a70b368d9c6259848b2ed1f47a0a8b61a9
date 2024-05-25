@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ae5e624_b7d3c87e",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-25T17:51:05Z",
+      "side": 1,
+      "message": "Metal Validation does complain when the layout stride is greater than the `length` parameter of the associated `setVertexBytes` command. The `VertexArrayMtl::updateClientAttribs` function ensures that `mCurrentArrayInlineDataSizes[v]` value is not smaller than the layout stride so this validation issue is not reachable.\n\nIn practice, client arrays are not used because of the `allowInlineConstVertexData` feature.",
+      "parentUuid": "ec59350b_6a38a40e",
+      "range": {
+        "startLine": 460,
+        "startChar": 20,
+        "endLine": 460,
+        "endChar": 40
+      },
+      "revId": "6f8271a70b368d9c6259848b2ed1f47a0a8b61a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e111f5bf_8e8e5fb0",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 1
