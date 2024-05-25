@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e615f3_d6f08b25",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-25T05:48:17Z",
+      "side": 1,
+      "message": "Right, though every driver doesn\u0027t reinstall the same GL headers. Like IIRC, I used to install the GL headers through the mesa package, and my GL app would build and end up running on Nvidia. I suspect that would work for ANGLE too, but anyway, I\u0027m not pressing for this, we won\u0027t be using this packaging anyway for the foreseeable future.",
+      "parentUuid": "39d7ad14_396f5929",
+      "range": {
+        "startLine": 1855,
+        "startChar": 0,
+        "endLine": 1860,
+        "endChar": 42
+      },
+      "revId": "bcaed0be8bb227ccea5220fe13947a0ff5f9df52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a697b76d_15c92538",
