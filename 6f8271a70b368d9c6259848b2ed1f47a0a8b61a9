@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2de85ef8_8020617f",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-25T12:30:18Z",
+      "side": 1,
+      "message": "This branch (starting from L434) is also executed when data is sourced from  `mCurrentArrayInlineDataPointers[v]`.",
+      "parentUuid": "42d7b793_b3d3efbb",
+      "range": {
+        "startLine": 460,
+        "startChar": 20,
+        "endLine": 460,
+        "endChar": 40
+      },
+      "revId": "6f8271a70b368d9c6259848b2ed1f47a0a8b61a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e111f5bf_8e8e5fb0",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 1
@@ -107,6 +131,30 @@
       "writtenOn": "2024-05-25T09:46:45Z",
       "side": 1,
       "message": "nit:\n```suggestion\n                        ASSERT(stride % mtl::kVertexAttribBufferStrideAlignment \u003d\u003d 0);\n```",
+      "range": {
+        "startLine": 468,
+        "startChar": 24,
+        "endLine": 468,
+        "endChar": 48
+      },
+      "revId": "6f8271a70b368d9c6259848b2ed1f47a0a8b61a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c34d8399_a7615e15",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-25T12:30:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afc9a8b5_bd32c2b1",
       "range": {
         "startLine": 468,
         "startChar": 24,
