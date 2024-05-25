@@ -4729,11 +4729,17 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // Use VMA for image suballocation.
     ANGLE_FEATURE_CONDITION(&mFeatures, useVmaForImageSuballocation, true);
 
-    // Emit SPIR-V 1.4 when supported.  The windows/Nvidia Chromium bots crash when creating a
-    // pipeline with SPIR-V 1.4 shaders, so that's disabled.
+    // Emit SPIR-V 1.4 when supported.  The following old drivers have various bugs with SPIR-V 1.4:
+    //
+    // - Nvidia drivers - Crashes when creating pipelines, not using any SPIR-V 1.4 features.  Known
+    //                    good since at least version 525
+    // - Qualcomm drivers - Crashes when creating pipelines in the presence of OpCopyLogical with
+    //                      some types.  Unknown if/when fixed (assuming fixed in latest).
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsSPIRV14,
                             ExtensionFound(VK_KHR_SPIRV_1_4_EXTENSION_NAME, deviceExtensionNames) &&
-                                !(IsWindows() && isNvidia));
+                                !(isNvidia && nvidiaVersion.major < 525) &&
+                                !(isQualcommProprietary &&
+                                  qualcommDriverVersion < QualcommDriverVersion(512, 762, 12)));
 
     // Retain debug info in SPIR-V blob.
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSPIRVDebugInfo, getEnableValidationLayers());
