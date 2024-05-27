@@ -711,6 +711,11 @@ class ProgramExecutable final : public angle::Subject
         return mUniformBlockIndexToBufferBinding;
     }
 
+    const ShaderMap<SharedProgramExecutable> &getPPOProgramExecutables() const
+    {
+        return mPPOProgramExecutables;
+    }
+
     // Post-link task helpers
     const std::vector<std::shared_ptr<rx::LinkSubTask>> &getPostLinkSubTasks() const
     {
