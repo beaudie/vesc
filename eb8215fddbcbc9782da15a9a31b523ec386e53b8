@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b86d9489_5f1d200f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-27T18:56:40Z",
+      "side": 1,
+      "message": "`s/Cleanup:/Vulkan:`",
+      "revId": "eb8215fddbcbc9782da15a9a31b523ec386e53b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be8d2b9e_817808f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-27T18:56:40Z",
+      "side": 1,
+      "message": "`Bug: angleproject:7103`",
+      "revId": "eb8215fddbcbc9782da15a9a31b523ec386e53b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
