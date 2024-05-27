@@ -16,6 +16,23 @@
       "message": "The `AtomicRefCounted` is currently used in `WarmUpGraphicsTask` and requires `memory_order_acq_rel` for porbper synchronization.\n\nI noticed that `memory_order_acq_rel` was added for `RefCountedEvent`, but then reverted. However, this problem existed before adding the `RefCountedEvent`, so we indeed need to change the memory order.",
       "revId": "336b8e2256fa746c34abb3f3085274feda60b070",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7702a6ab_046b4cd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-27T15:45:10Z",
+      "side": 1,
+      "message": "I\u0027ve seen relaxed ++ and acq_rel -- for ref counts elsewhere too, but I thought this is the way it is because `AtomicRefCounted` is always protected by the sharegroup lock ... which now that I think about it doesn\u0027t make sense (as it otherwise wouldn\u0027t have needed atomic).\n\nAnyway, leaving to Charlie for the proper review as he was fiddling with this recently,",
+      "revId": "336b8e2256fa746c34abb3f3085274feda60b070",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
