@@ -2015,7 +2015,7 @@ angle::Result ProgramExecutableVk::updateUniforms(
     bool isTransformFeedbackActiveUnpaused,
     TransformFeedbackVk *transformFeedbackVk)
 {
-    ASSERT(hasDirtyUniforms());
+    ASSERT(mDefaultUniformBlocksDirty.any());
 
     vk::BufferHelper *defaultUniformBuffer;
     bool anyNewBufferAllocated          = false;
