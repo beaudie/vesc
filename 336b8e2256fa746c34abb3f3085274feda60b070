@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8adfda82_68638adc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-05-27T15:21:11Z",
+      "side": 1,
+      "message": "The `AtomicRefCounted` is currently used in `WarmUpGraphicsTask` and requires `memory_order_acq_rel` for porbper synchronization.\n\nI noticed that `memory_order_acq_rel` was added for `RefCountedEvent`, but then reverted. However, this problem existed before adding the `RefCountedEvent`, so we indeed need to change the memory order.",
+      "revId": "336b8e2256fa746c34abb3f3085274feda60b070",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
