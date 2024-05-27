@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "621bdb48_b92f85dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-27T13:37:05Z",
+      "side": 1,
+      "message": "I Think all the comments are resolved so I\u0027ll stamp this with +2.",
+      "revId": "afdaed497ea3c548ba9bfc70aa121416ea1572c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
