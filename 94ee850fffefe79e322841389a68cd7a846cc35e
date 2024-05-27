@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5697798_5f3397d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-27T16:35:02Z",
+      "side": 1,
+      "message": "Same here, could you please add an assert when starting the render pass for example that the render pass desc and the framebuffer agree w.r.t sRGB?",
+      "revId": "94ee850fffefe79e322841389a68cd7a846cc35e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
