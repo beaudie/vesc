@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5037902f_8a13f597",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-27T16:37:45Z",
+      "side": 1,
+      "message": "LGTM. Not sure what the deal with idle_heroes is, the driver is crashing when creating the graphics pipeline (pretty unrelated to this change)",
+      "revId": "e75d79662af7abca3a1a9d3eecf8701acc6b804d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
