@@ -4736,11 +4736,15 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // - Qualcomm drivers - Crashes when creating pipelines in the presence of OpCopyLogical with
     //                      some types.  Unknown if/when fixed (assuming fixed in latest).
     //                      http://anglebug.com/343218484
+    // - ARM drivers - Fail tests when OpSelect uses a scalar to select between vectors.  Known good
+    //                 since at least version 47.  http://anglebug.com/343218491
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsSPIRV14,
                             ExtensionFound(VK_KHR_SPIRV_1_4_EXTENSION_NAME, deviceExtensionNames) &&
                                 !(isNvidia && nvidiaVersion.major < 525) &&
                                 !(isQualcommProprietary &&
-                                  qualcommDriverVersion < QualcommDriverVersion(512, 762, 12)));
+                                  qualcommDriverVersion < QualcommDriverVersion(512, 762, 12) &&
+                                !(isARM &&
+                                  armDriverVersion < ARMDriverVersion(47, 0, 0)));
 
     // Retain debug info in SPIR-V blob.
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSPIRVDebugInfo, getEnableValidationLayers());

@@ -4369,7 +4369,7 @@ spirv::IdRef OutputSPIRVTraverser::cast(spirv::IdRef value,
     // If SPIR-V 1.4 is available, use OpCopyLogical if possible.  OpCopyLogical works on arrays and
     // structs, and only if the types are logically the same.  This means that arrays and structs
     // can be copied with this instruction despite their SpirvTypeSpec being different.  The only
-    // exception is if there is a mistmatch in the isOrHasBoolInInterfaceBlock type specialization
+    // exception is if there is a mismatch in the isOrHasBoolInInterfaceBlock type specialization
     // as it actually changes the type of the struct members.
     if (mCompileOptions.emitSPIRV14 && (valueType.isArray() || valueType.getStruct() != nullptr) &&
         valueTypeSpec.isOrHasBoolInInterfaceBlock == expectedTypeSpec.isOrHasBoolInInterfaceBlock)
@@ -5166,10 +5166,10 @@ bool OutputSPIRVTraverser::visitTernary(Visit visit, TIntermTernary *node)
     size_t lastChildIndex = getLastTraversedChildIndex(visit);
 
     // If the condition was just visited, evaluate it and decide if OpSelect could be used or an
-    // if-else must be emitted.  OpSelect is only used if the type is scalar or vector (required by
-    // OpSelect) and if neither side has a side effect.
+    // if-else must be emitted.  OpSelect is only used if neither side has a side effect.  SPIR-V
+    // prior to 1.4 requires the type to be either scalar or vector.
     const TType &type   = node->getType();
-    bool canUseOpSelect = (type.isScalar() || type.isVector()) &&
+    bool canUseOpSelect = (type.isScalar() || type.isVector() || mCompileOptions.emitSPIRV14) &&
                           !node->getTrueExpression()->hasSideEffects() &&
                           !node->getFalseExpression()->hasSideEffects();
 
@@ -5190,9 +5190,9 @@ bool OutputSPIRVTraverser::visitTernary(Visit visit, TIntermTernary *node)
         // If OpSelect can be used, keep the condition for later usage.
         if (canUseOpSelect)
         {
-            // SPIR-V 1.0 requires that the condition value have as many components as the result.
-            // So when selecting between vectors, we must replicate the condition scalar.
-            if (type.isVector())
+            // SPIR-V prior to 1.4 requires that the condition value have as many components as the
+            // result.  So when selecting between vectors, we must replicate the condition scalar.
+            if (!mCompileOptions.emitSPIRV14 && type.isVector())
             {
                 const TType &boolVectorType =
                     *StaticType::GetForVec<EbtBool, EbpUndefined>(EvqGlobal, type.getNominalSize());
