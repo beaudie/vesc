@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "56ee7888_358658ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-05-27T17:13:41Z",
+      "side": 1,
+      "message": "I will.",
+      "parentUuid": "88315b72_fc8b38c9",
+      "revId": "7fd25f3332e925961f65df1a8630eb24d03b12fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5abf1a14_e43ff79d",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2024-05-27T16:33:46Z",
       "side": 1,
       "message": "There\u0027s a little bit of inconsistency here too. `updateRenderPassDesc()` does `setFragmentShadingAttachment(mCurrentFramebufferDesc.hasFragmentShadingRateAttachment()` but this one did `setFragmentShadingAttachment(isFoveationEnabled)`\n\nWas this one maybe supposed to disable the fragment shading attachment (even if there _is_ one) if foveation is disabled for the framebuffer?",
+      "revId": "7fd25f3332e925961f65df1a8630eb24d03b12fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a586f82_c7396379",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-05-27T17:13:41Z",
+      "side": 1,
+      "message": "I do not see inconsistency. Maybe I\u0027m wrong.\n\n`mCurrentFramebufferDesc.updateFragmentShadingRate(serial)` updates `mCurrentFramebufferDesc.hasFragmentShadingRateAttachment()` state (checks if serial is valid).\n\nThe `serial` and `isFoveationEnabled` local variables are synchronized: (valid and true) or (invalid and false). So `setFragmentShadingAttachment(isFoveationEnabled)` is equivalent to `setFragmentShadingAttachment(mCurrentFramebufferDesc.hasFragmentShadingRateAttachment()`.\n\nThe `updateFoveationState()` is only called from `FramebufferVk::syncState()`. It is like any other method updates `mCurrentFramebufferDesc`. In case of description change during sync, the `\nupdateRenderPassDesc()` will update the `\nmRenderPassDesc`\n\n\u003e Was this one maybe supposed to disable the fragment shading attachment (even if there is one) if foveation is disabled for the framebuffer?\n\nI think that `mRenderPassDesc` was updated here to be consistent with similar update when `shouldUpdateSrgbWriteControlMode` is true (which I think is also redundant).\n\nIf `newFoveationState-\u003eisFoveated()` is false, while old was true, `mCurrentFramebufferDesc.updateFragmentShadingRate()` will be called with invalid serial. This will result in false `mCurrentFramebufferDesc.hasFragmentShadingRateAttachment()` (same as `isFoveationEnabled`). The `mCurrentFramebufferDesc \u003d\u003d priorFramebufferDesc` check will fail and `updateRenderPassDesc()` will update the `mRenderPassDesc`.",
+      "parentUuid": "5abf1a14_e43ff79d",
       "revId": "7fd25f3332e925961f65df1a8630eb24d03b12fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
