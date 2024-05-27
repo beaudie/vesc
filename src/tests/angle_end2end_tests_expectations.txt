@@ -33,6 +33,9 @@
 8446 : CopyTexImageTestES3.RedefineSameLevel/* = SKIP
 // Currently fails on WebGPU as it's not fully implemented yet.
 
+// Fails AST validation
+342866374 : GLSLTest_ES31.PerVertexRedefinition/*_ForceInitShaderVariables* = SKIP
+
 6743 OPENGL : SimpleStateChangeTestES3.RespecifyBufferAfterBeginTransformFeedback/* = SKIP
 6743 GLES : SimpleStateChangeTestES3.RespecifyBufferAfterBeginTransformFeedback/* = SKIP
 
