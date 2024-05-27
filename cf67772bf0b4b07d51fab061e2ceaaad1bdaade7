@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bfae676_b5620a04",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-27T16:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df961a7d_a02a80d1",
+      "range": {
+        "startLine": 1569,
+        "startChar": 0,
+        "endLine": 1573,
+        "endChar": 5
+      },
+      "revId": "cf67772bf0b4b07d51fab061e2ceaaad1bdaade7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21abdeaf_0cc98b17",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-05-27T15:08:54Z",
       "side": 1,
       "message": "For an easy follow up (unrelated change): Since you\u0027re working around this area, suggest making this similar to the graphics case, by removing the `DIRTY_BIT_DESCRIPTOR_SETS` set, and move the line that sets it from `handleDirtyGraphicsUniforms` to `handleDirtyUniformsImpl` to cover both graphics and compute.",
+      "revId": "cf67772bf0b4b07d51fab061e2ceaaad1bdaade7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4cdb008_15fa51d0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1825,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-27T16:17:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "21abdeaf_0cc98b17",
       "revId": "cf67772bf0b4b07d51fab061e2ceaaad1bdaade7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
