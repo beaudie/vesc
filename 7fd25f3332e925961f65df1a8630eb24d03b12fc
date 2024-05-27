@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9320d3a7_2ba84b61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-05-27T17:36:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56ee7888_358658ea",
+      "revId": "7fd25f3332e925961f65df1a8630eb24d03b12fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5abf1a14_e43ff79d",
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "Ack, if `mCurrentFramebufferDesc.hasFragmentShadingRateAttachment()` and `mFoveationState.isFoveated()` are always equal (taking your word for it), there\u0027s no concern.",
       "parentUuid": "5a586f82_c7396379",
+      "revId": "7fd25f3332e925961f65df1a8630eb24d03b12fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98b8fc61_1a002c35",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-05-27T17:36:47Z",
+      "side": 1,
+      "message": "In fact, in cause of the failure of `ANGLE_TRY(updateFragmentShadingRateAttachment()` they may no longer be in sync.\n\nI also fixed this, by moving `mFoveationState` after the possible failure point.",
+      "parentUuid": "be8cd176_b834a6ed",
       "revId": "7fd25f3332e925961f65df1a8630eb24d03b12fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
