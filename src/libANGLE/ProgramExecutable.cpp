@@ -2607,7 +2607,6 @@ void ProgramExecutable::setUniformGeneric(UniformLocation location,
     const VariableLocation &locationInfo = mUniformLocations[location.value];
     GLsizei clampedCount                 = clampUniformCount(locationInfo, count, UniformSize, v);
     (mImplementation->*SetUniformFunc)(location.value, clampedCount, v);
-    onStateChange(angle::SubjectMessage::ProgramUniformUpdated);
 }
 
 void ProgramExecutable::setUniform1fv(UniformLocation location, GLsizei count, const GLfloat *v)
@@ -2648,10 +2647,6 @@ void ProgramExecutable::setUniform1iv(Context *context,
     if (isSamplerUniformIndex(locationInfo.index))
     {
         updateSamplerUniform(context, locationInfo, clampedCount, v);
-    }
-    else
-    {
-        onStateChange(angle::SubjectMessage::ProgramUniformUpdated);
     }
 }
 
@@ -2707,7 +2702,6 @@ void ProgramExecutable::setUniformMatrixGeneric(UniformLocation location,
 
     GLsizei clampedCount = clampMatrixUniformCount<MatrixC, MatrixR>(location, count, transpose, v);
     (mImplementation->*SetUniformMatrixFunc)(location.value, clampedCount, transpose, v);
-    onStateChange(angle::SubjectMessage::ProgramUniformUpdated);
 }
 
 void ProgramExecutable::setUniformMatrix2fv(UniformLocation location,
