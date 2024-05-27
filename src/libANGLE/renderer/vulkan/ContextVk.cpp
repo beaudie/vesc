@@ -1566,6 +1566,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     }
 
     ProgramExecutableVk *executableVk = vk::GetImpl(mState.getProgramExecutable());
+    executableVk->updateDirtyGraphicsUniformsFromPPO();
     if (executableVk->hasDirtyUniforms())
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_UNIFORMS);
@@ -1817,6 +1818,7 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
     ANGLE_TRY(flushOutsideRenderPassCommands());
 
     ProgramExecutableVk *executableVk = vk::GetImpl(mState.getProgramExecutable());
+    executableVk->updateDirtyComputeUniformsFromPPO();
     if (executableVk->hasDirtyUniforms())
     {
         mComputeDirtyBits.set(DIRTY_BIT_UNIFORMS);
