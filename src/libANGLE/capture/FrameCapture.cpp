@@ -812,6 +812,19 @@ void WriteBinaryParamReplay(ReplayWriter &replayWriter,
     }
 }
 
+void WriteComment(std::ostream &out, const CallCapture &call)
+{
+    // Read the string parameter
+    const ParamCapture &stringParam =
+        call.params.getParam("comment", ParamType::TGLcharConstPointer, 0);
+    const std::vector<uint8_t> &data = stringParam.data[0];
+    ASSERT(data.size() > 0 && data.back() == '\0');
+    std::string str(data.begin(), data.end() - 1);
+
+    // Write the string prefixed with single line comment
+    out << "// " << str;
+}
+
 void WriteCppReplayForCall(const CallCapture &call,
                            ReplayWriter &replayWriter,
                            std::ostream &out,
@@ -819,6 +832,13 @@ void WriteCppReplayForCall(const CallCapture &call,
                            std::vector<uint8_t> *binaryData,
                            size_t *maxResourceIDBufferSize)
 {
+    if (call.customFunctionName == "Comment")
+    {
+        // Just write it directly to the file and move on
+        WriteComment(out, call);
+        return;
+    }
+
     std::ostringstream callOut;
 
     callOut << call.name() << "(";
@@ -4106,6 +4126,16 @@ void CompressPalettedTexture(angle::MemoryBuffer &data,
         indexBits * extents.width / 8,                              // outputRowPitch
         indexBits * extents.width * extents.height / 8              // outputDepthPitch
     );
+}
+
+void AddComment(std::vector<CallCapture> *outCalls, const std::string &comment)
+{
+
+    ParamBuffer commentParamBuffer;
+    ParamCapture commentParam("comment", ParamType::TGLcharConstPointer);
+    CaptureString(comment.c_str(), &commentParam);
+    commentParamBuffer.addParam(std::move(commentParam));
+    outCalls->emplace_back("Comment", std::move(commentParamBuffer));
 }
 
 // Capture the setup of the state that's shared by all of the contexts in the share group
@@ -8324,6 +8354,9 @@ void FrameCaptureShared::captureCall(gl::Context *context, CallCapture &&inCall,
 {
     if (SkipCall(inCall.entryPoint))
     {
+        std::stringstream skipCall;
+        skipCall << "Skipping call to " << GetEntryPointName(inCall.entryPoint);
+        AddComment(&mFrameCalls, skipCall.str());
         return;
     }
 
