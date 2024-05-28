@@ -2179,6 +2179,7 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
     // may get non-coherent memory type.
     requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
     preferredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+<<<<<<< HEAD   (3cabe8 Tests: fix python assertion)
     VkResult result = mAllocator.findMemoryTypeIndexForBufferInfo(
         createInfo, requiredFlags, preferredFlags, persistentlyMapped,
         &mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedPreferCoherent]);
@@ -2193,6 +2194,14 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
         mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedPreferCoherent] =
             mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::UnCachedCoherent];
     }
+=======
+    ANGLE_VK_TRY(context,
+                 mAllocator.findMemoryTypeIndexForBufferInfo(
+                     createInfo, requiredFlags, preferredFlags, persistentlyMapped,
+                     &mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedPreferCoherent]));
+    ASSERT(mStagingBufferMemoryTypeIndex[vk::MemoryCoherency::CachedPreferCoherent] !=
+           kInvalidMemoryTypeIndex);
+>>>>>>> CHANGE (117bd5 M126: Vulkan: Fix CachedPreferCoherent to actually require c)
 
     // Cached Non-coherent staging buffer
     requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
