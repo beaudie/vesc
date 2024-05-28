@@ -115,10 +115,10 @@ class ProgramGL::LinkTaskGL final : public LinkTask
         ASSERT(linkSubTasksOut && linkSubTasksOut->empty());
         ASSERT(postLinkSubTasksOut && postLinkSubTasksOut->empty());
 
-        mProgram->linkJobImpl(mExtensions);
+        mResult = mProgram->linkJobImpl(mExtensions);
 
         // If there is no native parallel compile, do the post-link right away.
-        if (!mHasNativeParallelCompile)
+        if (mResult == angle::Result::Continue && !mHasNativeParallelCompile)
         {
             mResult = mProgram->postLinkJobImpl(resources);
         }
@@ -132,7 +132,7 @@ class ProgramGL::LinkTaskGL final : public LinkTask
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "LinkTaskGL::getResult");
 
-        if (mHasNativeParallelCompile)
+        if (mResult == angle::Result::Continue && mHasNativeParallelCompile)
         {
             mResult = mProgram->postLinkJobImpl(*mResources);
         }
@@ -293,7 +293,7 @@ angle::Result ProgramGL::link(const gl::Context *context, std::shared_ptr<LinkTa
     return angle::Result::Continue;
 }
 
-void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
+angle::Result ProgramGL::linkJobImpl(const gl::Extensions &extensions)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramGL::linkJobImpl");
     const gl::ProgramExecutable &executable = mState.getExecutable();
@@ -374,6 +374,8 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
             if (fragmentShader && fragmentShader->shaderVersion == 100 &&
                 mFunctions->standard == STANDARD_GL_DESKTOP)
             {
+                ASSERT(!mFeatures.avoidBindFragDataLocation.enabled);
+
                 const auto &shaderOutputs = fragmentShader->activeOutputVariables;
                 for (const auto &output : shaderOutputs)
                 {
@@ -417,60 +419,77 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
             }
             else if (fragmentShader && fragmentShader->shaderVersion >= 300)
             {
+                if (mFeatures.avoidBindFragDataLocation.enabled)
+                {
+                    // If any location was assigned by the API and we're unable to set it due to
+                    // Qualcomm driver issues, fail link now instead of leaving the location
+                    // unassigned.
+                    bool hasApiAssignedLocation = !executable.getSecondaryOutputLocations().empty();
+                    if (!hasApiAssignedLocation)
+                    {
+                        for (const gl::VariableLocation &outputLocation :
+                             executable.getOutputLocations())
+                        {
+                            if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
+                                !outputLocation.ignored)
+                            {
+                                const gl::ProgramOutput &outputVar =
+                                    executable.getOutputVariables()[outputLocation.index];
+                                if (outputVar.pod.hasApiAssignedLocation ||
+                                    outputVar.pod.hasApiAssignedIndex)
+                                {
+                                    hasApiAssignedLocation = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (hasApiAssignedLocation)
+                    {
+                        executable.getInfoLog()
+                            << "Unable to assign fragment output locations due to driver issues. "
+                               "See http://anglebug.com/42267082";
+                        return angle::Result::Stop;
+                    }
+                }
+
                 // ESSL 3.00 and up.
-                const auto &outputLocations          = executable.getOutputLocations();
-                const auto &secondaryOutputLocations = executable.getSecondaryOutputLocations();
-                for (size_t outputLocationIndex = 0u; outputLocationIndex < outputLocations.size();
-                     ++outputLocationIndex)
-                {
-                    const gl::VariableLocation &outputLocation =
-                        outputLocations[outputLocationIndex];
-                    if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
-                        !outputLocation.ignored)
-                    {
-                        const gl::ProgramOutput &outputVar =
-                            executable.getOutputVariables()[outputLocation.index];
-                        if (outputVar.pod.location == -1 || outputVar.pod.index == -1)
+                auto setApiAssignedOutputLocations =
+                    [this](const std::vector<gl::VariableLocation> &locations) {
+                        const gl::ProgramExecutable &executable = mState.getExecutable();
+                        for (size_t outputLocationIndex = 0u;
+                             outputLocationIndex < locations.size(); ++outputLocationIndex)
                         {
-                            // We only need to assign the location and index via the API in case the
-                            // variable doesn't have a shader-assigned location and index. If a
-                            // variable doesn't have its location set in the shader it doesn't have
-                            // the index set either.
-                            ASSERT(outputVar.pod.index == -1);
-                            mFunctions->bindFragDataLocationIndexed(
-                                mProgramID, static_cast<int>(outputLocationIndex), 0,
-                                outputVar.mappedName.c_str());
+                            const gl::VariableLocation &outputLocation =
+                                locations[outputLocationIndex];
+                            if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
+                                !outputLocation.ignored)
+                            {
+                                const gl::ProgramOutput &outputVar =
+                                    executable.getOutputVariables()[outputLocation.index];
+                                if (!outputVar.pod.hasShaderAssignedLocation)
+                                {
+                                    // We only need to assign the location and index via the API
+                                    // if the variable doesn't have a shader-assigned location.
+                                    ASSERT(!outputVar.pod.hasShaderAssignedIndex);
+                                    ASSERT(outputVar.pod.index != -1);
+                                    mFunctions->bindFragDataLocationIndexed(
+                                        mProgramID, static_cast<int>(outputLocationIndex),
+                                        outputVar.pod.index, outputVar.mappedName.c_str());
+                                }
+                            }
                         }
-                    }
-                }
-                for (size_t outputLocationIndex = 0u;
-                     outputLocationIndex < secondaryOutputLocations.size(); ++outputLocationIndex)
-                {
-                    const gl::VariableLocation &outputLocation =
-                        secondaryOutputLocations[outputLocationIndex];
-                    if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
-                        !outputLocation.ignored)
-                    {
-                        const gl::ProgramOutput &outputVar =
-                            executable.getOutputVariables()[outputLocation.index];
-                        if (outputVar.pod.location == -1 || outputVar.pod.index == -1)
-                        {
-                            // We only need to assign the location and index via the API in case the
-                            // variable doesn't have a shader-assigned location and index.  If a
-                            // variable doesn't have its location set in the shader it doesn't have
-                            // the index set either.
-                            ASSERT(outputVar.pod.index == -1);
-                            mFunctions->bindFragDataLocationIndexed(
-                                mProgramID, static_cast<int>(outputLocationIndex), 1,
-                                outputVar.mappedName.c_str());
-                        }
-                    }
-                }
+                    };
+
+                setApiAssignedOutputLocations(executable.getOutputLocations());
+                setApiAssignedOutputLocations(executable.getSecondaryOutputLocations());
             }
         }
     }
 
     mFunctions->linkProgram(mProgramID);
+    return angle::Result::Continue;
 }
 
 angle::Result ProgramGL::postLinkJobImpl(const gl::ProgramLinkedResources &resources)
