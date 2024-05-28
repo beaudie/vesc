@@ -1787,6 +1787,11 @@ void Context::getFloatvImpl(GLenum pname, GLfloat *params) const
             params[0] = mState.getCaps().minAliasedLineWidth;
             params[1] = mState.getCaps().maxAliasedLineWidth;
             break;
+        case GL_MULTISAMPLE_LINE_WIDTH_RANGE:
+            // TODO: Update (should be MS range; is it same as *AliasedLineWidth?)
+            params[0] = mState.getCaps().minMultisampleLineWidth;
+            params[1] = mState.getCaps().maxMultisampleLineWidth;
+            break;
         case GL_ALIASED_POINT_SIZE_RANGE:
             params[0] = mState.getCaps().minAliasedPointSize;
             params[1] = mState.getCaps().maxAliasedPointSize;
@@ -1798,6 +1803,10 @@ void Context::getFloatvImpl(GLenum pname, GLfloat *params) const
         case GL_SMOOTH_LINE_WIDTH_RANGE:
             params[0] = mState.getCaps().minSmoothLineWidth;
             params[1] = mState.getCaps().maxSmoothLineWidth;
+            break;
+        case GL_MULTISAMPLE_LINE_WIDTH_GRANULARITY:
+            // TODO: Update (should be MS granularity; same as line width granularity?)
+            *params = mState.getCaps().lineWidthGranularity;
             break;
         case GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT:
             ASSERT(mState.getExtensions().textureFilterAnisotropicEXT);

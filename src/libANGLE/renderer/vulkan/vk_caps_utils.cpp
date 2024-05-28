@@ -628,16 +628,27 @@ void Renderer::ensureCapsInitialized() const
                   limitsVk.maxFramebufferHeight});
     mNativeCaps.minAliasedPointSize = std::max(1.0f, limitsVk.pointSizeRange[0]);
     mNativeCaps.maxAliasedPointSize = limitsVk.pointSizeRange[1];
+    // TODO: Point size granularity? (Unrelated to this)
+
+    // Line width ranges and granularity
+    mNativeCaps.lineWidthGranularity = limitsVk.lineWidthGranularity;
 
     if (mPhysicalDeviceFeatures.wideLines && mFeatures.bresenhamLineRasterization.enabled)
     {
         mNativeCaps.minAliasedLineWidth = std::max(1.0f, limitsVk.lineWidthRange[0]);
         mNativeCaps.maxAliasedLineWidth = limitsVk.lineWidthRange[1];
+
+        // TODO: Another value?
+        mNativeCaps.minMultisampleLineWidth = std::max(1.0f, limitsVk.lineWidthRange[0]);
+        mNativeCaps.maxMultisampleLineWidth = limitsVk.lineWidthRange[1];
     }
     else
     {
         mNativeCaps.minAliasedLineWidth = 1.0f;
         mNativeCaps.maxAliasedLineWidth = 1.0f;
+
+        mNativeCaps.minMultisampleLineWidth = 1.0f;
+        mNativeCaps.maxMultisampleLineWidth = 1.0f;
     }
 
     mNativeCaps.maxDrawBuffers =

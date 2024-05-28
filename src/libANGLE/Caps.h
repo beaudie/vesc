@@ -397,6 +397,11 @@ struct Caps
     GLint maxTextureBufferSize         = 0;
     GLint textureBufferOffsetAlignment = 0;
 
+    // ES 3.2 Table 21.40: Implementation Dependent Values
+    GLfloat lineWidthGranularity    = 0.0f;
+    GLfloat minMultisampleLineWidth = 0.0f;
+    GLfloat maxMultisampleLineWidth = 0.0f;
+
     // GL_ARM_shader_framebuffer_fetch
     bool fragmentShaderFramebufferFetchMRT = false;
 };
