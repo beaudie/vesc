@@ -64,6 +64,30 @@
       },
       "revId": "a9aae9cc05280258eed4a8b89c6d8789ded7488a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3bde75c_32a04d01",
+        "filename": "scripts/install_target.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3316531
+      },
+      "writtenOn": "2024-05-28T15:12:08Z",
+      "side": 1,
+      "message": "I see. I updated the sample code including `\\\"` around `$CUSTOM_PREFIX`. This should work as expected.",
+      "parentUuid": "088b2fe0_00e31959",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "a9aae9cc05280258eed4a8b89c6d8789ded7488a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
