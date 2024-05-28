@@ -123,6 +123,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0b843b2_f135895c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-28T17:17:16Z",
+      "side": 1,
+      "message": "Ouch that\u0027s a good point. Separable programs can\u0027t be used to draw with, but you could have the same program bound to multiple PPOs and get the same effect.\n\nRoman, please add a test for this. It would go in ProgramPipelineTest.cpp and look something like this:\n\n- Create VS, FS1 and FS2 programs\n- Bind VS+FS1 into PPO1\n- Draw with it so everything is up-to-date\n- Bind VS+FS2 into PPO2\n- Draw with it so everything is up-to-date\n\n- Call glUniform on the VS program\n- Draw with PPO1 -\u003e should see updated uniform values\n- Draw with PPO2 -\u003e should see updated uniform values\n\nThe VS uniform could be something like the color passed to the FS in an `out` variable. FS1 could output just that, and FS2 could swap some channels. The test could use scissors to draw to four parts of the framebuffer, so you can do all of the above and leave the pixel-check expectations to last.\n\nCharlie\u0027s suggestion about using serials is good.",
+      "parentUuid": "30cfcd11_0a6d9102",
+      "range": {
+        "startLine": 298,
+        "startChar": 9,
+        "endLine": 298,
+        "endChar": 44
+      },
+      "revId": "e75d79662af7abca3a1a9d3eecf8701acc6b804d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "76503ddd_dc5a4fcd",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 2
