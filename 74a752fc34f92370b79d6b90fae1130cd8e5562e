@@ -69,6 +69,24 @@
       "parentUuid": "d602d642_cdad5b3b",
       "revId": "74a752fc34f92370b79d6b90fae1130cd8e5562e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b18478_f2fb307e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118670
+      },
+      "writtenOn": "2024-05-28T15:29:07Z",
+      "side": 1,
+      "message": "Reverted test enabling as AHB allocation fails on most platforms",
+      "parentUuid": "8399d882_ed2ea380",
+      "revId": "74a752fc34f92370b79d6b90fae1130cd8e5562e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
