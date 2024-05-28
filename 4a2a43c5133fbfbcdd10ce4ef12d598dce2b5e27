@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad25ff9c_dca704a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-28T15:09:22Z",
+      "side": 1,
+      "message": "Can you tag this with:\n```\nBug: angleproject:343190307\n```",
+      "revId": "4a2a43c5133fbfbcdd10ce4ef12d598dce2b5e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1857e962_d94eb696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-28T15:09:22Z",
+      "side": 1,
+      "message": "Shabi, are you okay adding a new way to log in release mode?  We can isolate this further to FrameCapture if preferred.",
+      "revId": "4a2a43c5133fbfbcdd10ce4ef12d598dce2b5e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
