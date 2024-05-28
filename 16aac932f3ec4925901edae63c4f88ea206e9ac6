@@ -63,6 +63,30 @@
       },
       "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4297c1c7_4b0b29ae",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-28T17:54:22Z",
+      "side": 1,
+      "message": "I think what\u0027s happening is the bots are building *everything* possible.  You can recreate it by running ninja locally with no target:\n```\n$ autoninja -C out/AndroidFoo\nProxy started successfully.\nninja: Entering directory `out/AndroidFoo\u0027\n[29/4899] ACTION //:install_includes(//build/toolchain/linux:clang_x64)\nFAILED: gen/install_install_includes.stamp \npython3 ../../scripts/install_target.py --prefix  -I../../include\nusage: install_target.py [-h] [--name NAME] [--version VERSION]\n                         [--prefix PREFIX] [--libs LIBS [LIBS ...]]\n                         [-I INCLUDES [INCLUDES ...]]\ninstall_target.py: error: argument --prefix: expected one argument\n```\nI don\u0027t know if there are better ways in GN to hide targets.",
+      "parentUuid": "91b5970e_cd9ca0ce",
+      "range": {
+        "startLine": 1856,
+        "startChar": 0,
+        "endLine": 1856,
+        "endChar": 28
+      },
+      "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
