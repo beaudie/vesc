@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "285d3a50_f49ec377",
+        "filename": "src/compiler/translator/spirv/OutputSPIRV.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4372,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-28T21:06:29Z",
+      "side": 1,
+      "message": "Nit",
+      "range": {
+        "startLine": 4372,
+        "startChar": 34,
+        "endLine": 4372,
+        "endChar": 43
+      },
+      "revId": "a6443b0ec2c8f1ee9dc543d250bad653ecc20de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4a4c413_54317e56",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4737,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-28T21:06:29Z",
+      "side": 1,
+      "message": "Is there a test that has exhibited this issue so it could be confirmed that it has been fixed?",
+      "range": {
+        "startLine": 4737,
+        "startChar": 41,
+        "endLine": 4737,
+        "endChar": 62
+      },
+      "revId": "a6443b0ec2c8f1ee9dc543d250bad653ecc20de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
