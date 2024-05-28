@@ -586,7 +586,11 @@ angle::Result BufferVk::handleDeviceLocalBufferMap(ContextVk *contextVk,
 {
     ANGLE_TRY(
         allocStagingBuffer(contextVk, vk::MemoryCoherency::CachedPreferCoherent, size, mapPtr));
+<<<<<<< HEAD   (4f60fa M125: Vulkan: Turn SPIR-V limitations to crash instead of se)
     ANGLE_TRY(mStagingBuffer.invalidate(contextVk->getRenderer()));
+=======
+    ANGLE_TRY(mStagingBuffer.flush(renderer));
+>>>>>>> CHANGE (018188 Vulkan: Fix CachedPreferCoherent to actually require cached)
 
     // Copy data from device local buffer to host visible staging buffer.
     VkBufferCopy copyRegion = {mBuffer.getOffset() + offset, mStagingBuffer.getOffset(), size};

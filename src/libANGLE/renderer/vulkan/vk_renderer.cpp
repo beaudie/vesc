@@ -2116,6 +2116,7 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
 
     // Cached coherent staging buffer.  Note coherent is preferred but not required, which means we
     // may get non-coherent memory type.
+<<<<<<< HEAD   (4f60fa M125: Vulkan: Turn SPIR-V limitations to crash instead of se)
     if (getFeatures().requireCachedBitForStagingBuffer.enabled)
     {
         requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
@@ -2126,6 +2127,10 @@ angle::Result Renderer::initializeMemoryAllocator(vk::Context *context)
         requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
         preferredFlags = VK_MEMORY_PROPERTY_HOST_CACHED_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     }
+=======
+    requiredFlags  = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+    preferredFlags = VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+>>>>>>> CHANGE (018188 Vulkan: Fix CachedPreferCoherent to actually require cached)
     ANGLE_VK_TRY(context,
                  mAllocator.findMemoryTypeIndexForBufferInfo(
                      createInfo, requiredFlags, preferredFlags, persistentlyMapped,

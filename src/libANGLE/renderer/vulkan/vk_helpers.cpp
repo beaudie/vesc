@@ -9811,7 +9811,12 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRY(contextVk->initBufferForImageCopy(dstBuffer, bufferSize,
                                                 MemoryCoherency::CachedPreferCoherent,
                                                 imageFormat.id, &dstOffset, outDataPtr));
+<<<<<<< HEAD   (4f60fa M125: Vulkan: Turn SPIR-V limitations to crash instead of se)
     ANGLE_TRY(dstBuffer->invalidate(contextVk->getRenderer()));
+=======
+    ANGLE_TRY(dstBuffer->flush(contextVk->getRenderer()));
+
+>>>>>>> CHANGE (018188 Vulkan: Fix CachedPreferCoherent to actually require cached)
     VkBuffer bufferHandle = dstBuffer->getBuffer().getHandle();
 
     LevelIndex sourceLevelVk = toVkLevel(sourceLevelGL);
@@ -10481,7 +10486,11 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     ANGLE_TRY(contextVk->initBufferForImageCopy(stagingBuffer, allocationSize,
                                                 MemoryCoherency::CachedPreferCoherent,
                                                 readFormat->id, &stagingOffset, &readPixelBuffer));
+<<<<<<< HEAD   (4f60fa M125: Vulkan: Turn SPIR-V limitations to crash instead of se)
     ANGLE_TRY(stagingBuffer->invalidate(renderer));
+=======
+    ANGLE_TRY(stagingBuffer->flush(renderer));
+>>>>>>> CHANGE (018188 Vulkan: Fix CachedPreferCoherent to actually require cached)
     VkBuffer bufferHandle = stagingBuffer->getBuffer().getHandle();
 
     VkBufferImageCopy region = {};
