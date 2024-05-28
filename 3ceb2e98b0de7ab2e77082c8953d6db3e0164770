@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f95ffc7e_e67af777",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-28T20:42:35Z",
+      "side": 1,
+      "message": "I realized there was another issue here. I think with this approach we need to reset the child dirty bits _somewhere_. This is technically not the right spot because we\u0027d be resetting them for the other PPOs, BUT given that `onProgramBind` marks everything dirty, this should work.\n\nShabi gave me some additional pointers on how to do this properly. It\u0027s complicated though, so unless there are objections I\u0027d like to land this and look into it separately.",
+      "range": {
+        "startLine": 316,
+        "startChar": 20,
+        "endLine": 316,
+        "endChar": 79
+      },
+      "revId": "3ceb2e98b0de7ab2e77082c8953d6db3e0164770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
