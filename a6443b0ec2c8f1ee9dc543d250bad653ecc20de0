@@ -45,6 +45,30 @@
       },
       "revId": "a6443b0ec2c8f1ee9dc543d250bad653ecc20de0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f7088fa_1e130c29",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4737,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-28T21:16:07Z",
+      "side": 1,
+      "message": "Yes, see these failures: https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-test/19807/overview\n\nI\u0027ve actually been meaning to ask you. Could you please try this CL on QDC and confirm that those tests pass? I\u0027ve assumed they fixed SPIR-V 1.4 after so long so I\u0027ve set it to enable SPIR-V 1.4 usage on latest drivers but I\u0027m not sure that\u0027s correct.",
+      "parentUuid": "a4a4c413_54317e56",
+      "range": {
+        "startLine": 4737,
+        "startChar": 41,
+        "endLine": 4737,
+        "endChar": 62
+      },
+      "revId": "a6443b0ec2c8f1ee9dc543d250bad653ecc20de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
