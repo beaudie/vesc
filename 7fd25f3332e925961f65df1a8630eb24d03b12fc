@@ -123,6 +123,24 @@
       "parentUuid": "be8cd176_b834a6ed",
       "revId": "7fd25f3332e925961f65df1a8630eb24d03b12fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85f08eff_8eee5e68",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-28T13:55:04Z",
+      "side": 1,
+      "message": "Ack, though you didn\u0027t really have to do that, we pretty much have no real handle over keeping the state consistent in the presence of driver failures.",
+      "parentUuid": "98b8fc61_1a002c35",
+      "revId": "7fd25f3332e925961f65df1a8630eb24d03b12fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
