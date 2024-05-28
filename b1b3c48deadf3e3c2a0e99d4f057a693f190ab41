@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c29a57ff_0571a492",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-28T18:49:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ab28f42_93dac12a",
+      "revId": "b1b3c48deadf3e3c2a0e99d4f057a693f190ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f879ea13_f14567d6",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-05-28T18:18:24Z",
       "side": 1,
       "message": "Maybe also adding `343011429` to the `Bug: section` of commit the message?",
+      "revId": "b1b3c48deadf3e3c2a0e99d4f057a693f190ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8d2553a_efca7af8",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-28T18:49:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f879ea13_f14567d6",
       "revId": "b1b3c48deadf3e3c2a0e99d4f057a693f190ab41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
