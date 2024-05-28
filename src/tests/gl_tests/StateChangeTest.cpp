@@ -80,6 +80,12 @@ class StateChangeTestES31 : public StateChangeTest
     StateChangeTestES31() {}
 };
 
+class StateChangeTestES32 : public StateChangeTest
+{
+  protected:
+    StateChangeTestES32() {}
+};
+
 // Ensure that CopyTexImage2D syncs framebuffer changes.
 TEST_P(StateChangeTest, CopyTexImage2DSync)
 {
@@ -8450,9 +8456,12 @@ TEST_P(SimpleStateChangeTestES3, DeleteDoubleBoundBufferAndVertexArray)
 // Tests state change for glLineWidth.
 TEST_P(StateChangeTestES3, LineWidth)
 {
+    // According to the spec, the minimum value for the line width range limits is one.
     GLfloat range[2] = {1};
     glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, range);
     EXPECT_GL_NO_ERROR();
+    EXPECT_GE(range[0], 1.0f);
+    EXPECT_GE(range[1], 1.0f);
 
     ANGLE_SKIP_TEST_IF(range[1] < 5.0);
 
@@ -11068,6 +11077,9 @@ ANGLE_INSTANTIATE_TEST_ES31_AND(
     ES31_VULKAN().disable(Feature::SupportsExtendedDynamicState2),
     ES31_VULKAN().disable(Feature::UseVertexInputBindingStrideDynamicState),
     ES31_VULKAN().disable(Feature::UsePrimitiveRestartEnableDynamicState));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(StateChangeTestES32);
+ANGLE_INSTANTIATE_TEST_ES32(StateChangeTestES32);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(StateChangeTestWebGL2);
 ANGLE_INSTANTIATE_TEST_COMBINE_1(StateChangeTestWebGL2,
