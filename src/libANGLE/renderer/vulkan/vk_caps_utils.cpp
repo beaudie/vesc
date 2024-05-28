@@ -1292,6 +1292,7 @@ void Renderer::ensureCapsInitialized() const
     mNativeExtensions.YUVTargetEXT = mFeatures.supportsExternalFormatResolve.enabled;
 
     // Log any missing extensions required for GLES 3.2.
+    // TODO: Add query for MULTISAMPLE_LINE_WIDTH_GRANULARITY and MULTISAMPLE_LINE_WIDTH_RANGE
     LogMissingExtensionsForGLES32(mNativeExtensions);
 }
 
