@@ -22,6 +22,30 @@
       },
       "revId": "95a02ccef1cbfcf06bf7cf639c7cc532fecf3b0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3b6fbd2_8898cc95",
+        "filename": "infra/specs/angle.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 6068,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-28T12:27:48Z",
+      "side": 1,
+      "message": "Yes, when we don\u0027t have an active experiment.",
+      "parentUuid": "38e4f740_5b711a56",
+      "range": {
+        "startLine": 6068,
+        "startChar": 25,
+        "endLine": 6068,
+        "endChar": 27
+      },
+      "revId": "95a02ccef1cbfcf06bf7cf639c7cc532fecf3b0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
