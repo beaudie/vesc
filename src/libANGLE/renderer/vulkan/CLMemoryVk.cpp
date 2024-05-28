@@ -350,6 +350,10 @@ CLImageVk::~CLImageVk()
 
     mImage.destroy(mRenderer);
     mImageView.destroy(mContext->getDevice());
+    if (isStagingBufferInitialized())
+    {
+        mStagingBuffer.destroy(mRenderer);
+    }
 }
 
 angle::Result CLImageVk::create(void *hostPtr)
