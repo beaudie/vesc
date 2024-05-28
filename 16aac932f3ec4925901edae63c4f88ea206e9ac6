@@ -39,6 +39,30 @@
       },
       "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91b5970e_cd9ca0ce",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 3316531
+      },
+      "writtenOn": "2024-05-28T17:42:13Z",
+      "side": 1,
+      "message": "Ideally, the install actions should not run by default, meaning that I would expect to install only by explicitly running `ninja -C out install_angle`",
+      "parentUuid": "5ef570a3_0a5409ce",
+      "range": {
+        "startLine": 1856,
+        "startChar": 0,
+        "endLine": 1856,
+        "endChar": 28
+      },
+      "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
