@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13e65ce3_9930b008",
+        "filename": "util/shader_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-28T18:47:06Z",
+      "side": 1,
+      "message": "Maybe just keep this inside `StateChangeTest.cpp`, it\u0027s not really a common shader.",
+      "revId": "a0ea77f092598a590ac2470657d13e1cfaeb8787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
