@@ -143,24 +143,28 @@ int GetOutputLocationForLink(const ProgramAliasedBindings &fragmentOutputLocatio
     return -1;
 }
 
-bool IsOutputSecondaryForLink(const ProgramAliasedBindings &fragmentOutputIndexes,
-                              const ProgramOutput &outputVariable)
+void AssignOutputIndex(const ProgramAliasedBindings &fragmentOutputIndexes,
+                       ProgramOutput &outputVariable)
 {
-    if (outputVariable.pod.index != -1)
+    if (outputVariable.pod.hasShaderAssignedIndex)
     {
+        // Already assigned through a layout qualifier
         ASSERT(outputVariable.pod.index == 0 || outputVariable.pod.index == 1);
-        return (outputVariable.pod.index == 1);
+        return;
     }
+
     int apiIndex = fragmentOutputIndexes.getBinding(outputVariable);
     if (apiIndex != -1)
     {
         // Index layout qualifier from the shader takes precedence, so the index from the API is
         // checked only if the index was not set in the shader. This is not specified in the EXT
         // spec, but is specified in desktop OpenGL specs.
-        return (apiIndex == 1);
+        outputVariable.pod.index = apiIndex;
+        return;
     }
+
     // EXT_blend_func_extended: Outputs get index 0 by default.
-    return false;
+    outputVariable.pod.index = 0;
 }
 
 RangeUI AddUniforms(const ShaderMap<SharedProgramExecutable> &executables,
@@ -720,6 +724,8 @@ ProgramOutput::ProgramOutput(const sh::ShaderVariable &var)
     SetBitField(pod.isBuiltIn, IsBuiltInName(var.name));
     SetBitField(pod.isArray, var.isArray());
     SetBitField(pod.hasImplicitLocation, var.hasImplicitLocation);
+    SetBitField(pod.hasShaderAssignedLocation, var.location != -1);
+    SetBitField(pod.hasShaderAssignedIndex, var.index != -1);
     SetBitField(pod.pad, 0);
 }
 
@@ -1609,7 +1615,7 @@ bool ProgramExecutable::linkValidateOutputVariables(
     for (unsigned int outputVariableIndex = 0; outputVariableIndex < mOutputVariables.size();
          outputVariableIndex++)
     {
-        const ProgramOutput &outputVariable = mOutputVariables[outputVariableIndex];
+        ProgramOutput &outputVariable = mOutputVariables[outputVariableIndex];
 
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
         if (outputVariable.isBuiltIn())
@@ -1623,10 +1629,10 @@ bool ProgramExecutable::linkValidateOutputVariables(
         }
         unsigned int baseLocation = static_cast<unsigned int>(fixedLocation);
 
+        AssignOutputIndex(fragmentOutputIndices, outputVariable);
+        ASSERT(outputVariable.pod.index == 0 || outputVariable.pod.index == 1);
         std::vector<VariableLocation> &outputLocations =
-            IsOutputSecondaryForLink(fragmentOutputIndices, outputVariable)
-                ? mSecondaryOutputLocations
-                : mOutputLocations;
+            outputVariable.pod.index == 0 ? mOutputLocations : mSecondaryOutputLocations;
 
         // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays or arrays of
         // structures, so we may use getBasicTypeElementCount().
@@ -1639,7 +1645,7 @@ bool ProgramExecutable::linkValidateOutputVariables(
             return false;
         }
         AssignOutputLocations(outputLocations, baseLocation, elementCount, reservedLocations,
-                              outputVariableIndex, mOutputVariables[outputVariableIndex]);
+                              outputVariableIndex, outputVariable);
     }
 
     // Here we assign locations for the output variables that don't yet have them. Note that we're
@@ -1658,17 +1664,18 @@ bool ProgramExecutable::linkValidateOutputVariables(
     for (unsigned int outputVariableIndex = 0; outputVariableIndex < mOutputVariables.size();
          outputVariableIndex++)
     {
-        const ProgramOutput &outputVariable = mOutputVariables[outputVariableIndex];
+        ProgramOutput &outputVariable = mOutputVariables[outputVariableIndex];
 
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
         if (outputVariable.isBuiltIn())
             continue;
 
-        int fixedLocation = GetOutputLocationForLink(fragmentOutputLocations, outputVariable);
+        AssignOutputIndex(fragmentOutputLocations, outputVariable);
+        ASSERT(outputVariable.pod.index == 0 || outputVariable.pod.index == 1);
         std::vector<VariableLocation> &outputLocations =
-            IsOutputSecondaryForLink(fragmentOutputIndices, outputVariable)
-                ? mSecondaryOutputLocations
-                : mOutputLocations;
+            outputVariable.pod.index == 0 ? mSecondaryOutputLocations : mOutputLocations;
+
+        int fixedLocation = GetOutputLocationForLink(fragmentOutputLocations, outputVariable);
         unsigned int baseLocation = 0;
         unsigned int elementCount = outputVariable.pod.basicTypeElementCount;
         if (fixedLocation != -1)
@@ -1688,7 +1695,7 @@ bool ProgramExecutable::linkValidateOutputVariables(
                 baseLocation++;
             }
             AssignOutputLocations(outputLocations, baseLocation, elementCount, reservedLocations,
-                                  outputVariableIndex, mOutputVariables[outputVariableIndex]);
+                                  outputVariableIndex, outputVariable);
         }
 
         // Check for any elements assigned above the max location that are actually used.
