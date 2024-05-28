@@ -51,6 +51,24 @@
       "parentUuid": "747004f4_29354e0a",
       "revId": "ded88e2a671dced9a6ebabcb38c5c03539672b48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c946a1b3_9fc3072f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-28T18:59:03Z",
+      "side": 1,
+      "message": "Ah ok, maybe you should move the log to the front-end then, where all the extensions are initialized. But that affects all backends...\n\nHow about removing debugKHR from `LogMissingExtensionsForGLES32` with a comment that it\u0027s a front-end feature and so it\u0027s not worth checking?",
+      "parentUuid": "78cdeb88_cd4a1ce9",
+      "revId": "ded88e2a671dced9a6ebabcb38c5c03539672b48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
