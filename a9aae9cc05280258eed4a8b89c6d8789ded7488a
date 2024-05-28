@@ -40,6 +40,30 @@
       ],
       "revId": "a9aae9cc05280258eed4a8b89c6d8789ded7488a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "088b2fe0_00e31959",
+        "filename": "scripts/install_target.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-28T14:46:38Z",
+      "side": 1,
+      "message": "If I put the following directly in `out/AndroidFoo/args.gn`:\n```\ninstall_prefix\u003d\"/tmp/foo\"\n```\nand then run `gn gen out/AndroidFoo`, things work as expected.",
+      "parentUuid": "de258d76_d7ec4be6",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "a9aae9cc05280258eed4a8b89c6d8789ded7488a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
