@@ -417,54 +417,64 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
             }
             else if (fragmentShader && fragmentShader->shaderVersion >= 300)
             {
-                // ESSL 3.00 and up.
-                const auto &outputLocations          = executable.getOutputLocations();
-                const auto &secondaryOutputLocations = executable.getSecondaryOutputLocations();
-                for (size_t outputLocationIndex = 0u; outputLocationIndex < outputLocations.size();
-                     ++outputLocationIndex)
+                // Only assign output locations if EXT_blend_func_extended is being used. We
+                // determine this by the presence of any shader assigned index or api assigned
+                // location/index. The presence of any variables in the secondary output locations
+                // implies that the user has bound them explicitly.
+                bool hasAssignedOutputLocation = !executable.getSecondaryOutputLocations().empty();
+                if (!hasAssignedOutputLocation)
                 {
-                    const gl::VariableLocation &outputLocation =
-                        outputLocations[outputLocationIndex];
-                    if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
-                        !outputLocation.ignored)
+                    for (const gl::VariableLocation &outputLocation :
+                         executable.getOutputLocations())
                     {
-                        const gl::ProgramOutput &outputVar =
-                            executable.getOutputVariables()[outputLocation.index];
-                        if (outputVar.pod.location == -1 || outputVar.pod.index == -1)
+                        if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
+                            !outputLocation.ignored)
                         {
-                            // We only need to assign the location and index via the API in case the
-                            // variable doesn't have a shader-assigned location and index. If a
-                            // variable doesn't have its location set in the shader it doesn't have
-                            // the index set either.
-                            ASSERT(outputVar.pod.index == -1);
-                            mFunctions->bindFragDataLocationIndexed(
-                                mProgramID, static_cast<int>(outputLocationIndex), 0,
-                                outputVar.mappedName.c_str());
+                            const gl::ProgramOutput &outputVar =
+                                executable.getOutputVariables()[outputLocation.index];
+                            if (outputVar.pod.hasShaderAssignedIndex ||
+                                outputVar.pod.hasApiAssignedLocation ||
+                                outputVar.pod.hasApiAssignedIndex)
+                            {
+                                hasAssignedOutputLocation = true;
+                                break;
+                            }
                         }
                     }
                 }
-                for (size_t outputLocationIndex = 0u;
-                     outputLocationIndex < secondaryOutputLocations.size(); ++outputLocationIndex)
+
+                if (hasAssignedOutputLocation)
                 {
-                    const gl::VariableLocation &outputLocation =
-                        secondaryOutputLocations[outputLocationIndex];
-                    if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
-                        !outputLocation.ignored)
-                    {
-                        const gl::ProgramOutput &outputVar =
-                            executable.getOutputVariables()[outputLocation.index];
-                        if (outputVar.pod.location == -1 || outputVar.pod.index == -1)
-                        {
-                            // We only need to assign the location and index via the API in case the
-                            // variable doesn't have a shader-assigned location and index.  If a
-                            // variable doesn't have its location set in the shader it doesn't have
-                            // the index set either.
-                            ASSERT(outputVar.pod.index == -1);
-                            mFunctions->bindFragDataLocationIndexed(
-                                mProgramID, static_cast<int>(outputLocationIndex), 1,
-                                outputVar.mappedName.c_str());
-                        }
-                    }
+                    // ESSL 3.00 and up.
+                    auto setApiAssignedOutputLocations =
+                        [this](const std::vector<gl::VariableLocation> &locations) {
+                            const gl::ProgramExecutable &executable = mState.getExecutable();
+                            for (size_t outputLocationIndex = 0u;
+                                 outputLocationIndex < locations.size(); ++outputLocationIndex)
+                            {
+                                const gl::VariableLocation &outputLocation =
+                                    locations[outputLocationIndex];
+                                if (outputLocation.arrayIndex == 0 && outputLocation.used() &&
+                                    !outputLocation.ignored)
+                                {
+                                    const gl::ProgramOutput &outputVar =
+                                        executable.getOutputVariables()[outputLocation.index];
+                                    if (!outputVar.pod.hasShaderAssignedLocation)
+                                    {
+                                        // We only need to assign the location and index via the API
+                                        // if the variable doesn't have a shader-assigned location.
+                                        ASSERT(!outputVar.pod.hasShaderAssignedIndex);
+                                        ASSERT(outputVar.pod.index != -1);
+                                        mFunctions->bindFragDataLocationIndexed(
+                                            mProgramID, static_cast<int>(outputLocationIndex),
+                                            outputVar.pod.index, outputVar.mappedName.c_str());
+                                    }
+                                }
+                            }
+                        };
+
+                    setApiAssignedOutputLocations(executable.getOutputLocations());
+                    setApiAssignedOutputLocations(executable.getSecondaryOutputLocations());
                 }
             }
         }
