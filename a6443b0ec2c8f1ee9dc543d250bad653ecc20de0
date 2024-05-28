@@ -69,6 +69,30 @@
       },
       "revId": "a6443b0ec2c8f1ee9dc543d250bad653ecc20de0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e240e92c_c88f9871",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4737,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-28T22:48:09Z",
+      "side": 1,
+      "message": "Thanks! I have checked the following tests:\n* `KHR-GLES31.core.shader_storage_buffer_object.basic-stdLayout-case4-vs`\n* `KHR-GLES31.core.shader_storage_buffer_object.basic-std430Layout-case7-cs`\n\nIt looks like the latest QDC is also failing these tests in `createPipeline()` or `getOrCreateComputePipeline()` (-13).",
+      "parentUuid": "0f7088fa_1e130c29",
+      "range": {
+        "startLine": 4737,
+        "startChar": 41,
+        "endLine": 4737,
+        "endChar": 62
+      },
+      "revId": "a6443b0ec2c8f1ee9dc543d250bad653ecc20de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
