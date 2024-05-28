@@ -138,6 +138,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36583080_79935104",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-28T21:43:06Z",
+      "side": 1,
+      "message": "In that case, I think checking `EXT` should also work for GLES 3.2. Thanks :)",
+      "parentUuid": "192d1bef_a5042701",
+      "range": {
+        "startLine": 264,
+        "startChar": 25,
+        "endLine": 264,
+        "endChar": 38
+      },
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fa7ce4a_6b2f62ac",
@@ -151,6 +175,30 @@
       "writtenOn": "2024-05-20T23:17:36Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 297,
+        "startChar": 9,
+        "endLine": 297,
+        "endChar": 22
+      },
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8495547_6556b7cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-28T21:43:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fa7ce4a_6b2f62ac",
       "range": {
         "startLine": 297,
         "startChar": 9,
@@ -214,6 +262,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "56b187db_24e334bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-28T21:43:06Z",
+      "side": 1,
+      "message": "The logging at the end of `ensureCapInitialized()` has been addressed.\nJust to confirm, was the `clipControlEXT` suggestion also intended?",
+      "parentUuid": "f5136193_685aaac4",
+      "range": {
+        "startLine": 1296,
+        "startChar": 4,
+        "endLine": 1296,
+        "endChar": 33
+      },
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab1405cc_9f3aeb17",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 9
@@ -261,6 +333,24 @@
       "side": 1,
       "message": "Alright.  Its just kind of plopped in there at the end, so easy to lose, but better than printing it repeatedly I suppose.",
       "parentUuid": "05f9f51e_8dcae817",
+      "revId": "c9774cf741879786886896bce4395a9660f21a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef95da5_48108784",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3795,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-28T21:43:06Z",
+      "side": 1,
+      "message": "Marked as resolved.",
+      "parentUuid": "78eb2eaa_c09c1215",
       "revId": "c9774cf741879786886896bce4395a9660f21a6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
