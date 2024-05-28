@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef23dfe0_a5f82349",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-28T15:09:37Z",
+      "side": 1,
+      "message": "Can you update this sentence to reflect this new output?",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 86
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "561066d4_7b55bdd0",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/restricted_traces/README.md",
+              "range": {
+                "startLine": 238,
+                "startChar": 0,
+                "endLine": 240,
+                "endChar": 0
+              },
+              "replacement": "Allow the app to run until the `*angledata.gz` file is non-zero and no longer\ngrowing. The app should continue rendering after that:\n"
+            },
+            {
+              "path": "src/tests/restricted_traces/README.md",
+              "range": {
+                "startLine": 259,
+                "startChar": 0,
+                "endLine": 259,
+                "endChar": 0
+              },
+              "replacement": "Note: If you are using a debug build of ANGLE, the `*angledata.gz` file will\ncontain a serialized trace.\n\n"
+            }
+          ]
+        }
+      ],
+      "revId": "150b327aa2c2aa6879e792ef304a6e6a8aacf29f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
