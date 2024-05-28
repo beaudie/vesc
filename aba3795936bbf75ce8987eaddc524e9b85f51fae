@@ -16,6 +16,24 @@
       "message": "Would you please also add `angleproject:341780527` to the commit message?\n\n`Bug: angleproject:341780527`",
       "revId": "aba3795936bbf75ce8987eaddc524e9b85f51fae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57eb3cc9_121e866d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2024-05-28T20:41:01Z",
+      "side": 1,
+      "message": "yes, it\u0027s added.",
+      "parentUuid": "fcf8b08d_6d7176a7",
+      "revId": "aba3795936bbf75ce8987eaddc524e9b85f51fae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
