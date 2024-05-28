@@ -34,6 +34,29 @@
       "parentUuid": "5037902f_8a13f597",
       "revId": "e75d79662af7abca3a1a9d3eecf8701acc6b804d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76503ddd_dc5a4fcd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-28T15:13:53Z",
+      "side": 1,
+      "message": "Oops, this doesn\u0027t actually work as `setAllDefaultUniformsDirty()` gets called on the PPO",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 24
+      },
+      "revId": "e75d79662af7abca3a1a9d3eecf8701acc6b804d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
