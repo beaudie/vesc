@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db1f792_d3373df8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1118670
+      },
+      "writtenOn": "2024-05-28T15:01:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d5a7832_37b4d84d",
+      "revId": "74a752fc34f92370b79d6b90fae1130cd8e5562e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d602d642_cdad5b3b",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-05-24T15:47:34Z",
       "side": 1,
       "message": "Seems legit. Would you be able to contribute a test? Actually in ImageTest.cpp, we have the `SourceAHBTarget2DDepth` test which is just skipped:\n\n```\n    // TODO - Support for depth formats in AHB is missing (http://anglebug.com/4818)\n    ANGLE_SKIP_TEST_IF(true);\n```\n\nMaybe you can enable that now!",
+      "revId": "74a752fc34f92370b79d6b90fae1130cd8e5562e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8399d882_ed2ea380",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118670
+      },
+      "writtenOn": "2024-05-28T15:01:38Z",
+      "side": 1,
+      "message": "I have tried removing this but I haven\u0027t been able to run the test in my environment yet. I assume this might only work if the gralloc implementation supports depth.",
+      "parentUuid": "d602d642_cdad5b3b",
       "revId": "74a752fc34f92370b79d6b90fae1130cd8e5562e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
