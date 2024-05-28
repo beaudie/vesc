@@ -38,6 +38,67 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4241831_21b206e8",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-28T16:43:06Z",
+      "side": 1,
+      "message": "If this has to return true when one of the program\u0027s mDefaultUniformBlocksDirty has changed since last time this program checked, then this wont work. Each program\u0027s mDefaultUniformBlocksDirty may gets set and then cleared as the program itself being used. Then if you switch to this PPO which also uses the program, it will not detect that the program\u0027s mDefaultUniformBlocksDirty has changed.",
+      "range": {
+        "startLine": 298,
+        "startChar": 9,
+        "endLine": 298,
+        "endChar": 44
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "778aa473_874bf673",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+              "range": {
+                "startLine": 298,
+                "startChar": 0,
+                "endLine": 299,
+                "endChar": 0
+              },
+              "replacement": "    bool updateAndCheckDirtyGraphicsUniforms(gl::ShaderType shaderType)\n"
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+              "range": {
+                "startLine": 300,
+                "startChar": 0,
+                "endLine": 320,
+                "endChar": 0
+              },
+              "replacement": "        return mDefaultUniformBlocksDirty.test(shaderType);\n"
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+              "range": {
+                "startLine": 324,
+                "startChar": 0,
+                "endLine": 342,
+                "endChar": 0
+              },
+              "replacement": "        return mDefaultUniformBlocksDirty.test(gl::ShaderType::Compute);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "e75d79662af7abca3a1a9d3eecf8701acc6b804d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "76503ddd_dc5a4fcd",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 2
