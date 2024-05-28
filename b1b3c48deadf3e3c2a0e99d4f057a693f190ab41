@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ab28f42_93dac12a",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-05-28T18:18:24Z",
+      "side": 1,
+      "message": "Maybe also adding `342866374`to the `Bug:` section of commit message?",
+      "revId": "b1b3c48deadf3e3c2a0e99d4f057a693f190ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f879ea13_f14567d6",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-05-28T18:18:24Z",
+      "side": 1,
+      "message": "Maybe also adding `343011429` to the `Bug: section` of commit the message?",
+      "revId": "b1b3c48deadf3e3c2a0e99d4f057a693f190ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
