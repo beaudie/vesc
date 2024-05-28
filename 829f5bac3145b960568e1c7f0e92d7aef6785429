@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87c9ec90_a57eb01b",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2590,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-28T17:54:42Z",
+      "side": 1,
+      "message": "I see. Thanks for the clarification! Removed.",
+      "parentUuid": "5ecab99c_11544736",
+      "range": {
+        "startLine": 2585,
+        "startChar": 0,
+        "endLine": 2590,
+        "endChar": 84
+      },
+      "revId": "829f5bac3145b960568e1c7f0e92d7aef6785429",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b64ab47b_e022f743",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-24T15:10:44Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 3782,
+        "startChar": 0,
+        "endLine": 3787,
+        "endChar": 63
+      },
+      "revId": "829f5bac3145b960568e1c7f0e92d7aef6785429",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3bd3ed_dc12a9ef",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3787,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-28T17:54:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b64ab47b_e022f743",
       "range": {
         "startLine": 3782,
         "startChar": 0,
