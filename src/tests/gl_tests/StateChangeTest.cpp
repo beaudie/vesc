@@ -80,6 +80,12 @@ class StateChangeTestES31 : public StateChangeTest
     StateChangeTestES31() {}
 };
 
+class StateChangeTestES32 : public StateChangeTest
+{
+  protected:
+    StateChangeTestES32() {}
+};
+
 // Ensure that CopyTexImage2D syncs framebuffer changes.
 TEST_P(StateChangeTest, CopyTexImage2DSync)
 {
@@ -8518,6 +8524,35 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// According to the spec, the minimum value for the line width range limits is one.
+TEST_P(StateChangeTestES3, LineWidthRangeCheck)
+{
+    GLfloat range[2] = {1};
+    glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, range);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_GE(range[0], 1.0f);
+    EXPECT_GE(range[1], 1.0f);
+}
+
+// According to the spec, the minimum value for the multisample line width range limits is one.
+TEST_P(StateChangeTestES32, MultisampleLineWidthRangeCheck)
+{
+    GLfloat range[2] = {1};
+    glGetFloatv(GL_MULTISAMPLE_LINE_WIDTH_RANGE, range);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_GE(range[0], 1.0f);
+    EXPECT_GE(range[1], 1.0f);
+}
+
+// The multisample line width granularity should not be negative.
+TEST_P(StateChangeTestES32, MultisampleLineWidthGranularityCheck)
+{
+    GLfloat granularity = 0;
+    glGetFloatv(GL_MULTISAMPLE_LINE_WIDTH_GRANULARITY, &granularity);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_GE(granularity, 0.0f);
+}
+
 // Tests state change for out-of-range value for glLineWidth. The expectation
 // here is primarily that rendering backends do not crash with invalid line
 // width values.
@@ -11068,6 +11103,9 @@ ANGLE_INSTANTIATE_TEST_ES31_AND(
     ES31_VULKAN().disable(Feature::SupportsExtendedDynamicState2),
     ES31_VULKAN().disable(Feature::UseVertexInputBindingStrideDynamicState),
     ES31_VULKAN().disable(Feature::UsePrimitiveRestartEnableDynamicState));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(StateChangeTestES32);
+ANGLE_INSTANTIATE_TEST_ES32(StateChangeTestES32);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(StateChangeTestWebGL2);
 ANGLE_INSTANTIATE_TEST_COMBINE_1(StateChangeTestWebGL2,
