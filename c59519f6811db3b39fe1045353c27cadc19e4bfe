@@ -16,6 +16,24 @@
       "message": "This needs to be reverted",
       "revId": "c59519f6811db3b39fe1045353c27cadc19e4bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6020715d_c96a401c",
+        "filename": "src/tests/deqp_support/deqp.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-29T20:43:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fc2f223c_e206b8a4",
+      "revId": "c59519f6811db3b39fe1045353c27cadc19e4bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

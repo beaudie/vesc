@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8c2fee5_750212b3",
+        "filename": "update_types.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-29T20:43:55Z",
+      "side": 1,
+      "message": "Remember to remove this file",
+      "revId": "bf15cbf3e543850929856484d537e26a3c6d1d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
