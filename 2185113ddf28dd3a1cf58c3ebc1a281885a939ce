@@ -16,6 +16,23 @@
       "message": "nit: maybe adding the bug number to the commit message:\n\n```\nBug: angleproject:3830\n```",
       "revId": "2185113ddf28dd3a1cf58c3ebc1a281885a939ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c7d5914_0316a70f",
+        "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-05-29T23:18:36Z",
+      "side": 1,
+      "message": "Do we need to configure the `FragmentShaderValidationTest` test to run with `SupportsSPIRV14` disabled?",
+      "revId": "2185113ddf28dd3a1cf58c3ebc1a281885a939ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
