@@ -1473,8 +1473,6 @@ deqp_framework_debase_sources = [
   "$deqp_path/framework/delibs/debase/deDefs.h",
   "$deqp_path/framework/delibs/debase/deFloat16.c",
   "$deqp_path/framework/delibs/debase/deFloat16.h",
-  "$deqp_path/framework/delibs/debase/deInt32.c",
-  "$deqp_path/framework/delibs/debase/deInt32.h",
   "$deqp_path/framework/delibs/debase/deInt32Test.c",
   "$deqp_path/framework/delibs/debase/deMath.c",
   "$deqp_path/framework/delibs/debase/deMath.h",
@@ -1486,6 +1484,8 @@ deqp_framework_debase_sources = [
   "$deqp_path/framework/delibs/debase/deSha1.h",
   "$deqp_path/framework/delibs/debase/deString.c",
   "$deqp_path/framework/delibs/debase/deString.h",
+  "$deqp_path/framework/delibs/debase/int32_t.c",
+  "$deqp_path/framework/delibs/debase/int32_t.h",
 ]
 
 deqp_framework_delibs_sources = [
