@@ -34,6 +34,24 @@
       "parentUuid": "fc2f223c_e206b8a4",
       "revId": "c59519f6811db3b39fe1045353c27cadc19e4bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14f58e24_6f99bb84",
+        "filename": "src/tests/deqp_support/deqp.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2024-05-29T22:56:01Z",
+      "side": 1,
+      "message": "Thanks for the clue.  I updated the script.",
+      "parentUuid": "6020715d_c96a401c",
+      "revId": "c59519f6811db3b39fe1045353c27cadc19e4bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
