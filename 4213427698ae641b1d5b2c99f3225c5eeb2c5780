@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15ece18e_7dc2b807",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-29T22:09:30Z",
+      "side": 1,
+      "message": "LGTM % comments",
+      "revId": "4213427698ae641b1d5b2c99f3225c5eeb2c5780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be93fbda_14045ea1",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-29T22:09:30Z",
+      "side": 1,
+      "message": "So this does a render pass (and a encoder.Finish() and a queue.Submit(), I think) for every dirty color attachment, is there any optimization to be had here?",
+      "range": {
+        "startLine": 351,
+        "startChar": 18,
+        "endLine": 351,
+        "endChar": 45
+      },
+      "revId": "4213427698ae641b1d5b2c99f3225c5eeb2c5780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
