@@ -52,6 +52,24 @@
       "parentUuid": "4f868aab_fa6bb857",
       "revId": "1a51ad0717ae6a23135530a00d8f87d9a7052e68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac8d79f8_11335104",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-29T16:58:52Z",
+      "side": 1,
+      "message": "The buffer suballocation code path not using VMA. So it is not necessary VMA subject to the same bug. I think user of VMA should do that since you only need to do this if you are doing the GPU to CPU DMA, which VMA does not know what direction you are doing the copy.",
+      "parentUuid": "5cf72c26_3660bc9b",
+      "revId": "1a51ad0717ae6a23135530a00d8f87d9a7052e68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
