@@ -34,6 +34,24 @@
       "parentUuid": "1b3be5e9_00f6674e",
       "revId": "1a51ad0717ae6a23135530a00d8f87d9a7052e68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cf72c26_3660bc9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-29T16:47:08Z",
+      "side": 1,
+      "message": "I mean a lot of VMA-using apps could get tripped up by this. Would be nice to let VMA folks know about this, maybe they\u0027d want to do this automatically.",
+      "parentUuid": "4f868aab_fa6bb857",
+      "revId": "1a51ad0717ae6a23135530a00d8f87d9a7052e68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
