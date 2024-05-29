@@ -87,6 +87,30 @@
       },
       "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04aa2bdf_c6e7ea52",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-29T17:35:06Z",
+      "side": 1,
+      "message": "Antonio, do you want to spend more time researching this, or okay guarding the target with the GN arg?  I\u0027ll land it if the latter.",
+      "parentUuid": "4297c1c7_4b0b29ae",
+      "range": {
+        "startLine": 1856,
+        "startChar": 0,
+        "endLine": 1856,
+        "endChar": 28
+      },
+      "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
