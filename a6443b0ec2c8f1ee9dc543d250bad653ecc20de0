@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "990155df_a4a2cb07",
+        "filename": "src/compiler/translator/spirv/OutputSPIRV.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4372,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-29T02:30:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "285d3a50_f49ec377",
+      "range": {
+        "startLine": 4372,
+        "startChar": 34,
+        "endLine": 4372,
+        "endChar": 43
+      },
+      "revId": "a6443b0ec2c8f1ee9dc543d250bad653ecc20de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4a4c413_54317e56",
@@ -109,6 +133,30 @@
       "side": 1,
       "message": "Pfft, looks like the bugs were never fixed. Ok, I\u0027ll just keep this disabled on QC, and we can follow up with them with a bug.",
       "parentUuid": "e240e92c_c88f9871",
+      "range": {
+        "startLine": 4737,
+        "startChar": 41,
+        "endLine": 4737,
+        "endChar": 62
+      },
+      "revId": "a6443b0ec2c8f1ee9dc543d250bad653ecc20de0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be57a701_c3c08c58",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4737,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-29T02:30:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "510ca136_91715625",
       "range": {
         "startLine": 4737,
         "startChar": 41,
