@@ -16,6 +16,24 @@
       "message": "PTAL\n\nThis CL was manually generated to solve this issue\n\nhttps://issues.chromium.org/issues/42241081\n\nOne more request, since I am an external contributor, even though I have a @chromium.org account, I still don\u0027t have tryjobs permissions for all repos. Could you please add tryjobs permissions for ANGLE for me so that I can have my ANGLE CL tested on tryjobs?",
       "revId": "569d8af82f3447ffe89574da654872ca500753dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8150448_20c49c38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3395304
+      },
+      "writtenOn": "2024-05-29T15:03:30Z",
+      "side": 1,
+      "message": "Hi Shahbaz, could you please take a look at my CL and this request? Thanks.",
+      "parentUuid": "55a9b99b_66e3f323",
+      "revId": "569d8af82f3447ffe89574da654872ca500753dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
