@@ -16,6 +16,24 @@
       "message": "Curious, is this happening due to memory reuse? Sounds like a VMA bug?",
       "revId": "1a51ad0717ae6a23135530a00d8f87d9a7052e68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f868aab_fa6bb857",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-29T16:24:58Z",
+      "side": 1,
+      "message": "I dont think ANGLE is doing host write on these type of memory. So my guess is that it might come from prior life of memory pages. SInce spec did not say that memory heap has to have clean cache line, so we just have to assume cache line is dirty and do flush first.",
+      "parentUuid": "1b3be5e9_00f6674e",
+      "revId": "1a51ad0717ae6a23135530a00d8f87d9a7052e68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
