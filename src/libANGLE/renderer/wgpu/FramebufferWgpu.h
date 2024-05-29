@@ -80,10 +80,22 @@ class FramebufferWgpu : public FramebufferImpl
 
     RenderTargetWgpu *getReadPixelsRenderTarget(const angle::Format &format) const;
 
+    angle::Result startNewRenderPass(
+        std::vector<wgpu::RenderPassColorAttachment> newColorAttachments,
+        ContextWgpu *contextWgpu);
+
+    angle::Result flushColorAttachmentUpdates(const gl::Context *context,
+                                              bool deferClears,
+                                              uint32_t colorIndexGL);
+
+    angle::Result flushDeferredClears(ContextWgpu *contextWgpu);
+
   private:
     RenderTargetCache<RenderTargetWgpu> mRenderTargetCache;
     wgpu::RenderPassDescriptor mCurrentRenderPassDesc;
     std::vector<wgpu::RenderPassColorAttachment> mCurrentColorAttachments;
+
+    webgpu::ClearValuesArray mDeferredClears;
 };
 
 }  // namespace rx
