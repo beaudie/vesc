@@ -16,6 +16,24 @@
       "message": "The reason for the most failures here is that `ProgramGL::linkJobImpl` uses API location/index assignments when either parameter is not present and the extension is supported. This has been confirmed with the OpenGL ES WG to be incorrect because:\n- API calls cannot override location and index statically set in GLSL.\n- When location is set without index, the latter is implicitly set to 0, i.e., `layout(location\u003d0)` is the same as `layout(location\u003d0, index\u003d0)`.\n\nWe should probably enforce `ProgramOutput::pod::index` to be zero when it is not 1 and remove `outputVar.pod.index \u003d\u003d -1` checks from that function.",
       "revId": "f50fe45b4104723cf7948f53104b68e8aeac64d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdd51514_144ed4e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-29T11:59:57Z",
+      "side": 1,
+      "message": "The tests that failed with PS4 would require heroics to pass on Pixel 4 because Adreno drivers do not properly implement `glBindFragDataLocationIndexedEXT` and `glBindFragDataLocationEXT` functions. I suggest just suppressing them on that platform.",
+      "parentUuid": "b113a67b_eadd75d1",
+      "revId": "f50fe45b4104723cf7948f53104b68e8aeac64d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
