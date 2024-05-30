@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a491ad24_fb7cc8fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-05-30T19:37:06Z",
+      "side": 1,
+      "message": "The fix is 2 lines and one of them is if (limitExpressionComplexity). So it\u0027s relatively evident that the option is needed..\n\nYou could instead mention that the issue was that the AST validation would run out of stack and the fix was to check the expression complexity before validating the ast.",
+      "revId": "87a917fc5e9147edc15a050bb8333ba639dcb3af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bfd3021_1cb45fcd",
+        "filename": "src/tests/compiler_tests/Parse_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-05-30T19:37:06Z",
+      "side": 1,
+      "message": "\"Extreme\" is a bit of a judgemental term. It doesn\u0027t describe in what way the unary expresssions are extreme. You could just say \"Many\" or something similar.",
+      "revId": "87a917fc5e9147edc15a050bb8333ba639dcb3af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
