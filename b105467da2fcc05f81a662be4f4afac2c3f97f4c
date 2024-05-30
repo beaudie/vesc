@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d69f3916_57588f8f",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T17:02:13Z",
+      "side": 1,
+      "message": "Maybe initialize granularity too, if for some reason anyone divides by it.",
+      "revId": "b105467da2fcc05f81a662be4f4afac2c3f97f4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b778288b_87aa2705",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T17:02:13Z",
+      "side": 1,
+      "message": "How about this? Makes it clear there are no separate limits for MSAA:\n\n```suggestion\n    // Line width ranges and granularity\n    if (mPhysicalDeviceFeatures.wideLines \u0026\u0026 mFeatures.bresenhamLineRasterization.enabled)\n    {\n        mNativeCaps.minAliasedLineWidth \u003d std::max(1.0f, limitsVk.lineWidthRange[0]);\n        mNativeCaps.maxAliasedLineWidth \u003d limitsVk.lineWidthRange[1];\n    }\n    else\n    {\n        mNativeCaps.minAliasedLineWidth \u003d 1.0f;\n        mNativeCaps.maxAliasedLineWidth \u003d 1.0f;\n    }\n    mNativeCaps.lineWidthGranularity    \u003d limitsVk.lineWidthGranularity;\n    mNativeCaps.minMultisampleLineWidth \u003d mNativeCaps.minAliasedLineWidth;\n    mNativeCaps.maxMultisampleLineWidth \u003d mNativeCaps.maxAliasedLineWidth;\n```",
+      "range": {
+        "startLine": 632,
+        "startChar": 0,
+        "endLine": 649,
+        "endChar": 69
+      },
+      "revId": "b105467da2fcc05f81a662be4f4afac2c3f97f4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37aa333d_575e9f74",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T17:02:13Z",
+      "side": 1,
+      "message": "There\u0027s a `LineWidth` test in this file, maybe just bundle the extra checks there.",
+      "range": {
+        "startLine": 8527,
+        "startChar": 0,
+        "endLine": 8535,
+        "endChar": 1
+      },
+      "revId": "b105467da2fcc05f81a662be4f4afac2c3f97f4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02c8b5fb_96227a18",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8554,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T17:02:13Z",
+      "side": 1,
+      "message": "Given that these aren\u0027t \"state change\" tests (and the file is huge), suggest moving them elsewhere. Could be in MultisampleTest.cpp for example",
+      "range": {
+        "startLine": 8536,
+        "startChar": 0,
+        "endLine": 8554,
+        "endChar": 1
+      },
+      "revId": "b105467da2fcc05f81a662be4f4afac2c3f97f4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
