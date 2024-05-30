@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b0dbd2b_8bb5d17b",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 3110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T14:21:25Z",
+      "side": 1,
+      "message": "Please merge this with the `if` above that does the same thing. No need for a comment IMO.\n\nBut also maybe leave this to a separate change in case reverts need to happen",
+      "range": {
+        "startLine": 3106,
+        "startChar": 0,
+        "endLine": 3110,
+        "endChar": 47
+      },
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fed9a817_67683152",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T14:21:25Z",
+      "side": 1,
+      "message": "```suggestion\n    newExecutable-\u003emIsPPO                 \u003d true;\n```",
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "983cf0d1_b98d603d",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T14:21:25Z",
+      "side": 1,
+      "message": "Please turn these four lines into a helper. That\u0027d be called here of course, but also from the constructor (instead of the `new` call). Then `mIsPPO` is consistently set at the same time the executable is created. Then you can remove the `mIsPPO \u003d true` line from `useProgramStage`.",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 67
+      },
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3b39892_48f1598d",
+        "filename": "src/libANGLE/renderer/ProgramExecutableImpl.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T14:21:25Z",
+      "side": 1,
+      "message": "Not really a per-executable property, but I see what your problem is. Not sure if passing the context to all those setUniform calls and querying a feature is worth it (more instructions, and besides it never makes sense to override the feature). So I guess this is fine.",
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77ad5cf5_18c2bc36",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T14:21:25Z",
+      "side": 1,
+      "message": "With `IsPPO()` added, the two functions are now identical. `mExecutable-\u003egetLinkedShaderStages()` will return `Compute` for the compute executables, so you can coalesce these again.",
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
