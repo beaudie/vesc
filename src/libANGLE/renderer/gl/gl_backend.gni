@@ -139,6 +139,8 @@ if (is_android || is_linux || is_chromeos) {
     "egl/ImageEGL.h",
     "egl/PbufferSurfaceEGL.cpp",
     "egl/PbufferSurfaceEGL.h",
+    "egl/PixmapImageSiblingEGL.cpp",
+    "egl/PixmapImageSiblingEGL.h",
     "egl/RendererEGL.cpp",
     "egl/RendererEGL.h",
     "egl/SurfaceEGL.cpp",
