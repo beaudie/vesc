@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b5050b6_b92436e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-05-30T00:31:25Z",
+      "side": 1,
+      "message": "Would you please add the roll CL range in the commit message?\n\n```\nManual roll VK-GL-CTS from fd5cc7b1e075 to 1a09796462f7 (1 revision)\n\nhttps://chromium.googlesource.com/external/github.com/KhronosGroup/VK-GL-CTS.git/+log/fd5cc7b1e075..1a09796462f7\n```",
+      "revId": "af6d6d800dc5ec9be63000a6a4a38e70893861a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
