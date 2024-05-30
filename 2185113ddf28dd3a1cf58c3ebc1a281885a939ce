@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10c87a05_39cf20d1",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T02:33:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ed1a9f6_55cc2629",
+      "revId": "2185113ddf28dd3a1cf58c3ebc1a281885a939ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c7d5914_0316a70f",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-05-29T23:18:36Z",
       "side": 1,
       "message": "Do we need to configure the `FragmentShaderValidationTest` test to run with `SupportsSPIRV14` disabled?",
+      "revId": "2185113ddf28dd3a1cf58c3ebc1a281885a939ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cb30e3d_4b48d127",
+        "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T02:33:13Z",
+      "side": 1,
+      "message": "This is a compiler test checking for validation rules. It doesn\u0027t matter what its output is.",
+      "parentUuid": "6c7d5914_0316a70f",
       "revId": "2185113ddf28dd3a1cf58c3ebc1a281885a939ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
