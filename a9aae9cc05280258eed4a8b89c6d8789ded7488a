@@ -112,6 +112,30 @@
       },
       "revId": "a9aae9cc05280258eed4a8b89c6d8789ded7488a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a94adef_e291b552",
+        "filename": "scripts/install_target.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3316531
+      },
+      "writtenOn": "2024-05-30T09:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2aa8f7f9_4d811332",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "a9aae9cc05280258eed4a8b89c6d8789ded7488a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

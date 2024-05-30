@@ -111,6 +111,30 @@
       },
       "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "176b57a9_53f858c2",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 3316531
+      },
+      "writtenOn": "2024-05-30T09:58:36Z",
+      "side": 1,
+      "message": "I think we\u0027d need this: https://gn.googlesource.com/gn/+/main/docs/reference.md#the-all-and-default-rules\n\nMeaning, creating a \"default\" target in BUILD.gn, which needs to list all targets which are meant to build by default. So, if this list is well-known and not too big, it\u0027s maybe doable. Otherwise, I\u0027m fine with guarding the target.",
+      "parentUuid": "4297c1c7_4b0b29ae",
+      "range": {
+        "startLine": 1856,
+        "startChar": 0,
+        "endLine": 1856,
+        "endChar": 28
+      },
+      "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
