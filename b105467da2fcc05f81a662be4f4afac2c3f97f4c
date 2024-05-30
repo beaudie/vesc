@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e9b3c5_b97310a6",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-30T18:13:51Z",
+      "side": 1,
+      "message": "Initialized to 1.0.",
+      "parentUuid": "d69f3916_57588f8f",
+      "revId": "b105467da2fcc05f81a662be4f4afac2c3f97f4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b778288b_87aa2705",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-05-30T17:02:13Z",
       "side": 1,
       "message": "How about this? Makes it clear there are no separate limits for MSAA:\n\n```suggestion\n    // Line width ranges and granularity\n    if (mPhysicalDeviceFeatures.wideLines \u0026\u0026 mFeatures.bresenhamLineRasterization.enabled)\n    {\n        mNativeCaps.minAliasedLineWidth \u003d std::max(1.0f, limitsVk.lineWidthRange[0]);\n        mNativeCaps.maxAliasedLineWidth \u003d limitsVk.lineWidthRange[1];\n    }\n    else\n    {\n        mNativeCaps.minAliasedLineWidth \u003d 1.0f;\n        mNativeCaps.maxAliasedLineWidth \u003d 1.0f;\n    }\n    mNativeCaps.lineWidthGranularity    \u003d limitsVk.lineWidthGranularity;\n    mNativeCaps.minMultisampleLineWidth \u003d mNativeCaps.minAliasedLineWidth;\n    mNativeCaps.maxMultisampleLineWidth \u003d mNativeCaps.maxAliasedLineWidth;\n```",
+      "range": {
+        "startLine": 632,
+        "startChar": 0,
+        "endLine": 649,
+        "endChar": 69
+      },
+      "revId": "b105467da2fcc05f81a662be4f4afac2c3f97f4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc7ff41c_0407251c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-30T18:13:51Z",
+      "side": 1,
+      "message": "Thanks. This looks better. Done.",
+      "parentUuid": "b778288b_87aa2705",
       "range": {
         "startLine": 632,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb34d715_d2c84674",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8535,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-30T18:13:51Z",
+      "side": 1,
+      "message": "Moved to just after querying the range in the `LineWidth` test.",
+      "parentUuid": "37aa333d_575e9f74",
+      "range": {
+        "startLine": 8527,
+        "startChar": 0,
+        "endLine": 8535,
+        "endChar": 1
+      },
+      "revId": "b105467da2fcc05f81a662be4f4afac2c3f97f4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02c8b5fb_96227a18",
@@ -77,6 +143,30 @@
       "writtenOn": "2024-05-30T17:02:13Z",
       "side": 1,
       "message": "Given that these aren\u0027t \"state change\" tests (and the file is huge), suggest moving them elsewhere. Could be in MultisampleTest.cpp for example",
+      "range": {
+        "startLine": 8536,
+        "startChar": 0,
+        "endLine": 8554,
+        "endChar": 1
+      },
+      "revId": "b105467da2fcc05f81a662be4f4afac2c3f97f4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b98d9f09_1119021e",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8554,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-30T18:13:51Z",
+      "side": 1,
+      "message": "Sounds good. Done.",
+      "parentUuid": "02c8b5fb_96227a18",
       "range": {
         "startLine": 8536,
         "startChar": 0,
