@@ -46,6 +46,30 @@
       },
       "revId": "79b9865cf7c3000faa88fa3ef739ef7409b49177",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca890c51_b4bfa22e",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3025,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-30T20:48:07Z",
+      "side": 1,
+      "message": "I personally think it makes the code harder to read since there is nothing added or guarded by the scope, and keep the break indented.",
+      "parentUuid": "42e57622_1dae15c6",
+      "range": {
+        "startLine": 3025,
+        "startChar": 8,
+        "endLine": 3025,
+        "endChar": 9
+      },
+      "revId": "79b9865cf7c3000faa88fa3ef739ef7409b49177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
