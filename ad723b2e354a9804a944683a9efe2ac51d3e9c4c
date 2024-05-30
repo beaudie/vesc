@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80e9a04c_36934ec7",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T20:47:43Z",
+      "side": 1,
+      "message": "There should be a helper for this somewhere, have you looked at `OutputGLSLBase.cpp`? I suspect a lot of what you need to do in this file would end up very similar to that. I would even suggest just copy pasting from OutputGLSLBase.cpp and adapting it to wgsl where there is a difference",
+      "revId": "ad723b2e354a9804a944683a9efe2ac51d3e9c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
