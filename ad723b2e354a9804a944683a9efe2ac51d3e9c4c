@@ -16,6 +16,24 @@
       "message": "There should be a helper for this somewhere, have you looked at `OutputGLSLBase.cpp`? I suspect a lot of what you need to do in this file would end up very similar to that. I would even suggest just copy pasting from OutputGLSLBase.cpp and adapting it to wgsl where there is a difference",
       "revId": "ad723b2e354a9804a944683a9efe2ac51d3e9c4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9228e3bf_a6287322",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-30T21:02:02Z",
+      "side": 1,
+      "message": "Actually most of this is copied and adapted from the MSL translator. Looking at OutputGLSLBase.cpp, it looks extremely similar to the MSL translator.\n\nAnyway it looks like the third_party/angle/src/compiler/translator/HashNames.h util might be useful, but I think I might need to hash mangled names since WGSL doesn\u0027t support overloaded functions. Does this work for now?",
+      "parentUuid": "80e9a04c_36934ec7",
+      "revId": "ad723b2e354a9804a944683a9efe2ac51d3e9c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
