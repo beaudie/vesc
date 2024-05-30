@@ -764,8 +764,8 @@ bool TextureVk::isMutableTextureConsistentlySpecifiedForFlush()
     return true;
 }
 
-bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
-                                     angle::FormatID dstImageFormatID) const
+bool TextureVk::updateMustBeFlushed(gl::LevelIndex textureLevelIndexGL,
+                                    angle::FormatID dstImageFormatID) const
 {
     ASSERT(mImage);
 
@@ -776,13 +776,19 @@ bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
         // EGLImage is always initialized upon creation and format should always renderable so that
         // there is no format upgrade.
         ASSERT(mImage->valid());
-        ASSERT(IsTextureLevelInAllocatedImage(*mImage, textureLevelIndexGL));
-        ASSERT(mImage->getActualFormatID() == dstImageFormatID);
-        ASSERT(!IsTextureLevelRedefined(mRedefinedLevels, mState.getType(), textureLevelIndexGL));
-        return false;
+        ASSERT(!updateMustBeStaged(textureLevelIndexGL, dstImageFormatID));
+        return true;
     }
 
-    // If we do not have storage yet, there is impossible to immediately do the copy, so just
+    return false;
+}
+
+bool TextureVk::updateMustBeStaged(gl::LevelIndex textureLevelIndexGL,
+                                   angle::FormatID dstImageFormatID) const
+{
+    ASSERT(mImage);
+
+    // If we do not have storage yet, it is impossible to immediately do the copy, so just
     // stage it. Note that immutable texture will have a valid storage.
     if (!mImage->valid())
     {
@@ -808,6 +814,13 @@ bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
     return IsTextureLevelRedefined(mRedefinedLevels, mState.getType(), textureLevelIndexGL);
 }
 
+bool TextureVk::shouldUpdateBeFlushed(gl::LevelIndex textureLevelIndexGL,
+                                      angle::FormatID dstImageFormatID) const
+{
+    return updateMustBeFlushed(textureLevelIndexGL, dstImageFormatID) ||
+           !updateMustBeStaged(textureLevelIndexGL, dstImageFormatID);
+}
+
 angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const gl::ImageIndex &index,
                                          const gl::Box &area,
@@ -821,10 +834,17 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
 
     // When possible flush out updates immediately.
-    vk::ApplyImageUpdate applyUpdate = vk::ApplyImageUpdate::Defer;
-    if (!mOwnsImage || mState.getImmutableFormat() ||
-        (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
-                               vkFormat.getActualImageFormatID(getRequiredImageAccess()))))
+    bool updateAppliedImmediately = false;
+    bool mustFlush                = updateMustBeFlushed(gl::LevelIndex(index.getLevelIndex()),
+                                                        vkFormat.getActualImageFormatID(getRequiredImageAccess()));
+    bool mustStage                = updateMustBeStaged(gl::LevelIndex(index.getLevelIndex()),
+                                                       vkFormat.getActualImageFormatID(getRequiredImageAccess()));
+    vk::ApplyImageUpdate applyUpdate;
+    if (mustStage)
+    {
+        applyUpdate = vk::ApplyImageUpdate::Defer;
+    }
+    else
     {
         // Cannot defer to unlocked tail call if:
         //
@@ -840,7 +860,6 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                           ? vk::ApplyImageUpdate::ImmediatelyInUnlockedTailCall
                           : vk::ApplyImageUpdate::Immediately;
     }
-    bool updateAppliedImmediately = false;
 
     if (unpackBuffer)
     {
@@ -865,7 +884,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         const vk::Format &bufferVkFormat =
             contextVk->getRenderer()->getFormat(formatInfo.sizedInternalFormat);
 
-        if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
+        if (shouldUpdateBeFlushed(gl::LevelIndex(index.getLevelIndex()),
                                   vkFormat.getActualImageFormatID(getRequiredImageAccess())) &&
             isFastUnpackPossible(vkFormat, offsetBytes, bufferVkFormat))
         {
@@ -918,24 +937,28 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             getRequiredImageAccess(), applyUpdate, &updateAppliedImmediately));
     }
 
-    // If we used context's staging buffer, flush out the updates
-    if (!updateAppliedImmediately)
+    if (updateAppliedImmediately)
     {
-        if (applyUpdate != vk::ApplyImageUpdate::Defer)
-        {
-            ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+        // Return if stageSubresourceUpdate already applied the update
+        return angle::Result::Continue;
+    }
 
-            // If forceSubmitImmutableTextureUpdates is enabled, submit the staged updates as well
-            if (contextVk->getFeatures().forceSubmitImmutableTextureUpdates.enabled)
-            {
-                ANGLE_TRY(contextVk->submitStagedTextureUpdates());
-            }
-        }
-        else if (contextVk->isEligibleForMutableTextureFlush() && !mState.getImmutableFormat())
+    // If we used context's staging buffer, flush out the updates
+    if (mustFlush || (!mustStage && mImage->valid() &&
+                      mImage->hasBufferOrImageSourcedStagedUpdatesInAllLevels()))
+    {
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+
+        // If forceSubmitImmutableTextureUpdates is enabled, submit the staged updates as well
+        if (contextVk->getFeatures().forceSubmitImmutableTextureUpdates.enabled)
         {
-            // Check if we should flush any mutable textures from before.
-            ANGLE_TRY(contextVk->getShareGroup()->onMutableTextureUpload(contextVk, this));
+            ANGLE_TRY(contextVk->submitStagedTextureUpdates());
         }
+    }
+    else if (contextVk->isEligibleForMutableTextureFlush() && !mState.getImmutableFormat())
+    {
+        // Check if we should flush any mutable textures from before.
+        ANGLE_TRY(contextVk->getShareGroup()->onMutableTextureUpload(contextVk, this));
     }
 
     return angle::Result::Continue;
@@ -1203,7 +1226,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         getRequiredImageAccess(), framebufferVk));
 
     // Flush out staged update if possible
-    if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()), dstActualFormatID))
+    if (shouldUpdateBeFlushed(gl::LevelIndex(index.getLevelIndex()), dstActualFormatID))
     {
         ANGLE_TRY(flushImageStagedUpdates(contextVk));
     }
@@ -1332,7 +1355,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
                       dstFormat.componentType, sourceBox.width, sourceBox.height, sourceBox.depth,
                       unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
 
-    if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()), dstFormatID))
+    if (shouldUpdateBeFlushed(gl::LevelIndex(index.getLevelIndex()), dstFormatID))
     {
         ANGLE_TRY(flushImageStagedUpdates(contextVk));
     }
@@ -1393,7 +1416,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
     bool isSelfCopy = mImage == srcImage;
 
     // If destination is valid, copy the source directly into it.
-    if (!shouldUpdateBeStaged(level, dstFormat.getActualImageFormatID(getRequiredImageAccess())) &&
+    if (shouldUpdateBeFlushed(level, dstFormat.getActualImageFormatID(getRequiredImageAccess())) &&
         !isSelfCopy)
     {
         // Make sure any updates to the image are already flushed.
@@ -1567,7 +1590,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
             .colorEncoding;
 
     // If destination is valid, copy the source directly into it.
-    if (!shouldUpdateBeStaged(level, dstFormat.getActualImageFormatID(getRequiredImageAccess())) &&
+    if (shouldUpdateBeFlushed(level, dstFormat.getActualImageFormatID(getRequiredImageAccess())) &&
         !isSelfCopy)
     {
         // Make sure any updates to the image are already flushed.
