@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18a38f54_435bbb9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-30T19:31:49Z",
+      "side": 1,
+      "message": "I\u0027ll emit the translated code in a block comment (/**/) and just continue emitting the basic WGPU shaders tat Geoff wrote for noww, so that the enabled Texture2D tests continue to pass.",
+      "revId": "2ebc99c579630c8577e5b10211ba249fd6cf53bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
