@@ -788,7 +788,15 @@ bool TextureVk::updateMustBeStaged(gl::LevelIndex textureLevelIndexGL,
 {
     ASSERT(mImage);
 
-    // If we do not have storage yet, there is impossible to immediately do the copy, so just
+    return false;
+}
+
+bool TextureVk::updateMustBeStaged(gl::LevelIndex textureLevelIndexGL,
+                                   angle::FormatID dstImageFormatID) const
+{
+    ASSERT(mImage);
+
+    // If we do not have storage yet, it is impossible to immediately do the copy, so just
     // stage it. Note that immutable texture will have a valid storage.
     if (!mImage->valid())
     {
@@ -812,6 +820,13 @@ bool TextureVk::updateMustBeStaged(gl::LevelIndex textureLevelIndexGL,
     // Otherwise, it can only be directly applied to the image if the level is not previously
     // incompatibly redefined.
     return IsTextureLevelRedefined(mRedefinedLevels, mState.getType(), textureLevelIndexGL);
+}
+
+bool TextureVk::shouldUpdateBeFlushed(gl::LevelIndex textureLevelIndexGL,
+                                      angle::FormatID dstImageFormatID) const
+{
+    return updateMustBeFlushed(textureLevelIndexGL, dstImageFormatID) ||
+           !updateMustBeStaged(textureLevelIndexGL, dstImageFormatID);
 }
 
 angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
@@ -853,7 +868,6 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                           ? vk::ApplyImageUpdate::ImmediatelyInUnlockedTailCall
                           : vk::ApplyImageUpdate::Immediately;
     }
-    bool updateAppliedImmediately = false;
 
     if (unpackBuffer)
     {
