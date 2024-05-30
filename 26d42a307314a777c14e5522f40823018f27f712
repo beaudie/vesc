@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b8f9f7a_7228ef60",
+        "filename": "include/platform/gl_features.json",
+        "patchSetId": 12
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-30T15:48:02Z",
+      "side": 1,
+      "message": "Last time I checked, Adreno generated a GL error when using `glBindFragDataLocation*` with any non-zero location or index.\n\nIIRC, linking was working with driver auto-assignments.",
+      "revId": "26d42a307314a777c14e5522f40823018f27f712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
