@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "abcd8d7f_c8ed5f22",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 3110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T19:26:46Z",
+      "side": 1,
+      "message": "Chatted offline, only Vulkan is actually thread-safe, so this is fine.\n\nMaybe add a comment on the `virtual supportsUnifromBatching() { return false; }` (in the Impl) function that any backend that claims to be thread safe should return true",
+      "parentUuid": "06c67a22_f8a04b02",
+      "range": {
+        "startLine": 3106,
+        "startChar": 0,
+        "endLine": 3110,
+        "endChar": 47
+      },
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fed9a817_67683152",
         "filename": "src/libANGLE/ProgramPipeline.cpp",
         "patchSetId": 17
