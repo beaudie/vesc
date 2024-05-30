@@ -16,6 +16,23 @@
       "message": "lgtm\n\nDoes the alternative code path for these copies work correctly on the simulator?",
       "revId": "29f1d79c6f173c496d755d294ba86cb192507f6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a392520_6b71c4d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-05-30T20:16:00Z",
+      "side": 1,
+      "message": "+2\u0027ing as this unblocks the ANGLE-\u003eWebKit roll.",
+      "revId": "29f1d79c6f173c496d755d294ba86cb192507f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
