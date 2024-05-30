@@ -13,6 +13,7 @@
 #include "common/angleutils.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Config.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Observer.h"
 #include "libANGLE/Stream.h"
@@ -61,7 +62,11 @@ class DisplayImpl : public EGLImplFactory, public angle::Subject
 
     virtual egl::Error initialize(egl::Display *display) = 0;
     virtual void terminate()                             = 0;
+
+#if ANGLE_USE_DISPLAY_PREPARE_FOR_CALL
     virtual egl::Error prepareForCall();
+#endif
+
     virtual egl::Error releaseThread();
 
     virtual egl::Error makeCurrent(egl::Display *display,

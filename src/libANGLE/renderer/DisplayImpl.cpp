@@ -43,10 +43,12 @@ DisplayImpl::~DisplayImpl()
     ASSERT(mState.surfaceMap.empty());
 }
 
+#if ANGLE_USE_DISPLAY_PREPARE_FOR_CALL
 egl::Error DisplayImpl::prepareForCall()
 {
     return egl::NoError();
 }
+#endif
 
 egl::Error DisplayImpl::releaseThread()
 {
