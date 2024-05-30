@@ -293,7 +293,7 @@ EGLBoolean EGLAPIENTRY EGL_GetFrameTimestampsANDROID(EGLDisplay dpy,
         ANGLE_CAPTURE_EGL(GetFrameTimestampsANDROID, true, thread, dpyPacked, surfacePacked,
                           frameId, numTimestamps, timestamps, values, returnValue);
     }
-    ASSERT(!egl::Display::GetCurrentThreadUnlockedTailCall()->any());
+    egl::Display::GetCurrentThreadUnlockedTailCall()->run(&returnValue);
     return returnValue;
 }
 

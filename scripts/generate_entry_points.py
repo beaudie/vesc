@@ -3193,6 +3193,7 @@ def get_unlocked_tail_call(api, cmd_name):
             'eglCreateSync',
             'eglDestroySyncKHR',
             'eglDestroySync',
+            'eglGetFrameTimestampsANDROID',
             'eglSwapBuffers',
             'eglSwapBuffersWithDamageKHR',
             'eglWaitSyncKHR',
