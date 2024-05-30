@@ -39,6 +39,12 @@ class CLProgramVk : public CLProgramImpl
 {
   public:
     using Ptr = std::unique_ptr<CLProgramVk>;
+    // TODO: Look into moving this information in CLKernelArgument
+    struct ImagePushConstant
+    {
+        VkPushConstantRange pcRange;
+        uint32_t ordinal;
+    };
     struct SpvReflectionData
     {
         angle::HashMap<uint32_t, uint32_t> spvIntLookup;
@@ -50,6 +56,7 @@ class CLProgramVk : public CLProgramImpl
         angle::HashMap<uint32_t, VkPushConstantRange> pushConstants;
         angle::PackedEnumMap<SpecConstantType, uint32_t> specConstantIDs;
         angle::PackedEnumBitSet<SpecConstantType, uint32_t> specConstantsUsed;
+        angle::HashMap<uint32_t, std::vector<ImagePushConstant>> imagePushConstants;
         CLKernelArgsMap kernelArgsMap;
         ClspvPrintfBufferStorage printfBufferStorage;
         angle::HashMap<uint32_t, ClspvPrintfInfo> printfInfoMap;
@@ -222,6 +229,42 @@ class CLProgramVk : public CLProgramImpl
         {
             return getPushConstantRangeFromClspvReflectionType(
                 NonSemanticClspvReflectionPushConstantRegionGroupOffset);
+        }
+
+        const VkPushConstantRange *getImageDataChannelOrderRange(size_t ordinal) const
+        {
+            const VkPushConstantRange *pushConstantRangePtr = nullptr;
+            if (reflectionData.imagePushConstants.contains(
+                    NonSemanticClspvReflectionImageArgumentInfoChannelOrderPushConstant))
+            {
+                for (const auto imageConstant : reflectionData.imagePushConstants.at(
+                         NonSemanticClspvReflectionImageArgumentInfoChannelOrderPushConstant))
+                {
+                    if (static_cast<size_t>(imageConstant.ordinal) == ordinal)
+                    {
+                        pushConstantRangePtr = &imageConstant.pcRange;
+                    }
+                }
+            }
+            return pushConstantRangePtr;
+        }
+
+        const VkPushConstantRange *getImageDataChannelDataTypeRange(size_t ordinal) const
+        {
+            const VkPushConstantRange *pushConstantRangePtr = nullptr;
+            if (reflectionData.imagePushConstants.contains(
+                    NonSemanticClspvReflectionImageArgumentInfoChannelDataTypePushConstant))
+            {
+                for (const auto imageConstant : reflectionData.imagePushConstants.at(
+                         NonSemanticClspvReflectionImageArgumentInfoChannelDataTypePushConstant))
+                {
+                    if (static_cast<size_t>(imageConstant.ordinal) == ordinal)
+                    {
+                        pushConstantRangePtr = &imageConstant.pcRange;
+                    }
+                }
+            }
+            return pushConstantRangePtr;
         }
     };
     using DevicePrograms   = angle::HashMap<const _cl_device_id *, DeviceProgramData>;
