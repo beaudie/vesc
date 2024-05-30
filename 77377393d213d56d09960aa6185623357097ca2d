@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f464779b_2c5ab552",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1398329
+      },
+      "writtenOn": "2024-05-30T17:50:16Z",
+      "side": 1,
+      "message": "Shabi, release team approved, so I\u0027ll let you land it.",
+      "revId": "77377393d213d56d09960aa6185623357097ca2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
