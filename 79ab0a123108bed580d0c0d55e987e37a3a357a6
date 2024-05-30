@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19545a22_4618d121",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T15:07:37Z",
+      "side": 1,
+      "message": "IIUC, you can make this a lockless call instead? That\u0027s always better than taking the lock and then doing the real work after.",
+      "revId": "79ab0a123108bed580d0c0d55e987e37a3a357a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
