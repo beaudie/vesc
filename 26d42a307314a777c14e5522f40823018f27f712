@@ -16,6 +16,24 @@
       "message": "Last time I checked, Adreno generated a GL error when using `glBindFragDataLocation*` with any non-zero location or index.\n\nIIRC, linking was working with driver auto-assignments.",
       "revId": "26d42a307314a777c14e5522f40823018f27f712",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dee92d0d_9440ab16",
+        "filename": "include/platform/gl_features.json",
+        "patchSetId": 12
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-30T15:59:13Z",
+      "side": 1,
+      "message": "I don\u0027t have the device on hand this week to really confirm but from the logs I see:\n\n```\n\u003cerrors from the glBindFragDataLocation calls\u003e\nWARN: ProgramGL.cpp:647 (checkLinkStatus): Program link or binary loading failed: Error: Output _uFragData location or component exceeds max allowed.\n```\n\nSo I think it\u0027s both. \n\nIt feels safe to fail the link in this case instead of leaving the locations unassigned when the user explicitly assigned them. It\u0027ll help us catch any unexpected usage of the extension in Chrome too.",
+      "parentUuid": "6b8f9f7a_7228ef60",
+      "revId": "26d42a307314a777c14e5522f40823018f27f712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
