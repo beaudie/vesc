@@ -52,6 +52,24 @@
       "parentUuid": "cdd51514_144ed4e0",
       "revId": "f50fe45b4104723cf7948f53104b68e8aeac64d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f437077b_0ecd54c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-05-30T11:13:34Z",
+      "side": 1,
+      "message": "If a fragment shader has, e.g., two unassigned outputs, and an application does not assign bindings through API calls, the spec requires automatic assignment. To avoid relying on loosely-defined driver behavior, ANGLE assigns them internally and calls `glBindFragDataLocationEXT` for each output that has not been assigned in the fragment shader.\n\nSince Adreno drivers do not properly support `glBindFragDataLocationEXT`, such assignments fail. There are only two possible resolutions here:\n\n- Ignore Adreno bugs as they are not reachable from WebGL and ensure that Skia uses shader-assigned outputs.\n\n- Defer shader compilation until program linking when this extension is used on Adreno and rewrite fragment output declarations according to API bindings.",
+      "parentUuid": "30d6ec97_45f10994",
+      "revId": "f50fe45b4104723cf7948f53104b68e8aeac64d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
