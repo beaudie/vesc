@@ -385,7 +385,7 @@ namespace
 TestPlatformContext gPlatformContext;
 
 // After a fixed number of iterations we reset the test window. This works around some driver bugs.
-constexpr uint32_t kWindowReuseLimit = 50;
+constexpr uint32_t kWindowReuseLimit = 1;
 
 constexpr char kUseConfig[]                      = "--use-config=";
 constexpr char kReuseDisplays[]                  = "--reuse-displays";
