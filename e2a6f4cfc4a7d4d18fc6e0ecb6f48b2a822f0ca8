@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33259794_8eef4ceb",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-30T22:26:10Z",
+      "side": 1,
+      "message": "I am not convinced why we need batching at all. Can\u0027t you just call into backend directly (i.e, call mImplementation-\u003e*SetUniformFunc() directly without if(!mSupportsUniformBatching) check)? I think as long at you made sure all other parts of code are thread safe (things like observer notification, calling into other shared object etc), which I think your earlier CLs already handled, you should be good to remove the share lock. The only thing you need to make sure is Looking at VK backend, the only way this is this SetUniformFunc call will only access the uniform data. If you are unsure about the other backend is thread safe, you can still keep share lock for other backend.",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
