@@ -33,6 +33,24 @@
       "message": "\"Extreme\" is a bit of a judgemental term. It doesn\u0027t describe in what way the unary expresssions are extreme. You could just say \"Many\" or something similar.",
       "revId": "87a917fc5e9147edc15a050bb8333ba639dcb3af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "573d4b42_6c49f16b",
+        "filename": "src/tests/compiler_tests/Parse_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 3426581
+      },
+      "writtenOn": "2024-05-30T19:50:11Z",
+      "side": 1,
+      "message": "I suppose it\u0027s judgmental, but \u003e 5,000 chained unary expressions/3,500 chained assignments does seem a bit \"extreme\" to me. 😉 (Fewer than those numbers and it won\u0027t crash.)\n\nI\u0027ve changed it to \"ManyChained\".",
+      "parentUuid": "3bfd3021_1cb45fcd",
+      "revId": "87a917fc5e9147edc15a050bb8333ba639dcb3af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
