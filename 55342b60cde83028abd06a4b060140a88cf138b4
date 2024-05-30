@@ -16,6 +16,52 @@
       "message": "Thanks",
       "revId": "55342b60cde83028abd06a4b060140a88cf138b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7875b1e3_b9b0c253",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T18:15:04Z",
+      "side": 1,
+      "message": "nit: remove now",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 2
+      },
+      "revId": "55342b60cde83028abd06a4b060140a88cf138b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53e9ae56_aa4c20ca",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11082,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T18:15:04Z",
+      "side": 1,
+      "message": "nit: remove now",
+      "range": {
+        "startLine": 11081,
+        "startChar": 0,
+        "endLine": 11082,
+        "endChar": 49
+      },
+      "revId": "55342b60cde83028abd06a4b060140a88cf138b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
