@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f15066de_eba75c72",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-30T16:41:24Z",
+      "side": 1,
+      "message": "It\u0027s not intuitive, but you gotta keeping `std::move`ing!\n\n```suggestion\n    newExecutable-\u003emPPOProgramExecutables \u003d std::move(ppoProgramExecutables);\n```",
+      "revId": "72f82ecaca81cb7802d69f63a884bf0a36156254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
