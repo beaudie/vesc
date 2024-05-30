@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b8b831e_0ed8679d",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 3110,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-30T20:17:47Z",
+      "side": 1,
+      "message": "Moved `if` to a helper as glUniform is easier to manage as an if/else logic than a full list I think?..\n\nAdded comments regarding batching.",
+      "parentUuid": "abcd8d7f_c8ed5f22",
+      "range": {
+        "startLine": 3106,
+        "startChar": 0,
+        "endLine": 3110,
+        "endChar": 47
+      },
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fed9a817_67683152",
