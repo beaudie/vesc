@@ -118,6 +118,30 @@
       },
       "revId": "79b9865cf7c3000faa88fa3ef739ef7409b49177",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bbc51e9_12eaaca8",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3025,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-30T21:08:56Z",
+      "side": 1,
+      "message": "The following is repeated for `default` and the other 4 cases after it:\n```\nerror: cannot jump from switch statement to this case label\n 3118 |         default:\n      |         ^\nnote: jump bypasses variable initialization\n 3078 |             const FramebufferAttachment *attachment \u003d readFramebuffer-\u003egetReadColorAttachment();\n      |                                          ^\nnote: jump bypasses variable initialization\n 3063 |             Framebuffer *readFramebuffer \u003d context-\u003egetState().getReadFramebuffer();\n      |                          ^\n```",
+      "parentUuid": "9fa5ecfc_92a90387",
+      "range": {
+        "startLine": 3025,
+        "startChar": 8,
+        "endLine": 3025,
+        "endChar": 9
+      },
+      "revId": "79b9865cf7c3000faa88fa3ef739ef7409b49177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
