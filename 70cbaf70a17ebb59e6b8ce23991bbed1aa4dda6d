@@ -41,6 +41,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5957fb64_f052a0d0",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-30T16:01:43Z",
+      "side": 1,
+      "message": "Thanks, moved to the CL up the relation chain: https://crrev.com/c/5569184/5",
+      "parentUuid": "fed9a817_67683152",
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "983cf0d1_b98d603d",
@@ -54,6 +72,30 @@
       "writtenOn": "2024-05-30T14:21:25Z",
       "side": 1,
       "message": "Please turn these four lines into a helper. That\u0027d be called here of course, but also from the constructor (instead of the `new` call). Then `mIsPPO` is consistently set at the same time the executable is created. Then you can remove the `mIsPPO \u003d true` line from `useProgramStage`.",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 67
+      },
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a117f0ea_e43bb020",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-30T16:01:43Z",
+      "side": 1,
+      "message": "Thanks, moved to the CL up the relation chain: https://crrev.com/c/5569184/5",
+      "parentUuid": "983cf0d1_b98d603d",
       "range": {
         "startLine": 502,
         "startChar": 0,
@@ -94,6 +136,24 @@
       "writtenOn": "2024-05-30T14:21:25Z",
       "side": 1,
       "message": "With `IsPPO()` added, the two functions are now identical. `mExecutable-\u003egetLinkedShaderStages()` will return `Compute` for the compute executables, so you can coalesce these again.",
+      "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1003969_c7910519",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-30T16:01:43Z",
+      "side": 1,
+      "message": "Thanks, moved to the CL up the relation chain: https://crrev.com/c/5569184/5",
+      "parentUuid": "77ad5cf5_18c2bc36",
       "revId": "70cbaf70a17ebb59e6b8ce23991bbed1aa4dda6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
