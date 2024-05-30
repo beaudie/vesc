@@ -22,6 +22,30 @@
       },
       "revId": "79b9865cf7c3000faa88fa3ef739ef7409b49177",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42e57622_1dae15c6",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3025,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-30T20:20:49Z",
+      "side": 1,
+      "message": "No, but since I added the two new cases in this function, I also tried to make the styles in the switch-case statements similar. Should we remove them?",
+      "parentUuid": "ef886433_0ac68207",
+      "range": {
+        "startLine": 3025,
+        "startChar": 8,
+        "endLine": 3025,
+        "endChar": 9
+      },
+      "revId": "79b9865cf7c3000faa88fa3ef739ef7409b49177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
