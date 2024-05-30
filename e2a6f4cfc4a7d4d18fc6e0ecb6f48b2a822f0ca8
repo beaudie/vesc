@@ -22,6 +22,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3ee37b2_175b6a73",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-30T22:43:09Z",
+      "side": 1,
+      "message": "One thing maybe you can entertain with is to make ProgramExecutableVk::setUniformImpl() function const so that you ensure we are not modifying anything other than writing to the mDefaultUniformBlocks[shaderType].uniformData.data() (you will need to make exception to the pointer returned from data() so that you can write to it. I think you can use mutable keyword).",
+      "parentUuid": "33259794_8eef4ceb",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
