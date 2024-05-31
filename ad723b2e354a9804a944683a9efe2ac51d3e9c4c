@@ -56,6 +56,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "768ae7f2_128f237e",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-31T07:27:09Z",
+      "side": 1,
+      "message": "Ah those are quite extensive!",
+      "parentUuid": "c5f68e50_8a1cfeb5",
+      "revId": "ad723b2e354a9804a944683a9efe2ac51d3e9c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "89cbd7a3_d5f7dc34",
         "filename": "src/tests/compiler_tests/WGSLOutput_test.cpp",
         "patchSetId": 3
@@ -67,6 +85,24 @@
       "writtenOn": "2024-05-31T02:51:30Z",
       "side": 1,
       "message": "TBH, I wouldn\u0027t bother with tests like this. It\u0027ll be a lot of churn as you keep changing the way things are translated. The end2end tests (in GLSLTest.cpp) are best IMO and they simultaneously test every backend too.\n\nIf you want a convenient showcase of what\u0027s getting output, maybe keep this one only and every CL change it as needed. When the basics of the translation are done, you might as well delete this file and focus on the end2end tests.",
+      "revId": "ad723b2e354a9804a944683a9efe2ac51d3e9c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00cf3ea0_d6acb7f2",
+        "filename": "src/tests/compiler_tests/WGSLOutput_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-05-31T07:27:09Z",
+      "side": 1,
+      "message": "Agreed, this is essentially an auto-checked CL description.",
+      "parentUuid": "89cbd7a3_d5f7dc34",
       "revId": "ad723b2e354a9804a944683a9efe2ac51d3e9c4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
