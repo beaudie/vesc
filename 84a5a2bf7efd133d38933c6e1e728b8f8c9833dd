@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3643aa59_33814450",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-05-31T22:44:41Z",
+      "side": 1,
+      "message": "apologies for the code churn but i was recently informed about the VVL error mentioned in the commit message and this change is one way to get around it. would like to get your feedback and or alternate approaches. I\u0027m also curious what the intent was behind that VVL",
+      "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
