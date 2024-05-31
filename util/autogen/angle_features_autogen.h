@@ -103,6 +103,7 @@ enum class Feature
     DisableSyncControlSupport,
     DisableTextureClampToBorder,
     DisableTextureMirrorClampToEdge,
+    DisableTiledRendering,
     DisableTimestampQueries,
     DisallowMixedDepthStencilLoadOpNoneAndLoad,
     DoesSRGBClearsOnLinearFramebufferAttachments,
