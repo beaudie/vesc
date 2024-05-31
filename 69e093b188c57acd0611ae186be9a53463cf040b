@@ -1,0 +1,272 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "102fa6df_a0477f0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-31T22:34:07Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "69e093b188c57acd0611ae186be9a53463cf040b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a71b8ab3_62337c97",
+        "filename": "doc/TestingOnBots.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-31T22:34:07Z",
+      "side": 1,
+      "message": "due to",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 3
+      },
+      "revId": "69e093b188c57acd0611ae186be9a53463cf040b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "546b89f2_ac94a101",
+        "filename": "doc/TestingOnBots.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-31T22:34:07Z",
+      "side": 1,
+      "message": "version,",
+      "range": {
+        "startLine": 4,
+        "startChar": 40,
+        "endLine": 4,
+        "endChar": 41
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "a5e067a2_2facd78e",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "doc/TestingOnBots.md",
+              "range": {
+                "startLine": 4,
+                "startChar": 0,
+                "endLine": 5,
+                "endChar": 0
+              },
+              "replacement": "due a different platform, driver version, etc. The same build can be triggered on a matching bot\n"
+            }
+          ]
+        }
+      ],
+      "revId": "69e093b188c57acd0611ae186be9a53463cf040b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3231703f_3e806c57",
+        "filename": "doc/TestingOnBots.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-31T22:34:07Z",
+      "side": 1,
+      "message": "nit: full stop :)",
+      "range": {
+        "startLine": 6,
+        "startChar": 79,
+        "endLine": 6,
+        "endChar": 80
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "97f31d9c_73b675c7",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "doc/TestingOnBots.md",
+              "range": {
+                "startLine": 6,
+                "startChar": 0,
+                "endLine": 7,
+                "endChar": 0
+              },
+              "replacement": "can also sometimes be useful (see [`scripts/trigger.py`](../scripts/trigger.py)).\n"
+            }
+          ]
+        }
+      ],
+      "revId": "69e093b188c57acd0611ae186be9a53463cf040b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f28b1b9_b8dd2a40",
+        "filename": "doc/TestingOnBots.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-31T22:34:07Z",
+      "side": 1,
+      "message": "Should `-d` be separated by space?",
+      "range": {
+        "startLine": 17,
+        "startChar": 60,
+        "endLine": 17,
+        "endChar": 61
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "838d9c3d_afa076a8",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "doc/TestingOnBots.md",
+              "range": {
+                "startLine": 17,
+                "startChar": 0,
+                "endLine": 19,
+                "endChar": 0
+              },
+              "replacement": "  example, here we can limit to the same OS and GPU with `-d os\u003dWindows-10` and\n  `-d gpu\u003d8086:9bc5-31.0.101.2127` (note: this numeric GPU id encodes both the vendor and the\n"
+            }
+          ]
+        }
+      ],
+      "revId": "69e093b188c57acd0611ae186be9a53463cf040b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fdf6511_9c2fd226",
+        "filename": "doc/TestingOnBots.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-31T22:34:07Z",
+      "side": 1,
+      "message": "batch?",
+      "range": {
+        "startLine": 26,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 12
+      },
+      "revId": "69e093b188c57acd0611ae186be9a53463cf040b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caca2e23_6c5e188f",
+        "filename": "doc/TestingOnBots.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-31T22:34:07Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 31,
+        "startChar": 84,
+        "endLine": 31,
+        "endChar": 85
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "7fc1f988_6417824f",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "doc/TestingOnBots.md",
+              "range": {
+                "startLine": 31,
+                "startChar": 0,
+                "endLine": 32,
+                "endChar": 0
+              },
+              "replacement": "* Sometimes additional args are required (can be found in logs of the original tasks).\n"
+            }
+          ]
+        }
+      ],
+      "revId": "69e093b188c57acd0611ae186be9a53463cf040b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24f38a70_234889f9",
+        "filename": "doc/TestingOnBots.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-05-31T22:34:07Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 40,
+        "startChar": 52,
+        "endLine": 40,
+        "endChar": 53
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "15041dde_3126e25f",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "doc/TestingOnBots.md",
+              "range": {
+                "startLine": 40,
+                "startChar": 0,
+                "endLine": 41,
+                "endChar": 0
+              },
+              "replacement": "`PermissionDenied`, you could also try `chromium:try`.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "69e093b188c57acd0611ae186be9a53463cf040b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
