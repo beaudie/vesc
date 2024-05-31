@@ -327,6 +327,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95e314db_66e9e571",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-31T20:00:24Z",
+      "side": 1,
+      "message": "I see, thanks (talked to Charlie offline and he also does not expect sane apps to blow up)\n\nI tested (`driver_overhead_2`) this CL in a couple of setups on a couple mobile devices I have on my desk, and `supportsUnifromBatching-\u003etrue` is looking noticeably _worse_ than `supportsUnifromBatching-\u003efalse` (so locks on those calls are still off). I definitely don\u0027t see evidence of this batching making a positive difference. That might be due to the additional copy, or could be something about the way I\u0027m storing/replaying calls, not sure.\n\nWe should probably move forward with calls where we can ensure backend is thread safe and leave batching aside for now.",
+      "parentUuid": "63db801e_996fb5b9",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
