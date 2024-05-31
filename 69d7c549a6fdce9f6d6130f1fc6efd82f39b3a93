@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef0c535d_b9dfc369",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-31T14:43:45Z",
+      "side": 1,
+      "message": "Ugh, lost the CR from removing a file diff",
+      "revId": "69d7c549a6fdce9f6d6130f1fc6efd82f39b3a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
