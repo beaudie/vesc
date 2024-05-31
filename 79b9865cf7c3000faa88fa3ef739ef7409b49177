@@ -142,6 +142,30 @@
       },
       "revId": "79b9865cf7c3000faa88fa3ef739ef7409b49177",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1534623c_a1552296",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3025,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T03:03:32Z",
+      "side": 1,
+      "message": "The reason some cases have `{}` is exactly because of variable declarations. The cases that don\u0027t have a variable declaration don\u0027t need `{}`.\n\nMoving the `break;` didn\u0027t really do anything",
+      "parentUuid": "2bbc51e9_12eaaca8",
+      "range": {
+        "startLine": 3025,
+        "startChar": 8,
+        "endLine": 3025,
+        "endChar": 9
+      },
+      "revId": "79b9865cf7c3000faa88fa3ef739ef7409b49177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
