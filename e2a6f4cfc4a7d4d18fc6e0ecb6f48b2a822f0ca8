@@ -111,6 +111,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "519a18e7_680436ab",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-31T13:52:42Z",
+      "side": 1,
+      "message": "Thanks. I will try to:\n1) Check where it is safe to just remove the lock, go ahead and do that.\n2) Benchmark this batching idea and see if it helps after (1)",
+      "parentUuid": "84cbe251_0b5e43e0",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
