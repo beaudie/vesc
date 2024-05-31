@@ -1479,7 +1479,8 @@ Renderer::Renderer()
       mCommandProcessor(this, &mCommandQueue),
       mSupportedVulkanPipelineStageMask(0),
       mSupportedVulkanShaderStageMask(0),
-      mMemoryAllocationTracker(MemoryAllocationTracker(this))
+      mMemoryAllocationTracker(MemoryAllocationTracker(this)),
+      mPlaceHolderDescriptorSetLayout(nullptr)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1514,6 +1515,12 @@ void Renderer::onDestroy(vk::Context *context)
     if (isDeviceLost())
     {
         handleDeviceLost();
+    }
+
+    if (mPlaceHolderDescriptorSetLayout && mPlaceHolderDescriptorSetLayout->get().valid())
+    {
+        ASSERT(!mPlaceHolderDescriptorSetLayout->isReferenced());
+        mPlaceHolderDescriptorSetLayout->get().destroy(getDevice());
     }
 
     mCommandProcessor.destroy(context);
@@ -4876,9 +4883,6 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
                             mGraphicsPipelineLibraryFeatures.graphicsPipelineLibrary == VK_TRUE &&
                                 (!isNvidia || nvidiaVersion.major >= 531) && !isRADV);
 
-    // By default all shaders are compiled into the same pipeline library
-    ANGLE_FEATURE_CONDITION(&mFeatures, combineAllShadersInPipelineLibrary, true);
-
     // The following drivers are known to key the pipeline cache blobs with vertex input and
     // fragment output state, causing draw-time pipeline creation to miss the cache regardless of
     // warmup:
@@ -5204,6 +5208,31 @@ angle::Result Renderer::mergeIntoPipelineCache(vk::Context *context,
 
     globalCache.merge(this, pipelineCache);
 
+    return angle::Result::Continue;
+}
+
+angle::Result Renderer::getDescriptorLayoutForEmptyDesc(
+    vk::Context *context,
+    vk::AtomicBindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
+{
+    std::unique_lock<angle::SimpleMutex> lock(mPlaceHolderDescriptorSetLayoutMutex);
+
+    if (!mPlaceHolderDescriptorSetLayout || !mPlaceHolderDescriptorSetLayout->get().valid())
+    {
+        VkDescriptorSetLayoutCreateInfo createInfo = {};
+        createInfo.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        createInfo.flags        = 0;
+        createInfo.bindingCount = 0;
+        createInfo.pBindings    = nullptr;
+
+        vk::DescriptorSetLayout newLayout;
+        ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+
+        mPlaceHolderDescriptorSetLayout =
+            new vk::RefCountedDescriptorSetLayout(std::move(newLayout));
+    }
+
+    descriptorSetLayoutOut->set(mPlaceHolderDescriptorSetLayout);
     return angle::Result::Continue;
 }
 

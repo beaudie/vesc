@@ -752,6 +752,10 @@ class Renderer : angle::NonCopyable
 
     std::thread::id getCommandProcessorThreadId() const { return mCommandProcessor.getThreadId(); }
 
+    angle::Result getDescriptorLayoutForEmptyDesc(
+        vk::Context *context,
+        vk::AtomicBindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut);
+
   private:
     angle::Result setupDevice(vk::Context *context,
                               const angle::FeatureOverrides &featureOverrides,
@@ -1089,6 +1093,10 @@ class Renderer : angle::NonCopyable
     std::ostringstream mPipelineCacheGraph;
     bool mDumpPipelineCacheGraph;
     std::string mPipelineCacheGraphDumpPath;
+
+    // Protects access to mPlaceHolderDescriptorSetLayout
+    angle::SimpleMutex mPlaceHolderDescriptorSetLayoutMutex;
+    vk::RefCountedDescriptorSetLayout *mPlaceHolderDescriptorSetLayout;
 };
 
 ANGLE_INLINE Serial Renderer::generateQueueSerial(SerialIndex index)

@@ -7487,15 +7487,12 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
         return angle::Result::Continue;
     }
 
-    // Descriptor set layout handle is allowed to be VK_NULL_HANDLE iff
-    // VK_EXT_graphics_pipeline_library is supported and pre-rasterization and fragment shader
-    // subsets can be independently compiled.
-    if (!context->getFeatures().combineAllShadersInPipelineLibrary.enabled && desc.empty())
+    // Create a single placeholder descriptor set layout handle for an empty DescriptorSetLayoutDesc
+    // and reuse it across all contexts.
+    if (desc.empty())
     {
-        auto insertedItem = mPayload.emplace(desc, vk::DescriptorSetLayout());
-        vk::RefCountedDescriptorSetLayout &insertedLayout = insertedItem.first->second;
-        descriptorSetLayoutOut->set(&insertedLayout);
-
+        ANGLE_TRY(context->getRenderer()->getDescriptorLayoutForEmptyDesc(context,
+                                                                          descriptorSetLayoutOut));
         return angle::Result::Continue;
     }
 
@@ -7569,8 +7566,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
         if (layoutPtr.valid())
         {
             VkDescriptorSetLayout setLayout = layoutPtr.get().getHandle();
-            ASSERT(setLayout != VK_NULL_HANDLE ||
-                   !context->getFeatures().combineAllShadersInPipelineLibrary.enabled);
+            ASSERT(setLayout != VK_NULL_HANDLE);
             setLayoutHandles.push_back(setLayout);
         }
     }
