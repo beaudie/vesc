@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "983e326d_4b0eac9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-05-31T08:35:02Z",
+      "side": 1,
+      "message": "Note: if revert to use `SingleContextMutex` (we do this in our ANGLE), the performance difference is a lot bigger: 9213 -\u003e 9839 frames (6.8%).\n\nFor reference. Commit where `SingleContextMutex` was replaced with `ContextMutex`:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4632729",
+      "revId": "175a45d4c9cc645f7be70dcb65ca9eaee5d7cc89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
