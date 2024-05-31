@@ -33,6 +33,107 @@ TEST_P(TiledRenderingTest, ExtensionDisabled)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
+// Test that tiled rendering can be stared and stopped. Verify that only pixels in bounds are
+// written.
+TEST_P(TiledRenderingTest, BasicUsage)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_QCOM_tiled_rendering"));
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
+
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glStartTilingQCOM(16, 16, 16, 16, GL_COLOR_BUFFER_BIT0_QCOM);
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+
+    glEndTilingQCOM(GL_COLOR_BUFFER_BIT0_QCOM);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(24, 24, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(64, 64, GLColor::transparentBlack);
+}
+
+// Test that changing the framebuffer implicitly ends tiled rendering.
+TEST_P(TiledRenderingTest, ImplicitEnd)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_QCOM_tiled_rendering"));
+
+    GLTexture tex1;
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer fbo1;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex1, 0);
+
+    GLTexture tex2;
+    glBindTexture(GL_TEXTURE_2D, tex2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer fbo2;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo2);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex2, 0);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
+
+    glClearColor(0, 0, 0, 0);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glStartTilingQCOM(0, 0, 8, 8, GL_COLOR_BUFFER_BIT0_QCOM);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+
+    // Switch framebuffer bindings. Tiling is implicitly ended and start can be called again without
+    // errors.
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo2);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glStartTilingQCOM(8, 8, 8, 8, GL_COLOR_BUFFER_BIT0_QCOM);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+
+    glEndTilingQCOM(GL_COLOR_BUFFER_BIT0_QCOM);
+
+    // Test that the correct tiling regions were used
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
+    EXPECT_PIXEL_COLOR_EQ(4, 4, GLColor::blue);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo2);
+    EXPECT_PIXEL_COLOR_EQ(12, 12, GLColor::blue);
+}
+
+// Test that the only written areas are the intersection of scissor and tiled rendering area
+TEST_P(TiledRenderingTest, Scissor)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_QCOM_tiled_rendering"));
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
+
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(0, 0, 12, 12);
+
+    glStartTilingQCOM(8, 8, 8, 8, GL_COLOR_BUFFER_BIT0_QCOM);
+
+    // Scissor and tile intersect from [8, 8] to [12, 12]
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+
+    glEndTilingQCOM(GL_COLOR_BUFFER_BIT0_QCOM);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(6, 6, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(10, 10, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(14, 14, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(18, 18, GLColor::transparentBlack);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(TiledRenderingTest);
 
 }  // namespace angle
