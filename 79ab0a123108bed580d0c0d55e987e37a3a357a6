@@ -34,6 +34,24 @@
       "parentUuid": "19545a22_4618d121",
       "revId": "79ab0a123108bed580d0c0d55e987e37a3a357a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9d991cf_c2c1fb8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T14:12:44Z",
+      "side": 1,
+      "message": "Because of capture/replay I think?\n\nOk let\u0027s land this, but maybe a good follow up would be to make the Display maps (like `SurfaceMap`) use `ResourceMap`, make it self-locking and then we can start making surface and sync calls just lockless instead if we can.",
+      "parentUuid": "1d36d740_5bb4b7fc",
+      "revId": "79ab0a123108bed580d0c0d55e987e37a3a357a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
