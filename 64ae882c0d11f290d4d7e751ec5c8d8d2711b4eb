@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a20dee5_55bdf793",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T16:49:35Z",
+      "side": 1,
+      "message": "```suggestion\n    static constexpr DirtyObjectHandlerArray MakeDirtyObjectHandlers()\n```",
+      "range": {
+        "startLine": 1452,
+        "startChar": 45,
+        "endLine": 1452,
+        "endChar": 68
+      },
+      "revId": "64ae882c0d11f290d4d7e751ec5c8d8d2711b4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cf717f3_06146bbc",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T16:49:35Z",
+      "side": 1,
+      "message": "Could you look at the assembly to make sure there is nothing about this init-on-the-first-run declaration here?\n\nDoes `static constexpr DirtyObjectHandlerArray kDirtyObjectHandlers \u003d MakeDirtyObjectHandlers();` as a member not work?",
+      "revId": "64ae882c0d11f290d4d7e751ec5c8d8d2711b4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
