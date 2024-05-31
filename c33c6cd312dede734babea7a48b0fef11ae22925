@@ -16,6 +16,24 @@
       "message": "Shabi, could you PTAL at this failure on Intel Mesa 23.2.1\nhttps://ci.chromium.org/ui/p/angle/builders/ci/linux-exp-test/278/overview",
       "revId": "c33c6cd312dede734babea7a48b0fef11ae22925",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7f6757a_1b2de86a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T19:18:14Z",
+      "side": 1,
+      "message": "Please suppress. It\u0027s failing both with SPIR-V 1.4 and SPIR-V 1.3, so it\u0027s just something about the test the driver doesn\u0027t like (i.e. unrelated to the change itself)",
+      "parentUuid": "c1eddd69_3c945b5a",
+      "revId": "c33c6cd312dede734babea7a48b0fef11ae22925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
