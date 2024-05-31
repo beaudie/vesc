@@ -159,6 +159,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdfbc1c1_cdbb2506",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-05-31T16:18:28Z",
+      "side": 1,
+      "message": "The uniform data goes into the mDefaultUniformBlocks[shaderType].uniformData, which is another CPU access only memory, so we are already doing \"batching\". I don\u0027t think the extra batching will help perf though. virtual function call overhead is true, but I thought the overhead is small? If not, we really should look to remove all virtual functions, since there is we dont need virtual function.",
+      "parentUuid": "3691b611_21a50ebf",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
