@@ -237,8 +237,9 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
             }
         }
         // EXT_shader_io_blocks is implicitly enabled when EXT_geometry_shader or
-        // EXT_tessellation_shader is enabled.
-        if (name == "GL_EXT_geometry_shader" || name == "GL_EXT_tessellation_shader")
+        // EXT_tessellation_shader is enabled. The same holds for their OES counterparts.
+        if (name == "GL_EXT_geometry_shader" || name == "GL_EXT_tessellation_shader" ||
+            name == "GL_OES_geometry_shader" || name == "GL_OES_tessellation_shader")
         {
             constexpr char kIOBlocksExtName[] = "GL_EXT_shader_io_blocks";
             iter = mExtensionBehavior.find(GetExtensionByName(kIOBlocksExtName));

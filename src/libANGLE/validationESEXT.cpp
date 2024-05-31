@@ -2685,25 +2685,7 @@ bool ValidatePatchParameteriEXT(const PrivateState &state,
         return false;
     }
 
-    if (pname != GL_PATCH_VERTICES)
-    {
-        errors->validationError(entryPoint, GL_INVALID_ENUM, kInvalidPname);
-        return false;
-    }
-
-    if (value <= 0)
-    {
-        errors->validationError(entryPoint, GL_INVALID_VALUE, kInvalidValueNonPositive);
-        return false;
-    }
-
-    if (value > state.getCaps().maxPatchVertices)
-    {
-        errors->validationError(entryPoint, GL_INVALID_VALUE, kInvalidValueExceedsMaxPatchSize);
-        return false;
-    }
-
-    return true;
+    return ValidatePatchParameteriBase(state, errors, entryPoint, pname, value);
 }
 
 bool ValidatePatchParameteriOES(const PrivateState &state,
@@ -2712,8 +2694,13 @@ bool ValidatePatchParameteriOES(const PrivateState &state,
                                 GLenum pname,
                                 GLint value)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (!state.getExtensions().tessellationShaderOES)
+    {
+        errors->validationError(entryPoint, GL_INVALID_OPERATION, kTessellationShaderOESNotEnabled);
+        return false;
+    }
+
+    return ValidatePatchParameteriBase(state, errors, entryPoint, pname, value);
 }
 
 bool ValidateTexStorageMemFlags2DANGLE(const Context *context,
