@@ -1120,6 +1120,8 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glEndQueryEXT";
         case EntryPoint::GLEndQueryIndexed:
             return "glEndQueryIndexed";
+        case EntryPoint::GLEndTilingQCOM:
+            return "glEndTilingQCOM";
         case EntryPoint::GLEndTransformFeedback:
             return "glEndTransformFeedback";
         case EntryPoint::GLEvalCoord1d:
@@ -2738,6 +2740,8 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glSignalSemaphoreEXT";
         case EntryPoint::GLSpecializeShader:
             return "glSpecializeShader";
+        case EntryPoint::GLStartTilingQCOM:
+            return "glStartTilingQCOM";
         case EntryPoint::GLStencilFunc:
             return "glStencilFunc";
         case EntryPoint::GLStencilFuncSeparate:
