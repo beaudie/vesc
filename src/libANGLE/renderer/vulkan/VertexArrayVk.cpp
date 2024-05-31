@@ -147,7 +147,7 @@ angle::Result StreamVertexDataWithDivisor(ContextVk *contextVk,
     }
 
     // Satisfy robustness constraints (only if extension enabled)
-    if (contextVk->getExtensions().robustnessEXT)
+    if (contextVk->getExtensions().robustnessAny())
     {
         if (clampedSize < bytesToAllocate)
         {
@@ -1024,7 +1024,9 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
 
     // Early return for corner case where emulated buffered attribs are not active
     if (!activeStreamedAttribs.any())
+    {
         return angle::Result::Continue;
+    }
 
     GLint startVertex;
     size_t vertexCount;
@@ -1097,7 +1099,7 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
 
                         ANGLE_TRY(bufferVk->unmapImpl(contextVk));
                     }
-                    else if (contextVk->getExtensions().robustnessEXT)
+                    else if (contextVk->getExtensions().robustnessAny())
                     {
                         // Satisfy robustness constraints (only if extension enabled)
                         uint8_t *dst = vertexDataBuffer->getMappedMemory();
