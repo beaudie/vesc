@@ -575,6 +575,7 @@ MSG kStrideMustBeMultipleOfType = "Stride must be a multiple of the passed in da
 MSG kSyncMissing = "Sync object does not exist.";
 MSG kTargetMustBeTexture2DMultisampleArrayOES = "Target must be TEXTURE_2D_MULTISAMPLE_ARRAY_OES.";
 MSG kTessellationShaderExtensionNotEnabled = "GL_EXT_tessellation_shader extension not enabled.";
+MSG kTessellationShaderOESNotEnabled = "GL_OES_tessellation_shader extension not enabled.";
 MSG kTessellationShaderRequiresBothControlAndEvaluation = "Tessellation requires both control and evaluation shaders.";
 MSG kTessellationShaderRequiresVertexShader = "Any command that transfers vertices to the GL requires a vertex shader if the current program uses a tessellation shader.";
 MSG kTextureBufferExtensionNotAvailable = "Texture buffer extension not available.";
