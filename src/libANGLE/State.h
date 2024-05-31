@@ -557,6 +557,10 @@ class PrivateState : angle::NonCopyable
     void setVertexAttribu(GLuint index, const GLuint values[4]);
     void setVertexAttribi(GLuint index, const GLint values[4]);
 
+    // QCOM_tiled_rendering
+    void setTiledRendering(bool tiledRendering) { mTiledRendering = tiledRendering; }
+    bool isTiledRendering() const { return mTiledRendering; }
+
     // Debug state
     const Debug &getDebug() const { return mDebug; }
     Debug &getDebug() { return mDebug; }
@@ -724,6 +728,9 @@ class PrivateState : angle::NonCopyable
 
     // GL_ARM_shader_framebuffer_fetch
     bool mFetchPerSample;
+
+    // QCOM_tiled_rendering
+    bool mTiledRendering;
 
     const bool mBindGeneratesResource;
     const bool mClientArraysEnabled;
