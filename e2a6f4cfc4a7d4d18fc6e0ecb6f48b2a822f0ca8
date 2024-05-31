@@ -207,6 +207,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8b7904d_072ccae6",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-31T18:17:43Z",
+      "side": 1,
+      "message": "`mDefaultUniformBlocks`\u0027s `uniformData` is two dereferences away (`shared_ptr` and `angle::MemoryBuffer`) and under multiple nested calls (including the virtual call), so both code and data locality suffer. I don\u0027t know how much that matters though and it might be very device and core specific (hello little mobile cores).\n\nhttps://crrev.com/c/5588853 is what making `setUniformImpl` a free function could look like, but I\u0027m not sure how much that helps. Accessing `const` state is still potentially an issue as it doesn\u0027t prevent races on another thread writes. We\u0027re walking through quite a few objects there. If any of them change in the middle, `const` access can still blow up.",
+      "parentUuid": "243f812d_149e192b",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
