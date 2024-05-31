@@ -323,6 +323,23 @@ b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.shader_multisample_interpolation.
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-input-case5 = SKIP
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-input-case6 = SKIP
 
+// Pixel 6
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_invariance.invariance_rule* = SKIP
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_control_to_tessellation_evaluation.data_pass_through
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_control_to_tessellation_evaluation.gl_MaxPatchVertices_Position_PointSize
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_control_to_tessellation_evaluation.gl_tessLevel
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_point_mode.points_verification
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_quads_tessellation.degenerate_case
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_quads_tessellation.inner_tessellation_level_rounding
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_tessellation.gl_InvocationID_PatchVerticesIn_PrimitiveID
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_tessellation.TCS_TES
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_triangles_tessellation.degenerate_triangle
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_triangles_tessellation.identical_triangles
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_triangles_tessellation.inner_tessellation_level_rounding
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.vertex.vertex_ordering
+345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.vertex.vertex_spacing
+
+
 // Samsung Galaxy S23
 8157 GALAXYS23 VULKAN : KHR-GLES31.core.arrays_of_arrays.InteractionFunctionCalls2 = SKIP
 8157 GALAXYS23 VULKAN : KHR-GLES31.core.blend_equation_advanced.* = SKIP
