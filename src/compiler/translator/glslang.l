@@ -279,7 +279,7 @@ O           [0-7]
 "volatile" { return ES2_reserved_ES3_1_keyword(context, VOLATILE); }
 "atomic_uint" { return ES3_reserved_ES3_1_keyword(context, ATOMICUINT); }
 "sample" { return ES3_reserved_ES3_extension_ES3_2_keyword(context, TExtension::OES_shader_multisample_interpolation, SAMPLE); }
-"precise" { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::EXT_gpu_shader5, PRECISE); }
+"precise" { return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(context, TExtension::EXT_gpu_shader5, TExtension::OES_gpu_shader5, PRECISE, PRECISE); }
 
     /* ANGLE_shader_pixel_local_storage */
 "pixelLocalANGLE" { return ES3_extension(context, TExtension::ANGLE_shader_pixel_local_storage, PIXELLOCALANGLE); }

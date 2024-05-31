@@ -2133,8 +2133,9 @@ YY_DECL
                 case 127:
                     YY_RULE_SETUP
                     {
-                        return ES3_1_reserved_ES3_1_extension_ES3_2_keyword(
-                            context, TExtension::EXT_gpu_shader5, PRECISE);
+                        return ES3_1_reserved_ES3_1_extension_ES3_2_keyword_2(
+                            context, TExtension::EXT_gpu_shader5, TExtension::OES_gpu_shader5,
+                            PRECISE, PRECISE);
                     }
                     YY_BREAK
                 /* ANGLE_shader_pixel_local_storage */
