@@ -3905,7 +3905,7 @@ gl::Version Renderer::getMaxConformantESVersion() const
 {
     const gl::Version maxSupportedESVersion = getMaxSupportedESVersion();
     const bool hasGeometryAndTessSupport =
-        getNativeExtensions().geometryShaderAny() && getNativeExtensions().tessellationShaderEXT;
+        getNativeExtensions().geometryShaderAny() && getNativeExtensions().tessellationShaderAny();
 
     if (!hasGeometryAndTessSupport || !mFeatures.exposeNonConformantExtensionsAndVersions.enabled)
     {
