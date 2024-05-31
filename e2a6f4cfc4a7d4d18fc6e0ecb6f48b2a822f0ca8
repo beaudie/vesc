@@ -303,6 +303,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63db801e_996fb5b9",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T19:46:16Z",
+      "side": 1,
+      "message": "The only thing that can change that is indeed a relink, and setting uniforms on a program while _also_ relinking it is even crazier. An app that does that is functionality broken IMO. As long as there is no security concern for messing it up even further, I don\u0027t have any sympathy for such an app.",
+      "parentUuid": "0c3063cb_b6c3d7de",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
