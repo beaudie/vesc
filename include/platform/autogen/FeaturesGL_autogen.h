@@ -739,6 +739,13 @@ struct FeaturesGL : FeatureSetBase
         &members, "https://crbug.com/40279678"
     };
 
+    FeatureInfo disableTiledRendering = {
+        "disableTiledRendering",
+        FeatureCategory::OpenGLWorkarounds,
+        "Disable QCOM_tiled_rendering on devices with rendering artifacts or which improperly expose the extension.",
+        &members, "http://skbug.com/9491 https://github.com/flutter/flutter/issues/47164 https://github.com/flutter/flutter/issues/47804"
+    };
+
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

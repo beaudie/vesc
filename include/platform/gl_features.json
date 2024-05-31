@@ -801,6 +801,14 @@
                 "Some drivers lose context when repeatedly generating mipmaps on textures that were used as framebuffers."
             ],
             "issue": "https://crbug.com/40279678"
+        },
+        {
+            "name": "disable_tiled_rendering",
+            "category": "Workarounds",
+            "description": [
+                "Disable QCOM_tiled_rendering on devices with rendering artifacts or which improperly expose the extension."
+            ],
+            "issue": "http://skbug.com/9491 https://github.com/flutter/flutter/issues/47164 https://github.com/flutter/flutter/issues/47804"
         }
     ]
 }
