@@ -34,6 +34,29 @@
       "parentUuid": "4dcb4696_d2d520ba",
       "revId": "6f05fd05f447045e1968aafb4769d6078362650d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8801c652_970d770f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T19:19:18Z",
+      "side": 1,
+      "message": "```suggestion\nvoid SetUniformImpl(const gl::ProgramExecutable *executable,\n```",
+      "range": {
+        "startLine": 308,
+        "startChar": 5,
+        "endLine": 308,
+        "endChar": 19
+      },
+      "revId": "6f05fd05f447045e1968aafb4769d6078362650d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
