@@ -817,6 +817,8 @@
 #define glFramebufferFoveationParametersQCOM l_glFramebufferFoveationParametersQCOM
 #define glShadingRateQCOM l_glShadingRateQCOM
 #define glTextureFoveationParametersQCOM l_glTextureFoveationParametersQCOM
+#define glEndTilingQCOM l_glEndTilingQCOM
+#define glStartTilingQCOM l_glStartTilingQCOM
 #define glDrawTexfOES l_glDrawTexfOES
 #define glDrawTexfvOES l_glDrawTexfvOES
 #define glDrawTexiOES l_glDrawTexiOES
@@ -1702,6 +1704,8 @@ ANGLE_UTIL_EXPORT extern PFNGLFRAMEBUFFERFOVEATIONPARAMETERSQCOMPROC
     l_glFramebufferFoveationParametersQCOM;
 ANGLE_UTIL_EXPORT extern PFNGLSHADINGRATEQCOMPROC l_glShadingRateQCOM;
 ANGLE_UTIL_EXPORT extern PFNGLTEXTUREFOVEATIONPARAMETERSQCOMPROC l_glTextureFoveationParametersQCOM;
+ANGLE_UTIL_EXPORT extern PFNGLENDTILINGQCOMPROC l_glEndTilingQCOM;
+ANGLE_UTIL_EXPORT extern PFNGLSTARTTILINGQCOMPROC l_glStartTilingQCOM;
 ANGLE_UTIL_EXPORT extern PFNGLDRAWTEXFOESPROC l_glDrawTexfOES;
 ANGLE_UTIL_EXPORT extern PFNGLDRAWTEXFVOESPROC l_glDrawTexfvOES;
 ANGLE_UTIL_EXPORT extern PFNGLDRAWTEXIOESPROC l_glDrawTexiOES;
