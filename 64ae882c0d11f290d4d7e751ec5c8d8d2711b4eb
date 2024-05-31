@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e83278a_7784acc7",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-31T18:03:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a20dee5_55bdf793",
+      "range": {
+        "startLine": 1452,
+        "startChar": 45,
+        "endLine": 1452,
+        "endChar": 68
+      },
+      "revId": "64ae882c0d11f290d4d7e751ec5c8d8d2711b4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cf717f3_06146bbc",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-05-31T16:49:35Z",
       "side": 1,
       "message": "Could you look at the assembly to make sure there is nothing about this init-on-the-first-run declaration here?\n\nDoes `static constexpr DirtyObjectHandlerArray kDirtyObjectHandlers \u003d MakeDirtyObjectHandlers();` as a member not work?",
+      "revId": "64ae882c0d11f290d4d7e751ec5c8d8d2711b4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32f00e77_5eeaa908",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-31T18:03:43Z",
+      "side": 1,
+      "message": "I did check the assembly, it just becomes a `.data.rel.ro` data section array like before which gets used as expected:\n\n```\n\tadrp\tx22, _ZN2gl5State20kDirtyObjectHandlersE\n\tadd\tx22, x22, :lo12:_ZN2gl5State20kDirtyObjectHandlersE\n\t...\n\tldr\tx8, [x22, x8]\n\tblr\tx8\n```\n-\u003e\n```\n\tadrp\tx22, _ZZN2gl5State18dirtyObjectHandlerEmPKNS_7ContextENS_7CommandEE8handlers\n\tadd\tx22, x22, :lo12:_ZZN2gl5State18dirtyObjectHandlerEmPKNS_7ContextENS_7CommandEE8handlers\n\t...\n\tldr\tx8, [x22, x8]\n\tblr\tx8\n```\n\nRight, static member doesn\u0027t work... the static function ends up being _declared_ but not _defined_ at this point (yet another ewwwww, C++)\nhttps://stackoverflow.com/questions/37194245/why-is-this-constexpr-static-member-function-not-seen-as-constexpr-when-called",
+      "parentUuid": "1cf717f3_06146bbc",
       "revId": "64ae882c0d11f290d4d7e751ec5c8d8d2711b4eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
