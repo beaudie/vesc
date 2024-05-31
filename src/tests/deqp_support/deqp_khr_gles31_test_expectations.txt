@@ -323,6 +323,9 @@ b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.shader_multisample_interpolation.
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-input-case5 = SKIP
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-input-case6 = SKIP
 
+// Pixel 6
+42264094 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_invariance.invariance_rule* = SKIP
+
 // Samsung Galaxy S23
 8157 GALAXYS23 VULKAN : KHR-GLES31.core.arrays_of_arrays.InteractionFunctionCalls2 = SKIP
 8157 GALAXYS23 VULKAN : KHR-GLES31.core.blend_equation_advanced.* = SKIP
