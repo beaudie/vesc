@@ -255,6 +255,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7f80f6_1e0f47f7",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T19:29:39Z",
+      "side": 1,
+      "message": "\u003e Accessing const state is still potentially an issue as it doesn\u0027t prevent races on another thread writes.\n\nHonestly, no application should set uniforms on the same program from multiple threads. Even if it were a thread-safe thing, the application literally would have no idea which uniform it ends up getting. Luckily the space is vague enough that we should be good making `glUniform*` calls just lockless right away.",
+      "parentUuid": "8f5e0704_0f60cf81",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
