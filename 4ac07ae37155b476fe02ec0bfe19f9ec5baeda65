@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5aee8a_bee288a8",
+        "filename": "src/libANGLE/renderer/DisplayImpl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T13:56:17Z",
+      "side": 1,
+      "message": "`#if`ing the ones in Display is a good added safety, but no real need to do that here.",
+      "revId": "4ac07ae37155b476fe02ec0bfe19f9ec5baeda65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
