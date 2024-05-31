@@ -1467,7 +1467,8 @@ Renderer::Renderer()
       mCommandProcessor(this, &mCommandQueue),
       mSupportedVulkanPipelineStageMask(0),
       mSupportedVulkanShaderStageMask(0),
-      mMemoryAllocationTracker(MemoryAllocationTracker(this))
+      mMemoryAllocationTracker(MemoryAllocationTracker(this)),
+      mPlaceHolderDescriptorSetLayout(nullptr)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1502,6 +1503,12 @@ void Renderer::onDestroy(vk::Context *context)
     if (isDeviceLost())
     {
         handleDeviceLost();
+    }
+
+    if (mPlaceHolderDescriptorSetLayout && mPlaceHolderDescriptorSetLayout->get().valid())
+    {
+        ASSERT(!mPlaceHolderDescriptorSetLayout->isReferenced());
+        mPlaceHolderDescriptorSetLayout->get().destroy(getDevice());
     }
 
     mCommandProcessor.destroy(context);
@@ -2038,6 +2045,20 @@ angle::Result Renderer::initialize(vk::Context *context,
     {
         mOneOffCommandPoolMap[protectionType].init(protectionType);
     }
+
+    // Initialize place holder descriptor set layout for empty DescriptorSetLayoutDesc
+    ASSERT(mPlaceHolderDescriptorSetLayout == nullptr);
+    VkDescriptorSetLayoutCreateInfo createInfo = {};
+    createInfo.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    createInfo.flags        = 0;
+    createInfo.bindingCount = 0;
+    createInfo.pBindings    = nullptr;
+
+    vk::DescriptorSetLayout newLayout;
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+
+    mPlaceHolderDescriptorSetLayout = new vk::RefCountedDescriptorSetLayout(std::move(newLayout));
+    ASSERT(mPlaceHolderDescriptorSetLayout && mPlaceHolderDescriptorSetLayout->get().valid());
 
     return angle::Result::Continue;
 }
@@ -4851,9 +4872,6 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsGraphicsPipelineLibrary,
                             mGraphicsPipelineLibraryFeatures.graphicsPipelineLibrary == VK_TRUE &&
                                 (!isNvidia || nvidiaVersion.major >= 531) && !isRADV);
-
-    // By default all shaders are compiled into the same pipeline library
-    ANGLE_FEATURE_CONDITION(&mFeatures, combineAllShadersInPipelineLibrary, true);
 
     // The following drivers are known to key the pipeline cache blobs with vertex input and
     // fragment output state, causing draw-time pipeline creation to miss the cache regardless of
