@@ -34,6 +34,41 @@
       "parentUuid": "afc0c64b_d7cdf239",
       "revId": "bff0c227c0721b458f2ece2ffdcc665e28b95824",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "003302d0_52633b0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-31T14:40:20Z",
+      "side": 1,
+      "message": "Alexey, do you want to give the +2 review?",
+      "revId": "bff0c227c0721b458f2ece2ffdcc665e28b95824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d7c7cf6_20ae1879",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-31T14:40:20Z",
+      "side": 1,
+      "message": "I prefer lambdas in situations like this where the helper function would only have been called in a single place and the surrounding logic is very similar. Splitting it up would make me jump around the file to understand what\u0027s going on.",
+      "parentUuid": "7c696c29_d67b5ea9",
+      "revId": "bff0c227c0721b458f2ece2ffdcc665e28b95824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
