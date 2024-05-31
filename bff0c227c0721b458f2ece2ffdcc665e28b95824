@@ -16,6 +16,24 @@
       "message": "Ok, PTAL!\n\nShabi please let me use this lambda :)",
       "revId": "bff0c227c0721b458f2ece2ffdcc665e28b95824",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c696c29_d67b5ea9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T14:08:41Z",
+      "side": 1,
+      "message": "Lol, ok but only because you asked nicely :P\n\nFWIW, it could have been a helper function to keep `ProgramGL::linkJobImpl` shorter and cleaner, not sure what benefit lambda gives you here :shrug:",
+      "parentUuid": "afc0c64b_d7cdf239",
+      "revId": "bff0c227c0721b458f2ece2ffdcc665e28b95824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
