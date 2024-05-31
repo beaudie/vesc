@@ -16,6 +16,24 @@
       "message": "IIUC, you can make this a lockless call instead? That\u0027s always better than taking the lock and then doing the real work after.",
       "revId": "79ab0a123108bed580d0c0d55e987e37a3a357a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d36d740_5bb4b7fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-05-31T11:45:56Z",
+      "side": 1,
+      "message": "They can\u0027t be made into lockless calls yet because they need to resolve the surface ID -\u003e surface pointer which is in a std::map in the display.\n\nI don\u0027t remember why we made the EGL objects into IDs anymore. If EGL validation is disabled then it would definitely be faster to not do that lookup.",
+      "parentUuid": "19545a22_4618d121",
+      "revId": "79ab0a123108bed580d0c0d55e987e37a3a357a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
