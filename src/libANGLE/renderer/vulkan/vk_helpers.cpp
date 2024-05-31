@@ -9970,6 +9970,34 @@ bool ImageHelper::hasStagedImageUpdatesWithMismatchedFormat(gl::LevelIndex level
     return false;
 }
 
+bool ImageHelper::hasBufferOrImageSourcedStagedUpdatesInAllLevels() const
+{
+    for (gl::LevelIndex level = mFirstAllocatedLevel; level <= getLastAllocatedLevel(); ++level)
+    {
+        const std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(level);
+        if (levelUpdates == nullptr || levelUpdates->empty())
+        {
+            return false;
+        }
+
+        bool hasUpdateSourceWithBufferOrImage = false;
+        for (const SubresourceUpdate &update : *levelUpdates)
+        {
+            if (update.updateSource == UpdateSource::Buffer ||
+                update.updateSource == UpdateSource::Image)
+            {
+                hasUpdateSourceWithBufferOrImage = true;
+                break;
+            }
+        }
+        if (!hasUpdateSourceWithBufferOrImage)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool ImageHelper::validateSubresourceUpdateBufferRefConsistent(
     RefCounted<BufferHelper> *buffer) const
 {
