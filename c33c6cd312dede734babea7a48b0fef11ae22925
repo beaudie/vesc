@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1eddd69_3c945b5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-05-31T16:02:58Z",
+      "side": 1,
+      "message": "Shabi, could you PTAL at this failure on Intel Mesa 23.2.1\nhttps://ci.chromium.org/ui/p/angle/builders/ci/linux-exp-test/278/overview",
+      "revId": "c33c6cd312dede734babea7a48b0fef11ae22925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
