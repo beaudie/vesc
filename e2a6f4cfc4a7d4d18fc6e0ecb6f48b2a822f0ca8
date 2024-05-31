@@ -279,6 +279,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c3063cb_b6c3d7de",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-31T19:39:00Z",
+      "side": 1,
+      "message": "My problem isn\u0027t with glUniform calls from other threads, it\u0027s with all _other_ GL calls that might also affect some of the state. That state might be `const` during a glUniform call, but it can still be changed by another call where the same object is being updated as non-`const`.\n\nSay program gets relinked from another thread, is this still valid?\n```\nconst sh::BlockMemberInfo \u0026layoutInfo \u003d uniformBlock.uniformLayout[location];\n```\n(or anything else in `setUniformImpl`, there is no easy way for me to tell whether some or none of those structures can get updated by another GL call - it doesn\u0027t help much that access here is `const`)",
+      "parentUuid": "ce7f80f6_1e0f47f7",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
