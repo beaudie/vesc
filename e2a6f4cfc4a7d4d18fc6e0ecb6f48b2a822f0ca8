@@ -46,6 +46,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22b8b8b8_37d8d74d",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T02:58:23Z",
+      "side": 1,
+      "message": "\u003e If you are unsure about the other backend is thread safe, you can still keep share lock for other backend.\n\nThe other backends don\u0027t claim to be thread safe, there is no concern there.\n\n\u003e I am not convinced why we need batching at all\n\nIt\u0027s mostly to manage the complexity. It\u0027s easier to reason about the thread-safety if very little happens (as in, the uniform gets batched and the function exits, nothing more). You\u0027re probably right that calling into the backend is still going to be as thread-safe, but it\u0027s just harder to reason about it.\n\n\u003e you will need to make exception to the pointer returned from data() so that you can write to it. I think you can use mutable keyword\n\nFWIW, you can pass in a pointer to the member (from the non-const caller) to the const function (which might as well not be a member function anymore) so it can be manipulated without making it `mutable`.",
+      "parentUuid": "f3ee37b2_175b6a73",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
