@@ -159,6 +159,30 @@
       },
       "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f2230b8_f69b738f",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-31T14:55:19Z",
+      "side": 1,
+      "message": "I think it is okay to keep it as is.  We guard other targets, but typically with boolean.",
+      "parentUuid": "176b57a9_53f858c2",
+      "range": {
+        "startLine": 1856,
+        "startChar": 0,
+        "endLine": 1856,
+        "endChar": 28
+      },
+      "revId": "16aac932f3ec4925901edae63c4f88ea206e9ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
