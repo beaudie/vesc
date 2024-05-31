@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "474a235e_516bc465",
+        "filename": "src/libANGLE/validationES32.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-05-31T17:42:58Z",
+      "side": 0,
+      "message": "Why re-ordering this file?  Prefer alphabetical.",
+      "range": {
+        "startLine": 398,
+        "startChar": 5,
+        "endLine": 398,
+        "endChar": 35
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "b94ce286_a8b70d74",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/validationES32.cpp",
+              "range": {
+                "startLine": 383,
+                "startChar": 0,
+                "endLine": 397,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "src/libANGLE/validationES32.cpp",
+              "range": {
+                "startLine": 418,
+                "startChar": 0,
+                "endLine": 418,
+                "endChar": 0
+              },
+              "replacement": "\nbool ValidateGetDebugMessageLog(const Context *context,\n                                angle::EntryPoint entryPoint,\n                                GLuint count,\n                                GLsizei bufSize,\n                                const GLenum *sources,\n                                const GLenum *types,\n                                const GLuint *ids,\n                                const GLenum *severities,\n                                const GLsizei *lengths,\n                                const GLchar *messageLog)\n{\n    return true;\n}\n"
+            }
+          ]
+        }
+      ],
+      "revId": "9b3ceac8eee6318cb314e8c40343714a08d8b69a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
