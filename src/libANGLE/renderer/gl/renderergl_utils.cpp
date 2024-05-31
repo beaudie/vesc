@@ -130,6 +130,12 @@ int getMaliGNumber(const FunctionsGL *functions)
     return number;
 }
 
+bool IsAdreno3xx(const FunctionsGL *functions)
+{
+    int number = getAdrenoNumber(functions);
+    return number != 0 && number >= 300 && number < 400;
+}
+
 bool IsAdreno42xOr3xx(const FunctionsGL *functions)
 {
     int number = getAdrenoNumber(functions);
@@ -2155,6 +2161,10 @@ void GenerateCaps(const FunctionsGL *functions,
     // GL_ANGLE_logic_op
     extensions->logicOpANGLE = functions->isAtLeastGL(gl::Version(2, 0));
 
+    // GL_QCOM_tiled_rendering
+    extensions->tiledRenderingQCOM = !features.disableTiledRendering.enabled &&
+                                     functions->hasGLESExtension("GL_QCOM_tiled_rendering");
+
     // PVRTC1 textures must be squares on Apple platforms.
     if (IsApple())
     {
@@ -2676,6 +2686,17 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // https://crbug.com/40279678
     ANGLE_FEATURE_CONDITION(features, useIntermediateTextureForGenerateMipmap,
                             IsPixel7OrPixel8(functions));
+
+    // https://github.com/flutter/flutter/issues/47164
+    // https://github.com/flutter/flutter/issues/47804
+    // Some devices expose the QCOM tiled memory extension string but don't actually provide the
+    // start and end tiling functions.
+    bool missingTilingEntryPoints = functions->hasGLESExtension("GL_QCOM_tiled_rendering") &&
+                                    (!functions->startTilingQCOM || !functions->endTilingQCOM);
+
+    // http://skbug.com/9491: Nexus5 produces rendering artifacts when we use QCOM_tiled_rendering.
+    ANGLE_FEATURE_CONDITION(features, disableTiledRendering,
+                            missingTilingEntryPoints || IsAdreno3xx(functions));
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

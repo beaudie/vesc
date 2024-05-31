@@ -161,6 +161,10 @@ constexpr state::ExtendedDirtyBits kPixelLocalStorageEXTEnableDisableExtendedDir
 constexpr state::DirtyObjects kPixelLocalStorageEXTEnableDisableDirtyObjects{
     state::DIRTY_OBJECT_DRAW_FRAMEBUFFER};
 
+constexpr state::DirtyBits kTilingDirtyBits{state::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING};
+constexpr state::ExtendedDirtyBits kTilingExtendedDirtyBits{};
+constexpr state::DirtyObjects kTilingDirtyObjects{state::DIRTY_OBJECT_DRAW_FRAMEBUFFER};
+
 egl::ShareGroup *AllocateOrGetShareGroup(egl::Display *display, const gl::Context *shareContext)
 {
     if (shareContext)
@@ -9930,12 +9934,15 @@ void Context::textureFoveationParameters(TextureID texturePacked,
 
 void Context::endTiling(GLbitfield preserveMask)
 {
-    UNIMPLEMENTED();
+    ANGLE_CONTEXT_TRY(mImplementation->endTiling(this, preserveMask));
 }
 
 void Context::startTiling(GLuint x, GLuint y, GLuint width, GLuint height, GLbitfield preserveMask)
 {
-    UNIMPLEMENTED();
+    ANGLE_CONTEXT_TRY(syncDirtyObjects(kTilingDirtyObjects, Command::Other));
+    ANGLE_CONTEXT_TRY(syncDirtyBits(kTilingDirtyBits, kTilingExtendedDirtyBits, Command::Other));
+    ANGLE_CONTEXT_TRY(
+        mImplementation->startTiling(this, Rectangle(x, y, width, height), preserveMask));
 }
 
 // ErrorSet implementation.
