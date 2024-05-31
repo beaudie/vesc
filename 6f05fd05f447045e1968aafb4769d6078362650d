@@ -16,6 +16,24 @@
       "message": "As suggested in https://chromium-review.googlesource.com/c/angle/angle/+/5462972/comment/33259794_8eef4ceb/",
       "revId": "6f05fd05f447045e1968aafb4769d6078362650d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e7fe1f5_5c630319",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-05-31T16:33:28Z",
+      "side": 1,
+      "message": "Hmm, do we want to somehow narrow it down further to `uniformBlock.uniformData.data()`?",
+      "parentUuid": "4dcb4696_d2d520ba",
+      "revId": "6f05fd05f447045e1968aafb4769d6078362650d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
