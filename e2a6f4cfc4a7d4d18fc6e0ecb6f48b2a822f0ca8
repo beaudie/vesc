@@ -135,6 +135,30 @@
       },
       "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3691b611_21a50ebf",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-05-31T14:14:58Z",
+      "side": 1,
+      "message": "No need to wait for 1. Forget about multithreading and remove the lock right away for benchmarking purposes. Then we can tell if batching is going to benefit or hurt us before we decide if lock can be removed and how.",
+      "parentUuid": "519a18e7_680436ab",
+      "range": {
+        "startLine": 2615,
+        "startChar": 7,
+        "endLine": 2615,
+        "endChar": 76
+      },
+      "revId": "e2a6f4cfc4a7d4d18fc6e0ecb6f48b2a822f0ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
