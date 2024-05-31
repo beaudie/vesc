@@ -4442,7 +4442,22 @@ bool ValidateEndTilingQCOM(const Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
+    const gl::PrivateState &privateState = context->getPrivateState();
+    if (privateState.isTiledRendering())
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kTilingStartCalledWithoutEnd);
+    }
+
+    Framebuffer *framebuffer                   = context->getState().getDrawFramebuffer();
+    const FramebufferStatus &framebufferStatus = framebuffer->checkStatus(context);
+    if (!framebufferStatus.isComplete())
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, framebufferStatus.reason);
+    }
+
+    // preserveMask does not need to be validated. The bitfield covers the entire 32 bits of
+    // GLbitfield and unbound attachments are siliently ignored like in glClear
+
     return false;
 }
 
@@ -4460,7 +4475,15 @@ bool ValidateStartTilingQCOM(const Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
+    const gl::PrivateState &privateState = context->getPrivateState();
+    if (!privateState.isTiledRendering())
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kTilingEndCalledWithoutStart);
+    }
+
+    // preserveMask does not need to be validated. The bitfield covers the entire 32 bits of
+    // GLbitfield and unbound attachments are siliently ignored like in glClear
+
     return false;
 }
 
