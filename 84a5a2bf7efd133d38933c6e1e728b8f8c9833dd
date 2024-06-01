@@ -33,6 +33,24 @@
       "message": "Why not put this in the share group and remove the lock?",
       "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e357a147_20056aeb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-01T03:30:28Z",
+      "side": 1,
+      "message": "warmup pipeline code path will access this placeholder handle for an empty `DescriptorSetLayoutDesc` in an unlocked tail call, right?",
+      "parentUuid": "cc372427_48161de9",
+      "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
