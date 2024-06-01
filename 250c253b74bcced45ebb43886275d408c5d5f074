@@ -16,6 +16,23 @@
       "message": "Following the [KHR_robustness CL](https://chromium-review.googlesource.com/c/angle/angle/+/5555985), `KHR_robustness` has now replaced `EXT_robustness` in the GLES 3.2 check.",
       "revId": "250c253b74bcced45ebb43886275d408c5d5f074",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14f8e8ed_6f4e3979",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-01T02:12:12Z",
+      "side": 1,
+      "message": "Nice, let\u0027s go for it",
+      "revId": "250c253b74bcced45ebb43886275d408c5d5f074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
