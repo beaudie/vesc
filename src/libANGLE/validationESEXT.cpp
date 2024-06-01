@@ -2709,6 +2709,16 @@ bool ValidatePatchParameteriEXT(const PrivateState &state,
     return true;
 }
 
+bool ValidatePatchParameteriOES(const PrivateState &state,
+                                ErrorSet *errors,
+                                angle::EntryPoint entryPoint,
+                                GLenum pname,
+                                GLint value)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
 bool ValidateTexStorageMemFlags2DANGLE(const Context *context,
                                        angle::EntryPoint entryPoint,
                                        TextureType targetPacked,
