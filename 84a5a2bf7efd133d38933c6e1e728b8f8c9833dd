@@ -16,6 +16,23 @@
       "message": "apologies for the code churn but i was recently informed about the VVL error mentioned in the commit message and this change is one way to get around it. would like to get your feedback and or alternate approaches. I\u0027m also curious what the intent was behind that VVL",
       "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc372427_48161de9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-01T01:56:07Z",
+      "side": 1,
+      "message": "Why not put this in the share group and remove the lock?",
+      "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
