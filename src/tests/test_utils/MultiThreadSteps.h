@@ -88,6 +88,29 @@ class ThreadSynchronization
         mCondVar->notify_all();
     }
 
+    bool nextStepAndThenWait(E newStep, E waitStep)
+    {
+        std::unique_lock<std::mutex> lock(*mMutex);
+        *mCurrentStep = newStep;
+        mCondVar->notify_all();
+        while (*mCurrentStep != waitStep)
+        {
+            // If necessary, abort execution as the other thread has encountered a GL error.
+            if (*mCurrentStep == E::Abort)
+            {
+                return false;
+            }
+            // Expect increasing order to reduce risk of race conditions / deadlocks.
+            if (*mCurrentStep > waitStep)
+            {
+                FATAL() << "waitForStep requires increasing order. mCurrentStep="
+                        << (int)*mCurrentStep << ", waitStep=" << (int)waitStep;
+            }
+            mCondVar->wait(lock);
+        }
+        return true;
+    }
+
   private:
     E *mCurrentStep;
     std::mutex *mMutex;

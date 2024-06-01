@@ -4040,8 +4040,8 @@ void main()
         sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
         // Make sure the two threads start work around the same time
-        threadSynchronization.nextStep(Step::Thread0Ready);
-        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread1Ready));
+        ASSERT_TRUE(
+            threadSynchronization.nextStepAndThenWait(Step::Thread0Ready, Step::Thread1Ready));
 
         // Bind and unbind the buffer many times.  If ref counting is not thread safe, chances are
         // the ref count would be incorrect in the end.  This can result in the buffer prematurely
