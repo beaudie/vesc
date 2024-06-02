@@ -123,6 +123,24 @@
       "parentUuid": "80b93fde_6c74f6cb",
       "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5415e34_71887e05",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-02T20:00:09Z",
+      "side": 1,
+      "message": "\u003e you are worried because of potential / unexpected deadlocks, right?\n\nNo, more the fact that it\u0027s hard to reason what exactly the task accesses (and so where threading issues may be). The more is passed in the task, the clearer it is that it\u0027s something it\u0027s supposed to access.\n\nLike in this case, it wasn\u0027t obvious in code review that this needed safety beyond the share group lock.",
+      "parentUuid": "1ae8d3e0_3261c721",
+      "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
