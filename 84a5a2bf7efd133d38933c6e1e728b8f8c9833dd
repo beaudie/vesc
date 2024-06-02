@@ -51,6 +51,24 @@
       "parentUuid": "cc372427_48161de9",
       "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "687fcafc_48a0ab19",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-02T02:13:17Z",
+      "side": 1,
+      "message": "Link is in an unlocked tile call, warm up is in a thread. Both would need thread safety, sure, but ok this is a bit of a dangerous design. The way we have managed to keep thread safety of those tasks reasonably manageable is by passing whatever they need at task creation time (under share group lock) so they don\u0027t try to access things all over the place.\n\nMy suggestion is to do the same here; move this to ShareGroupVk, lazy init if you want (or not, just create it at init) and pass it to the tasks that need it.\n\n---\n\nActually writing that I just realized you can also just not lazy init this, keep it in renderer and remove the lock. That would work too, no?",
+      "parentUuid": "e357a147_20056aeb",
+      "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
