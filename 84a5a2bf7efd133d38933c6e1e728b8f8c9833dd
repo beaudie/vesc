@@ -69,6 +69,24 @@
       "parentUuid": "e357a147_20056aeb",
       "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80b93fde_6c74f6cb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-02T03:10:37Z",
+      "side": 1,
+      "message": "\u003e this is a bit of a dangerous design\n\nyou are worried because of potential / unexpected deadlocks, right?\n\n\u003e you can also just not lazy init this, keep it in renderer and remove the lock. That would work too, no?\n\nindeed it would, lol",
+      "parentUuid": "687fcafc_48a0ab19",
+      "revId": "84a5a2bf7efd133d38933c6e1e728b8f8c9833dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
