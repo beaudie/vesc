@@ -2729,22 +2729,46 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
         hasRenderToTextureEXT
             ? gl::RenderToTextureImageIndex::Default
             : static_cast<gl::RenderToTextureImageIndex>(PackSampleCount(samples));
-    if (samples > 1 && !mMultisampledImages[renderToTextureIndex].valid() && !hasRenderToTextureEXT)
+
+    if (samples > 1 && !hasRenderToTextureEXT)
     {
-        ASSERT(mState.getBaseLevelDesc().samples <= 1);
-        vk::ImageHelper *multisampledImage = &mMultisampledImages[renderToTextureIndex];
-
-        // Ensure the view serial is valid.
         vk::Renderer *renderer = contextVk->getRenderer();
-        mMultisampledImageViews[renderToTextureIndex].init(renderer);
 
-        // The MSAA image always comes from the single sampled one, so disable robust init.
-        bool useRobustInit = false;
+        ASSERT(mState.getBaseLevelDesc().samples <= 1);
+        vk::ImageHelper *multisampledImage         = &mMultisampledImages[renderToTextureIndex];
+        vk::ImageViewHelper *multisampledImageView = &mMultisampledImageViews[renderToTextureIndex];
 
-        // Create the implicit multisampled image.
-        ANGLE_TRY(multisampledImage->initImplicitMultisampledRenderToTexture(
-            contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            mState.getType(), samples, *mImage, useRobustInit));
+        VkExtent3D newExtents = {};
+        gl_vk::GetExtent(
+            mImage->getLevelExtents(mImage->toVkLevel(gl::LevelIndex(imageIndex.getLevelIndex()))),
+            &newExtents);
+
+        if (multisampledImage->valid())
+        {
+            const VkExtent3D &currentVkExtents = multisampledImage->getExtents();
+            if (newExtents.width != currentVkExtents.width ||
+                newExtents.height != currentVkExtents.height ||
+                newExtents.depth != currentVkExtents.depth)
+            {
+                multisampledImageView->release(renderer, multisampledImage->getResourceUse());
+                multisampledImage->releaseImageFromShareContexts(renderer, contextVk,
+                                                                 mImageSiblingSerial);
+            }
+        }
+
+        if (!multisampledImage->valid())
+        {
+            // Ensure the view serial is valid.
+            multisampledImageView->init(renderer);
+
+            // The MSAA image always comes from the single sampled one, so disable robust init.
+            bool useRobustInit = false;
+
+            // Create the implicit multisampled image.
+            ANGLE_TRY(multisampledImage->initImplicitMultisampledRenderToTexture(
+                contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+                mState.getType(), samples, *mImage, newExtents, useRobustInit));
+        }
     }
 
     GLuint layerIndex = 0, layerCount = 0, imageLayerCount = 0;

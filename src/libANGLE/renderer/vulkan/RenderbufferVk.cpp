@@ -142,9 +142,13 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
     {
         mMultisampledImageViews.init(renderer);
 
+        VkExtent3D newVkExtents = {};
+        gl_vk::GetExtent(mImage->getLevelExtents(mImage->toVkLevel(gl::LevelIndex(0))),
+                         &newVkExtents);
+
         ANGLE_TRY(mMultisampledImage.initImplicitMultisampledRenderToTexture(
             contextVk, false, renderer->getMemoryProperties(), gl::TextureType::_2D, samples,
-            *mImage, robustInit));
+            *mImage, newVkExtents, robustInit));
 
         mRenderTarget.init(&mMultisampledImage, &mMultisampledImageViews, mImage, &mImageViews,
                            mImageSiblingSerial, gl::LevelIndex(0), 0, 1,

@@ -2864,7 +2864,11 @@ angle::Result FramebufferVk::createNewFramebuffer(
                                      ? &info.renderTarget->getResolveImageForRenderPass()
                                      : &info.renderTarget->getImageForRenderPass();
 
-        const gl::LevelIndex level = info.renderTarget->getLevelIndex();
+        // Transient multisampled images have no mips
+        const gl::LevelIndex level = (info.renderTarget->isImageTransient() &&
+                                      info.renderTargetImage == RenderTargetImage::Attachment)
+                                         ? gl::LevelIndex(0)
+                                         : info.renderTarget->getLevelIndex();
         const uint32_t layerCount  = info.renderTarget->getLayerCount();
         const gl::Extents extents  = image->getLevelExtents2D(image->toVkLevel(level));
 

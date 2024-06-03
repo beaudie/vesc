@@ -177,7 +177,11 @@ angle::Result RenderTargetVk::getImageViewImpl(vk::Context *context,
                                                const vk::ImageView **imageViewOut) const
 {
     ASSERT(image.valid() && imageViews);
-    vk::LevelIndex levelVk = mImage->toVkLevel(mLevelIndexGL);
+    // Transient multisampled images have no mips
+    vk::LevelIndex levelVk = (mTransience != RenderTargetTransience::Default &&
+                              image.getImageSerial() == mImage->getImageSerial())
+                                 ? vk::LevelIndex(0)
+                                 : mImage->toVkLevel(mLevelIndexGL);
     if (mLayerCount == 1)
     {
         return imageViews->getLevelLayerDrawImageView(context, image, levelVk, mLayerIndex, mode,

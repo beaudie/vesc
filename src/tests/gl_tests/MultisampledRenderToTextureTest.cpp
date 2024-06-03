@@ -919,6 +919,68 @@ TEST_P(MultisampledRenderToTextureTest, 2DColorDepthMultisampleDrawTest)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+// Draw test using color attachment with multiple levels.
+TEST_P(MultisampledRenderToTextureTest, 2DColorMultipleLevelsMultisampleDrawTest)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+
+    constexpr GLsizei kSize = 4;
+    const std::vector<GLColor> greenColor(kSize * kSize, GLColor::green);
+
+    // create complete framebuffer
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // Level 0
+    GLuint maxLevel   = 0;
+    GLsizei levelSize = kSize >> maxLevel;
+    glTexImage2D(GL_TEXTURE_2D, maxLevel, GL_RGBA, levelSize, levelSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, greenColor.data());
+    // Level 1
+    maxLevel++;
+    levelSize = kSize >> maxLevel;
+    glTexImage2D(GL_TEXTURE_2D, maxLevel, GL_RGBA, levelSize, levelSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, greenColor.data());
+    // Level 2
+    maxLevel++;
+    levelSize = kSize >> maxLevel;
+    glTexImage2D(GL_TEXTURE_2D, maxLevel, GL_RGBA, levelSize, levelSize, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, greenColor.data());
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer FBO;
+    GLFramebuffer readFbo;
+
+    // Draw and verify with each level
+    for (GLuint currentLevel = 0; currentLevel <= maxLevel; currentLevel++)
+    {
+        GLsizei currentLevelSize = kSize >> currentLevel;
+
+        // Attach a texture level as color attachment
+        glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+        glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                             texture, currentLevel, 4);
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+        // Draw blue color
+        glViewport(0, 0, currentLevelSize, currentLevelSize);
+        ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+        glUseProgram(program);
+        drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+        ASSERT_GL_NO_ERROR();
+
+        // Verify blue color
+        glBindFramebuffer(GL_FRAMEBUFFER, readFbo);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture,
+                               currentLevel);
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+        EXPECT_PIXEL_COLOR_EQ(currentLevelSize / 2, currentLevelSize / 2, GLColor::blue);
+    }
+}
+
 void MultisampledRenderToTextureES3Test::readPixelsTestCommon(bool useRenderbuffer)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
