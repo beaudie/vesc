@@ -2081,7 +2081,7 @@ angle::Result ContextVk::createGraphicsPipeline()
     ASSERT(executableVk);
 
     // Wait for any warmup task if necessary
-    executableVk->waitForPostLinkTasksIfNecessary(this, mGraphicsPipelineDesc.get());
+    executableVk->waitForPostLinkTasksIfNecessary(this, *mGraphicsPipelineDesc);
 
     vk::PipelineCacheAccess pipelineCache;
     ANGLE_TRY(mRenderer->getPipelineCache(this, &pipelineCache));
@@ -2482,7 +2482,7 @@ angle::Result ContextVk::handleDirtyComputePipelineDesc(DirtyBits::Iterator *dir
         ProgramExecutableVk *executableVk = vk::GetImpl(mState.getProgramExecutable());
         ASSERT(executableVk);
 
-        executableVk->waitForPostLinkTasksIfNecessary(this, nullptr);
+        executableVk->waitForPostLinkTasks(this);
         ANGLE_TRY(executableVk->getOrCreateComputePipeline(
             this, &pipelineCache, PipelineSource::Draw, pipelineRobustness(),
             pipelineProtectedAccess(), &mCurrentComputePipeline));
