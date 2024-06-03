@@ -177,7 +177,8 @@ angle::Result RenderTargetVk::getImageViewImpl(vk::Context *context,
                                                const vk::ImageView **imageViewOut) const
 {
     ASSERT(image.valid() && imageViews);
-    vk::LevelIndex levelVk = mImage->toVkLevel(mLevelIndexGL);
+    // Transient multisampled images have no mips
+    vk::LevelIndex levelVk = mImage->toVkLevel(getLevelIndexForImage(mImage));
     if (mLayerCount == 1)
     {
         return imageViews->getLevelLayerDrawImageView(context, image, levelVk, mLayerIndex, mode,
@@ -283,6 +284,14 @@ gl::Extents RenderTargetVk::getRotatedExtents() const
     ASSERT(mImage && mImage->valid());
     vk::LevelIndex levelVk = mImage->toVkLevel(mLevelIndexGL);
     return mImage->getRotatedLevelExtents2D(levelVk);
+}
+
+gl::LevelIndex RenderTargetVk::getLevelIndexForImage(vk::ImageHelper *image) const
+{
+    ASSERT(image);
+    return (isImageTransient() && mImage->getImageSerial() == image->getImageSerial())
+               ? gl::LevelIndex(0)
+               : mLevelIndexGL;
 }
 
 void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image,
