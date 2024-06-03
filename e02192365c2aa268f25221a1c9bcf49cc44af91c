@@ -87,6 +87,30 @@
       },
       "revId": "e02192365c2aa268f25221a1c9bcf49cc44af91c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fc32557_aa1d759e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T20:51:17Z",
+      "side": 1,
+      "message": "It\u0027s renamed in this CL so doesn\u0027t exist anymore",
+      "parentUuid": "f3e74e1e_dece097c",
+      "range": {
+        "startLine": 352,
+        "startChar": 9,
+        "endLine": 352,
+        "endChar": 29
+      },
+      "revId": "e02192365c2aa268f25221a1c9bcf49cc44af91c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
