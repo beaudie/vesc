@@ -382,6 +382,30 @@
       },
       "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dcf8c59_9c1d47b3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-03T23:55:02Z",
+      "side": 1,
+      "message": "You can easily fix that. either add a copy constructor in AtomicRefCounted that adds refCount instead of making cgopy (which I think useful anyway). Or you just retrieve the underline object and create a new RefCountedDescriptorSetLayout out of it. The benefit is that you pay the cost once instead of every time do a if check in getDescriptorSetLayout, which gets called more often. But I agree this is minor issue, so will leave up to you.",
+      "parentUuid": "8daeaaa3_f38e65e4",
+      "range": {
+        "startLine": 7490,
+        "startChar": 4,
+        "endLine": 7495,
+        "endChar": 5
+      },
+      "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
