@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf02c0c2_f20c3438",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T20:30:14Z",
+      "side": 1,
+      "message": "Our style is this:\n\n```suggestion\n        case TBasicType::EbtFloat:\n            mSink \u003c\u003c \"f32\";\n            break;\n```\n\nWe only use `{}` for case when we have to (variable declared inside)",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 14
+      },
+      "revId": "caec587da44707cf1f9dcabbd61107998572aa2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8544776e_c05e8892",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T20:30:14Z",
+      "side": 1,
+      "message": "Can also simplify these since the variable name doesn\u0027t add any value:\n\n```suggestion\n        case TBasicType::EbtStruct:\n            emitNameOf(*type.getStruct());\n            break;\n```",
+      "range": {
+        "startLine": 458,
+        "startChar": 0,
+        "endLine": 463,
+        "endChar": 14
+      },
+      "revId": "caec587da44707cf1f9dcabbd61107998572aa2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
