@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7509c73e_56f69b5f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T17:03:40Z",
+      "side": 1,
+      "message": "Please don\u0027t reference with `g-issues`, that\u0027s internal.\n\n```suggestion\n    // http://anglebug.com/344031874\n```",
+      "revId": "55491476afee32a275b581d5b6041df532ab55da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
