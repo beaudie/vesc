@@ -69,6 +69,24 @@
       "parentUuid": "3d439825_581a5744",
       "revId": "0251f7d41652106eae01a9a3ac796e3a30d465b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b12dcbc_281a4b07",
+        "filename": "src/tests/test_utils/MultiThreadSteps.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T17:17:18Z",
+      "side": 1,
+      "message": "If the other thread doesn\u0027t change the step until that wait, you\u0027d still have the same race though, once this function waits, the other thread can take two steps before this wakes up.",
+      "parentUuid": "1de82e13_20adf0c5",
+      "revId": "0251f7d41652106eae01a9a3ac796e3a30d465b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
