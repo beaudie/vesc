@@ -39,6 +39,30 @@
       },
       "revId": "e02192365c2aa268f25221a1c9bcf49cc44af91c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca2cc91f_ca7e1d62",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T20:02:52Z",
+      "side": 1,
+      "message": "It is, and I noticed it too, but `Impl` is also usually private to the class. I decided to let it slide since the overload is really still the same function (as opposed to different implementation but same name)\n\nWe could also keep the real implementation private and `Impl`, then call this one `waitForComputePostLinkTasks` which just forwards to the `Impl`.",
+      "parentUuid": "5ac34447_f6ce4442",
+      "range": {
+        "startLine": 352,
+        "startChar": 9,
+        "endLine": 352,
+        "endChar": 29
+      },
+      "revId": "e02192365c2aa268f25221a1c9bcf49cc44af91c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
