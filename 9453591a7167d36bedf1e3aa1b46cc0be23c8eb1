@@ -262,6 +262,30 @@
       },
       "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56e0e7f9_ae1474b1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-03T20:25:16Z",
+      "side": 1,
+      "message": "I was thinking in ShareGroupVk::destroy(), you do something like this:\n    auto iter \u003d mPayload.find(emptyDesc);\n    ASSERT(iter !\u003d mPayload.end());\n    iter.second \u003d VK_NULL_HANDLE;",
+      "parentUuid": "cd18d0ae_528afefd",
+      "range": {
+        "startLine": 7490,
+        "startChar": 4,
+        "endLine": 7495,
+        "endChar": 5
+      },
+      "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
