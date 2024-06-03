@@ -36,6 +36,29 @@ enum class BarrierType
     Event,
 };
 
+enum class EventStage : uint32_t
+{
+    Transfer                                          = 0,
+    VertexShader                                      = 1,
+    FragmentShader                                    = 2,
+    ComputeShader                                     = 3,
+    AllShaders                                        = 4,
+    PreFragmentShaders                                = 5,
+    ColorAttachmentOutput                             = 6,
+    FragmentShadingRate                               = 7,
+    ColorAttachmentOutputAndFragmentShader            = 8,
+    ColorAttachmentOutputAndFragmentShaderAndTransfer = 9,
+    ColorAttachmentOutputAndAllShaders                = 10,
+    AllFragmentTest                                   = 11,
+    AllFragmentTestAndFragmentShader                  = 12,
+    AllFragmentTestAndAllShaders                      = 13,
+    TransferAndComputeShader                          = 14,
+    AllCommands                                       = 15,
+    BottomOfPipe                                      = 16,
+    InvalidEnum                                       = 17,
+    EnumCount                                         = InvalidEnum,
+};
+
 // VkCmdWaitEvents requires srcStageMask must be the bitwise OR of the stageMask parameter used in
 // previous calls to vkCmdSetEvent (See VUID-vkCmdWaitEvents-srcStageMask-01158). This mean we must
 // keep the record of what stageMask each event has been used in VkCmdSetEvent call so that we can
@@ -45,7 +68,7 @@ struct EventAndLayout
 {
     bool valid() const { return event.valid(); }
     Event event;
-    ImageLayout imageLayout;
+    EventStage eventStage;
 };
 
 // The VkCmdSetEvent is called after VkCmdEndRenderPass and all images that used at the given
@@ -97,7 +120,7 @@ class RefCountedEvent final
 
     // Create VkEvent and associated it with given layout. Returns true if success and false if
     // failed.
-    bool init(Context *context, ImageLayout layout);
+    bool init(Context *context, EventStage eventStage);
 
     // Release one reference count to the underline Event object and destroy or recycle the handle
     // to renderer's recycler if this is the very last reference.
@@ -123,11 +146,10 @@ class RefCountedEvent final
         return mHandle->get().event;
     }
 
-    // Returns the ImageLayout associated with the event.
-    ImageLayout getImageLayout() const
+    EventStage getEventStage() const
     {
-        ASSERT(valid());
-        return mHandle->get().imageLayout;
+        ASSERT(mHandle != nullptr);
+        return mHandle->get().eventStage;
     }
 
   private:
@@ -432,9 +454,7 @@ class EventBarrierArray final
 };
 
 VkPipelineStageFlags GetRefCountedEventStageMask(Context *context, const RefCountedEvent &event);
-VkPipelineStageFlags GetRefCountedEventStageMask(Context *context,
-                                                 const RefCountedEvent &event,
-                                                 VkAccessFlags *accessMask);
+VkPipelineStageFlags GetRefCountedEventStageMask(Context *context, EventStage eventStage);
 }  // namespace vk
 }  // namespace rx
 #endif  // LIBANGLE_RENDERER_VULKAN_REFCOUNTED_EVENT_H_
