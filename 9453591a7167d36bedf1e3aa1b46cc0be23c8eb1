@@ -70,6 +70,30 @@
       },
       "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caf36762_a654e345",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-03T19:31:19Z",
+      "side": 1,
+      "message": "\u003e What was costly?\n\ncalling into vulkan to create a handle that will most likely never be used for any subsequent draw operations and the sheer number of handles that get created.\nThis was the stat i have in my notes for when i ran end2end test suite -\n - before change - empty DescriptorSetLayoutDesc handles created: 43,812\n - after change - empty DescriptorSetLayoutDesc handles created: 8,309 reused: 35,503\n\nThis is not from real game scenario but i saw an opportunity to reduce vulkan handle count and took it\n\n\u003e Why not insert the {emptyDesc, renderer-\u003emPlaceHolderDescriptorSetLayout} into the cache at the DescriptorSetLayoutCache initialize time?\n\nmany games link 100s or 1000s of program link during loading scene in non-shared contexts. Having the placeholder private to a sharegroup will mean having duplicates but i like how the suggestion fits into existing code, at the cost of duplication\n\nSince i have no real game data to push the \"duplicate placeholder\" theory, if you all insist, i will make the update. Let me know",
+      "parentUuid": "1a5e8d2f_5a387c0e",
+      "range": {
+        "startLine": 7490,
+        "startChar": 4,
+        "endLine": 7495,
+        "endChar": 5
+      },
+      "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
