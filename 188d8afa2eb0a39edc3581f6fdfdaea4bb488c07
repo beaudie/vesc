@@ -16,6 +16,24 @@
       "message": "Except samplers I agree with, but otherwise just make all of them lockless. There\u0027s really nothing the matrix ones access over what the non-matrix ones do.",
       "revId": "188d8afa2eb0a39edc3581f6fdfdaea4bb488c07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a7c5f77_8cec75d7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-03T14:05:32Z",
+      "side": 1,
+      "message": "Thanks, updated.\n\nhttps://crrev.com/c/5592968 makes setUniformMatrixfv a free function\n\nglUniform* matches glUniform1/2/3/4, glUniformMatrix* and glUniformBlockBinding. The latter looks a bit more complex with notification passing etc, so I added it to the exclusion list together with samplers.",
+      "parentUuid": "4bfb68d2_e32c0f1a",
+      "revId": "188d8afa2eb0a39edc3581f6fdfdaea4bb488c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
