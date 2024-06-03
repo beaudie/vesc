@@ -135,6 +135,11 @@ class CLImageVk : public CLMemoryVk
     cl::ImageDescriptor getDesc() { return mDesc; }
     void packPixels(const void *fillColor, void *outData);
     void fillImageWithColor(const cl::Coordinate &region, uint8_t *imagePtr, void *packedFillColor);
+    void setExtent(const cl::Coordinate &region, VkExtent3D *extent);
+    void setOffset(const cl::MemOffsets &origin, VkOffset3D *offset);
+    void setSubresourceLayers(const cl::MemOffsets &origin,
+                              cl::MemObjectType copyToType,
+                              VkImageSubresourceLayers *subresource);
 
   private:
     angle::Result mapImpl() override;

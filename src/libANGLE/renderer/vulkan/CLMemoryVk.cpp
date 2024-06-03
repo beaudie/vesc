@@ -477,14 +477,9 @@ angle::Result CLImageVk::create(void *hostPtr)
         copyRegion.bufferOffset      = 0;
         copyRegion.bufferRowLength   = 0;
         copyRegion.bufferImageHeight = 0;
-
-        copyRegion.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
-        copyRegion.imageSubresource.mipLevel       = (int)desc.numMipLevels;
-        copyRegion.imageSubresource.baseArrayLayer = 0;
-        copyRegion.imageSubresource.layerCount     = 1;
-
-        copyRegion.imageOffset = {0, 0, 0};
-        copyRegion.imageExtent = {mExtent.width, mExtent.height, mExtent.depth};
+        setExtent({mExtent.width, mExtent.height, mExtent.depth}, &copyRegion.imageExtent);
+        setOffset({0, 0, 0}, &copyRegion.imageOffset);
+        setSubresourceLayers({0, 0, 0}, mDesc.type, &copyRegion.imageSubresource);
 
         ANGLE_CL_IMPL_TRY_ERROR(mImage.copyToBufferOneOff(mContext, &mStagingBuffer, copyRegion),
                                 CL_OUT_OF_RESOURCES);
@@ -677,6 +672,76 @@ void CLImageVk::fillImageWithColor(const cl::Coordinate &region,
             rowPtr += imageRowPitch;
         }
         ptr += imageSlicePitch;
+    }
+}
+
+void CLImageVk::setExtent(const cl::Coordinate &region, VkExtent3D *extent)
+{
+    extent->width  = static_cast<uint32_t>(region.x);
+    extent->height = static_cast<uint32_t>(region.y);
+    extent->depth  = static_cast<uint32_t>(region.z);
+    switch (mDesc.type)
+    {
+        case cl::MemObjectType::Image1D_Array:
+
+            extent->height = 1;
+            extent->depth  = 1;
+            break;
+        case cl::MemObjectType::Image2D_Array:
+            extent->depth = 1;
+            break;
+        default:
+            break;
+    }
+}
+
+void CLImageVk::setOffset(const cl::MemOffsets &origin, VkOffset3D *offset)
+{
+    offset->x = static_cast<int32_t>(origin.x);
+    offset->y = static_cast<int32_t>(origin.y);
+    offset->z = static_cast<int32_t>(origin.z);
+    switch (mDesc.type)
+    {
+        case cl::MemObjectType::Image1D_Array:
+            offset->y = 0;
+            offset->z = 0;
+            break;
+        case cl::MemObjectType::Image2D_Array:
+            offset->z = 0;
+            break;
+        default:
+            break;
+    }
+}
+
+void CLImageVk::setSubresourceLayers(const cl::MemOffsets &origin,
+                                     cl::MemObjectType copyToType,
+                                     VkImageSubresourceLayers *subresource)
+{
+    subresource->aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresource->mipLevel   = 0;
+    switch (mDesc.type)
+    {
+        case cl::MemObjectType::Image1D_Array:
+            subresource->baseArrayLayer = static_cast<uint32_t>(origin.y);
+            subresource->layerCount     = static_cast<uint32_t>(mArrayLayers);
+            break;
+        case cl::MemObjectType::Image2D_Array:
+            subresource->baseArrayLayer = static_cast<uint32_t>(origin.z);
+            if (copyToType == cl::MemObjectType::Image2D ||
+                copyToType == cl::MemObjectType::Image3D)
+            {
+                subresource->layerCount = 1;
+            }
+            else
+            {
+                subresource->layerCount = static_cast<uint32_t>(mArrayLayers);
+            }
+            break;
+        default:
+            subresource->baseArrayLayer = 0;
+            subresource->layerCount     = 1;
+            break;
     }
 }
 
