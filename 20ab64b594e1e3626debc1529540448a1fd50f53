@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9dd0f90_b4ce1257",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T18:29:52Z",
+      "side": 1,
+      "message": "This changes the warning too though; if the warm up guesses wrong, the perf warning was there to tell about the wasted effort. That\u0027s independent from whether said wasted effort is already finished or not.\n\nMaybe this?\n\n```suggestion\n    if (!mWarmUpGraphicsPipelineDesc.keyEqual(currentGraphicsPipelineDesc, subset))\n    {\n        // The GraphicsPipelineDesc used for warmup differs from the one used by the draw call.\n        // There is no need to wait for the warmup tasks to complete.\n        ANGLE_PERF_WARNING(\n            contextVk-\u003egetDebug(), GL_DEBUG_SEVERITY_LOW,\n            \"GraphicsPipelineDesc used for warmup differs from the one used by draw.\");\n\n        // If the warm up tasks are finished anyway, let |waitForPostLinkTasks| clean them up.\n        if (!angle::WaitableEvent::AllReady(\u0026mExecutable-\u003egetPostLinkSubTaskWaitableEvents())\n        {\n            return;\n        }\n    }\n```",
+      "range": {
+        "startLine": 1184,
+        "startChar": 0,
+        "endLine": 1194,
+        "endChar": 5
+      },
+      "revId": "20ab64b594e1e3626debc1529540448a1fd50f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
