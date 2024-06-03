@@ -324,8 +324,8 @@ void EventBarrier::execute(PrimaryCommandBuffer *primary)
     // Issue vkCmdWaitEvents call
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = mMemoryBarrierSrcAccess;
-    memoryBarrier.dstAccessMask   = mMemoryBarrierDstAccess;
+    memoryBarrier.srcAccessMask   = 0;
+    memoryBarrier.dstAccessMask   = 0;
 
     primary->waitEvents(1, &mEvent, mSrcStageMask, mDstStageMask, 1, &memoryBarrier, 0, nullptr,
                         mImageMemoryBarrierCount,

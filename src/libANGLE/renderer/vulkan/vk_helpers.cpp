@@ -1106,7 +1106,7 @@ VkPipelineStageFlags GetRefCountedEventStageMask(Context *context,
                                                  VkAccessFlags *accessMask)
 {
     const ImageMemoryBarrierData &barrierData = kImageMemoryBarrierData[event.getImageLayout()];
-    *accessMask                               = barrierData.dstAccessMask;
+    *accessMask                               = 0;
     return GetImageLayoutDstStageMask(context, barrierData);
 }
 
@@ -7128,12 +7128,9 @@ ANGLE_INLINE void ImageHelper::initImageMemoryBarrierStruct(
     ASSERT(mCurrentDeviceQueueIndex.familyIndex() != QueueFamily::kInvalidIndex);
     ASSERT(newQueueFamilyIndex != QueueFamily::kInvalidIndex);
 
-    const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[mCurrentLayout];
-    const ImageMemoryBarrierData &transitionTo   = kImageMemoryBarrierData[newLayout];
-
     imageMemoryBarrier->sType         = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-    imageMemoryBarrier->srcAccessMask = transitionFrom.srcAccessMask;
-    imageMemoryBarrier->dstAccessMask = transitionTo.dstAccessMask;
+    imageMemoryBarrier->srcAccessMask = 0;
+    imageMemoryBarrier->dstAccessMask = 0;
     imageMemoryBarrier->oldLayout     = ConvertImageLayoutToVkImageLayout(context, mCurrentLayout);
     imageMemoryBarrier->newLayout     = ConvertImageLayoutToVkImageLayout(context, newLayout);
     imageMemoryBarrier->srcQueueFamilyIndex = mCurrentDeviceQueueIndex.familyIndex();
@@ -7174,8 +7171,8 @@ void ImageHelper::barrierImpl(Context *context,
         const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
         VkMemoryBarrier memoryBarrier            = {};
         memoryBarrier.sType                      = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-        memoryBarrier.srcAccessMask              = transition.srcAccessMask;
-        memoryBarrier.dstAccessMask              = transition.dstAccessMask;
+        memoryBarrier.srcAccessMask              = 0;
+        memoryBarrier.dstAccessMask              = 0;
 
         commandBuffer->memoryBarrier(transition.srcStageMask, transition.dstStageMask,
                                      memoryBarrier);
@@ -7421,8 +7418,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         {
             pipelineBarriers->mergeMemoryBarrier(
                 layoutData.barrierIndex, GetImageLayoutSrcStageMask(context, layoutData),
-                GetImageLayoutDstStageMask(context, layoutData), layoutData.srcAccessMask,
-                layoutData.dstAccessMask);
+                GetImageLayoutDstStageMask(context, layoutData), 0, 0);
 
             // Release it. No need to garbage collect since we did not use the event here. ALl
             // previous use of event should garbage tracked already.
@@ -7474,7 +7470,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
                     kImageMemoryBarrierData[mLastNonShaderReadOnlyLayout];
                 pipelineBarriers->mergeMemoryBarrier(
                     transitionTo.barrierIndex, GetImageLayoutSrcStageMask(context, layoutData),
-                    dstStageMask, layoutData.srcAccessMask, transitionTo.dstAccessMask);
+                    dstStageMask, 0, 0);
             }
 
             mBarrierQueueSerial = queueSerial;
@@ -7917,8 +7913,8 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
             barrier.subresourceRange.baseMipLevel = mipLevel.get() - 1;
             barrier.oldLayout                     = getCurrentLayout(contextVk);
             barrier.newLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-            barrier.srcAccessMask                 = VK_ACCESS_TRANSFER_WRITE_BIT;
-            barrier.dstAccessMask                 = VK_ACCESS_TRANSFER_READ_BIT;
+            barrier.srcAccessMask                 = 0;
+            barrier.dstAccessMask                 = 0;
 
             // We can do it for all layers at once.
             commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
@@ -7950,7 +7946,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
     // after glGenerateMipmap call.
     barrier.oldLayout     = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
     barrier.newLayout     = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    barrier.dstAccessMask = 0;
     if (baseLevel.get() > 0)
     {
         // [0:baseLevel-1] from TRANSFER_DST to SHADER_READ
@@ -7967,7 +7963,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
                                 VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, barrier);
     // [baseLevel:maxLevel-1] from TRANSFER_SRC to SHADER_READ
     barrier.oldLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-    barrier.srcAccessMask                 = VK_ACCESS_TRANSFER_READ_BIT;
+    barrier.srcAccessMask                 = 0;
     barrier.subresourceRange.baseMipLevel = baseLevel.get();
     barrier.subresourceRange.levelCount   = maxLevel.get() - baseLevel.get();
     commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,

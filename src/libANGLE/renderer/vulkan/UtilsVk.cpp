@@ -3151,8 +3151,8 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     // Add a barrier prior to copy.
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_TRANSFER_READ_BIT;
+    memoryBarrier.srcAccessMask   = 0;
+    memoryBarrier.dstAccessMask   = 0;
 
     commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
                                  VK_PIPELINE_STAGE_TRANSFER_BIT, memoryBarrier);
@@ -3514,8 +3514,8 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     // Add a barrier prior to dispatch call.
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_SHADER_READ_BIT;
+    memoryBarrier.srcAccessMask   = 0;
+    memoryBarrier.dstAccessMask   = 0;
 
     commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
                                  VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, memoryBarrier);
@@ -3614,8 +3614,8 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
                                       commandBufferHelper, shaderParams));
 
     // Add a barrier prior to copy.
-    memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
-    memoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+    memoryBarrier.srcAccessMask = 0;
+    memoryBarrier.dstAccessMask = 0;
 
     commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
                                  VK_PIPELINE_STAGE_TRANSFER_BIT, memoryBarrier);

@@ -791,8 +791,8 @@ class PipelineBarrier : angle::NonCopyable
         if (mMemoryBarrierDstAccess != 0)
         {
             memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-            memoryBarrier.srcAccessMask = mMemoryBarrierSrcAccess;
-            memoryBarrier.dstAccessMask = mMemoryBarrierDstAccess;
+            memoryBarrier.srcAccessMask = 0;
+            memoryBarrier.dstAccessMask = 0;
             memoryBarrierCount++;
         }
         primary->pipelineBarrier(

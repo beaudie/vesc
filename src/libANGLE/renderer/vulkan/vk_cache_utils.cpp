@@ -699,13 +699,16 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
         attachmentReadWriteFlags |= kDepthStencilReadWriteFlags;
     }
 
+    (void)attachmentWriteFlags;
+    (void)attachmentReadWriteFlags;
+
     dependency->sType           = VK_STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2;
     dependency->srcSubpass      = kUnresolveSubpassIndex;
     dependency->dstSubpass      = kDrawSubpassIndex;
     dependency->srcStageMask    = attachmentWriteStages;
     dependency->dstStageMask    = attachmentReadWriteStages;
-    dependency->srcAccessMask   = attachmentWriteFlags;
-    dependency->dstAccessMask   = attachmentReadWriteFlags;
+    dependency->srcAccessMask   = 0;
+    dependency->dstAccessMask   = 0;
     dependency->dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
     subpassDependencies->push_back({});
@@ -717,8 +720,8 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
     dependency->dstSubpass      = kDrawSubpassIndex;
     dependency->srcStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
     dependency->dstStageMask    = kColorWriteStage;
-    dependency->srcAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
-    dependency->dstAccessMask   = kColorWriteFlags;
+    dependency->srcAccessMask   = 0;
+    dependency->dstAccessMask   = 0;
     dependency->dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 }
 
@@ -770,7 +773,7 @@ void InitializeDefaultSubpassSelfDependencies(
     dependency->dstSubpass    = subpassIndex;
     dependency->srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     dependency->dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency->srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependency->srcAccessMask = 0;
     dependency->dstAccessMask = 0;
     if (!hasRasterizationOrderAttachmentAccess)
     {
@@ -906,8 +909,8 @@ void ToSubpassDependency1(const VkSubpassDependency2 &dep, VkSubpassDependency *
     dep1Out->dstSubpass      = dep.dstSubpass;
     dep1Out->srcStageMask    = dep.srcStageMask;
     dep1Out->dstStageMask    = dep.dstStageMask;
-    dep1Out->srcAccessMask   = dep.srcAccessMask;
-    dep1Out->dstAccessMask   = dep.dstAccessMask;
+    dep1Out->srcAccessMask   = 0;
+    dep1Out->dstAccessMask   = 0;
     dep1Out->dependencyFlags = dep.dependencyFlags;
 }
 

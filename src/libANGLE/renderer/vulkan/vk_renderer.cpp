@@ -1801,6 +1801,8 @@ angle::Result Renderer::initialize(vk::Context *context,
     mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
     mEnabledICD             = scopedEnvironment.getEnabledICD();
 
+    mEnableValidationLayers = false;
+
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
     {

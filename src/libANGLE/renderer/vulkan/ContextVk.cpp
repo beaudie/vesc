@@ -2727,8 +2727,8 @@ angle::Result ContextVk::handleDirtyGraphicsFramebufferFetchBarrier(
 {
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+    memoryBarrier.srcAccessMask   = 0;
+    memoryBarrier.dstAccessMask   = 0;
 
     mRenderPassCommandBuffer->pipelineBarrier(
         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
@@ -2742,8 +2742,8 @@ angle::Result ContextVk::handleDirtyGraphicsBlendBarrier(DirtyBits::Iterator *di
 {
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
+    memoryBarrier.srcAccessMask   = 0;
+    memoryBarrier.dstAccessMask   = 0;
 
     mRenderPassCommandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                               VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
@@ -7605,8 +7605,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         // flush and wait on a one-pipeline-barrier command buffer on every map().
         VkMemoryBarrier memoryBarrier = {};
         memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-        memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
-        memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;
+        memoryBarrier.srcAccessMask   = 0;
+        memoryBarrier.dstAccessMask   = 0;
 
         const VkPipelineStageFlags supportedShaderStages =
             (VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
@@ -8082,8 +8082,8 @@ angle::Result ContextVk::syncExternalMemory()
 {
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+    memoryBarrier.srcAccessMask   = 0;
+    memoryBarrier.dstAccessMask   = 0;
 
     mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
         VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, memoryBarrier);
