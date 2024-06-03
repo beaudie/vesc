@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a8997fa_a2d97ac5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-03T19:57:12Z",
+      "side": 1,
+      "message": "will be easier to review if you can split the changes re: shaderprogram into its own change",
+      "revId": "e02192365c2aa268f25221a1c9bcf49cc44af91c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ac34447_f6ce4442",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-03T19:57:12Z",
+      "side": 1,
+      "message": "i was under the impression that ANGLE has the `*Impl` pattern was to avoid overloaded methods? `xxxx` takes in front-end parameter and `xxxxImpl` takes the `Impl` or backend parameter\n\nis that no longer the case?",
+      "range": {
+        "startLine": 352,
+        "startChar": 9,
+        "endLine": 352,
+        "endChar": 29
+      },
+      "revId": "e02192365c2aa268f25221a1c9bcf49cc44af91c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
