@@ -36,6 +36,58 @@ enum class BarrierType
     Event,
 };
 
+enum class EventPipelineStage : uint32_t
+{
+    // Bellow are ordered based on Graphics Pipeline Stages
+    //    TopOfPipe              = 0,
+    //    DrawIndirect           = 1,
+    //    VertexInput            = 2,
+    VertexShader = 3,
+    //    TessellationControl    = 4,
+    //    TessellationEvaluation = 5,
+    //    GeometryShader         = 6,
+    //    TransformFeedback      = 7,
+    FragmentShadingRate = 8,
+    //    EarlyFragmentTest      = 9,
+    FragmentShader = 10,
+    //    LateFragmentTest       = 11,
+    ColorAttachmentOutput = 12,
+
+    // Compute specific pipeline Stage
+    ComputeShader = 13,
+
+    // Transfer specific pipeline Stage
+    Transfer     = 14,
+    BottomOfPipe = 15,
+
+    // Host specific pipeline stage
+    //    Host = 16,
+
+    // ImageLayout::MSRTTEmulationColorUnresolveAndResolve,
+    ColorAttachmentOutputAndFragmentShader = 17,
+    //        ImageLayout::DepthWriteStencilWrite,
+    AllFragmentTest = 18,
+    //        ImageLayout::DepthWriteStencilReadFragmentShaderStencilRead,
+    AllFragmentTestAndFragmentShader = 19,
+    //        ImageLayout::DepthWriteStencilReadAllShadersStencilRead,
+    AllFragmentTestAndAllShaders = 20,
+    //        ImageLayout::ColorWriteAllShadersFeedback,
+    ColorAttachmentOutputAndAllShaders = 21,
+    //        ImageLayout::SharedPresent,
+    ColorAttachmentOutputAndFragmentShaderAndTransfer = 22,
+    //        ImageLayout::ExternalShadersReadOnly,
+    AllCommands = 23,
+    //        ImageLayout::PreFragmentShadersReadOnly,
+    PreFragmentShaders = 24,
+    //        ImageLayout::AllGraphicsShadersWrite,
+    AllShaders = 25,
+    //        ImageLayout::TransferDstAndComputeWrite,
+    TransferAndComputeShader = 26,
+
+    InvalidEnum = 19,
+    EnumCount   = InvalidEnum,
+};
+
 // VkCmdWaitEvents requires srcStageMask must be the bitwise OR of the stageMask parameter used in
 // previous calls to vkCmdSetEvent (See VUID-vkCmdWaitEvents-srcStageMask-01158). This mean we must
 // keep the record of what stageMask each event has been used in VkCmdSetEvent call so that we can
@@ -45,7 +97,7 @@ struct EventAndLayout
 {
     bool valid() const { return event.valid(); }
     Event event;
-    ImageLayout imageLayout;
+    EventPipelineStage pipelineStage;
 };
 
 // The VkCmdSetEvent is called after VkCmdEndRenderPass and all images that used at the given
@@ -97,7 +149,7 @@ class RefCountedEvent final
 
     // Create VkEvent and associated it with given layout. Returns true if success and false if
     // failed.
-    bool init(Context *context, ImageLayout layout);
+    bool init(Context *context, EventPipelineStage eventPipelineStage);
 
     // Release one reference count to the underline Event object and destroy or recycle the handle
     // to renderer's recycler if this is the very last reference.
@@ -123,12 +175,8 @@ class RefCountedEvent final
         return mHandle->get().event;
     }
 
-    // Returns the ImageLayout associated with the event.
-    ImageLayout getImageLayout() const
-    {
-        ASSERT(valid());
-        return mHandle->get().imageLayout;
-    }
+    // Returns the VkPipelineStageFlags associated with the event.
+    VkPipelineStageFlags getPipelineStageFlags() const;
 
   private:
     // Release one reference count to the underline Event object and destroy or recycle the handle

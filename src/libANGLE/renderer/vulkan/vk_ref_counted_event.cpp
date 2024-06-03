@@ -17,6 +17,53 @@ namespace vk
 {
 namespace
 {
+constexpr VkPipelineStageFlags kPreFragmentStageFlags =
+    VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+    VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT | VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+
+constexpr VkPipelineStageFlags kAllShadersPipelineStageFlags =
+    kPreFragmentStageFlags | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
+    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+
+constexpr VkPipelineStageFlags kAllDepthStencilPipelineStageFlags =
+    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+
+constexpr angle::PackedEnumMap<EventPipelineStage, VkPipelineStageFlagBits>
+    kEventPipelineStageFlagBitMap = {
+        //    {EventPipelineStage::TopOfPipe, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT},
+        //    {EventPipelineStage::DrawIndirect, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT},
+        {EventPipelineStage::TransferAndComputeShader,
+         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT},
+        {EventPipelineStage::VertexShader, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT},
+        {EventPipelineStage::FragmentShader, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+        {EventPipelineStage::AllShaders, kAllShadersPipelineStageFlags},
+        //    {EventPipelineStage::TessellationControl,
+        //    VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT},
+        //    {EventPipelineStage::TessellationEvaluation,
+        //    VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT},
+        //    {EventPipelineStage::GeometryShader, VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT},
+        //    {EventPipelineStage::TransformFeedback, VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT},
+        {EventPipelineStage::FragmentShadingRate,
+         VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR},
+        {EventPipelineStage::PreFragmentShaders, kPreFragmentStageFlags},
+        {EventPipelineStage::AllFragmentTest, kAllDepthStencilPipelineStageFlags},
+        {EventPipelineStage::AllFragmentTestAndFragmentShader,
+         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags},
+        {EventPipelineStage::AllFragmentTestAndAllShaders,
+         kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags},
+        {EventPipelineStage::ColorAttachmentOutputAndFragmentShader,
+         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+        {EventPipelineStage::ColorAttachmentOutputAndAllShaders,
+         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags},
+        {EventPipelineStage::ColorAttachmentOutput, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
+        {EventPipelineStage::ComputeShader, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
+        {EventPipelineStage::Transfer, VK_PIPELINE_STAGE_TRANSFER_BIT},
+        {EventPipelineStage::ColorAttachmentOutputAndFragmentShaderAndTransfer,
+         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT |
+             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+        {EventPipelineStage::AllCommands, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT},
+        {EventPipelineStage::BottomOfPipe, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT}};
+
 void DestroyRefCountedEvents(VkDevice device, RefCountedEventCollector &events)
 {
     while (!events.empty())
@@ -27,7 +74,7 @@ void DestroyRefCountedEvents(VkDevice device, RefCountedEventCollector &events)
 }
 }  // namespace
 
-bool RefCountedEvent::init(Context *context, ImageLayout layout)
+bool RefCountedEvent::init(Context *context, EventPipelineStage eventPipelineStage)
 {
     ASSERT(mHandle == nullptr);
     ASSERT(layout != ImageLayout::Undefined);
@@ -70,7 +117,7 @@ bool RefCountedEvent::init(Context *context, ImageLayout layout)
     }
 
     mHandle->addRef();
-    mHandle->get().imageLayout = layout;
+    mHandle->get().pipelineStage = eventPipelineStage;
     return true;
 }
 
@@ -121,6 +168,12 @@ void RefCountedEvent::destroy(VkDevice device)
     ASSERT(!mHandle->isReferenced());
     mHandle->get().event.destroy(device);
     SafeDelete(mHandle);
+}
+
+VkPipelineStageFlags RefCountedEvent::getPipelineStageFlags() const
+{
+    ASSERT(valid());
+    return kEventPipelineStageFlagBitMap[mHandle->get().pipelineStage];
 }
 
 // RefCountedEventsGarbage implementation.
