@@ -111,6 +111,30 @@
       },
       "revId": "e02192365c2aa268f25221a1c9bcf49cc44af91c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0d89cfc_80bd50ba",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-03T20:54:42Z",
+      "side": 1,
+      "message": "well, its removed in this change while adding an overridden method\n\ni guess i dont understand the \"confusion\" mentioned in the commit message?",
+      "parentUuid": "5fc32557_aa1d759e",
+      "range": {
+        "startLine": 352,
+        "startChar": 9,
+        "endLine": 352,
+        "endChar": 29
+      },
+      "revId": "e02192365c2aa268f25221a1c9bcf49cc44af91c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
