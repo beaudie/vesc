@@ -358,6 +358,30 @@
       },
       "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8daeaaa3_f38e65e4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-03T23:42:04Z",
+      "side": 1,
+      "message": "say we have 3 share groups, when creating the 1st one i will need to `std::move` the placeholder `vk::DescriptorSetLayout` owned by renderer since that is the only supported variant of constructor in `AtomicRefCounted`. Which will mean the 2nd and 3rd sharegroups will need to recreate a new handle\n\nfeels like this is getting more complicated than my original patch?",
+      "parentUuid": "ee144b88_9856b872",
+      "range": {
+        "startLine": 7490,
+        "startChar": 4,
+        "endLine": 7495,
+        "endChar": 5
+      },
+      "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
