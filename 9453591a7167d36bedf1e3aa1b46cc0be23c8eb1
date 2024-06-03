@@ -166,6 +166,30 @@
       },
       "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3356544f_4577e5db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T20:05:21Z",
+      "side": 1,
+      "message": "Whatever the solution, Mohan do you think you could add a test for this? Basically:\n\n- Create two contexts that are not shared\n- Make one current and draw such that this empty desc set is used\n- On the same thread, make the other context current and issue a similar draw\n- Make uncurrent\n- Destroy both contexts\n\nThis would catch double-free if that accidentally happens.",
+      "parentUuid": "4b1a5cc8_ab4f9618",
+      "range": {
+        "startLine": 7490,
+        "startChar": 4,
+        "endLine": 7495,
+        "endChar": 5
+      },
+      "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
