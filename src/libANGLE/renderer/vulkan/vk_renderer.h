@@ -522,6 +522,14 @@ class Renderer : angle::NonCopyable
     {
         return mSupportedVulkanPipelineStageMask;
     }
+    VkPipelineStageFlags getPipelineStageMask(EventStage eventStage) const
+    {
+        return mPipelineStageMaskAndEventMap[eventStage];
+    }
+    VkPipelineStageFlags getPipelineStageMask(const RefCountedEvent &refCountedEvent) const
+    {
+        return mPipelineStageMaskAndEventMap[refCountedEvent.getEventStage()];
+    }
 
     VkShaderStageFlags getSupportedVulkanShaderStageMask() const
     {
@@ -1071,6 +1079,8 @@ class Renderer : angle::NonCopyable
     // stages.
     VkPipelineStageFlags mSupportedVulkanPipelineStageMask;
     VkShaderStageFlags mSupportedVulkanShaderStageMask;
+    // The 1:1 mapping between EventStage and VkPipelineStageFlags
+    angle::PackedEnumMap<EventStage, VkPipelineStageFlags> mPipelineStageMaskAndEventMap;
 
     // Use thread pool to compress cache data.
     std::shared_ptr<angle::WaitableEvent> mCompressEvent;

@@ -96,6 +96,7 @@ struct ImageMemoryBarrierData
     // mask bits, we pick the lowest stage as the index since it is the first stage that needs
     // barrier.
     PipelineStage barrierIndex;
+    EventStage eventStage;
 };
 
 constexpr VkPipelineStageFlags kPreFragmentStageFlags =
@@ -124,6 +125,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::InvalidEnum,
+            EventStage::InvalidEnum,
         },
     },
     {
@@ -139,6 +141,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ColorAttachmentOutput,
+            EventStage::ColorAttachmentOutput,
         },
     },
     {
@@ -154,6 +157,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            EventStage::ColorAttachmentOutputAndFragmentShader,
         },
     },
     {
@@ -169,6 +173,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            EventStage::AllFragmentTest,
         },
     },
     {
@@ -184,6 +189,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            EventStage::AllFragmentTest,
         },
     },
     {
@@ -199,6 +205,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            EventStage::AllFragmentTestAndFragmentShader,
         },
     },
     {
@@ -214,6 +221,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
+            EventStage::AllFragmentTestAndAllShaders,
         },
     },
     {
@@ -229,6 +237,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            EventStage::AllFragmentTest,
         },
     },
     {
@@ -244,6 +253,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
+            EventStage::AllFragmentTestAndFragmentShader,
         },
     },
     {
@@ -259,6 +269,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
+            EventStage::AllFragmentTestAndAllShaders,
         },
     },
     {
@@ -274,6 +285,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::EarlyFragmentTest,
+            EventStage::AllFragmentTest,
         },
     },
 
@@ -290,6 +302,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::EarlyFragmentTest,
+            EventStage::AllFragmentTestAndFragmentShader,
         },
     },
     {
@@ -305,6 +318,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::VertexShader,
+            EventStage::AllFragmentTestAndAllShaders,
         },
     },
     {
@@ -320,6 +334,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            EventStage::ColorAttachmentOutputAndFragmentShader,
         },
     },
     {
@@ -336,6 +351,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            EventStage::ColorAttachmentOutputAndAllShaders,
         },
     },
     {
@@ -351,6 +367,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            EventStage::AllFragmentTestAndFragmentShader,
         },
     },
     {
@@ -367,6 +384,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            EventStage::AllFragmentTestAndAllShaders,
         },
     },
     {
@@ -383,6 +401,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ColorAttachmentOutput,
+            EventStage::ColorAttachmentOutput,
         },
     },
     {
@@ -399,6 +418,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            EventStage::ColorAttachmentOutputAndFragmentShader,
         },
     },
     {
@@ -424,6 +444,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::BottomOfPipe,
+            EventStage::BottomOfPipe,
         },
     },
     {
@@ -440,6 +461,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_MEMORY_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::BottomOfPipe,
+            EventStage::ColorAttachmentOutputAndFragmentShaderAndTransfer,
         },
     },
     {
@@ -464,6 +486,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_MEMORY_WRITE_BIT,
             ResourceAccess::ReadOnly,
             PipelineStage::InvalidEnum,
+            EventStage::BottomOfPipe,
         },
     },
     {
@@ -480,6 +503,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::TopOfPipe,
+            EventStage::AllCommands,
         },
     },
     {
@@ -496,6 +520,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::TopOfPipe,
+            EventStage::AllCommands,
         },
     },
     {
@@ -511,6 +536,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::Transfer,
+            EventStage::Transfer,
         },
     },
     {
@@ -526,6 +552,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::Transfer,
+            EventStage::Transfer,
         },
     },
     {
@@ -541,6 +568,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::Transfer,
+            EventStage::Transfer,
         },
     },
     {
@@ -558,6 +586,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::InvalidEnum,
+            EventStage::BottomOfPipe,
         },
     },
     {
@@ -573,6 +602,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::VertexShader,
+            EventStage::VertexShader,
         },
     },
     {
@@ -588,6 +618,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
+            EventStage::VertexShader,
         },
     },
     {
@@ -604,6 +635,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            EventStage::PreFragmentShaders,
         },
     },
     {
@@ -620,6 +652,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            EventStage::PreFragmentShaders,
         },
     },
     {
@@ -635,6 +668,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::FragmentShadingRate,
+            EventStage::FragmentShadingRate,
         },
     },
     {
@@ -650,6 +684,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::FragmentShader,
+            EventStage::FragmentShader,
         },
     },
     {
@@ -665,6 +700,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
+            EventStage::FragmentShader,
         },
     },
     {
@@ -680,6 +716,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             ResourceAccess::ReadOnly,
             PipelineStage::ComputeShader,
+            EventStage::ComputeShader,
         },
     },
     {
@@ -695,6 +732,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ComputeShader,
+            EventStage::ComputeShader,
         },
     },
     {
@@ -711,6 +749,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            EventStage::AllShaders,
         },
     },
     {
@@ -727,6 +766,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
+            EventStage::AllShaders,
         },
     },
     {
@@ -743,6 +783,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::ComputeShader,
+            EventStage::TransferAndComputeShader,
         },
     },
 };
@@ -758,6 +799,12 @@ VkPipelineStageFlags GetImageLayoutDstStageMask(Context *context,
                                                 const ImageMemoryBarrierData &transition)
 {
     return transition.dstStageMask & context->getRenderer()->getSupportedVulkanPipelineStageMask();
+}
+
+EventStage GetImageLayoutEventStage(ImageLayout layout)
+{
+    const ImageMemoryBarrierData &barrierData = kImageMemoryBarrierData[layout];
+    return barrierData.eventStage;
 }
 
 void HandlePrimitiveRestart(ContextVk *contextVk,
@@ -1096,19 +1143,6 @@ ImageLayerWriteMask GetImageLayerWriteMask(uint32_t layerStart, uint32_t layerCo
 // This is an arbitrary max. We can change this later if necessary.
 uint32_t DynamicDescriptorPool::mMaxSetsPerPool           = 16;
 uint32_t DynamicDescriptorPool::mMaxSetsPerPoolMultiplier = 2;
-
-VkPipelineStageFlags GetRefCountedEventStageMask(Context *context, const RefCountedEvent &event)
-{
-    return GetImageLayoutDstStageMask(context, kImageMemoryBarrierData[event.getImageLayout()]);
-}
-VkPipelineStageFlags GetRefCountedEventStageMask(Context *context,
-                                                 const RefCountedEvent &event,
-                                                 VkAccessFlags *accessMask)
-{
-    const ImageMemoryBarrierData &barrierData = kImageMemoryBarrierData[event.getImageLayout()];
-    *accessMask                               = barrierData.dstAccessMask;
-    return GetImageLayoutDstStageMask(context, barrierData);
-}
 
 ImageLayout GetImageLayoutFromGLImageLayout(Context *context, GLenum layout)
 {
@@ -1733,14 +1767,13 @@ void CommandBufferHelperCommon::flushSetEventsImpl(Context *context, CommandBuff
         return;
     }
 
+    Renderer *renderer = context->getRenderer();
     // Add VkCmdSetEvent here to track the completion of this renderPass.
-    for (ImageLayout layout : mRefCountedEvents.mask)
+    for (EventStage stage : mRefCountedEvents.mask)
     {
-        RefCountedEvent &refCountedEvent = mRefCountedEvents.map[layout];
+        RefCountedEvent &refCountedEvent = mRefCountedEvents.map[stage];
         ASSERT(refCountedEvent.valid());
-        const ImageMemoryBarrierData &layoutData =
-            kImageMemoryBarrierData[refCountedEvent.getImageLayout()];
-        VkPipelineStageFlags stageMask = GetImageLayoutDstStageMask(context, layoutData);
+        VkPipelineStageFlags stageMask = renderer->getPipelineStageMask(stage);
         commandBuffer->setEvent(refCountedEvent.getEvent().getHandle(), stageMask);
         // We no longer need event, so garbage collect it.
         mRefCountedEventCollector.emplace_back(std::move(refCountedEvent));
@@ -2703,16 +2736,15 @@ void RenderPassCommandBufferHelper::trackImagesWithEvent(Context *context,
 void RenderPassCommandBufferHelper::executeSetEvents(Context *context,
                                                      PrimaryCommandBuffer *primary)
 {
+    Renderer *renderer = context->getRenderer();
     // Add VkCmdSetEvent here to track the completion of this renderPass.
-    for (ImageLayout layout : mRefCountedEvents.mask)
+    for (EventStage stage : mRefCountedEvents.mask)
     {
         // This must have been garbage collected. The VkEvent handle should have been copied to
         // VkEvents.
-        ASSERT(!mRefCountedEvents.map[layout].valid());
-        ASSERT(mRefCountedEvents.vkEvents[layout] != VK_NULL_HANDLE);
-        const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[layout];
-        primary->setEvent(mRefCountedEvents.vkEvents[layout],
-                          GetImageLayoutDstStageMask(context, layoutData));
+        ASSERT(!mRefCountedEvents.map[stage].valid());
+        ASSERT(mRefCountedEvents.vkEvents[stage] != VK_NULL_HANDLE);
+        primary->setEvent(mRefCountedEvents.vkEvents[stage], renderer->getPipelineStageMask(stage));
     }
     mRefCountedEvents.mask.reset();
 }
@@ -2726,11 +2758,11 @@ void RenderPassCommandBufferHelper::collectRefCountedEventsGarbage(
     // here we simply make a local copy of the VkEvent and then add the RefCountedEvent to the
     // garbage collector. No VkCmdSetEvent call is issued here (they will be issued at
     // flushToPrimary time).
-    for (ImageLayout layout : mRefCountedEvents.mask)
+    for (EventStage stage : mRefCountedEvents.mask)
     {
-        ASSERT(mRefCountedEvents.map[layout].valid());
-        mRefCountedEvents.vkEvents[layout] = mRefCountedEvents.map[layout].getEvent().getHandle();
-        mRefCountedEventCollector.emplace_back(std::move(mRefCountedEvents.map[layout]));
+        ASSERT(mRefCountedEvents.map[stage].valid());
+        mRefCountedEvents.vkEvents[stage] = mRefCountedEvents.map[stage].getEvent().getHandle();
+        mRefCountedEventCollector.emplace_back(std::move(mRefCountedEvents.map[stage]));
     }
 
     if (!mRefCountedEventCollector.empty())
@@ -7209,7 +7241,8 @@ void ImageHelper::barrierImpl(Context *context,
         // event gets garbage collected (which is GPU completion tracked) to avoid waited again in
         // future. We always use DstStageMask since that is what setEvent used and
         // VUID-vkCmdWaitEvents-srcStageMask-01158 requires they must match.
-        VkPipelineStageFlags srcStageMask = GetRefCountedEventStageMask(context, mCurrentEvent);
+        VkPipelineStageFlags srcStageMask =
+            context->getRenderer()->getPipelineStageMask(mCurrentEvent);
         commandBuffer->imageWaitEvent(mCurrentEvent.getEvent().getHandle(), srcStageMask,
                                       dstStageMask, imageMemoryBarrier);
         eventCollector->emplace_back(std::move(mCurrentEvent));
@@ -7365,14 +7398,14 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
                                          RefCountedEventCollector *eventCollector,
                                          VkSemaphore *semaphoreOut)
 {
+    Renderer *renderer = context->getRenderer();
     ASSERT(queueSerial.valid());
     ASSERT(!mBarrierQueueSerial.valid() ||
            mBarrierQueueSerial.getIndex() != queueSerial.getIndex() ||
            mBarrierQueueSerial.getSerial() <= queueSerial.getSerial());
     ASSERT(kImageMemoryBarrierData[newLayout].barrierIndex != PipelineStage::InvalidEnum);
     // mCurrentEvent must be invalid if useVkEventForImageBarrieris disabled.
-    ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled ||
-           !mCurrentEvent.valid());
+    ASSERT(renderer->getFeatures().useVkEventForImageBarrier.enabled || !mCurrentEvent.valid());
 
     if (mCurrentDeviceQueueIndex != context->getDeviceQueueIndex())
     {
@@ -7411,7 +7444,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         // No layout change, only memory barrier is required
         if (barrierType == BarrierType::Event)
         {
-            eventBarriers->addMemoryEvent(context, mCurrentEvent,
+            eventBarriers->addMemoryEvent(renderer, mCurrentEvent,
                                           GetImageLayoutDstStageMask(context, layoutData),
                                           layoutData.dstAccessMask);
             // Garbage collect the event, which tracks GPU completion automatically.
@@ -7453,7 +7486,8 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             }
 
             ASSERT(!mLastNonShaderReadOnlyEvent.valid() ||
-                   mLastNonShaderReadOnlyEvent.getImageLayout() == mLastNonShaderReadOnlyLayout);
+                   mLastNonShaderReadOnlyEvent.getEventStage() ==
+                       GetImageLayoutEventStage(mLastNonShaderReadOnlyLayout));
             if (!mLastNonShaderReadOnlyEvent.valid())
             {
                 barrierType = BarrierType::Pipeline;
@@ -7553,7 +7587,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
 
             if (barrierType == BarrierType::Event)
             {
-                eventBarriers->addImageEvent(context, mCurrentEvent, dstStageMask,
+                eventBarriers->addImageEvent(renderer, mCurrentEvent, dstStageMask,
                                              imageMemoryBarrier);
                 if (isShaderReadOnly)
                 {
@@ -7591,19 +7625,20 @@ void ImageHelper::setCurrentRefCountedEvent(Context *context, ImageLayoutEventMa
     // Create the event if we have not yet so. Otherwise just use the already created event. This
     // means all images used in the same render pass that has the same layout will be tracked by the
     // same event.
-    if (!layoutEventMaps.map[mCurrentLayout].valid())
+    EventStage stage = GetImageLayoutEventStage(mCurrentLayout);
+    if (!layoutEventMaps.map[stage].valid())
     {
-        if (!layoutEventMaps.map[mCurrentLayout].init(context, mCurrentLayout))
+        if (!layoutEventMaps.map[stage].init(context, stage))
         {
             // If VkEvent creation fail, we fallback to pipelineBarrier
             return;
         }
-        layoutEventMaps.mask.set(mCurrentLayout);
+        layoutEventMaps.mask.set(stage);
     }
 
     // Copy the event to mCurrentEvent so that we can wait for it in future. This will add extra
     // refcount to the underlying VkEvent.
-    mCurrentEvent = layoutEventMaps.map[mCurrentLayout];
+    mCurrentEvent = layoutEventMaps.map[stage];
 }
 
 void ImageHelper::clearColor(Context *context,

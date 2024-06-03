@@ -173,10 +173,10 @@ struct ImageLayoutEventMaps
 {
     // The list of RefCountedEvents that have been tracked. The mask is used to accelerate the
     // loop of map
-    angle::PackedEnumMap<ImageLayout, RefCountedEvent> map;
-    angle::PackedEnumBitSet<ImageLayout, uint64_t> mask;
+    angle::PackedEnumMap<EventStage, RefCountedEvent> map;
+    angle::PackedEnumBitSet<EventStage, uint64_t> mask;
     // Only used by RenderPassCommandBufferHelper
-    angle::PackedEnumMap<ImageLayout, VkEvent> vkEvents;
+    angle::PackedEnumMap<EventStage, VkEvent> vkEvents;
 };
 
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
@@ -1345,7 +1345,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     bool hasSetEventPendingFlush(const RefCountedEvent &event) const
     {
         ASSERT(event.valid());
-        return mRefCountedEvents.map[event.getImageLayout()] == event;
+        return mRefCountedEvents.map[event.getEventStage()] == event;
     }
 
     // Issue VkCmdSetEvent call for events in this command buffer.
