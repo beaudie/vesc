@@ -87,6 +87,24 @@
       "parentUuid": "1de82e13_20adf0c5",
       "revId": "0251f7d41652106eae01a9a3ac796e3a30d465b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfdacd89_daca4068",
+        "filename": "src/tests/test_utils/MultiThreadSteps.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-03T17:25:34Z",
+      "side": 1,
+      "message": "Right, but once it wake up form the wait() here, the condition should already full filled and exit the while loop. I am sure it will fix this specific race condition. But I agree that if there are more complicated situation that involves more steps, it could still subject to the same FATAL. For now I am going to just do the simple fix like you suggested.",
+      "parentUuid": "9b12dcbc_281a4b07",
+      "revId": "0251f7d41652106eae01a9a3ac796e3a30d465b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
