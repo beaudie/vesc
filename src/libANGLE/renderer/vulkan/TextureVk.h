@@ -355,11 +355,13 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     vk::ImageViewHelper &getImageViews()
     {
-        return mMultisampledImageViews[gl::RenderToTextureImageIndex::Default];
+        return mMultisampledImageViews[gl::RenderToTextureImageIndex::Default]
+                                      [gl::LevelIndex(0).get()];
     }
     const vk::ImageViewHelper &getImageViews() const
     {
-        return mMultisampledImageViews[gl::RenderToTextureImageIndex::Default];
+        return mMultisampledImageViews[gl::RenderToTextureImageIndex::Default]
+                                      [gl::LevelIndex(0).get()];
     }
 
     // Redefine a mip level of the texture.  If the new size and format don't match the allocated
@@ -586,22 +588,30 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     uint32_t mEGLImageLevelOffset;
 
     // If multisampled rendering to texture, an intermediate multisampled image is created for use
-    // as renderpass color attachment.  An array of images and image views are used based on the
-    // number of samples used with multisampled rendering to texture.  Index 0 corresponds to the
-    // non-multisampled-render-to-texture usage of the texture.
+    // as renderpass color attachment.  A map of images and image views are used where the map
+    // is keyed based on the number of samples used with multisampled rendering to texture.
+    // Index 0 corresponds to the non-multisampled-render-to-texture usage of the texture.
+    //
+    // The value in the map is an array of image and image views, each element corresponds to a
+    // level
 
+    // Multisampled images stored as a map of an array of |vk::ImageHelper|
+    //
     // - index 0: Unused.  See description of |mImage|.
     // - index N: intermediate multisampled image used for multisampled rendering to texture with
-    //   1 << N samples
-    gl::RenderToTextureImageMap<vk::ImageHelper> mMultisampledImages;
+    //            1 << N samples
+    //
+    // - mMultisampledImages[N][M]: intermediate multisampled image with 1 << N samples and
+    //                              level index M
+    gl::RenderToTextureImageMap<gl::TexLevelArray<vk::ImageHelper>> mMultisampledImages;
 
     // |ImageViewHelper| contains all the current views for the Texture. The views are always owned
     // by the Texture and are not shared like |mImage|. They also have different lifetimes and can
     // be reallocated independently of |mImage| on state changes.
     //
     // - index 0: views for the texture's image (regardless of |mOwnsImage|).
-    // - index N: views for mMultisampledImages[N]
-    gl::RenderToTextureImageMap<vk::ImageViewHelper> mMultisampledImageViews;
+    // - mMultisampledImageViews[N][M]: views for mMultisampledImages[N][M]
+    gl::RenderToTextureImageMap<gl::TexLevelArray<vk::ImageViewHelper>> mMultisampledImageViews;
 
     // Texture buffers create texel buffer views instead.  |BufferViewHelper| contains the views
     // corresponding to the attached buffer range.
