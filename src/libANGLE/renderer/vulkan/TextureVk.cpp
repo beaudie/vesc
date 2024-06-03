@@ -2698,7 +2698,8 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    GLsizei samples,
                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
-    ASSERT(imageIndex.getLevelIndex() >= 0);
+    GLint requestedLevel = imageIndex.getLevelIndex();
+    ASSERT(requestedLevel >= 0);
 
     ContextVk *contextVk = vk::GetImpl(context);
 
@@ -2729,22 +2730,27 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
         hasRenderToTextureEXT
             ? gl::RenderToTextureImageIndex::Default
             : static_cast<gl::RenderToTextureImageIndex>(PackSampleCount(samples));
-    if (samples > 1 && !mMultisampledImages[renderToTextureIndex].valid() && !hasRenderToTextureEXT)
+    vk::ImageHelper &multisampledImage = mMultisampledImages[renderToTextureIndex][requestedLevel];
+    if (samples > 1 && !multisampledImage.valid() && !hasRenderToTextureEXT)
     {
         ASSERT(mState.getBaseLevelDesc().samples <= 1);
-        vk::ImageHelper *multisampledImage = &mMultisampledImages[renderToTextureIndex];
 
         // Ensure the view serial is valid.
         vk::Renderer *renderer = contextVk->getRenderer();
-        mMultisampledImageViews[renderToTextureIndex].init(renderer);
+        mMultisampledImageViews[renderToTextureIndex][requestedLevel].init(renderer);
 
         // The MSAA image always comes from the single sampled one, so disable robust init.
         bool useRobustInit = false;
 
+        // Calculate extents for multisample image
+        VkExtent3D extents = {};
+        gl_vk::GetExtent(mImage->getLevelExtents(mImage->toVkLevel(gl::LevelIndex(requestedLevel))),
+                         &extents);
+
         // Create the implicit multisampled image.
-        ANGLE_TRY(multisampledImage->initImplicitMultisampledRenderToTexture(
+        ANGLE_TRY(multisampledImage.initImplicitMultisampledRenderToTexture(
             contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            mState.getType(), samples, *mImage, useRobustInit));
+            mState.getType(), samples, *mImage, extents, useRobustInit));
     }
 
     GLuint layerIndex = 0, layerCount = 0, imageLayerCount = 0;
@@ -2753,15 +2759,14 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
     if (layerCount == 1)
     {
-        initSingleLayerRenderTargets(contextVk, imageLayerCount,
-                                     gl::LevelIndex(imageIndex.getLevelIndex()),
+        initSingleLayerRenderTargets(contextVk, imageLayerCount, gl::LevelIndex(requestedLevel),
                                      renderToTextureIndex);
 
         std::vector<RenderTargetVector> &levelRenderTargets =
             mSingleLayerRenderTargets[renderToTextureIndex];
-        ASSERT(imageIndex.getLevelIndex() < static_cast<int32_t>(levelRenderTargets.size()));
+        ASSERT(requestedLevel < static_cast<int32_t>(levelRenderTargets.size()));
 
-        RenderTargetVector &layerRenderTargets = levelRenderTargets[imageIndex.getLevelIndex()];
+        RenderTargetVector &layerRenderTargets = levelRenderTargets[requestedLevel];
         ASSERT(imageIndex.getLayerIndex() < static_cast<int32_t>(layerRenderTargets.size()));
 
         *rtOut = &layerRenderTargets[layerIndex];
@@ -2851,15 +2856,16 @@ void TextureVk::initSingleLayerRenderTargets(ContextVk *contextVk,
                                              gl::LevelIndex levelIndex,
                                              gl::RenderToTextureImageIndex renderToTextureIndex)
 {
+    GLint requestedLevel = levelIndex.get();
     std::vector<RenderTargetVector> &allLevelsRenderTargets =
         mSingleLayerRenderTargets[renderToTextureIndex];
 
-    if (allLevelsRenderTargets.size() <= static_cast<uint32_t>(levelIndex.get()))
+    if (allLevelsRenderTargets.size() <= static_cast<uint32_t>(requestedLevel))
     {
-        allLevelsRenderTargets.resize(levelIndex.get() + 1);
+        allLevelsRenderTargets.resize(requestedLevel + 1);
     }
 
-    RenderTargetVector &renderTargets = allLevelsRenderTargets[levelIndex.get()];
+    RenderTargetVector &renderTargets = allLevelsRenderTargets[requestedLevel];
 
     // Lazy init. Check if already initialized.
     if (!renderTargets.empty())
@@ -2884,13 +2890,13 @@ void TextureVk::initSingleLayerRenderTargets(ContextVk *contextVk,
     // resolve into the texture's image automatically.
     if (isMultisampledRenderToTexture)
     {
-        ASSERT(mMultisampledImages[renderToTextureIndex].valid());
+        ASSERT(mMultisampledImages[renderToTextureIndex][requestedLevel].valid());
         ASSERT(!mImage->isYuvResolve());
 
         resolveImage      = drawImage;
         resolveImageViews = drawImageViews;
-        drawImage         = &mMultisampledImages[renderToTextureIndex];
-        drawImageViews    = &mMultisampledImageViews[renderToTextureIndex];
+        drawImage         = &mMultisampledImages[renderToTextureIndex][requestedLevel];
+        drawImageViews    = &mMultisampledImageViews[renderToTextureIndex][requestedLevel];
 
         // If the texture is depth/stencil, GL_EXT_multisampled_render_to_texture2 explicitly
         // indicates that there is no need for the image to be resolved.  In that case, mark the
@@ -3766,11 +3772,14 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
     }
 
-    for (vk::ImageHelper &image : mMultisampledImages)
+    for (gl::TexLevelArray<vk::ImageHelper> &images : mMultisampledImages)
     {
-        if (image.valid())
+        for (vk::ImageHelper &image : images)
         {
-            image.releaseImageFromShareContexts(renderer, contextVk, mImageSiblingSerial);
+            if (image.valid())
+            {
+                image.releaseImageFromShareContexts(renderer, contextVk, mImageSiblingSerial);
+            }
         }
     }
 
@@ -3786,16 +3795,22 @@ void TextureVk::releaseImageViews(ContextVk *contextVk)
 
     if (mImage == nullptr)
     {
-        for (vk::ImageViewHelper &imageViewHelper : mMultisampledImageViews)
+        for (gl::TexLevelArray<vk::ImageViewHelper> &imageViewHelpers : mMultisampledImageViews)
         {
-            ASSERT(imageViewHelper.isImageViewGarbageEmpty());
+            for (vk::ImageViewHelper &imageViewHelper : imageViewHelpers)
+            {
+                ASSERT(imageViewHelper.isImageViewGarbageEmpty());
+            }
         }
         return;
     }
 
-    for (vk::ImageViewHelper &imageViewHelper : mMultisampledImageViews)
+    for (gl::TexLevelArray<vk::ImageViewHelper> &imageViewHelpers : mMultisampledImageViews)
     {
-        imageViewHelper.release(renderer, mImage->getResourceUse());
+        for (vk::ImageViewHelper &imageViewHelper : imageViewHelpers)
+        {
+            imageViewHelper.release(renderer, mImage->getResourceUse());
+        }
     }
 
     for (auto &renderTargets : mSingleLayerRenderTargets)
