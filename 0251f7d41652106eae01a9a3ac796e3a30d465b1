@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c0614681_0e62c921",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4085,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-03T17:15:32Z",
+      "side": 1,
+      "message": "Your suggestion will also fix the crash, I think.",
+      "parentUuid": "a6312bac_a03165c9",
+      "revId": "0251f7d41652106eae01a9a3ac796e3a30d465b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3d439825_581a5744",
         "filename": "src/tests/test_utils/MultiThreadSteps.h",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2024-06-01T02:20:43Z",
       "side": 1,
       "message": "Maybe this is changing the timing only, but it doesn\u0027t look like it actually solves the problem. Right after the newStep is set, everything up to `mCondVar-\u003ewait(lock)` is a no-op, which means Thread0 is back to releasing the lock and waking up at an unknown time. I think I know what the problem is, I\u0027ll leave a comment on the other file.",
+      "revId": "0251f7d41652106eae01a9a3ac796e3a30d465b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1de82e13_20adf0c5",
+        "filename": "src/tests/test_utils/MultiThreadSteps.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-03T17:15:32Z",
+      "side": 1,
+      "message": "This is holding the lock until wait() call, I dont think it is a no-op though.",
+      "parentUuid": "3d439825_581a5744",
       "revId": "0251f7d41652106eae01a9a3ac796e3a30d465b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
