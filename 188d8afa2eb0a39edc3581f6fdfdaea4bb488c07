@@ -34,6 +34,24 @@
       "parentUuid": "4bfb68d2_e32c0f1a",
       "revId": "188d8afa2eb0a39edc3581f6fdfdaea4bb488c07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8043a8e8_2b7a0d9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T15:34:21Z",
+      "side": 1,
+      "message": "Yeah `glUniformBlockBinding` is whole other beast and it\u0027s unrelated to default uniforms (set by `glUniformN`)",
+      "parentUuid": "1a7c5f77_8cec75d7",
+      "revId": "188d8afa2eb0a39edc3581f6fdfdaea4bb488c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
