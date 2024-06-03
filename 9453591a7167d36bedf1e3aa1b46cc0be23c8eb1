@@ -22,6 +22,30 @@
       },
       "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8558c23e_9e0673ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-03T17:00:59Z",
+      "side": 1,
+      "message": "I had the same thought, but apparently that was costly: https://chromium-review.googlesource.com/c/angle/angle/+/5483308",
+      "parentUuid": "f81fefdb_e7d2d198",
+      "range": {
+        "startLine": 7490,
+        "startChar": 4,
+        "endLine": 7495,
+        "endChar": 5
+      },
+      "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
