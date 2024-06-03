@@ -36,6 +36,46 @@ enum class BarrierType
     Event,
 };
 
+constexpr VkPipelineStageFlags kPreFragmentStageFlags =
+    VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
+    VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT | VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+
+constexpr VkPipelineStageFlags kAllShadersPipelineStageFlags =
+    kPreFragmentStageFlags | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
+    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+
+constexpr VkPipelineStageFlags kAllDepthStencilPipelineStageFlags =
+    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+
+// Enum for predefined VkPipelineStageFlags set that VkEvent will be using. Use
+// Renderer::getPipelineStageMask to convert the enum to actual VkPipelineStageFlags.
+enum class EventStage : uint32_t
+{
+    Transfer                                          = 0,
+    VertexShader                                      = 1,
+    FragmentShader                                    = 2,
+    ComputeShader                                     = 3,
+    AllShaders                                        = 4,
+    PreFragmentShaders                                = 5,
+    ColorAttachmentOutput                             = 6,
+    FragmentShadingRate                               = 7,
+    ColorAttachmentOutputAndFragmentShader            = 8,
+    ColorAttachmentOutputAndFragmentShaderAndTransfer = 9,
+    ColorAttachmentOutputAndAllShaders                = 10,
+    AllFragmentTest                                   = 11,
+    AllFragmentTestAndFragmentShader                  = 12,
+    AllFragmentTestAndAllShaders                      = 13,
+    TransferAndComputeShader                          = 14,
+    AllCommands                                       = 15,
+    BottomOfPipe                                      = 16,
+    InvalidEnum                                       = 17,
+    EnumCount                                         = InvalidEnum,
+};
+// Initialize EventStage to VkPipelineStageFlags mapping table.
+void InitializeEventAndPipelineStagesMap(
+    angle::PackedEnumMap<EventStage, VkPipelineStageFlags> *mapping,
+    VkPipelineStageFlags mSupportedVulkanPipelineStageMask);
+
 // VkCmdWaitEvents requires srcStageMask must be the bitwise OR of the stageMask parameter used in
 // previous calls to vkCmdSetEvent (See VUID-vkCmdWaitEvents-srcStageMask-01158). This mean we must
 // keep the record of what stageMask each event has been used in VkCmdSetEvent call so that we can
@@ -45,7 +85,7 @@ struct EventAndLayout
 {
     bool valid() const { return event.valid(); }
     Event event;
-    ImageLayout imageLayout;
+    EventStage eventStage;
 };
 
 // The VkCmdSetEvent is called after VkCmdEndRenderPass and all images that used at the given
@@ -97,7 +137,7 @@ class RefCountedEvent final
 
     // Create VkEvent and associated it with given layout. Returns true if success and false if
     // failed.
-    bool init(Context *context, ImageLayout layout);
+    bool init(Context *context, EventStage eventStage);
 
     // Release one reference count to the underline Event object and destroy or recycle the handle
     // to renderer's recycler if this is the very last reference.
@@ -123,11 +163,10 @@ class RefCountedEvent final
         return mHandle->get().event;
     }
 
-    // Returns the ImageLayout associated with the event.
-    ImageLayout getImageLayout() const
+    EventStage getEventStage() const
     {
-        ASSERT(valid());
-        return mHandle->get().imageLayout;
+        ASSERT(mHandle != nullptr);
+        return mHandle->get().eventStage;
     }
 
   private:
@@ -413,12 +452,12 @@ class EventBarrierArray final
                                   VkPipelineStageFlags dstStageMask,
                                   VkAccessFlags dstAccess);
 
-    void addMemoryEvent(Context *context,
+    void addMemoryEvent(Renderer *renderer,
                         const RefCountedEvent &waitEvent,
                         VkPipelineStageFlags dstStageMask,
                         VkAccessFlags dstAccess);
 
-    void addImageEvent(Context *context,
+    void addImageEvent(Renderer *renderer,
                        const RefCountedEvent &waitEvent,
                        VkPipelineStageFlags dstStageMask,
                        const VkImageMemoryBarrier &imageMemoryBarrier);
@@ -430,11 +469,6 @@ class EventBarrierArray final
   private:
     std::deque<EventBarrier> mBarriers;
 };
-
-VkPipelineStageFlags GetRefCountedEventStageMask(Context *context, const RefCountedEvent &event);
-VkPipelineStageFlags GetRefCountedEventStageMask(Context *context,
-                                                 const RefCountedEvent &event,
-                                                 VkAccessFlags *accessMask);
 }  // namespace vk
 }  // namespace rx
 #endif  // LIBANGLE_RENDERER_VULKAN_REFCOUNTED_EVENT_H_
