@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fac153f5_b0a00cef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-06-04T09:00:05Z",
+      "side": 1,
+      "message": "This breaks couple of tests on https://ci.chromium.org/ui/p/angle/builders/ci/win-trace/6014/overview:\n[ RUN      ] FramebufferTest_ES3.RenderAndInvalidateImmutableTextureWithSubImageWithBeyondMaxLevel/ES3_Vulkan_SwiftShader\n..\\..\\..\\src\\tests\\gl_tests\\FramebufferTest.cpp(4814): error: Expected equality of these values:\n  GLColor::red\n    Which is: Red\n  angle::ReadColor(0, 0)\n    Which is: Transparent Black\n[  FAILED  ] FramebufferTest_ES3.RenderAndInvalidateImmutableTextureWithSubImageWithBeyondMaxLevel/ES3_Vulkan_SwiftShader, where GetParam() \u003d ES3_Vulkan_SwiftShader (40 ms)\n[ RUN      ] FramebufferTest_ES3.RenderAndInvalidateImmutableTextureWithBellowBaseLevelLOD/ES3_Vulkan_SwiftShader\n..\\..\\..\\src\\tests\\gl_tests\\FramebufferTest.cpp(4865): error: Expected equality of these values:\n  GLColor::red\n    Which is: Red\n  angle::ReadColor(0, 0)\n    Which is: Transparent Black\n[  FAILED  ] FramebufferTest_ES3.RenderAndInvalidateImmutableTextureWithBellowBaseLevelLOD/ES3_Vulkan_SwiftShader, where GetParam() \u003d ES3_Vulkan_SwiftShader (36 ms)\n[ RUN      ] FramebufferTest_ES3.RenderImmutableTextureWithSubImageWithBeyondMaxLevel/ES3_Vulkan_SwiftShader\n\nI\u0027ll revert, since win-trace is optional CQ bot.",
+      "revId": "490c056a88a33870cb4ba2a7906b0a9688d96262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
