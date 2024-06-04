@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04b5849a_4f946ccd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-04T22:58:15Z",
+      "side": 1,
+      "message": "yup, given we have 3 fixed / guaranteed descriptor set indices tons of programs in the end2end test suite have at least 1 index with an empty binding",
+      "parentUuid": "8461de1e_22e8a1b9",
+      "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f81fefdb_e7d2d198",
