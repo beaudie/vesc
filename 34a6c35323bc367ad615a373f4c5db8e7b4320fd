@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62c66be2_8f432f2f",
+        "filename": "src/common/uniform_type_info_autogen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-04T21:59:45Z",
+      "side": 1,
+      "message": "TODO: add an include guard",
+      "range": {
+        "startLine": 1,
+        "startChar": 3,
+        "endLine": 1,
+        "endChar": 12
+      },
+      "revId": "34a6c35323bc367ad615a373f4c5db8e7b4320fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
