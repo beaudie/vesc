@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cecef45b_a7044617",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-04T12:22:58Z",
+      "side": 1,
+      "message": "shabi\u0027s rename suggestion may provide more clarity, we can have 2 methods \n - `waitForComputePostLinkTasks(contextVk)`\n - `waitForGraphicsPostLinkTasks(contextVk, GraphicsPipelineDesc)`\n\n`waitForComputePostLinkTasks` calls into `waitForPostLinkTasksImpl` unconditionally\n\n`waitForGraphicsPostLinkTasks` calls into `waitForPostLinkTasksImpl` if the passed in `GraphicsPipelineDesc` matches",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 69
+      },
+      "revId": "a6ad29cb96b24d1404ef5ab05aaead4aa74a1f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
