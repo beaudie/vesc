@@ -16,6 +16,24 @@
       "message": "Typo: Backend.",
       "revId": "7432a13819a843af44f2ddb660584a7865737a6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cf2d88d_421e3abc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-06-04T09:35:42Z",
+      "side": 1,
+      "message": "Thanks!\nDone.",
+      "parentUuid": "187ea226_161ff4f4",
+      "revId": "7432a13819a843af44f2ddb660584a7865737a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
