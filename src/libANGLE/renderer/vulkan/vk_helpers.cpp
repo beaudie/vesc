@@ -2731,6 +2731,7 @@ void RenderPassCommandBufferHelper::executeSetEvents(Context *context,
         ASSERT(!mRefCountedEvents.map[stage].valid());
         ASSERT(mRefCountedEvents.vkEvents[stage] != VK_NULL_HANDLE);
         primary->setEvent(mRefCountedEvents.vkEvents[stage], renderer->getPipelineStageMask(stage));
+        mRefCountedEvents.vkEvents[stage] = VK_NULL_HANDLE;
     }
     mRefCountedEvents.mask.reset();
 }
