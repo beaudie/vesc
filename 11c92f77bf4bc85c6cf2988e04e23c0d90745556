@@ -16,6 +16,24 @@
       "message": "2% by eliminating a single branch would be insane!\n\nWhat I think made the biggest impact is that this function is now inlined. Before:\n\n```\n3ddd70:      \tbl\t0x3dd350 \u003cgl::ProgramExecutable::shouldIgnoreUniform(gl::UniformLocation) const\u003e\n  3ddd74:      \ttbz\tw0, #0x0, 0x3ddd90 \u003cgl::ProgramExecutable::setUniform2fv(gl::UniformLocation, int, float const*)+0x50\u003e\n ```\n\nAfter:\n\n```\n  3ddb50:       ldr x8, [x0, #0x558]\n  3ddb54:       ldr x9, [x0, #0x550]\n; ./../../src/libANGLE/ProgramExecutable.cpp:2476\n  3ddb58:       sxtw  x10, w1\n; ./../../third_party/libc++/src/include/vector:596\n11  916,663 \n  3ddb5c:       sub x8, x8, x9\n; ./../../src/libANGLE/ProgramExecutable.cpp:2476\n  3ddb60:       cmp x10, x8, asr #3\n  3ddb64:       b.hs  0x3ddc18 \u003cgl::ProgramExecutable::setUniform2fv(gl::UniformLocation, int, float const*)+0xcc\u003e\n  3ddb68:       add x8, x9, x10, lsl #3\n  3ddb6c:       ldr w8, [x8, #0x4]\n; ./../../src/libANGLE/ProgramExecutable.cpp:2594\n  3ddb70:       tbnz  w8, #0x1f, 0x3ddc18 \u003cgl::ProgramExecutable::setUniform2fv(gl::UniformLocation, int, float const*)+0xcc\u003e\n ```",
       "revId": "11c92f77bf4bc85c6cf2988e04e23c0d90745556",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4edadd86_3adb3fb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-04T15:50:24Z",
+      "side": 1,
+      "message": "(ANGLE_INLINE / ANGLE_NOINLINE would be one way to confirm whether it\u0027s one or the other)",
+      "parentUuid": "c4aa6727_969dc20d",
+      "revId": "11c92f77bf4bc85c6cf2988e04e23c0d90745556",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
