@@ -13,12 +13,52 @@
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/IntermNode.h"
+#include "compiler/translator/OutputTree.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 
 namespace sh
 {
 namespace
 {
+
+struct VarDecl
+{
+    explicit VarDecl(const TVariable &var) : mVariable(&var), mIsField(false) {}
+    explicit VarDecl(const TField &field) : mField(&field), mIsField(true) {}
+
+    ANGLE_INLINE const TVariable &variable() const
+    {
+        ASSERT(isVariable());
+        return *mVariable;
+    }
+
+    ANGLE_INLINE const TField &field() const
+    {
+        ASSERT(isField());
+        return *mField;
+    }
+
+    ANGLE_INLINE bool isVariable() const { return !mIsField; }
+
+    ANGLE_INLINE bool isField() const { return mIsField; }
+
+    const TType &type() const { return isField() ? *field().type() : variable().getType(); }
+
+    SymbolType symbolType() const
+    {
+        return isField() ? field().symbolType() : variable().symbolType();
+    }
+
+    ImmutableString name() const { return isField() ? field().name() : variable().name(); }
+
+  private:
+    union
+    {
+        const TVariable *mVariable;
+        const TField *mField;
+    };
+    bool mIsField;
+};
 
 // When emitting a list of statements, this determines whether a semicolon follows the statement.
 bool RequiresSemicolonTerminator(TIntermNode &node)
@@ -101,6 +141,12 @@ class OutputWGSLTraverser : public TIntermTraverser
     void visitPreprocessorDirective(TIntermPreprocessorDirective *node) override;
 
   private:
+    struct EmitVariableDeclarationConfig
+    {
+        bool isParameter            = false;
+        bool disableStructSpecifier = false;
+    };
+
     void groupedTraverse(TIntermNode &node);
     template <typename T>
     void emitNameOf(const T &namedObject);
@@ -112,6 +158,9 @@ class OutputWGSLTraverser : public TIntermTraverser
     void emitFunctionSignature(const TFunction &func);
     void emitFunctionReturn(const TFunction &func);
     void emitFunctionParameter(const TFunction &func, const TVariable &param);
+    void emitStructDeclaration(const TType &type);
+    void emitVariableDeclaration(const VarDecl &decl,
+                                 const EmitVariableDeclarationConfig &evdConfig);
 
     TInfoSinkBase &mSink;
 
@@ -311,9 +360,11 @@ void OutputWGSLTraverser::emitFunctionSignature(const TFunction &func)
 
 void OutputWGSLTraverser::emitFunctionParameter(const TFunction &func, const TVariable &param)
 {
-    // TODO(anglebug.com/8662): actually emit function parameters.
-
-    mSink << "FAKE_FUNCTION_PARAMETER";
+    // TODO(anglebug.com/42267100): function parameters are immutable and will need to be renamed if
+    // they are mutated.
+    EmitVariableDeclarationConfig evdConfig;
+    evdConfig.isParameter = true;
+    emitVariableDeclaration(VarDecl(param), evdConfig);
 }
 
 void OutputWGSLTraverser::visitFunctionPrototype(TIntermFunctionPrototype *funcProtoNode)
@@ -399,10 +450,99 @@ bool OutputWGSLTraverser::visitGlobalQualifierDeclaration(Visit,
     return false;
 }
 
+void OutputWGSLTraverser::emitStructDeclaration(const TType &type)
+{
+    ASSERT(type.getBasicType() == TBasicType::EbtStruct);
+    ASSERT(type.isStructSpecifier());
+
+    mSink << "struct ";
+    emitBareTypeName(type);
+
+    mSink << "\n";
+    emitOpenBrace();
+
+    const TStructure &structure = *type.getStruct();
+
+    for (const TField *field : structure.fields())
+    {
+        emitIndentation();
+        // TODO(anglebug.com/42267100): emit qualifiers.
+        EmitVariableDeclarationConfig evdConfig;
+        evdConfig.disableStructSpecifier = true;
+        emitVariableDeclaration(VarDecl(*field), evdConfig);
+        mSink << ",\n";
+    }
+
+    emitCloseBrace();
+}
+
+void OutputWGSLTraverser::emitVariableDeclaration(const VarDecl &decl,
+                                                  const EmitVariableDeclarationConfig &evdConfig)
+{
+    const SymbolType symbolType = decl.symbolType();
+    const TType &type           = decl.type();
+    const TBasicType basicType  = type.getBasicType();
+
+    if (basicType == TBasicType::EbtStruct && type.isStructSpecifier() &&
+        !evdConfig.disableStructSpecifier)
+    {
+        // TODO(anglebug.com/42267100): in WGSL structs probably can't be declared in
+        // function parameters or in uniform declarations or in variable declarations, or
+        // anonymously either within other structs or within a variable declaration. Handle
+        // these with the same AST pre-passes as other shader translators.
+        ASSERT(!evdConfig.isParameter);
+        emitStructDeclaration(type);
+        if (symbolType != SymbolType::Empty)
+        {
+            mSink << " ";
+            emitNameOf(decl);
+        }
+        return;
+    }
+
+    ASSERT(basicType == TBasicType::EbtStruct || symbolType != SymbolType::Empty ||
+           evdConfig.isParameter);
+
+    if (decl.symbolType() != SymbolType::Empty)
+    {
+        emitNameOf(decl);
+    }
+    mSink << " : ";
+    emitType(type);
+}
+
 bool OutputWGSLTraverser::visitDeclaration(Visit, TIntermDeclaration *declNode)
 {
-    // TODO(anglebug.com/8662): support variable declarations.
-    mSink << "FAKE_DECLARATION";
+    ASSERT(declNode->getChildCount() == 1);
+    TIntermNode &node = *declNode->getChildNode(0);
+
+    EmitVariableDeclarationConfig evdConfig;
+
+    // TODO(anglebug.com/42267100): emit let or var for function-local variables. (GLSL const or
+    // default).
+    if (TIntermSymbol *symbolNode = node.getAsSymbolNode())
+    {
+        const TVariable &var = symbolNode->variable();
+        emitVariableDeclaration(VarDecl(var), evdConfig);
+    }
+    else if (TIntermBinary *initNode = node.getAsBinaryNode())
+    {
+        ASSERT(initNode->getOp() == TOperator::EOpInitialize);
+        TIntermSymbol *leftSymbolNode = initNode->getLeft()->getAsSymbolNode();
+        TIntermTyped *valueNode       = initNode->getRight()->getAsTyped();
+        ASSERT(leftSymbolNode && valueNode);
+
+        const TVariable &var = leftSymbolNode->variable();
+
+        emitVariableDeclaration(VarDecl(var), evdConfig);
+        mSink << " = ";
+        groupedTraverse(*valueNode);
+    }
+    else
+    {
+        UNREACHABLE();
+    }
+
     return false;
 }
 
@@ -525,11 +665,35 @@ void OutputWGSLTraverser::emitBareTypeName(const TType &type)
 
 void OutputWGSLTraverser::emitType(const TType &type)
 {
-    // TODO(anglebug.com/8662): support types with dimensions.
-    ASSERT(!type.isVector() && !type.isMatrix() && !type.isArray());
-
-    // This type has no dimensions and is equivalent to its bare type.
-    emitBareTypeName(type);
+    if (type.isArray())
+    {
+        // Examples:
+        // array<f32, 5>
+        // array<array<u32, 5>, 10>
+        mSink << "array<";
+        TType innerType = type;
+        innerType.toArrayElementType();
+        emitType(innerType);
+        mSink << ", " << type.getOutermostArraySize() << ">";
+    }
+    else if (type.isVector())
+    {
+        mSink << "vec" << static_cast<uint32_t>(type.getNominalSize()) << "<";
+        emitBareTypeName(type);
+        mSink << ">";
+    }
+    else if (type.isMatrix())
+    {
+        mSink << "mat" << static_cast<uint32_t>(type.getCols()) << "x"
+              << static_cast<uint32_t>(type.getRows()) << "<";
+        emitBareTypeName(type);
+        mSink << ">";
+    }
+    else
+    {
+        // This type has no dimensions and is equivalent to its bare type.
+        emitBareTypeName(type);
+    }
 }
 
 }  // namespace
@@ -542,6 +706,10 @@ bool TranslatorWGSL::translate(TIntermBlock *root,
                                const ShCompileOptions &compileOptions,
                                PerformanceDiagnostics *perfDiagnostics)
 {
+
+    OutputTree(root, getInfoSink().info);
+    std::cout << getInfoSink().info.c_str();
+
     // TODO(anglebug.com/8662): until the translator is ready to translate most basic shaders, emit
     // the code commented out.
     TInfoSinkBase &sink = getInfoSink().obj;
