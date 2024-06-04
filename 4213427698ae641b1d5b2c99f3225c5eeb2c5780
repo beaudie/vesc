@@ -39,6 +39,30 @@
       },
       "revId": "4213427698ae641b1d5b2c99f3225c5eeb2c5780",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8c67d90_df956717",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-04T19:16:52Z",
+      "side": 1,
+      "message": "Hmm, yes I think I should be able to do this all in one render pass, good point. I modified this to now add the RenderPassColorAttachments to a new vector, and start a render pass after iterating through all the dirty color attachments.",
+      "parentUuid": "be93fbda_14045ea1",
+      "range": {
+        "startLine": 351,
+        "startChar": 18,
+        "endLine": 351,
+        "endChar": 45
+      },
+      "revId": "4213427698ae641b1d5b2c99f3225c5eeb2c5780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
