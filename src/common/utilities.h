@@ -212,6 +212,14 @@ struct UniformTypeIndex
 const UniformTypeInfo &GetUniformTypeInfo(GLenum uniformType);
 UniformTypeIndex GetUniformTypeIndex(GLenum uniformType);
 const UniformTypeInfo &GetUniformTypeInfoFromIndex(UniformTypeIndex index);
+inline GLint GetElementComponents(UniformTypeIndex index)
+{
+    static constexpr std::array<uint8_t, 77> kV = {
+        0, 1, 2, 3, 4, 1, 4, 6, 8, 9, 6, 12, 16, 8, 12, 2, 3, 4, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1,  2, 3,  4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1,  1, 1,  1, 1, 1, 1, 1, 2, 3, 4, 1, 1};
+    return kV[index.value];
+}
 
 const char *GetGenericErrorMessage(GLenum error);
 
