@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d22b5363_27cae154",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-06-04T09:40:22Z",
+      "side": 1,
+      "message": "Changes moved from this patchset:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5592474/3",
+      "revId": "b3d28cb24767bd14974c62c707815dd76d6d1bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
