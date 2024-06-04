@@ -1,0 +1,12 @@
+{
+  "src/libANGLE/renderer/angle_format.py":
+    "8269a72cc5629fb2544975b6c36c2bd4",
+  "src/libANGLE/renderer/angle_format_map.json":
+    "eab6744df71f7bf6bfe9e8bb39949b79",
+  "src/libANGLE/renderer/wgpu/gen_wgpu_format_table.py":
+    "43e9f95997b95b695671bf0d678c9e75",
+  "src/libANGLE/renderer/wgpu/wgpu_format_map.json":
+    "831d4f2a845023041c96f8f22acae2bd",
+  "src/libANGLE/renderer/wgpu/wgpu_format_table_autogen.cpp":
+    "814b84cd920b223aab3057785311ee1f"
+}
