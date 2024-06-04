@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b672749a_89045d78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-04T12:41:42Z",
+      "side": 1,
+      "message": "test request from shabi -\n\nBasically:\n\nCreate two contexts that are not shared\nMake one current and draw such that this empty desc set is used\nOn the same thread, make the other context current and issue a similar draw\nMake uncurrent\nDestroy both contexts\n\nThis would catch double-free if that accidentally happens.",
+      "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f81fefdb_e7d2d198",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 4
@@ -398,6 +415,30 @@
       "side": 1,
       "message": "You can easily fix that. either add a copy constructor in AtomicRefCounted that adds refCount instead of making cgopy (which I think useful anyway). Or you just retrieve the underline object and create a new RefCountedDescriptorSetLayout out of it. The benefit is that you pay the cost once instead of every time do a if check in getDescriptorSetLayout, which gets called more often. But I agree this is minor issue, so will leave up to you.",
       "parentUuid": "8daeaaa3_f38e65e4",
+      "range": {
+        "startLine": 7490,
+        "startChar": 4,
+        "endLine": 7495,
+        "endChar": 5
+      },
+      "revId": "9453591a7167d36bedf1e3aa1b46cc0be23c8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7844bccf_dc2c8734",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7495,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-04T12:41:42Z",
+      "side": 1,
+      "message": "\u003e add a copy constructor in AtomicRefCounted that adds refCount instead of making cgopy (which I think useful anyway). Or you just retrieve the underline object and create a new RefCountedDescriptorSetLayout out of it.\n\ni needed such a \"sharable\" `AtomicRefCounted` in many places but unfortunately copy-constructor is not the way to do this since it invalidates the ownership invariant. The underlying assumption in `AtomicRefCounted` is that the object owns the underlying `mObject` but having 2 different `AtomicRefCounted` \"own\" the same underlying `mObject` will be a source of bugs\n\n\u003e The benefit is that you pay the cost once instead of every time do a if check in getDescriptorSetLayout\n\nthis is true but the if-check is only on a cache miss and im hoping\ncache hit count \u003e\u003e\u003e cache miss count\n\nwith all of the above in mind im going to leave the code as-is",
+      "parentUuid": "5dcf8c59_9c1d47b3",
       "range": {
         "startLine": 7490,
         "startChar": 4,
