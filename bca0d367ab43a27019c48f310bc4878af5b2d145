@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc809adb_e4a8111c",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-04T22:45:27Z",
+      "side": 1,
+      "message": "```suggestion\n// Make sure that if there are any placeholder objects when the programs don\u0027t use any resources (such as textures),\n// they can correctly be used in non-shared contexts (without causing double-free).\n```",
+      "revId": "bca0d367ab43a27019c48f310bc4878af5b2d145",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76219d33_49690633",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-04T22:45:27Z",
+      "side": 1,
+      "message": "Just in case:\n\n```suggestion\n    ANGLE_GL_PROGRAM(program1, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());\n```",
+      "revId": "bca0d367ab43a27019c48f310bc4878af5b2d145",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
