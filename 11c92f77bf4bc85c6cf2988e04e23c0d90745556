@@ -52,6 +52,24 @@
       "parentUuid": "4edadd86_3adb3fb9",
       "revId": "11c92f77bf4bc85c6cf2988e04e23c0d90745556",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14e91165_366ab412",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-04T16:17:04Z",
+      "side": 1,
+      "message": "I usually look at profiling with disassembly, from something like this:\n```\n$android_checkout/system/extras/simpleperf/scripts\n % python3 app_profiler.py -np com.android.angle.test:test_process -r \"-e task-clock --call-graph dwarf -f 12000 --duration 4\"\npython3 binary_cache_builder.py -lib /d2/angle3/out/AndroidPerformance/lib.unstripped/\npython3 report_html.py --min_func_percent\u003d0 --add_disassembly --binary_filter\u003dlibGLESv2_angle.so\n```\n\nthen go to Sample Table and search for the function I\u0027m interested in\n\n(profiling is sampled though, so I don\u0027t fully trust the profiling numbers, but at least it gives an idea of what gets hit and what doesn\u0027t)",
+      "parentUuid": "818b7ae0_c7acf3ff",
+      "revId": "11c92f77bf4bc85c6cf2988e04e23c0d90745556",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
