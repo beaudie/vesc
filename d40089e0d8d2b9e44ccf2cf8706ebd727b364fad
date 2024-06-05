@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "38316c05_4cac9e2f",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-06-05T18:34:50Z",
+      "side": 1,
+      "message": "TField doesn\u0027t have a TSymbol right? Can I create a TSymbol from a TField?",
+      "parentUuid": "f377f539_c719434f",
+      "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c766a48e_2ad14498",
         "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
         "patchSetId": 2
@@ -54,6 +72,24 @@
       "writtenOn": "2024-06-05T13:47:52Z",
       "side": 1,
       "message": "You are free to be as thorough as you want, and I do believe it\u0027s ultimately best if the code is able to handle all types up-front, but FYI, the webgpu backend doesn\u0027t really need to support anything beyond GLES3 (i.e. WebGL2) which translates to `#version 300 es`).",
+      "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad1d8098_6fbf50a3",
+        "filename": "src/tests/compiler_tests/WGSLOutput_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-06-05T18:34:50Z",
+      "side": 1,
+      "message": "Got it, so there\u0027s no multidimensional arrays in WebGL2?",
+      "parentUuid": "9a0f56e4_96d85c37",
       "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
