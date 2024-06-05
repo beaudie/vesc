@@ -3870,7 +3870,9 @@ enum class PresentMode
 
 VkPresentModeKHR ConvertPresentModeToVkPresentMode(PresentMode presentMode);
 PresentMode ConvertVkPresentModeToPresentMode(VkPresentModeKHR vkPresentMode);
-
+bool EventAndPipelineBarrierHasSameStageMask(
+    const angle::PackedEnumMap<EventStage, VkPipelineStageFlags> &map,
+    VkPipelineStageFlags supportedVulkanPipelineStageMask);
 }  // namespace vk
 }  // namespace rx
 
