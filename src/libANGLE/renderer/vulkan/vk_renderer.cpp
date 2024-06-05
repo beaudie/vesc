@@ -1464,7 +1464,6 @@ Renderer::Renderer()
       mPipelineCacheInitialized(false),
       mValidationMessageCount(0),
       mCommandProcessor(this, &mCommandQueue),
-      mSupportedVulkanPipelineStageMask(0),
       mSupportedVulkanShaderStageMask(0),
       mMemoryAllocationTracker(MemoryAllocationTracker(this)),
       mPlaceHolderDescriptorSetLayout(nullptr)
@@ -3628,9 +3627,16 @@ angle::Result Renderer::createDeviceAndQueue(vk::Context *context, uint32_t queu
     {
         mSupportedVulkanShaderStageMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
     }
-    mSupportedVulkanPipelineStageMask = ~unsupportedStages;
+
+    VkPipelineStageFlags supportedVulkanPipelineStageMask = ~unsupportedStages;
     InitializeEventAndPipelineStagesMap(&mEventStageAndPipelineStageFlagsMap,
-                                        mSupportedVulkanPipelineStageMask);
+                                        supportedVulkanPipelineStageMask);
+    InitializeImageLayoutAndMemoryBarrierDataMap(&mImageLayoutAndMemoryBarrierDataMap,
+                                                 supportedVulkanPipelineStageMask);
+    // mEventStageAndPipelineStageFlagsMap supposedly should match the value in dstStageMask of
+    // mImageLayoutAndMemoryBarrierData
+    ASSERT(EventAndPipelineBarrierHaveMatchingStageFlags(mEventStageAndPipelineStageFlagsMap,
+                                                         mImageLayoutAndMemoryBarrierDataMap));
 
     ANGLE_TRY(initializeMemoryAllocator(context));
 

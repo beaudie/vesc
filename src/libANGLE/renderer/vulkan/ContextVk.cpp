@@ -7614,7 +7614,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
              VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT |
              VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
              VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT) &
-            mRenderer->getSupportedVulkanPipelineStageMask();
+            mRenderer->getSupportedVulkanShaderStageMask();
         const VkPipelineStageFlags bufferWriteStages =
             VK_PIPELINE_STAGE_TRANSFER_BIT | supportedShaderStages |
             (getFeatures().supportsTransformFeedbackExtension.enabled
