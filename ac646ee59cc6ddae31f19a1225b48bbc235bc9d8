@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2524df37_a8483100",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-05T01:20:43Z",
+      "side": 1,
+      "message": "It isn\u0027t a capture bug.  These tests fail without capture enabled when `forceRobustResourceInit` is specified.  It looks like capture_replay_tests may be the only thing that actually run tests with that extention in use.\n\nI don\u0027t know why the script was passing before, but these two tests used to be skipped:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3118549\n\nand then were removed (perhaps inadvertently):\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3291643\n\nSomething about Charlie\u0027s CL causes them to go back to failing status, so let\u0027s restore the skip.",
+      "range": {
+        "startLine": 9,
+        "startChar": 50,
+        "endLine": 10,
+        "endChar": 12
+      },
+      "revId": "ac646ee59cc6ddae31f19a1225b48bbc235bc9d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78d09e1e_db2224e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-05T01:20:43Z",
+      "side": 1,
+      "message": "also please tag angleproject:6314",
+      "revId": "ac646ee59cc6ddae31f19a1225b48bbc235bc9d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f823ea6_e57dfb18",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-05T01:20:43Z",
+      "side": 1,
+      "message": "Can you swap the order here, tag bug `6314` instead, and move them to line 80?  This puts them back to the state they were originally.",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 109
+      },
+      "revId": "ac646ee59cc6ddae31f19a1225b48bbc235bc9d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
