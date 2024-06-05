@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7c48c70_15c71db8",
+        "filename": "src/libANGLE/renderer/wgpu/RenderTargetWgpu.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-05T21:17:14Z",
+      "side": 1,
+      "message": "Rename this to `getTextureView()` if mTexture is gonna be renamed to mTextureView.",
+      "range": {
+        "startLine": 39,
+        "startChar": 22,
+        "endLine": 39,
+        "endChar": 32
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd1ababb_d694cd2f",
+        "filename": "src/libANGLE/renderer/wgpu/RenderTargetWgpu.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-05T21:17:14Z",
+      "side": 1,
+      "message": "While you\u0027re here, could you rename this to mTextureView?",
+      "range": {
+        "startLine": 46,
+        "startChar": 22,
+        "endLine": 46,
+        "endChar": 30
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e23d1766_0e26f9b0",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-05T21:17:14Z",
+      "side": 1,
+      "message": "Maybe we should add an ImageHelper::CreateView() method. The format and dimension we get from the from the texture\u0027s TextureDescriptor anyways, and this could de-dupe some of the code from here and `TextureWgpu::initSingleLayerRenderTargets` since both need to create a TextureView. Something like:\n\n```\nwgpu::TextureView ImageHelper::createTextureView(uint32_t baseMipLevel, uint32_t mipLevelCount, uint32_t baseArrayLayer, uint32_t arrayLayerCount)\n```",
+      "range": {
+        "startLine": 147,
+        "startChar": 71,
+        "endLine": 147,
+        "endChar": 81
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef25039c_93fecf67",
+        "filename": "src/libANGLE/renderer/wgpu/mac/WindowSurfaceWgpuMetalLayer.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-05T21:17:14Z",
+      "side": 1,
+      "message": "mMetalLayer gets its bounds from the platform, right? Never the user? \u0027Cause otherwise it might be good to use CheckedNumeric for the type conversion.",
+      "range": {
+        "startLine": 88,
+        "startChar": 5,
+        "endLine": 88,
+        "endChar": 12
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
