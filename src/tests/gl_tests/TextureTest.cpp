@@ -5817,7 +5817,7 @@ TEST_P(Texture2DTestES3, DrawWithBaseLevel1)
 }
 
 // Test basic GL_EXT_copy_image copy without any bound textures
-TEST_P(Texture2DTestES3, CopyImage)
+TEST_P(Texture2DTestES3, CopyImageEXT)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_copy_image"));
 
@@ -5861,8 +5861,53 @@ TEST_P(Texture2DTestES3, CopyImage)
     EXPECT_PIXEL_RECT_EQ(0, 0, 2, 4, GLColor::red);
 }
 
+// Test basic GL_OES_copy_image copy without any bound textures
+TEST_P(Texture2DTestES3, CopyImageOES)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_copy_image"));
+
+    std::vector<GLColor> texDataRed(4u * 4u, GLColor::red);
+    GLTexture srcTexture;
+    GLTexture destTexture;
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, destTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataRed.data());
+
+    std::vector<GLColor> texDataGreen(4u * 4u, GLColor::green);
+    glBindTexture(GL_TEXTURE_2D, srcTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 texDataGreen.data());
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // copy
+    glCopyImageSubDataOES(srcTexture, GL_TEXTURE_2D, 0, 2, 2, 0, destTexture, GL_TEXTURE_2D, 0, 2,
+                          2, 0, 2, 2, 1);
+
+    glBindTexture(GL_TEXTURE_2D, destTexture);
+
+    EXPECT_GL_NO_ERROR();
+
+    glViewport(0, 0, 4, 4);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_RECT_EQ(2, 2, 2, 2, GLColor::green);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 4, 2, GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 2, 4, GLColor::red);
+}
+
 // Test basic GL_EXT_copy_image copy with a depth/stencil texture
-TEST_P(Texture2DTestES3, CopyImageDepthStencil)
+TEST_P(Texture2DTestES3, CopyImageEXTDepthStencil)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_copy_image"));
 
@@ -5919,6 +5964,82 @@ TEST_P(Texture2DTestES3, CopyImageDepthStencil)
 
     // Now that the depth stencil image is definitely initialized, copy it into the destination
     glCopyImageSubDataEXT(src, GL_TEXTURE_2D, 0, 0, 0, 0, dst, GL_TEXTURE_2D, 0, 0, 0, 0, kSize,
+                          kSize, 1);
+    ASSERT_GL_NO_ERROR();
+
+    // Verify the dst texture has the right depth/stencil values
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, dst, 0);
+
+    glDepthFunc(GL_LESS);
+    glUniform4f(colorLoc, 0, 0, 1, 1);
+    drawQuad(program, essl1_shaders::PositionAttrib(), -0.41f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    glDepthFunc(GL_GREATER);
+    glUniform4f(colorLoc, 1, 1, 0, 1);
+    drawQuad(program, essl1_shaders::PositionAttrib(), -0.39f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+    ASSERT_GL_NO_ERROR();
+}
+
+// Test basic GL_OES_copy_image copy with a depth/stencil texture
+TEST_P(Texture2DTestES3, CopyImageOESDepthStencil)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_copy_image"));
+
+    std::vector<GLColor> texDataRed(4u * 4u, GLColor::red);
+    GLTexture srcTexture;
+    GLTexture destTexture;
+
+    constexpr GLsizei kSize = 4;
+
+    GLTexture src;
+    glBindTexture(GL_TEXTURE_2D, src);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, kSize, kSize);
+
+    GLTexture dst;
+    glBindTexture(GL_TEXTURE_2D, dst);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, kSize, kSize);
+
+    // A color image for testing depth/stencil
+    GLTexture color;
+    glBindTexture(GL_TEXTURE_2D, color);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kSize, kSize);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(program);
+    GLint colorLoc = glGetUniformLocation(program, angle::essl1_shaders::ColorUniform());
+    ASSERT_NE(colorLoc, -1);
+
+    // Initialize the src depth image
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, src, 0);
+    glClearDepthf(0.3f);
+    glClearStencil(0x57);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_EQUAL, 0x57, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilMask(0xFF);
+
+    glDepthFunc(GL_LESS);
+    glUniform4f(colorLoc, 1, 0, 0, 1);
+    drawQuad(program, essl1_shaders::PositionAttrib(), -0.41f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    glDepthFunc(GL_GREATER);
+    glUniform4f(colorLoc, 0, 1, 0, 1);
+    drawQuad(program, essl1_shaders::PositionAttrib(), -0.39f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    ASSERT_GL_NO_ERROR();
+
+    // Now that the depth stencil image is definitely initialized, copy it into the destination
+    glCopyImageSubDataOES(src, GL_TEXTURE_2D, 0, 0, 0, 0, dst, GL_TEXTURE_2D, 0, 0, 0, 0, kSize,
                           kSize, 1);
     ASSERT_GL_NO_ERROR();
 
