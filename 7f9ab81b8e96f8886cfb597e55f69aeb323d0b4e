@@ -16,6 +16,24 @@
       "message": "Need to squash in the capture/replay suppression?",
       "revId": "7f9ab81b8e96f8886cfb597e55f69aeb323d0b4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00d31519_3ec320f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-05T03:51:09Z",
+      "side": 1,
+      "message": "We switched the suppression to https://chromium-review.googlesource.com/c/angle/angle/+/5599918, just need to rebase when that lands.",
+      "parentUuid": "e3786afe_24cde493",
+      "revId": "7f9ab81b8e96f8886cfb597e55f69aeb323d0b4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
