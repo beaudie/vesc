@@ -738,7 +738,7 @@ deps = {
   },
 
   'third_party/llvm/src': {
-    'url': Var('chromium_git') + '/external/github.com/llvm/llvm-project@d222fa4521531cc4ac14b8e157d231c108c003be',
+    'url': Var('chromium_git') + '/external/github.com/llvm/llvm-project@c5dd10ba3a650c55f72d1b58ef807aa4ca2bca95',
     'condition': 'not build_with_chromium',
   },
 
