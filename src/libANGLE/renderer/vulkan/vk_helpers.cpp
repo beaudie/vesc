@@ -96,7 +96,7 @@ struct ImageMemoryBarrierData
     // mask bits, we pick the lowest stage as the index since it is the first stage that needs
     // barrier.
     PipelineStage barrierIndex;
-    EventStage eventStage;
+    EventStage dstEventStage;
 };
 
 // clang-format off
@@ -784,16 +784,10 @@ VkPipelineStageFlags GetImageLayoutSrcStageMask(Context *context,
     return transition.srcStageMask & context->getRenderer()->getSupportedVulkanPipelineStageMask();
 }
 
-VkPipelineStageFlags GetImageLayoutDstStageMask(Context *context,
-                                                const ImageMemoryBarrierData &transition)
-{
-    return transition.dstStageMask & context->getRenderer()->getSupportedVulkanPipelineStageMask();
-}
-
 EventStage GetImageLayoutEventStage(ImageLayout layout)
 {
     const ImageMemoryBarrierData &barrierData = kImageMemoryBarrierData[layout];
-    return barrierData.eventStage;
+    return barrierData.dstEventStage;
 }
 
 void HandlePrimitiveRestart(ContextVk *contextVk,
@@ -7197,9 +7191,9 @@ void ImageHelper::barrierImpl(Context *context,
                               CommandBufferT *commandBuffer,
                               VkSemaphore *acquireNextImageSemaphoreOut)
 {
+    Renderer *renderer = context->getRenderer();
     // mCurrentEvent must be invalid if useVkEventForImageBarrieris disabled.
-    ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled ||
-           !mCurrentEvent.valid());
+    ASSERT(renderer->getFeatures().useVkEventForImageBarrier.enabled || !mCurrentEvent.valid());
 
     // Release the ANI semaphore to caller to add to the command submission.
     *acquireNextImageSemaphoreOut = mAcquireNextImageSemaphore.release();
@@ -7231,7 +7225,7 @@ void ImageHelper::barrierImpl(Context *context,
     initImageMemoryBarrierStruct(context, aspectMask, newLayout, newDeviceQueueIndex.familyIndex(),
                                  &imageMemoryBarrier);
 
-    VkPipelineStageFlags dstStageMask = GetImageLayoutDstStageMask(context, transitionTo);
+    VkPipelineStageFlags dstStageMask = renderer->getPipelineStageMask(transitionTo.dstEventStage);
 
     // Fallback to pipelineBarrier if there is no event tracking image.
     // VkCmdWaitEvent requires the srcQueueFamilyIndex and dstQueueFamilyIndex members of any
@@ -7452,7 +7446,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         if (barrierType == BarrierType::Event)
         {
             eventBarriers->addMemoryEvent(renderer, mCurrentEvent,
-                                          GetImageLayoutDstStageMask(context, layoutData),
+                                          renderer->getPipelineStageMask(layoutData.dstEventStage),
                                           layoutData.dstAccessMask);
             // Garbage collect the event, which tracks GPU completion automatically.
             eventCollector->emplace_back(std::move(mCurrentEvent));
@@ -7461,7 +7455,7 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         {
             pipelineBarriers->mergeMemoryBarrier(
                 layoutData.barrierIndex, GetImageLayoutSrcStageMask(context, layoutData),
-                GetImageLayoutDstStageMask(context, layoutData), layoutData.srcAccessMask,
+                renderer->getPipelineStageMask(layoutData.dstEventStage), layoutData.srcAccessMask,
                 layoutData.dstAccessMask);
 
             // Release it. No need to garbage collect since we did not use the event here. ALl
@@ -7475,7 +7469,8 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[mCurrentLayout];
         const ImageMemoryBarrierData &transitionTo   = kImageMemoryBarrierData[newLayout];
         VkPipelineStageFlags srcStageMask = GetImageLayoutSrcStageMask(context, transitionFrom);
-        VkPipelineStageFlags dstStageMask = GetImageLayoutDstStageMask(context, transitionTo);
+        VkPipelineStageFlags dstStageMask =
+            renderer->getPipelineStageMask(transitionTo.dstEventStage);
 
         if (transitionFrom.layout == transitionTo.layout && IsShaderReadOnlyLayout(transitionTo) &&
             mBarrierQueueSerial == queueSerial)

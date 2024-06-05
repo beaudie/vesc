@@ -63,8 +63,11 @@ void InitializeEventAndPipelineStagesMap(
     {
         flag &= supportedVulkanPipelineStageMask;
     }
+<<<<<<< HEAD
     // kEventPipelineStageFlagBitMap supposedly should match the value in dstStageMask of
     // kImageMemoryBarrierData
+=======
+>>>>>>> 7d6393a219 (Debug: Debug)
     ASSERT(EventAndPipelineBarrierHasSameStageMask(*map, supportedVulkanPipelineStageMask));
 }
 
@@ -72,6 +75,7 @@ bool RefCountedEvent::init(Context *context, EventStage eventStage)
 {
     ASSERT(mHandle == nullptr);
     ASSERT(eventStage != EventStage::InvalidEnum);
+    ASSERT(eventStage != EventStage::BottomOfPipe);
 
     // First try with recycler. We must issue VkCmdResetEvent before VkCmdSetEvent
     if (context->getRefCountedEventsGarbageRecycler()->fetch(context->getRenderer(), this))
