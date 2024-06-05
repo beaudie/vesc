@@ -3864,7 +3864,6 @@ PresentMode ConvertVkPresentModeToPresentMode(VkPresentModeKHR vkPresentMode);
 bool EventAndPipelineBarrierHaveMatchingStageFlags(
     const angle::PackedEnumMap<EventStage, VkPipelineStageFlags> &map,
     VkPipelineStageFlags supportedVulkanPipelineStageMask);
-
 }  // namespace vk
 }  // namespace rx
 

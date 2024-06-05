@@ -74,6 +74,7 @@ bool RefCountedEvent::init(Context *context, EventStage eventStage)
 {
     ASSERT(mHandle == nullptr);
     ASSERT(eventStage != EventStage::InvalidEnum);
+    ASSERT(eventStage != EventStage::BottomOfPipe);
 
     // First try with recycler. We must issue VkCmdResetEvent before VkCmdSetEvent
     if (context->getRefCountedEventsGarbageRecycler()->fetch(context->getRenderer(), this))
