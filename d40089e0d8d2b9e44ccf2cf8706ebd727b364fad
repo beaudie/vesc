@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f377f539_c719434f",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-05T13:47:52Z",
+      "side": 1,
+      "message": "Looks like all you need is to pass in a `TSymbol` and `TType` where you need this. You could encapsulate that as `struct SymbolAndType { const TSymbol *symbol; const TType *type; };`, but probably not even worth doing that.",
+      "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c766a48e_2ad14498",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-05T13:47:52Z",
+      "side": 1,
+      "message": "You can keep this for debugging, but this is how we usually do it:\n\nAt the top (anonymous namespace):\n\n```\nconstexpr bool kOutputTreeBeforeTranslation \u003d false;\n```\n\nAnd here:\n\n```suggestion\n    if (kOutputTreeBeforeTranslation)\n    {\n        OutputTree(root, getInfoSink().info);\n        std::cout \u003c\u003c getInfoSink().info.c_str();\n    }\n```\n\nYou can toggle it easily then, but it never makes it to production.",
+      "range": {
+        "startLine": 709,
+        "startChar": 0,
+        "endLine": 711,
+        "endChar": 44
+      },
+      "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a0f56e4_96d85c37",
+        "filename": "src/tests/compiler_tests/WGSLOutput_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-05T13:47:52Z",
+      "side": 1,
+      "message": "You are free to be as thorough as you want, and I do believe it\u0027s ultimately best if the code is able to handle all types up-front, but FYI, the webgpu backend doesn\u0027t really need to support anything beyond GLES3 (i.e. WebGL2) which translates to `#version 300 es`).",
+      "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
