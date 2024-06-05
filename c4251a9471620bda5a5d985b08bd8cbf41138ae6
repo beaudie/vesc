@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17b60f97_91e2c98e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-05T17:58:15Z",
+      "side": 1,
+      "message": "All bots are passing if we enable VkEvent after the other two CLs\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5597810\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5597732",
+      "revId": "c4251a9471620bda5a5d985b08bd8cbf41138ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
