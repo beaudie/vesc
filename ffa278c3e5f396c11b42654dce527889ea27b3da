@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ca26f01_62fdb9c8",
+        "filename": "src/common/uniform_type_info_autogen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-05T12:57:58Z",
+      "side": 1,
+      "message": "Could you please do a quick before/after check to see if the compiler is smart enough not to include this in every cpp file? That would be by checking the size of `libGLESv2.so`.\n\nIf it isn\u0027t, it might be better to have helpers like this not be automatically used by another header (`Uniform.h`) and instead make the caller call `GetUniformElementComponents(uniform.pod.typeIndex)` directly",
+      "revId": "ffa278c3e5f396c11b42654dce527889ea27b3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
