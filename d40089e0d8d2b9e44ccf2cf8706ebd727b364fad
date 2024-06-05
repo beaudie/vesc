@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b21205e1_f61c5d40",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-06-05T22:38:58Z",
+      "side": 1,
+      "message": "I.e. I can pass around 3 params, a struct with 3 params, or use MSL\u0027s VarDecl (the current approach), or try to create a new TSymbol for a TField, what seems best?",
+      "parentUuid": "38316c05_4cac9e2f",
+      "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c766a48e_2ad14498",
         "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
         "patchSetId": 2
