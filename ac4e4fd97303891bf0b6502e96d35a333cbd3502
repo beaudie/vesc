@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6e6be5fe_cb7d7559",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T15:31:58Z",
+      "side": 1,
+      "message": "😮 maybe one day GPU hardware isn\u0027t a mess of bespoke features",
+      "parentUuid": "51a62560_25aa5492",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "37febef8_16530064",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -107,6 +131,97 @@
         "startChar": 8,
         "endLine": 2867,
         "endChar": 53
+      },
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "690612a1_2ee0f88f",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T15:31:58Z",
+      "side": 1,
+      "message": "This is affecting YUV rendering too, is that intentional? Are they also expected to be single-level?",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ba8eab3_e23dbb4c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T15:31:58Z",
+      "side": 1,
+      "message": "Can make the intention clearer here: `getDrawImageLevelIndex()` (no params). You can add a comment that it\u0027s the level of the image that\u0027s drawn to, while `mLevelIndexGL` may refer to a level in the resolve attachment.\n\n`isImageTransient()` is sufficient to choose 0 or not, isn\u0027t it?",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d6eace0_75445950",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T15:31:58Z",
+      "side": 1,
+      "message": "Please update this comment to say that when there\u0027s a resolve attachment, `mLevelIndexGL` applies to `mResolveImage` and that `mImage` is always single-level. I\u0027m assuming this based on the implementation which is also covering YUV rendering.",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "365aadfd_e096f066",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T15:31:58Z",
+      "side": 1,
+      "message": "Why not just pass `mImage-\u003egetExtents()`?",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04a42606_c6f16e2b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T15:31:58Z",
+      "side": 1,
+      "message": "You can avoid this by making `mMultisampledImages` and `mMultisampledImageViews` be per-level. This is also probably broken with a test like this (IIRC, GL allows framebuffer attachments of different sizes):\n\n- Create a texture with 2 mips\n- Attach each mip as MSRTT to the same framebuffer\n- Render to the framebuffer, writing to both mips at the same time",
+      "range": {
+        "startLine": 2749,
+        "startChar": 0,
+        "endLine": 2756,
+        "endChar": 13
       },
       "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
