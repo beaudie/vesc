@@ -16,6 +16,24 @@
       "message": "Could you please do a quick before/after check to see if the compiler is smart enough not to include this in every cpp file? That would be by checking the size of `libGLESv2.so`.\n\nIf it isn\u0027t, it might be better to have helpers like this not be automatically used by another header (`Uniform.h`) and instead make the caller call `GetUniformElementComponents(uniform.pod.typeIndex)` directly",
       "revId": "ffa278c3e5f396c11b42654dce527889ea27b3da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b0a22f8_29530096",
+        "filename": "src/common/uniform_type_info_autogen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-06T13:14:19Z",
+      "side": 1,
+      "message": "By every cpp file, do you mean even those where this function is not getting called? Pretty sure dead code elimination should be taking care of that, it would be crazy if it didn\u0027t.\n\nAlso, this structure is a whopping *77 bytes* big :) Pretty much anything going differently could change the size by larger amounts.\n\nThe lib actually appears to be becoming _smaller_ after this CL:\n\nBefore:\n```\n  6862648  2001-01-01 00:00   lib/arm64-v8a/libGLESv2_angle.so\n```\n\nAfter:\n```\n  6860328  2001-01-01 00:00   lib/arm64-v8a/libGLESv2_angle.so\n```",
+      "parentUuid": "4ca26f01_62fdb9c8",
+      "revId": "ffa278c3e5f396c11b42654dce527889ea27b3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
