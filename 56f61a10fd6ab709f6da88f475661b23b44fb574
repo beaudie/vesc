@@ -33,6 +33,24 @@
       "message": "This is unconditionally set for WebGL contexts, but Chrome uses non-webgl contexts too. The change should be fine IMO, but @geofflang@chromium.org any opinions about this?\n\nAs a side note, there are a number of places where I limited complexity unconditionally in the translator because the result just wouldn\u0027t fit in SPIR-V instructions. If what this flag does is cheap, maybe we should just remove it and make it unconditional?",
       "revId": "56f61a10fd6ab709f6da88f475661b23b44fb574",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79321735_888034b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-06-06T17:37:41Z",
+      "side": 1,
+      "message": "The rationale being that ANGLE is implemented with algorithms that by design cannot survive arbitrarily complex expressions. Thus fuzzing without this flag is pointless, as the fuzzer finds stack overruns that are there by design.\nThe more issues are fixed, the bigger proportion of the fuzzer finds are then pointless findings that clutter the results.",
+      "parentUuid": "93918f84_ae5e03cd",
+      "revId": "56f61a10fd6ab709f6da88f475661b23b44fb574",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
