@@ -34,6 +34,24 @@
       "parentUuid": "4ca26f01_62fdb9c8",
       "revId": "ffa278c3e5f396c11b42654dce527889ea27b3da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4a14a11_b602c31f",
+        "filename": "src/common/uniform_type_info_autogen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T14:44:54Z",
+      "side": 1,
+      "message": "👍 Just wanted to be sure the compiler doesn\u0027t mess up",
+      "parentUuid": "0b0a22f8_29530096",
+      "revId": "ffa278c3e5f396c11b42654dce527889ea27b3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
