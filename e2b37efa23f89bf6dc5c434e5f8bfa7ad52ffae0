@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12be0eec_c39c20d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-06T23:11:05Z",
+      "side": 1,
+      "message": "Should it be a reland of the most recent submission? (commit b93af07ac1ddb9f2e262d611d155f4b63f18999f)\nAlthough, there seems to be no difference code-wise.",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "e2b37efa23f89bf6dc5c434e5f8bfa7ad52ffae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
