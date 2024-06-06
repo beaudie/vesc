@@ -52,6 +52,24 @@
       "parentUuid": "0b0a22f8_29530096",
       "revId": "ffa278c3e5f396c11b42654dce527889ea27b3da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43171181_8797a484",
+        "filename": "src/common/uniform_type_info_autogen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-06T15:09:28Z",
+      "side": 1,
+      "message": "I poke around a bit, and clang actually seems to merge this kind of copies across compilation units into a single thing even with `-fno-lto`, so within the same library there shouldn\u0027t even be duplication (unless it gets optimized differently in different places, but then that\u0027s a win too)",
+      "parentUuid": "e4a14a11_b602c31f",
+      "revId": "ffa278c3e5f396c11b42654dce527889ea27b3da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
