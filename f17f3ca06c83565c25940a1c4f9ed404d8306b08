@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52045f15_47d0b83f",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T17:53:53Z",
+      "side": 1,
+      "message": "Unfortunately we still have to support C++17 for a while longer 😞",
+      "revId": "f17f3ca06c83565c25940a1c4f9ed404d8306b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
