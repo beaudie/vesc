@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0855c85d_41c4076a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-06T13:20:37Z",
+      "side": 1,
+      "message": "nit: Is it similar or identical?  From my quick look they are identical: https://diff.googleplex.com/#key\u003dzbWgV3ZVxONv",
+      "range": {
+        "startLine": 9,
+        "startChar": 52,
+        "endLine": 9,
+        "endChar": 59
+      },
+      "revId": "03ff8600670591df796106df8a085ecfd48a4cb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1715119d_1aa4c59d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-06T13:20:37Z",
+      "side": 1,
+      "message": "Nice work Amirali",
+      "revId": "03ff8600670591df796106df8a085ecfd48a4cb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
