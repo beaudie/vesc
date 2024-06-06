@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9ee005c9_97315c55",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-06T16:01:03Z",
+      "side": 1,
+      "message": "its nice that vulkan has explicit VUIDs but i wish there was a place documenting the intent / purpose of each of them. I was stumped by the intent behind the other VUID as well (VUID-VkGraphicsPipelineCreateInfo-pLibraries-06681)",
+      "parentUuid": "6e6be5fe_cb7d7559",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "37febef8_16530064",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -155,6 +179,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2cffa170_e1fc329d",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-06T16:01:03Z",
+      "side": 1,
+      "message": "AFAIK, yuv rendering path is also confined to single mip level.\n\nwill leave this open for any corrections / comments from @cclao@google.com",
+      "parentUuid": "690612a1_2ee0f88f",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ba8eab3_e23dbb4c",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 3
@@ -166,6 +208,24 @@
       "writtenOn": "2024-06-06T15:31:58Z",
       "side": 1,
       "message": "Can make the intention clearer here: `getDrawImageLevelIndex()` (no params). You can add a comment that it\u0027s the level of the image that\u0027s drawn to, while `mLevelIndexGL` may refer to a level in the resolve attachment.\n\n`isImageTransient()` is sufficient to choose 0 or not, isn\u0027t it?",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1ee9be6_55d44c79",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-06T16:01:03Z",
+      "side": 1,
+      "message": "\u003e Can make the intention clearer here: getDrawImageLevelIndex()\n\u003e isImageTransient() is sufficient to choose 0 or not, isn\u0027t it?\n\nthat was my first stop but when modifying `FramebufferVk::createNewFramebuffer` i was more confused about which one to call into. The common pattern i saw was that callers would get some image from a rendertarget they are interested in and then they query rendertarget for levelindex. it felt like the simpler / safer approach would be to require the callers pass in the image they need the levelindex for. For callers that dont care the existing `getLevelIndex` would suffice\n\nlet me know if you feel strongly and i can change",
+      "parentUuid": "8ba8eab3_e23dbb4c",
       "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
