@@ -16,6 +16,24 @@
       "message": "Unfortunately we still have to support C++17 for a while longer 😞",
       "revId": "f17f3ca06c83565c25940a1c4f9ed404d8306b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4c4b30d_84d1d0df",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-06-06T18:04:50Z",
+      "side": 1,
+      "message": "Oh no 😞",
+      "parentUuid": "52045f15_47d0b83f",
+      "revId": "f17f3ca06c83565c25940a1c4f9ed404d8306b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
