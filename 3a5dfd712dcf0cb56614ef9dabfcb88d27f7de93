@@ -1,0 +1,85 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa2eb21_77b35636",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-06T14:42:23Z",
+      "side": 1,
+      "message": "Here\u0027s another extension diff:\nhttps://diff.googleplex.com/#key\u003debWx2EeYn1va",
+      "revId": "3a5dfd712dcf0cb56614ef9dabfcb88d27f7de93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfd5f7e5_68c61bea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-06T14:42:23Z",
+      "side": 1,
+      "message": "No need to call twice",
+      "range": {
+        "startLine": 540,
+        "startChar": 37,
+        "endLine": 540,
+        "endChar": 87
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "95c89efb_da540bb0",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+              "range": {
+                "startLine": 539,
+                "startChar": 0,
+                "endLine": 541,
+                "endChar": 0
+              },
+              "replacement": "    bool gpuShader5Support \u003d vk::CanSupportGPUShader5(mPhysicalDeviceFeatures);\n    mNativeExtensions.gpuShader5EXT \u003d gpuShader5Support;\n    mNativeExtensions.gpuShader5OES \u003d gpuShader5Support;\n"
+            }
+          ]
+        }
+      ],
+      "revId": "3a5dfd712dcf0cb56614ef9dabfcb88d27f7de93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c27fa4a_7cf7d8d8",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-06T14:42:23Z",
+      "side": 1,
+      "message": "nit: It would be clearer if these weren\u0027t inlined.",
+      "range": {
+        "startLine": 543,
+        "startChar": 0,
+        "endLine": 543,
+        "endChar": 87
+      },
+      "revId": "3a5dfd712dcf0cb56614ef9dabfcb88d27f7de93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
