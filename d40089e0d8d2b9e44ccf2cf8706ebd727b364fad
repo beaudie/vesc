@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1562c6d1_d1fc97c3",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T13:33:10Z",
+      "side": 1,
+      "message": "Ugh, ok, you\u0027re right. The class still feels like overcomplication. Maybe just put the name / symbolType / type in a POD struct?",
+      "parentUuid": "b21205e1_f61c5d40",
+      "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c766a48e_2ad14498",
         "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
         "patchSetId": 2
