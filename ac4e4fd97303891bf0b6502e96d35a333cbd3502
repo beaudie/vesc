@@ -247,6 +247,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfb4bdc3_bff8056b",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-06T22:09:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d6eace0_75445950",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "365aadfd_e096f066",
@@ -264,6 +282,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "468cb8e5_8a2e47ea",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-06T22:09:04Z",
+      "side": 1,
+      "message": "indeed",
+      "parentUuid": "365aadfd_e096f066",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04a42606_c6f16e2b",
@@ -277,6 +313,30 @@
       "writtenOn": "2024-06-06T15:31:58Z",
       "side": 1,
       "message": "You can avoid this by making `mMultisampledImages` and `mMultisampledImageViews` be per-level. This is also probably broken with a test like this (IIRC, GL allows framebuffer attachments of different sizes):\n\n- Create a texture with 2 mips\n- Attach each mip as MSRTT to the same framebuffer\n- Render to the framebuffer, writing to both mips at the same time",
+      "range": {
+        "startLine": 2749,
+        "startChar": 0,
+        "endLine": 2756,
+        "endChar": 13
+      },
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e8c966c_f77b7aa9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-06T22:09:04Z",
+      "side": 1,
+      "message": "\u003e You can avoid this by making mMultisampledImages and mMultisampledImageViews be per-level\n\nthis is bringing in `ImageHelper` copy-constructor complexities. is there a reason why `ImageHelper` doesn\u0027t yet have a copy-constructor?",
+      "parentUuid": "04a42606_c6f16e2b",
       "range": {
         "startLine": 2749,
         "startChar": 0,
