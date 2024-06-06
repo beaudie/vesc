@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e21db5d5_97600ede",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-06-06T17:46:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1562c6d1_d1fc97c3",
+      "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c766a48e_2ad14498",
@@ -85,6 +103,30 @@
       "writtenOn": "2024-06-05T13:47:52Z",
       "side": 1,
       "message": "You can keep this for debugging, but this is how we usually do it:\n\nAt the top (anonymous namespace):\n\n```\nconstexpr bool kOutputTreeBeforeTranslation \u003d false;\n```\n\nAnd here:\n\n```suggestion\n    if (kOutputTreeBeforeTranslation)\n    {\n        OutputTree(root, getInfoSink().info);\n        std::cout \u003c\u003c getInfoSink().info.c_str();\n    }\n```\n\nYou can toggle it easily then, but it never makes it to production.",
+      "range": {
+        "startLine": 709,
+        "startChar": 0,
+        "endLine": 711,
+        "endChar": 44
+      },
+      "revId": "d40089e0d8d2b9e44ccf2cf8706ebd727b364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "214adbb0_b271e61c",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-06-06T17:46:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c766a48e_2ad14498",
       "range": {
         "startLine": 709,
         "startChar": 0,
