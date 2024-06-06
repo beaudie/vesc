@@ -2555,6 +2555,304 @@ TEST_P(RobustResourceInitTestES3, BlitDepthStencilAfterClearBuffer)
     EXPECT_PIXEL_COLOR_EQ(kSize - 1, kSize - 1, GLColor::green);
 }
 
+class RobustResourceInitAfterInvalidationTest : public RobustResourceInitTest
+{
+  protected:
+    static constexpr int kFboWidth  = 16;
+    static constexpr int kFboHeight = 16;
+
+    bool hasGLExtension()
+    {
+        return RobustResourceInitTest::hasGLExtension() &&
+               (IsGLExtensionEnabled("GL_EXT_discard_framebuffer") || getClientMajorVersion() >= 3);
+    }
+
+    void checkFramebufferPixels(const GLColor &check);
+
+    void checkCustomFramebufferPixels(int fboWidth, int fboHeight, const GLColor &check);
+
+    void invalidateFramebuffer(std::span<GLenum> discards);
+};
+
+void RobustResourceInitAfterInvalidationTest::checkFramebufferPixels(const GLColor &check)
+{
+    checkCustomFramebufferPixels(kWidth, kHeight, check);
+}
+
+void RobustResourceInitAfterInvalidationTest::checkCustomFramebufferPixels(int fboWidth,
+                                                                           int fboHeight,
+                                                                           const GLColor &check)
+{
+    std::vector<GLColor> data(fboWidth * fboHeight);
+    glReadPixels(0, 0, fboWidth, fboHeight, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
+
+    int k = 0;
+    for (int y = 0; y < fboHeight; ++y)
+    {
+        for (int x = 0; x < fboWidth; ++x)
+        {
+            int index = (y * fboWidth + x);
+            k += (data[index] != check) ? 1 : 0;
+        }
+    }
+
+    EXPECT_EQ(0, k);
+}
+
+void RobustResourceInitAfterInvalidationTest::invalidateFramebuffer(std::span<GLenum> discards)
+{
+    if (getClientMajorVersion() >= 3)
+    {
+        glInvalidateFramebuffer(GL_FRAMEBUFFER, discards.size(), discards.data());
+    }
+    else
+    {
+        glDiscardFramebufferEXT(GL_FRAMEBUFFER, discards.size(), discards.data());
+    }
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test reading of a renderbuffer by glReadPixels from a framebuffer that has
+// been invalidated.
+TEST_P(RobustResourceInitAfterInvalidationTest, CustomFramebufferRenderbufferRead)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+
+    GLRenderbuffer rb;
+    glBindRenderbuffer(GL_RENDERBUFFER, rb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, kFboWidth, kFboHeight);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rb);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    EXPECT_GL_NO_ERROR();
+
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    std::vector<GLenum> discards{GL_COLOR_ATTACHMENT0};
+    invalidateFramebuffer(discards);
+    checkCustomFramebufferNonZeroPixels(kFboWidth, kFboHeight, 0, 0, 0, 0,
+                                        GLColor::transparentBlack);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test reading of a texture by glReadPixels from a framebuffer that has been
+// invalidated.
+TEST_P(RobustResourceInitAfterInvalidationTest, CustomFramebufferTextureRead)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    std::array<uint8_t, kFboWidth * kFboHeight * 4> badData;
+    for (size_t i = 0; i < badData.size(); ++i)
+    {
+        badData[i] = static_cast<uint8_t>(i % 255);
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kFboWidth, kFboHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 badData.data());
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    EXPECT_GL_NO_ERROR();
+
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    std::vector<GLenum> discards{GL_COLOR_ATTACHMENT0};
+    invalidateFramebuffer(discards);
+    checkCustomFramebufferNonZeroPixels(kFboWidth, kFboHeight, 0, 0, 0, 0,
+                                        GLColor::transparentBlack);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test reading of a texture by glReadPixels from a framebuffer that is not the
+// one that was invalidated.
+TEST_P(RobustResourceInitAfterInvalidationTest, CustomFramebufferTextureReadViaOtherFramebuffer)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    std::array<uint8_t, kFboWidth * kFboHeight * 4> badData;
+    for (size_t i = 0; i < badData.size(); ++i)
+    {
+        badData[i] = static_cast<uint8_t>(i % 255);
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kFboWidth, kFboHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 badData.data());
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    EXPECT_GL_NO_ERROR();
+
+    // Test framebuffer contents via glReadPixels
+    std::vector<GLenum> discards{GL_COLOR_ATTACHMENT0};
+    invalidateFramebuffer(discards);
+    checkCustomFramebufferNonZeroPixels(kFboWidth, kFboHeight, 0, 0, 0, 0,
+                                        GLColor::transparentBlack);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test drawing with a texture that has been invalidated as an attachment to a
+// framebuffer.
+TEST_P(RobustResourceInitAfterInvalidationTest, DrawWithTexture)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+
+    std::array<uint8_t, kFboWidth * kFboHeight * 4> badData;
+    for (size_t i = 0; i < badData.size(); ++i)
+    {
+        badData[i] = static_cast<uint8_t>(i % 255);
+    }
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kFboWidth, kFboHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 badData.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    EXPECT_GL_NO_ERROR();
+
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    std::vector<GLenum> discards{GL_COLOR_ATTACHMENT0};
+    invalidateFramebuffer(discards);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(1.0, 0.0, 1.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    constexpr char kVS[] =
+        "attribute vec2 position;\n"
+        "varying vec2 texCoord;\n"
+        "void main() {\n"
+        "    gl_Position = vec4(position, 0, 1);\n"
+        "    texCoord = (position * 0.5) + 0.5;\n"
+        "}";
+    constexpr char kFS[] =
+        "precision mediump float;\n"
+        "varying vec2 texCoord;\n"
+        "uniform sampler2D tex;\n"
+        "void main() {\n"
+        "    gl_FragColor = texture2D(tex, texCoord);\n"
+        "}";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    drawQuad(program, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    checkFramebufferNonZeroPixels(0, 0, 0, 0, GLColor::black);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test partially drawing drawing to a custom framebuffer restricted by scissor
+// test. Outside of the area defined by the scissor rect, the previous contents
+// should be unavailable.
+TEST_P(RobustResourceInitAfterInvalidationTest, PartialDrawOnTopOfInvalidatedCustomFramebuffer)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+
+    GLRenderbuffer colorRB;
+    glBindRenderbuffer(GL_RENDERBUFFER, colorRB);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, kWidth, kHeight);
+    EXPECT_GL_NO_ERROR();
+
+    GLRenderbuffer depthRB;
+    glBindRenderbuffer(GL_RENDERBUFFER, depthRB);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kWidth, kHeight);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRB);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRB);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    EXPECT_GL_NO_ERROR();
+
+    glClearColor(1.0, 0.0, 1.0, 1.0);
+    glClearDepthf(1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    std::vector<GLenum> discards{GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+    invalidateFramebuffer(discards);
+
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(0, 0, kWidth / 2, kHeight / 2);
+    ANGLE_GL_PROGRAM(drawGreen, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    drawQuad(drawGreen, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_NO_ERROR();
+    glDisable(GL_SCISSOR_TEST);
+
+    checkFramebufferNonZeroPixels(0, 0, kWidth / 2, kHeight / 2, GLColor::green);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test drawing over a custom framebuffer with depth cleared to 0.0 before
+// invalidation and quad drawing at depth 1.0, which would fail if the depth was
+// not correct initialized after invalidation.
+TEST_P(RobustResourceInitAfterInvalidationTest, DrawOnTopOfInvalidatedCustomFramebufferDepth)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+
+    GLRenderbuffer colorRB;
+    glBindRenderbuffer(GL_RENDERBUFFER, colorRB);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA4, kWidth, kHeight);
+    EXPECT_GL_NO_ERROR();
+
+    GLRenderbuffer depthRB;
+    glBindRenderbuffer(GL_RENDERBUFFER, depthRB);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kWidth, kHeight);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRB);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRB);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    EXPECT_GL_NO_ERROR();
+
+    glClearColor(1.0, 0.0, 1.0, 1.0);
+    glClearDepthf(0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    std::vector<GLenum> discards{GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
+    invalidateFramebuffer(discards);
+
+    // Render a quad at Z = 1.0 with depth test on and depth function set to GL_EQUAL.
+    // If the depth buffer is not cleared to 1.0 this will fail
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_EQUAL);
+
+    ANGLE_GL_PROGRAM(drawGreen, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    drawQuad(drawGreen, essl1_shaders::PositionAttrib(), 1.0f, 1.0f, true);
+    EXPECT_GL_NO_ERROR();
+    glDisable(GL_SCISSOR_TEST);
+
+    checkFramebufferPixels(GLColor::green);
+    EXPECT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(RobustResourceInitTest,
                                        ES2_VULKAN().enable(Feature::AllocateNonZeroMemory));
 
@@ -2565,5 +2863,9 @@ ANGLE_INSTANTIATE_TEST_ES3_AND(RobustResourceInitTestES3,
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(RobustResourceInitTestES31);
 ANGLE_INSTANTIATE_TEST_ES31_AND(RobustResourceInitTestES31,
                                 ES31_VULKAN().enable(Feature::AllocateNonZeroMemory));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(RobustResourceInitAfterInvalidationTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(RobustResourceInitAfterInvalidationTest,
+                                       ES2_VULKAN().enable(Feature::AllocateNonZeroMemory));
 
 }  // namespace angle
