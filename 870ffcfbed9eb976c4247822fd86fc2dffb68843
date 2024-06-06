@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "188971af_ecaeeda7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T03:12:39Z",
+      "side": 1,
+      "message": "VUID-vkCmdWaitEvents-srcStageMask-01158?\n\nWhat a restrictive rule, they should have let us signal after color output only for example instead of FS+color output.",
+      "revId": "870ffcfbed9eb976c4247822fd86fc2dffb68843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2a12f7d_8805c2c1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-06T03:12:39Z",
+      "side": 1,
+      "message": "To avoid overloading and ease `grep`ping:\n\n```suggestion\n    VkPipelineStageFlags getEventPipelineStageMask(const RefCountedEvent \u0026refCountedEvent) const\n```",
+      "range": {
+        "startLine": 529,
+        "startChar": 25,
+        "endLine": 529,
+        "endChar": 45
+      },
+      "revId": "870ffcfbed9eb976c4247822fd86fc2dffb68843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
