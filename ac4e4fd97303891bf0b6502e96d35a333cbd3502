@@ -268,6 +268,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37fe1ac6_0d6c9be2",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-07T20:11:51Z",
+      "side": 1,
+      "message": "\u003e Every site that calls get(Resolve)ImageForRenderPass would have to use the ...AndLevel... variant to get the correct level\n\nthe amount of code change would be a lot 😞\n\naddressing the \"awkward\" point, how about instead of passing image we pass in `RenderTargetInfo::RenderTargetImage`?",
+      "parentUuid": "19b302c1_d8133242",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1d6eace0_75445950",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 3
