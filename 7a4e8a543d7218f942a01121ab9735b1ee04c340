@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b2a666c_76ed23d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-07T18:49:54Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9b24607_3a137b6b",
@@ -83,6 +100,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3d209a3_309d929c",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-07T18:49:54Z",
+      "side": 1,
+      "message": "Thanks!\nI had used the dependency from OES_tessellation_shader and OES_geometry_shader:\n```\nOES_shader_io_blocks or EXT_shader_io_blocks is required.\n```\nBut I agree with keeping them separate.\nUpdated.",
+      "parentUuid": "462e0708_c6bef322",
+      "range": {
+        "startLine": 239,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 81
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83108295_9c65019f",
@@ -96,6 +137,30 @@
       "writtenOn": "2024-06-07T02:56:00Z",
       "side": 1,
       "message": "This seems unnecessary, why not use `checkCanUseOneOfExtensions` and check for both when looking at `PATCH`? The token itself (`patch`) is still the same thing with the same meaning.",
+      "range": {
+        "startLine": 883,
+        "startChar": 0,
+        "endLine": 898,
+        "endChar": 5
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56e80efb_a24730ae",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 19
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-07T18:49:54Z",
+      "side": 1,
+      "message": "Sounds good. Done.",
+      "parentUuid": "83108295_9c65019f",
       "range": {
         "startLine": 883,
         "startChar": 0,
@@ -147,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45d02c1e_bb25f484",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-07T18:49:54Z",
+      "side": 1,
+      "message": "Thanks! Done.",
+      "parentUuid": "86da839b_dd500812",
+      "range": {
+        "startLine": 577,
+        "startChar": 4,
+        "endLine": 577,
+        "endChar": 42
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e97dd2cd_1da3f15b",
@@ -160,6 +249,30 @@
       "writtenOn": "2024-06-07T15:37:22Z",
       "side": 1,
       "message": "If you know the gaps, might as well include them, or list them here for future contributors.  Otherwise keeping it the same is fine.",
+      "range": {
+        "startLine": 3158,
+        "startChar": 13,
+        "endLine": 3158,
+        "endChar": 63
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f44a62c_bb95b206",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3158,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-07T18:49:54Z",
+      "side": 1,
+      "message": "Added validation to the core `glPatchParameteri()`.\nFor the extension versions, other than the ES version, the validation should be similar. However, since the spec mentions dependencies such as `EXT_shader_io_blocks` and `EXT_gpu_shader5`, should we also include them?",
+      "parentUuid": "e97dd2cd_1da3f15b",
       "range": {
         "startLine": 3158,
         "startChar": 13,
@@ -206,6 +319,30 @@
       "writtenOn": "2024-06-07T02:56:00Z",
       "side": 1,
       "message": "This bug seems long fixed, feel free to remove this line",
+      "range": {
+        "startLine": 7472,
+        "startChar": 0,
+        "endLine": 7472,
+        "endChar": 65
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b9a3693_d3858b9b",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7472,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-07T18:49:54Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "d1f26651_40675c42",
       "range": {
         "startLine": 7472,
         "startChar": 0,
