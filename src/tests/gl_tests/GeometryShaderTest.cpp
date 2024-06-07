@@ -88,6 +88,8 @@ class GeometryShaderTest : public ANGLETest<>
                                    GLint level);
     void testNegativeFramebufferTexture(APIExtensionVersion usedExtension);
 
+    void testCreateAndAttachGeometryShader(APIExtensionVersion usedExtension);
+
     static constexpr GLsizei kWidth              = 16;
     static constexpr GLsizei kHeight             = 16;
     static constexpr GLsizei kColor0Layers       = 4;
@@ -101,7 +103,10 @@ class GeometryShaderTestES3 : public ANGLETest<>
 {};
 
 class GeometryShaderTestES32 : public ANGLETest<>
-{};
+{
+  protected:
+    void testCreateAndAttachGeometryShader();
+};
 
 // Verify that Geometry Shader cannot be created in an OpenGL ES 3.0 context.
 TEST_P(GeometryShaderTestES3, CreateGeometryShaderInES3)
@@ -112,13 +117,78 @@ TEST_P(GeometryShaderTestES3, CreateGeometryShaderInES3)
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 }
 
-// Verify that Geometry Shader can be created and attached to a program.
-TEST_P(GeometryShaderTest, CreateAndAttachGeometryShader)
+void GeometryShaderTest::testCreateAndAttachGeometryShader(APIExtensionVersion usedExtension)
+{
+    ASSERT(usedExtension == APIExtensionVersion::EXT || usedExtension == APIExtensionVersion::OES);
+
+    std::string gs;
+
+    constexpr char kGLSLVersion[] = R"(#version 310 es
+)";
+    constexpr char kGeometryEXT[] = R"(#extension GL_EXT_geometry_shader : require
+)";
+    constexpr char kGeometryOES[] = R"(#extension GL_OES_geometry_shader : require
+)";
+
+    gs.append(kGLSLVersion);
+    if (usedExtension == APIExtensionVersion::EXT)
+    {
+        gs.append(kGeometryEXT);
+    }
+    else
+    {
+        gs.append(kGeometryOES);
+    }
+
+    constexpr char kGSBody[] = R"(
+layout (invocations = 3, triangles) in;
+layout (triangle_strip, max_vertices = 3) out;
+in vec4 texcoord[];
+out vec4 o_texcoord;
+void main()
+{
+    int n;
+    for (n = 0; n < gl_in.length(); n++)
+    {
+        gl_Position = gl_in[n].gl_Position;
+        gl_Layer   = gl_InvocationID;
+        o_texcoord = texcoord[n];
+        EmitVertex();
+    }
+    EndPrimitive();
+})";
+    gs.append(kGSBody);
+
+    GLuint geometryShader = CompileShader(GL_GEOMETRY_SHADER_EXT, gs.c_str());
+    EXPECT_NE(0u, geometryShader);
+
+    GLuint programID = glCreateProgram();
+    glAttachShader(programID, geometryShader);
+
+    glDetachShader(programID, geometryShader);
+    glDeleteShader(geometryShader);
+    glDeleteProgram(programID);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// Verify that a geometry shader can be created and attached to a program using the EXT extension.
+TEST_P(GeometryShaderTest, CreateAndAttachGeometryShaderEXT)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_geometry_shader"));
+    testCreateAndAttachGeometryShader(APIExtensionVersion::EXT);
+}
 
-    constexpr char kGS[] = R"(#version 310 es
-#extension GL_EXT_geometry_shader : require
+// Verify that a geometry shader can be created and attached to a program using the OES extension.
+TEST_P(GeometryShaderTest, CreateAndAttachGeometryShaderOES)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_geometry_shader"));
+    testCreateAndAttachGeometryShader(APIExtensionVersion::OES);
+}
+
+void GeometryShaderTestES32::testCreateAndAttachGeometryShader()
+{
+    constexpr char kGS[] = R"(#version 320 es
 layout (invocations = 3, triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
 in vec4 texcoord[];
@@ -136,8 +206,7 @@ void main()
     EndPrimitive();
 })";
 
-    GLuint geometryShader = CompileShader(GL_GEOMETRY_SHADER_EXT, kGS);
-
+    GLuint geometryShader = CompileShader(GL_GEOMETRY_SHADER, kGS);
     EXPECT_NE(0u, geometryShader);
 
     GLuint programID = glCreateProgram();
@@ -148,6 +217,12 @@ void main()
     glDeleteProgram(programID);
 
     EXPECT_GL_NO_ERROR();
+}
+
+// Verify that a geometry shader can be created and attached to a program in GLES 3.2.
+TEST_P(GeometryShaderTestES32, CreateAndAttachGeometryShader)
+{
+    testCreateAndAttachGeometryShader();
 }
 
 // Verify that Geometry Shader can be compiled when geometry shader array input size
