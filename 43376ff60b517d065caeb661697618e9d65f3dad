@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d260af32_dbc185e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-07T13:15:05Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "43376ff60b517d065caeb661697618e9d65f3dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e38e7f8d_177c0d98",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-07T13:15:05Z",
+      "side": 1,
+      "message": "i believe the test is correct but im seeing failures here\n\nany suggestions @syoussefi@chromium.org?",
+      "range": {
+        "startLine": 1015,
+        "startChar": 4,
+        "endLine": 1015,
+        "endChar": 65
+      },
+      "revId": "43376ff60b517d065caeb661697618e9d65f3dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
