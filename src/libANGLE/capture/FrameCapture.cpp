@@ -1100,7 +1100,8 @@ void DeleteResourcesInReset(std::stringstream &out,
 }
 
 // TODO (http://anglebug.com/4599): Reset more state on frame loop
-void MaybeResetResources(gl::ContextID contextID,
+void MaybeResetResources(egl::Display *display,
+                         gl::ContextID contextID,
                          ResourceIDType resourceIDType,
                          ReplayWriter &replayWriter,
                          std::stringstream &out,
@@ -1205,17 +1206,6 @@ void MaybeResetResources(gl::ContextID contextID,
                     }
                 }
             }
-
-            // Restore buffer bindings as seen during MEC
-            std::vector<CallCapture> &bufferBindingCalls = resourceTracker->getBufferBindingCalls();
-            for (CallCapture &call : bufferBindingCalls)
-            {
-                out << "    ";
-                WriteCppReplayForCall(call, replayWriter, out, header, binaryData,
-                                      maxResourceIDBufferSize);
-                out << ";\n";
-            }
-
             break;
         }
         case ResourceIDType::Framebuffer:
@@ -1402,6 +1392,25 @@ void MaybeResetResources(gl::ContextID contextID,
 
             // If any of our starting textures were modified during the run, restore their contents
             ResourceSet &texturesToRestore = trackedTextures.getResourcesToRestore();
+
+            // Do some setup if we have any textures to restore
+            if (texturesToRestore.size() != 0)
+            {
+                // We need to unbind PIXEL_UNPACK_BUFFER before restoring textures
+                // The correct binding will be restored in context state reset
+                gl::Context *context = display->getContext(contextID);
+                if (context->getState().getTargetBuffer(gl::BufferBinding::PixelUnpack))
+                {
+                    out << "    // Clearing PIXEL_UNPACK_BUFFER binding for texture restor\n";
+                    out << "    ";
+                    WriteCppReplayForCall(CaptureBindBuffer(context->getState(), true,
+                                                            gl::BufferBinding::PixelUnpack, {0}),
+                                          replayWriter, out, header, binaryData,
+                                          maxResourceIDBufferSize);
+                    out << ";\n";
+                }
+            }
+
             for (GLuint id : texturesToRestore)
             {
                 // Emit their restore calls
@@ -1729,6 +1738,41 @@ void MaybeResetContextState(ReplayWriter &replayWriter,
                 out << ";\n";
             }
         }
+    }
+
+    // Reset buffer bindings that weren't bound at the beginning
+    for (const gl::BufferBinding &dirtyBufferBinding : stateResetHelper.getDirtyBufferBindings())
+    {
+        // Check to see if dirty binding was part of starting set
+        bool dirtyStartingBinding = false;
+        for (const BufferBindingPair &startingBufferBinding :
+             stateResetHelper.getStartingBufferBindings())
+        {
+            gl::BufferBinding startingBinding = startingBufferBinding.first;
+            if (startingBinding == dirtyBufferBinding)
+            {
+                dirtyStartingBinding = true;
+            }
+        }
+
+        // If the dirty binding was not part of starting bidings, clear it
+        if (!dirtyStartingBinding)
+        {
+            out << "    ";
+            WriteCppReplayForCall(
+                CaptureBindBuffer(context->getState(), true, dirtyBufferBinding, {0}), replayWriter,
+                out, header, binaryData, maxResourceIDBufferSize);
+            out << ";\n";
+        }
+    }
+
+    // Restore starting buffer bindings to initial state
+    std::vector<CallCapture> &bufferBindingCalls = resourceTracker->getBufferBindingCalls();
+    for (CallCapture &call : bufferBindingCalls)
+    {
+        out << "    ";
+        WriteCppReplayForCall(call, replayWriter, out, header, binaryData, maxResourceIDBufferSize);
+        out << ";\n";
     }
 
     // Restore texture bindings to initial state
@@ -3991,6 +4035,7 @@ void CaptureBufferBindingResetCalls(const gl::State &replayState,
                                     gl::BufferBinding binding,
                                     gl::BufferID id)
 {
+    // Track the calls to reset it
     std::vector<CallCapture> &bufferBindingCalls = resourceTracker->getBufferBindingCalls();
     Capture(&bufferBindingCalls, CaptureBindBuffer(replayState, true, binding, id));
 }
@@ -4253,6 +4298,14 @@ void CaptureShareGroupMidExecutionSetup(
     {
         cap(CaptureBindBuffer(replayState, true, gl::BufferBinding::Array, {0}));
         replayState.setBufferBinding(context, gl::BufferBinding::Array, nullptr);
+    }
+
+    // Clear pixel unpack buffer as it affects texture population
+    gl::Buffer *unpackBuffer = replayState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
+    if (unpackBuffer != nullptr)
+    {
+        cap(CaptureBindBuffer(replayState, true, gl::BufferBinding::PixelUnpack, {0}));
+        replayState.setBufferBinding(context, gl::BufferBinding::PixelUnpack, nullptr);
     }
 
     // Set a unpack alignment of 1. Otherwise, computeRowPitch() will compute the wrong value,
@@ -4969,6 +5022,14 @@ void CaptureShareGroupMidExecutionSetup(
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, contextUnpackAlignment));
         replayState.getMutablePrivateStateForCapture()->setUnpackAlignment(contextUnpackAlignment);
     }
+
+    // Restore the unpack buffer binding
+    if (unpackBuffer != nullptr)
+    {
+        cap(CaptureBindBuffer(replayState, true, gl::BufferBinding::PixelUnpack,
+                              unpackBuffer->id()));
+        replayState.setBufferBinding(context, gl::BufferBinding::PixelUnpack, unpackBuffer);
+    }
 }
 
 void CaptureMidExecutionSetup(const gl::Context *context,
@@ -5097,6 +5158,9 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         if (bufferID.value != 0)
         {
             CaptureBufferBindingResetCalls(replayState, resourceTracker, binding, bufferID);
+
+            // Track this as a starting binding
+            resetHelper.setStartingBufferBinding(binding, bufferID);
         }
     }
 
@@ -7669,6 +7733,25 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
 
         case EntryPoint::GLBindBuffer:
             maybeGenResourceOnBind<gl::BufferID>(context, call);
+            if (isCaptureActive())
+            {
+                gl::BufferBinding binding =
+                    call.params.getParam("targetPacked", ParamType::TBufferBinding, 0)
+                        .value.BufferBindingVal;
+
+                context->getFrameCapture()->getStateResetHelper().setBufferBindingDirty(binding);
+            }
+            break;
+
+        case EntryPoint::GLBindBufferBase:
+        case EntryPoint::GLBindBufferRange:
+        case EntryPoint::GLBindBuffersBase:
+        case EntryPoint::GLBindBuffersRange:
+            if (isCaptureActive())
+            {
+                WARN() << "Indexed buffer binding changed during capture, Reset doesn't handle it "
+                          "yet.";
+            }
             break;
 
         case EntryPoint::GLDeleteProgramPipelines:
@@ -9651,9 +9734,9 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                     continue;
                 }
                 // Use current context for shared reset
-                MaybeResetResources(context->id(), resourceType, mReplayWriter, bodyStream,
-                                    headerStream, &mResourceTracker, &mBinaryData, anyResourceReset,
-                                    &mResourceIDBufferSize);
+                MaybeResetResources(context->getDisplay(), context->id(), resourceType,
+                                    mReplayWriter, bodyStream, headerStream, &mResourceTracker,
+                                    &mBinaryData, anyResourceReset, &mResourceIDBufferSize);
             }
 
             // Reset opaque type objects that don't have IDs, so are not ResourceIDTypes.
@@ -9695,9 +9778,9 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                     {
                         continue;
                     }
-                    MaybeResetResources(contextID, resourceType, mReplayWriter, resetStream,
-                                        headerStream, &mResourceTracker, &mBinaryData,
-                                        anyResourceReset, &mResourceIDBufferSize);
+                    MaybeResetResources(context->getDisplay(), contextID, resourceType,
+                                        mReplayWriter, resetStream, headerStream, &mResourceTracker,
+                                        &mBinaryData, anyResourceReset, &mResourceIDBufferSize);
                 }
 
                 // Only call eglMakeCurrent if anything was actually reset in the function and the
