@@ -22,6 +22,30 @@
       },
       "revId": "e2b37efa23f89bf6dc5c434e5f8bfa7ad52ffae0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8651d499_c7b7a395",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-07T00:18:32Z",
+      "side": 1,
+      "message": "The fix will be in a separate CL (not uploaded yet) that will land before this reland CL. Feel free to +2 or wait until the fix uploaded.",
+      "parentUuid": "12be0eec_c39c20d4",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "e2b37efa23f89bf6dc5c434e5f8bfa7ad52ffae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
