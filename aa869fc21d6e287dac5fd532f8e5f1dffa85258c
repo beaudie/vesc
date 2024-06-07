@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0768efb_1e486e34",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 20
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-07T19:02:42Z",
+      "side": 1,
+      "message": "You can completely revert everything in this file, no?",
+      "revId": "aa869fc21d6e287dac5fd532f8e5f1dffa85258c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

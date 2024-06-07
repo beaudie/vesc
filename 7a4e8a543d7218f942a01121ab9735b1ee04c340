@@ -285,6 +285,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6659f927_8f7f1cea",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-07T19:02:42Z",
+      "side": 1,
+      "message": "No, ANGLE wouldn\u0027t expose geom/tess without those extensions, so checking for tess (in this case) is sufficient.",
+      "parentUuid": "2f44a62c_bb95b206",
+      "range": {
+        "startLine": 3158,
+        "startChar": 13,
+        "endLine": 3158,
+        "endChar": 63
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d9257bb1_2d9027d5",
         "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
         "patchSetId": 19
