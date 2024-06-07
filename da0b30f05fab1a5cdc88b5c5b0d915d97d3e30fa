@@ -16,6 +16,24 @@
       "message": "Appears to be working as intended: http://b/345514719#comment6\n\nYuly, lmk if any concerns",
       "revId": "da0b30f05fab1a5cdc88b5c5b0d915d97d3e30fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f93971e9_f7a593da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-06-07T17:35:35Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "17098b5f_bcdd01b5",
+      "revId": "da0b30f05fab1a5cdc88b5c5b0d915d97d3e30fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
