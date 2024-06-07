@@ -34,6 +34,24 @@
       "parentUuid": "d0768efb_1e486e34",
       "revId": "aa869fc21d6e287dac5fd532f8e5f1dffa85258c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "913a7860_300f4953",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 20
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-07T21:38:43Z",
+      "side": 1,
+      "message": "Oh right, I was surprised by the `PATCH, PATCH`, you can make that a single parameter (like `ES2_extensions_ES3_keyword` for example)",
+      "parentUuid": "dc74e620_38774c85",
+      "revId": "aa869fc21d6e287dac5fd532f8e5f1dffa85258c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
