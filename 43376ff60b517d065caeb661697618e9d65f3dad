@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "96ae8d40_5d5e3cb8",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-07T18:59:11Z",
+      "side": 1,
+      "message": "Suggest splitting this in another test, so if suppressions are needed, it would not disable the other part.",
+      "revId": "43376ff60b517d065caeb661697618e9d65f3dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e38e7f8d_177c0d98",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 6
@@ -31,6 +48,30 @@
       "writtenOn": "2024-06-07T13:15:05Z",
       "side": 1,
       "message": "i believe the test is correct but im seeing failures here\n\nany suggestions @syoussefi@chromium.org?",
+      "range": {
+        "startLine": 1015,
+        "startChar": 4,
+        "endLine": 1015,
+        "endChar": 65
+      },
+      "revId": "43376ff60b517d065caeb661697618e9d65f3dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e254bcd_7e83eb5e",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-07T18:59:11Z",
+      "side": 1,
+      "message": "One attachment is 256x256, the other attachment is 128x128. So GL will only draw to the common 128x128 area.",
+      "parentUuid": "e38e7f8d_177c0d98",
       "range": {
         "startLine": 1015,
         "startChar": 4,
