@@ -1,6 +1,64 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d144f9c1_9ddfcf49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-07T15:37:22Z",
+      "side": 1,
+      "message": "Nice work Amirali.\n\nObligitory diff:\nhttps://diff.googleplex.com/#key\u003dHx4pWaS0juYT",
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9b24607_3a137b6b",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-07T15:37:22Z",
+      "side": 1,
+      "message": "From OES_shader_io_blocks:\n```\n    If OES_geometry_shader or EXT_geometry_shader is enabled, this extension\n    is implicitly enabled for geometry shaders.\n    \n    If OES_tessellation_shader or EXT_tessellation_shader is enabled, this\n    extension is implicitly enabled for tessellation control and evaluation\n    shaders.\n```\nFrom EXT_shader_io_blocks (note absense of OES mentions):\n```\n    If EXT_geometry_shader is enabled, this extension is implicitly\n    enabled for geometry shaders.\n    \n    If EXT_tessellation_shader is enabled, this extension is implicitly\n    enabled for tessellation control and evaluation shaders.\n```\nSo I don\u0027t think the OES versions should implicitly enable EXT.\n\nMaybe there should be a `GL_OES_shader_io_blocks` block?",
+      "range": {
+        "startLine": 239,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 81
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "8d2a880d_3d17d5fa",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/compiler/translator/DirectiveHandler.cpp",
+              "range": {
+                "startLine": 239,
+                "startChar": 0,
+                "endLine": 241,
+                "endChar": 0
+              },
+              "replacement": "        // EXT_shader_io_blocks is implicitly enabled when EXT_geometry_shader, EXT_tessellation_shader,\n        // OES_geometry_shader or OES_tessellation_shader is enabled.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83108295_9c65019f",
@@ -19,6 +77,93 @@
         "startChar": 0,
         "endLine": 898,
         "endChar": 5
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86da839b_dd500812",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-07T15:37:22Z",
+      "side": 1,
+      "message": "I don\u0027t see a great precedent other than `kGeometryShaderExtensionNotEnabled` that combines them, but this would be clearer if you renamed it `kTessellationShaderEXTNotEnabled`.  I like that you\u0027ve maintained separate error messages.",
+      "range": {
+        "startLine": 577,
+        "startChar": 4,
+        "endLine": 577,
+        "endChar": 42
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "f12db1ea_600fabec",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/ErrorStrings.h",
+              "range": {
+                "startLine": 577,
+                "startChar": 0,
+                "endLine": 578,
+                "endChar": 0
+              },
+              "replacement": "MSG kTessellationShaderEXTNotEnabled \u003d \"GL_EXT_tessellation_shader extension not enabled.\";\n"
+            }
+          ]
+        }
+      ],
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e97dd2cd_1da3f15b",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3158,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-07T15:37:22Z",
+      "side": 1,
+      "message": "If you know the gaps, might as well include them, or list them here for future contributors.  Otherwise keeping it the same is fine.",
+      "range": {
+        "startLine": 3158,
+        "startChar": 13,
+        "endLine": 3158,
+        "endChar": 63
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9257bb1_2d9027d5",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-07T15:37:22Z",
+      "side": 1,
+      "message": "Ugh... we should probably dig in here after landing the CL.",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 9
       },
       "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
