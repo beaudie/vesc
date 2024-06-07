@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c4ccaf_415d1563",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-07T22:51:42Z",
+      "side": 1,
+      "message": "Thanks Cody!",
+      "parentUuid": "d144f9c1_9ddfcf49",
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9b24607_3a137b6b",
@@ -344,6 +362,30 @@
       "writtenOn": "2024-06-07T15:37:22Z",
       "side": 1,
       "message": "Ugh... we should probably dig in here after landing the CL.",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 9
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9932966_2f0f3a44",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-07T22:51:42Z",
+      "side": 1,
+      "message": "It seems that after updating Pixel 6 to a very recent build, the only failing test from this list is the following: `KHR-GLES31.core.tessellation_shader.tessellation_shader_tessellation.gl_InvocationID_PatchVerticesIn_PrimitiveID`\n\nFor this test, although the result of the test in the end is marked as \"Pass\" (`*RESULT: Passed: 1`), there is the following validation error which results in failure:\n```\n[ VUID-VkPipelineInputAssemblyStateCreateInfo-topology-06253 ] Validation Error: [ VUID-VkPipelineInputAssemblyStateCreateInfo-topology-06253 ] | MessageID \u003d 0xdd1b7568 | vkCreateGraphicsPipelines(): pCreateInfos[0].pInputAssemblyState topology is VK_PRIMITIVE_TOPOLOGY_PATCH_LIST and primitiveRestartEnable is VK_TRUE and the primitiveTopologyPatchListRestart feature was not enabled. The Vulkan spec states: If the primitiveTopologyPatchListRestart feature is not enabled, and topology is VK_PRIMITIVE_TOPOLOGY_PATCH_LIST, primitiveRestartEnable must be VK_FALSE (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-VkPipelineInputAssemblyStateCreateInfo-topology-06253)\n```\nAfter skipping the VVL message (`kSkippedMessages`), this test also passes.",
+      "parentUuid": "d9257bb1_2d9027d5",
       "range": {
         "startLine": 329,
         "startChar": 0,
