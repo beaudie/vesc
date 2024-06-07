@@ -49,6 +49,7 @@ void SetupReplayContext1(void)
 
 void ReplayFrame1(void)
 {
+    // Skipping call to eglSwapBuffers;
     eglGetError();
     glClearColor(0.25, 0.5, 0.5, 0.5);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -71,10 +72,12 @@ void ReplayFrame1(void)
 glDeleteVertexArrays(1, gResourceIDBuffer);
     UpdateResourceIDBuffer(0, gVertexArrayMap[1]);
 glDeleteVertexArrays(1, gResourceIDBuffer);
+    // Skipping call to eglPrepareSwapBuffersANGLE;
 }
 
 void ReplayFrame2(void)
 {
+    // Skipping call to eglSwapBuffers;
     eglGetError();
     CreateProgram(11);
     CreateShader(GL_VERTEX_SHADER, 12);
@@ -121,10 +124,12 @@ glDeleteVertexArrays(1, gResourceIDBuffer);
     DeleteUniformLocations(gShaderProgramMap[11]);
     glDeleteShader(gShaderProgramMap[12]);
     glDeleteShader(gShaderProgramMap[13]);
+    // Skipping call to eglPrepareSwapBuffersANGLE;
 }
 
 void ReplayFrame3(void)
 {
+    // Skipping call to eglSwapBuffers;
     eglGetError();
     glGenBuffers(1, (GLuint *)gReadBuffer);
     UpdateBufferID(1, 0);
@@ -159,6 +164,7 @@ void ReplayFrame3(void)
     DeleteUniformLocations(gShaderProgramMap[14]);
     UpdateResourceIDBuffer(0, gBufferMap[1]);
 glDeleteBuffers(1, gResourceIDBuffer);
+    // Skipping call to eglPrepareSwapBuffersANGLE;
 }
 
 void ResetReplayContextShared(void)
@@ -173,6 +179,7 @@ void ResetReplayContext1(void)
 
 void ReplayFrame4(void)
 {
+    // Skipping call to eglSwapBuffers;
     eglGetError();
     glCompileShader(gShaderProgramMap[4]);
     glLinkProgram(gShaderProgramMap[5]);
@@ -202,6 +209,7 @@ void ReplayFrame4(void)
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (const GLubyte *)&gBinaryData[608]);
     glReadPixels(108, 108, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, (void *)gReadBuffer);
     glGetError();
+    // Skipping call to eglPrepareSwapBuffersANGLE;
 }
 
 // Public Functions
