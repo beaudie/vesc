@@ -398,6 +398,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0aebf5d6_deb9635d",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-08T03:39:54Z",
+      "side": 1,
+      "message": "Ack, thanks for taking a first look at it.  We\u0027ll have to revisit these if we can upgrade from Android T at some point.",
+      "parentUuid": "f9932966_2f0f3a44",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 9
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1f26651_40675c42",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 19
