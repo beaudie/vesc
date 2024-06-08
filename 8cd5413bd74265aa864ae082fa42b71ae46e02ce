@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa79b6a7_40d4afc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-08T01:40:37Z",
+      "side": 1,
+      "message": "Thanks for the tests!",
+      "revId": "8cd5413bd74265aa864ae082fa42b71ae46e02ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d82d23fa_b499ac35",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-08T01:40:37Z",
+      "side": 1,
+      "message": "No need to be specific about emulation, it\u0027s fine for the test to run with real advanced blend too, who knows if it would catch a bug there as well!\n\n```suggestion\n// Test that when blending is disabled, advanced blend is not applied.\n// Regression test for a bug in the emulation path in the Vulkan backend.\nTEST_P(AdvancedBlendTest, advancedBlendNotAppliedWhenBlendIsDisabled)\n{\n    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(\"GL_KHR_blend_equation_advanced\"));\n```",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 98
+      },
+      "revId": "8cd5413bd74265aa864ae082fa42b71ae46e02ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14d7006a_a078a833",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-08T01:40:37Z",
+      "side": 1,
+      "message": "`glFlush()` is unnecessary",
+      "revId": "8cd5413bd74265aa864ae082fa42b71ae46e02ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fe1d7c4_d96027bf",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-08T01:40:37Z",
+      "side": 1,
+      "message": "```suggestion\n// Test that when blending is disabled, advanced blend is not applied, but is applied after\n// it is enabled.\n// Regression test for a bug in the emulation path in the Vulkan backend.\nTEST_P(AdvancedBlendTest, advancedBlendAppliedBasedOnGLBlendState)\n{\n    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(\"GL_KHR_blend_equation_advanced\"));\n```",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 87,
+        "endChar": 98
+      },
+      "revId": "8cd5413bd74265aa864ae082fa42b71ae46e02ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d2e29f4_22bc8762",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-08T01:40:37Z",
+      "side": 1,
+      "message": "Both `glFlush` and `glBlendBarrier` are unnecessary",
+      "revId": "8cd5413bd74265aa864ae082fa42b71ae46e02ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb20842f_2b973676",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-08T01:40:37Z",
+      "side": 1,
+      "message": "Could you please add the opposite test too? That is, enable first, draw, then disable. Makes sure the state from the time blend was enabled gets updated and doesn\u0027t remain enabled.",
+      "revId": "8cd5413bd74265aa864ae082fa42b71ae46e02ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
