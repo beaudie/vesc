@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e65adb1_ee214c18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-06-09T20:35:57Z",
+      "side": 1,
+      "message": "Please take a look at the CL and the failures.\n\nWhat may cause Android devices to return `132` instead of `127`? On Intel/D3D11, the error is even bigger.",
+      "revId": "4bef422487804df719632dc706bd852d3f6f5dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
