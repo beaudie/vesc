@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12107194_d8a7ef52",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-06-09T07:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f19b3d63_a4cd463c",
+      "range": {
+        "startLine": 32,
+        "startChar": 6,
+        "endLine": 32,
+        "endChar": 23
+      },
+      "revId": "cf8067449e2d06a598cbb261d1bae850600745dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbcfc152_4a457216",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-08T22:37:30Z",
       "side": 1,
       "message": "I think we could return reference instead of pointer?",
+      "range": {
+        "startLine": 734,
+        "startChar": 5,
+        "endLine": 734,
+        "endChar": 15
+      },
+      "revId": "cf8067449e2d06a598cbb261d1bae850600745dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19fdb8aa_f84180ff",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-06-09T07:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbcfc152_4a457216",
       "range": {
         "startLine": 734,
         "startChar": 5,
