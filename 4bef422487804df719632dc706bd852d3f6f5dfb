@@ -16,6 +16,24 @@
       "message": "Please take a look at the CL and the failures.\n\nWhat may cause Android devices to return `132` instead of `127`? On Intel/D3D11, the error is even bigger.",
       "revId": "4bef422487804df719632dc706bd852d3f6f5dfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08cb9ec4_dd3a0bc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-06-10T09:49:15Z",
+      "side": 1,
+      "message": "These differences were caused by the test not requiring 8-bit color channels.\n\nFor some reason, the default surface format is platform-dependent:\n\nIntel/D3D11 -  `B4G4R4A4_UNORM` (0.5 ≈ 8/15 \u003d 136/255)\nIntel/Vulkan - `B8G8R8A8_UNORM`\n\nNV/D3D11  - `R8G8B8A8_UNORM`\nNV/Vulkan - `B8G8R8A8_UNORM`\n\nOn Android, the default surface seems to have 5 bits (0.5 ≈ 16/31 ≈ 132/255).",
+      "parentUuid": "8e65adb1_ee214c18",
+      "revId": "4bef422487804df719632dc706bd852d3f6f5dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
