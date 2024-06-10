@@ -184,6 +184,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac221481_6ebbeeec",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-10T19:20:36Z",
+      "side": 1,
+      "message": "The barrier is needed between draws (as on line 144). But you don\u0027t need one before glReadPixels.",
+      "parentUuid": "cc69b650_18b1be8c",
+      "revId": "8cd5413bd74265aa864ae082fa42b71ae46e02ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb20842f_2b973676",
         "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
         "patchSetId": 4
