@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e90790a_ba9a6b61",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6676,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-10T18:15:25Z",
+      "side": 1,
+      "message": "nit: `GLsizei`?",
+      "range": {
+        "startLine": 6676,
+        "startChar": 14,
+        "endLine": 6676,
+        "endChar": 22
+      },
+      "revId": "514de8ca21a8f65db87d9bcc9ab2a4ea58dd42c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07800842_d34b8ed3",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6721,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-10T18:15:25Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 6721,
+        "startChar": 14,
+        "endLine": 6721,
+        "endChar": 22
+      },
+      "revId": "514de8ca21a8f65db87d9bcc9ab2a4ea58dd42c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
