@@ -51,6 +51,24 @@
       "parentUuid": "93918f84_ae5e03cd",
       "revId": "56f61a10fd6ab709f6da88f475661b23b44fb574",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "202de7aa_f8aaa96f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-10T17:42:45Z",
+      "side": 1,
+      "message": "No strong opinions on this. If we always enable it for WebGL right now I think it\u0027s pretty reasonable to make it unconditional too.",
+      "parentUuid": "79321735_888034b5",
+      "revId": "56f61a10fd6ab709f6da88f475661b23b44fb574",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
