@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d483d38_b440c485",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-10T22:24:37Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "c3a63a28d57c650cab1506594bf189401d009354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9d62778_5c22a95d",
+        "filename": "src/tests/gl_tests/GeometryShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-10T22:24:37Z",
+      "side": 1,
+      "message": "This might be overkill, but I don\u0027t have a reason not to include it.",
+      "range": {
+        "startLine": 1541,
+        "startChar": 0,
+        "endLine": 1543,
+        "endChar": 36
+      },
+      "revId": "c3a63a28d57c650cab1506594bf189401d009354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
