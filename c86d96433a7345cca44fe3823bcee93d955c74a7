@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3fabd34_82337a5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-10T13:33:54Z",
+      "side": 1,
+      "message": "Bug: angleproject:345532371",
+      "revId": "c86d96433a7345cca44fe3823bcee93d955c74a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef12f62d_d7b6ac40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-10T13:33:54Z",
+      "side": 1,
+      "message": "Thanks for the fix. Could you please add a similar test to the one in the previous CL that doesn\u0027t immediately read back the images but instead draws to them (like, with blend to ensure both update and draw happen correctly)?\n\nThe way draw-time updates are handled are a bit special, just wanna make sure there\u0027s no bug there.",
+      "revId": "c86d96433a7345cca44fe3823bcee93d955c74a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
