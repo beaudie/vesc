@@ -51,6 +51,24 @@
       "message": "Thanks for the fix. Could you please add a similar test to the one in the previous CL that doesn\u0027t immediately read back the images but instead draws to them (like, with blend to ensure both update and draw happen correctly)?\n\nThe way draw-time updates are handled are a bit special, just wanna make sure there\u0027s no bug there.",
       "revId": "c86d96433a7345cca44fe3823bcee93d955c74a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "965ddecd_c3cd58be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-10T17:51:00Z",
+      "side": 1,
+      "message": "Added another test in the previous CL",
+      "parentUuid": "ef12f62d_d7b6ac40",
+      "revId": "c86d96433a7345cca44fe3823bcee93d955c74a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
