@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01357086_760786ab",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-10T13:26:58Z",
+      "side": 1,
+      "message": "Moved it to public tracker\n\n```suggestion\n// keep the staged clear. http://anglebug.com/345532371\n```",
+      "revId": "6a79d13c15ed4b353193a86ea671ecb4cb577ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c353f98d_4f1eb77f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6687,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-10T13:26:58Z",
+      "side": 1,
+      "message": "nit: don\u0027t need these lines",
+      "range": {
+        "startLine": 6686,
+        "startChar": 0,
+        "endLine": 6687,
+        "endChar": 34
+      },
+      "revId": "6a79d13c15ed4b353193a86ea671ecb4cb577ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "605272e2_8f9b0b52",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6695,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-10T13:26:58Z",
+      "side": 1,
+      "message": "!",
+      "revId": "6a79d13c15ed4b353193a86ea671ecb4cb577ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
