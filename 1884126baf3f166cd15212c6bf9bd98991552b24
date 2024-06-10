@@ -16,6 +16,24 @@
       "message": "Please plug the testing gap 😊",
       "revId": "1884126baf3f166cd15212c6bf9bd98991552b24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a9fc6d3_04a3afbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-10T13:45:00Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "8393e926_cc7ec264",
+      "revId": "1884126baf3f166cd15212c6bf9bd98991552b24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
