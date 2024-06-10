@@ -16,6 +16,29 @@
       "message": "Charlie - PTAL",
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07aecac0_c22e6e75",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-10T21:22:07Z",
+      "side": 1,
+      "message": "Practically you will never run into usage case that people try to render into level other than 0. std::vector\u003cgl::RenderToTextureImageMap\u003cvk::ImageHelper\u003e\u003e might be better here. I am think you might able to just keep one mMultisampledImages and destroy it if renderTarget level changed. But I am not sure if it is allowed for two contexts to render into different level of the same tetxure simutanously? If no, then this will work and change will be much simpler. Otherwise, you will need to keep a vector of mMultisampledImages but std::vector still saves some memory (TexLevelArray is an array of 16 ImageHelper).",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
