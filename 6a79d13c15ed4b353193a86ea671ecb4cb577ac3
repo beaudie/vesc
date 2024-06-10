@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e8c8fea_8e583ab3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-10T13:27:47Z",
+      "side": 1,
+      "message": "Bug: angleproject:345532371",
+      "revId": "6a79d13c15ed4b353193a86ea671ecb4cb577ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01357086_760786ab",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 4
