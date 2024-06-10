@@ -215,6 +215,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6cba748_5626ee57",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-10T23:33:37Z",
+      "side": 1,
+      "message": "i have not seen \u003e 1 mip level for yuv images but ok, will exclude yuv from this usecase",
+      "parentUuid": "96a85a4b_5869f0e2",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ba8eab3_e23dbb4c",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 3
