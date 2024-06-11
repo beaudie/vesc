@@ -87,6 +87,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd1a6b1b_288ad051",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-11T02:07:30Z",
+      "side": 1,
+      "message": "\u003e But I am not sure if it is allowed for two contexts to render into different level of the same tetxure simutanously?\n\nThat is a possibility. And as a test I requested and added here, you can even have the same framebuffer attach to multiple levels of the same texture.\n\nThe memory is indeed probably considerable. Using `std::vector` should work, `ImageHelper`s are `std::move`-able.",
+      "parentUuid": "e280e98d_87fbb7ff",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
