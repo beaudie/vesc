@@ -16,6 +16,24 @@
       "message": "Could also just remove the feature entirely. We don\u0027t care about perf on older Qualcomm phones anymore.",
       "revId": "fd145e4b1f3c4bbdd6d03d91a0b473392ff29b02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb4383e_9d741d0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-11T14:07:35Z",
+      "side": 1,
+      "message": "Charlie, should I do that?\n\nAlso, do we keep the feature or remove the workaround altogether?",
+      "parentUuid": "9df368ee_999bfc51",
+      "revId": "fd145e4b1f3c4bbdd6d03d91a0b473392ff29b02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
