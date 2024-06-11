@@ -1372,6 +1372,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
         ASSERT(event.valid());
         return mRefCountedEvents.map[event.getEventStage()] == event;
     }
+    bool hasAnySetEventPendingFlush() const { return mRefCountedEvents.mask.any(); }
 
     // Issue VkCmdSetEvent call for events in this command buffer.
     template <typename CommandBufferT>
