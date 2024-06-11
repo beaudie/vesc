@@ -171,6 +171,12 @@ class RefCountedEvent final
         return mHandle->get().eventStage;
     }
 
+    bool isLastReference() const
+    {
+        ASSERT(mHandle != nullptr);
+        return mHandle->isLastReference();
+    }
+
   private:
     // Release one reference count to the underline Event object and destroy or recycle the handle
     // to the provided recycler if this is the very last reference.
