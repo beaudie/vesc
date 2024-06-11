@@ -81,6 +81,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac5d6321_4de1b2a1",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4532ae6c_a218093c",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 52
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8eeff5b7_5abb661a",
@@ -94,6 +118,24 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "Missing ETC2_R8G8B8A8_UNORM_BLOCK-\u003eRGBA8Unorm",
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd170f0d_c6e28ce0",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eeff5b7_5abb661a",
       "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -171,6 +213,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc3b2695_5a6a7884",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "So I removed the ASSERT in angle_format.py and reran the script generator, there were some changes made to some metal autogen files but I think they\u0027re negligible? I still have a bit more cleanup to do in other spots but wanted to highlight the metal changes in case I am deeply incorrect and they are a big deal.",
+      "parentUuid": "50a00402_8abec54a",
+      "range": {
+        "startLine": 161,
+        "startChar": 19,
+        "endLine": 161,
+        "endChar": 37
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f30cdce1_3a74e075",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
         "patchSetId": 1
@@ -182,6 +248,30 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "R16G16B16A16_SNORM",
+      "range": {
+        "startLine": 165,
+        "startChar": 19,
+        "endLine": 165,
+        "endChar": 37
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4229d838_4e0cb48c",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f30cdce1_3a74e075",
       "range": {
         "startLine": 165,
         "startChar": 19,
@@ -215,6 +305,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59096433_37a4ba1a",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "391cfb71_a0e551e1",
+      "range": {
+        "startLine": 173,
+        "startChar": 19,
+        "endLine": 173,
+        "endChar": 37
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a90b5166_b2681812",
@@ -228,6 +342,24 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "Missing 10x6_UNORM?",
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e9d1468_dc8c83eb",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a90b5166_b2681812",
       "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -255,6 +387,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8acbe963_044330a9",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eec0d349_7a2f62df",
+      "range": {
+        "startLine": 271,
+        "startChar": 18,
+        "endLine": 271,
+        "endChar": 32
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2984126a_65695cd2",
@@ -268,6 +424,24 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "OCD:\n\n```suggestion\n      \"B8G8R8A8_UNORM_SRGB\": {\n```",
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9867c535_4b2448c1",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2984126a_65695cd2",
       "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -308,6 +482,24 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "`\"image\": \"D32_FLOAT\"`?",
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db4222f1_14f3b549",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d75e4c4_013df93e",
       "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -406,6 +598,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "613f8ca8_0b210abd",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89668157_a2a0f833",
+      "range": {
+        "startLine": 344,
+        "startChar": 19,
+        "endLine": 344,
+        "endChar": 37
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9037dc20_5f9b0c36",
@@ -423,6 +639,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05c09bc8_61139d61",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9037dc20_5f9b0c36",
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6424c3f_af7c6188",
@@ -436,6 +670,30 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "R16G16B16A16_SINT",
+      "range": {
+        "startLine": 508,
+        "startChar": 19,
+        "endLine": 508,
+        "endChar": 37
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a03471a4_03b92239",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6424c3f_af7c6188",
       "range": {
         "startLine": 508,
         "startChar": 19,
@@ -469,6 +727,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdd05277_3967484e",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "978d6967_2e55eaa1",
+      "range": {
+        "startLine": 512,
+        "startChar": 19,
+        "endLine": 512,
+        "endChar": 37
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ca32d91_fc5b4af0",
@@ -492,6 +774,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb3bba23_bbe6a930",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ca32d91_fc5b4af0",
+      "range": {
+        "startLine": 520,
+        "startChar": 19,
+        "endLine": 520,
+        "endChar": 37
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "803ecd4a_dbf9252e",
@@ -505,6 +811,30 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "R16G16B16A16_UNORM",
+      "range": {
+        "startLine": 524,
+        "startChar": 19,
+        "endLine": 524,
+        "endChar": 37
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04696baa_c35b5e73",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-11T17:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "803ecd4a_dbf9252e",
       "range": {
         "startLine": 524,
         "startChar": 19,
