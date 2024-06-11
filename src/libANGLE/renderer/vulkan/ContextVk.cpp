@@ -8246,7 +8246,8 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     ASSERT(mWaitSemaphores.empty());
     ASSERT(mWaitSemaphoreStageMasks.empty());
 
-    if (mOutsideRenderPassCommands->empty())
+    if (mOutsideRenderPassCommands->empty() &&
+        !mOutsideRenderPassCommands->hasAnySetEventPendingFlush())
     {
         return angle::Result::Continue;
     }
