@@ -279,6 +279,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0028f712_c9dc00e1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-11T16:08:48Z",
+      "side": 1,
+      "message": "\u003e All code is a source of bugs, doesn\u0027t stop us from writing more of it ;)\n\ntrue but we could always get more help from compiler, say a warning flag \"all-members-are-updated-in-move-constructor\" might help?\n\n\u003e Not sure what you mean by this though?\n\ncharlie mentioned angle avoids storing pointers in general but the change you mentioned explicitly changed a member variable to a pointer, so was wondering if this is more of a personal preference than style guide",
+      "parentUuid": "3d3a58b6_8205cfe7",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
