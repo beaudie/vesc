@@ -101,6 +101,8 @@ enum class ImageLayout
 
     // Color (Write):
     ColorWrite,
+    // Used only with dynamic rendering, because it needs a different VkImageLayout
+    ColorWriteAndInput,
     MSRTTEmulationColorUnresolveAndResolve,
 
     // Depth (Write), Stencil (Write)
@@ -1386,9 +1388,6 @@ class CommandBufferHelperCommon : angle::NonCopyable
         mAcquireNextImageSemaphore.setHandle(semaphore);
     }
 
-    // Dumping the command stream is disabled by default.
-    static constexpr bool kEnableCommandStreamDiagnostics = false;
-
   protected:
     CommandBufferHelperCommon();
     ~CommandBufferHelperCommon();
@@ -1610,14 +1609,16 @@ class RenderPassFramebuffer : angle::NonCopyable
 
     void reset();
 
-    void setFramebuffer(Framebuffer &&initialFramebuffer,
+    void setFramebuffer(Context *context,
+                        Framebuffer &&initialFramebuffer,
                         FramebufferAttachmentsVector<VkImageView> &&imageViews,
                         uint32_t width,
                         uint32_t height,
                         uint32_t layers,
                         ImagelessFramebuffer imagelessFramebuffer)
     {
-        ASSERT(initialFramebuffer.valid());
+        // Framebuffers are mutually exclusive with dynamic rendering.
+        ASSERT(initialFramebuffer.valid() != context->getFeatures().preferDynamicRendering.enabled);
         mInitialFramebuffer = std::move(initialFramebuffer);
         mImageViews         = std::move(imageViews);
         mWidth              = width;
@@ -1629,6 +1630,7 @@ class RenderPassFramebuffer : angle::NonCopyable
     bool isImageless() { return mIsImageless; }
     const Framebuffer &getFramebuffer() const { return mInitialFramebuffer; }
     bool needsNewFramebufferWithResolveAttachments() const { return !mInitialFramebuffer.valid(); }
+    uint32_t getLayers() const { return mLayers; }
 
     // Helpers to determine if a resolve attachment already exists
     bool hasColorResolveAttachment(size_t colorIndexGL)
@@ -1661,6 +1663,14 @@ class RenderPassFramebuffer : angle::NonCopyable
 
     // Prepare for rendering using the initial imageless framebuffer.
     void packResolveViewsForRenderPassBegin(VkRenderPassAttachmentBeginInfo *beginInfoOut);
+
+    // For use with dynamic rendering.
+    // TODO: This means that even with dynamic rendering this "framebuffer" needs to be maintained
+    // by FramebufferVk (parts of `getFramebuffer` should run that is).
+    const FramebufferAttachmentsVector<VkImageView> &getUnpackedImageViews() const
+    {
+        return mImageViews;
+    }
 
     // Packs views in a contiguous list.
     //
@@ -1785,7 +1795,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     angle::Result flushToPrimary(Context *context,
                                  CommandsState *commandsState,
-                                 const RenderPass &renderPass,
+                                 const RenderPass *renderPass,
                                  VkFramebuffer framebufferOverride);
 
     bool started() const { return mRenderPassStarted; }
@@ -1906,6 +1916,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                         VkImageAspectFlags dsAspectFlags);
 
     void collectRefCountedEventsGarbage(RefCountedEventsGarbageRecycler *garbageRecycler);
+
+    void updatePerfCountersForDynamicRenderingInstance(Context *context,
+                                                       angle::VulkanPerfCounters *countersOut);
 
   private:
     uint32_t getSubpassCommandBufferCount() const { return mCurrentSubpassCommandBufferIndex + 1; }
@@ -3593,7 +3606,7 @@ class ShaderProgramHelper : angle::NonCopyable
         vk::Context *context,
         GraphicsPipelineCache<PipelineHash> *graphicsPipelines,
         PipelineCacheAccess *pipelineCache,
-        const RenderPass &compatibleRenderPass,
+        const RenderPass *compatibleRenderPass,
         const PipelineLayout &pipelineLayout,
         PipelineSource source,
         const GraphicsPipelineDesc &pipelineDesc,
