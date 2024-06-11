@@ -81,7 +81,6 @@
 6826 WIN NVIDIA GLES : GLSLTest.VectorAndMatrixScalarizationDoesNotAffectRendering/* = SKIP
 4716 WIN NVIDIA GLES : CopyTextureTest.CopyOutsideMipmap/* = SKIP
 7298 WIN INTEL D3D11 : BlitFramebufferTest.Blit3DTo2DArray/* = SKIP
-7413 WIN NVIDIA VULKAN : DebugTestES3.MessageControl1/* = SKIP
 7700 WIN INTEL D3D11 : FramebufferTest_ES31.ChangeFBOSizeAndAttachmentsCount/* = SKIP
 7666 WIN NVIDIA D3D11 : FramebufferTest_ES31.ChangeFBOSizeAndAttachmentsCount/* = SKIP
 7699 WIN INTEL VULKAN : FramebufferTest_ES31.ChangeFBOSizeAndAttachmentsCount/* = SKIP
