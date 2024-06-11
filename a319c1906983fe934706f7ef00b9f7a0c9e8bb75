@@ -111,6 +111,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd3ae67c_2240e25e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-11T12:59:31Z",
+      "side": 1,
+      "message": "i changed it to `std::vector\u003cgl::RenderToTextureImageMap\u003cvk::ImageHelper\u003e\u003e` but i continue to see the same error -\n```\n../../src/libANGLE/renderer/vulkan/TextureVk.cpp(2723,29): note: in instantiation of member function \u0027std::vector\u003cangle::PackedEnumMap\u003cgl::RenderToTextureImageIndex, rx::vk::ImageHelper\u003e\u003e::resize\u0027 requested here\n 2723 |         mMultisampledImages.resize(requestedLevel);\n      |                             ^\n../../third_party/libc++/src/include\\__memory/construct_at.h(47,58): note: candidate template ignored: substitution failure [with _Tp \u003d angle::PackedEnumMap\u003cgl::RenderToTextureImageIndex, rx::vk::ImageHelper\u003e, _Args \u003d \u003cangle::PackedEnumMap\u003cgl::RenderToTextureImageIndex, rx::vk::ImageHelper\u003e\u003e]: call to implicitly-deleted copy constructor of \u0027angle::PackedEnumMap\u003cgl::RenderToTextureImageIndex, rx::vk::ImageHelper\u003e\u0027\n   46 | template \u003cclass _Tp, class... _Args, class \u003d decltype(::new(std::declval\u003cvoid*\u003e()) _Tp(std::declval\u003c_Args\u003e()...))\u003e\n      |                                                                                    ~~~\n   47 | _LIBCPP_HIDE_FROM_ABI _LIBCPP_CONSTEXPR_SINCE_CXX20 _Tp* __construct_at(_Tp* __location, _Args\u0026\u0026... __args) {\n      |                                                          ^\n2 errors generated.\nninja: build stopped: subcommand failed.\n```\n\nwhat am i missing?",
+      "parentUuid": "e280e98d_87fbb7ff",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
