@@ -382,11 +382,31 @@ def get_cpu_time():
         # Look for "cpu_time" in the line and grab the second to last entry:
         logging.debug('Checking line: %s' % line)
 
-        if "cpu_time" in line:
+        if ".cpu_time:" in line:
             cpu_time = line.split()[-2]
             break
 
     return cpu_time
+
+
+def get_startup_times():
+    result = run_adb_command('shell cat /sdcard/Download/out.txt')
+
+    startup_times = {
+        'setup_wall_time': '0',
+        'first_frame_wall_time': '0',
+        'first_loop_wall_time': '0'
+    }
+
+    for line in result.stdout.splitlines():
+        logging.debug('Checking line: %s' % line)
+
+        for key in startup_times:
+            if key in line:
+                startup_times[key] = line.split()[-2]
+                break  # Move on to the next line if found
+
+    return startup_times
 
 
 def get_frame_count():
@@ -726,6 +746,7 @@ def run_traces(args):
         'wall_time': 15,
         'gpu_time': 15,
         'cpu_time': 15,
+        'first_frame_wall_time': 15,
         'gpu_power': 10,
         'cpu_power': 10,
         'gpu_mem_sustained': 20,
@@ -737,16 +758,18 @@ def run_traces(args):
     if args.walltimeonly:
         print('%-*s' % (trace_width, 'wall_time_per_frame'))
     else:
-        print('%-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s' %
+        print('%-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s' %
               (column_width['trace'], 'trace', column_width['wall_time'], 'wall_time',
                column_width['gpu_time'], 'gpu_time', column_width['cpu_time'], 'cpu_time',
-               column_width['gpu_power'], 'gpu_power', column_width['cpu_power'], 'cpu_power',
+               column_width['first_frame_wall_time'], 'setup+frame1', column_width['gpu_power'],
+               'gpu_power', column_width['cpu_power'], 'cpu_power',
                column_width['gpu_mem_sustained'], 'gpu_mem_sustained',
                column_width['gpu_mem_peak'], 'gpu_mem_peak', column_width['proc_mem_median'],
                'proc_mem_median', column_width['proc_mem_peak'], 'proc_mem_peak'))
         output_writer.writerow([
-            'trace', 'wall_time(ms)', 'gpu_time(ms)', 'cpu_time(ms)', 'gpu_power(W)',
-            'cpu_power(W)', 'gpu_mem_sustained', 'gpu_mem_peak', 'proc_mem_median', 'proc_mem_peak'
+            'trace', 'wall_time(ms)', 'gpu_time(ms)', 'cpu_time(ms)', 'first_frame_wall_time(ms)',
+            'gpu_power(W)', 'cpu_power(W)', 'gpu_mem_sustained', 'gpu_mem_peak', 'proc_mem_median',
+            'proc_mem_peak'
         ])
 
     if args.power:
@@ -762,6 +785,7 @@ def run_traces(args):
     wall_times = defaultdict(dict)
     gpu_times = defaultdict(dict)
     cpu_times = defaultdict(dict)
+    first_frame_wall_times = defaultdict(dict)
     gpu_powers = defaultdict(dict)
     cpu_powers = defaultdict(dict)
     gpu_mem_sustaineds = defaultdict(dict)
@@ -832,7 +856,14 @@ def run_traces(args):
 
                 gpu_time = get_gpu_time() if args.vsync else '0'
 
-                cpu_time = get_cpu_time()
+                cpu_time = safe_cast_float(get_cpu_time())
+
+                # We record all the data, but only report time to first frame
+                # Setup is an artificial metric that might include items delayed to draw time
+                startup_times = get_startup_times()
+                first_frame_wall_time = safe_cast_float(
+                    startup_times['setup_wall_time']) + safe_cast_float(
+                        startup_times['first_frame_wall_time'])
 
                 gpu_mem_sustained, gpu_mem_peak = 0, 0
                 proc_mem_peak, proc_mem_median = 0, 0
@@ -862,6 +893,11 @@ def run_traces(args):
                     cpu_times[test] = defaultdict(list)
                 cpu_times[test][renderer].append(safe_cast_float(cpu_time))
 
+                if len(first_frame_wall_times[test]) == 0:
+                    first_frame_wall_times[test] = defaultdict(list)
+                first_frame_wall_times[test][renderer].append(
+                    safe_cast_float(first_frame_wall_time))
+
                 if len(gpu_powers[test]) == 0:
                     gpu_powers[test] = defaultdict(list)
                 gpu_powers[test][renderer].append(safe_cast_float(gpu_power))
@@ -889,23 +925,24 @@ def run_traces(args):
                 if args.walltimeonly:
                     print('%-*s' % (trace_width, wall_time))
                 else:
-                    print(
-                        '%-*s %-*s %-*s %-*s %-*s %-*s %-*i %-*i %-*i %-*i' %
-                        (column_width['trace'], trace_name, column_width['wall_time'], wall_time,
-                         column_width['gpu_time'], gpu_time, column_width['cpu_time'], cpu_time,
-                         column_width['gpu_power'], '%.3f' % gpu_power, column_width['cpu_power'],
-                         '%.3f' % cpu_power, column_width['gpu_mem_sustained'], gpu_mem_sustained,
-                         column_width['gpu_mem_peak'], gpu_mem_peak,
-                         column_width['proc_mem_median'], proc_mem_median,
-                         column_width['proc_mem_peak'], proc_mem_peak))
+                    print('%-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*i %-*i %-*i %-*i' %
+                          (column_width['trace'], trace_name, column_width['wall_time'], wall_time,
+                           column_width['gpu_time'], gpu_time, column_width['cpu_time'],
+                           '%.3f' % cpu_time, column_width['first_frame_wall_time'],
+                           '%.3f' % first_frame_wall_time, column_width['gpu_power'],
+                           '%.3f' % gpu_power, column_width['cpu_power'], '%.3f' % cpu_power,
+                           column_width['gpu_mem_sustained'], gpu_mem_sustained,
+                           column_width['gpu_mem_peak'], gpu_mem_peak,
+                           column_width['proc_mem_median'], proc_mem_median,
+                           column_width['proc_mem_peak'], proc_mem_peak))
                     output_writer.writerow([
-                        mode + renderer + '_' + test, wall_time, gpu_time, cpu_time, gpu_power,
-                        cpu_power, gpu_mem_sustained, gpu_mem_peak, proc_mem_median, proc_mem_peak
+                        mode + renderer + '_' + test, wall_time, gpu_time, cpu_time,
+                        first_frame_wall_time, gpu_power, cpu_power, gpu_mem_sustained,
+                        gpu_mem_peak, proc_mem_median, proc_mem_peak
                     ])
 
-
                 # Early exit for testing
-                #exit()
+                # exit()
 
                 # Depending on workload, sleeps might be needed to dissipate heat or recharge battery
                 if args.sleep != 0:
@@ -935,6 +972,9 @@ def run_traces(args):
         populate_row(rows, name, results)
 
     for name, results in cpu_times.items():
+        populate_row(rows, name, results)
+
+    for name, results in first_frame_wall_times.items():
         populate_row(rows, name, results)
 
     for name, results in gpu_powers.items():
@@ -980,10 +1020,12 @@ def run_traces(args):
             f"\"{renderer_name}\nGPU\ntime\nper\nframe\n(ms)\"",
             f"\"{renderer_name}\nGPU\ntime\nvariance\"",
             f"\"{renderer_name}\nCPU\ntime\nper\nframe\n(ms)\"",
-            f"\"{renderer_name}\nCPU\ntime\nvariance\"", f"\"{renderer_name}\nGPU\npower\n(W)\"",
-            f"\"{renderer_name}\nGPU\npower\nvariance\"", f"\"{renderer_name}\nCPU\npower\n(W)\"",
-            f"\"{renderer_name}\nCPU\npower\nvariance\"", f"\"{renderer_name}\nGPU\nmem\n(B)\"",
-            f"\"{renderer_name}\nGPU\nmem\nvariance\"",
+            f"\"{renderer_name}\nCPU\ntime\nvariance\"",
+            f"\"{renderer_name}\nFirst\nframe\nwall\ntime\n(ms)\"",
+            f"\"{renderer_name}\nFirst\nframe\nwall\ntime\nvariance\"",
+            f"\"{renderer_name}\nGPU\npower\n(W)\"", f"\"{renderer_name}\nGPU\npower\nvariance\"",
+            f"\"{renderer_name}\nCPU\npower\n(W)\"", f"\"{renderer_name}\nCPU\npower\nvariance\"",
+            f"\"{renderer_name}\nGPU\nmem\n(B)\"", f"\"{renderer_name}\nGPU\nmem\nvariance\"",
             f"\"{renderer_name}\npeak\nGPU\nmem\n(B)\"",
             f"\"{renderer_name}\npeak\nGPU\nmem\nvariance\"",
             f"\"{renderer_name}\nprocess\nmem\n(B)\"",
@@ -1006,24 +1048,27 @@ def run_traces(args):
                 # CPU time
                 "%.3f" % data[renderer_name][4],
                 percent(data[renderer_name][5]),
-                # GPU power
+                # First frame wall time
                 "%.3f" % data[renderer_name][6],
                 percent(data[renderer_name][7]),
-                # CPU power
+                # GPU power
                 "%.3f" % data[renderer_name][8],
                 percent(data[renderer_name][9]),
-                # GPU mem
-                int(data[renderer_name][10]),
+                # CPU power
+                "%.3f" % data[renderer_name][10],
                 percent(data[renderer_name][11]),
-                # GPU peak mem
+                # GPU mem
                 int(data[renderer_name][12]),
                 percent(data[renderer_name][13]),
-                # process mem
+                # GPU peak mem
                 int(data[renderer_name][14]),
                 percent(data[renderer_name][15]),
-                # process peak mem
+                # process mem
                 int(data[renderer_name][16]),
                 percent(data[renderer_name][17]),
+                # process peak mem
+                int(data[renderer_name][18]),
+                percent(data[renderer_name][19]),
             ])
     else:
         summary_writer.writerow([
@@ -1035,13 +1080,18 @@ def run_traces(args):
             "\"GPU\ntime\ncompare\"", "\"Native\nCPU\ntime\nper\nframe\n(ms)\"",
             "\"Native\nCPU\ntime\nvariance\"", "\"ANGLE\nCPU\ntime\nper\nframe\n(ms)\"",
             "\"ANGLE\nCPU\ntime\nvariance\"", "\"CPU\ntime\ncompare\"",
-            "\"Native\nGPU\npower\n(W)\"", "\"Native\nGPU\npower\nvariance\"",
-            "\"ANGLE\nGPU\npower\n(W)\"", "\"ANGLE\nGPU\npower\nvariance\"",
-            "\"GPU\npower\ncompare\"", "\"Native\nCPU\npower\n(W)\"",
-            "\"Native\nCPU\npower\nvariance\"", "\"ANGLE\nCPU\npower\n(W)\"",
-            "\"ANGLE\nCPU\npower\nvariance\"", "\"CPU\npower\ncompare\"",
-            "\"Native\nGPU\nmem\n(B)\"", "\"Native\nGPU\nmem\nvariance\"",
-            "\"ANGLE\nGPU\nmem\n(B)\"", "\"ANGLE\nGPU\nmem\nvariance\"", "\"GPU\nmem\ncompare\"",
+            "\"Native\nSetup+\nframe1\nwall\ntime\n(ms)\"",
+            "\"Native\nSetup+\nframe1\nwall\ntime\nvariance\"",
+            "\"ANGLE\nSetup+\nframe1\nwall\ntime\n(ms)\"",
+            "\"ANGLE\nSetup+\nframe1\nwall\ntime\nvariance\"",
+            "\"Setup+\nframe1\nwall\ntime\ncompare\"", "\"Native\nGPU\npower\n(W)\"",
+            "\"Native\nGPU\npower\nvariance\"", "\"ANGLE\nGPU\npower\n(W)\"",
+            "\"ANGLE\nGPU\npower\nvariance\"", "\"GPU\npower\ncompare\"",
+            "\"Native\nCPU\npower\n(W)\"", "\"Native\nCPU\npower\nvariance\"",
+            "\"ANGLE\nCPU\npower\n(W)\"", "\"ANGLE\nCPU\npower\nvariance\"",
+            "\"CPU\npower\ncompare\"", "\"Native\nGPU\nmem\n(B)\"",
+            "\"Native\nGPU\nmem\nvariance\"", "\"ANGLE\nGPU\nmem\n(B)\"",
+            "\"ANGLE\nGPU\nmem\nvariance\"", "\"GPU\nmem\ncompare\"",
             "\"Native\npeak\nGPU\nmem\n(B)\"", "\"Native\npeak\nGPU\nmem\nvariance\"",
             "\"ANGLE\npeak\nGPU\nmem\n(B)\"", "\"ANGLE\npeak\nGPU\nmem\nvariance\"",
             "\"GPU\npeak\nmem\ncompare\"", "\"Native\nprocess\nmem\n(B)\"",
@@ -1075,42 +1125,48 @@ def run_traces(args):
                 "%.3f" % data["vulkan"][4],
                 percent(data["vulkan"][5]),
                 percent(safe_divide(data["native"][4], data["vulkan"][4])),
-                # GPU power
+                # First frame wall time
                 "%.3f" % data["native"][6],
                 percent(data["native"][7]),
                 "%.3f" % data["vulkan"][6],
                 percent(data["vulkan"][7]),
                 percent(safe_divide(data["native"][6], data["vulkan"][6])),
-                # CPU power
+                # GPU power
                 "%.3f" % data["native"][8],
                 percent(data["native"][9]),
                 "%.3f" % data["vulkan"][8],
                 percent(data["vulkan"][9]),
                 percent(safe_divide(data["native"][8], data["vulkan"][8])),
-                # GPU mem
-                int(data["native"][10]),
+                # CPU power
+                "%.3f" % data["native"][10],
                 percent(data["native"][11]),
-                int(data["vulkan"][10]),
+                "%.3f" % data["vulkan"][10],
                 percent(data["vulkan"][11]),
                 percent(safe_divide(data["native"][10], data["vulkan"][10])),
-                # GPU peak mem
+                # GPU mem
                 int(data["native"][12]),
                 percent(data["native"][13]),
                 int(data["vulkan"][12]),
                 percent(data["vulkan"][13]),
                 percent(safe_divide(data["native"][12], data["vulkan"][12])),
-                # process mem
+                # GPU peak mem
                 int(data["native"][14]),
                 percent(data["native"][15]),
                 int(data["vulkan"][14]),
                 percent(data["vulkan"][15]),
                 percent(safe_divide(data["native"][14], data["vulkan"][14])),
-                # process peak mem
+                # process mem
                 int(data["native"][16]),
                 percent(data["native"][17]),
                 int(data["vulkan"][16]),
                 percent(data["vulkan"][17]),
-                percent(safe_divide(data["native"][16], data["vulkan"][16]))
+                percent(safe_divide(data["native"][16], data["vulkan"][16])),
+                # process peak mem
+                int(data["native"][18]),
+                percent(data["native"][19]),
+                int(data["vulkan"][18]),
+                percent(data["vulkan"][19]),
+                percent(safe_divide(data["native"][18], data["vulkan"][18]))
             ])
 
 

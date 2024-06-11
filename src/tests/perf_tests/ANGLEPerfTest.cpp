@@ -276,6 +276,10 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
     mReporter->RegisterImportantMetric(".wall_time", units);
     mReporter->RegisterImportantMetric(".cpu_time", units);
     mReporter->RegisterImportantMetric(".gpu_time", units);
+    mReporter->RegisterImportantMetric(".first_frame_wall_time", units);
+    mReporter->RegisterImportantMetric(".first_frame_cpu_time", units);
+    mReporter->RegisterImportantMetric(".first_loop_wall_time", units);
+    mReporter->RegisterImportantMetric(".first_loop_cpu_time", units);
     mReporter->RegisterFyiMetric(".trial_steps", "count");
     mReporter->RegisterFyiMetric(".total_steps", "count");
 }
@@ -418,7 +422,7 @@ void ANGLEPerfTest::SetUp()
 {
     if (gWarmup)
     {
-        // Trace tests run with glFinish for a loop (getStepAlignment == frameCount).
+        // Trace tests run at least once through a loop (getStepAlignment == frameCount).
         int warmupSteps = getStepAlignment();
         if (gVerboseLogging)
         {
@@ -428,9 +432,25 @@ void ANGLEPerfTest::SetUp()
         Timer warmupTimer;
         warmupTimer.start();
 
-        runTrial(gTrialTimeSeconds, warmupSteps, RunTrialPolicy::FinishEveryStep);
+        // Render a single frame so most of the Setup work has to be completed.
+        // Some drivers front-load and render first frame quickly, others defer work to draw time.
+        step();
+        mTrialNumStepsPerformed++;
+        mTotalNumStepsPerformed++;
+        recordDoubleMetric(".first_frame_cpu_time",
+                           warmupTimer.getElapsedCpuTime() * kMilliSecondsPerSecond, "ms");
+        recordDoubleMetric(".first_frame_wall_time",
+                           warmupTimer.getElapsedWallClockTime() * kMilliSecondsPerSecond, "ms");
 
-        if (warmupSteps > 1)  // trace tests only: getStepAlignment() is 1 otherwise
+        // Finish the warmup and gather metrics after the first full loop
+        runTrial(gTrialTimeSeconds, warmupSteps - 1, RunTrialPolicy::RunContinuously);
+        recordDoubleMetric(".first_loop_cpu_time",
+                           warmupTimer.getElapsedCpuTime() * kMilliSecondsPerSecond, "ms");
+        recordDoubleMetric(".first_loop_wall_time",
+                           warmupTimer.getElapsedWallClockTime() * kMilliSecondsPerSecond, "ms");
+
+        // If we have more than one step, this is likely a trace test
+        if (warmupSteps > 1)
         {
             // Short traces (e.g. 10 frames) have some spikes after the first loop b/308975999
             const double kMinWarmupTime = 1.5;
@@ -448,6 +468,8 @@ void ANGLEPerfTest::SetUp()
         {
             printf("Warmup took %.2lf seconds.\n", warmupTimer.getElapsedWallClockTime());
         }
+
+        FinishAndCheckForContextLoss();
     }
 }
 

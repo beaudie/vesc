@@ -113,7 +113,6 @@ class TracePerfTest : public ANGLERenderTest
   public:
     TracePerfTest(std::unique_ptr<const TracePerfParams> params);
 
-    void startTest() override;
     void initializeBenchmark() override;
     void destroyBenchmark() override;
     void drawBenchmark() override;
@@ -848,6 +847,9 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
       mStartFrame(0),
       mEndFrame(0)
 {
+    mReporter->RegisterImportantMetric(".setup_cpu_time", "ms");
+    mReporter->RegisterImportantMetric(".setup_wall_time", "ms");
+
     bool isAMD            = IsAMD() && !mParams->isSwiftshader();
     bool isAMDLinux       = isAMD && IsLinux();
     bool isAMDLinuxANGLE  = isAMDLinux && mParams->isANGLE();
@@ -1816,12 +1818,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     }
 }
 
-void TracePerfTest::startTest()
-{
-    // runTrial() must align to frameCount()
-    ASSERT(mCurrentFrame == mStartFrame);
-}
-
 std::string FindTraceGzPath(const std::string &traceName)
 {
     std::stringstream pathStream;
@@ -1944,9 +1940,15 @@ void TracePerfTest::initializeBenchmark()
     }
 
     // Potentially slow. Can load a lot of resources.
+    Timer setupReplayTimer;
+    setupReplayTimer.start();
+
     mTraceReplay->setupReplay();
 
     glFinish();
+
+    recordDoubleMetric(".setup_cpu_time", setupReplayTimer.getElapsedCpuTime() * 1e3, "ms");
+    recordDoubleMetric(".setup_wall_time", setupReplayTimer.getElapsedWallClockTime() * 1e3, "ms");
 
     ASSERT_GE(mEndFrame, mStartFrame);
 
