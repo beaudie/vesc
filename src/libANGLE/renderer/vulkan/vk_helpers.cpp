@@ -1871,7 +1871,6 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
 void OutsideRenderPassCommandBufferHelper::trackImageWithEvent(Context *context, ImageHelper *image)
 {
     image->setCurrentRefCountedEvent(context, mRefCountedEvents);
-    flushSetEventsImpl(context, &mCommandBuffer);
 }
 
 void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context,
@@ -1880,7 +1879,6 @@ void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context
 {
     srcImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
     dstImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
-    flushSetEventsImpl(context, &mCommandBuffer);
 }
 
 void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context,
@@ -1891,7 +1889,6 @@ void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context
     {
         images[i]->setCurrentRefCountedEvent(context, mRefCountedEvents);
     }
-    flushSetEventsImpl(context, &mCommandBuffer);
 }
 
 void OutsideRenderPassCommandBufferHelper::collectRefCountedEventsGarbage(
@@ -7312,7 +7309,11 @@ void ImageHelper::recordWriteBarrier(Context *context,
 {
     if (isWriteBarrierNecessary(newLayout, levelStart, levelCount, layerStart, layerCount))
     {
-        ASSERT(!mCurrentEvent.valid() || !commands->hasSetEventPendingFlush(mCurrentEvent));
+        if (mCurrentEvent.valid() && commands->hasSetEventPendingFlush(mCurrentEvent))
+        {
+            mCurrentEvent.release(context);
+        }
+
         VkSemaphore acquireNextImageSemaphore;
         barrierImpl(context, aspectMask, newLayout, context->getDeviceQueueIndex(),
                     commands->getRefCountedEventCollector(), &commands->getCommandBuffer(),
@@ -7341,7 +7342,10 @@ void ImageHelper::recordReadSubresourceBarrier(Context *context,
     if (isReadSubresourceBarrierNecessary(newLayout, levelStart, levelCount, layerStart,
                                           layerCount))
     {
-        ASSERT(!mCurrentEvent.valid() || !commands->hasSetEventPendingFlush(mCurrentEvent));
+        if (mCurrentEvent.valid() && commands->hasSetEventPendingFlush(mCurrentEvent))
+        {
+            mCurrentEvent.release(context);
+        }
         VkSemaphore acquireNextImageSemaphore;
         barrierImpl(context, aspectMask, newLayout, context->getDeviceQueueIndex(),
                     commands->getRefCountedEventCollector(), &commands->getCommandBuffer(),
@@ -7367,7 +7371,10 @@ void ImageHelper::recordReadBarrier(Context *context,
         return;
     }
 
-    ASSERT(!mCurrentEvent.valid() || !commands->hasSetEventPendingFlush(mCurrentEvent));
+    if (mCurrentEvent.valid() && commands->hasSetEventPendingFlush(mCurrentEvent))
+    {
+        mCurrentEvent.release(context);
+    }
     VkSemaphore acquireNextImageSemaphore;
     barrierImpl(context, aspectMask, newLayout, context->getDeviceQueueIndex(),
                 commands->getRefCountedEventCollector(), &commands->getCommandBuffer(),
