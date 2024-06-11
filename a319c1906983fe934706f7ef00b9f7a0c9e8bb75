@@ -159,6 +159,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84fbced1_0be3ea1c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-11T13:09:01Z",
+      "side": 1,
+      "message": "\u003e Does gl::RenderToTextureImageMap\u003cstd::vector\u003cvk::ImageHelper\u003e\u003e work?\n\nthat is what i tried all the way in the beginning (leading me to the copy-constructor comment here -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5601347/8#message-160118946f090bb05c0e19f0ab61370e9bc9d91b)\n\ni get the same \"call to implicitly-deleted copy constructor\" error",
+      "parentUuid": "5842a9ab_9a91a352",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
