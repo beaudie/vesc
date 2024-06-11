@@ -581,6 +581,18 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessagesWithMSRTTEmulation[] 
     },
 };
 
+// Messages that are only generated with VkEvent is used for image barriers.  Some of these are
+// syncval bugs (discussed
+constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessagesWithVkEvent[] = {
+    // False positive: TraceTest.black_desert_mobile
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
+        "VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL",
+        "prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION",
+    },
+};
+
 enum class DebugMessageReport
 {
     Ignore,
@@ -3749,6 +3761,12 @@ void Renderer::initializeValidationMessageSuppressions()
                                        kSkippedSyncvalMessagesWithMSRTTEmulation,
                                        kSkippedSyncvalMessagesWithMSRTTEmulation +
                                            ArraySize(kSkippedSyncvalMessagesWithMSRTTEmulation));
+    }
+    if (getFeatures().useVkEventForImageBarrier.enabled)
+    {
+        mSkippedSyncvalMessages.insert(
+            mSkippedSyncvalMessages.end(), kSkippedSyncvalMessagesWithVkEvent,
+            kSkippedSyncvalMessagesWithVkEvent + ArraySize(kSkippedSyncvalMessagesWithVkEvent));
     }
 }
 
