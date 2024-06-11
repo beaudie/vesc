@@ -58,6 +58,9 @@ static constexpr VkDeviceSize kMaxBufferToImageCopySize = 64 * 1024 * 1024;
 // RenderPassCommands.
 static constexpr size_t kMaxReservedOutsideRenderPassQueueSerials = 15;
 
+// Dumping the command stream is disabled by default.
+static constexpr bool kEnableCommandStreamDiagnostics = false;
+
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
 {
@@ -741,16 +744,16 @@ angle::Result CreateGraphicsPipelineSubset(ContextVk *contextVk,
     const vk::GraphicsPipelineDesc *descPtr = nullptr;
     if (!cache->getPipeline(desc, &descPtr, pipelineOut))
     {
-        const vk::RenderPass unusedRenderPass;
-        const vk::RenderPass *compatibleRenderPass = &unusedRenderPass;
-        if (renderPass == GraphicsPipelineSubsetRenderPass::Required)
+        const vk::RenderPass *compatibleRenderPass = nullptr;
+        if (renderPass == GraphicsPipelineSubsetRenderPass::Required &&
+            !contextVk->getFeatures().preferDynamicRendering.enabled)
         {
             // Pull in a compatible RenderPass if used by this subset.
             ANGLE_TRY(contextVk->getCompatibleRenderPass(desc.getRenderPassDesc(),
                                                          &compatibleRenderPass));
         }
 
-        ANGLE_TRY(cache->createPipeline(contextVk, pipelineCache, *compatibleRenderPass,
+        ANGLE_TRY(cache->createPipeline(contextVk, pipelineCache, compatibleRenderPass,
                                         unusedPipelineLayout, unusedShaders, unusedSpecConsts,
                                         PipelineSource::Draw, desc, &descPtr, pipelineOut));
     }
@@ -3432,6 +3435,11 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferHelperT *com
 
 void ContextVk::syncObjectPerfCounters(const angle::VulkanPerfCounters &commandQueuePerfCounters)
 {
+    if (!mState.isPerfMonitorActive())
+    {
+        return;
+    }
+
     mPerfCounters.descriptorSetCacheTotalSize                = 0;
     mPerfCounters.descriptorSetCacheKeySizeBytes             = 0;
     mPerfCounters.uniformsAndXfbDescriptorSetCacheHits       = 0;
@@ -3631,7 +3639,7 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
                                         const vk::SharedExternalFence *externalFence,
                                         Submit submission)
 {
-    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    if (kEnableCommandStreamDiagnostics)
     {
         dumpCommandStreamDiagnostics();
     }
@@ -4543,7 +4551,8 @@ angle::Result ContextVk::optimizeRenderPassForPresent(vk::ImageViewHelper *color
     }
 
     // Use finalLayout instead of extra barrier for layout change to present
-    if (colorImage != nullptr)
+    if (colorImage != nullptr && getFeatures().supportsPresentation.enabled &&
+        !getFeatures().preferDynamicRendering.enabled)
     {
         mRenderPassCommands->setImageOptimizeForPresent(colorImage);
     }
@@ -7730,6 +7739,11 @@ void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags sta
 angle::Result ContextVk::getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                                  const vk::RenderPass **renderPassOut)
 {
+    if (getFeatures().preferDynamicRendering.enabled)
+    {
+        return angle::Result::Continue;
+    }
+
     // Note: Each context has it's own RenderPassCache so no locking needed.
     return mRenderPassCache.getCompatibleRenderPass(this, desc, renderPassOut);
 }
@@ -7738,6 +7752,8 @@ angle::Result ContextVk::getRenderPassWithOps(const vk::RenderPassDesc &desc,
                                               const vk::AttachmentOpsArray &ops,
                                               const vk::RenderPass **renderPassOut)
 {
+    ASSERT(!getFeatures().preferDynamicRendering.enabled);
+
     // Note: Each context has it's own RenderPassCache so no locking needed.
     return mRenderPassCache.getRenderPassWithOps(this, desc, ops, renderPassOut);
 }
@@ -7966,14 +7982,10 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     ANGLE_TRY(mRenderPassCommands->endRenderPass(this));
 
-    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    if (kEnableCommandStreamDiagnostics)
     {
         addCommandBufferDiagnostics(mRenderPassCommands->getCommandDiagnostics());
     }
-
-    const vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(getRenderPassWithOps(mRenderPassCommands->getRenderPassDesc(),
-                                   mRenderPassCommands->getAttachmentOps(), &renderPass));
 
     flushDescriptorSetUpdates();
     // Collect RefCountedEvent garbage before submitting to renderer
@@ -7986,21 +7998,37 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
                                                    mRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mRenderPassCommands->getQueueSerial();
 
-    // If a new framebuffer is used to accommodate resolve attachments that have been added after
-    // the fact, create a temp one now and add it to garbage list.
+    const vk::RenderPass *renderPass  = nullptr;
     VkFramebuffer framebufferOverride = VK_NULL_HANDLE;
-    if (mRenderPassCommands->getFramebuffer().needsNewFramebufferWithResolveAttachments())
-    {
-        vk::Framebuffer tempFramebuffer;
-        ANGLE_TRY(mRenderPassCommands->getFramebuffer().packResolveViewsAndCreateFramebuffer(
-            this, *renderPass, &tempFramebuffer));
 
-        framebufferOverride = tempFramebuffer.getHandle();
-        addGarbage(&tempFramebuffer);
+    if (getFeatures().preferDynamicRendering.enabled)
+    {
+        if (mState.isPerfMonitorActive())
+        {
+            mRenderPassCommands->updatePerfCountersForDynamicRenderingInstance(this,
+                                                                               &mPerfCounters);
+        }
+    }
+    else
+    {
+        ANGLE_TRY(getRenderPassWithOps(mRenderPassCommands->getRenderPassDesc(),
+                                       mRenderPassCommands->getAttachmentOps(), &renderPass));
+
+        // If a new framebuffer is used to accommodate resolve attachments that have been added
+        // after the fact, create a temp one now and add it to garbage list.
+        if (mRenderPassCommands->getFramebuffer().needsNewFramebufferWithResolveAttachments())
+        {
+            vk::Framebuffer tempFramebuffer;
+            ANGLE_TRY(mRenderPassCommands->getFramebuffer().packResolveViewsAndCreateFramebuffer(
+                this, *renderPass, &tempFramebuffer));
+
+            framebufferOverride = tempFramebuffer.getHandle();
+            addGarbage(&tempFramebuffer);
+        }
     }
 
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, getProtectionType(), mContextPriority,
-                                                 *renderPass, framebufferOverride,
+                                                 renderPass, framebufferOverride,
                                                  &mRenderPassCommands));
 
     // We just flushed outSideRenderPassCommands above, and any future use of
@@ -8253,7 +8281,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     addOverlayUsedBuffersCount(mOutsideRenderPassCommands);
 
-    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    if (kEnableCommandStreamDiagnostics)
     {
         addCommandBufferDiagnostics(mOutsideRenderPassCommands->getCommandDiagnostics());
     }
@@ -8869,6 +8897,13 @@ angle::Result ContextVk::switchToFramebufferFetchMode(bool hasFramebufferFetch)
 
     ASSERT(mIsInFramebufferFetchMode != hasFramebufferFetch);
     mIsInFramebufferFetchMode = hasFramebufferFetch;
+
+    // With dynamic rendering, there is nothing to do.  There is nothing special about using
+    // framebuffer fetch.
+    if (getFeatures().preferDynamicRendering.enabled)
+    {
+        return angle::Result::Continue;
+    }
 
     // If a render pass is already open, close it.
     if (mRenderPassCommands->started())
