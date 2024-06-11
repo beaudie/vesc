@@ -30,15 +30,25 @@ angle::Result VulkanSecondaryCommandBuffer::InitializeRenderPassInheritanceInfo(
     ContextVk *contextVk,
     const Framebuffer &framebuffer,
     const RenderPassDesc &renderPassDesc,
-    VkCommandBufferInheritanceInfo *inheritanceInfoOut)
+    VkCommandBufferInheritanceInfo *inheritanceInfoOut,
+    VkCommandBufferInheritanceRenderingInfo *renderingInfoOut)
 {
-    const RenderPass *compatibleRenderPass = nullptr;
-    ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, &compatibleRenderPass));
+    *inheritanceInfoOut       = {};
+    inheritanceInfoOut->sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
 
-    inheritanceInfoOut->sType       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
-    inheritanceInfoOut->renderPass  = compatibleRenderPass->getHandle();
-    inheritanceInfoOut->subpass     = 0;
-    inheritanceInfoOut->framebuffer = framebuffer.getHandle();
+    if (contextVk->getFeatures().preferDynamicRendering.enabled)
+    {
+        renderPassDesc.populateRenderingInheritanceInfo(contextVk->getRenderer(), renderingInfoOut);
+        AddToPNextChain(inheritanceInfoOut, renderingInfoOut);
+    }
+    else
+    {
+        const RenderPass *compatibleRenderPass = nullptr;
+        ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, &compatibleRenderPass));
+        inheritanceInfoOut->renderPass  = compatibleRenderPass->getHandle();
+        inheritanceInfoOut->subpass     = 0;
+        inheritanceInfoOut->framebuffer = framebuffer.getHandle();
+    }
 
     return angle::Result::Continue;
 }

@@ -190,15 +190,6 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-VkImageViewCreateInfo-pNext-01585",
     // http://anglebug.com/6514
     "vkEnumeratePhysicalDevices: One or more layers modified physical devices",
-    // When using Vulkan secondary command buffers, the command buffer is begun with the current
-    // framebuffer specified in pInheritanceInfo::framebuffer.  If the framebuffer is multisampled
-    // and is resolved, an optimization would change the framebuffer to add the resolve target and
-    // use a subpass resolve operation instead.  The following error complains that the framebuffer
-    // used to start the render pass and the one specified in pInheritanceInfo::framebuffer must be
-    // equal, which is not true in that case.  In practice, this is benign, as the part of the
-    // framebuffer that's accessed by the command buffer is identically laid out.
-    // http://anglebug.com/6811
-    "VUID-vkCmdExecuteCommands-pCommandBuffers-00099",
     // http://anglebug.com/7325
     "VUID-vkCmdBindVertexBuffers2-pStrides-06209",
     // http://anglebug.com/7729
@@ -287,6 +278,18 @@ constexpr const char *kNoListRestartSkippedMessages[] = {
 // https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/7849
 constexpr const char *kSkippedMessagesWithVulkanSecondaryCommandBuffer[] = {
     "VUID-vkCmdWaitEvents-srcStageMask-parameter",
+};
+
+// When using Vulkan secondary command buffers, the command buffer is begun with the current
+// framebuffer specified in pInheritanceInfo::framebuffer.  If the framebuffer is multisampled
+// and is resolved, an optimization would change the framebuffer to add the resolve target and
+// use a subpass resolve operation instead.  The following error complains that the framebuffer
+// used to start the render pass and the one specified in pInheritanceInfo::framebuffer must be
+// equal, which is not true in that case.  In practice, this is benign, as the part of the
+// framebuffer that's accessed by the command buffer is identically laid out.
+// http://anglebug.com/6811
+constexpr const char *kSkippedMessagesWithRenderPassObjectsAndVulkanSCB[] = {
+    "VUID-vkCmdExecuteCommands-pCommandBuffers-00099",
 };
 
 // Some syncval errors are resolved in the presence of the NONE load or store render pass ops.  For
@@ -3332,6 +3335,11 @@ angle::Result Renderer::enableDeviceExtensions(vk::Context *context,
         for (const VkExtensionProperties &prop : deviceExtensionProps)
         {
             deviceExtensionNames.push_back(prop.extensionName);
+
+            if (strcmp(prop.extensionName, VK_EXT_LEGACY_DITHERING_EXTENSION_NAME) == 0)
+            {
+                mLegacyDitheringVersion = prop.specVersion;
+            }
         }
         std::sort(deviceExtensionNames.begin(), deviceExtensionNames.end(), StrLess);
     }
@@ -3738,6 +3746,15 @@ void Renderer::initializeValidationMessageSuppressions()
             mSkippedValidationMessages.end(), kSkippedMessagesWithVulkanSecondaryCommandBuffer,
             kSkippedMessagesWithVulkanSecondaryCommandBuffer +
                 ArraySize(kSkippedMessagesWithVulkanSecondaryCommandBuffer));
+    }
+
+    if (!getFeatures().preferDynamicRendering.enabled &&
+        !vk::RenderPassCommandBuffer::ExecutesInline())
+    {
+        mSkippedValidationMessages.insert(
+            mSkippedValidationMessages.end(), kSkippedMessagesWithRenderPassObjectsAndVulkanSCB,
+            kSkippedMessagesWithRenderPassObjectsAndVulkanSCB +
+                ArraySize(kSkippedMessagesWithRenderPassObjectsAndVulkanSCB));
     }
 
     // Build the list of syncval errors that are currently expected and should be skipped.
@@ -5146,8 +5163,25 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
         &mFeatures, supportsDynamicRenderingLocalRead,
         mDynamicRenderingLocalReadFeatures.dynamicRenderingLocalRead == VK_TRUE);
 
-    // Dynamic rendering usage is not yet implemented.
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferDynamicRendering, false);
+    // Using dynamic rendering when VK_KHR_dynamic_rendering_local_read is available, because that's
+    // needed for framebuffer fetch, MSRTT and advanced blend emulation.
+    //
+    // VK_EXT_legacy_dithering needs to be at version 2 and VK_KHR_maintenance5 to be usable with
+    // dynamic rendering.  If only version 1 is exposed, it's not sacrificied for dynamic rendering
+    // and render pass objects are continued to be used.
+    //
+    // Emulation of GL_EXT_multisampled_render_to_texture is not possible with dynamic rendering.
+    // That support is also not sacrificed for dynamic rendering.
+    const bool hasLegacyDitheringV1 =
+        mFeatures.supportsLegacyDithering.enabled &&
+        (mLegacyDitheringVersion < 2 || !mFeatures.supportsMaintenance5.enabled);
+    const bool emulatesMultisampledRenderToTexture =
+        mFeatures.enableMultisampledRenderToTexture.enabled &&
+        !mFeatures.supportsMultisampledRenderToSingleSampled.enabled;
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferDynamicRendering,
+                            mFeatures.supportsDynamicRendering.enabled &&
+                                mFeatures.supportsDynamicRenderingLocalRead.enabled &&
+                                !hasLegacyDitheringV1 && !emulatesMultisampledRenderToTexture);
 
     // Disable memory report feature overrides if extension is not supported.
     if ((mFeatures.logMemoryReportCallbacks.enabled || mFeatures.logMemoryReportStats.enabled) &&
@@ -5880,7 +5914,7 @@ angle::Result Renderer::flushRenderPassCommands(
     vk::Context *context,
     vk::ProtectionType protectionType,
     egl::ContextPriority priority,
-    const vk::RenderPass &renderPass,
+    const vk::RenderPass *renderPass,
     VkFramebuffer framebufferOverride,
     vk::RenderPassCommandBufferHelper **renderPassCommands)
 {
