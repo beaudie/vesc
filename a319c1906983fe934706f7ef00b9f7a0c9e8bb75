@@ -207,6 +207,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2e57651_3d5aab1d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-11T15:41:12Z",
+      "side": 1,
+      "message": "\u003e move constructor was removed in https://chromium-review.googlesource.com/c/angle/angle/+/4294905\n\nwhat about the claim in the commit message about bugs? is there a compiler flag that can assist with move-constructor correctness?",
+      "parentUuid": "ddedbf1d_7d910f54",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
