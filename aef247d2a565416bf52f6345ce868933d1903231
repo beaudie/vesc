@@ -16,6 +16,24 @@
       "message": "I\u0027ve dug through the logs of the failed run https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-test/20173/overview and have a feeling that they\u0027re related to this CL - enabling the force-init of shader variables for some test suites. Shabi, could you help guide Erica and Kimmo to track them down and fix them?",
       "revId": "aef247d2a565416bf52f6345ce868933d1903231",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ae6bc8e_8e1223d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-11T02:03:28Z",
+      "side": 1,
+      "message": "It\u0027s a Pixel4 crash, likely due to a driver bug. Please just add a suppression in `angle_end2end_tests_expectations.txt`.",
+      "parentUuid": "1faea23b_b657547c",
+      "revId": "aef247d2a565416bf52f6345ce868933d1903231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
