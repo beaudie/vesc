@@ -16,6 +16,29 @@
       "message": "Another bug exposed by the new test that I added in earlier CL (that shabi suggested)",
       "revId": "55ecf61da4a74ce55bf60f1024e58eab958faf41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34ccb594_22d7cbf0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 11222,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-11T01:40:25Z",
+      "side": 1,
+      "message": "Should it be `[updateBaseLayer, updateLayerEnd]` completely within `[layerIndex, layerEnd]`?",
+      "range": {
+        "startLine": 11222,
+        "startChar": 11,
+        "endLine": 11222,
+        "endChar": 85
+      },
+      "revId": "55ecf61da4a74ce55bf60f1024e58eab958faf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
