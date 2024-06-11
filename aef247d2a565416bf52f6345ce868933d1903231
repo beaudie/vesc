@@ -52,6 +52,24 @@
       "parentUuid": "3ae6bc8e_8e1223d1",
       "revId": "aef247d2a565416bf52f6345ce868933d1903231",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fa64ff9_236e43a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-06-11T06:06:51Z",
+      "side": 1,
+      "message": "\u003e [ RUN      ] GLSLTest_ES3.VaryingStructWithInlineDefinition2/ES3_Vulkan_ForceInitShaderVariables\n\u003e [ CRASHED      ]\n\n\nI think it crashes on the new test and then the rest of the tests are left unrun",
+      "parentUuid": "30fc1cf7_8349fbbb",
+      "revId": "aef247d2a565416bf52f6345ce868933d1903231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
