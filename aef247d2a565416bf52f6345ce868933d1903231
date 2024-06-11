@@ -34,6 +34,24 @@
       "parentUuid": "1faea23b_b657547c",
       "revId": "aef247d2a565416bf52f6345ce868933d1903231",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30fc1cf7_8349fbbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-06-11T04:56:56Z",
+      "side": 1,
+      "message": "It looks to me like there are some 256 failing tests. Is that correct? If so, is such a broad suppression appropriate?",
+      "parentUuid": "3ae6bc8e_8e1223d1",
+      "revId": "aef247d2a565416bf52f6345ce868933d1903231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
