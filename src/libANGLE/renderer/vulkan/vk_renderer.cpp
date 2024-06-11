@@ -4647,9 +4647,10 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsPipelineStatisticsQuery,
                             mPhysicalDeviceFeatures.pipelineStatisticsQuery == VK_TRUE);
 
-    // Defer glFLush call causes manhattan 3.0 perf regression. Let Qualcomm driver opt out from
-    // this optimization.
-    ANGLE_FEATURE_CONDITION(&mFeatures, deferFlushUntilEndRenderPass, !isQualcommProprietary);
+    // Defer glFLush call used to cause manhattan 3.0 perf regression on Qualcomm.
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, deferFlushUntilEndRenderPass,
+        !(isQualcommProprietary && qualcommDriverVersion < QualcommDriverVersion(512, 762, 12)));
 
     // Android mistakenly destroys the old swapchain when creating a new one.
     ANGLE_FEATURE_CONDITION(&mFeatures, waitIdleBeforeSwapchainRecreation, IsAndroid() && isARM);
