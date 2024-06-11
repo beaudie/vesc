@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba88b35_234ff0e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-11T01:08:26Z",
+      "side": 1,
+      "message": "Another bug exposed by the new test that I added in earlier CL (that shabi suggested)",
+      "revId": "55ecf61da4a74ce55bf60f1024e58eab958faf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
