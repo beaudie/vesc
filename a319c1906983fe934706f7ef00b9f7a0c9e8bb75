@@ -351,6 +351,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae1ce1cd_6839fe44",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-11T22:35:03Z",
+      "side": 1,
+      "message": "Ok one more thought, how about we continue to use `gl::RenderToTextureImageMap\u003cgl::TexLevelArray\u003cvk::ImageHelper\u003e\u003e`, but make _that_ a pointer. So basically `mMultisampledImages` would be nullptr normally, but the full array-of-array if used with MSRTT?",
+      "parentUuid": "e3685cd9_79b9bdbd",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
