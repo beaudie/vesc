@@ -122,6 +122,11 @@ class CLImageVk : public CLMemoryVk
     angle::Result createStagingBuffer(size_t size);
     angle::Result copyStagingFrom(void *ptr, size_t offset, size_t size);
     angle::Result copyStagingTo(void *ptr, size_t offset, size_t size);
+    angle::Result copyStagingToFromWithPitch(void *ptr,
+                                             const cl::Coordinate &region,
+                                             const size_t rowPitch,
+                                             const size_t slicePitch,
+                                             bool copyStagingTo);
     VkImageUsageFlags getVkImageUsageFlags();
     VkImageType getVkImageType(const cl::ImageDescriptor &desc);
     size_t getSize() const override { return mImageSize; }
@@ -140,6 +145,10 @@ class CLImageVk : public CLMemoryVk
     void setSubresourceLayers(const cl::MemOffsets &origin,
                               cl::MemObjectType copyToType,
                               VkImageSubresourceLayers *subresource);
+    size_t calculateRowPitch();
+    size_t calculateSlicePitch(size_t imageRowPitch);
+    size_t getRowPitch();
+    size_t getSlicePitch(size_t imageRowPitch);
 
   private:
     angle::Result mapImpl() override;

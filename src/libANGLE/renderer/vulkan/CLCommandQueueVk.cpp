@@ -433,7 +433,14 @@ angle::Result CLCommandQueueVk::enqueueReadImage(const cl::Image &image,
         ANGLE_TRY(copyImageToFromBuffer(imageVk, imageVk.getStagingBuffer(), origin, region, 0,
                                         ImageBufferCopyDirection::ToBuffer));
         ANGLE_TRY(finishInternal());
-        ANGLE_TRY(imageVk.copyStagingTo(ptr, 0, size));
+        if (rowPitch == 0 && slicePitch == 0)
+        {
+            ANGLE_TRY(imageVk.copyStagingTo(ptr, 0, size));
+        }
+        else
+        {
+            ANGLE_TRY(imageVk.copyStagingToFromWithPitch(ptr, region, rowPitch, slicePitch, true));
+        }
     }
     else
     {
@@ -463,6 +470,12 @@ angle::Result CLCommandQueueVk::enqueueReadImage(const cl::Image &image,
 
         ANGLE_TRY(copyImageToFromBuffer(imageVk, transferBufferVk.getBuffer(), origin, region, 0,
                                         ImageBufferCopyDirection::ToBuffer));
+        if (rowPitch != 0 || slicePitch != 0)
+        {
+            // TODO: Look into better enqueue handling of this op if non-blocking
+            ANGLE_TRY(finish());
+            ANGLE_TRY(imageVk.copyStagingToFromWithPitch(ptr, region, rowPitch, slicePitch, true));
+        }
     }
 
     ANGLE_TRY(createEvent(eventCreateFunc, true));
@@ -489,7 +502,16 @@ angle::Result CLCommandQueueVk::enqueueWriteImage(const cl::Image &image,
     {
         ANGLE_TRY(imageVk.createStagingBuffer(imageVk.getSize()));
     }
-    ANGLE_TRY(imageVk.copyStagingFrom((void *)ptr, 0, size));
+
+    if (inputRowPitch == 0 && inputSlicePitch == 0)
+    {
+        ANGLE_TRY(imageVk.copyStagingFrom((void *)ptr, 0, size));
+    }
+    else
+    {
+        ANGLE_TRY(imageVk.copyStagingToFromWithPitch((void *)ptr, region, inputRowPitch,
+                                                     inputSlicePitch, false));
+    }
 
     ANGLE_TRY(copyImageToFromBuffer(imageVk, imageVk.getStagingBuffer(), origin, region, 0,
                                     ImageBufferCopyDirection::ToImage));
