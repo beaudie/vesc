@@ -63,6 +63,30 @@
       },
       "revId": "c3a63a28d57c650cab1506594bf189401d009354",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51d85cbc_87547770",
+        "filename": "src/tests/gl_tests/GeometryShaderTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-11T18:53:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a57269ce_7cd5f1f5",
+      "range": {
+        "startLine": 1541,
+        "startChar": 0,
+        "endLine": 1543,
+        "endChar": 36
+      },
+      "revId": "c3a63a28d57c650cab1506594bf189401d009354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
