@@ -1871,7 +1871,6 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
 void OutsideRenderPassCommandBufferHelper::trackImageWithEvent(Context *context, ImageHelper *image)
 {
     image->setCurrentRefCountedEvent(context, mRefCountedEvents);
-    flushSetEventsImpl(context, &mCommandBuffer);
 }
 
 void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context,
@@ -1880,7 +1879,6 @@ void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context
 {
     srcImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
     dstImage->setCurrentRefCountedEvent(context, mRefCountedEvents);
-    flushSetEventsImpl(context, &mCommandBuffer);
 }
 
 void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context,
@@ -1891,7 +1889,6 @@ void OutsideRenderPassCommandBufferHelper::trackImagesWithEvent(Context *context
     {
         images[i]->setCurrentRefCountedEvent(context, mRefCountedEvents);
     }
-    flushSetEventsImpl(context, &mCommandBuffer);
 }
 
 void OutsideRenderPassCommandBufferHelper::collectRefCountedEventsGarbage(
