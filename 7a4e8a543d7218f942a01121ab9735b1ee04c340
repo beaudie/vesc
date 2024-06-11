@@ -420,6 +420,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37ac7f90_d6e7d4fc",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-11T01:42:33Z",
+      "side": 1,
+      "message": "I agree. I have added the updates to the following bug: https://anglebug.com/345306326",
+      "parentUuid": "0aebf5d6_deb9635d",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 9
+      },
+      "revId": "7a4e8a543d7218f942a01121ab9735b1ee04c340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1f26651_40675c42",
