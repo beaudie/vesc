@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0def8c6_b2d182a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-11T02:17:15Z",
+      "side": 1,
+      "message": "Apparently I had this in the back of my mind for almost exactly four years now. Please also reference angleproject:42263375 (which you can now close)",
+      "revId": "55ecf61da4a74ce55bf60f1024e58eab958faf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2ba88b35_234ff0e4",
@@ -31,6 +48,30 @@
       "writtenOn": "2024-06-11T01:40:25Z",
       "side": 1,
       "message": "Should it be `[updateBaseLayer, updateLayerEnd]` completely within `[layerIndex, layerEnd]`?",
+      "range": {
+        "startLine": 11222,
+        "startChar": 11,
+        "endLine": 11222,
+        "endChar": 85
+      },
+      "revId": "55ecf61da4a74ce55bf60f1024e58eab958faf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f76711_e78c52b7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 11222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-11T02:17:15Z",
+      "side": 1,
+      "message": "Same question, is this `isWithinLayerRange` or `intersectsLayerRange`?",
+      "parentUuid": "34ccb594_22d7cbf0",
       "range": {
         "startLine": 11222,
         "startChar": 11,
