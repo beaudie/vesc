@@ -56,6 +56,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "706941bd_8d32ef01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-11T12:49:33Z",
+      "side": 1,
+      "message": "Maybe leave that removal for another CL so your events change is unblocked ;)",
+      "parentUuid": "0de16657_0c777988",
+      "revId": "55ecf61da4a74ce55bf60f1024e58eab958faf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2ba88b35_234ff0e4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
