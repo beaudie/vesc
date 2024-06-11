@@ -70,6 +70,24 @@
       "parentUuid": "53c5979c_f90b00a2",
       "revId": "fd145e4b1f3c4bbdd6d03d91a0b473392ff29b02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8bfc647_31f8f5d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-11T17:51:40Z",
+      "side": 1,
+      "message": "Ugh, this actually seems to affect a couple of traces on Pixel 4\nhttps://angle-gold.skia.org/search?issue\u003d5622115\u0026crs\u003dgerrit\u0026patchsets\u003d3\u0026master\u003dtrue\u0026corpus\u003dangle\n\nBetter to keep the feature and do the version check like I did in the previous patchset?.. Or disable these tests on Pixel 4?",
+      "parentUuid": "648abb76_bead2989",
+      "revId": "fd145e4b1f3c4bbdd6d03d91a0b473392ff29b02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
