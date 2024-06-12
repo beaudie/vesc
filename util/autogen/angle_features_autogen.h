@@ -340,7 +340,6 @@ enum class Feature
     SupportsMixedReadWriteDepthStencilLayouts,
     SupportsMultiDrawIndirect,
     SupportsMultisampledRenderToSingleSampled,
-    SupportsMultisampledRenderToSingleSampledGOOGLEX,
     SupportsMultiview,
     SupportsNonConstantLoopIndexing,
     SupportsPipelineCreationFeedback,
