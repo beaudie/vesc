@@ -447,6 +447,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25ccb61a_5eae22bb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-12T01:39:38Z",
+      "side": 1,
+      "message": "Could be worth splitting that so the `mImage`\u0027s views and the MSRTT views are not in the same array. I did that because the array had an unused element (at gl::RenderToTextureImageIndex::Default), but if it saves us memory, it\u0027s perfectly fine to make `mMultisampledImageViews` also a pointer, and have a non-pointer non-array version for the non-MSRTT views.",
+      "parentUuid": "6fd5f9e8_88af83b8",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
