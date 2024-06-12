@@ -305,6 +305,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c4ee201_72efd149",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-12T00:19:15Z",
+      "side": 1,
+      "message": "Right. That is exactly what I am saying: You don\u0027t need to suppport multi level YUV rendering. No one use that. All you need to do is fail it in initImpl if you see this combination. Then you are for sure never run into this situation and you don\u0027t need to exclude yuv here.",
+      "parentUuid": "5fafe546_78e6fb20",
+      "revId": "ac4e4fd97303891bf0b6502e96d35a333cbd3502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ba8eab3_e23dbb4c",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 3
