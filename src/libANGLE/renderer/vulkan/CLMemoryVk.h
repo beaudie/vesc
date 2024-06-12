@@ -139,7 +139,10 @@ class CLImageVk : public CLMemoryVk
     cl_image_format getImageFormat() { return mImageFormat; }
     cl::ImageDescriptor getDesc() { return mDesc; }
     void packPixels(const void *fillColor, void *outData);
-    void fillImageWithColor(const cl::Coordinate &region, uint8_t *imagePtr, void *packedFillColor);
+    void fillImageWithColor(const cl::MemOffsets &origin,
+                            const cl::Coordinate &region,
+                            uint8_t *imagePtr,
+                            void *packedFillColor);
     void setExtent(const cl::Coordinate &region, VkExtent3D *extent);
     void setOffset(const cl::MemOffsets &origin, VkOffset3D *offset);
     void setSubresourceLayers(const cl::MemOffsets &origin,

@@ -669,14 +669,16 @@ void CLImageVk::packPixels(const void *fillColor, void *outData)
     }
 }
 
-void CLImageVk::fillImageWithColor(const cl::Coordinate &region,
+void CLImageVk::fillImageWithColor(const cl::MemOffsets &origin,
+                                   const cl::Coordinate &region,
                                    uint8_t *imagePtr,
                                    void *packedFillColor)
 {
     size_t imageRowPitch   = calculateRowPitch();
     size_t imageSlicePitch = calculateSlicePitch(imageRowPitch);
 
-    uint8_t *ptr = imagePtr;
+    uint8_t *ptr = imagePtr + (origin.z * imageSlicePitch) + (origin.y * imageRowPitch) +
+                   (origin.x * mElementSize);
     for (size_t z = 0; z < region.z; z++)
     {
         uint8_t *rowPtr = ptr;

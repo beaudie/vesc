@@ -586,6 +586,7 @@ angle::Result CLCommandQueueVk::enqueueFillImage(const cl::Image &image,
 {
     CLImageVk &imageVk = image.getImpl<CLImageVk>();
     std::unique_ptr<uint8_t> packedFillColor(new uint8_t[imageVk.getElementSize()]);
+    VkExtent3D extent = imageVk.getImageExtent();
 
     imageVk.packPixels(fillColor, static_cast<void *>(packedFillColor.get()));
 
@@ -596,16 +597,19 @@ angle::Result CLCommandQueueVk::enqueueFillImage(const cl::Image &image,
         ANGLE_TRY(imageVk.createStagingBuffer(imageVk.getSize()));
     }
 
-    ANGLE_TRY(copyImageToFromBuffer(imageVk, imageVk.getStagingBuffer(), origin, region, 0,
+    ANGLE_TRY(copyImageToFromBuffer(imageVk, imageVk.getStagingBuffer(), {0, 0, 0},
+                                    {extent.width, extent.height, extent.depth}, 0,
                                     ImageBufferCopyDirection::ToBuffer));
     ANGLE_TRY(finishInternal());
 
     uint8_t *mapPointer = nullptr;
     ANGLE_TRY(imageVk.map(mapPointer, 0));
-    imageVk.fillImageWithColor(region, mapPointer, static_cast<void *>(packedFillColor.get()));
+    imageVk.fillImageWithColor(origin, region, mapPointer,
+                               static_cast<void *>(packedFillColor.get()));
     imageVk.unmap();
     mapPointer = nullptr;
-    ANGLE_TRY(copyImageToFromBuffer(imageVk, imageVk.getStagingBuffer(), origin, region, 0,
+    ANGLE_TRY(copyImageToFromBuffer(imageVk, imageVk.getStagingBuffer(), {0, 0, 0},
+                                    {extent.width, extent.height, extent.depth}, 0,
                                     ImageBufferCopyDirection::ToImage));
     ANGLE_TRY(finishInternal());
 
