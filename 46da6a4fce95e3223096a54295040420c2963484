@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0894073_135b36c8",
+        "filename": "src/libANGLE/renderer/wgpu/DisplayWgpu.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27492f37_b0e331f0",
+      "range": {
+        "startLine": 113,
+        "startChar": 37,
+        "endLine": 113,
+        "endChar": 39
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7c48c70_15c71db8",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-06-05T21:17:14Z",
       "side": 1,
       "message": "Rename this to `getTextureView()` if mTexture is gonna be renamed to mTextureView.",
+      "range": {
+        "startLine": 39,
+        "startChar": 22,
+        "endLine": 39,
+        "endChar": 32
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4fd19b4_efe35fff",
+        "filename": "src/libANGLE/renderer/wgpu/RenderTargetWgpu.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7c48c70_15c71db8",
       "range": {
         "startLine": 39,
         "startChar": 22,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d55bd6a_b25e7b8a",
+        "filename": "src/libANGLE/renderer/wgpu/RenderTargetWgpu.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd1ababb_d694cd2f",
+      "range": {
+        "startLine": 46,
+        "startChar": 22,
+        "endLine": 46,
+        "endChar": 30
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e23d1766_0e26f9b0",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-06-05T21:17:14Z",
       "side": 1,
       "message": "Maybe we should add an ImageHelper::CreateView() method. The format and dimension we get from the from the texture\u0027s TextureDescriptor anyways, and this could de-dupe some of the code from here and `TextureWgpu::initSingleLayerRenderTargets` since both need to create a TextureView. Something like:\n\n```\nwgpu::TextureView ImageHelper::createTextureView(uint32_t baseMipLevel, uint32_t mipLevelCount, uint32_t baseArrayLayer, uint32_t arrayLayerCount)\n```",
+      "range": {
+        "startLine": 147,
+        "startChar": 71,
+        "endLine": 147,
+        "endChar": 81
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd957422_8692427e",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "Updated it to use the existing `ImageHelper::createTextureView`.",
+      "parentUuid": "e23d1766_0e26f9b0",
       "range": {
         "startLine": 147,
         "startChar": 71,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "744f6987_dc1c5520",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26aa566d_30a5651f",
+      "range": {
+        "startLine": 325,
+        "startChar": 94,
+        "endLine": 325,
+        "endChar": 95
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba84c3d9_f60d3269",
@@ -146,6 +266,30 @@
       "writtenOn": "2024-06-05T23:38:06Z",
       "side": 1,
       "message": "No Wayland?",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 17
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "186f8d73_3a3dd4b7",
+        "filename": "src/libANGLE/renderer/wgpu/linux/wayland/WindowSurfaceWgpuWayland.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "Not yet. I\u0027ll add it later when I have the setup to test it.",
+      "parentUuid": "ba84c3d9_f60d3269",
       "range": {
         "startLine": 27,
         "startChar": 4,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9121f7d7_0c2613d1",
+        "filename": "src/libANGLE/renderer/wgpu/linux/x11/WindowSurfaceWgpuX11.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "Just went ahead and generated an error message :)",
+      "parentUuid": "3821b878_fa62375f",
+      "range": {
+        "startLine": 67,
+        "startChar": 11,
+        "endLine": 67,
+        "endChar": 15
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef25039c_93fecf67",
@@ -192,6 +360,30 @@
       "writtenOn": "2024-06-05T21:17:14Z",
       "side": 1,
       "message": "mMetalLayer gets its bounds from the platform, right? Never the user? \u0027Cause otherwise it might be good to use CheckedNumeric for the type conversion.",
+      "range": {
+        "startLine": 88,
+        "startChar": 5,
+        "endLine": 88,
+        "endChar": 12
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e327ef3_6c616b83",
+        "filename": "src/libANGLE/renderer/wgpu/mac/WindowSurfaceWgpuMetalLayer.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "Yea, it\u0027s from the platform. It auto-sizes to the same size as the CALayer.\n\nThis path will not be used by Chrome so we don\u0027t have to worry about security.",
+      "parentUuid": "ef25039c_93fecf67",
       "range": {
         "startLine": 88,
         "startChar": 5,
@@ -225,6 +417,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "411a7ae6_d277ab51",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_sources.gni",
+        "patchSetId": 20
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "I\u0027m just going to remove the wayland code for now and re-add it when I have the setup.",
+      "parentUuid": "11e4711b_07b44944",
+      "range": {
+        "startLine": 76,
+        "startChar": 2,
+        "endLine": 76,
+        "endChar": 6
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f839936_358674a6",
@@ -238,6 +454,30 @@
       "writtenOn": "2024-06-05T23:38:06Z",
       "side": 1,
       "message": "Optionally `#undef` this later since this is a header (similarly with other defines)",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 26
+      },
+      "revId": "46da6a4fce95e3223096a54295040420c2963484",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78904a7a_dc0acab5",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-12T19:25:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f839936_358674a6",
       "range": {
         "startLine": 29,
         "startChar": 8,
