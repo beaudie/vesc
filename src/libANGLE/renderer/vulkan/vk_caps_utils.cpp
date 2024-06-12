@@ -1108,7 +1108,8 @@ void Renderer::ensureCapsInitialized() const
              mFeatures.exposeNonConformantExtensionsAndVersions.enabled);
         mNativeExtensions.tessellationShaderEXT = tessellationShaderEnabled;
         mNativeExtensions.tessellationShaderOES = tessellationShaderEnabled;
-        mNativeCaps.maxPatchVertices            = rx::LimitToInt(limitsVk.maxTessellationPatchSize);
+        // TODO: Test.
+        mNativeCaps.maxPatchVertices = rx::LimitToInt(limitsVk.maxTessellationPatchSize);
         mNativeCaps.maxTessPatchComponents =
             rx::LimitToInt(limitsVk.maxTessellationControlPerPatchOutputComponents);
         mNativeCaps.maxTessGenLevel = rx::LimitToInt(limitsVk.maxTessellationGenerationLevel);
