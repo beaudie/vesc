@@ -314,6 +314,7 @@ b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.shader_multisample_interpolation.
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.shader_multisample_interpolation.render.interpolate_at_sample_check.rgba8i.samples_4 = SKIP
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.shader_multisample_interpolation.render.interpolate_at_sample_check.rgba8ui.samples_2 = SKIP
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.shader_multisample_interpolation.render.interpolate_at_sample_check.rgba8ui.samples_4 = SKIP
+b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_tessellation.gl_InvocationID_PatchVerticesIn_PrimitiveID = SKIP
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.shader_multisample_interpolation.render.sample.rgba32f.samples_2 = SKIP
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.shader_multisample_interpolation.render.sample.rgba32f.samples_4 = SKIP
 b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.shader_multisample_interpolation.render.sample.rgba8.samples_2 = SKIP
