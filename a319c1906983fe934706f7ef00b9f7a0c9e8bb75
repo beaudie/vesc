@@ -423,6 +423,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fd5f9e8_88af83b8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-12T00:14:17Z",
+      "side": 1,
+      "message": "\u003e mMultisampledImages would be nullptr normally, but the full array-of-array if used with MSRTT?\n\nyes, we can do that but this means we need to handle `mMultisampledImageViews` differently since that is accessed irrespective of MSRTT or not. is disregarding consistency ok?",
+      "parentUuid": "ae1ce1cd_6839fe44",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
