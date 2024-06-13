@@ -210,6 +210,7 @@ class StateManagerGL final : angle::NonCopyable
 
     void setBlendEnabled(bool enabled);
     void setBlendEnabledIndexed(const gl::DrawBufferMask blendEnabledMask);
+    void setBlendAdvancedCoherent(bool enabled);
     void setBlendColor(const gl::ColorF &blendColor);
     void setBlendFuncs(const gl::BlendStateExt &blendStateExt);
     void setBlendEquations(const gl::BlendStateExt &blendStateExt);
@@ -489,6 +490,7 @@ class StateManagerGL final : angle::NonCopyable
 
     gl::ColorF mBlendColor;
     gl::BlendStateExt mBlendStateExt;
+    bool mBlendAdvancedCoherent;
     const bool mIndependentBlendStates;
 
     bool mSampleAlphaToCoverageEnabled;

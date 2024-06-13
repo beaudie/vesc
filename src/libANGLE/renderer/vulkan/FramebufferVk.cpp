@@ -2561,6 +2561,8 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
     mRenderPassDesc.setSamples(getSamples());
     mRenderPassDesc.setViewCount(
         mState.isMultiview() && mState.getNumViews() > 1 ? mState.getNumViews() : 0);
+    mRenderPassDesc.setBlendAdvancedCoherent(
+        contextVk->getState().isBlendAdvancedCoherentEnabled());
 
     // Color attachments.
     const auto &colorRenderTargets               = mRenderTargetCache.getColors();
@@ -3415,6 +3417,10 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         ++colorIndexVk;
     }
 
+    // TODO: Necessary?
+    mRenderPassDesc.setBlendAdvancedCoherent(
+        contextVk->getState().isBlendAdvancedCoherentEnabled());
+
     // Depth/stencil attachment.
     vk::PackedAttachmentIndex depthStencilAttachmentIndex = vk::kAttachmentIndexInvalid;
     RenderTargetVk *depthStencilRenderTarget              = getDepthStencilRenderTarget();
@@ -3786,5 +3792,10 @@ bool FramebufferVk::updateLegacyDither(ContextVk *contextVk)
     }
 
     return false;
+}
+
+void FramebufferVk::updateBlendAdvancedCoherent(const bool blendAdvancedCoherent)
+{
+    mRenderPassDesc.setBlendAdvancedCoherent(blendAdvancedCoherent);
 }
 }  // namespace rx

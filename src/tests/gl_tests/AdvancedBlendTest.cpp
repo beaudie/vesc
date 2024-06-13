@@ -21,10 +21,8 @@ class AdvancedBlendTest : public ANGLETest<>
 
 // Test that when blending is disabled, advanced blend is not applied.
 // Regression test for a bug in the emulation path in the Vulkan backend.
-TEST_P(AdvancedBlendTest, advancedBlendNotAppliedWhenBlendIsDisabled)
+TEST_P(AdvancedBlendTest, AdvancedBlendNotAppliedWhenBlendIsDisabled)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
-
     const char *vertSrc = R"(#version 320 es
         in highp vec4 a_position;
         in mediump vec4 a_color;
@@ -76,13 +74,42 @@ TEST_P(AdvancedBlendTest, advancedBlendNotAppliedWhenBlendIsDisabled)
     EXPECT_PIXEL_COLOR_NEAR(64, 64, GLColor(255, 51, 128, 255), kPixelColorThreshhold);
 }
 
+// Test querying advanced blend equation coherent on supported devices (enabled by default).
+TEST_P(AdvancedBlendTest, AdvancedBlendCoherentQuery)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced_coherent"));
+    GLint status = -1;
+    glGetIntegerv(GL_BLEND_ADVANCED_COHERENT_KHR, &status);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(status, 1);
+
+    glDisable(GL_BLEND_ADVANCED_COHERENT_KHR);
+    glGetIntegerv(GL_BLEND_ADVANCED_COHERENT_KHR, &status);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(status, 0);
+
+    glEnable(GL_BLEND_ADVANCED_COHERENT_KHR);
+    glGetIntegerv(GL_BLEND_ADVANCED_COHERENT_KHR, &status);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(status, 1);
+}
+
+// Test that querying advanced blend equation coherent results in an error as if this enum does not
+// exist.
+TEST_P(AdvancedBlendTest, AdvancedBlendCoherentQueryFailsIfNotSupported)
+{
+    ANGLE_SKIP_TEST_IF(IsGLExtensionEnabled("GL_KHR_blend_equation_advanced_coherent"));
+    GLint status = -1;
+    glGetIntegerv(GL_BLEND_ADVANCED_COHERENT_KHR, &status);
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+}
+
 // Test that when blending is disabled, advanced blend is not applied, but is applied after
 // it is enabled.
 // Regression test for a bug in the emulation path in the Vulkan backend.
-TEST_P(AdvancedBlendTest, advancedBlendDisabledAndThenEnabled)
+TEST_P(AdvancedBlendTest, AdvancedBlendDisabledAndThenEnabled)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
-
+    // TODO: Currently fails.
     const char *vertSrc = R"(#version 320 es
         in highp vec4 a_position;
         in mediump vec4 a_color;
@@ -154,10 +181,8 @@ TEST_P(AdvancedBlendTest, advancedBlendDisabledAndThenEnabled)
 // Test that when blending is enabled, advanced blend is applied, but is not applied after
 // it is disabled.
 // Regression test for a bug in the emulation path in the Vulkan backend.
-TEST_P(AdvancedBlendTest, advancedBlendEnabledAndThenDisabled)
+TEST_P(AdvancedBlendTest, AdvancedBlendEnabledAndThenDisabled)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
-
     const char *vertSrc = R"(#version 320 es
         in highp vec4 a_position;
         in mediump vec4 a_color;
@@ -226,6 +251,18 @@ TEST_P(AdvancedBlendTest, advancedBlendEnabledAndThenDisabled)
 
     EXPECT_PIXEL_COLOR_NEAR(64, 64, GLColor(128, 128, 0, 255), kPixelColorThreshhold);
 }
+
+// TODO: New tests?
+//  In addition to the coherency issues on implementations not supporting
+//    KHR_blend_equation_advanced_coherent, this extension has several
+//    limitations worth noting.  First, the new blend equations are not
+//    supported while rendering to more than one color buffer at once; an
+//    INVALID_OPERATION will be generated if an application attempts to render
+//    any primitives in this unsupported configuration.  Additionally, blending
+//    precision may be limited to 16-bit floating-point, which could result in a
+//    loss of precision and dynamic range for framebuffer formats with 32-bit
+//    floating-point components, and in a loss of precision for formats with 12-
+//    and 16-bit signed or unsigned normalized integer components.
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(AdvancedBlendTest);
 ANGLE_INSTANTIATE_TEST_ES32(AdvancedBlendTest);
