@@ -16,6 +16,24 @@
       "message": "(I\u0027m not sure if Siso is usable for Angle project, though.)",
       "revId": "4d8a29191ff4e6b46911606da33f6f2f9d15430a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14c71e83_b2ae47d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-06-13T18:03:43Z",
+      "side": 1,
+      "message": "I\u0027ve tried it locally and it works.",
+      "parentUuid": "89615381_9844b548",
+      "revId": "4d8a29191ff4e6b46911606da33f6f2f9d15430a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
