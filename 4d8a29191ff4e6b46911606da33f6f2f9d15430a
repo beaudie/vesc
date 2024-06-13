@@ -34,6 +34,23 @@
       "parentUuid": "89615381_9844b548",
       "revId": "4d8a29191ff4e6b46911606da33f6f2f9d15430a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f3ffbb1_1d4d7ea2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-06-13T18:06:00Z",
+      "side": 1,
+      "message": "Actually, please land this after https://chromium-review.googlesource.com/c/chromium/src/+/5627853, otherwise it will confuse the autoroll.",
+      "revId": "4d8a29191ff4e6b46911606da33f6f2f9d15430a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
