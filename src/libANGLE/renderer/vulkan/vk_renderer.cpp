@@ -2384,6 +2384,11 @@ void Renderer::appendDeviceExtensionFeaturesNotPromoted(
     {
         vk::AddToPNextChain(deviceFeatures, &mDynamicRenderingLocalReadFeatures);
     }
+
+    if (ExtensionFound(VK_EXT_BLEND_OPERATION_ADVANCED_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceFeatures, &mBlendOperationAdvancedFeatures);
+    }
 }
 
 // The following features and properties used by ANGLE have been promoted to Vulkan 1.1:
@@ -2723,6 +2728,10 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     mSynchronization2Features       = {};
     mSynchronization2Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SYNCHRONIZATION_2_FEATURES;
 
+    mBlendOperationAdvancedFeatures = {};
+    mBlendOperationAdvancedFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
+
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures = {};
     mExternalFormatResolveFeatures.sType =
@@ -2802,6 +2811,7 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     m8BitStorageFeatures.pNext                        = nullptr;
     m16BitStorageFeatures.pNext                       = nullptr;
     mSynchronization2Features.pNext                   = nullptr;
+    mBlendOperationAdvancedFeatures.pNext             = nullptr;
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures.pNext   = nullptr;
     mExternalFormatResolveProperties.pNext = nullptr;
@@ -3000,6 +3010,7 @@ void Renderer::enableDeviceExtensionsNotPromoted(const vk::ExtensionNameList &de
     if (mFeatures.supportsBlendOperationAdvanced.enabled)
     {
         mEnabledDeviceExtensions.push_back(VK_EXT_BLEND_OPERATION_ADVANCED_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mBlendOperationAdvancedFeatures);
     }
 
     if (mFeatures.supportsGraphicsPipelineLibrary.enabled)
@@ -4761,6 +4772,10 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
         &mFeatures, emulateAdvancedBlendEquations,
         !mFeatures.supportsBlendOperationAdvanced.enabled &&
             (IsAndroid() || !isIntel || (isIntel && IsLinux() && isMesaAtLeast22_0_0)));
+
+    // GL_KHR_blend_equation_advanced_coherent ensures that the blending operations are performed in
+    // API primitive order.
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsBlendOperationAdvancedCoherent, false);
 
     // http://anglebug.com/42265410
     // Android expects VkPresentRegionsKHR rectangles with a bottom-left origin, while spec
