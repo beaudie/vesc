@@ -61,6 +61,39 @@ to other shading languages, and to optionally apply shader modifications to work
 quirks in the native graphics drivers. The translator targets Desktop GLSL, Vulkan GLSL, Direct3D
 HLSL, and even ESSL for native GLES2 platforms.
 
+### ANCLE - Almost Native Compute Layer Engine
+
+In addition to OpenGL ES, ANGLE also provides an optional `OpenCL` runtime built into the same
+output GLES lib.
+
+This work/effort is currently **work-in-progress/experimental**.
+
+ANCLE provides the same benefits as ANGLE, having OpenCL APIs be translated to other HW-supported
+APIs available on that platform.
+
+### Level of OpenCL support via backing renderers
+
+|             |  Direct3D 12     |  Vulkan     |    Metal      |
+|-------------|:----------------:|:-----------:|:-------------:|
+| OpenCL 1.0  |                  | in progress |               |
+| OpenCL 1.1  |                  | in progress |               |
+| OpenCL 1.2  |                  | in progress |               |
+| OpenCL 3.0  |                  | in progress |               |
+
+Each supported backing renderer above ends up being an OpenCL `Platform` for the user to choose from.
+
+OpenCL also has an online compiler component to it that is used to compile `OpenCL C` source code at runtime
+(similarly to GLES and GLSL). Depending on the chosen backend(s), compiler implementations may vary. Below is
+a list of renderers and what OpenCL C compiler implementation is used for each:
+
+- `Vulkan` : [clspv](https://github.com/google/clspv/tree/main)
+
+### Passthrough mode
+
+ANCLE also provides a `Passthrough Mode` which does not perform any API translation at all.
+Instead, it serves as a simple CL passthrough layer that forwards APIs to other OpenCL
+driver(s)/implementation(s).
+
 ## Sources
 
 ANGLE repository is hosted by Chromium project and can be
