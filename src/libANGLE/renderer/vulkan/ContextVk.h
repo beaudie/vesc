@@ -1406,6 +1406,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateRasterizerDiscardEnabled(bool isPrimitivesGeneratedQueryActive);
 
     void updateAdvancedBlendEquations(const gl::ProgramExecutable *executable);
+    void updateBlendAdvancedCoherent(const bool blendAdvancedCoherent);
 
     void updateDither();
 

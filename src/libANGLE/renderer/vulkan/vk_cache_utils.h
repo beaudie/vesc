@@ -231,6 +231,9 @@ class alignas(4) RenderPassDesc final
     void setFragmentShadingAttachment(bool value) { mHasFragmentShadingAttachment = value; }
     bool hasFragmentShadingAttachment() const { return mHasFragmentShadingAttachment; }
 
+    void setBlendAdvancedCoherent(bool value) { mHasBlendAdvancedCoherent = value; }
+    bool hasBlendAdvancedCoherent() const { return mHasBlendAdvancedCoherent; }
+
     angle::FormatID operator[](size_t index) const
     {
         ASSERT(index < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1);
@@ -268,8 +271,12 @@ class alignas(4) RenderPassDesc final
     // Foveated rendering
     uint8_t mHasFragmentShadingAttachment : 1;
 
+    // Advanced coherent blending
+    // TODO: Remove if unused?
+    uint8_t mHasBlendAdvancedCoherent : 1;
+
     // Available space for expansion.
-    uint8_t mPadding2 : 6;
+    uint8_t mPadding2 : 5;
 
     // Whether each color attachment has a corresponding resolve attachment.  Color resolve
     // attachments can be used to optimize resolve through glBlitFramebuffer() as well as support
@@ -821,9 +828,10 @@ class GraphicsPipelineDesc final
     }
 
     void setRenderPassFoveation(bool isFoveated);
-    bool getRenderPassFoveation() const
+
+    bool getBlendAdvancedCoherentEnabled() const
     {
-        return mSharedNonVertexInput.renderPass.hasFragmentShadingAttachment();
+        return mSharedNonVertexInput.renderPass.hasBlendAdvancedCoherent();
     }
 
     void setRenderPassColorAttachmentFormat(size_t colorIndexGL, angle::FormatID formatID);
@@ -856,6 +864,7 @@ class GraphicsPipelineDesc final
                                const gl::DrawBufferMask &enabledDrawBuffers);
     void updateMissingOutputsMask(GraphicsPipelineTransitionBits *transition,
                                   gl::DrawBufferMask missingOutputsMask);
+    void updateBlendAdvancedCoherentEnabled(const bool blendAdvancedCoherent);
 
     // Logic op
     void updateLogicOpEnabled(GraphicsPipelineTransitionBits *transition, bool enable);

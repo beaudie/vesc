@@ -2739,15 +2739,18 @@ angle::Result ContextVk::handleDirtyGraphicsFramebufferFetchBarrier(
 angle::Result ContextVk::handleDirtyGraphicsBlendBarrier(DirtyBits::Iterator *dirtyBitsIterator,
                                                          DirtyBits dirtyBitMask)
 {
-    VkMemoryBarrier memoryBarrier = {};
-    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
+    if (!getFeatures().supportsBlendOperationAdvancedCoherent.enabled)
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
 
-    mRenderPassCommandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                              VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                              GetLocalDependencyFlags(this), 1, &memoryBarrier, 0,
-                                              nullptr, 0, nullptr);
+        mRenderPassCommandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                                  VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                                  GetLocalDependencyFlags(this), 1, &memoryBarrier,
+                                                  0, nullptr, 0, nullptr);
+    }
 
     return angle::Result::Continue;
 }
@@ -5218,6 +5221,20 @@ void ContextVk::updateAdvancedBlendEquations(const gl::ProgramExecutable *execut
     }
 }
 
+void ContextVk::updateBlendAdvancedCoherent(const bool blendAdvancedCoherent)
+{
+    if (mGraphicsPipelineDesc->getBlendAdvancedCoherentEnabled() != blendAdvancedCoherent)
+    {
+        mGraphicsPipelineDesc->updateBlendAdvancedCoherentEnabled(blendAdvancedCoherent);
+
+        FramebufferVk *framebufferVk = vk::GetImpl(mState.getDrawFramebuffer());
+        framebufferVk->updateBlendAdvancedCoherent(blendAdvancedCoherent);
+
+        invalidateCurrentGraphicsPipeline();
+        mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
+    }
+}
+
 void ContextVk::updateDither()
 {
     if (getFeatures().supportsLegacyDithering.enabled)
@@ -5684,6 +5701,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateColorMasks();
                 updateMissingOutputsMask();
                 updateRasterizationSamples(drawFramebufferVk->getSamples());
+                updateBlendAdvancedCoherent(glState.isBlendAdvancedCoherentEnabled());
                 updateRasterizerDiscardEnabled(
                     mState.isQueryActive(gl::QueryType::PrimitivesGenerated));
 
@@ -5906,6 +5924,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                             {
                                 mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE);
                             }
+                            break;
+                        case gl::state::EXTENDED_DIRTY_BIT_BLEND_ADVANCED_COHERENT:
+                            updateBlendAdvancedCoherent(glState.isBlendAdvancedCoherentEnabled());
                             break;
                         default:
                             UNREACHABLE();
@@ -6781,6 +6802,7 @@ void ContextVk::blendBarrier()
     }
     else
     {
+        // TODO: If coherent, no need? Emulation?
         mGraphicsDirtyBits.set(DIRTY_BIT_BLEND_BARRIER);
     }
 }
