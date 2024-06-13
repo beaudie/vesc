@@ -1345,6 +1345,16 @@ void StateManagerGL::setBlendColor(const gl::ColorF &blendColor)
     }
 }
 
+void StateManagerGL::setBlendAdvancedCoherent(bool enabled)
+{
+    if (mBlendAdvancedCoherent != enabled)
+    {
+        mBlendAdvancedCoherent = enabled;
+        mLocalDirtyBits.set(gl::state::DIRTY_BIT_EXTENDED);
+        mLocalExtendedDirtyBits.set(gl::state::EXTENDED_DIRTY_BIT_BLEND_ADVANCED_COHERENT);
+    }
+}
+
 void StateManagerGL::setBlendFuncs(const gl::BlendStateExt &blendStateExt)
 {
     if (mBlendStateExt.getSrcColorBits() == blendStateExt.getSrcColorBits() &&
@@ -2468,6 +2478,9 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                             break;
                         case gl::state::EXTENDED_DIRTY_BIT_SHADING_RATE:
                             // Unimplemented extensions.
+                            break;
+                        case gl::state::EXTENDED_DIRTY_BIT_BLEND_ADVANCED_COHERENT:
+                            setBlendAdvancedCoherent(state.isBlendAdvancedCoherentEnabled());
                             break;
                         default:
                             UNREACHABLE();
