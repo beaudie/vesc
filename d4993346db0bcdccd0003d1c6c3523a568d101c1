@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "477a74a0_8e033a8f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3829,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-13T12:52:06Z",
+      "side": 1,
+      "message": "The reordering of `mImage \u003d\u003d nullptr` check is changed. It\u0027s still correct, but logically more confusing. Better swap them, this is the early path for when the image is already previously released. If `mImage` is nullptr, `mSingleLayerRenderTargets` etc shouldn\u0027t have any data, you can `ASSERT` that. The code was already asserting that `mMultisampledImageViews` are also empty (and there is nothing to release).",
+      "parentUuid": "fe0fe01d_b3d8fe81",
+      "range": {
+        "startLine": 3829,
+        "startChar": 12,
+        "endLine": 3829,
+        "endChar": 19
+      },
+      "revId": "d4993346db0bcdccd0003d1c6c3523a568d101c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc164a07_528ae047",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 9
@@ -71,6 +95,30 @@
       "writtenOn": "2024-06-12T16:42:55Z",
       "side": 1,
       "message": "technically the image should be `mMultisampledImages`, right?",
+      "range": {
+        "startLine": 3836,
+        "startChar": 50,
+        "endLine": 3836,
+        "endChar": 74
+      },
+      "revId": "d4993346db0bcdccd0003d1c6c3523a568d101c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8a1eb53_1a1fb2ec",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3836,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-13T12:52:06Z",
+      "side": 1,
+      "message": "The multisampled view are used at the same time as the image. The image may individually be used more recently, so this is safe (even if pessimistic)",
+      "parentUuid": "fc164a07_528ae047",
       "range": {
         "startLine": 3836,
         "startChar": 50,
