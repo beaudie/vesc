@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce8a297a_268c3320",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-06-13T00:03:57Z",
+      "side": 1,
+      "message": "lgtm\n\nMaybe Shabi can help review if Geoff\u0027s too busy coming back from OOO.",
+      "revId": "bfb7cd243f199f573a503c880005b1699c935bfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03d1a3c0_1094f8e6",
+        "filename": "src/libANGLE/renderer/d3d/ProgramExecutableD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-06-13T00:03:57Z",
+      "side": 1,
+      "message": "Does this change to the serialized form automatically invalidate any on-disk caches because ANGLE\u0027s Git hash changes?",
+      "revId": "bfb7cd243f199f573a503c880005b1699c935bfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
