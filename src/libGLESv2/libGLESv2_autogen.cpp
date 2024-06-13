@@ -5130,6 +5130,8 @@ void GL_APIENTRY glBlendBarrierKHR()
     return GL_BlendBarrierKHR();
 }
 
+// GL_KHR_blend_equation_advanced_coherent
+
 // GL_KHR_debug
 void GL_APIENTRY glDebugMessageCallbackKHR(GLDEBUGPROCKHR callback, const void *userParam)
 {
