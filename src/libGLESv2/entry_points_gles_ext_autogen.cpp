@@ -9934,6 +9934,8 @@ void GL_APIENTRY GL_BlendBarrierKHR()
     ASSERT(!egl::Display::GetCurrentThreadUnlockedTailCall()->any());
 }
 
+// GL_KHR_blend_equation_advanced_coherent
+
 // GL_KHR_debug
 void GL_APIENTRY GL_DebugMessageCallbackKHR(GLDEBUGPROCKHR callback, const void *userParam)
 {
