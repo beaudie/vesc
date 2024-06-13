@@ -4757,7 +4757,11 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
 
     // GL_KHR_blend_equation_advanced_coherent ensures that the blending operations are performed in
     // API primitive order.
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsBlendOperationAdvancedCoherent, false);
+    // TODO: Is emulateAdvancedBlendEquations also included?
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsBlendOperationAdvancedCoherent,
+        mFeatures.supportsBlendOperationAdvanced.enabled &&
+            mBlendOperationAdvancedFeatures.advancedBlendCoherentOperations == VK_TRUE);
 
     // http://anglebug.com/6933
     // Android expects VkPresentRegionsKHR rectangles with a bottom-left origin, while spec

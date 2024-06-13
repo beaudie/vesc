@@ -151,6 +151,7 @@ enum DirtyBitType
     DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING,
     DIRTY_BIT_MULTISAMPLING,
     DIRTY_BIT_SAMPLE_ALPHA_TO_ONE,
+    DIRTY_BIT_BLEND_ADVANCED_COHERENT,
     DIRTY_BIT_COVERAGE_MODULATION,                  // CHROMIUM_framebuffer_mixed_samples
     DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE,  // GL_EXT_sRGB_write_control
     DIRTY_BIT_CURRENT_VALUES,
@@ -163,7 +164,7 @@ enum DirtyBitType
     DIRTY_BIT_INVALID,
     DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
 };
-static_assert(DIRTY_BIT_MAX <= 64, "State dirty bits must be capped at 64");
+static_assert(DIRTY_BIT_MAX <= 65, "State dirty bits must be capped at 65");
 using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
 
 enum ExtendedDirtyBitType
@@ -403,6 +404,10 @@ class PrivateState : angle::NonCopyable
     // Dither state toggle & query
     bool isDitherEnabled() const { return mRasterizer.dither; }
     void setDither(bool enabled);
+
+    // GL_KHR_blend_equation_advanced_coherent
+    void setBlendAdvancedCoherent(bool enabled);
+    bool isBlendAdvancedCoherentEnabled() const { return mBlendAdvancedCoherent; }
 
     // GL_CHROMIUM_bind_generates_resource
     bool isBindGeneratesResourceEnabled() const { return mBindGeneratesResource; }
@@ -665,6 +670,9 @@ class PrivateState : angle::NonCopyable
 
     bool mMultiSampling;
     bool mSampleAlphaToOne;
+
+    // GL_KHR_blend_equation_advanced_coherent
+    bool mBlendAdvancedCoherent;
 
     GLenum mCoverageModulation;
 
@@ -1273,6 +1281,10 @@ class State : angle::NonCopyable
     }
     const ColorF &getBlendColor() const { return mPrivateState.getBlendColor(); }
     bool isStencilTestEnabled() const { return mPrivateState.isStencilTestEnabled(); }
+    bool isBlendAdvancedCoherentEnabled() const
+    {
+        return mPrivateState.isBlendAdvancedCoherentEnabled();
+    }
     bool isStencilWriteEnabled() const { return mPrivateState.isStencilWriteEnabled(); }
     GLint getStencilRef() const { return mPrivateState.getStencilRef(); }
     GLint getStencilBackRef() const { return mPrivateState.getStencilBackRef(); }

@@ -21,10 +21,8 @@ class AdvancedBlendTest : public ANGLETest<>
 
 // Test that when blending is disabled, advanced blend is not applied.
 // Regression test for a bug in the emulation path in the Vulkan backend.
-TEST_P(AdvancedBlendTest, advancedBlendNotAppliedWhenBlendIsDisabled)
+TEST_P(AdvancedBlendTest, AdvancedBlendNotAppliedWhenBlendIsDisabled)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
-
     const char *vertSrc = R"(#version 320 es
         in highp vec4 a_position;
         in mediump vec4 a_color;
@@ -76,13 +74,29 @@ TEST_P(AdvancedBlendTest, advancedBlendNotAppliedWhenBlendIsDisabled)
     EXPECT_PIXEL_COLOR_NEAR(64, 64, GLColor(255, 51, 128, 255), kPixelColorThreshhold);
 }
 
+// Test querying advanced blend equation advanced coherent.
+TEST_P(AdvancedBlendTest, AdvancedBlendCoherentQuery)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced_coherent"));
+    GLint status = -1;
+    glGetIntegerv(GL_BLEND_ADVANCED_COHERENT_KHR, &status);
+    EXPECT_EQ(status, 1);
+
+    glDisable(GL_BLEND_ADVANCED_COHERENT_KHR);
+    glGetIntegerv(GL_BLEND_ADVANCED_COHERENT_KHR, &status);
+    EXPECT_EQ(status, 0);
+
+    glEnable(GL_BLEND_ADVANCED_COHERENT_KHR);
+    glGetIntegerv(GL_BLEND_ADVANCED_COHERENT_KHR, &status);
+    EXPECT_EQ(status, 1);
+}
+
 // Test that when blending is disabled, advanced blend is not applied, but is applied after
 // it is enabled.
 // Regression test for a bug in the emulation path in the Vulkan backend.
-TEST_P(AdvancedBlendTest, advancedBlendDisabledAndThenEnabled)
+TEST_P(AdvancedBlendTest, AdvancedBlendDisabledAndThenEnabled)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
-
+    // TODO: Currently fails.
     const char *vertSrc = R"(#version 320 es
         in highp vec4 a_position;
         in mediump vec4 a_color;
@@ -154,10 +168,8 @@ TEST_P(AdvancedBlendTest, advancedBlendDisabledAndThenEnabled)
 // Test that when blending is enabled, advanced blend is applied, but is not applied after
 // it is disabled.
 // Regression test for a bug in the emulation path in the Vulkan backend.
-TEST_P(AdvancedBlendTest, advancedBlendEnabledAndThenDisabled)
+TEST_P(AdvancedBlendTest, AdvancedBlendEnabledAndThenDisabled)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
-
     const char *vertSrc = R"(#version 320 es
         in highp vec4 a_position;
         in mediump vec4 a_color;

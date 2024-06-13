@@ -737,7 +737,7 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
 //     srcStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 //     dstStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 //     srcAccess = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-//     dstAccess = VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT
+//     dstAccess = VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT (unless it is coherent)
 //
 // Subpass dependencies cannot be added after the fact at the end of the render pass due to render
 // pass compatibility rules.  ANGLE specifies a subpass self-dependency with the above stage/access
@@ -777,7 +777,7 @@ void InitializeDefaultSubpassSelfDependencies(
         dependency->dstStageMask |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
         dependency->dstAccessMask |= VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
     }
-    if (renderer->getFeatures().supportsBlendOperationAdvanced.enabled)
+    if (hasBlendOperationAdvanced && !desc.hasBlendAdvancedCoherent())
     {
         dependency->dstAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
     }
@@ -2823,6 +2823,10 @@ void GraphicsPipelineDesc::initDefaults(const Context *context,
         mFragmentOutput.blendMaskAndLogic.bits.padding = 0;
     }
 
+    // Advanced blend coherent
+    mSharedNonVertexInput.renderPass.setBlendAdvancedCoherent(
+        context->getFeatures().supportsBlendOperationAdvancedCoherent.enabled);
+
     // Context robustness affects vertex input and shader stages.
     mVertexInput.inputAssembly.bits.isRobustContext = mShaders.shaders.bits.isRobustContext =
         pipelineRobustness == PipelineRobustness::Robust;
@@ -3778,6 +3782,11 @@ void GraphicsPipelineDesc::updateBlendEnabled(GraphicsPipelineTransitionBits *tr
 {
     SetBitField(mFragmentOutput.blendMaskAndLogic.bits.blendEnableMask, blendEnabledMask.bits());
     transition->set(ANGLE_GET_TRANSITION_BIT(mFragmentOutput.blendMaskAndLogic.bits));
+}
+
+void GraphicsPipelineDesc::updateBlendAdvancedCoherentEnabled(const bool blendAdvancedCoherent)
+{
+    mSharedNonVertexInput.renderPass.setBlendAdvancedCoherent(blendAdvancedCoherent);
 }
 
 void GraphicsPipelineDesc::updateBlendEquations(GraphicsPipelineTransitionBits *transition,

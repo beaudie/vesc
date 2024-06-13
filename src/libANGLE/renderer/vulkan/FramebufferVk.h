@@ -128,6 +128,8 @@ class FramebufferVk : public FramebufferImpl
 
     bool updateLegacyDither(ContextVk *contextVk);
 
+    void updateBlendAdvancedCoherent(const bool blendAdvancedCoherent);
+
     void setBackbuffer(WindowSurfaceVk *backbuffer) { mBackbuffer = backbuffer; }
     WindowSurfaceVk *getBackbuffer() const { return mBackbuffer; }
 

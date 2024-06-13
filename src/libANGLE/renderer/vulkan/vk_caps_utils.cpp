@@ -421,7 +421,8 @@ void Renderer::ensureCapsInitialized() const
     mNativeExtensions.drawElementsBaseVertexEXT = true;
 
     // Enable EXT_blend_minmax
-    mNativeExtensions.blendMinmaxEXT = true;
+    constexpr bool kEnableBlendMinmaxEXT = true;
+    mNativeExtensions.blendMinmaxEXT     = kEnableBlendMinmaxEXT;
 
     // Enable OES/EXT_draw_buffers_indexed
     mNativeExtensions.drawBuffersIndexedOES = mPhysicalDeviceFeatures.independentBlend == VK_TRUE;
@@ -584,8 +585,12 @@ void Renderer::ensureCapsInitialized() const
     // Vulkan requires advancedBlendMaxColorAttachments to be at least one, so we can support
     // advanced blend as long as the Vulkan extension is supported.  Otherwise, the extension is
     // emulated where possible.
-    mNativeExtensions.blendEquationAdvancedKHR = mFeatures.supportsBlendOperationAdvanced.enabled ||
-                                                 mFeatures.emulateAdvancedBlendEquations.enabled;
+    mNativeExtensions.blendEquationAdvancedKHR =
+        kEnableBlendMinmaxEXT && (mFeatures.supportsBlendOperationAdvanced.enabled ||
+                                  mFeatures.emulateAdvancedBlendEquations.enabled);
+
+    mNativeExtensions.blendEquationAdvancedCoherentKHR =
+        kEnableBlendMinmaxEXT && mFeatures.supportsBlendOperationAdvancedCoherent.enabled;
 
     // Enable EXT_unpack_subimage
     mNativeExtensions.unpackSubimageEXT = true;
