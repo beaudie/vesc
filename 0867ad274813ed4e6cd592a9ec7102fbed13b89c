@@ -16,6 +16,52 @@
       "message": "Okay, updated to include new CapturedTest output.  Note the comments that show calls we always skip.  I little noisy but... probably valuable.\n\n+Roman for his feedback.",
       "revId": "0867ad274813ed4e6cd592a9ec7102fbed13b89c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc924f88_b9a73eed",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8355,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-14T13:14:36Z",
+      "side": 1,
+      "message": "It looks like there are quite a few cases where this would get hit, including debug messages. Do we want everything listed in SkipCall to be added as comments (might get _really_ noisy?) - or only some specific cases?",
+      "range": {
+        "startLine": 8355,
+        "startChar": 8,
+        "endLine": 8355,
+        "endChar": 16
+      },
+      "revId": "0867ad274813ed4e6cd592a9ec7102fbed13b89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1537f66f_6ebe7c78",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-14T13:14:36Z",
+      "side": 1,
+      "message": "I think the wording is a bit confusing.\n\nDoes this mean something along the lines of \"eglSwapBuffers skipped intentionally\"? If so, why eglSwapBuffers was supposed to show up here?",
+      "range": {
+        "startLine": 52,
+        "startChar": 7,
+        "endLine": 52,
+        "endChar": 38
+      },
+      "revId": "0867ad274813ed4e6cd592a9ec7102fbed13b89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
