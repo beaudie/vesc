@@ -263,17 +263,17 @@ egl::Error DisplayWgpu::createWgpuDevice()
     // Get an adapter for the backend to use, and create the device.
     auto adapters = mInstance->EnumerateAdapters();
     wgpu::DawnAdapterPropertiesPowerPreference power_props{};
-    wgpu::AdapterProperties adapterProperties{};
-    adapterProperties.nextInChain = &power_props;
+    wgpu::AdapterInfo adapterInfo{};
+    adapterInfo.nextInChain = &power_props;
 
-    auto isAdapterType = [&adapterProperties](const auto &adapter) -> bool {
+    auto isAdapterType = [&adapterInfo](const auto &adapter) -> bool {
         // picks the first adapter when adapterType is unknown.
         if (adapterType == wgpu::AdapterType::Unknown)
         {
             return true;
         }
-        adapter.GetProperties(&adapterProperties);
-        return adapterProperties.adapterType == adapterType;
+        adapter.GetInfo(&adapterInfo);
+        return adapterInfo.adapterType == adapterType;
     };
 
     auto preferredAdapter = std::find_if(adapters.begin(), adapters.end(), isAdapterType);
