@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c9ac200e_41ffdda2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-14T13:58:52Z",
+      "side": 1,
+      "message": "SG. I wish we had sticky comments.",
+      "parentUuid": "9b417547_de65aec3",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 80
+      },
+      "revId": "47a3d0b992b54881fa3e50d75c3b5d12e3451f0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bae2f90d_badc0ac9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -37,6 +61,23 @@
       "writtenOn": "2024-06-14T13:57:39Z",
       "side": 1,
       "message": "Drive-by LGTM, thanks for stabilizing our results",
+      "revId": "47a3d0b992b54881fa3e50d75c3b5d12e3451f0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42fe1ba7_d9e44a52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-14T13:58:52Z",
+      "side": 1,
+      "message": "As suggested by Yuly:\nhttps://groups.google.com/a/google.com/g/angle-team/c/pl5YZPwf0KA/m/IJ0S3QN-AQAJ",
       "revId": "47a3d0b992b54881fa3e50d75c3b5d12e3451f0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
