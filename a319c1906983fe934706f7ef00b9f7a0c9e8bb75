@@ -495,6 +495,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1768f006_ecbde0e0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T18:29:45Z",
+      "side": 1,
+      "message": "Nice, looks like the lazy allocation here resulted in ~1%-1.5% memory improvement in most traces (notably star_trek_fleet_command, mu_origin_3, pokemon_unite which have high memory usage)",
+      "parentUuid": "8a64a629_474952b0",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
