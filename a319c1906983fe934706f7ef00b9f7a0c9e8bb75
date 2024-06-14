@@ -519,6 +519,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c802130f_281964d3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-14T18:48:37Z",
+      "side": 1,
+      "message": "👍 any public data i have access to?\n\ni was looking at memory footprint while working on this change and imagehelper object was about 700 bytes and imageviewhelper object was around 400 bytes. The total size (xxx * 6 (map) * 16 (level array)) is about 70KB + 40KB \u003d\u003d 100KB and if with multiple textures it adds up real quick",
+      "parentUuid": "1768f006_ecbde0e0",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
