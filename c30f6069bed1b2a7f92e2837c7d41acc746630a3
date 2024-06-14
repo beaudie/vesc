@@ -16,6 +16,24 @@
       "message": "Nice! Would also be nice to remove the workaround altogether for clean up",
       "revId": "c30f6069bed1b2a7f92e2837c7d41acc746630a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b6fc6ba_d351d60b",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2607,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-14T15:51:13Z",
+      "side": 1,
+      "message": "Keeping for now so we have a kill-switch that can be finch-controlled.",
+      "parentUuid": "d590c4e4_210ab84c",
+      "revId": "c30f6069bed1b2a7f92e2837c7d41acc746630a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
