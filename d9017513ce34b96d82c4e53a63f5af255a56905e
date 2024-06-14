@@ -1,0 +1,295 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb02c00f_974efe0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "Some minor suggestions, mostly removing references to ANCLE. I realize ANGLE has \"graphics\" in it, but it\u0027s just a name at this point, it\u0027ll be less confusing in my opinion if we didn\u0027t introduce the similar sounding ANCLE as an externally referenced name.",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba086587_f6ba8d2c",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "Cute, but probably confusing 😄\n\n```suggestion\n### OpenCL Implementation\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f33390c6_af82918d",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "```suggestion\nThis work provides the same benefits as the OpenGL implementation, having OpenCL APIs be translated to other HW-supported\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4143070d_8c317d78",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "We don\u0027t have a d3d12 backend. We _do_ have an OpenCL backend! TBH, unless you plan on adding support to metal or d3d, let\u0027s leave these columns out (like we leave GL and WebGPU out) and add them if support is ever added.\n\n\n```suggestion\n|             |  Vulkan     |  OpenCL     |\n|-------------|:-----------:|:-----------:|\n| OpenCL 1.0  | in progress | in progress |\n| OpenCL 1.1  | in progress | in progress |\n| OpenCL 1.2  | in progress | in progress |\n| OpenCL 3.0  | in progress | in progress |\n```",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 64
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2084930_dd86b1e8",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "```suggestion\nEach supported backing renderer above ends up being an OpenCL `Platform` for the user to choose from.\nThe `OpenCL` backend is a \"passthrough\" implementation which which does not perform any API translation at all, instead forwarding API calls to other OpenCL driver(s)/implementation(s).\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "750be46d_5052920f",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "```suggestion\n- `Vulkan` : [clspv](https://github.com/google/clspv/tree/main)\n- `OpenCL` : Compiler is part of the native driver\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4b3b372_218ff09f",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "Moved the description up so the CL backend is made less special and more like the other backends.\n\n```suggestion\n\n## Sources\n```",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 10
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a615f73_08fdab44",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "ANCLE is sort of a codename, users are not expected to be familiar with it.\n\n```suggestion\n## OpenCL Support\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "765c5dd5_a537f451",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "```suggestion\nA few GN args are needed to enable OpenCL runtime code to be built in the ANGLE lib(s).\n```",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 59
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bdab0a6_ebc4e1f8",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "```suggestion\n# Global enable flag for OpenCL support\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c95536b_b1fc0703",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "Maybe you could just remove these. There\u0027s no d3d12 backend. If you meant d3d11:\n\n```suggestion\n# Disable the D3D11 backend (Does not implement OpenCL)\nangle_enable_d3d11 \u003d false\n\n# Disable the Metal backend (Does not implement OpenCL)\nangle_enable_metal \u003d false\n\n# Disable the GL backend (Does not implement OpenCL)\nangle_enable_gl \u003d false\n\n# Disable the WebGPU backend (Does not implement OpenCL)\nangle_enable_wgpu \u003d false\n```",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 26
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ce147fc_034ec5d2",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "```suggestion\n# Enable the CL backend (i.e. passthrough) if needed\nangle_enable_cl_passthrough \u003d false  // or true\n```",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 35
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07c8e1e5_d559d1f6",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "```suggestion\n### OpenCL Artifacts\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1671c638_03a69728",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "What is your `is_component_build` gn arg? If you set it to `false`, all of these should just get linked into one lib I think.",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8108a07_3453be48",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T20:57:28Z",
+      "side": 1,
+      "message": "```suggestion\n### OpenCL Usage\n\nANGLE\u0027s OpenCL implementation acts no different from any other OpenCL ICD. Applications can either link to an existing system\n```",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 101
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
