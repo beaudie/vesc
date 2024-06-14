@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2c6f22d9_d4a69ba5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8355,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-14T14:40:08Z",
+      "side": 1,
+      "message": "I was hoping to just pick up calls we skipped because they were invalid.  I\u0027ll see if I can tease that out.",
+      "parentUuid": "fc924f88_b9a73eed",
+      "range": {
+        "startLine": 8355,
+        "startChar": 8,
+        "endLine": 8355,
+        "endChar": 16
+      },
+      "revId": "0867ad274813ed4e6cd592a9ec7102fbed13b89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1537f66f_6ebe7c78",
         "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2024-06-14T13:14:36Z",
       "side": 1,
       "message": "I think the wording is a bit confusing.\n\nDoes this mean something along the lines of \"eglSwapBuffers skipped intentionally\"? If so, why eglSwapBuffers was supposed to show up here?",
+      "range": {
+        "startLine": 52,
+        "startChar": 7,
+        "endLine": 52,
+        "endChar": 38
+      },
+      "revId": "0867ad274813ed4e6cd592a9ec7102fbed13b89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e50f8b99_eab38c41",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-14T14:40:08Z",
+      "side": 1,
+      "message": "Agree, these are confusing.  I\u0027ll back that off.",
+      "parentUuid": "1537f66f_6ebe7c78",
       "range": {
         "startLine": 52,
         "startChar": 7,
