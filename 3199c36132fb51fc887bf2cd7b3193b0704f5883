@@ -34,6 +34,23 @@
       "parentUuid": "55c5223c_e7d9c28d",
       "revId": "3199c36132fb51fc887bf2cd7b3193b0704f5883",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a62ae0a_591de152",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1381059
+      },
+      "writtenOn": "2024-06-14T19:13:07Z",
+      "side": 1,
+      "message": "Actually, I kicked off a [manual roll](https://crrev.com/c/5634374) to roll to the correct revision instead of reverting.",
+      "revId": "3199c36132fb51fc887bf2cd7b3193b0704f5883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
