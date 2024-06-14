@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c26aa4e5_7d7f7766",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-14T23:24:01Z",
+      "side": 1,
+      "message": "PTAL - this further reduces the wall time by 20 ms",
+      "revId": "f207ab2d76dcc5740af9314feccd5f684d390b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
