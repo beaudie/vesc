@@ -59,7 +59,7 @@ void GL_APIENTRY GL_AttachShader(GLuint program, GLuint shader)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
         ShaderProgramID shaderPacked  = PackParam<ShaderProgramID>(shader);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -90,7 +90,7 @@ void GL_APIENTRY GL_BindAttribLocation(GLuint program, GLuint index, const GLcha
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -147,7 +147,7 @@ void GL_APIENTRY GL_BindFramebuffer(GLenum target, GLuint framebuffer)
     if (context)
     {
         FramebufferID framebufferPacked = PackParam<FramebufferID>(framebuffer);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -177,7 +177,7 @@ void GL_APIENTRY GL_BindRenderbuffer(GLenum target, GLuint renderbuffer)
     if (context)
     {
         RenderbufferID renderbufferPacked = PackParam<RenderbufferID>(renderbuffer);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -208,7 +208,7 @@ void GL_APIENTRY GL_BindTexture(GLenum target, GLuint texture)
     {
         TextureType targetPacked = PackParam<TextureType>(target);
         TextureID texturePacked  = PackParam<TextureID>(texture);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateBindTexture(context, angle::EntryPoint::GLBindTexture,
                                                 targetPacked, texturePacked));
@@ -402,7 +402,7 @@ void GL_APIENTRY GL_BufferData(GLenum target, GLsizeiptr size, const void *data,
     {
         BufferBinding targetPacked = PackParam<BufferBinding>(target);
         BufferUsage usagePacked    = PackParam<BufferUsage>(usage);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateBufferData(context, angle::EntryPoint::GLBufferData,
                                                targetPacked, size, data, usagePacked));
@@ -431,7 +431,7 @@ void GL_APIENTRY GL_BufferSubData(GLenum target, GLintptr offset, GLsizeiptr siz
     if (context)
     {
         BufferBinding targetPacked = PackParam<BufferBinding>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateBufferSubData(context, angle::EntryPoint::GLBufferSubData,
                                                   targetPacked, offset, size, data));
@@ -457,7 +457,7 @@ GLenum GL_APIENTRY GL_CheckFramebufferStatus(GLenum target)
     GLenum returnValue;
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateCheckFramebufferStatus(
                                 context, angle::EntryPoint::GLCheckFramebufferStatus, target));
@@ -489,7 +489,7 @@ void GL_APIENTRY GL_Clear(GLbitfield mask)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -638,7 +638,7 @@ void GL_APIENTRY GL_CompileShader(GLuint shader)
     if (context)
     {
         ShaderProgramID shaderPacked = PackParam<ShaderProgramID>(shader);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -678,7 +678,7 @@ void GL_APIENTRY GL_CompressedTexImage2D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = PackParam<TextureTarget>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -723,7 +723,7 @@ void GL_APIENTRY GL_CompressedTexSubImage2D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = PackParam<TextureTarget>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -766,7 +766,7 @@ void GL_APIENTRY GL_CopyTexImage2D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = PackParam<TextureTarget>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -808,7 +808,7 @@ void GL_APIENTRY GL_CopyTexSubImage2D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = PackParam<TextureTarget>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -839,7 +839,7 @@ GLuint GL_APIENTRY GL_CreateProgram()
     GLuint returnValue;
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -875,7 +875,7 @@ GLuint GL_APIENTRY GL_CreateShader(GLenum type)
     if (context)
     {
         ShaderType typePacked = PackParam<ShaderType>(type);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -937,7 +937,7 @@ void GL_APIENTRY GL_DeleteBuffers(GLsizei n, const GLuint *buffers)
     if (context)
     {
         const BufferID *buffersPacked = PackParam<const BufferID *>(buffers);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateDeleteBuffers(context, angle::EntryPoint::GLDeleteBuffers, n, buffersPacked));
@@ -963,7 +963,7 @@ void GL_APIENTRY GL_DeleteFramebuffers(GLsizei n, const GLuint *framebuffers)
     if (context)
     {
         const FramebufferID *framebuffersPacked = PackParam<const FramebufferID *>(framebuffers);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateDeleteFramebuffers(context, angle::EntryPoint::GLDeleteFramebuffers, n,
@@ -989,7 +989,7 @@ void GL_APIENTRY GL_DeleteProgram(GLuint program)
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateDeleteProgram(context, angle::EntryPoint::GLDeleteProgram, programPacked));
@@ -1016,7 +1016,7 @@ void GL_APIENTRY GL_DeleteRenderbuffers(GLsizei n, const GLuint *renderbuffers)
     {
         const RenderbufferID *renderbuffersPacked =
             PackParam<const RenderbufferID *>(renderbuffers);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateDeleteRenderbuffers(context, angle::EntryPoint::GLDeleteRenderbuffers, n,
@@ -1042,7 +1042,7 @@ void GL_APIENTRY GL_DeleteShader(GLuint shader)
     if (context)
     {
         ShaderProgramID shaderPacked = PackParam<ShaderProgramID>(shader);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateDeleteShader(context, angle::EntryPoint::GLDeleteShader, shaderPacked));
@@ -1068,7 +1068,7 @@ void GL_APIENTRY GL_DeleteTextures(GLsizei n, const GLuint *textures)
     if (context)
     {
         const TextureID *texturesPacked = PackParam<const TextureID *>(textures);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateDeleteTextures(context, angle::EntryPoint::GLDeleteTextures, n,
                                                    texturesPacked));
@@ -1171,7 +1171,7 @@ void GL_APIENTRY GL_DetachShader(GLuint program, GLuint shader)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
         ShaderProgramID shaderPacked  = PackParam<ShaderProgramID>(shader);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -1225,7 +1225,7 @@ void GL_APIENTRY GL_DisableVertexAttribArray(GLuint index)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateDisableVertexAttribArray(
                                 context, angle::EntryPoint::GLDisableVertexAttribArray, index));
@@ -1331,7 +1331,7 @@ void GL_APIENTRY GL_EnableVertexAttribArray(GLuint index)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateEnableVertexAttribArray(
                                 context, angle::EntryPoint::GLEnableVertexAttribArray, index));
@@ -1355,7 +1355,7 @@ void GL_APIENTRY GL_Finish()
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -1382,7 +1382,7 @@ void GL_APIENTRY GL_Flush()
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -1417,7 +1417,7 @@ void GL_APIENTRY GL_FramebufferRenderbuffer(GLenum target,
     if (context)
     {
         RenderbufferID renderbufferPacked = PackParam<RenderbufferID>(renderbuffer);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -1458,7 +1458,7 @@ void GL_APIENTRY GL_FramebufferTexture2D(GLenum target,
     {
         TextureTarget textargetPacked = PackParam<TextureTarget>(textarget);
         TextureID texturePacked       = PackParam<TextureID>(texture);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -1517,7 +1517,7 @@ void GL_APIENTRY GL_GenBuffers(GLsizei n, GLuint *buffers)
     if (context)
     {
         BufferID *buffersPacked = PackParam<BufferID *>(buffers);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGenBuffers(context, angle::EntryPoint::GLGenBuffers, n, buffersPacked));
@@ -1543,7 +1543,7 @@ void GL_APIENTRY GL_GenFramebuffers(GLsizei n, GLuint *framebuffers)
     if (context)
     {
         FramebufferID *framebuffersPacked = PackParam<FramebufferID *>(framebuffers);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGenFramebuffers(context, angle::EntryPoint::GLGenFramebuffers,
                                                     n, framebuffersPacked));
@@ -1569,7 +1569,7 @@ void GL_APIENTRY GL_GenRenderbuffers(GLsizei n, GLuint *renderbuffers)
     if (context)
     {
         RenderbufferID *renderbuffersPacked = PackParam<RenderbufferID *>(renderbuffers);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGenRenderbuffers(context, angle::EntryPoint::GLGenRenderbuffers,
                                                      n, renderbuffersPacked));
@@ -1595,7 +1595,7 @@ void GL_APIENTRY GL_GenTextures(GLsizei n, GLuint *textures)
     if (context)
     {
         TextureID *texturesPacked = PackParam<TextureID *>(textures);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGenTextures(context, angle::EntryPoint::GLGenTextures, n, texturesPacked));
@@ -1621,7 +1621,7 @@ void GL_APIENTRY GL_GenerateMipmap(GLenum target)
     if (context)
     {
         TextureType targetPacked = PackParam<TextureType>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGenerateMipmap(context, angle::EntryPoint::GLGenerateMipmap, targetPacked));
@@ -1656,7 +1656,7 @@ void GL_APIENTRY GL_GetActiveAttrib(GLuint program,
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetActiveAttrib(context, angle::EntryPoint::GLGetActiveAttrib, programPacked,
@@ -1693,7 +1693,7 @@ void GL_APIENTRY GL_GetActiveUniform(GLuint program,
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetActiveUniform(context, angle::EntryPoint::GLGetActiveUniform, programPacked,
@@ -1727,7 +1727,7 @@ void GL_APIENTRY GL_GetAttachedShaders(GLuint program,
     {
         ShaderProgramID programPacked  = PackParam<ShaderProgramID>(program);
         ShaderProgramID *shadersPacked = PackParam<ShaderProgramID *>(shaders);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetAttachedShaders(context, angle::EntryPoint::GLGetAttachedShaders,
@@ -1756,7 +1756,7 @@ GLint GL_APIENTRY GL_GetAttribLocation(GLuint program, const GLchar *name)
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetAttribLocation(context, angle::EntryPoint::GLGetAttribLocation,
@@ -1788,7 +1788,7 @@ void GL_APIENTRY GL_GetBooleanv(GLenum pname, GLboolean *data)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetBooleanv(context, angle::EntryPoint::GLGetBooleanv, pname, data));
@@ -1816,7 +1816,7 @@ void GL_APIENTRY GL_GetBufferParameteriv(GLenum target, GLenum pname, GLint *par
     if (context)
     {
         BufferBinding targetPacked = PackParam<BufferBinding>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetBufferParameteriv(context, angle::EntryPoint::GLGetBufferParameteriv,
@@ -1842,7 +1842,7 @@ GLenum GL_APIENTRY GL_GetError()
     GLenum returnValue;
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() || ValidateGetError(context, angle::EntryPoint::GLGetError));
         if (isCallValid)
@@ -1872,7 +1872,7 @@ void GL_APIENTRY GL_GetFloatv(GLenum pname, GLfloat *data)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetFloatv(context, angle::EntryPoint::GLGetFloatv, pname, data));
@@ -1903,7 +1903,7 @@ void GL_APIENTRY GL_GetFramebufferAttachmentParameteriv(GLenum target,
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGetFramebufferAttachmentParameteriv(
                                 context, angle::EntryPoint::GLGetFramebufferAttachmentParameteriv,
@@ -1930,7 +1930,7 @@ void GL_APIENTRY GL_GetIntegerv(GLenum pname, GLint *data)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetIntegerv(context, angle::EntryPoint::GLGetIntegerv, pname, data));
@@ -1961,7 +1961,7 @@ void GL_APIENTRY GL_GetProgramInfoLog(GLuint program,
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetProgramInfoLog(context, angle::EntryPoint::GLGetProgramInfoLog,
@@ -1990,7 +1990,7 @@ void GL_APIENTRY GL_GetProgramiv(GLuint program, GLenum pname, GLint *params)
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGetProgramiv(context, angle::EntryPoint::GLGetProgramiv,
                                                  programPacked, pname, params));
@@ -2016,7 +2016,7 @@ void GL_APIENTRY GL_GetRenderbufferParameteriv(GLenum target, GLenum pname, GLin
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetRenderbufferParameteriv(
@@ -2048,7 +2048,7 @@ void GL_APIENTRY GL_GetShaderInfoLog(GLuint shader,
     if (context)
     {
         ShaderProgramID shaderPacked = PackParam<ShaderProgramID>(shader);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGetShaderInfoLog(context, angle::EntryPoint::GLGetShaderInfoLog,
                                                      shaderPacked, bufSize, length, infoLog));
@@ -2081,7 +2081,7 @@ void GL_APIENTRY GL_GetShaderPrecisionFormat(GLenum shadertype,
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGetShaderPrecisionFormat(
                                 context, angle::EntryPoint::GLGetShaderPrecisionFormat, shadertype,
@@ -2111,7 +2111,7 @@ void GL_APIENTRY GL_GetShaderSource(GLuint shader, GLsizei bufSize, GLsizei *len
     if (context)
     {
         ShaderProgramID shaderPacked = PackParam<ShaderProgramID>(shader);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGetShaderSource(context, angle::EntryPoint::GLGetShaderSource,
                                                     shaderPacked, bufSize, length, source));
@@ -2139,7 +2139,7 @@ void GL_APIENTRY GL_GetShaderiv(GLuint shader, GLenum pname, GLint *params)
     if (context)
     {
         ShaderProgramID shaderPacked = PackParam<ShaderProgramID>(shader);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGetShaderiv(context, angle::EntryPoint::GLGetShaderiv,
                                                 shaderPacked, pname, params));
@@ -2164,7 +2164,7 @@ const GLubyte *GL_APIENTRY GL_GetString(GLenum name)
     const GLubyte *returnValue;
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGetString(context, angle::EntryPoint::GLGetString, name));
         if (isCallValid)
@@ -2197,7 +2197,7 @@ void GL_APIENTRY GL_GetTexParameterfv(GLenum target, GLenum pname, GLfloat *para
     if (context)
     {
         TextureType targetPacked = PackParam<TextureType>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetTexParameterfv(context, angle::EntryPoint::GLGetTexParameterfv,
@@ -2226,7 +2226,7 @@ void GL_APIENTRY GL_GetTexParameteriv(GLenum target, GLenum pname, GLint *params
     if (context)
     {
         TextureType targetPacked = PackParam<TextureType>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetTexParameteriv(context, angle::EntryPoint::GLGetTexParameteriv,
@@ -2254,7 +2254,7 @@ GLint GL_APIENTRY GL_GetUniformLocation(GLuint program, const GLchar *name)
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetUniformLocation(context, angle::EntryPoint::GLGetUniformLocation,
@@ -2290,7 +2290,7 @@ void GL_APIENTRY GL_GetUniformfv(GLuint program, GLint location, GLfloat *params
     {
         ShaderProgramID programPacked  = PackParam<ShaderProgramID>(program);
         UniformLocation locationPacked = PackParam<UniformLocation>(location);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGetUniformfv(context, angle::EntryPoint::GLGetUniformfv,
                                                  programPacked, locationPacked, params));
@@ -2318,7 +2318,7 @@ void GL_APIENTRY GL_GetUniformiv(GLuint program, GLint location, GLint *params)
     {
         ShaderProgramID programPacked  = PackParam<ShaderProgramID>(program);
         UniformLocation locationPacked = PackParam<UniformLocation>(location);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateGetUniformiv(context, angle::EntryPoint::GLGetUniformiv,
                                                  programPacked, locationPacked, params));
@@ -2344,7 +2344,7 @@ void GL_APIENTRY GL_GetVertexAttribPointerv(GLuint index, GLenum pname, void **p
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetVertexAttribPointerv(context, angle::EntryPoint::GLGetVertexAttribPointerv,
@@ -2371,7 +2371,7 @@ void GL_APIENTRY GL_GetVertexAttribfv(GLuint index, GLenum pname, GLfloat *param
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetVertexAttribfv(context, angle::EntryPoint::GLGetVertexAttribfv, index,
@@ -2398,7 +2398,7 @@ void GL_APIENTRY GL_GetVertexAttribiv(GLuint index, GLenum pname, GLint *params)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateGetVertexAttribiv(context, angle::EntryPoint::GLGetVertexAttribiv, index,
@@ -2454,7 +2454,7 @@ GLboolean GL_APIENTRY GL_IsBuffer(GLuint buffer)
     if (context)
     {
         BufferID bufferPacked = PackParam<BufferID>(buffer);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateIsBuffer(context, angle::EntryPoint::GLIsBuffer, bufferPacked));
         if (isCallValid)
@@ -2518,7 +2518,7 @@ GLboolean GL_APIENTRY GL_IsFramebuffer(GLuint framebuffer)
     if (context)
     {
         FramebufferID framebufferPacked = PackParam<FramebufferID>(framebuffer);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateIsFramebuffer(context, angle::EntryPoint::GLIsFramebuffer, framebufferPacked));
@@ -2550,7 +2550,7 @@ GLboolean GL_APIENTRY GL_IsProgram(GLuint program)
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateIsProgram(context, angle::EntryPoint::GLIsProgram, programPacked));
@@ -2582,7 +2582,7 @@ GLboolean GL_APIENTRY GL_IsRenderbuffer(GLuint renderbuffer)
     if (context)
     {
         RenderbufferID renderbufferPacked = PackParam<RenderbufferID>(renderbuffer);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateIsRenderbuffer(context, angle::EntryPoint::GLIsRenderbuffer,
                                                    renderbufferPacked));
@@ -2614,7 +2614,7 @@ GLboolean GL_APIENTRY GL_IsShader(GLuint shader)
     if (context)
     {
         ShaderProgramID shaderPacked = PackParam<ShaderProgramID>(shader);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateIsShader(context, angle::EntryPoint::GLIsShader, shaderPacked));
         if (isCallValid)
@@ -2645,7 +2645,7 @@ GLboolean GL_APIENTRY GL_IsTexture(GLuint texture)
     if (context)
     {
         TextureID texturePacked = PackParam<TextureID>(texture);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateIsTexture(context, angle::EntryPoint::GLIsTexture, texturePacked));
@@ -2705,7 +2705,7 @@ void GL_APIENTRY GL_LinkProgram(GLuint program)
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -2799,7 +2799,7 @@ void GL_APIENTRY GL_ReadPixels(GLint x,
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -2828,7 +2828,7 @@ void GL_APIENTRY GL_ReleaseShaderCompiler()
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -2861,7 +2861,7 @@ void GL_APIENTRY GL_RenderbufferStorage(GLenum target,
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -2955,7 +2955,7 @@ void GL_APIENTRY GL_ShaderBinary(GLsizei count,
     if (context)
     {
         const ShaderProgramID *shadersPacked = PackParam<const ShaderProgramID *>(shaders);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -2991,7 +2991,7 @@ void GL_APIENTRY GL_ShaderSource(GLuint shader,
     if (context)
     {
         ShaderProgramID shaderPacked = PackParam<ShaderProgramID>(shader);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -3197,7 +3197,7 @@ void GL_APIENTRY GL_TexImage2D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = PackParam<TextureTarget>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -3230,7 +3230,7 @@ void GL_APIENTRY GL_TexParameterf(GLenum target, GLenum pname, GLfloat param)
     if (context)
     {
         TextureType targetPacked = PackParam<TextureType>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateTexParameterf(context, angle::EntryPoint::GLTexParameterf,
                                                   targetPacked, pname, param));
@@ -3258,7 +3258,7 @@ void GL_APIENTRY GL_TexParameterfv(GLenum target, GLenum pname, const GLfloat *p
     if (context)
     {
         TextureType targetPacked = PackParam<TextureType>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateTexParameterfv(context, angle::EntryPoint::GLTexParameterfv,
                                                    targetPacked, pname, params));
@@ -3285,7 +3285,7 @@ void GL_APIENTRY GL_TexParameteri(GLenum target, GLenum pname, GLint param)
     if (context)
     {
         TextureType targetPacked = PackParam<TextureType>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateTexParameteri(context, angle::EntryPoint::GLTexParameteri,
                                                   targetPacked, pname, param));
@@ -3313,7 +3313,7 @@ void GL_APIENTRY GL_TexParameteriv(GLenum target, GLenum pname, const GLint *par
     if (context)
     {
         TextureType targetPacked = PackParam<TextureType>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateTexParameteriv(context, angle::EntryPoint::GLTexParameteriv,
                                                    targetPacked, pname, params));
@@ -3351,7 +3351,7 @@ void GL_APIENTRY GL_TexSubImage2D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = PackParam<TextureTarget>(target);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context->getPrivateState(),
@@ -3434,7 +3434,7 @@ void GL_APIENTRY GL_Uniform1i(GLint location, GLint v0)
     if (context)
     {
         UniformLocation locationPacked = PackParam<UniformLocation>(location);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateUniform1i(context, angle::EntryPoint::GLUniform1i, locationPacked, v0));
@@ -3461,7 +3461,7 @@ void GL_APIENTRY GL_Uniform1iv(GLint location, GLsizei count, const GLint *value
     if (context)
     {
         UniformLocation locationPacked = PackParam<UniformLocation>(location);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateUniform1iv(context, angle::EntryPoint::GLUniform1iv,
                                                locationPacked, count, value));
@@ -3897,7 +3897,7 @@ void GL_APIENTRY GL_UseProgram(GLuint program)
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateUseProgram(context, angle::EntryPoint::GLUseProgram, programPacked));
@@ -3922,7 +3922,7 @@ void GL_APIENTRY GL_ValidateProgram(GLuint program)
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateValidateProgram(context, angle::EntryPoint::GLValidateProgram, programPacked));
@@ -4170,7 +4170,7 @@ void GL_APIENTRY GL_VertexAttribPointer(GLuint index,
     if (context)
     {
         VertexAttribType typePacked = PackParam<VertexAttribType>(type);
-        SCOPED_SHARE_CONTEXT_LOCK(context);
+        //SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateVertexAttribPointer(context, angle::EntryPoint::GLVertexAttribPointer, index,
