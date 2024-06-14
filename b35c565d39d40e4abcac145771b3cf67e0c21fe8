@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "b35c565d39d40e4abcac145771b3cf67e0c21fe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c863e78a_09b46233",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T13:41:23Z",
+      "side": 1,
+      "message": "Leaving review to wgpu/ folks",
+      "revId": "b35c565d39d40e4abcac145771b3cf67e0c21fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
