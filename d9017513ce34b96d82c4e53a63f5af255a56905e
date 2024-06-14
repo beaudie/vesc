@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21142daa_8e4a3bcd",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T21:40:05Z",
+      "side": 1,
+      "message": "Yup, at least what we call it haha. I understand the possible off-by-one letter confusion tho, will update.",
+      "parentUuid": "ba086587_f6ba8d2c",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f33390c6_af82918d",
         "filename": "README.md",
         "patchSetId": 2
@@ -65,6 +83,30 @@
       "writtenOn": "2024-06-14T20:57:28Z",
       "side": 1,
       "message": "We don\u0027t have a d3d12 backend. We _do_ have an OpenCL backend! TBH, unless you plan on adding support to metal or d3d, let\u0027s leave these columns out (like we leave GL and WebGPU out) and add them if support is ever added.\n\n\n```suggestion\n|             |  Vulkan     |  OpenCL     |\n|-------------|:-----------:|:-----------:|\n| OpenCL 1.0  | in progress | in progress |\n| OpenCL 1.1  | in progress | in progress |\n| OpenCL 1.2  | in progress | in progress |\n| OpenCL 3.0  | in progress | in progress |\n```",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 64
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37af279d_3f7382c1",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T21:40:05Z",
+      "side": 1,
+      "message": "Got it - will update.",
+      "parentUuid": "4143070d_8c317d78",
       "range": {
         "startLine": 76,
         "startChar": 0,
@@ -214,6 +256,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "38be3436_981dd56a",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T21:40:05Z",
+      "side": 1,
+      "message": "Oh, I see - yeah I meant d3d12 due to its compute shader support.\n\nBut I do see `DirectCompute` support for d3d10 and d3d11. Okay, will update this, thanks!",
+      "parentUuid": "7c95536b_b1fc0703",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 26
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ce147fc_034ec5d2",
         "filename": "doc/DevSetup.md",
         "patchSetId": 2
@@ -265,6 +331,24 @@
       "writtenOn": "2024-06-14T20:57:28Z",
       "side": 1,
       "message": "What is your `is_component_build` gn arg? If you set it to `false`, all of these should just get linked into one lib I think.",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b4bf7a8_898e445b",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T21:40:05Z",
+      "side": 1,
+      "message": "Ah so that\u0027s what that is for. Let me try that out and see if it does that, thanks",
+      "parentUuid": "1671c638_03a69728",
       "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
