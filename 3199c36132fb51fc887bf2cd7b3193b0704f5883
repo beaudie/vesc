@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55c5223c_e7d9c28d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T18:58:10Z",
+      "side": 1,
+      "message": "It does exist?\n\nhttps://github.com/KhronosGroup/VK-GL-CTS/commit/1c5f78753fd9a9417df997cdc15bfdbdd3ae47f9",
+      "revId": "3199c36132fb51fc887bf2cd7b3193b0704f5883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
