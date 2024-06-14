@@ -50,6 +50,23 @@
       "message": "Thanks!",
       "revId": "b35c565d39d40e4abcac145771b3cf67e0c21fe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fb3a05a_8862f0db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-06-14T17:56:28Z",
+      "side": 1,
+      "message": "Actually GetProperties() is removed in https://chromium-review.googlesource.com/c/angle/angle/+/5525974. Does that CL use anything that should be removed?",
+      "revId": "b35c565d39d40e4abcac145771b3cf67e0c21fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
