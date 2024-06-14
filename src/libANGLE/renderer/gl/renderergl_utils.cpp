@@ -2605,7 +2605,7 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
                             isNvidia && (IsWindows() || IsLinux()));
 
     // https://anglebug.com/7405
-    ANGLE_FEATURE_CONDITION(features, disableTextureClampToBorder, isImagination);
+    ANGLE_FEATURE_CONDITION(features, disableTextureClampToBorder, false);
 
     // https://anglebug.com/7527
     ANGLE_FEATURE_CONDITION(features, passHighpToPackUnormSnormBuiltins, isQualcomm);
