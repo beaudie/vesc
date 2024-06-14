@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3f8e757_89b2aea8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T19:27:55Z",
+      "side": 1,
+      "message": "Please skip the test failure on linux-test, it looks like the test reordering has uncovered a bug in that ancient Nvidia driver.",
+      "revId": "083bce10d1b81f36314c226e0932b8eacc7eb052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
