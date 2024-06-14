@@ -16,6 +16,23 @@
       "message": "Please skip the test failure on linux-test, it looks like the test reordering has uncovered a bug in that ancient Nvidia driver.",
       "revId": "083bce10d1b81f36314c226e0932b8eacc7eb052",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b2316e1_e3feaffb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-06-14T19:30:29Z",
+      "side": 1,
+      "message": "lgtm+2\n\nThank you Alexey and Quyen for tracking this down! Does this fix Gregg\u0027s occlusion query test that was failing on the Metal backend?\n\nMaybe this CL should also reference crbug.com/332743717 and anglebug.com/42265631 .",
+      "revId": "083bce10d1b81f36314c226e0932b8eacc7eb052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
