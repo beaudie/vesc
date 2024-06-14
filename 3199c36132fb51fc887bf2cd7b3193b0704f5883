@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e72e2301_d0aaefb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1560543
+      },
+      "writtenOn": "2024-06-14T20:49:52Z",
+      "side": 1,
+      "message": "It\u0027s not on main branch anymore, and it\u0027s not reachable from GoB, so nobody can fetch it. Let\u0027s roll it back.",
+      "parentUuid": "1e6be07b_b51ae819",
+      "revId": "3199c36132fb51fc887bf2cd7b3193b0704f5883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1a62ae0a_591de152",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
