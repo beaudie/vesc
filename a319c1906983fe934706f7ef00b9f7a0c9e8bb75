@@ -567,6 +567,30 @@
       },
       "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb3df139_bb744995",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-14T18:54:19Z",
+      "side": 1,
+      "message": "I got a perf alert about it from our perf bots: https://angle-perf.skia.org/e/?begin\u003d1718265736\u0026end\u003d1718385010\u0026keys\u003dX31af67cc028bb8354f43b379a2eba12c\u0026num_commits\u003d50\u0026request_type\u003d1\u0026xbaroffset\u003d23324\n\nOpening it in private browsing I see it asks for a login, so presumably it\u0027s not public, but you are welcome to give it a try.",
+      "parentUuid": "3374c424_9e058596",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 606,
+        "endChar": 88
+      },
+      "revId": "a319c1906983fe934706f7ef00b9f7a0c9e8bb75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
