@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6d27984_78909d61",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21142daa_8e4a3bcd",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f33390c6_af82918d",
@@ -66,6 +84,24 @@
       "writtenOn": "2024-06-14T20:57:28Z",
       "side": 1,
       "message": "```suggestion\nThis work provides the same benefits as the OpenGL implementation, having OpenCL APIs be translated to other HW-supported\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b718bdd2_fe3b4463",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f33390c6_af82918d",
       "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -117,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6becb9be_b89924a7",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37af279d_3f7382c1",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 64
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2084930_dd86b1e8",
@@ -134,6 +194,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0026b3a_93a38cfc",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2084930_dd86b1e8",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "750be46d_5052920f",
@@ -147,6 +225,24 @@
       "writtenOn": "2024-06-14T20:57:28Z",
       "side": 1,
       "message": "```suggestion\n- `Vulkan` : [clspv](https://github.com/google/clspv/tree/main)\n- `OpenCL` : Compiler is part of the native driver\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc85166a_147676b9",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "750be46d_5052920f",
       "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -174,6 +270,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b92a7435_54d7d5b9",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4b3b372_218ff09f",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 10
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a615f73_08fdab44",
@@ -187,6 +307,24 @@
       "writtenOn": "2024-06-14T20:57:28Z",
       "side": 1,
       "message": "ANCLE is sort of a codename, users are not expected to be familiar with it.\n\n```suggestion\n## OpenCL Support\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4581d80a_355c6748",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a615f73_08fdab44",
       "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -214,6 +352,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfdfc7f8_6dfbe7a3",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "765c5dd5_a537f451",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 59
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bdab0a6_ebc4e1f8",
@@ -227,6 +389,24 @@
       "writtenOn": "2024-06-14T20:57:28Z",
       "side": 1,
       "message": "```suggestion\n# Global enable flag for OpenCL support\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e8c872c_cd401fcb",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bdab0a6_ebc4e1f8",
       "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -278,6 +458,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7fa21ef_d842c2cf",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38be3436_981dd56a",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 26
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ce147fc_034ec5d2",
@@ -301,6 +505,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6bed739_1a2cb4fa",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ce147fc_034ec5d2",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 35
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07c8e1e5_d559d1f6",
@@ -314,6 +542,24 @@
       "writtenOn": "2024-06-14T20:57:28Z",
       "side": 1,
       "message": "```suggestion\n### OpenCL Artifacts\n```",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8841ceb5_e91e9f61",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07c8e1e5_d559d1f6",
       "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -353,6 +599,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "debc3a38_ca6cf7e4",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Yup looks like it - thanks for the info.\n\nDone.",
+      "parentUuid": "0b4bf7a8_898e445b",
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8108a07_3453be48",
@@ -366,6 +630,30 @@
       "writtenOn": "2024-06-14T20:57:28Z",
       "side": 1,
       "message": "```suggestion\n### OpenCL Usage\n\nANGLE\u0027s OpenCL implementation acts no different from any other OpenCL ICD. Applications can either link to an existing system\n```",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 101
+      },
+      "revId": "d9017513ce34b96d82c4e53a63f5af255a56905e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "690c19fd_5fb8976a",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-14T22:46:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8108a07_3453be48",
       "range": {
         "startLine": 309,
         "startChar": 0,
