@@ -16,6 +16,24 @@
       "message": "It does exist?\n\nhttps://github.com/KhronosGroup/VK-GL-CTS/commit/1c5f78753fd9a9417df997cdc15bfdbdd3ae47f9",
       "revId": "3199c36132fb51fc887bf2cd7b3193b0704f5883",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e6be07b_b51ae819",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1381059
+      },
+      "writtenOn": "2024-06-14T19:00:16Z",
+      "side": 1,
+      "message": "Seems like an orphan commit? The mirrored repo doesn\u0027t have this commit at all: https://chromium.googlesource.com/external/github.com/KhronosGroup/VK-GL-CTS/+log",
+      "parentUuid": "55c5223c_e7d9c28d",
+      "revId": "3199c36132fb51fc887bf2cd7b3193b0704f5883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
