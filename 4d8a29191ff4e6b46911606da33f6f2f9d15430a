@@ -69,6 +69,23 @@
       "parentUuid": "14c71e83_b2ae47d7",
       "revId": "4d8a29191ff4e6b46911606da33f6f2f9d15430a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36a905bb_69f6d415",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1560543
+      },
+      "writtenOn": "2024-06-14T19:52:42Z",
+      "side": 1,
+      "message": "chromium/src siso change has landed. But, I can\u0027t CQ+2 this CL",
+      "revId": "4d8a29191ff4e6b46911606da33f6f2f9d15430a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
