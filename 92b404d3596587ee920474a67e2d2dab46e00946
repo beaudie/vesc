@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aab4a8de_9841e531",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-15T01:44:35Z",
+      "side": 1,
+      "message": "My own typo:\n\n```suggestion\nThe `OpenCL` backend is a \"passthrough\" implementation which does not perform any API translation\n```",
+      "revId": "92b404d3596587ee920474a67e2d2dab46e00946",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
