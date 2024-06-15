@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d63b5e00_3ea9f5a3",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-15T02:02:13Z",
+      "side": 1,
+      "message": "No",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbb8db3d_b383026a",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-15T02:02:13Z",
+      "side": 1,
+      "message": "Please undo this and move the dirty bit to ExtendedDirtyBitType. The reason this is 64 is so that this fits in a single-word bitset. The multi-word bitset is significantly more expensive, so rare dirty bits are pushed to a second bitset.",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db16f23_d41a487d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2742,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-15T02:02:13Z",
+      "side": 1,
+      "message": "You can probably just drop the if. The app shouldn\u0027t call the barrier when coherent, but if you want to be extra sure, make it a function of the appropriate feature (see other comment about how the GL state cannot really affect how Vulkan works).",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e9c429f_8084d1a3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-15T02:02:13Z",
+      "side": 1,
+      "message": "So in Vulkan there\u0027s really no sense in \"switching\" to non-coherent blend. If blend is coherent, it\u0027s just coherent. So you can actually ignore the GL state for this I believe.\n\nA lot of the changes in the backend can be undone by checking the features instead (which never change)",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3562e563_964d3d45",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-15T02:02:13Z",
+      "side": 1,
+      "message": "Given that it\u0027s always true, no real need for this. Just add augment the comment above mNativeExtensions.blendEquationAdvancedKHR if you really care to mention blendMinmax.",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afe8d477_eb8914b7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-15T02:02:13Z",
+      "side": 1,
+      "message": "In a follow up, or here, you can add `|| (mFeatures.emulateAdvancedBlendEquations.enabled \u0026\u0026 mFeatures.supportsShaderFramebufferFetch.enabled)` to get coherent advanced blend with emulation. I don\u0027t believe you\u0027d need anything else to make that happen, maybe a similar check when creating the subpass self dependencies.",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0627055_bef66077",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4762,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-15T02:02:13Z",
+      "side": 1,
+      "message": "Not here. This is purely about the Vulkan extension.",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3026be60_3ca6653e",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-15T02:02:13Z",
+      "side": 1,
+      "message": "Everywhere? Why is the extension-check removed?",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
