@@ -777,8 +777,10 @@ void InitializeDefaultSubpassSelfDependencies(
         dependency->dstStageMask |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
         dependency->dstAccessMask |= VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
     }
-    if (hasBlendOperationAdvanced &&
-        !renderer->getFeatures().supportsBlendOperationAdvancedCoherent.enabled)
+    if ((hasBlendOperationAdvanced &&
+         !renderer->getFeatures().supportsBlendOperationAdvancedCoherent.enabled) ||
+        !(renderer->getFeatures().emulateAdvancedBlendEquations.enabled &&
+          renderer->getFeatures().supportsShaderFramebufferFetch.enabled))
     {
         dependency->dstAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
     }
