@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6f3fea6_e37127bf",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1706,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-17T16:09:07Z",
+      "side": 1,
+      "message": "Yes. It was this way before as well and on all Android devices because as far as I can tell, Qualcomm is the only vendor to implement EXT_blend_func_extended on GLES.\n\nLooks like our default location assignment is aligned with the drivers.",
+      "parentUuid": "7644554b_b30ef45c",
+      "revId": "bff0c227c0721b458f2ece2ffdcc665e28b95824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bd0b1e3_3d12aa5a",
@@ -101,6 +119,30 @@
       "writtenOn": "2024-05-31T16:54:24Z",
       "side": 1,
       "message": "These four bits define 16 possible states but most of them are impossible.\n\nIn practice, there are only two states:\n\n1. Both location and index are set in a shader; API calls have no effect on that output. Assigning only index without location would be a GLSL parse error. If a shader assigns only a location, it implicitly assigns an index zero that cannot be overridden by API. \n\n2. Neither location nor index are set in a shader; API calls define both values. Calling `glBindFragDataLocationEXT(p, loc, output)` is exactly the same as calling `glBindFragDataLocationIndexedEXT(p, loc, 0, output)`.",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 181,
+        "endChar": 41
+      },
+      "revId": "bff0c227c0721b458f2ece2ffdcc665e28b95824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e8a71b4_34fc7b4e",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-17T16:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bd0b1e3_3d12aa5a",
       "range": {
         "startLine": 178,
         "startChar": 0,
