@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3189a12_6831571e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-17T22:56:11Z",
+      "side": 1,
+      "message": "Example perfetto trace with these counters: https://screenshot.googleplex.com/9Y2fnqQMWUoKLBP",
+      "revId": "006923acddf16f601348bbe96835f094c9fb6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
