@@ -9947,6 +9947,39 @@ void Context::startTiling(GLuint x, GLuint y, GLuint width, GLuint height, GLbit
     UNIMPLEMENTED();
 }
 
+void Context::clearTexImage(TextureID texturePacked,
+                            GLint level,
+                            GLenum format,
+                            GLenum type,
+                            const void *data)
+{
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
+
+    Texture *texture = getTexture(texturePacked);
+    ANGLE_CONTEXT_TRY(
+        texture->clearImage(this, level, format, type, static_cast<const uint8_t *>(data)));
+}
+
+void Context::clearTexSubImage(TextureID texturePacked,
+                               GLint level,
+                               GLint xoffset,
+                               GLint yoffset,
+                               GLint zoffset,
+                               GLsizei width,
+                               GLsizei height,
+                               GLsizei depth,
+                               GLenum format,
+                               GLenum type,
+                               const void *data)
+{
+    ANGLE_CONTEXT_TRY(syncStateForTexImage());
+
+    Box area(xoffset, yoffset, zoffset, width, height, depth);
+    Texture *texture = getTexture(texturePacked);
+    ANGLE_CONTEXT_TRY(texture->clearSubImage(this, level, area, format, type,
+                                             static_cast<const uint8_t *>(data)));
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Debug *debug,
                    const angle::FrontendFeatures &frontendFeatures,
