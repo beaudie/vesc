@@ -193,6 +193,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a966d7e_1ba36dc0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-17T22:38:17Z",
+      "side": 1,
+      "message": "Added in the follow-up",
+      "parentUuid": "afe8d477_eb8914b7",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0627055_bef66077",
@@ -259,6 +277,24 @@
       "side": 1,
       "message": "It failed on my local Linux due to VVL.\nSince the test suite should use ES 3.2, which should have this feature, is the extension check still needed?",
       "parentUuid": "3026be60_3ca6653e",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18188674_cb615685",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-17T22:38:17Z",
+      "side": 1,
+      "message": "After making changes, it is currently failing on the Intel bots, but that failure already existed in the baseline and was being skipped.",
+      "parentUuid": "2359518d_a5c82882",
       "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
