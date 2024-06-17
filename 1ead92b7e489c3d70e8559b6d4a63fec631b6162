@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87bba057_d84a7910",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-17T18:12:33Z",
+      "side": 1,
+      "message": "Could you please add a few state-change tests? Like:\n\n- Define two levels of a mutable texture with glTexImage then clear one level, upload to a subresource of that level (not all of it), then draw\n- Define two levels of a mutable texture glTexImage with data, then clear a subregion of one of them, upload to an overlapping (but not encompassing) region of that level, then draw\n- Draw with a texture, then clear a portion of it, then draw again\n- Define multiple levels of a mutable texture, clear level 2, then call glGenerateMipmap on level 1 and draw with levels [1..N]\n- Define multiple levels of a mutable texture, clear level 3, then call glGenerateMipmap on level 3 and draw with levels [3..N]\n- There are probably more tricky cases\n\n@abdolrashidi@google.com was looking into implementing this for Vulkan, which is where this stuff gets tricky, it would also make sense IMO for him to follow up with these tests.",
+      "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
