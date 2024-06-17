@@ -16,6 +16,23 @@
       "message": "PTAL - this further reduces the wall time by 20 ms",
       "revId": "f207ab2d76dcc5740af9314feccd5f684d390b67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54a58765_5bc591ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-17T19:00:47Z",
+      "side": 1,
+      "message": "thanks, landing this",
+      "revId": "f207ab2d76dcc5740af9314feccd5f684d390b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
