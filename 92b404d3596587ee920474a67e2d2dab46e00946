@@ -16,6 +16,24 @@
       "message": "My own typo:\n\n```suggestion\nThe `OpenCL` backend is a \"passthrough\" implementation which does not perform any API translation\n```",
       "revId": "92b404d3596587ee920474a67e2d2dab46e00946",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8df27f1e_c7d423ba",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-06-17T17:56:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "aab4a8de_9841e531",
+      "revId": "92b404d3596587ee920474a67e2d2dab46e00946",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
