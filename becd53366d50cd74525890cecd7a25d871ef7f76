@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48b6b98f_2757e9b4",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-17T20:00:27Z",
+      "side": 1,
+      "message": "Thanks",
+      "parentUuid": "d63b5e00_3ea9f5a3",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bbb8db3d_b383026a",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-06-15T02:02:13Z",
       "side": 1,
       "message": "Please undo this and move the dirty bit to ExtendedDirtyBitType. The reason this is 64 is so that this fits in a single-word bitset. The multi-word bitset is significantly more expensive, so rare dirty bits are pushed to a second bitset.",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "818ccbe1_90e692af",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-17T20:00:27Z",
+      "side": 1,
+      "message": "I see. Updated. Thanks!",
+      "parentUuid": "bbb8db3d_b383026a",
       "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1998cc30_1bfa9392",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2742,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-17T20:00:27Z",
+      "side": 1,
+      "message": "Replaced with `supportsBlendOperationAdvancedCoherent`, which will remain constant.",
+      "parentUuid": "3db16f23_d41a487d",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4e9c429f_8084d1a3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 3
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fda8ab72_f7f784e9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-17T20:00:27Z",
+      "side": 1,
+      "message": "So IIUC, toggling this flag would change the GL state, but no changes will be made on the Vulkan side. If the related Vulkan extension is supported, the device performs the blend in a coherent manner regardless.",
+      "parentUuid": "4e9c429f_8084d1a3",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3562e563_964d3d45",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 3
@@ -82,6 +154,24 @@
       "writtenOn": "2024-06-15T02:02:13Z",
       "side": 1,
       "message": "Given that it\u0027s always true, no real need for this. Just add augment the comment above mNativeExtensions.blendEquationAdvancedKHR if you really care to mention blendMinmax.",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87db9f11_09b044e5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-17T20:00:27Z",
+      "side": 1,
+      "message": "Removed this and added comment above `blendEquationAdvancedKHR`.",
+      "parentUuid": "3562e563_964d3d45",
       "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad507b26_11bf9218",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4762,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-17T20:00:27Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "f0627055_bef66077",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3026be60_3ca6653e",
@@ -133,6 +241,24 @@
       "writtenOn": "2024-06-15T02:02:13Z",
       "side": 1,
       "message": "Everywhere? Why is the extension-check removed?",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2359518d_a5c82882",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-17T20:00:27Z",
+      "side": 1,
+      "message": "It failed on my local Linux due to VVL.\nSince the test suite should use ES 3.2, which should have this feature, is the extension check still needed?",
+      "parentUuid": "3026be60_3ca6653e",
       "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
