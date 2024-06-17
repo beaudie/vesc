@@ -16,6 +16,24 @@
       "message": "@m.maiya@samsung.com took me a while to get to this, but here\u0027s the alternative version we talked about. Perf really depends on how sparse the bindings are, I suspect they are generally already packed in most applications, in which case the hash should be faster.\n\nDo you want to verify the performance here before this can land?",
       "revId": "73ebb1ae7ce2218e6e7eb14aa6476540cac65239",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "510fac8c_892d5542",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-17T16:51:46Z",
+      "side": 1,
+      "message": "https://issues.angleproject.org/issues/42267114#comment15\n\n1. hashed bytes definitely sees positive impact (as expected)\n2. hashed time has positive impact mostly near the tail (as expected)\n\nso ignoring corner case where new app has sparse bindings the change looks good",
+      "parentUuid": "0e56b550_3e634fd5",
+      "revId": "73ebb1ae7ce2218e6e7eb14aa6476540cac65239",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
