@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6db11841_18b755a2",
+        "filename": "src/libANGLE/renderer/wgpu/gen_wgpu_format_table.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-17T20:40:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80b0b878_73d4acf1",
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc5bbf5f_bbe1da9e",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a04500c_27339fb1",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-17T20:40:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc5bbf5f_bbe1da9e",
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80fae705_edc4c54d",
@@ -48,6 +84,30 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "These have unorm and srgb flipped",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 32,
+        "endChar": 49
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6b8cdbb_50ca4885",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-17T20:40:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80fae705_edc4c54d",
       "range": {
         "startLine": 17,
         "startChar": 1,
@@ -469,6 +529,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73a1f5a9_dd2aec6a",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-17T20:40:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9db2f21_bcc01e30",
+      "range": {
+        "startLine": 283,
+        "startChar": 18,
+        "endLine": 283,
+        "endChar": 32
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d75e4c4_013df93e",
@@ -565,6 +649,30 @@
       "side": 1,
       "message": "\u003e I checked the webgpu docs again and all the compression texture formats do need to be enabled when we request the device and mention that the device/user agent also needs to support the format\n\nThat\u0027s ok, in that case ANGLE wouldn\u0027t expose those formats and the application will see the relevant extensions are missing.",
       "parentUuid": "2fd2cd4a_ca30b049",
+      "range": {
+        "startLine": 292,
+        "startChar": 0,
+        "endLine": 294,
+        "endChar": 10
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32580276_7caa5556",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-17T20:40:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "223ba315_f40c4bea",
       "range": {
         "startLine": 292,
         "startChar": 0,
@@ -868,6 +976,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d45be0e_210afa02",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-17T20:40:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e36108ef_6aaf376f",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 51
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12ae3065_e38191a7",
@@ -881,6 +1013,24 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "You can remove `CompressedBuffer` too, it will be unused",
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97ef9aed_2a74387b",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-17T20:40:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12ae3065_e38191a7",
       "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -908,6 +1058,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4399ec1f_da5ea7df",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-17T20:40:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c342f6b4_b43af465",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0846992c_5db6f525",
@@ -921,6 +1095,24 @@
       "writtenOn": "2024-06-05T13:25:19Z",
       "side": 1,
       "message": "Can be removed",
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7cec349_9c6d6707",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-17T20:40:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0846992c_5db6f525",
       "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
