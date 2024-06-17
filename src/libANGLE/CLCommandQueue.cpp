@@ -145,6 +145,7 @@ angle::Result CommandQueue::enqueueReadBuffer(cl_mem buffer,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(
         mImpl->enqueueReadBuffer(buf, blocking, offset, size, ptr, waitEvents, eventCreateFuncPtr));
@@ -168,6 +169,7 @@ angle::Result CommandQueue::enqueueWriteBuffer(cl_mem buffer,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueWriteBuffer(buf, blocking, offset, size, ptr, waitEvents,
                                         eventCreateFuncPtr));
@@ -196,6 +198,7 @@ angle::Result CommandQueue::enqueueReadBufferRect(cl_mem buffer,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueReadBufferRect(buf, blocking, bufferOrigin, hostOrigin, region,
                                            bufferRowPitch, bufferSlicePitch, hostRowPitch,
@@ -225,6 +228,7 @@ angle::Result CommandQueue::enqueueWriteBufferRect(cl_mem buffer,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueWriteBufferRect(buf, blocking, bufferOrigin, hostOrigin, region,
                                             bufferRowPitch, bufferSlicePitch, hostRowPitch,
@@ -249,6 +253,7 @@ angle::Result CommandQueue::enqueueCopyBuffer(cl_mem srcBuffer,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueCopyBuffer(src, dst, srcOffset, dstOffset, size, waitEvents,
                                        eventCreateFuncPtr));
@@ -276,6 +281,7 @@ angle::Result CommandQueue::enqueueCopyBufferRect(cl_mem srcBuffer,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueCopyBufferRect(src, dst, srcOrigin, dstOrigin, region, srcRowPitch,
                                            srcSlicePitch, dstRowPitch, dstSlicePitch, waitEvents,
@@ -299,6 +305,7 @@ angle::Result CommandQueue::enqueueFillBuffer(cl_mem buffer,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueFillBuffer(buf, pattern, patternSize, offset, size, waitEvents,
                                        eventCreateFuncPtr));
@@ -323,6 +330,7 @@ angle::Result CommandQueue::enqueueMapBuffer(cl_mem buffer,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueMapBuffer(buf, blocking, mapFlags, offset, size, waitEvents,
                                       eventCreateFuncPtr, mapPtr));
@@ -348,6 +356,7 @@ angle::Result CommandQueue::enqueueReadImage(cl_mem image,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueReadImage(img, blocking, origin, region, rowPitch, slicePitch, ptr,
                                       waitEvents, eventCreateFuncPtr));
@@ -373,6 +382,7 @@ angle::Result CommandQueue::enqueueWriteImage(cl_mem image,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueWriteImage(img, blocking, origin, region, inputRowPitch,
                                        inputSlicePitch, ptr, waitEvents, eventCreateFuncPtr));
@@ -396,6 +406,7 @@ angle::Result CommandQueue::enqueueCopyImage(cl_mem srcImage,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueCopyImage(src, dst, srcOrigin, dstOrigin, region, waitEvents,
                                       eventCreateFuncPtr));
@@ -417,6 +428,7 @@ angle::Result CommandQueue::enqueueFillImage(cl_mem image,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(
         mImpl->enqueueFillImage(img, fillColor, origin, region, waitEvents, eventCreateFuncPtr));
@@ -440,6 +452,7 @@ angle::Result CommandQueue::enqueueCopyImageToBuffer(cl_mem srcImage,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueCopyImageToBuffer(src, dst, srcOrigin, region, dstOffset, waitEvents,
                                               eventCreateFuncPtr));
@@ -463,6 +476,7 @@ angle::Result CommandQueue::enqueueCopyBufferToImage(cl_mem srcBuffer,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueCopyBufferToImage(src, dst, srcOffset, dstOrigin, region, waitEvents,
                                               eventCreateFuncPtr));
@@ -489,6 +503,7 @@ angle::Result CommandQueue::enqueueMapImage(cl_mem image,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueMapImage(img, blocking, mapFlags, origin, region, imageRowPitch,
                                      imageSlicePitch, waitEvents, eventCreateFuncPtr, mapPtr));
@@ -508,6 +523,7 @@ angle::Result CommandQueue::enqueueUnmapMemObject(cl_mem memobj,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueUnmapMemObject(memory, mappedPtr, waitEvents, eventCreateFuncPtr));
 
@@ -532,6 +548,7 @@ angle::Result CommandQueue::enqueueMigrateMemObjects(cl_uint numMemObjects,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueMigrateMemObjects(memories, flags, waitEvents, eventCreateFuncPtr));
 
@@ -550,6 +567,7 @@ angle::Result CommandQueue::enqueueNDRangeKernel(cl_kernel kernel,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueNDRangeKernel(krnl, ndrange, waitEvents, eventCreateFuncPtr));
 
@@ -567,6 +585,7 @@ angle::Result CommandQueue::enqueueTask(cl_kernel kernel,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueTask(krnl, waitEvents, eventCreateFuncPtr));
 
@@ -618,6 +637,7 @@ angle::Result CommandQueue::enqueueNativeKernel(UserFunc userFunc,
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueNativeKernel(userFunc, args, cbArgs, buffers, offsets, waitEvents,
                                          eventCreateFuncPtr));
@@ -634,6 +654,7 @@ angle::Result CommandQueue::enqueueMarkerWithWaitList(cl_uint numEventsInWaitLis
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueMarkerWithWaitList(waitEvents, eventCreateFuncPtr));
 
@@ -644,6 +665,7 @@ angle::Result CommandQueue::enqueueMarkerWithWaitList(cl_uint numEventsInWaitLis
 angle::Result CommandQueue::enqueueMarker(cl_event *event)
 {
     rx::CLEventImpl::CreateFunc eventCreateFunc;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueMarker(eventCreateFunc));
 
@@ -664,6 +686,7 @@ angle::Result CommandQueue::enqueueBarrierWithWaitList(cl_uint numEventsInWaitLi
     rx::CLEventImpl::CreateFunc eventCreateFunc;
     rx::CLEventImpl::CreateFunc *const eventCreateFuncPtr =
         event != nullptr ? &eventCreateFunc : nullptr;
+    safeDereference(event) = nullptr;
 
     ANGLE_TRY(mImpl->enqueueBarrierWithWaitList(waitEvents, eventCreateFuncPtr));
 

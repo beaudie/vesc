@@ -53,6 +53,29 @@ bool IsValidImageFormat(const cl_image_format *imageFormat, const rx::CLExtensio
 
 extern thread_local cl_int gClErrorTls;
 
+// Utility class to safely dereference-and-assign a value to a non-null given pointer
+template <typename T>
+class SafeDereference
+{
+  public:
+    SafeDereference(T **ptr) : mPtr(ptr) {}
+    void operator=(T *value)
+    {
+        if (mPtr != nullptr)
+        {
+            *mPtr = value;
+        }
+    }
+
+  private:
+    T **mPtr;
+};
+template <typename T>
+inline SafeDereference<T> safeDereference(T **object)
+{
+    return SafeDereference<T>(object);
+}
+
 }  // namespace cl
 
 #endif  // LIBANGLE_CL_UTILS_H_
