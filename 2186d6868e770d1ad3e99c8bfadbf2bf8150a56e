@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8451afd_fa84268b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3474762
+      },
+      "writtenOn": "2024-06-17T13:39:35Z",
+      "side": 1,
+      "message": "according to Kimmo this is supposed to fail due to `EXPECT_FALSE(hasPixmapExt());` in ImageTest (src/tests/gl_tests/ImageTest.cpp). That makes sense I suppose; I did run the unittests but I guess this one is not included in that since it relies on native platform code (which cannot be made to work in my container).\n\nThat said, I am not sure if the test itself makes sense to me. If I\u0027m reading it correctly, Linux is covered by the final `else` branch? How should I change the test?",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
