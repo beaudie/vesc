@@ -33,8 +33,8 @@
       'android-arm64-exp-s22': {
         'os_type': 'android',
         'mixins': [
-          'gpu-swarming-pool',
-          'samsung_s22',
+          'gpu_samsung_s24_stable',
+          'limited_capacity_bot',
         ],
         'test_suites': {
           'gtest_tests': 'android_vulkan_gtests',

@@ -682,6 +682,10 @@ b/217922015 PIXEL6 VULKAN : GLSLTest_ES3.NestedPowFromUniform/* = SKIP
 
 b/330697097 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachments/* = SKIP
 
+// Samsung S24
+0000 ANDROID VULKAN : ImageTestES3.SourceAHBMipTarget2DMip/* = SKIP
+0000 ANDROID VULKAN : ImageTestES3.SourceAHBMipTarget2DMipGenerateMipmap/* = SKIP
+
 // iOS
 7653 IOS OPENGL : BufferDataTestES3.DrawWithNotCallingBufferData/* = SKIP
 7653 IOS OPENGL : DepthStencilFormatsTest.DepthStencilReadback_DepthStencil/* = SKIP
