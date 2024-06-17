@@ -120,6 +120,12 @@
 8598 PIXEL6 VULKAN : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds_non_robust.reset_status.writes.shader_storage_block.compute = FAIL
 8598 PIXEL6 VULKAN : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds_non_robust.reset_status.writes.uniform_block.compute = FAIL
 
+// Samsung S24
+0000 ANDROID VULKAN : dEQP-EGL.functional.wide_color.window_888_colorspace_p3 = SKIP
+0000 ANDROID VULKAN : dEQP-EGL.functional.wide_color.window_8888_colorspace_srgb = SKIP
+0000 ANDROID VULKAN : dEQP-EGL.functional.wide_color.window_8888_colorspace_p3 = SKIP
+0000 ANDROID VULKAN : dEQP-EGL.functional.wide_color.window_888_colorspace_srgb = SKIP
+
 // ES 1 tests
 2306 WIN : dEQP-EGL.functional.color_clears.single_context.gles1* = FAIL
 2306 WIN : dEQP-EGL.functional.color_clears.multi_context.gles1* = FAIL
