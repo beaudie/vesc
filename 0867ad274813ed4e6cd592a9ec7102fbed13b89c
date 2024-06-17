@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ef20c46_d3b0ebf3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8355,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-17T23:44:21Z",
+      "side": 1,
+      "message": "Updated to only add a comment for invalid calls.  LMKWYT.\n\nI\u0027m open to dropping that entirely as well, but I\u0027d like to know when we\u0027ve skipped a call.",
+      "parentUuid": "2c6f22d9_d4a69ba5",
+      "range": {
+        "startLine": 8355,
+        "startChar": 8,
+        "endLine": 8355,
+        "endChar": 16
+      },
+      "revId": "0867ad274813ed4e6cd592a9ec7102fbed13b89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1537f66f_6ebe7c78",
         "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
         "patchSetId": 5
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "Agree, these are confusing.  I\u0027ll back that off.",
       "parentUuid": "1537f66f_6ebe7c78",
+      "range": {
+        "startLine": 52,
+        "startChar": 7,
+        "endLine": 52,
+        "endChar": 38
+      },
+      "revId": "0867ad274813ed4e6cd592a9ec7102fbed13b89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2afd3311_d59a4751",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-17T23:44:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e50f8b99_eab38c41",
       "range": {
         "startLine": 52,
         "startChar": 7,
