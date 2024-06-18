@@ -34,6 +34,24 @@
       "parentUuid": "a8451afd_fa84268b",
       "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af1e52a6_fc809426",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-06-18T06:45:07Z",
+      "side": 1,
+      "message": "\u003e it relies on native platform code (which cannot be made to work in my container).\n\nIn general, I do not think we should add any code that the author themselves are not able to run. So if this is the scenario, let\u0027s not do it. The code has to be runnable and testable in some accessible configuration.",
+      "parentUuid": "2dc2fa0c_d1c30356",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
