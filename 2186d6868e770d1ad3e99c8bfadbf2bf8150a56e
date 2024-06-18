@@ -16,6 +16,24 @@
       "message": "according to Kimmo this is supposed to fail due to `EXPECT_FALSE(hasPixmapExt());` in ImageTest (src/tests/gl_tests/ImageTest.cpp). That makes sense I suppose; I did run the unittests but I guess this one is not included in that since it relies on native platform code (which cannot be made to work in my container).\n\nThat said, I am not sure if the test itself makes sense to me. If I\u0027m reading it correctly, Linux is covered by the final `else` branch? How should I change the test?",
       "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dc2fa0c_d1c30356",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-06-18T06:42:46Z",
+      "side": 1,
+      "message": "\u003e I did run the unittests but I guess this one is not included in that since it relies on native platform code (which cannot be made to work in my container).\n\nMaybe the first task is to figure out why the code is not being run. Maybe you ran part of the tests but not everything? This might be run by angle_end2end_tests. In general when modifying the code, you should run the tests.\n\nhttps://chromium.googlesource.com/angle/angle/+/HEAD/doc/ContributingCode.md\n\n\u003e That said, I am not sure if the test itself makes sense to me.\n\nThe library doesn\u0027t support the pixmap extension today. The test verifies that the library says that it does not support the pixmap extension.\n\n\u003e If I\u0027m reading it correctly, Linux is covered by the final else branch? How should I change the test? \n\nIf you make the library support the pixmap extension, you add the tests testing this feature you add. \"Now that the library claims pixmap extension is supported, this should work, this should work, this should cause errors, this edge-case should work, ...\"",
+      "parentUuid": "a8451afd_fa84268b",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
