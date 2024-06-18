@@ -562,6 +562,25 @@ def sleep_until_temps_below(limit_temp):
                 break
 
 
+def sleep_until_temps_below_thermalservice(limit_temp):
+    waiting = True
+    while waiting:
+        waiting = False
+        lines = run_adb_command('shell dumpsys thermalservice').stdout.splitlines()
+        assert 'HAL Ready: true' in lines
+        for l in lines[lines.index('Current temperatures from HAL:') + 1:]:
+            if l[0] not in ' \t':
+                break
+            v = re.search(r'mValue=([^,}]+)', l).group(1)
+            # t = re.search(r'mType=([^,}]+)', l).group(1)
+            # if int(t) in [2, 3, 0, 1, 9]:  # battery, skin, cpu, gpu, tpu
+            if float(v) > limit_temp:
+                logging.info('Waiting for device temps below %.1f: %s', limit_temp, l.strip())
+                time.sleep(5)
+                waiting = True
+                break
+
+
 def sleep_until_battery_level(min_battery_level):
     while True:
         level = int(run_adb_command('shell dumpsys battery get level').stdout.strip())
@@ -648,6 +667,10 @@ def main():
     parser.add_argument(
         '--custom-throttling-temp',
         help='Custom thermal throttling with limit set to this temperature (off by default)',
+        type=float)
+    parser.add_argument(
+        '--custom-throttling-thermalservice-temp',
+        help='Custom thermal throttling (thermalservice) with limit set to this temperature (off by default)',
         type=float)
     parser.add_argument(
         '--min-battery-level',
@@ -913,6 +936,10 @@ def run_traces(args):
 
                 if args.custom_throttling_temp:
                     sleep_until_temps_below(args.custom_throttling_temp)
+
+                if args.custom_throttling_thermalservice_temp:
+                    sleep_until_temps_below_thermalservice(
+                        args.custom_throttling_thermalservice_temp)
 
                 if args.min_battery_level:
                     sleep_until_battery_level(args.min_battery_level)
