@@ -20,6 +20,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43bb5878_dc67f7be",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T03:54:22Z",
+      "side": 1,
+      "message": "I\u0027d vote putting this below setBlendEquations",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 48
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "40709a81_fd43161b",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/gl/StateManagerGL.h",
+              "range": {
+                "startLine": 213,
+                "startChar": 0,
+                "endLine": 214,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "src/libANGLE/renderer/gl/StateManagerGL.h",
+              "range": {
+                "startLine": 217,
+                "startChar": 0,
+                "endLine": 217,
+                "endChar": 0
+              },
+              "replacement": "    void setBlendAdvancedCoherent(bool enabled);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88769759_ee529180",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 5
@@ -59,6 +110,29 @@
         "startChar": 0,
         "endLine": 781,
         "endChar": 80
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d7dfd2c_96f10c58",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T03:54:22Z",
+      "side": 1,
+      "message": "Do we have any end2end tests that verify blending is actually behaving correctly in coherent mode?  I see you quoted to dEQP test in the CL message, so maybe that\u0027s enough.",
+      "range": {
+        "startLine": 82,
+        "startChar": 46,
+        "endLine": 82,
+        "endChar": 85
       },
       "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
