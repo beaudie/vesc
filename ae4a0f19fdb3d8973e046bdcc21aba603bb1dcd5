@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc5f5ece_01797bb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T02:22:24Z",
+      "side": 1,
+      "message": "Roman, PTAL.  Not sure if worth recording metrics that we don\u0027t report.  Wanted to put this up as it collides a bit with your CL, which we can land first: https://chromium-review.googlesource.com/c/angle/angle/+/5637158",
+      "revId": "ae4a0f19fdb3d8973e046bdcc21aba603bb1dcd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
