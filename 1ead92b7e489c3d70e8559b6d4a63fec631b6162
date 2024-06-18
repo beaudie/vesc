@@ -16,6 +16,110 @@
       "message": "Could you please add a few state-change tests? Like:\n\n- Define two levels of a mutable texture with glTexImage then clear one level, upload to a subresource of that level (not all of it), then draw\n- Define two levels of a mutable texture glTexImage with data, then clear a subregion of one of them, upload to an overlapping (but not encompassing) region of that level, then draw\n- Draw with a texture, then clear a portion of it, then draw again\n- Define multiple levels of a mutable texture, clear level 2, then call glGenerateMipmap on level 1 and draw with levels [1..N]\n- Define multiple levels of a mutable texture, clear level 3, then call glGenerateMipmap on level 3 and draw with levels [3..N]\n- There are probably more tricky cases\n\n@abdolrashidi@google.com was looking into implementing this for Vulkan, which is where this stuff gets tricky, it would also make sense IMO for him to follow up with these tests.",
       "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bca186ca_5fef35f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T21:00:39Z",
+      "side": 1,
+      "message": "LGTM with a couple of nits if you could fix before landing.  Good stuff Geoff!",
+      "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72215ab0_687d61a6",
+        "filename": "src/libANGLE/ImageIndex.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T21:00:39Z",
+      "side": 1,
+      "message": "Are these related to the extension?  Seems like this would affect a lot of scenarios?\nedit: I see you use it quite a bit in the rest of the implementation.",
+      "range": {
+        "startLine": 320,
+        "startChar": 40,
+        "endLine": 321,
+        "endChar": 44
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "6a86ca86_648689b5",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/ImageIndex.cpp",
+              "range": {
+                "startLine": 320,
+                "startChar": 0,
+                "endLine": 320,
+                "endChar": 0
+              },
+              "replacement": "    // TODO(jmadill): Remove this workaround when the extension is on by default.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "550af982_11339104",
+        "filename": "src/libANGLE/capture/capture_gles_ext_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3704,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T21:00:39Z",
+      "side": 1,
+      "message": "It looks like `data` can be nullptr, so I think we can wrap these in `if (data)` check.  Thanks for proactively adding capture support!",
+      "range": {
+        "startLine": 3702,
+        "startChar": 0,
+        "endLine": 3704,
+        "endChar": 51
+      },
+      "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d37d3bea_625816ac",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3619,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T21:00:39Z",
+      "side": 1,
+      "message": "depth",
+      "range": {
+        "startLine": 3619,
+        "startChar": 17,
+        "endLine": 3619,
+        "endChar": 24
+      },
+      "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
