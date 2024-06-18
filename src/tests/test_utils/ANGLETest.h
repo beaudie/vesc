@@ -664,6 +664,7 @@ enum class APIExtensionVersion
     Core,
     OES,
     EXT,
+    KHR,
 };
 
 template <typename Params>
