@@ -161,6 +161,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f712b5e6_79d00342",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8355,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T20:15:48Z",
+      "side": 1,
+      "message": "Hooking up the error was interesting, so I included it.",
+      "parentUuid": "351e59f3_b637f242",
+      "range": {
+        "startLine": 8355,
+        "startChar": 8,
+        "endLine": 8355,
+        "endChar": 16
+      },
+      "revId": "0867ad274813ed4e6cd592a9ec7102fbed13b89c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1537f66f_6ebe7c78",

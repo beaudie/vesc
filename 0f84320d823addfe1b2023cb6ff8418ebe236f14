@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34d1b4db_cf15cd7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T20:15:48Z",
+      "side": 1,
+      "message": "I seem to have lost all votes if you can PTAL again Mark and Roman.",
+      "revId": "0f84320d823addfe1b2023cb6ff8418ebe236f14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
