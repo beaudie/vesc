@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6cd3d68_8eccf031",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T04:00:30Z",
+      "side": 1,
+      "message": "Where does framebuffer fetch enter the equation?\n\nPossibly answering my own question, I see it queried in `ContextVk::blendBarrier()`.  Is that what drove this inclusion?",
+      "range": {
+        "startLine": 594,
+        "startChar": 19,
+        "endLine": 594,
+        "endChar": 49
+      },
+      "revId": "804a21ecc9d17a4240a5045024276af98b06547c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
