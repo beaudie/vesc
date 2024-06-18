@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8c1afbe3_940aedee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-18T20:47:31Z",
+      "side": 1,
+      "message": "0 before app starts is implicit. Updated CL description.\n\nWill look into where to document this stuff once it settles.",
+      "parentUuid": "40c4a642_ac5191db",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "006923acddf16f601348bbe96835f094c9fb6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a3189a12_6831571e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
