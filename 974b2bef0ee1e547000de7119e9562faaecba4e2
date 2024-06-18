@@ -16,6 +16,52 @@
       "message": "Got some warnings at `git cl upload` time: ```code owner email \u0027blahblah@google.com\u0027 in /OWNERS cannot be resolved for mark@lunarg.com```.",
       "revId": "974b2bef0ee1e547000de7119e9562faaecba4e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7b5d716_bcd5c23a",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T22:04:38Z",
+      "side": 1,
+      "message": "It looks like this isn\u0027t used anywhere.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "974b2bef0ee1e547000de7119e9562faaecba4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a42b5464_3539cf48",
+        "filename": "src/common/vulkan/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T22:04:38Z",
+      "side": 1,
+      "message": "From our offline sync, need:\n```\n        if (!is_android) {\n          data_deps +\u003d [ \"$angle_lunarg_vulkantools_dir:vulkan_gen_json_files\" ]\n        }\n```",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 75
+      },
+      "revId": "974b2bef0ee1e547000de7119e9562faaecba4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
