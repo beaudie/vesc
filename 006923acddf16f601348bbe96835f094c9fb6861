@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "40c4a642_ac5191db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T20:08:47Z",
+      "side": 1,
+      "message": "Makes sense given the visualization, thanks.  Might help to start from 0 at the beginning, like \"Not started\" is the first value in the list.  No big deal either way.  Might be good to document these somewhere, like what each stage means, and the `ftrace_config` requirement.",
+      "parentUuid": "46a4acb4_3171f808",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "006923acddf16f601348bbe96835f094c9fb6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a3189a12_6831571e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -184,6 +208,30 @@
       "side": 1,
       "message": "It does have an effect because there is branching based on what the policy is and we hit a different branch with `RunContinuouslyWarmup`.",
       "parentUuid": "79415553_33430fa9",
+      "range": {
+        "startLine": 90,
+        "startChar": 8,
+        "endLine": 90,
+        "endChar": 29
+      },
+      "revId": "006923acddf16f601348bbe96835f094c9fb6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f23399d_19bd11a0",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-18T20:08:47Z",
+      "side": 1,
+      "message": "I see now. You branch on other enums, but not this one, which is why you added it.",
+      "parentUuid": "239276e1_b29fe0b7",
       "range": {
         "startLine": 90,
         "startChar": 8,
