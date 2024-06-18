@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc62d0d_e90e676e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2742,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-18T03:04:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1998cc30_1bfa9392",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e9c429f_8084d1a3",
@@ -137,6 +155,24 @@
       "side": 1,
       "message": "So IIUC, toggling this flag would change the GL state, but no changes will be made on the Vulkan side. If the related Vulkan extension is supported, the device performs the blend in a coherent manner regardless.",
       "parentUuid": "4e9c429f_8084d1a3",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd703d08_3fc8af0d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-18T03:04:53Z",
+      "side": 1,
+      "message": "Yeap, and the CL looks much nicer now 😊",
+      "parentUuid": "fda8ab72_f7f784e9",
       "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -295,6 +331,24 @@
       "side": 1,
       "message": "After making changes, it is currently failing on the Intel bots, but that failure already existed in the baseline and was being skipped.",
       "parentUuid": "2359518d_a5c82882",
+      "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64f5ccda_3bdeeb4c",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-18T03:04:53Z",
+      "side": 1,
+      "message": "Ah ok, no since it\u0027s an ES3.2 suite (I thought it was 3.1), extension check should be unnecessary.",
+      "parentUuid": "18188674_cb615685",
       "revId": "becd53366d50cd74525890cecd7a25d871ef7f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

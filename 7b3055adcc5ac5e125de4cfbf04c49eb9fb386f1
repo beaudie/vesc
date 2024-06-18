@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e21816ed_ff8e8b5b",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-18T03:04:53Z",
+      "side": 1,
+      "message": "I think this should make the equivalent call to the native driver (something like `mFunctions-\u003e...` per other similar functions)\n\nFYI, @geofflang@chromium.org, anything else? Like state store/restore for webview or something?",
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88769759_ee529180",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-18T03:04:53Z",
+      "side": 1,
+      "message": "Should skip this self-dep if coherent:\n\n```suggestion\n    const bool hasBlendOperationAdvanced \u003d\n        renderer-\u003egetFeatures().supportsBlendOperationAdvanced.enabled;\n    const bool hasCoherentBlendOperationAdvanced \u003d\n        renderer-\u003egetFeatures().supportsBlendOperationAdvancedCoherent.enabled;\n\n    if (hasRasterizationOrderAttachmentAccess \u0026\u0026 (!hasBlendOperationAdvanced || hasBlendOperationCoherent))\n```",
+      "range": {
+        "startLine": 755,
+        "startChar": 0,
+        "endLine": 758,
+        "endChar": 76
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86c33a1d_1d0189bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-18T03:04:53Z",
+      "side": 1,
+      "message": "```suggestion\n    if (hasBlendOperationAdvanced \u0026\u0026 !hasCoherentBlendOperationAdvanced)\n```",
+      "range": {
+        "startLine": 780,
+        "startChar": 0,
+        "endLine": 781,
+        "endChar": 80
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
