@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddf24904_31bb4594",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-18T12:42:02Z",
+      "side": 1,
+      "message": "Is this a requirement of robust init? I always thought the goal is to avoid leaking the old contents of memory on init, after that invalidate doesn\u0027t leak anything.\n\nI\u0027m a little concerned about the performance implications of this.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 51
+      },
+      "revId": "2f3d264b28d49c6d006f5bf63d4fed7d8bf30c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
