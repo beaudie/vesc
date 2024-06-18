@@ -16,6 +16,23 @@
       "message": "Nice still LGTM",
       "revId": "9d2f681339840356bb2d94feb7b507feaf6e3fde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25c42d55_ef5426bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-06-18T17:29:55Z",
+      "side": 1,
+      "message": "+2 since Liza already reviewed",
+      "revId": "9d2f681339840356bb2d94feb7b507feaf6e3fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
