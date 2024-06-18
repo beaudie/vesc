@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb92b7eb_087e6d43",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-18T21:32:18Z",
+      "side": 1,
+      "message": "Thanks! Updated.",
+      "parentUuid": "59794bcc_ab39c347",
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43bb5878_dc67f7be",
@@ -87,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "396cbc27_0918d06c",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-18T21:32:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43bb5878_dc67f7be",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 48
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8ddb19b_7865956d",
@@ -100,6 +142,54 @@
       "writtenOn": "2024-06-18T13:44:35Z",
       "side": 1,
       "message": "Needs to be initialized in the constructor.",
+      "range": {
+        "startLine": 493,
+        "startChar": 4,
+        "endLine": 493,
+        "endChar": 32
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2caf408_69ff6c25",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-18T21:32:18Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "e8ddb19b_7865956d",
+      "range": {
+        "startLine": 493,
+        "startChar": 4,
+        "endLine": 493,
+        "endChar": 32
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6599c06d_fdcd5b7c",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-18T21:32:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8ddb19b_7865956d",
       "range": {
         "startLine": 493,
         "startChar": 4,
@@ -133,6 +223,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96330c48_f37e4779",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-18T21:32:18Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "88769759_ee529180",
+      "range": {
+        "startLine": 755,
+        "startChar": 0,
+        "endLine": 758,
+        "endChar": 76
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86c33a1d_1d0189bb",
@@ -156,6 +270,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f009e237_0fff7762",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-18T21:32:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86c33a1d_1d0189bb",
+      "range": {
+        "startLine": 780,
+        "startChar": 0,
+        "endLine": 781,
+        "endChar": 80
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d7dfd2c_96f10c58",
@@ -169,6 +307,30 @@
       "writtenOn": "2024-06-18T03:54:22Z",
       "side": 1,
       "message": "Do we have any end2end tests that verify blending is actually behaving correctly in coherent mode?  I see you quoted to dEQP test in the CL message, so maybe that\u0027s enough.",
+      "range": {
+        "startLine": 82,
+        "startChar": 46,
+        "endLine": 82,
+        "endChar": 85
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "702b2768_33aba950",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-18T21:32:18Z",
+      "side": 1,
+      "message": "I don\u0027t see any end2end tests specifically for coherent mode. In two `AdvancedBlendTest` cases, the test checks for the extension so it can disable the related GL state.\n\nThere are the dEQP tests that pass after this CL. In `AdvancedBlendCase::iterate()`, the coherent test enables `GL_BLEND_ADVANCED_COHERENT_KHR` and uses one draw without barriers instead of a loop of draws and blend barriers, but otherwise looks similar to the regular advanced blend case.",
+      "parentUuid": "7d7dfd2c_96f10c58",
       "range": {
         "startLine": 82,
         "startChar": 46,
