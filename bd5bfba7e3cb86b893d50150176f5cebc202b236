@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05eff608_9565229e",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-18T12:51:47Z",
+      "side": 1,
+      "message": "You ended up deleting too much. The `mTextureLoadFunctions` and `mVertexLoadFunctions` (+ probably `mVertexLoadRequiresConversion`) should stay; just always assume `mIsRenderable` is true and `compressed` is false, because the other cases are vulkan/ optimizations.\n\nOk for now, but you\u0027ll have to bring them back eventually.",
+      "revId": "bd5bfba7e3cb86b893d50150176f5cebc202b236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
