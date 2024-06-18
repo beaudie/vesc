@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d39b5656_157bdedc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-18T00:05:07Z",
+      "side": 1,
+      "message": "Got some warnings at `git cl upload` time: ```code owner email \u0027blahblah@google.com\u0027 in /OWNERS cannot be resolved for mark@lunarg.com```.",
+      "revId": "974b2bef0ee1e547000de7119e9562faaecba4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
