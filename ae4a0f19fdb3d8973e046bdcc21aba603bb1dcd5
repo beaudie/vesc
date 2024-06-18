@@ -16,6 +16,98 @@
       "message": "Roman, PTAL.  Not sure if worth recording metrics that we don\u0027t report.  Wanted to put this up as it collides a bit with your CL, which we can land first: https://chromium-review.googlesource.com/c/angle/angle/+/5637158",
       "revId": "ae4a0f19fdb3d8973e046bdcc21aba603bb1dcd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6f33af7_23d9f998",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-18T13:49:41Z",
+      "side": 1,
+      "message": "Given that this is under the gWarmup condition, would it be confusing that this metric goes missing when `--warmup` is not enabled?",
+      "range": {
+        "startLine": 440,
+        "startChar": 29,
+        "endLine": 440,
+        "endChar": 49
+      },
+      "revId": "ae4a0f19fdb3d8973e046bdcc21aba603bb1dcd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca992e93_cadceb72",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-18T13:49:41Z",
+      "side": 1,
+      "message": "Not \"likely\" but guaranteed - `getStepAlignment()` is only overridden for trace tests, which is what the previous comment was referring to.",
+      "range": {
+        "startLine": 452,
+        "startChar": 50,
+        "endLine": 452,
+        "endChar": 56
+      },
+      "revId": "ae4a0f19fdb3d8973e046bdcc21aba603bb1dcd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6b5d284_e097066a",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-18T13:49:41Z",
+      "side": 1,
+      "message": "Don\u0027t we want `glFinish()` to be called before tracking first_loop metrics? Otherwise some rendering might still be in flight? If this is intentional, could you add a comment/warning to the metric collection above?",
+      "range": {
+        "startLine": 472,
+        "startChar": 8,
+        "endLine": 472,
+        "endChar": 36
+      },
+      "revId": "ae4a0f19fdb3d8973e046bdcc21aba603bb1dcd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6927c35_5c698f0c",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-18T13:49:41Z",
+      "side": 1,
+      "message": "Let\u0027s avoid referring to two different things by the same name? By renaming this one or the one reported by the harness.",
+      "range": {
+        "startLine": 864,
+        "startChar": 16,
+        "endLine": 864,
+        "endChar": 37
+      },
+      "revId": "ae4a0f19fdb3d8973e046bdcc21aba603bb1dcd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
