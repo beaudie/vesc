@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "46a4acb4_3171f808",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-18T13:34:21Z",
+      "side": 1,
+      "message": "Going back to the \"not doing anything\" state which we started from. See an example trace, I think 0 makes most sense: https://screenshot.googleplex.com/9Y2fnqQMWUoKLBP\n\nIn case of multiple trials (not sure we\u0027d do this but anyways), it\u0027ll go 1-2-3-0-3-0-...-3-0-exit.",
+      "parentUuid": "06384dcb_e8dd06ec",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "006923acddf16f601348bbe96835f094c9fb6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a3189a12_6831571e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -99,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "492377aa_e9e5e989",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-18T13:34:21Z",
+      "side": 1,
+      "message": "I switched to another var to track the same thing (`loopStepsPerformed`), PTAL if that\u0027s less confusing.",
+      "parentUuid": "3d5b7849_d27c431e",
+      "range": {
+        "startLine": 414,
+        "startChar": 12,
+        "endLine": 414,
+        "endChar": 69
+      },
+      "revId": "006923acddf16f601348bbe96835f094c9fb6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79415553_33430fa9",
@@ -112,6 +160,30 @@
       "writtenOn": "2024-06-18T02:11:46Z",
       "side": 1,
       "message": "It looks like you don\u0027t use this, or at least it has no effect?",
+      "range": {
+        "startLine": 90,
+        "startChar": 8,
+        "endLine": 90,
+        "endChar": 29
+      },
+      "revId": "006923acddf16f601348bbe96835f094c9fb6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "239276e1_b29fe0b7",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-06-18T13:34:21Z",
+      "side": 1,
+      "message": "It does have an effect because there is branching based on what the policy is and we hit a different branch with `RunContinuouslyWarmup`.",
+      "parentUuid": "79415553_33430fa9",
       "range": {
         "startLine": 90,
         "startChar": 8,
