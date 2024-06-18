@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f83252b_d9ae4255",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-18T22:25:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7b5d716_bcd5c23a",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "974b2bef0ee1e547000de7119e9562faaecba4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a42b5464_3539cf48",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-06-18T22:04:38Z",
       "side": 1,
       "message": "From our offline sync, need:\n```\n        if (!is_android) {\n          data_deps +\u003d [ \"$angle_lunarg_vulkantools_dir:vulkan_gen_json_files\" ]\n        }\n```",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 75
+      },
+      "revId": "974b2bef0ee1e547000de7119e9562faaecba4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c45d737_f0645584",
+        "filename": "src/common/vulkan/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-18T22:25:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a42b5464_3539cf48",
       "range": {
         "startLine": 163,
         "startChar": 0,
