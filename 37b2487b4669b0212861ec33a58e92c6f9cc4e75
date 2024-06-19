@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f1ab860_db1ca89b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-19T18:28:53Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like this would cost us anything if it were a runtime decision instead. Perhaps use an envvar/android-property to get this instead? You can still have a default set by a build flag:\n\n```\n// In the anonymous namespace at the top:\n#if defined(ANGLE_ENABLE_VULKAN_API_DUMP_LAYER)\nconstexpr bool kEnableVulanAPIDumpLayer \u003d true;\n#else\nconstexpr bool kEnableVulanAPIDumpLayer \u003d false;\n#endif\n\n// And here:\nbool enableVulkanAPIDumpLayer \u003d kEnableVulanAPIDumpLayer ||\n    angle::GetEnvironmentVarOrAndroidProperty(\"ANGLE_ENABLE_VULKAN_API_DUMP_LAYER\",\n        \"angle.enable_vulkan_api_dump_layer\") \u003d\u003d \"1\";\n\n```",
+      "revId": "37b2487b4669b0212861ec33a58e92c6f9cc4e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55ab1815_86dd4050",
+        "filename": "third_party/lunarg-vulkantools/README.chromium",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-19T18:28:53Z",
+      "side": 1,
+      "message": "Will there be an autoroller for this? If not, please use a specific hash",
+      "revId": "37b2487b4669b0212861ec33a58e92c6f9cc4e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
