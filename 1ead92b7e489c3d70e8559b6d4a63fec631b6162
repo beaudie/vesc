@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "501f7ecb_0f97b1c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-19T17:10:58Z",
+      "side": 1,
+      "message": "I added some tests for interleaved clears and TexSubImage calls. Fixed an issue where the texture wasn\u0027t always synced because glClearTexImage doesn\u0027t require that the texture is bound.\n\nI\u0027ll leave the other edge cases for Amirali.",
+      "parentUuid": "7db0cb50_ec5b38c0",
+      "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72215ab0_687d61a6",
@@ -94,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32201a9f_2871f372",
+        "filename": "src/libANGLE/ImageIndex.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-19T17:10:58Z",
+      "side": 1,
+      "message": "MakeGeneric would always loop over all the cube map faces and ignore the min/max layer parameters. This extension seems to be one of the few cases that uses layers to represent cube map faces. We were always passing kEntireLevel before.",
+      "parentUuid": "72215ab0_687d61a6",
+      "range": {
+        "startLine": 320,
+        "startChar": 40,
+        "endLine": 321,
+        "endChar": 44
+      },
+      "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "550af982_11339104",
@@ -117,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a954c48b_a0ae4a0b",
+        "filename": "src/libANGLE/capture/capture_gles_ext_params.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3704,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-19T17:10:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "550af982_11339104",
+      "range": {
+        "startLine": 3702,
+        "startChar": 0,
+        "endLine": 3704,
+        "endChar": 51
+      },
+      "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d37d3bea_625816ac",
@@ -130,6 +196,30 @@
       "writtenOn": "2024-06-18T21:00:39Z",
       "side": 1,
       "message": "depth",
+      "range": {
+        "startLine": 3619,
+        "startChar": 17,
+        "endLine": 3619,
+        "endChar": 24
+      },
+      "revId": "1ead92b7e489c3d70e8559b6d4a63fec631b6162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4d5392f_6403c985",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3619,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-19T17:10:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d37d3bea_625816ac",
       "range": {
         "startLine": 3619,
         "startChar": 17,
