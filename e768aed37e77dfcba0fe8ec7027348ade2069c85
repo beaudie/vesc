@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2098e309_0dc8b681",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-06-19T19:46:33Z",
+      "side": 1,
+      "message": "Lot of WebGL2 failures on Android because of this:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/5641251\nhttps://ci.chromium.org/ui/p/chromium/builders/try/android_optional_gpu_tests_rel/168128/overview\nShould we revert to get the roll going, or do you want to suppress / triage goldens?",
+      "revId": "e768aed37e77dfcba0fe8ec7027348ade2069c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
