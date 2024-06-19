@@ -70,6 +70,24 @@
       "parentUuid": "af1e52a6_fc809426",
       "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3773c93_99b0d025",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3474762
+      },
+      "writtenOn": "2024-06-19T10:38:10Z",
+      "side": 1,
+      "message": "i figured out a way to run things but:\n\n```\n[----------] 8 tests from ImageTest\n[ RUN      ] ImageTest.ANGLEExtensionAvailability/ES2_OpenGL\n[       OK ] ImageTest.ANGLEExtensionAvailability/ES2_OpenGL (101 ms)\n[ RUN      ] ImageTest.ANGLEExtensionAvailability/ES2_Vulkan\n[       OK ] ImageTest.ANGLEExtensionAvailability/ES2_Vulkan (105 ms)\n[ RUN      ] ImageTest.ANGLEExtensionAvailability/ES2_Vulkan_SwiftShader\n[       OK ] ImageTest.ANGLEExtensionAvailability/ES2_Vulkan_SwiftShader (89 ms)\n[ RUN      ] ImageTest.ANGLEExtensionAvailability/ES2_Vulkan_SwiftShader_EnableParallelCompileAndLink\n[       OK ] ImageTest.ANGLEExtensionAvailability/ES2_Vulkan_SwiftShader_EnableParallelCompileAndLink (114 ms)\n[ RUN      ] ImageTest.ANGLEExtensionAvailability/ES3_OpenGL\n[       OK ] ImageTest.ANGLEExtensionAvailability/ES3_OpenGL (73 ms)\n[ RUN      ] ImageTest.ANGLEExtensionAvailability/ES3_Vulkan\n[       OK ] ImageTest.ANGLEExtensionAvailability/ES3_Vulkan (112 ms)\n[ RUN      ] ImageTest.ANGLEExtensionAvailability/ES3_Vulkan_SwiftShader\n[       OK ] ImageTest.ANGLEExtensionAvailability/ES3_Vulkan_SwiftShader (141 ms)\n[ RUN      ] ImageTest.ANGLEExtensionAvailability/ES3_Vulkan_EnableParallelCompileAndLink\n[       OK ] ImageTest.ANGLEExtensionAvailability/ES3_Vulkan_EnableParallelCompileAndLink (152 ms)\n[----------] 8 tests from ImageTest (891 ms total)\n```\n\nguess it needs further investigation...",
+      "parentUuid": "b669ad70_49821275",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
