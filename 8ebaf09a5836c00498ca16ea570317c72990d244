@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d71f9bc4_e990348c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-19T18:31:56Z",
+      "side": 1,
+      "message": "Presubmit is going to complain about how long this is. Suggest:\n\n```\nDefine MemoryAllocInfoMapKey\u0027s hash before using in unordered_map\n```",
+      "revId": "8ebaf09a5836c00498ca16ea570317c72990d244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5efa2715_a5ae4cba",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
