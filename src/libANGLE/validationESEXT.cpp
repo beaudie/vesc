@@ -4028,8 +4028,7 @@ bool ValidateBeginPerfMonitorAMD(const Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    return true;
 }
 
 bool ValidateDeletePerfMonitorsAMD(const Context *context,
@@ -4043,8 +4042,8 @@ bool ValidateDeletePerfMonitorsAMD(const Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    // Note: ANGLE does not really create monitor objects or track ids.
+    return true;
 }
 
 bool ValidateEndPerfMonitorAMD(const Context *context, angle::EntryPoint entryPoint, GLuint monitor)
@@ -4055,8 +4054,13 @@ bool ValidateEndPerfMonitorAMD(const Context *context, angle::EntryPoint entryPo
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    if (!context->getState().isPerfMonitorActive())
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kPerfMonitorNotActive);
+        return false;
+    }
+
+    return true;
 }
 
 bool ValidateGenPerfMonitorsAMD(const Context *context,
@@ -4070,8 +4074,7 @@ bool ValidateGenPerfMonitorsAMD(const Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    return true;
 }
 
 bool ValidateGetPerfMonitorCounterDataAMD(const Context *context,
