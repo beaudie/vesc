@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af9c1431_f9b1ee0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-19T22:35:08Z",
+      "side": 1,
+      "message": "Currently, the api_dump layer library is not included (on Android) if `angle_enable_vulkan_api_dump_layer \u003d true` isn\u0027t in `args.gn`, but I can change the build to include it by default if you\u0027d prefer, is that OK?",
+      "parentUuid": "2f1ab860_db1ca89b",
+      "revId": "37b2487b4669b0212861ec33a58e92c6f9cc4e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55ab1815_86dd4050",
         "filename": "third_party/lunarg-vulkantools/README.chromium",
         "patchSetId": 6
