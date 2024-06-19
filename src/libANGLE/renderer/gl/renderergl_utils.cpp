@@ -2376,7 +2376,7 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, disableBlendFuncExtended,
                             IsApple() && isIntel && GetMacOSVersion() < OSVersion(10, 14, 0));
 
-    ANGLE_FEATURE_CONDITION(features, avoidBindFragDataLocation, !isMesa && isQualcomm);
+    ANGLE_FEATURE_CONDITION(features, avoidBindFragDataLocation, false);
 
     ANGLE_FEATURE_CONDITION(features, unsizedSRGBReadPixelsDoesntTransform, !isMesa && isQualcomm);
 
