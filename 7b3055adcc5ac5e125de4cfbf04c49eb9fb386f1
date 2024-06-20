@@ -339,6 +339,30 @@
       },
       "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2de2d6da_ae7a5515",
+        "filename": "src/tests/gl_tests/AdvancedBlendTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-20T21:19:26Z",
+      "side": 1,
+      "message": "Marked as done",
+      "parentUuid": "702b2768_33aba950",
+      "range": {
+        "startLine": 82,
+        "startChar": 46,
+        "endLine": 82,
+        "endChar": 85
+      },
+      "revId": "7b3055adcc5ac5e125de4cfbf04c49eb9fb386f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
