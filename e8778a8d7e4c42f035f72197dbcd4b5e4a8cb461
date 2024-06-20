@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a32f0e7_5cbb7fd6",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 2
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-20T18:57:29Z",
+      "side": 1,
+      "message": "What is missing in VK to support this? Is it just ValidateAST that doesn\u0027t support built-in struct types (I don\u0027t believe I had ever considered their existence before), or something else missing? IOW, if validation is disabled, what fails?",
+      "revId": "e8778a8d7e4c42f035f72197dbcd4b5e4a8cb461",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
