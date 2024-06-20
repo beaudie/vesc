@@ -121,6 +121,7 @@ angle::Result RenderTargetCache<RenderTargetT>::updateReadColorRenderTarget(
     const gl::Context *context,
     const gl::FramebufferState &state)
 {
+    fprintf(stderr, "  * Update read RT (prev: %p)\n", mReadRenderTarget);
     return updateCachedRenderTarget(context, state.getReadAttachment(), &mReadRenderTarget);
 }
 
@@ -137,6 +138,7 @@ angle::Result RenderTargetCache<RenderTargetT>::updateColorRenderTarget(
         ANGLE_TRY(updateReadColorRenderTarget(context, state));
     }
 
+    fprintf(stderr, "  * Update color RT (prev: %p)\n", mColorRenderTargets[colorIndex]);
     return updateCachedRenderTarget(context, state.getColorAttachment(colorIndex),
                                     &mColorRenderTargets[colorIndex]);
 }
@@ -164,6 +166,7 @@ angle::Result RenderTargetCache<RenderTargetT>::updateCachedRenderTarget(
                                               &newRenderTarget));
     }
     *cachedRenderTarget = newRenderTarget;
+    fprintf(stderr, "   ** Update RT (new: %p)\n", newRenderTarget);
     return angle::Result::Continue;
 }
 

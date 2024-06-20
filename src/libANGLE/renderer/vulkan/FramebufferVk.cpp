@@ -2201,6 +2201,7 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
 angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
                                                    uint32_t colorIndexGL)
 {
+    fprintf(stderr, " - update color RT %u\n", colorIndexGL);
     ANGLE_TRY(mRenderTargetCache.updateColorRenderTarget(context, mState, colorIndexGL));
 
     // Update cached masks for masked clears.
@@ -2301,6 +2302,7 @@ angle::Result FramebufferVk::flushColorAttachmentUpdates(const gl::Context *cont
 
     // Draw
     drawRenderTarget = mRenderTargetCache.getColorDraw(mState, colorIndexGL);
+    fprintf(stderr, " - flushColorAttachmentUpdates: %p\n", drawRenderTarget);
     if (drawRenderTarget)
     {
         if (deferClears)
@@ -2360,6 +2362,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                                        const gl::Framebuffer::DirtyBits &dirtyBits,
                                        gl::Command command)
 {
+    fprintf(stderr, "%p: FramebufferVk::syncState\n", this);
     ContextVk *contextVk = vk::GetImpl(context);
 
     vk::FramebufferDesc priorFramebufferDesc = mCurrentFramebufferDesc;
@@ -2393,6 +2396,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 dirtyDepthStencilAttachment = true;
                 break;
             case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
+                fprintf(stderr, " - update read RT\n");
                 ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
                 break;
             case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
