@@ -1340,11 +1340,14 @@ angle::Result BlitGL::initializeResources(const gl::Context *context)
                                                  GL_STATIC_DRAW));
 
     VertexArrayStateGL *defaultVAOState = mStateManager->getDefaultVAOState();
+    fprintf(stderr, "BlitGL: %d\n", mFeatures.syncVertexArraysToDefault.enabled);
     if (!mFeatures.syncVertexArraysToDefault.enabled)
     {
         ANGLE_GL_TRY(context, mFunctions->genVertexArrays(1, &mVAO));
-        mVAOState     = new VertexArrayStateGL(defaultVAOState->attributes.size(),
-                                               defaultVAOState->bindings.size());
+        mVAOState = new VertexArrayStateGL(defaultVAOState->attributes.size(),
+                                           defaultVAOState->bindings.size());
+        fprintf(stderr, "Default VAO state: %zu %zu\n", defaultVAOState->attributes.size(),
+                defaultVAOState->bindings.size());
         mOwnsVAOState = true;
         ANGLE_TRY(setVAOState(context));
         ANGLE_TRY(initializeVAOState(context));
@@ -1452,6 +1455,7 @@ angle::Result BlitGL::initializeVAOState(const gl::Context *context)
     ANGLE_GL_TRY(context, mFunctions->vertexAttribPointer(mTexcoordAttribLocation, 2, GL_FLOAT,
                                                           GL_FALSE, 0, nullptr));
 
+    fprintf(stderr, "  - init %u\n", mTexcoordAttribLocation);
     VertexAttributeGL &attribute = mVAOState->attributes[mTexcoordAttribLocation];
     attribute.enabled            = true;
     attribute.format             = &angle::Format::Get(angle::FormatID::R32G32_FLOAT);
