@@ -16,6 +16,24 @@
       "message": "Commit message has been updated against a presubmit failure.",
       "revId": "7ddf88809038422bcfe5c86db14233938c1f05a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0faed1c_c88e3310",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-20T03:36:52Z",
+      "side": 1,
+      "message": "Looks like you need to run `git cl format`",
+      "parentUuid": "cf67bac1_d070174b",
+      "revId": "7ddf88809038422bcfe5c86db14233938c1f05a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
