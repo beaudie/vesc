@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b090a6a5_cef5f4f6",
+        "filename": "include/platform/gl_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-20T18:21:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff0bafa0_7b9d5719",
+      "range": {
+        "startLine": 814,
+        "startChar": 40,
+        "endLine": 814,
+        "endChar": 46
+      },
+      "revId": "f5e35b4c1e4f735e1424bb9cc68347ba4ec866c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48b9457c_c0205d78",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-18T19:06:02Z",
       "side": 1,
       "message": "https://anglebug.com/40096376?",
+      "range": {
+        "startLine": 822,
+        "startChar": 43,
+        "endLine": 822,
+        "endChar": 47
+      },
+      "revId": "f5e35b4c1e4f735e1424bb9cc68347ba4ec866c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1daf5c45_fd3b33a0",
+        "filename": "include/platform/gl_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-20T18:21:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48b9457c_c0205d78",
       "range": {
         "startLine": 822,
         "startChar": 43,
