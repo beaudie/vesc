@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c93c896d_28d3243e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-20T13:29:26Z",
+      "side": 1,
+      "message": "I don\u0027t see a rhyme or reason for the ordering, but why insert this here?\n\nUgh: Apparently I never hit Reply on this.  Comment has been sitting since the 17th.  Apologies.",
+      "range": {
+        "startLine": 930,
+        "startChar": 0,
+        "endLine": 930,
+        "endChar": 86
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "68e59ab3_1bff1e6d",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+              "range": {
+                "startLine": 930,
+                "startChar": 0,
+                "endLine": 931,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+              "range": {
+                "startLine": 940,
+                "startChar": 0,
+                "endLine": 940,
+                "endChar": 0
+              },
+              "replacement": "    VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT mBlendOperationAdvancedFeatures;\n"
+            }
+          ]
+        }
+      ],
+      "revId": "ed199aad7055f33408a5e53e5ea824c1bbfc53b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
