@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1afcd275_49683b4d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-20T15:19:29Z",
+      "side": 1,
+      "message": "This is all intentionally modelled after VVL (short of doing anything by default in debug builds), so let\u0027s try mirror what it is doing right below.",
+      "parentUuid": "ea3c143c_5c2cdd25",
+      "revId": "37b2487b4669b0212861ec33a58e92c6f9cc4e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55ab1815_86dd4050",
         "filename": "third_party/lunarg-vulkantools/README.chromium",
         "patchSetId": 6
@@ -103,6 +121,24 @@
       "writtenOn": "2024-06-19T18:28:53Z",
       "side": 1,
       "message": "Will there be an autoroller for this? If not, please use a specific hash",
+      "revId": "37b2487b4669b0212861ec33a58e92c6f9cc4e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb7e1a2f_3d8b7643",
+        "filename": "third_party/lunarg-vulkantools/README.chromium",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-20T15:19:29Z",
+      "side": 1,
+      "message": "We\u0027ve got a roller into vulkan-deps:\nhttps://autoroll.skia.org/r/lunarg-vulkan-tools-vulkan-deps",
+      "parentUuid": "55ab1815_86dd4050",
       "revId": "37b2487b4669b0212861ec33a58e92c6f9cc4e75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
