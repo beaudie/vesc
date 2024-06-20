@@ -33,6 +33,24 @@
       "message": "LGTM - I assume you\u0027ve already used it and it is working.  If not, worth reaching out to an AMD dev.",
       "revId": "ba117e17aba4adcd95e5ad924ee0c4fed77c1f21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d416eb_82a115eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-20T17:01:28Z",
+      "side": 1,
+      "message": "The end2end tests are clearly working, but I need help verifying that the perf/trace tests are also working. I didn\u0027t even realize we can capture counters in perf tests, have you ever used that? If so, could you please verify this change doesn\u0027t break that use case? (or instruct me how to run it)\n\nAlso lost the +1!",
+      "parentUuid": "ddd68ea6_348d42e7",
+      "revId": "ba117e17aba4adcd95e5ad924ee0c4fed77c1f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
