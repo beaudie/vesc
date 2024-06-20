@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f15fad9_c76b558b",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-06-20T08:02:18Z",
+      "side": 1,
+      "message": "I think you only need to clear `mOcclusionQueryPool.getNumRenderPassAllocatedQueries() * sizeof(uint64_t)` bytes.\n\n`getNumRenderPassAllocatedQueries()` actually returns number of allocated offsets.\n\nProbably can create a helper method in `OcclusionQueryPool` for clearing.",
+      "range": {
+        "startLine": 1836,
+        "startChar": 51,
+        "endLine": 1836,
+        "endChar": 84
+      },
+      "revId": "8ffb0a1726d47e06a5058d8930e4ab5cd6a9edd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e52de66_f47d8bd0",
+        "filename": "src/libANGLE/renderer/metal/mtl_occlusion_query_pool.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-06-20T08:02:18Z",
+      "side": 1,
+      "message": "IMO, I think the buffer is going to be reused a lot because its capacity is always expanding. The clearing will only be redundant when the buffer is created the first time, which should be rare. So it shouldn\u0027t be too bad.\n\nAlternatively, I\u0027m thinking we could also have another solution like performing a tiny and occluded draw call after `glBeginQuery`, which should reset the visibility result\u0027s slot to zero. Could it be more readable and less overhead than clearing?",
+      "range": {
+        "startLine": 63,
+        "startChar": 9,
+        "endLine": 63,
+        "endChar": 14
+      },
+      "revId": "8ffb0a1726d47e06a5058d8930e4ab5cd6a9edd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
