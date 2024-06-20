@@ -2704,6 +2704,8 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
     ContextVk *contextVk = vk::GetImpl(context);
 
+    WARN() << this << ": getAttachmentRT";
+
     // Sync the texture's image.  See comment on this function in the header.
     ANGLE_TRY(respecifyImageStorageIfNecessary(contextVk, gl::Command::Draw));
 
@@ -2783,12 +2785,14 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
         ASSERT(imageIndex.getLayerIndex() < static_cast<int32_t>(layerRenderTargets.size()));
 
         *rtOut = &layerRenderTargets[layerIndex];
+        WARN() << " - getAttachmentRT result (layerIndex " << layerIndex << "): " << *rtOut;
     }
     else
     {
         ASSERT(layerCount > 0);
         *rtOut = getMultiLayerRenderTarget(contextVk, gl::LevelIndex(imageIndex.getLevelIndex()),
                                            layerIndex, layerCount);
+        WARN() << " - getAttachmentRT multilayer result: " << *rtOut;
     }
 
     return angle::Result::Continue;
@@ -3076,6 +3080,7 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
         mState.hasBeenBoundToMSRTTFramebuffer() &&
         ((mImageCreateFlags & VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT) == 0))
     {
+        WARN() << " - respecify image due to MSRTSS";
         ANGLE_TRY(respecifyImageStorage(contextVk));
         oldUsageFlags  = mImageUsageFlags;
         oldCreateFlags = mImageCreateFlags;
@@ -3089,6 +3094,7 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
     if (mState.getImmutableFormat() &&
         (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags))
     {
+        WARN() << " - respecify image due to change of flags";
         ANGLE_TRY(respecifyImageStorage(contextVk));
         oldUsageFlags  = mImageUsageFlags;
         oldCreateFlags = mImageCreateFlags;
@@ -3146,6 +3152,7 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
     if (oldUsageFlags != mImageUsageFlags || oldCreateFlags != mImageCreateFlags ||
         TextureHasAnyRedefinedLevels(mRedefinedLevels) || isMipmapEnabledByMinFilter)
     {
+        WARN() << " - respecify image due to levels";
         ANGLE_TRY(respecifyImageStorage(contextVk));
     }
 
@@ -3849,6 +3856,7 @@ void TextureVk::releaseImageViews(ContextVk *contextVk)
         {
             for (RenderTargetVk &renderTargetVk : renderTargetLevels)
             {
+                WARN() << "  -- Release RT " << &renderTargetVk;
                 renderTargetVk.release(contextVk);
             }
             // Clear the layers tracked for each level
@@ -3860,6 +3868,7 @@ void TextureVk::releaseImageViews(ContextVk *contextVk)
 
     for (auto &renderTargetPair : mMultiLayerRenderTargets)
     {
+        WARN() << "  -- Release multilayer RT " << renderTargetPair.second.get();
         renderTargetPair.second->release(contextVk);
     }
     mMultiLayerRenderTargets.clear();
