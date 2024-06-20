@@ -176,6 +176,7 @@ angle::Result IOSurfaceSurfaceMtl::ensureColorTextureCreated(const gl::Context *
 
         if (mColorTexture)
         {
+            mColorTextureInitialized = false;
             size_t resourceSize = EstimateTextureSizeInBytes(
                 mColorFormat, mColorTexture->widthAt0(), mColorTexture->heightAt0(),
                 mColorTexture->depthAt0(), mColorTexture->samples(), mColorTexture->mipmapLevels());
@@ -198,6 +199,7 @@ angle::Result IOSurfaceSurfaceMtl::ensureColorTextureCreated(const gl::Context *
 
         // Disable subsequent rendering to alpha channel.
         mColorTexture->setColorWritableMask(MTLColorWriteMaskAll & (~MTLColorWriteMaskAlpha));
+        mColorTextureInitialized = true;
     }
 
     return angle::Result::Continue;
