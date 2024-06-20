@@ -1455,7 +1455,9 @@ type_specifier_nonarray
     | TYPE_NAME {
         // This is for user defined type names. The lexical phase looked up the type.
         const TStructure *structure = static_cast<const TStructure*>($1.symbol);
-        $$.initializeStruct(structure, false, @1);
+	// Temporary check until VK and Metal backends support type name like gl_DepthRangeParameters.
+        context->checkIsNotReserved(@1, ImmutableString($1.string));
+	$$.initializeStruct(structure, false, @1);
     }
     ;
 
