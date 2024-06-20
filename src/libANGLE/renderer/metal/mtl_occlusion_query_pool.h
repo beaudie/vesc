@@ -49,6 +49,9 @@ class OcclusionQueryPool
     // This function is called at the end of render pass
     void resolveVisibilityResults(ContextMtl *contextMtl);
 
+    bool wasUsed() { return mUsed; }
+    void setUsed() { mUsed = true; }
+
   private:
     // Buffer to hold the visibility results for current render pass
     BufferRef mRenderPassResultsPool;
@@ -57,6 +60,7 @@ class OcclusionQueryPool
     std::vector<QueryMtl *> mAllocatedQueries;
 
     bool mResetFirstQuery = false;
+    bool mUsed            = false;
 };
 
 }  // namespace mtl

@@ -50,6 +50,7 @@ angle::Result OcclusionQueryPool::allocateQueryOffset(ContextMtl *contextMtl,
         static_cast<uint32_t>(mAllocatedQueries.size()) * kOcclusionQueryResultSize;
     if (!mRenderPassResultsPool)
     {
+        ASSERT(!mUsed);
         // First allocation
         ANGLE_TRY(Buffer::MakeBufferWithStorageMode(contextMtl, MTLStorageModePrivate,
                                                     kOcclusionQueryResultSize, nullptr,
@@ -62,6 +63,7 @@ angle::Result OcclusionQueryPool::allocateQueryOffset(ContextMtl *contextMtl,
         ANGLE_TRY(Buffer::MakeBufferWithStorageMode(contextMtl, MTLStorageModePrivate,
                                                     mRenderPassResultsPool->size() * 2, nullptr,
                                                     &mRenderPassResultsPool));
+        mUsed                               = false;
         mRenderPassResultsPool->get().label = @"OcclusionQueryPool";
     }
 

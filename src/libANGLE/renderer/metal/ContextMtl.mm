@@ -1824,6 +1824,21 @@ void ContextMtl::endRenderEncoding(mtl::RenderCommandEncoder *encoder)
         mBlitEncoder.endEncoding();
     }
 
+    if (mOcclusionQueryPool.getNumRenderPassAllocatedQueries() > 0)
+    {
+        // If the current visibility pool buffer was used before,
+        // ensure that it does not contain previous results.
+        if (mOcclusionQueryPool.wasUsed())
+        {
+            auto blitEncoder = getBlitCommandEncoderWithoutEndingRenderEncoder();
+            blitEncoder->fillBuffer(
+                mOcclusionQueryPool.getRenderPassVisibilityPoolBuffer(),
+                NSMakeRange(0, mOcclusionQueryPool.getRenderPassVisibilityPoolBuffer()->size()), 0);
+            blitEncoder->endEncoding();
+        }
+        mOcclusionQueryPool.setUsed();
+    }
+
     encoder->endEncoding();
 
     // Resolve visibility results
