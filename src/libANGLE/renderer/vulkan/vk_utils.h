@@ -31,6 +31,7 @@
 #include "libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
 #include "platform/autogen/FeaturesVk_autogen.h"
+#include "vulkan/vulkan_core.h"
 #include "vulkan/vulkan_fuchsia_ext.h"
 
 #define ANGLE_GL_OBJECTS_X(PROC) \
