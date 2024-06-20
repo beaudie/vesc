@@ -254,11 +254,6 @@ angle::Result SurfaceMtl::initializeContents(const gl::Context *context,
 {
     ASSERT(mColorTexture);
 
-    if (mContentInitialized)
-    {
-        return angle::Result::Continue;
-    }
-
     ContextMtl *contextMtl = mtl::GetImpl(context);
 
     // Use loadAction=clear
@@ -269,17 +264,26 @@ angle::Result SurfaceMtl::initializeContents(const gl::Context *context,
     {
         case GL_BACK:
         {
+            if (mColorTextureInitialized)
+            {
+                return angle::Result::Continue;
+            }
             rpDesc.numColorAttachments = 1;
             mColorRenderTarget.toRenderPassAttachmentDesc(&rpDesc.colorAttachments[0]);
             rpDesc.colorAttachments[0].loadAction = MTLLoadActionClear;
             MTLClearColor black                   = {};
             rpDesc.colorAttachments[0].clearColor =
                 mtl::EmulatedAlphaClearColor(black, mColorTexture->getColorWritableMask());
+            mColorTextureInitialized = true;
             break;
         }
         case GL_DEPTH:
         case GL_STENCIL:
         {
+            if (mDepthStencilTexturesInitialized)
+            {
+                return angle::Result::Continue;
+            }
             if (mDepthTexture)
             {
                 mDepthRenderTarget.toRenderPassAttachmentDesc(&rpDesc.depthAttachment);
@@ -290,6 +294,7 @@ angle::Result SurfaceMtl::initializeContents(const gl::Context *context,
                 mStencilRenderTarget.toRenderPassAttachmentDesc(&rpDesc.stencilAttachment);
                 rpDesc.stencilAttachment.loadAction = MTLLoadActionClear;
             }
+            mDepthStencilTexturesInitialized = true;
             break;
         }
         default:
@@ -298,7 +303,6 @@ angle::Result SurfaceMtl::initializeContents(const gl::Context *context,
     }
     mtl::RenderCommandEncoder *encoder = contextMtl->getRenderPassCommandEncoder(rpDesc);
     encoder->setStoreAction(MTLStoreActionStore);
-    mContentInitialized = true;
 
     return angle::Result::Continue;
 }
@@ -374,6 +378,7 @@ angle::Result SurfaceMtl::ensureCompanionTexturesSizeCorrect(const gl::Context *
                                         /** renderTargetOnly */ false, &mDepthTexture));
 
         mDepthRenderTarget.set(mDepthTexture, mtl::kZeroNativeMipLevel, 0, mDepthFormat);
+        mDepthStencilTexturesInitialized = false;  // Robust resource case should initialize to 1.0.
     }
 
     if (mStencilFormat.valid() && (!mStencilTexture || mStencilTexture->sizeAt0() != size))
@@ -671,7 +676,7 @@ angle::Result WindowSurfaceMtl::obtainNextDrawable(const gl::Context *context)
             mMetalLayer.get().allowsNextDrawableTimeout = NO;
             mCurrentDrawable.retainAssign([mMetalLayer nextDrawable]);
             mMetalLayer.get().allowsNextDrawableTimeout = YES;
-            mContentInitialized                         = false;
+            mColorTextureInitialized                    = false;
         }
 
         if (!mColorTexture)
