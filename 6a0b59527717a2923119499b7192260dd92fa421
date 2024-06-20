@@ -16,6 +16,29 @@
       "message": "(no opinion)",
       "revId": "6a0b59527717a2923119499b7192260dd92fa421",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40e41948_98609ba1",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-06-20T18:35:41Z",
+      "side": 1,
+      "message": "I am not familiar with how robustness interact with framebuffer\u0027s clear. But what does this default clearDepth do? How is it different from setting it explicitly in InitializeDepthStencilTextureContentsGPU?",
+      "range": {
+        "startLine": 362,
+        "startChar": 24,
+        "endLine": 362,
+        "endChar": 27
+      },
+      "revId": "6a0b59527717a2923119499b7192260dd92fa421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
