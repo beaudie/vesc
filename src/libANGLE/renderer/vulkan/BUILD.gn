@@ -72,6 +72,9 @@ config("angle_vulkan_backend_config") {
   if (angle_enable_vulkan_api_dump_layer) {
     defines += [ "ANGLE_ENABLE_VULKAN_API_DUMP_LAYER" ]
   }
+  if (angle_enable_cl) {
+    defines += [ "ANGLE_ENABLE_CL_VULKAN" ]
+  }
 
   defines += [ "ANGLE_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC=" +
                "${angle_enable_vulkan_shared_ring_buffer_cmd_alloc}" ]

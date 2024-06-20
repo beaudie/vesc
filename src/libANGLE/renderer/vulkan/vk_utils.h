@@ -31,7 +31,14 @@
 #include "libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
 #include "platform/autogen/FeaturesVk_autogen.h"
+#include "vulkan/vulkan_core.h"
 #include "vulkan/vulkan_fuchsia_ext.h"
+
+#if defined(ANGLE_ENABLE_CL_VULKAN)
+#    include "common/PackedCLEnums_autogen.h"
+#    include "libANGLE/CLBitField.h"
+#    include "libANGLE/cl_types.h"
+#endif
 
 #define ANGLE_GL_OBJECTS_X(PROC) \
     PROC(Buffer)                 \
@@ -1313,6 +1320,17 @@ vk::LevelIndex GetLevelIndex(gl::LevelIndex levelGL, gl::LevelIndex baseLevel);
 VkImageTiling GetTilingMode(gl::TilingMode tilingMode);
 
 }  // namespace gl_vk
+
+#if defined(ANGLE_ENABLE_CL_VULKAN)
+namespace cl_vk
+{
+VkExtent3D GetExtentFromDescriptor(cl::ImageDescriptor desc);
+VkImageType GetImageType(cl::MemObjectType memObjectType);
+VkImageViewType GetImageViewType(cl::MemObjectType memObjectType);
+VkMemoryPropertyFlags GetMemoryPropertyFlags(cl::MemFlags memFlags);
+
+}  // namespace cl_vk
+#endif
 
 namespace vk_gl
 {
