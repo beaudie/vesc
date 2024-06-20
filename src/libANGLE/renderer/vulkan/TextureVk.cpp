@@ -3655,15 +3655,23 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
                                                            : ConvertToSRGB(actualImageFormatID));
 
         // Note: If we ever fail the following check, we should use the emulation path for this
-        // texture instead of ignoring MSRTT.
-        if (vk::ImageHelper::FormatSupportsUsage(
-                renderer, actualImageFormat, imageType, imageTiling, mImageUsageFlags,
-                createFlagsMultisampled, nullptr,
-                vk::ImageHelper::FormatSupportCheck::RequireMultisampling) &&
-            vk::ImageHelper::FormatSupportsUsage(
-                renderer, additionalViewFormat, imageType, imageTiling, mImageUsageFlags,
-                createFlagsMultisampled, nullptr,
-                vk::ImageHelper::FormatSupportCheck::RequireMultisampling))
+        // texture instead of ignoring MSRTT. However, if the texture has already been bound to an
+        // MSRTT framebuffer, lack of support should result in failure.
+        bool supportsMSRTTUsage = vk::ImageHelper::FormatSupportsUsage(
+                                      renderer, actualImageFormat, imageType, imageTiling,
+                                      mImageUsageFlags, createFlagsMultisampled, nullptr,
+                                      vk::ImageHelper::FormatSupportCheck::RequireMultisampling) &&
+                                  vk::ImageHelper::FormatSupportsUsage(
+                                      renderer, additionalViewFormat, imageType, imageTiling,
+                                      mImageUsageFlags, createFlagsMultisampled, nullptr,
+                                      vk::ImageHelper::FormatSupportCheck::RequireMultisampling);
+
+        if (mState.hasBeenBoundToMSRTTFramebuffer() && !supportsMSRTTUsage)
+        {
+            return angle::Result::Stop;
+        }
+
+        if (supportsMSRTTUsage)
         {
             // If supported by format add the MSRTSS flag because any texture might end up as an
             // MSRTT attachment.
