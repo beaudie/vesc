@@ -86,24 +86,18 @@ int FindSupportedFormat(vk::Renderer *renderer,
                         SupportTest hasSupport)
 {
     ASSERT(numInfo > 0);
-    const int last = numInfo - 1;
 
-    for (int i = static_cast<int>(skip); i < last; ++i)
+    for (int i = static_cast<int>(skip); i < numInfo; ++i)
     {
         ASSERT(info[i].format != angle::FormatID::NONE);
         if (hasSupport(renderer, info[i].format))
+        {
             return i;
+        }
     }
 
-    if (skip > 0 && !hasSupport(renderer, info[last].format))
-    {
-        // We couldn't find a valid fallback, try again without skip
-        return FindSupportedFormat(renderer, info, 0, numInfo, hasSupport);
-    }
-
-    ASSERT(info[last].format != angle::FormatID::NONE);
-    ASSERT(hasSupport(renderer, info[last].format));
-    return last;
+    // We couldn't find a valid fallback, try ignoring the skip otherwise return -1
+    return (skip > 0 && hasSupport(renderer, info[0].format)) ? 0 : -1;
 }
 
 bool HasNonFilterableTextureFormatSupport(vk::Renderer *renderer, angle::FormatID formatID)
@@ -154,6 +148,13 @@ void Format::initImageFallback(Renderer *renderer, const ImageFormatInitInfo *in
     }
 
     int i = FindSupportedFormat(renderer, info, skip, static_cast<uint32_t>(numInfo), testFunction);
+
+    if (i == -1)
+    {
+        // If no fallback formats are supported, nothing left to do
+        return;
+    }
+
     mActualSampleOnlyImageFormatID = info[i].format;
     mImageInitializerFunction      = info[i].initializer;
 
