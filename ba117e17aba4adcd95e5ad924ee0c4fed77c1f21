@@ -16,6 +16,23 @@
       "message": "Our usage of the ext is still very wrong, we\u0027re supposed to select which counters to capture, and treat the capture as happening on the GPU pipeline (i.e. need to wait for it to happen), but what we had before this change was even more wrong; we didn\u0027t even begin/end the capture.\n\nI don\u0027t think it\u0027s worth doing this _more_ properly now, I did this just to add control over when capture happens as the next CL could add more overhead if counters are always captured for no reason.",
       "revId": "ba117e17aba4adcd95e5ad924ee0c4fed77c1f21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddd68ea6_348d42e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-20T13:53:00Z",
+      "side": 1,
+      "message": "LGTM - I assume you\u0027ve already used it and it is working.  If not, worth reaching out to an AMD dev.",
+      "revId": "ba117e17aba4adcd95e5ad924ee0c4fed77c1f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
