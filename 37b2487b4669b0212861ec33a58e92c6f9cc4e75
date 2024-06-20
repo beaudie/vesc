@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea3c143c_5c2cdd25",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-20T14:01:25Z",
+      "side": 1,
+      "message": "I\u0027ll let @cnorthrop make the final call, I personally see no problem with that. Even if not included by default in the test APK, the decision can still be a runtime one (even if it doesn\u0027t work on Android without having that layer one way or another)",
+      "parentUuid": "53c386b8_1e87dd48",
+      "revId": "37b2487b4669b0212861ec33a58e92c6f9cc4e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55ab1815_86dd4050",
         "filename": "third_party/lunarg-vulkantools/README.chromium",
         "patchSetId": 6
