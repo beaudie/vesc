@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53c386b8_1e87dd48",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-20T05:24:50Z",
+      "side": 1,
+      "message": "Not binary size, just a question if including it in the Android test APKs or not.",
+      "parentUuid": "b3e3df17_043ff55d",
+      "revId": "37b2487b4669b0212861ec33a58e92c6f9cc4e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55ab1815_86dd4050",
         "filename": "third_party/lunarg-vulkantools/README.chromium",
         "patchSetId": 6
