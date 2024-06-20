@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11e535c8_dc1af22c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-06-20T09:32:44Z",
+      "side": 1,
+      "message": "Thanks, this rolled into Chromium successfully https://chromium-review.googlesource.com/c/chromium/src/+/5643297.",
+      "revId": "800ca8d38b69203eaacd0c4553c0b1fe26ddd25e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
