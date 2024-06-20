@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2579e67_98630d76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-20T19:26:29Z",
+      "side": 1,
+      "message": "PTAL. Instead of always skipping output binding calls, we now do them only when the user also called glBindFragDataLocation. This works for the skia use case.\n\nWe also check for errors and fail link if the output location binding didn\u0027t work.",
+      "revId": "d46165fed42feab0788813f0d5a2859bf1cebbf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
