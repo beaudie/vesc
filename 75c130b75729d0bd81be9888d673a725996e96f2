@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7183f02d_db70362c",
+        "filename": "src/tests/gl_tests/TiledRenderingTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-21T17:58:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c7f07e1_b9f4a337",
+      "range": {
+        "startLine": 47,
+        "startChar": 22,
+        "endLine": 47,
+        "endChar": 36
+      },
+      "revId": "75c130b75729d0bd81be9888d673a725996e96f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08ad4c56_69b6d1d9",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-21T14:59:48Z",
       "side": 1,
       "message": "Extra sure:\n\n```suggestion\n    const int w \u003d getWindowWidth();\n    const int h \u003d getWindowHeight();\n\n    EXPECT_PIXEL_RECT_EQ(10, 12, 15, 17, GLColor::blue);\n    EXPECT_PIXEL_RECT_EQ(0, 0, w, 12, GLColor::transparentBlack);\n    EXPECT_PIXEL_RECT_EQ(0, 12 + 17, w, h - 12 - 17, GLColor::transparentBlack);\n    EXPECT_PIXEL_RECT_EQ(0, 0, 10, h, GLColor::transparentBlack);\n    EXPECT_PIXEL_RECT_EQ(10 + 15, 0, w - 10 - 15, h, GLColor::transparentBlack);\n```",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 61
+      },
+      "revId": "75c130b75729d0bd81be9888d673a725996e96f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c254102_814fe7cc",
+        "filename": "src/tests/gl_tests/TiledRenderingTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-21T17:58:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08ad4c56_69b6d1d9",
       "range": {
         "startLine": 52,
         "startChar": 0,
@@ -64,6 +112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f32a1568_8fca9e2e",
+        "filename": "src/tests/gl_tests/TiledRenderingTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-21T17:58:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dce6a745_c29b0bd9",
+      "revId": "75c130b75729d0bd81be9888d673a725996e96f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c1d1727_b215b8f9",
@@ -77,6 +143,30 @@
       "writtenOn": "2024-06-21T14:59:48Z",
       "side": 1,
       "message": "Could also use EXPECT_PIXEL_RECT_EQ here to be extra sure",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 1
+      },
+      "revId": "75c130b75729d0bd81be9888d673a725996e96f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d6a0eae_547db00c",
+        "filename": "src/tests/gl_tests/TiledRenderingTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-21T17:58:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c1d1727_b215b8f9",
       "range": {
         "startLine": 129,
         "startChar": 0,
