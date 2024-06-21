@@ -2686,6 +2686,13 @@ void RegisterTraceTests()
         tracesJsonStream << rootTracePath << GetPathSeparator() << "restricted_traces.json";
         std::string tracesJsonPath = tracesJsonStream.str();
 
+        std::vector<CallCapture> calls;
+        std::stringstream ss;
+        ss << rootTracePath << GetPathSeparator() << "converted.json";
+        LoadCallsFromJSON(ss.str(), &calls);
+        if (rand() >= 0)
+            exit(1);
+
         if (!LoadTraceNamesFromJSON(tracesJsonPath, &traces))
         {
             ERR() << "Unable to load traces from JSON file: " << tracesJsonPath;
