@@ -16,6 +16,24 @@
       "message": "What is missing in VK to support this? Is it just ValidateAST that doesn\u0027t support built-in struct types (I don\u0027t believe I had ever considered their existence before), or something else missing? IOW, if validation is disabled, what fails?",
       "revId": "e8778a8d7e4c42f035f72197dbcd4b5e4a8cb461",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3df0252_a52a300c",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 2
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 3444161
+      },
+      "writtenOn": "2024-06-21T01:40:33Z",
+      "side": 1,
+      "message": "Yeah, at first ValidateAST would fail, I had a proposal before this to ignore the builtIn struct declaration check:\n```\n-    if (!foundDeclaration)\n+    if (!foundDeclaration \u0026\u0026 structure-\u003esymbolType() !\u003d SymbolType::BuiltIn)\n``` \n\nBut even we passed the ValidateAST, when we run a GLSLTest case like below:\n```\nconstexpr char kFS[] \u003d R\"(precision mediump float;\nvoid main() {\n  gl_DepthRangeParameters myVariable;\n  myVariable \u003d gl_DepthRange;\n  gl_FragColor \u003d vec4(myVariable.near, myVariable.far, myVariable.diff, 1);\n})\"\n```\n\nerror we got from ES2_Vulkan_SwiftShader:\n```\n../../src/tests/test_utils/ANGLETest.cpp:65: Failure\nOutputSPIRV.cpp:6546 (getSpirv): \t! Assert failed in getSpirv (../../src/compiler/translator/spirv/OutputSPIRV.cpp:6546): spirv::Validate(result)\nBacktrace:\n```\n\nand ES3_Metal:\n```\nprogram link failed: Internal error compiling shader with Metal backend.\nprogram_source:91:3: error: unknown type name \u0027gl_DepthRangeParameters\u0027\n  gl_DepthRangeParameters _umyVariable \u003d gl_DepthRangeParameters{0.0f, 0.0f, 0.0f};\n  ^\nprogram_source:91:42: error: use of undeclared identifier \u0027gl_DepthRangeParameters\u0027\n  gl_DepthRangeParameters _umyVariable \u003d gl_DepthRangeParameters{0.0f, 0.0f, 0.0f};\n                                         ^\nprogram_source:91:65: error: expected \u0027;\u0027 at end of declaration\n  gl_DepthRangeParameters _umyVariable \u003d gl_DepthRangeParameters{0.0f, 0.0f, 0.0f};\n                                                                ^\n```",
+      "parentUuid": "5a32f0e7_5cbb7fd6",
+      "revId": "e8778a8d7e4c42f035f72197dbcd4b5e4a8cb461",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
