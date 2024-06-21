@@ -7220,6 +7220,9 @@ void ImageHelper::barrierImpl(Context *context,
 
     VkPipelineStageFlags dstStageMask = transitionTo.dstStageMask;
 
+    // Always use pipelineBarrier for wait
+    mCurrentEvent.release(context);
+
     // Fallback to pipelineBarrier if there is no event tracking image.
     // VkCmdWaitEvent requires the srcQueueFamilyIndex and dstQueueFamilyIndex members of any
     // element of pBufferMemoryBarriers or pImageMemoryBarriers must be equal
@@ -7401,6 +7404,9 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
            PipelineStage::InvalidEnum);
     // mCurrentEvent must be invalid if useVkEventForImageBarrieris disabled.
     ASSERT(renderer->getFeatures().useVkEventForImageBarrier.enabled || !mCurrentEvent.valid());
+
+    // Always use pipelineBarrier for wait
+    mCurrentEvent.release(context);
 
     if (mCurrentDeviceQueueIndex != context->getDeviceQueueIndex())
     {
