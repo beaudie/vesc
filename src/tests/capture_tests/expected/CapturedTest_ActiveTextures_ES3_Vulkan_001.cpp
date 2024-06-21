@@ -9,7 +9,6 @@ void SetupReplayContext3(void)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glBindTexture(GL_TEXTURE_2D, gTextureMap[1]);
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, gTextureMap[2]);
     glUseProgram(gShaderProgramMap[1]);
     UpdateCurrentProgram(1);
     glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, gTransformFeedbackMap[0]);
