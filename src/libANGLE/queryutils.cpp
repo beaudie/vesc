@@ -4486,8 +4486,11 @@ void QueryContextAttrib(const gl::Context *context, EGLint attribute, EGLint *va
         case EGL_CONTEXT_CLIENT_TYPE:
             *value = context->getClientType();
             break;
-        case EGL_CONTEXT_CLIENT_VERSION:
+        case EGL_CONTEXT_MAJOR_VERSION:
             *value = context->getClientMajorVersion();
+            break;
+        case EGL_CONTEXT_MINOR_VERSION:
+            *value = context->getClientMinorVersion();
             break;
         case EGL_RENDER_BUFFER:
             *value = context->getRenderBuffer();
