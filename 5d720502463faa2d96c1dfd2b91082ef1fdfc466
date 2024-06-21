@@ -51,6 +51,24 @@
       "parentUuid": "58611388_e0da43ef",
       "revId": "5d720502463faa2d96c1dfd2b91082ef1fdfc466",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20c2bd3b_e1ead837",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-21T17:36:15Z",
+      "side": 1,
+      "message": "Ok, if this works on your platform (as the only one that\u0027s hitting this) and the 16-bit uniform ext is correctly not exposed, let\u0027s go with it",
+      "parentUuid": "70c609d7_86e8cf58",
+      "revId": "5d720502463faa2d96c1dfd2b91082ef1fdfc466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
