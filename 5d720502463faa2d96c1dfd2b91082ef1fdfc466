@@ -33,6 +33,24 @@
       "message": "What if we do this? Is skipping initialization of the fields (when -1 is returned valid)? With the BC ones, there\u0027s no fallback check, and we set the format to whatever is specified without checking. We could do that here too probably?\n\n```suggestion\n    return 0;\n```",
       "revId": "5d720502463faa2d96c1dfd2b91082ef1fdfc466",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c609d7_86e8cf58",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-06-21T15:56:27Z",
+      "side": 1,
+      "message": "\u003e Is skipping initialization of the fields (when -1 is returned valid)?\n\nthe default initializer sets everything to `NONE` and `FormatTable::initialize` will early-continue when it sess `mActualSampleOnlyImageFormatID \u003d\u003d angle::FormatID::NONE` but im fine either way",
+      "parentUuid": "58611388_e0da43ef",
+      "revId": "5d720502463faa2d96c1dfd2b91082ef1fdfc466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
