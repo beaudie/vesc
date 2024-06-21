@@ -71,6 +71,14 @@ class ValidateTypeSizeLimitationsTraverser : public TIntermTraverser
                 continue;
             }
 
+            // Don't validate the sizes of UBOs and SSBOs; they are backed by buffers not hardware
+            // registers.
+            if (variable.getType().isInterfaceBlock() &&
+                !IsShaderIoBlock(variable.getType().getQualifier()))
+            {
+                continue;
+            }
+
             if (!validateVariableSize(variable, asSymbol->getLine()))
             {
                 return false;
