@@ -4375,6 +4375,44 @@ void CaptureShareGroupMidExecutionSetup(
         ResourceCalls &textureRestoreCalls = trackedTextures.getResourceRestoreCalls();
         CallVector texSetupCalls({setupCalls, &textureRestoreCalls[id.value]});
 
+        // For each texture, set the correct active and binding
+        const gl::TextureBindingMap &apiBoundTextures = apiState.getBoundTexturesForCapture();
+        size_t currentActiveTexture                   = replayState.getActiveSampler();
+        size_t bindingActiveTexture                   = currentActiveTexture;
+
+        const gl::TextureBindingVector &apiBindings = apiBoundTextures[texture->getType()];
+        const gl::TextureBindingVector &replayBindings =
+            replayState.getBoundTexturesForCapture()[texture->getType()];
+        ASSERT(apiBindings.size() == replayBindings.size());
+        for (size_t bindingIndex = 0; bindingIndex < apiBindings.size(); ++bindingIndex)
+        {
+            gl::TextureID apiTextureID    = apiBindings[bindingIndex].id();
+            gl::TextureID replayTextureID = replayBindings[bindingIndex].id();
+
+            if (apiTextureID != texture->id())
+            {
+                continue;
+            }
+
+            if (apiTextureID != replayTextureID)
+            {
+                bindingActiveTexture = bindingIndex;
+            }
+        }
+
+        // Before binding a texture, set the correct active texture
+        if (currentActiveTexture != bindingActiveTexture)
+        {
+            for (std::vector<CallCapture> *calls : texSetupCalls)
+            {
+                Capture(calls, CaptureActiveTexture(
+                                   replayState, true,
+                                   GL_TEXTURE0 + static_cast<GLenum>(bindingActiveTexture)));
+            }
+            replayState.getMutablePrivateStateForCapture()->setActiveSampler(
+                static_cast<unsigned int>(bindingActiveTexture));
+        }
+
         for (std::vector<CallCapture> *calls : texSetupCalls)
         {
             Capture(calls, CaptureBindTexture(replayState, true, texture->getType(), id));
