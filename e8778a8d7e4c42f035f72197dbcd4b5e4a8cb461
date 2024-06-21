@@ -52,6 +52,24 @@
       "parentUuid": "b3df0252_a52a300c",
       "revId": "e8778a8d7e4c42f035f72197dbcd4b5e4a8cb461",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a213c4fb_7656e72c",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 2
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 3444161
+      },
+      "writtenOn": "2024-06-21T02:08:28Z",
+      "side": 1,
+      "message": "NP! Thanks to Kimmo for the hint provided during issue debugging also!",
+      "parentUuid": "27b4498d_df2d1932",
+      "revId": "e8778a8d7e4c42f035f72197dbcd4b5e4a8cb461",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
