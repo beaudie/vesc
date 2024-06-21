@@ -157,6 +157,70 @@ bool LoadTraceNamesFromJSON(const std::string jsonFilePath, std::vector<std::str
     return true;
 }
 
+bool LoadCallsFromJSON(const std::string jsonFilePath, std::vector<CallCapture> *calls)
+{
+    rapidjson::Document doc;
+    if (!LoadJSONFromFile(jsonFilePath, &doc))
+    {
+        printf("can't load json\n");
+        return false;
+    }
+
+    if (!doc.IsObject() || !doc.HasMember("functions") || !doc["functions"].IsObject())
+    {
+        printf("wrong json format\n");
+        return false;
+    }
+
+    rapidjson::Document::Array arr = doc["functions"]["SetupReplayContext2"].GetArray();
+    for (rapidjson::SizeType arrayIndex = 0; arrayIndex < arr.Size(); ++arrayIndex)
+    {
+        const rapidjson::Document::ValueType &arrayElement = arr[arrayIndex];
+        ASSERT(arrayElement[0].IsString());
+        ParamBuffer b;
+        printf("%s", arrayElement[0].GetString());
+
+        for (rapidjson::SizeType j = 1; j < arrayElement.Size(); ++j)
+        {
+            const auto &el = arrayElement[j];
+            if (el.IsInt())
+            {
+                b.addUnnamedParam(ParamType::TGLint, el.GetInt());
+                printf(" %d", el.GetInt());
+            }
+            if (el.IsObject())
+            {
+                if (el.HasMember("gVertexArrayMap"))
+                {
+                    b.addUnnamedParam(ParamType::TVertexArrayID,
+                                      gl::VertexArrayID{(uint32_t)el["gVertexArrayMap"].GetInt()});
+                    printf(" gVertexArrayMap[%d]", el["gVertexArrayMap"].GetInt());
+                }
+                else if (el.HasMember("gBufferMap"))
+                {
+                    b.addUnnamedParam(ParamType::TBufferID,
+                                      gl::BufferID{(uint32_t)el["gBufferMap"].GetInt()});
+                    printf(" gBufferMap[%d]", el["gBufferMap"].GetInt());
+                }
+                // ... and so on
+                else
+                {
+                    printf(" <fixme>");
+                }
+            }
+        }
+        printf("\n");
+
+        // Example of adding CallCapture (for non-custom functions, map to entry points instead):
+        if (strcmp(arrayElement[0].GetString(), "UpdateVertexArrayID") == 0)
+        {
+            calls->emplace_back(CallCapture("UpdateVertexArrayID", std::move(b)));
+        }
+    }
+
+    return true;
+}
+
 bool LoadTraceInfoFromJSON(const std::string &traceName,
                            const std::string &traceJsonPath,
                            TraceInfo *traceInfoOut)
