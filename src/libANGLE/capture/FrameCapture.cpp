@@ -4300,6 +4300,14 @@ void CaptureShareGroupMidExecutionSetup(
         replayState.setBufferBinding(context, gl::BufferBinding::Array, nullptr);
     }
 
+    // Clear pixel pack buffer as it affects texture readback
+    gl::Buffer *packBuffer = replayState.getTargetBuffer(gl::BufferBinding::PixelPack);
+    if (packBuffer != nullptr)
+    {
+        cap(CaptureBindBuffer(replayState, true, gl::BufferBinding::PixelPack, {0}));
+        replayState.setBufferBinding(context, gl::BufferBinding::PixelPack, nullptr);
+    }
+
     // Set a unpack alignment of 1. Otherwise, computeRowPitch() will compute the wrong value,
     // leading to a crash in memcpy() when capturing the texture contents.
     gl::PixelUnpackState &currentUnpackState = replayState.getUnpackState();
@@ -5051,6 +5059,13 @@ void CaptureShareGroupMidExecutionSetup(
     {
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, contextUnpackAlignment));
         replayState.getMutablePrivateStateForCapture()->setUnpackAlignment(contextUnpackAlignment);
+    }
+
+    // Restore pixel pack buffer binding
+    if (packBuffer != nullptr)
+    {
+        cap(CaptureBindBuffer(replayState, true, gl::BufferBinding::PixelPack, packBuffer->id()));
+        replayState.setBufferBinding(context, gl::BufferBinding::PixelPack, packBuffer);
     }
 }
 
