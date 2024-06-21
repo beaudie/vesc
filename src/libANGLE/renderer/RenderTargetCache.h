@@ -52,6 +52,9 @@ class RenderTargetCache final : angle::NonCopyable
     angle::Result updateCachedRenderTarget(const gl::Context *context,
                                            const gl::FramebufferAttachment *attachment,
                                            RenderTargetT **cachedRenderTarget);
+    angle::Result updateCachedColorAndReadRenderTarget(const gl::Context *context,
+                                                       const gl::FramebufferState &state,
+                                                       size_t colorIndex);
 
     RenderTargetT *mReadRenderTarget                         = nullptr;
     gl::AttachmentArray<RenderTargetT *> mColorRenderTargets = {};
@@ -130,15 +133,7 @@ angle::Result RenderTargetCache<RenderTargetT>::updateColorRenderTarget(
     const gl::FramebufferState &state,
     size_t colorIndex)
 {
-    // If the color render target we're updating is also the read buffer, make sure we update the
-    // read render target also so it's not stale.
-    if (state.getReadBufferState() != GL_NONE && state.getReadIndex() == colorIndex)
-    {
-        ANGLE_TRY(updateReadColorRenderTarget(context, state));
-    }
-
-    return updateCachedRenderTarget(context, state.getColorAttachment(colorIndex),
-                                    &mColorRenderTargets[colorIndex]);
+    return updateCachedColorAndReadRenderTarget(context, state, colorIndex);
 }
 
 template <typename RenderTargetT>
@@ -164,6 +159,40 @@ angle::Result RenderTargetCache<RenderTargetT>::updateCachedRenderTarget(
                                               &newRenderTarget));
     }
     *cachedRenderTarget = newRenderTarget;
+    return angle::Result::Continue;
+}
+
+template <typename RenderTargetT>
+angle::Result RenderTargetCache<RenderTargetT>::updateCachedColorAndReadRenderTarget(
+    const gl::Context *context,
+    const gl::FramebufferState &state,
+    size_t colorIndex)
+{
+    RenderTargetT *newRenderTarget = nullptr;
+
+    const gl::FramebufferAttachment *colorAttachment = state.getColorAttachment(colorIndex);
+    if (colorAttachment)
+    {
+        ASSERT(colorAttachment->isAttached());
+        ANGLE_TRY(colorAttachment->getRenderTarget(
+            context, colorAttachment->getRenderToTextureSamples(), &newRenderTarget));
+    }
+    mColorRenderTargets[colorIndex] = newRenderTarget;
+
+    // If the color render target we're updating is also the read buffer, make sure we update the
+    // read render target also so it's not stale.
+    if (state.getReadBufferState() != GL_NONE && state.getReadIndex() == colorIndex)
+    {
+        if (colorAttachment == state.getReadAttachment())
+        {
+            mReadRenderTarget = newRenderTarget;
+        }
+        else
+        {
+            ANGLE_TRY(updateReadColorRenderTarget(context, state));
+        }
+    }
+
     return angle::Result::Continue;
 }
 
