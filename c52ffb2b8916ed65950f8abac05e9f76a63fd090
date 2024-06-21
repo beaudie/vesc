@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f514ce5_2447a9bc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3667,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-21T20:30:03Z",
+      "side": 1,
+      "message": "Thanks. Added a follow-up to the CL.",
+      "parentUuid": "3d37fb5a_beef0c98",
+      "revId": "c52ffb2b8916ed65950f8abac05e9f76a63fd090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "611ad821_84258d01",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27fc7972_b324f6dd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3674,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-21T20:30:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "611ad821_84258d01",
+      "range": {
+        "startLine": 3673,
+        "startChar": 0,
+        "endLine": 3674,
+        "endChar": 32
+      },
+      "revId": "c52ffb2b8916ed65950f8abac05e9f76a63fd090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70195462_568c0045",
@@ -54,6 +96,24 @@
       "writtenOn": "2024-06-21T14:45:28Z",
       "side": 1,
       "message": "```suggestion\n            ANGLE_VK_TRY(contextVk, VK_ERROR_FORMAT_NOT_SUPPORTED);\n```",
+      "revId": "c52ffb2b8916ed65950f8abac05e9f76a63fd090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f9b78f7_999ef3ab",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3675,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-21T20:30:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70195462_568c0045",
       "revId": "c52ffb2b8916ed65950f8abac05e9f76a63fd090",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
