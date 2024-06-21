@@ -1356,6 +1356,28 @@ void DumpPipelineCacheGraph(Renderer *renderer, const std::ostringstream &graph)
     out << "}\n";
     out.close();
 }
+
+bool CanSupportMSRTSSForRGBA8(Renderer *renderer)
+{
+    // The support is checked for a basic 2D texture.
+    constexpr VkImageUsageFlags kImageUsageFlags =
+        VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+        VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    VkImageCreateFlags imageCreateFlags =
+        GetMinimalImageCreateFlags(renderer, gl::TextureType::_2D, kImageUsageFlags) |
+        VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT;
+
+    bool supportsMSRTTUsageRGBA8 = vk::ImageHelper::FormatSupportsUsage(
+        renderer, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_OPTIMAL,
+        kImageUsageFlags, imageCreateFlags, nullptr,
+        vk::ImageHelper::FormatSupportCheck::RequireMultisampling);
+    bool supportsMSRTTUsageRGBA8SRGB = vk::ImageHelper::FormatSupportsUsage(
+        renderer, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_OPTIMAL,
+        kImageUsageFlags, imageCreateFlags, nullptr,
+        vk::ImageHelper::FormatSupportCheck::RequireMultisampling);
+
+    return supportsMSRTTUsageRGBA8 && supportsMSRTTUsageRGBA8SRGB;
+}
 }  // namespace
 
 // OneOffCommandPool implementation.
@@ -4455,11 +4477,12 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, disableDepthStencilResolveThroughAttachment,
                             isNvidia || isQualcommProprietary);
 
+    // MSRTSS should be disabled if the driver does not support it for RGBA8 and RGBA8_SRGB.
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsMultisampledRenderToSingleSampled,
-        mFeatures.supportsRenderpass2.enabled && mFeatures.supportsDepthStencilResolve.enabled &&
-            mMultisampledRenderToSingleSampledFeatures.multisampledRenderToSingleSampled ==
-                VK_TRUE);
+        mMultisampledRenderToSingleSampledFeatures.multisampledRenderToSingleSampled == VK_TRUE &&
+            mFeatures.supportsRenderpass2.enabled &&
+            mFeatures.supportsDepthStencilResolve.enabled && CanSupportMSRTSSForRGBA8(this));
 
     // Preferring the MSRTSS flag is for texture initialization. If the MSRTSS is not used at first,
     // it will be used (if available) when recreating the image if it is bound to an MSRTT
