@@ -573,6 +573,13 @@ void main()
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(0, 0, 0, 255, 255, 255);
 
+    // Modify the green texture to ensure we bind the right index in Reset
+    const std::vector<GLColor> kWhiteData(kSize * kSize, GLColor::white);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, greenTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 kWhiteData.data());
+
     // Empty frames to reach capture end.
     for (int i = 0; i < 10; i++)
     {

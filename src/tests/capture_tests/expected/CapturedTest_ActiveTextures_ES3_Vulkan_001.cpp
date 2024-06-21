@@ -7,8 +7,6 @@ void SetupReplayContext3(void)
 {
     eglMakeCurrent(gEGLDisplay, gSurfaceMap2[0], gSurfaceMap2[0], gContextMap2[3]);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glBindTexture(GL_TEXTURE_2D, gTextureMap[1]);
-    glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, gTextureMap[2]);
     glUseProgram(gShaderProgramMap[1]);
     UpdateCurrentProgram(1);
@@ -50,6 +48,9 @@ void ReplayFrame1(void)
     glGetError();
     glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, (void *)gReadBuffer);
     glGetError();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, gTextureMap[2]);
+    glTexImage2D(GL_TEXTURE_2D, 0, 6408, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const GLubyte *)&gBinaryData[160]);
 }
 
 void ReplayFrame2(void)
@@ -64,6 +65,11 @@ void ReplayFrame3(void)
 
 void ResetReplayContextShared(void)
 {
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, gTextureMap[2]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 9728);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 9728);
+    glTexImage2D(GL_TEXTURE_2D, 0, 6408, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const GLubyte *)&gBinaryData[224]);
 }
 
 void ResetReplayContext3(void)
@@ -96,7 +102,6 @@ void ResetReplay(void)
     ResetReplayContext3();
 
     // Reset main context state
-    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, gTextureMap[1]);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, gTextureMap[2]);
