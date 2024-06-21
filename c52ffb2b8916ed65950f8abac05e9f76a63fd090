@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d37fb5a_beef0c98",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3667,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-21T14:45:28Z",
+      "side": 1,
+      "message": "Thank you! Could you please follow up with a second CL where these two calls are made for RGBA8 and RGBA8_SRGB (with some sensible values for the other fields) in `vk_renderer.cpp` and if they don\u0027t both support MSRTSS, we could automatically disable the extension?",
+      "revId": "c52ffb2b8916ed65950f8abac05e9f76a63fd090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "611ad821_84258d01",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3674,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-21T14:45:28Z",
+      "side": 1,
+      "message": "```suggestion\n            ERR() \u003c\u003c \"Texture bound to EXT_multisampled_render_to_texture framebuffer, \"\n                  \u003c\u003c \"but this device does not support this format.\";\n```",
+      "range": {
+        "startLine": 3673,
+        "startChar": 0,
+        "endLine": 3674,
+        "endChar": 32
+      },
+      "revId": "c52ffb2b8916ed65950f8abac05e9f76a63fd090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70195462_568c0045",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3675,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-21T14:45:28Z",
+      "side": 1,
+      "message": "```suggestion\n            ANGLE_VK_TRY(contextVk, VK_ERROR_FORMAT_NOT_SUPPORTED);\n```",
+      "revId": "c52ffb2b8916ed65950f8abac05e9f76a63fd090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
