@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29aa5fcb_378d6dd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-21T17:46:39Z",
+      "side": 1,
+      "message": "I need to refactor this, but wanted to get it up to preserve a working solution.  It is a bit clunky and shares code with the full active texture reset.",
+      "revId": "a328a1783b35588310285864cead8bde455ccf20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
