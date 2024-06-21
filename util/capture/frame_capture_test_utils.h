@@ -120,6 +120,7 @@ bool LoadTraceNamesFromJSON(const std::string jsonFilePath, std::vector<std::str
 bool LoadTraceInfoFromJSON(const std::string &traceName,
                            const std::string &traceJsonPath,
                            TraceInfo *traceInfoOut);
+bool LoadCallsFromJSON(const std::string jsonFilePath, std::vector<CallCapture> *calls);
 
 using TraceFunction    = std::vector<CallCapture>;
 using TraceFunctionMap = std::map<std::string, TraceFunction>;
