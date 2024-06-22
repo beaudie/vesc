@@ -63,6 +63,22 @@
     "d770e8274bcbce8f6d03fd13ce27b9bc",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000003.inc":
     "de59d829ddb735d36238cc25e0022cd6",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000000.inc":
+    "8a45c5d0f09c32f85476490adfb2a7c2",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000001.inc":
+    "32f35d5431a9f6becda7391cce6ec14f",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000002.inc":
+    "be0202026d8b7ec2722e867340badc64",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000003.inc":
+    "e5d843b3fbbeb9fc1851aa7fe7d6eb9b",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000004.inc":
+    "f5b381dc0978edf263d8358154c6245b",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000005.inc":
+    "bd94d6063f2cffa3d3b43782740fa383",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000006.inc":
+    "15fc886a0a4d287bbda0cc1acd948795",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000007.inc":
+    "28ebddc17ac19334232012886d9e6dd8",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000000.inc":
     "82426086e0b5aea32d0f756a1f6e5342",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000001.inc":
@@ -315,6 +331,10 @@
     "163151792f2ffed48258abd66a1bc10c",
   "src/libANGLE/renderer/vulkan/shaders/src/BlitResolveStencilNoExport.comp.json":
     "8a3e9ff34eba0386edb98048547a272b",
+  "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp":
+    "05458c9ccd2a170070121b6e3bd7bd81",
+  "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp.json":
+    "67dc9e3bddcc72db30250e56a800101b",
   "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp":
     "cab30c9098ecf1e2b00c7309b67cac1f",
   "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp.json":
@@ -366,9 +386,9 @@
   "src/libANGLE/renderer/vulkan/shaders/src/OverlayDraw.vert":
     "5aa33152fce5b9261c4d427ad2babdd7",
   "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp":
-    "f7628b2ff6155b47b8d1a37743b0db9c",
+    "6bdb6acb36b85e4ec8bc67c25e250eb0",
   "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h":
-    "e5e65771de0cef3cea2d5d50009abd61",
+    "9efaef7993d1650c000ac78c399e1fc3",
   "tools/glslang/glslang_validator.exe.sha1":
     "17e862cc6f462fecbf50b24ed6544a27",
   "tools/glslang/glslang_validator.sha1":

@@ -319,6 +319,13 @@ bool ValidateClearTexImageCommon(const Context *context,
             const ImageIndex index = it.next();
             TextureTarget target   = index.getTarget();
             const Extents extents  = tex->getExtents(target, level);
+
+            if (extents.width == 0 && extents.height == 0 && extents.depth == 0)
+            {
+                ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kDestinationTextureTooSmall);
+                return false;
+            }
+
             if (area.has_value() &&
                 (area->x + area->width > extents.width || area->y + area->height > extents.height))
             {
@@ -337,6 +344,13 @@ bool ValidateClearTexImageCommon(const Context *context,
     {
         TextureTarget target  = NonCubeTextureTypeToTarget(tex->getType());
         const Extents extents = tex->getExtents(target, level);
+
+        if (extents.width == 0 && extents.height == 0 && extents.depth == 0)
+        {
+            ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kDestinationTextureTooSmall);
+            return false;
+        }
+
         if (area.has_value() &&
             (area->x + area->width > extents.width || area->y + area->height > extents.height ||
              area->z + area->depth > extents.depth))

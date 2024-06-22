@@ -50,6 +50,14 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000002.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000003.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000001.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000002.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000003.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000004.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000005.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000006.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000007.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000002.inc"
@@ -213,6 +221,16 @@ constexpr CompressedShaderBlob kBlitResolveStencilNoExport_comp_shaders[] = {
     {kBlitResolveStencilNoExport_comp_00000001, sizeof(kBlitResolveStencilNoExport_comp_00000001)},
     {kBlitResolveStencilNoExport_comp_00000002, sizeof(kBlitResolveStencilNoExport_comp_00000002)},
     {kBlitResolveStencilNoExport_comp_00000003, sizeof(kBlitResolveStencilNoExport_comp_00000003)},
+};
+constexpr CompressedShaderBlob kClearTexture_comp_shaders[] = {
+    {kClearTexture_comp_00000000, sizeof(kClearTexture_comp_00000000)},
+    {kClearTexture_comp_00000001, sizeof(kClearTexture_comp_00000001)},
+    {kClearTexture_comp_00000002, sizeof(kClearTexture_comp_00000002)},
+    {kClearTexture_comp_00000003, sizeof(kClearTexture_comp_00000003)},
+    {kClearTexture_comp_00000004, sizeof(kClearTexture_comp_00000004)},
+    {kClearTexture_comp_00000005, sizeof(kClearTexture_comp_00000005)},
+    {kClearTexture_comp_00000006, sizeof(kClearTexture_comp_00000006)},
+    {kClearTexture_comp_00000007, sizeof(kClearTexture_comp_00000007)},
 };
 constexpr CompressedShaderBlob kConvertIndex_comp_shaders[] = {
     {kConvertIndex_comp_00000000, sizeof(kConvertIndex_comp_00000000)},
@@ -431,6 +449,10 @@ void ShaderLibrary::destroy(VkDevice device)
     {
         shader.get().destroy(device);
     }
+    for (RefCounted<ShaderModule> &shader : mClearTexture_comp_shaders)
+    {
+        shader.get().destroy(device);
+    }
     for (RefCounted<ShaderModule> &shader : mConvertIndex_comp_shaders)
     {
         shader.get().destroy(device);
@@ -513,6 +535,14 @@ angle::Result ShaderLibrary::getBlitResolveStencilNoExport_comp(
     return GetShader(context, mBlitResolveStencilNoExport_comp_shaders,
                      kBlitResolveStencilNoExport_comp_shaders,
                      ArraySize(kBlitResolveStencilNoExport_comp_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getClearTexture_comp(Context *context,
+                                                  uint32_t shaderFlags,
+                                                  RefCounted<ShaderModule> **shaderOut)
+{
+    return GetShader(context, mClearTexture_comp_shaders, kClearTexture_comp_shaders,
+                     ArraySize(kClearTexture_comp_shaders), shaderFlags, shaderOut);
 }
 
 angle::Result ShaderLibrary::getConvertIndex_comp(Context *context,
