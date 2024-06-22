@@ -825,6 +825,103 @@ bool TextureVk::updateMustBeStaged(gl::LevelIndex textureLevelIndexGL,
     return IsTextureLevelRedefined(mRedefinedLevels, mState.getType(), textureLevelIndexGL);
 }
 
+angle::Result TextureVk::clearImage(const gl::Context *context,
+                                    GLint level,
+                                    GLenum format,
+                                    GLenum type,
+                                    const uint8_t *data)
+{
+    // All defined cubemap faces are expected to have equal width and height.
+    bool isCubeMap = mState.getType() == gl::TextureType::CubeMap;
+    gl::TextureTarget textureTarget =
+        (isCubeMap) ? gl::kCubeMapTextureTargetMin : gl::TextureTypeToTarget(mState.getType(), 0);
+    gl::Extents extents = mState.getImageDesc(textureTarget, level).size;
+
+    gl::Box area = gl::Box(gl::kOffsetZero, extents);
+    if (isCubeMap)
+    {
+        // For a cubemap, the depth offset moves between cube faces.
+        ASSERT(area.depth == 1);
+        area.depth = 6;
+    }
+
+    // TODO(http://anglebug.com/42266869): This function can be staged as a Clear update, which
+    // means it can be picked up as LOAD_OP_CLEAR (similar to FramebufferVk::clearImpl()), improving
+    // the performance.
+    return clearSubImageImpl(context, level, area, format, type, data);
+}
+
+angle::Result TextureVk::clearSubImage(const gl::Context *context,
+                                       GLint level,
+                                       const gl::Box &area,
+                                       GLenum format,
+                                       GLenum type,
+                                       const uint8_t *data)
+{
+    return clearSubImageImpl(context, level, area, format, type, data);
+}
+
+angle::Result TextureVk::clearSubImageImpl(const gl::Context *context,
+                                           GLint level,
+                                           const gl::Box &area,
+                                           GLenum format,
+                                           GLenum type,
+                                           const uint8_t *data)
+{
+    gl::TextureType textureType = mState.getType();
+    bool useLayerAsDepth        = textureType == gl::TextureType::CubeMap ||
+                           textureType == gl::TextureType::CubeMapArray ||
+                           textureType == gl::TextureType::_2DArray ||
+                           textureType == gl::TextureType::_2DMultisampleArray;
+
+    // From the spec: For texture types that do not have certain dimensions, this command treats
+    // those dimensions as having a size of 1.  For example, to clear a portion of a two-dimensional
+    // texture, the application would use <zoffset> equal to zero and <depth> equal to one.
+    gl::Box clearArea = area;
+    if (textureType == gl::TextureType::_2D || textureType == gl::TextureType::_2DMultisample)
+    {
+        ASSERT(clearArea.z == 0 && clearArea.depth == 1);
+    }
+
+    // There should be no zero extents in the clear area, since such calls should return before
+    // entering the backend with no changes to the texture.
+    ASSERT(clearArea.width != 0 && clearArea.height != 0 && clearArea.depth != 0);
+
+    // Stage the clear update.
+    ContextVk *contextVk                 = vk::GetImpl(context);
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
+    const vk::Format &vkFormat =
+        contextVk->getRenderer()->getFormat(formatInfo.sizedInternalFormat);
+    const angle::FormatID &actualFormatID =
+        vkFormat.getActualImageFormatID(getRequiredImageAccess());
+
+    TextureUpdateResult updateResult = TextureUpdateResult::ImageUnaffected;
+    ANGLE_TRY(ensureRenderable(contextVk, &updateResult));
+
+    uint32_t baseLayer  = useLayerAsDepth ? clearArea.z : 0;
+    uint32_t layerCount = useLayerAsDepth ? clearArea.depth : 1;
+    ANGLE_TRY(mImage->stagePartialClear(contextVk, clearArea, mState.getType(), level, baseLayer,
+                                        layerCount, type, formatInfo, vkFormat,
+                                        getRequiredImageAccess(), data));
+
+    // Flush the staged updates if needed.
+    bool mustFlush = updateMustBeFlushed(gl::LevelIndex(level), actualFormatID);
+    bool mustStage = updateMustBeStaged(gl::LevelIndex(level), actualFormatID);
+    if (mustFlush ||
+        (!mustStage && mImage->valid() && mImage->hasBufferSourcedStagedUpdatesInAllLevels()))
+    {
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+
+        // If forceSubmitImmutableTextureUpdates is enabled, submit the staged updates as well
+        if (contextVk->getFeatures().forceSubmitImmutableTextureUpdates.enabled)
+        {
+            ANGLE_TRY(contextVk->submitStagedTextureUpdates());
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const gl::ImageIndex &index,
                                          const gl::Box &area,
@@ -3257,6 +3354,13 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                                    const gl::Texture::DirtyBits &dirtyBits,
                                    gl::Command source)
 {
+    // Skip if the sync has been called due to ClearTexImage or ClearTexSubImage. A new update will
+    // be applied to the image.
+    if (source == gl::Command::ClearTexture)
+    {
+        return angle::Result::Continue;
+    }
+
     ContextVk *contextVk   = vk::GetImpl(context);
     vk::Renderer *renderer = contextVk->getRenderer();
 
