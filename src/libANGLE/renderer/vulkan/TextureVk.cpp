@@ -825,6 +825,267 @@ bool TextureVk::updateMustBeStaged(gl::LevelIndex textureLevelIndexGL,
     return IsTextureLevelRedefined(mRedefinedLevels, mState.getType(), textureLevelIndexGL);
 }
 
+// TODO: Via vkCmdClearColorImage()
+// angle::Result TextureVk::clearImage(const gl::Context *context,
+//                                    GLint level,
+//                                    GLenum format,
+//                                    GLenum type,
+//                                    const uint8_t *data)
+//{
+//    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
+//    ContextVk *contextVk                 = vk::GetImpl(context);
+//    const vk::Format &vkFormat =
+//        contextVk->getRenderer()->getFormat(formatInfo.sizedInternalFormat);
+//
+//    // TODO: We will probably need to extract the values based on the loading functions? If the
+//    // pointer is null, then they should be set to 0.
+//    VkImageAspectFlags aspectMask = 0;
+//
+//    if (formatInfo.isDepthOrStencil())
+//    {
+//        // TODO: Get depth/stencil values from data based on the depth/stencil bits.
+//
+//        if (formatInfo.depthBits > 0)
+//        {
+//            aspectMask |= VK_IMAGE_ASPECT_DEPTH_BIT;
+//        }
+//        if (formatInfo.stencilBits > 0)
+//        {
+//            aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+//        }
+//    }
+//    else
+//    {
+//        aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+//    }
+//
+//    bool isCubeMap = mState.getType() == gl::TextureType::CubeMap;
+//    gl::TextureTarget textureTarget =
+//        (isCubeMap) ? gl::kCubeMapTextureTargetMin : gl::TextureTypeToTarget(mState.getType(), 0);
+//
+//    gl::Extents extents = mState.getImageDesc(textureTarget, level).size;
+//    WARN() << "Extents for level " << level << ": " << extents.width << "x" << extents.height <<
+//    "x"
+//           << extents.depth;
+//
+//    // TODO: getRequiredImageAccess() needed?
+//
+//    if (isCubeMap)
+//    {
+//        for (size_t i = 0; i < 6; i++)
+//        {
+//            const gl::ImageIndex index = gl::ImageIndex::MakeFromTarget(
+//                gl::CubeFaceIndexToTextureTarget(i), level, 0);
+//            ANGLE_TRY(mImage->stageSubresourceClear(contextVk, extents, index, aspectMask,
+//                                                    formatInfo, getRequiredImageAccess(), type,
+//                                                    data));
+//        }
+//    }
+//    else
+//    {
+//        const gl::ImageIndex index =
+//            gl::ImageIndex::MakeFromTarget(textureTarget, level, 0);
+//        ANGLE_TRY(mImage->stageSubresourceClear(contextVk, extents, index, aspectMask, formatInfo,
+//                                                getRequiredImageAccess(), type, data));
+//    }
+//
+//    WARN() << "Placeholder for clearImage " << (uint32_t)vkFormat.getIntendedFormatID();
+//    return angle::Result::Continue;
+//}
+
+// TODO: Also possible via vkCmdClearColorImage or vkCmdClearDepthStencilImage.
+angle::Result TextureVk::clearImage(const gl::Context *context,
+                                    GLint level,
+                                    GLenum format,
+                                    GLenum type,
+                                    const uint8_t *data)
+{
+    // All defined cubemap faces are expected to have equal width and height.
+    bool isCubeMap = mState.getType() == gl::TextureType::CubeMap;
+    gl::TextureTarget textureTarget =
+        (isCubeMap) ? gl::kCubeMapTextureTargetMin : gl::TextureTypeToTarget(mState.getType(), 0);
+    gl::Extents extents = mState.getImageDesc(textureTarget, level).size;
+
+    gl::Box updateArea = gl::Box(gl::kOffsetZero, extents);
+    if (isCubeMap)
+    {
+        // For a cubemap, the depth offset moves between cube faces.
+        ASSERT(updateArea.depth == 1);
+        updateArea.depth = 6;
+    }
+    return clearSubImage(context, level, updateArea, format, type, data);
+}
+
+angle::Result TextureVk::clearSubImage(const gl::Context *context,
+                                       GLint level,
+                                       const gl::Box &area,
+                                       GLenum format,
+                                       GLenum type,
+                                       const uint8_t *data)
+{
+    // TODO: Clean up the extra data.
+    gl::TextureType textureType = mState.getType();
+    bool useLayerAsDepth =
+        textureType == gl::TextureType::CubeMap || textureType == gl::TextureType::_2DArray;
+
+    // From the spec: For texture types that do not have certain dimensions, this command treats
+    // those dimensions as having a size of 1.  For example, to clear a portion of a two-dimensional
+    // texture, the application would use <zoffset> equal to zero and <depth> equal to one.
+    gl::Box updateArea = area;
+    if (textureType == gl::TextureType::_2D || textureType == gl::TextureType::_2DMultisample)
+    {
+        updateArea.z     = 0;
+        updateArea.depth = 1;
+    }
+
+    // TODO: Use clearSubImageImpl if not using compute?
+    //    return clearSubImageImpl(context, level, updateArea, format, type, isCubeMap, data);
+
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    // Get pixel data
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
+
+    // If the data pointer is null, the texture is filled with zeros. Otherwise, the data should be
+    // extracted and applied to the target areas.
+    auto pixelSize = static_cast<size_t>(formatInfo.pixelBytes);
+    std::vector<uint8_t> constValue(pixelSize, 0);
+    if (data != nullptr)
+    {
+        memcpy(constValue.data(), data, pixelSize);
+    }
+
+    // Determine clear value
+    VkImageAspectFlags aspectMask = 0;
+    if (!formatInfo.isDepthOrStencil())
+    {
+        aspectMask |= VK_IMAGE_ASPECT_COLOR_BIT;
+    }
+    else
+    {
+        if (formatInfo.depthBits > 0)
+        {
+            aspectMask |= VK_IMAGE_ASPECT_DEPTH_BIT;
+        }
+        if (formatInfo.stencilBits > 0)
+        {
+            aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+        }
+    }
+
+    // TODO: Extra
+    VkClearValue clearValue = {};
+
+    // Add update and determine if updates should be flushed.
+    ANGLE_TRY(mImage->stageSubresourceClear(
+        contextVk, updateArea, mState.getType(), level, useLayerAsDepth ? updateArea.z : 0,
+        useLayerAsDepth ? updateArea.depth : 1, aspectMask, formatInfo, constValue, clearValue));
+
+    const vk::Format &vkFormat =
+        contextVk->getRenderer()->getFormat(formatInfo.sizedInternalFormat);
+    bool mustFlush = updateMustBeFlushed(gl::LevelIndex(level),
+                                         vkFormat.getActualImageFormatID(getRequiredImageAccess()));
+    bool mustStage = updateMustBeStaged(gl::LevelIndex(level),
+                                        vkFormat.getActualImageFormatID(getRequiredImageAccess()));
+    if (mustFlush ||
+        (!mustStage && mImage->valid() && mImage->hasBufferSourcedStagedUpdatesInAllLevels()))
+    {
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+
+        // If forceSubmitImmutableTextureUpdates is enabled, submit the staged updates as well
+        if (contextVk->getFeatures().forceSubmitImmutableTextureUpdates.enabled)
+        {
+            ANGLE_TRY(contextVk->submitStagedTextureUpdates());
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+// TODO: Currently unused. CPU clearing? (Without compute)
+angle::Result TextureVk::clearSubImageImpl(const gl::Context *context,
+                                           GLint level,
+                                           const gl::Box &area,
+                                           GLenum format,
+                                           GLenum type,
+                                           const bool isCubeMap,
+                                           const uint8_t *data)
+{
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
+    ContextVk *contextVk                 = vk::GetImpl(context);
+    const vk::Format &vkFormat =
+        contextVk->getRenderer()->getFormat(formatInfo.sizedInternalFormat);
+
+    // TODO: Clear multisample image?
+    if (mImage->getSamples() > 1)
+    {
+        UNIMPLEMENTED();
+        return angle::Result::Continue;
+    }
+
+    // If the data pointer is null, the texture is filled with zeros. Otherwise, the data should be
+    // extracted and applied to the target areas.
+    auto pixelSize = static_cast<size_t>(formatInfo.pixelBytes);
+    std::vector<uint8_t> constValue(pixelSize, 0);
+    if (data != nullptr)
+    {
+        memcpy(constValue.data(), data, pixelSize);
+    }
+
+    // If the texture is a cubemap, the update is separately applied to each face, using the depth
+    // offset and size as range. Otherwise, there only needs to be one update for the whole texture.
+    size_t updateArea =
+        isCubeMap ? area.width * area.height : area.width * area.height * area.depth;
+    size_t dataSize = updateArea * pixelSize;
+
+    std::vector<uint8_t> constImageData(dataSize, 0);
+    if (data != nullptr)
+    {
+        for (GLuint i = 0; i < dataSize; i++)
+        {
+            constImageData[i] = constValue[i % pixelSize];
+        }
+    }
+
+    // The constructed data buffer is used as texture update.
+    bool updateAppliedImmediately = false;
+    if (isCubeMap)
+    {
+        size_t cubeFaceStart = area.z;
+        auto cubeFaceEnd     = static_cast<size_t>(area.z + area.depth);
+
+        for (size_t cubeFace = cubeFaceStart; cubeFace < cubeFaceEnd; cubeFace++)
+        {
+            const gl::ImageIndex index = gl::ImageIndex::MakeFromTarget(
+                gl::CubeFaceIndexToTextureTarget(cubeFace), level, 0);
+
+            ANGLE_TRY(mImage->stageSubresourceUpdate(
+                contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, 1),
+                gl::Offset(area.x, area.y, 0), formatInfo, contextVk->getState().getUnpackState(),
+                type, constImageData.data(), vkFormat, getRequiredImageAccess(),
+                vk::ApplyImageUpdate::Defer, &updateAppliedImmediately));
+            ASSERT(!updateAppliedImmediately);
+        }
+    }
+    else
+    {
+        gl::TextureTarget textureTarget = gl::TextureTypeToTarget(mState.getType(), 0);
+        const gl::ImageIndex index      = gl::ImageIndex::MakeFromTarget(textureTarget, level, 0);
+
+        ANGLE_TRY(mImage->stageSubresourceUpdate(
+            contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
+            gl::Offset(area.x, area.y, area.z), formatInfo, contextVk->getState().getUnpackState(),
+            type, constImageData.data(), vkFormat, getRequiredImageAccess(),
+            vk::ApplyImageUpdate::Defer, &updateAppliedImmediately));
+        ASSERT(!updateAppliedImmediately);
+    }
+
+    // TODO: Flush if mutable? For example, if we start clearing another texture?
+    // It is tricky, since clearTexImageEXT and clearTexSubImageEXT needs no binding.
+
+    return angle::Result::Continue;
+}
+
 angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const gl::ImageIndex &index,
                                          const gl::Box &area,
@@ -2723,6 +2984,8 @@ angle::Result TextureVk::releaseTexImage(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+// TODO: Implement clearTexture() on the Vulkan backend.
+
 angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    GLenum binding,
                                                    const gl::ImageIndex &imageIndex,
@@ -3257,6 +3520,13 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                                    const gl::Texture::DirtyBits &dirtyBits,
                                    gl::Command source)
 {
+    // Skip if the sync has been called due to ClearTexImage or ClearTexSubImage. A new update will
+    // be applied to the image.
+    if (source == gl::Command::ClearTexture)
+    {
+        return angle::Result::Continue;
+    }
+
     ContextVk *contextVk   = vk::GetImpl(context);
     vk::Renderer *renderer = contextVk->getRenderer();
 
@@ -3637,6 +3907,10 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
                              VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT;
         mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
     }
+
+    // TODO: This is needed for glClearTexImageEXT() if compute shader is used. Is there a way to
+    // avoid this? Maybe if we use a fragment shader? (Like ImageClear?)
+    //    mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
 
     mImageCreateFlags |=
         vk::GetMinimalImageCreateFlags(renderer, mState.getType(), mImageUsageFlags);
