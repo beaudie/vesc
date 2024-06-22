@@ -9986,7 +9986,7 @@ void Context::clearTexImage(TextureID texturePacked,
     // bound.
     if (texture->hasAnyDirtyBit())
     {
-        ANGLE_CONTEXT_TRY(texture->syncState(this, Command::Other));
+        ANGLE_CONTEXT_TRY(texture->syncState(this, Command::ClearTexture));
     }
 
     ANGLE_CONTEXT_TRY(
@@ -10011,7 +10011,7 @@ void Context::clearTexSubImage(TextureID texturePacked,
     // bound.
     if (texture->hasAnyDirtyBit())
     {
-        ANGLE_CONTEXT_TRY(texture->syncState(this, Command::Other));
+        ANGLE_CONTEXT_TRY(texture->syncState(this, Command::ClearTexture));
     }
 
     Box area(xoffset, yoffset, zoffset, width, height, depth);
