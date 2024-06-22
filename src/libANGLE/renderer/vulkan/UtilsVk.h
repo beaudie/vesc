@@ -106,6 +106,15 @@ class UtilsVk : angle::NonCopyable
         VkClearDepthStencilValue depthStencilClearValue;
     };
 
+    struct ClearTextureParameters
+    {
+        VkImageAspectFlags aspectFlags;
+        vk::LevelIndex level;
+        uint32_t layer;
+        gl::Box clearArea;
+        VkClearValue clearValue;
+    };
+
     struct BlitResolveParameters
     {
         // |srcOffset| and |dstIndexBufferOffset| define the original blit/resolve offsets, possibly
@@ -246,6 +255,11 @@ class UtilsVk : angle::NonCopyable
                                       vk::BufferHelper *dst,
                                       vk::BufferHelper *src,
                                       const ConvertVertexParameters &params);
+
+    // EXT_clear_texture
+    angle::Result clearTexture(ContextVk *contextVk,
+                               vk::ImageHelper *dst,
+                               ClearTextureParameters &params);
 
     angle::Result clearFramebuffer(ContextVk *contextVk,
                                    FramebufferVk *framebuffer,
@@ -392,6 +406,18 @@ class UtilsVk : angle::NonCopyable
         uint32_t _padding         = 0;
     };
 
+    struct ClearTextureShaderParams
+    {
+        ClearTextureShaderParams();
+
+        // Structure matching PushConstants in ClearTexture.comp
+        uint32_t data[4]            = {0};
+        uint32_t texelCount         = 0;
+        uint32_t maxThreadId        = 0;
+        uint32_t dataSize           = 0;
+        uint32_t hasDepthAndStencil = 0;
+    };
+
     struct ImageClearShaderParams
     {
         // Structure matching PushConstants in ImageClear.frag
@@ -529,6 +555,7 @@ class UtilsVk : angle::NonCopyable
         ComputeStartIndex,  // Special value to separate draw and dispatch functions.
         ConvertIndexBuffer = ComputeStartIndex,
         ConvertVertexBuffer,
+        ClearTexture,
         BlitResolveStencilNoExport,
         ConvertIndexIndirectBuffer,
         ConvertIndexIndirectLineLoopBuffer,
@@ -616,6 +643,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureUnresolveResourcesInitialized(ContextVk *contextVk,
                                                       Function function,
                                                       uint32_t attachmentIndex);
+    angle::Result ensureClearTextureResourcesInitialized(ContextVk *contextVk);
 
     angle::Result ensureImageCopyResourcesInitializedWithSampler(
         ContextVk *contextVk,
@@ -631,6 +659,7 @@ class UtilsVk : angle::NonCopyable
                                   const vk::RenderPassDesc &renderPassDesc,
                                   const gl::Rectangle &renderArea,
                                   const VkImageAspectFlags aspectFlags,
+                                  const VkClearValue *clearValue,
                                   vk::RenderPassCommandBuffer **commandBufferOut);
 
     // Set up descriptor set and call dispatch.
