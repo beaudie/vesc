@@ -3667,6 +3667,308 @@ TEST_P(ClearTextureEXTTest, Clear2D)
     EXPECT_PIXEL_COLOR_EQ(12, 12, GLColor::yellow);
 }
 
+// Test basic functionality of clearing a 2D RGB texture with GL_EXT_clear_texture.
+TEST_P(ClearTextureEXTTest, Clear2DRGB)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 texture with no data.
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 16, 16, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Clear the entire texture
+    glClearTexImageEXT(tex, 0, GL_RGB, GL_UNSIGNED_BYTE, &GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Clear each corner to a different color
+    glClearTexSubImageEXT(tex, 0, 0, 0, 0, 8, 8, 1, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glClearTexSubImageEXT(tex, 0, 8, 0, 0, 8, 8, 1, GL_RGB, GL_UNSIGNED_BYTE, &GLColor::blue);
+    glClearTexSubImageEXT(tex, 0, 0, 8, 0, 8, 8, 1, GL_RGB, GL_UNSIGNED_BYTE, &GLColor::cyan);
+    glClearTexSubImageEXT(tex, 0, 8, 8, 0, 8, 8, 1, GL_RGB, GL_UNSIGNED_BYTE, &GLColor::yellow);
+
+    EXPECT_PIXEL_COLOR_EQ(4, 4, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(12, 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(4, 12, GLColor::cyan);
+    EXPECT_PIXEL_COLOR_EQ(12, 12, GLColor::yellow);
+}
+
+// Test basic functionality of clearing a part of a 2D texture with GL_EXT_clear_texture
+TEST_P(ClearTextureEXTTest, Clear2DSubImage)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 texture with no data.
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Clear the center to a different color
+    glClearTexSubImageEXT(tex, 0, 4, 4, 0, 8, 8, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::cyan);
+    EXPECT_PIXEL_RECT_EQ(4, 4, 8, 8, GLColor::cyan);
+}
+
+// Test basic functionality of clearing 2D textures with GL_EXT_clear_texture using nullptr.
+TEST_P(ClearTextureEXTTest, Clear2DWithNull)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create two 16x16 textures with prior data.
+    std::vector<GLColor> redBlock(16 * 16, GLColor::red);
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 16, 16, 0, GL_RGB, GL_UNSIGNED_BYTE, redBlock.data());
+
+    GLTexture tex2;
+    glBindTexture(GL_TEXTURE_2D, tex2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, redBlock.data());
+
+    // Clear the RGB texture.
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    GLColor outputColor;
+    glClearTexImageEXT(tex, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glReadPixels(0, 0, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &outputColor);
+    EXPECT_EQ(outputColor.R, 0);
+    EXPECT_EQ(outputColor.G, 0);
+    EXPECT_EQ(outputColor.B, 0);
+
+    // Clear the RGBA texture.
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex2, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glClearTexImageEXT(tex2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &outputColor);
+    EXPECT_EQ(outputColor.R, 0);
+    EXPECT_EQ(outputColor.G, 0);
+    EXPECT_EQ(outputColor.B, 0);
+    EXPECT_EQ(outputColor.A, 0);
+}
+
+// Test basic functionality of clearing a 2D texture while bound to another.
+TEST_P(ClearTextureEXTTest, Clear2DDifferentBinding)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create two 16x16 textures with no data.
+    GLTexture tex1;
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLTexture tex2;
+    glBindTexture(GL_TEXTURE_2D, tex2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Use clear on both textures while none are bound.
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glClearTexImageEXT(tex1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    glClearTexImageEXT(tex2, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::blue);
+
+    // Bind to one texture while clearing the other.
+    glBindTexture(GL_TEXTURE_2D, tex2);
+    glClearTexImageEXT(tex1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::green);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex1, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 16, GLColor::green);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex2, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 16, GLColor::blue);
+}
+
+// Test basic functionality of clearing 2D textures without binding to them.
+TEST_P(ClearTextureEXTTest, Clear2DNoBinding)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create two 16x16 textures with no data.
+    GLTexture tex1;
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLTexture tex2;
+    glBindTexture(GL_TEXTURE_2D, tex2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Use clear on both textures while bound to neither.
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glClearTexImageEXT(tex1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    glClearTexImageEXT(tex2, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::blue);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex1, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 16, GLColor::red);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex2, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 16, GLColor::blue);
+}
+
+// Test basic functionality of clearing a 2D texture with prior staged update.
+TEST_P(ClearTextureEXTTest, Clear2DOverwritePriorContent)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 texture with some data.
+    std::vector<GLColor> redBlock(16 * 16, GLColor::red);
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, redBlock.data());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Clear the entire texture.
+    glClearTexImageEXT(tex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::blue);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 16, GLColor::blue);
+}
+
+// Test clearing a 2D texture with using a depth of zero.
+TEST_P(ClearTextureEXTTest, Clear2DWithZeroDepth)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 texture with no data.
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Clear the 2D texture using depth of zero.
+    glClearTexSubImageEXT(tex, 0, 0, 0, 0, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::green);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 16, GLColor::green);
+}
+
+// Test basic functionality of clearing a 2D texture defined using glTexStorage().
+TEST_P(ClearTextureEXTTest, Clear2DTexStorage)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 mipmap texture.
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 5, GL_RGBA8, 16, 16);
+
+    // Define texture mip levels by clearing them.
+    glClearTexImageEXT(tex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    glClearTexImageEXT(tex, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::green);
+    glClearTexImageEXT(tex, 2, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::blue);
+    glClearTexImageEXT(tex, 3, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::magenta);
+    ASSERT_GL_NO_ERROR();
+
+    // Bind to framebuffer and verify.
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 1);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 2);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 3);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+}
+
+// Test that clearing slices of a 3D texture and reading them back works.
+TEST_P(ClearTextureEXTTest, Clear3D)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+    constexpr uint32_t kWidth  = 128;
+    constexpr uint32_t kHeight = 128;
+    constexpr uint32_t kDepth  = 7;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_3D, texture);
+    glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, kWidth, kHeight, kDepth);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, 0);
+
+    std::array<GLColor, kDepth> clearColors = {
+        GLColor::red,  GLColor::green,   GLColor::blue,  GLColor::yellow,
+        GLColor::cyan, GLColor::magenta, GLColor::white,
+    };
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glClearTexImageEXT(texture, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    for (uint32_t z = 0; z < kDepth; ++z)
+    {
+        glClearTexSubImageEXT(texture, 0, 0, 0, z, kWidth, kHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                              &clearColors[z]);
+    }
+
+    for (uint32_t z = 0; z < kDepth; ++z)
+    {
+        glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, z);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, clearColors[z]);
+    }
+}
+
+// Test that clearing slices of a 3D texture and reading them back works.
+TEST_P(ClearTextureEXTTest, Clear2DArray)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+    constexpr uint32_t kWidth  = 64;
+    constexpr uint32_t kHeight = 64;
+    constexpr uint32_t kDepth  = 4;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, kWidth, kHeight, kDepth);
+
+    std::array<GLColor, kDepth> clearColors = {GLColor::red, GLColor::green, GLColor::blue,
+                                               GLColor::yellow};
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glClearTexImageEXT(texture, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    for (uint32_t z = 0; z < kDepth; ++z)
+    {
+        glClearTexSubImageEXT(texture, 0, 0, 0, z, kWidth, kHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                              &clearColors[z]);
+    }
+
+    for (uint32_t z = 0; z < kDepth; ++z)
+    {
+        glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, z);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, clearColors[z]);
+    }
+}
+
 // Test that luminance alpha textures are cleared correctly with GL_EXT_clear_texture. Regression
 // test for emulated luma formats.
 TEST_P(ClearTextureEXTTest, Luma)
@@ -3682,19 +3984,21 @@ TEST_P(ClearTextureEXTTest, Luma)
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
 
     // Clear the entire texture to transparent black and test
-    GLubyte luminmanceClearValue = 192;
+    GLubyte luminanceClearValue = 192;
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 16, 16, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE,
                  nullptr);
-    glClearTexImageEXT(tex, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, &luminmanceClearValue);
+    glClearTexImageEXT(tex, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, &luminanceClearValue);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     EXPECT_PIXEL_COLOR_EQ(
-        0, 0, GLColor(luminmanceClearValue, luminmanceClearValue, luminmanceClearValue, 255));
+        0, 0, GLColor(luminanceClearValue, luminanceClearValue, luminanceClearValue, 255));
 
     GLubyte lumaClearValue[2] = {128, 64};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, 16, 16, 0, GL_LUMINANCE_ALPHA,
                  GL_UNSIGNED_BYTE, nullptr);
     glClearTexImageEXT(tex, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, &lumaClearValue);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    // TODO: Problem on Android (related to kEmulatedInitColorValue)?
+    // TODO: Replace with RECT_EQ to make sure complete correctness.
     EXPECT_PIXEL_COLOR_EQ(
         0, 0, GLColor(lumaClearValue[0], lumaClearValue[0], lumaClearValue[0], lumaClearValue[1]));
 }
@@ -3717,6 +4021,8 @@ TEST_P(ClearTextureEXTTest, InterleavedUploads)
     // Clear the entire texture to transparent black and test
     glClearTexImageEXT(tex, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    // TODO: Problem on Android (shows black instead of transparentBlack)
+    // TODO: Seems to be related to kEmulatedInitColorValue (init2DWeakReference?).
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);
 
     // TexSubImage a corner
@@ -3758,6 +4064,29 @@ TEST_P(ClearTextureEXTTest, IntegerTexture)
     glClearTexImageEXT(tex, 0, GL_RGBA_INTEGER, GL_UNSIGNED_INT, &rgba32uiTestValue);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_32UI_COLOR(0, 0, rgba32uiTestValue);
+}
+
+// TODO: RGB integer?
+
+// Test clearing float32 textures with GL_EXT_clear_texture
+TEST_P(ClearTextureEXTTest, Float32Texture)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+    GLColor32F rgba32fTestValue(0.1, 0.2, 0.3, 0.4);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 16, 16, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glClearTexImageEXT(tex, 0, GL_RGBA, GL_FLOAT, &rgba32fTestValue);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_32F_EQ(0, 0, rgba32fTestValue.R, rgba32fTestValue.G, rgba32fTestValue.B,
+                        rgba32fTestValue.A);
 }
 
 // Test clearing depth textures with GL_EXT_clear_texture
@@ -3808,6 +4137,294 @@ TEST_P(ClearTextureEXTTest, DepthTexture)
     EXPECT_PIXEL_COLOR_EQ(4, 8, GLColor::red);
     EXPECT_PIXEL_COLOR_EQ(12, 8, GLColor::blue);
 }
+
+// Test clearing depth textures with GL_EXT_clear_texture
+TEST_P(ClearTextureEXTTest, Depth16Texture)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    GLTexture colorTex;
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+
+    GLTexture depthTex;
+    glBindTexture(GL_TEXTURE_2D, depthTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 16, 16, 0, GL_DEPTH_COMPONENT,
+                 GL_UNSIGNED_SHORT, nullptr);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTex, 0);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    const GLushort depthClearZero = 0;
+    const GLushort depthClearOne  = std::numeric_limits<GLushort>::max();
+
+    // Draw doesn't pass the depth test. Texture has 0.0.
+    glClearTexImageEXT(depthTex, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, &depthClearZero);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Draw passes the depth test. Texture has 1.0.
+    glClearTexImageEXT(depthTex, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, &depthClearOne);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    // Left side passes, right side fails
+    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    glClearTexSubImageEXT(depthTex, 0, 0, 0, 0, 8, 16, 1, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT,
+                          &depthClearZero);
+    glClearTexSubImageEXT(depthTex, 0, 8, 0, 0, 8, 16, 1, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT,
+                          &depthClearOne);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(4, 8, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(12, 8, GLColor::blue);
+}
+
+// Test clearing stencil textures with GL_EXT_clear_texture
+TEST_P(ClearTextureEXTTest, StencilTexture)
+{
+    // TODO: Fails on some devices.
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    GLTexture colorTex;
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+
+    GLTexture stencilTex;
+    glBindTexture(GL_TEXTURE_2D, stencilTex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_STENCIL_INDEX8, 16, 16);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, stencilTex, 0);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_LESS, 0xCC, 0xFF);
+
+    const GLint stencilClearAA = 0xAA;
+    const GLint stencilClearEE = 0xEE;
+
+    // Draw doesn't pass the stencil test.
+    glClearTexImageEXT(stencilTex, 0, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, &stencilClearAA);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Draw passes the stencil test.
+    glClearTexImageEXT(stencilTex, 0, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, &stencilClearEE);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    // Left side passes, right side fails
+    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    glClearTexSubImageEXT(stencilTex, 0, 0, 0, 0, 8, 16, 1, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE,
+                          &stencilClearAA);
+    glClearTexSubImageEXT(stencilTex, 0, 8, 0, 0, 8, 16, 1, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE,
+                          &stencilClearEE);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(4, 8, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(12, 8, GLColor::blue);
+}
+
+// Test clearing depth24/stencil8 textures with GL_EXT_clear_texture.
+TEST_P(ClearTextureEXTTest, Depth24Stencil8Texture)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    GLTexture colorTex;
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+
+    GLTexture dsTex;
+    glBindTexture(GL_TEXTURE_2D, dsTex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, 16, 16);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, dsTex, 0);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_LESS, 0xCC, 0xFF);
+
+    GLuint dsValue0 = 0x000000AA;
+    GLuint dsValue1 = 0x000000EE;
+    GLuint dsValue2 = 0xFFFFFFAA;
+    GLuint dsValue3 = 0xFFFFFFEE;
+
+    // Draw doesn't pass the test.
+    glClearTexImageEXT(dsTex, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, &dsValue0);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Draw passes the stencil test.
+    glClearTexImageEXT(dsTex, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, &dsValue3);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    // Left side fails the depth test. Top side fails the stencil test.
+    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+
+    glClearTexSubImageEXT(dsTex, 0, 0, 0, 0, 8, 8, 1, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8,
+                          &dsValue0);
+    glClearTexSubImageEXT(dsTex, 0, 0, 8, 0, 8, 8, 1, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8,
+                          &dsValue1);
+    glClearTexSubImageEXT(dsTex, 0, 8, 0, 0, 8, 8, 1, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8,
+                          &dsValue2);
+    glClearTexSubImageEXT(dsTex, 0, 8, 8, 0, 8, 8, 1, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8,
+                          &dsValue3);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 8, GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 8, 16, GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(8, 8, 8, 8, GLColor::blue);
+}
+
+// Test clearing depth32/stencil textures with GL_EXT_clear_texture
+TEST_P(ClearTextureEXTTest, Depth32FStencilTexture)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    GLTexture colorTex;
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+
+    GLTexture dsTex;
+    glBindTexture(GL_TEXTURE_2D, dsTex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH32F_STENCIL8, 16, 16);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, dsTex, 0);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_LESS, 0xCC, 0xFF);
+
+    struct DSClearValue
+    {
+        GLfloat depth;
+        GLuint stencil;
+    };
+
+    DSClearValue dsValue0 = {0, 0xAA};
+    DSClearValue dsValue1 = {0, 0xEE};
+    DSClearValue dsValue2 = {1, 0xAA};
+    DSClearValue dsValue3 = {1, 0xEE};
+
+    // Draw doesn't pass the test.
+    glClearTexImageEXT(dsTex, 0, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, &dsValue0);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Draw passes the stencil test.
+    glClearTexImageEXT(dsTex, 0, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, &dsValue3);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    // Left side fails the depth test. Top side fails the stencil test.
+    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+
+    glClearTexSubImageEXT(dsTex, 0, 0, 0, 0, 8, 8, 1, GL_DEPTH_STENCIL,
+                          GL_FLOAT_32_UNSIGNED_INT_24_8_REV, &dsValue0);
+    glClearTexSubImageEXT(dsTex, 0, 0, 8, 0, 8, 8, 1, GL_DEPTH_STENCIL,
+                          GL_FLOAT_32_UNSIGNED_INT_24_8_REV, &dsValue1);
+    glClearTexSubImageEXT(dsTex, 0, 8, 0, 0, 8, 8, 1, GL_DEPTH_STENCIL,
+                          GL_FLOAT_32_UNSIGNED_INT_24_8_REV, &dsValue2);
+    glClearTexSubImageEXT(dsTex, 0, 8, 8, 0, 8, 8, 1, GL_DEPTH_STENCIL,
+                          GL_FLOAT_32_UNSIGNED_INT_24_8_REV, &dsValue3);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 8, GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 8, 16, GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(8, 8, 8, 8, GLColor::blue);
+}
+
+//// TODO: Test for later?
+// //Test clearing depth/stencil textures with GL_EXT_clear_texture
+// TEST_P(ClearTextureEXTTest, DepthStencilTestTexture)
+//{
+//    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+//    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+//
+//    GLTexture colorTex;
+//    glBindTexture(GL_TEXTURE_2D, colorTex);
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+//    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+//
+//    GLTexture dsTex;
+//    glBindTexture(GL_TEXTURE_2D, dsTex);
+//    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, 16, 16);
+//
+//    GLFramebuffer fbo;
+//    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+//    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
+//    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, dsTex, 0);
+//
+//    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Blue());
+//     glDisable(GL_STENCIL_TEST);
+//    glEnable(GL_DEPTH_TEST);
+//    glDepthFunc(GL_LESS);
+//
+//        std::vector<GLuint> dsData0(16 * 16, 0x000000AA);
+//        std::vector<GLuint> dsData1(16 * 16, 0x000000EE);
+//        std::vector<GLuint> dsData2(16 * 16, 0xFFFFFFAA);
+//        std::vector<GLuint> dsData3(16 * 16, 0xFFFFFFEE);
+//
+//    // Draw doesn't pass the stencil test.
+//        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 16, 16, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8,
+//                        dsData0.data());
+//    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+//    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+//
+//    // Draw passes the stencil test.
+//        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 16, 16, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8,
+//                        dsData3.data());
+//    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+//    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+//
+//    // Left side passes, right side fails
+//    glClearTexImageEXT(colorTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+//
+//        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 8, 16, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8,
+//                        dsData2.data());
+//        glTexSubImage2D(GL_TEXTURE_2D, 0, 8, 0, 8, 16, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8,
+//                        dsData1.data());
+//
+//    drawQuad(program, essl1_shaders::PositionAttrib(), 0);
+//    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 8, GLColor::red);
+//    EXPECT_PIXEL_RECT_EQ(0, 0, 8, 16, GLColor::red);
+//    EXPECT_PIXEL_RECT_EQ(8, 8, 8, 8, GLColor::blue);
+//
+//    // TODO: Artifact while using horizontal rectangle/stencil after vertical/depth? Or maybe
+//    there was a mistake? glDisable(GL_DEPTH_TEST); glEnable(GL_STENCIL_TEST);
+//    glStencilFunc(GL_LESS, 0xCC, 0xFF);
+//
+//    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 16, 8, GL_DEPTH_STENCIL,
+//    GL_UNSIGNED_INT_24_8,dsData1.data()); glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 8, 16, 8,
+//    GL_DEPTH_STENCIL,GL_UNSIGNED_INT_24_8, dsData2.data()); drawQuad(program,
+//    essl1_shaders::PositionAttrib(),    0); EXPECT_PIXEL_COLOR_EQ(4, 8, GLColor::red);
+//    EXPECT_PIXEL_COLOR_EQ(12, 8,
+//    GLColor::blue);
+//}
 
 // Test clearing different sets of cube map texture faces with GL_EXT_clear_texture
 TEST_P(ClearTextureEXTTest, ClearCubeFaces)
@@ -3872,6 +4489,160 @@ TEST_P(ClearTextureEXTTest, ClearCubeFaces)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::cyan);
 }
 
+// Test clearing one level, then uploading an update to the same level and then drawing.
+TEST_P(ClearTextureEXTTest, ClearOneLevelThenPartialUpdateAndDraw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 texture with prior data.
+    std::vector<GLColor> redBlock(16 * 16, GLColor::red);
+    std::vector<GLColor> greenBlock(16 * 16, GLColor::green);
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, redBlock.data());
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, redBlock.data());
+
+    // Clear one level and add another update on top of it.
+    glClearTexImageEXT(tex, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::blue);
+    glTexSubImage2D(GL_TEXTURE_2D, 1, 0, 0, 4, 4, GL_RGBA, GL_UNSIGNED_BYTE, greenBlock.data());
+
+    // Draw.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_RECT_EQ(getWindowWidth() / 2, 0, getWindowWidth() / 2, getWindowHeight(),
+                         GLColor::blue);
+    EXPECT_PIXEL_RECT_EQ(0, getWindowHeight() / 2, getWindowWidth(), getWindowHeight() / 2,
+                         GLColor::blue);
+}
+
+// Test drawing, then partially clearing the texture and drawing again.
+TEST_P(ClearTextureEXTTest, DrawThenClearPartiallyThenDraw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 texture with prior data.
+    std::vector<GLColor> redBlock(16 * 16, GLColor::red);
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, redBlock.data());
+
+    // Draw.
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor::red);
+
+    // Clear a portion of the texture and draw again.
+    glClearTexSubImageEXT(tex, 0, 0, 0, 0, 8, 8, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::yellow);
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth() / 2, getWindowHeight() / 2, GLColor::yellow);
+    EXPECT_PIXEL_RECT_EQ(getWindowWidth() / 2, 0, getWindowWidth() / 2, getWindowHeight(),
+                         GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(0, getWindowHeight() / 2, getWindowWidth(), getWindowHeight() / 2,
+                         GLColor::red);
+}
+
+// Test partially clearing a mip level, applying an overlapping update and then drawing with it.
+TEST_P(ClearTextureEXTTest, PartialClearThenOverlappingUploadThenDraw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 texture with prior data.
+    std::vector<GLColor> redBlock(16 * 16, GLColor::red);
+    std::vector<GLColor> greenBlock(16 * 16, GLColor::green);
+    std::vector<GLColor> blueBlock(16 * 16, GLColor::blue);
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, blueBlock.data());
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, redBlock.data());
+
+    // Clear one level and add another update on top of it.
+    glClearTexSubImageEXT(tex, 1, 2, 2, 0, 4, 4, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::yellow);
+    glTexSubImage2D(GL_TEXTURE_2D, 1, 0, 0, 4, 4, GL_RGBA, GL_UNSIGNED_BYTE, greenBlock.data());
+
+    // Draw and verify.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_RECT_EQ(getWindowWidth() / 4, getWindowWidth() / 2, getWindowWidth() / 2,
+                         getWindowHeight() / 4, GLColor::yellow);
+    EXPECT_PIXEL_RECT_EQ(getWindowWidth() / 2, getWindowWidth() / 4, getWindowWidth() / 4,
+                         getWindowHeight() / 2, GLColor::yellow);
+    EXPECT_PIXEL_RECT_EQ((3 * getWindowWidth()) / 4, 0, getWindowWidth() / 4, getWindowHeight(),
+                         GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(0, (3 * getWindowHeight()) / 4, getWindowWidth(), getWindowHeight() / 4,
+                         GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(getWindowWidth() / 2, 0, getWindowWidth() / 2, getWindowHeight() / 4,
+                         GLColor::red);
+    EXPECT_PIXEL_RECT_EQ(0, getWindowHeight() / 2, getWindowWidth() / 4, getWindowHeight() / 2,
+                         GLColor::red);
+}
+
+// Test clearing a mip level and generating mipmap based on its previous level and draw.
+TEST_P(ClearTextureEXTTest, ClearLevelThenGenerateMipmapOnBaseThenDraw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 texture with prior data.
+    std::vector<GLColor> redBlock(16 * 16, GLColor::red);
+    std::vector<GLColor> greenBlock(16 * 16, GLColor::green);
+    std::vector<GLColor> blueBlock(16 * 16, GLColor::blue);
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, redBlock.data());
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, greenBlock.data());
+    glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, blueBlock.data());
+
+    // Clear level 1 and then generate mipmap for the texture.
+    glClearTexImageEXT(tex, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::yellow);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    // Draw.
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor::red);
+}
+
+// Test clearing a mip level and generating mipmap based on that level and draw.
+TEST_P(ClearTextureEXTTest, ClearLevelThenGenerateMipmapOnLevelThenDraw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    // Create a 16x16 texture with prior data.
+    std::vector<GLColor> redBlock(16 * 16, GLColor::red);
+    std::vector<GLColor> greenBlock(16 * 16, GLColor::green);
+    std::vector<GLColor> blueBlock(16 * 16, GLColor::blue);
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, redBlock.data());
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, greenBlock.data());
+    glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, blueBlock.data());
+
+    // Clear level 1 and then generate mipmap for the texture based on level 1.
+    glClearTexImageEXT(tex, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::yellow);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    // Draw.
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor::yellow);
+}
+
 // Test validation of GL_EXT_clear_texture
 TEST_P(ClearTextureEXTTest, Validation)
 {
@@ -3922,6 +4693,13 @@ TEST_P(ClearTextureEXTTest, Validation)
     // Cube range with an unspecified face
     glClearTexSubImageEXT(texCube, 0, 0, 0, 0, 16, 16, 3, GL_RGBA, GL_UNSIGNED_BYTE,
                           &GLColor::green);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    // Compressed texture
+    GLTexture tex2DCompressed;
+    glBindTexture(GL_TEXTURE_2D, tex2DCompressed);
+    glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB8_ETC2, 16, 16, 0, 128, nullptr);
+    glClearTexImageEXT(tex2DCompressed, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
