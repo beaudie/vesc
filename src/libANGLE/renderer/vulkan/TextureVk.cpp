@@ -476,6 +476,32 @@ bool NeedsRGBAEmulation(vk::Renderer *renderer, angle::FormatID formatID)
     return true;
 }
 
+void GetVkClearValueFromBytes(uint8_t *inputValue,
+                              uint8_t *constValue,
+                              const angle::Format &intendedFormat,
+                              const angle::Format &actualFormat,
+                              VkClearValue *clearValueOut)
+{
+    ASSERT(constValue != nullptr);
+
+    *clearValueOut = {};
+    if (!actualFormat.hasDepthOrStencilBits())
+    {
+        VkClearColorValue colorValue = {{}};
+        actualFormat.pixelReadFunction(constValue, reinterpret_cast<uint8_t *>(&colorValue));
+        clearValueOut->color = colorValue;
+    }
+    else
+    {
+        uint32_t dsData[4] = {0};
+        double depthValue  = 0;
+        intendedFormat.pixelReadFunction(inputValue, reinterpret_cast<uint8_t *>(dsData));
+        memcpy(&depthValue, &dsData[0], sizeof(double));
+        clearValueOut->depthStencil.depth   = static_cast<float>(depthValue);
+        clearValueOut->depthStencil.stencil = dsData[2];
+    }
+}
+
 }  // anonymous namespace
 
 // TextureVk implementation.
@@ -813,6 +839,150 @@ bool TextureVk::updateMustBeStaged(gl::LevelIndex textureLevelIndexGL,
     // Otherwise, it can only be directly applied to the image if the level is not previously
     // incompatibly redefined.
     return IsTextureLevelRedefined(mRedefinedLevels, mState.getType(), textureLevelIndexGL);
+}
+
+angle::Result TextureVk::clearImage(const gl::Context *context,
+                                    GLint level,
+                                    GLenum format,
+                                    GLenum type,
+                                    const uint8_t *data)
+{
+    // All defined cubemap faces are expected to have equal width and height.
+    bool isCubeMap = mState.getType() == gl::TextureType::CubeMap;
+    gl::TextureTarget textureTarget =
+        (isCubeMap) ? gl::kCubeMapTextureTargetMin : gl::TextureTypeToTarget(mState.getType(), 0);
+    gl::Extents extents = mState.getImageDesc(textureTarget, level).size;
+
+    gl::Box area = gl::Box(gl::kOffsetZero, extents);
+    if (isCubeMap)
+    {
+        // For a cubemap, the depth offset moves between cube faces.
+        ASSERT(area.depth == 1);
+        area.depth = 6;
+    }
+
+    // TODO: Some devices fail ZeroDims if it uses the Vulkan API (isFullClear == true).
+    // TODO: For now, let's use the original method. This can be a follow-up CL.
+    return clearSubImageImpl(context, level, area, false, format, type, data);
+}
+
+angle::Result TextureVk::clearSubImage(const gl::Context *context,
+                                       GLint level,
+                                       const gl::Box &area,
+                                       GLenum format,
+                                       GLenum type,
+                                       const uint8_t *data)
+{
+    return clearSubImageImpl(context, level, area, false, format, type, data);
+}
+
+angle::Result TextureVk::clearSubImageImpl(const gl::Context *context,
+                                           GLint level,
+                                           const gl::Box &area,
+                                           bool isFullClear,
+                                           GLenum format,
+                                           GLenum type,
+                                           const uint8_t *data)
+{
+    // TODO: Clean up the extra data.
+    gl::TextureType textureType = mState.getType();
+    bool useLayerAsDepth        = textureType == gl::TextureType::CubeMap ||
+                           textureType == gl::TextureType::CubeMapArray ||
+                           textureType == gl::TextureType::_2DArray ||
+                           textureType == gl::TextureType::_2DMultisampleArray;
+
+    // From the spec: For texture types that do not have certain dimensions, this command treats
+    // those dimensions as having a size of 1.  For example, to clear a portion of a two-dimensional
+    // texture, the application would use <zoffset> equal to zero and <depth> equal to one.
+    gl::Box updateArea = area;
+    if (textureType == gl::TextureType::_2D || textureType == gl::TextureType::_2DMultisample)
+    {
+        updateArea.z     = 0;
+        updateArea.depth = 1;
+    }
+
+    // No op is needed if the clear size is 0.
+    if (updateArea.width == 0 || updateArea.height == 0 || updateArea.depth == 0)
+    {
+        return angle::Result::Continue;
+    }
+
+    // TODO: Use clearSubImageImpl if not using compute?
+    //    return clearSubImageImpl(context, level, updateArea, format, type, isCubeMap, data);
+
+    // If the data pointer is null, the texture is filled with zeros. Otherwise, the data should be
+    // extracted and applied to the target areas.
+    ContextVk *contextVk                 = vk::GetImpl(context);
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
+
+    VkImageAspectFlags aspectMask = 0;
+    if (!formatInfo.isDepthOrStencil())
+    {
+        aspectMask |= VK_IMAGE_ASPECT_COLOR_BIT;
+    }
+    else
+    {
+        if (formatInfo.depthBits > 0)
+        {
+            aspectMask |= VK_IMAGE_ASPECT_DEPTH_BIT;
+        }
+        if (formatInfo.stencilBits > 0)
+        {
+            aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+        }
+    }
+
+    // Determine clear value. This means converting the data into the appropriate format if needed.
+    const vk::Format &vkFormat =
+        contextVk->getRenderer()->getFormat(formatInfo.sizedInternalFormat);
+    const angle::Format &intendedFormat = vkFormat.getIntendedFormat();
+    const angle::Format &actualFormat   = vkFormat.getActualImageFormat(getRequiredImageAccess());
+    const angle::FormatID &actualFormatID =
+        vkFormat.getActualImageFormatID(getRequiredImageAccess());
+
+    auto pixelSize        = static_cast<size_t>(actualFormat.pixelBytes);
+    uint8_t inputData[16] = {0};
+
+    if (data != nullptr)
+    {
+        memcpy(inputData, data, pixelSize);
+    }
+
+    std::vector<uint8_t> constValue(pixelSize, 0);
+    LoadImageFunctionInfo loadFunctionInfo =
+        vkFormat.getTextureLoadFunction(getRequiredImageAccess(), type);
+    loadFunctionInfo.loadFunction(contextVk->getImageLoadContext(), 1, 1, 1, inputData, 1, 1,
+                                  constValue.data(), 1, 1);
+
+    // TODO: Now the Vulkan API can be used for the full clear. However, the current stage-clear
+    // function takes an "ImageIndex", which means no full cubemap support (only one cube face at a
+    // time).
+    VkClearValue clearValue = {};
+    GetVkClearValueFromBytes(inputData, constValue.data(), intendedFormat, actualFormat,
+                             &clearValue);
+
+    // TODO: Move some of the process to vk_helpers, including how we get the final texture clear
+    // value. Add update and determine if updates should be flushed.
+    ANGLE_TRY(mImage->stageSubresourceClear(contextVk, updateArea, mState.getType(), isFullClear,
+                                            level, useLayerAsDepth ? updateArea.z : 0,
+                                            useLayerAsDepth ? updateArea.depth : 1, aspectMask,
+                                            formatInfo, constValue, clearValue));
+
+    bool mustFlush = updateMustBeFlushed(gl::LevelIndex(level), actualFormatID);
+    bool mustStage = updateMustBeStaged(gl::LevelIndex(level), actualFormatID);
+    if (mustFlush ||
+        (!mustStage && mImage->valid() && mImage->hasBufferSourcedStagedUpdatesInAllLevels()))
+    {
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+
+        // If forceSubmitImmutableTextureUpdates is enabled, submit the staged updates as well
+        if (contextVk->getFeatures().forceSubmitImmutableTextureUpdates.enabled)
+        {
+            ANGLE_TRY(contextVk->submitStagedTextureUpdates());
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
@@ -2686,6 +2856,8 @@ angle::Result TextureVk::releaseTexImage(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+// TODO: Implement clearTexture() on the Vulkan backend.
+
 angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    GLenum binding,
                                                    const gl::ImageIndex &imageIndex,
@@ -3220,6 +3392,13 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                                    const gl::Texture::DirtyBits &dirtyBits,
                                    gl::Command source)
 {
+    // Skip if the sync has been called due to ClearTexImage or ClearTexSubImage. A new update will
+    // be applied to the image.
+    if (source == gl::Command::ClearTexture)
+    {
+        return angle::Result::Continue;
+    }
+
     ContextVk *contextVk   = vk::GetImpl(context);
     vk::Renderer *renderer = contextVk->getRenderer();
 
@@ -3600,6 +3779,10 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
                              VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT;
         mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
     }
+
+    // TODO: This is needed for glClearTexImageEXT() if compute shader is used. Is there a way to
+    // avoid this? Maybe if we use a fragment shader? (Like ImageClear?)
+    //    mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
 
     mImageCreateFlags |=
         vk::GetMinimalImageCreateFlags(renderer, mState.getType(), mImageUsageFlags);

@@ -135,8 +135,10 @@ class UtilsVk : angle::NonCopyable
         vk::LevelIndex dstMip;
         int dstLayer;
 
+        VkImageAspectFlags aspectFlags;
         VkColorComponentFlags colorMaskFlags;
         VkClearColorValue colorClearValue;
+        VkClearDepthStencilValue dsClearValue;
     };
 
     struct CopyImageParameters
@@ -245,6 +247,24 @@ class UtilsVk : angle::NonCopyable
                                       vk::BufferHelper *dst,
                                       vk::BufferHelper *src,
                                       const ConvertVertexParameters &params);
+
+    // EXT_clear_texture
+    angle::Result clearTexture(ContextVk *contextVk,
+                               vk::ImageHelper *dst,
+                               VkImageAspectFlags aspectFlags,
+                               uint32_t level,
+                               gl::Box updateArea,
+                               VkClearValue clearValue,
+                               gl::TextureType textureType,
+                               uint8_t *data,
+                               uint32_t dataSize);
+    angle::Result clearTextureMS(ContextVk *contextVk,
+                                 vk::ImageHelper *dst,
+                                 vk::LevelIndex level,
+                                 uint32_t layer,
+                                 VkImageAspectFlags aspectFlags,
+                                 gl::Box updateArea,
+                                 VkClearValue clearValue);
 
     angle::Result clearFramebuffer(ContextVk *contextVk,
                                    FramebufferVk *framebuffer,
@@ -391,6 +411,21 @@ class UtilsVk : angle::NonCopyable
         uint32_t _padding         = 0;
     };
 
+    struct ClearTextureShaderParams
+    {
+        ClearTextureShaderParams();
+
+        // Structure matching PushConstants in ClearTexture.comp
+        VkClearColorValue colorValue = {};
+        float depthValue             = 0;
+        uint32_t rawData[4]          = {0, 0, 0, 0};
+        uint32_t dataSize            = 0;
+        uint32_t stencilValue        = 0;
+        uint32_t width               = 0;
+        uint32_t height              = 0;
+        uint32_t depth               = 0;
+    };
+
     struct ImageClearShaderParams
     {
         // Structure matching PushConstants in ImageClear.frag
@@ -528,6 +563,7 @@ class UtilsVk : angle::NonCopyable
         ComputeStartIndex,  // Special value to separate draw and dispatch functions.
         ConvertIndexBuffer = ComputeStartIndex,
         ConvertVertexBuffer,
+        ClearTexture,
         BlitResolveStencilNoExport,
         ConvertIndexIndirectBuffer,
         ConvertIndexIndirectLineLoopBuffer,
@@ -615,6 +651,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureUnresolveResourcesInitialized(ContextVk *contextVk,
                                                       Function function,
                                                       uint32_t attachmentIndex);
+    angle::Result ensureClearTextureResourcesInitialized(ContextVk *contextVk);
 
     angle::Result ensureImageCopyResourcesInitializedWithSampler(
         ContextVk *contextVk,
@@ -630,6 +667,14 @@ class UtilsVk : angle::NonCopyable
                                   const vk::RenderPassDesc &renderPassDesc,
                                   const gl::Rectangle &renderArea,
                                   vk::RenderPassCommandBuffer **commandBufferOut);
+
+    // TODO: Merge with above?
+    angle::Result startRenderPassDS(ContextVk *contextVk,
+                                    vk::ImageHelper *image,
+                                    const vk::ImageView *imageView,
+                                    const vk::RenderPassDesc &renderPassDesc,
+                                    const gl::Rectangle &renderArea,
+                                    vk::RenderPassCommandBuffer **commandBufferOut);
 
     // Set up descriptor set and call dispatch.
     angle::Result convertVertexBufferImpl(
@@ -694,6 +739,8 @@ class UtilsVk : angle::NonCopyable
         mImageCopyWithSampler[vk::InternalShader::ImageCopy_frag::kArrayLen];
     ComputeShaderProgramAndPipelines
         mCopyImageToBuffer[vk::InternalShader::CopyImageToBuffer_comp::kArrayLen];
+    ComputeShaderProgramAndPipelines
+        mClearTexture[vk::InternalShader::ClearTexture_comp::kArrayLen];
     GraphicsShaderProgramAndPipelines mBlitResolve[vk::InternalShader::BlitResolve_frag::kArrayLen];
     GraphicsShaderProgramAndPipelines mBlit3DSrc[vk::InternalShader::Blit3DSrc_frag::kArrayLen];
     ComputeShaderProgramAndPipelines

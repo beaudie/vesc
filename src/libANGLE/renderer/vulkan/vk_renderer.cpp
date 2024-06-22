@@ -2810,6 +2810,8 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     vkGetPhysicalDeviceFeatures2(mPhysicalDevice, &deviceFeatures);
     vkGetPhysicalDeviceProperties2(mPhysicalDevice, &deviceProperties);
 
+    // WARN() << "SSMS: " << deviceFeatures.features.shaderStorageImageMultisample;
+
     // Clean up pNext chains
     mPhysicalDevice11Properties.pNext                 = nullptr;
     mPhysicalDevice11Features.pNext                   = nullptr;
