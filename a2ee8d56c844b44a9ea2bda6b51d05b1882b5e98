@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e1f7f9a_b7d0f6c9",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3065,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-22T01:10:18Z",
+      "side": 1,
+      "message": "Extra?",
+      "range": {
+        "startLine": 3065,
+        "startChar": 4,
+        "endLine": 3065,
+        "endChar": 20
+      },
+      "revId": "a2ee8d56c844b44a9ea2bda6b51d05b1882b5e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "002511dd_9313370c",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3098,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-22T01:10:18Z",
+      "side": 1,
+      "message": "Should we use a constant for this value and point out that this is the integer representation of `1.0f`?",
+      "range": {
+        "startLine": 3098,
+        "startChar": 39,
+        "endLine": 3098,
+        "endChar": 49
+      },
+      "revId": "a2ee8d56c844b44a9ea2bda6b51d05b1882b5e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b49f3bfa_02728066",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3100,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-22T01:10:18Z",
+      "side": 1,
+      "message": "`kTexHeight / 2`?",
+      "range": {
+        "startLine": 3100,
+        "startChar": 31,
+        "endLine": 3100,
+        "endChar": 32
+      },
+      "revId": "a2ee8d56c844b44a9ea2bda6b51d05b1882b5e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a363fda0_69b1acbf",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3107,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-22T01:10:18Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 3107,
+        "startChar": 31,
+        "endLine": 3107,
+        "endChar": 32
+      },
+      "revId": "a2ee8d56c844b44a9ea2bda6b51d05b1882b5e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
