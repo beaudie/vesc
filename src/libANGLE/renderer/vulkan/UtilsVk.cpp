@@ -21,6 +21,7 @@
 namespace rx
 {
 
+namespace ClearTexture_comp                 = vk::InternalShader::ClearTexture_comp;
 namespace ConvertVertex_comp                = vk::InternalShader::ConvertVertex_comp;
 namespace ImageClear_frag                   = vk::InternalShader::ImageClear_frag;
 namespace ImageCopy_frag                    = vk::InternalShader::ImageCopy_frag;
@@ -43,6 +44,8 @@ constexpr uint32_t kConvertVertexDestinationBinding = 0;
 constexpr uint32_t kConvertVertexSourceBinding      = 1;
 
 constexpr uint32_t kImageCopySourceBinding = 0;
+
+constexpr uint32_t kClearTextureDestinationBinding = 0;
 
 constexpr uint32_t kCopyImageToBufferSourceBinding      = 0;
 constexpr uint32_t kCopyImageToBufferDestinationBinding = 1;
@@ -1260,6 +1263,8 @@ UtilsVk::ConvertVertexShaderParams::ConvertVertexShaderParams() = default;
 
 UtilsVk::ImageCopyShaderParams::ImageCopyShaderParams() = default;
 
+UtilsVk::ClearTextureShaderParams::ClearTextureShaderParams() = default;
+
 uint32_t UtilsVk::GetGenerateMipmapMaxLevels(ContextVk *contextVk)
 {
     vk::Renderer *renderer = contextVk->getRenderer();
@@ -1334,6 +1339,14 @@ void UtilsVk::destroy(ContextVk *contextVk)
         }
     }
     for (ComputeShaderProgramAndPipelines &programAndPipelines : mConvertVertex)
+    {
+        programAndPipelines.program.destroy(renderer);
+        for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
+        {
+            pipeline.destroy(device);
+        }
+    }
+    for (ComputeShaderProgramAndPipelines &programAndPipelines : mClearTexture)
     {
         programAndPipelines.program.destroy(renderer);
         for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
@@ -1790,6 +1803,21 @@ angle::Result UtilsVk::ensureUnresolveResourcesInitialized(ContextVk *contextVk,
     return ensureResourcesInitialized(contextVk, function, setSizes.data(), attachmentCount, 0);
 }
 
+angle::Result UtilsVk::ensureClearTextureResourcesInitialized(ContextVk *contextVk)
+{
+    if (mPipelineLayouts[Function::ClearTexture].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorPoolSize setSizes[1] = {
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},
+    };
+    // The shader does not use any descriptor sets.
+    return ensureResourcesInitialized(contextVk, Function::ClearTexture, setSizes,
+                                      ArraySize(setSizes), sizeof(ClearTextureShaderParams));
+}
+
 angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
 {
     VkSamplerCreateInfo samplerInfo     = {};
@@ -2240,6 +2268,247 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
     return angle::Result::Continue;
 }
 
+// Compute shader used to clear a texture in part or whole (EXT_clear_texture).
+angle::Result UtilsVk::clearTexture(ContextVk *contextVk,
+                                    vk::ImageHelper *dst,
+                                    VkImageAspectFlags aspectFlags,
+                                    uint32_t level,
+                                    gl::Box updateArea,
+                                    VkClearValue clearValue,
+                                    gl::TextureType textureType,
+                                    uint8_t *data,
+                                    uint32_t dataSize)
+{
+    // Clear updates use the three dims in the update area. However, for cube map textures, each
+    // face corresponds to an image layer. In addition, 2D arrays also use layers instead of depth.
+    uint32_t baseLayer     = 0;
+    uint32_t layerCount    = 1;
+    uint32_t updateOffsetZ = updateArea.z;
+    uint32_t updateDepth   = updateArea.depth;
+
+    bool useLayerAsDepth =
+        textureType == gl::TextureType::CubeMap || textureType == gl::TextureType::_2DArray;
+    if (useLayerAsDepth)
+    {
+        baseLayer     = updateArea.z;
+        layerCount    = updateArea.depth;
+        updateOffsetZ = 0;
+        updateDepth   = 1;
+    }
+
+    //    bool hasColor   = (aspectFlags & VK_IMAGE_ASPECT_COLOR_BIT) != 0;
+    bool hasDepth   = (aspectFlags & VK_IMAGE_ASPECT_DEPTH_BIT) != 0;
+    bool hasStencil = (aspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT) != 0;
+
+    // A temporary buffer will be used to transfer the clear values to the specific image aspect.
+    vk::Renderer *renderer = contextVk->getRenderer();
+    vk::RendererScoped<vk::BufferHelper> clearBuffer(renderer);
+
+    const angle::Format &format     = dst->getActualFormat();
+    const angle::FormatID &formatID = dst->getActualFormatID();
+
+    uint32_t formatOffsetByte = 0;
+    // For D24_S8, depth has a one-byte offset.
+    if (formatID == angle::FormatID::D24_UNORM_S8_UINT)
+    {
+        formatOffsetByte = 1;
+    }
+
+    uint32_t pixelSize    = format.pixelBytes + formatOffsetByte;
+    uint32_t bufferPixels = updateArea.width * updateArea.height * updateArea.depth;
+
+    ANGLE_TRY(contextVk->initBufferAllocation(
+        &clearBuffer.get(), renderer->getDeviceLocalMemoryTypeIndex(),
+        static_cast<size_t>(bufferPixels * pixelSize), renderer->getDefaultBufferAlignment(),
+        BufferUsageType::Static));
+
+    vk::CommandBufferAccess access;
+    access.onBufferComputeShaderWrite(&clearBuffer.get());
+    gl::LevelIndex levelGL = gl::LevelIndex(level);
+    access.onImageTransferWrite(levelGL, 1, baseLayer, layerCount, aspectFlags, dst);
+
+    vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBufferHelper));
+
+    // Initialize shader parameters.
+    ClearTextureShaderParams shaderParams;
+    shaderParams.width  = updateArea.width;
+    shaderParams.height = updateArea.height;
+    shaderParams.depth  = updateArea.depth;
+
+    shaderParams.depthValue   = clearValue.depthStencil.depth;
+    shaderParams.stencilValue = clearValue.depthStencil.stencil;
+    shaderParams.colorValue   = clearValue.color;
+    shaderParams.dataSize     = dataSize;
+    memcpy(shaderParams.rawData, data, dataSize);
+
+    // For texture with both depth and stencil components, the data for the two components will be
+    // split and applied separately.
+    uint32_t flags = 0;
+    switch (dataSize)
+    {
+        case 1:
+        {
+            flags |= ClearTexture_comp::kPixel1Byte;
+            break;
+        }
+        case 2:
+        {
+            flags |= ClearTexture_comp::kPixel2Byte;
+            break;
+        }
+        case 3:
+        {
+            if (pixelSize == 4)
+            {
+                // If the alpha component is needed, it should be added as a new component to the
+                // clear value.
+                uint32_t fourthComponent = 0xFF;
+                shaderParams.rawData[0] |= fourthComponent << 24;
+                flags |= ClearTexture_comp::kPixel4Byte;
+                // TODO: Other options? (e.g., RGB integer)
+            }
+            else
+            {
+                flags |= ClearTexture_comp::kPixel3Byte;
+            }
+            break;
+        }
+        case 4:
+        {
+            flags |= (hasDepth && hasStencil) ? ClearTexture_comp::kPixel4ByteDS
+                                              : ClearTexture_comp::kPixel4Byte;
+            break;
+        }
+        case 8:
+        {
+            flags |= (hasDepth && hasStencil) ? ClearTexture_comp::kPixel8ByteDS
+                                              : ClearTexture_comp::kPixel8Byte;
+            break;
+        }
+        case 16:
+        {
+            flags |= ClearTexture_comp::kPixel16Byte;
+            break;
+        }
+        default:
+        {
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    // TODO: D32_FLOAT_S8X24_UINT with 4 stencil byte offsets.
+
+    // Set up the descriptor set and compute pipeline, and dispatch program.
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    commandBuffer = &commandBufferHelper->getCommandBuffer();
+
+    ANGLE_TRY(ensureClearTextureResourcesInitialized(contextVk));
+
+    VkDescriptorSet descriptorSet;
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::ClearTexture,
+                                    &descriptorSet));
+
+    VkDescriptorBufferInfo bufferInfo = {};
+    bufferInfo.buffer                 = clearBuffer.get().getBuffer().getHandle();
+    bufferInfo.offset                 = clearBuffer.get().getOffset();
+    bufferInfo.range                  = clearBuffer.get().getSize();
+
+    VkWriteDescriptorSet writeInfo = {};
+    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo.dstSet               = descriptorSet;
+    writeInfo.dstBinding           = kClearTextureDestinationBinding;
+    writeInfo.descriptorCount      = 1;
+    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    writeInfo.pBufferInfo          = &bufferInfo;
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+
+    vk::RefCounted<vk::ShaderModule> *shader = nullptr;
+    ANGLE_TRY(contextVk->getShaderLibrary().getClearTexture_comp(contextVk, flags, &shader));
+
+    ANGLE_TRY(setupComputeProgram(contextVk, Function::ClearTexture, shader, &mClearTexture[flags],
+                                  descriptorSet, &shaderParams, sizeof(shaderParams),
+                                  commandBufferHelper));
+
+    uint32_t workGroupCountX = UnsignedCeilDivide(bufferPixels, 16);
+    commandBuffer->dispatch(workGroupCountX, 1, 1);
+
+    // Add a barrier prior to copy.
+    VkMemoryBarrier memoryBarrier = {};
+    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
+    memoryBarrier.dstAccessMask   = VK_ACCESS_TRANSFER_READ_BIT;
+
+    commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                 VK_PIPELINE_STAGE_TRANSFER_BIT, memoryBarrier);
+
+    // Copy the elements to the required image aspect.
+    if (hasDepth && hasStencil)
+    {
+        // Only one aspect mask bit is allowed at a time. Therefore, the the depth and the stencil
+        // components are copied separately.
+        VkBufferImageCopy regionDepth               = {};
+        regionDepth.bufferOffset                    = clearBuffer.get().getOffset();
+        regionDepth.bufferRowLength                 = 0;
+        regionDepth.bufferImageHeight               = 0;
+        regionDepth.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_DEPTH_BIT;
+        regionDepth.imageSubresource.mipLevel       = dst->toVkLevel(levelGL).get();
+        regionDepth.imageSubresource.baseArrayLayer = baseLayer;
+        regionDepth.imageSubresource.layerCount     = layerCount;
+        regionDepth.imageOffset.x                   = updateArea.x;
+        regionDepth.imageOffset.y                   = updateArea.y;
+        regionDepth.imageOffset.z                   = updateOffsetZ;
+        regionDepth.imageExtent.width               = updateArea.width;
+        regionDepth.imageExtent.height              = updateArea.height;
+        regionDepth.imageExtent.depth               = updateDepth;
+        commandBuffer->copyBufferToImage(clearBuffer.get().getBuffer().getHandle(), dst->getImage(),
+                                         dst->getCurrentLayout(renderer), 1, &regionDepth);
+
+        VkDeviceSize bufferStencilOffset =
+            static_cast<VkDeviceSize>(bufferPixels) * (format.depthBits / 8 + formatOffsetByte);
+        VkBufferImageCopy regionStencil = {};
+        regionStencil.bufferOffset      = clearBuffer.get().getOffset() + bufferStencilOffset;
+        regionStencil.bufferRowLength   = 0;
+        regionStencil.bufferImageHeight = 0;
+        regionStencil.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
+        regionStencil.imageSubresource.mipLevel       = dst->toVkLevel(levelGL).get();
+        regionStencil.imageSubresource.baseArrayLayer = baseLayer;
+        regionStencil.imageSubresource.layerCount     = layerCount;
+        regionStencil.imageOffset.x                   = updateArea.x;
+        regionStencil.imageOffset.y                   = updateArea.y;
+        regionStencil.imageOffset.z                   = updateOffsetZ;
+        regionStencil.imageExtent.width               = updateArea.width;
+        regionStencil.imageExtent.height              = updateArea.height;
+        regionStencil.imageExtent.depth               = updateDepth;
+        commandBuffer->copyBufferToImage(clearBuffer.get().getBuffer().getHandle(), dst->getImage(),
+                                         dst->getCurrentLayout(renderer), 1, &regionStencil);
+    }
+    else
+    {
+        VkBufferImageCopy region               = {};
+        region.bufferOffset                    = clearBuffer.get().getOffset();
+        region.bufferRowLength                 = 0;
+        region.bufferImageHeight               = 0;
+        region.imageSubresource.aspectMask     = aspectFlags;
+        region.imageSubresource.mipLevel       = dst->toVkLevel(levelGL).get();
+        region.imageSubresource.baseArrayLayer = baseLayer;
+        region.imageSubresource.layerCount     = layerCount;
+        region.imageOffset.x                   = updateArea.x;
+        region.imageOffset.y                   = updateArea.y;
+        region.imageOffset.z                   = updateOffsetZ;
+        region.imageExtent.width               = updateArea.width;
+        region.imageExtent.height              = updateArea.height;
+        region.imageExtent.depth               = updateDepth;
+        commandBuffer->copyBufferToImage(clearBuffer.get().getBuffer().getHandle(), dst->getImage(),
+                                         dst->getCurrentLayout(renderer), 1, &region);
+    }
+    // TODO: MS images?
+
+    return angle::Result::Continue;
+}
+
 angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
                                            vk::BufferHelper *dst,
                                            vk::BufferHelper *src,
@@ -2613,6 +2882,8 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
                                   vk::ImageHelper *dst,
                                   const ClearImageParameters &params)
 {
+    // TODO: Try using this function for the partial clear instead. (2D and 2D multisample)
+    // TODO: Include depth. (Stencil?)
     vk::Renderer *renderer = contextVk->getRenderer();
 
     ANGLE_TRY(ensureImageClearResourcesInitialized(contextVk));

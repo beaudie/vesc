@@ -1,0 +1,128 @@
+//
+// Copyright 2024 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+#version 450 core
+layout (local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
+
+layout (set = 0, binding = 0) buffer dest
+{
+	uint dataBuffer[];
+};
+
+layout (push_constant) uniform PushConstants
+{
+    vec4 clearValue;
+	uint depthValue;
+	uint rawData[4];
+	uint dataSize;
+	uint stencilValue;
+	uint width;
+	uint height;
+	uint depth;
+} params;
+
+void main()
+{
+	uint threadId = gl_GlobalInvocationID.x;
+#if Pixel1Byte
+	if (threadId >= ceil(params.width * params.height * params.depth / 4))
+	{
+		return;
+	}
+	uint byteData = params.rawData[0] & 0xFF;
+    dataBuffer[threadId] = (byteData) | (byteData << 8) | (byteData << 16) | (byteData << 24);
+#elif Pixel2Byte
+	if (threadId >= ceil(params.width * params.height * params.depth / 2))
+	{
+		return;
+	}
+	uint byteData = params.rawData[0] & 0xFFFF;
+    dataBuffer[threadId] = (byteData) | (byteData << 16);
+#elif Pixel3Byte
+	if (threadId >= ceil(params.width * params.height * params.depth * 3 / 4))
+	{
+		return;
+	}
+	// TODO: Make it a function.
+	uint shift = threadId % 3;
+	uint byteData = params.rawData[0];
+	if (shift == 0)
+	{
+		dataBuffer[threadId] = (byteData) | (byteData << 24);
+	}
+	else if (shift == 1)
+	{
+		dataBuffer[threadId] = (byteData >> 8) | (byteData << 16);
+	}
+	else
+	{
+		dataBuffer[threadId] = (byteData >> 16) | (byteData << 8);
+	}
+
+#elif Pixel4Byte
+	if (threadId >= params.width * params.height * params.depth)
+	{
+		return;
+	}
+    dataBuffer[threadId] = params.rawData[0];
+#elif Pixel4ByteDS
+	// For D24S8, the 24-bit depth will use the entire uint.
+	if (threadId >= ceil(params.width * params.height * params.depth))
+	{
+		return;
+	}
+		
+	uint depthValue = params.rawData[0] >> 8;
+	dataBuffer[threadId] = depthValue;
+
+	if (threadId > ceil(params.width * params.height * params.depth / 4))
+	{
+		return;
+	}	
+
+	uint offset = uint((ceil(params.width * params.height * params.depth)));
+	uint stencilValue = params.rawData[0] & 0xFF;
+	dataBuffer[threadId + offset] = (stencilValue) | (stencilValue << 8) | (stencilValue << 16) | (stencilValue << 24);
+
+#elif Pixel8Byte
+	if (threadId >= params.width * params.height * params.depth)
+	{
+		return;
+	}
+    dataBuffer[threadId * 2] = params.rawData[0];
+    dataBuffer[threadId * 2 + 1] = params.rawData[1];
+
+#elif Pixel8ByteDS
+	if (threadId >= params.width * params.height * params.depth)
+	{
+		return;
+	}
+    dataBuffer[threadId] = params.rawData[0];
+
+	if (threadId > ceil(params.width * params.height * params.depth / 4))
+	{
+		return;
+	}	
+
+	uint offset = uint((ceil(params.width * params.height * params.depth)));
+	uint stencilValue = params.rawData[1] & 0xFF;
+	dataBuffer[threadId + offset] = (stencilValue) | (stencilValue << 8) | (stencilValue << 16) | (stencilValue << 24);
+
+#elif Pixel16Byte
+	if (threadId >= params.width * params.height * params.depth)
+	{
+		return;
+	}
+    dataBuffer[threadId * 4] = params.rawData[0];
+    dataBuffer[threadId * 4 + 1] = params.rawData[1];
+    dataBuffer[threadId * 4 + 2] = params.rawData[2];
+    dataBuffer[threadId * 4 + 3] = params.rawData[3];
+#else
+#error "Undefined behavior"
+#endif
+}
+
+
