@@ -1286,6 +1286,9 @@ void Renderer::ensureCapsInitialized() const
     mNativeExtensions.readDepthStencilNV = true;
     mNativeExtensions.readStencilNV      = true;
 
+    // GL_EXT_clear_texture
+    mNativeExtensions.clearTextureEXT = true;
+
     // GL_QCOM_shading_rate
     mNativeExtensions.shadingRateQCOM = mFeatures.supportsFragmentShadingRate.enabled;
 
