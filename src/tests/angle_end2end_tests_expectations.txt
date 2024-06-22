@@ -1467,6 +1467,16 @@ b/292285899 PIXEL4ORXL GLES : EGLSurfaceTest.DestroyAndRecreateWhileCurrent/* = 
 42267119 LINUX INTEL OPENGL : WEBGLVideoTextureTest.VerifySamplerVideoWEBGLAsParameter/* = SKIP
 42267119 LINUX INTEL OPENGL : WEBGLVideoTextureTest.VerifyStateManagerKnowsBindingVideoImage/* = SKIP
 
+// OpenGL/GLES failures related to GL_EXT_clear_texture (TODO: File new bugs)
+42266869 LINUX INTEL OPENGL : ClearTextureEXTTest.Clear2DWithZeroDepth/* = SKIP
+42266869 LINUX INTEL OPENGL : FramebufferTest_ES31.ClearTextureEXT2DMSStencil/* = SKIP
+42266869 LINUX NVIDIA OPENGL : ClearTextureEXTTest.Clear2DWithZeroDepth/* = SKIP
+42266869 WIN INTEL OPENGL : ClearTextureEXTTest.ClearCubeMapArray/* = SKIP
+42266869 WIN INTEL OPENGL : ClearTextureEXTTest.StencilTexture/* = SKIP
+42266869 WIN INTEL OPENGL : FramebufferTest_ES31.ClearTextureEXT2DMSStencil/* = SKIP
+42266869 WIN NVIDIA OPENGL : ClearTextureEXTTest.Clear2DWithZeroDepth/* = SKIP
+42266869 WIN NVIDIA GLES : ClearTextureEXTTest.Clear2DWithZeroDepth/* = SKIP
+
 // MSRTT D3D11 failures
 40644740 D3D11 : MultisampledRenderToTextureES3Test.MultipleLevelsMultisampleMRTDraw2DColor/* = SKIP
 
