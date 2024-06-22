@@ -1405,6 +1405,7 @@ enum class RenderPassClosureReason
     // UtilsVk
     PrepareForBlit,
     PrepareForImageCopy,
+    TemporaryForClearTextureMS,
     TemporaryForImageClear,
     TemporaryForImageCopy,
     TemporaryForOverlayDraw,
