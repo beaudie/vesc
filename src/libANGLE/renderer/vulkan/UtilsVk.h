@@ -234,6 +234,15 @@ class UtilsVk : angle::NonCopyable
                                       vk::BufferHelper *src,
                                       const ConvertVertexParameters &params);
 
+    // EXT_clear_texture
+    angle::Result clearTexture(ContextVk *contextVk,
+                               vk::ImageHelper *dst,
+                               VkImageAspectFlags aspectFlags,
+                               uint32_t level,
+                               gl::Box updateArea,
+                               VkClearValue clearValue,
+                               gl::TextureType textureType);
+
     angle::Result clearFramebuffer(ContextVk *contextVk,
                                    FramebufferVk *framebuffer,
                                    const ClearFramebufferParameters &params);
@@ -370,6 +379,22 @@ class UtilsVk : angle::NonCopyable
         uint32_t isSrcHDR         = 0;
         uint32_t isSrcA2BGR10     = 0;
         uint32_t _padding         = 0;
+    };
+
+    struct ClearTextureShaderParams
+    {
+        ClearTextureShaderParams();
+
+        // Structure matching PushConstants in ClearTexture.comp
+        VkClearColorValue colorValue = {};
+        float depthValue             = 0;
+        uint32_t stencilValue        = 0;
+        uint32_t offsetX             = 0;
+        uint32_t offsetY             = 0;
+        uint32_t offsetZ             = 0;
+        uint32_t width               = 0;
+        uint32_t height              = 0;
+        uint32_t depth               = 0;
     };
 
     struct ImageClearShaderParams
@@ -509,6 +534,7 @@ class UtilsVk : angle::NonCopyable
         ComputeStartIndex,  // Special value to separate draw and dispatch functions.
         ConvertIndexBuffer = ComputeStartIndex,
         ConvertVertexBuffer,
+        ClearTexture,
         BlitResolveStencilNoExport,
         ConvertIndexIndirectBuffer,
         ConvertIndexIndirectLineLoopBuffer,
@@ -595,6 +621,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureUnresolveResourcesInitialized(ContextVk *contextVk,
                                                       Function function,
                                                       uint32_t attachmentIndex);
+    angle::Result ensureClearTextureResourcesInitialized(ContextVk *contextVk);
 
     angle::Result ensureImageCopyResourcesInitializedWithSampler(
         ContextVk *contextVk,
@@ -672,6 +699,8 @@ class UtilsVk : angle::NonCopyable
         mImageCopyWithSampler[vk::InternalShader::ImageCopy_frag::kArrayLen];
     ComputeShaderProgramAndPipelines
         mCopyImageToBuffer[vk::InternalShader::CopyImageToBuffer_comp::kArrayLen];
+    ComputeShaderProgramAndPipelines
+        mClearTexture[vk::InternalShader::ClearTexture_comp::kArrayLen];
     GraphicsShaderProgramAndPipelines mBlitResolve[vk::InternalShader::BlitResolve_frag::kArrayLen];
     GraphicsShaderProgramAndPipelines mBlit3DSrc[vk::InternalShader::Blit3DSrc_frag::kArrayLen];
     ComputeShaderProgramAndPipelines

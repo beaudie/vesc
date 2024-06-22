@@ -1078,13 +1078,15 @@ bool IsClear(UpdateSource updateSource)
 {
     return updateSource == UpdateSource::Clear ||
            updateSource == UpdateSource::ClearEmulatedChannelsOnly ||
-           updateSource == UpdateSource::ClearAfterInvalidate;
+           updateSource == UpdateSource::ClearAfterInvalidate ||
+           updateSource == UpdateSource::ClearPartial;
 }
 
 bool IsClearOfAllChannels(UpdateSource updateSource)
 {
     return updateSource == UpdateSource::Clear ||
-           updateSource == UpdateSource::ClearAfterInvalidate;
+           updateSource == UpdateSource::ClearAfterInvalidate ||
+           updateSource == UpdateSource::ClearPartial;
 }
 
 angle::Result InitDynamicDescriptorPool(Context *context,
@@ -9100,6 +9102,24 @@ void ImageHelper::restoreSubresourceContentImpl(gl::LevelIndex level,
     *contentDefinedMask |= layerRangeBits;
 }
 
+// TODO: Currently Unused
+angle::Result ImageHelper::stageSubresourceClear(ContextVk *contextVk,
+                                                 const gl::Box &updateArea,
+                                                 gl::TextureType textureType,
+                                                 uint32_t levelIndex,
+                                                 uint32_t layerIndex,
+                                                 uint32_t layerCount,
+                                                 VkImageAspectFlags aspectMask,
+                                                 const gl::InternalFormat &formatInfo,
+                                                 VkClearValue clearValue)
+{
+    appendSubresourceUpdate(gl::LevelIndex(levelIndex),
+                            SubresourceUpdate(aspectMask, clearValue, textureType, levelIndex,
+                                              layerIndex, layerCount, updateArea));
+
+    return angle::Result::Continue;
+}
+
 angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                                                   const gl::ImageIndex &index,
                                                   const gl::Extents &glExtents,
@@ -9842,6 +9862,11 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                     update.data.clear.levelIndex = updateMipLevelVk.get();
                     break;
                 }
+                case UpdateSource::ClearPartial:
+                {
+                    update.data.clearPartial.levelIndex = updateMipLevelVk.get();
+                    break;
+                }
                 case UpdateSource::Buffer:
                 {
                     if (!transCoding && !isDataFormatMatchForCopy(update.data.buffer.formatID))
@@ -9919,6 +9944,23 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                     // setContentDefined directly.
                     setContentDefined(updateMipLevelVk, 1, updateBaseLayer, updateLayerCount,
                                       update.data.clear.aspectFlags);
+                    break;
+                }
+                case UpdateSource::ClearPartial:
+                {
+                    ClearPartialUpdate &clearPartialUpdate = update.data.clearPartial;
+                    gl::Box updateArea;
+                    updateArea.x      = clearPartialUpdate.offsetX;
+                    updateArea.y      = clearPartialUpdate.offsetY;
+                    updateArea.z      = clearPartialUpdate.offsetZ;
+                    updateArea.width  = clearPartialUpdate.width;
+                    updateArea.height = clearPartialUpdate.height;
+                    updateArea.depth  = clearPartialUpdate.depth;
+                    ANGLE_TRY(contextVk->getUtils().clearTexture(
+                        contextVk, this, clearPartialUpdate.aspectFlags, updateMipLevelGL.get(),
+                        updateArea, clearPartialUpdate.value, clearPartialUpdate.textureType));
+                    setContentDefined(updateMipLevelVk, 1, updateBaseLayer, updateLayerCount,
+                                      clearPartialUpdate.aspectFlags);
                     break;
                 }
                 case UpdateSource::Buffer:
@@ -10234,7 +10276,8 @@ bool ImageHelper::hasBufferSourcedStagedUpdatesInAllLevels() const
         bool hasUpdateSourceWithBuffer = false;
         for (const SubresourceUpdate &update : *levelUpdates)
         {
-            if (update.updateSource == UpdateSource::Buffer)
+            if (update.updateSource == UpdateSource::Buffer ||
+                update.updateSource == UpdateSource::ClearPartial)
             {
                 hasUpdateSourceWithBuffer = true;
                 break;
@@ -10371,6 +10414,13 @@ void ImageHelper::pruneSupersededUpdatesForLevel(ContextVk *contextVk,
         {
             currentUpdateBox = gl::Box(update.data.image.copyRegion.dstOffset,
                                        update.data.image.copyRegion.extent);
+        }
+        else if (update.updateSource == UpdateSource::ClearPartial)
+        {
+            currentUpdateBox =
+                gl::Box(update.data.clearPartial.offsetX, update.data.clearPartial.offsetY,
+                        update.data.clearPartial.offsetZ, update.data.clearPartial.width,
+                        update.data.clearPartial.height, update.data.clearPartial.depth);
         }
         else
         {
@@ -11268,6 +11318,29 @@ ImageHelper::SubresourceUpdate::SubresourceUpdate() : updateSource(UpdateSource:
     refCounted.buffer        = nullptr;
 }
 
+ImageHelper::SubresourceUpdate::SubresourceUpdate(VkImageAspectFlags aspectFlags,
+                                                  const VkClearValue &clearValue,
+                                                  gl::TextureType textureType,
+                                                  uint32_t levelIndex,
+                                                  uint32_t layerIndex,
+                                                  uint32_t layerCount,
+                                                  gl::Box updateArea)
+    : updateSource(UpdateSource::ClearPartial)
+{
+    data.clearPartial.aspectFlags = aspectFlags;
+    data.clearPartial.levelIndex  = levelIndex;
+    data.clearPartial.textureType = textureType;
+    data.clearPartial.layerIndex  = layerIndex;
+    data.clearPartial.layerCount  = layerCount;
+    data.clearPartial.offsetX     = updateArea.x;
+    data.clearPartial.offsetY     = updateArea.y;
+    data.clearPartial.offsetZ     = updateArea.z;
+    data.clearPartial.width       = updateArea.width;
+    data.clearPartial.height      = updateArea.height;
+    data.clearPartial.depth       = updateArea.depth;
+    data.clearPartial.value       = clearValue;
+}
+
 ImageHelper::SubresourceUpdate::~SubresourceUpdate() {}
 
 ImageHelper::SubresourceUpdate::SubresourceUpdate(RefCounted<BufferHelper> *bufferIn,
@@ -11349,6 +11422,9 @@ ImageHelper::SubresourceUpdate::SubresourceUpdate(SubresourceUpdate &&other)
         case UpdateSource::ClearAfterInvalidate:
             data.clear        = other.data.clear;
             refCounted.buffer = nullptr;
+            break;
+        case UpdateSource::ClearPartial:
+            data.clearPartial = other.data.clearPartial;
             break;
         case UpdateSource::Buffer:
             data.buffer             = other.data.buffer;

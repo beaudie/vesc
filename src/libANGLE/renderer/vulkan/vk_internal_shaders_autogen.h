@@ -59,6 +59,24 @@ enum flags
 constexpr size_t kArrayLen = 0x00000004;
 }  // namespace BlitResolveStencilNoExport_comp
 
+namespace ClearTexture_comp
+{
+enum ImageAspect
+{
+    kIsColor        = 0x00000000,
+    kIsDepth        = 0x00000001,
+    kIsStencil      = 0x00000002,
+    kIsDepthStencil = 0x00000003,
+};
+enum DstType
+{
+    kDstIsInt   = 0x00000000,
+    kDstIsUint  = 0x00000004,
+    kDstIsFloat = 0x00000008,
+};
+constexpr size_t kArrayLen = 0x0000000C;
+}  // namespace ClearTexture_comp
+
 namespace ConvertIndex_comp
 {
 enum flags
@@ -232,6 +250,9 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getBlitResolveStencilNoExport_comp(Context *context,
                                                      uint32_t shaderFlags,
                                                      RefCounted<ShaderModule> **shaderOut);
+    angle::Result getClearTexture_comp(Context *context,
+                                       uint32_t shaderFlags,
+                                       RefCounted<ShaderModule> **shaderOut);
     angle::Result getConvertIndex_comp(Context *context,
                                        uint32_t shaderFlags,
                                        RefCounted<ShaderModule> **shaderOut);
@@ -277,6 +298,8 @@ class ShaderLibrary final : angle::NonCopyable
     RefCounted<ShaderModule> mBlitResolve_frag_shaders[InternalShader::BlitResolve_frag::kArrayLen];
     RefCounted<ShaderModule> mBlitResolveStencilNoExport_comp_shaders
         [InternalShader::BlitResolveStencilNoExport_comp::kArrayLen];
+    RefCounted<ShaderModule>
+        mClearTexture_comp_shaders[InternalShader::ClearTexture_comp::kArrayLen];
     RefCounted<ShaderModule>
         mConvertIndex_comp_shaders[InternalShader::ConvertIndex_comp::kArrayLen];
     RefCounted<ShaderModule> mConvertIndexIndirectLineLoop_comp_shaders

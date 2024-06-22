@@ -1,0 +1,89 @@
+//
+// Copyright 2018 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+#version 450 core
+layout (local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
+
+#define MAKE_DST_RESOURCE(prefix, type) prefix ## type
+
+// TODO: Process the byte values on the host and use a single type to copy them.
+#if DstIsFloat
+#define DST_RESOURCE(type) type
+#define DSTTYPE vec4
+#elif DstIsInt
+#define DST_RESOURCE(type) MAKE_DST_RESOURCE(i, type)
+#define DSTTYPE ivec4
+#elif DstIsUint
+#define DST_RESOURCE(type) MAKE_DST_RESOURCE(u, type)
+#define DSTTYPE uvec4
+#else
+#error "Not all source formats are accounted for"
+#endif
+
+#if IsDepthStencil
+layout (set = 0, binding = 0) buffer dest
+{
+	uint dsBuffer[];
+};
+#elif IsDepth
+layout (set = 0, binding = 0) buffer dest
+{
+	float depthBuffer[];
+};
+#elif IsStencil
+layout (set = 0, binding = 0) buffer dest
+{
+	uint stencilBuffer[];
+};
+#else
+layout (set = 0, binding = 0) buffer dest
+{
+#if DstIsFloat
+	uint colorBuffer[];
+#else
+	DSTTYPE colorBuffer[];
+#endif
+};
+#endif
+
+layout (push_constant) uniform PushConstants
+{
+    DSTTYPE clearValue;
+	float depthValue;
+	uint stencilValue;
+	uint offsetX;
+	uint offsetY;
+	uint offsetZ;
+	uint width;
+	uint height;
+	uint depth;
+} params;
+
+
+void main()
+{
+	if (gl_GlobalInvocationID.x >= params.width * params.height * params.depth)
+	{
+		return;
+	}
+
+#if IsDepthStencil
+    // TODO: For 24_8 and 32_8? Input D/S bit count?
+    dsBuffer[gl_GlobalInvocationID.x] = params.stencilValue;
+#elif IsDepth
+    depthBuffer[gl_GlobalInvocationID.x] = params.depthValue;
+#elif IsStencil
+    stencilBuffer[gl_GlobalInvocationID.x] = params.stencilValue;
+#else
+#if DstIsFloat
+    colorBuffer[gl_GlobalInvocationID.x] = packUnorm4x8(params.clearValue);
+#else
+    colorBuffer[gl_GlobalInvocationID.x] = (params.clearValue);
+#endif
+#endif
+}
+
+
