@@ -1,0 +1,64 @@
+//
+// Copyright 2024 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// ClearTexture.comp: Generates the buffer data to clear a texture to a
+// constant value based on the input data.
+
+#version 450 core
+layout (local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
+
+layout (set = 0, binding = 0) buffer dest
+{
+    uint dataBuffer[];
+};
+
+layout (push_constant) uniform PushConstants
+{
+    uint data[4];
+    uint texelCount;
+    uint maxThreadId;
+    uint dataSize;
+    bool hasDepthAndStencil;
+} params;
+
+void main()
+{
+    uint threadId = gl_GlobalInvocationID.x;
+    uint texelCount = params.texelCount;
+    uint dataSize = params.dataSize;
+
+    if (threadId >= params.maxThreadId)
+    {
+        return;
+    }
+
+    if (dataSize == 1 || dataSize == 2)
+    {
+        dataBuffer[threadId] = params.data[0];
+    }
+    else if (dataSize % 4 == 0 && !params.hasDepthAndStencil)
+    {
+        uint dataCount = dataSize / 4;
+        for (int i = 0; i < dataCount; i++)
+        {
+            dataBuffer[dataCount * threadId + i] = params.data[i];
+        }
+    }
+    else if (dataSize == 3)
+    {
+        dataBuffer[threadId] = params.data[threadId % 3];
+    }
+    else if (params.hasDepthAndStencil)
+    {
+        dataBuffer[threadId] = params.data[0];
+        if (threadId >= ceil(params.maxThreadId / 4))
+        {
+            return;
+        }
+        uint offset = texelCount;
+        dataBuffer[threadId + offset] = params.data[1];
+    }
+}
+
