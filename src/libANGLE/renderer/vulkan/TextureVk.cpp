@@ -3654,6 +3654,7 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         const VkFormat additionalViewFormat = rx::vk::GetVkFormatFromFormatID(
             isActualFormatSRGB ? ConvertToLinear(actualImageFormatID)
                                : ConvertToSRGB(actualImageFormatID));
+        const bool isAdditionalFormatValid = additionalViewFormat != VK_FORMAT_UNDEFINED;
 
         // If the texture has already been bound to an MSRTT framebuffer, lack of support should
         // result in failure.
@@ -3666,8 +3667,8 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
             createFlagsMultisampled, nullptr,
             vk::ImageHelper::FormatSupportCheck::RequireMultisampling);
 
-        bool supportsMSRTTUsage =
-            supportsMSRTTUsageActualFormat && supportsMSRTTUsageAdditionalFormat;
+        bool supportsMSRTTUsage = supportsMSRTTUsageActualFormat &&
+                                  (!isAdditionalFormatValid || supportsMSRTTUsageAdditionalFormat);
         if (ANGLE_UNLIKELY(mState.hasBeenBoundToMSRTTFramebuffer() && !supportsMSRTTUsage))
         {
             ERR() << "Texture bound to EXT_multisampled_render_to_texture framebuffer, "
