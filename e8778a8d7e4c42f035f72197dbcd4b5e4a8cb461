@@ -70,6 +70,23 @@
       "parentUuid": "27b4498d_df2d1932",
       "revId": "e8778a8d7e4c42f035f72197dbcd4b5e4a8cb461",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "995d298a_b6165f3a",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 2
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-06-24T08:32:47Z",
+      "side": 1,
+      "message": "There\u0027s a strange symbol in the diff viewer. Can you check that you didn\u0027t add tabs to the file?",
+      "revId": "e8778a8d7e4c42f035f72197dbcd4b5e4a8cb461",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
