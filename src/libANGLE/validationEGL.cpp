@@ -3092,6 +3092,9 @@ bool ValidateCreatePbufferFromClientBuffer(const ValidationContext *val,
                 }
                 break;
 
+            case EGL_D3D11_TEXTURE_PLANE_ANGLE:
+                break;
+
             default:
                 val->setError(EGL_BAD_ATTRIBUTE);
                 return false;
