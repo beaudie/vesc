@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25afda3b_270b01ef",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-24T15:31:31Z",
+      "side": 1,
+      "message": "Let\u0027s just set it to `angle_enable_vulkan_validation_layers`, the intent will be clearer.",
+      "range": {
+        "startLine": 281,
+        "startChar": 2,
+        "endLine": 281,
+        "endChar": 36
+      },
+      "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08f8aa03_99600ce3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1808,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-24T15:31:31Z",
+      "side": 1,
+      "message": "I wonder if we should just uplevel things and rename all validation layer stuff to debug layers, which we are adding to.",
+      "range": {
+        "startLine": 1804,
+        "startChar": 0,
+        "endLine": 1808,
+        "endChar": 59
+      },
+      "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b91d68_fdc76d46",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-24T15:31:31Z",
+      "side": 1,
+      "message": "This in particular.  Things would get much simpler if stop treating validation special.\n\n+Shabi, what do you think of changing ANGLE\u0027s logic throughout to speak of `UseDebugLayers` instead of `UseValidationLayers`?\n\nThe current intent is:\n - Enabling `validation` loads the layer and starts emitting validation errors\n - Enabling `api_dump` loads the layer, but does nothing until you set an env var\n\nThe new intent would be:\n - Enabling `debug` layers:\n   - causes validation to load and emit errors\n   - causes api_dump to load but stay silent without env var",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1836,
+        "endChar": 85
+      },
+      "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
