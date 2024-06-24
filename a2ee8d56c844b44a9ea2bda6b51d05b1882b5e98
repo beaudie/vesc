@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aeb9a45_f42da5fc",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3065,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-06-24T17:40:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e1f7f9a_b7d0f6c9",
+      "range": {
+        "startLine": 3065,
+        "startChar": 4,
+        "endLine": 3065,
+        "endChar": 20
+      },
+      "revId": "a2ee8d56c844b44a9ea2bda6b51d05b1882b5e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "002511dd_9313370c",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-22T01:10:18Z",
       "side": 1,
       "message": "Should we use a constant for this value and point out that this is the integer representation of `1.0f`?",
+      "range": {
+        "startLine": 3098,
+        "startChar": 39,
+        "endLine": 3098,
+        "endChar": 49
+      },
+      "revId": "a2ee8d56c844b44a9ea2bda6b51d05b1882b5e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bc90b22_806246bb",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3098,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-06-24T17:40:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "002511dd_9313370c",
       "range": {
         "startLine": 3098,
         "startChar": 39,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb379fd5_0e186bc8",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3100,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-06-24T17:40:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b49f3bfa_02728066",
+      "range": {
+        "startLine": 3100,
+        "startChar": 31,
+        "endLine": 3100,
+        "endChar": 32
+      },
+      "revId": "a2ee8d56c844b44a9ea2bda6b51d05b1882b5e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a363fda0_69b1acbf",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-06-22T01:10:18Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 3107,
+        "startChar": 31,
+        "endLine": 3107,
+        "endChar": 32
+      },
+      "revId": "a2ee8d56c844b44a9ea2bda6b51d05b1882b5e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "978b7bf7_198902f6",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3107,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-06-24T17:40:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a363fda0_69b1acbf",
       "range": {
         "startLine": 3107,
         "startChar": 31,
