@@ -16,6 +16,24 @@
       "message": "Looks ok, but I don\u0027t understand the footnote this is based on. I\u0027ll try to confirm",
       "revId": "fe3b378805549bdec936f13a78560a3ab4024636",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "904ec471_c3ab63ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-06-24T12:33:07Z",
+      "side": 1,
+      "message": "That footnote was written more clearly in the previous edition of the document.",
+      "parentUuid": "295220fb_0458bb18",
+      "revId": "fe3b378805549bdec936f13a78560a3ab4024636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
