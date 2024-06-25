@@ -24,6 +24,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56272b87_9c0ac754",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-25T20:40:48Z",
+      "side": 1,
+      "message": "Roman, looks promising to me, better than writing/maintaining our own parser.",
+      "revId": "cdec4e22207cb6b2bbb477f8db53b662354864ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6aa3cb68_95eadfb6",
