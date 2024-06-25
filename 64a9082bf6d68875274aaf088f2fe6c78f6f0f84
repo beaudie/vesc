@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f3c678_65c43a0b",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-25T20:27:45Z",
+      "side": 1,
+      "message": "This should just log without marking the test as failed.",
+      "parentUuid": "c589597d_891b9d34",
+      "range": {
+        "startLine": 265,
+        "startChar": 8,
+        "endLine": 265,
+        "endChar": 21
+      },
+      "revId": "64a9082bf6d68875274aaf088f2fe6c78f6f0f84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3423d76_d230262f",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-20T17:04:37Z",
       "side": 1,
       "message": "And this warn triggers. Causing test failures maybe?",
+      "range": {
+        "startLine": 306,
+        "startChar": 8,
+        "endLine": 306,
+        "endChar": 12
+      },
+      "revId": "64a9082bf6d68875274aaf088f2fe6c78f6f0f84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac4d410_3da35594",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-25T20:27:45Z",
+      "side": 1,
+      "message": "Yea, Getting this linux bot happy with the test runner\u0027s way of managing windows has been a nightmare. I ended up using a different wgpu swap chain API that seems more consistent. Also updated the test runner to re-create displays for WebGPU.",
+      "parentUuid": "f3423d76_d230262f",
       "range": {
         "startLine": 306,
         "startChar": 8,
