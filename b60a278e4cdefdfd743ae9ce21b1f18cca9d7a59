@@ -164,6 +164,30 @@
       },
       "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebeac4f0_1296d32b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-25T20:48:41Z",
+      "side": 1,
+      "message": "Ah ok, I meant this: Look at step 102 here for example (end2end tests on Nvidia): https://ci.chromium.org/ui/p/angle/builders/try/linux-test/21246/overview\n\nIt says:\n\n```\nshard #0 test results\nshard #0 (runtime (10m 43s) + overhead (8s): 10m 51s)\nshard #1 test results\nshard #1 (runtime (10m 28s) + overhead (8s): 10m 36s)\n```\n\nJust wanted us to keep an eye on the `runtime` that\u0027s measured by the bot to make sure it doesn\u0027t change much.",
+      "parentUuid": "9aba08dc_93998e74",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1836,
+        "endChar": 85
+      },
+      "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
