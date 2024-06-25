@@ -1444,7 +1444,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         vk::ImageHelper::Copy(renderer, srcImage, mImage, srcOffset, dstOffsetModified, extents,
                               srcSubresource, destSubresource, commandBuffer);
 
-        contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, mImage);
+        //        contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, mImage);
     }
     else
     {
@@ -1479,7 +1479,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         vk::ImageHelper::Copy(renderer, srcImage, &stagingImage->get(), srcOffset, gl::kOffsetZero,
                               extents, srcSubresource, destSubresource, commandBuffer);
 
-        contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, &stagingImage->get());
+        //        contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, &stagingImage->get());
 
         // Stage the copy for when the image storage is actually created.
         VkImageType imageType = gl_vk::GetImageType(mState.getType());
@@ -2171,7 +2171,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
                                      mImage->getCurrentLayout(contextVk->getRenderer()), 1,
                                      &region);
 
-    contextVk->trackImageWithOutsideRenderPassEvent(mImage);
+    //    contextVk->trackImageWithOutsideRenderPassEvent(mImage);
 
     return angle::Result::Continue;
 }
@@ -2485,7 +2485,7 @@ angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
                                  stagingImage->get().getCurrentLayout(renderer), 1, &copyRegion);
     }
 
-    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, &stagingImage->get());
+    //    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, &stagingImage->get());
 
     // Stage the staging image in the destination
     dstImage->stageSubresourceUpdatesFromAllImageLevels(stagingImage.release(),

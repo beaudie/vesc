@@ -1398,8 +1398,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                                           flipY));
                 accessedImages.push_back(&drawRenderTarget->getImageForWrite());
             }
-            contextVk->trackImagesWithOutsideRenderPassEvent(accessedImages.data(),
-                                                             accessedImages.size());
+            //            contextVk->trackImagesWithOutsideRenderPassEvent(accessedImages.data(),
+            //                                                             accessedImages.size());
         }
         // If we're not flipping or rotating, use Vulkan's builtin resolve.
         else if (isColorResolve && !flipX && !flipY && areChannelsBlitCompatible &&
@@ -1507,8 +1507,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             ANGLE_TRY(blitWithCommand(contextVk, sourceArea, destArea, readRenderTarget,
                                       drawRenderTarget, filter, false, blitDepthBuffer,
                                       blitStencilBuffer, flipX, flipY));
-            contextVk->trackImagesWithOutsideRenderPassEvent(&readRenderTarget->getImageForCopy(),
-                                                             &drawRenderTarget->getImageForWrite());
+            //            contextVk->trackImagesWithOutsideRenderPassEvent(&readRenderTarget->getImageForCopy(),
+            //                                                             &drawRenderTarget->getImageForWrite());
         }
         else
         {
@@ -1853,7 +1853,7 @@ angle::Result FramebufferVk::generateFragmentShadingRateWithCPU(
                                   mFragmentShadingRateImage.getImage(),
                                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy);
 
-    contextVk->trackImageWithOutsideRenderPassEvent(&mFragmentShadingRateImage);
+    //    contextVk->trackImageWithOutsideRenderPassEvent(&mFragmentShadingRateImage);
 
     return angle::Result::Continue;
 }
@@ -2027,7 +2027,8 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
         perfCounters.resolveImageCommands++;
         accessedImages.push_back(&dstImage);
     }
-    contextVk->trackImagesWithOutsideRenderPassEvent(accessedImages.data(), accessedImages.size());
+    //    contextVk->trackImagesWithOutsideRenderPassEvent(accessedImages.data(),
+    //    accessedImages.size());
 
     return angle::Result::Continue;
 }

@@ -2811,20 +2811,20 @@ angle::Result RenderPassCommandBufferHelper::endRenderPass(ContextVk *contextVk)
         if (mColorAttachments[index].getImage() != nullptr)
         {
             finalizeColorImageLayoutAndLoadStore(contextVk, index);
-            accessedImages.push_back(mColorAttachments[index].getImage());
+            //            accessedImages.push_back(mColorAttachments[index].getImage());
         }
         if (mColorResolveAttachments[index].getImage() != nullptr)
         {
             finalizeColorImageLayout(contextVk, mColorResolveAttachments[index].getImage(), index,
                                      true);
-            accessedImages.push_back(mColorResolveAttachments[index].getImage());
+            //            accessedImages.push_back(mColorResolveAttachments[index].getImage());
         }
     }
 
     if (mFragmentShadingRateAtachment.getImage() != nullptr)
     {
         finalizeFragmentShadingRateImageLayout(contextVk);
-        accessedImages.push_back(mFragmentShadingRateAtachment.getImage());
+        //        accessedImages.push_back(mFragmentShadingRateAtachment.getImage());
     }
 
     if (mDepthStencilAttachmentIndex != kAttachmentIndexInvalid)
@@ -2835,12 +2835,12 @@ angle::Result RenderPassCommandBufferHelper::endRenderPass(ContextVk *contextVk)
         if (mDepthAttachment.getImage() != nullptr)
         {
             finalizeDepthStencilImageLayoutAndLoadStore(contextVk);
-            accessedImages.push_back(mDepthAttachment.getImage());
+            //            accessedImages.push_back(mDepthAttachment.getImage());
         }
         if (mDepthResolveAttachment.getImage() != nullptr)
         {
             finalizeDepthStencilResolveImageLayout(contextVk);
-            accessedImages.push_back(mDepthResolveAttachment.getImage());
+            //            accessedImages.push_back(mDepthResolveAttachment.getImage());
         }
     }
 
@@ -7902,7 +7902,7 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         ANGLE_VK_CHECK(contextVk, false, VK_ERROR_FEATURE_NOT_PRESENT);
     }
 
-    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, dstImage);
+    //    contextVk->trackImagesWithOutsideRenderPassEvent(srcImage, dstImage);
 
     return angle::Result::Continue;
 }
@@ -9806,11 +9806,11 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
         *levelUpdates = std::move(updatesToKeep);
     }
 
-    if (commandBuffer != nullptr)
-    {
-        // Track completion of this copy operation.
-        contextVk->trackImageWithOutsideRenderPassEvent(this);
-    }
+    /*    if (commandBuffer != nullptr)
+        {
+            // Track completion of this copy operation.
+            contextVk->trackImageWithOutsideRenderPassEvent(this);
+        }*/
 
     return angle::Result::Continue;
 }
@@ -10330,7 +10330,7 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
     commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(renderer), bufferHandle, regionCount,
                                      &regions);
     // Track completion of this copy.
-    contextVk->trackImageWithOutsideRenderPassEvent(this);
+    //    contextVk->trackImageWithOutsideRenderPassEvent(this);
 
     return angle::Result::Continue;
 }
@@ -10954,14 +10954,14 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
 
             copyCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(renderer),
                                                  packBuffer.getBuffer().getHandle(), 1, &region);
-            contextVk->trackImageWithOutsideRenderPassEvent(this);
+            //            contextVk->trackImageWithOutsideRenderPassEvent(this);
             return angle::Result::Continue;
         }
         if (canCopyWithComputeForReadPixels(packPixelsParams, readFormat, pixelsOffset))
         {
             ANGLE_TRY(readPixelsWithCompute(contextVk, src, packPixelsParams, srcOffset, srcExtent,
                                             pixelsOffset, srcSubresource));
-            contextVk->trackImageWithOutsideRenderPassEvent(this);
+            //            contextVk->trackImageWithOutsideRenderPassEvent(this);
             return angle::Result::Continue;
         }
     }
