@@ -6,6 +6,7 @@
 
 #include "compiler/translator/wgsl/TranslatorWGSL.h"
 
+#include "GLES2/gl2.h"
 #include "GLSLANG/ShaderLang.h"
 #include "common/log_utils.h"
 #include "compiler/translator/BaseTypes.h"
@@ -18,14 +19,16 @@
 #include "compiler/translator/SymbolUniqueId.h"
 #include "compiler/translator/Types.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
+#include "compiler/translator/tree_util/RunAtTheEndOfShader.h"
+#include "compiler/translator/wgsl/RewriteBuiltinVariables.h"
 
 namespace sh
 {
 namespace
 {
 
-constexpr bool kOutputTreeBeforeTranslation = false;
-constexpr bool kOutputTranslatedShader      = false;
+constexpr bool kOutputTreeBeforeTranslation = true;
+constexpr bool kOutputTranslatedShader      = true;
 
 struct VarDecl
 {
@@ -90,7 +93,7 @@ bool NewlinePad(TIntermNode &node)
 class OutputWGSLTraverser : public TIntermTraverser
 {
   public:
-    OutputWGSLTraverser(TCompiler *compiler);
+    OutputWGSLTraverser(TCompiler *compiler, BuiltinAnnotationsMap builtinAnnotations);
     ~OutputWGSLTraverser() override;
 
   protected:
@@ -119,6 +122,8 @@ class OutputWGSLTraverser : public TIntermTraverser
     {
         bool isParameter            = false;
         bool disableStructSpecifier = false;
+        bool needsVar               = false;
+        bool isGlobalScope          = false;
     };
 
     void groupedTraverse(TIntermNode &node);
@@ -151,13 +156,21 @@ class OutputWGSLTraverser : public TIntermTraverser
     bool emulateDoWhileLoop(TIntermLoop *);
 
     TInfoSinkBase &mSink;
+    const TCompiler &mCompiler;
+
+    BuiltinAnnotationsMap mBuiltinAnnotations;
+    bool mIsInMain = false;
 
     int mIndentLevel        = -1;
     int mLastIndentationPos = -1;
 };
 
-OutputWGSLTraverser::OutputWGSLTraverser(TCompiler *compiler)
-    : TIntermTraverser(true, false, false), mSink(compiler->getInfoSink().obj)
+OutputWGSLTraverser::OutputWGSLTraverser(TCompiler *compiler,
+                                         BuiltinAnnotationsMap builtinAnnotations)
+    : TIntermTraverser(true, false, false),
+      mSink(compiler->getInfoSink().obj),
+      mCompiler(*compiler),
+      mBuiltinAnnotations(std::move(builtinAnnotations))
 {}
 
 OutputWGSLTraverser::~OutputWGSLTraverser() = default;
@@ -198,18 +211,16 @@ void OutputWGSLTraverser::emitNameOf(SymbolType symbolType, const ImmutableStrin
     switch (symbolType)
     {
         case SymbolType::BuiltIn:
-        {
             mSink << name;
-        }
-        break;
+            break;
         case SymbolType::UserDefined:
-        {
             mSink << kUserDefinedNamePrefix << name;
-        }
-        break;
+            break;
         case SymbolType::AngleInternal:
+            mSink << name;
+            break;
         case SymbolType::Empty:
-            // TODO(anglebug.com/42267100): support these if necessary
+            // TODO(anglebug.com/42267100): support this if necessary
             UNREACHABLE();
     }
 }
@@ -1226,8 +1237,11 @@ void OutputWGSLTraverser::emitFunctionReturn(const TFunction &func)
 // (https://github.com/gpuweb/gpuweb/issues/876).
 void OutputWGSLTraverser::emitFunctionSignature(const TFunction &func)
 {
-    // TODO(anglebug.com/42267100): main functions should be renamed and labeled with @vertex or
-    // @fragment.
+    // The function signature of main() is handled specially as it needs to be modified in ways that
+    // are not compatible with GLSL.
+    ASSERT(!func.isMain());
+    ASSERT(!mIsInMain);
+
     mSink << "fn ";
 
     emitNameOf(func);
@@ -1266,6 +1280,7 @@ void OutputWGSLTraverser::visitFunctionPrototype(TIntermFunctionPrototype *funcP
     const TFunction &func = *funcProtoNode->getFunction();
 
     emitIndentation();
+    // TODO XXX special case for main????
     emitFunctionSignature(func);
 }
 
@@ -1273,10 +1288,51 @@ bool OutputWGSLTraverser::visitFunctionDefinition(Visit, TIntermFunctionDefiniti
 {
     const TFunction &func = *funcDefNode->getFunction();
     TIntermBlock &body    = *funcDefNode->getBody();
-    emitIndentation();
-    emitFunctionSignature(func);
+
+    mIsInMain = func.isMain();
+    if (mIsInMain)
+    {
+        // Main function needs parameters and return values that are not present in the GLSL AST,
+        // and needs to be annotated as a vertex or fragment main function.
+        emitIndentation();
+        if (mCompiler.getShaderType() == GL_VERTEX_SHADER)
+        {
+            mSink << "@vertex\n";
+        }
+        else
+        {
+            ASSERT(mCompiler.getShaderType() == GL_FRAGMENT_SHADER);
+            mSink << "@fragment\n";
+        }
+        emitIndentation();
+        mSink << "fn main(" << kBuiltinInputStructName << "_temp : " << kBuiltinInputStructType
+              << ") -> " << kBuiltinOutputStructType << " {\n";
+        emitOpenBrace();
+        // Need to assign the input to a global so it can be accessed anywhere.
+        emitIndentation();
+        mSink << kBuiltinInputStructName << " = " << kBuiltinInputStructName << "_temp;";
+        // The rest of main will be emitted in a new block. Users of this traverser should ensure
+        // that this block contains no return statements, otherwise they will be emitted without a
+        // return value which will fail WGSL compilation.
+    }
+    else
+    {
+        emitIndentation();
+        emitFunctionSignature(func);
+    }
     mSink << "\n";
     body.traverse(this);
+
+    if (mIsInMain)
+    {
+        // Make sure main returns the output struct.
+        mSink << "\n";
+        emitIndentation();
+        mSink << "return " << kBuiltinOutputStructName << ";\n";
+        emitCloseBrace();
+        mIsInMain = false;
+    }
+
     return false;
 }
 
@@ -1477,6 +1533,11 @@ void OutputWGSLTraverser::emitStructDeclaration(const TType &type)
         // TODO(anglebug.com/42267100): emit qualifiers.
         EmitVariableDeclarationConfig evdConfig;
         evdConfig.disableStructSpecifier = true;
+        auto builtinAnnotation           = mBuiltinAnnotations.find(field);
+        if (builtinAnnotation != mBuiltinAnnotations.end())
+        {
+            mSink << "@builtin(" << builtinAnnotation->second << ") ";
+        }
         emitVariableDeclaration({field->symbolType(), field->name(), *field->type()}, evdConfig);
         mSink << ",\n";
     }
@@ -1509,6 +1570,27 @@ void OutputWGSLTraverser::emitVariableDeclaration(const VarDecl &decl,
     ASSERT(basicType == TBasicType::EbtStruct || decl.symbolType != SymbolType::Empty ||
            evdConfig.isParameter);
 
+    if (evdConfig.needsVar)
+    {
+        // "const" and "let" probably don't need to be ever emitted because they are more for
+        // readability, and the GLSL compiler constant folds most (all?) the consts anyway.
+        mSink << "var";
+        // TODO(anglebug.com/42267100): <workgroup> or <storage>?
+        if (decl.type.getQualifier() == EvqUniform)
+        {
+            mSink << "<uniform>";
+        }
+        else if (evdConfig.isGlobalScope)
+        {
+            mSink << "<private>";
+        }
+        mSink << " ";
+    }
+    else
+    {
+        ASSERT(!evdConfig.isGlobalScope);
+    }
+
     if (decl.symbolType != SymbolType::Empty)
     {
         emitNameOf(decl);
@@ -1523,9 +1605,9 @@ bool OutputWGSLTraverser::visitDeclaration(Visit, TIntermDeclaration *declNode)
     TIntermNode &node = *declNode->getChildNode(0);
 
     EmitVariableDeclarationConfig evdConfig;
+    evdConfig.needsVar      = true;
+    evdConfig.isGlobalScope = mIndentLevel == 0;
 
-    // TODO(anglebug.com/42267100): emit let or var for function-local variables. (GLSL const or
-    // default).
     if (TIntermSymbol *symbolNode = node.getAsSymbolNode())
     {
         const TVariable &var = symbolNode->variable();
@@ -1673,6 +1755,7 @@ bool OutputWGSLTraverser::visitBranch(Visit, TIntermBranch *branchNode)
         case TOperator::EOpReturn:
         {
             mSink << "return";
+            ASSERT(!mIsInMain);
             if (exprNode)
             {
                 mSink << " ";
@@ -1858,48 +1941,63 @@ bool TranslatorWGSL::translate(TIntermBlock *root,
         std::cout << getInfoSink().info.c_str();
     }
 
+    // WGSL's main() will need to take parameters or return values if any glsl (input/output)
+    // builtin variables are used.
+    BuiltinAnnotationsMap builtinAnnotations;
+    if (!PartiallyRewriteBuiltinVariables(*this, *root, builtinAnnotations))
+    {
+        return false;
+    }
+
+    // Main should always only return at the end of the function to ensure that the
+    // output struct added above is always returned.
+    if (!RunAtTheEndOfShader(this, root, nullptr, &getSymbolTable()))
+    {
+        return false;
+    }
+
     // TODO(anglebug.com/42267100): until the translator is ready to translate most basic shaders,
     // emit the code commented out.
-    TInfoSinkBase &sink = getInfoSink().obj;
-    sink << "/*\n";
-    OutputWGSLTraverser traverser(this);
+    // TInfoSinkBase &sink = getInfoSink().obj;
+    // sink << "/*\n";
+    OutputWGSLTraverser traverser(this, std::move(builtinAnnotations));
     root->traverse(&traverser);
-    sink << "*/\n";
+    // sink << "*/\n";
 
     if (kOutputTranslatedShader)
     {
         std::cout << getInfoSink().obj.str();
     }
-    // TODO(anglebug.com/42267100): delete this.
-    if (getShaderType() == GL_VERTEX_SHADER)
-    {
-        constexpr const char *kVertexShader = R"(@vertex
-fn main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f
-{
-    const pos = array(
-        vec2( 0.0,  0.5),
-        vec2(-0.5, -0.5),
-        vec2( 0.5, -0.5)
-    );
+    //     // TODO(anglebug.com/42267100): delete this.
+    //     if (getShaderType() == GL_VERTEX_SHADER)
+    //     {
+    //         constexpr const char *kVertexShader = R"(@vertex
+    // fn main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f
+    // {
+    //     const pos = array(
+    //         vec2( 0.0,  0.5),
+    //         vec2(-0.5, -0.5),
+    //         vec2( 0.5, -0.5)
+    //     );
 
-    return vec4f(pos[vertex_index % 3], 0, 1);
-})";
-        sink << kVertexShader;
-    }
-    else if (getShaderType() == GL_FRAGMENT_SHADER)
-    {
-        constexpr const char *kFragmentShader = R"(@fragment
-fn main() -> @location(0) vec4f
-{
-    return vec4(1, 0, 0, 1);
-})";
-        sink << kFragmentShader;
-    }
-    else
-    {
-        UNREACHABLE();
-        return false;
-    }
+    //     return vec4f(pos[vertex_index % 3], 0, 1);
+    // })";
+    //         sink << kVertexShader;
+    //     }
+    //     else if (getShaderType() == GL_FRAGMENT_SHADER)
+    //     {
+    //         constexpr const char *kFragmentShader = R"(@fragment
+    // fn main() -> @location(0) vec4f
+    // {
+    //     return vec4(1, 0, 0, 1);
+    // })";
+    //         sink << kFragmentShader;
+    //     }
+    //     else
+    //     {
+    //         UNREACHABLE();
+    //         return false;
+    //     }
 
     return true;
 }
