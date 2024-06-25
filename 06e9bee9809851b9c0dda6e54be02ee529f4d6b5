@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62ee5489_a8ced638",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-25T18:43:03Z",
+      "side": 1,
+      "message": "Big chunk of code here, use a helper maybe?",
+      "revId": "06e9bee9809851b9c0dda6e54be02ee529f4d6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
