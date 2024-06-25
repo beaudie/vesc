@@ -598,6 +598,7 @@ class TIntermAggregateBase
     virtual const TIntermSequence *getSequence() const = 0;
 
     bool replaceChildNodeWithMultiple(TIntermNode *original, const TIntermSequence &replacements);
+    bool deleteNodes(const TUnorderedSet<TIntermNode *> nodes);
     bool insertChildNodes(TIntermSequence::size_type position, const TIntermSequence &insertions);
 
   protected:

@@ -176,6 +176,22 @@ TIntermBinary &AccessField(const TVariable &structVarTVariable, const ImmutableS
     return AccessFieldByIndex(structVarSymbol, -1);
 }
 
+using GlobalVars = TMap<ImmutableString, TIntermDeclaration *>;
+
+GlobalVars FindGlobalVars(TIntermBlock &root)
+{
+    GlobalVars globals;
+    for (TIntermNode *node : *root.getSequence())
+    {
+        if (TIntermDeclaration *declNode = node->getAsDeclarationNode())
+        {
+            Declaration decl = ViewDeclaration(*declNode);
+            globals.insert({decl.symbol.variable().name(), declNode});
+        }
+    }
+    return globals;
+}
+
 // Records information about a ShaderVariable and how it should be annotated when it is inserted
 // into a pipeline (input/output) struct.
 struct AddToPipelineStruct
@@ -186,22 +202,24 @@ struct AddToPipelineStruct
     const TVariable *var;
 };
 
-// Given a list of `shaderVars` (as well as `compiler`), computes the fields that should appear in
-// the input/output pipeline structs and the annotations that should appear in the WGSL source.
+// Given a list of `shaderVars` (as well as `compiler` and a list of global variables in the GLSL
+// source, `globalVars`), computes the fields that should appear in the input/output pipeline
+// structs and the annotations that should appear in the WGSL source.
 //
 // `addToPipelineStruct` will be filled with AddToPipelineStruct entries that map a shaderVar from
 // `shaderVars` to the appropriate pipeline annotation (either @builtin(wgslBuiltinName) or
 // @location(...)), a new name when the shaderVar is stored into the appropriate pipeline struct,
-// and the TVariable `var` that corresponds to the shaderVar.
+// and the TVariable `var` that corresponds to the shaderVar. If shaderVar is user defined, its
+// declaration can be deleted once the variable is moved into the pipeline struct.
+// `varDeclsToDelete` records those declarations.
 //
 // Finally, `debugString` should describe `shaderVars` (e.g. "input varyings"), and `ioType`
 // indicates whether `shaderVars` is meant to be an input or output variable, which is useful for
 // debugging asserts.
-//
-// TODO(anglebug.com/42267100): for now this only deals with builtins, and not user-defined
-// inputs/outputs.
 [[nodiscard]] bool PrepareToFillPipelineStructs(const std::vector<ShaderVariable> &shaderVars,
                                                 TVector<AddToPipelineStruct> *addToPipelineStruct,
+                                                TUnorderedSet<TIntermNode *> *varDeclsToDelete,
+                                                const GlobalVars &globalVars,
                                                 TCompiler &compiler,
                                                 IOType ioType,
                                                 std::string debugString)
@@ -257,6 +275,22 @@ struct AddToPipelineStruct
 
             addToPipelineStruct->push_back(addToPipeline);
         }
+        else
+        {
+            TIntermDeclaration *declNode = globalVars.find(shaderVar.name)->second;
+            const TVariable *astVar      = &ViewDeclaration(*declNode).symbol.variable();
+            bool foundNewVarDecl         = varDeclsToDelete->insert(declNode).second;
+            if (!foundNewVarDecl)
+            {
+                // This should not occur.
+                return false;
+            }
+
+            AddToPipelineStruct addToPipeline{shaderVar, LocationAnnotation(), shaderVar.name,
+                                              astVar};
+
+            addToPipelineStruct->push_back(addToPipeline);
+        }
     }
 
     return true;
@@ -298,19 +332,26 @@ bool PartiallyRewritePipelineVariables(TCompiler &compiler,
 {
     // Track all of the uses of GLSL's input/output variables so we can add them all to input/output
     // pipeline structs for WGSL's main function to understand.
-    // TODO(anglebug.com/42267100): for now this only deals with builtins, and not user-defined
-    // inputs/outputs.
     TVector<AddToPipelineStruct> addToInputStruct;
     TVector<AddToPipelineStruct> addToOutputStruct;
 
-    if (!PrepareToFillPipelineStructs(compiler.getInputVaryings(), &addToInputStruct, compiler,
-                                      IOType::Input, "input varyings") ||
-        !PrepareToFillPipelineStructs(compiler.getAttributes(), &addToInputStruct, compiler,
-                                      IOType::Input, "input attributes") ||
-        !PrepareToFillPipelineStructs(compiler.getOutputVaryings(), &addToOutputStruct, compiler,
-                                      IOType::Output, "output varyings") ||
-        !PrepareToFillPipelineStructs(compiler.getOutputVariables(), &addToOutputStruct, compiler,
-                                      IOType::Output, "output variables"))
+    // Global variable declarations can be deleted once they are moved into the pipeline structs.
+    TUnorderedSet<TIntermNode *> varDeclsToDelete;
+
+    GlobalVars globalVars = FindGlobalVars(root);
+
+    if (!PrepareToFillPipelineStructs(compiler.getInputVaryings(), &addToInputStruct,
+                                      &varDeclsToDelete, globalVars, compiler, IOType::Input,
+                                      "input varyings") ||
+        !PrepareToFillPipelineStructs(compiler.getAttributes(), &addToInputStruct,
+                                      &varDeclsToDelete, globalVars, compiler, IOType::Input,
+                                      "input attributes") ||
+        !PrepareToFillPipelineStructs(compiler.getOutputVaryings(), &addToOutputStruct,
+                                      &varDeclsToDelete, globalVars, compiler, IOType::Output,
+                                      "output varyings") ||
+        !PrepareToFillPipelineStructs(compiler.getOutputVariables(), &addToOutputStruct,
+                                      &varDeclsToDelete, globalVars, compiler, IOType::Output,
+                                      "output variables"))
     {
         return false;
     }
@@ -383,6 +424,12 @@ bool PartiallyRewritePipelineVariables(TCompiler &compiler,
         root.insertStatement(1, &inputVariableDeclarationAstDecl);
         *needsInputStructOut = true;
     }
+
+    // The declarations are no longer needed, so delete them. This probably wouldn't pass AST
+    // validation because the variables they declare are still used in the AST, but the next step
+    // deletes all references to those variables anyway.
+    bool deletedAllDecls = root.deleteNodes(varDeclsToDelete);
+    ASSERT(deletedAllDecls);
 
     // Finally, replace the variable accesses with field accesses.
     if (!ReplaceVariables(&compiler, &root, variableReplacementMap))
