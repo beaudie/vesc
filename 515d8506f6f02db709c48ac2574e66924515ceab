@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "049f0c18_3630d852",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4490,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-25T16:58:06Z",
+      "side": 1,
+      "message": "nit: Maybe a static_assert that EGL_CONTEXT_CLIENT_VERSION \u003d\u003d EGL_CONTEXT_MAJOR_VERSION",
+      "revId": "515d8506f6f02db709c48ac2574e66924515ceab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
