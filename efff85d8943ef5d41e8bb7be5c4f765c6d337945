@@ -16,6 +16,24 @@
       "message": "```suggestion\n    // MSRTSS is disabled if the driver does not support it for RGBA8 and RGBA8_SRGB.\n    // This is used to filter out known drivers where support for sRGB formats are missing.\n```",
       "revId": "efff85d8943ef5d41e8bb7be5c4f765c6d337945",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4e3cf8c_a8d572a3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4480,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-25T17:14:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9912bebe_04b0f587",
+      "revId": "efff85d8943ef5d41e8bb7be5c4f765c6d337945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
