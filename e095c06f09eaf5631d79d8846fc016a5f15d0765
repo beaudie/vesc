@@ -16,6 +16,24 @@
       "message": "Looks like D/S doesn\u0027t support MSRTSS?! That\u0027s not good. @abdolrashidi@google.com could you please take a look at what format this is failing for? The codepath always checks two formats, but D/S doesn\u0027t have a second compatible format, so it may just be our own bug.",
       "revId": "e095c06f09eaf5631d79d8846fc016a5f15d0765",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec577e35_b4152296",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-25T03:48:07Z",
+      "side": 1,
+      "message": "Just saw the fix, thank you for taking the initiative 😊",
+      "parentUuid": "61dfe7e1_9afa6ce6",
+      "revId": "e095c06f09eaf5631d79d8846fc016a5f15d0765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
