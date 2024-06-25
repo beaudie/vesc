@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72f8167a_62131326",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3668,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-25T17:14:39Z",
+      "side": 1,
+      "message": "Thanks. Updated.",
+      "parentUuid": "78e5a751_f75758f3",
+      "range": {
+        "startLine": 3665,
+        "startChar": 0,
+        "endLine": 3668,
+        "endChar": 71
+      },
+      "revId": "6a389b4072fb73752f17d2fa746c28388b271f16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c7a9256_499d28c7",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-06-25T03:49:20Z",
       "side": 1,
       "message": "```suggestion\n        bool supportsMSRTTUsage \u003d\n            supportsMSRTTUsageActualFormat \u0026\u0026 supportsMSRTTUsageAdditionalFormat;\n```",
+      "range": {
+        "startLine": 3670,
+        "startChar": 0,
+        "endLine": 3671,
+        "endChar": 99
+      },
+      "revId": "6a389b4072fb73752f17d2fa746c28388b271f16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d42124cd_493f5d53",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3671,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-25T17:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c7a9256_499d28c7",
       "range": {
         "startLine": 3670,
         "startChar": 0,
