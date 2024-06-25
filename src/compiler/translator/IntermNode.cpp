@@ -18,6 +18,7 @@
 #include "common/mathutil.h"
 #include "common/matrix_utils.h"
 #include "common/utilities.h"
+#include "compiler/translator/Common.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/IntermNode.h"
@@ -550,6 +551,16 @@ bool TIntermAggregateBase::replaceChildNodeWithMultiple(TIntermNode *original,
         }
     }
     return false;
+}
+
+bool TIntermAggregateBase::deleteNodes(TUnorderedSet<TIntermNode *> nodes)
+{
+    auto newEndIterator =
+        std::remove_if(getSequence()->begin(), getSequence()->end(),
+                       [&nodes](TIntermNode *node) { return nodes.count(node) != 0; });
+    size_t numNodesDeleted = std::distance(newEndIterator, getSequence()->end());
+    getSequence()->erase(newEndIterator, getSequence()->end());
+    return numNodesDeleted == nodes.size();
 }
 
 bool TIntermAggregateBase::insertChildNodes(TIntermSequence::size_type position,
