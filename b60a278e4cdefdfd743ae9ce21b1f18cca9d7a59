@@ -140,6 +140,30 @@
       },
       "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aba08dc_93998e74",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-25T20:46:01Z",
+      "side": 1,
+      "message": "You\u0027d mentioned having a look at the runtime of end2end tests on some configs w/ and w/o this change, so I was trying to include that info.",
+      "parentUuid": "eeb00213_082e48b6",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1836,
+        "endChar": 85
+      },
+      "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
