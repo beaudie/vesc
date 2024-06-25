@@ -295,6 +295,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3fb37e9_2d17e25e",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-06-25T22:14:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc3b2695_5a6a7884",
+      "range": {
+        "startLine": 161,
+        "startChar": 19,
+        "endLine": 161,
+        "endChar": 37
+      },
+      "revId": "9eff68d0c1201fefeb6bd85e36e142e7506c7f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f30cdce1_3a74e075",
