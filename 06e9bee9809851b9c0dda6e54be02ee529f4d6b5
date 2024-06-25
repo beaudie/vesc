@@ -3,6 +3,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "940d8552_7b25b202",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-25T20:33:45Z",
+      "side": 1,
+      "message": "Looks like old names",
+      "range": {
+        "startLine": 780,
+        "startChar": 7,
+        "endLine": 780,
+        "endChar": 21
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "8c56c70c_dc4d6954",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+              "range": {
+                "startLine": 780,
+                "startChar": 0,
+                "endLine": 782,
+                "endChar": 0
+              },
+              "replacement": "#undef BITCAST_SCALAR\n#undef BITCAST_VECTOR\n"
+            }
+          ]
+        }
+      ],
+      "revId": "06e9bee9809851b9c0dda6e54be02ee529f4d6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62ee5489_a8ced638",
         "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
         "patchSetId": 4
