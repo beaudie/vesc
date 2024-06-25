@@ -92,6 +92,30 @@
       },
       "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5faa2ed7_5f1089bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-25T20:32:24Z",
+      "side": 1,
+      "message": "Size difference for `libGLESv2.so` (on Linux) was +360 bytes while on Android they are the same size.  Api dump gets triggered by setting the ANGLE `enable_vulkan_api_dump_layer` android property or desktop environment variable. If this is set (and some other circumstances are met) the layer name is added to `enabledInstanceLayerNames` which is passed in as part of the `VKInstanceCreateInfo`. So the run-time difference between it being enabled and not enabled is a couple of if checks.  It is not even available on release builds unless the GN arg is set to true.\n\nPretty sure I\u0027m running the E2E tests wrong in order to get perf numbers as my times were all over the place -- are there some recommended args for this?",
+      "parentUuid": "38f3a477_1566f28f",
+      "range": {
+        "startLine": 1836,
+        "startChar": 0,
+        "endLine": 1836,
+        "endChar": 85
+      },
+      "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
