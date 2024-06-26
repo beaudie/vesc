@@ -224,13 +224,6 @@ class RefCountedEventsGarbage final
     // Move event to the garbage list
     void add(RefCountedEvent &&event) { mRefCountedEvents.emplace_back(std::move(event)); }
 
-    // Move the vector of events to the garbage list
-    void add(RefCountedEventCollector &&events)
-    {
-        mRefCountedEvents.insert(mRefCountedEvents.end(), events.begin(), events.end());
-        ASSERT(events.empty());
-    }
-
     // Make a copy of event (which adds another refcount to the VkEvent) and add the copied event to
     // the garbages
     void add(const RefCountedEvent &event)
