@@ -34,6 +34,24 @@
       "parentUuid": "580357b3_7686e209",
       "revId": "0ccc018e8f4a7b61c2dd3611a064bb2dc3136663",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9360e558_6a9de9e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-26T14:39:57Z",
+      "side": 1,
+      "message": "I\u0027d prefer to suppress the test failures in Chromium. They are already suppressed for non-ANGLE.",
+      "parentUuid": "4af748a1_9fa5a227",
+      "revId": "0ccc018e8f4a7b61c2dd3611a064bb2dc3136663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
