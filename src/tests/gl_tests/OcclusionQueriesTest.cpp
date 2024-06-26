@@ -41,6 +41,9 @@ class OcclusionQueriesTest : public ANGLETest<>
 class OcclusionQueriesTestES3 : public OcclusionQueriesTest
 {};
 
+class OcclusionQueriesTestES31 : public OcclusionQueriesTestES3
+{};
+
 TEST_P(OcclusionQueriesTest, IsOccluded)
 {
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 &&
@@ -338,6 +341,72 @@ TEST_P(OcclusionQueriesTestES3, UnresolveNotCounted)
     EXPECT_GL_NO_ERROR();
 
     EXPECT_GL_FALSE(result);
+}
+
+// simplified from
+// dEQP-GLES31.functional.fbo.no_attachments.interaction.127x127ms0_default_129x129ms0:
+TEST_P(OcclusionQueriesTestES31, NoAttachmentTest)
+{
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+    glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 127);
+    glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 127);
+    glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 0);
+
+    GLRenderbuffer renderbuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 0, GL_RGBA8, 129, 129);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
+
+    const char *vertSrc = R"(#version 310 es
+        in layout(location = 0) highp vec2 a_position;
+        void main()
+        {
+            gl_Position = vec4(a_position, 0.0, 1.0);
+        }
+    )";
+
+    const char *fragSrc = R"(#version 310 es
+        uniform layout(location = 0) highp ivec2 u_expectedSize;
+        out layout(location = 0) mediump vec4 f_color;
+        void main()
+        {
+            if (ivec2(gl_FragCoord.xy) != u_expectedSize) discard;
+            f_color = vec4(1.0, 0.5, 0.25, 1.0);
+        }
+    )";
+
+    ANGLE_GL_PROGRAM(program, vertSrc, fragSrc);
+    glUseProgram(program);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+    glViewport(0, 0, 129 * 2, 129 * 2);
+
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    GLQuery query;
+    GLVertexArray vertexArray;
+    GLBuffer vertexBuffer;
+
+    const float data[] = {
+        1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f,
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, nullptr);
+
+    glUniform2i(0, 129, 129 - 1);
+    glBeginQuery(GL_ANY_SAMPLES_PASSED, query);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glEndQuery(GL_ANY_SAMPLES_PASSED);
+    GLuint outsideXPassed;
+    glGetQueryObjectuiv(query, GL_QUERY_RESULT, &outsideXPassed);
+
+    ASSERT(outsideXPassed == 0);
 }
 
 // Test that reusing a query should reset its value to zero if no draw calls are emitted in the
@@ -1070,6 +1139,7 @@ GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(OcclusionQueriesTestES3);
 ANGLE_INSTANTIATE_TEST_ES3_AND(
     OcclusionQueriesTestES3,
     ES3_VULKAN().enable(Feature::PreferSubmitOnAnySamplesPassedQueryEnd));
+ANGLE_INSTANTIATE_TEST_ES31_AND(OcclusionQueriesTestES31);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(OcclusionQueriesNoSurfaceTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(OcclusionQueriesNoSurfaceTestES3);
