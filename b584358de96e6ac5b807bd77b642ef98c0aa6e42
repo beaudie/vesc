@@ -1,0 +1,79 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd9b00ce_3124c312",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-26T21:04:33Z",
+      "side": 1,
+      "message": "Thanks Mark, I think it is a little cleaner with the updated names, although it doesn\u0027t fully eliminate the code complexity in Renderer::initialize.",
+      "revId": "b584358de96e6ac5b807bd77b642ef98c0aa6e42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "071b4ee9_8676d6cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-26T21:04:33Z",
+      "side": 1,
+      "message": "Can you add a couple comments stating that we purposefully require an env var for api_dump to become active.  This differs from validation, which is active without further interaction.  This code could reduce in complexity if we change validation to be inactive by default, but we don\u0027t intend to do that.\n\nWe also want to be careful that we don\u0027t require validation when running api_dump.",
+      "fixSuggestions": [
+        {
+          "fixId": "ba54198b_019c58eb",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+              "range": {
+                "startLine": 1798,
+                "startChar": 0,
+                "endLine": 1801,
+                "endChar": 0
+              },
+              "replacement": "        kEnableVulkanAPIDumpLayer \u0026\u0026\n        angle::GetEnvironmentVarOrAndroidProperty(\n            \"ANGLE_ENABLE_VULKAN_API_DUMP_LAYER\",\n            \"debug.angle.enable_vulkan_api_dump_layer\") \u003d\u003d \"1\";\n"
+            }
+          ]
+        }
+      ],
+      "revId": "b584358de96e6ac5b807bd77b642ef98c0aa6e42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "028b159f_4cbac25d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-26T21:04:33Z",
+      "side": 1,
+      "message": "Can we split this up something like this?\n```\nbool enableDebugLayers  \u003d scopedEnvironment(loadLayers, desiredICD);\n\nmEnableValidationLayers \u003d enableDebugLayers;\nenableApiDumpLayer      \u003d enableDebugLayers \u0026\u0026 enableApiDumpLayer;\n```",
+      "range": {
+        "startLine": 1804,
+        "startChar": 4,
+        "endLine": 1804,
+        "endChar": 27
+      },
+      "revId": "b584358de96e6ac5b807bd77b642ef98c0aa6e42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
