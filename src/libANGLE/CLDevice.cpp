@@ -8,6 +8,7 @@
 #include "libANGLE/CLDevice.h"
 
 #include "libANGLE/CLPlatform.h"
+#include "libANGLE/Error.h"
 #include "libANGLE/cl_utils.h"
 
 #include "common/string_utils.h"
@@ -414,6 +415,22 @@ bool Device::supportsImageDimensions(const ImageDescriptor &desc) const
             break;
     }
     return false;
+}
+
+bool Device::hasDeviceEnqueueCaps() const
+{
+    return mInfo.queueOnDeviceMaxSize > 0;
+}
+
+bool Device::supportsNonUniformWorkGroups() const
+{
+    cl_bool support = false;
+    if (IsError(
+            getInfo(DeviceInfo::NonUniformWorkGroupSupport, sizeof(cl_bool), &support, nullptr)))
+    {
+        return false;
+    }
+    return support;
 }
 
 Device::Device(Platform &platform,

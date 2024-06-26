@@ -14,6 +14,7 @@
 #include "libANGLE/CLImage.h"
 #include "libANGLE/CLKernel.h"
 #include "libANGLE/CLMemory.h"
+#include "libANGLE/cl_utils.h"
 
 #include <cstring>
 
@@ -83,6 +84,12 @@ angle::Result CommandQueue::getInfo(CommandQueueInfo name,
             copySize  = mPropArray.size() * sizeof(decltype(mPropArray)::value_type);
             break;
         case CommandQueueInfo::Size:
+            // CL_INVALID_COMMAND_QUEUE if command_queue is not a valid command-queue, or if
+            // command_queue is not a valid command-queue for param_name.
+            if (!mDevice->hasDeviceEnqueueCaps())
+            {
+                ANGLE_CL_RETURN_ERROR(CL_INVALID_COMMAND_QUEUE);
+            }
             copyValue = &mSize;
             copySize  = sizeof(mSize);
             break;
