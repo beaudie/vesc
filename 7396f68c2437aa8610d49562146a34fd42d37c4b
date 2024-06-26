@@ -1,0 +1,62 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2d68e7_0f87fe22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-26T20:35:24Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "7396f68c2437aa8610d49562146a34fd42d37c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01d3881c_7401590e",
+        "filename": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-06-26T20:35:24Z",
+      "side": 1,
+      "message": "micro nit: can remove this space. Can see it in the test case outputs.",
+      "range": {
+        "startLine": 1117,
+        "startChar": 22,
+        "endLine": 1117,
+        "endChar": 23
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "37b80caa_3cd2bbdd",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/compiler/translator/wgsl/TranslatorWGSL.cpp",
+              "range": {
+                "startLine": 1117,
+                "startChar": 0,
+                "endLine": 1118,
+                "endChar": 0
+              },
+              "replacement": "        mSink \u003c\u003c \"else\\n\";\n"
+            }
+          ]
+        }
+      ],
+      "revId": "7396f68c2437aa8610d49562146a34fd42d37c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
