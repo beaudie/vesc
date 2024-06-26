@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0c6e861_3db3e3bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3495535
+      },
+      "writtenOn": "2024-06-26T13:37:24Z",
+      "side": 1,
+      "message": "I\u0027d love to make a better description summary, but you have a limit of 64 chars for it.",
+      "parentUuid": "1bb91d3b_bb6bfb7f",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 54
+      },
+      "revId": "73d6612be716329f7cd592e7e2597d05da9b95f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da3f611d_be4d6821",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-25T16:56:46Z",
       "side": 1,
       "message": "Please check that the extension is present before letting this enum through. Just like in the `ValidateCreateImage` case will work: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/validationEGL.cpp;l\u003d3498-3505;drc\u003dd193d51bf88e2f5162672eff4c75b3bc3ada9ef6",
+      "range": {
+        "startLine": 3095,
+        "startChar": 0,
+        "endLine": 3096,
+        "endChar": 22
+      },
+      "revId": "73d6612be716329f7cd592e7e2597d05da9b95f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "298af650_98b984e9",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3096,
+      "author": {
+        "id": 3495535
+      },
+      "writtenOn": "2024-06-26T13:37:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da3f611d_be4d6821",
       "range": {
         "startLine": 3095,
         "startChar": 0,
