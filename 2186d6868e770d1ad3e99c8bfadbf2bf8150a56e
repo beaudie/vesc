@@ -88,6 +88,24 @@
       "parentUuid": "b669ad70_49821275",
       "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be9baaae_8ad514ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3474762
+      },
+      "writtenOn": "2024-06-26T14:07:11Z",
+      "side": 1,
+      "message": "I looked into this further, it seems ImageTest.ANGLEExtensionAvailability does not use the rest of the code in this patch at all; instead you have:\n\n```\n    bool hasPixmapExt() const\n    {\n        return IsEGLDisplayExtensionEnabled(getEGLWindow()-\u003egetDisplay(), kPixmapExt);\n    }\n```\n\nwhich calls the function in the test platform code:\n\n```\nbool IsEGLDisplayExtensionEnabled(EGLDisplay display, const std::string \u0026extName)\n{\n    return CheckExtensionExists(eglQueryString(display, EGL_EXTENSIONS), extName);\n}\n```\n\nThis directly parses the output of `eglQueryString`. When comparing the outputs to `eglinfo` output on my machine, the available extensions match the extensions for \"Wayland platform\", which makes sense and indeed does not have the pixmap extension. However, the pixmap extension is present in \"GBM platform\" as well as \"X11 platform\".",
+      "parentUuid": "e3773c93_99b0d025",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
