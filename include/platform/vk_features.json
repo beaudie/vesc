@@ -498,6 +498,14 @@
             "issue": "http://anglebug.com/42262476"
         },
         {
+            "name": "supports_primitive_topology_patch_list_restart",
+            "category": "Features",
+            "description": [
+                "VkDevice supports primitive topology patch list restart."
+            ],
+            "issue": "http://anglebug.com/349610458"
+        },
+        {
             "name": "supports_blend_operation_advanced",
             "category": "Features",
             "description": [

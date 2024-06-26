@@ -355,6 +355,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::SupportsPresentation, "supportsPresentation"},
     {Feature::SupportsPrimitivesGeneratedQuery, "supportsPrimitivesGeneratedQuery"},
     {Feature::SupportsPrimitiveTopologyListRestart, "supportsPrimitiveTopologyListRestart"},
+    {Feature::SupportsPrimitiveTopologyPatchListRestart, "supportsPrimitiveTopologyPatchListRestart"},
     {Feature::SupportsProtectedMemory, "supportsProtectedMemory"},
     {Feature::SupportsRasterizationOrderAttachmentAccess, "supportsRasterizationOrderAttachmentAccess"},
     {Feature::SupportsRenderpass2, "supportsRenderpass2"},

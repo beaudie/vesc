@@ -468,6 +468,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/42262476"
     };
 
+    FeatureInfo supportsPrimitiveTopologyPatchListRestart = {
+        "supportsPrimitiveTopologyPatchListRestart",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports primitive topology patch list restart.",
+        &members, "http://anglebug.com/349610458"
+    };
+
     FeatureInfo supportsBlendOperationAdvanced = {
         "supportsBlendOperationAdvanced",
         FeatureCategory::VulkanFeatures,

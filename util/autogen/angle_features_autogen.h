@@ -355,6 +355,7 @@ enum class Feature
     SupportsPresentation,
     SupportsPrimitivesGeneratedQuery,
     SupportsPrimitiveTopologyListRestart,
+    SupportsPrimitiveTopologyPatchListRestart,
     SupportsProtectedMemory,
     SupportsRasterizationOrderAttachmentAccess,
     SupportsRenderpass2,

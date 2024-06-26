@@ -4437,6 +4437,10 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
         mPrimitiveTopologyListRestartFeatures.primitiveTopologyListRestart == VK_TRUE);
 
     ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsPrimitiveTopologyPatchListRestart,
+        mPrimitiveTopologyListRestartFeatures.primitiveTopologyPatchListRestart == VK_TRUE);
+
+    ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsBlendOperationAdvanced,
         ExtensionFound(VK_EXT_BLEND_OPERATION_ADVANCED_EXTENSION_NAME, deviceExtensionNames));
 
