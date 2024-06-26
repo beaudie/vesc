@@ -24,10 +24,14 @@ ImageHelper::ImageHelper()
 
 ImageHelper::~ImageHelper() {}
 
-angle::Result ImageHelper::initImage(wgpu::Device &device,
+angle::Result ImageHelper::initImage(angle::FormatID intendedFormatID,
+                                     angle::FormatID actualFormatID,
+                                     wgpu::Device &device,
                                      gl::LevelIndex firstAllocatedLevel,
                                      wgpu::TextureDescriptor textureDescriptor)
 {
+    mIntendedFormatID    = intendedFormatID;
+    mActualFormatID      = actualFormatID;
     mTextureDescriptor   = textureDescriptor;
     mFirstAllocatedLevel = firstAllocatedLevel;
     mTexture             = device.CreateTexture(&mTextureDescriptor);
@@ -115,6 +119,8 @@ wgpu::TextureDescriptor ImageHelper::createTextureDescriptor(wgpu::TextureUsage 
 }
 
 angle::Result ImageHelper::stageTextureUpload(ContextWgpu *contextWgpu,
+                                              const webgpu::Format &webgpuFormat,
+                                              GLenum type,
                                               const gl::Extents &glExtents,
                                               GLuint inputRowPitch,
                                               GLuint inputDepthPitch,
@@ -134,7 +140,7 @@ angle::Result ImageHelper::stageTextureUpload(ContextWgpu *contextWgpu,
     BufferHelper bufferHelper;
     wgpu::BufferUsage usage = wgpu::BufferUsage::CopySrc | wgpu::BufferUsage::CopyDst;
     ANGLE_TRY(bufferHelper.initBuffer(device, allocationSize, usage, MapAtCreation::Yes));
-    LoadImageFunctionInfo loadFunctionInfo = {angle::LoadToNative<GLubyte, 4>, false};
+    LoadImageFunctionInfo loadFunctionInfo = webgpuFormat.getTextureLoadFunction(type);
     uint8_t *data                          = bufferHelper.getMapWritePointer(0, allocationSize);
     loadFunctionInfo.loadFunction(contextWgpu->getImageLoadContext(), glExtents.width,
                                   glExtents.height, glExtents.depth, pixels, inputRowPitch,

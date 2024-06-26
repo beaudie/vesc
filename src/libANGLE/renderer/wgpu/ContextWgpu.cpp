@@ -117,6 +117,7 @@ void ContextWgpu::onDestroy(const gl::Context *context)
 angle::Result ContextWgpu::initialize(const angle::ImageLoadContext &imageLoadContext)
 {
     mImageLoadContext = imageLoadContext;
+    mFormatTable.initialize();
     return angle::Result::Continue;
 }
 

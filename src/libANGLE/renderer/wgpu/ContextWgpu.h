@@ -15,6 +15,7 @@
 #include "image_util/loadimage.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/wgpu/DisplayWgpu.h"
+#include "libANGLE/renderer/wgpu/wgpu_format_utils.h"
 #include "libANGLE/renderer/wgpu/wgpu_utils.h"
 
 namespace rx
@@ -262,6 +263,10 @@ class ContextWgpu : public ContextImpl
     wgpu::Device &getDevice() { return mDisplay->getDevice(); }
     wgpu::Queue &getQueue() { return mDisplay->getQueue(); }
     angle::ImageLoadContext &getImageLoadContext() { return mImageLoadContext; }
+    const webgpu::Format &getFormat(GLenum internalFormat) const
+    {
+        return mFormatTable[internalFormat];
+    }
     angle::Result startRenderPass(const wgpu::RenderPassDescriptor &desc);
     angle::Result endRenderPass(webgpu::RenderPassClosureReason closure_reason);
 
@@ -282,6 +287,8 @@ class ContextWgpu : public ContextImpl
 
     wgpu::CommandEncoder mCurrentCommandEncoder;
     wgpu::RenderPassEncoder mCurrentRenderPass;
+
+    webgpu::FormatTable mFormatTable;
 };
 
 }  // namespace rx
