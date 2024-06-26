@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e60ab4b_acbf2fd2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1808,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-26T02:49:56Z",
+      "side": 1,
+      "message": "I\u0027ll give it a go in the morning and see if anything comes up.",
+      "parentUuid": "08f8aa03_99600ce3",
+      "range": {
+        "startLine": 1804,
+        "startChar": 0,
+        "endLine": 1808,
+        "endChar": 59
+      },
+      "revId": "b60a278e4cdefdfd743ae9ce21b1f18cca9d7a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8b91d68_fdc76d46",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 2
