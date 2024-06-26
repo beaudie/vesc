@@ -16,6 +16,24 @@
       "message": "This change is suspected for causing\nhttps://ci.chromium.org/ui/p/chromium/builders/ci/Android%20FYI%20Release%20(Pixel%204)/51214/overview",
       "revId": "0ccc018e8f4a7b61c2dd3611a064bb2dc3136663",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4af748a1_9fa5a227",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-26T14:35:35Z",
+      "side": 1,
+      "message": "Revert of ANGLE in Chromium is up:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/5656378",
+      "parentUuid": "580357b3_7686e209",
+      "revId": "0ccc018e8f4a7b61c2dd3611a064bb2dc3136663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
