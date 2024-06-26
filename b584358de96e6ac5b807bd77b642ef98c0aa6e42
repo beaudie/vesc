@@ -74,6 +74,30 @@
       },
       "revId": "b584358de96e6ac5b807bd77b642ef98c0aa6e42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa88d485_3701d37b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-26T23:13:11Z",
+      "side": 1,
+      "message": "Mark pointed out `scopedEnvironment` doesn\u0027t return a bool, and I\u0027m not suggesting we make it do that.  Just trying to eliminate a duplicate function call and make the code easier to read.",
+      "parentUuid": "028b159f_4cbac25d",
+      "range": {
+        "startLine": 1804,
+        "startChar": 4,
+        "endLine": 1804,
+        "endChar": 27
+      },
+      "revId": "b584358de96e6ac5b807bd77b642ef98c0aa6e42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
