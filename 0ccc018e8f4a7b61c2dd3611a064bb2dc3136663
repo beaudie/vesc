@@ -52,6 +52,24 @@
       "parentUuid": "4af748a1_9fa5a227",
       "revId": "0ccc018e8f4a7b61c2dd3611a064bb2dc3136663",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d96dda15_b324ea06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-26T14:42:51Z",
+      "side": 1,
+      "message": "Ack.\n\n+Mateusz who owns the revert",
+      "parentUuid": "9360e558_6a9de9e6",
+      "revId": "0ccc018e8f4a7b61c2dd3611a064bb2dc3136663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
