@@ -70,6 +70,24 @@
       "parentUuid": "9360e558_6a9de9e6",
       "revId": "0ccc018e8f4a7b61c2dd3611a064bb2dc3136663",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f67c6e7e_156c8aa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-06-26T14:59:28Z",
+      "side": 1,
+      "message": "Okay, just realized the suppressions are in ANGLE\u0027s tree, not some separate Chromium thing.\n\nI\u0027ll update the suppressions added in this CL to extend to ANGLE too:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5415796",
+      "parentUuid": "d96dda15_b324ea06",
+      "revId": "0ccc018e8f4a7b61c2dd3611a064bb2dc3136663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
