@@ -360,7 +360,7 @@ PrivateState::PrivateState(const EGLenum clientType,
       mFarZ(0),
       mProvokingVertex(gl::ProvokingVertexConvention::LastVertexConvention),
       mActiveSampler(0),
-      mPrimitiveRestart(false),
+      mPrimitiveRestart(true),
       mMultiSampling(false),
       mSampleAlphaToOne(false),
       mFramebufferSRGB(true),
@@ -462,7 +462,7 @@ void PrivateState::initialize(Context *context)
     // glEnable() or glDisable() with the symbolic constant GL_BLEND_ADVANCED_COHERENT_KHR.
     mBlendAdvancedCoherent = context->getExtensions().blendEquationAdvancedCoherentKHR;
 
-    mPrimitiveRestart = false;
+    mPrimitiveRestart = true;
 
     mNoSimultaneousConstantColorAndAlphaBlendFunc =
         context->getLimitations().noSimultaneousConstantColorAndAlphaBlendFunc ||
@@ -550,7 +550,7 @@ void PrivateState::setPrimitiveRestart(bool enabled)
 {
     if (mPrimitiveRestart != enabled)
     {
-        mPrimitiveRestart = enabled;
+        mPrimitiveRestart = true;
         mDirtyBits.set(state::DIRTY_BIT_PRIMITIVE_RESTART_ENABLED);
     }
 }
