@@ -1887,6 +1887,7 @@ void OutsideRenderPassCommandBufferHelper::retainImage(ImageHelper *image)
     // We want explicit control on when VkEvent is used for outsideRPCommands to minimize the
     // overhead, so do not setEvent here.
     image->setQueueSerial(mQueueSerial);
+    image->updatePipelineStageAccessHistory();
 }
 
 void OutsideRenderPassCommandBufferHelper::trackImageWithEvent(Context *context, ImageHelper *image)
@@ -2263,6 +2264,7 @@ void RenderPassCommandBufferHelper::fragmentShadingRateImageRead(ImageHelper *im
 void RenderPassCommandBufferHelper::retainImage(Context *context, ImageHelper *image)
 {
     image->setQueueSerial(mQueueSerial);
+    image->updatePipelineStageAccessHistory();
 
     if (context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled)
     {
@@ -5778,6 +5780,7 @@ void ImageHelper::resetCachedProperties()
     mImageSerial                 = kInvalidImageSerial;
     mCurrentLayout               = ImageLayout::Undefined;
     mCurrentDeviceQueueIndex     = kInvalidDeviceQueueIndex;
+    mIsCurrentAccessFragmentOnly = false;
     mIsReleasedToExternal        = false;
     mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     mCurrentShaderReadStageMask  = 0;
@@ -7266,6 +7269,7 @@ void ImageHelper::barrierImpl(Context *context,
                                  &imageMemoryBarrier);
 
     VkPipelineStageFlags dstStageMask = transitionTo.dstStageMask;
+    mIsCurrentAccessFragmentOnly = (dstStageMask & ~kFragmentAndAttachmentPipelineStageFlags) == 0;
 
     // Fallback to pipelineBarrier if there is no event tracking image.
     // VkCmdWaitEvent requires the srcQueueFamilyIndex and dstQueueFamilyIndex members of any
@@ -7511,6 +7515,8 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         const ImageMemoryBarrierData &transitionTo = renderer->getImageMemoryBarrierData(newLayout);
         VkPipelineStageFlags srcStageMask          = transitionFrom.srcStageMask;
         VkPipelineStageFlags dstStageMask          = transitionTo.dstStageMask;
+        mIsCurrentAccessFragmentOnly =
+            (dstStageMask & ~kFragmentAndAttachmentPipelineStageFlags) == 0;
 
         if (transitionFrom.layout == transitionTo.layout && IsShaderReadOnlyLayout(transitionTo) &&
             mBarrierQueueSerial == queueSerial)
@@ -7663,6 +7669,16 @@ void ImageHelper::setCurrentRefCountedEvent(Context *context, EventMaps &eventMa
 
     // If there is already an event, release it first.
     mCurrentEvent.release(context);
+
+    // VkCmdSetEvent can remove the unnecessary GPU pipeline bubble that comes from false dependency
+    // between fragment and vertex/transfer/compute stages. But it also comes with higher overhead.
+    // In order to strike the balance, we exclude the images that are only used by fragment stages
+    // in the past N references. Use of VkEvent will not be beneficial
+    // if it is only accessed by fragment stages or only accessed by non-fragment access.
+    if (mFragmentStageAccessHistory.all())
+    {
+        return;
+    }
 
     // Create the event if we have not yet so. Otherwise just use the already created event. This
     // means all images used in the same render pass that has the same layout will be tracked by the
@@ -8736,6 +8752,8 @@ angle::Result ImageHelper::CalculateBufferInfo(ContextVk *contextVk,
 void ImageHelper::onRenderPassAttach(const QueueSerial &queueSerial)
 {
     setQueueSerial(queueSerial);
+    mIsCurrentAccessFragmentOnly = true;
+    updatePipelineStageAccessHistory();
 }
 
 void ImageHelper::onWrite(gl::LevelIndex levelStart,
