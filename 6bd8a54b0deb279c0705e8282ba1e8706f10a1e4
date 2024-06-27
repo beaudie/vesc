@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "493e8c5b_f0957bf7",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:00:12Z",
+      "side": 1,
+      "message": "`SetBitField` here and similar places",
+      "revId": "6bd8a54b0deb279c0705e8282ba1e8706f10a1e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eecd0f7_91b2c348",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:00:12Z",
+      "side": 1,
+      "message": "Looks like these can be moved to the cpp",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 1
+      },
+      "revId": "6bd8a54b0deb279c0705e8282ba1e8706f10a1e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0453a78_ba290d83",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:00:12Z",
+      "side": 1,
+      "message": "Please wrap these structs with `ANGLE_ENABLE_STRUCT_PADDING_WARNINGS` / `ANGLE_DISABLE_STRUCT_PADDING_WARNINGS` to avoid surprises in the future since the underlying memory is being hashed.",
+      "revId": "6bd8a54b0deb279c0705e8282ba1e8706f10a1e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db699c24_d5d30a91",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:00:12Z",
+      "side": 1,
+      "message": "TBH, I\u0027m not sure you\u0027re winning anything by automatically calculating these values with `BitCountForEnumValue`. The struct sizes are still validated, padding should still be removed, it just makes it harder to actually know how many bits there are in the fields and how to pack them.\n\nMy suggestion is to just directly use constants (on the struct fields even) with a comment about what wgpu enum goes in there. You can then use `SetBitField` to make sure the values that get written do fit in the bits.",
+      "revId": "6bd8a54b0deb279c0705e8282ba1e8706f10a1e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
