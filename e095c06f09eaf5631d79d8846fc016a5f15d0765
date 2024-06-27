@@ -34,6 +34,24 @@
       ],
       "revId": "e095c06f09eaf5631d79d8846fc016a5f15d0765",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee34c428_30446a6e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-06-27T16:49:24Z",
+      "side": 0,
+      "message": "The use was removed when I add the event recycling. I think the other add function also not used any more and can be removed.",
+      "parentUuid": "b34662f5_bc2152cd",
+      "revId": "e095c06f09eaf5631d79d8846fc016a5f15d0765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
