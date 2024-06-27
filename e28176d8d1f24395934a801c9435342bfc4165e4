@@ -16,6 +16,23 @@
       "message": "Approving my own code :P",
       "revId": "e28176d8d1f24395934a801c9435342bfc4165e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b17b627e_17b790b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-06-27T11:10:56Z",
+      "side": 1,
+      "message": "Hi Shahbaz Youssefi, thanks for reviewing it, could you also submit the CL? I don\u0027t think I have the permissions to do it",
+      "revId": "e28176d8d1f24395934a801c9435342bfc4165e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
