@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e8fc709_80d79ca4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:14:44Z",
+      "side": 1,
+      "message": "Looking good, sorry I forgot to comment yesterday but looks like you got it 😊",
+      "revId": "5a1c7b56851703b386096e9f8f5a31dfb91057fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d03a4f6_11189208",
+        "filename": "src/libANGLE/renderer/RenderTargetCache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:14:44Z",
+      "side": 1,
+      "message": "This helper is only called once, you could just move the contents to `updateColorRenderTarget` since it does nothing but forward to this",
+      "revId": "5a1c7b56851703b386096e9f8f5a31dfb91057fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7aac946_418245a1",
+        "filename": "src/libANGLE/renderer/RenderTargetCache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:14:44Z",
+      "side": 1,
+      "message": "```suggestion\n    const gl::FramebufferAttachment *colorAttachment \u003d state.getColorAttachment(colorIndex);\n    ANGLE_TRY(updateCachedRenderTarget(context, colorAttachment,\n                                    \u0026mColorRenderTargets[colorIndex]);\n```",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 54
+      },
+      "revId": "5a1c7b56851703b386096e9f8f5a31dfb91057fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9725c3e3_506758b8",
+        "filename": "src/libANGLE/renderer/RenderTargetCache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:14:44Z",
+      "side": 1,
+      "message": "```suggestion\n            mReadRenderTarget \u003d mColorRenderTargets[colorIndex];\n```",
+      "revId": "5a1c7b56851703b386096e9f8f5a31dfb91057fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
