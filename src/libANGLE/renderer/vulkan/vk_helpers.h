@@ -2338,6 +2338,7 @@ class ImageHelper final : public Resource, public angle::Subject
         }
         mCurrentLayout = newLayout;
     }
+
     ImageLayout getCurrentImageLayout() const { return mCurrentLayout; }
     VkImageLayout getCurrentLayout(Renderer *renderer) const;
     const QueueSerial &getBarrierQueueSerial() const { return mBarrierQueueSerial; }
@@ -2774,6 +2775,12 @@ class ImageHelper final : public Resource, public angle::Subject
     // Create event if needed and record the event in ImageHelper::mCurrentEvent.
     void setCurrentRefCountedEvent(Context *context, EventMaps &eventMaps);
 
+    void updatePipelineStageAccessHistory()
+    {
+        mFragmentStageAccessHistory <<= 1;
+        mFragmentStageAccessHistory |= mIsCurrentAccessFragmentOnly ? 1 : 0;
+    }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -3132,6 +3139,15 @@ class ImageHelper final : public Resource, public angle::Subject
     // this event.
     RefCountedEvent mCurrentEvent;
     RefCountedEvent mLastNonShaderReadOnlyEvent;
+    // Track history of pipeline stages being used. Each bit represents the non-fragment or
+    // attachment usage, i.e, a bit is set if the layout indicates a transfer/compute/vertex
+    // pipeline stage, and bit is 0 if only used by fragment shader or fragment test or color
+    // attachment. Every barrier call will shift the bitfields left and new bit that represents the
+    // new pipeline usage is added to the right most bit. Tjis way we tracks if there is any
+    // non-fragment pipeline use during the past 32 barrier calls. This information provides
+    // heuristic for making decisions if a VkEvent should be used to track the operation.
+    FragmentStageAccessHistory mFragmentStageAccessHistory;
+    bool mIsCurrentAccessFragmentOnly;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
