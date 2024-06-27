@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62ae72a2_b8241d25",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-27T18:53:09Z",
+      "side": 1,
+      "message": "I agree. Updated.",
+      "parentUuid": "fe319436_8cd12b99",
+      "revId": "0e703918604b594ee6bffeda2dd227ba873a1e11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7114f1c_a275d602",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-06-27T15:10:08Z",
       "side": 1,
       "message": "A little test would be good. For example, call this twice, once with primitive restart (GL_PRIMITIVE_RESTART_FIXED_INDEX) enabled and once disabled, the result should be the same. That would have caught the incorrect use of `isPrimitiveRestartEnabled()` here.",
+      "revId": "0e703918604b594ee6bffeda2dd227ba873a1e11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b593c0dc_895f3b93",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-27T18:53:09Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "a7114f1c_a275d602",
       "revId": "0e703918604b594ee6bffeda2dd227ba873a1e11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
