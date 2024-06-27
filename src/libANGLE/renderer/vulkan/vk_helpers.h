@@ -3094,6 +3094,18 @@ class ImageHelper final : public Resource, public angle::Subject
                           uint32_t *layerStart,
                           uint32_t *layerEnd);
 
+    void updatePipelineStageAccessHistory(VkPipelineStageFlags stageMask)
+    {
+        // First shift bitfield left. Then add new bit at the right most to reflect this usage
+        mTranCompPreFragmentAccessHistory <<= 1;
+        bool usedByTransferComputeAndPreFragmentPipelineStages =
+            (stageMask & kTransferComputeAndPreFragmentStageFlags) == 0;
+        if (usedByTransferComputeAndPreFragmentPipelineStages)
+        {
+            mTranCompPreFragmentAccessHistory.set(0);
+        }
+    }
+
     // Vulkan objects.
     Image mImage;
     DeviceMemory mDeviceMemory;
@@ -3132,6 +3144,14 @@ class ImageHelper final : public Resource, public angle::Subject
     // this event.
     RefCountedEvent mCurrentEvent;
     RefCountedEvent mLastNonShaderReadOnlyEvent;
+    // Track history of pipeline stages being used. Each bit represents the non-fragment or
+    // attachment usage, i.e, a bit is set if the layout indicates a transfer/compute/vertex
+    // pipeline stage, and bit is 0 if only used by fragment shader or fragment test or color
+    // attachment. Every barrier call will shift the bitfields left and new bit that represents the
+    // new pipeline usage is added to the right most bit. Tjis way we tracks if there is any
+    // non-fragment pipeline use during the past 32 barrier calls. This information provides
+    // heuristic for making decisions if a VkEvent should be used to track the operation.
+    TranCompPreFragmentAccessHistory mTranCompPreFragmentAccessHistory;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;

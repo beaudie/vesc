@@ -7192,6 +7192,9 @@ void ImageHelper::barrierImpl(Context *context,
 
     VkPipelineStageFlags dstStageMask = transitionTo.dstStageMask;
 
+    // Update the pipeline stage access history
+    updatePipelineStageAccessHistory(dstStageMask);
+
     // Fallback to pipelineBarrier if there is no event tracking image.
     // VkCmdWaitEvent requires the srcQueueFamilyIndex and dstQueueFamilyIndex members of any
     // element of pBufferMemoryBarriers or pImageMemoryBarriers must be equal
@@ -7437,6 +7440,9 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         VkPipelineStageFlags srcStageMask          = transitionFrom.srcStageMask;
         VkPipelineStageFlags dstStageMask          = transitionTo.dstStageMask;
 
+        // Update the pipeline stage access history
+        updatePipelineStageAccessHistory(dstStageMask);
+
         if (transitionFrom.layout == transitionTo.layout && IsShaderReadOnlyLayout(transitionTo) &&
             mBarrierQueueSerial == queueSerial)
         {
@@ -7588,6 +7594,16 @@ void ImageHelper::setCurrentRefCountedEvent(Context *context, EventMaps &eventMa
 
     // If there is already an event, release it first.
     mCurrentEvent.release(context);
+
+    // VkCmdSetEvent can remove the unnecessary GPU pipeline bubble that comes from false dependency
+    // between fragment and vertex/transfer/compute stages. But it also comes with higher overhead.
+    // In order to strike the balance, we exclude the images that are only used by fragment stages
+    // or non-fragment stages in the past 32 layout changes. Use of VkEvent will not be beneficial
+    // if it is only accessed by fragment stages or only accessed by non-fragment access.
+    if (mTranCompPreFragmentAccessHistory.any() || mTranCompPreFragmentAccessHistory.all())
+    {
+        return;
+    }
 
     // Create the event if we have not yet so. Otherwise just use the already created event. This
     // means all images used in the same render pass that has the same layout will be tracked by the
