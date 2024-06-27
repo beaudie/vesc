@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b65bc9bd_b50cbf8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-06-27T17:02:41Z",
+      "side": 1,
+      "message": "Thank you!",
+      "revId": "20dbff4bd0f09f6b67674da2b40887e0a698be94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c845f2ce_fd40e385",
+        "filename": "util/android/third_party/README.chromium",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-06-27T17:02:41Z",
+      "side": 1,
+      "message": "I actually updated this to https://android.googlesource.com/platform/ndk/+/5aac75cf5bea628f44bc8e09fe672573aeac0849/sources/android/native_app_glue in https://chromium-review.googlesource.com/c/angle/angle/+/5526468, didn\u0027t know I need to update here as well.\nCould you please?",
+      "range": {
+        "startLine": 2,
+        "startChar": 5,
+        "endLine": 2,
+        "endChar": 125
+      },
+      "revId": "20dbff4bd0f09f6b67674da2b40887e0a698be94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
