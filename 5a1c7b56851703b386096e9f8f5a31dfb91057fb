@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90eb0a51_fe7f3994",
+        "filename": "src/libANGLE/renderer/RenderTargetCache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-27T18:23:16Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "5d03a4f6_11189208",
+      "revId": "5a1c7b56851703b386096e9f8f5a31dfb91057fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7aac946_418245a1",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2851e1d1_795eff5b",
+        "filename": "src/libANGLE/renderer/RenderTargetCache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-27T18:23:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7aac946_418245a1",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 54
+      },
+      "revId": "5a1c7b56851703b386096e9f8f5a31dfb91057fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9725c3e3_506758b8",
@@ -71,6 +113,24 @@
       "writtenOn": "2024-06-27T15:14:44Z",
       "side": 1,
       "message": "```suggestion\n            mReadRenderTarget \u003d mColorRenderTargets[colorIndex];\n```",
+      "revId": "5a1c7b56851703b386096e9f8f5a31dfb91057fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7afbdab_affa1d9d",
+        "filename": "src/libANGLE/renderer/RenderTargetCache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-06-27T18:23:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9725c3e3_506758b8",
       "revId": "5a1c7b56851703b386096e9f8f5a31dfb91057fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
