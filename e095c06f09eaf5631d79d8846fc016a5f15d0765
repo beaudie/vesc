@@ -1,0 +1,39 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b34662f5_bc2152cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-06-27T02:33:19Z",
+      "side": 0,
+      "message": "I have checked that the deque insert should only take copies of the events: https://paste.googleplex.com/5712635607908352. If we want to keep this function, we should remove this ASSERT.",
+      "fixSuggestions": [
+        {
+          "fixId": "db314d65_2e0bbb3f",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_ref_counted_event.h",
+              "range": {
+                "startLine": 233,
+                "startChar": 0,
+                "endLine": 234,
+                "endChar": 0
+              },
+              "replacement": ""
+            }
+          ]
+        }
+      ],
+      "revId": "e095c06f09eaf5631d79d8846fc016a5f15d0765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
