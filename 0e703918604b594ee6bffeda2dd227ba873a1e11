@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe319436_8cd12b99",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:10:08Z",
+      "side": 1,
+      "message": "Feature bit is probably overkill, it\u0027s just a property to set in Caps. We could add a feature if we ever think it\u0027s useful to override it, but given that it\u0027s tessellation shader related, I highly doubt that\u0027d ever be needed.",
+      "revId": "0e703918604b594ee6bffeda2dd227ba873a1e11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7114f1c_a275d602",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-27T15:10:08Z",
+      "side": 1,
+      "message": "A little test would be good. For example, call this twice, once with primitive restart (GL_PRIMITIVE_RESTART_FIXED_INDEX) enabled and once disabled, the result should be the same. That would have caught the incorrect use of `isPrimitiveRestartEnabled()` here.",
+      "revId": "0e703918604b594ee6bffeda2dd227ba873a1e11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
