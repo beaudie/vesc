@@ -5674,28 +5674,29 @@ ImageHelper::~ImageHelper()
 
 void ImageHelper::resetCachedProperties()
 {
-    mImageType                   = VK_IMAGE_TYPE_2D;
-    mTilingMode                  = VK_IMAGE_TILING_OPTIMAL;
-    mCreateFlags                 = kVkImageCreateFlagsNone;
-    mUsage                       = 0;
-    mExtents                     = {};
-    mRotatedAspectRatio          = false;
-    mIntendedFormatID            = angle::FormatID::NONE;
-    mActualFormatID              = angle::FormatID::NONE;
-    mSamples                     = 1;
-    mImageSerial                 = kInvalidImageSerial;
-    mCurrentLayout               = ImageLayout::Undefined;
-    mCurrentDeviceQueueIndex     = kInvalidDeviceQueueIndex;
-    mIsReleasedToExternal        = false;
-    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
-    mCurrentShaderReadStageMask  = 0;
-    mFirstAllocatedLevel         = gl::LevelIndex(0);
-    mLayerCount                  = 0;
-    mLevelCount                  = 0;
-    mTotalStagedBufferUpdateSize = 0;
-    mAllocationSize              = 0;
-    mMemoryAllocationType        = MemoryAllocationType::InvalidEnum;
-    mMemoryTypeIndex             = kInvalidMemoryTypeIndex;
+    mImageType                     = VK_IMAGE_TYPE_2D;
+    mTilingMode                    = VK_IMAGE_TILING_OPTIMAL;
+    mCreateFlags                   = kVkImageCreateFlagsNone;
+    mUsage                         = 0;
+    mExtents                       = {};
+    mRotatedAspectRatio            = false;
+    mIntendedFormatID              = angle::FormatID::NONE;
+    mActualFormatID                = angle::FormatID::NONE;
+    mSamples                       = 1;
+    mImageSerial                   = kInvalidImageSerial;
+    mCurrentLayout                 = ImageLayout::Undefined;
+    mCurrentDeviceQueueIndex       = kInvalidDeviceQueueIndex;
+    mIsReleasedToExternal          = false;
+    mLastNonShaderReadOnlyLayout   = ImageLayout::Undefined;
+    mCurrentShaderReadStageMask    = 0;
+    mAccumulatedPipelineStageFlags = 0;
+    mFirstAllocatedLevel           = gl::LevelIndex(0);
+    mLayerCount                    = 0;
+    mLevelCount                    = 0;
+    mTotalStagedBufferUpdateSize   = 0;
+    mAllocationSize                = 0;
+    mMemoryAllocationType          = MemoryAllocationType::InvalidEnum;
+    mMemoryTypeIndex               = kInvalidMemoryTypeIndex;
     std::fill(mViewFormats.begin(), mViewFormats.begin() + mViewFormats.max_size(),
               VK_FORMAT_UNDEFINED);
     mYcbcrConversionDesc.reset();
@@ -7174,6 +7175,9 @@ void ImageHelper::barrierImpl(Context *context,
 
     VkPipelineStageFlags dstStageMask = transitionTo.dstStageMask;
 
+    // Accumulate the pipelineStageFlags being used
+    mAccumulatedPipelineStageFlags |= dstStageMask;
+
     // Fallback to pipelineBarrier if there is no event tracking image.
     // VkCmdWaitEvent requires the srcQueueFamilyIndex and dstQueueFamilyIndex members of any
     // element of pBufferMemoryBarriers or pImageMemoryBarriers must be equal
@@ -7419,6 +7423,9 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
         VkPipelineStageFlags srcStageMask          = transitionFrom.srcStageMask;
         VkPipelineStageFlags dstStageMask          = transitionTo.dstStageMask;
 
+        // Accumulate the pipelineStageFlags being used
+        mAccumulatedPipelineStageFlags |= dstStageMask;
+
         if (transitionFrom.layout == transitionTo.layout && IsShaderReadOnlyLayout(transitionTo) &&
             mBarrierQueueSerial == queueSerial)
         {
@@ -7570,6 +7577,15 @@ void ImageHelper::setCurrentRefCountedEvent(Context *context, EventMaps &eventMa
 
     // If there is already an event, release it first.
     mCurrentEvent.release(context);
+
+    // VkCmdSetEvent can remove the unnecessary GPU pipeline bubble that comes from false dependency
+    // between fragment and vertex/transfer/compute stages. But it also comes with higher overhead.
+    // In order to strike the balance, we exclude the images that are only used by fragment stages.
+    // Use of VkEvent will not be beneficial in this case.
+    if ((mAccumulatedPipelineStageFlags & ~kAllFragmentAndAttachmentPipelineStageFlags) == 0)
+    {
+        return;
+    }
 
     // Create the event if we have not yet so. Otherwise just use the already created event. This
     // means all images used in the same render pass that has the same layout will be tracked by the

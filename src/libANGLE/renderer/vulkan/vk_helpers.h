@@ -3132,6 +3132,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // this event.
     RefCountedEvent mCurrentEvent;
     RefCountedEvent mLastNonShaderReadOnlyEvent;
+    // Tracks accumulated VkPipelineStageFlags ever used since last VkEvent use.
+    VkPipelineStageFlags mAccumulatedPipelineStageFlags;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
