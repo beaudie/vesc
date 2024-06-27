@@ -47,6 +47,11 @@ constexpr VkPipelineStageFlags kAllShadersPipelineStageFlags =
 constexpr VkPipelineStageFlags kAllDepthStencilPipelineStageFlags =
     VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
 
+constexpr VkPipelineStageFlags kTransferComputeAndPreFragmentStageFlags =
+    VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | kPreFragmentStageFlags;
+
+using NonFragmentAccessHistory = angle::BitSet32<32>;
+
 // Enum for predefined VkPipelineStageFlags set that VkEvent will be using. Because VkEvent has
 // strict rules that waitEvent and setEvent must have matching VkPipelineStageFlags, it is desirable
 // to keep VkEvent per VkPipelineStageFlags combination. This enum table enumerates all possible
