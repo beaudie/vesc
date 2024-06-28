@@ -300,7 +300,9 @@
       'win10-x64-nvidia': {
         'os_type': 'win',
         'mixins': [
-          'win10_nvidia_gtx_1660_stable',
+          # 'win10_nvidia_gtx_1660_stable',
+          'windows_amd_7600',
+          'limited_capacity_bot',
         ],
         'test_suites': {
           'gtest_tests': 'win10_nvidia_gtests',

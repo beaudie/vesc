@@ -108,4 +108,8 @@
                                                                   'gpu': '10de:2184-27.21.14.5638',
                                                                   'os': 'Windows-10-18363',
                                                                   'pool': 'chromium.tests.gpu'}}},
+  'windows_amd_7600': { 'swarming': { 'dimensions': { 'display_attached': '1',
+                                                      'gpu': '1002:7480',
+                                                      'os': 'Windows-10',
+                                                      'pool': 'chromium.tests.gpu.experimental'}}},
   'x86-64': {'swarming': {'dimensions': {'cpu': 'x86-64'}}}}
