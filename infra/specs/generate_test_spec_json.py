@@ -66,6 +66,16 @@ ADDITIONAL_MIXINS = {
             }
         }
     },
+    'windows_amd_7600': {
+        'swarming': {
+            'dimensions': {
+                'gpu': '1002:7480',
+                'os': 'Windows-10',
+                'display_attached': '1',
+                'pool': 'chromium.tests.gpu.experimental',
+            },
+        },
+    },
 }
 
 MIXIN_FILE_NAME = os.path.join(THIS_DIR, 'mixins.pyl')
