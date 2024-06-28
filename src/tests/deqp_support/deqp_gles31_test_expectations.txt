@@ -203,6 +203,11 @@ b/266710445 WIN OPENGL NVIDIA : dEQP-GLES31.functional.image_load_store.buffer.a
 // Copy image tests fail on desktop cards where ASTC is emulated
 42265887 NVIDIA VULKAN : dEQP-GLES31.functional.copy_image.mixed.*astc* = FAIL
 42265887 NVIDIA VULKAN : dEQP-GLES31.functional.copy_image.compressed.viewclass_astc* = FAIL
+42265887 AMD VULKAN : dEQP-GLES31.functional.copy_image.mixed.*astc* = FAIL
+42265887 AMD VULKAN : dEQP-GLES31.functional.copy_image.compressed.viewclass_astc* = FAIL
+42265887 AMD VULKAN : dEQP-GLES31.functional.copy_image.compressed.viewclass_etc2* = FAIL
+42265887 AMD VULKAN : dEQP-GLES31.functional.copy_image.compressed.viewclass_128_bits* = FAIL
+42265887 AMD VULKAN : dEQP-GLES31.functional.copy_image.compressed.viewclass_64_bits* = FAIL
 
 // Vulkan Pixel4 failures with these formats
 42263825 VULKAN PIXEL4ORXL : dEQP-GLES31.functional.copy_image.non_compressed.viewclass_32_bits.rgba8_snorm_rgb10_a2* = FAIL
