@@ -16,6 +16,24 @@
       "message": "The condition `!build_with_chromium` seems overly broad.\nThis is getting turned on in the Dawn build, and then fails gn configuration.\n\nI filed b/350042736",
       "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6135c7b_67aa204d",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-28T18:05:58Z",
+      "side": 1,
+      "message": "I\u0027m sorry David, I\u0027m unfamiliar with Dawn. Is there a way to disable this for Dawn builds or would you prefer a different/better solution?",
+      "parentUuid": "054fb00c_f3b79549",
+      "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
