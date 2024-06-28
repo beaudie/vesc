@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "054fb00c_f3b79549",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1298161
+      },
+      "writtenOn": "2024-06-28T17:36:35Z",
+      "side": 1,
+      "message": "The condition `!build_with_chromium` seems overly broad.\nThis is getting turned on in the Dawn build, and then fails gn configuration.\n\nI filed b/350042736",
+      "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
