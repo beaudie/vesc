@@ -34,6 +34,24 @@
       "parentUuid": "054fb00c_f3b79549",
       "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb396ba9_6059d1db",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-28T21:01:38Z",
+      "side": 1,
+      "message": "It looks like adding a check for `!angle_enable_wgpu` to the apidump layer enable check might serve, would that be sufficient?",
+      "parentUuid": "a6135c7b_67aa204d",
+      "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
