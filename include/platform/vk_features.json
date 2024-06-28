@@ -1609,6 +1609,15 @@
                 "Whether dynamic rendering should be used instead of render pass objects"
             ],
             "issue": "http://anglebug.com/42267038"
+        },
+        {
+            "name": "prefer_host_cached_non_coherent_memory_for_buffer",
+            "category": "Features",
+            "description": [
+                "Prefer cached + non-coherent memory for buffers with dynamic/stream usage. ",
+                "Some platforms like Meteorlake don't support cached-coherent memory."
+            ],
+            "issue": "https://issuetracker.google.com/347601787"
         }
     ]
 }

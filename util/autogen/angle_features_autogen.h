@@ -243,6 +243,7 @@ enum class Feature
     PreferDriverUniformOverSpecConst,
     PreferDynamicRendering,
     PreferHostCachedForNonStaticBufferUsage,
+    PreferHostCachedNonCoherentMemoryForBuffer,
     PreferLinearFilterForYUV,
     PreferMonolithicPipelinesOverLibraries,
     PreferMSRTSSFlagByDefault,

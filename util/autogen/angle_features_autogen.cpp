@@ -243,6 +243,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::PreferDriverUniformOverSpecConst, "preferDriverUniformOverSpecConst"},
     {Feature::PreferDynamicRendering, "preferDynamicRendering"},
     {Feature::PreferHostCachedForNonStaticBufferUsage, "preferHostCachedForNonStaticBufferUsage"},
+    {Feature::PreferHostCachedNonCoherentMemoryForBuffer, "preferHostCachedNonCoherentMemoryForBuffer"},
     {Feature::PreferLinearFilterForYUV, "preferLinearFilterForYUV"},
     {Feature::PreferMonolithicPipelinesOverLibraries, "preferMonolithicPipelinesOverLibraries"},
     {Feature::PreferMSRTSSFlagByDefault, "preferMSRTSSFlagByDefault"},

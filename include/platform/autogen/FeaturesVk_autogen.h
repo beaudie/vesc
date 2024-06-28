@@ -1472,6 +1472,14 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/42267038"
     };
 
+    FeatureInfo preferHostCachedNonCoherentMemoryForBuffer = {
+        "preferHostCachedNonCoherentMemoryForBuffer",
+        FeatureCategory::VulkanFeatures,
+        "Prefer cached + non-coherent memory for buffers with dynamic/stream usage. "
+        "Some platforms like Meteorlake don't support cached-coherent memory.",
+        &members, "https://issuetracker.google.com/347601787"
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
