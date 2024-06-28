@@ -236,6 +236,7 @@ enum class Feature
     PreAddTexelFetchOffsets,
     PreemptivelyStartProvokingVertexCommandBuffer,
     PreferAggregateBarrierCalls,
+    PreferCachedNoncoherentForDynamicStreamBufferUsage,
     PreferCpuForBuffersubdata,
     PreferCPUForBufferSubData,
     PreferDeviceLocalMemoryHostVisible,
