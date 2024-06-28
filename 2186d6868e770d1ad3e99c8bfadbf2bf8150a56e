@@ -106,6 +106,41 @@
       "parentUuid": "e3773c93_99b0d025",
       "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b118be8_86356396",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-06-28T18:34:40Z",
+      "side": 1,
+      "message": "Ok. I may or may not have understood completely.\nTo put the question the other way:\nAre you alle to write any sort of test that is runnable with angle end2end runner, exercising your added code?",
+      "parentUuid": "be9baaae_8ad514ce",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f17cf4f_55dc40ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-06-28T18:34:40Z",
+      "side": 1,
+      "message": "Geoff, does esoteric platform extensions typically require any tests to land the patch?",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
