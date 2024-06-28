@@ -48,6 +48,8 @@ constexpr VkMemoryPropertyFlags kHostCachedFlags =
      VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 constexpr VkMemoryPropertyFlags kHostUncachedFlags =
     (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+constexpr VkMemoryPropertyFlags kHostCachedNonCoherentFlags =
+    (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
 
 // Vertex attribute buffers are used as storage buffers for conversion in compute, where access to
 // the buffer is made in 4-byte chunks.  Assume the size of the buffer is 4k+n where n is in [0, 3).
@@ -93,7 +95,10 @@ VkMemoryPropertyFlags GetPreferredMemoryType(vk::Renderer *renderer,
         case gl::BufferUsage::StreamCopy:
         case gl::BufferUsage::StreamRead:
             // For all other types of usage, request a host cached memory
-            return kHostCachedFlags;
+            return renderer->getFeatures()
+                           .preferCachedNoncoherentForDynamicStreamBufferUsage.enabled
+                       ? kHostCachedNonCoherentFlags
+                       : kHostCachedFlags;
         default:
             UNREACHABLE();
             return kHostCachedFlags;
