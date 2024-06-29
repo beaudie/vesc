@@ -31,7 +31,7 @@ namespace spv
 
 // Enable this for debug logging of pre-transform SPIR-V:
 #if !defined(ANGLE_DEBUG_SPIRV_GENERATION)
-#    define ANGLE_DEBUG_SPIRV_GENERATION 0
+#    define ANGLE_DEBUG_SPIRV_GENERATION 1
 #endif  // !defined(ANGLE_DEBUG_SPIRV_GENERATION)
 
 namespace sh
@@ -6550,7 +6550,9 @@ spirv::Blob OutputSPIRVTraverser::getSpirv()
     spvtools::SpirvTools spirvTools(mCompileOptions.emitSPIRV14 ? SPV_ENV_VULKAN_1_1_SPIRV_1_4
                                                                 : SPV_ENV_VULKAN_1_1);
     std::string readableSpirv;
-    spirvTools.Disassemble(result, &readableSpirv, 0);
+    spirvTools.Disassemble(result, &readableSpirv,
+                           SPV_BINARY_TO_TEXT_OPTION_COMMENT | SPV_BINARY_TO_TEXT_OPTION_INDENT |
+                               SPV_BINARY_TO_TEXT_OPTION_NESTED_INDENT);
     fprintf(stderr, "%s\n", readableSpirv.c_str());
 #endif  // ANGLE_DEBUG_SPIRV_GENERATION
 
