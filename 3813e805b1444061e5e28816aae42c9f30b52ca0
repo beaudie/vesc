@@ -52,6 +52,24 @@
       "parentUuid": "a6135c7b_67aa204d",
       "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "008d08c2_709cf283",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-29T03:52:45Z",
+      "side": 1,
+      "message": "That would probably work but it\u0027s a hack, it would rely on Dawn\u0027s build of ANGLE not enabling ANGLE\u0027s WebGPU backend (which it doesn\u0027t probably, but it\u0027s not a requirement).\n\nDavid, if we change the setting to use `angle_standalone`, would Dawn set that to false to fix the issue?",
+      "parentUuid": "eb396ba9_6059d1db",
+      "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
