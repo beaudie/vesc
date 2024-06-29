@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "318550c0_3df4352c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-29T03:44:40Z",
+      "side": 1,
+      "message": "Feature name is a bit inconsistent with the other one, but no big deal",
+      "revId": "2eaf03682a70a2998356e171309c6f8dc39297f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4da56480_0d30ba18",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-06-29T03:44:40Z",
+      "side": 1,
+      "message": "This description ends up in chrome://gpu, and we refrain from baking in the condition into the description.\n\n```suggestion\n                \"Prefer cached + non-coherent memory for buffers with dynamic/stream usage.\"\n```",
+      "range": {
+        "startLine": 1617,
+        "startChar": 0,
+        "endLine": 1618,
+        "endChar": 86
+      },
+      "revId": "2eaf03682a70a2998356e171309c6f8dc39297f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
