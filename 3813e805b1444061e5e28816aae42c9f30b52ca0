@@ -70,6 +70,24 @@
       "parentUuid": "eb396ba9_6059d1db",
       "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cb3e82e_de041db5",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-06-29T16:50:10Z",
+      "side": 1,
+      "message": "`angle.gni` sets `angle_standalone \u003d !build_with_chromium`, but maybe it gets overridden elsewhere?",
+      "parentUuid": "008d08c2_709cf283",
+      "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
