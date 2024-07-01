@@ -88,6 +88,24 @@
       "parentUuid": "008d08c2_709cf283",
       "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23745748_f54e8b90",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-01T12:51:31Z",
+      "side": 1,
+      "message": "Dawn does override `angle_standalone` in here https://source.chromium.org/chromium/chromium/src/+/main:third_party/dawn/.gn;l\u003d37;drc\u003d6cdf3a1a195fa8ce4aec963dee146a7da6f435b8, so that should work.",
+      "parentUuid": "2cb3e82e_de041db5",
+      "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
