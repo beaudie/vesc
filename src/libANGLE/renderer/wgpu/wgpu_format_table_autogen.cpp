@@ -2086,15 +2086,15 @@ wgpu::TextureFormat GetWgpuTextureFormatFromFormatID(angle::FormatID formatID)
         {angle::FormatID::ETC2_R8G8B8A8_UNORM_BLOCK, wgpu::TextureFormat::ETC2RGBA8Unorm},
         {angle::FormatID::ETC2_R8G8B8_SRGB_BLOCK, wgpu::TextureFormat::ETC2RGB8UnormSrgb},
         {angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK, wgpu::TextureFormat::ETC2RGB8Unorm},
-        {angle::FormatID::EXTERNAL0, wgpu::TextureFormat::Undefined},
-        {angle::FormatID::EXTERNAL1, wgpu::TextureFormat::Undefined},
-        {angle::FormatID::EXTERNAL2, wgpu::TextureFormat::Undefined},
-        {angle::FormatID::EXTERNAL3, wgpu::TextureFormat::Undefined},
-        {angle::FormatID::EXTERNAL4, wgpu::TextureFormat::Undefined},
-        {angle::FormatID::EXTERNAL5, wgpu::TextureFormat::Undefined},
-        {angle::FormatID::EXTERNAL6, wgpu::TextureFormat::Undefined},
-        {angle::FormatID::EXTERNAL7, wgpu::TextureFormat::Undefined},
-        {angle::FormatID::NONE, wgpu::TextureFormat::Undefined},
+        {angle::FormatID::EXTERNAL0, wgpu::TextureFormat(0u)},
+        {angle::FormatID::EXTERNAL1, wgpu::TextureFormat(0u)},
+        {angle::FormatID::EXTERNAL2, wgpu::TextureFormat(0u)},
+        {angle::FormatID::EXTERNAL3, wgpu::TextureFormat(0u)},
+        {angle::FormatID::EXTERNAL4, wgpu::TextureFormat(0u)},
+        {angle::FormatID::EXTERNAL5, wgpu::TextureFormat(0u)},
+        {angle::FormatID::EXTERNAL6, wgpu::TextureFormat(0u)},
+        {angle::FormatID::EXTERNAL7, wgpu::TextureFormat(0u)},
+        {angle::FormatID::NONE, wgpu::TextureFormat(0u)},
         {angle::FormatID::R10G10B10A2_SINT, wgpu::TextureFormat::RGB10A2Uint},
         {angle::FormatID::R10G10B10A2_UNORM, wgpu::TextureFormat::RGB10A2Unorm},
         {angle::FormatID::R11G11B10_FLOAT, wgpu::TextureFormat::RG11B10Ufloat},
@@ -2257,8 +2257,6 @@ angle::FormatID GetFormatIDFromWgpuTextureFormat(wgpu::TextureFormat wgpuFormat)
             return angle::FormatID::ETC2_R8G8B8_SRGB_BLOCK;
         case wgpu::TextureFormat::ETC2RGB8Unorm:
             return angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK;
-        case wgpu::TextureFormat::Undefined:
-            return angle::FormatID::NONE;
         case wgpu::TextureFormat::RGB10A2Uint:
             return angle::FormatID::R10G10B10A2_SINT;
         case wgpu::TextureFormat::RGB10A2Unorm:
@@ -2353,15 +2351,15 @@ angle::FormatID GetFormatIDFromWgpuTextureFormat(wgpu::TextureFormat wgpuFormat)
 wgpu::VertexFormat GetWgpuVertexFormatFromFormatID(angle::FormatID formatID)
 {
     static constexpr angle::FormatMap<wgpu::VertexFormat> kMap = {
-        {angle::FormatID::EXTERNAL0, wgpu::VertexFormat::Undefined},
-        {angle::FormatID::EXTERNAL1, wgpu::VertexFormat::Undefined},
-        {angle::FormatID::EXTERNAL2, wgpu::VertexFormat::Undefined},
-        {angle::FormatID::EXTERNAL3, wgpu::VertexFormat::Undefined},
-        {angle::FormatID::EXTERNAL4, wgpu::VertexFormat::Undefined},
-        {angle::FormatID::EXTERNAL5, wgpu::VertexFormat::Undefined},
-        {angle::FormatID::EXTERNAL6, wgpu::VertexFormat::Undefined},
-        {angle::FormatID::EXTERNAL7, wgpu::VertexFormat::Undefined},
-        {angle::FormatID::NONE, wgpu::VertexFormat::Undefined},
+        {angle::FormatID::EXTERNAL0, wgpu::VertexFormat(0u)},
+        {angle::FormatID::EXTERNAL1, wgpu::VertexFormat(0u)},
+        {angle::FormatID::EXTERNAL2, wgpu::VertexFormat(0u)},
+        {angle::FormatID::EXTERNAL3, wgpu::VertexFormat(0u)},
+        {angle::FormatID::EXTERNAL4, wgpu::VertexFormat(0u)},
+        {angle::FormatID::EXTERNAL5, wgpu::VertexFormat(0u)},
+        {angle::FormatID::EXTERNAL6, wgpu::VertexFormat(0u)},
+        {angle::FormatID::EXTERNAL7, wgpu::VertexFormat(0u)},
+        {angle::FormatID::NONE, wgpu::VertexFormat(0u)},
         {angle::FormatID::R10G10B10A2_UNORM, wgpu::VertexFormat::Unorm10_10_10_2},
         {angle::FormatID::R16G16B16A16_FLOAT, wgpu::VertexFormat::Float16x4},
         {angle::FormatID::R16G16B16A16_SINT, wgpu::VertexFormat::Sint16x4},
@@ -2401,8 +2399,6 @@ angle::FormatID GetFormatIDFromWgpuBufferFormat(wgpu::VertexFormat wgpuFormat)
 {
     switch (wgpuFormat)
     {
-        case wgpu::VertexFormat::Undefined:
-            return angle::FormatID::NONE;
         case wgpu::VertexFormat::Unorm10_10_10_2:
             return angle::FormatID::R10G10B10A2_UNORM;
         case wgpu::VertexFormat::Float16x4:

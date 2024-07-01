@@ -225,13 +225,19 @@ def gen_format_case(angle, internal_format, wgpu_json_data):
 
 
 def get_format_id_case(format_id, format_type, wgpu_format):
+    # Map ANGLE format that used to map to Undefined WebGPU formats
+    # prior to https://dawn-review.googlesource.com/c/dawn/+/193360
+    # to special value (0u)
+    if 'Undefined' in wgpu_format:
+        return "{angle::FormatID::%s, wgpu::%s(0u)}" % (format_id, format_type)
     return "{angle::FormatID::%s, wgpu::%s::%s}" % (format_id, format_type, wgpu_format)
 
 
 def get_wgpu_format_case(format_type, format_id, wgpu_format):
-    # don't generate the reverse mapping for the external format slots because they _all_ map
-    # to WGPU_FORMAT_UNDEFINED and so clash with NONE
-    if 'EXTERNAL' in format_id:
+    # Don't generate the reverse mapping for ANGLE formats
+    # that used to map to Undefined WebGPU formats
+    # prior to https://dawn-review.googlesource.com/c/dawn/+/193360
+    if 'Undefined' in wgpu_format:
         return ''
     return """\
         case wgpu::%s::%s:
