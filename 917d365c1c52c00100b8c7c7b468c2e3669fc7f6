@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c142b4dd_949d16c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-01T17:04:28Z",
+      "side": 1,
+      "message": "PTAL gen_wgpu_format_table.py.\n\nIt looks ugly to me that I kept \"Undefined\" in wgpu_format_map.json and then I special case it in gen_wgpu_format_table.py to produce \"(0u)\", but I can\u0027t think of a better way.",
+      "revId": "917d365c1c52c00100b8c7c7b468c2e3669fc7f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
