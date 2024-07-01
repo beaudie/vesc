@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ce40839_dd3ca6d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-01T15:49:01Z",
+      "side": 1,
+      "message": "Mac failures should be fixed by https://chromium-review.googlesource.com/c/angle/angle/+/5667168.",
+      "revId": "110e1ca1fecaa4e25fccdc96beb2f48a17f5dd45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
