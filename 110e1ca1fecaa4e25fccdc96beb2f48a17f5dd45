@@ -16,6 +16,23 @@
       "message": "Mac failures should be fixed by https://chromium-review.googlesource.com/c/angle/angle/+/5667168.",
       "revId": "110e1ca1fecaa4e25fccdc96beb2f48a17f5dd45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10af4974_4e1ccabb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-01T18:34:23Z",
+      "side": 1,
+      "message": "After the [Mac fix CL](https://chromium-review.googlesource.com/c/angle/angle/+/5667168)",
+      "revId": "110e1ca1fecaa4e25fccdc96beb2f48a17f5dd45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
