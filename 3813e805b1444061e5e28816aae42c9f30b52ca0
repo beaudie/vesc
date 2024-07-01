@@ -106,6 +106,24 @@
       "parentUuid": "2cb3e82e_de041db5",
       "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4924556_43b61b6a",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-07-01T13:52:24Z",
+      "side": 1,
+      "message": "Followed up in https://chromium-review.googlesource.com/c/angle/angle/+/5666597.",
+      "parentUuid": "23745748_f54e8b90",
+      "revId": "3813e805b1444061e5e28816aae42c9f30b52ca0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
