@@ -38,6 +38,14 @@ class Kernel final : public _cl_kernel, public Object
                              void *value,
                              size_t *valueSizeRet) const;
 
+    const std::string &getName() const { return mInfo.functionName; }
+
+    bool areAllArgsSet() const
+    {
+        return std::all_of(mSetArguments.begin(), mSetArguments.end(),
+                           [](KernelArg arg) { return arg.isSet == true; });
+    }
+
   public:
     ~Kernel() override;
 
@@ -54,6 +62,8 @@ class Kernel final : public _cl_kernel, public Object
     const ProgramPtr mProgram;
     rx::CLKernelImpl::Ptr mImpl;
     rx::CLKernelImpl::Info mInfo;
+
+    std::vector<KernelArg> mSetArguments;
 
     friend class Object;
     friend class Program;
