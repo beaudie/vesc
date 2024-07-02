@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5196f2e8_cfdeefc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-02T09:33:20Z",
+      "side": 1,
+      "message": "Looks like TextureFormat needs to be treated differently from VertexFormat per\nhttps://dawn-review.googlesource.com/c/dawn/+/193360/4#message-c5b076db7765ddec7d3ee98000ff6c19320a5955",
+      "revId": "dcc282702a974b457c274b5bdbccfe27e0336b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
