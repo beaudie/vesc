@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb7d7a17_e8bf62f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-02T22:53:54Z",
+      "side": 1,
+      "message": "lgtm\n\nThank you Alexey for tracking this down! Let\u0027s let Geoff review this too.",
+      "revId": "e110eb8028d4fb7ec824a3883b6a8119e0b9bbdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
