@@ -876,6 +876,14 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glViewportIndexedfv", viewportIndexedfv);
     }
 
+    if (extensions.count("GL_EXT_base_instance") != 0)
+    {
+        ASSIGN("glDrawArraysInstancedBaseInstanceEXT", drawArraysInstancedBaseInstance);
+        ASSIGN("glDrawElementsInstancedBaseInstanceEXT", drawElementsInstancedBaseInstance);
+        ASSIGN("glDrawElementsInstancedBaseVertexBaseInstanceEXT",
+               drawElementsInstancedBaseVertexBaseInstance);
+    }
+
     if (extensions.count("GL_EXT_blend_color") != 0)
     {
         ASSIGN("glBlendColorEXT", blendColor);
@@ -886,9 +894,43 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glBlendEquationSeparateEXT", blendEquationSeparate);
     }
 
+    if (extensions.count("GL_EXT_blend_func_extended") != 0)
+    {
+        ASSIGN("glBindFragDataLocationEXT", bindFragDataLocation);
+        ASSIGN("glBindFragDataLocationIndexedEXT", bindFragDataLocationIndexed);
+        ASSIGN("glGetFragDataIndexEXT", getFragDataIndex);
+        ASSIGN("glGetProgramResourceLocationIndexEXT", getProgramResourceLocationIndex);
+    }
+
     if (extensions.count("GL_EXT_blend_func_separate") != 0)
     {
         ASSIGN("glBlendFuncSeparateEXT", blendFuncSeparate);
+    }
+
+    if (extensions.count("GL_EXT_blend_minmax") != 0)
+    {
+        ASSIGN("glBlendEquationEXT", blendEquation);
+    }
+
+    if (extensions.count("GL_EXT_buffer_storage") != 0)
+    {
+        ASSIGN("glBufferStorageEXT", bufferStorage);
+    }
+
+    if (extensions.count("GL_EXT_clear_texture") != 0)
+    {
+        ASSIGN("glClearTexImageEXT", clearTexImage);
+        ASSIGN("glClearTexSubImageEXT", clearTexSubImage);
+    }
+
+    if (extensions.count("GL_EXT_clip_control") != 0)
+    {
+        ASSIGN("glClipControlEXT", clipControl);
+    }
+
+    if (extensions.count("GL_EXT_copy_image") != 0)
+    {
+        ASSIGN("glCopyImageSubDataEXT", copyImageSubData);
     }
 
     if (extensions.count("GL_EXT_copy_texture") != 0)
@@ -946,21 +988,54 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glNamedRenderbufferStorageMultisampleEXT", namedRenderbufferStorageMultisample);
         ASSIGN("glProgramUniform1dEXT", programUniform1d);
         ASSIGN("glProgramUniform1dvEXT", programUniform1dv);
+        ASSIGN("glProgramUniform1fEXT", programUniform1f);
+        ASSIGN("glProgramUniform1fvEXT", programUniform1fv);
+        ASSIGN("glProgramUniform1iEXT", programUniform1i);
+        ASSIGN("glProgramUniform1ivEXT", programUniform1iv);
+        ASSIGN("glProgramUniform1uiEXT", programUniform1ui);
+        ASSIGN("glProgramUniform1uivEXT", programUniform1uiv);
         ASSIGN("glProgramUniform2dEXT", programUniform2d);
         ASSIGN("glProgramUniform2dvEXT", programUniform2dv);
+        ASSIGN("glProgramUniform2fEXT", programUniform2f);
+        ASSIGN("glProgramUniform2fvEXT", programUniform2fv);
+        ASSIGN("glProgramUniform2iEXT", programUniform2i);
+        ASSIGN("glProgramUniform2ivEXT", programUniform2iv);
+        ASSIGN("glProgramUniform2uiEXT", programUniform2ui);
+        ASSIGN("glProgramUniform2uivEXT", programUniform2uiv);
         ASSIGN("glProgramUniform3dEXT", programUniform3d);
         ASSIGN("glProgramUniform3dvEXT", programUniform3dv);
+        ASSIGN("glProgramUniform3fEXT", programUniform3f);
+        ASSIGN("glProgramUniform3fvEXT", programUniform3fv);
+        ASSIGN("glProgramUniform3iEXT", programUniform3i);
+        ASSIGN("glProgramUniform3ivEXT", programUniform3iv);
+        ASSIGN("glProgramUniform3uiEXT", programUniform3ui);
+        ASSIGN("glProgramUniform3uivEXT", programUniform3uiv);
         ASSIGN("glProgramUniform4dEXT", programUniform4d);
         ASSIGN("glProgramUniform4dvEXT", programUniform4dv);
+        ASSIGN("glProgramUniform4fEXT", programUniform4f);
+        ASSIGN("glProgramUniform4fvEXT", programUniform4fv);
+        ASSIGN("glProgramUniform4iEXT", programUniform4i);
+        ASSIGN("glProgramUniform4ivEXT", programUniform4iv);
+        ASSIGN("glProgramUniform4uiEXT", programUniform4ui);
+        ASSIGN("glProgramUniform4uivEXT", programUniform4uiv);
         ASSIGN("glProgramUniformMatrix2dvEXT", programUniformMatrix2dv);
+        ASSIGN("glProgramUniformMatrix2fvEXT", programUniformMatrix2fv);
         ASSIGN("glProgramUniformMatrix2x3dvEXT", programUniformMatrix2x3dv);
+        ASSIGN("glProgramUniformMatrix2x3fvEXT", programUniformMatrix2x3fv);
         ASSIGN("glProgramUniformMatrix2x4dvEXT", programUniformMatrix2x4dv);
+        ASSIGN("glProgramUniformMatrix2x4fvEXT", programUniformMatrix2x4fv);
         ASSIGN("glProgramUniformMatrix3dvEXT", programUniformMatrix3dv);
+        ASSIGN("glProgramUniformMatrix3fvEXT", programUniformMatrix3fv);
         ASSIGN("glProgramUniformMatrix3x2dvEXT", programUniformMatrix3x2dv);
+        ASSIGN("glProgramUniformMatrix3x2fvEXT", programUniformMatrix3x2fv);
         ASSIGN("glProgramUniformMatrix3x4dvEXT", programUniformMatrix3x4dv);
+        ASSIGN("glProgramUniformMatrix3x4fvEXT", programUniformMatrix3x4fv);
         ASSIGN("glProgramUniformMatrix4dvEXT", programUniformMatrix4dv);
+        ASSIGN("glProgramUniformMatrix4fvEXT", programUniformMatrix4fv);
         ASSIGN("glProgramUniformMatrix4x2dvEXT", programUniformMatrix4x2dv);
+        ASSIGN("glProgramUniformMatrix4x2fvEXT", programUniformMatrix4x2fv);
         ASSIGN("glProgramUniformMatrix4x3dvEXT", programUniformMatrix4x3dv);
+        ASSIGN("glProgramUniformMatrix4x3fvEXT", programUniformMatrix4x3fv);
         ASSIGN("glTextureBufferEXT", textureBuffer);
         ASSIGN("glTextureBufferRangeEXT", textureBufferRange);
         ASSIGN("glTextureParameterIivEXT", textureParameterIiv);
@@ -977,9 +1052,61 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glUnmapNamedBufferEXT", unmapNamedBuffer);
     }
 
+    if (extensions.count("GL_EXT_discard_framebuffer") != 0)
+    {
+        ASSIGN("glDiscardFramebufferEXT", discardFramebufferEXT);
+    }
+
+    if (extensions.count("GL_EXT_disjoint_timer_query") != 0)
+    {
+        ASSIGN("glBeginQueryEXT", beginQuery);
+        ASSIGN("glDeleteQueriesEXT", deleteQueries);
+        ASSIGN("glEndQueryEXT", endQuery);
+        ASSIGN("glGenQueriesEXT", genQueries);
+        ASSIGN("glGetInteger64vEXT", getInteger64v);
+        ASSIGN("glGetQueryObjecti64vEXT", getQueryObjecti64v);
+        ASSIGN("glGetQueryObjectivEXT", getQueryObjectiv);
+        ASSIGN("glGetQueryObjectui64vEXT", getQueryObjectui64v);
+        ASSIGN("glGetQueryObjectuivEXT", getQueryObjectuiv);
+        ASSIGN("glGetQueryivEXT", getQueryiv);
+        ASSIGN("glIsQueryEXT", isQuery);
+        ASSIGN("glQueryCounterEXT", queryCounter);
+    }
+
+    if (extensions.count("GL_EXT_draw_buffers") != 0)
+    {
+        ASSIGN("glDrawBuffersEXT", drawBuffers);
+    }
+
+    if (extensions.count("GL_EXT_draw_buffers_indexed") != 0)
+    {
+        ASSIGN("glBlendEquationSeparateiEXT", blendEquationSeparatei);
+        ASSIGN("glBlendEquationiEXT", blendEquationi);
+        ASSIGN("glBlendFuncSeparateiEXT", blendFuncSeparatei);
+        ASSIGN("glBlendFunciEXT", blendFunci);
+        ASSIGN("glColorMaskiEXT", colorMaski);
+        ASSIGN("glDisableiEXT", disablei);
+        ASSIGN("glEnableiEXT", enablei);
+        ASSIGN("glIsEnablediEXT", isEnabledi);
+    }
+
+    if (extensions.count("GL_EXT_draw_elements_base_vertex") != 0)
+    {
+        ASSIGN("glDrawElementsBaseVertexEXT", drawElementsBaseVertex);
+        ASSIGN("glDrawElementsInstancedBaseVertexEXT", drawElementsInstancedBaseVertex);
+        ASSIGN("glDrawRangeElementsBaseVertexEXT", drawRangeElementsBaseVertex);
+        ASSIGN("glMultiDrawElementsBaseVertexEXT", multiDrawElementsBaseVertex);
+    }
+
     if (extensions.count("GL_EXT_draw_range_elements") != 0)
     {
         ASSIGN("glDrawRangeElementsEXT", drawRangeElements);
+    }
+
+    if (extensions.count("GL_EXT_draw_transform_feedback") != 0)
+    {
+        ASSIGN("glDrawTransformFeedbackEXT", drawTransformFeedback);
+        ASSIGN("glDrawTransformFeedbackInstancedEXT", drawTransformFeedbackInstanced);
     }
 
     if (extensions.count("GL_EXT_framebuffer_blit") != 0)
@@ -1013,6 +1140,16 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glIsFramebufferEXT", isFramebuffer);
         ASSIGN("glIsRenderbufferEXT", isRenderbuffer);
         ASSIGN("glRenderbufferStorageEXT", renderbufferStorage);
+    }
+
+    if (extensions.count("GL_EXT_geometry_shader") != 0)
+    {
+        ASSIGN("glFramebufferTextureEXT", framebufferTexture);
+    }
+
+    if (extensions.count("GL_EXT_geometry_shader4") != 0)
+    {
+        ASSIGN("glProgramParameteriEXT", programParameteri);
     }
 
     if (extensions.count("GL_EXT_gpu_shader4") != 0)
@@ -1053,6 +1190,46 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glVertexAttribIPointerEXT", vertexAttribIPointer);
     }
 
+    if (extensions.count("GL_EXT_instanced_arrays") != 0)
+    {
+        ASSIGN("glVertexAttribDivisorEXT", vertexAttribDivisor);
+    }
+
+    if (extensions.count("GL_EXT_map_buffer_range") != 0)
+    {
+        ASSIGN("glFlushMappedBufferRangeEXT", flushMappedBufferRange);
+        ASSIGN("glMapBufferRangeEXT", mapBufferRange);
+    }
+
+    if (extensions.count("GL_EXT_multi_draw_indirect") != 0)
+    {
+        ASSIGN("glMultiDrawArraysIndirectEXT", multiDrawArraysIndirect);
+        ASSIGN("glMultiDrawElementsIndirectEXT", multiDrawElementsIndirect);
+    }
+
+    if (extensions.count("GL_EXT_multisampled_render_to_texture") != 0)
+    {
+        ASSIGN("glFramebufferTexture2DMultisampleEXT", framebufferTexture2DMultisampleEXT);
+        ASSIGN("glRenderbufferStorageMultisampleEXT", renderbufferStorageMultisample);
+        ASSIGN("glRenderbufferStorageMultisampleEXT", renderbufferStorageMultisampleEXT);
+    }
+
+    if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
+    {
+        ASSIGN("glGetIntegeri_vEXT", getIntegeri_v);
+    }
+
+    if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)
+    {
+        ASSIGN("glBeginQueryEXT", beginQuery);
+        ASSIGN("glDeleteQueriesEXT", deleteQueries);
+        ASSIGN("glEndQueryEXT", endQuery);
+        ASSIGN("glGenQueriesEXT", genQueries);
+        ASSIGN("glGetQueryObjectuivEXT", getQueryObjectuiv);
+        ASSIGN("glGetQueryivEXT", getQueryiv);
+        ASSIGN("glIsQueryEXT", isQuery);
+    }
+
     if (extensions.count("GL_EXT_point_parameters") != 0)
     {
         ASSIGN("glPointParameterfEXT", pointParameterf);
@@ -1064,9 +1241,70 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glPolygonOffsetEXT", polygonOffset);
     }
 
+    if (extensions.count("GL_EXT_primitive_bounding_box") != 0)
+    {
+        ASSIGN("glPrimitiveBoundingBoxEXT", primitiveBoundingBox);
+    }
+
     if (extensions.count("GL_EXT_provoking_vertex") != 0)
     {
         ASSIGN("glProvokingVertexEXT", provokingVertex);
+    }
+
+    if (extensions.count("GL_EXT_robustness") != 0)
+    {
+        ASSIGN("glGetGraphicsResetStatusEXT", getGraphicsResetStatus);
+        ASSIGN("glGetnUniformfvEXT", getnUniformfv);
+        ASSIGN("glGetnUniformivEXT", getnUniformiv);
+        ASSIGN("glReadnPixelsEXT", readnPixels);
+    }
+
+    if (extensions.count("GL_EXT_separate_shader_objects") != 0)
+    {
+        ASSIGN("glActiveShaderProgramEXT", activeShaderProgram);
+        ASSIGN("glBindProgramPipelineEXT", bindProgramPipeline);
+        ASSIGN("glCreateShaderProgramvEXT", createShaderProgramv);
+        ASSIGN("glDeleteProgramPipelinesEXT", deleteProgramPipelines);
+        ASSIGN("glGenProgramPipelinesEXT", genProgramPipelines);
+        ASSIGN("glGetProgramPipelineInfoLogEXT", getProgramPipelineInfoLog);
+        ASSIGN("glGetProgramPipelineivEXT", getProgramPipelineiv);
+        ASSIGN("glIsProgramPipelineEXT", isProgramPipeline);
+        ASSIGN("glProgramParameteriEXT", programParameteri);
+        ASSIGN("glProgramUniform1fEXT", programUniform1f);
+        ASSIGN("glProgramUniform1fvEXT", programUniform1fv);
+        ASSIGN("glProgramUniform1iEXT", programUniform1i);
+        ASSIGN("glProgramUniform1ivEXT", programUniform1iv);
+        ASSIGN("glProgramUniform1uiEXT", programUniform1ui);
+        ASSIGN("glProgramUniform1uivEXT", programUniform1uiv);
+        ASSIGN("glProgramUniform2fEXT", programUniform2f);
+        ASSIGN("glProgramUniform2fvEXT", programUniform2fv);
+        ASSIGN("glProgramUniform2iEXT", programUniform2i);
+        ASSIGN("glProgramUniform2ivEXT", programUniform2iv);
+        ASSIGN("glProgramUniform2uiEXT", programUniform2ui);
+        ASSIGN("glProgramUniform2uivEXT", programUniform2uiv);
+        ASSIGN("glProgramUniform3fEXT", programUniform3f);
+        ASSIGN("glProgramUniform3fvEXT", programUniform3fv);
+        ASSIGN("glProgramUniform3iEXT", programUniform3i);
+        ASSIGN("glProgramUniform3ivEXT", programUniform3iv);
+        ASSIGN("glProgramUniform3uiEXT", programUniform3ui);
+        ASSIGN("glProgramUniform3uivEXT", programUniform3uiv);
+        ASSIGN("glProgramUniform4fEXT", programUniform4f);
+        ASSIGN("glProgramUniform4fvEXT", programUniform4fv);
+        ASSIGN("glProgramUniform4iEXT", programUniform4i);
+        ASSIGN("glProgramUniform4ivEXT", programUniform4iv);
+        ASSIGN("glProgramUniform4uiEXT", programUniform4ui);
+        ASSIGN("glProgramUniform4uivEXT", programUniform4uiv);
+        ASSIGN("glProgramUniformMatrix2fvEXT", programUniformMatrix2fv);
+        ASSIGN("glProgramUniformMatrix2x3fvEXT", programUniformMatrix2x3fv);
+        ASSIGN("glProgramUniformMatrix2x4fvEXT", programUniformMatrix2x4fv);
+        ASSIGN("glProgramUniformMatrix3fvEXT", programUniformMatrix3fv);
+        ASSIGN("glProgramUniformMatrix3x2fvEXT", programUniformMatrix3x2fv);
+        ASSIGN("glProgramUniformMatrix3x4fvEXT", programUniformMatrix3x4fv);
+        ASSIGN("glProgramUniformMatrix4fvEXT", programUniformMatrix4fv);
+        ASSIGN("glProgramUniformMatrix4x2fvEXT", programUniformMatrix4x2fv);
+        ASSIGN("glProgramUniformMatrix4x3fvEXT", programUniformMatrix4x3fv);
+        ASSIGN("glUseProgramStagesEXT", useProgramStages);
+        ASSIGN("glValidateProgramPipelineEXT", validateProgramPipeline);
     }
 
     if (extensions.count("GL_EXT_shader_image_load_store") != 0)
@@ -1081,6 +1319,11 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glTexSubImage2DEXT", texSubImage2D);
     }
 
+    if (extensions.count("GL_EXT_tessellation_shader") != 0)
+    {
+        ASSIGN("glPatchParameteriEXT", patchParameteri);
+    }
+
     if (extensions.count("GL_EXT_texture3D") != 0)
     {
         ASSIGN("glTexImage3DEXT", texImage3D);
@@ -1090,6 +1333,26 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
     if (extensions.count("GL_EXT_texture_array") != 0)
     {
         ASSIGN("glFramebufferTextureLayerEXT", framebufferTextureLayer);
+    }
+
+    if (extensions.count("GL_EXT_texture_border_clamp") != 0)
+    {
+        ASSIGN("glGetSamplerParameterIivEXT", getSamplerParameterIiv);
+        ASSIGN("glGetSamplerParameterIuivEXT", getSamplerParameterIuiv);
+        ASSIGN("glGetTexParameterIivEXT", getTexParameterIiv);
+        ASSIGN("glGetTexParameterIuivEXT", getTexParameterIuiv);
+        ASSIGN("glSamplerParameterIivEXT", samplerParameterIiv);
+        ASSIGN("glSamplerParameterIuivEXT", samplerParameterIuiv);
+        ASSIGN("glTexParameterIivEXT", texParameterIiv);
+        ASSIGN("glTexParameterIuivEXT", texParameterIuiv);
+    }
+
+    if (extensions.count("GL_EXT_texture_buffer") != 0)
+    {
+        ASSIGN("glTexBufferEXT", texBuffer);
+        ASSIGN("glTexBufferEXT", texBufferEXT);
+        ASSIGN("glTexBufferRangeEXT", texBufferRange);
+        ASSIGN("glTexBufferRangeEXT", texBufferRangeEXT);
     }
 
     if (extensions.count("GL_EXT_texture_buffer_object") != 0)
@@ -1112,6 +1375,11 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glDeleteTexturesEXT", deleteTextures);
         ASSIGN("glGenTexturesEXT", genTextures);
         ASSIGN("glIsTextureEXT", isTexture);
+    }
+
+    if (extensions.count("GL_EXT_texture_view") != 0)
+    {
+        ASSIGN("glTextureViewEXT", textureView);
     }
 
     if (extensions.count("GL_EXT_timer_query") != 0)
@@ -1150,6 +1418,12 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glVertexAttribLPointerEXT", vertexAttribLPointer);
     }
 
+    if (extensions.count("GL_IMG_multisampled_render_to_texture") != 0)
+    {
+        ASSIGN("glFramebufferTexture2DMultisampleIMG", framebufferTexture2DMultisampleIMG);
+        ASSIGN("glRenderbufferStorageMultisampleIMG", renderbufferStorageMultisampleIMG);
+    }
+
     if (extensions.count("GL_KHR_debug") != 0)
     {
         ASSIGN("glDebugMessageCallback", debugMessageCallback);
@@ -1174,10 +1448,20 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glReadnPixels", readnPixels);
     }
 
+    if (extensions.count("GL_NV_framebuffer_blit") != 0)
+    {
+        ASSIGN("glBlitFramebufferNV", blitFramebufferNV);
+    }
+
     if (extensions.count("GL_NV_geometry_program4") != 0)
     {
         ASSIGN("glFramebufferTextureEXT", framebufferTexture);
         ASSIGN("glFramebufferTextureLayerEXT", framebufferTextureLayer);
+    }
+
+    if (extensions.count("GL_NV_polygon_mode") != 0)
+    {
+        ASSIGN("glPolygonModeNV", polygonModeNV);
     }
 
     if (extensions.count("GL_NV_vertex_program4") != 0)
@@ -1207,10 +1491,142 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
         ASSIGN("glVertexAttribIPointerEXT", vertexAttribIPointer);
     }
 
+    if (extensions.count("GL_OES_EGL_image") != 0)
+    {
+        ASSIGN("glEGLImageTargetRenderbufferStorageOES", eGLImageTargetRenderbufferStorageOES);
+        ASSIGN("glEGLImageTargetTexture2DOES", eGLImageTargetTexture2DOES);
+    }
+
+    if (extensions.count("GL_OES_copy_image") != 0)
+    {
+        ASSIGN("glCopyImageSubDataOES", copyImageSubData);
+    }
+
+    if (extensions.count("GL_OES_draw_buffers_indexed") != 0)
+    {
+        ASSIGN("glBlendEquationSeparateiOES", blendEquationSeparatei);
+        ASSIGN("glBlendEquationiOES", blendEquationi);
+        ASSIGN("glBlendFuncSeparateiOES", blendFuncSeparatei);
+        ASSIGN("glBlendFunciOES", blendFunci);
+        ASSIGN("glColorMaskiOES", colorMaski);
+        ASSIGN("glDisableiOES", disablei);
+        ASSIGN("glEnableiOES", enablei);
+        ASSIGN("glIsEnablediOES", isEnabledi);
+    }
+
+    if (extensions.count("GL_OES_draw_elements_base_vertex") != 0)
+    {
+        ASSIGN("glDrawElementsBaseVertexOES", drawElementsBaseVertex);
+        ASSIGN("glDrawElementsInstancedBaseVertexOES", drawElementsInstancedBaseVertex);
+        ASSIGN("glDrawRangeElementsBaseVertexOES", drawRangeElementsBaseVertex);
+        ASSIGN("glMultiDrawElementsBaseVertexEXT", multiDrawElementsBaseVertex);
+    }
+
+    if (extensions.count("GL_OES_geometry_shader") != 0)
+    {
+        ASSIGN("glFramebufferTextureOES", framebufferTexture);
+    }
+
+    if (extensions.count("GL_OES_get_program_binary") != 0)
+    {
+        ASSIGN("glGetProgramBinaryOES", getProgramBinary);
+        ASSIGN("glProgramBinaryOES", programBinary);
+    }
+
+    if (extensions.count("GL_OES_mapbuffer") != 0)
+    {
+        ASSIGN("glGetBufferPointervOES", getBufferPointerv);
+        ASSIGN("glMapBufferOES", mapBuffer);
+        ASSIGN("glUnmapBufferOES", unmapBuffer);
+    }
+
+    if (extensions.count("GL_OES_primitive_bounding_box") != 0)
+    {
+        ASSIGN("glPrimitiveBoundingBoxOES", primitiveBoundingBox);
+    }
+
+    if (extensions.count("GL_OES_sample_shading") != 0)
+    {
+        ASSIGN("glMinSampleShadingOES", minSampleShading);
+    }
+
     if (extensions.count("GL_OES_single_precision") != 0)
     {
         ASSIGN("glClearDepthfOES", clearDepthf);
         ASSIGN("glDepthRangefOES", depthRangef);
+    }
+
+    if (extensions.count("GL_OES_tessellation_shader") != 0)
+    {
+        ASSIGN("glPatchParameteriOES", patchParameteri);
+    }
+
+    if (extensions.count("GL_OES_texture_3D") != 0)
+    {
+        ASSIGN("glCompressedTexImage3DOES", compressedTexImage3D);
+        ASSIGN("glCompressedTexSubImage3DOES", compressedTexSubImage3D);
+        ASSIGN("glCopyTexSubImage3DOES", copyTexSubImage3D);
+        ASSIGN("glFramebufferTexture3DOES", framebufferTexture3D);
+        ASSIGN("glTexImage3DOES", texImage3D);
+        ASSIGN("glTexSubImage3DOES", texSubImage3D);
+    }
+
+    if (extensions.count("GL_OES_texture_border_clamp") != 0)
+    {
+        ASSIGN("glGetSamplerParameterIivOES", getSamplerParameterIiv);
+        ASSIGN("glGetSamplerParameterIuivOES", getSamplerParameterIuiv);
+        ASSIGN("glGetTexParameterIivOES", getTexParameterIiv);
+        ASSIGN("glGetTexParameterIuivOES", getTexParameterIuiv);
+        ASSIGN("glSamplerParameterIivOES", samplerParameterIiv);
+        ASSIGN("glSamplerParameterIuivOES", samplerParameterIuiv);
+        ASSIGN("glTexParameterIivOES", texParameterIiv);
+        ASSIGN("glTexParameterIuivOES", texParameterIuiv);
+    }
+
+    if (extensions.count("GL_OES_texture_buffer") != 0)
+    {
+        ASSIGN("glTexBufferOES", texBuffer);
+        ASSIGN("glTexBufferOES", texBufferOES);
+        ASSIGN("glTexBufferRangeOES", texBufferRange);
+        ASSIGN("glTexBufferRangeOES", texBufferRangeOES);
+    }
+
+    if (extensions.count("GL_OES_texture_storage_multisample_2d_array") != 0)
+    {
+        ASSIGN("glTexStorage3DMultisampleOES", texStorage3DMultisample);
+    }
+
+    if (extensions.count("GL_OES_texture_view") != 0)
+    {
+        ASSIGN("glTextureViewOES", textureView);
+    }
+
+    if (extensions.count("GL_OES_vertex_array_object") != 0)
+    {
+        ASSIGN("glBindVertexArrayOES", bindVertexArray);
+        ASSIGN("glDeleteVertexArraysOES", deleteVertexArrays);
+        ASSIGN("glGenVertexArraysOES", genVertexArrays);
+        ASSIGN("glIsVertexArrayOES", isVertexArray);
+    }
+
+    if (extensions.count("GL_OES_viewport_array") != 0)
+    {
+        ASSIGN("glDisableiOES", disablei);
+        ASSIGN("glEnableiOES", enablei);
+        ASSIGN("glGetFloati_vOES", getFloati_v);
+        ASSIGN("glIsEnablediOES", isEnabledi);
+        ASSIGN("glScissorArrayvOES", scissorArrayv);
+        ASSIGN("glScissorIndexedOES", scissorIndexed);
+        ASSIGN("glScissorIndexedvOES", scissorIndexedv);
+        ASSIGN("glViewportArrayvOES", viewportArrayv);
+        ASSIGN("glViewportIndexedfOES", viewportIndexedf);
+        ASSIGN("glViewportIndexedfvOES", viewportIndexedfv);
+    }
+
+    if (extensions.count("GL_QCOM_tiled_rendering") != 0)
+    {
+        ASSIGN("glEndTilingQCOM", endTilingQCOM);
+        ASSIGN("glStartTilingQCOM", startTilingQCOM);
     }
 
     if (version >= gl::Version(1, 0))
@@ -1945,354 +2361,6 @@ void DispatchTableGL::initProcsDesktopGL(const gl::Version &version,
 void DispatchTableGL::initProcsGLES(const gl::Version &version,
                                     const std::set<std::string> &extensions)
 {
-    if (extensions.count("GL_EXT_base_instance") != 0)
-    {
-        ASSIGN("glDrawArraysInstancedBaseInstanceEXT", drawArraysInstancedBaseInstance);
-        ASSIGN("glDrawElementsInstancedBaseInstanceEXT", drawElementsInstancedBaseInstance);
-        ASSIGN("glDrawElementsInstancedBaseVertexBaseInstanceEXT",
-               drawElementsInstancedBaseVertexBaseInstance);
-    }
-
-    if (extensions.count("GL_EXT_blend_func_extended") != 0)
-    {
-        ASSIGN("glBindFragDataLocationEXT", bindFragDataLocation);
-        ASSIGN("glBindFragDataLocationIndexedEXT", bindFragDataLocationIndexed);
-        ASSIGN("glGetFragDataIndexEXT", getFragDataIndex);
-        ASSIGN("glGetProgramResourceLocationIndexEXT", getProgramResourceLocationIndex);
-    }
-
-    if (extensions.count("GL_EXT_buffer_storage") != 0)
-    {
-        ASSIGN("glBufferStorageEXT", bufferStorage);
-    }
-
-    if (extensions.count("GL_EXT_clear_texture") != 0)
-    {
-        ASSIGN("glClearTexImageEXT", clearTexImage);
-        ASSIGN("glClearTexSubImageEXT", clearTexSubImage);
-    }
-
-    if (extensions.count("GL_EXT_clip_control") != 0)
-    {
-        ASSIGN("glClipControlEXT", clipControl);
-    }
-
-    if (extensions.count("GL_EXT_copy_image") != 0)
-    {
-        ASSIGN("glCopyImageSubDataEXT", copyImageSubData);
-    }
-
-    if (extensions.count("GL_EXT_discard_framebuffer") != 0)
-    {
-        ASSIGN("glDiscardFramebufferEXT", discardFramebufferEXT);
-    }
-
-    if (extensions.count("GL_EXT_disjoint_timer_query") != 0)
-    {
-        ASSIGN("glBeginQueryEXT", beginQuery);
-        ASSIGN("glDeleteQueriesEXT", deleteQueries);
-        ASSIGN("glEndQueryEXT", endQuery);
-        ASSIGN("glGenQueriesEXT", genQueries);
-        ASSIGN("glGetInteger64vEXT", getInteger64v);
-        ASSIGN("glGetQueryObjecti64vEXT", getQueryObjecti64v);
-        ASSIGN("glGetQueryObjectivEXT", getQueryObjectiv);
-        ASSIGN("glGetQueryObjectui64vEXT", getQueryObjectui64v);
-        ASSIGN("glGetQueryObjectuivEXT", getQueryObjectuiv);
-        ASSIGN("glGetQueryivEXT", getQueryiv);
-        ASSIGN("glIsQueryEXT", isQuery);
-        ASSIGN("glQueryCounterEXT", queryCounter);
-    }
-
-    if (extensions.count("GL_EXT_draw_buffers") != 0)
-    {
-        ASSIGN("glDrawBuffersEXT", drawBuffers);
-    }
-
-    if (extensions.count("GL_EXT_draw_buffers_indexed") != 0)
-    {
-        ASSIGN("glBlendEquationSeparateiEXT", blendEquationSeparatei);
-        ASSIGN("glBlendEquationiEXT", blendEquationi);
-        ASSIGN("glBlendFuncSeparateiEXT", blendFuncSeparatei);
-        ASSIGN("glBlendFunciEXT", blendFunci);
-        ASSIGN("glColorMaskiEXT", colorMaski);
-        ASSIGN("glDisableiEXT", disablei);
-        ASSIGN("glEnableiEXT", enablei);
-        ASSIGN("glIsEnablediEXT", isEnabledi);
-    }
-
-    if (extensions.count("GL_EXT_draw_elements_base_vertex") != 0)
-    {
-        ASSIGN("glDrawElementsBaseVertexEXT", drawElementsBaseVertex);
-        ASSIGN("glDrawElementsInstancedBaseVertexEXT", drawElementsInstancedBaseVertex);
-        ASSIGN("glDrawRangeElementsBaseVertexEXT", drawRangeElementsBaseVertex);
-        ASSIGN("glMultiDrawElementsBaseVertexEXT", multiDrawElementsBaseVertex);
-    }
-
-    if (extensions.count("GL_EXT_draw_transform_feedback") != 0)
-    {
-        ASSIGN("glDrawTransformFeedbackEXT", drawTransformFeedback);
-        ASSIGN("glDrawTransformFeedbackInstancedEXT", drawTransformFeedbackInstanced);
-    }
-
-    if (extensions.count("GL_EXT_geometry_shader") != 0)
-    {
-        ASSIGN("glFramebufferTextureEXT", framebufferTexture);
-    }
-
-    if (extensions.count("GL_EXT_instanced_arrays") != 0)
-    {
-        ASSIGN("glVertexAttribDivisorEXT", vertexAttribDivisor);
-    }
-
-    if (extensions.count("GL_EXT_map_buffer_range") != 0)
-    {
-        ASSIGN("glFlushMappedBufferRangeEXT", flushMappedBufferRange);
-        ASSIGN("glMapBufferRangeEXT", mapBufferRange);
-    }
-
-    if (extensions.count("GL_EXT_multi_draw_indirect") != 0)
-    {
-        ASSIGN("glMultiDrawArraysIndirectEXT", multiDrawArraysIndirect);
-        ASSIGN("glMultiDrawElementsIndirectEXT", multiDrawElementsIndirect);
-    }
-
-    if (extensions.count("GL_EXT_multisampled_render_to_texture") != 0)
-    {
-        ASSIGN("glFramebufferTexture2DMultisampleEXT", framebufferTexture2DMultisampleEXT);
-        ASSIGN("glRenderbufferStorageMultisampleEXT", renderbufferStorageMultisample);
-        ASSIGN("glRenderbufferStorageMultisampleEXT", renderbufferStorageMultisampleEXT);
-    }
-
-    if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
-    {
-        ASSIGN("glGetIntegeri_vEXT", getIntegeri_v);
-    }
-
-    if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)
-    {
-        ASSIGN("glBeginQueryEXT", beginQuery);
-        ASSIGN("glDeleteQueriesEXT", deleteQueries);
-        ASSIGN("glEndQueryEXT", endQuery);
-        ASSIGN("glGenQueriesEXT", genQueries);
-        ASSIGN("glGetQueryObjectuivEXT", getQueryObjectuiv);
-        ASSIGN("glGetQueryivEXT", getQueryiv);
-        ASSIGN("glIsQueryEXT", isQuery);
-    }
-
-    if (extensions.count("GL_EXT_primitive_bounding_box") != 0)
-    {
-        ASSIGN("glPrimitiveBoundingBoxEXT", primitiveBoundingBox);
-    }
-
-    if (extensions.count("GL_EXT_robustness") != 0)
-    {
-        ASSIGN("glGetGraphicsResetStatusEXT", getGraphicsResetStatus);
-        ASSIGN("glGetnUniformfvEXT", getnUniformfv);
-        ASSIGN("glGetnUniformivEXT", getnUniformiv);
-        ASSIGN("glReadnPixelsEXT", readnPixels);
-    }
-
-    if (extensions.count("GL_EXT_tessellation_shader") != 0)
-    {
-        ASSIGN("glPatchParameteriEXT", patchParameteri);
-    }
-
-    if (extensions.count("GL_EXT_texture_border_clamp") != 0)
-    {
-        ASSIGN("glGetSamplerParameterIivEXT", getSamplerParameterIiv);
-        ASSIGN("glGetSamplerParameterIuivEXT", getSamplerParameterIuiv);
-        ASSIGN("glGetTexParameterIivEXT", getTexParameterIiv);
-        ASSIGN("glGetTexParameterIuivEXT", getTexParameterIuiv);
-        ASSIGN("glSamplerParameterIivEXT", samplerParameterIiv);
-        ASSIGN("glSamplerParameterIuivEXT", samplerParameterIuiv);
-        ASSIGN("glTexParameterIivEXT", texParameterIiv);
-        ASSIGN("glTexParameterIuivEXT", texParameterIuiv);
-    }
-
-    if (extensions.count("GL_EXT_texture_buffer") != 0)
-    {
-        ASSIGN("glTexBufferEXT", texBuffer);
-        ASSIGN("glTexBufferEXT", texBufferEXT);
-        ASSIGN("glTexBufferRangeEXT", texBufferRange);
-        ASSIGN("glTexBufferRangeEXT", texBufferRangeEXT);
-    }
-
-    if (extensions.count("GL_EXT_texture_view") != 0)
-    {
-        ASSIGN("glTextureViewEXT", textureView);
-    }
-
-    if (extensions.count("GL_IMG_multisampled_render_to_texture") != 0)
-    {
-        ASSIGN("glFramebufferTexture2DMultisampleIMG", framebufferTexture2DMultisampleIMG);
-        ASSIGN("glRenderbufferStorageMultisampleIMG", renderbufferStorageMultisampleIMG);
-    }
-
-    if (extensions.count("GL_KHR_debug") != 0)
-    {
-        ASSIGN("glDebugMessageCallbackKHR", debugMessageCallback);
-        ASSIGN("glDebugMessageControlKHR", debugMessageControl);
-        ASSIGN("glDebugMessageInsertKHR", debugMessageInsert);
-        ASSIGN("glGetDebugMessageLogKHR", getDebugMessageLog);
-        ASSIGN("glGetObjectLabelKHR", getObjectLabel);
-        ASSIGN("glGetObjectPtrLabelKHR", getObjectPtrLabel);
-        ASSIGN("glGetPointervKHR", getPointerv);
-        ASSIGN("glObjectLabelKHR", objectLabel);
-        ASSIGN("glObjectPtrLabelKHR", objectPtrLabel);
-        ASSIGN("glPopDebugGroupKHR", popDebugGroup);
-        ASSIGN("glPushDebugGroupKHR", pushDebugGroup);
-    }
-
-    if (extensions.count("GL_KHR_robustness") != 0)
-    {
-        ASSIGN("glGetGraphicsResetStatusKHR", getGraphicsResetStatus);
-        ASSIGN("glGetnUniformfvKHR", getnUniformfv);
-        ASSIGN("glGetnUniformivKHR", getnUniformiv);
-        ASSIGN("glGetnUniformuivKHR", getnUniformuiv);
-        ASSIGN("glReadnPixelsKHR", readnPixels);
-    }
-
-    if (extensions.count("GL_NV_framebuffer_blit") != 0)
-    {
-        ASSIGN("glBlitFramebufferNV", blitFramebufferNV);
-    }
-
-    if (extensions.count("GL_NV_polygon_mode") != 0)
-    {
-        ASSIGN("glPolygonModeNV", polygonModeNV);
-    }
-
-    if (extensions.count("GL_OES_EGL_image") != 0)
-    {
-        ASSIGN("glEGLImageTargetRenderbufferStorageOES", eGLImageTargetRenderbufferStorageOES);
-        ASSIGN("glEGLImageTargetTexture2DOES", eGLImageTargetTexture2DOES);
-    }
-
-    if (extensions.count("GL_OES_copy_image") != 0)
-    {
-        ASSIGN("glCopyImageSubDataOES", copyImageSubData);
-    }
-
-    if (extensions.count("GL_OES_draw_buffers_indexed") != 0)
-    {
-        ASSIGN("glBlendEquationSeparateiOES", blendEquationSeparatei);
-        ASSIGN("glBlendEquationiOES", blendEquationi);
-        ASSIGN("glBlendFuncSeparateiOES", blendFuncSeparatei);
-        ASSIGN("glBlendFunciOES", blendFunci);
-        ASSIGN("glColorMaskiOES", colorMaski);
-        ASSIGN("glDisableiOES", disablei);
-        ASSIGN("glEnableiOES", enablei);
-        ASSIGN("glIsEnablediOES", isEnabledi);
-    }
-
-    if (extensions.count("GL_OES_draw_elements_base_vertex") != 0)
-    {
-        ASSIGN("glDrawElementsBaseVertexOES", drawElementsBaseVertex);
-        ASSIGN("glDrawElementsInstancedBaseVertexOES", drawElementsInstancedBaseVertex);
-        ASSIGN("glDrawRangeElementsBaseVertexOES", drawRangeElementsBaseVertex);
-        ASSIGN("glMultiDrawElementsBaseVertexEXT", multiDrawElementsBaseVertex);
-    }
-
-    if (extensions.count("GL_OES_geometry_shader") != 0)
-    {
-        ASSIGN("glFramebufferTextureOES", framebufferTexture);
-    }
-
-    if (extensions.count("GL_OES_get_program_binary") != 0)
-    {
-        ASSIGN("glGetProgramBinaryOES", getProgramBinary);
-        ASSIGN("glProgramBinaryOES", programBinary);
-    }
-
-    if (extensions.count("GL_OES_mapbuffer") != 0)
-    {
-        ASSIGN("glGetBufferPointervOES", getBufferPointerv);
-        ASSIGN("glMapBufferOES", mapBuffer);
-        ASSIGN("glUnmapBufferOES", unmapBuffer);
-    }
-
-    if (extensions.count("GL_OES_primitive_bounding_box") != 0)
-    {
-        ASSIGN("glPrimitiveBoundingBoxOES", primitiveBoundingBox);
-    }
-
-    if (extensions.count("GL_OES_sample_shading") != 0)
-    {
-        ASSIGN("glMinSampleShadingOES", minSampleShading);
-    }
-
-    if (extensions.count("GL_OES_tessellation_shader") != 0)
-    {
-        ASSIGN("glPatchParameteriOES", patchParameteri);
-    }
-
-    if (extensions.count("GL_OES_texture_3D") != 0)
-    {
-        ASSIGN("glCompressedTexImage3DOES", compressedTexImage3D);
-        ASSIGN("glCompressedTexSubImage3DOES", compressedTexSubImage3D);
-        ASSIGN("glCopyTexSubImage3DOES", copyTexSubImage3D);
-        ASSIGN("glFramebufferTexture3DOES", framebufferTexture3D);
-        ASSIGN("glTexImage3DOES", texImage3D);
-        ASSIGN("glTexSubImage3DOES", texSubImage3D);
-    }
-
-    if (extensions.count("GL_OES_texture_border_clamp") != 0)
-    {
-        ASSIGN("glGetSamplerParameterIivOES", getSamplerParameterIiv);
-        ASSIGN("glGetSamplerParameterIuivOES", getSamplerParameterIuiv);
-        ASSIGN("glGetTexParameterIivOES", getTexParameterIiv);
-        ASSIGN("glGetTexParameterIuivOES", getTexParameterIuiv);
-        ASSIGN("glSamplerParameterIivOES", samplerParameterIiv);
-        ASSIGN("glSamplerParameterIuivOES", samplerParameterIuiv);
-        ASSIGN("glTexParameterIivOES", texParameterIiv);
-        ASSIGN("glTexParameterIuivOES", texParameterIuiv);
-    }
-
-    if (extensions.count("GL_OES_texture_buffer") != 0)
-    {
-        ASSIGN("glTexBufferOES", texBuffer);
-        ASSIGN("glTexBufferOES", texBufferOES);
-        ASSIGN("glTexBufferRangeOES", texBufferRange);
-        ASSIGN("glTexBufferRangeOES", texBufferRangeOES);
-    }
-
-    if (extensions.count("GL_OES_texture_storage_multisample_2d_array") != 0)
-    {
-        ASSIGN("glTexStorage3DMultisampleOES", texStorage3DMultisample);
-    }
-
-    if (extensions.count("GL_OES_texture_view") != 0)
-    {
-        ASSIGN("glTextureViewOES", textureView);
-    }
-
-    if (extensions.count("GL_OES_vertex_array_object") != 0)
-    {
-        ASSIGN("glBindVertexArrayOES", bindVertexArray);
-        ASSIGN("glDeleteVertexArraysOES", deleteVertexArrays);
-        ASSIGN("glGenVertexArraysOES", genVertexArrays);
-        ASSIGN("glIsVertexArrayOES", isVertexArray);
-    }
-
-    if (extensions.count("GL_OES_viewport_array") != 0)
-    {
-        ASSIGN("glDisableiOES", disablei);
-        ASSIGN("glEnableiOES", enablei);
-        ASSIGN("glGetFloati_vOES", getFloati_v);
-        ASSIGN("glIsEnablediOES", isEnabledi);
-        ASSIGN("glScissorArrayvOES", scissorArrayv);
-        ASSIGN("glScissorIndexedOES", scissorIndexed);
-        ASSIGN("glScissorIndexedvOES", scissorIndexedv);
-        ASSIGN("glViewportArrayvOES", viewportArrayv);
-        ASSIGN("glViewportIndexedfOES", viewportIndexedf);
-        ASSIGN("glViewportIndexedfvOES", viewportIndexedfv);
-    }
-
-    if (extensions.count("GL_QCOM_tiled_rendering") != 0)
-    {
-        ASSIGN("glEndTilingQCOM", endTilingQCOM);
-        ASSIGN("glStartTilingQCOM", startTilingQCOM);
-    }
 
     if (version >= gl::Version(2, 0))
     {
@@ -2671,11 +2739,6 @@ void DispatchTableGL::initProcsGLES(const gl::Version &version,
 
 void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &extensions)
 {
-    if (extensions.count("GL_EXT_blend_minmax") != 0)
-    {
-        ASSIGN("glBlendEquationEXT", blendEquation);
-    }
-
     if (extensions.count("GL_EXT_debug_label") != 0)
     {
         ASSIGN("glGetObjectLabelEXT", getObjectLabel);
@@ -2759,54 +2822,6 @@ void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &ext
     {
         ASSIGN("glImportSemaphoreWin32HandleEXT", importSemaphoreWin32HandleEXT);
         ASSIGN("glImportSemaphoreWin32NameEXT", importSemaphoreWin32NameEXT);
-    }
-
-    if (extensions.count("GL_EXT_separate_shader_objects") != 0)
-    {
-        ASSIGN("glActiveShaderProgramEXT", activeShaderProgram);
-        ASSIGN("glBindProgramPipelineEXT", bindProgramPipeline);
-        ASSIGN("glCreateShaderProgramvEXT", createShaderProgramv);
-        ASSIGN("glDeleteProgramPipelinesEXT", deleteProgramPipelines);
-        ASSIGN("glGenProgramPipelinesEXT", genProgramPipelines);
-        ASSIGN("glGetProgramPipelineInfoLogEXT", getProgramPipelineInfoLog);
-        ASSIGN("glGetProgramPipelineivEXT", getProgramPipelineiv);
-        ASSIGN("glIsProgramPipelineEXT", isProgramPipeline);
-        ASSIGN("glProgramParameteriEXT", programParameteri);
-        ASSIGN("glProgramUniform1fEXT", programUniform1f);
-        ASSIGN("glProgramUniform1fvEXT", programUniform1fv);
-        ASSIGN("glProgramUniform1iEXT", programUniform1i);
-        ASSIGN("glProgramUniform1ivEXT", programUniform1iv);
-        ASSIGN("glProgramUniform1uiEXT", programUniform1ui);
-        ASSIGN("glProgramUniform1uivEXT", programUniform1uiv);
-        ASSIGN("glProgramUniform2fEXT", programUniform2f);
-        ASSIGN("glProgramUniform2fvEXT", programUniform2fv);
-        ASSIGN("glProgramUniform2iEXT", programUniform2i);
-        ASSIGN("glProgramUniform2ivEXT", programUniform2iv);
-        ASSIGN("glProgramUniform2uiEXT", programUniform2ui);
-        ASSIGN("glProgramUniform2uivEXT", programUniform2uiv);
-        ASSIGN("glProgramUniform3fEXT", programUniform3f);
-        ASSIGN("glProgramUniform3fvEXT", programUniform3fv);
-        ASSIGN("glProgramUniform3iEXT", programUniform3i);
-        ASSIGN("glProgramUniform3ivEXT", programUniform3iv);
-        ASSIGN("glProgramUniform3uiEXT", programUniform3ui);
-        ASSIGN("glProgramUniform3uivEXT", programUniform3uiv);
-        ASSIGN("glProgramUniform4fEXT", programUniform4f);
-        ASSIGN("glProgramUniform4fvEXT", programUniform4fv);
-        ASSIGN("glProgramUniform4iEXT", programUniform4i);
-        ASSIGN("glProgramUniform4ivEXT", programUniform4iv);
-        ASSIGN("glProgramUniform4uiEXT", programUniform4ui);
-        ASSIGN("glProgramUniform4uivEXT", programUniform4uiv);
-        ASSIGN("glProgramUniformMatrix2fvEXT", programUniformMatrix2fv);
-        ASSIGN("glProgramUniformMatrix2x3fvEXT", programUniformMatrix2x3fv);
-        ASSIGN("glProgramUniformMatrix2x4fvEXT", programUniformMatrix2x4fv);
-        ASSIGN("glProgramUniformMatrix3fvEXT", programUniformMatrix3fv);
-        ASSIGN("glProgramUniformMatrix3x2fvEXT", programUniformMatrix3x2fv);
-        ASSIGN("glProgramUniformMatrix3x4fvEXT", programUniformMatrix3x4fv);
-        ASSIGN("glProgramUniformMatrix4fvEXT", programUniformMatrix4fv);
-        ASSIGN("glProgramUniformMatrix4x2fvEXT", programUniformMatrix4x2fv);
-        ASSIGN("glProgramUniformMatrix4x3fvEXT", programUniformMatrix4x3fv);
-        ASSIGN("glUseProgramStagesEXT", useProgramStages);
-        ASSIGN("glValidateProgramPipelineEXT", validateProgramPipeline);
     }
 
     if (extensions.count("GL_EXT_shader_framebuffer_fetch_non_coherent") != 0)
@@ -3710,6 +3725,14 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         viewportIndexedfv = &glViewportIndexedfvNULL;
     }
 
+    if (extensions.count("GL_EXT_base_instance") != 0)
+    {
+        drawArraysInstancedBaseInstance   = &glDrawArraysInstancedBaseInstanceNULL;
+        drawElementsInstancedBaseInstance = &glDrawElementsInstancedBaseInstanceNULL;
+        drawElementsInstancedBaseVertexBaseInstance =
+            &glDrawElementsInstancedBaseVertexBaseInstanceNULL;
+    }
+
     if (extensions.count("GL_EXT_blend_color") != 0)
     {
         blendColor = &glBlendColorNULL;
@@ -3720,9 +3743,43 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         blendEquationSeparate = &glBlendEquationSeparateNULL;
     }
 
+    if (extensions.count("GL_EXT_blend_func_extended") != 0)
+    {
+        bindFragDataLocation            = &glBindFragDataLocationNULL;
+        bindFragDataLocationIndexed     = &glBindFragDataLocationIndexedNULL;
+        getFragDataIndex                = &glGetFragDataIndexNULL;
+        getProgramResourceLocationIndex = &glGetProgramResourceLocationIndexNULL;
+    }
+
     if (extensions.count("GL_EXT_blend_func_separate") != 0)
     {
         blendFuncSeparate = &glBlendFuncSeparateNULL;
+    }
+
+    if (extensions.count("GL_EXT_blend_minmax") != 0)
+    {
+        blendEquation = &glBlendEquationNULL;
+    }
+
+    if (extensions.count("GL_EXT_buffer_storage") != 0)
+    {
+        bufferStorage = &glBufferStorageNULL;
+    }
+
+    if (extensions.count("GL_EXT_clear_texture") != 0)
+    {
+        clearTexImage    = &glClearTexImageNULL;
+        clearTexSubImage = &glClearTexSubImageNULL;
+    }
+
+    if (extensions.count("GL_EXT_clip_control") != 0)
+    {
+        clipControl = &glClipControlNULL;
+    }
+
+    if (extensions.count("GL_EXT_copy_image") != 0)
+    {
+        copyImageSubData = &glCopyImageSubDataNULL;
     }
 
     if (extensions.count("GL_EXT_copy_texture") != 0)
@@ -3779,21 +3836,54 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         namedRenderbufferStorageMultisample      = &glNamedRenderbufferStorageMultisampleNULL;
         programUniform1d                         = &glProgramUniform1dNULL;
         programUniform1dv                        = &glProgramUniform1dvNULL;
+        programUniform1f                         = &glProgramUniform1fNULL;
+        programUniform1fv                        = &glProgramUniform1fvNULL;
+        programUniform1i                         = &glProgramUniform1iNULL;
+        programUniform1iv                        = &glProgramUniform1ivNULL;
+        programUniform1ui                        = &glProgramUniform1uiNULL;
+        programUniform1uiv                       = &glProgramUniform1uivNULL;
         programUniform2d                         = &glProgramUniform2dNULL;
         programUniform2dv                        = &glProgramUniform2dvNULL;
+        programUniform2f                         = &glProgramUniform2fNULL;
+        programUniform2fv                        = &glProgramUniform2fvNULL;
+        programUniform2i                         = &glProgramUniform2iNULL;
+        programUniform2iv                        = &glProgramUniform2ivNULL;
+        programUniform2ui                        = &glProgramUniform2uiNULL;
+        programUniform2uiv                       = &glProgramUniform2uivNULL;
         programUniform3d                         = &glProgramUniform3dNULL;
         programUniform3dv                        = &glProgramUniform3dvNULL;
+        programUniform3f                         = &glProgramUniform3fNULL;
+        programUniform3fv                        = &glProgramUniform3fvNULL;
+        programUniform3i                         = &glProgramUniform3iNULL;
+        programUniform3iv                        = &glProgramUniform3ivNULL;
+        programUniform3ui                        = &glProgramUniform3uiNULL;
+        programUniform3uiv                       = &glProgramUniform3uivNULL;
         programUniform4d                         = &glProgramUniform4dNULL;
         programUniform4dv                        = &glProgramUniform4dvNULL;
+        programUniform4f                         = &glProgramUniform4fNULL;
+        programUniform4fv                        = &glProgramUniform4fvNULL;
+        programUniform4i                         = &glProgramUniform4iNULL;
+        programUniform4iv                        = &glProgramUniform4ivNULL;
+        programUniform4ui                        = &glProgramUniform4uiNULL;
+        programUniform4uiv                       = &glProgramUniform4uivNULL;
         programUniformMatrix2dv                  = &glProgramUniformMatrix2dvNULL;
+        programUniformMatrix2fv                  = &glProgramUniformMatrix2fvNULL;
         programUniformMatrix2x3dv                = &glProgramUniformMatrix2x3dvNULL;
+        programUniformMatrix2x3fv                = &glProgramUniformMatrix2x3fvNULL;
         programUniformMatrix2x4dv                = &glProgramUniformMatrix2x4dvNULL;
+        programUniformMatrix2x4fv                = &glProgramUniformMatrix2x4fvNULL;
         programUniformMatrix3dv                  = &glProgramUniformMatrix3dvNULL;
+        programUniformMatrix3fv                  = &glProgramUniformMatrix3fvNULL;
         programUniformMatrix3x2dv                = &glProgramUniformMatrix3x2dvNULL;
+        programUniformMatrix3x2fv                = &glProgramUniformMatrix3x2fvNULL;
         programUniformMatrix3x4dv                = &glProgramUniformMatrix3x4dvNULL;
+        programUniformMatrix3x4fv                = &glProgramUniformMatrix3x4fvNULL;
         programUniformMatrix4dv                  = &glProgramUniformMatrix4dvNULL;
+        programUniformMatrix4fv                  = &glProgramUniformMatrix4fvNULL;
         programUniformMatrix4x2dv                = &glProgramUniformMatrix4x2dvNULL;
+        programUniformMatrix4x2fv                = &glProgramUniformMatrix4x2fvNULL;
         programUniformMatrix4x3dv                = &glProgramUniformMatrix4x3dvNULL;
+        programUniformMatrix4x3fv                = &glProgramUniformMatrix4x3fvNULL;
         textureBuffer                            = &glTextureBufferNULL;
         textureBufferRange                       = &glTextureBufferRangeNULL;
         textureParameterIiv                      = &glTextureParameterIivNULL;
@@ -3810,9 +3900,61 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         unmapNamedBuffer                         = &glUnmapNamedBufferNULL;
     }
 
+    if (extensions.count("GL_EXT_discard_framebuffer") != 0)
+    {
+        discardFramebufferEXT = &glDiscardFramebufferEXTNULL;
+    }
+
+    if (extensions.count("GL_EXT_disjoint_timer_query") != 0)
+    {
+        beginQuery          = &glBeginQueryNULL;
+        deleteQueries       = &glDeleteQueriesNULL;
+        endQuery            = &glEndQueryNULL;
+        genQueries          = &glGenQueriesNULL;
+        getInteger64v       = &glGetInteger64vNULL;
+        getQueryObjecti64v  = &glGetQueryObjecti64vNULL;
+        getQueryObjectiv    = &glGetQueryObjectivNULL;
+        getQueryObjectui64v = &glGetQueryObjectui64vNULL;
+        getQueryObjectuiv   = &glGetQueryObjectuivNULL;
+        getQueryiv          = &glGetQueryivNULL;
+        isQuery             = &glIsQueryNULL;
+        queryCounter        = &glQueryCounterNULL;
+    }
+
+    if (extensions.count("GL_EXT_draw_buffers") != 0)
+    {
+        drawBuffers = &glDrawBuffersNULL;
+    }
+
+    if (extensions.count("GL_EXT_draw_buffers_indexed") != 0)
+    {
+        blendEquationSeparatei = &glBlendEquationSeparateiNULL;
+        blendEquationi         = &glBlendEquationiNULL;
+        blendFuncSeparatei     = &glBlendFuncSeparateiNULL;
+        blendFunci             = &glBlendFunciNULL;
+        colorMaski             = &glColorMaskiNULL;
+        disablei               = &glDisableiNULL;
+        enablei                = &glEnableiNULL;
+        isEnabledi             = &glIsEnablediNULL;
+    }
+
+    if (extensions.count("GL_EXT_draw_elements_base_vertex") != 0)
+    {
+        drawElementsBaseVertex          = &glDrawElementsBaseVertexNULL;
+        drawElementsInstancedBaseVertex = &glDrawElementsInstancedBaseVertexNULL;
+        drawRangeElementsBaseVertex     = &glDrawRangeElementsBaseVertexNULL;
+        multiDrawElementsBaseVertex     = &glMultiDrawElementsBaseVertexNULL;
+    }
+
     if (extensions.count("GL_EXT_draw_range_elements") != 0)
     {
         drawRangeElements = &glDrawRangeElementsNULL;
+    }
+
+    if (extensions.count("GL_EXT_draw_transform_feedback") != 0)
+    {
+        drawTransformFeedback          = &glDrawTransformFeedbackNULL;
+        drawTransformFeedbackInstanced = &glDrawTransformFeedbackInstancedNULL;
     }
 
     if (extensions.count("GL_EXT_framebuffer_blit") != 0)
@@ -3846,6 +3988,16 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         isFramebuffer                       = &glIsFramebufferNULL;
         isRenderbuffer                      = &glIsRenderbufferNULL;
         renderbufferStorage                 = &glRenderbufferStorageNULL;
+    }
+
+    if (extensions.count("GL_EXT_geometry_shader") != 0)
+    {
+        framebufferTexture = &glFramebufferTextureNULL;
+    }
+
+    if (extensions.count("GL_EXT_geometry_shader4") != 0)
+    {
+        programParameteri = &glProgramParameteriNULL;
     }
 
     if (extensions.count("GL_EXT_gpu_shader4") != 0)
@@ -3886,6 +4038,46 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         vertexAttribIPointer = &glVertexAttribIPointerNULL;
     }
 
+    if (extensions.count("GL_EXT_instanced_arrays") != 0)
+    {
+        vertexAttribDivisor = &glVertexAttribDivisorNULL;
+    }
+
+    if (extensions.count("GL_EXT_map_buffer_range") != 0)
+    {
+        flushMappedBufferRange = &glFlushMappedBufferRangeNULL;
+        mapBufferRange         = &glMapBufferRangeNULL;
+    }
+
+    if (extensions.count("GL_EXT_multi_draw_indirect") != 0)
+    {
+        multiDrawArraysIndirect   = &glMultiDrawArraysIndirectNULL;
+        multiDrawElementsIndirect = &glMultiDrawElementsIndirectNULL;
+    }
+
+    if (extensions.count("GL_EXT_multisampled_render_to_texture") != 0)
+    {
+        framebufferTexture2DMultisampleEXT = &glFramebufferTexture2DMultisampleEXTNULL;
+        renderbufferStorageMultisample     = &glRenderbufferStorageMultisampleNULL;
+        renderbufferStorageMultisampleEXT  = &glRenderbufferStorageMultisampleEXTNULL;
+    }
+
+    if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
+    {
+        getIntegeri_v = &glGetIntegeri_vNULL;
+    }
+
+    if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)
+    {
+        beginQuery        = &glBeginQueryNULL;
+        deleteQueries     = &glDeleteQueriesNULL;
+        endQuery          = &glEndQueryNULL;
+        genQueries        = &glGenQueriesNULL;
+        getQueryObjectuiv = &glGetQueryObjectuivNULL;
+        getQueryiv        = &glGetQueryivNULL;
+        isQuery           = &glIsQueryNULL;
+    }
+
     if (extensions.count("GL_EXT_point_parameters") != 0)
     {
         pointParameterf  = &glPointParameterfNULL;
@@ -3897,9 +4089,70 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         polygonOffset = &glPolygonOffsetNULL;
     }
 
+    if (extensions.count("GL_EXT_primitive_bounding_box") != 0)
+    {
+        primitiveBoundingBox = &glPrimitiveBoundingBoxNULL;
+    }
+
     if (extensions.count("GL_EXT_provoking_vertex") != 0)
     {
         provokingVertex = &glProvokingVertexNULL;
+    }
+
+    if (extensions.count("GL_EXT_robustness") != 0)
+    {
+        getGraphicsResetStatus = &glGetGraphicsResetStatusNULL;
+        getnUniformfv          = &glGetnUniformfvNULL;
+        getnUniformiv          = &glGetnUniformivNULL;
+        readnPixels            = &glReadnPixelsNULL;
+    }
+
+    if (extensions.count("GL_EXT_separate_shader_objects") != 0)
+    {
+        activeShaderProgram       = &glActiveShaderProgramNULL;
+        bindProgramPipeline       = &glBindProgramPipelineNULL;
+        createShaderProgramv      = &glCreateShaderProgramvNULL;
+        deleteProgramPipelines    = &glDeleteProgramPipelinesNULL;
+        genProgramPipelines       = &glGenProgramPipelinesNULL;
+        getProgramPipelineInfoLog = &glGetProgramPipelineInfoLogNULL;
+        getProgramPipelineiv      = &glGetProgramPipelineivNULL;
+        isProgramPipeline         = &glIsProgramPipelineNULL;
+        programParameteri         = &glProgramParameteriNULL;
+        programUniform1f          = &glProgramUniform1fNULL;
+        programUniform1fv         = &glProgramUniform1fvNULL;
+        programUniform1i          = &glProgramUniform1iNULL;
+        programUniform1iv         = &glProgramUniform1ivNULL;
+        programUniform1ui         = &glProgramUniform1uiNULL;
+        programUniform1uiv        = &glProgramUniform1uivNULL;
+        programUniform2f          = &glProgramUniform2fNULL;
+        programUniform2fv         = &glProgramUniform2fvNULL;
+        programUniform2i          = &glProgramUniform2iNULL;
+        programUniform2iv         = &glProgramUniform2ivNULL;
+        programUniform2ui         = &glProgramUniform2uiNULL;
+        programUniform2uiv        = &glProgramUniform2uivNULL;
+        programUniform3f          = &glProgramUniform3fNULL;
+        programUniform3fv         = &glProgramUniform3fvNULL;
+        programUniform3i          = &glProgramUniform3iNULL;
+        programUniform3iv         = &glProgramUniform3ivNULL;
+        programUniform3ui         = &glProgramUniform3uiNULL;
+        programUniform3uiv        = &glProgramUniform3uivNULL;
+        programUniform4f          = &glProgramUniform4fNULL;
+        programUniform4fv         = &glProgramUniform4fvNULL;
+        programUniform4i          = &glProgramUniform4iNULL;
+        programUniform4iv         = &glProgramUniform4ivNULL;
+        programUniform4ui         = &glProgramUniform4uiNULL;
+        programUniform4uiv        = &glProgramUniform4uivNULL;
+        programUniformMatrix2fv   = &glProgramUniformMatrix2fvNULL;
+        programUniformMatrix2x3fv = &glProgramUniformMatrix2x3fvNULL;
+        programUniformMatrix2x4fv = &glProgramUniformMatrix2x4fvNULL;
+        programUniformMatrix3fv   = &glProgramUniformMatrix3fvNULL;
+        programUniformMatrix3x2fv = &glProgramUniformMatrix3x2fvNULL;
+        programUniformMatrix3x4fv = &glProgramUniformMatrix3x4fvNULL;
+        programUniformMatrix4fv   = &glProgramUniformMatrix4fvNULL;
+        programUniformMatrix4x2fv = &glProgramUniformMatrix4x2fvNULL;
+        programUniformMatrix4x3fv = &glProgramUniformMatrix4x3fvNULL;
+        useProgramStages          = &glUseProgramStagesNULL;
+        validateProgramPipeline   = &glValidateProgramPipelineNULL;
     }
 
     if (extensions.count("GL_EXT_shader_image_load_store") != 0)
@@ -3914,6 +4167,11 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         texSubImage2D = &glTexSubImage2DNULL;
     }
 
+    if (extensions.count("GL_EXT_tessellation_shader") != 0)
+    {
+        patchParameteri = &glPatchParameteriNULL;
+    }
+
     if (extensions.count("GL_EXT_texture3D") != 0)
     {
         texImage3D    = &glTexImage3DNULL;
@@ -3923,6 +4181,26 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
     if (extensions.count("GL_EXT_texture_array") != 0)
     {
         framebufferTextureLayer = &glFramebufferTextureLayerNULL;
+    }
+
+    if (extensions.count("GL_EXT_texture_border_clamp") != 0)
+    {
+        getSamplerParameterIiv  = &glGetSamplerParameterIivNULL;
+        getSamplerParameterIuiv = &glGetSamplerParameterIuivNULL;
+        getTexParameterIiv      = &glGetTexParameterIivNULL;
+        getTexParameterIuiv     = &glGetTexParameterIuivNULL;
+        samplerParameterIiv     = &glSamplerParameterIivNULL;
+        samplerParameterIuiv    = &glSamplerParameterIuivNULL;
+        texParameterIiv         = &glTexParameterIivNULL;
+        texParameterIuiv        = &glTexParameterIuivNULL;
+    }
+
+    if (extensions.count("GL_EXT_texture_buffer") != 0)
+    {
+        texBuffer         = &glTexBufferNULL;
+        texBufferEXT      = &glTexBufferEXTNULL;
+        texBufferRange    = &glTexBufferRangeNULL;
+        texBufferRangeEXT = &glTexBufferRangeEXTNULL;
     }
 
     if (extensions.count("GL_EXT_texture_buffer_object") != 0)
@@ -3945,6 +4223,11 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         deleteTextures = &glDeleteTexturesNULL;
         genTextures    = &glGenTexturesNULL;
         isTexture      = &glIsTextureNULL;
+    }
+
+    if (extensions.count("GL_EXT_texture_view") != 0)
+    {
+        textureView = &glTextureViewNULL;
     }
 
     if (extensions.count("GL_EXT_timer_query") != 0)
@@ -3983,6 +4266,12 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         vertexAttribLPointer = &glVertexAttribLPointerNULL;
     }
 
+    if (extensions.count("GL_IMG_multisampled_render_to_texture") != 0)
+    {
+        framebufferTexture2DMultisampleIMG = &glFramebufferTexture2DMultisampleIMGNULL;
+        renderbufferStorageMultisampleIMG  = &glRenderbufferStorageMultisampleIMGNULL;
+    }
+
     if (extensions.count("GL_KHR_debug") != 0)
     {
         debugMessageCallback = &glDebugMessageCallbackNULL;
@@ -4007,10 +4296,20 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         readnPixels            = &glReadnPixelsNULL;
     }
 
+    if (extensions.count("GL_NV_framebuffer_blit") != 0)
+    {
+        blitFramebufferNV = &glBlitFramebufferNVNULL;
+    }
+
     if (extensions.count("GL_NV_geometry_program4") != 0)
     {
         framebufferTexture      = &glFramebufferTextureNULL;
         framebufferTextureLayer = &glFramebufferTextureLayerNULL;
+    }
+
+    if (extensions.count("GL_NV_polygon_mode") != 0)
+    {
+        polygonModeNV = &glPolygonModeNVNULL;
     }
 
     if (extensions.count("GL_NV_vertex_program4") != 0)
@@ -4040,10 +4339,142 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
         vertexAttribIPointer = &glVertexAttribIPointerNULL;
     }
 
+    if (extensions.count("GL_OES_EGL_image") != 0)
+    {
+        eGLImageTargetRenderbufferStorageOES = &glEGLImageTargetRenderbufferStorageOESNULL;
+        eGLImageTargetTexture2DOES           = &glEGLImageTargetTexture2DOESNULL;
+    }
+
+    if (extensions.count("GL_OES_copy_image") != 0)
+    {
+        copyImageSubData = &glCopyImageSubDataNULL;
+    }
+
+    if (extensions.count("GL_OES_draw_buffers_indexed") != 0)
+    {
+        blendEquationSeparatei = &glBlendEquationSeparateiNULL;
+        blendEquationi         = &glBlendEquationiNULL;
+        blendFuncSeparatei     = &glBlendFuncSeparateiNULL;
+        blendFunci             = &glBlendFunciNULL;
+        colorMaski             = &glColorMaskiNULL;
+        disablei               = &glDisableiNULL;
+        enablei                = &glEnableiNULL;
+        isEnabledi             = &glIsEnablediNULL;
+    }
+
+    if (extensions.count("GL_OES_draw_elements_base_vertex") != 0)
+    {
+        drawElementsBaseVertex          = &glDrawElementsBaseVertexNULL;
+        drawElementsInstancedBaseVertex = &glDrawElementsInstancedBaseVertexNULL;
+        drawRangeElementsBaseVertex     = &glDrawRangeElementsBaseVertexNULL;
+        multiDrawElementsBaseVertex     = &glMultiDrawElementsBaseVertexNULL;
+    }
+
+    if (extensions.count("GL_OES_geometry_shader") != 0)
+    {
+        framebufferTexture = &glFramebufferTextureNULL;
+    }
+
+    if (extensions.count("GL_OES_get_program_binary") != 0)
+    {
+        getProgramBinary = &glGetProgramBinaryNULL;
+        programBinary    = &glProgramBinaryNULL;
+    }
+
+    if (extensions.count("GL_OES_mapbuffer") != 0)
+    {
+        getBufferPointerv = &glGetBufferPointervNULL;
+        mapBuffer         = &glMapBufferNULL;
+        unmapBuffer       = &glUnmapBufferNULL;
+    }
+
+    if (extensions.count("GL_OES_primitive_bounding_box") != 0)
+    {
+        primitiveBoundingBox = &glPrimitiveBoundingBoxNULL;
+    }
+
+    if (extensions.count("GL_OES_sample_shading") != 0)
+    {
+        minSampleShading = &glMinSampleShadingNULL;
+    }
+
     if (extensions.count("GL_OES_single_precision") != 0)
     {
         clearDepthf = &glClearDepthfNULL;
         depthRangef = &glDepthRangefNULL;
+    }
+
+    if (extensions.count("GL_OES_tessellation_shader") != 0)
+    {
+        patchParameteri = &glPatchParameteriNULL;
+    }
+
+    if (extensions.count("GL_OES_texture_3D") != 0)
+    {
+        compressedTexImage3D    = &glCompressedTexImage3DNULL;
+        compressedTexSubImage3D = &glCompressedTexSubImage3DNULL;
+        copyTexSubImage3D       = &glCopyTexSubImage3DNULL;
+        framebufferTexture3D    = &glFramebufferTexture3DNULL;
+        texImage3D              = &glTexImage3DNULL;
+        texSubImage3D           = &glTexSubImage3DNULL;
+    }
+
+    if (extensions.count("GL_OES_texture_border_clamp") != 0)
+    {
+        getSamplerParameterIiv  = &glGetSamplerParameterIivNULL;
+        getSamplerParameterIuiv = &glGetSamplerParameterIuivNULL;
+        getTexParameterIiv      = &glGetTexParameterIivNULL;
+        getTexParameterIuiv     = &glGetTexParameterIuivNULL;
+        samplerParameterIiv     = &glSamplerParameterIivNULL;
+        samplerParameterIuiv    = &glSamplerParameterIuivNULL;
+        texParameterIiv         = &glTexParameterIivNULL;
+        texParameterIuiv        = &glTexParameterIuivNULL;
+    }
+
+    if (extensions.count("GL_OES_texture_buffer") != 0)
+    {
+        texBuffer         = &glTexBufferNULL;
+        texBufferOES      = &glTexBufferOESNULL;
+        texBufferRange    = &glTexBufferRangeNULL;
+        texBufferRangeOES = &glTexBufferRangeOESNULL;
+    }
+
+    if (extensions.count("GL_OES_texture_storage_multisample_2d_array") != 0)
+    {
+        texStorage3DMultisample = &glTexStorage3DMultisampleNULL;
+    }
+
+    if (extensions.count("GL_OES_texture_view") != 0)
+    {
+        textureView = &glTextureViewNULL;
+    }
+
+    if (extensions.count("GL_OES_vertex_array_object") != 0)
+    {
+        bindVertexArray    = &glBindVertexArrayNULL;
+        deleteVertexArrays = &glDeleteVertexArraysNULL;
+        genVertexArrays    = &glGenVertexArraysNULL;
+        isVertexArray      = &glIsVertexArrayNULL;
+    }
+
+    if (extensions.count("GL_OES_viewport_array") != 0)
+    {
+        disablei          = &glDisableiNULL;
+        enablei           = &glEnableiNULL;
+        getFloati_v       = &glGetFloati_vNULL;
+        isEnabledi        = &glIsEnablediNULL;
+        scissorArrayv     = &glScissorArrayvNULL;
+        scissorIndexed    = &glScissorIndexedNULL;
+        scissorIndexedv   = &glScissorIndexedvNULL;
+        viewportArrayv    = &glViewportArrayvNULL;
+        viewportIndexedf  = &glViewportIndexedfNULL;
+        viewportIndexedfv = &glViewportIndexedfvNULL;
+    }
+
+    if (extensions.count("GL_QCOM_tiled_rendering") != 0)
+    {
+        endTilingQCOM   = &glEndTilingQCOMNULL;
+        startTilingQCOM = &glStartTilingQCOMNULL;
     }
 
     if (version >= gl::Version(1, 0))
@@ -4777,354 +5208,6 @@ void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version,
 void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
                                         const std::set<std::string> &extensions)
 {
-    if (extensions.count("GL_EXT_base_instance") != 0)
-    {
-        drawArraysInstancedBaseInstance   = &glDrawArraysInstancedBaseInstanceNULL;
-        drawElementsInstancedBaseInstance = &glDrawElementsInstancedBaseInstanceNULL;
-        drawElementsInstancedBaseVertexBaseInstance =
-            &glDrawElementsInstancedBaseVertexBaseInstanceNULL;
-    }
-
-    if (extensions.count("GL_EXT_blend_func_extended") != 0)
-    {
-        bindFragDataLocation            = &glBindFragDataLocationNULL;
-        bindFragDataLocationIndexed     = &glBindFragDataLocationIndexedNULL;
-        getFragDataIndex                = &glGetFragDataIndexNULL;
-        getProgramResourceLocationIndex = &glGetProgramResourceLocationIndexNULL;
-    }
-
-    if (extensions.count("GL_EXT_buffer_storage") != 0)
-    {
-        bufferStorage = &glBufferStorageNULL;
-    }
-
-    if (extensions.count("GL_EXT_clear_texture") != 0)
-    {
-        clearTexImage    = &glClearTexImageNULL;
-        clearTexSubImage = &glClearTexSubImageNULL;
-    }
-
-    if (extensions.count("GL_EXT_clip_control") != 0)
-    {
-        clipControl = &glClipControlNULL;
-    }
-
-    if (extensions.count("GL_EXT_copy_image") != 0)
-    {
-        copyImageSubData = &glCopyImageSubDataNULL;
-    }
-
-    if (extensions.count("GL_EXT_discard_framebuffer") != 0)
-    {
-        discardFramebufferEXT = &glDiscardFramebufferEXTNULL;
-    }
-
-    if (extensions.count("GL_EXT_disjoint_timer_query") != 0)
-    {
-        beginQuery          = &glBeginQueryNULL;
-        deleteQueries       = &glDeleteQueriesNULL;
-        endQuery            = &glEndQueryNULL;
-        genQueries          = &glGenQueriesNULL;
-        getInteger64v       = &glGetInteger64vNULL;
-        getQueryObjecti64v  = &glGetQueryObjecti64vNULL;
-        getQueryObjectiv    = &glGetQueryObjectivNULL;
-        getQueryObjectui64v = &glGetQueryObjectui64vNULL;
-        getQueryObjectuiv   = &glGetQueryObjectuivNULL;
-        getQueryiv          = &glGetQueryivNULL;
-        isQuery             = &glIsQueryNULL;
-        queryCounter        = &glQueryCounterNULL;
-    }
-
-    if (extensions.count("GL_EXT_draw_buffers") != 0)
-    {
-        drawBuffers = &glDrawBuffersNULL;
-    }
-
-    if (extensions.count("GL_EXT_draw_buffers_indexed") != 0)
-    {
-        blendEquationSeparatei = &glBlendEquationSeparateiNULL;
-        blendEquationi         = &glBlendEquationiNULL;
-        blendFuncSeparatei     = &glBlendFuncSeparateiNULL;
-        blendFunci             = &glBlendFunciNULL;
-        colorMaski             = &glColorMaskiNULL;
-        disablei               = &glDisableiNULL;
-        enablei                = &glEnableiNULL;
-        isEnabledi             = &glIsEnablediNULL;
-    }
-
-    if (extensions.count("GL_EXT_draw_elements_base_vertex") != 0)
-    {
-        drawElementsBaseVertex          = &glDrawElementsBaseVertexNULL;
-        drawElementsInstancedBaseVertex = &glDrawElementsInstancedBaseVertexNULL;
-        drawRangeElementsBaseVertex     = &glDrawRangeElementsBaseVertexNULL;
-        multiDrawElementsBaseVertex     = &glMultiDrawElementsBaseVertexNULL;
-    }
-
-    if (extensions.count("GL_EXT_draw_transform_feedback") != 0)
-    {
-        drawTransformFeedback          = &glDrawTransformFeedbackNULL;
-        drawTransformFeedbackInstanced = &glDrawTransformFeedbackInstancedNULL;
-    }
-
-    if (extensions.count("GL_EXT_geometry_shader") != 0)
-    {
-        framebufferTexture = &glFramebufferTextureNULL;
-    }
-
-    if (extensions.count("GL_EXT_instanced_arrays") != 0)
-    {
-        vertexAttribDivisor = &glVertexAttribDivisorNULL;
-    }
-
-    if (extensions.count("GL_EXT_map_buffer_range") != 0)
-    {
-        flushMappedBufferRange = &glFlushMappedBufferRangeNULL;
-        mapBufferRange         = &glMapBufferRangeNULL;
-    }
-
-    if (extensions.count("GL_EXT_multi_draw_indirect") != 0)
-    {
-        multiDrawArraysIndirect   = &glMultiDrawArraysIndirectNULL;
-        multiDrawElementsIndirect = &glMultiDrawElementsIndirectNULL;
-    }
-
-    if (extensions.count("GL_EXT_multisampled_render_to_texture") != 0)
-    {
-        framebufferTexture2DMultisampleEXT = &glFramebufferTexture2DMultisampleEXTNULL;
-        renderbufferStorageMultisample     = &glRenderbufferStorageMultisampleNULL;
-        renderbufferStorageMultisampleEXT  = &glRenderbufferStorageMultisampleEXTNULL;
-    }
-
-    if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
-    {
-        getIntegeri_v = &glGetIntegeri_vNULL;
-    }
-
-    if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)
-    {
-        beginQuery        = &glBeginQueryNULL;
-        deleteQueries     = &glDeleteQueriesNULL;
-        endQuery          = &glEndQueryNULL;
-        genQueries        = &glGenQueriesNULL;
-        getQueryObjectuiv = &glGetQueryObjectuivNULL;
-        getQueryiv        = &glGetQueryivNULL;
-        isQuery           = &glIsQueryNULL;
-    }
-
-    if (extensions.count("GL_EXT_primitive_bounding_box") != 0)
-    {
-        primitiveBoundingBox = &glPrimitiveBoundingBoxNULL;
-    }
-
-    if (extensions.count("GL_EXT_robustness") != 0)
-    {
-        getGraphicsResetStatus = &glGetGraphicsResetStatusNULL;
-        getnUniformfv          = &glGetnUniformfvNULL;
-        getnUniformiv          = &glGetnUniformivNULL;
-        readnPixels            = &glReadnPixelsNULL;
-    }
-
-    if (extensions.count("GL_EXT_tessellation_shader") != 0)
-    {
-        patchParameteri = &glPatchParameteriNULL;
-    }
-
-    if (extensions.count("GL_EXT_texture_border_clamp") != 0)
-    {
-        getSamplerParameterIiv  = &glGetSamplerParameterIivNULL;
-        getSamplerParameterIuiv = &glGetSamplerParameterIuivNULL;
-        getTexParameterIiv      = &glGetTexParameterIivNULL;
-        getTexParameterIuiv     = &glGetTexParameterIuivNULL;
-        samplerParameterIiv     = &glSamplerParameterIivNULL;
-        samplerParameterIuiv    = &glSamplerParameterIuivNULL;
-        texParameterIiv         = &glTexParameterIivNULL;
-        texParameterIuiv        = &glTexParameterIuivNULL;
-    }
-
-    if (extensions.count("GL_EXT_texture_buffer") != 0)
-    {
-        texBuffer         = &glTexBufferNULL;
-        texBufferEXT      = &glTexBufferEXTNULL;
-        texBufferRange    = &glTexBufferRangeNULL;
-        texBufferRangeEXT = &glTexBufferRangeEXTNULL;
-    }
-
-    if (extensions.count("GL_EXT_texture_view") != 0)
-    {
-        textureView = &glTextureViewNULL;
-    }
-
-    if (extensions.count("GL_IMG_multisampled_render_to_texture") != 0)
-    {
-        framebufferTexture2DMultisampleIMG = &glFramebufferTexture2DMultisampleIMGNULL;
-        renderbufferStorageMultisampleIMG  = &glRenderbufferStorageMultisampleIMGNULL;
-    }
-
-    if (extensions.count("GL_KHR_debug") != 0)
-    {
-        debugMessageCallback = &glDebugMessageCallbackNULL;
-        debugMessageControl  = &glDebugMessageControlNULL;
-        debugMessageInsert   = &glDebugMessageInsertNULL;
-        getDebugMessageLog   = &glGetDebugMessageLogNULL;
-        getObjectLabel       = &glGetObjectLabelNULL;
-        getObjectPtrLabel    = &glGetObjectPtrLabelNULL;
-        getPointerv          = &glGetPointervNULL;
-        objectLabel          = &glObjectLabelNULL;
-        objectPtrLabel       = &glObjectPtrLabelNULL;
-        popDebugGroup        = &glPopDebugGroupNULL;
-        pushDebugGroup       = &glPushDebugGroupNULL;
-    }
-
-    if (extensions.count("GL_KHR_robustness") != 0)
-    {
-        getGraphicsResetStatus = &glGetGraphicsResetStatusNULL;
-        getnUniformfv          = &glGetnUniformfvNULL;
-        getnUniformiv          = &glGetnUniformivNULL;
-        getnUniformuiv         = &glGetnUniformuivNULL;
-        readnPixels            = &glReadnPixelsNULL;
-    }
-
-    if (extensions.count("GL_NV_framebuffer_blit") != 0)
-    {
-        blitFramebufferNV = &glBlitFramebufferNVNULL;
-    }
-
-    if (extensions.count("GL_NV_polygon_mode") != 0)
-    {
-        polygonModeNV = &glPolygonModeNVNULL;
-    }
-
-    if (extensions.count("GL_OES_EGL_image") != 0)
-    {
-        eGLImageTargetRenderbufferStorageOES = &glEGLImageTargetRenderbufferStorageOESNULL;
-        eGLImageTargetTexture2DOES           = &glEGLImageTargetTexture2DOESNULL;
-    }
-
-    if (extensions.count("GL_OES_copy_image") != 0)
-    {
-        copyImageSubData = &glCopyImageSubDataNULL;
-    }
-
-    if (extensions.count("GL_OES_draw_buffers_indexed") != 0)
-    {
-        blendEquationSeparatei = &glBlendEquationSeparateiNULL;
-        blendEquationi         = &glBlendEquationiNULL;
-        blendFuncSeparatei     = &glBlendFuncSeparateiNULL;
-        blendFunci             = &glBlendFunciNULL;
-        colorMaski             = &glColorMaskiNULL;
-        disablei               = &glDisableiNULL;
-        enablei                = &glEnableiNULL;
-        isEnabledi             = &glIsEnablediNULL;
-    }
-
-    if (extensions.count("GL_OES_draw_elements_base_vertex") != 0)
-    {
-        drawElementsBaseVertex          = &glDrawElementsBaseVertexNULL;
-        drawElementsInstancedBaseVertex = &glDrawElementsInstancedBaseVertexNULL;
-        drawRangeElementsBaseVertex     = &glDrawRangeElementsBaseVertexNULL;
-        multiDrawElementsBaseVertex     = &glMultiDrawElementsBaseVertexNULL;
-    }
-
-    if (extensions.count("GL_OES_geometry_shader") != 0)
-    {
-        framebufferTexture = &glFramebufferTextureNULL;
-    }
-
-    if (extensions.count("GL_OES_get_program_binary") != 0)
-    {
-        getProgramBinary = &glGetProgramBinaryNULL;
-        programBinary    = &glProgramBinaryNULL;
-    }
-
-    if (extensions.count("GL_OES_mapbuffer") != 0)
-    {
-        getBufferPointerv = &glGetBufferPointervNULL;
-        mapBuffer         = &glMapBufferNULL;
-        unmapBuffer       = &glUnmapBufferNULL;
-    }
-
-    if (extensions.count("GL_OES_primitive_bounding_box") != 0)
-    {
-        primitiveBoundingBox = &glPrimitiveBoundingBoxNULL;
-    }
-
-    if (extensions.count("GL_OES_sample_shading") != 0)
-    {
-        minSampleShading = &glMinSampleShadingNULL;
-    }
-
-    if (extensions.count("GL_OES_tessellation_shader") != 0)
-    {
-        patchParameteri = &glPatchParameteriNULL;
-    }
-
-    if (extensions.count("GL_OES_texture_3D") != 0)
-    {
-        compressedTexImage3D    = &glCompressedTexImage3DNULL;
-        compressedTexSubImage3D = &glCompressedTexSubImage3DNULL;
-        copyTexSubImage3D       = &glCopyTexSubImage3DNULL;
-        framebufferTexture3D    = &glFramebufferTexture3DNULL;
-        texImage3D              = &glTexImage3DNULL;
-        texSubImage3D           = &glTexSubImage3DNULL;
-    }
-
-    if (extensions.count("GL_OES_texture_border_clamp") != 0)
-    {
-        getSamplerParameterIiv  = &glGetSamplerParameterIivNULL;
-        getSamplerParameterIuiv = &glGetSamplerParameterIuivNULL;
-        getTexParameterIiv      = &glGetTexParameterIivNULL;
-        getTexParameterIuiv     = &glGetTexParameterIuivNULL;
-        samplerParameterIiv     = &glSamplerParameterIivNULL;
-        samplerParameterIuiv    = &glSamplerParameterIuivNULL;
-        texParameterIiv         = &glTexParameterIivNULL;
-        texParameterIuiv        = &glTexParameterIuivNULL;
-    }
-
-    if (extensions.count("GL_OES_texture_buffer") != 0)
-    {
-        texBuffer         = &glTexBufferNULL;
-        texBufferOES      = &glTexBufferOESNULL;
-        texBufferRange    = &glTexBufferRangeNULL;
-        texBufferRangeOES = &glTexBufferRangeOESNULL;
-    }
-
-    if (extensions.count("GL_OES_texture_storage_multisample_2d_array") != 0)
-    {
-        texStorage3DMultisample = &glTexStorage3DMultisampleNULL;
-    }
-
-    if (extensions.count("GL_OES_texture_view") != 0)
-    {
-        textureView = &glTextureViewNULL;
-    }
-
-    if (extensions.count("GL_OES_vertex_array_object") != 0)
-    {
-        bindVertexArray    = &glBindVertexArrayNULL;
-        deleteVertexArrays = &glDeleteVertexArraysNULL;
-        genVertexArrays    = &glGenVertexArraysNULL;
-        isVertexArray      = &glIsVertexArrayNULL;
-    }
-
-    if (extensions.count("GL_OES_viewport_array") != 0)
-    {
-        disablei          = &glDisableiNULL;
-        enablei           = &glEnableiNULL;
-        getFloati_v       = &glGetFloati_vNULL;
-        isEnabledi        = &glIsEnablediNULL;
-        scissorArrayv     = &glScissorArrayvNULL;
-        scissorIndexed    = &glScissorIndexedNULL;
-        scissorIndexedv   = &glScissorIndexedvNULL;
-        viewportArrayv    = &glViewportArrayvNULL;
-        viewportIndexedf  = &glViewportIndexedfNULL;
-        viewportIndexedfv = &glViewportIndexedfvNULL;
-    }
-
-    if (extensions.count("GL_QCOM_tiled_rendering") != 0)
-    {
-        endTilingQCOM   = &glEndTilingQCOMNULL;
-        startTilingQCOM = &glStartTilingQCOMNULL;
-    }
 
     if (version >= gl::Version(2, 0))
     {
@@ -5503,11 +5586,6 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
 
 void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> &extensions)
 {
-    if (extensions.count("GL_EXT_blend_minmax") != 0)
-    {
-        blendEquation = &glBlendEquationNULL;
-    }
-
     if (extensions.count("GL_EXT_debug_label") != 0)
     {
         getObjectLabel = &glGetObjectLabelNULL;
@@ -5591,54 +5669,6 @@ void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> 
     {
         importSemaphoreWin32HandleEXT = &glImportSemaphoreWin32HandleEXTNULL;
         importSemaphoreWin32NameEXT   = &glImportSemaphoreWin32NameEXTNULL;
-    }
-
-    if (extensions.count("GL_EXT_separate_shader_objects") != 0)
-    {
-        activeShaderProgram       = &glActiveShaderProgramNULL;
-        bindProgramPipeline       = &glBindProgramPipelineNULL;
-        createShaderProgramv      = &glCreateShaderProgramvNULL;
-        deleteProgramPipelines    = &glDeleteProgramPipelinesNULL;
-        genProgramPipelines       = &glGenProgramPipelinesNULL;
-        getProgramPipelineInfoLog = &glGetProgramPipelineInfoLogNULL;
-        getProgramPipelineiv      = &glGetProgramPipelineivNULL;
-        isProgramPipeline         = &glIsProgramPipelineNULL;
-        programParameteri         = &glProgramParameteriNULL;
-        programUniform1f          = &glProgramUniform1fNULL;
-        programUniform1fv         = &glProgramUniform1fvNULL;
-        programUniform1i          = &glProgramUniform1iNULL;
-        programUniform1iv         = &glProgramUniform1ivNULL;
-        programUniform1ui         = &glProgramUniform1uiNULL;
-        programUniform1uiv        = &glProgramUniform1uivNULL;
-        programUniform2f          = &glProgramUniform2fNULL;
-        programUniform2fv         = &glProgramUniform2fvNULL;
-        programUniform2i          = &glProgramUniform2iNULL;
-        programUniform2iv         = &glProgramUniform2ivNULL;
-        programUniform2ui         = &glProgramUniform2uiNULL;
-        programUniform2uiv        = &glProgramUniform2uivNULL;
-        programUniform3f          = &glProgramUniform3fNULL;
-        programUniform3fv         = &glProgramUniform3fvNULL;
-        programUniform3i          = &glProgramUniform3iNULL;
-        programUniform3iv         = &glProgramUniform3ivNULL;
-        programUniform3ui         = &glProgramUniform3uiNULL;
-        programUniform3uiv        = &glProgramUniform3uivNULL;
-        programUniform4f          = &glProgramUniform4fNULL;
-        programUniform4fv         = &glProgramUniform4fvNULL;
-        programUniform4i          = &glProgramUniform4iNULL;
-        programUniform4iv         = &glProgramUniform4ivNULL;
-        programUniform4ui         = &glProgramUniform4uiNULL;
-        programUniform4uiv        = &glProgramUniform4uivNULL;
-        programUniformMatrix2fv   = &glProgramUniformMatrix2fvNULL;
-        programUniformMatrix2x3fv = &glProgramUniformMatrix2x3fvNULL;
-        programUniformMatrix2x4fv = &glProgramUniformMatrix2x4fvNULL;
-        programUniformMatrix3fv   = &glProgramUniformMatrix3fvNULL;
-        programUniformMatrix3x2fv = &glProgramUniformMatrix3x2fvNULL;
-        programUniformMatrix3x4fv = &glProgramUniformMatrix3x4fvNULL;
-        programUniformMatrix4fv   = &glProgramUniformMatrix4fvNULL;
-        programUniformMatrix4x2fv = &glProgramUniformMatrix4x2fvNULL;
-        programUniformMatrix4x3fv = &glProgramUniformMatrix4x3fvNULL;
-        useProgramStages          = &glUseProgramStagesNULL;
-        validateProgramPipeline   = &glValidateProgramPipelineNULL;
     }
 
     if (extensions.count("GL_EXT_shader_framebuffer_fetch_non_coherent") != 0)

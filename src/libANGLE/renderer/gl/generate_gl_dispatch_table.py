@@ -309,19 +309,33 @@ def main():
     for extension in xml_root.findall('extensions/extension'):
         extension_name = extension.attrib['name']
         support = extension.attrib['supported'].split('|')
-        for command in extension.findall('./require/command'):
-            command_name = command.attrib['name']
-            if 'gl' in support and 'gles2' in support:
-                # Special case for KHR extensions, since in GLES they are suffixed.
-                if '_KHR_' in extension_name and not command_name.endswith('KHR'):
-                    safe_append(gl_extension_commands, command_name, extension_name)
-                    safe_append(gles2_extension_commands, command_name, extension_name)
-                else:
+        for require in extension.findall(".require"):
+            require_api = require.attrib['api'] if 'api' in require.attrib else None
+
+            for command in require.findall('./command'):
+                gl_support = 'gl' in support and (not require_api or require_api == 'gl')
+                gles_support = 'gles2' in support and (not require_api or require_api == 'gles2')
+                command_name = command.attrib['name']
+
+                if gl_support and gles_support:
                     safe_append(both_extension_commands, command_name, extension_name)
-            elif 'gl' in support:
-                safe_append(gl_extension_commands, command_name, extension_name)
-            elif 'gles2' in support:
-                safe_append(gles2_extension_commands, command_name, extension_name)
+                elif gl_support:
+                    safe_append(gl_extension_commands, command_name, extension_name)
+                elif gles_support:
+                    safe_append(gl_extension_commands, command_name, extension_name)
+
+
+#                if 'gl' in support and 'gles2' in support:
+#                    # Special case for KHR extensions, since in GLES they are suffixed.
+#                    if '_KHR_' in extension_name and not command_name.endswith('KHR'):
+#                        safe_append(gl_extension_commands, command_name, extension_name)
+#                        safe_append(gles2_extension_commands, command_name, extension_name)
+#                    else:
+#                        safe_append(both_extension_commands, command_name, extension_name)
+#                elif 'gl' in support:
+#                    safe_append(gl_extension_commands, command_name, extension_name)
+#                elif 'gles2' in support:
+#                    safe_append(gl_extension_commands, command_name, extension_name)
 
     gl_requirements = {}
     gles2_requirements = {}
