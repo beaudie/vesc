@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb30f891_515e15bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2024-07-02T23:07:29Z",
+      "side": 1,
+      "message": "hi all,\nplease help to review the change, this just add new workaround at upstream to avoid merge conflict.\n\nthanks\n\nhallin",
+      "revId": "82027a1c29ee1201325c14ee6fb07bc9679c9a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
