@@ -196,6 +196,13 @@ struct FrontendFeatures : FeatureSetBase
         &members, ""
     };
 
+    FeatureInfo forceFlushAfterDrawcallUseShadowmapForIntelDevice = {
+        "forceFlushAfterDrawcallUseShadowmapForIntelDevice",
+        FeatureCategory::FrontendWorkarounds,
+        "Force flush after drawcall use shadow map for intel device.",
+        &members, "https://issuetracker.google.com/349489248"
+    };
+
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
