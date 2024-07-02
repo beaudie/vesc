@@ -16,6 +16,40 @@
       "message": "Was there anything missing for this extension?",
       "revId": "c4e3ef3060bf38489f0b2274dfc9ff16d8dd9d28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "027383e7_d9573cac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-02T14:13:25Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "c4e3ef3060bf38489f0b2274dfc9ff16d8dd9d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b156b665_8c00d15f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-02T14:13:25Z",
+      "side": 1,
+      "message": "lgtm.",
+      "revId": "c4e3ef3060bf38489f0b2274dfc9ff16d8dd9d28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
