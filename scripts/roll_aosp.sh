@@ -90,6 +90,15 @@ function generate_Android_bp_file() {
 
         gn gen ${GN_OUTPUT_DIRECTORY} --args="${gn_args[*]}"
         gn desc ${GN_OUTPUT_DIRECTORY} --format=json "*" > ${GN_OUTPUT_DIRECTORY}/desc.$abi.json
+
+        gn_args_frameworkless=("${gn_args[@]}")
+        gn_args_frameworkless+=(
+            "angle_android_frameworkless = true"
+            "angle_vulkan_display_mode = \"offscreen\""
+        )
+
+        gn gen ${GN_OUTPUT_DIRECTORY} --args="${gn_args_frameworkless[*]}"
+        gn desc ${GN_OUTPUT_DIRECTORY} --format=json "*" > ${GN_OUTPUT_DIRECTORY}/desc.$abi.frameworkless.json
     done
 
     python3 scripts/generate_android_bp.py \
@@ -97,6 +106,10 @@ function generate_Android_bp_file() {
         --gn_json_arm64=${GN_OUTPUT_DIRECTORY}/desc.arm64.json \
         --gn_json_x86=${GN_OUTPUT_DIRECTORY}/desc.x86.json \
         --gn_json_x64=${GN_OUTPUT_DIRECTORY}/desc.x64.json \
+        --gn_json_arm_frameworkless=${GN_OUTPUT_DIRECTORY}/desc.arm.frameworkless.json \
+        --gn_json_arm64_frameworkless=${GN_OUTPUT_DIRECTORY}/desc.arm64.frameworkless.json \
+        --gn_json_x86_frameworkless=${GN_OUTPUT_DIRECTORY}/desc.x86.frameworkless.json \
+        --gn_json_x64_frameworkless=${GN_OUTPUT_DIRECTORY}/desc.x64.frameworkless.json \
         --output=Android.bp
 }
 
