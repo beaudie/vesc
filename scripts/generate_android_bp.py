@@ -13,6 +13,7 @@ import os
 import argparse
 import functools
 import collections
+from typing import List, Tuple
 
 ROOT_TARGETS = [
     "//:libGLESv2",
@@ -603,6 +604,20 @@ def get_angle_in_vendor_flag_config():
     return blueprint_results
 
 
+# returns list of (blueprint module type, dict with contents)
+def get_blueprint_targets_from_build_info(build_info: BuildInfo) -> List[Tuple[str, dict]]:
+    targets_to_write = collections.OrderedDict()
+    for abi in ABI_TARGETS:
+        for root_target in ROOT_TARGETS:
+            targets_to_write.update(get_gn_target_dependencies(abi, root_target, build_info))
+
+    generated_targets = []
+    for target in reversed(targets_to_write.keys()):
+        generated_targets.append(gn_target_to_blueprint(target, build_info))
+
+    return generated_targets
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Generate Android blueprints from gn descriptions.')
@@ -622,10 +637,6 @@ def main():
             infos[abi] = json.load(f)
 
     build_info = BuildInfo(infos)
-    targets_to_write = collections.OrderedDict()
-    for abi in ABI_TARGETS:
-        for root_target in ROOT_TARGETS:
-            targets_to_write.update(get_gn_target_dependencies(abi, root_target, build_info))
 
     blueprint_targets = []
 
@@ -650,9 +661,7 @@ def main():
             ],
         }))
 
-    generated_targets = []
-    for target in reversed(targets_to_write.keys()):
-        generated_targets.append(gn_target_to_blueprint(target, build_info))
+    generated_targets = get_blueprint_targets_from_build_info(build_info)
 
     # Move cflags that are repeated in each target to cc_defaults
     all_cflags = [set(bp['cflags']) for _, bp in generated_targets if 'cflags' in bp]
