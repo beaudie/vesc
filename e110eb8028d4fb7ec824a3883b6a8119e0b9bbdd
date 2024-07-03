@@ -16,6 +16,23 @@
       "message": "lgtm\n\nThank you Alexey for tracking this down! Let\u0027s let Geoff review this too.",
       "revId": "e110eb8028d4fb7ec824a3883b6a8119e0b9bbdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bb07e61_5598878d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-03T13:36:40Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "e110eb8028d4fb7ec824a3883b6a8119e0b9bbdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
