@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3ffd128_0ede56e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-03T15:49:54Z",
+      "side": 1,
+      "message": "Roman, FYI restricted_trace_gold_tests change.",
+      "revId": "70b09818ca014ab7ba2af76b75a2f621c804872d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
