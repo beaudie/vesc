@@ -13,7 +13,10 @@ import os
 import argparse
 import functools
 import collections
-from typing import List, Tuple
+import unittest
+import typing
+from typing import List, Tuple, Set, Dict
+from pprint import pprint
 
 ROOT_TARGETS = [
     "//:libGLESv2",
@@ -46,6 +49,19 @@ class BuildInfo(dict):
 
     def __eq__(self, other):
         return self is other
+
+
+class FlaggedModuleType(typing.NamedTuple):
+    """
+    Information required to define a soong_config_module_type with properties
+    adjustable with a config flag.
+    - Name of the "base" module type that's being extended
+    - Name of the "flagged" module being defined
+    - List of properties that change depending on the flag value
+    """
+    base_module_type: str
+    flagged_module_type: str
+    differing_properties: List[str]
 
 
 def tabs(indent):
@@ -604,6 +620,31 @@ def get_angle_in_vendor_flag_config():
     return blueprint_results
 
 
+def get_angle_without_android_framework_flag_config(flagged_module_types: List[FlaggedModuleType]):
+    """
+    Generates a list of Android.bp definitions for angle_without_android_framework flag.
+
+    flagged_module_types is a list of Soong module types that are going to be used.
+    """
+
+    blueprint_results = []
+
+    for mod in sorted(flagged_module_types):
+        blueprint_results.append(('soong_config_module_type', {
+            'name': mod.flagged_module_type,
+            'module_type': mod.base_module_type,
+            'config_namespace': 'angle',
+            'bool_variables': ['angle_without_android_framework'],
+            'properties': list(mod.differing_properties),
+        }))
+
+    blueprint_results.append(('soong_config_bool_variable', {
+        'name': 'angle_without_android_framework',
+    }))
+
+    return blueprint_results
+
+
 # returns list of (blueprint module type, dict with contents)
 def get_blueprint_targets_from_build_info(build_info: BuildInfo) -> List[Tuple[str, dict]]:
     targets_to_write = collections.OrderedDict()
@@ -618,16 +659,370 @@ def get_blueprint_targets_from_build_info(build_info: BuildInfo) -> List[Tuple[s
     return generated_targets
 
 
+def dict_diff(left, right) -> Tuple[dict, dict, dict]:
+    """
+    Perform a recursive three-way diff of 2 dictionaries. Return a tuple with
+    3 elements:
+    - dictionary with elements unique to the `left` dict,
+    - dictionary with elements common to both `left` and `right`,
+    - dictionary with elements unique to the `right` dict.
+    """
+    left_only = {k: left[k] for k in set(left) - set(right)}
+    right_only = {k: right[k] for k in set(right) - set(left)}
+    common = {}
+    for k in set(left) & set(right):
+        if left[k] == right[k]:
+            l = None
+            c = left[k]
+            r = None
+        elif isinstance(left[k], list) and isinstance(right[k], list):
+            l_set = set(left[k])
+            r_set = set(right[k])
+            l = list(sorted(l_set - r_set))
+            c = list(sorted(l_set & r_set))
+            r = list(sorted(r_set - l_set))
+        elif isinstance(left[k], dict) and isinstance(right[k], dict):
+            l, c, r = dict_diff(left[k], right[k])
+        else:
+            l = left[k]
+            c = None
+            r = right[k]
+
+        if l:
+            left_only[k] = l
+        if c:
+            common[k] = c
+        if r:
+            right_only[k] = r
+
+    return left_only, common, right_only
+
+
+# run tests with
+#   python3 -m unittest scripts/generate_android_bp.py
+class DictDiffTests(unittest.TestCase):
+
+    def test_primitives_left_only(self):
+        l, c, r = dict_diff({'a': 1}, {})
+        self.assertEqual(l, {'a': 1})
+        self.assertEqual(c, {})
+        self.assertEqual(r, {})
+
+    def test_primitives_right_only(self):
+        l, c, r = dict_diff({}, {'a': 1})
+        self.assertEqual(l, {})
+        self.assertEqual(c, {})
+        self.assertEqual(r, {'a': 1})
+
+    def test_primitives_common(self):
+        l, c, r = dict_diff({'a': 1}, {'a': 1})
+        self.assertEqual(l, {})
+        self.assertEqual(c, {'a': 1})
+        self.assertEqual(r, {})
+
+    def test_list_left_only(self):
+        l, c, r = dict_diff({'a': [1]}, {})
+        self.assertEqual(l, {'a': [1]})
+        self.assertEqual(c, {})
+        self.assertEqual(r, {})
+
+    def test_list_right_only(self):
+        l, c, r = dict_diff({}, {'a': [1]})
+        self.assertEqual(l, {})
+        self.assertEqual(c, {})
+        self.assertEqual(r, {'a': [1]})
+
+    def test_list_common(self):
+        l, c, r = dict_diff({'a': [1]}, {'a': [1]})
+        self.assertEqual(l, {})
+        self.assertEqual(c, {'a': [1]})
+        self.assertEqual(r, {})
+
+    def test_list_common_partial(self):
+        l, c, r = dict_diff({'a': [1, 2]}, {'a': [1, 3]})
+        self.assertEqual(l, {'a': [2]})
+        self.assertEqual(c, {'a': [1]})
+        self.assertEqual(r, {'a': [3]})
+
+    def test_dict_left_only(self):
+        l, c, r = dict_diff({'a': {'b': 1}}, {})
+        self.assertEqual(l, {'a': {'b': 1}})
+        self.assertEqual(c, {})
+        self.assertEqual(r, {})
+
+    def test_dict_right_only(self):
+        l, c, r = dict_diff({}, {'a': {'b': 1}})
+        self.assertEqual(l, {})
+        self.assertEqual(c, {})
+        self.assertEqual(r, {'a': {'b': 1}})
+
+    def test_dict_common(self):
+        l, c, r = dict_diff({'a': {'b': 1}}, {'a': {'b': 1}})
+        self.assertEqual(l, {})
+        self.assertEqual(c, {'a': {'b': 1}})
+        self.assertEqual(r, {})
+
+    def test_dict_common_partial(self):
+        l, c, r = dict_diff({'a': {'b': 1, 'c': 2}}, {'a': {'b': 1, 'c': 3}})
+        self.assertEqual(l, {'a': {'c': 2}})
+        self.assertEqual(c, {'a': {'b': 1}})
+        self.assertEqual(r, {'a': {'c': 3}})
+
+
+def merge_targets_with_flag(default: List[Tuple[str, dict]], flagged: List[Tuple[str, dict]],
+                            flag: str) -> Tuple[List[Tuple[str, dict]], List[FlaggedModuleType]]:
+    """
+    Given 2 lists of Android.bp module definitions and a Soong config flag name,
+    generate "merged" Android.bp modules that use given flag name to
+    conditionally enable differing properties depending on the flag being defined.
+
+    Keep track of cases where introduced conditional requires defining a new
+    Soong module type.
+
+    Return a tuple with:
+    - a list of possibly flagged Soong modules,
+    - list of new Soong module types to define.
+    """
+
+    def reorder_dict(d: dict) -> collections.OrderedDict:
+        """
+        Reorder dictionary keys to minimize changes to generated Android.bp file.
+
+        This is not strictly necessary, but makes manual inspection of generated
+        changes easier.
+        """
+        ordered = collections.OrderedDict()
+        order = [
+            'name',
+            'cpp_std',
+            'srcs',
+            'static_libs',
+            'shared_libs',
+            'defaults',
+            'generated_headers',
+            'local_include_dirs',
+            'cflags',
+            'out',
+            'tool_files',
+            'cmd',
+            'sdk_version',
+            'stl',
+            'arch',
+            'vendor',
+            'target',
+            'android',
+            'relative_install_path',
+            'soong_config_variables',
+            'conditions_default',
+        ]
+        order += sorted([k for k in d if k not in order])
+
+        for k in order:
+            if k in d:
+                if isinstance(d[k], dict):
+                    ordered[k] = reorder_dict(d[k])
+                else:
+                    ordered[k] = d[k]
+
+        return ordered
+
+    def collect_property_names(d: dict) -> Set[str]:
+        """
+        Recursively collect all keys in a dict. In case of nested dicts, return
+        dot-separated paths.
+
+        Used to list the properties for soong_config_module_type.
+        """
+        names = set()
+        for k, v in d.items():
+            names.add(k)
+            if isinstance(v, dict):
+                names |= set(f'{k}.{n}' for n in collect_property_names(v))
+        return names
+
+    flagged_module_types = {}
+
+    def merge_targets(default: dict, flagged: dict) -> Tuple[List[dict], Set[str]]:
+        """
+        Merge Android.bp dictionaries, putting elements unique to either
+        `default` or `flagged` under relevant sections of soong_config_variables.
+
+        Return a tuple with:
+        - a merged Android.bp dict,
+        - a set of dot-separated property paths that differ between default and
+          flagged.
+        """
+        default, common, flagged = dict_diff(default, flagged)
+        assert 'soong_config_variables' not in common
+
+        if default or flagged:
+            differing_properties = set()
+            if 'soong_config_variables' not in common:
+                common['soong_config_variables'] = {}
+            common['soong_config_variables'] = {}
+            common['soong_config_variables'][flag] = flagged or {}
+            if default:
+                common['soong_config_variables'][flag]['conditions_default'] = default
+
+            differing_properties |= {
+                v for v in collect_property_names(flagged) if 'conditions_default' not in v
+            }
+            differing_properties |= {
+                v for v in collect_property_names(default) if 'conditions_default' not in v
+            }
+            return reorder_dict(common), differing_properties
+
+        return reorder_dict(common), set()
+
+    default_dict = {bp['name']: (t, bp) for t, bp in default}
+    flagged_dict = {bp['name']: (t, bp) for t, bp in flagged}
+
+    merged_targets = []
+    for target in list(default_dict) + [t for t in flagged_dict if t not in default_dict]:
+        if target in default_dict and target not in flagged_dict:
+            merged_targets.append(default_dict[target])
+        elif target not in default_dict and target in flagged_dict:
+            merged_targets.append(flagged_dict[target])
+        else:
+            # The target exists in both default and flagged cases.
+            # Check for differences between the variants. If there are any:
+            # - Merge default and flagged targets.
+            # - Add the module type to a list of ones that need flagging. We
+            #   will emit a `soong_config_module_type` for it.
+            # - Change Soong module type to the emitted one.
+            assert default_dict[target][0] == flagged_dict[target][0], \
+                   'cannot merge different Android.bp module types: {} and {}'.format(default_dict[target][0], flagged_dict[target][0])
+            merged, differing_properties = merge_targets(default_dict[target][1],
+                                                         flagged_dict[target][1])
+            module_type = default_dict[target][0]
+
+            if differing_properties:
+                new_type = f'{flag}_{module_type}'
+                if new_type not in flagged_module_types:
+                    flagged_module_types[new_type] = FlaggedModuleType(
+                        base_module_type=module_type,
+                        flagged_module_type=new_type,
+                        differing_properties=set())
+                flagged_module_types[new_type].differing_properties.update(differing_properties)
+                module_type = new_type
+
+            merged_targets.append((module_type, merged))
+
+    return merged_targets, list(flagged_module_types.values())
+
+
+# run tests with
+#   python3 -m unittest scripts/generate_android_bp.py
+class MergeTargetsTests(unittest.TestCase):
+
+    def test_no_flag_needed(self):
+        default = {
+            'name': 'default',
+            'srcs': ['a.cpp'],
+        }
+        flagged = {
+            'name': 'flagged',
+            'srcs': ['a.cpp'],
+        }
+        merged, module_types = merge_targets_with_flag(
+            default=[('cc_library', default)], flagged=[('cc_library', flagged)], flag='flag')
+        self.assertEqual(len(merged), 2)
+        merged_default = [(k, v) for k, v in merged if v['name'] == 'default'][0]
+        merged_flagged = [(k, v) for k, v in merged if v['name'] == 'flagged'][0]
+        self.assertEqual(merged_default, ('cc_library', default))
+        self.assertEqual(merged_flagged, ('cc_library', flagged))
+
+        # disjoint modules => no need to generate flagged module types
+        self.assertEqual(len(module_types), 0)
+
+    def test_merge_same(self):
+        default = {
+            'name': 'default',
+            'srcs': ['a.cpp'],
+        }
+        merged, module_types = merge_targets_with_flag(
+            default=[('cc_library', default)], flagged=[('cc_library', default)], flag='flag')
+        self.assertEqual(len(merged), 1)
+        self.assertEqual(merged[0], ('cc_library', default))
+
+        # no differences => no need to generate flagged module types
+        self.assertEqual(len(module_types), 0)
+
+    def test_merge_differences(self):
+        default = {
+            'name': 'same',
+            'srcs': ['default.cpp', 'common.cpp'],
+            'cflags': ['default'],
+            'target': {
+                'android': {
+                    'cflags': ['nested_default'],
+                }
+            }
+        }
+        flagged = {
+            'name': 'same',
+            'srcs': ['common.cpp', 'flagged.cpp'],
+            'cflags': ['flagged'],
+            'target': {
+                'android': {
+                    'cflags': ['nested_flagged'],
+                }
+            }
+        }
+        merged, module_types = merge_targets_with_flag(
+            default=[('cc_library', default)], flagged=[('cc_library', flagged)], flag='flag')
+        self.assertEqual(merged, [
+            ('flag_cc_library', {
+                'name': 'same',
+                'srcs': ['common.cpp'],
+                'soong_config_variables': {
+                    'flag': {
+                        'srcs': ['flagged.cpp'],
+                        'cflags': ['flagged'],
+                        'target': {
+                            'android': {
+                                'cflags': ['nested_flagged'],
+                            }
+                        },
+                        'conditions_default': {
+                            'srcs': ['default.cpp'],
+                            'cflags': ['default'],
+                            'target': {
+                                'android': {
+                                    'cflags': ['nested_default'],
+                                }
+                            }
+                        }
+                    }
+                }
+            }),
+        ])
+        self.assertEqual(module_types, [
+            FlaggedModuleType(
+                base_module_type='cc_library',
+                flagged_module_type='flag_cc_library',
+                differing_properties={
+                    'srcs',
+                    'cflags',
+                    'target',
+                    'target.android',
+                    'target.android.cflags',
+                }),
+        ])
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Generate Android blueprints from gn descriptions.')
 
-    for abi in ABI_TARGETS:
-        parser.add_argument(
-            '--gn_json_' + gn_abi(abi),
-            help=gn_abi(abi) +
-            ' gn desc file in json format. Generated with \'gn desc <out_dir> --format=json "*"\'.',
-            required=True)
+    for suffix in ('', '_dma_buf'):
+        for abi in ABI_TARGETS:
+            parser.add_argument(
+                '--gn_json_' + gn_abi(abi) + suffix,
+                help=gn_abi(abi) +
+                ' gn desc file in json format. Generated with \'gn desc <out_dir> --format=json "*"\'.',
+                required=True)
+
     parser.add_argument('--output', help='output file (e.g. Android.bp)')
     args = vars(parser.parse_args())
 
@@ -635,12 +1030,22 @@ def main():
     for abi in ABI_TARGETS:
         with open(args['gn_json_' + gn_abi(abi)], 'r') as f:
             infos[abi] = json.load(f)
-
     build_info = BuildInfo(infos)
 
-    blueprint_targets = []
+    dma_buf_infos = {}
+    for abi in ABI_TARGETS:
+        with open(args['gn_json_' + gn_abi(abi) + '_dma_buf'], 'r') as f:
+            dma_buf_infos[abi] = json.load(f)
+    dma_buf_build_info = BuildInfo(dma_buf_infos)
 
+    generated_targets, flagged_module_types = merge_targets_with_flag(
+        default=get_blueprint_targets_from_build_info(build_info),
+        flagged=get_blueprint_targets_from_build_info(dma_buf_build_info),
+        flag='angle_without_android_framework')
+
+    blueprint_targets = []
     blueprint_targets.extend(get_angle_in_vendor_flag_config())
+    blueprint_targets.extend(get_angle_without_android_framework_flag_config(flagged_module_types))
 
     blueprint_targets.append((
         'cc_defaults',
@@ -661,8 +1066,6 @@ def main():
             ],
         }))
 
-    generated_targets = get_blueprint_targets_from_build_info(build_info)
-
     # Move cflags that are repeated in each target to cc_defaults
     all_cflags = [set(bp['cflags']) for _, bp in generated_targets if 'cflags' in bp]
     all_target_cflags = set.intersection(*all_cflags)
@@ -670,6 +1073,8 @@ def main():
     for _, bp in generated_targets:
         if 'cflags' in bp:
             bp['cflags'] = list(set(bp['cflags']) - all_target_cflags)
+            if 'defaults' not in bp:
+                bp['defaults'] = []
             bp['defaults'].append('angle_common_auto_cflags')
 
     blueprint_targets.append(('cc_defaults', {
