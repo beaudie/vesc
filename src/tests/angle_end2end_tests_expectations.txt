@@ -1075,6 +1075,7 @@ b/330697097 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachmen
 8077 D3D11 : DepthWriteTest.Test/ES3_D3D11__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
 
 // Driver bugs
+<<<<<<< HEAD   (108a8f M127: Vulkan: Disable VK_EXT_shader_stencil_export on SwiftS)
 8077 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
 8077 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
 8077 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
@@ -1087,6 +1088,20 @@ b/330697097 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachmen
 8077 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
 8077 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
 8077 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
+=======
+42266528 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
+42266528 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
+42266528 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
+42266528 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
+42266528 MAC INTEL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
+42266528 MAC INTEL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
+42266528 MAC INTEL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
+42266528 MAC INTEL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
+42266528 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
+42266528 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
+42266528 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
+42266528 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
+>>>>>>> CHANGE (1dd3a4 D3D11: Use built-in position for gl_FragCoord.z on SM 4.0+)
 
 // gl_PointCoord origin is flipped for non-default framebuffers
 8066 WIN INTEL OPENGL : ClipControlTest.OriginPointCoord/* = SKIP
