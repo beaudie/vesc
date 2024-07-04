@@ -1506,7 +1506,14 @@ angle::Result ContextVk::flush(const gl::Context *context)
     const bool frontBufferRenderingEnabled =
         isSingleBufferedWindow || drawFramebufferVk->hasFrontBufferUsage();
 
-    if (hasActiveRenderPass() && !frontBufferRenderingEnabled)
+    // Some poorly written applications (Instagram, BIGO LIVE), use |glFLush()| for synchronization,
+    // instead of |glFenceSync()| or |eglCreateSyncKHR()|.  Some applications (like Instagram)
+    // bind default/different framebuffer BEFORE calling |glFlush()|.  Other applications (like BIGO
+    // LIVE) render into external image and then call |glFlush()| without changing the framebuffer.
+    // Skipping deferring flush in these cases will WA the issue.
+    if (hasActiveRenderPass() && !frontBufferRenderingEnabled &&
+        !drawFramebufferVk->hasAnyExternalAttachments() &&
+        drawFramebufferVk->getLastRenderPassQueueSerial() == mRenderPassCommands->getQueueSerial())
     {
         mHasDeferredFlush = true;
         return angle::Result::Continue;
