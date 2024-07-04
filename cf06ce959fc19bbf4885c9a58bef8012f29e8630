@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35df2ebe_a570fe8d",
+        "filename": "include/platform/frontend_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-04T02:01:46Z",
+      "side": 1,
+      "message": "Please avoid duplicating the feature condition in its name/description, that changes over time.\n\n```suggestion\n            \"name\": \"force_flush_after_drawcall_using_shadowmap\",\n            \"category\": \"Workarounds\",\n            \"description\": [\n                \"Force flush after drawcall using shadow map on buggy drivers.\"\n            ],\n            \"issue\": \"https://issuetracker.google.com/349489248\"\n```",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 211,
+        "endChar": 64
+      },
+      "revId": "cf06ce959fc19bbf4885c9a58bef8012f29e8630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
