@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c6d34ac_71ca7a33",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-05T02:33:32Z",
+      "side": 1,
+      "message": "Suggest the following to pass presubmit:\n\n```\nUpdate clspv\u0027s README.chromium to include Revision\n\nbug: b/350851535\nChange-Id: Id4204aebbbd9eb61f25982a6acbd783987944016\n```",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "bae02075eab675a3570d9aa89f45e668aa77c175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
