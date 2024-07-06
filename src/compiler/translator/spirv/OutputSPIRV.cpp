@@ -818,6 +818,16 @@ void OutputSPIRVTraverser::accessChainPushLiteral(NodeData *data,
     // Add the literal integer in the chain of indices.  Since this is an id list, fake it as an id.
     data->idList.emplace_back(index);
     data->accessChain.preSwizzleTypeId = typeId;
+
+    // If a swizzle is indexed, remap the index based on the swizzle and remove the swizzle.
+    if (!data->accessChain.swizzles.empty())
+    {
+        ASSERT(index < data->accessChain.swizzles.size());
+        data->idList.back() = spirv::LiteralInteger(data->accessChain.swizzles[index]);
+
+        data->accessChain.postSwizzleTypeId = typeId;
+        data->accessChain.swizzles.clear();
+    }
 }
 
 void OutputSPIRVTraverser::accessChainPushSwizzle(NodeData *data,
