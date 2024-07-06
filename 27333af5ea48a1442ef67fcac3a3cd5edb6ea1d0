@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b59d7808_27d52587",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-06T02:28:18Z",
+      "side": 1,
+      "message": "This should be removed",
+      "range": {
+        "startLine": 913,
+        "startChar": 0,
+        "endLine": 914,
+        "endChar": 14
+      },
+      "revId": "27333af5ea48a1442ef67fcac3a3cd5edb6ea1d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c965baea_8ed271f4",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-06T02:28:18Z",
+      "side": 1,
+      "message": "Please remove this `glFlush` too, it\u0027s unnecessary. If that affects the test, that means `glFenceSync` is broken.",
+      "range": {
+        "startLine": 976,
+        "startChar": 0,
+        "endLine": 977,
+        "endChar": 18
+      },
+      "revId": "27333af5ea48a1442ef67fcac3a3cd5edb6ea1d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "281cbd5b_f746f845",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-06T02:28:18Z",
+      "side": 1,
+      "message": "FWIW, these two lines can be removed, the other thread already configured this for the texture",
+      "range": {
+        "startLine": 1033,
+        "startChar": 0,
+        "endLine": 1034,
+        "endChar": 77
+      },
+      "revId": "27333af5ea48a1442ef67fcac3a3cd5edb6ea1d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e3ef23d_ce39b41f",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-06T02:28:18Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 1046,
+        "startChar": 0,
+        "endLine": 1047,
+        "endChar": 22
+      },
+      "revId": "27333af5ea48a1442ef67fcac3a3cd5edb6ea1d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
