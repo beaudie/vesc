@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2fbf902_fe85a1e1",
+        "filename": "src/compiler/translator/spirv/OutputSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-06T06:51:25Z",
+      "side": 1,
+      "message": "Could this operation be done earlier so it applies to all translation targets? There\u0027s `TIntermSwizzle::fold` that combines multiple swizzles; maybe a swizzle followed by a constant index could be handled during that stage as well.",
+      "revId": "631e8a0d4b66bb86ea076ac6d0fff3c8a15e6fbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
