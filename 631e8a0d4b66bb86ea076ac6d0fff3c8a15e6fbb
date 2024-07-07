@@ -16,6 +16,24 @@
       "message": "Could this operation be done earlier so it applies to all translation targets? There\u0027s `TIntermSwizzle::fold` that combines multiple swizzles; maybe a swizzle followed by a constant index could be handled during that stage as well.",
       "revId": "631e8a0d4b66bb86ea076ac6d0fff3c8a15e6fbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c79e454_7137de14",
+        "filename": "src/compiler/translator/spirv/OutputSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-07T02:14:31Z",
+      "side": 1,
+      "message": "Yes, given the metal failures that\u0027s more reasonable",
+      "parentUuid": "f2fbf902_fe85a1e1",
+      "revId": "631e8a0d4b66bb86ea076ac6d0fff3c8a15e6fbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
