@@ -493,6 +493,40 @@ angle::Result VertexArrayGL::streamAttributes(
                         functions, GL_ARRAY_BUFFER, binding.getOffset(), copySize, GL_MAP_READ_BIT);
                     ASSERT(inputBufferPointer);
                     inputPointer = inputBufferPointer;
+
+                    // Validate if there is OOB access of the input buffer in the coming memcpy.
+                    angle::CheckedNumeric<size_t> outputRequiredSize;
+                    angle::CheckedNumeric<size_t> inputRequiredSize;
+                    if (destStride == sourceStride)
+                    {
+                        outputRequiredSize = batchMemcpySize;
+                        outputRequiredSize += curBufferOffset;
+
+                        inputRequiredSize = batchMemcpySize;
+                        inputRequiredSize += batchMemcpyInputOffset;
+                    }
+                    else
+                    {
+                        outputRequiredSize = streamedVertexCount - 1;
+                        outputRequiredSize *= destStride;
+                        outputRequiredSize += curBufferOffset;
+                        inputRequiredSize = streamedVertexCount - 1;
+                        inputRequiredSize += firstIndexForSeparateCopy;
+                        inputRequiredSize *= sourceStride;
+                    }
+
+                    const size_t outputBufferSize = requiredBufferSize;
+                    const size_t inputBufferSize  = bindingBufferPointer->getSize();
+                    ANGLE_CHECK(GetImplAs<ContextGL>(context),
+                                outputRequiredSize.IsValid() &&
+                                    outputRequiredSize.ValueOrDie() <= outputBufferSize,
+                                "Out of bound access of the output attribute buffer.",
+                                GL_INVALID_OPERATION);
+                    ANGLE_CHECK(GetImplAs<ContextGL>(context),
+                                inputRequiredSize.IsValid() &&
+                                    inputRequiredSize.ValueOrDie() <= inputBufferSize,
+                                "Out of bound access of the input attribute buffer.",
+                                GL_INVALID_OPERATION);
                 }
 
                 batchMemcpyInputOffset    = 0;
