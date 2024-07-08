@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df1806bd_49814730",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-08T22:48:53Z",
+      "side": 1,
+      "message": "SwiftShader, I implemented that a few weeks ago for this purpose.",
+      "parentUuid": "62d1ae7e_6d5ca00b",
+      "revId": "ee195b953fed13e4e7823de6d5eadae5423bdbb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67ab284e_344c0a15",
