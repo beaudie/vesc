@@ -1,0 +1,101 @@
+Name
+
+    ANGLE_platform_angle_vulkan_device_uuid
+
+Name Strings
+
+    EGL_ANGLE_platform_angle_vulkan_device_uuid
+
+Contributors
+
+    Steven Noonan
+
+Contacts
+
+    Steven Noonan <steven@uplinklabs.net>
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, 2024-07-08
+
+Number
+
+    EGL Extension XXX
+
+Extension Type
+
+    EGL client extension
+
+Dependencies
+
+    This extension requires EGL 1.5 and the ANGLE_platform_angle_vulkan
+    extension.
+
+Overview
+
+    This extension enables developers to specify a Vulkan device UUID when
+    creating an ANGLE Vulkan context, ensuring that the context is associated
+    with a particular physical device and driver combination, providing more
+    precise control over device selection.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    Accepted as an attribute name in the <attrib_list> argument of
+    eglGetPlatformDisplay:
+
+        EGL_PLATFORM_ANGLE_VULKAN_DEVICE_UUID          0x34F0
+
+Additions to the EGL Specification
+
+    None
+
+New Behavior
+
+	The EGL_PLATFORM_ANGLE_VULKAN_DEVICE_UUID attribute can be passed to
+	eglGetPlatformDisplay to specify the device UUID of the desired Vulkan
+	device for the ANGLE context. This attribute must be used in conjunction
+	with the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute set to
+	EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE. If it is not, eglGetPlatformDisplay
+	will generate an EGL_BAD_ATTRIBUTE error and return EGL_NO_DISPLAY.
+
+	The value provided for EGL_PLATFORM_ANGLE_VULKAN_DEVICE_UUID must be
+	a valid pointer to a 16-byte Vulkan device UUID, or a NULL pointer
+	indicating that any device is acceptable. The UUID value should match the
+	deviceUUID field of VkPhysicalDeviceIDProperties for a VkPhysicalDevice in
+	the system. If no matching VkPhysicalDevice is found, the implementation
+	may fall back to any other available VkPhysicalDevice.
+
+Usage Example
+
+    uint8_t deviceUUID[16] = { /* UUID value */ };
+    EGLAttrib attribs[] = {
+        EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE,
+        EGL_PLATFORM_ANGLE_VULKAN_DEVICE_UUID, (EGLAttrib)deviceUUID,
+        EGL_NONE
+    };
+    EGLDisplay display =
+        eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE, EGL_DEFAULT_DISPLAY, attribs);
+    if (display == EGL_NO_DISPLAY) {
+        // Handle display creation failure
+    }
+
+Issues
+
+    None
+
+Revision History
+
+    Version 1, 2024-07-08 (Steven Noonan)
+      - Initial draft

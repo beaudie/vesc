@@ -160,6 +160,7 @@ class Renderer : angle::NonCopyable
                              angle::vk::ICD desiredICD,
                              uint32_t preferredVendorId,
                              uint32_t preferredDeviceId,
+                             const uint8_t *preferredDeviceUuid,
                              UseDebugLayers useDebugLayers,
                              const char *wsiExtension,
                              const char *wsiLayer,
@@ -897,8 +898,10 @@ class Renderer : angle::NonCopyable
     VkDebugUtilsMessengerEXT mDebugUtilsMessenger;
     VkPhysicalDevice mPhysicalDevice;
 
-    VkPhysicalDeviceProperties mPhysicalDeviceProperties;
+    VkPhysicalDeviceProperties2 mPhysicalDeviceProperties2;
+    VkPhysicalDeviceProperties &mPhysicalDeviceProperties;
     VkPhysicalDeviceVulkan11Properties mPhysicalDevice11Properties;
+    VkPhysicalDeviceIDProperties mPhysicalDeviceIDProperties;
 
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
     VkPhysicalDeviceVulkan11Features mPhysicalDevice11Features;
