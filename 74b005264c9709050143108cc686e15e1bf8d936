@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27a75d11_c17d7cf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-08T18:59:37Z",
+      "side": 1,
+      "message": "Can we make this a bit more automatic? Like, isReadBarrierNecessary and isWriteBarrierNecessary on their early return path + the layout change functions can do this tracking completely without the need for `mIsCurrentAccessFragmentOnly` and a later manual `updatePipelineStageAccessHistory()`.",
+      "revId": "74b005264c9709050143108cc686e15e1bf8d936",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "114def10_9aed5867",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7605,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-08T18:59:37Z",
+      "side": 1,
+      "message": "Making this 8 bit so it triggers earlier (or even 4 bits) may be even better!",
+      "revId": "74b005264c9709050143108cc686e15e1bf8d936",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
