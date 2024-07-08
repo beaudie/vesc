@@ -22,6 +22,30 @@
       },
       "revId": "ee195b953fed13e4e7823de6d5eadae5423bdbb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26882329_805dea97",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3050,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-08T19:02:16Z",
+      "side": 1,
+      "message": "Yes that is true. There is already an ASSERT in `DeriveRenderingInfo` called from `beginRendering`.",
+      "parentUuid": "67ab284e_344c0a15",
+      "range": {
+        "startLine": 3050,
+        "startChar": 8,
+        "endLine": 3050,
+        "endChar": 29
+      },
+      "revId": "ee195b953fed13e4e7823de6d5eadae5423bdbb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
