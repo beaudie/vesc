@@ -6666,11 +6666,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_egl_tests",
@@ -6689,11 +6689,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_egl_tests",
@@ -6711,11 +6711,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -6734,11 +6734,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles2_tests",
@@ -6756,11 +6756,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles2_tests",
@@ -6778,11 +6778,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles2_tests",
@@ -6800,11 +6800,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -6823,11 +6823,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -6846,11 +6846,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_multisample_tests",
@@ -6868,11 +6868,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_rotate180_tests",
@@ -6890,11 +6890,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_rotate270_tests",
@@ -6912,11 +6912,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles31_rotate90_tests",
@@ -6934,11 +6934,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -6957,11 +6957,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -6980,11 +6980,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -7003,11 +7003,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_gles3_multisample_tests",
@@ -7025,11 +7025,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -7048,11 +7048,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -7071,11 +7071,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -7094,11 +7094,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 4
         },
@@ -7120,11 +7120,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles2_tests",
@@ -7145,11 +7145,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles31_tests",
@@ -7170,11 +7170,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -7195,11 +7195,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -7221,11 +7221,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -7247,11 +7247,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles32_tests",
@@ -7272,11 +7272,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_gles3_tests",
@@ -7297,11 +7297,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_noctx_gles2_tests",
@@ -7322,11 +7322,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_noctx_gles32_tests",
@@ -7347,11 +7347,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_deqp_khr_single_gles32_tests",
@@ -7369,11 +7369,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -7393,11 +7393,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_gles1_conformance_tests",
@@ -7412,11 +7412,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_unittests",
@@ -7431,11 +7431,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_white_box_tests",
@@ -7455,11 +7455,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_capture_tests",
@@ -7481,11 +7481,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -7513,11 +7513,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_restricted_trace_gold_tests",
@@ -7542,11 +7542,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test": "angle_restricted_trace_gold_tests",
@@ -7570,11 +7570,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
@@ -7599,11 +7599,11 @@
         "swarming": {
           "containment_type": "AUTO",
           "dimensions": {
-            "display_attached": "1",
-            "gpu": "10de:2184-27.21.14.5638",
-            "os": "Windows-10-18363",
-            "pool": "chromium.tests.gpu"
+            "gpu": "10de:2803",
+            "os": "Windows",
+            "pool": "chromium.tests.gpu.experimental"
           },
+          "expiration": 21600,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 2
         },
