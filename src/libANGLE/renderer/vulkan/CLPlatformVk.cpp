@@ -47,9 +47,10 @@ angle::Result CLPlatformVk::initBackendRenderer()
 {
     ASSERT(mRenderer != nullptr);
 
-    ANGLE_TRY(mRenderer->initialize(this, this, angle::vk::ICD::Default, 0, 0,
-                                    vk::UseDebugLayers::YesIfAvailable, getWSIExtension(),
-                                    getWSILayer(), getWindowSystem(), angle::FeatureOverrides{}));
+    ANGLE_TRY(mRenderer->initialize(this, this, angle::vk::ICD::Default, 0, 0, nullptr,
+                                    static_cast<VkDriverId>(0), vk::UseDebugLayers::YesIfAvailable,
+                                    getWSIExtension(), getWSILayer(), getWindowSystem(),
+                                    angle::FeatureOverrides{}));
 
     return angle::Result::Continue;
 }
