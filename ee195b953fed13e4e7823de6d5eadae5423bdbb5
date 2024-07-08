@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67ab284e_344c0a15",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3050,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-08T18:54:59Z",
+      "side": 1,
+      "message": "Is `renderPass` null only for dynamic rendering? If so, should an assert be added?",
+      "range": {
+        "startLine": 3050,
+        "startChar": 8,
+        "endLine": 3050,
+        "endChar": 29
+      },
+      "revId": "ee195b953fed13e4e7823de6d5eadae5423bdbb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
