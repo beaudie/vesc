@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "163d1052_bd849a84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-08T20:57:34Z",
+      "side": 1,
+      "message": "updatePipelineStageAccessHistory really mostly tied to ImageHelper::setQueueSerial, since every time you use it, you kind of needs to update the usage history. The  exception here is renderPass attachment where we setQueueSerial first and finalize the layout later, which means updatePipelineStageAccessHistory has to defer to later point as well. I actually tried to add a retainImage to OutsideRenderPassCommandBufferhelper which does setQueueSerial and updatePipelineStageAccessHistory. But it runs into other issues (forgot what it is now) and that is why I end up did not make a helper function for this. I think make it two calls actually more readable, it is more clear what we are doing here.\n\nI suggest we take this as is for now and I will double check if I can add retainImage to OutsideRPCommandsHelper in the follow up CL.",
+      "parentUuid": "27a75d11_c17d7cf4",
+      "revId": "74b005264c9709050143108cc686e15e1bf8d936",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "114def10_9aed5867",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-08T18:59:37Z",
       "side": 1,
       "message": "Making this 8 bit so it triggers earlier (or even 4 bits) may be even better!",
+      "revId": "74b005264c9709050143108cc686e15e1bf8d936",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b74db4a8_81e93c18",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7605,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-08T20:57:34Z",
+      "side": 1,
+      "message": "It depends. I was worried that too narrow window will miss the usage case that would otherwise benefit from VkEvent. Since this is heuristic information, there is no right or wrong, we need to make decision based on the actual data collected from apps and Gfxbench. I think I tried 8 bits and manhattan improvement is gone, but can\u0027t really sure about it right now. I will need to double check again to make sure. But for now let\u0027s settle it for 16 bit since that is what I have gathered app traces with and we can always adjust if needed with supporting data.",
+      "parentUuid": "114def10_9aed5867",
       "revId": "74b005264c9709050143108cc686e15e1bf8d936",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
