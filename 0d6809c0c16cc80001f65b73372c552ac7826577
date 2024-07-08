@@ -16,6 +16,24 @@
       "message": "Any suppressions to lift?",
       "revId": "0d6809c0c16cc80001f65b73372c552ac7826577",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c450330c_a02e41ce",
+        "filename": "src/tests/gl_tests/D3DTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-08T15:51:10Z",
+      "side": 1,
+      "message": "There are no suppressions in this suite. These tests were passing before by relying on unspecified behavior. They are still passing.",
+      "parentUuid": "5a3d76ec_d228e61c",
+      "revId": "0d6809c0c16cc80001f65b73372c552ac7826577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
