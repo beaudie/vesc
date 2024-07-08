@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ac8e4a1_ef1e43b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-08T13:32:42Z",
+      "side": 1,
+      "message": "Brian, PTAL.\nhttps://ci.chromium.org/ui/p/angle/builders/try/mac-exp-test/46/overview is green.",
+      "revId": "3cf8c5e559e803b874412b8a7cf2e7764f8700d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
