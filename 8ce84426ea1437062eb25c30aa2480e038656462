@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5adbc2b5_126761cd",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-09T18:10:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "16e6856a_5a356e77",
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cccf51b_7dd8afcd",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64a17d73_ea6ac2dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-09T18:10:31Z",
+      "side": 1,
+      "message": "Heh, I wondered why that wasn\u0027t being used. I\u0027ll get rid of both the `*Vulkan11*` structures since they\u0027re written to but never read by anything (or added to pNext chains).",
+      "parentUuid": "7cccf51b_7dd8afcd",
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35a5ffd3_0fbe5996",
@@ -65,6 +101,30 @@
       "writtenOn": "2024-07-09T17:51:18Z",
       "side": 1,
       "message": "Question: Can a non-Vulkan backend get past these skips? (IIUC, `EGL_BAD_ATTRIBUTE` is tested for non-Vulkan platforms)",
+      "range": {
+        "startLine": 549,
+        "startChar": 0,
+        "endLine": 550,
+        "endChar": 100
+      },
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bf089c3_117d7d55",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-09T18:10:31Z",
+      "side": 1,
+      "message": "If ANGLE is built without Vulkan support at all, it\u0027d get skipped on everything. But those extensions are \"enabled\" (as in, not prevented from being listed) regardless of which backend is being used.",
+      "parentUuid": "35a5ffd3_0fbe5996",
       "range": {
         "startLine": 549,
         "startChar": 0,
@@ -122,6 +182,30 @@
           ]
         }
       ],
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88373b26_2070deb7",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-09T18:10:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4ecf41ff_a36ab681",
+      "range": {
+        "startLine": 574,
+        "startChar": 12,
+        "endLine": 574,
+        "endChar": 21
+      },
       "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -197,6 +281,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19d5e52d_10772fe1",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-09T18:10:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0b32cd66_d3bc9a48",
+      "range": {
+        "startLine": 591,
+        "startChar": 16,
+        "endLine": 591,
+        "endChar": 42
+      },
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c812f0be_8dbd3354",
@@ -220,6 +328,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "008e4e17_c19d3c0e",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-09T18:10:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c812f0be_8dbd3354",
+      "range": {
+        "startLine": 689,
+        "startChar": 12,
+        "endLine": 689,
+        "endChar": 21
+      },
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5de45819_e49e075c",
@@ -233,6 +365,30 @@
       "writtenOn": "2024-07-09T17:51:18Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 705,
+        "startChar": 16,
+        "endLine": 705,
+        "endChar": 42
+      },
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "548c46e5_40178db7",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-09T18:10:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5de45819_e49e075c",
       "range": {
         "startLine": 705,
         "startChar": 16,
