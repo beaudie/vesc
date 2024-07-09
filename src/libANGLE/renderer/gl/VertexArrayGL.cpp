@@ -462,6 +462,7 @@ angle::Result VertexArrayGL::streamAttributes(
             bool needsUnmapAndRebindStreamingAttributeBuffer = false;
             size_t firstIndexForSeparateCopy                 = firstIndex;
 
+            const gl::Buffer *bindingBufferPointer = binding.getBuffer().get();
             if (applyExtraOffsetWorkaroundForInstancedAttributes && adjustedDivisor > 0)
             {
                 const size_t originalStreamedVertexCount = streamedVertexCount;
@@ -472,7 +473,6 @@ angle::Result VertexArrayGL::streamAttributes(
                     sourceStride *
                     originalStreamedVertexCount;  // the real data in the buffer we are streaming
 
-                const gl::Buffer *bindingBufferPointer = binding.getBuffer().get();
                 if (!bindingBufferPointer)
                 {
                     if (!inputPointer)
@@ -503,12 +503,61 @@ angle::Result VertexArrayGL::streamAttributes(
             // would cause the buffer to be much larger than needed.
             if (destStride == sourceStride)
             {
+                if (bindingBufferPointer)
+                {
+                    // Validate if there is OOB access of the input buffer in the coming memcpy.
+                    angle::CheckedNumeric<GLuint64> inputRequiredSize;
+                    inputRequiredSize = batchMemcpySize;
+                    inputRequiredSize += batchMemcpyInputOffset;
+                    const GLuint64 inputBufferSize = bindingBufferPointer->getSize();
+                    ANGLE_CHECK(GetImplAs<ContextGL>(context),
+                                inputRequiredSize.IsValid() &&
+                                    inputRequiredSize.ValueOrDie() <= inputBufferSize,
+                                "Out of bound access of the input attribute buffer.",
+                                GL_INVALID_OPERATION);
+
+                    angle::CheckedNumeric<GLuint64> outputRequiredSize;
+                    outputRequiredSize = batchMemcpySize;
+                    outputRequiredSize += curBufferOffset;
+                    const GLuint64 outputBufferSize = requiredBufferSize;
+                    ANGLE_CHECK(GetImplAs<ContextGL>(context),
+                                outputRequiredSize.IsValid() &&
+                                    outputRequiredSize.ValueOrDie() <= outputBufferSize,
+                                "Out of bound access of the output attribute buffer.",
+                                GL_INVALID_OPERATION);
+                }
                 // Can copy in one go, the data is packed
                 memcpy(bufferPointer + curBufferOffset, inputPointer + batchMemcpyInputOffset,
                        batchMemcpySize);
             }
             else
             {
+                if (bindingBufferPointer)
+                {
+                    // Validate if there is OOB access of the input buffer in the coming memcpy.
+                    angle::CheckedNumeric<GLuint64> inputRequiredSize;
+                    inputRequiredSize = streamedVertexCount - 1;
+                    inputRequiredSize += firstIndexForSeparateCopy;
+                    inputRequiredSize *= sourceStride;
+                    inputRequiredSize += destStride;
+                    const GLuint64 inputBufferSize = bindingBufferPointer->getSize();
+                    ANGLE_CHECK(GetImplAs<ContextGL>(context),
+                                inputRequiredSize.IsValid() &&
+                                    inputRequiredSize.ValueOrDie() <= inputBufferSize,
+                                "Out of bound access of the input attribute buffer.",
+                                GL_INVALID_OPERATION);
+
+                    angle::CheckedNumeric<GLuint64> outputRequiredSize;
+                    outputRequiredSize = streamedVertexCount;
+                    outputRequiredSize *= destStride;
+                    outputRequiredSize += curBufferOffset;
+                    const GLuint64 outputBufferSize = requiredBufferSize;
+                    ANGLE_CHECK(GetImplAs<ContextGL>(context),
+                                outputRequiredSize.IsValid() &&
+                                    outputRequiredSize.ValueOrDie() <= outputBufferSize,
+                                "Out of bound access of the output attribute buffer.",
+                                GL_INVALID_OPERATION);
+                }
                 for (size_t vertexIdx = 0; vertexIdx < streamedVertexCount; vertexIdx++)
                 {
                     uint8_t *out = bufferPointer + curBufferOffset + (destStride * vertexIdx);
