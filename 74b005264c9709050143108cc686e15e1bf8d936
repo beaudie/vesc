@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0cd085a3_90aaa6ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T17:05:40Z",
+      "side": 1,
+      "message": "\u003e The exception here ..., which means updatePipelineStageAccessHistory has to defer to later point as well\n\nBut this is a rough heuristic isn\u0027t it? If we update the history at the same time as `setQueueSerial` as you mentioned, sure we may be one bit off in the exceptional case but as far as history is concerned that\u0027s still fine? Is the use of `.all()` the problem? Because we could change that to `.count() \u003e bits-1` or something so we skip this for mostly-FS cases too, which is _probably_ fine.\n\nI imagine the Manhattan use case is really a ping pong so the bits look like 101010101?",
+      "parentUuid": "2a35fa8a_1a2fe12d",
+      "revId": "74b005264c9709050143108cc686e15e1bf8d936",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "114def10_9aed5867",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
