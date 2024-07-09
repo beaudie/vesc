@@ -87,6 +87,24 @@
       "parentUuid": "114def10_9aed5867",
       "revId": "74b005264c9709050143108cc686e15e1bf8d936",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3273414a_deecd549",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7605,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-09T01:02:23Z",
+      "side": 1,
+      "message": "Looks like 8 bit is still good with manhattan31.",
+      "parentUuid": "b74db4a8_81e93c18",
+      "revId": "74b005264c9709050143108cc686e15e1bf8d936",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
