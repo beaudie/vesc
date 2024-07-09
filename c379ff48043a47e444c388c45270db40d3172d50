@@ -46,6 +46,30 @@
       },
       "revId": "c379ff48043a47e444c388c45270db40d3172d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1831cc9f_58aba8dd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-09T17:05:12Z",
+      "side": 1,
+      "message": "\u003eFor desktop drivers, we\u0027ll hear soon enough if Chrome Dev hits issues on Linux.\n\nDo they have driver that supports the ext? My concern is mostly on B*, which they ship it and then get a newer VK driver and run into bugs.",
+      "parentUuid": "4d71a9f8_c51e8531",
+      "range": {
+        "startLine": 5273,
+        "startChar": 28,
+        "endLine": 5275,
+        "endChar": 93
+      },
+      "revId": "c379ff48043a47e444c388c45270db40d3172d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
