@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fad122e8_cfc6e78f",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-09T17:23:51Z",
+      "side": 1,
+      "message": "Unless EGL supports creating unorm16 surfaces (does it?), it\u0027s not possible to have a norm16 color buffer without the extension.",
+      "parentUuid": "de5074d1_55d6c623",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 70
+      },
+      "revId": "b3202005544a44fc44986744be3a63ede9c6f9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbb10dc9_02f553cf",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-09T17:09:33Z",
       "side": 1,
       "message": "Should this be more general like `!(info-\u003etype \u003d\u003d ushort \u0026\u0026 type !\u003d ushort)`?",
+      "range": {
+        "startLine": 199,
+        "startChar": 28,
+        "endLine": 199,
+        "endChar": 87
+      },
+      "revId": "b3202005544a44fc44986744be3a63ede9c6f9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3911504f_3d47d357",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-09T17:23:51Z",
+      "side": 1,
+      "message": "The combined condition needs to:\n- disallow all read types except `ushort` for `ushort` buffers;\n- disallow all read types except `ubyte` for non-`ushort` buffers.",
+      "parentUuid": "cbb10dc9_02f553cf",
       "range": {
         "startLine": 199,
         "startChar": 28,
