@@ -23,6 +23,7 @@
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_renderer.h"
 
+#include <cstdlib>
 #include <type_traits>
 
 namespace rx
@@ -3153,7 +3154,7 @@ bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs)
 // Use aligned allocation and free so we can use the alignas keyword.
 void *GraphicsPipelineDesc::operator new(std::size_t size)
 {
-    return angle::AlignedAlloc(size, 32);
+    return std::aligned_alloc(32, size);
 }
 
 void GraphicsPipelineDesc::operator delete(void *ptr)
