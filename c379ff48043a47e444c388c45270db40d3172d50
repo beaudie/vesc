@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f639b0_6883db5c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-09T16:29:26Z",
+      "side": 1,
+      "message": "Thought about this a bit more: I suggest you add `\u0026\u0026 isSwiftShader` for now to reduce the risk for shipping platforms (like B* and chromeOS). Since this has not been tested on any real GPUs and this will be shipped out to user now. Then some months later some driver implements supportsDynamicRenderingLocalRead and all of sudden user see this preferDynamicRendering enabled. There is risk here that they may run into bugs or performance regressions that they do not have an easy way to workaround. Explicitly limit to swiftshader for now and enable it until we have tested at least on one real GPU will avoid most of the risks.",
+      "range": {
+        "startLine": 5273,
+        "startChar": 28,
+        "endLine": 5275,
+        "endChar": 93
+      },
+      "revId": "c379ff48043a47e444c388c45270db40d3172d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
