@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "105a4707_41dc9055",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-09T14:03:57Z",
+      "side": 1,
+      "message": "CC\u0027ing Geoff Lang for question about how I should deal with `EGL_DONT_CARE`, mentioned in my other comment.",
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
