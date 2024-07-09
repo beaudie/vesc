@@ -16,6 +16,40 @@
       "message": "CC\u0027ing Geoff Lang for question about how I should deal with `EGL_DONT_CARE`, mentioned in my other comment.",
       "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e6856a_5a356e77",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T17:26:29Z",
+      "side": 1,
+      "message": "Should probably null out the pNexts here, they are pointing to stack variables.",
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cccf51b_7dd8afcd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T17:26:29Z",
+      "side": 1,
+      "message": "Can you remove this while you\u0027re here? It belongs to https://chromium-review.googlesource.com/c/angle/angle/+/4116450, accidentally ended up on a split that got committed.",
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
