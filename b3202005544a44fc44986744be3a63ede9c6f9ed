@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e6f2558_1950dc86",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T17:30:37Z",
+      "side": 1,
+      "message": "`ValidReadPixelsFormatType` is called for any `glReadPixels`, not just for surfaces. And the app could just give ushort even if unsupported. That should lead to a validation error not ASSERT, I was asking if that validation is present elsewhere.\n\nBut it probably is, because `info-\u003etype` comes from an already created texture/etc, so if the ext wasn\u0027t supported that earlier command wouldn\u0027t have succeeded",
+      "parentUuid": "fad122e8_cfc6e78f",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 70
+      },
+      "revId": "b3202005544a44fc44986744be3a63ede9c6f9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbb10dc9_02f553cf",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "The combined condition needs to:\n- disallow all read types except `ushort` for `ushort` buffers;\n- disallow all read types except `ubyte` for non-`ushort` buffers.",
       "parentUuid": "cbb10dc9_02f553cf",
+      "range": {
+        "startLine": 199,
+        "startChar": 28,
+        "endLine": 199,
+        "endChar": 87
+      },
+      "revId": "b3202005544a44fc44986744be3a63ede9c6f9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e72c9cab_1d1af54d",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T17:30:37Z",
+      "side": 1,
+      "message": "Ah ok, weird!",
+      "parentUuid": "3911504f_3d47d357",
       "range": {
         "startLine": 199,
         "startChar": 28,
