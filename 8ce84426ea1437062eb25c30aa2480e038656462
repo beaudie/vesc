@@ -50,6 +50,197 @@
       "message": "Can you remove this while you\u0027re here? It belongs to https://chromium-review.googlesource.com/c/angle/angle/+/4116450, accidentally ended up on a split that got committed.",
       "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35a5ffd3_0fbe5996",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-09T17:51:18Z",
+      "side": 1,
+      "message": "Question: Can a non-Vulkan backend get past these skips? (IIUC, `EGL_BAD_ATTRIBUTE` is tested for non-Vulkan platforms)",
+      "range": {
+        "startLine": 549,
+        "startChar": 0,
+        "endLine": 550,
+        "endChar": 100
+      },
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ecf41ff_a36ab681",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-09T17:51:18Z",
+      "side": 1,
+      "message": "Braces?",
+      "range": {
+        "startLine": 574,
+        "startChar": 12,
+        "endLine": 574,
+        "endChar": 21
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "26ce2421_4c37de50",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+              "range": {
+                "startLine": 573,
+                "startChar": 0,
+                "endLine": 574,
+                "endChar": 0
+              },
+              "replacement": "        if (!isValidUUID(targetDeviceUUID)) {\n"
+            },
+            {
+              "path": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+              "range": {
+                "startLine": 575,
+                "startChar": 0,
+                "endLine": 575,
+                "endChar": 0
+              },
+              "replacement": "        }\n"
+            }
+          ]
+        }
+      ],
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b32cd66_d3bc9a48",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-09T17:51:18Z",
+      "side": 1,
+      "message": "Braces?",
+      "range": {
+        "startLine": 591,
+        "startChar": 16,
+        "endLine": 591,
+        "endChar": 42
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "c5f10aad_45801505",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+              "range": {
+                "startLine": 591,
+                "startChar": 0,
+                "endLine": 591,
+                "endChar": 0
+              },
+              "replacement": "            {\n"
+            },
+            {
+              "path": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+              "range": {
+                "startLine": 592,
+                "startChar": 0,
+                "endLine": 592,
+                "endChar": 0
+              },
+              "replacement": "            }\n"
+            },
+            {
+              "path": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+              "range": {
+                "startLine": 705,
+                "startChar": 0,
+                "endLine": 705,
+                "endChar": 0
+              },
+              "replacement": "            {\n"
+            },
+            {
+              "path": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+              "range": {
+                "startLine": 706,
+                "startChar": 0,
+                "endLine": 706,
+                "endChar": 0
+              },
+              "replacement": "            }\n"
+            }
+          ]
+        }
+      ],
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c812f0be_8dbd3354",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-09T17:51:18Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 689,
+        "startChar": 12,
+        "endLine": 689,
+        "endChar": 21
+      },
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5de45819_e49e075c",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-09T17:51:18Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 705,
+        "startChar": 16,
+        "endLine": 705,
+        "endChar": 42
+      },
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
