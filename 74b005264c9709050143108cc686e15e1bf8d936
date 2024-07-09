@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b9a514d_6ce828fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-09T17:19:28Z",
+      "side": 1,
+      "message": "Its not about rough or not, the problem is the heuristic is based on layout and layout is set at the finalize* call time. Moving to isReadBarrierNecessary is bad in the way that these are const function, not supposedly should update usage stats. If any, combine with setQueueSerial is better. But for renderPass attachment, we don\u0027t have an existing API to ride on. We can add a new helper API, but for just three calls, I think it is not that bad.",
+      "parentUuid": "0cd085a3_90aaa6ce",
+      "revId": "74b005264c9709050143108cc686e15e1bf8d936",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "114def10_9aed5867",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
