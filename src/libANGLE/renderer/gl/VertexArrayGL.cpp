@@ -491,7 +491,9 @@ angle::Result VertexArrayGL::streamAttributes(
                     ASSERT(CanMapBufferForRead(functions));
                     uint8_t *inputBufferPointer = MapBufferRangeWithFallback(
                         functions, GL_ARRAY_BUFFER, binding.getOffset(), copySize, GL_MAP_READ_BIT);
-                    ASSERT(inputBufferPointer);
+                    ANGLE_CHECK(GetImplAs<ContextGL>(context), inputBufferPointer,
+                                "Failed to map buffer range of the attribute buffer.",
+                                GL_OUT_OF_MEMORY);
                     inputPointer = inputBufferPointer;
                 }
 
