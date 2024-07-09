@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b5664a2_92ce7e58",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-09T18:10:37Z",
+      "side": 1,
+      "message": "Looking at this again, the following hypothetical case may break the assertion:\n- The `GL_EXT_texture_norm16` extension is not supported or has been explicitly disabled.\n- A default framebuffer somehow has the `RGBA16` internal format.\n- An app tries to read from it.\n\nCould we assume for now that this case does not happen in practice?",
+      "parentUuid": "5e6f2558_1950dc86",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 70
+      },
+      "revId": "b3202005544a44fc44986744be3a63ede9c6f9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbb10dc9_02f553cf",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "Ah ok, weird!",
       "parentUuid": "3911504f_3d47d357",
+      "range": {
+        "startLine": 199,
+        "startChar": 28,
+        "endLine": 199,
+        "endChar": 87
+      },
+      "revId": "b3202005544a44fc44986744be3a63ede9c6f9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21a88044_68972cdd",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-09T18:10:37Z",
+      "side": 1,
+      "message": "The base ES specs support only `rgba/ubyte` combination. The norm16 extension adds `rgba/ushort` but only for `ushort` color buffers.\n\nSince runtime type conversions are generally disallowed in GLES, `ubyte` read type cannot be used with `ushort` color buffers. This has been explicitly confirmed with OpenGL ES WG.",
+      "parentUuid": "e72c9cab_1d1af54d",
       "range": {
         "startLine": 199,
         "startChar": 28,
