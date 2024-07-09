@@ -22,6 +22,30 @@
       },
       "revId": "c379ff48043a47e444c388c45270db40d3172d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d71a9f8_c51e8531",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T16:42:26Z",
+      "side": 1,
+      "message": "FWIW, Joerg tried this with the r50 ARM driver, and it seems to have worked just fine, including Camera. For desktop drivers, we\u0027ll hear soon enough if Chrome Dev hits issues on Linux. For Android emulators, this is likely not a problem because the Vulkan tunnel still has to implement the extension, and ANGLE won\u0027t use it until they do (at which point they\u0027d test things). ChromeOS also rolls ANGLE infrequently and with lots of testing.\n\nTBH, the risk is minimal (especially given that it works fine on ARM).",
+      "parentUuid": "10f639b0_6883db5c",
+      "range": {
+        "startLine": 5273,
+        "startChar": 28,
+        "endLine": 5275,
+        "endChar": 93
+      },
+      "revId": "c379ff48043a47e444c388c45270db40d3172d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
