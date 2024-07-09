@@ -70,6 +70,30 @@
       },
       "revId": "c379ff48043a47e444c388c45270db40d3172d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cc144eb_0221ed31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T17:13:20Z",
+      "side": 1,
+      "message": "Yes. I just confirmed with Steven that this works on his game on Nvidia and AMD on Linux and windows.\n\nWe can check with them for sure. Based on conversations I had with Amirali about B*\u0027s support for VK_EXT_primitives_generated_query, it looks like they explicitly opt into extensions. @mprzybyl@google.com any concerns here?",
+      "parentUuid": "1831cc9f_58aba8dd",
+      "range": {
+        "startLine": 5273,
+        "startChar": 28,
+        "endLine": 5275,
+        "endChar": 93
+      },
+      "revId": "c379ff48043a47e444c388c45270db40d3172d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
