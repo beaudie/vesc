@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "781871d3_0b0fa27d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T17:01:03Z",
+      "side": 1,
+      "message": "Could we reorder this before the previous change?",
+      "revId": "c6647739390a8da545a5817b25f086dccca22cb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ee1e637_494e74f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T17:01:03Z",
+      "side": 1,
+      "message": "A comment as to why event is not set here would be nice",
+      "revId": "c6647739390a8da545a5817b25f086dccca22cb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
