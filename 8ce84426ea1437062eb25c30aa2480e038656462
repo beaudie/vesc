@@ -135,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f01616a_0075d6a3",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-09T20:28:00Z",
+      "side": 1,
+      "message": "I see. Thanks!",
+      "parentUuid": "0bf089c3_117d7d55",
+      "range": {
+        "startLine": 549,
+        "startChar": 0,
+        "endLine": 550,
+        "endChar": 100
+      },
+      "revId": "8ce84426ea1437062eb25c30aa2480e038656462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ecf41ff_a36ab681",
