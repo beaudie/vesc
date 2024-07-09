@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbbbd7af_a9aebddd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-09T17:43:28Z",
+      "side": 1,
+      "message": "Brian, PTAL in case there are no failures in https://ci.chromium.org/ui/p/angle/builders/try/win-exp-test/16/overview and I\u0027ll be able to land this tomorrow.",
+      "revId": "5c3fba6e3fc8f6d8bc39a6ae204e6b750db93b26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3579b21_1b3ed4a0",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-09T17:43:28Z",
+      "side": 1,
+      "message": "Forgot this in https://chromium-review.googlesource.com/c/angle/angle/+/5682424.",
+      "range": {
+        "startLine": 328,
+        "startChar": 0,
+        "endLine": 328,
+        "endChar": 23
+      },
+      "revId": "5c3fba6e3fc8f6d8bc39a6ae204e6b750db93b26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
