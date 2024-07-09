@@ -34,6 +34,24 @@
       "parentUuid": "c1a7ce73_0a87beca",
       "revId": "40b00c7e9c0d59735ea4cf6affe1ac41c8d73680",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db95ce51_98db7c11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T17:17:02Z",
+      "side": 1,
+      "message": "For passing unsupported structs in a pNext, that\u0027s explicitly allowed in Vulkan, the driver would ignore it so just making sure the struct is zero-filled is fine.\n\nFor the second question, input from @geofflang@chromium.org would be great",
+      "parentUuid": "53a86580_ed9589d1",
+      "revId": "40b00c7e9c0d59735ea4cf6affe1ac41c8d73680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
