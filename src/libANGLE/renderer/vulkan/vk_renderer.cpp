@@ -350,6 +350,12 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "imageLayout: VK_IMAGE_LAYOUT_GENERAL",
         "usage: SYNC_FRAGMENT_SHADER_SHADER_",
     },
+    // http://anglebug.com/352094384
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "Access info (usage: SYNC_ACCESS_INDEX_NONE, prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION, "
+        "write_barriers: SYNC_COMPUTE_SHADER_SHADER_",
+    },
     // http://anglebug.com/42265049
     {
         "SYNC-HAZARD-WRITE-AFTER-WRITE",
