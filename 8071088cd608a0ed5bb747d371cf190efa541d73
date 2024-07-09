@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "426a177d_eb77d3d5",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-09T14:23:35Z",
+      "side": 1,
+      "message": "As a follow up, you might want to consider hoisting this out of windows. Linux and ChromeOS could probably use this as-is on x64.\n\nARM needs more work apparently according to https://chromium-review.googlesource.com/240095 which might merit some attention too",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 10
+      },
+      "revId": "8071088cd608a0ed5bb747d371cf190efa541d73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
