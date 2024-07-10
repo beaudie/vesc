@@ -16,6 +16,24 @@
       "message": "There must be a mistake somewhere that makes the non-DR path less efficient in this change. Let me revert this for now while I figure out what\u0027s wrong, perhaps I can divide this up in meaningless-on-their-own parts so at least it\u0027d be easier to spot that mistake",
       "revId": "795f142e248a695d397633ac6d10352067cb564c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c3b730f_b190a59e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T15:27:01Z",
+      "side": 1,
+      "message": "Looks like the issue is in the SurfaceVk changes, I\u0027ll see if I can quickly fix that instead. I\u0027ll revert if I can\u0027t fix it by the end of the day",
+      "parentUuid": "ffa5eab5_532e8315",
+      "revId": "795f142e248a695d397633ac6d10352067cb564c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
