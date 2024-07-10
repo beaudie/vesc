@@ -16,6 +16,24 @@
       "message": "Much better thanks! Now that this function is only called by ImageHelper, you can move this to the cpp file. Then `mIsCurrentAccessFragmentOnly` is unnecessary IIUC, right? We can get that info out of `mCurrentLayout`?",
       "revId": "43c8b64f742c6a94ac4b510d90ba13a2e16b6cd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "397bfd7f_0201c514",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T20:06:18Z",
+      "side": 1,
+      "message": "It is called from OutsideRenderPassCommandBuffer::retainImage, so it needs to be a API. But yes, it can be moved to cpp file, but given its only two lines of code, I am not seeing benefits to put cpp file either. \n\nYes, you can calculate mIsCurrentAccessFragmentOnly from mCurrentLayout. The problem is that the table is now in renderer (because we do the sanity clean up with stageMasks). This means you need to pass in renderer to all these APIs (all the way to retainImage), which is something I am a bit hesitate to. The other option is add another static table in the vk_helpers.cpp file that maps mCurrentLayout to mIsCurrentAccessFragmentOnly.",
+      "parentUuid": "d2fd1cc6_3f651f00",
+      "revId": "43c8b64f742c6a94ac4b510d90ba13a2e16b6cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
