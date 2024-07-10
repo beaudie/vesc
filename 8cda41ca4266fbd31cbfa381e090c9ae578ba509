@@ -226,6 +226,24 @@
       "parentUuid": "1112c494_62037044",
       "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a67ce9b1_ac006190",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-10T23:59:31Z",
+      "side": 1,
+      "message": "Since Quyen didn\u0027t object, let me abandon this in favor of using EGL_ANGLE_metal_texture_client_buffer. But feel free to resurrect this or propose a similar approach in a new CL if it turns out to be needed.",
+      "parentUuid": "6ba17270_1624b56a",
+      "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
