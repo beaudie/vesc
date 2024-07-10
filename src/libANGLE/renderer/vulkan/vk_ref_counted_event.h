@@ -51,7 +51,51 @@ constexpr VkPipelineStageFlags kFragmentAndAttachmentPipelineStageFlags =
     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
     VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 
-using FragmentStageAccessHistory = angle::BitSet8<8>;
+enum class ExecutionUnit
+{
+    FragmentOnly,
+    PreFragmentOnly,
+    ComputeOnly,
+    Other,
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+
+class ExecutionUnitAccessHistory final
+{
+  public:
+    constexpr ExecutionUnitAccessHistory() = default;
+    constexpr ExecutionUnitAccessHistory(ExecutionUnit executionUnit)
+    {
+        for (size_t i = 0; i < kExecutionUnitAccessHistoryWindowSize; i++)
+        {
+            mHeuristicBits <<= kExecutionUnitBitShift;
+            mHeuristicBits |= ToUnderlying(executionUnit);
+        }
+    }
+    void updateHeuristic(ExecutionUnit executionUnit)
+    {
+        mHeuristicBits <<= kExecutionUnitBitShift;
+        mHeuristicBits |= ToUnderlying(executionUnit);
+    }
+    constexpr bool operator==(const ExecutionUnitAccessHistory &other) const
+    {
+        return mHeuristicBits == other.mHeuristicBits;
+    }
+
+  private:
+    static constexpr size_t kExecutionUnitBitShift = 2;
+    static_assert(ToUnderlying(ExecutionUnit::EnumCount) <= (1 << kExecutionUnitBitShift));
+    static constexpr size_t kExecutionUnitAccessHistoryWindowSize = 8;
+    angle::BitSet16<kExecutionUnitAccessHistoryWindowSize * kExecutionUnitBitShift> mHeuristicBits;
+};
+static constexpr ExecutionUnitAccessHistory kExecutionUnitAccessHistoryFragmentOnly =
+    ExecutionUnitAccessHistory(ExecutionUnit::FragmentOnly);
+static constexpr ExecutionUnitAccessHistory kExecutionUnitAccessHistoryComputeOnly =
+    ExecutionUnitAccessHistory(ExecutionUnit::ComputeOnly);
+static constexpr ExecutionUnitAccessHistory kExecutionUnitAccessHistoryPreFragmentOnly =
+    ExecutionUnitAccessHistory(ExecutionUnit::PreFragmentOnly);
 
 // Enum for predefined VkPipelineStageFlags set that VkEvent will be using. Because VkEvent has
 // strict rules that waitEvent and setEvent must have matching VkPipelineStageFlags, it is desirable

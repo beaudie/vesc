@@ -88,6 +88,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             PipelineStage::InvalidEnum,
             // We do not directly using this layout in SetEvent. We transit to other layout before using
             EventStage::InvalidEnum,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -104,6 +105,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::ColorAttachmentOutput,
             EventStage::ColorAttachmentOutput,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -120,6 +122,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::ColorAttachmentOutputAndFragmentShader,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -136,6 +139,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTest,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -152,6 +156,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTest,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -168,6 +173,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTestAndFragmentShader,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -184,6 +190,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
             EventStage::AllFragmentTestAndAllShaders,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -200,6 +207,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTest,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -216,6 +224,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTestAndFragmentShader,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -232,6 +241,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
             EventStage::AllFragmentTestAndAllShaders,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -248,6 +258,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTest,
+            ExecutionUnit::FragmentOnly,
         },
     },
 
@@ -265,6 +276,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTestAndFragmentShader,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -281,6 +293,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             PipelineStage::VertexShader,
             EventStage::AllFragmentTestAndAllShaders,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -297,6 +310,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::ColorAttachmentOutputAndFragmentShader,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -314,6 +328,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
             EventStage::ColorAttachmentOutputAndAllShaders,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -330,6 +345,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::AllFragmentTestAndFragmentShader,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -347,6 +363,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
             EventStage::AllFragmentTestAndAllShaders,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -364,6 +381,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::ColorAttachmentOutput,
             EventStage::ColorAttachmentOutput,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -381,6 +399,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::ColorAttachmentOutputAndFragmentShader,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -408,6 +427,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             PipelineStage::BottomOfPipe,
             // We do not directly using this layout in SetEvent.
             EventStage::InvalidEnum,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -425,6 +445,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::BottomOfPipe,
             EventStage::ColorAttachmentOutputAndFragmentShaderAndTransfer,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -451,6 +472,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             PipelineStage::InvalidEnum,
             // We do not directly using this layout in SetEvent. We transit to internal layout before using
             EventStage::InvalidEnum,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -469,6 +491,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             PipelineStage::TopOfPipe,
             // We do not directly using this layout in SetEvent. We transit to internal layout before using
             EventStage::InvalidEnum,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -487,6 +510,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             PipelineStage::TopOfPipe,
             // We do not directly using this layout in SetEvent. We transit to internal layout before using
             EventStage::InvalidEnum,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -503,6 +527,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             PipelineStage::Transfer,
             EventStage::Transfer,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -519,6 +544,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::Transfer,
             EventStage::Transfer,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -535,6 +561,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::Transfer,
             EventStage::Transfer,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -554,6 +581,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             PipelineStage::InvalidEnum,
             // We do not directly using this layout in SetEvent.
             EventStage::InvalidEnum,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -570,6 +598,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             PipelineStage::VertexShader,
             EventStage::VertexShader,
+            ExecutionUnit::PreFragmentOnly,
         },
     },
     {
@@ -586,6 +615,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
             EventStage::VertexShader,
+            ExecutionUnit::PreFragmentOnly,
         },
     },
     {
@@ -603,6 +633,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
             EventStage::PreFragmentShaders,
+            ExecutionUnit::PreFragmentOnly,
         },
     },
     {
@@ -620,6 +651,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
             EventStage::PreFragmentShaders,
+            ExecutionUnit::PreFragmentOnly,
         },
     },
     {
@@ -636,6 +668,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             PipelineStage::FragmentShadingRate,
             EventStage::FragmentShadingRate,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -652,6 +685,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             PipelineStage::FragmentShader,
             EventStage::FragmentShader,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -668,6 +702,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::FragmentShader,
+            ExecutionUnit::FragmentOnly,
         },
     },
     {
@@ -684,6 +719,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadOnly,
             PipelineStage::ComputeShader,
             EventStage::ComputeShader,
+            ExecutionUnit::ComputeOnly,
         },
     },
     {
@@ -700,6 +736,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ResourceAccess::ReadWrite,
             PipelineStage::ComputeShader,
             EventStage::ComputeShader,
+            ExecutionUnit::ComputeOnly,
         },
     },
     {
@@ -717,6 +754,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
             EventStage::AllShaders,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -734,6 +772,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
             EventStage::AllShaders,
+            ExecutionUnit::Other,
         },
     },
     {
@@ -751,6 +790,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::ComputeShader,
             EventStage::TransferAndComputeShader,
+            ExecutionUnit::Other,
         },
     },
 };
@@ -1192,6 +1232,23 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(Renderer *renderer, ImageLayout 
     return layout;
 }
 
+ExecutionUnit GetExecutionUnitFromPipelineStageFlags(VkPipelineStageFlags dstStageMask)
+{
+    if ((dstStageMask & ~kFragmentAndAttachmentPipelineStageFlags) == 0)
+    {
+        return ExecutionUnit::FragmentOnly;
+    }
+    else if (dstStageMask == VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT)
+    {
+        return ExecutionUnit::ComputeOnly;
+    }
+    else if ((dstStageMask & ~kPreFragmentStageFlags) == 0)
+    {
+        return ExecutionUnit::PreFragmentOnly;
+    }
+    return ExecutionUnit::Other;
+}
+
 void InitializeImageLayoutAndMemoryBarrierDataMap(
     angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> *map,
     VkPipelineStageFlags supportedVulkanPipelineStageMask)
@@ -1201,6 +1258,8 @@ void InitializeImageLayoutAndMemoryBarrierDataMap(
     {
         barrierData.srcStageMask &= supportedVulkanPipelineStageMask;
         barrierData.dstStageMask &= supportedVulkanPipelineStageMask;
+        ASSERT(barrierData.executionUnit ==
+               GetExecutionUnitFromPipelineStageFlags(barrierData.dstStageMask));
     }
 }
 
@@ -7611,7 +7670,9 @@ void ImageHelper::setCurrentRefCountedEvent(Context *context, EventMaps &eventMa
     // In order to strike the balance, we exclude the images that are only used by fragment stages
     // in the past N references. Use of VkEvent will not be beneficial
     // if it is only accessed by fragment stages or only accessed by non-fragment access.
-    if (mFragmentStageAccessHistory.all())
+    if (mExecutionUnitAccessHistory == kExecutionUnitAccessHistoryFragmentOnly ||
+        mExecutionUnitAccessHistory == kExecutionUnitAccessHistoryPreFragmentOnly ||
+        mExecutionUnitAccessHistory == kExecutionUnitAccessHistoryComputeOnly)
     {
         return;
     }
@@ -7638,11 +7699,7 @@ void ImageHelper::setCurrentRefCountedEvent(Context *context, EventMaps &eventMa
 void ImageHelper::updatePipelineStageAccessHistory()
 {
     const ImageMemoryBarrierData &barrierData = kImageMemoryBarrierData[mCurrentLayout];
-    bool isCurrentAccessFragmentOnly =
-        (barrierData.dstStageMask & ~kFragmentAndAttachmentPipelineStageFlags) == 0;
-
-    mFragmentStageAccessHistory <<= 1;
-    mFragmentStageAccessHistory |= isCurrentAccessFragmentOnly ? 1 : 0;
+    mExecutionUnitAccessHistory.updateHeuristic(barrierData.executionUnit);
 }
 
 void ImageHelper::clearColor(Renderer *renderer,
@@ -8701,8 +8758,7 @@ void ImageHelper::onRenderPassAttach(const QueueSerial &queueSerial)
     // updatePipelineStageAccessHistory uses mCurrentLayout which we dont know yet (deferred until
     // endRenderPass time). So update it directly since we know attachment will be accessed by
     // fragment and attachment stages.
-    mFragmentStageAccessHistory <<= 1;
-    mFragmentStageAccessHistory |= 1;
+    mExecutionUnitAccessHistory.updateHeuristic(ExecutionUnit::FragmentOnly);
 }
 
 void ImageHelper::onWrite(gl::LevelIndex levelStart,

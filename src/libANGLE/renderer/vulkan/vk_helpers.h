@@ -779,6 +779,7 @@ struct ImageMemoryBarrierData
     // barrier.
     PipelineStage barrierIndex;
     EventStage eventStage;
+    ExecutionUnit executionUnit;
 };
 // Initialize ImageLayout to ImageMemoryBarrierData mapping table.
 void InitializeImageLayoutAndMemoryBarrierDataMap(
@@ -3145,9 +3146,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // transfer. Every use of image update the usage history by shifting the bitfields left and new
     // bit that represents the new pipeline usage is added to the right most bit. This way we track
     // if there is any non-fragment pipeline usage during the past usages (i.e., the window of
-    // usage history is number of bits in mFragmentStageAccessHistory). This information provides
+    // usage history is number of bits in mExecutionUnitAccessHistory). This information provides
     // heuristic for making decisions if a VkEvent should be used to track the operation.
-    FragmentStageAccessHistory mFragmentStageAccessHistory;
+    ExecutionUnitAccessHistory mExecutionUnitAccessHistory;
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
