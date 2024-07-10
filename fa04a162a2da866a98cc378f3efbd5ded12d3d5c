@@ -16,6 +16,154 @@
       "message": "Split from reland",
       "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e2cef9e_158221d9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T17:27:58Z",
+      "side": 1,
+      "message": "These two are identical now.",
+      "range": {
+        "startLine": 505,
+        "startChar": 4,
+        "endLine": 516,
+        "endChar": 6
+      },
+      "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa1c8a4f_724ec164",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T17:27:58Z",
+      "side": 1,
+      "message": "I think all these are identical? Especially the one at line 551 should cover the ones at 545, 558, 565, I think.",
+      "range": {
+        "startLine": 542,
+        "startChar": 4,
+        "endLine": 570,
+        "endChar": 6
+      },
+      "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c9e6c9f_17bc6150",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T17:27:58Z",
+      "side": 1,
+      "message": "ASSERT(valid());",
+      "range": {
+        "startLine": 951,
+        "startChar": 0,
+        "endLine": 951,
+        "endChar": 38
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "0edc6c03_bd121ebe",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+              "range": {
+                "startLine": 951,
+                "startChar": 0,
+                "endLine": 952,
+                "endChar": 0
+              },
+              "replacement": "    ASSERT(valid());\n"
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+              "range": {
+                "startLine": 957,
+                "startChar": 0,
+                "endLine": 958,
+                "endChar": 0
+              },
+              "replacement": "    ASSERT(valid());\n"
+            }
+          ]
+        }
+      ],
+      "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2539685_50ffd728",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T17:27:58Z",
+      "side": 1,
+      "message": "ASSERT(valid());",
+      "range": {
+        "startLine": 957,
+        "startChar": 0,
+        "endLine": 957,
+        "endChar": 38
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "12d58128_d87bce94",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+              "range": {
+                "startLine": 951,
+                "startChar": 0,
+                "endLine": 952,
+                "endChar": 0
+              },
+              "replacement": "    ASSERT(valid());\n"
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+              "range": {
+                "startLine": 957,
+                "startChar": 0,
+                "endLine": 958,
+                "endChar": 0
+              },
+              "replacement": "    ASSERT(valid());\n"
+            }
+          ]
+        }
+      ],
+      "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
