@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18d196d5_4bc918aa",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8926,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-10T21:43:54Z",
+      "side": 1,
+      "message": "Combine?",
+      "range": {
+        "startLine": 8922,
+        "startChar": 0,
+        "endLine": 8926,
+        "endChar": 74
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f775d7a5_3b4e1ebd",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2952,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-10T21:43:54Z",
+      "side": 1,
+      "message": "Question: Does dynamic rendering use imageless framebuffers?",
+      "range": {
+        "startLine": 2952,
+        "startChar": 8,
+        "endLine": 2952,
+        "endChar": 63
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f91d3aba_33aac431",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-10T21:43:54Z",
+      "side": 1,
+      "message": "Combine?",
+      "range": {
+        "startLine": 3543,
+        "startChar": 0,
+        "endLine": 3545,
+        "endChar": 66
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f5ce3c4_4f56f35c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5030,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-10T21:43:54Z",
+      "side": 1,
+      "message": "This is correct. However, I noticed that in some places outside `vk`, `vk` is not used (like the function above).",
+      "range": {
+        "startLine": 5030,
+        "startChar": 10,
+        "endLine": 5030,
+        "endChar": 24
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94a0b42a_20e244fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7395,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-10T21:43:54Z",
+      "side": 1,
+      "message": "Combine?",
+      "range": {
+        "startLine": 7393,
+        "startChar": 0,
+        "endLine": 7395,
+        "endChar": 83
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13cf365c_91865586",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7239,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-10T21:43:54Z",
+      "side": 1,
+      "message": "Extra",
+      "range": {
+        "startLine": 7239,
+        "startChar": 4,
+        "endLine": 7239,
+        "endChar": 91
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
