@@ -2925,11 +2925,11 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
             ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
 
             // If there is a backbuffer, query the framebuffer from WindowSurfaceVk instead.
-            ANGLE_TRY(mBackbuffer->getCurrentFramebuffer(
-                contextVk,
-                mRenderPassDesc.hasFramebufferFetch() ? FramebufferFetchMode::Enabled
-                                                      : FramebufferFetchMode::Disabled,
-                *compatibleRenderPass, &framebufferHandle));
+            ANGLE_TRY(mBackbuffer->getCurrentFramebuffer(contextVk,
+                                                         mRenderPassDesc.hasFramebufferFetch()
+                                                             ? FramebufferFetchMode::Enabled
+                                                             : FramebufferFetchMode::Disabled,
+                                                         compatibleRenderPass, &framebufferHandle));
 
             // Account for swapchain pre-rotation
             framebufferWidth  = renderTargetsInfo[0].renderTarget->getRotatedExtents().width;

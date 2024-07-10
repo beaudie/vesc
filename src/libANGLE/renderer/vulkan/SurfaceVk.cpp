@@ -2990,7 +2990,7 @@ EGLint WindowSurfaceVk::getSwapBehavior() const
 
 angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
                                                      FramebufferFetchMode fetchMode,
-                                                     const vk::RenderPass &compatibleRenderPass,
+                                                     const vk::RenderPass *compatibleRenderPass,
                                                      vk::Framebuffer *framebufferOut)
 {
     // FramebufferVk dirty-bit processing should ensure that a new image was acquired.
@@ -3038,7 +3038,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
     VkFramebufferCreateInfo framebufferInfo = {};
     framebufferInfo.sType                   = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.flags                   = 0;
-    framebufferInfo.renderPass              = compatibleRenderPass.getHandle();
+    framebufferInfo.renderPass              = compatibleRenderPass->getHandle();
     framebufferInfo.attachmentCount         = attachmentCount;
     framebufferInfo.pAttachments            = imageViews.data();
     framebufferInfo.width                   = static_cast<uint32_t>(rotatedExtents.width);

@@ -5960,7 +5960,7 @@ angle::Result Renderer::flushRenderPassCommands(
     vk::Context *context,
     vk::ProtectionType protectionType,
     egl::ContextPriority priority,
-    const vk::RenderPass &renderPass,
+    const vk::RenderPass *renderPass,
     VkFramebuffer framebufferOverride,
     vk::RenderPassCommandBufferHelper **renderPassCommands)
 {

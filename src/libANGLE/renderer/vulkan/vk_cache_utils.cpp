@@ -306,8 +306,6 @@ void UnpackDepthStencilResolveAttachmentDesc(vk::Context *context,
                                              const AttachmentInfo &depthInfo,
                                              const AttachmentInfo &stencilInfo)
 {
-    // There cannot be simultaneous usages of the depth/stencil resolve image, as depth/stencil
-    // resolve currently only comes from depth/stencil renderbuffers.
     *desc        = {};
     desc->sType  = VK_STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2;
     desc->format = GetVkFormatFromFormatID(formatID);
@@ -2839,7 +2837,7 @@ void GraphicsPipelineDesc::initDefaults(const Context *context,
 VkResult GraphicsPipelineDesc::initializePipeline(Context *context,
                                                   PipelineCacheAccess *pipelineCache,
                                                   GraphicsPipelineSubset subset,
-                                                  const RenderPass &compatibleRenderPass,
+                                                  const RenderPass *compatibleRenderPass,
                                                   const PipelineLayout &pipelineLayout,
                                                   const ShaderModuleMap &shaders,
                                                   const SpecializationConstants &specConsts,
@@ -2855,8 +2853,9 @@ VkResult GraphicsPipelineDesc::initializePipeline(Context *context,
     VkGraphicsPipelineCreateInfo createInfo = {};
     createInfo.sType                        = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     createInfo.flags                        = 0;
-    createInfo.renderPass                   = compatibleRenderPass.getHandle();
-    createInfo.subpass                      = mSharedNonVertexInput.multisample.bits.subpass;
+    createInfo.renderPass =
+        compatibleRenderPass != nullptr ? compatibleRenderPass->getHandle() : VK_NULL_HANDLE;
+    createInfo.subpass = mSharedNonVertexInput.multisample.bits.subpass;
 
     const bool hasVertexInput             = GraphicsPipelineHasVertexInput(subset);
     const bool hasShaders                 = GraphicsPipelineHasShaders(subset);
@@ -4445,7 +4444,7 @@ void CreateMonolithicPipelineTask::operator()()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CreateMonolithicPipelineTask");
     mResult = mDesc.initializePipeline(this, &mPipelineCache, vk::GraphicsPipelineSubset::Complete,
-                                       *mCompatibleRenderPass, mPipelineLayout, mShaders,
+                                       mCompatibleRenderPass, mPipelineLayout, mShaders,
                                        mSpecConsts, &mPipeline, &mFeedback);
 
     if (mRenderer->getFeatures().slowDownMonolithicPipelineCreationForTesting.enabled)
@@ -7055,8 +7054,9 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
         }
     }
 
-    if (renderer->getFeatures().supportsLegacyDithering.enabled && desc.isLegacyDitherEnabled())
+    if (desc.isLegacyDitherEnabled())
     {
+        ASSERT(renderer->getFeatures().supportsLegacyDithering.enabled);
         subpassDesc.back().flags |= VK_SUBPASS_DESCRIPTION_ENABLE_LEGACY_DITHERING_BIT_EXT;
     }
 
@@ -7228,7 +7228,7 @@ template <typename Hash>
 angle::Result GraphicsPipelineCache<Hash>::createPipeline(
     vk::Context *context,
     vk::PipelineCacheAccess *pipelineCache,
-    const vk::RenderPass &compatibleRenderPass,
+    const vk::RenderPass *compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
     const vk::SpecializationConstants &specConsts,
@@ -7364,7 +7364,7 @@ template void GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>::release(
 template angle::Result GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>::createPipeline(
     vk::Context *context,
     vk::PipelineCacheAccess *pipelineCache,
-    const vk::RenderPass &compatibleRenderPass,
+    const vk::RenderPass *compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
     const vk::SpecializationConstants &specConsts,
@@ -7394,7 +7394,7 @@ template void GraphicsPipelineCache<GraphicsPipelineDescVertexInputHash>::releas
 template angle::Result GraphicsPipelineCache<GraphicsPipelineDescVertexInputHash>::createPipeline(
     vk::Context *context,
     vk::PipelineCacheAccess *pipelineCache,
-    const vk::RenderPass &compatibleRenderPass,
+    const vk::RenderPass *compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
     const vk::SpecializationConstants &specConsts,
@@ -7412,7 +7412,7 @@ template void GraphicsPipelineCache<GraphicsPipelineDescShadersHash>::release(vk
 template angle::Result GraphicsPipelineCache<GraphicsPipelineDescShadersHash>::createPipeline(
     vk::Context *context,
     vk::PipelineCacheAccess *pipelineCache,
-    const vk::RenderPass &compatibleRenderPass,
+    const vk::RenderPass *compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
     const vk::SpecializationConstants &specConsts,
@@ -7433,7 +7433,7 @@ template angle::Result
 GraphicsPipelineCache<GraphicsPipelineDescFragmentOutputHash>::createPipeline(
     vk::Context *context,
     vk::PipelineCacheAccess *pipelineCache,
-    const vk::RenderPass &compatibleRenderPass,
+    const vk::RenderPass *compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
     const vk::SpecializationConstants &specConsts,

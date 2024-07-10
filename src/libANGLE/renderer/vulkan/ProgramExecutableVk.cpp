@@ -534,9 +534,12 @@ class ProgramExecutableVk::WarmUpGraphicsTask : public WarmUpTaskCommon
 
     void operator()() override
     {
+        const vk::RenderPass *compatibleRenderPass =
+            mCompatibleRenderPass->get().valid() ? &mCompatibleRenderPass->get() : nullptr;
+
         angle::Result result = mExecutableVk->warmUpGraphicsPipelineCache(
             this, mPipelineRobustness, mPipelineProtectedAccess, mPipelineSubset, mIsSurfaceRotated,
-            mGraphicsPipelineDesc, mCompatibleRenderPass->get(), mWarmUpPipelineHelper);
+            mGraphicsPipelineDesc, compatibleRenderPass, mWarmUpPipelineHelper);
         ASSERT((result == angle::Result::Continue) == (mErrorCode == VK_SUCCESS));
 
         // Release reference to shared renderpass. If this is the last reference -
@@ -1115,7 +1118,7 @@ angle::Result ProgramExecutableVk::warmUpGraphicsPipelineCache(
     vk::GraphicsPipelineSubset subset,
     const bool isSurfaceRotated,
     const vk::GraphicsPipelineDesc &graphicsPipelineDesc,
-    const vk::RenderPass &renderPass,
+    const vk::RenderPass *renderPass,
     vk::PipelineHelper *placeholderPipelineHelper)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramExecutableVk::warmUpGraphicsPipelineCache");
@@ -1532,7 +1535,7 @@ angle::Result ProgramExecutableVk::initProgramThenCreateGraphicsPipeline(
     vk::PipelineCacheAccess *pipelineCache,
     PipelineSource source,
     const vk::GraphicsPipelineDesc &desc,
-    const vk::RenderPass &compatibleRenderPass,
+    const vk::RenderPass *compatibleRenderPass,
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
 {
@@ -1549,7 +1552,7 @@ angle::Result ProgramExecutableVk::createGraphicsPipelineImpl(
     vk::PipelineCacheAccess *pipelineCache,
     PipelineSource source,
     const vk::GraphicsPipelineDesc &desc,
-    const vk::RenderPass &compatibleRenderPass,
+    const vk::RenderPass *compatibleRenderPass,
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
 {
@@ -1651,9 +1654,9 @@ angle::Result ProgramExecutableVk::createGraphicsPipeline(
     ANGLE_TRY(contextVk->getRenderPassCache().getCompatibleRenderPass(
         contextVk, desc.getRenderPassDesc(), &compatibleRenderPass));
 
-    ANGLE_TRY(initProgramThenCreateGraphicsPipeline(
-        contextVk, transformOptions, pipelineSubset, pipelineCache, source, desc,
-        *compatibleRenderPass, descPtrOut, pipelineOut));
+    ANGLE_TRY(initProgramThenCreateGraphicsPipeline(contextVk, transformOptions, pipelineSubset,
+                                                    pipelineCache, source, desc,
+                                                    compatibleRenderPass, descPtrOut, pipelineOut));
 
     if (useProgramPipelineCache &&
         contextVk->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)

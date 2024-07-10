@@ -1910,7 +1910,7 @@ angle::Result UtilsVk::setupGraphicsProgramWithLayout(
     if (!programAndPipelines->pipelines.getPipeline(*pipelineDesc, &descPtr, &helper))
     {
         ANGLE_TRY(programAndPipelines->program.createGraphicsPipeline(
-            contextVk, &programAndPipelines->pipelines, &pipelineCache, *compatibleRenderPass,
+            contextVk, &programAndPipelines->pipelines, &pipelineCache, compatibleRenderPass,
             pipelineLayout, PipelineSource::Utils, *pipelineDesc, {}, &descPtr, &helper));
     }
 

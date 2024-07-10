@@ -58,6 +58,9 @@ static constexpr VkDeviceSize kMaxBufferToImageCopySize = 64 * 1024 * 1024;
 // RenderPassCommands.
 static constexpr size_t kMaxReservedOutsideRenderPassQueueSerials = 15;
 
+// Dumping the command stream is disabled by default.
+static constexpr bool kEnableCommandStreamDiagnostics = false;
+
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
 {
@@ -739,8 +742,7 @@ angle::Result CreateGraphicsPipelineSubset(ContextVk *contextVk,
     const vk::GraphicsPipelineDesc *descPtr = nullptr;
     if (!cache->getPipeline(desc, &descPtr, pipelineOut))
     {
-        const vk::RenderPass unusedRenderPass;
-        const vk::RenderPass *compatibleRenderPass = &unusedRenderPass;
+        const vk::RenderPass *compatibleRenderPass = nullptr;
         if (renderPass == GraphicsPipelineSubsetRenderPass::Required)
         {
             // Pull in a compatible RenderPass if used by this subset.
@@ -748,7 +750,7 @@ angle::Result CreateGraphicsPipelineSubset(ContextVk *contextVk,
                                                          &compatibleRenderPass));
         }
 
-        ANGLE_TRY(cache->createPipeline(contextVk, pipelineCache, *compatibleRenderPass,
+        ANGLE_TRY(cache->createPipeline(contextVk, pipelineCache, compatibleRenderPass,
                                         unusedPipelineLayout, unusedShaders, unusedSpecConsts,
                                         PipelineSource::Draw, desc, &descPtr, pipelineOut));
     }
@@ -3639,7 +3641,7 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
                                         const vk::SharedExternalFence *externalFence,
                                         Submit submission)
 {
-    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    if (kEnableCommandStreamDiagnostics)
     {
         dumpCommandStreamDiagnostics();
     }
@@ -7977,7 +7979,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     ANGLE_TRY(mRenderPassCommands->endRenderPass(this));
 
-    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    if (kEnableCommandStreamDiagnostics)
     {
         addCommandBufferDiagnostics(mRenderPassCommands->getCommandDiagnostics());
     }
@@ -8011,7 +8013,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
     }
 
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, getProtectionType(), mContextPriority,
-                                                 *renderPass, framebufferOverride,
+                                                 renderPass, framebufferOverride,
                                                  &mRenderPassCommands));
 
     // We just flushed outSideRenderPassCommands above, and any future use of
@@ -8264,7 +8266,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     addOverlayUsedBuffersCount(mOutsideRenderPassCommands);
 
-    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    if (kEnableCommandStreamDiagnostics)
     {
         addCommandBufferDiagnostics(mOutsideRenderPassCommands->getCommandDiagnostics());
     }

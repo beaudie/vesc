@@ -2932,7 +2932,7 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
 
 angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
                                                             CommandsState *commandsState,
-                                                            const RenderPass &renderPass,
+                                                            const RenderPass *renderPass,
                                                             VkFramebuffer framebufferOverride)
 {
     // |framebufferOverride| must only be provided if the initial framebuffer the render pass was
@@ -2952,7 +2952,7 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
 
     VkRenderPassBeginInfo beginInfo = {};
     beginInfo.sType                 = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    beginInfo.renderPass            = renderPass.getHandle();
+    beginInfo.renderPass            = renderPass->getHandle();
     beginInfo.framebuffer =
         framebufferOverride ? framebufferOverride : mFramebuffer.getFramebuffer().getHandle();
     beginInfo.renderArea.offset.x      = static_cast<uint32_t>(mRenderArea.x);
@@ -7157,6 +7157,7 @@ void ImageHelper::barrierImpl(Context *context,
     // mCurrentEvent must be invalid if useVkEventForImageBarrieris disabled.
     ASSERT(context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled ||
            !mCurrentEvent.valid());
+    ASSERT(acquireNextImageSemaphoreOut != nullptr || !mAcquireNextImageSemaphore.valid());
 
     // Release the ANI semaphore to caller to add to the command submission.
     *acquireNextImageSemaphoreOut = mAcquireNextImageSemaphore.release();

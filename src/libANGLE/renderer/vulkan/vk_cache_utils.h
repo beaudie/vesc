@@ -753,7 +753,7 @@ class GraphicsPipelineDesc final
     VkResult initializePipeline(Context *context,
                                 PipelineCacheAccess *pipelineCache,
                                 GraphicsPipelineSubset subset,
-                                const RenderPass &compatibleRenderPass,
+                                const RenderPass *compatibleRenderPass,
                                 const PipelineLayout &pipelineLayout,
                                 const ShaderModuleMap &shaders,
                                 const SpecializationConstants &specConsts,
@@ -2520,7 +2520,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
 
     angle::Result createPipeline(vk::Context *context,
                                  vk::PipelineCacheAccess *pipelineCache,
-                                 const vk::RenderPass &compatibleRenderPass,
+                                 const vk::RenderPass *compatibleRenderPass,
                                  const vk::PipelineLayout &pipelineLayout,
                                  const vk::ShaderModuleMap &shaders,
                                  const vk::SpecializationConstants &specConsts,

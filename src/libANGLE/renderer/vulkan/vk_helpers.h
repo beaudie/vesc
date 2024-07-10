@@ -1386,9 +1386,6 @@ class CommandBufferHelperCommon : angle::NonCopyable
         mAcquireNextImageSemaphore.setHandle(semaphore);
     }
 
-    // Dumping the command stream is disabled by default.
-    static constexpr bool kEnableCommandStreamDiagnostics = false;
-
   protected:
     CommandBufferHelperCommon();
     ~CommandBufferHelperCommon();
@@ -1783,7 +1780,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     angle::Result flushToPrimary(Context *context,
                                  CommandsState *commandsState,
-                                 const RenderPass &renderPass,
+                                 const RenderPass *renderPass,
                                  VkFramebuffer framebufferOverride);
 
     bool started() const { return mRenderPassStarted; }
@@ -3590,7 +3587,7 @@ class ShaderProgramHelper : angle::NonCopyable
         vk::Context *context,
         GraphicsPipelineCache<PipelineHash> *graphicsPipelines,
         PipelineCacheAccess *pipelineCache,
-        const RenderPass &compatibleRenderPass,
+        const RenderPass *compatibleRenderPass,
         const PipelineLayout &pipelineLayout,
         PipelineSource source,
         const GraphicsPipelineDesc &pipelineDesc,
