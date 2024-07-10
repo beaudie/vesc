@@ -101,6 +101,8 @@ enum class ImageLayout
 
     // Color (Write):
     ColorWrite,
+    // Used only with dynamic rendering, because it needs a different VkImageLayout
+    ColorWriteAndInput,
     MSRTTEmulationColorUnresolveAndResolve,
 
     // Depth (Write), Stencil (Write)
@@ -1386,9 +1388,6 @@ class CommandBufferHelperCommon : angle::NonCopyable
         mAcquireNextImageSemaphore.setHandle(semaphore);
     }
 
-    // Dumping the command stream is disabled by default.
-    static constexpr bool kEnableCommandStreamDiagnostics = false;
-
   protected:
     CommandBufferHelperCommon();
     ~CommandBufferHelperCommon();
@@ -1608,14 +1607,16 @@ class RenderPassFramebuffer : angle::NonCopyable
 
     void reset();
 
-    void setFramebuffer(Framebuffer &&initialFramebuffer,
+    void setFramebuffer(Context *context,
+                        Framebuffer &&initialFramebuffer,
                         FramebufferAttachmentsVector<VkImageView> &&imageViews,
                         uint32_t width,
                         uint32_t height,
                         uint32_t layers,
                         ImagelessFramebuffer imagelessFramebuffer)
     {
-        ASSERT(initialFramebuffer.valid());
+        // Framebuffers are mutually exclusive with dynamic rendering.
+        ASSERT(initialFramebuffer.valid() != context->getFeatures().preferDynamicRendering.enabled);
         mInitialFramebuffer = std::move(initialFramebuffer);
         mImageViews         = std::move(imageViews);
         mWidth              = width;
@@ -1627,6 +1628,7 @@ class RenderPassFramebuffer : angle::NonCopyable
     bool isImageless() { return mIsImageless; }
     const Framebuffer &getFramebuffer() const { return mInitialFramebuffer; }
     bool needsNewFramebufferWithResolveAttachments() const { return !mInitialFramebuffer.valid(); }
+    uint32_t getLayers() const { return mLayers; }
 
     // Helpers to determine if a resolve attachment already exists
     bool hasColorResolveAttachment(size_t colorIndexGL)
@@ -1659,6 +1661,12 @@ class RenderPassFramebuffer : angle::NonCopyable
 
     // Prepare for rendering using the initial imageless framebuffer.
     void packResolveViewsForRenderPassBegin(VkRenderPassAttachmentBeginInfo *beginInfoOut);
+
+    // For use with dynamic rendering.
+    const FramebufferAttachmentsVector<VkImageView> &getUnpackedImageViews() const
+    {
+        return mImageViews;
+    }
 
     // Packs views in a contiguous list.
     //
@@ -1912,6 +1920,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     void collectRefCountedEventsGarbage(RefCountedEventsGarbageRecycler *garbageRecycler);
 
+    void updatePerfCountersForDynamicRenderingInstance(Context *context,
+                                                       angle::VulkanPerfCounters *countersOut);
+
     RenderPassSource getSource() const { return mSource; }
 
   private:
@@ -1998,6 +2009,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     // final layout of the renderpass to transition it to the presentable layout
     RenderPassSource mSource;
     ImageHelper *mImageOptimizeForPresent;
+    ImageLayout mImageOptimizeForPresentOriginalLayout;
 
     friend class CommandBufferHelperCommon;
 };
