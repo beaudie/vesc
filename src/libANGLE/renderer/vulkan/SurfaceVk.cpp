@@ -2184,11 +2184,11 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
                                                           &imageResolved));
     }
 
-    // Because the color attachment defers layout changes until endRenderPass time, we must call
-    // finalize the layout transition in the renderpass before we insert layout change to
-    // ImageLayout::Present bellow.
-    contextVk->finalizeImageLayout(image.image.get(), {});
-    contextVk->finalizeImageLayout(&mColorImageMS, {});
+    // End the render pass before issuing the layout change to ImageLayout::Present below.  The
+    // layouts are determined at the end of the render pass, and until they are finalized the image
+    // is not aware of what layout it will be.
+    ANGLE_TRY(contextVk->flushCommandsAndEndRenderPassWithoutSubmit(
+        RenderPassClosureReason::EGLSwapBuffers));
 
     vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBufferHelper));
@@ -2231,7 +2231,7 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
     }
 
     ANGLE_TRY(contextVk->flushImpl(shouldDrawOverlay ? nullptr : &presentSemaphore, nullptr,
-                                   RenderPassClosureReason::EGLSwapBuffers));
+                                   RenderPassClosureReason::AlreadySpecifiedElsewhere));
 
     if (shouldDrawOverlay)
     {
