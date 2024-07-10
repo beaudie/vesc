@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "060c69bb_e4d2b5eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T23:27:31Z",
+      "side": 1,
+      "message": "Used PipelineStageGroup",
+      "parentUuid": "b2c58737_5f35cccf",
+      "revId": "f6446d5fd6f40218e978b5063216be7b3ca582e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99e2ae99_c56de692",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-07-10T21:49:08Z",
       "side": 1,
       "message": "update comment",
+      "range": {
+        "startLine": 7670,
+        "startChar": 83,
+        "endLine": 7670,
+        "endChar": 98
+      },
+      "revId": "f6446d5fd6f40218e978b5063216be7b3ca582e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5954e0b_57f242e7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7670,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T23:27:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99e2ae99_c56de692",
       "range": {
         "startLine": 7670,
         "startChar": 83,
