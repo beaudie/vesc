@@ -190,6 +190,30 @@
       },
       "revId": "c379ff48043a47e444c388c45270db40d3172d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d88b02b7_0d5c8146",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T13:35:32Z",
+      "side": 1,
+      "message": "The mechanism is the env var / Android property that downstreams can use to enable/disable ANGLE features without actually changing the code. For example, one day we could have a mechanism in Android for app workarounds that you\u0027d want to ship as updates without actually having to update ANGLE at the same time. That would basically just be a database of what ANGLE features to override per app.\n\nWhat I\u0027m trying to say is that building that logic in the code is not great when the features can just as easily be controlled from outside ANGLE itself.",
+      "parentUuid": "2f39246a_e3de3eac",
+      "range": {
+        "startLine": 5273,
+        "startChar": 28,
+        "endLine": 5275,
+        "endChar": 93
+      },
+      "revId": "c379ff48043a47e444c388c45270db40d3172d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
