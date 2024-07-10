@@ -16,6 +16,29 @@
       "message": "Split from reland",
       "revId": "25a146184e5cf4af76be45da4b09011bec693816",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4987e391_11699539",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1996,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T17:49:14Z",
+      "side": 1,
+      "message": "Can you add `bool mIsDefaultFramebuffer` to RenderPassFramebuffer class? If that works, it makes more sense to store there than RenderPassHelper.",
+      "range": {
+        "startLine": 1996,
+        "startChar": 0,
+        "endLine": 1996,
+        "endChar": 29
+      },
+      "revId": "25a146184e5cf4af76be45da4b09011bec693816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
