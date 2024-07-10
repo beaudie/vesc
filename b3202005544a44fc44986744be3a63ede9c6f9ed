@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0e496aa_82067ce0",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T01:17:30Z",
+      "side": 1,
+      "message": "Probably yeah, or you could just keep that check as part of the condition here.",
+      "parentUuid": "6b5664a2_92ce7e58",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 70
+      },
+      "revId": "b3202005544a44fc44986744be3a63ede9c6f9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbb10dc9_02f553cf",
