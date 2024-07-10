@@ -51,7 +51,21 @@ constexpr VkPipelineStageFlags kFragmentAndAttachmentPipelineStageFlags =
     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
     VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 
-using FragmentStageAccessHistory = angle::BitSet8<8>;
+enum class ExecutionUnit
+{
+    FragmentOnly,
+    PreFragmentOnly,
+    ComputeOnly,
+    Other,
+};
+
+using ExecutionUnitAccessHistory = angle::BitSet16<16>;
+constexpr ExecutionUnitAccessHistory kExecutionUnitAccessHistoryAllFragment =
+    ExecutionUnitAccessHistory(0x0000);
+constexpr ExecutionUnitAccessHistory kExecutionUnitAccessHistoryAllCompute =
+    ExecutionUnitAccessHistory(0xAAAA);
+constexpr ExecutionUnitAccessHistory kExecutionUnitAccessHistoryAllGeomery =
+    ExecutionUnitAccessHistory(0x5555);
 
 // Enum for predefined VkPipelineStageFlags set that VkEvent will be using. Because VkEvent has
 // strict rules that waitEvent and setEvent must have matching VkPipelineStageFlags, it is desirable
