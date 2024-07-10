@@ -16,6 +16,29 @@
       "message": "Not sure if ExecutionUnit is the right word. Other choice of word is PipelineStageCategory. Basically the VkEvent is used only when usage is across different pipeline stage category. In reality that category is an independent execution queue in the hardware. It is subject to bubble when usage is across different execution queue, that is where the VkEvent helps.",
       "revId": "f6446d5fd6f40218e978b5063216be7b3ca582e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99e2ae99_c56de692",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7670,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T21:49:08Z",
+      "side": 1,
+      "message": "update comment",
+      "range": {
+        "startLine": 7670,
+        "startChar": 83,
+        "endLine": 7670,
+        "endChar": 98
+      },
+      "revId": "f6446d5fd6f40218e978b5063216be7b3ca582e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
