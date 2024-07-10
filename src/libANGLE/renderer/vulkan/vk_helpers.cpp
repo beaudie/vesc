@@ -2070,6 +2070,7 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
       mPreviousSubpassesCmdCount(0),
       mDepthStencilAttachmentIndex(kAttachmentIndexInvalid),
       mColorAttachmentsCount(0),
+      mSource(RenderPassSource::FramebufferObject),
       mImageOptimizeForPresent(nullptr)
 {}
 
@@ -2119,6 +2120,7 @@ angle::Result RenderPassCommandBufferHelper::reset(
     mPreviousSubpassesCmdCount         = 0;
     mColorAttachmentsCount             = PackedAttachmentCount(0);
     mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
+    mSource                            = RenderPassSource::FramebufferObject;
     mImageOptimizeForPresent           = nullptr;
 
     ASSERT(CheckSubpassCommandBufferCount(getSubpassCommandBufferCount()));
@@ -2749,6 +2751,7 @@ void RenderPassCommandBufferHelper::collectRefCountedEventsGarbage(
 angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     ContextVk *contextVk,
     RenderPassFramebuffer &&framebuffer,
+    RenderPassSource source,
     const gl::Rectangle &renderArea,
     const RenderPassDesc &renderPassDesc,
     const AttachmentOpsArray &renderPassAttachmentOps,
@@ -2768,6 +2771,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mRenderArea                  = renderArea;
     mClearValues                 = clearValues;
     mQueueSerial                 = queueSerial;
+    mSource                      = source;
     *commandBufferOut            = &getCommandBuffer();
 
     mRenderPassStarted = true;
