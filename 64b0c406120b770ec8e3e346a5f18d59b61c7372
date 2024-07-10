@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80f2b099_5e334eed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T13:32:39Z",
+      "side": 1,
+      "message": "For posterity, part of this change was accidentally committed and was reverted here: https://chromium-review.googlesource.com/c/angle/angle/+/5686557/2..3\n\nIf this is ever revived, that bit needs to come back with this change.",
+      "revId": "64b0c406120b770ec8e3e346a5f18d59b61c7372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
