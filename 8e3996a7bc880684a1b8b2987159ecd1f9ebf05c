@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cbf2a03_5928ab7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-10T23:41:37Z",
+      "side": 1,
+      "message": "Let me try CQ\u0027ing this manually.",
+      "revId": "8e3996a7bc880684a1b8b2987159ecd1f9ebf05c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
