@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2c58737_5f35cccf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-10T21:38:36Z",
+      "side": 1,
+      "message": "Not sure if ExecutionUnit is the right word. Other choice of word is PipelineStageCategory. Basically the VkEvent is used only when usage is across different pipeline stage category. In reality that category is an independent execution queue in the hardware. It is subject to bubble when usage is across different execution queue, that is where the VkEvent helps.",
+      "revId": "f6446d5fd6f40218e978b5063216be7b3ca582e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
