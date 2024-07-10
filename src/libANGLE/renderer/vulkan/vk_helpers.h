@@ -1589,6 +1589,13 @@ enum class ImagelessFramebuffer
     Yes,
 };
 
+enum class RenderPassSource
+{
+    DefaultFramebuffer,
+    FramebufferObject,
+    InternalUtils,
+};
+
 class RenderPassFramebuffer : angle::NonCopyable
 {
   public:
@@ -1603,6 +1610,7 @@ class RenderPassFramebuffer : angle::NonCopyable
         mHeight      = other.mHeight;
         mLayers      = other.mLayers;
         mIsImageless = other.mIsImageless;
+        mIsDefault   = other.mIsDefault;
         return *this;
     }
 
@@ -1613,7 +1621,8 @@ class RenderPassFramebuffer : angle::NonCopyable
                         uint32_t width,
                         uint32_t height,
                         uint32_t layers,
-                        ImagelessFramebuffer imagelessFramebuffer)
+                        ImagelessFramebuffer imagelessFramebuffer,
+                        RenderPassSource source)
     {
         ASSERT(initialFramebuffer.valid());
         mInitialFramebuffer = std::move(initialFramebuffer);
@@ -1622,9 +1631,11 @@ class RenderPassFramebuffer : angle::NonCopyable
         mHeight             = height;
         mLayers             = layers;
         mIsImageless        = imagelessFramebuffer == ImagelessFramebuffer::Yes;
+        mIsDefault          = source == RenderPassSource::DefaultFramebuffer;
     }
 
-    bool isImageless() { return mIsImageless; }
+    bool isImageless() const { return mIsImageless; }
+    bool isDefault() const { return mIsDefault; }
     const Framebuffer &getFramebuffer() const { return mInitialFramebuffer; }
     bool needsNewFramebufferWithResolveAttachments() const { return !mInitialFramebuffer.valid(); }
 
@@ -1698,7 +1709,11 @@ class RenderPassFramebuffer : angle::NonCopyable
     uint32_t mHeight = 0;
     uint32_t mLayers = 0;
 
+    // Whether this is an imageless framebuffer.  Currently, window surface and UtilsVk framebuffers
+    // aren't imageless, unless imageless framebuffers aren't supported altogether.
     bool mIsImageless = false;
+    // Whether this is the default framebuffer (i.e. corresponding to the window surface).
+    bool mIsDefault = false;
 };
 
 class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
@@ -1904,6 +1919,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                         VkImageAspectFlags dsAspectFlags);
 
     void collectRefCountedEventsGarbage(RefCountedEventsGarbageRecycler *garbageRecycler);
+
+    bool isDefault() const { return mFramebuffer.isDefault(); }
 
   private:
     uint32_t getSubpassCommandBufferCount() const { return mCurrentSubpassCommandBufferIndex + 1; }

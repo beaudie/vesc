@@ -7882,6 +7882,8 @@ angle::Result ContextVk::beginNewRenderPass(
     QueueSerial renderPassQueueSerial;
     generateRenderPassCommandsQueueSerial(&renderPassQueueSerial);
 
+    ASSERT(mState.getDrawFramebuffer()->isDefault() == framebuffer.isDefault());
+
     mPerfCounters.renderPasses++;
     ANGLE_TRY(mRenderPassCommands->beginRenderPass(
         this, std::move(framebuffer), renderArea, renderPassDesc, renderPassAttachmentOps,
