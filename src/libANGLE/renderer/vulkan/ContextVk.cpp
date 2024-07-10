@@ -58,6 +58,9 @@ static constexpr VkDeviceSize kMaxBufferToImageCopySize = 64 * 1024 * 1024;
 // RenderPassCommands.
 static constexpr size_t kMaxReservedOutsideRenderPassQueueSerials = 15;
 
+// Dumping the command stream is disabled by default.
+static constexpr bool kEnableCommandStreamDiagnostics = false;
+
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
 {
@@ -741,7 +744,8 @@ angle::Result CreateGraphicsPipelineSubset(ContextVk *contextVk,
     {
         const vk::RenderPass unusedRenderPass;
         const vk::RenderPass *compatibleRenderPass = &unusedRenderPass;
-        if (renderPass == GraphicsPipelineSubsetRenderPass::Required)
+        if (renderPass == GraphicsPipelineSubsetRenderPass::Required &&
+            !contextVk->getFeatures().preferDynamicRendering.enabled)
         {
             // Pull in a compatible RenderPass if used by this subset.
             ANGLE_TRY(contextVk->getCompatibleRenderPass(desc.getRenderPassDesc(),
@@ -3639,7 +3643,7 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
                                         const vk::SharedExternalFence *externalFence,
                                         Submit submission)
 {
-    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    if (kEnableCommandStreamDiagnostics)
     {
         dumpCommandStreamDiagnostics();
     }
@@ -7741,6 +7745,11 @@ void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags sta
 angle::Result ContextVk::getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                                  const vk::RenderPass **renderPassOut)
 {
+    if (getFeatures().preferDynamicRendering.enabled)
+    {
+        return angle::Result::Continue;
+    }
+
     // Note: Each context has it's own RenderPassCache so no locking needed.
     return mRenderPassCache.getCompatibleRenderPass(this, desc, renderPassOut);
 }
@@ -7749,6 +7758,8 @@ angle::Result ContextVk::getRenderPassWithOps(const vk::RenderPassDesc &desc,
                                               const vk::AttachmentOpsArray &ops,
                                               const vk::RenderPass **renderPassOut)
 {
+    ASSERT(!getFeatures().preferDynamicRendering.enabled);
+
     // Note: Each context has it's own RenderPassCache so no locking needed.
     return mRenderPassCache.getRenderPassWithOps(this, desc, ops, renderPassOut);
 }
@@ -7977,14 +7988,10 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     ANGLE_TRY(mRenderPassCommands->endRenderPass(this));
 
-    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    if (kEnableCommandStreamDiagnostics)
     {
         addCommandBufferDiagnostics(mRenderPassCommands->getCommandDiagnostics());
     }
-
-    const vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(getRenderPassWithOps(mRenderPassCommands->getRenderPassDesc(),
-                                   mRenderPassCommands->getAttachmentOps(), &renderPass));
 
     flushDescriptorSetUpdates();
     // Collect RefCountedEvent garbage before submitting to renderer
@@ -7997,17 +8004,34 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
                                                    mRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mRenderPassCommands->getQueueSerial();
 
-    // If a new framebuffer is used to accommodate resolve attachments that have been added after
-    // the fact, create a temp one now and add it to garbage list.
+    const vk::RenderPass unusedRenderPass;
+    const vk::RenderPass *renderPass  = &unusedRenderPass;
     VkFramebuffer framebufferOverride = VK_NULL_HANDLE;
-    if (mRenderPassCommands->getFramebuffer().needsNewFramebufferWithResolveAttachments())
-    {
-        vk::Framebuffer tempFramebuffer;
-        ANGLE_TRY(mRenderPassCommands->getFramebuffer().packResolveViewsAndCreateFramebuffer(
-            this, *renderPass, &tempFramebuffer));
 
-        framebufferOverride = tempFramebuffer.getHandle();
-        addGarbage(&tempFramebuffer);
+    if (getFeatures().preferDynamicRendering.enabled)
+    {
+        if (mState.isPerfMonitorActive())
+        {
+            mRenderPassCommands->updatePerfCountersForDynamicRenderingInstance(this,
+                                                                               &mPerfCounters);
+        }
+    }
+    else
+    {
+        ANGLE_TRY(getRenderPassWithOps(mRenderPassCommands->getRenderPassDesc(),
+                                       mRenderPassCommands->getAttachmentOps(), &renderPass));
+
+        // If a new framebuffer is used to accommodate resolve attachments that have been added
+        // after the fact, create a temp one now and add it to garbage list.
+        if (mRenderPassCommands->getFramebuffer().needsNewFramebufferWithResolveAttachments())
+        {
+            vk::Framebuffer tempFramebuffer;
+            ANGLE_TRY(mRenderPassCommands->getFramebuffer().packResolveViewsAndCreateFramebuffer(
+                this, *renderPass, &tempFramebuffer));
+
+            framebufferOverride = tempFramebuffer.getHandle();
+            addGarbage(&tempFramebuffer);
+        }
     }
 
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, getProtectionType(), mContextPriority,
@@ -8264,7 +8288,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     addOverlayUsedBuffersCount(mOutsideRenderPassCommands);
 
-    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    if (kEnableCommandStreamDiagnostics)
     {
         addCommandBufferDiagnostics(mOutsideRenderPassCommands->getCommandDiagnostics());
     }
@@ -8895,11 +8919,14 @@ angle::Result ContextVk::switchToFramebufferFetchMode(bool hasFramebufferFetch)
         getDrawFramebuffer()->switchToFramebufferFetchMode(this, mIsInFramebufferFetchMode);
     }
 
-    // Clear the render pass cache; all render passes will be incompatible from now on with the old
-    // ones.
-    if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled)
+    if (!getFeatures().preferDynamicRendering.enabled)
     {
-        mRenderPassCache.clear(this);
+        // Clear the render pass cache; all render passes will be incompatible from now on with the
+        // old ones.
+        if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled)
+        {
+            mRenderPassCache.clear(this);
+        }
     }
 
     mRenderer->onFramebufferFetchUsed();
