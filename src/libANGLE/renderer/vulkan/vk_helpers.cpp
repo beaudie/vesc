@@ -2360,9 +2360,10 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
         mAttachmentOps.setLayouts(packedAttachmentIndex, imageLayout, imageLayout);
     }
 
-    if (mImageOptimizeForPresent == image &&
-        context->getRenderer()->getFeatures().supportsPresentation.enabled)
+    if (mImageOptimizeForPresent == image)
     {
+        ASSERT(isDefault());
+        ASSERT(context->getFeatures().supportsPresentation.enabled);
         ASSERT(packedAttachmentIndex == kAttachmentIndexZero);
         // Use finalLayout instead of extra barrier for layout change to present
         mImageOptimizeForPresent->setCurrentImageLayout(ImageLayout::Present);
