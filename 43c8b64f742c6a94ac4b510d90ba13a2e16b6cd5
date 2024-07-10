@@ -34,6 +34,24 @@
       "parentUuid": "d2fd1cc6_3f651f00",
       "revId": "43c8b64f742c6a94ac4b510d90ba13a2e16b6cd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3df9aca6_4e3a5678",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T20:35:45Z",
+      "side": 1,
+      "message": "Right, passing renderer around would be bad, but `kImageMemoryBarrierData` is still in `vk_helpers.cpp` and IIRC the renderer is only used to remove geometry/tessellation stages out. For the purpose of checking if access is fragment only, you should really need the renderer?\n\nThe move to cpp was really just so you can look up in `kImageMemoryBarrierData` 😊",
+      "parentUuid": "397bfd7f_0201c514",
+      "revId": "43c8b64f742c6a94ac4b510d90ba13a2e16b6cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
