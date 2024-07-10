@@ -16,6 +16,24 @@
       "message": "I\u0027d personally rather not let these applications off the hook if we can help it and continue to let this antipattern work. We\u0027ve reached out to the developers of these apps to let them know about the bug and hopefully fix it.\n\nThat seems to have previously worked with Instagram, and I\u0027m hopeful for the other apps as well. I\u0027ll put a -1 for now so we don\u0027t merge this until we see how far we can get with developers.",
       "revId": "551fe3e420c34b84f7f653a33e909674b595376b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dc660dc_bdd6704e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-07-10T13:25:33Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "802f728a_a04a8451",
+      "revId": "551fe3e420c34b84f7f653a33e909674b595376b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
