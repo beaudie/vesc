@@ -743,7 +743,8 @@ angle::Result CreateGraphicsPipelineSubset(ContextVk *contextVk,
     if (!cache->getPipeline(desc, &descPtr, pipelineOut))
     {
         const vk::RenderPass *compatibleRenderPass = nullptr;
-        if (renderPass == GraphicsPipelineSubsetRenderPass::Required)
+        if (renderPass == GraphicsPipelineSubsetRenderPass::Required &&
+            !contextVk->getFeatures().preferDynamicRendering.enabled)
         {
             // Pull in a compatible RenderPass if used by this subset.
             ANGLE_TRY(contextVk->getCompatibleRenderPass(desc.getRenderPassDesc(),
@@ -4553,7 +4554,8 @@ angle::Result ContextVk::optimizeRenderPassForPresent(vk::ImageViewHelper *color
     }
 
     // Use finalLayout instead of extra barrier for layout change to present
-    if (colorImage != nullptr && getFeatures().supportsPresentation.enabled)
+    if (colorImage != nullptr && getFeatures().supportsPresentation.enabled &&
+        !getFeatures().preferDynamicRendering.enabled)
     {
         mRenderPassCommands->setImageOptimizeForPresent(colorImage);
     }
@@ -7743,6 +7745,11 @@ void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags sta
 angle::Result ContextVk::getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                                  const vk::RenderPass **renderPassOut)
 {
+    if (getFeatures().preferDynamicRendering.enabled)
+    {
+        return angle::Result::Continue;
+    }
+
     // Note: Each context has it's own RenderPassCache so no locking needed.
     return mRenderPassCache.getCompatibleRenderPass(this, desc, renderPassOut);
 }
@@ -7751,6 +7758,8 @@ angle::Result ContextVk::getRenderPassWithOps(const vk::RenderPassDesc &desc,
                                               const vk::AttachmentOpsArray &ops,
                                               const vk::RenderPass **renderPassOut)
 {
+    ASSERT(!getFeatures().preferDynamicRendering.enabled);
+
     // Note: Each context has it's own RenderPassCache so no locking needed.
     return mRenderPassCache.getRenderPassWithOps(this, desc, ops, renderPassOut);
 }
@@ -7988,10 +7997,6 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
         addCommandBufferDiagnostics(mRenderPassCommands->getCommandDiagnostics());
     }
 
-    const vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(getRenderPassWithOps(mRenderPassCommands->getRenderPassDesc(),
-                                   mRenderPassCommands->getAttachmentOps(), &renderPass));
-
     flushDescriptorSetUpdates();
     // Collect RefCountedEvent garbage before submitting to renderer
     mRenderPassCommands->collectRefCountedEventsGarbage(
@@ -8003,17 +8008,33 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
                                                    mRenderPassCommands->getQueueSerial()));
     mLastFlushedQueueSerial = mRenderPassCommands->getQueueSerial();
 
-    // If a new framebuffer is used to accommodate resolve attachments that have been added after
-    // the fact, create a temp one now and add it to garbage list.
+    const vk::RenderPass *renderPass  = nullptr;
     VkFramebuffer framebufferOverride = VK_NULL_HANDLE;
-    if (mRenderPassCommands->getFramebuffer().needsNewFramebufferWithResolveAttachments())
-    {
-        vk::Framebuffer tempFramebuffer;
-        ANGLE_TRY(mRenderPassCommands->getFramebuffer().packResolveViewsAndCreateFramebuffer(
-            this, *renderPass, &tempFramebuffer));
 
-        framebufferOverride = tempFramebuffer.getHandle();
-        addGarbage(&tempFramebuffer);
+    if (getFeatures().preferDynamicRendering.enabled)
+    {
+        if (mState.isPerfMonitorActive())
+        {
+            mRenderPassCommands->updatePerfCountersForDynamicRenderingInstance(this,
+                                                                               &mPerfCounters);
+        }
+    }
+    else
+    {
+        ANGLE_TRY(getRenderPassWithOps(mRenderPassCommands->getRenderPassDesc(),
+                                       mRenderPassCommands->getAttachmentOps(), &renderPass));
+
+        // If a new framebuffer is used to accommodate resolve attachments that have been added
+        // after the fact, create a temp one now and add it to garbage list.
+        if (mRenderPassCommands->getFramebuffer().needsNewFramebufferWithResolveAttachments())
+        {
+            vk::Framebuffer tempFramebuffer;
+            ANGLE_TRY(mRenderPassCommands->getFramebuffer().packResolveViewsAndCreateFramebuffer(
+                this, *renderPass, &tempFramebuffer));
+
+            framebufferOverride = tempFramebuffer.getHandle();
+            addGarbage(&tempFramebuffer);
+        }
     }
 
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, getProtectionType(), mContextPriority,
@@ -8901,11 +8922,14 @@ angle::Result ContextVk::switchToFramebufferFetchMode(bool hasFramebufferFetch)
         getDrawFramebuffer()->switchToFramebufferFetchMode(this, mIsInFramebufferFetchMode);
     }
 
-    // Clear the render pass cache; all render passes will be incompatible from now on with the old
-    // ones.
-    if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled)
+    if (!getFeatures().preferDynamicRendering.enabled)
     {
-        mRenderPassCache.clear(this);
+        // Clear the render pass cache; all render passes will be incompatible from now on with the
+        // old ones.
+        if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled)
+        {
+            mRenderPassCache.clear(this);
+        }
     }
 
     mRenderer->onFramebufferFetchUsed();
