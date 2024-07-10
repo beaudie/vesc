@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7d3a0a0_dc8931c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T18:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e2cef9e_158221d9",
+      "range": {
+        "startLine": 505,
+        "startChar": 4,
+        "endLine": 516,
+        "endChar": 6
+      },
+      "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa1c8a4f_724ec164",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-07-10T17:27:58Z",
       "side": 1,
       "message": "I think all these are identical? Especially the one at line 551 should cover the ones at 545, 558, 565, I think.",
+      "range": {
+        "startLine": 542,
+        "startChar": 4,
+        "endLine": 570,
+        "endChar": 6
+      },
+      "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "117bbffb_990e4eaf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T18:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa1c8a4f_724ec164",
       "range": {
         "startLine": 542,
         "startChar": 4,
@@ -115,6 +163,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec94f38f_4c8298c5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T18:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c9e6c9f_17bc6150",
+      "range": {
+        "startLine": 951,
+        "startChar": 0,
+        "endLine": 951,
+        "endChar": 38
+      },
+      "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2539685_50ffd728",
@@ -162,6 +234,30 @@
           ]
         }
       ],
+      "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73f08415_1fd27689",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T18:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2539685_50ffd728",
+      "range": {
+        "startLine": 957,
+        "startChar": 0,
+        "endLine": 957,
+        "endChar": 38
+      },
       "revId": "fa04a162a2da866a98cc378f3efbd5ded12d3d5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
