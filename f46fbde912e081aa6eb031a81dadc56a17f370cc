@@ -16,6 +16,24 @@
       "message": "nit: `GL: Fix map input buffer out of range in streamAttributes` for consistency with our other commits.",
       "revId": "f46fbde912e081aa6eb031a81dadc56a17f370cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db67c12b_e44f9008",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2024-07-10T17:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b4b1a67_250a3f34",
+      "revId": "f46fbde912e081aa6eb031a81dadc56a17f370cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
