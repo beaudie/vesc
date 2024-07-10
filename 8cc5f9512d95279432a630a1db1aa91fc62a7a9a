@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45996346_fc17616e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T18:29:23Z",
+      "side": 1,
+      "message": "Ok I managed to make it work. renderPass.valid() is not always true even for render pass objects, that\u0027s when creating vertex input/shader pipeline libraries so I was using nullptr to distinguish between dynamic rendering and render pass objects.\n\nBut I might have as well just used the `preferDynamicRendering` feature for that. Not much is left of this CL after this, so I\u0027ll fold it into the final CL.",
+      "parentUuid": "e734a502_7720fceb",
+      "range": {
+        "startLine": 627,
+        "startChar": 14,
+        "endLine": 627,
+        "endChar": 24
+      },
+      "revId": "8cc5f9512d95279432a630a1db1aa91fc62a7a9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdd26440_7dee3cae",
@@ -102,6 +126,30 @@
       "writtenOn": "2024-07-10T17:39:55Z",
       "side": 1,
       "message": "Have getRenderPassWithOps() returns kInvalidRenderPass object would get rid of most of the diffs in this CL.",
+      "range": {
+        "startLine": 7988,
+        "startChar": 14,
+        "endLine": 7988,
+        "endChar": 34
+      },
+      "revId": "8cc5f9512d95279432a630a1db1aa91fc62a7a9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1bd6490_f6e54502",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7988,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-10T18:29:23Z",
+      "side": 1,
+      "message": "Acknowledged, there are more things that need to happen based on DR or not, so the ifs added around getRenderPassWithOps make this unnecessary.",
+      "parentUuid": "bdd26440_7dee3cae",
       "range": {
         "startLine": 7988,
         "startChar": 14,
