@@ -166,6 +166,30 @@
       },
       "revId": "c379ff48043a47e444c388c45270db40d3172d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f39246a_e3de3eac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2024-07-10T13:32:29Z",
+      "side": 1,
+      "message": "Yeah, if I don\u0027t have better upstream solution, I will proceed with downstream change here. I don\u0027t want to disable it for all, I\u0027d rather have the ability to disable it for B* specifically in upstream, and I\u0027m not sure if there is already such a mechanism.",
+      "parentUuid": "8e84461c_2012c97e",
+      "range": {
+        "startLine": 5273,
+        "startChar": 28,
+        "endLine": 5275,
+        "endChar": 93
+      },
+      "revId": "c379ff48043a47e444c388c45270db40d3172d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
