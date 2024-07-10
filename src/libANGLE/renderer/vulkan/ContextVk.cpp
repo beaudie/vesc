@@ -7882,11 +7882,15 @@ angle::Result ContextVk::beginNewRenderPass(
     QueueSerial renderPassQueueSerial;
     generateRenderPassCommandsQueueSerial(&renderPassQueueSerial);
 
+    const vk::RenderPassSource renderPassSource = mState.getDrawFramebuffer()->isDefault()
+                                                      ? vk::RenderPassSource::DefaultFramebuffer
+                                                      : vk::RenderPassSource::FramebufferObject;
+
     mPerfCounters.renderPasses++;
     ANGLE_TRY(mRenderPassCommands->beginRenderPass(
-        this, std::move(framebuffer), renderArea, renderPassDesc, renderPassAttachmentOps,
-        colorAttachmentCount, depthStencilAttachmentIndex, clearValues, renderPassQueueSerial,
-        commandBufferOut));
+        this, std::move(framebuffer), renderPassSource, renderArea, renderPassDesc,
+        renderPassAttachmentOps, colorAttachmentCount, depthStencilAttachmentIndex, clearValues,
+        renderPassQueueSerial, commandBufferOut));
 
     // By default all render pass should allow to be reactivated.
     mAllowRenderPassToReactivate = true;

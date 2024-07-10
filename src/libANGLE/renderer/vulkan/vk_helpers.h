@@ -1701,6 +1701,12 @@ class RenderPassFramebuffer : angle::NonCopyable
     bool mIsImageless = false;
 };
 
+enum class RenderPassSource
+{
+    DefaultFramebuffer,
+    FramebufferObject,
+};
+
 class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 {
   public:
@@ -1795,6 +1801,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     angle::Result beginRenderPass(ContextVk *contextVk,
                                   RenderPassFramebuffer &&framebuffer,
+                                  RenderPassSource source,
                                   const gl::Rectangle &renderArea,
                                   const RenderPassDesc &renderPassDesc,
                                   const AttachmentOpsArray &renderPassAttachmentOps,
@@ -1905,6 +1912,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     void collectRefCountedEventsGarbage(RefCountedEventsGarbageRecycler *garbageRecycler);
 
+    RenderPassSource getSource() const { return mSource; }
+
   private:
     uint32_t getSubpassCommandBufferCount() const { return mCurrentSubpassCommandBufferIndex + 1; }
 
@@ -1987,6 +1996,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     // This is last renderpass before present and this is the image will be presented. We can use
     // final layout of the renderpass to transition it to the presentable layout
+    RenderPassSource mSource;
     ImageHelper *mImageOptimizeForPresent;
 
     friend class CommandBufferHelperCommon;
