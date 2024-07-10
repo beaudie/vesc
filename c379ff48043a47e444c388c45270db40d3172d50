@@ -214,6 +214,30 @@
       },
       "revId": "c379ff48043a47e444c388c45270db40d3172d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf89c926_9df43027",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2024-07-10T13:45:27Z",
+      "side": 1,
+      "message": "Env vars are great but for the testing. In case of actual defaults, handling Android properties for the product like B* is annoying, as it\u0027s handled in the different codebase, and updates there does not align well with ANGLE updates. Our practice shows that it\u0027s best to actually save that mechanism for the issues like local testing etc, while relying on the defaults guaranteeing the best experience for the end users. This however, if done just downstream, creates a lot of merge conflicts, hence our goal to have that kind of the logic in the upstream.\n\nNot that I\u0027m going to rediscover the wheel here right now :) I\u0027m swamped with other stuff right now, and we are not yet released with our new graphics stack to the external users, but I expect at some point it will become the pain point when doing comparisons between graphics stacks, and want to have at least the idea on how to tackle that long term.",
+      "parentUuid": "d88b02b7_0d5c8146",
+      "range": {
+        "startLine": 5273,
+        "startChar": 28,
+        "endLine": 5275,
+        "endChar": 93
+      },
+      "revId": "c379ff48043a47e444c388c45270db40d3172d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
