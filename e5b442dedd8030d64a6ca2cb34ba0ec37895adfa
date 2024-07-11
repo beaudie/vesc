@@ -106,6 +106,24 @@
       "parentUuid": "a2fb4aa0_2d34f28a",
       "revId": "e5b442dedd8030d64a6ca2cb34ba0ec37895adfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "623e7206_5b1ef710",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-11T17:38:04Z",
+      "side": 1,
+      "message": "It\u0027s valid to read `GL_UNSIGNED_SHORT_4_4_4_4`, `GL_UNSIGNED_SHORT_5_6_5`, and `GL_UNSIGNED_INT_2_10_10_10_REV_EXT` color buffers with `GL_UNSIGNED_BYTE` read type.\n\nIt\u0027s not valid to read `GL_UNSIGNED_SHORT` color buffers with `GL_UNSIGNED_BYTE` read type.",
+      "parentUuid": "bef81fbf_03791ba7",
+      "revId": "e5b442dedd8030d64a6ca2cb34ba0ec37895adfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
