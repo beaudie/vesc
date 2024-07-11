@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42278619_aacb7e3c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3729,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-11T19:42:47Z",
+      "side": 1,
+      "message": "Not introduced by this CL but it might have exposed the issue?\n\nApparently this approach can result in (rare?) flakes:\nhttps://ci.chromium.org/ui/p/chromium/builders/try/win-swangle-try-x86/15646/overview\n\n```\n[ RUN      ] Texture2DMemoryTestES3.TextureDataInLoopManyTimes/ES3_Vulkan_SwiftShader_EnableParallelCompileAndLink_AsyncCommandQueue\n..\\..\\third_party\\angle\\src\\tests\\gl_tests\\TextureTest.cpp(3729): error: Expected equality of these values:\n  getPerfCounters().commandQueueSubmitCallsTotal\n    Which is: 675\n  expectedSubmitCalls\n    Which is: 91\n```\n\nSo we expected 90-\u003e91, but somehow got 90-\u003e675?..",
+      "range": {
+        "startLine": 3721,
+        "startChar": 0,
+        "endLine": 3729,
+        "endChar": 83
+      },
+      "revId": "3f57290520664d441e8a36849189394869405b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
