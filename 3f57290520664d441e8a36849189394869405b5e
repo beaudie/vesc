@@ -46,6 +46,30 @@
       },
       "revId": "3f57290520664d441e8a36849189394869405b5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9c83487_c2162a2f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3729,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-11T20:56:54Z",
+      "side": 1,
+      "message": "no idea.. I see this pattern but it makes no sense \u003d)\n```\n\u003e\u003e\u003e bin(675-90)\n\u00270b1001001001\u0027\n```",
+      "parentUuid": "7357a3d3_e178b86e",
+      "range": {
+        "startLine": 3721,
+        "startChar": 0,
+        "endLine": 3729,
+        "endChar": 83
+      },
+      "revId": "3f57290520664d441e8a36849189394869405b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
