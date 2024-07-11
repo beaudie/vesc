@@ -22,6 +22,30 @@
       },
       "revId": "3f57290520664d441e8a36849189394869405b5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7357a3d3_e178b86e",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3729,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-11T20:37:40Z",
+      "side": 1,
+      "message": "That looks like garbage? Why would it be garbage? :thinking:",
+      "parentUuid": "42278619_aacb7e3c",
+      "range": {
+        "startLine": 3721,
+        "startChar": 0,
+        "endLine": 3729,
+        "endChar": 83
+      },
+      "revId": "3f57290520664d441e8a36849189394869405b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
