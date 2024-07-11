@@ -52,6 +52,24 @@
       "parentUuid": "4c99a327_12f2964c",
       "revId": "126275cbff9a6322c981c353b036cacd58710566",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "382855d0_f14c8876",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-11T17:22:04Z",
+      "side": 0,
+      "message": "There are logs and error handling that\u0027s now removed by this CL. The abstraction was somewhat thin, but replacing it with this doesn\u0027t really seem like an improvement IMO.\n\nIf that\u0027s not convincing, let\u0027s add a third person as tie breaker",
+      "parentUuid": "62cac787_9e0edc5e",
+      "revId": "126275cbff9a6322c981c353b036cacd58710566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
