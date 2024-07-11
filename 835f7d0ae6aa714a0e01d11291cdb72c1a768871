@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cfb7708d_33f5f54a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-11T20:16:35Z",
+      "side": 1,
+      "message": "No needed. getCompatibleRenderPass() already does the checking.",
+      "range": {
+        "startLine": 747,
+        "startChar": 68,
+        "endLine": 748,
+        "endChar": 68
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e078387_02e6b2c9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8019,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-11T20:16:35Z",
+      "side": 1,
+      "message": "This can be moved to getRenderPassWithOps() so that it is symmetrical to getCompatibleRenderPassWithOps. Then this function will not need to be changed (I think needsNewFramebufferWithResolveAttachments is always false if preferDynamicRendering is enabled)",
+      "range": {
+        "startLine": 8011,
+        "startChar": 0,
+        "endLine": 8019,
+        "endChar": 0
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "18d196d5_4bc918aa",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -43,6 +89,47 @@
         "endLine": 2952,
         "endChar": 63
       },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "becda2f7_8f9ec293",
+        "filename": "src/libANGLE/renderer/vulkan/ShareGroupVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-11T20:16:35Z",
+      "side": 1,
+      "message": "No need. getCompatibleRenderPass will early return and give you a compatibleRenderPass with null handle.",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 65
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "a35a56da_24b3450a",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/ShareGroupVk.cpp",
+              "range": {
+                "startLine": 221,
+                "startChar": 0,
+                "endLine": 232,
+                "endChar": 0
+              },
+              "replacement": "    const vk::RenderPass *compatibleRenderPass \u003d nullptr;\n    // Pull in a compatible RenderPass to be used by the task.  This is done at the last minute,\n    // just before the task is scheduled, to minimize the time this reference to the render pass\n    // cache is held.  If the render pass cache needs to be cleared, the main thread will wait\n    // for the job to complete.\n    ANGLE_TRY(contextVk-\u003egetCompatibleRenderPass(taskOut-\u003egetTask()-\u003egetRenderPassDesc(),\n                                                 \u0026compatibleRenderPass));\n    taskOut-\u003esetRenderPass(compatibleRenderPass);\n"
+            }
+          ]
+        }
+      ],
       "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
