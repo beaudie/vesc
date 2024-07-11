@@ -70,6 +70,24 @@
       "parentUuid": "62cac787_9e0edc5e",
       "revId": "126275cbff9a6322c981c353b036cacd58710566",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cc39273_bc7db388",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-11T18:08:25Z",
+      "side": 0,
+      "message": "As Geoff is OOO and we synced over chat, I\u0027ll go ahead with this - LMK if you feel strongly about re-adding some checks this CL is removing (in my opinion, they provide little to no benefit while hurting readability)",
+      "parentUuid": "382855d0_f14c8876",
+      "revId": "126275cbff9a6322c981c353b036cacd58710566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
