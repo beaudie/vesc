@@ -34,6 +34,24 @@
       "parentUuid": "b75efe90_05a1c8b4",
       "revId": "e5b442dedd8030d64a6ca2cb34ba0ec37895adfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc16095f_5d6d9143",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-11T14:11:58Z",
+      "side": 1,
+      "message": "Possibly; we might still have to roll back while we figure out / convince the right folks (still need to confirm this is the culprit)",
+      "parentUuid": "f062863a_a57c2851",
+      "revId": "e5b442dedd8030d64a6ca2cb34ba0ec37895adfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
