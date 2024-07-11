@@ -34,6 +34,24 @@
       "parentUuid": "c7ad4d86_4c265151",
       "revId": "126275cbff9a6322c981c353b036cacd58710566",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62cac787_9e0edc5e",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-11T16:54:11Z",
+      "side": 0,
+      "message": "(fwiw the point of doing it the way I\u0027m doing is to remove a questionable level of abstraction)",
+      "parentUuid": "4c99a327_12f2964c",
+      "revId": "126275cbff9a6322c981c353b036cacd58710566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
