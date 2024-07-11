@@ -88,6 +88,24 @@
       "parentUuid": "89e4aa5f_3434fee9",
       "revId": "e5b442dedd8030d64a6ca2cb34ba0ec37895adfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bef81fbf_03791ba7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-11T17:33:13Z",
+      "side": 1,
+      "message": "Not sure how suppression works in Android, and the test is owned by Skia. I tried asking Skia Gardener in b/352348204#comment8, but not sure if that\u0027s visible.\n\nFWIW I tried adding some logging and for GL_UNSIGNED_BYTE that test hits 0x1403 (GL_UNSIGNED_SHORT) but also 0x8033 (GL_UNSIGNED_SHORT_4_4_4_4), 0x8363 (GL_UNSIGNED_SHORT_5_6_5), 0x8368 (GL_UNSIGNED_INT_2_10_10_10_REV_EXT)",
+      "parentUuid": "a2fb4aa0_2d34f28a",
+      "revId": "e5b442dedd8030d64a6ca2cb34ba0ec37895adfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
