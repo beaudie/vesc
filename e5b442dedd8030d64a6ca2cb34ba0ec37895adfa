@@ -16,6 +16,24 @@
       "message": "Suspected breakage of an Android test:\n```\norg.skia.skqp.SkQPFailure: external/skia/tests/ExtendedSkColorTypeTests.cpp:192\tR16G16B16A16_unorm SkImage::readPixels to F32 - mismatch at 0, 0 (-1.000000, -1.000000, -1.000000 -1.000000) [OpenGLES]\n```",
       "revId": "e5b442dedd8030d64a6ca2cb34ba0ec37895adfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f062863a_a57c2851",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-11T14:03:49Z",
+      "side": 1,
+      "message": "Skia likely makes incorrect GL calls and therefore relies on undefined behavior.",
+      "parentUuid": "b75efe90_05a1c8b4",
+      "revId": "e5b442dedd8030d64a6ca2cb34ba0ec37895adfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
