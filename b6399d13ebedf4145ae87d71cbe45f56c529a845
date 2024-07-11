@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "664b8468_610fd123",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-11T16:14:05Z",
+      "side": 1,
+      "message": "OK, I\u0027ve (manually 😞) triaged the goldens from https://ci.chromium.org/ui/p/angle/builders/try/win-exp-test/19/overview and I think this is ready to go.\n\nBrian, could I get another +2?\nShabi, PTAL if you think we need to take some additional action on the suppressed failures, like report them to Intel.",
+      "revId": "b6399d13ebedf4145ae87d71cbe45f56c529a845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
