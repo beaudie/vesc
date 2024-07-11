@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa8b14c_43c4289e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-11T22:45:07Z",
+      "side": 1,
+      "message": "lgtm+2; great work on the easy-to-read test in particular.\n\n+Geoff and Shabi as FYI.",
+      "revId": "3d6b17f16c9ea59a9168481d02d9aa8c36dcf8e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
