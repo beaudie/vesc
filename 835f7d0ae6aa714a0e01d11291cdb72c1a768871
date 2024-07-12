@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2d548d3_fe4e4988",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T04:23:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfb7708d_33f5f54a",
+      "range": {
+        "startLine": 747,
+        "startChar": 68,
+        "endLine": 748,
+        "endChar": 68
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e078387_02e6b2c9",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-11T20:16:35Z",
       "side": 1,
       "message": "This can be moved to getRenderPassWithOps() so that it is symmetrical to getCompatibleRenderPassWithOps. Then this function will not need to be changed (I think needsNewFramebufferWithResolveAttachments is always false if preferDynamicRendering is enabled)",
+      "range": {
+        "startLine": 8011,
+        "startChar": 0,
+        "endLine": 8019,
+        "endChar": 0
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8ef1fa3_2c79aafc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8019,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T04:23:02Z",
+      "side": 1,
+      "message": "`needsNewFramebufferWithResolveAttachments` is always true with dynamic rendering because it\u0027s implemented as `!mInitialFramebuffer.valid()` which is always true (there never was a framebuffer to begin with).\n\nI moved this to `getRenderPassWithOps`, but the dynamic rendering check is still there.",
+      "parentUuid": "7e078387_02e6b2c9",
       "range": {
         "startLine": 8011,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "559a4fe4_0897d63f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8926,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T04:23:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18d196d5_4bc918aa",
+      "range": {
+        "startLine": 8922,
+        "startChar": 0,
+        "endLine": 8926,
+        "endChar": 74
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f775d7a5_3b4e1ebd",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-07-10T21:43:54Z",
       "side": 1,
       "message": "Question: Does dynamic rendering use imageless framebuffers?",
+      "range": {
+        "startLine": 2952,
+        "startChar": 8,
+        "endLine": 2952,
+        "endChar": 63
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bccfce66_fe7bcc8a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2952,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T04:23:02Z",
+      "side": 1,
+      "message": "It doesn\u0027t use framebuffers at all, but it works very similarly to imageless framebuffers. As far as ANGLE is concerned, the work of supporting imageless framebuffers is mostly in the ability to provide the image views at render pass begin time, which is basically identical to dynamic rendering.",
+      "parentUuid": "f775d7a5_3b4e1ebd",
       "range": {
         "startLine": 2952,
         "startChar": 8,
@@ -134,6 +230,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4cac2da_23086c74",
+        "filename": "src/libANGLE/renderer/vulkan/ShareGroupVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T04:23:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "becda2f7_8f9ec293",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 65
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f91d3aba_33aac431",
@@ -147,6 +267,30 @@
       "writtenOn": "2024-07-10T21:43:54Z",
       "side": 1,
       "message": "Combine?",
+      "range": {
+        "startLine": 3543,
+        "startChar": 0,
+        "endLine": 3545,
+        "endChar": 66
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fb3ec02_7ede663e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T04:23:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f91d3aba_33aac431",
       "range": {
         "startLine": 3543,
         "startChar": 0,
@@ -180,6 +324,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc138ef2_dd7504f9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5030,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T04:23:02Z",
+      "side": 1,
+      "message": "Done, result of copy-paste",
+      "parentUuid": "1f5ce3c4_4f56f35c",
+      "range": {
+        "startLine": 5030,
+        "startChar": 10,
+        "endLine": 5030,
+        "endChar": 24
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94a0b42a_20e244fe",
@@ -203,6 +371,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df38715c_8156785d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7395,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T04:23:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94a0b42a_20e244fe",
+      "range": {
+        "startLine": 7393,
+        "startChar": 0,
+        "endLine": 7395,
+        "endChar": 83
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13cf365c_91865586",
@@ -216,6 +408,30 @@
       "writtenOn": "2024-07-10T21:43:54Z",
       "side": 1,
       "message": "Extra",
+      "range": {
+        "startLine": 7239,
+        "startChar": 4,
+        "endLine": 7239,
+        "endChar": 91
+      },
+      "revId": "835f7d0ae6aa714a0e01d11291cdb72c1a768871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db606bd1_31305a34",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7239,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T04:23:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13cf365c_91865586",
       "range": {
         "startLine": 7239,
         "startChar": 4,
