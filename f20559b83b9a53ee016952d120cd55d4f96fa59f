@@ -33,6 +33,24 @@
       "message": "Shouldn\u0027t width/height still be checked against `\u003e\u003e level`?\n\nThat\u0027s how it is for 2D array for example above, as well as 3D textures. Could you please cover this case with a test too?",
       "revId": "f20559b83b9a53ee016952d120cd55d4f96fa59f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2de71385_1bc2fee2",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-12T20:01:37Z",
+      "side": 1,
+      "message": "Done.\n\nThe spec states that \"the maximum allowable width or height of a cube map or cube map array texture image must be the same, and is determined by [`2^(k-level)`], where `k` is [`log2(MAX_CUBE_MAP_TEXTURE_SIZE)`]\". This is checked in the condition above.\n\nHowever, the condition with `max3DTextureSize` is brought from the API spec (from ES 3.2), where it says: \"`GL_INVALID_VALUE` is generated if `width`, `height`, or `depth` is less than 0 or greater than `GL_MAX_3D_TEXTURE_SIZE`.\"\n\nIn my opinion, it makes sense to add `level` to width and height here as well.",
+      "parentUuid": "d3b6608a_58cf7772",
+      "revId": "f20559b83b9a53ee016952d120cd55d4f96fa59f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
