@@ -8,6 +8,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_CLDEVICEVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CLDEVICEVK_H_
 
+#include "common/hash_map.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/cl_types.h"
 #include "libANGLE/renderer/vulkan/vk_renderer.h"

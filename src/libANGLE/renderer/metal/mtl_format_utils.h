@@ -16,6 +16,7 @@
 #include <unordered_map>
 
 #include "common/angleutils.h"
+#include "common/hash_map.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/copyvertex.h"

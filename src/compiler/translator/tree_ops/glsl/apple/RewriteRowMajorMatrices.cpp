@@ -8,6 +8,7 @@
 
 #include "compiler/translator/tree_ops/glsl/apple/RewriteRowMajorMatrices.h"
 
+#include "common/hash_map.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/StaticType.h"

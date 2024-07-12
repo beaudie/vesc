@@ -21,6 +21,7 @@
 #include "common/SimpleMutex.h"
 #include "common/WorkerThread.h"
 #include "common/angleutils.h"
+#include "common/hash_map.h"
 #include "common/vulkan/vk_headers.h"
 #include "common/vulkan/vulkan_icd.h"
 #include "libANGLE/Caps.h"

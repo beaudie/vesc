@@ -11,6 +11,7 @@
 
 #include "common/MemoryBuffer.h"
 #include "common/SimpleMutex.h"
+#include "common/hash_map.h"
 #include "libANGLE/renderer/vulkan/MemoryTracking.h"
 #include "libANGLE/renderer/vulkan/Suballocation.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
