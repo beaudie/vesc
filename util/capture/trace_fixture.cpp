@@ -12,6 +12,7 @@
 #include "angle_trace_gl.h"
 
 #include <string>
+#include <unordered_map>
 
 namespace
 {

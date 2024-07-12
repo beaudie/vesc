@@ -8,7 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#include <unordered_map>
+#include <unordered_set>
 #include <variant>
+
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "compiler/translator/msl/Name.h"

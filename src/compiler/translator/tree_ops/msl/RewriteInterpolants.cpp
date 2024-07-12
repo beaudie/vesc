@@ -6,6 +6,8 @@
 
 #include "compiler/translator/tree_ops/msl/RewriteInterpolants.h"
 
+#include <unordered_set>
+
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/msl/AstHelpers.h"
 #include "compiler/translator/tree_util/BuiltIn.h"

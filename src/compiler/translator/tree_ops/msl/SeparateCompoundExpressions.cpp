@@ -5,6 +5,7 @@
 //
 
 #include <unordered_map>
+#include <unordered_set>
 
 #include "common/system_utils.h"
 #include "compiler/translator/IntermRebuild.h"

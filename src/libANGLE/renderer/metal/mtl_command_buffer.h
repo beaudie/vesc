@@ -23,6 +23,8 @@
 
 #include "common/FixedVector.h"
 #include "common/angleutils.h"
+#include "common/hash_map.h"
+#include "common/hash_set.h"
 #include "libANGLE/renderer/metal/mtl_common.h"
 #include "libANGLE/renderer/metal/mtl_resources.h"
 #include "libANGLE/renderer/metal/mtl_state_cache.h"

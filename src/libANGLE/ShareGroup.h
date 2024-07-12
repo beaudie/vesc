@@ -13,6 +13,7 @@
 #include <mutex>
 #include <vector>
 
+#include "common/hash_map.h"
 #include "libANGLE/Context.h"
 
 namespace gl

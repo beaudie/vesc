@@ -6,6 +6,7 @@
 
 #include <cctype>
 #include <map>
+#include <unordered_map>
 
 #include "common/system_utils.h"
 #include "compiler/translator/BaseTypes.h"

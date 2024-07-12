@@ -11,6 +11,8 @@
 #ifndef LIBANGLE_RENDERER_METAL_PROVOKINGVERTEXHELPER_H
 #define LIBANGLE_RENDERER_METAL_PROVOKINGVERTEXHELPER_H
 
+#include <unordered_map>
+
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/metal/DisplayMtl.h"

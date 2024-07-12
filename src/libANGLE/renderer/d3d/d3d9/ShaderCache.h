@@ -14,6 +14,7 @@
 
 #include "common/SimpleMutex.h"
 #include "common/debug.h"
+#include "common/hash_map.h"
 #include "libANGLE/renderer/d3d/d3d9/Context9.h"
 
 #include <cstddef>

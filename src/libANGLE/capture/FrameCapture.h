@@ -10,6 +10,9 @@
 #ifndef LIBANGLE_FRAME_CAPTURE_H_
 #define LIBANGLE_FRAME_CAPTURE_H_
 
+#include <unordered_map>
+#include <unordered_set>
+
 #include "common/PackedEnums.h"
 #include "common/SimpleMutex.h"
 #include "common/frame_capture_utils.h"

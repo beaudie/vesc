@@ -8,6 +8,7 @@
 
 #include "compiler/translator/spirv/BuildSPIRV.h"
 
+#include "common/hash_map.h"
 #include "common/spirv/spirv_instruction_builder_autogen.h"
 #include "compiler/translator/ValidateVaryingLocations.h"
 #include "compiler/translator/blocklayout.h"

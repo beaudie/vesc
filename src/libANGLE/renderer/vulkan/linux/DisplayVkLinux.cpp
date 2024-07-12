@@ -9,6 +9,8 @@
 
 #include "libANGLE/renderer/vulkan/linux/DisplayVkLinux.h"
 
+#include <unordered_set>
+
 #include "common/linux/dma_buf_utils.h"
 #include "libANGLE/renderer/vulkan/linux/DeviceVkLinux.h"
 #include "libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.h"

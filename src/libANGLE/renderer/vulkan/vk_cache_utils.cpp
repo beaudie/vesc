@@ -11,6 +11,7 @@
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 #include "common/aligned_memory.h"
+#include "common/hash_map.h"
 #include "common/system_utils.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/VertexAttribute.h"
@@ -24,6 +25,7 @@
 #include "libANGLE/renderer/vulkan/vk_renderer.h"
 
 #include <type_traits>
+#include <unordered_map>
 
 namespace rx
 {

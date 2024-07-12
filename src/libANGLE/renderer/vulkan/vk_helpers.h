@@ -11,6 +11,7 @@
 
 #include "common/MemoryBuffer.h"
 #include "common/SimpleMutex.h"
+#include "common/hash_map.h"
 #include "libANGLE/renderer/vulkan/MemoryTracking.h"
 #include "libANGLE/renderer/vulkan/Suballocation.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
@@ -18,6 +19,7 @@
 #include "libANGLE/renderer/vulkan/vk_ref_counted_event.h"
 
 #include <functional>
+#include <unordered_map>
 
 namespace gl
 {

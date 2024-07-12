@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_PROGRAMEXECUTABLEVK_H_
 
 #include "common/bitset_utils.h"
+#include "common/hash_map.h"
 #include "common/mathutil.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"

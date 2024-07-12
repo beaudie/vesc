@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 
 #include <algorithm>
+#include <unordered_map>
 
 #include "common/debug.h"
 #include "libANGLE/Buffer.h"

@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <unordered_map>
 
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/IntermRebuild.h"

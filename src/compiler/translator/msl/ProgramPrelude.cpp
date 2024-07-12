@@ -5,6 +5,7 @@
 //
 
 #include <cctype>
+#include <unordered_set>
 
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/Symbol.h"

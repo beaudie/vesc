@@ -9,6 +9,8 @@
 #ifndef LIBANGLE_RENDERER_MTL_PROGRAMEXECUTABLEMTL_H_
 #define LIBANGLE_RENDERER_MTL_PROGRAMEXECUTABLEMTL_H_
 
+#include <unordered_map>
+
 #include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/renderer/ProgramExecutableImpl.h"
 #include "libANGLE/renderer/metal/mtl_buffer_pool.h"

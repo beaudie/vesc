@@ -8,6 +8,8 @@
 
 #include "compiler/translator/tree_ops/msl/NameEmbeddedUniformStructsMetal.h"
 
+#include <unordered_map>
+
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 

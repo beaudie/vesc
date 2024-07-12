@@ -9,6 +9,7 @@
 #define LIBANGLE_RENDERER_VULKAN_CLPROGRAMVK_H_
 
 #include "common/SimpleMutex.h"
+#include "common/hash_map.h"
 
 #include "libANGLE/renderer/vulkan/CLContextVk.h"
 #include "libANGLE/renderer/vulkan/CLKernelVk.h"

@@ -10,6 +10,9 @@
 
 #include "libANGLE/ProgramLinkedResources.h"
 
+#include <unordered_set>
+
+#include "common/hash_map.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"

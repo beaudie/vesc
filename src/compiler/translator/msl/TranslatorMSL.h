@@ -7,6 +7,8 @@
 #ifndef COMPILER_TRANSLATOR_MSL_H_
 #define COMPILER_TRANSLATOR_MSL_H_
 
+#include <unordered_map>
+
 #include "compiler/translator/Compiler.h"
 
 namespace sh

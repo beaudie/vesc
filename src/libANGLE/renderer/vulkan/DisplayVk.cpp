@@ -9,6 +9,8 @@
 
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 
+#include <unordered_set>
+
 #include "common/debug.h"
 #include "common/system_utils.h"
 #include "libANGLE/BlobCache.h"

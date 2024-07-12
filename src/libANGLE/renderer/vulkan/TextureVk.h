@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_TEXTUREVK_H_
 #define LIBANGLE_RENDERER_VULKAN_TEXTUREVK_H_
 
+#include "common/hash_map.h"
 #include "libANGLE/renderer/TextureImpl.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/SamplerVk.h"

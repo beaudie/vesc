@@ -12,10 +12,12 @@
 
 #include <array>
 #include <atomic>
+#include <unordered_map>
 
 #include "common/SimpleMutex.h"
 #include "common/angleutils.h"
 #include "common/backtrace_utils.h"
+#include "common/hash_map.h"
 #include "common/vulkan/vk_headers.h"
 
 namespace rx

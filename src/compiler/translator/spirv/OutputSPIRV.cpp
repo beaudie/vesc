@@ -10,6 +10,7 @@
 
 #include "angle_gl.h"
 #include "common/debug.h"
+#include "common/hash_map.h"
 #include "common/mathutil.h"
 #include "common/spirv/spirv_instruction_builder_autogen.h"
 #include "compiler/translator/Compiler.h"

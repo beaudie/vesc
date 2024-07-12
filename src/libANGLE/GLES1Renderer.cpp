@@ -13,6 +13,7 @@
 #include <sstream>
 #include <vector>
 
+#include "common/hash_map.h"
 #include "common/hash_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"

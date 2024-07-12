@@ -8,6 +8,7 @@
 //
 
 #include "compiler/translator/tree_ops/SeparateStructFromFunctionDeclarations.h"
+#include "common/hash_map.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/IntermRebuild.h"
 #include "compiler/translator/SymbolTable.h"

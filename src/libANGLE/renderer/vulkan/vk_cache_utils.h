@@ -11,10 +11,13 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_
 #define LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_
 
+#include <unordered_map>
+
 #include "common/Color.h"
 #include "common/FixedVector.h"
 #include "common/SimpleMutex.h"
 #include "common/WorkerThread.h"
+#include "common/hash_map.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/renderer/vulkan/ShaderInterfaceVariableInfoMap.h"
 #include "libANGLE/renderer/vulkan/vk_resource.h"

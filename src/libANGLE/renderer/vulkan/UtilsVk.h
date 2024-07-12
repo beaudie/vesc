@@ -28,6 +28,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_UTILSVK_H_
 #define LIBANGLE_RENDERER_VULKAN_UTILSVK_H_
 
+#include <unordered_map>
+
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"

@@ -7,6 +7,8 @@
 
 #include "libANGLE/renderer/metal/ProgramExecutableMtl.h"
 
+#include <unordered_map>
+
 #include "libANGLE/renderer/metal/BufferMtl.h"
 #include "libANGLE/renderer/metal/ContextMtl.h"
 #include "libANGLE/renderer/metal/TextureMtl.h"

@@ -12,6 +12,7 @@
 
 #include "compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.h"
 
+#include "common/hash_map.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/StaticType.h"
@@ -399,7 +400,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         inVec3Type->setQualifier(EvqParamIn);
 
         TVariable *pVar    = new TVariable(mSymbolTable, ImmutableString("P"), inVec3Type,
-                                        SymbolType::AngleInternal);
+                                           SymbolType::AngleInternal);
         TVariable *dPdxVar = new TVariable(mSymbolTable, ImmutableString("dPdx"), inVec3Type,
                                            SymbolType::AngleInternal);
         TVariable *dPdyVar = new TVariable(mSymbolTable, ImmutableString("dPdy"), inVec3Type,

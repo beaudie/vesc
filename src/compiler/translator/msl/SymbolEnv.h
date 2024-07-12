@@ -7,6 +7,7 @@
 #ifndef COMPILER_TRANSLATOR_MSL_SYMBOLENV_H_
 #define COMPILER_TRANSLATOR_MSL_SYMBOLENV_H_
 
+#include <unordered_map>
 #include <unordered_set>
 
 #include "compiler/translator/Compiler.h"
