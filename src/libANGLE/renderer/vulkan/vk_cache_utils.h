@@ -15,6 +15,7 @@
 #include "common/FixedVector.h"
 #include "common/SimpleMutex.h"
 #include "common/WorkerThread.h"
+#include "common/hash_map.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/renderer/vulkan/ShaderInterfaceVariableInfoMap.h"
 #include "libANGLE/renderer/vulkan/vk_resource.h"

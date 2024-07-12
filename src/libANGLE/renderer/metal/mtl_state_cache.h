@@ -15,6 +15,7 @@
 
 #include <unordered_map>
 
+#include "common/hash_map.h"
 #include "libANGLE/State.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/metal/mtl_common.h"

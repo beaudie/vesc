@@ -11,6 +11,7 @@
 
 #include <unordered_map>
 
+#include "common/hash_map.h"
 #include "libANGLE/renderer/gl/DisplayGL.h"
 
 #include <GL/wglext.h>

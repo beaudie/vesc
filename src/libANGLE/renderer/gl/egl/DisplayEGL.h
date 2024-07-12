@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 
+#include "common/hash_map.h"
 #include "libANGLE/renderer/gl/DisplayGL.h"
 #include "libANGLE/renderer/gl/egl/egl_utils.h"
 

@@ -16,6 +16,8 @@
 
 #include "common/SimpleMutex.h"
 #include "common/WorkerThread.h"
+#include "common/hash_map.h"
+#include "common/hash_set.h"
 #include "common/platform.h"
 #include "libANGLE/AttributeMap.h"
 #include "libANGLE/BlobCache.h"

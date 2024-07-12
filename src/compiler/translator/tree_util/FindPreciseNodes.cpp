@@ -16,6 +16,8 @@
 
 #include "compiler/translator/tree_util/FindPreciseNodes.h"
 
+#include "common/hash_map.h"
+#include "common/hash_set.h"
 #include "common/hash_utils.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/IntermNode.h"
