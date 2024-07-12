@@ -94,6 +94,30 @@
       },
       "revId": "3f57290520664d441e8a36849189394869405b5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c53dba_fae060ca",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3729,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-12T16:13:33Z",
+      "side": 1,
+      "message": "So I tried a few runs of that batch with the same build and it doesn\u0027t seem to flake. Also odd that it\u0027s SwS not actual hardware. Might have been some oddly broken GCE or something and we\u0027ll never see this again :) or a rare race condition of some kind.",
+      "parentUuid": "9bfed2c9_d81330d5",
+      "range": {
+        "startLine": 3721,
+        "startChar": 0,
+        "endLine": 3729,
+        "endChar": 83
+      },
+      "revId": "3f57290520664d441e8a36849189394869405b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
