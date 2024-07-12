@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b86e750b_43a79949",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T02:13:44Z",
+      "side": 1,
+      "message": "Thanks for being so thorough with the tests!",
+      "revId": "f20559b83b9a53ee016952d120cd55d4f96fa59f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3b6608a_58cf7772",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T02:13:44Z",
+      "side": 1,
+      "message": "Shouldn\u0027t width/height still be checked against `\u003e\u003e level`?\n\nThat\u0027s how it is for 2D array for example above, as well as 3D textures. Could you please cover this case with a test too?",
+      "revId": "f20559b83b9a53ee016952d120cd55d4f96fa59f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
