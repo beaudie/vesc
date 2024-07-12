@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c364b5d_0272db9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-12T18:16:19Z",
+      "side": 1,
+      "message": "syncval error is due to a real bug, which revealed some other unrelated bugs too. The issue comes from inconsistent tracking of resolve attachments where late-added resolve attachments (such as through glBlitFramebuffer) don\u0027t end up in mColorResolveAttachments, and processing them gets skipped in a few places.\n\nLet me put this in WIP while I deal with that problem first.",
+      "revId": "c0dff9f08ceb04c7b090de9dbd4bd364cbbd5bdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
