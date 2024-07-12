@@ -33,6 +33,23 @@
       "message": "Deferring review to Geoff",
       "revId": "3b7f7f16bf7d7dce36aed9dad209ee293815a666",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "179712cb_32e88615",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-12T18:04:13Z",
+      "side": 1,
+      "message": "lgtm+2, straightforward",
+      "revId": "3b7f7f16bf7d7dce36aed9dad209ee293815a666",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
