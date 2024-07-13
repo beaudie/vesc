@@ -118,7 +118,8 @@ class FramebufferGL : public FramebufferImpl
                                      GLenum format,
                                      GLenum type,
                                      const gl::PixelPackState &pack,
-                                     GLubyte *pixels) const;
+                                     GLubyte *pixels,
+                                     bool usingPackBuffer) const;
 
     angle::Result readPixelsAllAtOnce(const gl::Context *context,
                                       const gl::Rectangle &area,
@@ -127,6 +128,7 @@ class FramebufferGL : public FramebufferImpl
                                       GLenum type,
                                       const gl::PixelPackState &pack,
                                       GLubyte *pixels,
+                                      bool usingPackBuffer,
                                       bool readLastRowSeparately) const;
 
     void maskOutInactiveOutputDrawBuffersImpl(const gl::Context *context,
