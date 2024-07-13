@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aefead5_b16c1c9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-13T01:06:37Z",
+      "side": 1,
+      "message": "Alexey: thanks for your original fix.\n\nGeoff, Shabi: did I do this merge correctly? After resolving the conflicts in angle_end2end_expectations.txt, there were no changes relative to the M127 branch. Also, is there an ANGLE commit queue for the M127 branch?",
+      "revId": "a2134e53d0284195931674d3dc830a0d5a90fc1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
