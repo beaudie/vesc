@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94f44827_8bda5427",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-13T14:38:58Z",
+      "side": 1,
+      "message": "Current version now supports deviceUUID, driverUUID, and driverID. I found a situation on one particular device where deviceUUID + driverID was insufficient, but driverUUID was distinct. Frustrating!",
+      "revId": "e5fc1e37a1e36884c729237cf336f5398bc933ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
