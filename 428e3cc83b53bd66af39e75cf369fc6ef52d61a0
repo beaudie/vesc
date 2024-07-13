@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7c921ec_01a9aaa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-13T07:47:05Z",
+      "side": 1,
+      "message": "From Alexey\u0027s updates on the bug it sounds like we don\u0027t want to make this particular change, but rather fix the workaround so it reads back to the PBO properly. Still, sending this out since it should fix the immediate crash.",
+      "revId": "428e3cc83b53bd66af39e75cf369fc6ef52d61a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
