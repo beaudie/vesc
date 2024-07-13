@@ -9550,6 +9550,32 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
+    void testNorm16PBOReadPixels(GLint internalformat, GLenum format, GLenum type)
+    {
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_norm16"));
+
+        constexpr GLint width = 8, height = 8;
+
+        glBindTexture(GL_TEXTURE_2D, mTextures[1]);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalformat, width, height, 0, format, type, nullptr);
+
+        // Overallocate the readback PBO just to be safe
+        constexpr GLint pboSize = width * height * sizeof(unsigned short) * 4 * 2;
+        GLBuffer pbo;
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+        glBufferData(GL_PIXEL_PACK_BUFFER, pboSize, nullptr, GL_STATIC_DRAW);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[1],
+                               0);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_SHORT, reinterpret_cast<void *>(0));
+        // Ignore the returned data for the moment.
+        ASSERT_GL_NO_ERROR();
+
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+    }
+
     GLuint mTextures[3];
     GLuint mFBO;
     GLuint mRenderbuffer;
@@ -9623,6 +9649,16 @@ TEST_P(Texture2DNorm16TestES3, TextureNorm16RGBA16RenderTest)
     ANGLE_SKIP_TEST_IF(IsMac() && IsOpenGL() && IsNVIDIA());
 
     testNorm16RenderAndReadPixels(GL_RGBA16_EXT, GL_RGBA, GL_UNSIGNED_SHORT);
+}
+
+TEST_P(Texture2DNorm16TestES3, TextureNorm16R16PBOReadbackTest)
+{
+    testNorm16PBOReadPixels(GL_R16_EXT, GL_RED, GL_UNSIGNED_SHORT);
+}
+
+TEST_P(Texture2DNorm16TestES3, TextureNorm16RG16PBOReadbackTest)
+{
+    testNorm16PBOReadPixels(GL_RG16_EXT, GL_RG, GL_UNSIGNED_SHORT);
 }
 
 class Texture2DRGTest : public Texture2DTest

@@ -285,7 +285,8 @@ class [[nodiscard]] ScopedEXTTextureNorm16ReadbackWorkaround
                              GLuint skipBytes,
                              GLuint rowBytes,
                              GLuint pixelBytes,
-                             GLubyte *pixels)
+                             GLubyte *pixels,
+                             bool usingPackBuffer)
     {
         // Separate from constructor as there may be checked math result exception that needs to
         // early return
@@ -298,6 +299,11 @@ class [[nodiscard]] ScopedEXTTextureNorm16ReadbackWorkaround
         enabled = features.readPixelsUsingImplementationColorReadFormatForNorm16.enabled &&
                   type == GL_UNSIGNED_SHORT && originalReadFormat == GL_RGBA &&
                   (format == GL_RED || format == GL_RG);
+
+        if (usingPackBuffer)
+        {
+            enabled = false;
+        }
 
         clientPixels = pixels;
 
@@ -786,7 +792,7 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
     if (cannotSetDesiredRowLength || useOverlappingRowsWorkaround || usePackSkipWorkaround)
     {
         return readPixelsRowByRow(context, clippedArea, format, readFormat, readType, packState,
-                                  outPtr);
+                                  outPtr, (packBuffer != nullptr));
     }
 
     bool useLastRowPaddingWorkaround = false;
@@ -798,7 +804,7 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
     }
 
     return readPixelsAllAtOnce(context, clippedArea, format, readFormat, readType, packState,
-                               outPtr, useLastRowPaddingWorkaround);
+                               outPtr, (packBuffer != nullptr), useLastRowPaddingWorkaround);
 }
 
 angle::Result FramebufferGL::blit(const gl::Context *context,
@@ -1581,7 +1587,8 @@ angle::Result FramebufferGL::readPixelsRowByRow(const gl::Context *context,
                                                 GLenum format,
                                                 GLenum type,
                                                 const gl::PixelPackState &pack,
-                                                GLubyte *pixels) const
+                                                GLubyte *pixels,
+                                                bool usingPackBuffer) const
 {
     ContextGL *contextGL              = GetImplAs<ContextGL>(context);
     const FunctionsGL *functions      = GetFunctionsGL(context);
@@ -1600,7 +1607,7 @@ angle::Result FramebufferGL::readPixelsRowByRow(const gl::Context *context,
     ScopedEXTTextureNorm16ReadbackWorkaround workaround;
     angle::Result result =
         workaround.Initialize(context, area, originalReadFormat, format, type, skipBytes, rowBytes,
-                              glFormat.computePixelBytes(type), pixels);
+                              glFormat.computePixelBytes(type), pixels, usingPackBuffer);
     if (result != angle::Result::Continue)
     {
         return result;
@@ -1636,6 +1643,7 @@ angle::Result FramebufferGL::readPixelsAllAtOnce(const gl::Context *context,
                                                  GLenum type,
                                                  const gl::PixelPackState &pack,
                                                  GLubyte *pixels,
+                                                 bool usingPackBuffer,
                                                  bool readLastRowSeparately) const
 {
     ContextGL *contextGL              = GetImplAs<ContextGL>(context);
@@ -1655,7 +1663,7 @@ angle::Result FramebufferGL::readPixelsAllAtOnce(const gl::Context *context,
     ScopedEXTTextureNorm16ReadbackWorkaround workaround;
     angle::Result result =
         workaround.Initialize(context, area, originalReadFormat, format, type, skipBytes, rowBytes,
-                              glFormat.computePixelBytes(type), pixels);
+                              glFormat.computePixelBytes(type), pixels, usingPackBuffer);
     if (result != angle::Result::Continue)
     {
         return result;
