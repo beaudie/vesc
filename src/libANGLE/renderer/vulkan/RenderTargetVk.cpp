@@ -114,15 +114,17 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk,
     ASSERT(mResolveImage == nullptr || framebufferLayerCount == 1);
 }
 
-void RenderTargetVk::onColorResolve(ContextVk *contextVk, uint32_t framebufferLayerCount)
+void RenderTargetVk::onColorResolve(ContextVk *contextVk,
+                                    uint32_t framebufferLayerCount,
+                                    size_t colorIndexGL,
+                                    const vk::ImageView &view)
 {
     ASSERT(!mImage->getActualFormat().hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
     ASSERT(mResolveImage == nullptr);
 
-    contextVk->onImageRenderPassWrite(mLevelIndexGL, mLayerIndex, framebufferLayerCount,
-                                      VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorWrite,
-                                      mImage);
+    contextVk->onColorResolve(mLevelIndexGL, mLayerIndex, framebufferLayerCount, mImage,
+                              view.getHandle(), mImageSiblingSerial, colorIndexGL);
 }
 
 void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, uint32_t framebufferLayerCount)
@@ -135,15 +137,17 @@ void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, uint32_t framebuff
                                   mResolveImage, mImageSiblingSerial);
 }
 
-void RenderTargetVk::onDepthStencilResolve(ContextVk *contextVk, uint32_t framebufferLayerCount)
+void RenderTargetVk::onDepthStencilResolve(ContextVk *contextVk,
+                                           uint32_t framebufferLayerCount,
+                                           VkImageAspectFlags aspects,
+                                           const vk::ImageView &view)
 {
     ASSERT(mImage->getActualFormat().hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
     ASSERT(mResolveImage == nullptr);
 
-    contextVk->onImageRenderPassWrite(mLevelIndexGL, mLayerIndex, framebufferLayerCount,
-                                      mImage->getAspectFlags(),
-                                      vk::ImageLayout::DepthStencilResolve, mImage);
+    contextVk->onDepthStencilResolve(mLevelIndexGL, mLayerIndex, framebufferLayerCount, aspects,
+                                     mImage, view.getHandle(), mImageSiblingSerial);
 }
 
 vk::ImageHelper &RenderTargetVk::getImageForRenderPass()
