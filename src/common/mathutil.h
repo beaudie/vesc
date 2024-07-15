@@ -548,31 +548,63 @@ inline float normalizedToFloat(T input)
 template <typename T>
 inline T floatToNormalized(float input)
 {
+#if defined(__aarch64__) || defined(_M_ARM64)
+    // On armv8, std::round is compiled to a dedicated round-to-nearest instruction
     if constexpr (sizeof(T) > 2)
     {
         // float has only a 23 bit mantissa, so we need to do the calculation in double precision
-        return static_cast<T>(std::numeric_limits<T>::max() * static_cast<double>(input) + 0.5);
+        return static_cast<T>(
+            std::round(std::numeric_limits<T>::max() * static_cast<double>(input)));
     }
     else
     {
-        return static_cast<T>(std::numeric_limits<T>::max() * input + 0.5f);
+        return static_cast<T>(std::round(std::numeric_limits<T>::max() * input));
     }
+#else
+    if constexpr (sizeof(T) > 2)
+    {
+        // float has only a 23 bit mantissa, so we need to do the calculation in double precision
+        return static_cast<T>(std::numeric_limits<T>::max() * static_cast<double>(input) +
+                              std::copysign(0.5, input));
+    }
+    else
+    {
+        return static_cast<T>(std::numeric_limits<T>::max() * input + std::copysign(0.5f, input));
+    }
+#endif
 }
 
 template <unsigned int outputBitCount, typename T>
 inline T floatToNormalized(float input)
 {
     static_assert(outputBitCount < (sizeof(T) * 8), "T must have more bits than outputBitCount.");
+    static_assert(outputBitCount > (std::is_unsigned<T>::value ? 0 : 1),
+                  "outputBitCount must be at least 1 not counting the sign bit.");
+    constexpr unsigned int bits = std::is_unsigned<T>::value ? outputBitCount : outputBitCount - 1;
 
-    if (outputBitCount > 23)
+#if defined(__aarch64__) || defined(_M_ARM64)
+    // On armv8, std::round is compiled to a dedicated round-to-nearest instruction
+    if constexpr (sizeof(T) > 2)
     {
         // float has only a 23 bit mantissa, so we need to do the calculation in double precision
-        return static_cast<T>(((1 << outputBitCount) - 1) * static_cast<double>(input) + 0.5);
+        return static_cast<T>(std::round(((1 << bits) - 1) * static_cast<double>(input)));
     }
     else
     {
-        return static_cast<T>(((1 << outputBitCount) - 1) * input + 0.5f);
+        return static_cast<T>(std::round(((1 << bits) - 1) * input));
     }
+#else
+    if (bits > 23)
+    {
+        // float has only a 23 bit mantissa, so we need to do the calculation in double precision
+        return static_cast<T>(((1 << bits) - 1) * static_cast<double>(input) +
+                              std::copysign(0.5, input));
+    }
+    else
+    {
+        return static_cast<T>(((1 << bits) - 1) * input + std::copysign(0.5f, input));
+    }
+#endif
 }
 
 template <unsigned int inputBitCount, unsigned int inputBitStart, typename T>
