@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ba2ab1e_0bc782a5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3097,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-15T21:50:57Z",
+      "side": 1,
+      "message": "I think you might have a bug here: this get called from ContextVk::onColorResolve, which get called from FramebufferVk::resolveColorWithSubpass(). The colorIndexGL is read FBO\u0027s colorIndexGL. But this conversion occurs on mRenderPassDesc which is drawFBO.\n\nMaybe you pass colorIndexVk directly to this function. And at FramebufferVk you even don\u0027t need the for loop to convert colorIndexGL to colorIndexVk, I think you can use bit operations on drawBufferMask.",
+      "range": {
+        "startLine": 3097,
+        "startChar": 24,
+        "endLine": 3097,
+        "endChar": 53
+      },
+      "revId": "ec8157a2e89914142fcf1f1939d395be43b6a5d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
