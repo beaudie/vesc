@@ -43,7 +43,7 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'dcc3741ff616418b8f42bab123e3547cd6e9f102',
+  'chromium_revision': '650a5ae5a93ab7f4ba3bd518e00fa959e387eab5',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -130,7 +130,7 @@ vars = {
   # reclient CIPD package
   'reclient_package': 'infra/rbe/client/',
   # reclient CIPD package version
-  'reclient_version': 're_client_version:0.150.0.c8b9fcfa-gomaip',
+  'reclient_version': 're_client_version:0.148.0.41b09b51-gomaip',
 
   # siso CIPD package version.
   'siso_version': 'git_revision:2771ced2186c49911899699f831f96ceea4812f6',
@@ -480,7 +480,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@4fb734b8198a40320ec942e8a36c9ebccdfd3ed5',
+    'url': '{chromium_git}/chromium/src/testing@30f435f2a8a01c392c096dd473c859f50a8ff55d',
     'condition': 'not build_with_chromium',
   },
 
@@ -1066,7 +1066,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': Var('chromium_git') + '/chromium/src/tools/perf@af2a814a21c69980d3369a6d48a227c5bc77548c',
+    'url': Var('chromium_git') + '/chromium/src/tools/perf@580809747233cead30e46613ed13511de3b00318',
     'condition': 'not build_with_chromium',
   },
 
