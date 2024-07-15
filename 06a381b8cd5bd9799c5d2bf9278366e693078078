@@ -16,6 +16,24 @@
       "message": "Given that width was checked before but not height, you might want to turn this into 2 tests, one where only width is max+1, one where only height is max+1.",
       "revId": "06a381b8cd5bd9799c5d2bf9278366e693078078",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5dad6c9_dd126d7c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 11466,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-15T18:36:48Z",
+      "side": 1,
+      "message": "Done. However, `TexImage3D` for cube maps cannot take unequal width and height. I also added a similar test for `TexSubImage3D`, which can do that.",
+      "parentUuid": "f140b2bc_ba9fdeea",
+      "revId": "06a381b8cd5bd9799c5d2bf9278366e693078078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
