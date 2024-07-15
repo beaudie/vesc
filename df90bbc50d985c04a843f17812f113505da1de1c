@@ -52,6 +52,24 @@
       "parentUuid": "ec067065_e265c488",
       "revId": "df90bbc50d985c04a843f17812f113505da1de1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6a4fb8c_ccfd4959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-15T21:22:31Z",
+      "side": 1,
+      "message": "Merged and I re-enabled https://autoroll.skia.org/r/angle-chromium-autoroll to get a new angle revision rolled.",
+      "parentUuid": "3ed086b3_c1a58ee9",
+      "revId": "df90bbc50d985c04a843f17812f113505da1de1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
