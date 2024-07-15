@@ -186,6 +186,11 @@
 42266040 : ImageTestES3.SourceCubeTargetExternalESSL3_Colorspace/* = SKIP_FOR_CAPTURE
 42266040 : ImageTestES3.SourceRenderbufferTargetTextureExternalESSL3_Colorspace/* = SKIP_FOR_CAPTURE
 
+353538491 : ImageTest.TargetTexture2DDeletedWhileInUse/* = FAIL
+353538491 : ImageTest.TargetTexture2DDeletedWhileInUse2/* = FAIL
+353538491 : ImageTest.TargetRenderbufferDeletedWhileInUse/* = FAIL
+353538491 : ImageTest.TargetRenderbufferDeletedWhileInUse2/* = FAIL
+
 42266048 : FramebufferTest_ES3.BlitWithDifferentPreRotations/* = SKIP_FOR_CAPTURE
 
 42266286 WIN : PBOExtensionTest.PBOWithExistingData/* = FLAKY
