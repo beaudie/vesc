@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6430667c_2ea0741e",
+        "filename": "extensions/EGL_ANGLE_platform_angle_vulkan_device_uuid.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-15T17:39:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "dace707f_ede64801",
+      "range": {
+        "startLine": 87,
+        "startChar": 24,
+        "endLine": 87,
+        "endChar": 30
+      },
+      "revId": "c9441304a1735e11a347a496b0a7175fd865ea93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fadc9cea_50915a1a",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-07-15T15:07:19Z",
       "side": 1,
       "message": "Suggest adding an issue that explains why driverUUID exists",
+      "revId": "c9441304a1735e11a347a496b0a7175fd865ea93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3613640_0d11923d",
+        "filename": "extensions/EGL_ANGLE_platform_angle_vulkan_device_uuid.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-15T17:39:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fadc9cea_50915a1a",
       "revId": "c9441304a1735e11a347a496b0a7175fd865ea93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +113,30 @@
       "writtenOn": "2024-07-15T15:07:19Z",
       "side": 1,
       "message": "Super minor optim:\n\n```suggestion\n            else if (preferredDeviceUUID !\u003d nullptr \u0026\u0026\n                memcmp(preferredDeviceUUID, physicalDeviceIDPropertiesOut-\u003edeviceUUID,\n                       VK_UUID_SIZE) !\u003d 0)\n            {\n                matched \u003d false;\n            }\n            else if (preferredDriverUUID !\u003d nullptr \u0026\u0026\n                memcmp(preferredDriverUUID, physicalDeviceIDPropertiesOut-\u003edriverUUID,\n                       VK_UUID_SIZE) !\u003d 0)\n            {\n                matched \u003d false;\n            }\n```",
+      "range": {
+        "startLine": 282,
+        "startChar": 0,
+        "endLine": 295,
+        "endChar": 13
+      },
+      "revId": "c9441304a1735e11a347a496b0a7175fd865ea93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ead3a2c2_49c4919b",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-07-15T17:39:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "54869165_2c36566b",
       "range": {
         "startLine": 282,
         "startChar": 0,
