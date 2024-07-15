@@ -16,6 +16,24 @@
       "message": "Remember the `Vulkan: ` prefix",
       "revId": "26b386e5cd81cae89a040f09fc3b3468ea8c07d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b45005e_fa7004bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-07-15T19:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23dd0e3f_964fa12a",
+      "revId": "26b386e5cd81cae89a040f09fc3b3468ea8c07d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
