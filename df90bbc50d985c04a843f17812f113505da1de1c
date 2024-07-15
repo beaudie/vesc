@@ -16,6 +16,24 @@
       "message": "Hi Roman, your change seems breaking the chromium linux msan bot: https://chromium-review.googlesource.com/c/chromium/src/+/5706150. Compilation error: https://ci.chromium.org/ui/p/chromium/builders/ci/Linux%20MSan%20Builder/73727/overview. Can you please verify if this can be fixed with a follow-up change / revert?",
       "revId": "df90bbc50d985c04a843f17812f113505da1de1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec067065_e265c488",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-15T20:00:53Z",
+      "side": 1,
+      "message": "Thanks Yuxin. Looks like we need an include specifically for MSAN there which was probably transitively pulled in before. I\u0027ll have a look.",
+      "parentUuid": "fb3f1f2b_12c47b45",
+      "revId": "df90bbc50d985c04a843f17812f113505da1de1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
