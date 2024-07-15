@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91257460_b0e941ee",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-15T14:45:54Z",
+      "side": 1,
+      "message": "`MapBufferRangeWithFallback` uses glMapBuffer and adds the offset if glMapBufferRange is not available which would not fail but still result in an invalid offset.\n\nInstead of validating `inputBufferPointer` is non-null, you can check something like `buffer-\u003egetBufferSize() \u003c\u003d binding.getOffset() + copySize`.",
+      "range": {
+        "startLine": 492,
+        "startChar": 50,
+        "endLine": 492,
+        "endChar": 76
+      },
+      "revId": "5ea78e9a64b3cffcdde7a1b6efb6cf1ae3272373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
