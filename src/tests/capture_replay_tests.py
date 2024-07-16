@@ -252,7 +252,7 @@ def ParseTestNamesFromTestList(output, test_expectation, also_run_skipped_for_ca
 
 def GetRunCommand(args, command):
     if args.xvfb:
-        return ['vpython', 'testing/xvfb.py', command]
+        return ['vpython3', 'testing/xvfb.py', '--use-xvfb', command]
     else:
         return [command]
 
@@ -870,9 +870,9 @@ def main(args):
         os.environ["RBE_experimental_credentials_helper"] = ""
         os.environ["RBE_experimental_credentials_helper_args"] = ""
 
-    if sys.platform == 'linux' and is_bot:
-        logger.warning('Test is currently a no-op https://anglebug.com/42264614')
-        return EXIT_SUCCESS
+    # if sys.platform == 'linux' and is_bot:
+    #     logger.warning('Test is currently a no-op https://anglebug.com/42264614')
+    #     return EXIT_SUCCESS
 
     ninja_lock = multiprocessing.Semaphore(args.max_ninja_jobs)
     child_processes_manager = ChildProcessesManager(args, logger, ninja_lock)
