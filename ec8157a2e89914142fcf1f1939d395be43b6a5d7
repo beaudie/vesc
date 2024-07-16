@@ -46,6 +46,30 @@
       },
       "revId": "ec8157a2e89914142fcf1f1939d395be43b6a5d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a642e3c1_7abb4698",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3097,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-16T17:13:16Z",
+      "side": 1,
+      "message": "I see. canResolveWithSubpass is only true when the current RP has srcFBO. A comment or assert in FramebufferVk::resolveColorWithSubpass would be helpful.",
+      "parentUuid": "317977c5_bb2d931f",
+      "range": {
+        "startLine": 3097,
+        "startChar": 24,
+        "endLine": 3097,
+        "endChar": 53
+      },
+      "revId": "ec8157a2e89914142fcf1f1939d395be43b6a5d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
