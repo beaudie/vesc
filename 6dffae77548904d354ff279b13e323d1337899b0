@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89c82dca_f3d4e13c",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T15:13:24Z",
+      "side": 1,
+      "message": "Can we instead define a `Round` function in ANGLE that does either `std::round()` or `+ std::copysign()` so we don\u0027t have to duplicate this logic?",
+      "revId": "6dffae77548904d354ff279b13e323d1337899b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8735ecc_b7f304cd",
+        "filename": "src/common/mathutil_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T15:13:24Z",
+      "side": 1,
+      "message": "Shouldn\u0027t `-1.0` return -2^n instead of -2^n+1? That\u0027s -128 here. Or are -127 and -128 considered equal (most importantly when GPUs sample a texture from snorm)?",
+      "range": {
+        "startLine": 571,
+        "startChar": 49,
+        "endLine": 571,
+        "endChar": 53
+      },
+      "revId": "6dffae77548904d354ff279b13e323d1337899b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
