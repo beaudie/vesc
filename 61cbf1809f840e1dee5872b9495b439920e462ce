@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "438fe57b_26da9404",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-16T22:54:22Z",
+      "side": 1,
+      "message": "We had discussed multiple tests when I was adding this suite originally, we decided to start with one test for simplicity and do pretty much this CL when needed or convenient.",
+      "parentUuid": "4caee0e5_8b915fba",
+      "revId": "61cbf1809f840e1dee5872b9495b439920e462ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f98b1ad1_881b8b5e",
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93b8e296_b8756507",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1866,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-16T22:54:22Z",
+      "side": 1,
+      "message": "Looks totally fine for now, minimal duplication. In future we can rearrange if it starts getting out of hand.",
+      "parentUuid": "f98b1ad1_881b8b5e",
+      "range": {
+        "startLine": 1865,
+        "startChar": 0,
+        "endLine": 1866,
+        "endChar": 73
+      },
+      "revId": "61cbf1809f840e1dee5872b9495b439920e462ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e3a15f8b_c82082ee",
         "filename": "src/tests/capture_tests/expected/CapturedTest_ActiveTextures_ES3_Vulkan_001.cpp",
         "patchSetId": 1
@@ -54,6 +96,30 @@
       "writtenOn": "2024-07-16T22:44:29Z",
       "side": 1,
       "message": "These are the key.  Might not be worth adding another test, but figured it needs to happen at some point.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 49
+      },
+      "revId": "61cbf1809f840e1dee5872b9495b439920e462ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac3b0fb1_00ea351c",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_ActiveTextures_ES3_Vulkan_001.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-16T22:54:22Z",
+      "side": 1,
+      "message": "I think the most difficult part really is going to be having to make the choice between adding another frame to an existing test vs adding a new test :)",
+      "parentUuid": "e3a15f8b_c82082ee",
       "range": {
         "startLine": 97,
         "startChar": 0,
