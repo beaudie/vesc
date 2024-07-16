@@ -216,3 +216,22 @@
 
 # Capture not supported
 42267114 : EGLMultiContextTest.NonSharedContextsReuseDescritorSetLayoutHandle/* = SKIP_FOR_CAPTURE
+
+# Replay timeout
+42264614 LINUX : VulkanExternalImageTest.PreInitializedOnGLImport/* = SKIP_FOR_CAPTURE
+42264614 LINUX : VulkanExternalImageTest.PreInitializedOnGLImportWithFlags/* = SKIP_FOR_CAPTURE
+
+# Multiple tests, failures and timeout
+42264614 LINUX : VulkanExternalImageTest.UninitializedOnGLImport* = SKIP_FOR_CAPTURE
+
+# CreateEGLSync(gEGLDisplay, 12537, (nil), 1);
+42264614 LINUX : EGLSyncTest.EglClientWaitSync/* = COMPILE_FAIL
+
+# error: duplicate case value '1'
+42264614 LINUX : EGLSyncTest.GlobalFenceSync/* = COMPILE_FAIL
+
+# glGetPerfMonitorCountersAMD(0, (GLint *)gReadBuffer, (GLint *)gReadBuffer, 0, (nil));
+42264614 LINUX : Texture2DMemoryTestES3.TextureDataInLoop* = COMPILE_FAIL
+
+# glGetPerfMonitorCountersAMD(0, (GLint *)gReadBuffer, (GLint *)gReadBuffer, 0, (nil));
+42264614 LINUX : UniformBufferMemoryTest.BufferDataInLoopManyTimes/* = COMPILE_FAIL
