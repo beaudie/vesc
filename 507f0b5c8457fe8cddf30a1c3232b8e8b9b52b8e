@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0f5859b_e4b7732a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T16:11:07Z",
+      "side": 1,
+      "message": "This should be good to reland, PTAL",
+      "revId": "507f0b5c8457fe8cddf30a1c3232b8e8b9b52b8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
