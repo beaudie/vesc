@@ -16,6 +16,24 @@
       "message": "Windows and Linux Intel GL drivers are usually quite different. Are these failures seen on both platforms?",
       "revId": "8191282b85e49a5c1d2518de4132564f96f08628",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "683ca190_b6a84f0d",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2720,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-16T15:58:29Z",
+      "side": 1,
+      "message": "I changed it to Windows-only. It\u0027s only failed on Windows bots so far.",
+      "parentUuid": "9a37ff87_cb0ba9cf",
+      "revId": "8191282b85e49a5c1d2518de4132564f96f08628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
