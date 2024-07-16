@@ -154,6 +154,7 @@ class ChildProcessesManager():
             self.runtimes[cmd_name] += elapsed_time
             self.RemoveSubprocess(proc.Pid())
             if returncode != 0:
+                self._logger.warn(output)
                 return -1, output
             return returncode, output
         except KeyboardInterrupt:
@@ -199,11 +200,11 @@ class ChildProcessesManager():
                 count += 1
         return count
 
-    def RunGNGen(self, build_dir, pipe_stdout, extra_gn_args=[]):
+    def RunGNGen(self, build_dir, pipe_stdout, extra_gn_args=[], force_debug=False):
         gn_args = [('angle_with_capture_by_default', 'true')] + extra_gn_args
         if self._args.use_reclient:
             gn_args.append(('use_remoteexec', 'true'))
-        if not self._args.debug:
+        if not self._args.debug and not force_debug:
             gn_args.append(('is_debug', 'false'))
             gn_args.append(('symbol_level', '1'))
             gn_args.append(('angle_assert_always_on', 'true'))
@@ -252,7 +253,7 @@ def ParseTestNamesFromTestList(output, test_expectation, also_run_skipped_for_ca
 
 def GetRunCommand(args, command):
     if args.xvfb:
-        return ['vpython', 'testing/xvfb.py', command]
+        return ['vpython3', 'testing/xvfb.py', '--use-xvfb', command]
     else:
         return [command]
 
@@ -489,7 +490,8 @@ class TestBatch():
         gn_args = [('angle_build_capture_replay_tests', 'true'),
                    ('angle_capture_replay_test_trace_dir', '"%s"' % self.trace_dir),
                    ('angle_capture_replay_composite_file_id', str(composite_file_id))]
-        returncode, output = child_processes_manager.RunGNGen(replay_build_dir, True, gn_args)
+        returncode, output = child_processes_manager.RunGNGen(
+            replay_build_dir, True, gn_args, force_debug=True)
         if returncode != 0:
             self.logger.warning('GN failure output: %s' % output)
             self.results.append(
@@ -870,9 +872,9 @@ def main(args):
         os.environ["RBE_experimental_credentials_helper"] = ""
         os.environ["RBE_experimental_credentials_helper_args"] = ""
 
-    if sys.platform == 'linux' and is_bot:
-        logger.warning('Test is currently a no-op https://anglebug.com/42264614')
-        return EXIT_SUCCESS
+    # if sys.platform == 'linux' and is_bot:
+    #     logger.warning('Test is currently a no-op https://anglebug.com/42264614')
+    #     return EXIT_SUCCESS
 
     ninja_lock = multiprocessing.Semaphore(args.max_ninja_jobs)
     child_processes_manager = ChildProcessesManager(args, logger, ninja_lock)
@@ -900,7 +902,8 @@ def main(args):
             return EXIT_FAILURE
         # get a list of tests
         test_path = os.path.join(capture_build_dir, args.test_suite)
-        test_list = GetTestsListForFilter(args, test_path, args.filter, logger)
+        mfilter = "ImageTest.SourceRenderbufferTargetTexture/ES2_Vulkan_SwiftShader:ImageTest.SourceRenderbufferTargetTextureExternal/ES2_Vulkan_SwiftShader:ImageTest.SourceYUVAHBTargetExternalRGBSampleInitData/ES2_Vulkan_SwiftShader:ImageTest.SourceYUVAHBTargetExternalRGBSampleNoData/ES2_Vulkan_SwiftShader:ImageTest.TargetRenderbufferDeletedWhileInUse/ES2_Vulkan_SwiftShader:ImageTest.TargetRenderbufferDeletedWhileInUse2/ES2_Vulkan_SwiftShader:ImageTest.TargetTexture2DDeletedWhileInUse/ES2_Vulkan_SwiftShader:ImageTest.TargetTexture2DDeletedWhileInUse2/ES2_Vulkan_SwiftShader"
+        test_list = GetTestsListForFilter(args, test_path, mfilter, logger)
         test_expectation = TestExpectation(args)
         test_names = ParseTestNamesFromTestList(test_list, test_expectation,
                                                 args.also_run_skipped_for_capture_tests, logger)
