@@ -39,6 +39,30 @@
       },
       "revId": "6dffae77548904d354ff279b13e323d1337899b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b859377_8bf03c72",
+        "filename": "src/common/mathutil_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-16T15:28:23Z",
+      "side": 1,
+      "message": "-128 and -127 are considered equal for sampling (that\u0027s yet to be fixed in `normalizedToFloat` functions), see OpenGL ES 3.2, Section 2.3.5.1.\n\nFor the `floatToNormalized` path, the correct result is -127, See OpenGL ES 3.2, Section 2.3.5.2.",
+      "parentUuid": "e8735ecc_b7f304cd",
+      "range": {
+        "startLine": 571,
+        "startChar": 49,
+        "endLine": 571,
+        "endChar": 53
+      },
+      "revId": "6dffae77548904d354ff279b13e323d1337899b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
