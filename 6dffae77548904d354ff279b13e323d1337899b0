@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fbc3c17_75e206c7",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T17:45:14Z",
+      "side": 1,
+      "message": "Much better, thanks!",
+      "parentUuid": "89c82dca_f3d4e13c",
+      "revId": "6dffae77548904d354ff279b13e323d1337899b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8735ecc_b7f304cd",
