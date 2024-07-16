@@ -47,7 +47,8 @@ struct UBOConversionInfo
 
     bool _calculateNeedsConversion()
     {
-        if (_stdSize != _metalSize)
+        // It's OK for the Metal version to have unused padding at the end.
+        if (_stdSize > _metalSize)
         {
             return true;
         }
