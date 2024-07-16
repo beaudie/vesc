@@ -16,6 +16,24 @@
       "message": "Hi. I just noticed that the ANGLE -\u003e Skia roller hasn\u0027t succeeded since this landed: https://skia-review.googlesource.com/c/skia/+/873165\n\nLooks like various blending unit tests are failing, so I assume it was this CL.",
       "revId": "b64563343822b61a3a840ad192632c3d6c94da42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "534858ee_30b37805",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2024-07-16T18:18:58Z",
+      "side": 1,
+      "message": "I suspect this is just because the Intel drivers are buggy - we already disable the advanced blend equation when running against them directly. I\u0027ll try updating Skia\u0027s logic to also ignore advanced-blend for ANGLE-on-top-of-Intel.",
+      "parentUuid": "0d21e511_81c11ba6",
+      "revId": "b64563343822b61a3a840ad192632c3d6c94da42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
