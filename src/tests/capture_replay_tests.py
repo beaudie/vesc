@@ -32,6 +32,7 @@ import math
 import multiprocessing
 import os
 import queue
+import random
 import re
 import shutil
 import subprocess
@@ -50,9 +51,10 @@ TRACE_FILE_SUFFIX = "_context"  # because we only deal with 1 context right now
 RESULT_TAG = "*RESULT"
 STATUS_MESSAGE_PERIOD = 20  # in seconds
 SUBPROCESS_TIMEOUT = 600  # in seconds
+REPLAY_SUBPROCESS_TIMEOUT = 300  # in seconds
 DEFAULT_RESULT_FILE = "results.txt"
 DEFAULT_LOG_LEVEL = "info"
-DEFAULT_MAX_JOBS = 8
+DEFAULT_MAX_JOBS = 1
 DEFAULT_MAX_NINJA_JOBS = 1
 REPLAY_BINARY = "capture_replay_tests"
 if sys.platform == "win32":
@@ -83,6 +85,44 @@ default_case_with_return_template = """\
             return {default_val};"""
 
 
+def setup_xvfb(env):
+    while True:
+        dnum = random.randint(7600000, 7700000)
+        xf = '/tmp/.X11-unix/X%d' % dnum
+        if not os.path.exists(xf):
+            break
+    x11_proc = subprocess.Popen([
+        'Xvfb',
+        ':%d' % dnum, '-screen', '0', '1280x1024x24', '-ac', '-nolisten', 'tcp', '-dpi', '96',
+        '+extension', 'RANDR', '-maxclients', '512'
+    ],
+                                stderr=subprocess.STDOUT)
+    for _ in range(600):
+        if os.path.exists(xf):
+            break
+        time.sleep(0.1)
+    assert os.path.exists(xf)
+
+    env = env.copy()
+    env['DISPLAY'] = ':%d' % dnum
+    env['XVFB_DISPLAY'] = ':%d' % dnum
+
+    rf = '/tmp/openbox-ready-%d' % dnum
+    assert not os.path.exists(rf)
+    openbox_proc = subprocess.Popen(['openbox', '--sm-disable', '--startup',
+                                     'touch %s' % rf],
+                                    stderr=subprocess.STDOUT,
+                                    env=env)
+    for _ in range(600):
+        if os.path.exists(rf):
+            break
+        time.sleep(0.1)
+    assert os.path.exists(rf)
+    os.remove(rf)
+
+    return x11_proc, openbox_proc, env
+
+
 def winext(name, ext):
     return ("%s.%s" % (name, ext)) if sys.platform == "win32" else name
 
@@ -92,6 +132,12 @@ class SubProcess():
         # shell=False so that only 1 subprocess is spawned.
         # if shell=True, a shell process is spawned, which in turn spawns the process running
         # the command. Since we do not have a handle to the 2nd process, we cannot terminate it.
+        self.x11_proc = None
+        if command[0] == 'run-with-xvfb':
+            self.x11_proc, self.openbox_proc, env = setup_xvfb(env)
+
+            command = command[1:]
+
         if pipe_stdout:
             self.proc_handle = subprocess.Popen(
                 command, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False)
@@ -106,6 +152,15 @@ class SubProcess():
             output = output.decode('utf-8')
         else:
             output = ''
+
+        if self.x11_proc:
+            self.openbox_proc.kill()
+            self.openbox_proc.wait()
+            self.openbox_proc = None
+            self.x11_proc.kill()
+            self.x11_proc.wait()
+            self.x11_proc = None
+
         return self.proc_handle.returncode, output
 
     def Pid(self):
@@ -222,9 +277,20 @@ class ChildProcessesManager():
 
 
 def GetTestsListForFilter(args, test_path, filter, logger):
-    cmd = GetRunCommand(args, test_path) + ["--list-tests", "--gtest_filter=%s" % filter]
-    logger.info('Getting test list from "%s"' % " ".join(cmd))
-    return subprocess.check_output(cmd, text=True)
+    command = GetRunCommand(args, test_path) + ["--list-tests", "--gtest_filter=%s" % filter]
+    x11_proc = None
+    if command[0] == 'run-with-xvfb':
+        x11_proc, openbox_proc, env = setup_xvfb(os.environ)
+        command = command[1:]
+
+    logger.info('Getting test list from "%s"' % " ".join(command))
+    result = subprocess.check_output(command, text=True, env=env)
+
+    openbox_proc.kill()
+    openbox_proc.wait()
+    x11_proc.kill()
+    x11_proc.wait()
+    return result
 
 
 def ParseTestNamesFromTestList(output, test_expectation, also_run_skipped_for_capture_tests,
@@ -252,7 +318,7 @@ def ParseTestNamesFromTestList(output, test_expectation, also_run_skipped_for_ca
 
 def GetRunCommand(args, command):
     if args.xvfb:
-        return ['vpython', 'testing/xvfb.py', command]
+        return ['run-with-xvfb', command]
     else:
         return [command]
 
@@ -521,7 +587,7 @@ class TestBatch():
             self.UnlinkContextStateJsonFilesIfPresent(replay_build_dir, test.GetLabel())
 
         returncode, output = child_processes_manager.RunSubprocess(
-            run_cmd, env, timeout=SUBPROCESS_TIMEOUT)
+            run_cmd, env, timeout=REPLAY_SUBPROCESS_TIMEOUT)
         if returncode == -1:
             cmd = replay_exe_path
             self.results.append(
@@ -870,9 +936,9 @@ def main(args):
         os.environ["RBE_experimental_credentials_helper"] = ""
         os.environ["RBE_experimental_credentials_helper_args"] = ""
 
-    if sys.platform == 'linux' and is_bot:
-        logger.warning('Test is currently a no-op https://anglebug.com/42264614')
-        return EXIT_SUCCESS
+    # if sys.platform == 'linux' and is_bot:
+    #     logger.warning('Test is currently a no-op https://anglebug.com/42264614')
+    #     return EXIT_SUCCESS
 
     ninja_lock = multiprocessing.Semaphore(args.max_ninja_jobs)
     child_processes_manager = ChildProcessesManager(args, logger, ninja_lock)
@@ -970,6 +1036,7 @@ def main(args):
 
         # print out periodic status messages
         while child_processes_manager.IsAnyWorkerAlive():
+            #top = subprocess.check_output('top -b | head', shell=True).decode()
             logger.info('%d workers running, %d jobs left.' %
                         (child_processes_manager.GetRemainingWorkers(), (job_queue.qsize())))
             # If only a few tests are run it is likely that the workers are finished before
