@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0047dde_e7d622e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T18:37:05Z",
+      "side": 1,
+      "message": "Suggest:\n\n```\nWebGPU: Add more format support\n```",
+      "revId": "8fc9c025f38ac0c390579bcc1b924be71db538d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73b0b884_34af2465",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T18:37:05Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this end up with the R and B channels swapped?",
+      "revId": "8fc9c025f38ac0c390579bcc1b924be71db538d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13202e37_ff919ffc",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T18:37:05Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "8fc9c025f38ac0c390579bcc1b924be71db538d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b74b4fd_24cdf941",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T18:37:05Z",
+      "side": 1,
+      "message": "`format` is meaningless on its own, it must be paired with `type`. For example, GL may accept data in `RGBA` (format) + `GL_UNSIGNED_BYTE` (type) form, which means RGBA8 (also known as a \"sized\" format).\n\nSee `TextureVk::setSubImage` about how to combine them and get the correct format:\n\n```\n    const gl::InternalFormat \u0026formatInfo \u003d gl::GetInternalFormatInfo(format, type);\n    ...\n    const vk::Format \u0026vkFormat \u003d\n        contextVk-\u003egetRenderer()-\u003egetFormat(levelDesc.format.info-\u003esizedInternalFormat);\n```",
+      "range": {
+        "startLine": 116,
+        "startChar": 36,
+        "endLine": 116,
+        "endChar": 66
+      },
+      "revId": "8fc9c025f38ac0c390579bcc1b924be71db538d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbe2c1d2_a4f5f2fc",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T18:37:05Z",
+      "side": 1,
+      "message": "If this gets hit, `mRedefinedLevels` is not appropriately updated. See TextureVk, the format check is part of `levelDefinition`",
+      "revId": "8fc9c025f38ac0c390579bcc1b924be71db538d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88e47274_876037e6",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T18:37:05Z",
+      "side": 1,
+      "message": "This is a GL detail that\u0027s leaked to the webgpu namespace. In an ideal world, the webgpu namespace has no knowledge of GL, it\u0027s just webgpu helpers!\n\nIn this case, the `ImageHelper` may very well store what webgpu format it has, but what GL format led to it is the responsibility of the rx namespace (which translates GL to webgpu).\n\nI see the same mistake in the Vulkan backend unfortunately, but that was also added for some optimizations that this backend might likely never get. If you can avoid this, it would be best.",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 36
+      },
+      "revId": "8fc9c025f38ac0c390579bcc1b924be71db538d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
