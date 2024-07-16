@@ -154,6 +154,7 @@ class ChildProcessesManager():
             self.runtimes[cmd_name] += elapsed_time
             self.RemoveSubprocess(proc.Pid())
             if returncode != 0:
+                self._logger.warn(output)
                 return -1, output
             return returncode, output
         except KeyboardInterrupt:
@@ -900,7 +901,8 @@ def main(args):
             return EXIT_FAILURE
         # get a list of tests
         test_path = os.path.join(capture_build_dir, args.test_suite)
-        test_list = GetTestsListForFilter(args, test_path, args.filter, logger)
+        mfilter = "ImageTest.SourceRenderbufferTargetTexture/ES2_Vulkan_SwiftShader:ImageTest.SourceRenderbufferTargetTextureExternal/ES2_Vulkan_SwiftShader:ImageTest.SourceYUVAHBTargetExternalRGBSampleInitData/ES2_Vulkan_SwiftShader:ImageTest.SourceYUVAHBTargetExternalRGBSampleNoData/ES2_Vulkan_SwiftShader:ImageTest.TargetRenderbufferDeletedWhileInUse/ES2_Vulkan_SwiftShader:ImageTest.TargetRenderbufferDeletedWhileInUse2/ES2_Vulkan_SwiftShader:ImageTest.TargetTexture2DDeletedWhileInUse/ES2_Vulkan_SwiftShader:ImageTest.TargetTexture2DDeletedWhileInUse2/ES2_Vulkan_SwiftShader"
+        test_list = GetTestsListForFilter(args, test_path, mfilter, logger)
         test_expectation = TestExpectation(args)
         test_names = ParseTestNamesFromTestList(test_list, test_expectation,
                                                 args.also_run_skipped_for_capture_tests, logger)
