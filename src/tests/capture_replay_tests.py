@@ -32,6 +32,7 @@ import math
 import multiprocessing
 import os
 import queue
+import random
 import re
 import shutil
 import subprocess
@@ -50,9 +51,10 @@ TRACE_FILE_SUFFIX = "_context"  # because we only deal with 1 context right now
 RESULT_TAG = "*RESULT"
 STATUS_MESSAGE_PERIOD = 20  # in seconds
 SUBPROCESS_TIMEOUT = 600  # in seconds
+REPLAY_SUBPROCESS_TIMEOUT = 300  # in seconds
 DEFAULT_RESULT_FILE = "results.txt"
 DEFAULT_LOG_LEVEL = "info"
-DEFAULT_MAX_JOBS = 8
+DEFAULT_MAX_JOBS = 3
 DEFAULT_MAX_NINJA_JOBS = 1
 REPLAY_BINARY = "capture_replay_tests"
 if sys.platform == "win32":
@@ -83,6 +85,58 @@ default_case_with_return_template = """\
             return {default_val};"""
 
 
+class XvfbHelper(object):
+
+    def __init__(self):
+        while True:
+            dnum = random.randint(7600000, 7700000)
+            xf = '/tmp/.X11-unix/X%d' % dnum
+            if not os.path.exists(xf):
+                break
+        self.x11_proc = subprocess.Popen([
+            'Xvfb',
+            ':%d' % dnum, '-screen', '0', '1280x1024x24', '-ac', '-nolisten', 'tcp', '-dpi', '96',
+            '+extension', 'RANDR', '-maxclients', '512'
+        ],
+                                         stderr=subprocess.STDOUT)
+        for _ in range(600):
+            if os.path.exists(xf):
+                break
+            time.sleep(0.1)
+        assert os.path.exists(xf)
+
+        env = os.environ.copy()
+        env['DISPLAY'] = ':%d' % dnum
+
+        rf = '/tmp/openbox-ready-%d' % dnum
+        assert not os.path.exists(rf)
+        self.openbox_proc = subprocess.Popen(
+            ['openbox', '--sm-disable', '--startup',
+             'touch %s' % rf],
+            stderr=subprocess.STDOUT,
+            env=env)
+        for _ in range(600):
+            if os.path.exists(rf):
+                break
+            time.sleep(0.1)
+        assert os.path.exists(rf)
+        os.remove(rf)
+
+        self.display = dnum
+
+    def DisplayEnvVars(self):
+        d = ':%d' % self.display
+        return {'DISPLAY': d, 'XVFB_DISPLAY': d}
+
+    def Teardown(self):
+        self.openbox_proc.kill()
+        self.openbox_proc.wait()
+        self.openbox_proc = None
+        self.x11_proc.kill()
+        self.x11_proc.wait()
+        self.x11_proc = None
+
+
 def winext(name, ext):
     return ("%s.%s" % (name, ext)) if sys.platform == "win32" else name
 
@@ -106,6 +160,7 @@ class SubProcess():
             output = output.decode('utf-8')
         else:
             output = ''
+
         return self.proc_handle.returncode, output
 
     def Pid(self):
@@ -221,10 +276,13 @@ class ChildProcessesManager():
             return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
 
 
-def GetTestsListForFilter(args, test_path, filter, logger):
-    cmd = GetRunCommand(args, test_path) + ["--list-tests", "--gtest_filter=%s" % filter]
-    logger.info('Getting test list from "%s"' % " ".join(cmd))
-    return subprocess.check_output(cmd, text=True)
+def GetTestsListForFilter(args, test_path, filter, logger, env):
+    command = [test_path, "--list-tests", "--gtest_filter=%s" % filter]
+
+    logger.info('Getting test list from "%s"' % " ".join(command))
+    result = subprocess.check_output(command, text=True, env=env)
+
+    return result
 
 
 def ParseTestNamesFromTestList(output, test_expectation, also_run_skipped_for_capture_tests,
@@ -248,13 +306,6 @@ def ParseTestNamesFromTestList(output, test_expectation, also_run_skipped_for_ca
 
     logger.info('Found %s tests and %d disabled tests.' % (len(tests), disabled))
     return tests
-
-
-def GetRunCommand(args, command):
-    if args.xvfb:
-        return ['vpython', 'testing/xvfb.py', command]
-    else:
-        return [command]
 
 
 class GroupedResult():
@@ -426,7 +477,7 @@ class TestBatch():
             ClearFolderContent(self.trace_folder_path)
         filt = ':'.join([test.full_test_name for test in self.tests])
 
-        cmd = GetRunCommand(args, test_exe_path)
+        cmd = [test_exe_path]
         results_file = tempfile.mktemp()
         cmd += [
             '--gtest_filter=%s' % filt,
@@ -514,14 +565,14 @@ class TestBatch():
 
         env = {**os.environ.copy(), **extra_env}
 
-        run_cmd = GetRunCommand(self.args, replay_exe_path)
+        run_cmd = [replay_exe_path]
         self.logger.info('%s %s' % (_FormatEnv(extra_env), ' '.join(run_cmd)))
 
         for test in tests:
             self.UnlinkContextStateJsonFilesIfPresent(replay_build_dir, test.GetLabel())
 
         returncode, output = child_processes_manager.RunSubprocess(
-            run_cmd, env, timeout=SUBPROCESS_TIMEOUT)
+            run_cmd, env, timeout=REPLAY_SUBPROCESS_TIMEOUT)
         if returncode == -1:
             cmd = replay_exe_path
             self.results.append(
@@ -759,9 +810,14 @@ def CleanupAfterReplay(replay_build_dir, tests):
             os.unlink(os.path.join(replay_build_dir, build_file))
 
 
-def RunTests(args, worker_id, job_queue, result_list, message_queue, logger, ninja_lock):
+def RunTests(args, worker_id, job_queue, result_list, message_queue, logger, ninja_lock,
+             xvfb_env_vars):
     replay_build_dir = os.path.join(args.out_dir, 'Replay%d' % worker_id)
     replay_exec_path = os.path.join(replay_build_dir, REPLAY_BINARY)
+
+    if xvfb_env_vars:
+        os.environ.update(xvfb_env_vars)
+        logger.info('Using xvfb display %s', xvfb_env_vars['DISPLAY'])
 
     child_processes_manager = ChildProcessesManager(args, logger, ninja_lock)
     # used to differentiate between multiple composite files when there are multiple test batchs
@@ -870,9 +926,9 @@ def main(args):
         os.environ["RBE_experimental_credentials_helper"] = ""
         os.environ["RBE_experimental_credentials_helper_args"] = ""
 
-    if sys.platform == 'linux' and is_bot:
-        logger.warning('Test is currently a no-op https://anglebug.com/42264614')
-        return EXIT_SUCCESS
+    # if sys.platform == 'linux' and is_bot:
+    #     logger.warning('Test is currently a no-op https://anglebug.com/42264614')
+    #     return EXIT_SUCCESS
 
     ninja_lock = multiprocessing.Semaphore(args.max_ninja_jobs)
     child_processes_manager = ChildProcessesManager(args, logger, ninja_lock)
@@ -883,6 +939,8 @@ def main(args):
         # runs it. The worker closes down when there is no more job.
         worker_count = min(multiprocessing.cpu_count() - 1, args.max_jobs)
         cwd = SetCWDToAngleFolder()
+
+        xvfb_helpers = [XvfbHelper() for _ in range(worker_count)] if args.xvfb else []
 
         CreateTraceFolders(worker_count)
         capture_build_dir = os.path.normpath(r'%s/Capture' % args.out_dir)
@@ -900,7 +958,10 @@ def main(args):
             return EXIT_FAILURE
         # get a list of tests
         test_path = os.path.join(capture_build_dir, args.test_suite)
-        test_list = GetTestsListForFilter(args, test_path, args.filter, logger)
+        env = os.environ.copy()
+        if args.xvfb:
+            env.update(xvfb_helpers[0].DisplayEnvVars())
+        test_list = GetTestsListForFilter(args, test_path, args.filter, logger, env)
         test_expectation = TestExpectation(args)
         test_names = ParseTestNamesFromTestList(test_list, test_expectation,
                                                 args.also_run_skipped_for_capture_tests, logger)
@@ -962,14 +1023,17 @@ def main(args):
         worker_count = min(worker_count, test_batch_num)
         # spawning and starting up workers
         for worker_id in range(worker_count):
+            xvfb_env_vars = xvfb_helpers[worker_id].DisplayEnvVars() if args.xvfb else None
             proc = multiprocessing.Process(
                 target=RunTests,
-                args=(args, worker_id, job_queue, result_list, message_queue, logger, ninja_lock))
+                args=(args, worker_id, job_queue, result_list, message_queue, logger, ninja_lock,
+                      xvfb_env_vars))
             child_processes_manager.AddWorker(proc)
             proc.start()
 
         # print out periodic status messages
         while child_processes_manager.IsAnyWorkerAlive():
+            #top = subprocess.check_output('top -b | head', shell=True).decode()
             logger.info('%d workers running, %d jobs left.' %
                         (child_processes_manager.GetRemainingWorkers(), (job_queue.qsize())))
             # If only a few tests are run it is likely that the workers are finished before
@@ -1061,6 +1125,9 @@ def main(args):
     except KeyboardInterrupt:
         child_processes_manager.KillAll()
         return EXIT_FAILURE
+    finally:
+        for xvfb_helper in xvfb_helpers:
+            xvfb_helper.Teardown()
 
 
 if __name__ == '__main__':
