@@ -42,7 +42,7 @@ import traceback
 
 PIPE_STDOUT = True
 DEFAULT_OUT_DIR = "out/CaptureReplayTest"  # relative to angle folder
-DEFAULT_FILTER = "*/ES2_Vulkan_SwiftShader"
+DEFAULT_FILTER = "ImageTest.SourceRenderbufferTargetTexture/ES2_Vulkan_SwiftShader:ImageTest.SourceRenderbufferTargetTextureExternal/ES2_Vulkan_SwiftShader:ImageTest.SourceYUVAHBTargetExternalRGBSampleInitData/ES2_Vulkan_SwiftShader:ImageTest.SourceYUVAHBTargetExternalRGBSampleNoData/ES2_Vulkan_SwiftShader:ImageTest.TargetRenderbufferDeletedWhileInUse/ES2_Vulkan_SwiftShader:ImageTest.TargetRenderbufferDeletedWhileInUse2/ES2_Vulkan_SwiftShader:ImageTest.TargetTexture2DDeletedWhileInUse/ES2_Vulkan_SwiftShader:ImageTest.TargetTexture2DDeletedWhileInUse2/ES2_Vulkan_SwiftShader"
 DEFAULT_TEST_SUITE = "angle_end2end_tests"
 REPLAY_SAMPLE_FOLDER = "src/tests/capture_replay_tests"  # relative to angle folder
 DEFAULT_BATCH_COUNT = 8  # number of tests batched together
@@ -154,6 +154,7 @@ class ChildProcessesManager():
             self.runtimes[cmd_name] += elapsed_time
             self.RemoveSubprocess(proc.Pid())
             if returncode != 0:
+                self._logger.warn(output)
                 return -1, output
             return returncode, output
         except KeyboardInterrupt:
