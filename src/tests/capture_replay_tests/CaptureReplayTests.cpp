@@ -15,6 +15,7 @@
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
 #include "util/shader_utils.h"
+#include "util/test_utils.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -451,6 +452,7 @@ class CaptureReplayTests
 
 int main(int argc, char **argv)
 {
+    angle::InitCrashHandler(nullptr);
     CaptureReplayTests app;
     return app.run();
 }
