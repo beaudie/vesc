@@ -22,6 +22,30 @@
       },
       "revId": "ec8157a2e89914142fcf1f1939d395be43b6a5d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "317977c5_bb2d931f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3097,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-16T16:08:39Z",
+      "side": 1,
+      "message": "I need to use the GL color index here because of the way late-added resolve attachments are handled. Like, ANGLE optimizes the case where the app calls `glBlitFramebuffer` to resolve attachment 1, then `glBlitFramebuffer` to resolve attachment 0. I keep the resolve attachments in their corresponding GL index and only pack them in the end (or not in the case of dynamic rendering) after they are all added.\n\n---\n\nRegarding the colorIndexGL, it\u0027s confusing I agree. I\u0027ll rename it to be clear, but the code is correct. This is adding the image of the drawFBO to be resolved by the readFBO\u0027s RP at the read-GL-index. So the index here is actually the read index and is only passed through the drawFBO\u0027s render target.",
+      "parentUuid": "2ba2ab1e_0bc782a5",
+      "range": {
+        "startLine": 3097,
+        "startChar": 24,
+        "endLine": 3097,
+        "endChar": 53
+      },
+      "revId": "ec8157a2e89914142fcf1f1939d395be43b6a5d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
