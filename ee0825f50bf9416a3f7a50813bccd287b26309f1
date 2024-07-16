@@ -16,6 +16,24 @@
       "message": "Hi Gregg, Quyen - is this the modification to this size check you both were thinking of?",
       "revId": "ee0825f50bf9416a3f7a50813bccd287b26309f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9cbddfb_55f2c330",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2024-07-16T21:32:54Z",
+      "side": 1,
+      "message": "IIUC, this code returns true if a conversion is needed. \n\nSo, in our case, the stdSize \u003d 240, metalSize \u003d 228 so the new check will return true and we\u0027ll do the conversion even though none is needed.\n\nI think the check for size needs to happen after the number of fields check and the loop.\n\nIf they have the same number of fields, and all the fields match, and none of the fields need conversion.\n\nCache that result (conversion needed vs no conversion needed)\n\nThen, at usage time, if the metal buffer\u0027s size - offset \u003e\u003d stdSize then no conversion is needed.",
+      "parentUuid": "d5415139_a6017444",
+      "revId": "ee0825f50bf9416a3f7a50813bccd287b26309f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
