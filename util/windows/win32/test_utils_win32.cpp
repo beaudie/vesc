@@ -24,7 +24,7 @@ static const struct
 } kExceptions[] = {
 #define _(E)  \
     {         \
-#        E, E \
+        #E, E \
     }
     _(EXCEPTION_ACCESS_VIOLATION),
     _(EXCEPTION_BREAKPOINT),
@@ -96,6 +96,8 @@ LONG WINAPI StackTraceCrashHandler(EXCEPTION_POINTERS *e)
     printf("\n");
 
     PrintBacktrace(e->ContextRecord);
+
+    fflush(stdout);
 
     // Exit NOW.  Don't notify other threads, don't call anything registered with atexit().
     _exit(1);
