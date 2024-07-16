@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4caee0e5_8b915fba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-16T22:44:29Z",
+      "side": 1,
+      "message": "Roman, I\u0027m curious your thoughts on this.",
+      "revId": "61cbf1809f840e1dee5872b9495b439920e462ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f98b1ad1_881b8b5e",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1866,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-16T22:44:29Z",
+      "side": 1,
+      "message": "There might be a way to do this as a group instead of duplicating.",
+      "range": {
+        "startLine": 1865,
+        "startChar": 0,
+        "endLine": 1866,
+        "endChar": 73
+      },
+      "revId": "61cbf1809f840e1dee5872b9495b439920e462ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3a15f8b_c82082ee",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_ActiveTextures_ES3_Vulkan_001.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-16T22:44:29Z",
+      "side": 1,
+      "message": "These are the key.  Might not be worth adding another test, but figured it needs to happen at some point.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 49
+      },
+      "revId": "61cbf1809f840e1dee5872b9495b439920e462ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
