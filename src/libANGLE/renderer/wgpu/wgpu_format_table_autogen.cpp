@@ -501,7 +501,7 @@ void Format::initialize(const angle::Format &angleFormat)
 
         case angle::FormatID::B10G10R10A2_UNORM:
             mIntendedGLFormat         = GL_BGR10_A2_ANGLEX;
-            mActualImageFormatID      = angle::FormatID::R16G16B16A16_UNORM;
+            mActualImageFormatID      = angle::FormatID::R10G10B10A2_UNORM;
             mImageInitializerFunction = nullptr;
             mIsRenderable             = true;
 
@@ -1465,13 +1465,13 @@ void Format::initialize(const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R32G32B32_SINT:
-            mIntendedGLFormat         = GL_RGB32I;
-            mActualImageFormatID      = angle::FormatID::R32G32B32A32_FLOAT;
-            mImageInitializerFunction = Initialize4ComponentData<GLfloat, 0x00000000, 0x00000000,
-                                                                 0x00000000, gl::Float32One>;
-            mIsRenderable             = true;
-            mActualBufferFormatID     = angle::FormatID::R32G32B32_SINT;
-            mVertexLoadFunction       = CopyNativeVertexData<GLint, 3, 3, 0>;
+            mIntendedGLFormat    = GL_RGB32I;
+            mActualImageFormatID = angle::FormatID::R32G32B32A32_SINT;
+            mImageInitializerFunction =
+                Initialize4ComponentData<GLint, 0x00000000, 0x00000000, 0x00000000, 0x00000001>;
+            mIsRenderable                 = true;
+            mActualBufferFormatID         = angle::FormatID::R32G32B32_SINT;
+            mVertexLoadFunction           = CopyNativeVertexData<GLint, 3, 3, 0>;
             mVertexLoadRequiresConversion = false;
             break;
 
