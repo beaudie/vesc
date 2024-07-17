@@ -212,6 +212,7 @@ class RefCountedEvent final
 
     // Only intended for assertion in recycler
     bool validAndNoReference() const { return mHandle != nullptr && !mHandle->isReferenced(); }
+    bool isLastReference() const { return mHandle->isLastReference(); }
 
     // Returns the underlying Event object
     const Event &getEvent() const
