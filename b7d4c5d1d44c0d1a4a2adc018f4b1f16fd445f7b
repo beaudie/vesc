@@ -52,6 +52,24 @@
       "parentUuid": "ebbcdd5a_11779c9b",
       "revId": "b7d4c5d1d44c0d1a4a2adc018f4b1f16fd445f7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b81cbb3c_51363d72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-17T16:10:43Z",
+      "side": 1,
+      "message": "\u003e I\u0027m guessing that the shader failed to build for some reason (because of the fast math change), which left us without a valid pipeline state?\n\nThis sounds plausible. However, `isinf` always returns false starting with macOS 14 if fast-math is enabled, hence the CL.",
+      "parentUuid": "a6890a23_4f89fd46",
+      "revId": "b7d4c5d1d44c0d1a4a2adc018f4b1f16fd445f7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
