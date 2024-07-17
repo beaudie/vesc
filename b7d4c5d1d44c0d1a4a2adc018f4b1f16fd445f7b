@@ -16,6 +16,24 @@
       "message": "After the most recent ANGLE -\u003e Skia roll, we started seeing failures on Intel MacBookPro devices: https://logs.chromium.org/logs/skia/6ad98d455ac79111/+/steps/dm/0/stdout\n\nWe\u0027re getting invalid operation errors, which appear to be accompanied by a crash?\n\nSurprisingly, I bisected the issue to this CL. I can try to debug, but if you\u0027re interested in looking, it\u0027s pretty easy to reproduce (build Skia with skia_use_angle true, then run `dm --config angle_mtl_es3 -m strokes_round`).",
       "revId": "b7d4c5d1d44c0d1a4a2adc018f4b1f16fd445f7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebbcdd5a_11779c9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-17T16:00:36Z",
+      "side": 1,
+      "message": "FWIW, this CL _should_ affect only shaders that use `isinf` or `isnan`.",
+      "parentUuid": "8eaa00ed_618d2421",
+      "revId": "b7d4c5d1d44c0d1a4a2adc018f4b1f16fd445f7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
