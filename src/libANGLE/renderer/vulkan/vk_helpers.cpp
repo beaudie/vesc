@@ -2848,6 +2848,7 @@ void RenderPassCommandBufferHelper::executeSetEvents(Context *context,
 }
 
 void RenderPassCommandBufferHelper::collectRefCountedEventsGarbage(
+    Context *context,
     RefCountedEventsGarbageRecycler *garbageRecycler)
 {
     // For render pass the VkCmdSetEvent works differently from OutsideRenderPassCommands.
@@ -2859,8 +2860,19 @@ void RenderPassCommandBufferHelper::collectRefCountedEventsGarbage(
     for (EventStage stage : mRefCountedEvents.mask)
     {
         ASSERT(mRefCountedEvents.map[stage].valid());
-        mRefCountedEvents.vkEvents[stage] = mRefCountedEvents.map[stage].getEvent().getHandle();
-        mRefCountedEventCollector.emplace_back(std::move(mRefCountedEvents.map[stage]));
+        if (mRefCountedEvents.map[stage].isLastReference())
+        {
+            // Normally you would expect ImageHelper holds another reference to the event so that
+            // it can wait for it later on. But in certain cases ImageHelper may drop the event.
+            // Then there is no need for us to setEvent here if no one will ever wait for the event.
+            mRefCountedEvents.map[stage].release(context);
+            mRefCountedEvents.mask.reset(stage);
+        }
+        else
+        {
+            mRefCountedEvents.vkEvents[stage] = mRefCountedEvents.map[stage].getEvent().getHandle();
+            mRefCountedEventCollector.emplace_back(std::move(mRefCountedEvents.map[stage]));
+        }
     }
 
     if (!mRefCountedEventCollector.empty())
