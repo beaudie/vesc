@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "366c700a_10fec0b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-17T15:18:27Z",
+      "side": 1,
+      "message": "lgtm.",
+      "revId": "27542cc1ea1183705b465acf30803f4a72981b7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8a3dacf_24d075d3",
+        "filename": "src/libANGLE/renderer/metal/shaders/copy_buffer.metal",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-17T15:18:27Z",
+      "side": 1,
+      "message": "Is this really needed?",
+      "range": {
+        "startLine": 709,
+        "startChar": 17,
+        "endLine": 709,
+        "endChar": 31
+      },
+      "revId": "27542cc1ea1183705b465acf30803f4a72981b7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d5815e4_b1910738",
+        "filename": "src/libANGLE/renderer/metal/shaders/copy_buffer.metal",
+        "patchSetId": 1
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-17T15:18:27Z",
+      "side": 1,
+      "message": "unit: we could just write one template function similar to readR16G16_NORM above",
+      "range": {
+        "startLine": 813,
+        "startChar": 19,
+        "endLine": 813,
+        "endChar": 36
+      },
+      "revId": "27542cc1ea1183705b465acf30803f4a72981b7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76d99b2c_fdce6a89",
+        "filename": "src/libANGLE/renderer/metal/shaders/copy_buffer.metal",
+        "patchSetId": 1
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-17T15:18:27Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 815,
+        "startChar": 17,
+        "endLine": 815,
+        "endChar": 31
+      },
+      "revId": "27542cc1ea1183705b465acf30803f4a72981b7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "438a49d4_68821e18",
+        "filename": "src/libANGLE/renderer/metal/shaders/copy_buffer.metal",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-17T15:18:27Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 935,
+        "startChar": 17,
+        "endLine": 935,
+        "endChar": 31
+      },
+      "revId": "27542cc1ea1183705b465acf30803f4a72981b7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
