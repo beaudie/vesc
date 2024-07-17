@@ -1943,7 +1943,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void updateDepthStencilReadOnlyMode(RenderPassUsageFlags dsUsageFlags,
                                         VkImageAspectFlags dsAspectFlags);
 
-    void collectRefCountedEventsGarbage(RefCountedEventsGarbageRecycler *garbageRecycler);
+    void collectRefCountedEventsGarbage(Context *context,
+                                        RefCountedEventsGarbageRecycler *garbageRecycler);
 
     void updatePerfCountersForDynamicRenderingInstance(Context *context,
                                                        angle::VulkanPerfCounters *countersOut);
@@ -2823,7 +2824,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // Create event if needed and record the event in ImageHelper::mCurrentEvent.
     void setCurrentRefCountedEvent(Context *context, EventMaps &eventMaps);
-
+    void releaseCurrentEvent(Context *context) { mCurrentEvent.release(context); }
     void updatePipelineStageAccessHistory();
 
   private:

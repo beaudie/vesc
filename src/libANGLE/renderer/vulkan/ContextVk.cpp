@@ -8005,7 +8005,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
     flushDescriptorSetUpdates();
     // Collect RefCountedEvent garbage before submitting to renderer
     mRenderPassCommands->collectRefCountedEventsGarbage(
-        mShareGroupVk->getRefCountedEventsGarbageRecycler());
+        this, mShareGroupVk->getRefCountedEventsGarbageRecycler());
 
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
@@ -8697,12 +8697,18 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
     // Read images only need to close the render pass if they need a layout transition.
     for (const vk::CommandBufferImageAccess &imageAccess : access.getReadImages())
     {
+        vk::ImageHelper *image = imageAccess.image;
         // Note that different read methods are not compatible. A shader read uses a different
         // layout than a transfer read. So we cannot support simultaneous read usage as easily as
         // for Buffers.  TODO: Don't close the render pass if the image was only used read-only in
         // the render pass.  http://anglebug.com/42263557
-        if (isRenderPassStartedAndUsesImage(*imageAccess.image))
+        if (isRenderPassStartedAndUsesImage(*image))
         {
+            // Image was first used in render pass and then immediately followed by other reads.
+            // This is a back to back image usage and PipelineBarrier will be as good as VkEvent. We
+            // release VkEvent here to avoid VkEvent overhead in situations like this where it does
+            // not provide benefit.
+            image->releaseCurrentEvent(this);
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageUseThenOutOfRPRead);
         }
     }
@@ -8713,8 +8719,10 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
     for (const vk::CommandBufferImageSubresourceAccess &imageSubresourceAccess :
          access.getReadImageSubresources())
     {
-        if (isRenderPassStartedAndUsesImage(*imageSubresourceAccess.access.image))
+        vk::ImageHelper *image = imageSubresourceAccess.access.image;
+        if (isRenderPassStartedAndUsesImage(*image))
         {
+            image->releaseCurrentEvent(this);
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageUseThenOutOfRPRead);
         }
     }
@@ -8722,8 +8730,10 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
     // Write images only need to close the render pass if they need a layout transition.
     for (const vk::CommandBufferImageSubresourceAccess &imageWrite : access.getWriteImages())
     {
-        if (isRenderPassStartedAndUsesImage(*imageWrite.access.image))
+        vk::ImageHelper *image = imageWrite.access.image;
+        if (isRenderPassStartedAndUsesImage(*image))
         {
+            image->releaseCurrentEvent(this);
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageUseThenOutOfRPWrite);
         }
     }

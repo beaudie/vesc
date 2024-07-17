@@ -739,6 +739,11 @@ class RefCounted : angle::NonCopyable
     }
 
     bool isReferenced() const { return mRefCount != 0; }
+    bool isLastReference() const
+    {
+        ASSERT(mRefCount != 0);
+        return mRefCount == 1;
+    }
 
     T &get() { return mObject; }
     const T &get() const { return mObject; }
