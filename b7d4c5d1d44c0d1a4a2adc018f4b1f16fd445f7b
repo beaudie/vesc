@@ -34,6 +34,24 @@
       "parentUuid": "8eaa00ed_618d2421",
       "revId": "b7d4c5d1d44c0d1a4a2adc018f4b1f16fd445f7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6890a23_4f89fd46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2024-07-17T16:06:37Z",
+      "side": 1,
+      "message": "Right. The test that\u0027s failing is using a path renderer that does call `isinf` (it uses infinity as a sentinel value in certain situations). The ASSERT that\u0027s firing inside ANGLE is here: https://crsrc.org/c/third_party/angle/src/libANGLE/renderer/metal/mtl_command_buffer.mm;drc\u003dd521dd08bef4dc5769690e8ec7c996b2cdd40e27;l\u003d2033\n\nI\u0027m guessing that the shader failed to build for some reason (because of the fast math change), which left us without a valid pipeline state?",
+      "parentUuid": "ebbcdd5a_11779c9b",
+      "revId": "b7d4c5d1d44c0d1a4a2adc018f4b1f16fd445f7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
