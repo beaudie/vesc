@@ -34,6 +34,24 @@
       "parentUuid": "d5415139_a6017444",
       "revId": "ee0825f50bf9416a3f7a50813bccd287b26309f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c787b4d_5b85bd57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-17T09:04:17Z",
+      "side": 1,
+      "message": "+1 to Gregg\u0027s comment, I think we can just omit the total size check in _calculateNeedsConversion().  _calculateNeedsConversion() should only check if all fields are compatible (excluding the padding at the end). Probably rename it to `_calculateNeedsFieldConversion`.\n\nThen at runtime we do additional check whether the bound buffer\u0027s size is \u003e\u003d _metalSize. If it is then no coverssion is needed. Example:\n```\nbool needsConversion(size_t bindingSize) {\n  return bindingSize \u003c _metalSize || _needsFieldConversion;\n}\n\n\n...\nif (conversionInfo.needsConversion(size - offset)) {\n  // do conversion\n}\n...\n\n```",
+      "parentUuid": "f9cbddfb_55f2c330",
+      "revId": "ee0825f50bf9416a3f7a50813bccd287b26309f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
