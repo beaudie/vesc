@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e785c85_8010e0e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2024-07-17T15:38:35Z",
+      "side": 1,
+      "message": "Thanks! It looks like we\u0027re also seeing failures on sufficiently old NVIDIA (which matches logic that we have in Skia, as well).\n\nhttps://crsrc.org/c/third_party/skia/src/gpu/ganesh/gl/GrGLCaps.cpp;drc\u003d5d18422d979164c5a2222f06ef0ba003cf01a710;l\u003d4306\n\nLog from our Windows GTX660 ANGLE bot: https://logs.chromium.org/logs/skia/6ad9a939437e1f11/+/steps/dm/0/stdout",
+      "revId": "84c77437db70443c0822ec8810c605fb5f85907b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
