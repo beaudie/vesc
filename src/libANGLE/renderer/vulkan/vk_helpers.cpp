@@ -7195,6 +7195,11 @@ bool ImageHelper::isWriteBarrierNecessary(ImageLayout newLayout,
         return true;
     }
 
+    if (mCurrentLayout == ImageLayout::ComputeShaderWrite)
+    {
+        return false;
+    }
+
     if (layerCount >= kMaxParallelLayerWrites)
     {
         return true;
