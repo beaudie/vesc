@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd1c7cd4_b576115f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-17T20:38:57Z",
+      "side": 1,
+      "message": "lgtm\n\nThank you very much Gregg for fixing this, as well as finding it in the first place.",
+      "revId": "2f92b36e5065c8841166451abc4155459600921f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
