@@ -70,6 +70,24 @@
       "parentUuid": "a6890a23_4f89fd46",
       "revId": "b7d4c5d1d44c0d1a4a2adc018f4b1f16fd445f7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d169705_5232cc83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2024-07-17T16:51:33Z",
+      "side": 1,
+      "message": "Absolutely. To be clear: I think this CL looks correct, and necessary. I just wanted to let you know what happened, in case you had any ideas. I\u0027m debugging it now, and I\u0027ll try and log if/when any shader compiles fail.",
+      "parentUuid": "b81cbb3c_51363d72",
+      "revId": "b7d4c5d1d44c0d1a4a2adc018f4b1f16fd445f7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
