@@ -3496,6 +3496,50 @@ TEST_P(MultisampledRenderToTextureES31Test, RenderbufferBlitFramebufferAttachmen
     blitFramebufferAttachment1Common(true);
 }
 
+class MultisampledRenderToTextureFragInputsTest : public ANGLETest<>
+{};
+
+// Tests that FragCoord returns the correct values when rendering to a multisampled texture.
+TEST_P(MultisampledRenderToTextureFragInputsTest, FragCoord)
+{
+    GLFramebuffer fboMS;
+    glBindFramebuffer(GL_FRAMEBUFFER, fboMS);
+
+    // Create multisampled framebuffer to draw into, use color attachment 1
+    GLTexture colorMS0;
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, colorMS0);
+    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA8, 1, 1, true);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE,
+                           colorMS0, 0);
+
+    const char *fs = R"(#version 310 es
+    precision highp float;
+    out vec4 outFrag;
+    void main() {
+        outFrag = gl_FragCoord;
+    }
+    )";
+    GLuint prg     = CompileProgram(essl31_shaders::vs::Simple(), fs);
+    ASSERT_NE(prg, 0u);
+    glUseProgram(prg);
+
+    glViewport(0, 0, 1, 1);
+    drawQuad(prg, essl31_shaders::PositionAttrib(), 0.5);
+
+    GLTexture color;
+    glBindTexture(GL_TEXTURE_2D, color);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1);
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fb);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
+    glBlitFramebuffer(0, 0, 1, 1, 0, 0, 1, 1, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fb);
+    // gl_FragCoord should be 0.5, 0.5, 0.75, 1
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(128, 128, 191, 255), 1);
+}
+
 void MultisampledRenderToTextureES3Test::blitFramebufferMixedColorAndDepthCommon(
     bool useRenderbuffer)
 {
@@ -4428,4 +4472,6 @@ ANGLE_INSTANTIATE_TEST_COMBINE_1(MultisampledRenderToTextureWithAdvancedBlendTes
                                      .enable(Feature::EnableMultisampledRenderToTexture)
                                      .disable(Feature::PreferDynamicRendering)
                                      .enable(Feature::AsyncCommandQueue));
+
+ANGLE_INSTANTIATE_TEST_ES31(MultisampledRenderToTextureFragInputsTest);
 }  // namespace
