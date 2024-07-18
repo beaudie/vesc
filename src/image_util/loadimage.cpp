@@ -1271,6 +1271,36 @@ void LoadRGB10A2ToRGB10X2(const ImageLoadContext &context,
     }
 }
 
+void LoadBGR10A2ToRGB10A2(const ImageLoadContext &context,
+                          size_t width,
+                          size_t height,
+                          size_t depth,
+                          const uint8_t *input,
+                          size_t inputRowPitch,
+                          size_t inputDepthPitch,
+                          uint8_t *output,
+                          size_t outputRowPitch,
+                          size_t outputDepthPitch)
+{
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const uint8_t *source =
+                priv::OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint8_t *dest =
+                priv::OffsetDataPointer<uint8_t>(output, y, z, outputRowPitch, outputDepthPitch);
+            for (size_t x = 0; x < width; x++)
+            {
+                dest[4 * x + 0] = source[x * 3 + 2];
+                dest[4 * x + 1] = source[x * 3 + 1];
+                dest[4 * x + 2] = source[x * 3 + 0];
+                dest[4 * x + 3] = source[x * 3 + 3];
+            }
+        }
+    }
+}
+
 void LoadRGB16FToRGB9E5(const ImageLoadContext &context,
                         size_t width,
                         size_t height,
