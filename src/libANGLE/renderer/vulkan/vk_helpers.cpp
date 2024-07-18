@@ -10799,6 +10799,7 @@ angle::Result ImageHelper::readPixelsWithCompute(ContextVk *contextVk,
 }
 
 bool ImageHelper::canCopyWithTransformForReadPixels(const PackPixelsParams &packPixelsParams,
+                                                    const VkExtent3D &srcExtent,
                                                     const angle::Format *readFormat,
                                                     ptrdiff_t pixelsOffset)
 {
@@ -10820,9 +10821,13 @@ bool ImageHelper::canCopyWithTransformForReadPixels(const PackPixelsParams &pack
     const VkDeviceSize offset = packBuffer.getOffset() + packPixelsParams.offset + pixelsOffset;
     const bool isOffsetMultipleOfTexelSize = offset % readFormat->pixelBytes == 0;
 
+    // Disallow copies when PBO row length is smaller than the source area width.
+    const bool isRowLengthEnough =
+        packPixelsParams.outputPitch >= srcExtent.width * readFormat->pixelBytes;
+
     // Don't allow copies from emulated formats for simplicity.
     return !hasEmulatedImageFormat() && isSameFormatCopy && !needsTransformation &&
-           isPitchMultipleOfTexelSize && isOffsetMultipleOfTexelSize;
+           isPitchMultipleOfTexelSize && isOffsetMultipleOfTexelSize && isRowLengthEnough;
 }
 
 bool ImageHelper::canCopyWithComputeForReadPixels(const PackPixelsParams &packPixelsParams,
@@ -11111,7 +11116,8 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
         ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::readPixelsImpl - PBO");
 
         const ptrdiff_t pixelsOffset = reinterpret_cast<ptrdiff_t>(pixels);
-        if (canCopyWithTransformForReadPixels(packPixelsParams, readFormat, pixelsOffset))
+        if (canCopyWithTransformForReadPixels(packPixelsParams, srcExtent, readFormat,
+                                              pixelsOffset))
         {
             BufferHelper &packBuffer      = GetImpl(packPixelsParams.packBuffer)->getBuffer();
             VkDeviceSize packBufferOffset = packBuffer.getOffset();
