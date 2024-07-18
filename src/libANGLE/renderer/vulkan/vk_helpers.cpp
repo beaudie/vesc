@@ -5777,7 +5777,11 @@ void BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
     // must not be zero as well. stage is finer grain than accessType.
     ASSERT((!mCurrentReadStages && !mCurrentReadAccess) ||
            (mCurrentReadStages && mCurrentReadAccess));
-    if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
+    // If the write comes from compute shader and previous write is also compute shader, then no
+    // barrier is needed. App is supposedly should handle this explicitly with glMemoryBarrier.
+    if (mCurrentReadAccess != 0 ||
+        (mCurrentWriteAccess != 0 && (mCurrentWriteStages != writeStage ||
+                                      mCurrentWriteStages != VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT)))
     {
         VkPipelineStageFlags srcStageMask = mCurrentWriteStages | mCurrentReadStages;
         barriers->mergeMemoryBarrier(stageIndex, srcStageMask, writeStage, mCurrentWriteAccess,
