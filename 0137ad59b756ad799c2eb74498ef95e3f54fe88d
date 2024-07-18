@@ -22,6 +22,30 @@
       },
       "revId": "0137ad59b756ad799c2eb74498ef95e3f54fe88d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e6f682f_dbbdb281",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 3481761
+      },
+      "writtenOn": "2024-07-18T16:43:43Z",
+      "side": 1,
+      "message": "Yes, changing to explicitly capture all variables is the version-agnostic workaround.",
+      "parentUuid": "e623eb3b_1e8b92d5",
+      "range": {
+        "startLine": 869,
+        "startChar": 15,
+        "endLine": 869,
+        "endChar": 23
+      },
+      "revId": "0137ad59b756ad799c2eb74498ef95e3f54fe88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
