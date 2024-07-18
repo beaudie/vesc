@@ -80,7 +80,7 @@ NativeT CastQueryValueToInt(GLenum pname, QueryT value)
 
 GLint CastMaskValue(GLuint value)
 {
-    return clampCast<GLint>(value);
+    return static_cast<GLint>(value & std::numeric_limits<GLint>::max());
 }
 
 template <typename QueryT, typename InternalT>

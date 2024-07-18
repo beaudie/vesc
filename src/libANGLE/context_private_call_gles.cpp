@@ -614,12 +614,12 @@ void ContextPrivateStencilFuncSeparate(PrivateState *privateState,
     GLint clampedRef = gl::clamp(ref, 0, std::numeric_limits<uint8_t>::max());
     if (face == GL_FRONT || face == GL_FRONT_AND_BACK)
     {
-        privateState->setStencilParams(func, clampedRef, mask);
+        privateState->setStencilParams(func, clampedRef, CastMaskValue(mask));
     }
 
     if (face == GL_BACK || face == GL_FRONT_AND_BACK)
     {
-        privateState->setStencilBackParams(func, clampedRef, mask);
+        privateState->setStencilBackParams(func, clampedRef, CastMaskValue(mask));
     }
 
     privateStateCache->onStencilStateChange();
@@ -639,12 +639,12 @@ void ContextPrivateStencilMaskSeparate(PrivateState *privateState,
 {
     if (face == GL_FRONT || face == GL_FRONT_AND_BACK)
     {
-        privateState->setStencilWritemask(mask);
+        privateState->setStencilWritemask(CastMaskValue(mask));
     }
 
     if (face == GL_BACK || face == GL_FRONT_AND_BACK)
     {
-        privateState->setStencilBackWritemask(mask);
+        privateState->setStencilBackWritemask(CastMaskValue(mask));
     }
 
     privateStateCache->onStencilStateChange();
