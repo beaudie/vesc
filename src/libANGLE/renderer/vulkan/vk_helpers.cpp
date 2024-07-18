@@ -7194,6 +7194,12 @@ bool ImageHelper::isWriteBarrierNecessary(ImageLayout newLayout,
     {
         return true;
     }
+    else if (mCurrentLayout == ImageLayout::ComputeShaderWrite)
+    {
+        // Compute write followed by compute write does not require implicit barrier. App is
+        // required to handle the barrier using glMemoryBarrier.
+        return false;
+    }
 
     if (layerCount >= kMaxParallelLayerWrites)
     {
