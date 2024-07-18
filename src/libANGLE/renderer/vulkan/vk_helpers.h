@@ -2826,6 +2826,15 @@ class ImageHelper final : public Resource, public angle::Subject
 
     void updatePipelineStageAccessHistory();
 
+    void forceShaderWAWBarrier()
+    {
+        if (mCurrentLayout == ImageLayout::ComputeShaderWrite ||
+            mCurrentLayout == ImageLayout::FragmentShaderWrite)
+        {
+            mForceShaderWAWBarrier = true;
+        }
+    }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -3196,6 +3205,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // Whether ANGLE currently has ownership of this resource or it's released to external.
     bool mIsReleasedToExternal;
+    bool mForceShaderWAWBarrier;
 
     // For imported images
     YcbcrConversionDesc mYcbcrConversionDesc;
