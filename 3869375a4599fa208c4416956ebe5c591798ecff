@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "faa2373b_880bc0da",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-07-18T21:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5a085d0_144698dc",
+      "range": {
+        "startLine": 358,
+        "startChar": 12,
+        "endLine": 358,
+        "endChar": 104
+      },
+      "revId": "3869375a4599fa208c4416956ebe5c591798ecff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14d33e27_5755e997",
@@ -43,6 +67,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1ca9b16e_ee15889d",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-07-18T21:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14d33e27_5755e997",
+      "revId": "3869375a4599fa208c4416956ebe5c591798ecff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "183f585f_3e053735",
         "filename": "infra/config/main.star",
         "patchSetId": 1
@@ -54,6 +96,30 @@
       "writtenOn": "2024-07-18T21:23:16Z",
       "side": 1,
       "message": "I don\u0027t know if these are the right people to be allowed to run led in angle project.",
+      "range": {
+        "startLine": 410,
+        "startChar": 16,
+        "endLine": 412,
+        "endChar": 37
+      },
+      "revId": "3869375a4599fa208c4416956ebe5c591798ecff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "682fb08a_55038ddf",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-07-18T21:39:59Z",
+      "side": 1,
+      "message": "I don\u0027t think we have an issue with letting the same people run jobs here as in Chromium, but I\u0027ll let Yuly have the final say.",
+      "parentUuid": "183f585f_3e053735",
       "range": {
         "startLine": 410,
         "startChar": 16,
@@ -89,6 +155,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d2e3ffeb_c7fdde08",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-07-18T21:39:59Z",
+      "side": 1,
+      "message": "Removed. Seems like this should be removed from Chromium as well, then? https://source.chromium.org/chromium/chromium/src/+/main:infra/config/subprojects/chromium/ci.star;l\u003d86?q\u003d-file:%5Eout%20-file:%5Egen%20subprojects%2Fchromium%2Fci.star",
+      "parentUuid": "4644faab_421e8ff6",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 14
+      },
+      "revId": "3869375a4599fa208c4416956ebe5c591798ecff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4a5e6f9e_1b990d10",
         "filename": "infra/config/main.star",
         "patchSetId": 1
@@ -100,6 +190,30 @@
       "writtenOn": "2024-07-18T21:23:16Z",
       "side": 1,
       "message": "This is already supported. So the reader permission is not needed anymore",
+      "range": {
+        "startLine": 429,
+        "startChar": 8,
+        "endLine": 430,
+        "endChar": 67
+      },
+      "revId": "3869375a4599fa208c4416956ebe5c591798ecff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78edaf6f_d54e3b12",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-07-18T21:39:59Z",
+      "side": 1,
+      "message": "Removed, should probably be removed from Chromium as well https://source.chromium.org/chromium/chromium/src/+/main:infra/config/subprojects/chromium/ci.star;l\u003d97?q\u003d-file:%5Eout%20-file:%5Egen%20subprojects%2Fchromium%2Fci.star",
+      "parentUuid": "4a5e6f9e_1b990d10",
       "range": {
         "startLine": 429,
         "startChar": 8,
