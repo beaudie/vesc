@@ -1978,6 +1978,12 @@ angle::Result ContextVk::handleDirtyMemoryBarrierImpl(DirtyBits::Iterator *dirty
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
 
+    for (TextureVk *textureVk : mActiveImages)
+    {
+        vk::ImageHelper *image = &textureVk->getImage();
+        image->forceShaderWAWBarrier();
+    }
+
     return angle::Result::Continue;
 }
 
