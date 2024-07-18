@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e623eb3b_1e8b92d5",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-18T12:57:49Z",
+      "side": 1,
+      "message": "https://g-issues.angleproject.org/issues/42266730#comment4",
+      "range": {
+        "startLine": 869,
+        "startChar": 15,
+        "endLine": 869,
+        "endChar": 23
+      },
+      "revId": "0137ad59b756ad799c2eb74498ef95e3f54fe88d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
