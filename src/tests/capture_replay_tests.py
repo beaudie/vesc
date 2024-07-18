@@ -37,6 +37,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import traceback
 
@@ -45,11 +46,13 @@ DEFAULT_OUT_DIR = "out/CaptureReplayTest"  # relative to angle folder
 DEFAULT_FILTER = "*/ES2_Vulkan_SwiftShader"
 DEFAULT_TEST_SUITE = "angle_end2end_tests"
 REPLAY_SAMPLE_FOLDER = "src/tests/capture_replay_tests"  # relative to angle folder
-DEFAULT_BATCH_COUNT = 8  # number of tests batched together
+DEFAULT_BATCH_COUNT = 64  # number of tests batched together for capture
+CAPTURE_FRAME_END = 1000
 TRACE_FILE_SUFFIX = "_context"  # because we only deal with 1 context right now
 RESULT_TAG = "*RESULT"
 STATUS_MESSAGE_PERIOD = 20  # in seconds
-SUBPROCESS_TIMEOUT = 600  # in seconds
+CAPTURE_SUBPROCESS_TIMEOUT = 600  # in seconds
+REPLAY_SUBPROCESS_TIMEOUT = 60  # in seconds
 DEFAULT_RESULT_FILE = "results.txt"
 DEFAULT_LOG_LEVEL = "info"
 DEFAULT_MAX_JOBS = 8
@@ -384,9 +387,43 @@ def _FormatEnv(env):
     return ' '.join(['%s=%s' % (k, v) for (k, v) in env.items()])
 
 
-class TestBatch():
+def GetCaptureEnv(args, trace_folder_path):
+    extra_env = {
+        'ANGLE_CAPTURE_SERIALIZE_STATE': '1',
+        'ANGLE_FEATURE_OVERRIDES_ENABLED': 'forceRobustResourceInit:forceInitShaderVariables',
+        'ANGLE_FEATURE_OVERRIDES_DISABLED': 'supportsHostImageCopy',
+        'ANGLE_CAPTURE_ENABLED': '1',
+        'ANGLE_CAPTURE_OUT_DIR': trace_folder_path,
+    }
 
-    CAPTURE_FRAME_END = 100
+    if args.mec > 0:
+        extra_env['ANGLE_CAPTURE_FRAME_START'] = '{}'.format(args.mec)
+        extra_env['ANGLE_CAPTURE_FRAME_END'] = '{}'.format(args.mec + 1)
+    else:
+        extra_env['ANGLE_CAPTURE_FRAME_END'] = '{}'.format(CAPTURE_FRAME_END)
+
+    if args.expose_nonconformant_features:
+        extra_env['ANGLE_FEATURE_OVERRIDES_ENABLED'] += ':exposeNonConformantExtensionsAndVersions'
+
+    return extra_env
+
+
+def UnlinkContextStateJsonFilesIfPresent(replay_build_dir, test_name):
+    frame = 1
+    while True:
+        capture_file = "{}/{}_ContextCaptured{}.json".format(replay_build_dir, test_name, frame)
+        replay_file = "{}/{}_ContextReplayed{}.json".format(replay_build_dir, test_name, frame)
+        if os.path.exists(capture_file):
+            os.unlink(capture_file)
+        if os.path.exists(replay_file):
+            os.unlink(replay_file)
+
+        if frame > CAPTURE_FRAME_END:
+            break
+        frame = frame + 1
+
+
+class TestBatch():
 
     def __init__(self, args, logger, batch_index):
         self.args = args
@@ -402,24 +439,7 @@ class TestBatch():
     def RunWithCapture(self, args, child_processes_manager):
         test_exe_path = os.path.join(args.out_dir, 'Capture', args.test_suite)
 
-        extra_env = {
-            'ANGLE_CAPTURE_SERIALIZE_STATE': '1',
-            'ANGLE_FEATURE_OVERRIDES_ENABLED': 'forceRobustResourceInit:forceInitShaderVariables',
-            'ANGLE_FEATURE_OVERRIDES_DISABLED': 'supportsHostImageCopy',
-            'ANGLE_CAPTURE_ENABLED': '1',
-            'ANGLE_CAPTURE_OUT_DIR': self.trace_folder_path,
-        }
-
-        if args.mec > 0:
-            extra_env['ANGLE_CAPTURE_FRAME_START'] = '{}'.format(args.mec)
-            extra_env['ANGLE_CAPTURE_FRAME_END'] = '{}'.format(args.mec + 1)
-        else:
-            extra_env['ANGLE_CAPTURE_FRAME_END'] = '{}'.format(self.CAPTURE_FRAME_END)
-
-        if args.expose_nonconformant_features:
-            extra_env[
-                'ANGLE_FEATURE_OVERRIDES_ENABLED'] += ':exposeNonConformantExtensionsAndVersions'
-
+        extra_env = GetCaptureEnv(args, self.trace_folder_path)
         env = {**os.environ.copy(), **extra_env}
 
         if not self.args.keep_temp_files:
@@ -436,7 +456,7 @@ class TestBatch():
         self.logger.info('%s %s' % (_FormatEnv(extra_env), ' '.join(cmd)))
 
         returncode, output = child_processes_manager.RunSubprocess(
-            cmd, env, timeout=SUBPROCESS_TIMEOUT)
+            cmd, env, timeout=CAPTURE_SUBPROCESS_TIMEOUT)
 
         if args.show_capture_stdout:
             self.logger.info("Capture stdout: %s" % output)
@@ -497,7 +517,7 @@ class TestBatch():
                               output, tests))
             return False
         returncode, output = child_processes_manager.RunAutoNinja(replay_build_dir, REPLAY_BINARY,
-                                                                  True)
+                                                                  False)
         if returncode != 0:
             self.logger.warning('Ninja failure output: %s' % output)
             self.results.append(
@@ -514,70 +534,56 @@ class TestBatch():
 
         env = {**os.environ.copy(), **extra_env}
 
-        run_cmd = GetRunCommand(self.args, replay_exe_path)
-        self.logger.info('%s %s' % (_FormatEnv(extra_env), ' '.join(run_cmd)))
-
         for test in tests:
-            self.UnlinkContextStateJsonFilesIfPresent(replay_build_dir, test.GetLabel())
+            UnlinkContextStateJsonFilesIfPresent(replay_build_dir, test.GetLabel())
 
-        returncode, output = child_processes_manager.RunSubprocess(
-            run_cmd, env, timeout=SUBPROCESS_TIMEOUT)
-        if returncode == -1:
-            cmd = replay_exe_path
-            self.results.append(
-                GroupedResult(GroupedResult.ReplayFailed, "Replay run failed (%s)" % cmd, output,
-                              tests))
-            return
-        elif returncode == -2:
-            self.results.append(
-                GroupedResult(GroupedResult.TimedOut, "Replay run timed out", output, tests))
-            return
+            run_cmd = GetRunCommand(self.args, replay_exe_path) + [test.GetLabel()]
+            self.logger.info('%s %s' % (_FormatEnv(extra_env), ' '.join(run_cmd)))
 
-        if args.show_replay_stdout:
-            self.logger.info("Replay stdout: %s" % output)
+            returncode, output = child_processes_manager.RunSubprocess(
+                run_cmd, env, timeout=REPLAY_SUBPROCESS_TIMEOUT)
+            if returncode == -1:
+                cmd = replay_exe_path
+                self.results.append(
+                    GroupedResult(GroupedResult.ReplayFailed, "Replay run failed (%s)" % cmd,
+                                  output, tests))
+                continue
+            elif returncode == -2:
+                self.results.append(
+                    GroupedResult(GroupedResult.TimedOut, "Replay run timed out", output, tests))
+                continue
 
-        output_lines = output.splitlines()
-        passes = []
-        fails = []
-        count = 0
-        for output_line in output_lines:
-            words = output_line.split(" ")
-            if len(words) == 3 and words[0] == RESULT_TAG:
-                test_name = self.FindTestByLabel(words[1])
-                result = int(words[2])
-                if result == 0:
-                    passes.append(test_name)
-                elif result == REPLAY_INITIALIZATION_FAILURE:
-                    fails.append(test_name)
-                    self.logger.info("Initialization failure: %s" % test_name)
-                elif result == REPLAY_SERIALIZATION_FAILURE:
-                    fails.append(test_name)
-                    self.logger.info("Context comparison failed: %s" % test_name)
-                    self.PrintContextDiff(replay_build_dir, words[1])
-                else:
-                    fails.append(test_name)
-                    self.logger.error("Unknown test result code: %s -> %d" % (test_name, result))
-                count += 1
+            if args.show_replay_stdout:
+                self.logger.info("Replay stdout: %s" % output)
 
-        if len(passes) > 0:
-            self.results.append(GroupedResult(GroupedResult.Passed, "", output, passes))
-        if len(fails) > 0:
-            self.results.append(GroupedResult(GroupedResult.Failed, "", output, fails))
+            output_lines = output.splitlines()
+            passes = []
+            fails = []
+            count = 0
+            for output_line in output_lines:
+                words = output_line.split(" ")
+                if len(words) == 3 and words[0] == RESULT_TAG:
+                    test_name = self.FindTestByLabel(words[1])
+                    result = int(words[2])
+                    if result == 0:
+                        passes.append(test_name)
+                    elif result == REPLAY_INITIALIZATION_FAILURE:
+                        fails.append(test_name)
+                        self.logger.info("Initialization failure: %s" % test_name)
+                    elif result == REPLAY_SERIALIZATION_FAILURE:
+                        fails.append(test_name)
+                        self.logger.info("Context comparison failed: %s" % test_name)
+                        self.PrintContextDiff(replay_build_dir, words[1])
+                    else:
+                        fails.append(test_name)
+                        self.logger.error("Unknown test result code: %s -> %d" %
+                                          (test_name, result))
+                    count += 1
 
-    def UnlinkContextStateJsonFilesIfPresent(self, replay_build_dir, test_name):
-        frame = 1
-        while True:
-            capture_file = "{}/{}_ContextCaptured{}.json".format(replay_build_dir, test_name,
-                                                                 frame)
-            replay_file = "{}/{}_ContextReplayed{}.json".format(replay_build_dir, test_name, frame)
-            if os.path.exists(capture_file):
-                os.unlink(capture_file)
-            if os.path.exists(replay_file):
-                os.unlink(replay_file)
-
-            if frame > self.CAPTURE_FRAME_END:
-                break
-            frame = frame + 1
+            if len(passes) > 0:
+                self.results.append(GroupedResult(GroupedResult.Passed, "", output, passes))
+            if len(fails) > 0:
+                self.results.append(GroupedResult(GroupedResult.Failed, "", output, fails))
 
     def PrintContextDiff(self, replay_build_dir, test_name):
         frame = 1
@@ -595,7 +601,7 @@ class TestBatch():
                         tofile=replay_file):
                     print(line, end="")
             else:
-                if frame > self.CAPTURE_FRAME_END:
+                if frame > CAPTURE_FRAME_END:
                     break
             frame = frame + 1
         if not found:
@@ -876,6 +882,228 @@ def main(args):
 
     ninja_lock = multiprocessing.Semaphore(args.max_ninja_jobs)
     child_processes_manager = ChildProcessesManager(args, logger, ninja_lock)
+
+    try:
+        worker_count = min(multiprocessing.cpu_count() - 1, args.max_jobs)
+
+        trace_dir = "%s%d" % (TRACE_FOLDER, 0)
+        trace_folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, trace_dir)
+        #os.makedirs(trace_folder_path)
+        CreateTraceFolders(1)
+
+        capture_build_dir = os.path.normpath(r'%s/Capture' % args.out_dir)
+
+        tref = time.time()
+
+        returncode, output = child_processes_manager.RunGNGen(capture_build_dir, False)
+        if returncode != 0:
+            logger.error(output)
+            return EXIT_FAILURE
+
+        returncode, output = child_processes_manager.RunAutoNinja(capture_build_dir,
+                                                                  args.test_suite, False)
+        if returncode != 0:
+            logger.error(output)
+            return EXIT_FAILURE
+
+        logger.info('Capture build time: %.1fs', time.time() - tref)
+
+        test_path = os.path.join(capture_build_dir, args.test_suite)
+        test_list = GetTestsListForFilter(args, test_path, args.filter, logger)
+        test_expectation = TestExpectation(args)
+        test_names = ParseTestNamesFromTestList(test_list, test_expectation,
+                                                args.also_run_skipped_for_capture_tests, logger)
+        test_expectation_for_list = test_expectation.Filter(
+            test_names, args.also_run_skipped_for_capture_tests)
+
+        # FIXME: run_single are COMPILE_FAIL, ignore that and FLAKY
+        test_names = [
+            t for t in test_names
+            if not (test_expectation.TestNeedsToRunSingle(t) or test_expectation.IsFlaky(t))
+        ]
+
+        n = 8
+        test_batches = [test_names[i:i + n] for i in range(0, len(test_names), n)]
+        print(len(test_names), len(test_batches))
+        processes = {}
+        skipped_by_suite = set()
+
+        def stdout_reader(stdout, arr):
+            arr.append(stdout.read())
+
+        def handle_processes():
+            for p in list(processes.keys()):
+                pv = processes[p]
+                rc = p.poll()
+                if rc is not None:
+                    #print('finished %.1f' % (time.time()-pv[0]), len(pv[1]))
+                    results_file = pv[2]
+                    pv[3].join()
+
+                    with open(results_file) as f:
+                        test_results = json.load(f)
+                    os.unlink(results_file)
+
+                    for test_name, res in test_results['tests'].items():
+                        if res['actual'] == 'SKIP':
+                            skipped_by_suite.add(test_name)
+
+                    del processes[p]
+
+        tref = time.time()
+
+        for tests in test_batches:
+            filt = ':'.join(tests)
+            extra_env = GetCaptureEnv(args, trace_folder_path)
+            env = {**os.environ.copy(), **extra_env}
+
+            test_exe_path = os.path.join(args.out_dir, 'Capture', args.test_suite)
+            cmd = [test_exe_path]
+            results_file = tempfile.mktemp()
+            cmd += [
+                '--gtest_filter=%s' % filt,
+                '--angle-per-test-capture-label',
+                '--results-file=' + results_file,
+            ]
+
+            while len(processes) >= worker_count:
+                handle_processes()
+                time.sleep(0.01)
+
+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env)
+            stdout_arr = []
+            t = threading.Thread(target=stdout_reader, args=(p.stdout, stdout_arr))
+            t.start()
+            processes[p] = [time.time(), stdout_arr, results_file, t]
+
+        while processes:
+            handle_processes()
+            time.sleep(0.01)
+
+        logger.info('Capture time: %.1fs', time.time() - tref)
+
+        labels_to_tests = {t.replace(".", "_").replace("/", "_"): t for t in test_names}
+        out_files = {t: [] for t in test_names}
+
+        for f in os.listdir(trace_folder_path):
+            if f == 'test_names_1.json':  # FIXME
+                continue
+            label, ext = f.split('.', 1)
+            # _001.cpp, _002.cpp etc
+            m = re.match(r'(.*)_\d\d\d\.cpp', f)
+            if m:
+                label = m.group(1)
+            assert label in labels_to_tests, label
+
+            out_files[labels_to_tests[label]].append(f)
+
+        replay_tests = []
+        for test_name, replay_files in out_files.items():
+            if test_name not in skipped_by_suite:
+                assert replay_files, test_name
+                replay_tests.append(test_name)
+
+        composite_file_id = 1
+        names_path = os.path.join(trace_folder_path, 'test_names_%d.json' % composite_file_id)
+        with open(names_path, 'w') as f:
+            f.write(
+                json.dumps(
+                    {'traces': [t.replace(".", "_").replace("/", "_") for t in replay_tests]}))
+
+        replay_build_dir = os.path.join(args.out_dir, 'Replay%d' % 0)
+        replay_exe_path = os.path.join(replay_build_dir, REPLAY_BINARY)
+
+        tref = time.time()
+
+        gn_args = [('angle_build_capture_replay_tests', 'true'),
+                   ('angle_capture_replay_test_trace_dir', '"%s"' % trace_dir),
+                   ('angle_capture_replay_composite_file_id', str(composite_file_id))]
+        returncode, output = child_processes_manager.RunGNGen(replay_build_dir, True, gn_args)
+        if returncode != 0:
+            logger.error(output)
+            return EXIT_FAILURE
+        returncode, output = child_processes_manager.RunAutoNinja(replay_build_dir, REPLAY_BINARY,
+                                                                  True)
+        if returncode != 0:
+            logger.error(output)
+            return EXIT_FAILURE
+
+        logger.info('Replay build time: %.1fs', time.time() - tref)
+
+        extra_env = {}
+        if args.expose_nonconformant_features:
+            extra_env[
+                'ANGLE_FEATURE_OVERRIDES_ENABLED'] = 'exposeNonConformantExtensionsAndVersions'
+        env = {**os.environ.copy(), **extra_env}
+
+        passes = []
+        fails = []
+
+        def handle_replay_processes():
+            for p in list(processes.keys()):
+                pv = processes[p]
+                rc = p.poll()
+                if rc is not None:
+                    pv[3].join()
+
+                    #print('finished %.1f' % (time.time()-pv[0]), len(pv[1]))
+                    output = b''.join(pv[1]).decode()
+                    output_lines = output.splitlines()
+                    for output_line in output_lines:
+                        words = output_line.split(" ")
+                        if len(words) == 3 and words[0] == RESULT_TAG:
+                            test_name = labels_to_tests[words[1]]
+                            result = int(words[2])
+                            if result == 0:
+                                passes.append(test_name)
+                            elif result == REPLAY_INITIALIZATION_FAILURE:
+                                fails.append(test_name)
+                                logger.info("Initialization failure: %s" % test_name)
+                            elif result == REPLAY_SERIALIZATION_FAILURE:
+                                fails.append(test_name)
+                                logger.info("Context comparison failed: %s" % test_name)
+                                #FIXME self.PrintContextDiff(replay_build_dir, words[1])
+                            else:
+                                fails.append(test_name)
+                                logger.error("Unknown test result code: %s -> %d" %
+                                             (test_name, result))
+
+                    del processes[p]
+
+        tref = time.time()
+
+        replay_worker_count = 8
+        print('Tests to replay: ', len(replay_tests))
+        for test in replay_tests:
+            run_cmd = [replay_exe_path, test.replace(".", "_").replace("/", "_")]
+
+            while len(processes) >= replay_worker_count:
+                handle_replay_processes()
+                time.sleep(0.01)
+
+            stdout_arr = []
+            t = threading.Thread(target=stdout_reader, args=(p.stdout, stdout_arr))
+            t.start()
+            p = subprocess.Popen(
+                run_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env)
+            processes[p] = [time.time(), stdout_arr, results_file, t]
+
+        while processes:
+            handle_replay_processes()
+            time.sleep(0.01)
+
+        logger.info('Replay time: %.1fs', time.time() - tref)
+
+    finally:
+        child_processes_manager.KillAll()
+
+    if fails:
+        logger.error('Failures: %s' % fails)
+        return EXIT_FAILURE
+    else:
+        logger.info('Passing tests: %d' % len(passes))
+        return EXIT_SUCCESS
+
     try:
         start_time = time.time()
         # set the number of workers to be cpu_count - 1 (since the main process already takes up a
