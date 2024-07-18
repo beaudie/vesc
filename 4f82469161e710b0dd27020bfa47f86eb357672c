@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1807b3cc_52e43ad1",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-18T19:41:53Z",
+      "side": 1,
+      "message": "Might want to start the regex with `\\b` as well, for clarity?",
+      "range": {
+        "startLine": 449,
+        "startChar": 12,
+        "endLine": 449,
+        "endChar": 15
+      },
+      "revId": "4f82469161e710b0dd27020bfa47f86eb357672c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
