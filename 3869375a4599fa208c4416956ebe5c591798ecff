@@ -179,6 +179,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2fdf11b4_d068c769",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1157909
+      },
+      "writtenOn": "2024-07-18T22:16:31Z",
+      "side": 1,
+      "message": "Yeah I left a comment in the CL adding this",
+      "parentUuid": "d2e3ffeb_c7fdde08",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 14
+      },
+      "revId": "3869375a4599fa208c4416956ebe5c591798ecff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4a5e6f9e_1b990d10",
         "filename": "infra/config/main.star",
         "patchSetId": 1
