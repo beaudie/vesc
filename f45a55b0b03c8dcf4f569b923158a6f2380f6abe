@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2b4d611_99c89bf1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5784,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-18T01:07:58Z",
+      "side": 1,
+      "message": "I actually think this can be just `writeStage !\u003d VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT`",
+      "range": {
+        "startLine": 5783,
+        "startChar": 38,
+        "endLine": 5784,
+        "endChar": 97
+      },
+      "revId": "f45a55b0b03c8dcf4f569b923158a6f2380f6abe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
