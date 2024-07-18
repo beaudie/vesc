@@ -136,11 +136,11 @@ DepthStencilState::DepthStencilState()
     depthMask                = true;
     stencilTest              = false;
     stencilFunc              = GL_ALWAYS;
-    stencilMask              = static_cast<GLuint>(-1);
-    stencilWritemask         = static_cast<GLuint>(-1);
+    stencilMask              = std::numeric_limits<GLint>::max();
+    stencilWritemask         = std::numeric_limits<GLint>::max();
     stencilBackFunc          = GL_ALWAYS;
-    stencilBackMask          = static_cast<GLuint>(-1);
-    stencilBackWritemask     = static_cast<GLuint>(-1);
+    stencilBackMask          = std::numeric_limits<GLint>::max();
+    stencilBackWritemask     = std::numeric_limits<GLint>::max();
     stencilFail              = GL_KEEP;
     stencilPassDepthFail     = GL_KEEP;
     stencilPassDepthPass     = GL_KEEP;

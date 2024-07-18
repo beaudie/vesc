@@ -792,6 +792,7 @@ void PrivateState::setStencilTest(bool enabled)
 
 void PrivateState::setStencilParams(GLenum stencilFunc, GLint stencilRef, GLuint stencilMask)
 {
+    stencilMask = CastMaskValue(stencilMask);
     if (mDepthStencil.stencilFunc != stencilFunc || mStencilRef != stencilRef ||
         mDepthStencil.stencilMask != stencilMask)
     {
@@ -806,6 +807,7 @@ void PrivateState::setStencilBackParams(GLenum stencilBackFunc,
                                         GLint stencilBackRef,
                                         GLuint stencilBackMask)
 {
+    stencilBackMask = CastMaskValue(stencilBackMask);
     if (mDepthStencil.stencilBackFunc != stencilBackFunc || mStencilBackRef != stencilBackRef ||
         mDepthStencil.stencilBackMask != stencilBackMask)
     {
@@ -818,6 +820,7 @@ void PrivateState::setStencilBackParams(GLenum stencilBackFunc,
 
 void PrivateState::setStencilWritemask(GLuint stencilWritemask)
 {
+    stencilWritemask = CastMaskValue(stencilWritemask);
     if (mDepthStencil.stencilWritemask != stencilWritemask)
     {
         mDepthStencil.stencilWritemask = stencilWritemask;
@@ -827,6 +830,7 @@ void PrivateState::setStencilWritemask(GLuint stencilWritemask)
 
 void PrivateState::setStencilBackWritemask(GLuint stencilBackWritemask)
 {
+    stencilBackWritemask = CastMaskValue(stencilBackWritemask);
     if (mDepthStencil.stencilBackWritemask != stencilBackWritemask)
     {
         mDepthStencil.stencilBackWritemask = stencilBackWritemask;
@@ -1958,7 +1962,7 @@ void PrivateState::getIntegerv(GLenum pname, GLint *params) const
             *params = mStencilRef;
             break;
         case GL_STENCIL_VALUE_MASK:
-            *params = CastMaskValue(mDepthStencil.stencilMask);
+            *params = mDepthStencil.stencilMask;
             break;
         case GL_STENCIL_BACK_FUNC:
             *params = mDepthStencil.stencilBackFunc;
@@ -1967,7 +1971,7 @@ void PrivateState::getIntegerv(GLenum pname, GLint *params) const
             *params = mStencilBackRef;
             break;
         case GL_STENCIL_BACK_VALUE_MASK:
-            *params = CastMaskValue(mDepthStencil.stencilBackMask);
+            *params = mDepthStencil.stencilBackMask;
             break;
         case GL_STENCIL_FAIL:
             *params = mDepthStencil.stencilFail;
@@ -2010,10 +2014,10 @@ void PrivateState::getIntegerv(GLenum pname, GLint *params) const
             *params = ToGLenum(mBlendStateExt.getEquationAlphaIndexed(0));
             break;
         case GL_STENCIL_WRITEMASK:
-            *params = CastMaskValue(mDepthStencil.stencilWritemask);
+            *params = mDepthStencil.stencilWritemask;
             break;
         case GL_STENCIL_BACK_WRITEMASK:
-            *params = CastMaskValue(mDepthStencil.stencilBackWritemask);
+            *params = mDepthStencil.stencilBackWritemask;
             break;
         case GL_STENCIL_CLEAR_VALUE:
             *params = mStencilClearValue;

@@ -20,6 +20,12 @@ namespace
 class DepthStencilTest : public ANGLETest<>
 {
   protected:
+    static constexpr GLuint kRandomMasks[] = {
+        453568031u,  601518169u,  758817514u, 2072850935u, 1847516404u, 244075613u,
+        1346227688u, 1678543044u, 971175556u, 1406344107u, 1926181098u, 2136772285u,
+        1282643671u, 1846973730u, 620767142u, 659586564u,
+    };
+
     DepthStencilTest()
     {
         setWindowWidth(128);
@@ -229,6 +235,96 @@ void DepthStencilTest::prepareSingleEmulatedWithPacked()
 
     glDisable(GL_STENCIL_TEST);
     glDisable(GL_SCISSOR_TEST);
+}
+
+// Test setting/querying of stencil mask, which are specified as Z+ by the spec, are sane.
+TEST_P(DepthStencilTest, BasicStencilFuncByte)
+{
+    GLint actualMask;
+
+    // The least significant sbits of mask , where sis the number of bits in the stencil
+    // buffer, specify a masbk. In practice, this is 8 bits.
+    for (GLint expectedMask = 0; expectedMask <= 0xFF; ++expectedMask)
+    {
+        glStencilFunc(GL_EQUAL, 0, expectedMask);
+        EXPECT_GL_NO_ERROR();
+        actualMask = 0;
+        glGetIntegerv(GL_STENCIL_VALUE_MASK, &actualMask);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_EQ(expectedMask, actualMask);
+        actualMask = 0;
+        glGetIntegerv(GL_STENCIL_BACK_VALUE_MASK, &actualMask);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_EQ(expectedMask, actualMask);
+    }
+}
+
+// Test setting/querying of stencil mask, which are specified as Z+ by the spec, are sane.
+TEST_P(DepthStencilTest, BasicStencilMaskRandom)
+{
+    GLint actualMask;
+
+    // Because the stencil masks are specified as Z+ - non-negative integers, only the
+    // least 31 bits of the mask are guaranteed.  Test random masks with the MSB set,
+    // which is out of range, and test that the low bits match.
+    for (GLuint randomMask : kRandomMasks)
+    {
+        glStencilFunc(GL_EQUAL, 0, randomMask | 0x80000000);
+        EXPECT_GL_NO_ERROR();
+        actualMask = 0;
+        glGetIntegerv(GL_STENCIL_VALUE_MASK, &actualMask);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_EQ(static_cast<GLint>(randomMask), actualMask);
+        actualMask = 0;
+        glGetIntegerv(GL_STENCIL_BACK_VALUE_MASK, &actualMask);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_EQ(static_cast<GLint>(randomMask), actualMask);
+    }
+}
+
+// Test setting/querying of stencil mask, which are specified as Z+ by the spec, are sane.
+TEST_P(DepthStencilTest, BasicStencilMaskByte)
+{
+    GLint actualMask;
+
+    // The least significant sbits of mask , where sis the number of bits in the stencil
+    // buffer, specify a masbk. In practice, this is 8 bits.
+    for (GLint expectedMask = 0; expectedMask <= 0xFF; ++expectedMask)
+    {
+        glStencilMask(expectedMask);
+        EXPECT_GL_NO_ERROR();
+        actualMask = 0;
+        glGetIntegerv(GL_STENCIL_WRITEMASK, &actualMask);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_EQ(expectedMask, actualMask);
+        actualMask = 0;
+        glGetIntegerv(GL_STENCIL_BACK_WRITEMASK, &actualMask);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_EQ(expectedMask, actualMask);
+    }
+}
+
+// Test setting/querying of stencil mask, which are specified as Z+ by the spec, are sane.
+TEST_P(DepthStencilTest, BasicStencilFuncRandom)
+{
+    GLint actualMask;
+
+    // Because the stencil masks are specified as Z+ - non-negative integers, only the
+    // least 31 bits of the mask are guaranteed.  Test random masks with the MSB set,
+    // which is out of range, and test that the low bits match.
+    for (GLuint randomMask : kRandomMasks)
+    {
+        glStencilMask(randomMask | 0x80000000);
+        EXPECT_GL_NO_ERROR();
+        actualMask = 0;
+        glGetIntegerv(GL_STENCIL_WRITEMASK, &actualMask);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_EQ(static_cast<GLint>(randomMask), actualMask);
+        actualMask = 0;
+        glGetIntegerv(GL_STENCIL_WRITEMASK, &actualMask);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_EQ(static_cast<GLint>(randomMask), actualMask);
+    }
 }
 
 // Tests that clearing or rendering into a depth-only format doesn't affect stencil.
