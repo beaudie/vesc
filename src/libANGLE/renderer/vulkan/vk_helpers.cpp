@@ -5893,6 +5893,7 @@ void ImageHelper::resetCachedProperties()
     mCurrentLayout               = ImageLayout::Undefined;
     mCurrentDeviceQueueIndex     = kInvalidDeviceQueueIndex;
     mIsReleasedToExternal        = false;
+    mForceShaderWAWBarrier       = false;
     mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     mCurrentShaderReadStageMask  = 0;
     mFirstAllocatedLevel         = gl::LevelIndex(0);
@@ -7194,6 +7195,17 @@ bool ImageHelper::isWriteBarrierNecessary(ImageLayout newLayout,
     {
         return true;
     }
+    else if (mForceShaderWAWBarrier)
+    {
+        return true;
+    }
+    else if (mCurrentLayout == ImageLayout::ComputeShaderWrite ||
+             mCurrentLayout == ImageLayout::FragmentShaderWrite)
+    {
+        // Compute write followed by compute write does not require implicit barrier. App is
+        // required to handle the barrier using glMemoryBarrier.
+        return false;
+    }
 
     if (layerCount >= kMaxParallelLayerWrites)
     {
@@ -7423,6 +7435,7 @@ void ImageHelper::barrierImpl(Context *context,
     mCurrentLayout           = newLayout;
     mCurrentDeviceQueueIndex = newDeviceQueueIndex;
     resetSubresourcesWrittenSinceBarrier();
+    mForceShaderWAWBarrier = false;
 
     // We must release the event so that new event will be created and added. If we did not add new
     // event, because mCurrentEvent have been released, next barrier will automatically fallback to
@@ -7619,7 +7632,8 @@ void ImageHelper::updateLayoutAndBarrier(Context *context,
             // previous use of event should garbage tracked already.
             mCurrentEvent.release(context);
         }
-        mBarrierQueueSerial = queueSerial;
+        mBarrierQueueSerial    = queueSerial;
+        mForceShaderWAWBarrier = false;
     }
     else
     {

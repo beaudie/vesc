@@ -877,6 +877,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
       mClearColorValue{},
       mClearDepthStencilValue{},
       mClearColorMasks(0),
+      mCurrentMemoryBarriers(0),
       mFlipYForCurrentSurface(false),
       mFlipViewportForDrawFramebuffer(false),
       mFlipViewportForReadFramebuffer(false),
@@ -1951,6 +1952,51 @@ angle::Result ContextVk::handleDirtyMemoryBarrierImpl(DirtyBits::Iterator *dirty
     {
         return angle::Result::Continue;
     }
+
+    ASSERT(mCurrentMemoryBarriers != 0);
+    VkMemoryBarrier memoryBarrier     = {};
+    memoryBarrier.sType               = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    memoryBarrier.srcAccessMask       = VK_ACCESS_SHADER_WRITE_BIT;
+    VkPipelineStageFlags srcStageMask = vk::kAllShadersPipelineStageFlags;
+
+    memoryBarrier.dstAccessMask       = VK_ACCESS_SHADER_WRITE_BIT;
+    VkPipelineStageFlags dstStageMask = 0;  // vk::kAllShadersPipelineStageFlags;
+
+    if (mCurrentMemoryBarriers & GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT)
+    {
+        dstStageMask |= VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
+        memoryBarrier.dstAccessMask = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
+    }
+    if (mCurrentMemoryBarriers & GL_ELEMENT_ARRAY_BARRIER_BIT)
+    {
+        dstStageMask |= VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
+        memoryBarrier.dstAccessMask = VK_ACCESS_INDEX_READ_BIT;
+    }
+    else if (mCurrentMemoryBarriers & GL_UNIFORM_BARRIER_BIT)
+    {
+        srcStageMask |= kAllShadersPipelineStageFlags;
+    }
+    else if (mCurrentMemoryBarriers & GL_COMMAND_BARRIER_BIT)
+    {
+        srcStageMask |= VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT;
+    }
+    else if (mCurrentMemoryBarriers & GL_BUFFER_UPDATE_BARRIER_BIT)
+    {
+        srcStageMask |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+    }
+    else if (mCurrentMemoryBarriers & GL_TRANSFORM_FEEDBACK_BARRIER_BIT)
+    {
+        srcStageMask |= VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT;
+    }
+    else if ()
+    {
+    }
+    GL_UNIFORM_BARRIER_BIT | GL_TEXTURE_FETCH_BARRIER_BIT | GL_SHADER_IMAGE_ACCESS_BARRIER_BIT |
+        GL_PIXEL_BUFFER_BARRIER_BIT | GL_TEXTURE_UPDATE_BARRIER_BIT | GL_FRAMEBUFFER_BARRIER_BIT |
+        GL_ATOMIC_COUNTER_BARRIER_BIT | GL_SHADER_STORAGE_BARRIER_BIT;
+
+    mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(vk::kAllShadersPipelineStageFlags,
+                                                                 stageMask, memoryBarrier);
 
     // Break the render pass if necessary.  This is only needed for write-after-read situations, and
     // is done by checking whether current storage buffers and images are used in the render pass.
@@ -6748,15 +6794,12 @@ angle::Result ContextVk::memoryBarrier(const gl::Context *context, GLbitfield ba
         return angle::Result::Continue;
     }
 
+    mCurrentMemoryBarriers |= barriers;
+
     // Defer flushing the command buffers until a draw/dispatch with storage buffer/image is
     // encountered.
     mGraphicsDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
     mComputeDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
-
-    // Make sure memory barrier is issued for future usages of storage buffers and images even if
-    // there's no binding change.
-    mGraphicsDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
-    mComputeDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
 
     // Mark the command buffers as affected by glMemoryBarrier, so future program and storage
     // buffer/image binding changes can set DIRTY_BIT_MEMORY_BARRIER again.
