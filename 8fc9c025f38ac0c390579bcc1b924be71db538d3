@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86f74c1b_b98b114a",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-07-18T20:41:05Z",
+      "side": 1,
+      "message": "Ah, right. I added a new load function `LoadBGR10A2ToRGB10A2`.",
+      "parentUuid": "07140ec3_3584430d",
+      "revId": "8fc9c025f38ac0c390579bcc1b924be71db538d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "13202e37_ff919ffc",
         "filename": "src/libANGLE/renderer/load_functions_data.json",
         "patchSetId": 5
@@ -185,6 +203,30 @@
       "side": 1,
       "message": "There are two formats: The format of the texture, and the format of data that\u0027s passed to `glTex[Sub]Image`. The gl::ImageDesc describes the format of the texture. The format+type combination describe the format of the data that\u0027s being uploaded.",
       "parentUuid": "b7f54139_be553d1b",
+      "range": {
+        "startLine": 116,
+        "startChar": 36,
+        "endLine": 116,
+        "endChar": 66
+      },
+      "revId": "8fc9c025f38ac0c390579bcc1b924be71db538d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07e01c28_20cd77fd",
+        "filename": "src/libANGLE/renderer/wgpu/TextureWgpu.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-07-18T20:41:05Z",
+      "side": 1,
+      "message": "Ah gotcha, that makes sense. Thanks!",
+      "parentUuid": "2538347a_97644c53",
       "range": {
         "startLine": 116,
         "startChar": 36,
