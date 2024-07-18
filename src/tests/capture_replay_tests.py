@@ -45,14 +45,15 @@ DEFAULT_OUT_DIR = "out/CaptureReplayTest"  # relative to angle folder
 DEFAULT_FILTER = "*/ES2_Vulkan_SwiftShader"
 DEFAULT_TEST_SUITE = "angle_end2end_tests"
 REPLAY_SAMPLE_FOLDER = "src/tests/capture_replay_tests"  # relative to angle folder
-DEFAULT_BATCH_COUNT = 8  # number of tests batched together
+DEFAULT_BATCH_COUNT = 64  # number of tests batched together for capture
 TRACE_FILE_SUFFIX = "_context"  # because we only deal with 1 context right now
 RESULT_TAG = "*RESULT"
 STATUS_MESSAGE_PERIOD = 20  # in seconds
-SUBPROCESS_TIMEOUT = 600  # in seconds
+CAPTURE_SUBPROCESS_TIMEOUT = 600  # in seconds
+REPLAY_SUBPROCESS_TIMEOUT = 60  # in seconds
 DEFAULT_RESULT_FILE = "results.txt"
 DEFAULT_LOG_LEVEL = "info"
-DEFAULT_MAX_JOBS = 8
+DEFAULT_MAX_JOBS = 3
 DEFAULT_MAX_NINJA_JOBS = 1
 REPLAY_BINARY = "capture_replay_tests"
 if sys.platform == "win32":
@@ -386,7 +387,7 @@ def _FormatEnv(env):
 
 class TestBatch():
 
-    CAPTURE_FRAME_END = 100
+    CAPTURE_FRAME_END = 1000
 
     def __init__(self, args, logger, batch_index):
         self.args = args
@@ -436,7 +437,7 @@ class TestBatch():
         self.logger.info('%s %s' % (_FormatEnv(extra_env), ' '.join(cmd)))
 
         returncode, output = child_processes_manager.RunSubprocess(
-            cmd, env, timeout=SUBPROCESS_TIMEOUT)
+            cmd, env, timeout=CAPTURE_SUBPROCESS_TIMEOUT)
 
         if args.show_capture_stdout:
             self.logger.info("Capture stdout: %s" % output)
@@ -514,55 +515,56 @@ class TestBatch():
 
         env = {**os.environ.copy(), **extra_env}
 
-        run_cmd = GetRunCommand(self.args, replay_exe_path)
-        self.logger.info('%s %s' % (_FormatEnv(extra_env), ' '.join(run_cmd)))
-
         for test in tests:
             self.UnlinkContextStateJsonFilesIfPresent(replay_build_dir, test.GetLabel())
 
-        returncode, output = child_processes_manager.RunSubprocess(
-            run_cmd, env, timeout=SUBPROCESS_TIMEOUT)
-        if returncode == -1:
-            cmd = replay_exe_path
-            self.results.append(
-                GroupedResult(GroupedResult.ReplayFailed, "Replay run failed (%s)" % cmd, output,
-                              tests))
-            return
-        elif returncode == -2:
-            self.results.append(
-                GroupedResult(GroupedResult.TimedOut, "Replay run timed out", output, tests))
-            return
+            run_cmd = GetRunCommand(self.args, replay_exe_path) + [test.GetLabel()]
+            self.logger.info('%s %s' % (_FormatEnv(extra_env), ' '.join(run_cmd)))
 
-        if args.show_replay_stdout:
-            self.logger.info("Replay stdout: %s" % output)
+            returncode, output = child_processes_manager.RunSubprocess(
+                run_cmd, env, timeout=REPLAY_SUBPROCESS_TIMEOUT)
+            if returncode == -1:
+                cmd = replay_exe_path
+                self.results.append(
+                    GroupedResult(GroupedResult.ReplayFailed, "Replay run failed (%s)" % cmd,
+                                  output, tests))
+                continue
+            elif returncode == -2:
+                self.results.append(
+                    GroupedResult(GroupedResult.TimedOut, "Replay run timed out", output, tests))
+                continue
 
-        output_lines = output.splitlines()
-        passes = []
-        fails = []
-        count = 0
-        for output_line in output_lines:
-            words = output_line.split(" ")
-            if len(words) == 3 and words[0] == RESULT_TAG:
-                test_name = self.FindTestByLabel(words[1])
-                result = int(words[2])
-                if result == 0:
-                    passes.append(test_name)
-                elif result == REPLAY_INITIALIZATION_FAILURE:
-                    fails.append(test_name)
-                    self.logger.info("Initialization failure: %s" % test_name)
-                elif result == REPLAY_SERIALIZATION_FAILURE:
-                    fails.append(test_name)
-                    self.logger.info("Context comparison failed: %s" % test_name)
-                    self.PrintContextDiff(replay_build_dir, words[1])
-                else:
-                    fails.append(test_name)
-                    self.logger.error("Unknown test result code: %s -> %d" % (test_name, result))
-                count += 1
+            if args.show_replay_stdout:
+                self.logger.info("Replay stdout: %s" % output)
 
-        if len(passes) > 0:
-            self.results.append(GroupedResult(GroupedResult.Passed, "", output, passes))
-        if len(fails) > 0:
-            self.results.append(GroupedResult(GroupedResult.Failed, "", output, fails))
+            output_lines = output.splitlines()
+            passes = []
+            fails = []
+            count = 0
+            for output_line in output_lines:
+                words = output_line.split(" ")
+                if len(words) == 3 and words[0] == RESULT_TAG:
+                    test_name = self.FindTestByLabel(words[1])
+                    result = int(words[2])
+                    if result == 0:
+                        passes.append(test_name)
+                    elif result == REPLAY_INITIALIZATION_FAILURE:
+                        fails.append(test_name)
+                        self.logger.info("Initialization failure: %s" % test_name)
+                    elif result == REPLAY_SERIALIZATION_FAILURE:
+                        fails.append(test_name)
+                        self.logger.info("Context comparison failed: %s" % test_name)
+                        self.PrintContextDiff(replay_build_dir, words[1])
+                    else:
+                        fails.append(test_name)
+                        self.logger.error("Unknown test result code: %s -> %d" %
+                                          (test_name, result))
+                    count += 1
+
+            if len(passes) > 0:
+                self.results.append(GroupedResult(GroupedResult.Passed, "", output, passes))
+            if len(fails) > 0:
+                self.results.append(GroupedResult(GroupedResult.Failed, "", output, fails))
 
     def UnlinkContextStateJsonFilesIfPresent(self, replay_build_dir, test_name):
         frame = 1
