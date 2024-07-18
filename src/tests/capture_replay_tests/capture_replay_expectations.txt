@@ -53,7 +53,7 @@
 42265150 : UniformTest.UnusedStructInlineUniformWithSampler/* = SKIP_FOR_CAPTURE
 
 # Fails because of unsupported combined depth/stencil GetImage.
-42263287 ASAN : DepthStencilTest.DepthOnlyEmulatedWithPacked/* = FAIL
+42263287 : DepthStencilTest.DepthOnlyEmulatedWithPacked/* = FAIL
 
 # ES3
 42264706 : BlitFramebufferTest.BlitDepthStencilPixelByPixel/* = NOT_RUN
