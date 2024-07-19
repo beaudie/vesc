@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "179ae5c3_104bc828",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-19T14:50:34Z",
+      "side": 1,
+      "message": "I don\u0027t remember whether the compute kernel already handles this but could it cause race condition between the threads that writes to last pixels on one row and the first pixels on the next row?",
+      "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
