@@ -16,6 +16,23 @@
       "message": "Thanks for the initial review chanli@! Please take another look with the comments addressed.\n\n+ynovikov for an ANGLE reviewer.",
       "revId": "0ccea0c6cc36f24734dac71e74e760c619dcbbf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35dcd0b0_86480a46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-19T12:32:04Z",
+      "side": 1,
+      "message": "Thanks a lot for setting this up, Brian!",
+      "revId": "0ccea0c6cc36f24734dac71e74e760c619dcbbf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
