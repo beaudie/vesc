@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76285df7_c78231e0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4802,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2024-07-19T20:13:51Z",
+      "side": 1,
+      "message": "This line looks like keeping the feature for the older ARM driver.   Does this mean the new ARM driver hasn\u0027t rolled everywhere yet?",
+      "revId": "1d1b730db932ef14ed55319a5d2405cc38640e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
