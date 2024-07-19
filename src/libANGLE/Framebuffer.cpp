@@ -1695,6 +1695,15 @@ angle::Result Framebuffer::invalidate(const Context *context,
     return mImpl->invalidate(context, count, attachments);
 }
 
+#if defined(ANGLE_ENABLE_ASSERTS)
+static GLuint stencilBitCount(const Framebuffer *framebuffer)
+{
+    const FramebufferAttachment *stencilAttachment =
+        framebuffer ? framebuffer->getStencilOrDepthStencilAttachment() : nullptr;
+    return stencilAttachment ? stencilAttachment->getStencilSize() : 0;
+}
+#endif
+
 bool Framebuffer::partialClearNeedsInit(const Context *context,
                                         bool color,
                                         bool depth,
@@ -1726,11 +1735,22 @@ bool Framebuffer::partialClearNeedsInit(const Context *context,
         return true;
     }
 
-    const auto &depthStencil = glState.getDepthStencilState();
-    if (stencil && (depthStencil.stencilMask != depthStencil.stencilWritemask ||
-                    depthStencil.stencilBackMask != depthStencil.stencilBackWritemask))
+    if (stencil)
     {
-        return true;
+        ASSERT(stencilBitCount(glState.getDrawFramebuffer()) == 8);
+
+        // The least significant |stencilBits| of stencil mask state specify a
+        // mask. Compare the masks for differences only in those bits, ignoring any
+        // difference in the high bits.
+        const auto &depthStencil       = glState.getDepthStencilState();
+        const GLuint differentFwdMasks = depthStencil.stencilMask ^ depthStencil.stencilWritemask;
+        const GLuint differentBackMasks =
+            depthStencil.stencilBackMask ^ depthStencil.stencilBackWritemask;
+
+        if (((differentFwdMasks | differentBackMasks) & 0xFF) != 0)
+        {
+            return true;
+        }
     }
 
     return false;
