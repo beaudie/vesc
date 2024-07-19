@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb7b8f0b_64804509",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-19T21:52:49Z",
+      "side": 1,
+      "message": "Nit: this is actually `chromium:354025373`. This bug\u0027s in Chromium\u0027s issue tracker under the `Internals\u003eGPU\u003eANGLE` component.",
+      "revId": "33c659e4d7d766e5f55ad7543218883a40cff366",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d3afd8_8d63de69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-19T21:52:49Z",
+      "side": 1,
+      "message": "lgtm\n\nDo similar checks exist elsewhere in ANGLE?",
+      "revId": "33c659e4d7d766e5f55ad7543218883a40cff366",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
