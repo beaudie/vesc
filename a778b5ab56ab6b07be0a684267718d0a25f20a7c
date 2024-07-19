@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a3799ed_c4409d18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-19T23:41:33Z",
+      "side": 1,
+      "message": "This generally lgtm but it would be better if Geoff and Quyen review. A couple of small questions.",
+      "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "179ae5c3_104bc828",
@@ -68,6 +85,40 @@
       "side": 1,
       "message": "I think yes; it says:\n\u003e Before obtaining the first group from memory, the _data_ pointer is advanced by (`UNPACK_SKIP_PIXELS`)_n_ + (`UNPACK_SKIP_ROWS`)_k_ elements. Then _width_ groups are obtained from contiguous elements in memory (without advancing the pointer), after which the pointer is advanced by _k_ elements.",
       "parentUuid": "cbcfe39b_ccf2efe6",
+      "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38131c73_2933fb35",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-19T23:41:33Z",
+      "side": 1,
+      "message": "Which of these two code paths is currently taken when the row pitch is too small? Row-by-row copies have been used on other platforms as a workaround for bugs, so I\u0027m wondering whether the row-by-row loop below could be used as the fallback discussed in this bug.",
+      "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b360e6a_8fed9e22",
+        "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-19T23:41:33Z",
+      "side": 1,
+      "message": "Is this if-test being added because the rest of the test verifies that the Metal backend doesn\u0027t crash on this test when Metal\u0027s validation is turned on?",
       "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
