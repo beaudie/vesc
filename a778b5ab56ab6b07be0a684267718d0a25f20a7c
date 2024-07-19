@@ -16,6 +16,24 @@
       "message": "I don\u0027t remember whether the compute kernel already handles this but could it cause race condition between the threads that writes to last pixels on one row and the first pixels on the next row?",
       "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2381ace3_ce931659",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-19T14:55:30Z",
+      "side": 1,
+      "message": "This case does cause a compute race condition and the new test is partly suppressed because of this (some pixel values are flaky). That said, the blit path crashes the GPU process, which is certainly worse.",
+      "parentUuid": "179ae5c3_104bc828",
+      "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
