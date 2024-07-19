@@ -5092,9 +5092,11 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, useNonZeroStencilWriteMaskStaticState,
                             isARM && armDriverVersion < ARMDriverVersion(43, 0, 0));
 
-    // On ARM, per-sample shading is not enabled despite the presence of a Sample decoration.  As a
-    // workaround, per-sample shading is inferred by ANGLE and explicitly enabled by the API.
-    ANGLE_FEATURE_CONDITION(&mFeatures, explicitlyEnablePerSampleShading, isARM);
+    // On some vendors, per-sample shading is not enabled despite the presence of a Sample
+    // decoration. As a workaround, per-sample shading is inferred by ANGLE and explicitly enabled
+    // by the API.
+    ANGLE_FEATURE_CONDITION(&mFeatures, explicitlyEnablePerSampleShading,
+                            isARM || (isIntel && IsLinux()) || isSamsung);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, explicitlyCastMediumpFloatTo16Bit, isARM);
 
