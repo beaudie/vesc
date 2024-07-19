@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61efed74_7ffa627e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3481761
+      },
+      "writtenOn": "2024-07-19T15:31:30Z",
+      "side": 1,
+      "message": "Thanks for the reviews! I don\u0027t seem to have the authority to submit the CL, can one of you do it for me?",
+      "revId": "fdb410a6ef16c173387b415acde3bd33250759bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
