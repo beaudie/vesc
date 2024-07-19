@@ -34,6 +34,24 @@
       "parentUuid": "179ae5c3_104bc828",
       "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbcfe39b_ccf2efe6",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-19T17:25:08Z",
+      "side": 1,
+      "message": "I\u0027m just curious is this a defined behaviour in GL spec. For example, it clearly says that the overlapped bytes should contain the next row\u0027s pixels?",
+      "parentUuid": "2381ace3_ce931659",
+      "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
