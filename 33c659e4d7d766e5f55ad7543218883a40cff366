@@ -33,6 +33,23 @@
       "message": "lgtm\n\nDo similar checks exist elsewhere in ANGLE?",
       "revId": "33c659e4d7d766e5f55ad7543218883a40cff366",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "955de7fc_f10860a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-19T23:47:35Z",
+      "side": 1,
+      "message": "Thank you Dan for tracking down this longstanding performance bug. lgtm\n\nI\u0027m curious whether similar tests of the stencil masks exist elsewhere inside ANGLE; if so, they should be updated, too.",
+      "revId": "33c659e4d7d766e5f55ad7543218883a40cff366",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
