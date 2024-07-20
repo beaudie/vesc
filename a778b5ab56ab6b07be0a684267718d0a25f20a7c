@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d3748a7_d1554566",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-20T00:12:04Z",
+      "side": 1,
+      "message": "The blit path is used by default for all readbacks unless the long condition on L1720 is true. Using a loop here for the small row length case won\u0027t help if something else, e.g., formats mismatch, also prevents blit encoder usage.",
+      "parentUuid": "38131c73_2933fb35",
+      "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0b360e6a_8fed9e22",
         "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
         "patchSetId": 3
@@ -119,6 +137,24 @@
       "writtenOn": "2024-07-19T23:41:33Z",
       "side": 1,
       "message": "Is this if-test being added because the rest of the test verifies that the Metal backend doesn\u0027t crash on this test when Metal\u0027s validation is turned on?",
+      "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0077e9a_d3b7d5f0",
+        "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-20T00:12:04Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "0b360e6a_8fed9e22",
       "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
