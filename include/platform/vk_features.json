@@ -1651,6 +1651,30 @@
             "issue": "https://issuetracker.google.com/347601787"
         },
         {
+            "name": "supports_AMD_anti_lag",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_AMD_anti_lag extension"
+            ],
+            "issue": ""
+        },
+        {
+            "name": "supports_NV_low_latency2",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the VK_NV_low_latency2 extension"
+            ],
+            "issue": ""
+        },
+        {
+            "name": "enable_low_latency_extension",
+            "category": "Features",
+            "description": [
+                "Request that GL_ANGLE_low_latency be enabled if supported by driver"
+            ],
+            "issue": ""
+        },
+        {
             "name": "supports_rounding_mode_rte_fp16",
             "category": "Features",
             "description": [

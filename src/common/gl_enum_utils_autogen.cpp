@@ -2846,6 +2846,32 @@ const char *GLenumToString(GLESEnum enumGroup, unsigned int value)
                     return "GL_PIXEL_LOCAL_CLEAR_VALUE_INT_ANGLE";
                 case 0x96EE:
                     return "GL_PIXEL_LOCAL_CLEAR_VALUE_UNSIGNED_INT_ANGLE";
+                case 0x9720:
+                    return "GL_LOW_LATENCY_MODE_DRIVER_CONTROL_ANGLE";
+                case 0x9721:
+                    return "GL_LOW_LATENCY_MODE_OFF_ANGLE";
+                case 0x9722:
+                    return "GL_LOW_LATENCY_MODE_ON_ANGLE";
+                case 0x9723:
+                    return "GL_LOW_LATENCY_BOOST_MODE_OFF_ANGLE";
+                case 0x9724:
+                    return "GL_LOW_LATENCY_BOOST_MODE_ON_ANGLE";
+                case 0x9725:
+                    return "GL_LATENCY_MARKER_SIMULATION_START_ANGLE";
+                case 0x9726:
+                    return "GL_LATENCY_MARKER_SIMULATION_END_ANGLE";
+                case 0x9727:
+                    return "GL_LATENCY_MARKER_PRESENT_START_ANGLE";
+                case 0x9728:
+                    return "GL_LATENCY_MARKER_PRESENT_END_ANGLE";
+                case 0x9729:
+                    return "GL_LATENCY_MARKER_RENDERSUBMIT_START_ANGLE";
+                case 0x972A:
+                    return "GL_LATENCY_MARKER_RENDERSUBMIT_END_ANGLE";
+                case 0x972B:
+                    return "GL_LATENCY_MARKER_INPUT_SAMPLE_START_ANGLE";
+                case 0x972C:
+                    return "GL_LATENCY_MARKER_INPUT_SAMPLE_END_ANGLE";
                 case 0x9EA0:
                     return "GL_RENDERABILITY_VALIDATION_ANGLE";
                 case 0x10000:
@@ -5821,6 +5847,31 @@ const char *GLenumToString(GLESEnum enumGroup, unsigned int value)
                     return "GL_DEPTH_ATTACHMENT";
                 case 0x8D20:
                     return "GL_STENCIL_ATTACHMENT_OES";
+                default:
+                    return UnknownEnumToString(value);
+            }
+        }
+
+        case GLESEnum::LatencyMarker:
+        {
+            switch (value)
+            {
+                case 0x9725:
+                    return "GL_LATENCY_MARKER_SIMULATION_START_ANGLE";
+                case 0x9726:
+                    return "GL_LATENCY_MARKER_SIMULATION_END_ANGLE";
+                case 0x9727:
+                    return "GL_LATENCY_MARKER_PRESENT_START_ANGLE";
+                case 0x9728:
+                    return "GL_LATENCY_MARKER_PRESENT_END_ANGLE";
+                case 0x9729:
+                    return "GL_LATENCY_MARKER_RENDERSUBMIT_START_ANGLE";
+                case 0x972A:
+                    return "GL_LATENCY_MARKER_RENDERSUBMIT_END_ANGLE";
+                case 0x972B:
+                    return "GL_LATENCY_MARKER_INPUT_SAMPLE_START_ANGLE";
+                case 0x972C:
+                    return "GL_LATENCY_MARKER_INPUT_SAMPLE_END_ANGLE";
                 default:
                     return UnknownEnumToString(value);
             }
@@ -21348,6 +21399,14 @@ static StringEnumEntry g_stringEnumTable[] = {
     {"GL_LAST_VERTEX_CONVENTION_EXT", 0x8E4E},
     {"GL_LAST_VERTEX_CONVENTION_OES", 0x8E4E},
     {"GL_LAST_VIDEO_CAPTURE_STATUS_NV", 0x9027},
+    {"GL_LATENCY_MARKER_INPUT_SAMPLE_END_ANGLE", 0x972C},
+    {"GL_LATENCY_MARKER_INPUT_SAMPLE_START_ANGLE", 0x972B},
+    {"GL_LATENCY_MARKER_PRESENT_END_ANGLE", 0x9728},
+    {"GL_LATENCY_MARKER_PRESENT_START_ANGLE", 0x9727},
+    {"GL_LATENCY_MARKER_RENDERSUBMIT_END_ANGLE", 0x972A},
+    {"GL_LATENCY_MARKER_RENDERSUBMIT_START_ANGLE", 0x9729},
+    {"GL_LATENCY_MARKER_SIMULATION_END_ANGLE", 0x9726},
+    {"GL_LATENCY_MARKER_SIMULATION_START_ANGLE", 0x9725},
     {"GL_LAYER_NV", 0x8DAA},
     {"GL_LAYER_PROVOKING_VERTEX", 0x825E},
     {"GL_LAYER_PROVOKING_VERTEX_EXT", 0x825E},
@@ -21477,6 +21536,11 @@ static StringEnumEntry g_stringEnumTable[] = {
     {"GL_LOWER_LEFT_EXT", 0x8CA1},
     {"GL_LOW_FLOAT", 0x8DF0},
     {"GL_LOW_INT", 0x8DF3},
+    {"GL_LOW_LATENCY_BOOST_MODE_OFF_ANGLE", 0x9723},
+    {"GL_LOW_LATENCY_BOOST_MODE_ON_ANGLE", 0x9724},
+    {"GL_LOW_LATENCY_MODE_DRIVER_CONTROL_ANGLE", 0x9720},
+    {"GL_LOW_LATENCY_MODE_OFF_ANGLE", 0x9721},
+    {"GL_LOW_LATENCY_MODE_ON_ANGLE", 0x9722},
     {"GL_LO_BIAS_NV", 0x8715},
     {"GL_LO_SCALE_NV", 0x870F},
     {"GL_LUID_SIZE_EXT", 0x0008},

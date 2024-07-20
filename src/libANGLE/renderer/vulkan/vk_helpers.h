@@ -3860,6 +3860,16 @@ enum class PresentMode
 
 VkPresentModeKHR ConvertPresentModeToVkPresentMode(PresentMode presentMode);
 PresentMode ConvertVkPresentModeToPresentMode(VkPresentModeKHR vkPresentMode);
+
+std::optional<VkLatencyMarkerNV> ConvertLatencyMarkerToVkLatencyMarkerNV(
+    gl::LatencyMarker latencyMarker);
+std::optional<VkAntiLagStageAMD> ConvertLatencyMarkerToVkAntiLagStageAMD(
+    gl::LatencyMarker latencyMarker);
+
+VkAntiLagModeAMD ConvertLatencyModesToVkAntiLagModeAMD(gl::LowLatencyMode lowLatencyMode,
+                                                       gl::LowLatencyBoostMode boostMode);
+uint32_t MicrosecondIntervalToLatencyFPSLimit(uint64_t microsecondInterval);
+
 }  // namespace vk
 }  // namespace rx
 

@@ -250,6 +250,26 @@ ImageLayout FromGLenum<ImageLayout>(GLenum from);
 GLenum ToGLenum(ImageLayout from);
 std::ostream &operator<<(std::ostream &os, ImageLayout value);
 
+enum class LatencyMarker : uint8_t
+{
+    SimulationStart   = 0,
+    SimulationEnd     = 1,
+    PresentStart      = 2,
+    PresentEnd        = 3,
+    RenderSubmitStart = 4,
+    RenderSubmitEnd   = 5,
+    InputSampleStart  = 6,
+    InputSampleEnd    = 7,
+
+    InvalidEnum = 8,
+    EnumCount   = 8,
+};
+
+template <>
+LatencyMarker FromGLenum<LatencyMarker>(GLenum from);
+GLenum ToGLenum(LatencyMarker from);
+std::ostream &operator<<(std::ostream &os, LatencyMarker value);
+
 enum class LightParameter : uint8_t
 {
     Ambient              = 0,
@@ -300,6 +320,35 @@ template <>
 LogicalOperation FromGLenum<LogicalOperation>(GLenum from);
 GLenum ToGLenum(LogicalOperation from);
 std::ostream &operator<<(std::ostream &os, LogicalOperation value);
+
+enum class LowLatencyBoostMode : uint8_t
+{
+    Off = 0,
+    On  = 1,
+
+    InvalidEnum = 2,
+    EnumCount   = 2,
+};
+
+template <>
+LowLatencyBoostMode FromGLenum<LowLatencyBoostMode>(GLenum from);
+GLenum ToGLenum(LowLatencyBoostMode from);
+std::ostream &operator<<(std::ostream &os, LowLatencyBoostMode value);
+
+enum class LowLatencyMode : uint8_t
+{
+    DriverControl = 0,
+    Off           = 1,
+    On            = 2,
+
+    InvalidEnum = 3,
+    EnumCount   = 3,
+};
+
+template <>
+LowLatencyMode FromGLenum<LowLatencyMode>(GLenum from);
+GLenum ToGLenum(LowLatencyMode from);
+std::ostream &operator<<(std::ostream &os, LowLatencyMode value);
 
 enum class MaterialParameter : uint8_t
 {

@@ -298,6 +298,16 @@ class ContextImpl : public GLImplFactory
                                                           const gl::PixelLocalStoragePlane[],
                                                           const GLenum storeops[]);
 
+    // ANGLE_low_latency
+    virtual angle::Result lowLatencyMode(gl::Context *context,
+                                         gl::LowLatencyMode latencyMode,
+                                         gl::LowLatencyBoostMode boostMode,
+                                         GLuint minInterval);
+    virtual angle::Result lowLatencyWait(gl::Context *context, GLuint64 frameId);
+    virtual angle::Result latencyMarker(gl::Context *context,
+                                        GLuint64 frameId,
+                                        gl::LatencyMarker marker);
+
   protected:
     const gl::State &mState;
     gl::MemoryProgramCache *mMemoryProgramCache;

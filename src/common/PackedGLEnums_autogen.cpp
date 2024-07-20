@@ -916,6 +916,93 @@ std::ostream &operator<<(std::ostream &os, ImageLayout value)
 }
 
 template <>
+LatencyMarker FromGLenum<LatencyMarker>(GLenum from)
+{
+    switch (from)
+    {
+        case GL_LATENCY_MARKER_SIMULATION_START_ANGLE:
+            return LatencyMarker::SimulationStart;
+        case GL_LATENCY_MARKER_SIMULATION_END_ANGLE:
+            return LatencyMarker::SimulationEnd;
+        case GL_LATENCY_MARKER_PRESENT_START_ANGLE:
+            return LatencyMarker::PresentStart;
+        case GL_LATENCY_MARKER_PRESENT_END_ANGLE:
+            return LatencyMarker::PresentEnd;
+        case GL_LATENCY_MARKER_RENDERSUBMIT_START_ANGLE:
+            return LatencyMarker::RenderSubmitStart;
+        case GL_LATENCY_MARKER_RENDERSUBMIT_END_ANGLE:
+            return LatencyMarker::RenderSubmitEnd;
+        case GL_LATENCY_MARKER_INPUT_SAMPLE_START_ANGLE:
+            return LatencyMarker::InputSampleStart;
+        case GL_LATENCY_MARKER_INPUT_SAMPLE_END_ANGLE:
+            return LatencyMarker::InputSampleEnd;
+        default:
+            return LatencyMarker::InvalidEnum;
+    }
+}
+
+GLenum ToGLenum(LatencyMarker from)
+{
+    switch (from)
+    {
+        case LatencyMarker::SimulationStart:
+            return GL_LATENCY_MARKER_SIMULATION_START_ANGLE;
+        case LatencyMarker::SimulationEnd:
+            return GL_LATENCY_MARKER_SIMULATION_END_ANGLE;
+        case LatencyMarker::PresentStart:
+            return GL_LATENCY_MARKER_PRESENT_START_ANGLE;
+        case LatencyMarker::PresentEnd:
+            return GL_LATENCY_MARKER_PRESENT_END_ANGLE;
+        case LatencyMarker::RenderSubmitStart:
+            return GL_LATENCY_MARKER_RENDERSUBMIT_START_ANGLE;
+        case LatencyMarker::RenderSubmitEnd:
+            return GL_LATENCY_MARKER_RENDERSUBMIT_END_ANGLE;
+        case LatencyMarker::InputSampleStart:
+            return GL_LATENCY_MARKER_INPUT_SAMPLE_START_ANGLE;
+        case LatencyMarker::InputSampleEnd:
+            return GL_LATENCY_MARKER_INPUT_SAMPLE_END_ANGLE;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+std::ostream &operator<<(std::ostream &os, LatencyMarker value)
+{
+    switch (value)
+    {
+        case LatencyMarker::SimulationStart:
+            os << "GL_LATENCY_MARKER_SIMULATION_START_ANGLE";
+            break;
+        case LatencyMarker::SimulationEnd:
+            os << "GL_LATENCY_MARKER_SIMULATION_END_ANGLE";
+            break;
+        case LatencyMarker::PresentStart:
+            os << "GL_LATENCY_MARKER_PRESENT_START_ANGLE";
+            break;
+        case LatencyMarker::PresentEnd:
+            os << "GL_LATENCY_MARKER_PRESENT_END_ANGLE";
+            break;
+        case LatencyMarker::RenderSubmitStart:
+            os << "GL_LATENCY_MARKER_RENDERSUBMIT_START_ANGLE";
+            break;
+        case LatencyMarker::RenderSubmitEnd:
+            os << "GL_LATENCY_MARKER_RENDERSUBMIT_END_ANGLE";
+            break;
+        case LatencyMarker::InputSampleStart:
+            os << "GL_LATENCY_MARKER_INPUT_SAMPLE_START_ANGLE";
+            break;
+        case LatencyMarker::InputSampleEnd:
+            os << "GL_LATENCY_MARKER_INPUT_SAMPLE_END_ANGLE";
+            break;
+        default:
+            os << "GL_INVALID_ENUM";
+            break;
+    }
+    return os;
+}
+
+template <>
 LightParameter FromGLenum<LightParameter>(GLenum from)
 {
     switch (from)
@@ -1158,6 +1245,103 @@ std::ostream &operator<<(std::ostream &os, LogicalOperation value)
             break;
         case LogicalOperation::Xor:
             os << "GL_XOR";
+            break;
+        default:
+            os << "GL_INVALID_ENUM";
+            break;
+    }
+    return os;
+}
+
+template <>
+LowLatencyBoostMode FromGLenum<LowLatencyBoostMode>(GLenum from)
+{
+    switch (from)
+    {
+        case GL_LOW_LATENCY_BOOST_MODE_OFF_ANGLE:
+            return LowLatencyBoostMode::Off;
+        case GL_LOW_LATENCY_BOOST_MODE_ON_ANGLE:
+            return LowLatencyBoostMode::On;
+        default:
+            return LowLatencyBoostMode::InvalidEnum;
+    }
+}
+
+GLenum ToGLenum(LowLatencyBoostMode from)
+{
+    switch (from)
+    {
+        case LowLatencyBoostMode::Off:
+            return GL_LOW_LATENCY_BOOST_MODE_OFF_ANGLE;
+        case LowLatencyBoostMode::On:
+            return GL_LOW_LATENCY_BOOST_MODE_ON_ANGLE;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+std::ostream &operator<<(std::ostream &os, LowLatencyBoostMode value)
+{
+    switch (value)
+    {
+        case LowLatencyBoostMode::Off:
+            os << "GL_LOW_LATENCY_BOOST_MODE_OFF_ANGLE";
+            break;
+        case LowLatencyBoostMode::On:
+            os << "GL_LOW_LATENCY_BOOST_MODE_ON_ANGLE";
+            break;
+        default:
+            os << "GL_INVALID_ENUM";
+            break;
+    }
+    return os;
+}
+
+template <>
+LowLatencyMode FromGLenum<LowLatencyMode>(GLenum from)
+{
+    switch (from)
+    {
+        case GL_LOW_LATENCY_MODE_DRIVER_CONTROL_ANGLE:
+            return LowLatencyMode::DriverControl;
+        case GL_LOW_LATENCY_MODE_OFF_ANGLE:
+            return LowLatencyMode::Off;
+        case GL_LOW_LATENCY_MODE_ON_ANGLE:
+            return LowLatencyMode::On;
+        default:
+            return LowLatencyMode::InvalidEnum;
+    }
+}
+
+GLenum ToGLenum(LowLatencyMode from)
+{
+    switch (from)
+    {
+        case LowLatencyMode::DriverControl:
+            return GL_LOW_LATENCY_MODE_DRIVER_CONTROL_ANGLE;
+        case LowLatencyMode::Off:
+            return GL_LOW_LATENCY_MODE_OFF_ANGLE;
+        case LowLatencyMode::On:
+            return GL_LOW_LATENCY_MODE_ON_ANGLE;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+std::ostream &operator<<(std::ostream &os, LowLatencyMode value)
+{
+    switch (value)
+    {
+        case LowLatencyMode::DriverControl:
+            os << "GL_LOW_LATENCY_MODE_DRIVER_CONTROL_ANGLE";
+            break;
+        case LowLatencyMode::Off:
+            os << "GL_LOW_LATENCY_MODE_OFF_ANGLE";
+            break;
+        case LowLatencyMode::On:
+            os << "GL_LOW_LATENCY_MODE_ON_ANGLE";
             break;
         default:
             os << "GL_INVALID_ENUM";

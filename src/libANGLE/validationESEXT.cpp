@@ -4653,4 +4653,46 @@ bool ValidateStartTilingQCOM(const Context *context,
     return true;
 }
 
+bool ValidateLowLatencyModeANGLE(const Context *context,
+                                 angle::EntryPoint entryPoint,
+                                 GLenum latencyMode,
+                                 GLenum boostMode,
+                                 GLuint minInterval)
+{
+    if (!context->getExtensions().lowLatencyANGLE)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+    // TODO: Validation
+    return true;
+}
+
+bool ValidateLowLatencyWaitANGLE(const Context *context,
+                                 angle::EntryPoint entryPoint,
+                                 GLuint64 frameID)
+{
+    if (!context->getExtensions().lowLatencyANGLE)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+    // TODO: Validation
+    return true;
+}
+
+bool ValidateLatencyMarkerANGLE(const Context *context,
+                                angle::EntryPoint entryPoint,
+                                GLuint64 frameID,
+                                GLenum marker)
+{
+    if (!context->getExtensions().lowLatencyANGLE)
+    {
+        ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+    // TODO: Validation
+    return true;
+}
+
 }  // namespace gl

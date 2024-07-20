@@ -124,4 +124,28 @@ angle::Result ContextImpl::drawPixelLocalStorageEXTDisable(gl::Context *,
     UNREACHABLE();
     return angle::Result::Stop;
 }
+
+angle::Result ContextImpl::lowLatencyMode(gl::Context *context,
+                                          gl::LowLatencyMode latencyMode,
+                                          gl::LowLatencyBoostMode boostMode,
+                                          GLuint minInterval)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
+angle::Result ContextImpl::lowLatencyWait(gl::Context *context, GLuint64 frameId)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
+angle::Result ContextImpl::latencyMarker(gl::Context *context,
+                                         GLuint64 frameId,
+                                         gl::LatencyMarker marker)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
 }  // namespace rx

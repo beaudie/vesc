@@ -409,6 +409,10 @@
     /* GL_ANGLE_get_tex_level_parameter */                                                         \
     /* GL_ANGLE_logic_op */                                                                        \
     /* GL_ANGLE_lossy_etc_decode */                                                                \
+    /* GL_ANGLE_low_latency */                                                                     \
+    void lowLatencyMode(GLenum latencyMode, GLenum boostMode, GLuint minimumInterval);             \
+    void lowLatencyWait(GLuint64 frameId);                                                         \
+    void latencyMarker(GLuint64 frameId, GLenum latencyMarker);                                    \
     /* GL_ANGLE_memory_object_flags */                                                             \
     void texStorageMemFlags2D(TextureType targetPacked, GLsizei levels, GLenum internalFormat,     \
                               GLsizei width, GLsizei height, MemoryObjectID memoryPacked,          \

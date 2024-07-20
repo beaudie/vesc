@@ -96,6 +96,7 @@ enum class GLESEnum
     InternalFormat,
     InternalFormatPName,
     InvalidateFramebufferAttachment,
+    LatencyMarker,
     LightEnvModeSGIX,
     LightModelParameter,
     LightName,

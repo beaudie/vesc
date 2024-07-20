@@ -462,6 +462,15 @@ class Semaphore final : public WrappedObject<Semaphore, VkSemaphore>
     VkResult importFd(VkDevice device, const VkImportSemaphoreFdInfoKHR &importFdInfo) const;
 };
 
+class TimelineSemaphore final : public WrappedObject<TimelineSemaphore, VkSemaphore>
+{
+  public:
+    TimelineSemaphore() = default;
+    void destroy(VkDevice device);
+
+    VkResult init(VkDevice device, uint64_t initialValue = 0);
+};
+
 class Framebuffer final : public WrappedObject<Framebuffer, VkFramebuffer>
 {
   public:
@@ -1494,6 +1503,33 @@ ANGLE_INLINE VkResult Semaphore::init(VkDevice device)
     VkSemaphoreCreateInfo semaphoreInfo = {};
     semaphoreInfo.sType                 = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     semaphoreInfo.flags                 = 0;
+
+    return vkCreateSemaphore(device, &semaphoreInfo, nullptr, &mHandle);
+}
+
+// Timeline semaphore implementation.
+ANGLE_INLINE void TimelineSemaphore::destroy(VkDevice device)
+{
+    if (valid())
+    {
+        vkDestroySemaphore(device, mHandle, nullptr);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+ANGLE_INLINE VkResult TimelineSemaphore::init(VkDevice device, uint64_t initialValue)
+{
+    ASSERT(!valid());
+
+    VkSemaphoreTypeCreateInfo timelineSemaphoreInfo = {};
+    timelineSemaphoreInfo.sType                     = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO;
+    timelineSemaphoreInfo.semaphoreType             = VK_SEMAPHORE_TYPE_TIMELINE_KHR;
+    timelineSemaphoreInfo.initialValue              = initialValue;
+
+    VkSemaphoreCreateInfo semaphoreInfo = {};
+    semaphoreInfo.sType                 = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    semaphoreInfo.flags                 = 0;
+    semaphoreInfo.pNext                 = &timelineSemaphoreInfo;
 
     return vkCreateSemaphore(device, &semaphoreInfo, nullptr, &mHandle);
 }

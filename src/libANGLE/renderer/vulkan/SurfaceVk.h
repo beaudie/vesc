@@ -384,6 +384,15 @@ class WindowSurfaceVk : public SurfaceVk
 
     void setTimestampsEnabled(bool enabled) override;
 
+    angle::Result lowLatencyMode(ContextVk *context,
+                                 gl::LowLatencyMode latencyMode,
+                                 gl::LowLatencyBoostMode boostMode,
+                                 GLuint minInterval);
+    angle::Result lowLatencyWait(ContextVk *context, GLuint64 frameId);
+    angle::Result latencyMarker(ContextVk *context,
+                                GLuint64 frameId,
+                                gl::LatencyMarker latencyMarker);
+
   protected:
     angle::Result swapImpl(const gl::Context *context,
                            const EGLint *rects,
@@ -474,7 +483,10 @@ class WindowSurfaceVk : public SurfaceVk
     angle::FormatID getIntendedFormatID(vk::Renderer *renderer);
     angle::FormatID getActualFormatID(vk::Renderer *renderer);
 
+    std::vector<vk::PresentMode> const &EnabledPresentModes() const;
+
     std::vector<vk::PresentMode> mPresentModes;
+    std::vector<vk::PresentMode> mNVLowLatencyPresentModes;
 
     VkSwapchainKHR mSwapchain;
     vk::SwapchainStatus mSwapchainStatus;
@@ -486,6 +498,8 @@ class WindowSurfaceVk : public SurfaceVk
     VkSurfaceTransformFlagBitsKHR mEmulatedPreTransform;
     VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
     VkColorSpaceKHR mSurfaceColorSpace;
+    VkAntiLagDataAMD mAntiLagData;
+    VkAntiLagPresentationInfoAMD mAntiLagPresentationInfo;
 
     // Present modes that are compatible with the current mode.  If mDesiredSwapchainPresentMode is
     // in this list, mode switch can happen without the need to recreate the swapchain.  Fast

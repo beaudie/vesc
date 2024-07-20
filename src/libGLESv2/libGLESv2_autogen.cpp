@@ -2990,6 +2990,22 @@ void GL_APIENTRY glLogicOpANGLE(GLenum opcode)
 
 // GL_ANGLE_lossy_etc_decode
 
+// GL_ANGLE_low_latency
+void GL_APIENTRY glLowLatencyModeANGLE(GLenum latencyMode, GLenum boostMode, GLuint minimumInterval)
+{
+    return GL_LowLatencyModeANGLE(latencyMode, boostMode, minimumInterval);
+}
+
+void GL_APIENTRY glLowLatencyWaitANGLE(GLuint64 frameId)
+{
+    return GL_LowLatencyWaitANGLE(frameId);
+}
+
+void GL_APIENTRY glLatencyMarkerANGLE(GLuint64 frameId, GLenum latencyMarker)
+{
+    return GL_LatencyMarkerANGLE(frameId, latencyMarker);
+}
+
 // GL_ANGLE_memory_object_flags
 void GL_APIENTRY glTexStorageMemFlags2DANGLE(GLenum target,
                                              GLsizei levels,

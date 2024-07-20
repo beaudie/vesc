@@ -1294,6 +1294,79 @@ bool CanCopyWithTransfer(Renderer *renderer,
     return isTilingCompatible && srcFormatHasNecessaryFeature && dstFormatHasNecessaryFeature;
 }
 
+std::optional<VkLatencyMarkerNV> ConvertLatencyMarkerToVkLatencyMarkerNV(
+    gl::LatencyMarker latencyMarker)
+{
+    switch (latencyMarker)
+    {
+        case gl::LatencyMarker::SimulationStart:
+            return VK_LATENCY_MARKER_SIMULATION_START_NV;
+        case gl::LatencyMarker::SimulationEnd:
+            return VK_LATENCY_MARKER_SIMULATION_END_NV;
+        case gl::LatencyMarker::RenderSubmitStart:
+            return VK_LATENCY_MARKER_RENDERSUBMIT_START_NV;
+        case gl::LatencyMarker::RenderSubmitEnd:
+            return VK_LATENCY_MARKER_RENDERSUBMIT_END_NV;
+        case gl::LatencyMarker::PresentStart:
+            return VK_LATENCY_MARKER_PRESENT_START_NV;
+        case gl::LatencyMarker::PresentEnd:
+            return VK_LATENCY_MARKER_PRESENT_END_NV;
+        case gl::LatencyMarker::InputSampleStart:
+            return VK_LATENCY_MARKER_INPUT_SAMPLE_NV;
+        case gl::LatencyMarker::InputSampleEnd:
+            // NOTE: There is no VK_LATENCY_MARKER_INPUT_SAMPLE_END_NV
+            return std::nullopt;
+        default:
+            break;
+    }
+    return std::nullopt;
+}
+
+std::optional<VkAntiLagStageAMD> ConvertLatencyMarkerToVkAntiLagStageAMD(
+    gl::LatencyMarker latencyMarker)
+{
+    switch (latencyMarker)
+    {
+        case gl::LatencyMarker::InputSampleStart:
+            return VK_ANTI_LAG_STAGE_INPUT_AMD;
+        case gl::LatencyMarker::RenderSubmitStart:
+            return VK_ANTI_LAG_STAGE_PRESENT_AMD;
+        default:
+            break;
+    }
+    return std::nullopt;
+}
+
+VkAntiLagModeAMD ConvertLatencyModesToVkAntiLagModeAMD(gl::LowLatencyMode lowLatencyMode,
+                                                       gl::LowLatencyBoostMode boostMode)
+{
+    switch (lowLatencyMode)
+    {
+        case gl::LowLatencyMode::DriverControl:
+            return VK_ANTI_LAG_MODE_DRIVER_CONTROL_AMD;
+        case gl::LowLatencyMode::Off:
+            return VK_ANTI_LAG_MODE_OFF_AMD;
+        case gl::LowLatencyMode::On:
+            return VK_ANTI_LAG_MODE_ON_AMD;
+        default:
+            break;
+    }
+    return VK_ANTI_LAG_MODE_DRIVER_CONTROL_AMD;
+}
+
+uint32_t MicrosecondIntervalToLatencyFPSLimit(uint64_t microsecondInterval)
+{
+    constexpr uint64_t MICROSECONDS_PER_SECOND = 1000000ULL;
+
+    if (microsecondInterval == 0ULL)
+    {
+        // If the minimum interval is set to 0, the FPS limit is effectively disabled.
+        return 0;
+    }
+
+    return static_cast<uint32_t>(MICROSECONDS_PER_SECOND / microsecondInterval);
+}
+
 // PackedClearValuesArray implementation
 PackedClearValuesArray::PackedClearValuesArray() : mValues{} {}
 PackedClearValuesArray::~PackedClearValuesArray() = default;

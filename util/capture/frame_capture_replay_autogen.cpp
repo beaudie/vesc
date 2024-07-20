@@ -2228,6 +2228,9 @@ void ReplayTraceFunctionCall(const CallCapture &call, const TraceFunctionMap &cu
             glLabelObjectEXT(captures[0].value.GLenumVal, captures[1].value.GLuintVal,
                              captures[2].value.GLsizeiVal, captures[3].value.GLcharConstPointerVal);
             break;
+        case angle::EntryPoint::GLLatencyMarkerANGLE:
+            glLatencyMarkerANGLE(captures[0].value.GLuint64Val, captures[1].value.GLenumVal);
+            break;
         case angle::EntryPoint::GLLightModelf:
             glLightModelf(captures[0].value.GLenumVal, captures[1].value.GLfloatVal);
             break;
@@ -2285,6 +2288,13 @@ void ReplayTraceFunctionCall(const CallCapture &call, const TraceFunctionMap &cu
             break;
         case angle::EntryPoint::GLLoseContextCHROMIUM:
             glLoseContextCHROMIUM(captures[0].value.GLenumVal, captures[1].value.GLenumVal);
+            break;
+        case angle::EntryPoint::GLLowLatencyModeANGLE:
+            glLowLatencyModeANGLE(captures[0].value.GLenumVal, captures[1].value.GLenumVal,
+                                  captures[2].value.GLuintVal);
+            break;
+        case angle::EntryPoint::GLLowLatencyWaitANGLE:
+            glLowLatencyWaitANGLE(captures[0].value.GLuint64Val);
             break;
         case angle::EntryPoint::GLMapBufferOES:
             glMapBufferOES(captures[0].value.GLenumVal, captures[1].value.GLenumVal);

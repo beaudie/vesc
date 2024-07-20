@@ -629,6 +629,11 @@ void Renderer::ensureCapsInitialized() const
     // Always enable ANGLE_rgbx_internal_format to expose GL_RGBX8_ANGLE.
     mNativeExtensions.rgbxInternalFormatANGLE = true;
 
+    // GL_ANGLE_low_latency can be enabled by feature override. The presence of
+    // these extensions implies the feature override was enabled as well.
+    mNativeExtensions.lowLatencyANGLE =
+        getFeatures().supportsNVLowLatency2.enabled || getFeatures().supportsAMDAntiLag.enabled;
+
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
     mNativeCaps.max3DTextureSize = rx::LimitToInt(limitsVk.maxImageDimension3D);

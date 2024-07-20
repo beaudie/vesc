@@ -1048,6 +1048,100 @@ void GL_APIENTRY GL_LogicOpANGLE(GLenum opcode)
 
 // GL_ANGLE_lossy_etc_decode
 
+// GL_ANGLE_low_latency
+void GL_APIENTRY GL_LowLatencyModeANGLE(GLenum latencyMode,
+                                        GLenum boostMode,
+                                        GLuint minimumInterval)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT(context, GLLowLatencyModeANGLE,
+          "context = %d, latencyMode = %s, boostMode = %s, minimumInterval = %u", CID(context),
+          GLenumToString(GLESEnum::AllEnums, latencyMode),
+          GLenumToString(GLESEnum::AllEnums, boostMode), minimumInterval);
+
+    if (context)
+    {
+        SCOPED_SHARE_CONTEXT_LOCK(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             (ValidatePixelLocalStorageInactive(context->getPrivateState(),
+                                                context->getMutableErrorSetForValidation(),
+                                                angle::EntryPoint::GLLowLatencyModeANGLE) &&
+              ValidateLowLatencyModeANGLE(context, angle::EntryPoint::GLLowLatencyModeANGLE,
+                                          latencyMode, boostMode, minimumInterval)));
+        if (isCallValid)
+        {
+            context->lowLatencyMode(latencyMode, boostMode, minimumInterval);
+        }
+        ANGLE_CAPTURE_GL(LowLatencyModeANGLE, isCallValid, context, latencyMode, boostMode,
+                         minimumInterval);
+    }
+    else
+    {
+        GenerateContextLostErrorOnCurrentGlobalContext();
+    }
+    ASSERT(!egl::Display::GetCurrentThreadUnlockedTailCall()->any());
+}
+
+void GL_APIENTRY GL_LowLatencyWaitANGLE(GLuint64 frameId)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT(context, GLLowLatencyWaitANGLE, "context = %d, frameId = %llu", CID(context),
+          static_cast<unsigned long long>(frameId));
+
+    if (context)
+    {
+        SCOPED_SHARE_CONTEXT_LOCK(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             (ValidatePixelLocalStorageInactive(context->getPrivateState(),
+                                                context->getMutableErrorSetForValidation(),
+                                                angle::EntryPoint::GLLowLatencyWaitANGLE) &&
+              ValidateLowLatencyWaitANGLE(context, angle::EntryPoint::GLLowLatencyWaitANGLE,
+                                          frameId)));
+        if (isCallValid)
+        {
+            context->lowLatencyWait(frameId);
+        }
+        ANGLE_CAPTURE_GL(LowLatencyWaitANGLE, isCallValid, context, frameId);
+    }
+    else
+    {
+        GenerateContextLostErrorOnCurrentGlobalContext();
+    }
+    ASSERT(!egl::Display::GetCurrentThreadUnlockedTailCall()->any());
+}
+
+void GL_APIENTRY GL_LatencyMarkerANGLE(GLuint64 frameId, GLenum latencyMarker)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT(context, GLLatencyMarkerANGLE, "context = %d, frameId = %llu, latencyMarker = %s",
+          CID(context), static_cast<unsigned long long>(frameId),
+          GLenumToString(GLESEnum::AllEnums, latencyMarker));
+
+    if (context)
+    {
+        SCOPED_SHARE_CONTEXT_LOCK(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             (ValidatePixelLocalStorageInactive(context->getPrivateState(),
+                                                context->getMutableErrorSetForValidation(),
+                                                angle::EntryPoint::GLLatencyMarkerANGLE) &&
+              ValidateLatencyMarkerANGLE(context, angle::EntryPoint::GLLatencyMarkerANGLE, frameId,
+                                         latencyMarker)));
+        if (isCallValid)
+        {
+            context->latencyMarker(frameId, latencyMarker);
+        }
+        ANGLE_CAPTURE_GL(LatencyMarkerANGLE, isCallValid, context, frameId, latencyMarker);
+    }
+    else
+    {
+        GenerateContextLostErrorOnCurrentGlobalContext();
+    }
+    ASSERT(!egl::Display::GetCurrentThreadUnlockedTailCall()->any());
+}
+
 // GL_ANGLE_memory_object_flags
 void GL_APIENTRY GL_TexStorageMemFlags2DANGLE(GLenum target,
                                               GLsizei levels,

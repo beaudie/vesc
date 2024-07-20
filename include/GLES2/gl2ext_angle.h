@@ -736,4 +736,29 @@ GL_APICALL void GL_APIENTRY glLogicOpANGLE (GLenum);
 #define GL_PROGRAM_BINARY_READY_ANGLE    0x96BE
 #endif /* GL_ANGLE_program_binary_readiness_query */
 
+#ifndef GL_ANGLE_low_latency
+#define GL_ANGLE_low_latency
+#define GL_LOW_LATENCY_MODE_DRIVER_CONTROL_ANGLE    0x9720
+#define GL_LOW_LATENCY_MODE_OFF_ANGLE               0x9721
+#define GL_LOW_LATENCY_MODE_ON_ANGLE                0x9722
+#define GL_LOW_LATENCY_BOOST_MODE_OFF_ANGLE         0x9723
+#define GL_LOW_LATENCY_BOOST_MODE_ON_ANGLE          0x9724
+#define GL_LATENCY_MARKER_SIMULATION_START_ANGLE    0x9725
+#define GL_LATENCY_MARKER_SIMULATION_END_ANGLE      0x9726
+#define GL_LATENCY_MARKER_PRESENT_START_ANGLE       0x9727
+#define GL_LATENCY_MARKER_PRESENT_END_ANGLE         0x9728
+#define GL_LATENCY_MARKER_RENDERSUBMIT_START_ANGLE  0x9729
+#define GL_LATENCY_MARKER_RENDERSUBMIT_END_ANGLE    0x972A
+#define GL_LATENCY_MARKER_INPUT_SAMPLE_START_ANGLE  0x972B
+#define GL_LATENCY_MARKER_INPUT_SAMPLE_END_ANGLE    0x972C
+typedef void (GL_APIENTRYP PFNGLLOWLATENCYMODEANGLEPROC) (GLenum latencyMode, GLenum boostMode, GLuint minimumInterval);
+typedef void (GL_APIENTRYP PFNGLLOWLATENCYWAITANGLEPROC) (GLuint64 frameId);
+typedef void (GL_APIENTRYP PFNGLLATENCYMARKERANGLEPROC) (GLuint64 frameId, GLenum latencyMarker);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glLowLatencyModeANGLE (GLenum latencyMode, GLenum boostMode, GLuint minimumInterval);
+GL_APICALL void GL_APIENTRY glLowLatencyWaitANGLE (GLuint64 frameId);
+GL_APICALL void GL_APIENTRY glLatencyMarkerANGLE (GLuint64 frameId, GLenum latencyMarker);
+#endif
+#endif /* GL_ANGLE_low_latency */
+
 #endif  // INCLUDE_GLES2_GL2EXT_ANGLE_H_

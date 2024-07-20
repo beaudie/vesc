@@ -689,6 +689,9 @@ struct Extensions
     // GL_ANGLE_lossy_etc_decode
     bool lossyEtcDecodeANGLE = false;
 
+    // GL_ANGLE_low_latency
+    bool lowLatencyANGLE = false;
+
     // GL_ANGLE_memory_object_flags
     bool memoryObjectFlagsANGLE = false;
 

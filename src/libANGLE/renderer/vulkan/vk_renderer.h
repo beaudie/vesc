@@ -963,6 +963,7 @@ class Renderer : angle::NonCopyable
     VkPhysicalDevice8BitStorageFeatures m8BitStorageFeatures;
     VkPhysicalDevice16BitStorageFeatures m16BitStorageFeatures;
     VkPhysicalDeviceSynchronization2Features mSynchronization2Features;
+    VkPhysicalDeviceAntiLagFeaturesAMD mAntiLagFeatures;
     VkPhysicalDeviceVariablePointersFeatures mVariablePointersFeatures;
     VkPhysicalDeviceFloatControlsProperties mFloatControlProperties;
 

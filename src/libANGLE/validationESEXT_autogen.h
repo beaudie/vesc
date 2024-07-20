@@ -244,6 +244,20 @@ bool ValidateLogicOpANGLE(const PrivateState &state,
 
 // GL_ANGLE_lossy_etc_decode
 
+// GL_ANGLE_low_latency
+bool ValidateLowLatencyModeANGLE(const Context *context,
+                                 angle::EntryPoint entryPoint,
+                                 GLenum latencyMode,
+                                 GLenum boostMode,
+                                 GLuint minimumInterval);
+bool ValidateLowLatencyWaitANGLE(const Context *context,
+                                 angle::EntryPoint entryPoint,
+                                 GLuint64 frameId);
+bool ValidateLatencyMarkerANGLE(const Context *context,
+                                angle::EntryPoint entryPoint,
+                                GLuint64 frameId,
+                                GLenum latencyMarker);
+
 // GL_ANGLE_memory_object_flags
 bool ValidateTexStorageMemFlags2DANGLE(const Context *context,
                                        angle::EntryPoint entryPoint,

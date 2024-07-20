@@ -184,6 +184,13 @@ ANGLE_EXPORT void GL_APIENTRY GL_LogicOpANGLE(GLenum opcode);
 
 // GL_ANGLE_lossy_etc_decode
 
+// GL_ANGLE_low_latency
+ANGLE_EXPORT void GL_APIENTRY GL_LowLatencyModeANGLE(GLenum latencyMode,
+                                                     GLenum boostMode,
+                                                     GLuint minimumInterval);
+ANGLE_EXPORT void GL_APIENTRY GL_LowLatencyWaitANGLE(GLuint64 frameId);
+ANGLE_EXPORT void GL_APIENTRY GL_LatencyMarkerANGLE(GLuint64 frameId, GLenum latencyMarker);
+
 // GL_ANGLE_memory_object_flags
 ANGLE_EXPORT void GL_APIENTRY GL_TexStorageMemFlags2DANGLE(GLenum target,
                                                            GLsizei levels,

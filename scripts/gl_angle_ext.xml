@@ -1048,6 +1048,21 @@
             <param group="LogicOp"><ptype>GLenum</ptype> <name>opcode</name></param>
             <alias name="glLogicOp"/>
         </command>
+        <command>
+            <proto>void <name>glLowLatencyModeANGLE</name></proto>
+            <param><ptype>GLenum</ptype> <name>latencyMode</name></param>
+            <param><ptype>GLenum</ptype> <name>boostMode</name></param>
+            <param><ptype>GLuint</ptype> <name>minimumInterval</name></param>
+        </command>
+        <command>
+            <proto>void <name>glLowLatencyWaitANGLE</name></proto>
+            <param><ptype>GLuint64</ptype> <name>frameId</name></param>
+        </command>
+        <command>
+            <proto>void <name>glLatencyMarkerANGLE</name></proto>
+            <param><ptype>GLuint64</ptype> <name>frameId</name></param>
+            <param gorup="LatencyMarker"><ptype>GLenum</ptype> <name>latencyMarker</name></param>
+        </command>
     </commands>
 
     <!-- SECTION: ANGLE extension interface definitions -->
@@ -1451,6 +1466,26 @@
                 <enum name="GL_SHADER_BINARY_ANGLE"/>
             </require>
         </extension>
+        <extension name="GL_ANGLE_low_latency" supported='gles2'>
+            <require>
+                <command name="glLowLatencyModeANGLE"/>
+                <command name="glLowLatencyWaitANGLE"/>
+                <command name="glLatencyMarkerANGLE"/>
+                <enum name="GL_LOW_LATENCY_MODE_DRIVER_CONTROL_ANGLE"/>
+                <enum name="GL_LOW_LATENCY_MODE_OFF_ANGLE"/>
+                <enum name="GL_LOW_LATENCY_MODE_ON_ANGLE"/>
+                <enum name="GL_LOW_LATENCY_BOOST_MODE_OFF_ANGLE"/>
+                <enum name="GL_LOW_LATENCY_BOOST_MODE_ON_ANGLE"/>
+                <enum name="GL_LATENCY_MARKER_SIMULATION_START_ANGLE"/>
+                <enum name="GL_LATENCY_MARKER_SIMULATION_END_ANGLE"/>
+                <enum name="GL_LATENCY_MARKER_PRESENT_START_ANGLE"/>
+                <enum name="GL_LATENCY_MARKER_PRESENT_END_ANGLE"/>
+                <enum name="GL_LATENCY_MARKER_RENDERSUBMIT_START_ANGLE"/>
+                <enum name="GL_LATENCY_MARKER_RENDERSUBMIT_END_ANGLE"/>
+                <enum name="GL_LATENCY_MARKER_INPUT_SAMPLE_START_ANGLE"/>
+                <enum name="GL_LATENCY_MARKER_INPUT_SAMPLE_END_ANGLE"/>
+            </require>
+        </extension>
     </extensions>
 
     <!-- SECTION: GL enumerant (token) definitions. -->
@@ -1576,6 +1611,23 @@
         <enum value="0x96EC" name="GL_PIXEL_LOCAL_CLEAR_VALUE_FLOAT_ANGLE" group="PLSQueryFloat"/>
         <enum value="0x96ED" name="GL_PIXEL_LOCAL_CLEAR_VALUE_INT_ANGLE" group="PLSQueryInt"/>
         <enum value="0x96EE" name="GL_PIXEL_LOCAL_CLEAR_VALUE_UNSIGNED_INT_ANGLE" group="PLSQueryInt"/>
+    </enums>
+
+    <!-- TODO: Ask Khronos for this range -->
+    <enums namespace="GL" start="0x9720" end="0x972C" vendor="ANGLE">
+        <enum value="0x9720" name="GL_LOW_LATENCY_MODE_DRIVER_CONTROL_ANGLE"/>
+        <enum value="0x9721" name="GL_LOW_LATENCY_MODE_OFF_ANGLE"/>
+        <enum value="0x9722" name="GL_LOW_LATENCY_MODE_ON_ANGLE"/>
+        <enum value="0x9723" name="GL_LOW_LATENCY_BOOST_MODE_OFF_ANGLE"/>
+        <enum value="0x9724" name="GL_LOW_LATENCY_BOOST_MODE_ON_ANGLE"/>
+        <enum value="0x9725" name="GL_LATENCY_MARKER_SIMULATION_START_ANGLE" group="LatencyMarker"/>
+        <enum value="0x9726" name="GL_LATENCY_MARKER_SIMULATION_END_ANGLE" group="LatencyMarker"/>
+        <enum value="0x9727" name="GL_LATENCY_MARKER_PRESENT_START_ANGLE" group="LatencyMarker"/>
+        <enum value="0x9728" name="GL_LATENCY_MARKER_PRESENT_END_ANGLE" group="LatencyMarker"/>
+        <enum value="0x9729" name="GL_LATENCY_MARKER_RENDERSUBMIT_START_ANGLE" group="LatencyMarker"/>
+        <enum value="0x972A" name="GL_LATENCY_MARKER_RENDERSUBMIT_END_ANGLE" group="LatencyMarker"/>
+        <enum value="0x972B" name="GL_LATENCY_MARKER_INPUT_SAMPLE_START_ANGLE" group="LatencyMarker"/>
+        <enum value="0x972C" name="GL_LATENCY_MARKER_INPUT_SAMPLE_END_ANGLE" group="LatencyMarker"/>
     </enums>
 
     <enums namespace="GL" group="CreateFlagMask" type="bitmask" vendor="ANGLE">

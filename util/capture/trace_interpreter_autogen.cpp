@@ -3984,6 +3984,13 @@ CallCapture ParseCallCapture(const Token &nameToken,
             paramTokens, strings);
         return CallCapture(EntryPoint::GLLabelObjectEXT, std::move(params));
     }
+    if (strcmp(nameToken, "glLatencyMarkerANGLE") == 0)
+    {
+        ParamBuffer params =
+            ParseParameters<std::remove_pointer<PFNGLLATENCYMARKERANGLEPROC>::type>(paramTokens,
+                                                                                    strings);
+        return CallCapture(EntryPoint::GLLatencyMarkerANGLE, std::move(params));
+    }
     if (strcmp(nameToken, "glLightModelf") == 0)
     {
         ParamBuffer params =
@@ -4093,6 +4100,20 @@ CallCapture ParseCallCapture(const Token &nameToken,
             ParseParameters<std::remove_pointer<PFNGLLOSECONTEXTCHROMIUMPROC>::type>(paramTokens,
                                                                                      strings);
         return CallCapture(EntryPoint::GLLoseContextCHROMIUM, std::move(params));
+    }
+    if (strcmp(nameToken, "glLowLatencyModeANGLE") == 0)
+    {
+        ParamBuffer params =
+            ParseParameters<std::remove_pointer<PFNGLLOWLATENCYMODEANGLEPROC>::type>(paramTokens,
+                                                                                     strings);
+        return CallCapture(EntryPoint::GLLowLatencyModeANGLE, std::move(params));
+    }
+    if (strcmp(nameToken, "glLowLatencyWaitANGLE") == 0)
+    {
+        ParamBuffer params =
+            ParseParameters<std::remove_pointer<PFNGLLOWLATENCYWAITANGLEPROC>::type>(paramTokens,
+                                                                                     strings);
+        return CallCapture(EntryPoint::GLLowLatencyWaitANGLE, std::move(params));
     }
     if (strcmp(nameToken, "glMapBufferOES") == 0)
     {

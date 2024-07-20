@@ -1940,6 +1940,8 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glIsVertexArrayOES";
         case EntryPoint::GLLabelObjectEXT:
             return "glLabelObjectEXT";
+        case EntryPoint::GLLatencyMarkerANGLE:
+            return "glLatencyMarkerANGLE";
         case EntryPoint::GLLightModelf:
             return "glLightModelf";
         case EntryPoint::GLLightModelfv:
@@ -1996,6 +1998,10 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glLogicOpANGLE";
         case EntryPoint::GLLoseContextCHROMIUM:
             return "glLoseContextCHROMIUM";
+        case EntryPoint::GLLowLatencyModeANGLE:
+            return "glLowLatencyModeANGLE";
+        case EntryPoint::GLLowLatencyWaitANGLE:
+            return "glLowLatencyWaitANGLE";
         case EntryPoint::GLMap1d:
             return "glMap1d";
         case EntryPoint::GLMap1f:

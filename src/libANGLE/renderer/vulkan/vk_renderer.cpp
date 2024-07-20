@@ -2468,6 +2468,12 @@ void Renderer::appendDeviceExtensionFeaturesNotPromoted(
     {
         vk::AddToPNextChain(deviceFeatures, &mBlendOperationAdvancedFeatures);
     }
+
+    if (ExtensionFound(VK_AMD_ANTI_LAG_EXTENSION_NAME, deviceExtensionNames) &&
+        getFeatures().supportsAMDAntiLag.enabled)
+    {
+        vk::AddToPNextChain(deviceFeatures, &mAntiLagFeatures);
+    }
 }
 
 // The following features and properties used by ANGLE have been promoted to Vulkan 1.1:
@@ -2851,6 +2857,9 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     mExternalFormatResolveProperties.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FORMAT_RESOLVE_PROPERTIES_ANDROID;
 #endif
+
+    mAntiLagFeatures       = {};
+    mAntiLagFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ANTI_LAG_FEATURES_AMD;
 
     // Query features and properties.
     VkPhysicalDeviceFeatures2KHR deviceFeatures = {};
@@ -3240,6 +3249,16 @@ void Renderer::enableDeviceExtensionsNotPromoted(const vk::ExtensionNameList &de
         vk::AddToPNextChain(&mEnabledFeatures, &mExternalFormatResolveFeatures);
     }
 #endif
+
+    if (getFeatures().supportsNVLowLatency2.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_NV_LOW_LATENCY_2_EXTENSION_NAME);
+    }
+
+    if (getFeatures().supportsAMDAntiLag.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_AMD_ANTI_LAG_EXTENSION_NAME);
+    }
 }
 
 // See comment above appendDeviceExtensionFeaturesPromotedTo11.  Additional extensions are enabled
@@ -3740,6 +3759,11 @@ angle::Result Renderer::createDeviceAndQueue(vk::Context *context, uint32_t queu
         mMemoryReportCallback.pfnUserCallback = &MemoryReportCallback;
         mMemoryReportCallback.pUserData       = this;
         vk::AddToPNextChain(&createInfo, &mMemoryReportCallback);
+    }
+
+    if (getFeatures().supportsAMDAntiLag.enabled)
+    {
+        vk::AddToPNextChain(&createInfo, &mAntiLagFeatures);
     }
 
     // Create the list of expected VVL messages to suppress.  Done before creating the device, as it
@@ -5357,6 +5381,27 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsDynamicRenderingLocalRead,
         mDynamicRenderingLocalReadFeatures.dynamicRenderingLocalRead == VK_TRUE);
+
+    // GL_ANGLE_low_latency extension and underlying implementations
+    // Default to disabled, only enable via feature override.
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableLowLatencyExtension, false);
+
+    // VK_NV_low_latency2 extension, only enable if low latency extension is
+    // requested.
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsNVLowLatency2,
+        mFeatures.enableLowLatencyExtension.enabled &&
+            mFeatures.supportsTimelineSemaphore.enabled &&
+            ExtensionFound(VK_NV_LOW_LATENCY_2_EXTENSION_NAME, deviceExtensionNames));
+
+    // VK_AMD_anti_lag extension, only enable if low latency extension is
+    // requested and VK_NV_low_latency2 is not supported. It's highly unlikely
+    // that both extensions would be supported on any device, but we check for
+    // it anyway because using both at once would be potentially dangerous.
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsAMDAntiLag,
+        mFeatures.enableLowLatencyExtension.enabled && !mFeatures.supportsNVLowLatency2.enabled &&
+            ExtensionFound(VK_AMD_ANTI_LAG_EXTENSION_NAME, deviceExtensionNames));
 
     // Using dynamic rendering when VK_KHR_dynamic_rendering_local_read is available, because that's
     // needed for framebuffer fetch, MSRTT and advanced blend emulation.

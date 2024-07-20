@@ -21,6 +21,7 @@
 #include "libANGLE/renderer/vulkan/OverlayVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_renderer.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -48,63 +49,44 @@ GLint GetSampleCount(const egl::Config *config)
     return samples;
 }
 
-vk::PresentMode GetDesiredPresentMode(const std::vector<vk::PresentMode> &presentModes,
+vk::PresentMode GetDesiredPresentMode(const std::vector<vk::PresentMode> &availableModes,
                                       EGLint interval)
 {
-    ASSERT(!presentModes.empty());
+    ASSERT(!availableModes.empty());
 
-    // If v-sync is enabled, use FIFO, which throttles you to the display rate and is guaranteed to
-    // always be supported.
-    if (interval > 0)
+    // If v-sync is enabled, prefer FIFO, whcih throttles you to the display
+    // rate. It's guaranteed to be supported at the implementation level, but
+    // might not be available if we have a low-latency extension enabled.
+    const std::vector<vk::PresentMode> kPreferredModesVsyncOn = {
+        vk::PresentMode::FifoKHR,
+        vk::PresentMode::FifoRelaxedKHR,
+        vk::PresentMode::MailboxKHR,
+        vk::PresentMode::ImmediateKHR,
+        vk::PresentMode::SharedDemandRefreshKHR,
+    };
+
+    // If v-sync is disabled, prefer mailbox first, as it doesn't throttle the
+    // framerate but also is guaranteed by the spec not to cause any screen
+    // tearing. Otherwise fall back to immediate.
+    const std::vector<vk::PresentMode> kPreferredModesVsyncOff = {
+        vk::PresentMode::MailboxKHR,     vk::PresentMode::ImmediateKHR,
+        vk::PresentMode::FifoRelaxedKHR, vk::PresentMode::SharedDemandRefreshKHR,
+        vk::PresentMode::FifoKHR,
+    };
+
+    auto const &preferredModes = interval > 0 ? kPreferredModesVsyncOn : kPreferredModesVsyncOff;
+
+    for (vk::PresentMode preferredMode : preferredModes)
     {
-        return vk::PresentMode::FifoKHR;
-    }
-
-    // Otherwise, choose either of the following, if available, in order specified here:
-    //
-    // - Mailbox is similar to triple-buffering.
-    // - Immediate is similar to single-buffering.
-    //
-    // If neither is supported, we fallback to FIFO.
-
-    bool mailboxAvailable   = false;
-    bool immediateAvailable = false;
-    bool sharedPresent      = false;
-
-    for (vk::PresentMode presentMode : presentModes)
-    {
-        switch (presentMode)
+        for (vk::PresentMode availableMode : availableModes)
         {
-            case vk::PresentMode::MailboxKHR:
-                mailboxAvailable = true;
-                break;
-            case vk::PresentMode::ImmediateKHR:
-                immediateAvailable = true;
-                break;
-            case vk::PresentMode::SharedDemandRefreshKHR:
-                sharedPresent = true;
-                break;
-            default:
-                break;
+            if (preferredMode == availableMode)
+            {
+                return preferredMode;
+            }
         }
     }
 
-    if (mailboxAvailable)
-    {
-        return vk::PresentMode::MailboxKHR;
-    }
-
-    if (immediateAvailable)
-    {
-        return vk::PresentMode::ImmediateKHR;
-    }
-
-    if (sharedPresent)
-    {
-        return vk::PresentMode::SharedDemandRefreshKHR;
-    }
-
-    // Note again that VK_PRESENT_MODE_FIFO_KHR is guaranteed to be available.
     return vk::PresentMode::FifoKHR;
 }
 
@@ -1009,6 +991,13 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
     mDepthStencilImageBinding.bind(&mDepthStencilImage);
     mColorImageMSBinding.bind(&mColorImageMS);
     mSwapchainStatus.isPending = false;
+
+    mAntiLagData                   = {};
+    mAntiLagData.sType             = VK_STRUCTURE_TYPE_ANTI_LAG_DATA_AMD;
+    mAntiLagData.pPresentationInfo = &mAntiLagPresentationInfo;
+
+    mAntiLagPresentationInfo       = {};
+    mAntiLagPresentationInfo.sType = VK_STRUCTURE_TYPE_ANTI_LAG_PRESENTATION_INFO_AMD;
 }
 
 WindowSurfaceVk::~WindowSurfaceVk()
@@ -1156,6 +1145,11 @@ angle::FormatID WindowSurfaceVk::getActualFormatID(vk::Renderer *renderer)
     return actualFormatID;
 }
 
+std::vector<vk::PresentMode> const &WindowSurfaceVk::EnabledPresentModes() const
+{
+    return mNVLowLatencyPresentModes.empty() ? mPresentModes : mNVLowLatencyPresentModes;
+}
+
 bool WindowSurfaceVk::updateColorSpace(DisplayVk *displayVk)
 {
     vk::Renderer *renderer = displayVk->getRenderer();
@@ -1230,8 +1224,34 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk, bool *anyMat
             vk::AddToPNextChain(&surfaceCaps2, &surfaceProtectedCaps);
         }
 
+        std::vector<VkPresentModeKHR> lowLatencyPresentModes;
+        VkLatencySurfaceCapabilitiesNV latencySurfaceCaps = {};
+        if (renderer->getFeatures().supportsNVLowLatency2.enabled)
+        {
+            // TODO: It's annoying to have to ask how many present modes it
+            // will give back, just give it more present modes than it could
+            // possibly have for now.
+            lowLatencyPresentModes.resize(16, static_cast<VkPresentModeKHR>(0));
+
+            latencySurfaceCaps.sType = VK_STRUCTURE_TYPE_LATENCY_SURFACE_CAPABILITIES_NV;
+            latencySurfaceCaps.presentModeCount =
+                static_cast<uint32_t>(lowLatencyPresentModes.size());
+            latencySurfaceCaps.pPresentModes = lowLatencyPresentModes.data();
+
+            vk::AddToPNextChain(&surfaceCaps2, &latencySurfaceCaps);
+        }
+
         ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfaceCapabilities2KHR(
                                     physicalDevice, &surfaceInfo2, &surfaceCaps2));
+
+        if (renderer->getFeatures().supportsNVLowLatency2.enabled)
+        {
+            lowLatencyPresentModes.resize(latencySurfaceCaps.presentModeCount);
+            mNVLowLatencyPresentModes.resize(latencySurfaceCaps.presentModeCount,
+                                             vk::PresentMode::EnumCount);
+            std::transform(begin(lowLatencyPresentModes), end(lowLatencyPresentModes),
+                           begin(mNVLowLatencyPresentModes), vk::ConvertVkPresentModeToPresentMode);
+        }
 
         mSurfaceCaps                = surfaceCaps2.surfaceCapabilities;
         mSupportsProtectedSwapchain = surfaceProtectedCaps.supportsProtected;
@@ -1718,6 +1738,25 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         // compatible with itself.
         mCompatiblePresentModes.resize(1);
         mCompatiblePresentModes[0] = swapchainInfo.presentMode;
+    }
+
+    VkSwapchainLatencyCreateInfoNV latencyCreateInfo = {};
+    if (renderer->getFeatures().supportsNVLowLatency2.enabled)
+    {
+        // VK_NV_low_latency2 has a limited set of present modes which are
+        // compatible with low-latency mode.
+        const bool isLowLatencyPresentMode =
+            std::find(std::begin(mNVLowLatencyPresentModes), std::end(mNVLowLatencyPresentModes),
+                      mDesiredSwapchainPresentMode) != std::end(mNVLowLatencyPresentModes);
+
+        // Since we always try to find a compatible present mode for the
+        // extension in GetDesiredPresentMode, we should always find a
+        // compatible present mode. If we don't, then we have a bug.
+        ASSERT(isLowLatencyPresentMode);
+
+        latencyCreateInfo.sType             = VK_STRUCTURE_TYPE_SWAPCHAIN_LATENCY_CREATE_INFO_NV;
+        latencyCreateInfo.latencyModeEnable = isLowLatencyPresentMode ? VK_TRUE : VK_FALSE;
+        vk::AddToPNextChain(&swapchainInfo, &latencyCreateInfo);
     }
 
     // TODO: Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old swapchain
@@ -2598,6 +2637,121 @@ void WindowSurfaceVk::setTimestampsEnabled(bool enabled)
     ASSERT(IsAndroid());
 }
 
+angle::Result WindowSurfaceVk::lowLatencyMode(ContextVk *context,
+                                              gl::LowLatencyMode latencyMode,
+                                              gl::LowLatencyBoostMode boostMode,
+                                              GLuint minInterval)
+{
+    if (context->getFeatures().supportsNVLowLatency2.enabled)
+    {
+        // TODO: We may need to re-create the swapchain if the latency mode
+        // changes, because our desired present mode may change as a result.
+
+        VkLatencySleepModeInfoNV sleepModeInfo = {};
+        sleepModeInfo.sType                    = VK_STRUCTURE_TYPE_LATENCY_SLEEP_MODE_INFO_NV;
+        sleepModeInfo.lowLatencyMode = (latencyMode == gl::LowLatencyMode::On) ? VK_TRUE : VK_FALSE;
+        sleepModeInfo.lowLatencyBoost =
+            (latencyMode == gl::LowLatencyMode::On && boostMode == gl::LowLatencyBoostMode::On)
+                ? VK_TRUE
+                : VK_FALSE;
+        sleepModeInfo.minimumIntervalUs = minInterval;
+        ANGLE_VK_TRY(context,
+                     vkSetLatencySleepModeNV(context->getDevice(), mSwapchain, &sleepModeInfo));
+        return angle::Result::Continue;
+    }
+    else if (context->getFeatures().supportsAMDAntiLag.enabled)
+    {
+        mAntiLagData.mode   = vk::ConvertLatencyModesToVkAntiLagModeAMD(latencyMode, boostMode);
+        mAntiLagData.maxFPS = vk::MicrosecondIntervalToLatencyFPSLimit(minInterval);
+        // mAntiLagData.pPresentationInfo = nullptr;
+        // vkAntiLagUpdateAMD(context->getDevice(), &mAntiLagData);
+        return angle::Result::Continue;
+    }
+    return angle::Result::Stop;
+}
+
+angle::Result WindowSurfaceVk::lowLatencyWait(ContextVk *context, GLuint64 frameId)
+{
+    if (context->getFeatures().supportsNVLowLatency2.enabled)
+    {
+        vk::DeviceScoped<vk::TimelineSemaphore> latencyWaitSemaphore(context->getDevice());
+        ANGLE_VK_TRY(context, latencyWaitSemaphore.get().init(context->getDevice(), frameId));
+
+        const uint64_t waitValue = frameId + 1;
+
+        VkLatencySleepInfoNV sleepInfo = {};
+        sleepInfo.sType                = VK_STRUCTURE_TYPE_LATENCY_SLEEP_INFO_NV;
+        sleepInfo.signalSemaphore      = latencyWaitSemaphore.get().getHandle();
+        sleepInfo.value                = waitValue;
+        ANGLE_VK_TRY(context, vkLatencySleepNV(context->getDevice(), mSwapchain, &sleepInfo));
+
+        VkSemaphoreWaitInfo waitInfo = {};
+        waitInfo.sType               = VK_STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO;
+        waitInfo.semaphoreCount      = 1;
+        waitInfo.pSemaphores         = latencyWaitSemaphore.get().ptr();
+        waitInfo.flags               = VK_SEMAPHORE_WAIT_ANY_BIT;
+        waitInfo.pValues             = &waitValue;
+        ANGLE_VK_TRY(context, vkWaitSemaphoresKHR(context->getDevice(), &waitInfo, 1000000000ULL));
+
+        return angle::Result::Continue;
+    }
+    else if (context->getFeatures().supportsAMDAntiLag.enabled)
+    {
+        // This looks a little odd, like a latency marker for "InputStart" but
+        // that's where AMD plugged their sleep functionality.
+        mAntiLagPresentationInfo.frameIndex = frameId;
+        mAntiLagPresentationInfo.stage      = VK_ANTI_LAG_STAGE_INPUT_AMD;
+        mAntiLagData.pPresentationInfo      = &mAntiLagPresentationInfo;
+        vkAntiLagUpdateAMD(context->getDevice(), &mAntiLagData);
+        return angle::Result::Continue;
+    }
+    return angle::Result::Stop;
+}
+
+angle::Result WindowSurfaceVk::latencyMarker(ContextVk *context,
+                                             GLuint64 frameId,
+                                             gl::LatencyMarker latencyMarker)
+{
+    if (context->getFeatures().supportsNVLowLatency2.enabled)
+    {
+        std::optional<VkLatencyMarkerNV> marker =
+            vk::ConvertLatencyMarkerToVkLatencyMarkerNV(latencyMarker);
+
+        // Not all markers can translate into VkLatencyMarkerNV. Drop any unknown markers.
+        if (!marker.has_value())
+            return angle::Result::Continue;
+
+        VkSetLatencyMarkerInfoNV latencyMarkerInfo = {};
+        latencyMarkerInfo.sType                    = VK_STRUCTURE_TYPE_SET_LATENCY_MARKER_INFO_NV;
+        latencyMarkerInfo.presentID                = frameId;
+        latencyMarkerInfo.marker                   = marker.value();
+        vkSetLatencyMarkerNV(context->getDevice(), mSwapchain, &latencyMarkerInfo);
+        return angle::Result::Continue;
+    }
+    else if (context->getFeatures().supportsAMDAntiLag.enabled)
+    {
+        std::optional<VkAntiLagStageAMD> marker =
+            vk::ConvertLatencyMarkerToVkAntiLagStageAMD(latencyMarker);
+
+        // Not all markers can translate into VkAntiLagStageAMD. Drop any unknown markers.
+        if (!marker.has_value())
+            return angle::Result::Continue;
+
+        // VK_ANTI_LAG_STAGE_INPUT_AMD is where AMD chose to put the blocking
+        // wait, so to be consistent with NVIDIA's behavior, we should instead
+        // use this marker specifically for lowLatencyWait().
+        if (marker.value() == VK_ANTI_LAG_STAGE_INPUT_AMD)
+            return angle::Result::Continue;
+
+        mAntiLagPresentationInfo.frameIndex = frameId;
+        mAntiLagPresentationInfo.stage      = marker.value();
+        mAntiLagData.pPresentationInfo      = &mAntiLagPresentationInfo;
+        vkAntiLagUpdateAMD(context->getDevice(), &mAntiLagData);
+        return angle::Result::Continue;
+    }
+    return angle::Result::Stop;
+}
+
 void WindowSurfaceVk::deferAcquireNextImage()
 {
     mAcquireOperation.needToAcquireNextSwapchainImage = true;
@@ -2907,7 +3061,7 @@ void WindowSurfaceVk::setSwapInterval(DisplayVk *displayVk, EGLint interval)
 
     interval = gl::clamp(interval, minSwapInterval, maxSwapInterval);
 
-    mDesiredSwapchainPresentMode = GetDesiredPresentMode(mPresentModes, interval);
+    mDesiredSwapchainPresentMode = GetDesiredPresentMode(EnabledPresentModes(), interval);
 
     // minImageCount may vary based on the Present Mode
     mMinImageCount =

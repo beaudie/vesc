@@ -1509,6 +1509,27 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://issuetracker.google.com/347601787"
     };
 
+    FeatureInfo supportsAMDAntiLag = {
+        "supportsAMDAntiLag",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_AMD_anti_lag extension",
+        &members, ""
+    };
+
+    FeatureInfo supportsNVLowLatency2 = {
+        "supportsNVLowLatency2",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_NV_low_latency2 extension",
+        &members, ""
+    };
+
+    FeatureInfo enableLowLatencyExtension = {
+        "enableLowLatencyExtension",
+        FeatureCategory::VulkanFeatures,
+        "Request that GL_ANGLE_low_latency be enabled if supported by driver",
+        &members, ""
+    };
+
     FeatureInfo supportsRoundingModeRteFp16 = {
         "supportsRoundingModeRteFp16",
         FeatureCategory::VulkanFeatures,

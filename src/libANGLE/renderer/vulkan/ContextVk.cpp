@@ -3716,6 +3716,33 @@ bool ContextVk::hasExcessPendingGarbage() const
     return trackedPendingGarbage >= mRenderer->getPendingGarbageSizeLimit();
 }
 
+angle::Result ContextVk::lowLatencyMode(gl::Context *context,
+                                        gl::LowLatencyMode latencyMode,
+                                        gl::LowLatencyBoostMode boostMode,
+                                        GLuint minInterval)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    ANGLE_TRY(
+        mCurrentWindowSurface->lowLatencyMode(contextVk, latencyMode, boostMode, minInterval));
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::lowLatencyWait(gl::Context *context, GLuint64 frameId)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    ANGLE_TRY(mCurrentWindowSurface->lowLatencyWait(contextVk, frameId));
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::latencyMarker(gl::Context *context,
+                                       GLuint64 frameId,
+                                       gl::LatencyMarker marker)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    ANGLE_TRY(mCurrentWindowSurface->latencyMarker(contextVk, frameId, marker));
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::synchronizeCpuGpuTime()
 {
     ASSERT(mGpuEventsEnabled);

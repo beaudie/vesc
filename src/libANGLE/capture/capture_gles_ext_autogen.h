@@ -242,6 +242,20 @@ angle::CallCapture CaptureLogicOpANGLE(const State &glState,
 
 // GL_ANGLE_lossy_etc_decode
 
+// GL_ANGLE_low_latency
+angle::CallCapture CaptureLowLatencyModeANGLE(const State &glState,
+                                              bool isCallValid,
+                                              GLenum latencyMode,
+                                              GLenum boostMode,
+                                              GLuint minimumInterval);
+angle::CallCapture CaptureLowLatencyWaitANGLE(const State &glState,
+                                              bool isCallValid,
+                                              GLuint64 frameId);
+angle::CallCapture CaptureLatencyMarkerANGLE(const State &glState,
+                                             bool isCallValid,
+                                             GLuint64 frameId,
+                                             GLenum latencyMarker);
+
 // GL_ANGLE_memory_object_flags
 angle::CallCapture CaptureTexStorageMemFlags2DANGLE(const State &glState,
                                                     bool isCallValid,

@@ -890,6 +890,7 @@ const ProcEntry g_procTable[] = {
     {"glIsVertexArray", P(GL_IsVertexArray)},
     {"glIsVertexArrayOES", P(GL_IsVertexArrayOES)},
     {"glLabelObjectEXT", P(GL_LabelObjectEXT)},
+    {"glLatencyMarkerANGLE", P(GL_LatencyMarkerANGLE)},
     {"glLightModelf", P(GL_LightModelf)},
     {"glLightModelfv", P(GL_LightModelfv)},
     DESKTOP_ONLY("glLightModeli", GL_LightModeli)
@@ -918,6 +919,8 @@ const ProcEntry g_procTable[] = {
     {"glLogicOp", P(GL_LogicOp)},
     {"glLogicOpANGLE", P(GL_LogicOpANGLE)},
     {"glLoseContextCHROMIUM", P(GL_LoseContextCHROMIUM)},
+    {"glLowLatencyModeANGLE", P(GL_LowLatencyModeANGLE)},
+    {"glLowLatencyWaitANGLE", P(GL_LowLatencyWaitANGLE)},
     DESKTOP_ONLY("glMap1d", GL_Map1d)
     DESKTOP_ONLY("glMap1f", GL_Map1f)
     DESKTOP_ONLY("glMap2d", GL_Map2d)

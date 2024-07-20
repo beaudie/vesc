@@ -897,6 +897,16 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     bool hasExcessPendingGarbage() const;
 
+    // ANGLE_low_latency
+    angle::Result lowLatencyMode(gl::Context *context,
+                                 gl::LowLatencyMode latencyMode,
+                                 gl::LowLatencyBoostMode boostMode,
+                                 GLuint minInterval) override;
+    angle::Result lowLatencyWait(gl::Context *context, GLuint64 frameId) override;
+    angle::Result latencyMarker(gl::Context *context,
+                                GLuint64 frameId,
+                                gl::LatencyMarker marker) override;
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t

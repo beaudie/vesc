@@ -1030,6 +1030,44 @@ CallCapture CaptureLogicOpANGLE(const State &glState,
     return CallCapture(angle::EntryPoint::GLLogicOpANGLE, std::move(paramBuffer));
 }
 
+CallCapture CaptureLowLatencyModeANGLE(const State &glState,
+                                       bool isCallValid,
+                                       GLenum latencyMode,
+                                       GLenum boostMode,
+                                       GLuint minimumInterval)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addEnumParam("latencyMode", GLESEnum::AllEnums, ParamType::TGLenum, latencyMode);
+    paramBuffer.addEnumParam("boostMode", GLESEnum::AllEnums, ParamType::TGLenum, boostMode);
+    paramBuffer.addValueParam("minimumInterval", ParamType::TGLuint, minimumInterval);
+
+    return CallCapture(angle::EntryPoint::GLLowLatencyModeANGLE, std::move(paramBuffer));
+}
+
+CallCapture CaptureLowLatencyWaitANGLE(const State &glState, bool isCallValid, GLuint64 frameId)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("frameId", ParamType::TGLuint64, frameId);
+
+    return CallCapture(angle::EntryPoint::GLLowLatencyWaitANGLE, std::move(paramBuffer));
+}
+
+CallCapture CaptureLatencyMarkerANGLE(const State &glState,
+                                      bool isCallValid,
+                                      GLuint64 frameId,
+                                      GLenum latencyMarker)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("frameId", ParamType::TGLuint64, frameId);
+    paramBuffer.addEnumParam("latencyMarker", GLESEnum::AllEnums, ParamType::TGLenum,
+                             latencyMarker);
+
+    return CallCapture(angle::EntryPoint::GLLatencyMarkerANGLE, std::move(paramBuffer));
+}
+
 CallCapture CaptureTexStorageMemFlags2DANGLE(const State &glState,
                                              bool isCallValid,
                                              TextureType targetPacked,

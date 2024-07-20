@@ -10041,6 +10041,24 @@ void Context::clearTexSubImage(TextureID texturePacked,
                                              static_cast<const uint8_t *>(data)));
 }
 
+void Context::lowLatencyMode(GLenum latencyMode, GLenum boostMode, GLuint minInterval)
+{
+    ANGLE_CONTEXT_TRY(mImplementation->lowLatencyMode(
+        this, FromGLenum<gl::LowLatencyMode>(latencyMode),
+        FromGLenum<gl::LowLatencyBoostMode>(boostMode), minInterval));
+}
+
+void Context::lowLatencyWait(GLuint64 frameId)
+{
+    ANGLE_CONTEXT_TRY(mImplementation->lowLatencyWait(this, frameId));
+}
+
+void Context::latencyMarker(GLuint64 frameId, GLenum marker)
+{
+    ANGLE_CONTEXT_TRY(
+        mImplementation->latencyMarker(this, frameId, FromGLenum<gl::LatencyMarker>(marker)));
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Debug *debug,
                    const angle::FrontendFeatures &frontendFeatures,

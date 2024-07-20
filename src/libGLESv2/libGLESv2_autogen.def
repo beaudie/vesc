@@ -518,6 +518,11 @@ EXPORTS
 
     ; GL_ANGLE_lossy_etc_decode
 
+    ; GL_ANGLE_low_latency
+    glLatencyMarkerANGLE
+    glLowLatencyModeANGLE
+    glLowLatencyWaitANGLE
+
     ; GL_ANGLE_memory_object_flags
     glTexStorageMemFlags2DANGLE
     glTexStorageMemFlags2DMultisampleANGLE
