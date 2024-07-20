@@ -114,6 +114,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68922d2d_afbbad31",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-20T08:48:20Z",
+      "side": 1,
+      "message": "This would not copy the last row correctly. Let\u0027s say row length is 1 and the area is 4x3:\n```\nABCD\nEFGH\nIJKL\n```\nThe written buffer should be `AEIJKL`. We should call the compute shader twice: with reduced width for all rows except the last one and with the original width for the last row.",
+      "parentUuid": "f4d7e867_6bd95136",
+      "range": {
+        "startLine": 1763,
+        "startChar": 15,
+        "endLine": 1763,
+        "endChar": 26
+      },
+      "revId": "a778b5ab56ab6b07be0a684267718d0a25f20a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "38131c73_2933fb35",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 3
