@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "221c9b66_fe51a508",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10860,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-20T01:07:11Z",
+      "side": 1,
+      "message": "What\u0027s stopping compute from working in this case? Do rows overlap in this case and the compute invocations race?",
+      "revId": "e01b161e333c3cddb979d6aae8647d7b42ba691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
