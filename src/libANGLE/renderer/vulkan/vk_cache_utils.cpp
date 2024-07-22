@@ -6506,6 +6506,12 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
             commandBufferHelper->bufferRead(contextVk, VK_ACCESS_SHADER_READ_BIT,
                                             block.activeShaders(), &bufferHelper);
         }
+        else if ((bufferHelper.getCurrentWriteAccess() & VK_ACCESS_SHADER_WRITE_BIT) != 0)
+        {
+            // Buffer is already in shader write access, insert WAW barrier only if it is required
+            // by is memoryBarrier.
+            commandBufferHelper->retainResourceForWrite(&bufferHelper);
+        }
         else
         {
             // We set the SHADER_READ_BIT to be conservative.

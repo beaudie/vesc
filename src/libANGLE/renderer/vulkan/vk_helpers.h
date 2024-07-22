@@ -1056,6 +1056,8 @@ class BufferHelper : public ReadWriteResource
 
     void initializeBarrierTracker(Context *context);
 
+    VkAccessFlags getCurrentWriteAccess() const { return mCurrentWriteAccess; }
+
   private:
     // Only called by DynamicBuffer.
     friend class DynamicBuffer;
@@ -1357,14 +1359,16 @@ class CommandBufferHelperCommon : angle::NonCopyable
     void setHasShaderStorageOutput() { mHasShaderStorageOutput = true; }
     bool hasShaderStorageOutput() const { return mHasShaderStorageOutput; }
 
-    bool hasGLMemoryBarrierIssued() const { return mHasGLMemoryBarrierIssued; }
-
     void retainResource(Resource *resource) { resource->setQueueSerial(mQueueSerial); }
 
     void retainResourceForWrite(ReadWriteResource *writeResource)
     {
         writeResource->setWriteQueueSerial(mQueueSerial);
     }
+
+    // Update image with this command buffer's queueSerial. If VkEvent is enabled, image's current
+    // event is also updated with this command's event.
+    void retainImageWithEvent(Context *context, ImageHelper *image);
 
     // Returns true if event already existed in this command buffer.
     bool hasSetEventPendingFlush(const RefCountedEvent &event) const
@@ -1385,6 +1389,12 @@ class CommandBufferHelperCommon : angle::NonCopyable
         ASSERT(!mAcquireNextImageSemaphore.valid());
         mAcquireNextImageSemaphore.setHandle(semaphore);
     }
+
+    void updateImageLayoutAndBarrier(Context *context,
+                                     ImageHelper *image,
+                                     VkImageAspectFlags aspectFlags,
+                                     ImageLayout imageLayout,
+                                     BarrierType barrierType);
 
   protected:
     CommandBufferHelperCommon();
@@ -1436,12 +1446,6 @@ class CommandBufferHelperCommon : angle::NonCopyable
                         BarrierType barrierType,
                         ImageHelper *image);
 
-    void updateImageLayoutAndBarrier(Context *context,
-                                     ImageHelper *image,
-                                     VkImageAspectFlags aspectFlags,
-                                     ImageLayout imageLayout,
-                                     BarrierType barrierType);
-
     void addCommandDiagnosticsCommon(std::ostringstream *out);
 
     // Allocator used by this class.
@@ -1459,10 +1463,6 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // through storage buffers and images.  This is used to determine whether glMemoryBarrier*
     // should flush the command buffer.
     bool mHasShaderStorageOutput;
-    // Whether glMemoryBarrier has been called while commands are recorded in this command buffer.
-    // This is used to know when to check and potentially flush the command buffer if storage
-    // buffers and images are used in it.
-    bool mHasGLMemoryBarrierIssued;
 
     // Tracks resources used in the command buffer.
     QueueSerial mQueueSerial;
@@ -1556,14 +1556,6 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     RefCountedEventCollector *getRefCountedEventCollector() { return &mRefCountedEventCollector; }
 
     angle::Result flushToPrimary(Context *context, CommandsState *commandsState);
-
-    void setGLMemoryBarrierIssued()
-    {
-        if (!mCommandBuffer.empty())
-        {
-            mHasGLMemoryBarrierIssued = true;
-        }
-    }
 
     std::string getCommandDiagnostics();
 
@@ -1802,10 +1794,6 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                 UniqueSerial imageSiblingSerial);
     void fragmentShadingRateImageRead(ImageHelper *image);
 
-    // Update image with this command buffer's queueSerial. If VkEvent is enabled, image's current
-    // event is also updated with this command's event.
-    void retainImage(Context *context, ImageHelper *image);
-
     bool usesImage(const ImageHelper &image) const;
     bool startedAndUsesImageWithBarrier(const ImageHelper &image) const;
 
@@ -1928,13 +1916,6 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     void setImageOptimizeForPresent(ImageHelper *image) { mImageOptimizeForPresent = image; }
 
-    void setGLMemoryBarrierIssued()
-    {
-        if (mRenderPassStarted)
-        {
-            mHasGLMemoryBarrierIssued = true;
-        }
-    }
     std::string getCommandDiagnostics();
 
     // Readonly depth stencil mode and feedback loop mode
@@ -2387,6 +2368,7 @@ class ImageHelper final : public Resource, public angle::Subject
     ImageLayout getCurrentImageLayout() const { return mCurrentLayout; }
     VkImageLayout getCurrentLayout(Renderer *renderer) const;
     const QueueSerial &getBarrierQueueSerial() const { return mBarrierQueueSerial; }
+    VkAccessFlags getCurrentAccess() const;
 
     gl::Extents getLevelExtents(LevelIndex levelVk) const;
     // Helper function to calculate the extents of a render target created for a certain mip of the

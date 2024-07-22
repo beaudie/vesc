@@ -1300,7 +1300,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Common parts of the common dirty bit handlers.
     angle::Result handleDirtyUniformsImpl(DirtyBits::Iterator *dirtyBitsIterator,
                                           vk::CommandBufferHelperCommon *commandBufferHelper);
-    angle::Result handleDirtyMemoryBarrierImpl(DirtyBits::Iterator *dirtyBitsIterator,
+    template <typename CommandBufferHelperT>
+    angle::Result handleDirtyMemoryBarrierImpl(CommandBufferHelperT *commandBufferHelper,
+                                               DirtyBits::Iterator *dirtyBitsIterator,
                                                DirtyBits dirtyBitMask);
     template <typename CommandBufferT>
     angle::Result handleDirtyEventLogImpl(CommandBufferT *commandBuffer);
@@ -1537,6 +1539,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     VkClearValue mClearColorValue;
     VkClearValue mClearDepthStencilValue;
     gl::BlendStateExt::ColorMaskStorage::Type mClearColorMasks;
+
+    // The unprocessed bits passed in from the previous glMemoryBarrier call
+    GLbitfield mDeferredMemoryBarriers;
 
     IncompleteTextureSet mIncompleteTextures;
 
