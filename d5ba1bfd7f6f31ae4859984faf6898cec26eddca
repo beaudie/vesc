@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d5913f8_1f6dfa3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-22T16:17:36Z",
+      "side": 1,
+      "message": "Sorry I wasn\u0027t clear, what I was trying to say: we shouldn\u0027t be trying to decompress some random data - that just looks like some kind of UB already happening elsewhere. We\u0027re also \"kind of lucky\" that the max supported size here is limited by uint_32, so ~4GB. If the format didn\u0027t happen to have this limitation, we could get a very large value and OOM.",
+      "parentUuid": "7afdebee_1702e0c7",
+      "revId": "d5ba1bfd7f6f31ae4859984faf6898cec26eddca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b46075b_4bee02fe",
