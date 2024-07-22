@@ -87,6 +87,30 @@
       },
       "revId": "878edaff51178a68d663691251eabd30a2063d6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "325f23bd_c4752c76",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5099,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-22T15:06:06Z",
+      "side": 1,
+      "message": "Could be a Qualcomm bug. Let\u0027s see if S22 passes or not; if it passes, I\u0027d say just suppress the tests for Pixel 4. If it fails too, make this `!isQualcommProprietary` for now.",
+      "parentUuid": "f6cc2912_ab0e915b",
+      "range": {
+        "startLine": 5098,
+        "startChar": 0,
+        "endLine": 5099,
+        "endChar": 74
+      },
+      "revId": "878edaff51178a68d663691251eabd30a2063d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
