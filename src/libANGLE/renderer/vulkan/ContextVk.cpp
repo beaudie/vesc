@@ -877,6 +877,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
       mClearColorValue{},
       mClearDepthStencilValue{},
       mClearColorMasks(0),
+      mDeferredMemoryBarriers(0),
       mFlipYForCurrentSurface(false),
       mFlipViewportForDrawFramebuffer(false),
       mFlipViewportForReadFramebuffer(false),
@@ -6748,6 +6749,9 @@ angle::Result ContextVk::memoryBarrier(const gl::Context *context, GLbitfield ba
         return angle::Result::Continue;
     }
 
+    // Accumulate unprocessed memoryBarrier bits
+    mDeferredMemoryBarriers |= barriers;
+
     // Defer flushing the command buffers until a draw/dispatch with storage buffer/image is
     // encountered.
     mGraphicsDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
@@ -7513,6 +7517,13 @@ angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferH
     const gl::ProgramExecutable *executable = glState.getProgramExecutable();
     ASSERT(executable);
 
+    // If there are memoryBarrier call being made that requires we insert barriers for images we
+    // must do so.
+    bool memoryBarrierRequired =
+        (mDeferredMemoryBarriers &
+         (GL_TEXTURE_FETCH_BARRIER_BIT | GL_SHADER_IMAGE_ACCESS_BARRIER_BIT)) != 0;
+    mDeferredMemoryBarriers &= ~(GL_TEXTURE_FETCH_BARRIER_BIT | GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
     FillWithNullptr(&mActiveImages);
 
     const gl::ActiveTextureMask &activeImages = executable->getActiveImagesMask();
@@ -7570,8 +7581,18 @@ angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferH
         const vk::ImageLayout imageLayout = GetImageWriteLayoutAndSubresource(
             imageUnit, *image, shaderStages, &level, &layerStart, &layerCount);
 
-        commandBufferHelper->imageWrite(this, level, layerStart, layerCount,
-                                        image->getAspectFlags(), imageLayout, image);
+        if (imageLayout == image->getCurrentImageLayout() && !memoryBarrierRequired)
+        {
+            // GL spec does not require implementation to do WAW barriers for shader image access.
+            // If there is no layout change, we skip the barrier here unless there is prior
+            // memoryBarrier call.
+            commandBufferHelper->retainImageWithEvent(this, image);
+        }
+        else
+        {
+            commandBufferHelper->imageWrite(this, level, layerStart, layerCount,
+                                            image->getAspectFlags(), imageLayout, image);
+        }
     }
 
     return angle::Result::Continue;

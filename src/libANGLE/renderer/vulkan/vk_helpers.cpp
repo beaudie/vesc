@@ -1809,6 +1809,17 @@ void CommandBufferHelperCommon::updateImageLayoutAndBarrier(Context *context,
     }
 }
 
+void CommandBufferHelperCommon::retainImageWithEvent(Context *context, ImageHelper *image)
+{
+    image->setQueueSerial(mQueueSerial);
+    image->updatePipelineStageAccessHistory();
+
+    if (context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled)
+    {
+        image->setCurrentRefCountedEvent(context, mRefCountedEvents);
+    }
+}
+
 template <typename CommandBufferT>
 void CommandBufferHelperCommon::flushSetEventsImpl(Context *context, CommandBufferT *commandBuffer)
 {
@@ -2233,7 +2244,7 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
     imageReadImpl(contextVk, aspectFlags, imageLayout, BarrierType::Event, image);
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
-    retainImage(contextVk, image);
+    retainImageWithEvent(contextVk, image);
 }
 
 void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
@@ -2246,7 +2257,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout,
                    BarrierType::Event, image);
-    retainImage(contextVk, image);
+    retainImageWithEvent(contextVk, image);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
@@ -2320,17 +2331,6 @@ void RenderPassCommandBufferHelper::fragmentShadingRateImageRead(ImageHelper *im
 
     image->resetRenderPassUsageFlags();
     image->setRenderPassUsageFlag(RenderPassUsage::FragmentShadingRateReadOnlyAttachment);
-}
-
-void RenderPassCommandBufferHelper::retainImage(Context *context, ImageHelper *image)
-{
-    image->setQueueSerial(mQueueSerial);
-    image->updatePipelineStageAccessHistory();
-
-    if (context->getRenderer()->getFeatures().useVkEventForImageBarrier.enabled)
-    {
-        image->setCurrentRefCountedEvent(context, mRefCountedEvents);
-    }
 }
 
 void RenderPassCommandBufferHelper::onColorAccess(PackedAttachmentIndex packedAttachmentIndex,
