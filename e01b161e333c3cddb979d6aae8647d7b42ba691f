@@ -34,6 +34,24 @@
       "parentUuid": "221c9b66_fe51a508",
       "revId": "e01b161e333c3cddb979d6aae8647d7b42ba691f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21416cf7_0c1adaca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 10860,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-22T15:11:54Z",
+      "side": 1,
+      "message": "Acknowledged. Should be an easy fix to the compute path then if this is ever used by anyone.",
+      "parentUuid": "3d83e180_42a2d0ca",
+      "revId": "e01b161e333c3cddb979d6aae8647d7b42ba691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
