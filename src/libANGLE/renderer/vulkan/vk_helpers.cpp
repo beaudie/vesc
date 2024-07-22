@@ -2202,7 +2202,6 @@ angle::Result RenderPassCommandBufferHelper::reset(
     mValidTransformFeedbackBufferCount     = 0;
     mRebindTransformFeedbackBuffers        = false;
     mHasShaderStorageOutput                = false;
-    mHasGLMemoryBarrierIssued              = false;
     mPreviousSubpassesCmdCount             = 0;
     mColorAttachmentsCount                 = PackedAttachmentCount(0);
     mDepthStencilAttachmentIndex           = kAttachmentIndexInvalid;
