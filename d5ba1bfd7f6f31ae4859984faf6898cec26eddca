@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b623c4e7_2107bb04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-22T15:24:35Z",
+      "side": 1,
+      "message": "FWIW if we\u0027re trying to decompress something that\u0027s not a correct zip blob, we\u0027re already in UB territory and that needs to be fixed at the source. This is still good to have to catch the trivial case.",
+      "revId": "d5ba1bfd7f6f31ae4859984faf6898cec26eddca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b46075b_4bee02fe",
