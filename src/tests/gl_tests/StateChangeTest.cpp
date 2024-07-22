@@ -3142,6 +3142,8 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+
     // Create the framebuffer that will be invalidated
     GLFramebuffer drawFBO;
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFBO);
