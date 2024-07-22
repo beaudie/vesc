@@ -1056,6 +1056,9 @@ class BufferHelper : public ReadWriteResource
 
     void initializeBarrierTracker(Context *context);
 
+    // Returns the current VkAccessFlags bits
+    VkAccessFlags getCurrentWriteAccess() const { return mCurrentWriteAccess; }
+
   private:
     // Only called by DynamicBuffer.
     friend class DynamicBuffer;
@@ -1366,6 +1369,10 @@ class CommandBufferHelperCommon : angle::NonCopyable
         writeResource->setWriteQueueSerial(mQueueSerial);
     }
 
+    // Update image with this command buffer's queueSerial. If VkEvent is enabled, image's current
+    // event is also updated with this command's event.
+    void retainImageWithEvent(Context *context, ImageHelper *image);
+
     // Returns true if event already existed in this command buffer.
     bool hasSetEventPendingFlush(const RefCountedEvent &event) const
     {
@@ -1384,6 +1391,16 @@ class CommandBufferHelperCommon : angle::NonCopyable
         ASSERT(semaphore != VK_NULL_HANDLE);
         ASSERT(!mAcquireNextImageSemaphore.valid());
         mAcquireNextImageSemaphore.setHandle(semaphore);
+    }
+
+    void addMemoryBarrier(VkPipelineStageFlags srcStageMask,
+                          VkAccessFlags srcAccess,
+                          PipelineStage dstStageIndex,
+                          VkPipelineStageFlags dstStageMask,
+                          VkAccessFlags dstAccess)
+    {
+        mPipelineBarriers.mergeMemoryBarrier(dstStageIndex, srcStageMask, dstStageMask, srcAccess,
+                                             dstAccess);
     }
 
   protected:
@@ -1802,10 +1819,6 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                 UniqueSerial imageSiblingSerial);
     void fragmentShadingRateImageRead(ImageHelper *image);
 
-    // Update image with this command buffer's queueSerial. If VkEvent is enabled, image's current
-    // event is also updated with this command's event.
-    void retainImage(Context *context, ImageHelper *image);
-
     bool usesImage(const ImageHelper &image) const;
     bool startedAndUsesImageWithBarrier(const ImageHelper &image) const;
 
@@ -1935,6 +1948,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
             mHasGLMemoryBarrierIssued = true;
         }
     }
+
     std::string getCommandDiagnostics();
 
     // Readonly depth stencil mode and feedback loop mode

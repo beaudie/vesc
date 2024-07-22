@@ -3078,6 +3078,9 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
+    // Needs explicit barrier between compute shader write to FBO access.
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+
     // Create the framebuffer that will be invalidated
     GLFramebuffer drawFBO;
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFBO);
@@ -3095,10 +3098,14 @@ void main()
     glInvalidateFramebuffer(GL_DRAW_FRAMEBUFFER, 1, &invalidateAttachment);
     EXPECT_GL_NO_ERROR();
 
+    // Make sure compute access occur after fbo clear and invalidate
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
     // Write to it with a compute shader
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
+    // Needs explicit barrier between compute shader write to FBO access.
     glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
 
     // Blend into the framebuffer, then verify that the framebuffer should have had cyan.
@@ -3142,6 +3149,9 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
+    // Needs explicit barrier between compute shader write to FBO access.
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+
     // Create the framebuffer that will be invalidated
     GLFramebuffer drawFBO;
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFBO);
@@ -3159,10 +3169,14 @@ void main()
     glInvalidateFramebuffer(GL_DRAW_FRAMEBUFFER, 1, &invalidateAttachment);
     EXPECT_GL_NO_ERROR();
 
+    // Make sure compute access occur after fbo clear and invalidate
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
     // Write to it with a compute shader
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
+    // Needs explicit barrier between compute shader write to FBO access.
     glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
 
     // Blend into the framebuffer, then verify that the framebuffer should have had cyan.
