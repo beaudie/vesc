@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "020e9e95_7c36e065",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5217,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-23T18:48:22Z",
+      "side": 1,
+      "message": "The loop serves to get all buffer bindings to initial state.  It explicitly skips bindings with no buffer bound (0).  It tries to be clever about whether to re-bind GL_ARRAY_BUFFER.  I\u0027m not sure the complexity is worth the one line of code it saves, redundently binding the array buffer.\n\nThis is basically saying *\"Our array buffer does not match the one bound in replay state\"* and we use that to change it.  And then below, *\"We changed the array buffer, we need Reset calls!\"*.\n\nThe `New` confused me for a minute.  How about `isArrayBufferChanging`?",
+      "range": {
+        "startLine": 5217,
+        "startChar": 13,
+        "endLine": 5217,
+        "endChar": 36
+      },
+      "revId": "05a04ffd53cfd4ce4c57bf1ec690fd87f29b1742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
