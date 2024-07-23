@@ -22,6 +22,30 @@
       },
       "revId": "05a04ffd53cfd4ce4c57bf1ec690fd87f29b1742",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5de03a64_22f93018",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5217,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-07-23T20:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "020e9e95_7c36e065",
+      "range": {
+        "startLine": 5217,
+        "startChar": 13,
+        "endLine": 5217,
+        "endChar": 36
+      },
+      "revId": "05a04ffd53cfd4ce4c57bf1ec690fd87f29b1742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
