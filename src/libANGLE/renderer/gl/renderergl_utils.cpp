@@ -2784,6 +2784,12 @@ bool CanUseDefaultVertexArrayObject(const FunctionsGL *functions)
     return (functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) == 0;
 }
 
+bool CanUseClientSideArrays(const FunctionsGL *functions, GLuint vao)
+{
+    // Can use client arrays on GLES or GL compatability profile only on the default VAO
+    return CanUseDefaultVertexArrayObject(functions) && vao == 0;
+}
+
 bool SupportsCompute(const FunctionsGL *functions)
 {
     // OpenGL 4.2 is required for GL_ARB_compute_shader, some platform drivers have the extension,
