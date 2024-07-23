@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eb1e329_26406479",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-23T22:03:25Z",
+      "side": 1,
+      "message": "These are to be fixed by https://crrev.com/c/5736060",
+      "range": {
+        "startLine": 227,
+        "startChar": 36,
+        "endLine": 227,
+        "endChar": 41
+      },
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
