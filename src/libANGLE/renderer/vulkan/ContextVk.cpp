@@ -62,10 +62,13 @@ static constexpr size_t kMaxReservedOutsideRenderPassQueueSerials = 15;
 static constexpr bool kEnableCommandStreamDiagnostics = false;
 
 // All glMemoryBarrier bits that related to texture usage
+static constexpr GLbitfield kAllBufferMemoryBarriers =
+    GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT | GL_ELEMENT_ARRAY_BARRIER_BIT | GL_UNIFORM_BARRIER_BIT |
+    GL_COMMAND_BARRIER_BIT | GL_PIXEL_BUFFER_BARRIER_BIT | GL_BUFFER_UPDATE_BARRIER_BIT |
+    GL_TRANSFORM_FEEDBACK_BARRIER_BIT | GL_ATOMIC_COUNTER_BARRIER_BIT |
+    GL_SHADER_STORAGE_BARRIER_BIT;
 static constexpr GLbitfield kWriteAfterAccessImageMemoryBarriers =
     GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_FRAMEBUFFER_BARRIER_BIT;
-static constexpr GLbitfield kWriteAfterAccessMemoryBarriers =
-    kWriteAfterAccessImageMemoryBarriers | GL_SHADER_STORAGE_BARRIER_BIT;
 
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
@@ -1964,15 +1967,75 @@ angle::Result ContextVk::handleDirtyMemoryBarrierImpl(DirtyBits::Iterator *dirty
         // dirty bits directly (if called during handling of compute dirty bits).
         if (dirtyBitsIterator)
         {
-            return flushDirtyGraphicsRenderPass(
+            ANGLE_TRY(flushDirtyGraphicsRenderPass(
                 dirtyBitsIterator, dirtyBitMask,
-                RenderPassClosureReason::GLMemoryBarrierThenStorageResource);
+                RenderPassClosureReason::GLMemoryBarrierThenStorageResource));
         }
         else
         {
-            return flushCommandsAndEndRenderPass(
-                RenderPassClosureReason::GLMemoryBarrierThenStorageResource);
+            ANGLE_TRY(flushCommandsAndEndRenderPass(
+                RenderPassClosureReason::GLMemoryBarrierThenStorageResource));
         }
+    }
+
+    if ((mDeferredMemoryBarriers & kAllBufferMemoryBarriers) != 0)
+    {
+        vk::OutsideRenderPassCommandBuffer &commandBuffer =
+            mOutsideRenderPassCommands->getCommandBuffer();
+
+        VkPipelineStageFlags srcStageMask = vk::kAllShadersPipelineStageFlags &
+                                            mRenderer->getSupportedBufferWritePipelineStageMask();
+        VkPipelineStageFlags dstStageMask = 0;
+
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = 0;
+
+        if (mDeferredMemoryBarriers & GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT)
+        {
+            dstStageMask |= VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
+            memoryBarrier.dstAccessMask = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
+        }
+
+        if (mDeferredMemoryBarriers & GL_ELEMENT_ARRAY_BARRIER_BIT)
+        {
+            dstStageMask |= VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
+            memoryBarrier.dstAccessMask = VK_ACCESS_INDEX_READ_BIT;
+        }
+
+        if (mDeferredMemoryBarriers & GL_UNIFORM_BARRIER_BIT)
+        {
+            dstStageMask |= vk::kAllShadersPipelineStageFlags &
+                            mRenderer->getSupportedBufferWritePipelineStageMask();
+            memoryBarrier.dstAccessMask = VK_ACCESS_UNIFORM_READ_BIT;
+        }
+
+        if (mDeferredMemoryBarriers & GL_COMMAND_BARRIER_BIT)
+        {
+            dstStageMask |= VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT;
+            memoryBarrier.dstAccessMask = VK_ACCESS_INDIRECT_COMMAND_READ_BIT;
+        }
+
+        if (mDeferredMemoryBarriers & (GL_PIXEL_BUFFER_BARRIER_BIT | GL_BUFFER_UPDATE_BARRIER_BIT))
+        {
+            dstStageMask |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+            memoryBarrier.dstAccessMask =
+                VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
+        }
+
+        if (mDeferredMemoryBarriers &
+            (GL_TRANSFORM_FEEDBACK_BARRIER_BIT | GL_ATOMIC_COUNTER_BARRIER_BIT |
+             GL_SHADER_STORAGE_BARRIER_BIT))
+        {
+            dstStageMask |= vk::kAllShadersPipelineStageFlags &
+                            mRenderer->getSupportedBufferWritePipelineStageMask();
+            memoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+        }
+
+        commandBuffer.memoryBarrier(srcStageMask, dstStageMask, memoryBarrier);
+
+        mDeferredMemoryBarriers &= ~kAllBufferMemoryBarriers;
     }
 
     // Flushing outside render pass commands is cheap.  If a memory barrier has been issued in its
@@ -6742,11 +6805,6 @@ angle::Result ContextVk::memoryBarrier(const gl::Context *context, GLbitfield ba
     {
         // Otherwise flush the outside render pass commands if necessary.
         ANGLE_TRY(flushOutsideRenderPassCommands());
-    }
-
-    if ((barriers & kWriteAfterAccessMemoryBarriers) == 0)
-    {
-        return angle::Result::Continue;
     }
 
     // Accumulate unprocessed memoryBarrier bits
