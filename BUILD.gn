@@ -945,6 +945,7 @@ angle_source_set("angle_version_info") {
     ":angle_translator_headers",
     ":angle_version",
   ]
+  public_configs += [ ":libANGLE_config" ]
 }
 
 config("angle_backend_config") {
@@ -1032,6 +1033,14 @@ config("libANGLE_config") {
   }
   if (angle_enable_perf_counter_output) {
     defines += [ "ANGLE_ENABLE_PERF_COUNTER_OUTPUT=1" ]
+  }
+
+  if (angle_use_static_hash) {
+    defines += [ "ANGLE_STATIC_HASH" ]
+    assert(
+        defined(angle_static_commit_hash),
+        "angle_static_commit_hash must be defined, if angle_use_static_hash is set to true")
+    defines += [ "ANGLE_STATIC_COMMIT_HASH=${angle_static_commit_hash}" ]
   }
 
   if (!is_android) {

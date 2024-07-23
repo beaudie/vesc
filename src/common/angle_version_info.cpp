@@ -25,6 +25,15 @@ const char *GetANGLECommitHash()
     return ANGLE_COMMIT_HASH;
 }
 
+const char *GetANGLEVersionStringWithStaticCommitHash()
+{
+#if defined(ANGLE_STATIC_HASH)
+    return ANGLE_VERSION_STRING_WITH_STATIC_COMMIT_HASH;
+#else
+    return ANGLE_VERSION_STRING;
+#endif
+}
+
 int GetANGLECommitHashSize()
 {
     return ANGLE_COMMIT_HASH_SIZE;

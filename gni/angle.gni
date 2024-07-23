@@ -30,6 +30,10 @@ declare_args() {
 
   # Enable Desktop GL frontend support.
   angle_enable_gl_desktop_frontend = false
+
+  angle_use_static_hash = true
+
+  angle_static_commit_hash = 1234567
 }
 
 declare_args() {

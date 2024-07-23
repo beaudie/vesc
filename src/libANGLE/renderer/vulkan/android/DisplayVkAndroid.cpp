@@ -30,7 +30,12 @@ egl::Error DisplayVkAndroid::initialize(egl::Display *display)
     ANGLE_TRY(DisplayVk::initialize(display));
 
     std::stringstream strstr;
+#if defined(ANGLE_STATIC_HASH)
+    INFO() << "Yuxin Debug ANGLE_STATIC_HASH defined";
+    strstr << "Version (" << angle::GetANGLEVersionStringWithStaticCommitHash() << ")";
+#else
     strstr << "Version (" << angle::GetANGLEVersionString() << "), ";
+#endif
     strstr << "Renderer (" << mRenderer->getRendererDescription() << ")";
     __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s", strstr.str().c_str());
 
