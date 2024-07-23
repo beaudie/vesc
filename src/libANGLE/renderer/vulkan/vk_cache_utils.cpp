@@ -6525,14 +6525,7 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
         }
         else
         {
-            // We set the SHADER_READ_BIT to be conservative.
-            VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-            for (const gl::ShaderType shaderType : block.activeShaders())
-            {
-                const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
-                commandBufferHelper->bufferWrite(contextVk, accessFlags, pipelineStage,
-                                                 &bufferHelper);
-            }
+            commandBufferHelper->retainResourceForWrite(&bufferHelper);
         }
     }
 
