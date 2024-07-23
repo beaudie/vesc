@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9712c66_6bd5f480",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-23T17:53:37Z",
+      "side": 1,
+      "message": "Update this to match the gn arg naming?",
+      "range": {
+        "startLine": 1013,
+        "startChar": 18,
+        "endLine": 1013,
+        "endChar": 45
+      },
+      "revId": "33e3ea9ba138f333d9b03a6aa30b19fa5e336dd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
