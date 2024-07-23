@@ -29,7 +29,7 @@ bool IsElementArrayBufferSubjectIndex(angle::SubjectIndex subjectIndex)
 VertexArrayState::VertexArrayState(VertexArray *vertexArray,
                                    size_t maxAttribs,
                                    size_t maxAttribBindings)
-    : mElementArrayBuffer(vertexArray, kElementArrayBufferIndex)
+    : mId(vertexArray->id()), mElementArrayBuffer(vertexArray, kElementArrayBufferIndex)
 {
     ASSERT(maxAttribs <= maxAttribBindings);
 
@@ -102,6 +102,11 @@ void VertexArrayState::updateCachedMutableOrNonPersistentArrayBuffers(size_t ind
         buffer.get() &&
         (!buffer->isImmutable() || (buffer->getAccessFlags() & GL_MAP_PERSISTENT_BIT_EXT) == 0);
     mCachedMutableOrImpersistentArrayBuffers.set(index, isMutableOrImpersistentArrayBuffer);
+}
+
+bool VertexArrayState::isDefault() const
+{
+    return mId.value == 0;
 }
 
 // VertexArray implementation.
