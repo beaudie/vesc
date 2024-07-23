@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffa6eeb6_ac06c726",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-23T16:45:50Z",
+      "side": 1,
+      "message": "I think \"frameworkless\" is a bit confusing as it could refer to multiple things, could we consider other alternatives? Maybe `angle_android_dma_buf` given this dependency? Or can it change to something else in near future? Could also be something like `angle_android_no_platform` - but then naturally the question is what replaces the platform part.",
+      "range": {
+        "startLine": 163,
+        "startChar": 35,
+        "endLine": 163,
+        "endChar": 62
+      },
+      "revId": "6a2af89cb283f920ac57b1024eae80ec1d82326f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
