@@ -11,6 +11,7 @@
 //   2. Literal statements: "1.0;". The ESSL output doesn't define a default precision for float,
 //      so float literal statements would end up with no precision which is invalid ESSL.
 //   3. Statements after discard, return, break and continue.
+//   4. Switch statements over a constant, where no case matches the constant
 
 #include "compiler/translator/tree_ops/PruneNoOps.h"
 
@@ -22,12 +23,78 @@ namespace sh
 
 namespace
 {
+uint32_t GetSwitchConstantAsUInt(const TConstantUnion *value)
+{
+    TConstantUnion asUInt;
+    if (value->getType() == EbtYuvCscStandardEXT)
+    {
+        asUInt.setUConst(value->getYuvCscStandardEXTConst());
+    }
+    else
+    {
+        bool valid = asUInt.cast(EbtUInt, *value);
+        ASSERT(valid);
+    }
+    return asUInt.getUConst();
+}
+
+bool IsNoOpSwitch(TIntermSwitch *node)
+{
+    if (node == nullptr)
+    {
+        return false;
+    }
+
+    TIntermConstantUnion *expr = node->getInit()->getAsConstantUnion();
+    if (expr == nullptr)
+    {
+        return false;
+    }
+
+    const uint32_t exprValue = GetSwitchConstantAsUInt(expr->getConstantValue());
+
+    // See if any block matches the constant value
+    const TIntermSequence &statements = *node->getStatementList()->getSequence();
+
+    for (TIntermNode *statement : statements)
+    {
+        TIntermCase *caseLabel = statement->getAsCaseNode();
+        if (caseLabel == nullptr)
+        {
+            continue;
+        }
+
+        // Default matches everything, consider it not a no-op.
+        if (!caseLabel->hasCondition())
+        {
+            return false;
+        }
+
+        TIntermConstantUnion *condition = caseLabel->getCondition()->getAsConstantUnion();
+        ASSERT(condition != nullptr);
+
+        // If any case matches the value, it's not a no-op.
+        const uint32_t caseValue = GetSwitchConstantAsUInt(condition->getConstantValue());
+        if (caseValue == exprValue)
+        {
+            return false;
+        }
+    }
+
+    // No case matched the constant value the switch was used on, so the entire switch is a no-op.
+    return true;
+}
 
 bool IsNoOp(TIntermNode *node)
 {
     bool isEmptyDeclaration = node->getAsDeclarationNode() != nullptr &&
                               node->getAsDeclarationNode()->getSequence()->empty();
     if (isEmptyDeclaration)
+    {
+        return true;
+    }
+
+    if (IsNoOpSwitch(node->getAsSwitchNode()))
     {
         return true;
     }
