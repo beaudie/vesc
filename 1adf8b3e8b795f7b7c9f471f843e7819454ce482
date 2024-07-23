@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbc2db88_cacb30b5",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_command_buffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-23T14:29:30Z",
+      "side": 1,
+      "message": "What\u0027s stopping wgpu/ from using WebGPU secondaries? In vulkan/ we actually _can_ use Vulkan secondaries (with probably even more restrictions compared to WebGPU), we just found this to be faster in practice. Since Dawn already has something like this, it may just be faster to use that directly.",
+      "revId": "1adf8b3e8b795f7b7c9f471f843e7819454ce482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
