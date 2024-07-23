@@ -56,6 +56,8 @@ static void ValidateStateHelper(const FunctionsGL *functions,
     }
 }
 
+static constexpr GLuint kInvalidObjectID = std::numeric_limits<GLuint>::max();
+
 }  // anonymous namespace
 
 VertexArrayStateGL::VertexArrayStateGL(size_t maxAttribs, size_t maxBindings)
@@ -212,7 +214,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
 
     // It's possible we've enabled the emulated VAO feature for testing but we're on a core profile.
     // Use a generated VAO as the default VAO so we can still test.
-    if (features.syncVertexArraysToDefault.enabled &&
+    if ((features.syncAllVertexArraysToDefault.enabled ||
+         features.syncDefaultVertexArraysToDefault.enabled) &&
         !nativegl::CanUseDefaultVertexArrayObject(mFunctions))
     {
         ASSERT(nativegl::SupportsVertexArrayObjects(mFunctions));
@@ -440,7 +443,7 @@ void StateManagerGL::bindVertexArray(GLuint vao, VertexArrayStateGL *vaoState)
 {
     if (mVAO != vao)
     {
-        ASSERT(!mFeatures.syncVertexArraysToDefault.enabled);
+        ASSERT(!mFeatures.syncAllVertexArraysToDefault.enabled);
 
         mVAO                                      = vao;
         mVAOState                                 = vaoState;
@@ -2281,7 +2284,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 ANGLE_TRY(propagateProgramToVAO(context, state.getProgramExecutable(),
                                                 GetImplAs<VertexArrayGL>(state.getVertexArray())));
 
-                if (mFeatures.syncVertexArraysToDefault.enabled)
+                if (vaoGL->syncsToSharedState())
                 {
                     // Re-sync the vertex array because all frontend VAOs share the same backend
                     // state. Only sync bits that can be set in ES2.0 or 3.0
@@ -3251,8 +3254,8 @@ void StateManagerGL::syncFromNativeContext(const gl::Extensions &extensions,
     syncFramebufferFromNativeContext(extensions, state);
     syncPixelPackUnpackFromNativeContext(extensions, state);
     syncStencilFromNativeContext(extensions, state);
-    syncVertexArraysFromNativeContext(extensions, state);
     syncBufferBindingsFromNativeContext(extensions, state);
+    syncVertexArraysFromNativeContext(extensions, state);
     syncTextureUnitsFromNativeContext(extensions, state);
 
     ASSERT(mFunctions->getError() == GL_NO_ERROR);
@@ -3604,7 +3607,12 @@ void StateManagerGL::syncBufferBindingsFromNativeContext(const gl::Extensions &e
     mBuffers[gl::BufferBinding::Array] = state->vertexArrayBufferBinding;
 
     get(GL_ELEMENT_ARRAY_BUFFER_BINDING, &state->elementArrayBufferBinding);
-    mBuffers[gl::BufferBinding::ElementArray] = state->elementArrayBufferBinding;
+    mBuffers[gl::BufferBinding::ElementArray] = kInvalidObjectID;
+    if (mVAOState)
+    {
+        mVAOState->elementArrayBuffer = kInvalidObjectID;
+    }
+    mLocalDirtyBits.set(gl::state::DIRTY_BIT_VERTEX_ARRAY_BINDING);
 }
 
 void StateManagerGL::restoreBufferBindingsNativeContext(const gl::Extensions &extensions,
@@ -3661,12 +3669,12 @@ void StateManagerGL::syncVertexArraysFromNativeContext(const gl::Extensions &ext
     if (mSupportsVertexArrayObjects)
     {
         get(GL_VERTEX_ARRAY_BINDING, &state->vertexArrayBinding);
-        if (mVAO != static_cast<GLuint>(state->vertexArrayBinding))
+        mVAO = kInvalidObjectID;
+        if (mVAOState)
         {
-            mVAO                                      = state->vertexArrayBinding;
-            mBuffers[gl::BufferBinding::ElementArray] = 0;
-            mLocalDirtyBits.set(gl::state::DIRTY_BIT_VERTEX_ARRAY_BINDING);
+            mVAOState->elementArrayBuffer = kInvalidObjectID;
         }
+        mLocalDirtyBits.set(gl::state::DIRTY_BIT_VERTEX_ARRAY_BINDING);
     }
 }
 
@@ -3675,7 +3683,10 @@ void StateManagerGL::restoreVertexArraysNativeContext(const gl::Extensions &exte
 {
     if (mSupportsVertexArrayObjects)
     {
-        bindVertexArray(state->vertexArrayBinding, 0);
+        mFunctions->bindVertexArray(state->vertexArrayBinding);
+        mVAO      = kInvalidObjectID;
+        mVAOState = nullptr;
+        mLocalDirtyBits.set(gl::state::DIRTY_BIT_VERTEX_ARRAY_BINDING);
     }
 }
 
