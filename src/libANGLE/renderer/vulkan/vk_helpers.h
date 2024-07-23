@@ -1056,6 +1056,8 @@ class BufferHelper : public ReadWriteResource
 
     void initializeBarrierTracker(Context *context);
 
+    VkAccessFlags getCurrentWriteAccess() const { return mCurrentWriteAccess; }
+
   private:
     // Only called by DynamicBuffer.
     friend class DynamicBuffer;
