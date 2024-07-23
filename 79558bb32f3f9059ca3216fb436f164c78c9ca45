@@ -16,6 +16,24 @@
       "message": "Do you mean no ES2 apps will be using ANGLE?",
       "revId": "79558bb32f3f9059ca3216fb436f164c78c9ca45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46918f0f_876c1115",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-23T02:24:54Z",
+      "side": 1,
+      "message": "GLES has a feature where if an app asks for context version X, the driver is allowed to return a context with version Y \u003e\u003d X. An application asking for an ES2 context can get an ES3.2 context for example.\n\nThe only way ANGLE would return an ES2 context is if the hardware is so limited that it cannot implement an ES3 context. Chances of such a hardware running Vulkan is slim (but possible), but most importantly:\n\n* the Android profiles will ensure some minimum requirements are met such that any device could expose ES3+\n* in the off chance a device is incapable of ES3, the worst that can happen is that application gets the nicer seamless cubemap sampling, instead of the bad seamful cubemap sampling\n\nIt\u0027s a win either way not to have this code.",
+      "parentUuid": "501eb5b1_60108f1c",
+      "revId": "79558bb32f3f9059ca3216fb436f164c78c9ca45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
