@@ -34,6 +34,24 @@
       "parentUuid": "dbc2db88_cacb30b5",
       "revId": "1adf8b3e8b795f7b7c9f471f843e7819454ce482",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4162bc4b_5b71a3be",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_command_buffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-23T17:10:22Z",
+      "side": 1,
+      "message": "Got it",
+      "parentUuid": "f5b3db9b_9cd4cb93",
+      "revId": "1adf8b3e8b795f7b7c9f471f843e7819454ce482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
