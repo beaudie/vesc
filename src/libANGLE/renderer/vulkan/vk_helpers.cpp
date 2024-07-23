@@ -1605,7 +1605,7 @@ bool RenderPassAttachment::onAccessImpl(ResourceAccess access, uint32_t currentC
 
 // CommandBufferHelperCommon implementation.
 CommandBufferHelperCommon::CommandBufferHelperCommon()
-    : mCommandPool(nullptr), mHasShaderStorageOutput(false), mHasGLMemoryBarrierIssued(false)
+    : mCommandPool(nullptr), mHasShaderStorageOutput(false)
 {}
 
 CommandBufferHelperCommon::~CommandBufferHelperCommon() {}
@@ -2202,7 +2202,6 @@ angle::Result RenderPassCommandBufferHelper::reset(
     mValidTransformFeedbackBufferCount     = 0;
     mRebindTransformFeedbackBuffers        = false;
     mHasShaderStorageOutput                = false;
-    mHasGLMemoryBarrierIssued              = false;
     mPreviousSubpassesCmdCount             = 0;
     mColorAttachmentsCount                 = PackedAttachmentCount(0);
     mDepthStencilAttachmentIndex           = kAttachmentIndexInvalid;
@@ -7059,6 +7058,11 @@ bool ImageHelper::isCombinedDepthStencilFormat() const
 VkImageLayout ImageHelper::getCurrentLayout(Renderer *renderer) const
 {
     return ConvertImageLayoutToVkImageLayout(renderer, mCurrentLayout);
+}
+
+VkAccessFlags ImageHelper::getCurrentAccess() const
+{
+    return kImageMemoryBarrierData[mCurrentLayout].dstAccessMask;
 }
 
 gl::Extents ImageHelper::getLevelExtents(LevelIndex levelVk) const
