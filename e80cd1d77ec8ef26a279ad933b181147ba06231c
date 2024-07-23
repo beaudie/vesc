@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5b5189d_e81bdf71",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-23T19:58:15Z",
+      "side": 1,
+      "message": "I think you could just set this true for everything. Most formats are filterable and we\u0027ll probably make more progress by just allowing everything for now.\n\nI would also set `renderbuffer` and `blendable` true as well.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 5
+      },
+      "revId": "e80cd1d77ec8ef26a279ad933b181147ba06231c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00fc516d_030ffd05",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-23T19:58:15Z",
+      "side": 1,
+      "message": "Looks like just capturing levelToRemove will be enough",
+      "range": {
+        "startLine": 190,
+        "startChar": 38,
+        "endLine": 190,
+        "endChar": 41
+      },
+      "revId": "e80cd1d77ec8ef26a279ad933b181147ba06231c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
