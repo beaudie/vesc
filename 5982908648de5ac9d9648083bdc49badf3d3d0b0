@@ -22,6 +22,30 @@
       },
       "revId": "5982908648de5ac9d9648083bdc49badf3d3d0b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40b82dac_20cf47d0",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-07-24T18:32:58Z",
+      "side": 1,
+      "message": "Oops I somehow forgot that the literal name of the formats indicate the size of each channel 🤦‍♀️\nThanks for the fix!",
+      "parentUuid": "f3895f2a_8aaaf327",
+      "range": {
+        "startLine": 1289,
+        "startChar": 0,
+        "endLine": 1299,
+        "endChar": 13
+      },
+      "revId": "5982908648de5ac9d9648083bdc49badf3d3d0b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
