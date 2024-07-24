@@ -16,6 +16,130 @@
       "message": "The easy part, hopefully passes CQ",
       "revId": "12ead85d5664f5af521f511f8012ada4ea5d92dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "766967e1_478af001",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-24T06:42:16Z",
+      "side": 1,
+      "message": "Thanks for putting this together. Will email some comments separately.",
+      "revId": "12ead85d5664f5af521f511f8012ada4ea5d92dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57644904_a0dfdacd",
+        "filename": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-24T06:42:16Z",
+      "side": 1,
+      "message": "typo\" Consant -\u003e Constant",
+      "fixSuggestions": [
+        {
+          "fixId": "25c71afc_ce259c73",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+              "range": {
+                "startLine": 26,
+                "startChar": 0,
+                "endLine": 27,
+                "endChar": 0
+              },
+              "replacement": "uint32_t GetSwitchConstantAsUInt(const TConstantUnion *value)\n"
+            },
+            {
+              "path": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+              "range": {
+                "startLine": 54,
+                "startChar": 0,
+                "endLine": 55,
+                "endChar": 0
+              },
+              "replacement": "    const uint32_t exprValue \u003d GetSwitchConstantAsUInt(expr-\u003egetConstantValue());\n"
+            },
+            {
+              "path": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+              "range": {
+                "startLine": 77,
+                "startChar": 0,
+                "endLine": 78,
+                "endChar": 0
+              },
+              "replacement": "        const uint32_t caseValue \u003d GetSwitchConstantAsUInt(condition-\u003egetConstantValue());\n"
+            }
+          ]
+        }
+      ],
+      "revId": "12ead85d5664f5af521f511f8012ada4ea5d92dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "275df3c2_b4c148b3",
+        "filename": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-24T06:42:16Z",
+      "side": 1,
+      "message": "Is it common to find switch values of this somewhat specialized extension type?",
+      "revId": "12ead85d5664f5af521f511f8012ada4ea5d92dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2239956b_f2eac2f8",
+        "filename": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-24T06:42:16Z",
+      "side": 1,
+      "message": "Under what conditions would this assertion fail? Can this code be made more robust so that in release builds it won\u0027t do the wrong thing, but instead signal failure to the caller?",
+      "fixSuggestions": [
+        {
+          "fixId": "701b701c_e515d528",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+              "range": {
+                "startLine": 35,
+                "startChar": 0,
+                "endLine": 37,
+                "endChar": 0
+              },
+              "replacement": "        asUInt.cast(EbtUInt, *value);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "12ead85d5664f5af521f511f8012ada4ea5d92dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
