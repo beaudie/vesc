@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1781e71_756b8ce6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-07-24T15:43:21Z",
+      "side": 1,
+      "message": "i believe the intent here is to make sure PPO warmup also respects GPL support? if so, could you reword this to -\n```\nVulkan: PPO must use Complete subset only when GPL isnt supported\n```\nor something to that effect",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 56
+      },
+      "revId": "c9957dfb74ff03ad32403259927cc26a0d9c65e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8199cce_84c21d93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-07-24T15:43:21Z",
+      "side": 1,
+      "message": "note - i will need to revert / rework this when i upstream decoupled GPL",
+      "revId": "c9957dfb74ff03ad32403259927cc26a0d9c65e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
