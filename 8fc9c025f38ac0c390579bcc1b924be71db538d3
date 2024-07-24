@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f855c13_32d41c33",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-07-24T15:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86f74c1b_b98b114a",
+      "revId": "8fc9c025f38ac0c390579bcc1b924be71db538d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13202e37_ff919ffc",
