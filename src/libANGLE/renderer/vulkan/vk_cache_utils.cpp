@@ -6452,7 +6452,8 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
     VkDescriptorType descriptorType,
     VkDeviceSize maxBoundBufferRange,
     const BufferHelper &emptyBuffer,
-    const WriteDescriptorDescs &writeDescriptorDescs)
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    const GLbitfield memoryBarrierBits)
 {
     if (block.activeShaders().none())
     {
@@ -6506,6 +6507,14 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
             commandBufferHelper->bufferRead(contextVk, VK_ACCESS_SHADER_READ_BIT,
                                             block.activeShaders(), &bufferHelper);
         }
+        else if ((bufferHelper.getCurrentWriteAccess() & VK_ACCESS_SHADER_WRITE_BIT) != 0 &&
+                 (memoryBarrierBits & kBufferMemoryBarrierBits) == 0)
+        {
+            // Buffer is already in shader write access, and this is not from memoryBarrier call,
+            // then skip the WAW barrier since GL spec says driver is not required to insert barrier
+            // here. We still need to maintain object life time tracking here.
+            commandBufferHelper->retainResourceForWrite(&bufferHelper);
+        }
         else
         {
             // We set the SHADER_READ_BIT to be conservative.
@@ -6549,7 +6558,8 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
     VkDescriptorType descriptorType,
     VkDeviceSize maxBoundBufferRange,
     const BufferHelper &emptyBuffer,
-    const WriteDescriptorDescs &writeDescriptorDescs)
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    const GLbitfield memoryBarrierBits)
 {
     const bool isUniformBuffer = descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER ||
                                  descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
@@ -6562,7 +6572,7 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
                                    : executable.getShaderStorageBlockBinding(blockIndex);
         updateOneShaderBuffer(contextVk, commandBufferHelper, variableInfoMap, buffers,
                               blocks[blockIndex], binding, descriptorType, maxBoundBufferRange,
-                              emptyBuffer, writeDescriptorDescs);
+                              emptyBuffer, writeDescriptorDescs, memoryBarrierBits);
     }
 }
 
@@ -6654,7 +6664,8 @@ template void DescriptorSetDescBuilder::updateOneShaderBuffer<vk::RenderPassComm
     VkDescriptorType descriptorType,
     VkDeviceSize maxBoundBufferRange,
     const BufferHelper &emptyBuffer,
-    const WriteDescriptorDescs &writeDescriptorDescs);
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    const GLbitfield memoryBarrierBits);
 
 template void DescriptorSetDescBuilder::updateOneShaderBuffer<OutsideRenderPassCommandBufferHelper>(
     ContextVk *contextVk,
@@ -6666,7 +6677,8 @@ template void DescriptorSetDescBuilder::updateOneShaderBuffer<OutsideRenderPassC
     VkDescriptorType descriptorType,
     VkDeviceSize maxBoundBufferRange,
     const BufferHelper &emptyBuffer,
-    const WriteDescriptorDescs &writeDescriptorDescs);
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    const GLbitfield memoryBarrierBits);
 
 template void DescriptorSetDescBuilder::updateShaderBuffers<OutsideRenderPassCommandBufferHelper>(
     ContextVk *contextVk,
@@ -6678,7 +6690,8 @@ template void DescriptorSetDescBuilder::updateShaderBuffers<OutsideRenderPassCom
     VkDescriptorType descriptorType,
     VkDeviceSize maxBoundBufferRange,
     const BufferHelper &emptyBuffer,
-    const WriteDescriptorDescs &writeDescriptorDescs);
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    const GLbitfield memoryBarrierBits);
 
 template void DescriptorSetDescBuilder::updateShaderBuffers<RenderPassCommandBufferHelper>(
     ContextVk *contextVk,
@@ -6690,7 +6703,8 @@ template void DescriptorSetDescBuilder::updateShaderBuffers<RenderPassCommandBuf
     VkDescriptorType descriptorType,
     VkDeviceSize maxBoundBufferRange,
     const BufferHelper &emptyBuffer,
-    const WriteDescriptorDescs &writeDescriptorDescs);
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    const GLbitfield memoryBarrierBits);
 
 template void DescriptorSetDescBuilder::updateAtomicCounters<OutsideRenderPassCommandBufferHelper>(
     ContextVk *contextVk,
