@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "81abedb2_9ecfd7da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-07-24T16:03:42Z",
+      "side": 1,
+      "message": "Yes. No point doing Complete warmup if then compile Shaders subset at draw time.\n\nSuggested comment will not fit the 64 character limit. Also it missed that PPO must use it in warmup - the important part.\n\nIs this OK?\n```\nVulkan: PPO must warmup subsets according to GPL support\n```",
+      "parentUuid": "d1781e71_756b8ce6",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 56
+      },
+      "revId": "c9957dfb74ff03ad32403259927cc26a0d9c65e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f8199cce_84c21d93",
