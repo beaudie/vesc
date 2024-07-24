@@ -16,6 +16,24 @@
       "message": "I find that this CL is adding a lot of complexity (-\u003e maintenance cost) to the script. Note that this script runs on bots that are outside of our team control (skia rollers managed by another team) and is known to have caused difficult to debug issues in the past (we don\u0027t even have access to full logs when things break). Could we take a step back and take some time to consider alternatives?\n\n* Can some of this be moved to BUILD.gn on ANGLE side, like adding new build rules or targets? This script is usually rather generic, hoping we could keep it that way maybe with small tweaks\n\n* Can we avoid the complex merging stuff? Maybe something like `Android.bp` -\u003e include `Android_impl1.bp` / `Android_impl2.bp` depending on the condition?",
       "revId": "02ca0298930fd9a64e36ed7d718cb9890deff1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b83fe5b7_a8eca442",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1386083
+      },
+      "writtenOn": "2024-07-24T14:26:08Z",
+      "side": 1,
+      "message": "Thank you for taking a look and sharing the additional context.\n\nI expanded the http://shortn/_Lb6ajNLayv doc with this information - let\u0027s discuss the options there.",
+      "parentUuid": "cf11c99e_88e66cc9",
+      "revId": "02ca0298930fd9a64e36ed7d718cb9890deff1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
