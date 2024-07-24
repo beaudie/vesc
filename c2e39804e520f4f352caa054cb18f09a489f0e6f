@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9005ae5c_c8f3ebc4",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-24T13:11:57Z",
+      "side": 1,
+      "message": "No need for `#ifdef`, since it\u0027s only called from ASSERT it gets removed by the compiler anyway.\n\nPlease move the anonymous namespace at the top of the file and remove `static`.\n\nAlso, for loose functions we use CamelCase.\n\n```suggestion\nGLuint StencilBitCount(const Framebuffer *framebuffer)\n{\n    const FramebufferAttachment *stencilAttachment \u003d\n        framebuffer ? framebuffer-\u003egetStencilOrDepthStencilAttachment() : nullptr;\n    return stencilAttachment ? stencilAttachment-\u003egetStencilSize() : 0;\n}\n```",
+      "range": {
+        "startLine": 1698,
+        "startChar": 0,
+        "endLine": 1705,
+        "endChar": 6
+      },
+      "revId": "c2e39804e520f4f352caa054cb18f09a489f0e6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
