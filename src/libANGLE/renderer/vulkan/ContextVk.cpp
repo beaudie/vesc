@@ -2809,7 +2809,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
             this, commandBufferHelper, *executable, variableInfoMap,
             mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
             executableVk->getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
+            mEmptyBuffer, mShaderBufferWriteDescriptorDescs, mDeferredMemoryBarriers);
     }
     if (hasStorageBuffers)
     {
@@ -2817,7 +2817,8 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
             this, commandBufferHelper, *executable, variableInfoMap,
             mState.getOffsetBindingPointerShaderStorageBuffers(),
             executable->getShaderStorageBlocks(), executableVk->getStorageBufferDescriptorType(),
-            limits.maxStorageBufferRange, mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
+            limits.maxStorageBufferRange, mEmptyBuffer, mShaderBufferWriteDescriptorDescs,
+            mDeferredMemoryBarriers);
     }
     if (hasAtomicCounterBuffers)
     {
@@ -2839,6 +2840,67 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
         ANGLE_TRY(mShaderBuffersDescriptorDesc.updateInputAttachments(
             this, *executable, variableInfoMap, vk::GetImpl(mState.getDrawFramebuffer()),
             mShaderBufferWriteDescriptorDescs));
+    }
+
+    if (mDeferredMemoryBarriers & kBufferMemoryBarrierBits)
+    {
+        VkPipelineStageFlags srcStageMask = vk::kAllShadersPipelineStageFlags &
+                                            mRenderer->getSupportedBufferWritePipelineStageMask();
+        VkAccessFlags srcAccess = VK_ACCESS_SHADER_WRITE_BIT;
+
+        if (mDeferredMemoryBarriers & GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT)
+        {
+            commandBufferHelper->addMemoryBarrier(
+                srcStageMask, srcAccess, vk::PipelineStage::VertexInput,
+                VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+        }
+
+        if (mDeferredMemoryBarriers & GL_ELEMENT_ARRAY_BARRIER_BIT)
+        {
+            commandBufferHelper->addMemoryBarrier(
+                srcStageMask, srcAccess, vk::PipelineStage::VertexInput,
+                VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, VK_ACCESS_INDEX_READ_BIT);
+        }
+
+        if (mDeferredMemoryBarriers & GL_UNIFORM_BARRIER_BIT)
+        {
+            commandBufferHelper->addMemoryBarrier(
+                srcStageMask, srcAccess, vk::PipelineStage::VertexShader,
+                vk::kAllShadersPipelineStageFlags &
+                    mRenderer->getSupportedBufferWritePipelineStageMask(),
+                VK_ACCESS_UNIFORM_READ_BIT);
+        }
+
+        if (mDeferredMemoryBarriers & GL_COMMAND_BARRIER_BIT)
+        {
+            commandBufferHelper->addMemoryBarrier(
+                srcStageMask, srcAccess, vk::PipelineStage::DrawIndirect,
+                VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+        }
+
+        if (mDeferredMemoryBarriers & (GL_PIXEL_BUFFER_BARRIER_BIT | GL_BUFFER_UPDATE_BARRIER_BIT))
+        {
+            commandBufferHelper->addMemoryBarrier(
+                srcStageMask, srcAccess, vk::PipelineStage::Transfer,
+                VK_PIPELINE_STAGE_TRANSFER_BIT,
+                VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT);
+        }
+
+        if (mDeferredMemoryBarriers &
+            (GL_TRANSFORM_FEEDBACK_BARRIER_BIT | GL_ATOMIC_COUNTER_BARRIER_BIT |
+             GL_SHADER_STORAGE_BARRIER_BIT))
+        {
+            commandBufferHelper->addMemoryBarrier(
+                srcStageMask, srcAccess, vk::PipelineStage::Transfer,
+                VK_PIPELINE_STAGE_TRANSFER_BIT |
+                    (vk::kAllShadersPipelineStageFlags &
+                     mRenderer->getSupportedBufferWritePipelineStageMask()),
+                VK_ACCESS_TRANSFER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT |
+                    VK_ACCESS_SHADER_WRITE_BIT);
+        }
+
+        // Force issued WAW barriers, remove the kBufferMemoryBarrierBits.
+        mDeferredMemoryBarriers &= ~kBufferMemoryBarrierBits;
     }
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
@@ -2896,7 +2958,7 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
             mState.getOffsetBindingPointerUniformBuffers(),
             executable->getUniformBlocks()[blockIndex], binding,
             executableVk->getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
+            mEmptyBuffer, mShaderBufferWriteDescriptorDescs, mDeferredMemoryBarriers);
     }
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
@@ -6676,15 +6738,8 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
 angle::Result ContextVk::memoryBarrier(const gl::Context *context, GLbitfield barriers)
 {
     // First, turn GL_ALL_BARRIER_BITS into a mask that has only the valid barriers set.
-    constexpr GLbitfield kCoreBarrierBits =
-        GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT | GL_ELEMENT_ARRAY_BARRIER_BIT | GL_UNIFORM_BARRIER_BIT |
-        GL_TEXTURE_FETCH_BARRIER_BIT | GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_COMMAND_BARRIER_BIT |
-        GL_PIXEL_BUFFER_BARRIER_BIT | GL_TEXTURE_UPDATE_BARRIER_BIT | GL_BUFFER_UPDATE_BARRIER_BIT |
-        GL_FRAMEBUFFER_BARRIER_BIT | GL_TRANSFORM_FEEDBACK_BARRIER_BIT |
-        GL_ATOMIC_COUNTER_BARRIER_BIT | GL_SHADER_STORAGE_BARRIER_BIT;
-    constexpr GLbitfield kExtensionBarrierBits = GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT;
-
-    barriers &= kCoreBarrierBits | kExtensionBarrierBits;
+    constexpr GLbitfield kAllMemoryBarrierBits = kBufferMemoryBarrierBits | kImageMemoryBarrierBits;
+    barriers &= kAllMemoryBarrierBits;
 
     // GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT specifies that a fence sync or glFinish must be used
     // after the barrier for the CPU to to see the shader writes.  Since host-visible buffer writes

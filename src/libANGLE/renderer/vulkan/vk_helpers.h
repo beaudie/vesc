@@ -1056,6 +1056,9 @@ class BufferHelper : public ReadWriteResource
 
     void initializeBarrierTracker(Context *context);
 
+    // Returns the current VkAccessFlags bits
+    VkAccessFlags getCurrentWriteAccess() const { return mCurrentWriteAccess; }
+
   private:
     // Only called by DynamicBuffer.
     friend class DynamicBuffer;
@@ -1388,6 +1391,16 @@ class CommandBufferHelperCommon : angle::NonCopyable
         ASSERT(semaphore != VK_NULL_HANDLE);
         ASSERT(!mAcquireNextImageSemaphore.valid());
         mAcquireNextImageSemaphore.setHandle(semaphore);
+    }
+
+    void addMemoryBarrier(VkPipelineStageFlags srcStageMask,
+                          VkAccessFlags srcAccess,
+                          PipelineStage stageIndex,
+                          VkPipelineStageFlags dstStageMask,
+                          VkAccessFlags dstAccess)
+    {
+        mPipelineBarriers.mergeMemoryBarrier(stageIndex, srcStageMask, dstStageMask, srcAccess,
+                                             dstAccess);
     }
 
   protected:
