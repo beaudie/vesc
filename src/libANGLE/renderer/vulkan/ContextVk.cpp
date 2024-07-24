@@ -2809,7 +2809,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
             this, commandBufferHelper, *executable, variableInfoMap,
             mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
             executableVk->getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
+            mEmptyBuffer, mShaderBufferWriteDescriptorDescs, mDeferredMemoryBarriers);
     }
     if (hasStorageBuffers)
     {
@@ -2817,7 +2817,8 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
             this, commandBufferHelper, *executable, variableInfoMap,
             mState.getOffsetBindingPointerShaderStorageBuffers(),
             executable->getShaderStorageBlocks(), executableVk->getStorageBufferDescriptorType(),
-            limits.maxStorageBufferRange, mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
+            limits.maxStorageBufferRange, mEmptyBuffer, mShaderBufferWriteDescriptorDescs,
+            mDeferredMemoryBarriers);
     }
     if (hasAtomicCounterBuffers)
     {
@@ -2839,6 +2840,25 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
         ANGLE_TRY(mShaderBuffersDescriptorDesc.updateInputAttachments(
             this, *executable, variableInfoMap, vk::GetImpl(mState.getDrawFramebuffer()),
             mShaderBufferWriteDescriptorDescs));
+    }
+
+    if ((mDeferredMemoryBarriers & kBufferMemoryBarrierBits) &&
+        (hasStorageBuffers || hasAtomicCounterBuffers))
+    {
+        VkPipelineStageFlags srcStageMask = vk::kAllShadersPipelineStageFlags &
+                                            mRenderer->getSupportedBufferWritePipelineStageMask();
+        VkPipelineStageFlags dstStageMask = srcStageMask;
+
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
+
+        commandBufferHelper->getCommandBuffer().memoryBarrier(srcStageMask, dstStageMask,
+                                                              memoryBarrier);
+
+        // Force issued WAW barriers, remove the kBufferMemoryBarrierBits.
+        mDeferredMemoryBarriers &= ~kBufferMemoryBarrierBits;
     }
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
@@ -2896,7 +2916,7 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
             mState.getOffsetBindingPointerUniformBuffers(),
             executable->getUniformBlocks()[blockIndex], binding,
             executableVk->getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
+            mEmptyBuffer, mShaderBufferWriteDescriptorDescs, mDeferredMemoryBarriers);
     }
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
@@ -6676,15 +6696,8 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
 angle::Result ContextVk::memoryBarrier(const gl::Context *context, GLbitfield barriers)
 {
     // First, turn GL_ALL_BARRIER_BITS into a mask that has only the valid barriers set.
-    constexpr GLbitfield kCoreBarrierBits =
-        GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT | GL_ELEMENT_ARRAY_BARRIER_BIT | GL_UNIFORM_BARRIER_BIT |
-        GL_TEXTURE_FETCH_BARRIER_BIT | GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_COMMAND_BARRIER_BIT |
-        GL_PIXEL_BUFFER_BARRIER_BIT | GL_TEXTURE_UPDATE_BARRIER_BIT | GL_BUFFER_UPDATE_BARRIER_BIT |
-        GL_FRAMEBUFFER_BARRIER_BIT | GL_TRANSFORM_FEEDBACK_BARRIER_BIT |
-        GL_ATOMIC_COUNTER_BARRIER_BIT | GL_SHADER_STORAGE_BARRIER_BIT;
-    constexpr GLbitfield kExtensionBarrierBits = GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT;
-
-    barriers &= kCoreBarrierBits | kExtensionBarrierBits;
+    constexpr GLbitfield kAllMemoryBarrierBits = kBufferMemoryBarrierBits | kImageMemoryBarrierBits;
+    barriers &= kAllMemoryBarrierBits;
 
     // GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT_EXT specifies that a fence sync or glFinish must be used
     // after the barrier for the CPU to to see the shader writes.  Since host-visible buffer writes
