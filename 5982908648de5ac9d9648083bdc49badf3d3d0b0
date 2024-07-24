@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3895f2a_8aaaf327",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-24T15:58:39Z",
+      "side": 1,
+      "message": "This won\u0027t work, the channels are not 8-bit! You\u0027d want something like this (untested code, not sure I actually have the RGBA vs BGRA order right but probably the result is the same as long as A is bits 30..31):\n\n```suggestion\n            const uint32_t *source \u003d\n                priv::OffsetDataPointer\u003cuint32_t\u003e(input, y, z, inputRowPitch, inputDepthPitch);\n            uint32_t *dest \u003d\n                priv::OffsetDataPointer\u003cuint32_t\u003e(output, y, z, outputRowPitch, outputDepthPitch);\n            for (size_t x \u003d 0; x \u003c width; x++)\n            {\n                const uint32_t src \u003d source[x];\n                const uint32_t srcB \u003d src \u0026 0x3FF;\n                const uint32_t srcG \u003d src \u003e\u003e 10 \u0026 0x3FF;\n                const uint32_t srcR \u003d src \u003e\u003e 20 \u0026 0x3FF;\n                const uint32_t srcA \u003d src \u003e\u003e 30 \u0026 0x3;\n                dest[x] \u003d srcR | srcG \u003c\u003c 10 | srcB \u003c\u003c 20 | srcA \u003c\u003c 30;\n            }\n```",
+      "range": {
+        "startLine": 1289,
+        "startChar": 0,
+        "endLine": 1299,
+        "endChar": 13
+      },
+      "revId": "5982908648de5ac9d9648083bdc49badf3d3d0b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
