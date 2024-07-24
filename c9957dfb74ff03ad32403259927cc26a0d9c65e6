@@ -135,6 +135,24 @@
       "message": "note - i will need to revert / rework this when i upstream decoupled GPL",
       "revId": "c9957dfb74ff03ad32403259927cc26a0d9c65e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37cde6af_f921ff0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-07-24T16:19:23Z",
+      "side": 1,
+      "message": "OK.\n\nI think that interface part should remain the same (no `subset` or `subsets` in `getPipelineCacheWarmUpTasks()`). The `GetWarmUpSubset` will be definitely replaced.",
+      "parentUuid": "f8199cce_84c21d93",
+      "revId": "c9957dfb74ff03ad32403259927cc26a0d9c65e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
