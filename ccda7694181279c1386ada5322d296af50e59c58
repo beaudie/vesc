@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e386ffc_c719d18b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-25T18:12:31Z",
+      "side": 1,
+      "message": "GL_FRAMEBUFFER_BARRIER_BIT is not a write-after-access bit, it\u0027s strictly for fbo-access-after-write.\n\nOnly GL_SHADER_IMAGE_ACCESS_BARRIER_BIT and GL_SHADER_STORAGE_BARRIER_BIT are for write-after-access synchronization.",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
