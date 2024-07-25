@@ -41,6 +41,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04d6993_f76c1974",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-25T18:34:51Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03037e50_5358f8ed",
@@ -59,6 +76,29 @@
         "startChar": 0,
         "endLine": 18,
         "endChar": 32
+      },
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8af8ea7_09cf5f30",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-25T18:34:51Z",
+      "side": 1,
+      "message": "Will these two run one after the other? Is `os.stat()` needed?",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 54
       },
       "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -130,6 +170,80 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce3ac4ce_ca6722a7",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-25T18:34:51Z",
+      "side": 1,
+      "message": "Can this be any value?",
+      "range": {
+        "startLine": 143,
+        "startChar": 54,
+        "endLine": 143,
+        "endChar": 66
+      },
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e357e1f_01bc5098",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-25T18:34:51Z",
+      "side": 1,
+      "message": "Suggestion: `HasCaptureProducedRequiredFiles`",
+      "range": {
+        "startLine": 277,
+        "startChar": 4,
+        "endLine": 277,
+        "endChar": 37
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "b6d2d96b_e8e1b291",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/capture_replay_tests.py",
+              "range": {
+                "startLine": 277,
+                "startChar": 0,
+                "endLine": 278,
+                "endChar": 0
+              },
+              "replacement": "def HasCaptureProducedRequiredFiles(trace_folder_path, test_name):\n"
+            },
+            {
+              "path": "src/tests/capture_replay_tests.py",
+              "range": {
+                "startLine": 707,
+                "startChar": 0,
+                "endLine": 708,
+                "endChar": 0
+              },
+              "replacement": "                if HasCaptureProducedRequiredFiles(trace_folder_path, test_name):\n"
+            }
+          ]
+        }
+      ],
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6b805e56_07b03ed2",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 13
@@ -165,6 +279,29 @@
           ]
         }
       ],
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20f80eb1_95c4631c",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-25T18:34:51Z",
+      "side": 1,
+      "message": "Can this set be another output arg instead?",
+      "range": {
+        "startLine": 507,
+        "startChar": 25,
+        "endLine": 507,
+        "endChar": 41
+      },
       "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
