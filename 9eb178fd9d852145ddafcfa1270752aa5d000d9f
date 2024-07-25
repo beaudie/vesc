@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c8d44ec3_1af6e74c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2024-07-25T14:15:35Z",
+      "side": 1,
+      "message": "Yes, it\u0027s a rebase.   It\u0027s the first patchset that my workspace is clean.",
+      "parentUuid": "413a27ea_19fbbe9d",
+      "revId": "9eb178fd9d852145ddafcfa1270752aa5d000d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ebd07b3f_7dce6a95",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
