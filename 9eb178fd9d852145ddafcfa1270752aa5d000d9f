@@ -16,6 +16,23 @@
       "message": "nit: Patchset 2 seems to just be rebase?",
       "revId": "9eb178fd9d852145ddafcfa1270752aa5d000d9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebd07b3f_7dce6a95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-25T10:51:20Z",
+      "side": 1,
+      "message": "Could you please start a new manual roll, and then make all the changes in PS2 there?\nPS1 and PS2 don\u0027t look to me like the original CL created by the autoroller because they modify BUILD.gn.",
+      "revId": "9eb178fd9d852145ddafcfa1270752aa5d000d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
