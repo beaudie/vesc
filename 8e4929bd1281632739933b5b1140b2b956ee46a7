@@ -93,6 +93,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a83ec74_fd40b5dd",
+        "filename": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-25T22:20:42Z",
+      "side": 1,
+      "message": "Nack, if these asserts fail we have waaay bigger problems. I\u0027m not being lazy with error handling here, if these asserts fail we either have a fundamental error somewhere else that will blow up later, or the transformation is not taking everything it needs to take into account.\n\nThe asserts are really added for the latter case.",
+      "parentUuid": "66e774e5_a6fc9e81",
+      "revId": "8e4929bd1281632739933b5b1140b2b956ee46a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55b65248_3eb098d9",
@@ -106,6 +124,24 @@
       "writtenOn": "2024-07-25T21:14:40Z",
       "side": 1,
       "message": "Could you add another test under `compiler_tests/` which unit tests the pruning? This test passes with or without the pruning of the no-op switches.",
+      "revId": "8e4929bd1281632739933b5b1140b2b956ee46a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6878d62_da5e0010",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 9017,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-25T22:20:42Z",
+      "side": 1,
+      "message": "I\u0027ll add something there, but FWIW, I never really liked our compiler tests; they are too fragile with the way they test things and have frequently been a cause of pain for me.",
+      "parentUuid": "55b65248_3eb098d9",
       "revId": "8e4929bd1281632739933b5b1140b2b956ee46a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
