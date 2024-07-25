@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca71f584_3bfb1fe0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-25T16:06:57Z",
+      "side": 1,
+      "message": "Issue number seems to not exist it seems",
+      "revId": "70cfba16e07faf540d0b9ebceb21c0a3eea1e536",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2ce7a5ac_2e6625ee",
@@ -14,6 +31,40 @@
       "writtenOn": "2024-07-25T14:44:08Z",
       "side": 1,
       "message": "PTAL\n\nVasiliy please give it a sanity check, we\u0027re low on GL-backend reviewers :)",
+      "revId": "70cfba16e07faf540d0b9ebceb21c0a3eea1e536",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3cdb271_c1dab495",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-25T16:06:57Z",
+      "side": 1,
+      "message": "Is this a bug fix? Do we need a regression test?",
+      "revId": "70cfba16e07faf540d0b9ebceb21c0a3eea1e536",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a00e569c_214ff129",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-25T16:06:57Z",
+      "side": 1,
+      "message": "Is this a bug fix? Do we need a regression test?",
       "revId": "70cfba16e07faf540d0b9ebceb21c0a3eea1e536",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
