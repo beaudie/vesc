@@ -3,6 +3,215 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "859631d6_f7c7b385",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-25T15:35:08Z",
+      "side": 1,
+      "message": "It would be good to include this info in the file itself.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 54
+      },
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a399da_718c05c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-25T15:35:08Z",
+      "side": 1,
+      "message": "Pretty significant rewrite.  LGTM though.  Running locally, I\u0027m getting some phantom windows after the script completes.  I\u0027ll share the details over chat.",
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03037e50_5358f8ed",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-25T15:35:08Z",
+      "side": 1,
+      "message": "Is this still accurate?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 32
+      },
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f399129_cb73b349",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-25T15:35:08Z",
+      "side": 1,
+      "message": "Went from 100 to 1000?",
+      "range": {
+        "startLine": 58,
+        "startChar": 20,
+        "endLine": 58,
+        "endChar": 24
+      },
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6682cc47_d8f87cb2",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-25T15:35:08Z",
+      "side": 1,
+      "message": "This could use a comment",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 32
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "861659fb_c4a5ce4e",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/capture_replay_tests.py",
+              "range": {
+                "startLine": 130,
+                "startChar": 0,
+                "endLine": 130,
+                "endChar": 0
+              },
+              "replacement": "                    # Use a random display number to avoid conflicts with other\n                    # processes.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b805e56_07b03ed2",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-25T15:35:08Z",
+      "side": 1,
+      "message": "Worth erroring on unrecognized extensions?",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 37
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "c8451c0d_d2122758",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/capture_replay_tests.py",
+              "range": {
+                "startLine": 303,
+                "startChar": 0,
+                "endLine": 303,
+                "endChar": 0
+              },
+              "replacement": "        else:\n            logging.error(\u0027Unexpected file %s\u0027 % f)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "365d80c1_3b6e5641",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-07-25T15:35:08Z",
+      "side": 1,
+      "message": "Any idea why this is only checking if there are three words?",
+      "range": {
+        "startLine": 604,
+        "startChar": 15,
+        "endLine": 604,
+        "endChar": 30
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "57ad67b7_2ab9beb8",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/capture_replay_tests.py",
+              "range": {
+                "startLine": 604,
+                "startChar": 0,
+                "endLine": 605,
+                "endChar": 0
+              },
+              "replacement": "            if len(words) \u003e\u003d 3 and words[0] \u003d\u003d RESULT_TAG:\n"
+            }
+          ]
+        }
+      ],
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3eb1e329_26406479",
         "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
         "patchSetId": 13
