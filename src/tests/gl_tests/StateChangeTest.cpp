@@ -3098,6 +3098,9 @@ void main()
     glInvalidateFramebuffer(GL_DRAW_FRAMEBUFFER, 1, &invalidateAttachment);
     EXPECT_GL_NO_ERROR();
 
+    // Make sure compute access occur after fbo clear and invalidate
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
     // Write to it with a compute shader
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();

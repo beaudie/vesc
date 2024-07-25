@@ -63,7 +63,7 @@ static constexpr bool kEnableCommandStreamDiagnostics = false;
 
 // All glMemoryBarrier bits that related to texture usage
 static constexpr GLbitfield kWriteAfterAccessImageMemoryBarriers =
-    GL_SHADER_IMAGE_ACCESS_BARRIER_BIT | GL_FRAMEBUFFER_BARRIER_BIT;
+    GL_SHADER_IMAGE_ACCESS_BARRIER_BIT /*| GL_FRAMEBUFFER_BARRIER_BIT*/;
 static constexpr GLbitfield kWriteAfterAccessMemoryBarriers =
     kWriteAfterAccessImageMemoryBarriers | GL_SHADER_STORAGE_BARRIER_BIT;
 
