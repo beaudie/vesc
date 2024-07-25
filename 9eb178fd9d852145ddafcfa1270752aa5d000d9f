@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "413a27ea_19fbbe9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-07-25T01:27:19Z",
+      "side": 1,
+      "message": "nit: Patchset 2 seems to just be rebase?",
+      "revId": "9eb178fd9d852145ddafcfa1270752aa5d000d9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
