@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eaef88b_598a62c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-25T21:14:40Z",
+      "side": 1,
+      "message": "Thank you, lgtm though I would still like to add the detector of \"unusual\" control flow and reject the shaders from the bug report. That detector would need to run before this pruning; is there a good place to put it in the compiler?",
+      "revId": "8e4929bd1281632739933b5b1140b2b956ee46a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66e774e5_a6fc9e81",
+        "filename": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-25T21:14:40Z",
+      "side": 1,
+      "message": "Please handle error conditions here and in the caller instead of asserting.",
+      "fixSuggestions": [
+        {
+          "fixId": "51f29df4_c843ab08",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+              "range": {
+                "startLine": 18,
+                "startChar": 0,
+                "endLine": 19,
+                "endChar": 0
+              },
+              "replacement": "bool GetSwitchConstantAsUInt(const TConstantUnion *value, uint32_t *outValue)\n"
+            },
+            {
+              "path": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+              "range": {
+                "startLine": 27,
+                "startChar": 0,
+                "endLine": 29,
+                "endChar": 0
+              },
+              "replacement": "        return asUInt.cast(EbtUInt, *value);\n"
+            },
+            {
+              "path": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+              "range": {
+                "startLine": 30,
+                "startChar": 0,
+                "endLine": 31,
+                "endChar": 0
+              },
+              "replacement": "    *outValue \u003d asUInt.getUConst();\n    return true;\n"
+            },
+            {
+              "path": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+              "range": {
+                "startLine": 46,
+                "startChar": 0,
+                "endLine": 47,
+                "endChar": 0
+              },
+              "replacement": "    uint32_t exprValue;\n    if (!GetSwitchConstantAsUInt(expr-\u003egetConstantValue(), \u0026exprValue))\n    {\n        return false;\n    }\n"
+            },
+            {
+              "path": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+              "range": {
+                "startLine": 69,
+                "startChar": 0,
+                "endLine": 70,
+                "endChar": 0
+              },
+              "replacement": "        uint32_t caseValue;\n        if (!GetSwitchConstantAsUInt(condition-\u003egetConstantValue(), \u0026caseValue))\n        {\n            return false;\n        }\n"
+            }
+          ]
+        }
+      ],
+      "revId": "8e4929bd1281632739933b5b1140b2b956ee46a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55b65248_3eb098d9",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 9017,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-25T21:14:40Z",
+      "side": 1,
+      "message": "Could you add another test under `compiler_tests/` which unit tests the pruning? This test passes with or without the pruning of the no-op switches.",
+      "revId": "8e4929bd1281632739933b5b1140b2b956ee46a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
