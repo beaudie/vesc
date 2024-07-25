@@ -46,6 +46,30 @@
       },
       "revId": "ccda7694181279c1386ada5322d296af50e59c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c51e26e_df03acfe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-25T19:37:41Z",
+      "side": 1,
+      "message": "That sounds strange, why `imageWrite` before FBO _read_? And what about other image usages like image store followed by texture upload? Also `ContextVk::updateActiveImages` doesn\u0027t get called after the barrier and before the FBO read.\n\nIt sounds like instead we should instead trigger some dirty bit on the image? Just so that the next FBO read, texture upload, etc, would all syncState and do whatever is necessary.",
+      "parentUuid": "cffd8c85_402872d4",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
