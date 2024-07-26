@@ -54,7 +54,7 @@ DEFAULT_OUT_DIR = "out/CaptureReplayTest"  # relative to angle folder
 DEFAULT_FILTER = "*/ES2_Vulkan_SwiftShader"
 DEFAULT_TEST_SUITE = "angle_end2end_tests"
 REPLAY_SAMPLE_FOLDER = "src/tests/capture_replay_tests"  # relative to angle folder
-DEFAULT_BATCH_COUNT = 8  # number of tests batched together for capture
+DEFAULT_BATCH_COUNT = 1  # number of tests batched together for capture
 CAPTURE_FRAME_END = 100
 TRACE_FILE_SUFFIX = "_context"  # because we only deal with 1 context right now
 RESULT_TAG = "*RESULT"
@@ -523,6 +523,9 @@ def RunCaptureInParallel(args, trace_folder_path, test_names, worker_count, xvfb
             '--angle-per-test-capture-label',
             '--results-file=' + results_file,
         ]
+
+        if ':' not in filt and '/' in filt:
+            cmd.append('--use-config=%s' % filt.split('/')[-1])
 
         test_results = None
         try:
