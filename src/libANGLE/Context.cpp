@@ -3833,6 +3833,23 @@ Extensions Context::generateSupportedExtensions() const
     supportedExtensions.multiDrawANGLE                   = true;
     supportedExtensions.programBinaryReadinessQueryANGLE = true;
 
+    const Limitations &limitations = getLimitations();
+    if (limitations.multidrawEmulated && !mWebGLContext)
+    {
+        supportedExtensions.multiDrawANGLE       = false;
+        supportedExtensions.multiDrawIndirectEXT = false;
+    }
+
+    if (limitations.baseInstanceBaseVertexEmulated && !mWebGLContext)
+    {
+        supportedExtensions.baseVertexBaseInstanceANGLE = false;
+    }
+
+    if (limitations.baseInstanceEmulated && !mWebGLContext)
+    {
+        supportedExtensions.baseInstanceEXT = false;
+    }
+
     // Enable the no error extension if the context was created with the flag.
     supportedExtensions.noErrorKHR = skipValidation();
 
