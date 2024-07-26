@@ -54,7 +54,7 @@ DEFAULT_OUT_DIR = "out/CaptureReplayTest"  # relative to angle folder
 DEFAULT_FILTER = "*/ES2_Vulkan_SwiftShader"
 DEFAULT_TEST_SUITE = "angle_end2end_tests"
 REPLAY_SAMPLE_FOLDER = "src/tests/capture_replay_tests"  # relative to angle folder
-DEFAULT_BATCH_COUNT = 8  # number of tests batched together for capture
+DEFAULT_BATCH_COUNT_WINDOWS = 4  # number of tests batched together for capture
 CAPTURE_FRAME_END = 100
 TRACE_FILE_SUFFIX = "_context"  # because we only deal with 1 context right now
 RESULT_TAG = "*RESULT"
@@ -102,7 +102,9 @@ AUTONINJA_PATH = os.path.join('third_party', 'depot_tools', 'autoninja.py')
 
 
 def GetGnArgsStr(args, extra_gn_args=[]):
-    gn_args = [('angle_with_capture_by_default', 'true')] + extra_gn_args
+    gn_args = [('angle_with_capture_by_default', 'true'),
+               ('angle_enable_vulkan_api_dump_layer', 'false'),
+               ('angle_enable_wgpu', 'false')] + extra_gn_args
     if args.use_reclient:
         gn_args.append(('use_remoteexec', 'true'))
     if not args.debug:
@@ -524,6 +526,11 @@ def RunCaptureInParallel(args, trace_folder_path, test_names, worker_count, xvfb
             '--results-file=' + results_file,
         ]
 
+        if ':' not in filt and '/' in filt:
+            config = filt.split('/')[-1]
+            if '*' not in config:
+                cmd.append('--use-config=%s' % config)
+
         test_results = None
         try:
             rc, stdout = RunProcess(cmd, env, xvfb_pool, stop_event, CAPTURE_SUBPROCESS_TIMEOUT)
@@ -553,6 +560,9 @@ def RunCaptureInParallel(args, trace_folder_path, test_names, worker_count, xvfb
             logging.error('Capture failed.\nTests: %s\nStdout:\n%s\n', ':'.join(tests), stdout)
             capture_failed = True
             continue
+
+        if args.show_capture_stdout:
+            logging.info('Capture test stdout:\n%s\n', stdout)
 
         for test_name, res in test_results['tests'].items():
             if res['actual'] == 'SKIP':
@@ -597,6 +607,9 @@ def RunReplayTestsInParallel(args, replay_build_dir, replay_tests, expected_resu
                 logging.info('Ignoring replay failure due to expectation: %s [expected %s]', test,
                              expected_results[test])
             continue
+
+        if args.show_replay_stdout:
+            logging.info('Replay test stdout:\n%s\n', stdout)
 
         output_lines = stdout.splitlines()
         for output_line in output_lines:
@@ -654,8 +667,6 @@ def main(args):
         os.environ["RBE_experimental_credentials_helper"] = ""
         os.environ["RBE_experimental_credentials_helper_args"] = ""
 
-    worker_count = min(os.cpu_count(), args.max_jobs)
-
     trace_dir = "%s%d" % (TRACE_FOLDER, 0)
     trace_folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, trace_dir)
     if os.path.exists(trace_folder_path):
@@ -671,27 +682,35 @@ def main(args):
     subprocess.check_call(
         [sys.executable, AUTONINJA_PATH, '-C', capture_build_dir, args.test_suite])
 
-    with MaybeXvfbPool(args.xvfb, worker_count) as xvfb_pool:
+    with MaybeXvfbPool(args.xvfb, 1) as xvfb_pool:
         logging.info('Getting test list')
         test_path = os.path.join(capture_build_dir, args.test_suite)
         with GetDisplayEnv(os.environ, xvfb_pool) as env:
             test_list = subprocess.check_output(
                 [test_path, "--list-tests",
                  "--gtest_filter=%s" % args.filter], env=env, text=True)
-        test_expectation = TestExpectation(args)
-        test_names = ParseTestNamesFromTestList(test_list, test_expectation,
-                                                args.also_run_skipped_for_capture_tests)
-        test_expectation_for_list = test_expectation.Filter(
-            test_names, args.also_run_skipped_for_capture_tests)
 
-        test_names = [
-            t for t in test_names if (not test_expectation.TestIsCompileFail(t) and
-                                      not test_expectation.TestIsSkippedForCapture(t))
-        ]
+    test_expectation = TestExpectation(args)
+    test_names = ParseTestNamesFromTestList(test_list, test_expectation,
+                                            args.also_run_skipped_for_capture_tests)
+    test_expectation_for_list = test_expectation.Filter(test_names,
+                                                        args.also_run_skipped_for_capture_tests)
 
-        logging.info('Running %d capture tests, worker_count=%d batch_count=%d', len(test_names),
-                     worker_count, args.batch_count)
+    test_names = [
+        t for t in test_names if (not test_expectation.TestIsCompileFail(t) and
+                                  not test_expectation.TestIsSkippedForCapture(t))
+    ]
 
+    if not test_names:
+        logging.error('No capture tests to run. Is everything skipped?')
+        return EXIT_FAILURE
+
+    worker_count = min(args.max_jobs, os.cpu_count(), 1 + len(test_names) // 10)
+
+    logging.info('Running %d capture tests, worker_count=%d batch_count=%d', len(test_names),
+                 worker_count, args.batch_count)
+
+    with MaybeXvfbPool(args.xvfb, worker_count) as xvfb_pool:
         success, skipped_by_suite = RunCaptureInParallel(args, trace_folder_path, test_names,
                                                          worker_count, xvfb_pool)
         if not success:
@@ -778,9 +797,9 @@ if __name__ == '__main__':
         help='Test suite binary to execute. Default is "%s".' % DEFAULT_TEST_SUITE)
     parser.add_argument(
         '--batch-count',
-        default=DEFAULT_BATCH_COUNT,
         type=int,
-        help='Number of tests in a batch. Default is %d.' % DEFAULT_BATCH_COUNT)
+        help='Number of tests in a (capture) batch. Default is 1 (%d on Windows).' %
+        DEFAULT_BATCH_COUNT_WINDOWS)
     parser.add_argument(
         '--keep-temp-files',
         action='store_true',
@@ -837,5 +856,7 @@ if __name__ == '__main__':
 
     if sys.platform == "win32":
         args.test_suite += ".exe"
+    if not args.batch_count:
+        args.batch_count = DEFAULT_BATCH_COUNT_WINDOWS if sys.platform == "win32" else 1
 
     sys.exit(main(args))
