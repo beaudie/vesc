@@ -1963,14 +1963,15 @@ void GenerateCaps(const FunctionsGL *functions,
                                 functions->hasGLESExtension("GL_EXT_float_blend") ||
                                 functions->isAtLeastGLES(gl::Version(3, 2));
 
-    // ANGLE_base_vertex_base_instance
+    // ANGLE_base_vertex_base_instance.
     extensions->baseVertexBaseInstanceANGLE =
         !features.disableBaseInstanceVertex.enabled &&
         (functions->isAtLeastGL(gl::Version(3, 2)) || functions->isAtLeastGLES(gl::Version(3, 2)) ||
          functions->hasGLESExtension("GL_OES_draw_elements_base_vertex") ||
          functions->hasGLESExtension("GL_EXT_draw_elements_base_vertex"));
 
-    // EXT_base_instance
+    // EXT_base_instance.
+    limitations->baseInstanceEmulated = !functions->drawArraysInstancedBaseInstance;
     extensions->baseInstanceEXT =
         !features.disableBaseInstanceVertex.enabled &&
         (functions->isAtLeastGL(gl::Version(3, 2)) || functions->isAtLeastGLES(gl::Version(3, 2)) ||

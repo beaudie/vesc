@@ -150,6 +150,9 @@ class MultiDrawTest : public ANGLETestBase, public ::testing::TestWithParam<Mult
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+
+        // These extensions are heavily emulated and sometimes not exposed except for WebGL.
+        setWebGLCompatibilityEnabled(true);
     }
 
     void SetUp() override { ANGLETestBase::ANGLETestSetUp(); }
