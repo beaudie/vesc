@@ -262,6 +262,30 @@
       },
       "revId": "ccda7694181279c1386ada5322d296af50e59c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0b1da99_cce47ca3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-26T16:43:17Z",
+      "side": 1,
+      "message": "If you read the first paragraph of `7.11.2 Shader Memory Access Synchronization`, it starts by explaining all normal GL operation will just work because GL can track it. Then it starts with shader memory store where driver can\u0027t track. So glMemoryBarrier call is the way to supplement the fact that driver don\u0027t know shader did memory write, thus only needed after shader memory write. Otherwise, all shader writes must wrapped by two glMemortyBarrier calls, one issued before dispatchCompute with GL_SHADER_IMAGE_ACCESS_BARRIER_BIT bit and another after the dispatchCompute. But that is not the case with all tests we have. Also if you look at https://www.khronos.org/opengl/wiki/Memory_Model section `Incoherent memory access` it also says the memoryBarrier is to resolve the issue `However, if memory has been modified in an incoherent fashion, any subsequent reads from that memory are not automatically guaranteed to see these changes.` Also, the existing test works on native gles. \n\nIs there a way to seek clarification from khronos? I don\u0027t want to just fix the test and then people run into weird rendering bugs that hard to track down.",
+      "parentUuid": "f2952ad0_fdcea2cf",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
