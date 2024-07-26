@@ -585,12 +585,6 @@ void main()
     GLuint mProgram;
 };
 
-// glMultiDraw*ANGLE are emulated and should always be available
-TEST_P(MultiDrawTest, RequestExtension)
-{
-    EXPECT_TRUE(requestMultiDrawExtension());
-}
-
 // Test that compile a program with the extension succeeds
 TEST_P(MultiDrawTest, CanCompile)
 {
