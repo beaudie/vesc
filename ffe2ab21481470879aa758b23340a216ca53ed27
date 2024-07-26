@@ -16,6 +16,24 @@
       "message": "In the bug report https://b.corp.google.com/issues/355567160, is ANGLE crashing here?",
       "revId": "ffe2ab21481470879aa758b23340a216ca53ed27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89565df0_f5b64a48",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5352,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-26T18:26:48Z",
+      "side": 1,
+      "message": "Yes, because it doesn\u0027t realize it needs to flush the render pass",
+      "parentUuid": "79b81e22_bf1a0cc8",
+      "revId": "ffe2ab21481470879aa758b23340a216ca53ed27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
