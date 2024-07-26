@@ -30,6 +30,7 @@
 // Incorrectly handled pretty much in all backends
 42266871 : CopyTexImageTestES3.RedefineSameLevel/* = SKIP
 // Currently fails on WebGPU as it's not fully implemented yet.
+355567160 VULKAN : SimpleStateChangeTestES31.DrawThenChangeFBOThenStorageWrite/* = SKIP
 
 // Fails AST validation
 342866374 : GLSLTest_ES31.PerVertexRedefinition/*_ForceInitShaderVariables* = SKIP
