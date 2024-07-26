@@ -142,6 +142,30 @@
       },
       "revId": "ccda7694181279c1386ada5322d296af50e59c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ac38655_f76b1f25",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-26T01:51:09Z",
+      "side": 1,
+      "message": "Sorry, I should clarify that the \"write\" in write-after-access refers to storage image/buffer write only. Not writes through texture upload, FBO draw, etc.\n\nIn general, there are two situations:\n\n1. Write to resource as storage image/buffer, then do something else\n2. Do something else, then write to resource as storage image/buffer\n\n#2 is what I referred to as write-after-access. To synchronize situation #2, only GL_SHADER_IMAGE_ACCESS_BARRIER_BIT and GL_SHADER_STORAGE_BARRIER_BIT works, while for #1 there are detailed enums for every kind of \"something else\".",
+      "parentUuid": "2af86756_388a38e0",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
