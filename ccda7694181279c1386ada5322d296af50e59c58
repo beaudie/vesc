@@ -286,6 +286,30 @@
       },
       "revId": "ccda7694181279c1386ada5322d296af50e59c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eae083f_776629bb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-26T19:47:24Z",
+      "side": 1,
+      "message": "Shabi pointed me to https://gitlab.khronos.org/opengl/API/-/issues/144, which confirms shabi\u0027s understanding. So the GL_FRAMEBUFFER_BARRIER_BIT is removed here.",
+      "parentUuid": "d0b1da99_cce47ca3",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
