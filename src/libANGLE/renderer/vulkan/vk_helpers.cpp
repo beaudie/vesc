@@ -1942,6 +1942,11 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
     }
 }
 
+void OutsideRenderPassCommandBufferHelper::retainBuffer(BufferHelper *buffer)
+{
+    buffer->setQueueSerial(mQueueSerial);
+}
+
 void OutsideRenderPassCommandBufferHelper::retainImage(ImageHelper *image)
 {
     // We want explicit control on when VkEvent is used for outsideRPCommands to minimize the
@@ -9756,24 +9761,26 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
     // done with fine granularity as updates are applied.  This is achieved by specifying a layer
     // that is outside the tracking range. Under some circumstances, ComputeWrite is also required.
     // This need not be applied if the only updates are ClearEmulatedChannels.
-    CommandBufferAccess transferAccess;
+    CommandBufferAccess updateAccess;
     OutsideRenderPassCommandBufferHelper *commandBuffer = nullptr;
     bool transCoding = renderer->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
                        IsETCFormat(intendedFormat) && IsBCFormat(actualformat);
 
     if (transCoding)
     {
-        transferAccess.onImageTransferDstAndComputeWrite(
+        updateAccess.onImageTransferDstAndComputeWrite(
             levelGLStart, 1, kMaxContentDefinedLayerCount, 0, aspectFlags, this);
     }
     else
     {
-        transferAccess.onImageTransferWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0,
-                                            aspectFlags, this);
+        updateAccess.onImageTransferWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0,
+                                          aspectFlags, this);
     }
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(transferAccess, &commandBuffer));
 
-    // Flush the staged updates in each mip level.
+    // Determine the required accesses for the outside command buffer.
+    std::vector<std::vector<SubresourceUpdate>> updatesToApplyPerLevel;
+    updatesToApplyPerLevel.resize(mSubresourceUpdates.size());
+
     for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLEnd;
          ++updateMipLevelGL)
     {
@@ -9873,11 +9880,72 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                 }
             }
 
+            // Gather the necessary accesses for the outside command buffer.
+            switch (update.updateSource)
+            {
+                case UpdateSource::Clear:
+                case UpdateSource::ClearAfterInvalidate:
+                {
+                    // No access required.
+                    break;
+                }
+                case UpdateSource::Buffer:
+                {
+                    BufferUpdate &bufferUpdate = update.data.buffer;
+
+                    BufferHelper *currentBuffer = bufferUpdate.bufferHelper;
+                    ASSERT(currentBuffer && currentBuffer->valid());
+
+                    CommandBufferAccess bufferAccess;
+                    if (transCoding && update.data.buffer.formatID != actualformat)
+                    {
+                        updateAccess.onBufferComputeShaderRead(currentBuffer);
+                    }
+                    else
+                    {
+                        updateAccess.onBufferTransferRead(currentBuffer);
+                    }
+                    break;
+                }
+                case UpdateSource::Image:
+                {
+                    updateAccess.onImageTransferRead(aspectFlags, &update.refCounted.image->get());
+                    break;
+                }
+                default:
+                {
+                    UNREACHABLE();
+                    break;
+                }
+            }
+
+            // The valid updates should now be collected to be processed after acquiring the outside
+            // command buffer.
+            updatesToApplyPerLevel[updateMipLevelGL.get()].emplace_back(std::move(update));
+        }
+
+        // The remaining updates will be returned to the source for later.
+        *levelUpdates = std::move(updatesToKeep);
+    }
+
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(updateAccess, &commandBuffer));
+
+    // Flush the staged updates in each mip level.
+    bool hasBeenFlushed = false;
+    for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLEnd;
+         ++updateMipLevelGL)
+    {
+        for (SubresourceUpdate &update : updatesToApplyPerLevel[updateMipLevelGL.get()])
+        {
             // When a barrier is necessary when uploading updates to a level, we could instead move
             // to the next level and continue uploads in parallel.  Once all levels need a barrier,
             // a single barrier can be issued and we could continue with the rest of the updates
             // from the first level. In case of multiple layer updates within the same level, a
             // barrier might be needed if there are multiple updates in the same parts of the image.
+            uint32_t updateBaseLayer, updateLayerCount;
+            update.getDestSubresource(mLayerCount, &updateBaseLayer, &updateLayerCount);
+            const LevelIndex updateMipLevelVk = toVkLevel(updateMipLevelGL);
+
             ImageLayout barrierLayout =
                 transCoding ? ImageLayout::TransferDstAndComputeWrite : ImageLayout::TransferDst;
             if (updateLayerCount >= kMaxParallelLayerWrites)
@@ -9929,49 +9997,43 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                     ASSERT(currentBuffer && currentBuffer->valid());
                     ANGLE_TRY(currentBuffer->flush(renderer));
 
-                    CommandBufferAccess bufferAccess;
                     VkBufferImageCopy *copyRegion = &update.data.buffer.copyRegion;
 
                     if (transCoding && update.data.buffer.formatID != actualformat)
                     {
-                        bufferAccess.onBufferComputeShaderRead(currentBuffer);
-                        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
-                            bufferAccess, &commandBuffer));
                         ANGLE_TRY(contextVk->getUtils().transCodeEtcToBc(contextVk, currentBuffer,
                                                                          this, copyRegion));
                     }
                     else
                     {
-                        bufferAccess.onBufferTransferRead(currentBuffer);
-                        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
-                            bufferAccess, &commandBuffer));
                         commandBuffer->getCommandBuffer().copyBufferToImage(
                             currentBuffer->getBuffer().getHandle(), mImage,
                             getCurrentLayout(renderer), 1, copyRegion);
                     }
-                    bool commandBufferWasFlushed = false;
+
+                    // If there has been a flush before this update, the serial should be updated.
+                    if (hasBeenFlushed)
+                    {
+                        commandBuffer->retainBuffer(currentBuffer);
+                    }
+
+                    bool wasCommandBufferFlushed = false;
                     ANGLE_TRY(contextVk->onCopyUpdate(currentBuffer->getSize(),
-                                                      &commandBufferWasFlushed));
+                                                      &wasCommandBufferFlushed));
+                    if (wasCommandBufferFlushed)
+                    {
+                        hasBeenFlushed = true;
+                    }
+
                     onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
                             copyRegion->imageSubresource.aspectMask);
 
                     // Update total staging buffer size.
                     mTotalStagedBufferUpdateSize -= bufferUpdate.bufferHelper->getSize();
-
-                    if (commandBufferWasFlushed)
-                    {
-                        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
-                            transferAccess, &commandBuffer));
-                    }
                     break;
                 }
                 case UpdateSource::Image:
                 {
-                    CommandBufferAccess imageAccess;
-                    imageAccess.onImageTransferRead(aspectFlags, &update.refCounted.image->get());
-                    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(imageAccess,
-                                                                                 &commandBuffer));
-
                     VkImageCopy *copyRegion = &update.data.image.copyRegion;
                     commandBuffer->getCommandBuffer().copyImage(
                         update.refCounted.image->get().getImage(),
@@ -9990,14 +10052,6 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
 
             update.release(renderer);
         }
-
-        // After applying the updates, the image serial should match the current queue serial of the
-        // outside command buffer.
-        ASSERT(mUse.getSerials()[commandBuffer->getQueueSerial().getIndex()] ==
-               commandBuffer->getQueueSerial().getSerial());
-
-        // Only remove the updates that were actually applied to the image.
-        *levelUpdates = std::move(updatesToKeep);
     }
 
     return angle::Result::Continue;
