@@ -201,6 +201,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1060bd26_a66e82b4",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-26T22:28:14Z",
+      "side": 1,
+      "message": "Not entirely sure why, but running capture one by one can be quite a bit slower and add \u003e10 minutes overhead to CI. There is probably something small-ish happening at startup or teardown and it\u0027s adding up over thousands of tests. I\u0027ll poke at it a bit next week, locally on linux with a small set `--gtest_filter\u003d*Blit*/ES3_Vulkan_SwiftShader` I\u0027m seeing a big difference in timing between `--batch-count\u003d8` vs `--batch-count\u003d1` so I might be able to narrow it down.",
+      "parentUuid": "7f44d842_504e6383",
+      "range": {
+        "startLine": 57,
+        "startChar": 22,
+        "endLine": 57,
+        "endChar": 23
+      },
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5f399129_cb73b349",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 13
