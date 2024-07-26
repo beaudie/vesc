@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80c29cb9_2ea67e1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-07-26T10:23:42Z",
+      "side": 1,
+      "message": "Looks like this fails to roll into Chromium:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/5742024\nhttps://ci.chromium.org/ui/p/chromium/builders/try/android-x64-rel/141614/overview\nhttps://chromium-swarm.appspot.com/task?id\u003d6b044d76fdd85211\u0026o\u003dtrue\u0026w\u003dtrue\nhttps://luci-logdog.appspot.com/logs/chromium/android/swarming/logcats/6b044d76fdd85211/+/logcat_logcat_org.chromium.android_webview.test.AwJavaBridgeTest.testTwoWebViewsCreatedSimultaneously__multiprocess_mode__null__shard4_20240725T200423-UTC_emulator-5554\n```\n07-25 20:04:26.632 14263 14263 F DEBUG   :       #00 pc 00000000000581b5  /vendor/lib64/libGLESv2_enc.so (GL2Encoder::calcIndexRange(void const*, unsigned int, int, int*, int*)+453) (BuildId: d57a8c4028435d37dd00ba2795e0f5df)\n07-25 20:04:26.632 14263 14263 F DEBUG   :       #01 pc 000000000004de1a  /vendor/lib64/libGLESv2_enc.so (GL2Encoder::s_glDrawRangeElements(void*, unsigned int, unsigned int, unsigned int, int, unsigned int, void const*)+794) (BuildId: d57a8c4028435d37dd00ba2795e0f5df)\n07-25 20:04:26.632 14263 14263 F DEBUG   :       #02 pc 0000000000018192  /vendor/lib64/egl/libGLESv2_emulation.so (glDrawRangeElements+66) (BuildId: 0809f38523cb8aa305ff4b018168cbed)\n07-25 20:04:26.632 14263 14263 F DEBUG   :       #03 pc 0000000005066387  /data/app/~~z4bmkijojwwX_gksnlgQ_w\u003d\u003d/org.chromium.android_webview.shell-D9WMawHT7M62TikjeY5O1g\u003d\u003d/lib/x86_64/libstandalonelibwebviewchromium.so (BuildId: e3ea3a0f70dd493e)\n```",
+      "revId": "a6c2b4346516f228054b5bdd754bbc6f3ba1cba7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
