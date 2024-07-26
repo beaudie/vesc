@@ -214,6 +214,30 @@
       },
       "revId": "ccda7694181279c1386ada5322d296af50e59c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d160dcb7_31e8f864",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-26T02:43:49Z",
+      "side": 1,
+      "message": "In this specific case, I think the problem here is that the first glMemoryBarrier is ignored due to ContextVk.cpp:6747. That memory barrier is required because shader access followed by FBO access. Then the FBO access actually did not resault in rendering (because we defer the clear and then invalidate removes the staged clear). So the next dispatchCompute end up seeing ComputeWrite to ComputeWrite, there is no layout change, so it did not insert barrier. That causes the test failure since now there is no barrier between two dispatchCompute.  \n\nUsually you don\u0027t run into this kidn of bug because FBO access and computeWrite has different layout, so the barrier will always inserted to do layout change. So this GL_FRAMEBUFFER_BARRIER_BIT bit needs to be added into consideration to account for this special situation that FBO access may not result in a ColorWrite layout (in fact it may keep ComputeWrite layout).\n\nI should add more detailed comment here for sure.",
+      "parentUuid": "184a607f_a3f994fd",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
