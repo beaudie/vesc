@@ -190,6 +190,30 @@
       },
       "revId": "ccda7694181279c1386ada5322d296af50e59c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "185baf34_afef08e6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-26T02:42:39Z",
+      "side": 1,
+      "message": "No that\u0027s not true, the GL_SHADER_IMAGE_ACCESS_BARRIER_BIT and GL_SHADER_STORAGE_BARRIER_BIT bits specifically talk about storage image writes after _any access_ (emphasis mine):\n\n\u003e SHADER_IMAGE_ACCESS_BARRIER_BIT: Memory accesses using shader built-in image load and store functions issued after the barrier will reflect data written by shaders prior to the barrier. **Additionally, image stores issued after the barrier will not execute until all memory accesses (e.g., loads, stores, texture fetches, vertex fetches) initiated prior to the barrier complete.**\n\n(text for GL_SHADER_STORAGE_BARRIER_BIT is similar, but for buffers)\n\nThe overview of 7.11.2 Shader Memory Access Synchronization also calls this out (bold text mine):\n\n\u003e Explicit synchronization is required to ensure that the effects of buffer and texture data stores performed by shaders will be visible to subsequent operations **(writes visible to subsequent ops: this is case #1 in my comment above)** using the same objects and will not overwrite data still to be read by previously requested operations **(this is case #2)**.",
+      "parentUuid": "184a607f_a3f994fd",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
