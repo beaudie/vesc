@@ -118,6 +118,30 @@
       },
       "revId": "ccda7694181279c1386ada5322d296af50e59c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2af86756_388a38e0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-07-26T01:44:43Z",
+      "side": 1,
+      "message": "```\nOnly GL_SHADER_IMAGE_ACCESS_BARRIER_BIT and GL_SHADER_STORAGE_BARRIER_BIT are for write-after-access synchronization.\n```\n\nMaybe a very basic question, but can I ask why `GL_FRAMEBUFFER_BARRIER_BIT` is not a valid `write-after-access` synchronization? According to https://registry.khronos.org/OpenGL-Refpages/es3.1/html/glMemoryBarrier.xhtml, under GL_FRAMEBUFFER_BARRIER_BIT:\n\n```\nReads and writes via framebuffer object attachments after the barrier will reflect data written by shaders prior to the barrier. \n```\n\nIt reads to me that it does ensure the \"writes to FBO attachments\" after the barrier will wait for the \"access to the FBO attachments\" prior to the barrier to  complete. Does `write-after-access` only refer to a specific type of resource and that does not include FBO attachments?",
+      "parentUuid": "53fb07be_45f08227",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
