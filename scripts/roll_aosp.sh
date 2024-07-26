@@ -131,6 +131,10 @@ delete_only_deps=(
     "third_party/zlib"  # Replaced by Android's zlib; delete for gclient to work https://crbug.com/skia/14155#c3
 )
 
+rm Android.bp
+mkdir -p /tmp/build/config/clang
+cp build/config/clang/BUILD.gn /tmp/build/config/clang/BUILD.gn
+
 # Delete dep directories so that gclient can check them out
 for dep in "${third_party_deps[@]}" "${delete_only_deps[@]}"; do
     rm -rf "$dep"
@@ -146,8 +150,12 @@ for removal_dir in "${extra_third_party_removal_patterns[@]}"; do
 done
 
 # Sync all of ANGLE's deps so that 'gn gen' works
+
 python3 scripts/bootstrap.py
 gclient sync --reset --force --delete_unversioned_trees
+
+cp /tmp/build/config/clang/BUILD.gn build/config/clang/BUILD.gn
+rm -rf /tmp/build/config/clang
 
 # Delete outdir to ensure a clean gn run.
 rm -rf ${GN_OUTPUT_DIRECTORY}
