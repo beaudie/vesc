@@ -277,7 +277,7 @@ def gn_libs_to_blueprint_shared_libraries(target_info):
     result = []
     if 'libs' in target_info:
         for lib in target_info['libs']:
-            if lib not in lib_blockist:
+            if lib not in lib_blockist and 'libclang_rt.builtins' not in lib:
                 android_lib = lib if '@' in lib else 'lib' + lib
                 result.append(android_lib)
     return result
