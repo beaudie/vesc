@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8bd013f_8a279751",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-26T19:13:12Z",
+      "side": 1,
+      "message": "Assuming that Skia uses fallback paths when these extensions are not available, is it the case that those fallbacks are more performant than ANGLE\u0027s emulation?",
+      "revId": "de220a64980117dc43523dd3352461380175fabc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
