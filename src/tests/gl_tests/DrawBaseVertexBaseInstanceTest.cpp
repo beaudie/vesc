@@ -107,6 +107,9 @@ class DrawBaseVertexBaseInstanceTest
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
 
+        // These extensions are heavily emulated and sometimes not exposed except for WebGL.
+        setWebGLCompatibilityEnabled(true);
+
         // Rects in the same column are within a vertex array, testing gl_VertexID, gl_BaseVertex
         // Rects in the same row are drawn by instancing, testing gl_InstanceID, gl_BaseInstance
 
