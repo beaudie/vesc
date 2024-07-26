@@ -16,6 +16,24 @@
       "message": "nit: should it be small letter \"Bug\"?",
       "revId": "4adf3729d427b57c807290a12eddf61d5d8ac049",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d02fef3_acf794df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2024-07-26T23:22:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b769f35e_3fa037bd",
+      "revId": "4adf3729d427b57c807290a12eddf61d5d8ac049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
