@@ -1971,6 +1971,7 @@ void GenerateCaps(const FunctionsGL *functions,
          functions->hasGLESExtension("GL_EXT_draw_elements_base_vertex"));
 
     // EXT_base_instance
+    limitations->baseInstanceEmulated = !functions->drawArraysInstancedBaseInstance;
     extensions->baseInstanceEXT =
         !features.disableBaseInstanceVertex.enabled &&
         (functions->isAtLeastGL(gl::Version(3, 2)) || functions->isAtLeastGLES(gl::Version(3, 2)) ||
