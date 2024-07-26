@@ -54,7 +54,7 @@ DEFAULT_OUT_DIR = "out/CaptureReplayTest"  # relative to angle folder
 DEFAULT_FILTER = "*/ES2_Vulkan_SwiftShader"
 DEFAULT_TEST_SUITE = "angle_end2end_tests"
 REPLAY_SAMPLE_FOLDER = "src/tests/capture_replay_tests"  # relative to angle folder
-DEFAULT_BATCH_COUNT = 8  # number of tests batched together for capture
+DEFAULT_BATCH_COUNT = 1  # number of tests batched together for capture
 CAPTURE_FRAME_END = 100
 TRACE_FILE_SUFFIX = "_context"  # because we only deal with 1 context right now
 RESULT_TAG = "*RESULT"
@@ -63,7 +63,7 @@ CAPTURE_SUBPROCESS_TIMEOUT = 600  # in seconds
 REPLAY_SUBPROCESS_TIMEOUT = 60  # in seconds
 DEFAULT_RESULT_FILE = "results.txt"
 DEFAULT_LOG_LEVEL = "info"
-DEFAULT_MAX_JOBS = 8
+DEFAULT_MAX_JOBS = 16
 REPLAY_BINARY = "capture_replay_tests"
 if sys.platform == "win32":
     REPLAY_BINARY += ".exe"
@@ -524,6 +524,11 @@ def RunCaptureInParallel(args, trace_folder_path, test_names, worker_count, xvfb
             '--results-file=' + results_file,
         ]
 
+        if ':' not in filt and '/' in filt:
+            config = filt.split('/')[-1]
+            if '*' not in config:
+                cmd.append('--use-config=%s' % config)
+
         test_results = None
         try:
             rc, stdout = RunProcess(cmd, env, xvfb_pool, stop_event, CAPTURE_SUBPROCESS_TIMEOUT)
@@ -654,7 +659,7 @@ def main(args):
         os.environ["RBE_experimental_credentials_helper"] = ""
         os.environ["RBE_experimental_credentials_helper_args"] = ""
 
-    worker_count = min(os.cpu_count(), args.max_jobs)
+    worker_count = min(os.cpu_count() * 2, args.max_jobs)
 
     trace_dir = "%s%d" % (TRACE_FOLDER, 0)
     trace_folder_path = os.path.join(REPLAY_SAMPLE_FOLDER, trace_dir)

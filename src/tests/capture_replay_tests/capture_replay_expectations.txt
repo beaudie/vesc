@@ -237,7 +237,7 @@
 42264614 LINUX : EGLSyncTest.EglClientWaitSync/* = COMPILE_FAIL
 
 # error: duplicate case value '1'
-42264614 LINUX : EGLSyncTest.GlobalFenceSync/* = COMPILE_FAIL
+42264614 : EGLSyncTest.GlobalFenceSync/* = COMPILE_FAIL
 
 # glGetPerfMonitorCountersAMD(0, (GLint *)gReadBuffer, (GLint *)gReadBuffer, 0, (nil));
 42264614 LINUX : Texture2DMemoryTestES3.TextureDataInLoop* = COMPILE_FAIL
