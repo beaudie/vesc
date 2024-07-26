@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b769f35e_3fa037bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-07-26T23:20:53Z",
+      "side": 1,
+      "message": "nit: should it be small letter \"Bug\"?",
+      "revId": "4adf3729d427b57c807290a12eddf61d5d8ac049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
