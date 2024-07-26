@@ -94,6 +94,30 @@
       },
       "revId": "ccda7694181279c1386ada5322d296af50e59c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53fb07be_45f08227",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-26T00:29:00Z",
+      "side": 1,
+      "message": "Ah ok, well that\u0027s a test bug. Between the glClear/glInvalidate and the second dispatch there\u0027s a missing `glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT)` (because it\u0027s write-after-access).",
+      "parentUuid": "2928098d_85598ffd",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
