@@ -141,6 +141,74 @@
       "message": "Geoff, does esoteric platform extensions typically require any tests to land the patch?",
       "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "573be3d4_a4357c40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-07-26T05:08:00Z",
+      "side": 1,
+      "message": "This change needs an end2end test that at a minimum creates and binds a pixmap on platforms that support it.",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d0f3a86_9e45893e",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-07-26T05:08:00Z",
+      "side": 1,
+      "message": "Why is this code not its own PixmapImageSiblingEGL.cpp file?",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbc6765a_55ff23a1",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-07-26T05:08:00Z",
+      "side": 1,
+      "message": "Why is this code not its own PixmapImageSiblingEGL.h file?",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f505fd3f_5c1cc137",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3532,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-07-26T05:08:00Z",
+      "side": 1,
+      "message": "This error message needs updating to reflect the new constraints upon target.",
+      "revId": "2186d6868e770d1ad3e99c8bfadbf2bf8150a56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
