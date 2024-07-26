@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46c8aab4_60923082",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-26T22:33:13Z",
+      "side": 1,
+      "message": "`not lib.startswith(\u0027//\u0027)` maybe? And leave it as a permanent fix as the line right below doesn\u0027t make sense for this case, just update the CL description to match. If we ever run into a case where `//` is legit, we can handle it at that point.",
+      "range": {
+        "startLine": 280,
+        "startChar": 43,
+        "endLine": 280,
+        "endChar": 76
+      },
+      "revId": "80b71fd59abd0379a4552fb9d7cd6334a496b086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
