@@ -238,6 +238,30 @@
       },
       "revId": "ccda7694181279c1386ada5322d296af50e59c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2952ad0_fdcea2cf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-26T02:53:59Z",
+      "side": 1,
+      "message": "All of that happens because the test is missing the `glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT)` before the second dispatch. For all the test cares, `glClear()` may actually be doing something, and `GL_SHADER_IMAGE_ACCESS_BARRIER_BIT` is needed to synchronize the compute-write with whatever clear might have done.\n\nIf you do add `glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT)` you\u0027ll find that it didn\u0027t matter that `glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT)` is ignored and that `glClear` didn\u0027t do anything.\n\n---\n\nFWIW, `glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT)` is not doing nothing, it still flushes RP/outside RP commands if necessary so the barriers we implicitly insert end up in the right place.",
+      "parentUuid": "d160dcb7_31e8f864",
+      "range": {
+        "startLine": 66,
+        "startChar": 41,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "ccda7694181279c1386ada5322d296af50e59c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
