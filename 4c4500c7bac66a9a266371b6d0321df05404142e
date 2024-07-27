@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5995b938_8cc1b82c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-27T20:04:34Z",
+      "side": 1,
+      "message": "Suggest:\n\n```\nSkip lib starting with \"//\" when generating Android bp\n```",
+      "revId": "4c4500c7bac66a9a266371b6d0321df05404142e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
