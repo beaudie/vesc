@@ -900,26 +900,21 @@ TextureMtl::~TextureMtl() = default;
 
 void TextureMtl::onDestroy(const gl::Context *context)
 {
-    releaseTexture(true);
+    deallocateNativeStorage(/*keepImages=*/false);
     mBoundSurface = nullptr;
 }
 
-void TextureMtl::releaseTexture(bool releaseImages)
-{
-    releaseTexture(releaseImages, false);
-}
-
-void TextureMtl::releaseTexture(bool releaseImages, bool releaseTextureObjectsOnly)
+void TextureMtl::deallocateNativeStorage(bool keepImages, bool keepSamplerStateAndFormat)
 {
 
-    if (releaseImages)
+    if (!keepImages)
     {
         mTexImageDefs.clear();
         mShaderImageViews.clear();
     }
     else if (mNativeTextureStorage)
     {
-        // Release native texture but keep its old per face per mipmap level image views.
+        // Release native texture but keep its image definitions.
         retainImageDefinitions();
     }
 
@@ -942,14 +937,14 @@ void TextureMtl::releaseTexture(bool releaseImages, bool releaseTextureObjectsOn
         view.reset();
     }
 
-    if (!releaseTextureObjectsOnly)
+    if (!keepSamplerStateAndFormat)
     {
         mMetalSamplerState = nil;
         mFormat            = mtl::Format();
     }
 }
 
-angle::Result TextureMtl::ensureTextureCreated(const gl::Context *context)
+angle::Result TextureMtl::ensureNativeStorageCreated(const gl::Context *context)
 {
     if (mNativeTextureStorage)
     {
@@ -969,7 +964,7 @@ angle::Result TextureMtl::ensureTextureCreated(const gl::Context *context)
         angle::Format::InternalFormatToID(desc.format.info->sizedInternalFormat);
     mFormat = contextMtl->getPixelFormat(angleFormatId);
 
-    ANGLE_TRY(createNativeTexture(context, mState.getType(), mips, desc.size));
+    ANGLE_TRY(createNativeStorage(context, mState.getType(), mips, desc.size));
 
     // Transfer data from defined images to actual texture object
     int numCubeFaces = static_cast<int>(mNativeTextureStorage->cubeFaces());
@@ -1006,7 +1001,7 @@ angle::Result TextureMtl::ensureTextureCreated(const gl::Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result TextureMtl::createNativeTexture(const gl::Context *context,
+angle::Result TextureMtl::createNativeStorage(const gl::Context *context,
                                               gl::TextureType type,
                                               GLuint mips,
                                               const gl::Extents &size)
@@ -1159,11 +1154,23 @@ angle::Result TextureMtl::onBaseMaxLevelsChanged(const gl::Context *context)
         return angle::Result::Continue;
     }
 
+    if (mState.getEffectiveBaseLevel() == mNativeTextureStorage->getBaseGLLevel() &&
+        mState.getMipmapMaxLevel() == mNativeTextureStorage->getMaxSupportedGLLevel())
+    {
+        ASSERT(mState.getBaseLevelDesc().size == mNativeTextureStorage->sizeAt0());
+        // If level range remain the same, don't recreate the texture.
+        return angle::Result::Continue;
+    }
+
     ContextMtl *contextMtl = mtl::GetImpl(context);
 
-    // Release native texture but keep old image definitions so that it can be recreated from old
-    // image definitions with different base level
-    releaseTexture(false, true);
+    // We need to recreate a new native texture storage with number of levels = max level - base
+    // level + 1. This can be achieved by simply deleting the old storage. The storage will be
+    // lazily recreated later via ensureNativeStorageCreated().
+    // Note: We release the native texture storage but keep old image definitions. So that when the
+    // storage is recreated, its levels can be recreated with data from the old image definitions
+    // respectively.
+    deallocateNativeStorage(/*keepImages=*/true, /*keepSamplerStateAndFormat=*/true);
 
     // Tell context to rebind textures
     contextMtl->invalidateCurrentTextures();
@@ -1548,7 +1555,7 @@ angle::Result TextureMtl::setEGLImageTarget(const gl::Context *context,
                                             gl::TextureType type,
                                             egl::Image *image)
 {
-    releaseTexture(true);
+    deallocateNativeStorage(/*keepImages=*/false);
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
 
@@ -1587,7 +1594,7 @@ angle::Result TextureMtl::setImageExternal(const gl::Context *context,
 
 angle::Result TextureMtl::generateMipmap(const gl::Context *context)
 {
-    ANGLE_TRY(ensureTextureCreated(context));
+    ANGLE_TRY(ensureNativeStorageCreated(context));
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
     if (!mViewFromBaseToMaxLevel)
@@ -1731,7 +1738,7 @@ angle::Result TextureMtl::setBaseLevel(const gl::Context *context, GLuint baseLe
 
 angle::Result TextureMtl::bindTexImage(const gl::Context *context, egl::Surface *surface)
 {
-    releaseTexture(true);
+    deallocateNativeStorage(/*keepImages=*/false);
 
     mBoundSurface         = surface;
     auto pBuffer          = GetImplAs<OffscreenSurfaceMtl>(surface);
@@ -1752,7 +1759,7 @@ angle::Result TextureMtl::bindTexImage(const gl::Context *context, egl::Surface 
 
 angle::Result TextureMtl::releaseTexImage(const gl::Context *context)
 {
-    releaseTexture(true);
+    deallocateNativeStorage(/*keepImages=*/false);
     mBoundSurface = nullptr;
     return angle::Result::Continue;
 }
@@ -1763,7 +1770,7 @@ angle::Result TextureMtl::getAttachmentRenderTarget(const gl::Context *context,
                                                     GLsizei samples,
                                                     FramebufferAttachmentRenderTarget **rtOut)
 {
-    ANGLE_TRY(ensureTextureCreated(context));
+    ANGLE_TRY(ensureNativeStorageCreated(context));
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
     ANGLE_MTL_TRY(contextMtl, mNativeTextureStorage);
@@ -1821,7 +1828,7 @@ angle::Result TextureMtl::syncState(const gl::Context *context,
         }
     }
 
-    ANGLE_TRY(ensureTextureCreated(context));
+    ANGLE_TRY(ensureNativeStorageCreated(context));
     ANGLE_TRY(ensureSamplerStateCreated(context));
 
     return angle::Result::Continue;
@@ -1968,7 +1975,7 @@ angle::Result TextureMtl::redefineImage(const gl::Context *context,
         if (mFormat != mtlFormat || size != mNativeTextureStorage->size(glLevel))
         {
             // Keep other images
-            releaseTexture(/*releaseImages=*/false);
+            deallocateNativeStorage(/*keepImages=*/true);
         }
     }
 
@@ -2038,7 +2045,7 @@ angle::Result TextureMtl::setStorageImpl(const gl::Context *context,
                                          const gl::Extents &size)
 {
     // Don't need to hold old images data.
-    releaseTexture(true);
+    deallocateNativeStorage(/*keepImages=*/false);
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
 
@@ -2047,7 +2054,7 @@ angle::Result TextureMtl::setStorageImpl(const gl::Context *context,
 
     mFormat = mtlFormat;
 
-    ANGLE_TRY(createNativeTexture(context, type, mState.getImmutableLevels(), size));
+    ANGLE_TRY(createNativeStorage(context, type, mState.getImmutableLevels(), size));
     ANGLE_TRY(createViewFromBaseToMaxLevel());
 
     return angle::Result::Continue;
