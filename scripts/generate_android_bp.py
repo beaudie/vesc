@@ -274,6 +274,7 @@ def gn_libs_to_blueprint_shared_libraries(target_info):
         'unwind',
     ]
 
+    # hello world
     result = []
     if 'libs' in target_info:
         for lib in target_info['libs']:
