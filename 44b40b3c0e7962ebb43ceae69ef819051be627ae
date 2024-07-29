@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "700e6074_1793e7bb",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-29T13:51:38Z",
+      "side": 1,
+      "message": "This fix requires some context to not be seen as an optimization. Consider adding a comment here mentioning the specific sequence of commands that makes a difference:\n1. A texture with a non-default base/max level state is set.\n2. The texture is used first as a framebuffer attachment. This operation does not fully sync the texture state and therefore does not unset base/max level dirty bits.\n3. The same texture is then used for sampling; this operation fully syncs the texture state. Base/max level dirty bits may lead to recreating the texture storage thus invalidating native render target references created in step 2.\n4. If the framebuffer created in step 2 is used again, its native render target references will not be updated to point to the new storage because everything is in sync from the frontend point of view.\n5. The issue is bypassed by not recreating the texture storage in step 3 if the new effective level range is the same as the existing one. If the new range is different, it is expected that native render target references will be updated during draw framebuffer sync.",
+      "revId": "44b40b3c0e7962ebb43ceae69ef819051be627ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
