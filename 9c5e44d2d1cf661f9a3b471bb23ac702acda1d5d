@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6a28c81_784d6b3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-29T14:36:40Z",
+      "side": 1,
+      "message": "Thanks for the +2, but let\u0027s not land this for now. It doesn\u0027t look like it worked around the issue, and there\u0027s no way we can robustly detect infinite loops anyway",
+      "revId": "9c5e44d2d1cf661f9a3b471bb23ac702acda1d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
