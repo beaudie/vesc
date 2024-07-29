@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97aee2c8_6d5a02d8",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-07-29T07:45:29Z",
+      "side": 1,
+      "message": "This helper name is misleading as it returns 8 when there\u0027s no stencil attachment.\n\nAs it\u0027s used only for an assertion, maybe the check could be moved inside:\n\n```\nbool HasSupportedStencilBitCount(const Framebuffer *framebuffer)\n{\n    const FramebufferAttachment *stencilAttachment \u003d\n        framebuffer ? framebuffer-\u003egetStencilOrDepthStencilAttachment() : nullptr;\n    return stencilAttachment ? stencilAttachment-\u003egetStencilSize() \u003d\u003d 8 : true;\n}\n```",
+      "revId": "dd3974aba44ae914d4595059b5a204878a403f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
