@@ -20,6 +20,12 @@ ROOT_TARGETS = [
     "//:libGLESv1_CM",
     "//:libEGL",
 ]
+DMA_BUF_SOURCES_TARGET = "//src/libANGLE/renderer/vulkan:angle_android_vulkan_dma_buf_sources"
+DMA_BUF_DEFINES_TARGET = "//src/libANGLE/renderer/vulkan:angle_android_vulkan_dma_buf_defines"
+DMA_BUF_TARGETS = [
+    DMA_BUF_SOURCES_TARGET,
+    DMA_BUF_DEFINES_TARGET,
+]
 
 MIN_SDK_VERSION = '28'
 TARGET_SDK_VERSION = '33'
@@ -395,6 +401,8 @@ def library_target_to_blueprint(target, build_info):
         bp['stl'] = STL
         if target in ROOT_TARGETS:
             bp['defaults'].append('angle_vendor_cc_defaults')
+            bp['defaults'].append('angle_dma_buf_defines_cc_defaults')
+            bp['defaults'].append('angle_dma_buf_sources_cc_defaults')
         bps_for_abis[abi] = bp
 
     common_bp = merge_bps(bps_for_abis)
@@ -611,11 +619,51 @@ def get_angle_in_vendor_flag_config():
     return blueprint_results
 
 
+def get_angle_android_dma_buf_flag_config(build_info):
+    """
+    Generates a list of Android.bp definitions for angle_android_dma_buf flag.
+    """
+
+    blueprint_results = []
+
+    blueprint_results.append(('soong_config_module_type', {
+        'name': 'angle_dma_buf_config_cc_defaults',
+        'module_type': 'cc_defaults',
+        'config_namespace': 'angle',
+        'bool_variables': ['angle_android_dma_buf'],
+        'properties': ['defaults'],
+    }))
+
+    blueprint_results.append(('soong_config_bool_variable', {
+        'name': 'angle_android_dma_buf',
+    }))
+
+    blueprint_results.append(('angle_dma_buf_config_cc_defaults', {
+        'name': 'angle_dma_buf_defines_cc_defaults',
+        'soong_config_variables': {
+            'angle_android_dma_buf': {
+                'defaults': [gn_target_to_blueprint_target(DMA_BUF_DEFINES_TARGET, {}),],
+            }
+        }
+    }))
+
+    blueprint_results.append(('angle_dma_buf_config_cc_defaults', {
+        'name': 'angle_dma_buf_sources_cc_defaults',
+        'soong_config_variables': {
+            'angle_android_dma_buf': {
+                'defaults': [gn_target_to_blueprint_target(DMA_BUF_SOURCES_TARGET, {}),],
+            }
+        }
+    }))
+
+    return blueprint_results
+
+
 # returns list of (blueprint module type, dict with contents)
 def get_blueprint_targets_from_build_info(build_info: BuildInfo) -> List[Tuple[str, dict]]:
     targets_to_write = collections.OrderedDict()
     for abi in ABI_TARGETS:
-        for root_target in ROOT_TARGETS:
+        for root_target in ROOT_TARGETS + DMA_BUF_TARGETS:
             targets_to_write.update(get_gn_target_dependencies(abi, root_target, build_info))
 
     generated_targets = []
@@ -656,6 +704,7 @@ def main():
     blueprint_targets = []
 
     blueprint_targets.extend(get_angle_in_vendor_flag_config())
+    blueprint_targets.extend(get_angle_android_dma_buf_flag_config(build_info))
 
     blueprint_targets.append((
         'cc_defaults',

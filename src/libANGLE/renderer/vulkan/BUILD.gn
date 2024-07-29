@@ -87,6 +87,23 @@ config("angle_vulkan_backend_config") {
   }
 }
 
+angle_source_set("angle_android_vulkan_dma_buf_defines") {
+  sources = []
+  defines = [
+    "ANGLE_ANDROID_DMA_BUF",
+    "ANGLE_USE_VULKAN_DISPLAY",
+    "ANGLE_VULKAN_DISPLAY_MODE_OFFSCREEN",
+  ]
+}
+
+angle_source_set("angle_android_vulkan_dma_buf_sources") {
+  sources = vulkan_backend_dma_buf_sources
+  deps = [ "$angle_root/src/common/linux:angle_dma_buf" ]
+  if (angle_use_gbm) {
+    deps += [ "//third_party/minigbm" ]
+  }
+}
+
 template("angle_vulkan_backend_template") {
   config("${target_name}_internal_config") {
     defines = []
