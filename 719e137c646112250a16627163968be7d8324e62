@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fc15304_6ec1ae3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-29T20:19:52Z",
+      "side": 1,
+      "message": "lgtm overall\n\nThank you Quyen for jumping on this bug right away.\n\nCould you please talk with Geoff about how to resolve the issue on Chrome Stable and Beta? I imagine this CL could be merged back to Beta, but don\u0027t think it can be merged back to Stable. If it turns out more applications are broken, I wonder whether we should consider reverting your original CL on ANGLE\u0027s branch for Chrome Stable - again, please discuss with Geoff. Thanks.",
+      "revId": "719e137c646112250a16627163968be7d8324e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
