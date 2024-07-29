@@ -184,6 +184,7 @@ for unsupported_third_party_dep in "${unsupported_third_party_deps[@]}"; do
 done
 
 git add Android.bp
+git add angle_commit.h
 
 # Delete the .git files in each dep so that it can be added to this repo. Some deps like jsoncpp
 # have multiple layers of deps so delete everything before adding them.
