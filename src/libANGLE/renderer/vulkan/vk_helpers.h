@@ -1541,7 +1541,8 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
                     ImageLayout imageLayout,
                     ImageHelper *image);
 
-    // Update image with this command buffer's queueSerial.
+    // Update buffer or image with this command buffer's queueSerial.
+    void retainBuffer(BufferHelper *buffer);
     void retainImage(ImageHelper *image);
 
     // Call SetEvent and have image's current event pointing to it.
@@ -3681,18 +3682,37 @@ class ActiveHandleCounter final : angle::NonCopyable
 // inserted.  The following struct aggregates all resources that such internal commands need.
 struct CommandBufferBufferAccess
 {
+    CommandBufferBufferAccess(BufferHelper *buffer, VkAccessFlags accessType, PipelineStage stage)
+        : buffer(buffer), accessType(accessType), stage(stage)
+    {}
     BufferHelper *buffer;
     VkAccessFlags accessType;
     PipelineStage stage;
 };
 struct CommandBufferImageAccess
 {
+    CommandBufferImageAccess(ImageHelper *image,
+                             VkImageAspectFlags aspectFlags,
+                             ImageLayout imageLayout)
+        : image(image), aspectFlags(aspectFlags), imageLayout(imageLayout)
+    {}
     ImageHelper *image;
     VkImageAspectFlags aspectFlags;
     ImageLayout imageLayout;
 };
 struct CommandBufferImageSubresourceAccess
 {
+    CommandBufferImageSubresourceAccess(CommandBufferImageAccess access,
+                                        gl::LevelIndex levelStart,
+                                        uint32_t levelCount,
+                                        uint32_t layerStart,
+                                        uint32_t layerCount)
+        : access(access),
+          levelStart(levelStart),
+          levelCount(levelCount),
+          layerStart(layerStart),
+          layerCount(layerCount)
+    {}
     CommandBufferImageAccess access;
     gl::LevelIndex levelStart;
     uint32_t levelCount;
@@ -3806,11 +3826,11 @@ class CommandBufferAccess : angle::NonCopyable
 
     // The limits reflect the current maximum concurrent usage of each resource type.  ASSERTs will
     // fire if this limit is exceeded in the future.
-    using ReadBuffers           = angle::FixedVector<CommandBufferBufferAccess, 2>;
-    using WriteBuffers          = angle::FixedVector<CommandBufferBufferAccess, 2>;
-    using ReadImages            = angle::FixedVector<CommandBufferImageAccess, 2>;
-    using WriteImages           = angle::FixedVector<CommandBufferImageSubresourceAccess, 1>;
-    using ReadImageSubresources = angle::FixedVector<CommandBufferImageSubresourceAccess, 1>;
+    using ReadBuffers           = std::vector<CommandBufferBufferAccess>;
+    using WriteBuffers          = std::vector<CommandBufferBufferAccess>;
+    using ReadImages            = std::vector<CommandBufferImageAccess>;
+    using WriteImages           = std::vector<CommandBufferImageSubresourceAccess>;
+    using ReadImageSubresources = std::vector<CommandBufferImageSubresourceAccess>;
 
     using ExternalAcquireReleaseBuffers =
         angle::FixedVector<CommandBufferBufferExternalAcquireRelease, 1>;
