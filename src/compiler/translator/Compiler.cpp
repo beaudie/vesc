@@ -38,6 +38,7 @@
 #include "compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.h"
 #include "compiler/translator/tree_ops/FoldExpressions.h"
 #include "compiler/translator/tree_ops/ForcePrecisionQualifier.h"
+#include "compiler/translator/tree_ops/HasInfiniteLoopAndAlsoNestedSwitches.h"
 #include "compiler/translator/tree_ops/InitializeVariables.h"
 #include "compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h"
 #include "compiler/translator/tree_ops/PruneEmptyCases.h"
@@ -1046,9 +1047,17 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
-    // Attempt to reject shaders with infinite loops in WebGL contexts.
     if (IsWebGLBasedSpec(mShaderSpec))
     {
+        // If requested, reject problematic shaders with infinite loops in WebGL contexts.  If not
+        // requested, the same loops are removed from the shader as a fallback.
+        if (mCompileOptions.rejectShadersWithInfiniteLoopsAndNestedSwitch &&
+            HasInfiniteLoopAndAlsoNestedSwitches(this, root, &mSymbolTable))
+        {
+            return false;
+        }
+
+        // Remove infinite loops, they are not supposed to exist in shaders.
         if (!PruneInfiniteLoops(this, root, &mSymbolTable))
         {
             return false;

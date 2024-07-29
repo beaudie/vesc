@@ -1351,6 +1351,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://crbug.com/350528343"
     };
 
+    FeatureInfo rejectShadersWithInfiniteLoopsAndNestedSwitch = {
+        "rejectShadersWithInfiniteLoopsAndNestedSwitch",
+        FeatureCategory::VulkanWorkarounds,
+        "Pattern triggering driver bugs",
+        &members, "http://crbug.com/350528343"
+    };
+
     FeatureInfo disableDepthStencilResolveThroughAttachment = {
         "disableDepthStencilResolveThroughAttachment",
         FeatureCategory::VulkanWorkarounds,

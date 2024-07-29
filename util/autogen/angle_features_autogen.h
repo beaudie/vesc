@@ -260,6 +260,7 @@ enum class Feature
     ReadPixelsUsingImplementationColorReadFormatForNorm16,
     ReapplyUBOBindingsAfterUsingBinaryProgram,
     RegenerateStructNames,
+    RejectShadersWithInfiniteLoopsAndNestedSwitch,
     RemoveDynamicIndexingOfSwizzledVector,
     RemoveInvariantAndCentroidForESSL3,
     RequireGpuFamily2,

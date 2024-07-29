@@ -4352,6 +4352,10 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // Affecting Linux/Intel (unknown range).
     ANGLE_FEATURE_CONDITION(&mFeatures, wrapSwitchInIfTrue, isIntel && IsLinux());
 
+    // Reject shaders with infinite loops and nested switches that trigger driver bugs.  In the
+    // compiler this only applies to WebGL.
+    ANGLE_FEATURE_CONDITION(&mFeatures, rejectShadersWithInfiniteLoopsAndNestedSwitch, true);
+
     // Vulkan implementations are not required to clamp gl_FragDepth to [0, 1] by default.
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsDepthClampZeroOne,
                             mDepthClampZeroOneFeatures.depthClampZeroOne == VK_TRUE);

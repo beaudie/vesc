@@ -9164,6 +9164,42 @@ void main()
     EXPECT_PIXEL_NEAR(0, 0, 178, 255, 127, 255, 1);
 }
 
+// Ensure driver bug workaround rejects shaders with infinite loops and nested switches.
+TEST_P(WebGL2GLSLTest, RejectInfiniteLoopsAndNestedSwitches)
+{
+    ANGLE_SKIP_TEST_IF(
+        !getEGLWindow()->isFeatureEnabled(Feature::RejectShadersWithInfiniteLoopsAndNestedSwitch));
+
+    constexpr char kVS[] = R"(#version 300 es
+uniform uint u;
+uniform uint v;
+void main() {
+    while(true) {
+        switch (u)
+        {
+            case 0u:
+                gl_Position = vec4(1);
+                break;
+            default:
+                gl_Position = vec4(0.5);
+                switch (v)
+                {
+                    case 0u:
+                        gl_PointSize = 0.;
+                        break;
+                    default:
+                        gl_PointSize = 1.;
+                        break;
+                }
+                break;
+        }
+    }
+})";
+
+    GLuint shader = CompileShader(GL_VERTEX_SHADER, kVS);
+    EXPECT_EQ(0u, shader);
+}
+
 // Test that a constant struct inside an expression is handled correctly.
 TEST_P(GLSLTest_ES3, ConstStructInsideExpression)
 {

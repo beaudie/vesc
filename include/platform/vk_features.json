@@ -1474,6 +1474,14 @@
             "issue": "http://crbug.com/350528343"
         },
         {
+            "name": "reject_shaders_with_infinite_loops_and_nested_switch",
+            "category": "Workarounds",
+            "description": [
+                "Pattern triggering driver bugs"
+            ],
+            "issue": "http://crbug.com/350528343"
+        },
+        {
             "name": "disable_depth_stencil_resolve_through_attachment",
             "category": "Workarounds",
             "description": [

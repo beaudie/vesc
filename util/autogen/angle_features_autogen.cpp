@@ -260,6 +260,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::ReadPixelsUsingImplementationColorReadFormatForNorm16, "readPixelsUsingImplementationColorReadFormatForNorm16"},
     {Feature::ReapplyUBOBindingsAfterUsingBinaryProgram, "reapplyUBOBindingsAfterUsingBinaryProgram"},
     {Feature::RegenerateStructNames, "regenerateStructNames"},
+    {Feature::RejectShadersWithInfiniteLoopsAndNestedSwitch, "rejectShadersWithInfiniteLoopsAndNestedSwitch"},
     {Feature::RemoveDynamicIndexingOfSwizzledVector, "removeDynamicIndexingOfSwizzledVector"},
     {Feature::RemoveInvariantAndCentroidForESSL3, "removeInvariantAndCentroidForESSL3"},
     {Feature::RequireGpuFamily2, "requireGpuFamily2"},
