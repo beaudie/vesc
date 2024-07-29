@@ -24,7 +24,7 @@ cd "${0%/*}/.."
 
 GN_OUTPUT_DIRECTORY=out/Android
 
-function generate_Android_bp_file() {
+function generate_Android_bp_file_and_angle_commit() {
     abis=(
         "arm"
         "arm64"
@@ -113,7 +113,7 @@ function generate_Android_bp_file() {
 
 
 if [[ "$1" == "--genAndroidBp" ]];then
-    generate_Android_bp_file "$2"
+    generate_Android_bp_file_and_angle_commit "$2"
     exit 0
 fi
 
@@ -163,12 +163,12 @@ gclient sync --reset --force --delete_unversioned_trees
 # Delete outdir to ensure a clean gn run.
 rm -rf ${GN_OUTPUT_DIRECTORY}
 
-generate_Android_bp_file
+generate_Android_bp_file_and_angle_commit
 
 # Delete outdir to cleanup after gn.
 rm -rf ${GN_OUTPUT_DIRECTORY}
 
-# Delete all unsupported 3rd party dependencies. Do this after generate_Android_bp_file, so
+# Delete all unsupported 3rd party dependencies. Do this after generate_Android_bp_file_and_angle_commit, so
 # it has access to all of the necessary BUILD.gn files.
 unsupported_third_party_deps=(
    "third_party/android_build_tools"
@@ -184,6 +184,7 @@ for unsupported_third_party_dep in "${unsupported_third_party_deps[@]}"; do
 done
 
 git add Android.bp
+git add angle_commit.h
 
 # Delete the .git files in each dep so that it can be added to this repo. Some deps like jsoncpp
 # have multiple layers of deps so delete everything before adding them.
