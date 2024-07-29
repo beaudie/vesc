@@ -9960,8 +9960,8 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
 
                     if (commandBufferWasFlushed)
                     {
-                        ANGLE_TRY(
-                            contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBuffer));
+                        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
+                            transferAccess, &commandBuffer));
                     }
                     break;
                 }
@@ -9988,12 +9988,18 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                 }
             }
 
+            commandBuffer->retainImage(this);
             update.release(renderer);
         }
 
         // Only remove the updates that were actually applied to the image.
         *levelUpdates = std::move(updatesToKeep);
     }
+
+    // After applying the updates, the image serial should match the current queue serial of the
+    // outside command buffer.
+    ASSERT(mUse.getSerials()[commandBuffer->getQueueSerial().getIndex()] ==
+           commandBuffer->getQueueSerial().getSerial());
 
     return angle::Result::Continue;
 }
