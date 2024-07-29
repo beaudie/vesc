@@ -22,6 +22,30 @@
       },
       "revId": "5c357d1a1e96ad58f2ae9be144219eba4872dac0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aca4caa3_576edbf0",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-07-29T21:52:21Z",
+      "side": 1,
+      "message": "Thanks Roman for catching that.\n\nI have renamed the function. It should be easier for local testing when running command `scripts/roll_aosp.sh --genAndroidBpAndAngleCommit`",
+      "parentUuid": "5580e2c2_4a74de32",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 22
+      },
+      "revId": "5c357d1a1e96ad58f2ae9be144219eba4872dac0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
