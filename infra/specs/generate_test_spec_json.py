@@ -43,6 +43,16 @@ ADDITIONAL_MIXINS = {
             '--use-permissive-pixel-comparison=${use_permissive_angle_pixel_comparison}',
         ],
     },
+    'angle_win10_intel_uhd_770': {
+        'swarming': {
+            'dimensions': {
+                'display_attached': '1',
+                'gpu': '8086:4680-32.0.101.5762',
+                'os': 'Windows-10-19045.3930',
+                'pool': 'chromium.tests.gpu',
+            },
+        },
+    },
     'samsung_s22': {
         'swarming': {
             'dimensions': {

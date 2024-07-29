@@ -272,7 +272,7 @@
       'win10-x64-exp-intel': {
         'os_type': 'win',
         'mixins': [
-          'win10_intel_uhd_770_stable',
+          'angle_win10_intel_uhd_770',
         ],
         'test_suites': {
           'gtest_tests': 'win10_intel_gtests',
