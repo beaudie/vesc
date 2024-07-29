@@ -136,6 +136,11 @@ std::shared_ptr<ShaderTranslateTask> ShaderVk::compile(const gl::Context *contex
         options->wrapSwitchInIfTrue = true;
     }
 
+    if (contextVk->getFeatures().rejectShadersWithInfiniteLoopsAndNestedSwitch.enabled)
+    {
+        options->rejectShadersWithInfiniteLoopsAndNestedSwitch = true;
+    }
+
     // The Vulkan backend needs no post-processing of the translated shader.
     return std::shared_ptr<ShaderTranslateTask>(new ShaderTranslateTask);
 }
