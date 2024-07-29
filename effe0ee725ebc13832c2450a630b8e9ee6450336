@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf09aa2_6199b567",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-29T19:44:10Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "effe0ee725ebc13832c2450a630b8e9ee6450336",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9de0c86a_74b505b2",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-29T19:44:10Z",
+      "side": 1,
+      "message": "Should this also be a constant in the beginning of the file?",
+      "range": {
+        "startLine": 710,
+        "startChar": 74,
+        "endLine": 710,
+        "endChar": 79
+      },
+      "revId": "effe0ee725ebc13832c2450a630b8e9ee6450336",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
