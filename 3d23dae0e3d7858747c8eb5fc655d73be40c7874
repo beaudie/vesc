@@ -223,6 +223,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20db9ebe_587f4954",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-29T18:42:59Z",
+      "side": 1,
+      "message": "After https://crrev.com/c/5746710 it seems there isn\u0027t a lot of difference between different batch sizes, I\u0027m seeing ~15 minute builds for linux-trace and ~30 for windows where everything seems slower. If we get ~30m consistently that\u0027s still a big improvement compared to the current state where we can easily get \u003e1h builds.",
+      "parentUuid": "1060bd26_a66e82b4",
+      "range": {
+        "startLine": 57,
+        "startChar": 22,
+        "endLine": 57,
+        "endChar": 23
+      },
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f399129_cb73b349",
@@ -647,6 +671,30 @@
       "writtenOn": "2024-07-23T22:03:25Z",
       "side": 1,
       "message": "These are to be fixed by https://crrev.com/c/5736060",
+      "range": {
+        "startLine": 227,
+        "startChar": 36,
+        "endLine": 227,
+        "endChar": 41
+      },
+      "revId": "3d23dae0e3d7858747c8eb5fc655d73be40c7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0b81dd6_16cce4d3",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-29T18:42:59Z",
+      "side": 1,
+      "message": "I\u0027ll go ahead with this CL first so that it\u0027s easy to vaildate that one.",
+      "parentUuid": "3eb1e329_26406479",
       "range": {
         "startLine": 227,
         "startChar": 36,
