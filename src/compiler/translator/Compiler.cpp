@@ -38,6 +38,7 @@
 #include "compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.h"
 #include "compiler/translator/tree_ops/FoldExpressions.h"
 #include "compiler/translator/tree_ops/ForcePrecisionQualifier.h"
+#include "compiler/translator/tree_ops/HasInfiniteLoopAndAlsoNestedSwitches.h"
 #include "compiler/translator/tree_ops/InitializeVariables.h"
 #include "compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h"
 #include "compiler/translator/tree_ops/PruneEmptyCases.h"
@@ -1043,6 +1044,15 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     if (!SeparateDeclarations(*this, *root))
     {
         return false;
+    }
+
+    // Attempt to reject shaders with infinite loops and nested switch statements in WebGL contexts.
+    if (IsWebGLBasedSpec(mShaderSpec))
+    {
+        if (HasInfiniteLoopAndAlsoNestedSwitches(this, root, &mSymbolTable))
+        {
+            return false;
+        }
     }
 
     if (compileOptions.rescopeGlobalVariables)
