@@ -9960,8 +9960,8 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
 
                     if (commandBufferWasFlushed)
                     {
-                        ANGLE_TRY(
-                            contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBuffer));
+                        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(
+                            transferAccess, &commandBuffer));
                     }
                     break;
                 }
@@ -9993,6 +9993,15 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
 
         // Only remove the updates that were actually applied to the image.
         *levelUpdates = std::move(updatesToKeep);
+    }
+
+    // After applying the updates, the image serial should match the current queue serial of the
+    // outside command buffer.
+    if (mUse.getSerials()[commandBuffer->getQueueSerial().getIndex()] !=
+        commandBuffer->getQueueSerial().getSerial())
+    {
+        // There has been a submission after the retainImage() call. Update the queue serial again.
+        setQueueSerial(commandBuffer->getQueueSerial());
     }
 
     return angle::Result::Continue;
