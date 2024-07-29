@@ -39,6 +39,30 @@
       },
       "revId": "effe0ee725ebc13832c2450a630b8e9ee6450336",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d0d4676_e84303b0",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-29T19:53:18Z",
+      "side": 1,
+      "message": "It\u0027s just a little hack to avoid spinning up the entire pool when running a couple of tests locally, not sure it\u0027s worth doing anything differently as it\u0027s a corner case that shouldn\u0027t really matter.",
+      "parentUuid": "9de0c86a_74b505b2",
+      "range": {
+        "startLine": 710,
+        "startChar": 74,
+        "endLine": 710,
+        "endChar": 79
+      },
+      "revId": "effe0ee725ebc13832c2450a630b8e9ee6450336",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
