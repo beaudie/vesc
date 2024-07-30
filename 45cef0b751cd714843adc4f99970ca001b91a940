@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4caffbda_10c8fed5",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1386083
+      },
+      "writtenOn": "2024-07-30T13:25:04Z",
+      "side": 1,
+      "message": "Note: this is declared as `angle_source_set`, and ends up in `Android.bp` as `cc_defaults` rather than `cc_static_library`.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 16
+      },
+      "revId": "45cef0b751cd714843adc4f99970ca001b91a940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac40b39f_80833b5a",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1386083
+      },
+      "writtenOn": "2024-07-30T13:25:04Z",
+      "side": 1,
+      "message": "@romanl@google.com this defines an `angle_source_set` and ends up generating a `cc_defaults` in Android.bp. We discussed turning this into a static library yesterday, but that so far caused it to use statically linked Vulkan over the system-provided one.\n\nIncluding the sources in the root targets like this doesn\u0027t have this problem; it also behaves more closely to having the sources included in the root targets directly as the linux gn build does.\n\nI have yet to identify the set of dependencies that set up cflags in a way that\u0027s in line with the root targets.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 1
+      },
+      "revId": "45cef0b751cd714843adc4f99970ca001b91a940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
