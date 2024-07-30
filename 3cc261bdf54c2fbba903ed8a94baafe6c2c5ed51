@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "914de20a_f827c991",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1386083
+      },
+      "writtenOn": "2024-07-30T17:45:43Z",
+      "side": 1,
+      "message": "Squashed the 2 parent changes into this one at @romanl@google.com\u0027s suggestion:\n- revert of the prematurely added gn build flag, needed for the previous revision of the change\n- small refactor of the generator python script",
+      "revId": "3cc261bdf54c2fbba903ed8a94baafe6c2c5ed51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
