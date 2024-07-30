@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9c7234a_e72fdbce",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-30T15:41:35Z",
+      "side": 1,
+      "message": "Instead of adding a special case in generate_android_bp, add a new gn arg here, Something like `angle_enable_android_vulkan_dma_buf`. You can then add add `angle_android_vulkan_dma_buf` as a conditional dep of `angle_vulkan_backend_template` and set that gn arg to true for our script that generates the android bp (around here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/scripts/roll_aosp.sh;l\u003d46;drc\u003d0ef066874643103f204c008213971e56b04ad803)",
+      "revId": "38784bb08f6dd25f3848fd0f672b72b469465725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
