@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d93b54cd_79b00512",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 9991,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-07-30T00:27:29Z",
+      "side": 1,
+      "message": "After this change, some tests start failing the assert below. (e.g., `dEQP-GLES3.functional.texture.mipmap.2d.base_level.nearest_linear`)",
+      "parentUuid": "5a6275ae_0a3b93b5",
+      "revId": "e69c4306100080e30bb077da65558ee5b9e7eb3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "890cd6b1_d946edac",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 8
