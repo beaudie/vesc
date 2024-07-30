@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a6275ae_0a3b93b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 9991,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-30T00:10:52Z",
+      "side": 1,
+      "message": "This should be moved to line 9964. Otherwise image will be retained multiple times and mess up the heuristic.",
+      "revId": "e69c4306100080e30bb077da65558ee5b9e7eb3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "890cd6b1_d946edac",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 8
