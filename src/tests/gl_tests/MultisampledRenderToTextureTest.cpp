@@ -3293,28 +3293,45 @@ TEST_P(MultisampledRenderToTextureES3Test, DepthStencilInvalidate)
     ASSERT_NE(-1, positionLocation);
 
     // Setup vertices such that depth is varied from top to bottom.
-    std::array<Vector3, 6> quadVertices = {
+    std::array<Vector3, 6> redQuadVertices = {
         Vector3(-1.0f, 1.0f, 0.8f), Vector3(-1.0f, -1.0f, 0.2f), Vector3(1.0f, -1.0f, 0.2f),
         Vector3(-1.0f, 1.0f, 0.8f), Vector3(1.0f, -1.0f, 0.2f),  Vector3(1.0f, 1.0f, 0.8f),
     };
-    GLBuffer quadVertexBuffer;
-    glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * 6, quadVertices.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    GLBuffer redQuadVertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, redQuadVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * 6, redQuadVertices.data(), GL_STATIC_DRAW);
     glEnableVertexAttribArray(positionLocation);
+
+    // Green quad has the same depth.
+    std::array<Vector3, 6> greenQuadVertices = {
+        Vector3(-1.0f, 1.0f, 0.5f), Vector3(-1.0f, -1.0f, 0.5f), Vector3(1.0f, -1.0f, 0.5f),
+        Vector3(-1.0f, 1.0f, 0.5f), Vector3(1.0f, -1.0f, 0.5f),  Vector3(1.0f, 1.0f, 0.5f),
+    };
+    GLBuffer greenQuadVertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, greenQuadVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * 6, greenQuadVertices.data(),
+                 GL_STATIC_DRAW);
 
     // Draw red into the framebuffer.
     glViewport(0, 0, kWidth, 1);
     glUniform4f(colorUniformLocation, 1.0f, 0.0f, 0.0f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_ALWAYS);
+    glBindBuffer(GL_ARRAY_BUFFER, redQuadVertexBuffer);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     ASSERT_GL_NO_ERROR();
 
     // Draw green such that half the samples of each pixel pass the depth test.
+    // Note: We don't use drawQuad() because it could internally create a vertex buffer
+    // or client array pointer on the fly. Those could break the render pass in some backends and
+    // force unresolve unwantedly. The unexpected unresolve would have write average depth value
+    // to all samples in the depth buffer.
     glUniform4f(colorUniformLocation, 0.0f, 1.0f, 0.0f, 1.0f);
     glDepthFunc(GL_GREATER);
-    drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.5f);
+    glBindBuffer(GL_ARRAY_BUFFER, greenQuadVertexBuffer);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
     ASSERT_GL_NO_ERROR();
 
     // Invalidate depth attachment
@@ -3608,10 +3625,6 @@ TEST_P(MultisampledRenderToTextureTest, DrawNonMultisampledThenMultisampled)
     // http://anglebug.com/42263509
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
-    // TODO(http://anglebug.com/42261786): mixing different sample count for rendering to the same
-    // texture is currently not supported.
-    ANGLE_SKIP_TEST_IF(IsMetal());
-
     // Texture attachment to the two framebuffers.
     GLTexture color;
     glBindTexture(GL_TEXTURE_2D, color);
@@ -3683,10 +3696,6 @@ TEST_P(MultisampledRenderToTextureTest, DrawNonMultisampledThenMultisampled)
 TEST_P(MultisampledRenderToTextureTest, DrawMultisampledDifferentSamples)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
-
-    // TODO(http://anglebug.com/42261786): mixing different sample count for rendering to the same
-    // texture is currently not supported.
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLsizei kSize = 64;
 
