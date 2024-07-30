@@ -563,6 +563,10 @@ def RunCaptureInParallel(args, trace_folder_path, test_names, worker_count, xvfb
             capture_failed = True
             continue
 
+        for l in stdout.split('\n'):
+            if 'qwe' in l:
+                logging.info('%s %s', tests[0], l.strip())
+
         if args.show_capture_stdout:
             logging.info('Capture test stdout:\n%s\n', stdout)
 
@@ -719,6 +723,8 @@ def main(args):
             logging.error('Capture tests failed, see "Capture failed" errors above')
             return EXIT_FAILURE
 
+        logging.info('RunCaptureInParallel finished')
+
         labels_to_tests = {TestLabel(t): t for t in test_names}
 
         replay_tests = []
@@ -730,6 +736,8 @@ def main(args):
                 else:
                     logging.error('Capture failed: test missing replay files: %s', test_name)
                     failed = True
+
+        logging.info('CaptureProducedRequiredFiles finished')
 
         if failed:
             logging.error('Capture tests failed, see "Capture failed" errors above')
