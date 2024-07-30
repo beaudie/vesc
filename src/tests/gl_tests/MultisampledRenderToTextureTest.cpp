@@ -981,6 +981,9 @@ TEST_P(MultisampledRenderToTextureES3Test, MultipleLevelsMultisampleMRTDraw2DCol
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
 
+    // Metal backend doesn't support different sized attachments.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     constexpr GLsizei kSize        = 256;
     const GLuint desiredLevelCount = gl::log2(kSize) + 1;
     const std::vector<GLColor> greenColor(kSize * kSize, GLColor::green);
@@ -1903,6 +1906,10 @@ void MultisampledRenderToTextureES3Test::drawCopyDrawAttachDepthStencilClearThen
     bool useRenderbuffer)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    // Use glFramebufferTexture2DMultisampleEXT for depth/stencil texture is only supported with
+    // GL_EXT_multisampled_render_to_texture2.
+    ANGLE_SKIP_TEST_IF(!useRenderbuffer &&
+                       !EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
     constexpr GLsizei kSize = 64;
 
     // http://anglebug.com/42263509
@@ -3599,6 +3606,10 @@ TEST_P(MultisampledRenderToTextureTest, DrawNonMultisampledThenMultisampled)
 
     // http://anglebug.com/42263509
     ANGLE_SKIP_TEST_IF(IsD3D11());
+
+    // TODO(http://anglebug.com/42261786): mixing different sample count for rendering to the same
+    // texture is currently not supported.
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     // Texture attachment to the two framebuffers.
     GLTexture color;
