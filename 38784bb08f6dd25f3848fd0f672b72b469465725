@@ -52,6 +52,24 @@
       "parentUuid": "8eeed02d_aecea9cf",
       "revId": "38784bb08f6dd25f3848fd0f672b72b469465725",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72e2d156_feb78ab3",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-30T17:03:39Z",
+      "side": 1,
+      "message": "Got it, I was missing that context. Sorry for the noise.",
+      "parentUuid": "fb41bda2_5d79ca93",
+      "revId": "38784bb08f6dd25f3848fd0f672b72b469465725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
