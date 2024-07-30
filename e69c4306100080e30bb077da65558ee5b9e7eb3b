@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "809e9887_38a8f7ce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 9991,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-07-30T00:45:49Z",
+      "side": 1,
+      "message": "I guess  it is because line 9973 end up did submission because there is hazard in update.refCounted.image. \n\nThen maybe do this: Replace the assertion at line 10001 with this\n```\nif(mUse.getSerials()[commandBuffer-\u003egetQueueSerial().getIndex()] !\u003d\n           commandBuffer-\u003egetQueueSerial().getSerial());\n{\n    // There is a submission after we called retainImage, update the queueSerial again\n     setQueueSerial(commandBuffer-\u003egetQueueSerial());\n}\n```\nThen you don\u0027t need the change at line 9965 as well.",
+      "parentUuid": "d93b54cd_79b00512",
+      "revId": "e69c4306100080e30bb077da65558ee5b9e7eb3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "890cd6b1_d946edac",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 8
