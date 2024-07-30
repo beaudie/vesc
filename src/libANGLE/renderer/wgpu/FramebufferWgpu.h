@@ -107,6 +107,7 @@ class FramebufferWgpu : public FramebufferImpl
   private:
     RenderTargetCache<RenderTargetWgpu> mRenderTargetCache;
     wgpu::RenderPassDescriptor mCurrentRenderPassDesc;
+    wgpu::RenderPassDepthStencilAttachment mCurrentDepthStencilAttachment;
     std::vector<wgpu::RenderPassColorAttachment> mCurrentColorAttachments;
     gl::DrawBuffersArray<wgpu::TextureFormat> mCurrentColorAttachmentFormats;
     wgpu::TextureFormat mCurrentDepthStencilFormat = wgpu::TextureFormat::Undefined;

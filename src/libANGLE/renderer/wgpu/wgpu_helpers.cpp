@@ -91,7 +91,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextWgpu *contextWgpu,
             case UpdateSource::Clear:
                 if (deferredClears)
                 {
-                    deferredClears->store(deferredClearIndex, srcUpdate.clearData);
+                    deferredClears->store(deferredClearIndex, srcUpdate.clearData.colorValues,
+                                          srcUpdate.clearData.depthStencilValue);
                 }
                 else
                 {
@@ -99,9 +100,12 @@ angle::Result ImageHelper::flushStagedUpdates(ContextWgpu *contextWgpu,
                     wgpu::TextureView textureView;
                     ANGLE_TRY(createTextureView(srcUpdate.targetLevel, 0, textureView));
 
-                    colorAttachments.push_back(
-                        CreateNewClearColorAttachment(srcUpdate.clearData.clearColor,
-                                                      srcUpdate.clearData.depthSlice, textureView));
+                    colorAttachments.push_back(CreateNewClearColorAttachment(
+                        srcUpdate.clearData.colorValues.clearColor,
+                        srcUpdate.clearData.colorValues.depthSlice, textureView));
+                    if (srcUpdate.clearData.depthStencilValue.valid)
+                    {
+                    }
                 }
                 break;
         }

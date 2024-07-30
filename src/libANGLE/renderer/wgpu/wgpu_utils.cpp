@@ -47,6 +47,27 @@ wgpu::RenderPassColorAttachment CreateNewClearColorAttachment(wgpu::Color clearV
     return colorAttachment;
 }
 
+wgpu::RenderPassDepthStencilAttachment CreateNewDepthStencilAttachment(
+    float depthClearValue,
+    uint32_t stencilClearValue,
+    wgpu::TextureView textureView,
+    bool depthReadOnly,
+    bool stencilReadOnly)
+{
+    wgpu::RenderPassDepthStencilAttachment depthStencilAttachment;
+    depthStencilAttachment.view              = textureView;
+    depthStencilAttachment.depthLoadOp       = wgpu::LoadOp::Clear;
+    depthStencilAttachment.depthStoreOp      = wgpu::StoreOp::Store;
+    depthStencilAttachment.depthClearValue   = depthClearValue;
+    depthStencilAttachment.depthReadOnly     = depthReadOnly;
+    depthStencilAttachment.stencilLoadOp     = wgpu::LoadOp::Clear;
+    depthStencilAttachment.stencilStoreOp    = wgpu::StoreOp::Store;
+    depthStencilAttachment.stencilClearValue = stencilClearValue;
+    depthStencilAttachment.stencilReadOnly   = stencilReadOnly;
+
+    return depthStencilAttachment;
+}
+
 bool IsWgpuError(wgpu::WaitStatus waitStatus)
 {
     return waitStatus != wgpu::WaitStatus::Success;
@@ -63,10 +84,23 @@ ClearValuesArray::~ClearValuesArray() = default;
 ClearValuesArray::ClearValuesArray(const ClearValuesArray &other)          = default;
 ClearValuesArray &ClearValuesArray::operator=(const ClearValuesArray &rhs) = default;
 
-void ClearValuesArray::store(uint32_t index, ClearValues clearValues)
+void ClearValuesArray::store(uint32_t index,
+                             const ColorClearValues &clearValues,
+                             const DepthStencilClearValue &depthStencilValue)
+{
+    storeColorClearValue(index, clearValues);
+    storeDepthStencil(depthStencilValue);
+}
+
+void ClearValuesArray::storeColorClearValue(uint32_t index, const ColorClearValues &clearValues)
 {
     mValues[index] = clearValues;
     mEnabled.set(index);
+}
+
+void ClearValuesArray::storeDepthStencil(const DepthStencilClearValue &depthStencilValue)
+{
+    mDepthStencilValue = depthStencilValue;
 }
 
 gl::DrawBufferMask ClearValuesArray::getColorMask() const
