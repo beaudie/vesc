@@ -41,7 +41,6 @@ enum class Feature
     AllowTranslateUniformBlockToStructuredBuffer,
     AlwaysCallUseProgramAfterLink,
     AlwaysPreferStagedTextureUploads,
-    AlwaysResolveMultisampleRenderBuffers,
     AlwaysRunLinkSubJobsThreaded,
     AlwaysUnbindFramebufferTexture2D,
     AlwaysUseManagedStorageModeForBuffers,

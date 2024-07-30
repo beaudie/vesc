@@ -2721,7 +2721,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     const gl::RenderToTextureImageIndex renderToTextureIndex =
         hasRenderToTextureEXT
             ? gl::RenderToTextureImageIndex::Default
-            : static_cast<gl::RenderToTextureImageIndex>(PackSampleCount(samples));
+            : static_cast<gl::RenderToTextureImageIndex>(gl::PackSampleCount(samples));
 
     if (samples > 1 && !hasRenderToTextureEXT)
     {
