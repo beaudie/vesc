@@ -1310,6 +1310,10 @@ inline bool isInf(float f)
            !(bitCast<uint32_t>(f) & 0x7fffffu);
 }
 
+// Return the log of samples.  Assumes |sampleCount| is a power of 2.  The result can be used to
+// index an array based on sample count.
+size_t PackSampleCount(int32_t sampleCount);
+
 namespace priv
 {
 template <unsigned int N, unsigned int R>

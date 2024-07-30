@@ -472,7 +472,8 @@ TEST_P(MultisampledRenderToTextureTest, FramebufferCompleteness)
     // http://anglebug.com/42261786
     ANGLE_SKIP_TEST_IF(IsD3D());
 
-    if (getClientMajorVersion() >= 3)
+    if (getClientMajorVersion() >= 3 &&
+        EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"))
     {
         // Texture attachment for color attachment 1.
         GLTexture texture2;
@@ -980,6 +981,9 @@ TEST_P(MultisampledRenderToTextureES3Test, MultipleLevelsMultisampleMRTDraw2DCol
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_draw_buffers"));
+
+    // Metal backend doesn't support different sized attachments.
+    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLsizei kSize        = 256;
     const GLuint desiredLevelCount = gl::log2(kSize) + 1;
@@ -1903,6 +1907,10 @@ void MultisampledRenderToTextureES3Test::drawCopyDrawAttachDepthStencilClearThen
     bool useRenderbuffer)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    // Use glFramebufferTexture2DMultisampleEXT for depth/stencil texture is only supported with
+    // GL_EXT_multisampled_render_to_texture2.
+    ANGLE_SKIP_TEST_IF(!useRenderbuffer &&
+                       !EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
     constexpr GLsizei kSize = 64;
 
     // http://anglebug.com/42263509
@@ -3600,6 +3608,10 @@ TEST_P(MultisampledRenderToTextureTest, DrawNonMultisampledThenMultisampled)
     // http://anglebug.com/42263509
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
+    // TODO(http://anglebug.com/42261786): mixing different sample count for rendering to the same
+    // texture is currently not supported.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     // Texture attachment to the two framebuffers.
     GLTexture color;
     glBindTexture(GL_TEXTURE_2D, color);
@@ -3671,6 +3683,11 @@ TEST_P(MultisampledRenderToTextureTest, DrawNonMultisampledThenMultisampled)
 TEST_P(MultisampledRenderToTextureTest, DrawMultisampledDifferentSamples)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+
+    // TODO(http://anglebug.com/42261786): mixing different sample count for rendering to the same
+    // texture is currently not supported.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     constexpr GLsizei kSize = 64;
 
     GLsizei maxSamples = 0;
@@ -4358,43 +4375,48 @@ TEST_P(MultisampledRenderToTextureWithAdvancedBlendTest, RenderbufferClearThenDr
     drawTestCommon(true, InitMethod::Clear);
 }
 
-ANGLE_INSTANTIATE_TEST_COMBINE_1(MultisampledRenderToTextureTest,
-                                 PrintToStringParamName,
-                                 testing::Bool(),
-                                 ANGLE_ALL_TEST_PLATFORMS_ES2,
-                                 ANGLE_ALL_TEST_PLATFORMS_ES3,
-                                 ANGLE_ALL_TEST_PLATFORMS_ES31,
-                                 ES3_VULKAN()
-                                     .disable(Feature::SupportsExtendedDynamicState)
-                                     .disable(Feature::SupportsExtendedDynamicState2),
-                                 ES3_VULKAN().disable(Feature::SupportsExtendedDynamicState2),
-                                 ES3_VULKAN().disable(Feature::SupportsSPIRV14),
-                                 ES3_VULKAN_SWIFTSHADER()
-                                     .enable(Feature::EnableMultisampledRenderToTexture)
-                                     .disable(Feature::PreferDynamicRendering),
-                                 ES3_VULKAN_SWIFTSHADER()
-                                     .enable(Feature::EnableMultisampledRenderToTexture)
-                                     .disable(Feature::PreferDynamicRendering)
-                                     .enable(Feature::AsyncCommandQueue));
+ANGLE_INSTANTIATE_TEST_COMBINE_1(
+    MultisampledRenderToTextureTest,
+    PrintToStringParamName,
+    testing::Bool(),
+    ANGLE_ALL_TEST_PLATFORMS_ES2,
+    ANGLE_ALL_TEST_PLATFORMS_ES3,
+    ANGLE_ALL_TEST_PLATFORMS_ES31,
+    ES2_METAL().enable(Feature::EnableMultisampledRenderToTextureOnNonTilers),
+    ES3_METAL().enable(Feature::EnableMultisampledRenderToTextureOnNonTilers),
+    ES3_VULKAN()
+        .disable(Feature::SupportsExtendedDynamicState)
+        .disable(Feature::SupportsExtendedDynamicState2),
+    ES3_VULKAN().disable(Feature::SupportsExtendedDynamicState2),
+    ES3_VULKAN().disable(Feature::SupportsSPIRV14),
+    ES3_VULKAN_SWIFTSHADER()
+        .enable(Feature::EnableMultisampledRenderToTexture)
+        .disable(Feature::PreferDynamicRendering),
+    ES3_VULKAN_SWIFTSHADER()
+        .enable(Feature::EnableMultisampledRenderToTexture)
+        .disable(Feature::PreferDynamicRendering)
+        .enable(Feature::AsyncCommandQueue));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MultisampledRenderToTextureES3Test);
-ANGLE_INSTANTIATE_TEST_COMBINE_1(MultisampledRenderToTextureES3Test,
-                                 PrintToStringParamName,
-                                 testing::Bool(),
-                                 ANGLE_ALL_TEST_PLATFORMS_ES3,
-                                 ANGLE_ALL_TEST_PLATFORMS_ES31,
-                                 ES3_VULKAN()
-                                     .disable(Feature::SupportsExtendedDynamicState)
-                                     .disable(Feature::SupportsExtendedDynamicState2),
-                                 ES3_VULKAN().disable(Feature::SupportsExtendedDynamicState2),
-                                 ES3_VULKAN().disable(Feature::SupportsSPIRV14),
-                                 ES3_VULKAN_SWIFTSHADER()
-                                     .enable(Feature::EnableMultisampledRenderToTexture)
-                                     .disable(Feature::PreferDynamicRendering),
-                                 ES3_VULKAN_SWIFTSHADER()
-                                     .enable(Feature::EnableMultisampledRenderToTexture)
-                                     .disable(Feature::PreferDynamicRendering)
-                                     .enable(Feature::AsyncCommandQueue));
+ANGLE_INSTANTIATE_TEST_COMBINE_1(
+    MultisampledRenderToTextureES3Test,
+    PrintToStringParamName,
+    testing::Bool(),
+    ANGLE_ALL_TEST_PLATFORMS_ES3,
+    ANGLE_ALL_TEST_PLATFORMS_ES31,
+    ES3_METAL().enable(Feature::EnableMultisampledRenderToTextureOnNonTilers),
+    ES3_VULKAN()
+        .disable(Feature::SupportsExtendedDynamicState)
+        .disable(Feature::SupportsExtendedDynamicState2),
+    ES3_VULKAN().disable(Feature::SupportsExtendedDynamicState2),
+    ES3_VULKAN().disable(Feature::SupportsSPIRV14),
+    ES3_VULKAN_SWIFTSHADER()
+        .enable(Feature::EnableMultisampledRenderToTexture)
+        .disable(Feature::PreferDynamicRendering),
+    ES3_VULKAN_SWIFTSHADER()
+        .enable(Feature::EnableMultisampledRenderToTexture)
+        .disable(Feature::PreferDynamicRendering)
+        .enable(Feature::AsyncCommandQueue));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MultisampledRenderToTextureES31Test);
 ANGLE_INSTANTIATE_TEST_COMBINE_1(MultisampledRenderToTextureES31Test,
