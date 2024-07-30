@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 //
 
+#include "common/system_utils.h"
 #include "gtest/gtest.h"
 #include "test_utils/runner/TestSuite.h"
 #include "util/OSWindow.h"
@@ -54,7 +55,9 @@ int main(int argc, char **argv)
             RegisterContextCompatibilityTests();
         }
     };
+    double t0 = angle::GetCurrentSystemTime();
     angle::TestSuite testSuite(&argc, argv, registerTestsCallback);
+    printf("qwe inst %.3f\n", angle::GetCurrentSystemTime() - t0);
 
     constexpr size_t kMaxPath = 512;
     std::array<char, kMaxPath> foundDataPath;
@@ -73,5 +76,8 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    return testSuite.run();
+    printf("qwe prerun %.3f\n", angle::GetCurrentSystemTime() - t0);
+    int rc = testSuite.run();
+    printf("qwe tot %.3f\n", angle::GetCurrentSystemTime() - t0);
+    return rc;
 }

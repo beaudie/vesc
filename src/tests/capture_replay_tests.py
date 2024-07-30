@@ -276,13 +276,11 @@ class GroupedResult():
             self.tests.append(test)
 
 
-def CaptureProducedRequiredFiles(trace_folder_path, test_name):
+def CaptureProducedRequiredFiles(all_trace_files, test_name):
     label = TestLabel(test_name)
 
-    test_files = []
-    for f in os.listdir(trace_folder_path):
-        if os.path.isfile(os.path.join(trace_folder_path, f)) and f.startswith(label):
-            test_files.append(f)
+    test_files = [f for f in all_trace_files if f.startswith(label)]
+
     frame_files_count = 0
     context_header_count = 0
     context_source_count = 0
@@ -563,6 +561,10 @@ def RunCaptureInParallel(args, trace_folder_path, test_names, worker_count, xvfb
             capture_failed = True
             continue
 
+        for l in stdout.split('\n'):
+            if 'qwe' in l:
+                logging.info('%s %s', tests[0], l.strip())
+
         if args.show_capture_stdout:
             logging.info('Capture test stdout:\n%s\n', stdout)
 
@@ -719,17 +721,23 @@ def main(args):
             logging.error('Capture tests failed, see "Capture failed" errors above')
             return EXIT_FAILURE
 
+        logging.info('RunCaptureInParallel finished')
+
         labels_to_tests = {TestLabel(t): t for t in test_names}
+
+        all_trace_files = [f.name for f in os.scandir(trace_folder_path) if f.is_file()]
 
         replay_tests = []
         failed = False
         for test_name in test_names:
             if test_name not in skipped_by_suite:
-                if CaptureProducedRequiredFiles(trace_folder_path, test_name):
+                if CaptureProducedRequiredFiles(all_trace_files, test_name):
                     replay_tests.append(test_name)
                 else:
                     logging.error('Capture failed: test missing replay files: %s', test_name)
                     failed = True
+
+        logging.info('CaptureProducedRequiredFiles finished')
 
         if failed:
             logging.error('Capture tests failed, see "Capture failed" errors above')
