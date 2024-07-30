@@ -69,6 +69,24 @@
       "parentUuid": "5408acdc_3854d1fd",
       "revId": "719e137c646112250a16627163968be7d8324e62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0da7ef28_5e01b811",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-30T13:51:02Z",
+      "side": 1,
+      "message": "Please work with Geoff - if there were dependent CLs on the original change in Stable, then it sounds too risky to revert there and we should just let the regression be for now.",
+      "parentUuid": "f597de09_928df899",
+      "revId": "719e137c646112250a16627163968be7d8324e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
