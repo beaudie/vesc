@@ -526,6 +526,10 @@ enum class PipelineType
     EnumCount   = 2,
 };
 
+// Return the log of samples.  Assumes |sampleCount| is a power of 2.  The result can be used to
+// index an array based on sample count.
+size_t PackSampleCount(int32_t sampleCount);
+
 }  // namespace rx
 
 // MultiDraw macro patterns

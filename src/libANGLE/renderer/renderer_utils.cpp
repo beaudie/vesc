@@ -1881,4 +1881,17 @@ void TextureRedefineGenerateMipmapLevels(gl::LevelIndex baseLevel,
         (*redefinedLevels)[face] &= ~levelsMask;
     }
 }
+
+size_t PackSampleCount(int32_t sampleCount)
+{
+    if (sampleCount == 0)
+    {
+        sampleCount = 1;
+    }
+
+    // We currently only support up to 16xMSAA.
+    ASSERT(1 <= sampleCount && sampleCount <= 16);
+    ASSERT(gl::isPow2(sampleCount));
+    return gl::ScanForward(static_cast<uint32_t>(sampleCount));
+}
 }  // namespace rx
