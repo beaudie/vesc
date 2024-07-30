@@ -3608,10 +3608,6 @@ TEST_P(MultisampledRenderToTextureTest, DrawNonMultisampledThenMultisampled)
     // http://anglebug.com/42263509
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
-    // TODO(http://anglebug.com/42261786): mixing different sample count for rendering to the same
-    // texture is currently not supported.
-    ANGLE_SKIP_TEST_IF(IsMetal());
-
     // Texture attachment to the two framebuffers.
     GLTexture color;
     glBindTexture(GL_TEXTURE_2D, color);
@@ -3683,10 +3679,6 @@ TEST_P(MultisampledRenderToTextureTest, DrawNonMultisampledThenMultisampled)
 TEST_P(MultisampledRenderToTextureTest, DrawMultisampledDifferentSamples)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
-
-    // TODO(http://anglebug.com/42261786): mixing different sample count for rendering to the same
-    // texture is currently not supported.
-    ANGLE_SKIP_TEST_IF(IsMetal());
 
     constexpr GLsizei kSize = 64;
 
