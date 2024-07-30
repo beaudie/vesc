@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ae8ba1c_b9ff6a66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-30T19:17:13Z",
+      "side": 1,
+      "message": "Alexey, since you\u0027ve done a lot of work in the Metal backend do you think you could review this? I don\u0027t think I\u0027ll be able to do so this week. Thanks.",
+      "revId": "a1041e20a8cdeaf2629e8e3d5c08e11beebff775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3207a9b0_ab3c5111",
