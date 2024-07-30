@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba849bc0_2c2276b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-30T19:15:36Z",
+      "side": 1,
+      "message": "Alexey, do you think you might be able to help review this CL since you have done a lot of work in the Metal backend? I don\u0027t think I\u0027ll be able to review it this week, apologies.",
+      "revId": "26fc7449982c7464f822d3f4c2a890f9e4e0c885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
