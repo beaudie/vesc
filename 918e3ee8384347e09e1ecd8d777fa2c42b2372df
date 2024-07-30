@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3bcdf86_b34f1c4d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 6517,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-30T16:05:54Z",
+      "side": 1,
+      "message": "What happens today if that check is removed? Do applications actually render incorrectly? What I\u0027m wondering is if applications are missing this because \"it seems to work\", and drivers keep WaW optimal for applications that _do_ use it correctly. We\u0027d be taking a perf hit in that case.\n\nI mean, sure we may get syncval errors from those apps, but as long as it renders correctly, they would be getting lucky with ANGLE same way they get lucky with native drivers.\n\nEither way, for now I suggest putting back `kBufferMemoryBarrierBits` where it was, add an `enum class BufferUpdateWithMemoryBarrier { No, Yes }` kind of thing (in vk_cache_utils.h), and pass that here. ContextVk can keep that instead of the `GLbitfield`, we only ever check `(memoryBarrierBits \u0026 kBufferMemoryBarrierBits) \u003d\u003d 0` anyway (so all we need is a boolean).\n\nIt would also then be easier to later add a feature to do this or not and make this possibly a per-app workaround.",
+      "revId": "918e3ee8384347e09e1ecd8d777fa2c42b2372df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
