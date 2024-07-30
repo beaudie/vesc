@@ -69,6 +69,30 @@
       },
       "revId": "45cef0b751cd714843adc4f99970ca001b91a940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ffd6b38_4e910bad",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-30T13:46:24Z",
+      "side": 1,
+      "message": "Hmm, so the thing I find confusing about this is that cflags from the rule with srcs also apply to the other files in the root targets. With the way it\u0027s currently split it\u0027s both still confusing and more verbose, so to me it doesn\u0027t look better than what we had at the previous stage. Maybe keep the previous implementation?\n\nIt\u0027s been a few times I wondered whether we should support ability to insert comments into the generated .bp. This seems like an opportunity to add that, so that we could clarify for anyone looking at the .bp file, something like:\n\n```\n# Note: this is no-op for most builds, only applies to ... [mention the project and the product config variable]\nangle_dma_buf_config_cc_defaults {\n```",
+      "parentUuid": "ac40b39f_80833b5a",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 1
+      },
+      "revId": "45cef0b751cd714843adc4f99970ca001b91a940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
