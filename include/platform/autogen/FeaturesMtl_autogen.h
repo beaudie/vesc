@@ -421,13 +421,6 @@ struct FeaturesMtl : FeatureSetBase
         &members, "http://anglebug.com/42266744"
     };
 
-    FeatureInfo alwaysResolveMultisampleRenderBuffers = {
-        "alwaysResolveMultisampleRenderBuffers",
-        FeatureCategory::MetalFeatures,
-        "Always automatically resolve MSAA render buffers to single sampled texture.",
-        &members, "http://crbug.com/1486094"
-    };
-
     FeatureInfo injectAsmStatementIntoLoopBodies = {
         "injectAsmStatementIntoLoopBodies",
         FeatureCategory::MetalFeatures,
