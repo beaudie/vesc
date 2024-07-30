@@ -1351,9 +1351,10 @@ void DisplayMtl::initializeFeatures()
     ANGLE_FEATURE_CONDITION((&mFeatures), injectAsmStatementIntoLoopBodies,
                             GetMacOSVersion() >= OSVersion(12, 0, 0));
 
-    ANGLE_FEATURE_CONDITION(
-        (&mFeatures), enableMultisampledRenderToTexture,
-        isARM && mFeatures.hasDepthAutoResolve.enabled && mFeatures.hasStencilAutoResolve.enabled);
+    ANGLE_FEATURE_CONDITION((&mFeatures), enableMultisampledRenderToTexture,
+                            isARM && mFeatures.hasShaderStencilOutput.enabled &&
+                                mFeatures.hasDepthAutoResolve.enabled &&
+                                mFeatures.hasStencilAutoResolve.enabled);
 }
 
 angle::Result DisplayMtl::initializeShaderLibrary()
