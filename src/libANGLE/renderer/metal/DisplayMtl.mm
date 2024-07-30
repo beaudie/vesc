@@ -983,9 +983,9 @@ void DisplayMtl::initializeExtensions() const
     // regular 2D textures with Metal, and causes other problems such as
     // breaking the SPIR-V Metal compiler.
 
-    mNativeExtensions.multisampledRenderToTextureEXT = ANGLE_APPLE_IS_ARM &&
-                                                       mFeatures.hasDepthAutoResolve.enabled &&
-                                                       mFeatures.hasStencilAutoResolve.enabled;
+    mNativeExtensions.multisampledRenderToTextureEXT =
+        ANGLE_APPLE_IS_ARM && mFeatures.hasShaderStencilOutput.enabled &&
+        mFeatures.hasDepthAutoResolve.enabled && mFeatures.hasStencilAutoResolve.enabled;
 
     // Enable EXT_blend_minmax
     mNativeExtensions.blendMinmaxEXT = true;
