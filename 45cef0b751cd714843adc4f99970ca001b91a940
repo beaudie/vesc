@@ -93,6 +93,30 @@
       },
       "revId": "45cef0b751cd714843adc4f99970ca001b91a940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a1817a3_01a37990",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1386083
+      },
+      "writtenOn": "2024-07-30T14:08:53Z",
+      "side": 1,
+      "message": "Thank you for taking a look. I reverted to the previous version with just one `angle_source_set`, added a comment to the .gn file, and some minimal logic to generate a comment for the Android.bp-generated one.\n\nThe products that use this are not public, so I included the bug number that contains more details. I hope that\u0027s OK.",
+      "parentUuid": "3ffd6b38_4e910bad",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 1
+      },
+      "revId": "45cef0b751cd714843adc4f99970ca001b91a940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
