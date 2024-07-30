@@ -1166,7 +1166,9 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
 
     // Call into gtest internals to force parameterized test name registration.
     testing::internal::UnitTestImpl *impl = testing::internal::GetUnitTestImpl();
+    double t0                             = angle::GetCurrentSystemTime();
     impl->RegisterParameterizedTests();
+    printf("qwe reg %.3f\n", angle::GetCurrentSystemTime() - t0);
 
     // Initialize internal GoogleTest filter arguments so we can call "FilterMatchesTest".
     testing::internal::ParseGoogleTestFlagsOnly(argc, argv);
@@ -1658,7 +1660,9 @@ int TestSuite::run()
             startWatchdog();
         }
 
+        double t0  = angle::GetCurrentSystemTime();
         int retVal = RUN_ALL_TESTS();
+        printf("qwe run_all %.3f\n", angle::GetCurrentSystemTime() - t0);
         {
             std::lock_guard<std::mutex> guard(mTestResults.currentTestMutex);
             mTestResults.allDone = true;

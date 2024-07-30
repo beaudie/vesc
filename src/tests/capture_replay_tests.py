@@ -563,6 +563,10 @@ def RunCaptureInParallel(args, trace_folder_path, test_names, worker_count, xvfb
             capture_failed = True
             continue
 
+        for l in stdout.split('\n'):
+            if 'qwe' in l:
+                logging.info('%s %s', tests[0], l.strip())
+
         if args.show_capture_stdout:
             logging.info('Capture test stdout:\n%s\n', stdout)
 
