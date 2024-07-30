@@ -16,6 +16,24 @@
       "message": "Instead of adding a special case in generate_android_bp, add a new gn arg here, Something like `angle_enable_android_vulkan_dma_buf`. You can then add add `angle_android_vulkan_dma_buf` as a conditional dep of `angle_vulkan_backend_template` and set that gn arg to true for our script that generates the android bp (around here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/scripts/roll_aosp.sh;l\u003d46;drc\u003d0ef066874643103f204c008213971e56b04ad803)",
       "revId": "38784bb08f6dd25f3848fd0f672b72b469465725",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eeed02d_aecea9cf",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1386083
+      },
+      "writtenOn": "2024-07-30T15:59:55Z",
+      "side": 1,
+      "message": "Thank you for taking a look!\n\nWhat I\u0027m trying to achieve is a way to get ANGLE not use regular Android graphics stack, but instead enable setting up GL rendering context based on externally allocated DMA-BUFs.\n\nThis flow differs significantly from what the vast majority of Android products do. I\u0027d like to conditionally enable this for a very limited set of Android lunch targets to not affect ones that don\u0027t need or care about this.\n\nIIUC, `gn` flags introduce a conditional at the point of creating `Android.bp`, at which point it becomes fixed and no longer configurable per Android lunch target.\n\nThe first comment in b/353262025 has a TL;DR on the internal project that needs this. If there are better ways to approach this I\u0027d greatly appreciate the suggestions.",
+      "parentUuid": "b9c7234a_e72fdbce",
+      "revId": "38784bb08f6dd25f3848fd0f672b72b469465725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
