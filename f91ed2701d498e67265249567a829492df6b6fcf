@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52adec8e_31eaaa7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-07-30T21:52:24Z",
+      "side": 1,
+      "message": "Thank you Shabi for putting this together. Have you tested this with some of the shaders the customer supplied in the bug and does it successfully reject all of them?",
+      "revId": "f91ed2701d498e67265249567a829492df6b6fcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
