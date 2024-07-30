@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d17cfc5a_f925709e",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1386083
+      },
+      "writtenOn": "2024-07-30T16:28:43Z",
+      "side": 1,
+      "message": "Fair point, fixed.",
+      "parentUuid": "18a5291c_0bc0c5c0",
+      "range": {
+        "startLine": 126,
+        "startChar": 25,
+        "endLine": 126,
+        "endChar": 27
+      },
+      "revId": "961659d78702a449de46a35a9ea1f28a966a1fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e350461b_adfe5fb6",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-30T16:13:31Z",
       "side": 1,
       "message": "Personally I\u0027d just inline the var name but this is fine too\n\nMove it to the top though? A docstring of sorts.\n\nBreaking intent seems odd here, and line breaks are ignored by textwrap later on.  Maybe just:\n```\n(\u0027multiple \u0027\n \u0027lines\u0027)\n```\n(or with a +)",
+      "range": {
+        "startLine": 657,
+        "startChar": 8,
+        "endLine": 657,
+        "endChar": 34
+      },
+      "revId": "961659d78702a449de46a35a9ea1f28a966a1fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93924a0d_d3dc3990",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1386083
+      },
+      "writtenOn": "2024-07-30T16:28:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e350461b_adfe5fb6",
       "range": {
         "startLine": 657,
         "startChar": 8,
