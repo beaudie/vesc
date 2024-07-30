@@ -9,6 +9,7 @@
 
 #include <dawn/webgpu_cpp.h>
 #include <stdint.h>
+#include <climits>
 
 #include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
@@ -105,10 +106,39 @@ enum class RenderPassClosureReason
     EnumCount = InvalidEnum,
 };
 
-struct ClearValues
+struct ColorClearValues
 {
     wgpu::Color clearColor;
     uint32_t depthSlice;
+};
+
+struct DepthStencilClearValue
+{
+    float depthValue      = NAN;
+    uint32_t stencilValue = 0;
+    bool valid            = false;
+};
+
+struct ClearValues
+{
+    /*
+    ClearValues(ClearValues &&other)
+    {
+
+    }
+    ClearValues &operator=(ClearValues &&other)
+    {
+        if (this == &other)
+        {
+            return this;
+        }
+        colorValues = other.colorValues;
+        depthStencilValue = other.depthStencilValue;
+
+        return *this;
+    }*/
+    ColorClearValues colorValues;
+    DepthStencilClearValue depthStencilValue;
 };
 
 class ClearValuesArray final
@@ -120,7 +150,12 @@ class ClearValuesArray final
     ClearValuesArray(const ClearValuesArray &other);
     ClearValuesArray &operator=(const ClearValuesArray &rhs);
 
-    void store(uint32_t index, ClearValues clearValues);
+    void store(uint32_t index,
+               const ColorClearValues &clearValues,
+               const DepthStencilClearValue &depthStencilValue);
+    void storeColorClearValue(uint32_t index, const ColorClearValues &clearValues);
+    void storeDepthStencil(const DepthStencilClearValue &depthStencilValue);
+
     gl::DrawBufferMask getColorMask() const;
     void reset()
     {
@@ -132,16 +167,20 @@ class ClearValuesArray final
         mValues[index] = {};
         mEnabled.reset(index);
     }
-    const ClearValues &operator[](size_t index) const { return mValues[index]; }
+    const ColorClearValues &operator[](size_t index) const { return mValues[index]; }
 
     bool empty() const { return mEnabled.none(); }
     bool any() const { return mEnabled.any(); }
 
     bool test(size_t index) const { return mEnabled.test(index); }
 
+    float getDepthValue() const { return mDepthStencilValue.depthValue; }
+    uint32_t getStencilValue() const { return mDepthStencilValue.stencilValue; }
+
   private:
-    gl::AttachmentArray<ClearValues> mValues;
+    gl::AttachmentArray<ColorClearValues> mValues;
     gl::AttachmentsMask mEnabled;
+    DepthStencilClearValue mDepthStencilValue;
 };
 
 void EnsureCapsInitialized(const wgpu::Device &device, gl::Caps *nativeCaps);
@@ -152,6 +191,12 @@ wgpu::Instance GetInstance(const gl::Context *context);
 wgpu::RenderPassColorAttachment CreateNewClearColorAttachment(wgpu::Color clearValue,
                                                               uint32_t depthSlice,
                                                               wgpu::TextureView textureView);
+wgpu::RenderPassDepthStencilAttachment CreateNewDepthStencilAttachment(
+    float depthClearValue,
+    uint32_t stencilClearValue,
+    wgpu::TextureView textureView,
+    bool depthReadOnly   = false,
+    bool stencilReadOnly = false);
 
 bool IsWgpuError(wgpu::WaitStatus waitStatus);
 bool IsWgpuError(WGPUBufferMapAsyncStatus mapBufferStatus);

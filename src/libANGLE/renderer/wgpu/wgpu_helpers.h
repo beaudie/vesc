@@ -53,9 +53,10 @@ struct SubresourceUpdate
                       gl::LevelIndex newTargetLevel,
                       ClearValues clearUpdate)
     {
-        updateSource = targetUpdateSource;
-        targetLevel  = newTargetLevel;
-        clearData    = clearUpdate;
+        updateSource                = targetUpdateSource;
+        targetLevel                 = newTargetLevel;
+        clearData.colorValues       = clearUpdate.colorValues;
+        clearData.depthStencilValue = clearUpdate.depthStencilValue;
     }
 
     UpdateSource updateSource;

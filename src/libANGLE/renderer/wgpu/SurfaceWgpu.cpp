@@ -150,7 +150,25 @@ angle::Result OffscreenSurfaceWgpu::initializeImpl(const egl::Display *display)
 
     if (config->depthStencilFormat != GL_NONE)
     {
-        UNIMPLEMENTED();
+        const webgpu::Format &webgpuFormat = displayWgpu->getFormat(config->depthStencilFormat);
+        wgpu::TextureDescriptor desc = mDepthStencilAttachment.texture.createTextureDescriptor(
+            kSurfaceTextureUsage, wgpu::TextureDimension::e2D,
+            {static_cast<uint32_t>(mWidth), static_cast<uint32_t>(mHeight), 1},
+            webgpuFormat.getActualWgpuTextureFormat(), 1, 1);
+
+        constexpr uint32_t level = 0;
+        constexpr uint32_t layer = 0;
+
+        ANGLE_TRY(mDepthStencilAttachment.texture.initImage(webgpuFormat.getIntendedFormatID(),
+                                                            webgpuFormat.getActualImageFormatID(),
+                                                            device, gl::LevelIndex(level), desc));
+
+        wgpu::TextureView view;
+        ANGLE_TRY(
+            mDepthStencilAttachment.texture.createTextureView(gl::LevelIndex(level), layer, view));
+        mDepthStencilAttachment.renderTarget.set(
+            &mDepthStencilAttachment.texture, view, webgpu::LevelIndex(level), layer,
+            mDepthStencilAttachment.texture.toWgpuTextureFormat());
     }
 
     return angle::Result::Continue;
@@ -174,6 +192,8 @@ void WindowSurfaceWgpu::destroy(const egl::Display *display)
     mSwapChain = nullptr;
     mColorAttachment.renderTarget.reset();
     mColorAttachment.texture.resetImage();
+    mDepthStencilAttachment.renderTarget.reset();
+    mDepthStencilAttachment.texture.resetImage();
 }
 
 egl::Error WindowSurfaceWgpu::swap(const gl::Context *context)
@@ -272,15 +292,21 @@ angle::Result WindowSurfaceWgpu::initializeImpl(const egl::Display *display)
 
     gl::Extents size;
     ANGLE_TRY(getCurrentWindowSize(display, &size));
+    wgpu::SurfaceConfiguration surfaceConfiguration;
+
+    surfaceConfiguration.device = device;
+    surfaceConfiguration.format =
+        displayWgpu->getFormat(config->renderTargetFormat).getActualWgpuTextureFormat();
+    surfaceConfiguration.usage = wgpu::TextureUsage::CopySrc | wgpu::TextureUsage::CopyDst |
+                                 wgpu::TextureUsage::RenderAttachment;
+    surfaceConfiguration.width  = size.width;
+    surfaceConfiguration.height = size.height;
+    mSurface.Configure(&surfaceConfiguration);
 
     wgpu::SwapChainDescriptor swapChainDesc = {};
-    swapChainDesc.usage                     = wgpu::TextureUsage::RenderAttachment;
-    swapChainDesc.format                    = wgpu::TextureFormat::BGRA8Unorm;
-    swapChainDesc.width                     = size.width;
-    swapChainDesc.height                    = size.height;
-    swapChainDesc.presentMode               = wgpu::PresentMode::Mailbox;
-    mSwapChain                              = device.CreateSwapChain(mSurface, &swapChainDesc);
+    wgpu::SurfaceCapabilities surfaceCapabilities;
 
+    mSurface.GetCapabilities(displayWgpu->getAdapter(), &surfaceCapabilities);
     mCurrentSwapChainSize = size;
 
     ANGLE_TRY(updateCurrentTexture(display));
@@ -309,9 +335,13 @@ angle::Result WindowSurfaceWgpu::updateCurrentTexture(const egl::Display *displa
     wgpu::TextureView view = mSwapChain.GetCurrentTextureView();
 
     ANGLE_TRY(mColorAttachment.texture.initExternal(texture));
+    //  ANGLE_TRY(mDepthStencilAttachment.texture.initExternal(texture));
 
     mColorAttachment.renderTarget.set(&mColorAttachment.texture, view, webgpu::LevelIndex(0), 0,
                                       mColorAttachment.texture.toWgpuTextureFormat());
+    /*mDepthStencilAttachment.renderTarget.set(&mDepthStencilAttachment.texture, view,
+                                                 webgpu::LevelIndex(0), 0,
+                                                 mDepthStencilAttachment.texture.toWgpuTextureFormat());*/
 
     return angle::Result::Continue;
 }
