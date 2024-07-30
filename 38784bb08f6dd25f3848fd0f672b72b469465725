@@ -34,6 +34,24 @@
       "parentUuid": "b9c7234a_e72fdbce",
       "revId": "38784bb08f6dd25f3848fd0f672b72b469465725",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb41bda2_5d79ca93",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-30T16:13:31Z",
+      "side": 1,
+      "message": "@Geoff there was a previous iteration that relied on another ninja invocation with an additional gn arg, and then merging the results, but that results in a much more convoluted logic than what we have here. The way I\u0027ve been approaching this has been trying to minimize complexity and what ANGLE folks would be responsible for. Note that some of this stuff has to be custom anyways (e.g. that soong var) so I don\u0027t think we can fully avoid having something custom in the generator, unless we find a way to restructure this into multiple files somehow.",
+      "parentUuid": "8eeed02d_aecea9cf",
+      "revId": "38784bb08f6dd25f3848fd0f672b72b469465725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

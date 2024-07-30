@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18a5291c_0bc0c5c0",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-30T16:13:31Z",
+      "side": 1,
+      "message": "This might be relying on a too recent python feature, not sure which version we have on these bots but I had to work around python versions on some bots previously. Probably better off with the good ol\u0027 `in` and `get`.",
+      "range": {
+        "startLine": 126,
+        "startChar": 25,
+        "endLine": 126,
+        "endChar": 27
+      },
+      "revId": "961659d78702a449de46a35a9ea1f28a966a1fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e350461b_adfe5fb6",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-30T16:13:31Z",
+      "side": 1,
+      "message": "Personally I\u0027d just inline the var name but this is fine too\n\nMove it to the top though? A docstring of sorts.\n\nBreaking intent seems odd here, and line breaks are ignored by textwrap later on.  Maybe just:\n```\n(\u0027multiple \u0027\n \u0027lines\u0027)\n```\n(or with a +)",
+      "range": {
+        "startLine": 657,
+        "startChar": 8,
+        "endLine": 657,
+        "endChar": 34
+      },
+      "revId": "961659d78702a449de46a35a9ea1f28a966a1fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
