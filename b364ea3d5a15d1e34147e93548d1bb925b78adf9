@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ea126ee_66299e46",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-30T14:41:12Z",
+      "side": 1,
+      "message": "Please add a comment here as well describing what this is for and link the bug",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 15
+      },
+      "revId": "b364ea3d5a15d1e34147e93548d1bb925b78adf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3881a72_aa198bd5",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-07-30T14:41:12Z",
+      "side": 1,
+      "message": "Thanks for adding support for comments. Result looks great!\n\nI know it\u0027s a hack but how about moving the comment inside this dict, something like\n```\n\u0027__android_bp_comment\u0027: \u0027comment\u0027,\n```\nand handle it as a special case in write_blueprint. Then you can drop the comment about the tuple below and the `*rest` stuff. There might be a cleaner way to do this as well, but it might end up touching a lot of the file which is more work (and should be a separate CL)",
+      "range": {
+        "startLine": 643,
+        "startChar": 8,
+        "endLine": 643,
+        "endChar": 44
+      },
+      "revId": "b364ea3d5a15d1e34147e93548d1bb925b78adf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
