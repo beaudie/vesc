@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74cfbe2c_161a62e6",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-31T18:34:43Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "91e5f57f_5a724205",
+      "revId": "a1041e20a8cdeaf2629e8e3d5c08e11beebff775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ccee7de_3bc12bdd",
