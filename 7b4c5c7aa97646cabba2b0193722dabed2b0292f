@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b81a8d98_4a34235f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-31T01:46:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71e1eeb1_ba344a75",
+      "range": {
+        "startLine": 9,
+        "startChar": 46,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "7b4c5c7aa97646cabba2b0193722dabed2b0292f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39c16f92_e18d240b",
@@ -55,6 +79,24 @@
           ]
         }
       ],
+      "revId": "7b4c5c7aa97646cabba2b0193722dabed2b0292f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f11b87af_68802ac1",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-31T01:46:03Z",
+      "side": 1,
+      "message": "The bottom left node in the tree shows it\u0027s constructed from a \"Uniform Struct\".\n\nLet me save the bots some time and not take the comment fix, I\u0027m working more in this area so the comment won\u0027t stay for long.",
+      "parentUuid": "39c16f92_e18d240b",
       "revId": "7b4c5c7aa97646cabba2b0193722dabed2b0292f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
