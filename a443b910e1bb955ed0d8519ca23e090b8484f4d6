@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0314050e_4dab565c",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 12
+      },
+      "lineNbr": 1840,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-31T18:58:39Z",
+      "side": 1,
+      "message": "This feels like some kind of UB, assuming the offset of the base class. Maybe change the `\u0026colorBlitParam` to `\u0026static_cast\u003cmtl::BlitParams\u0026\u003e(colorBlitParams)` to make sure the compiler does the proper offsetting if needed.",
+      "range": {
+        "startLine": 1840,
+        "startChar": 4,
+        "endLine": 1840,
+        "endChar": 62
+      },
+      "revId": "a443b910e1bb955ed0d8519ca23e090b8484f4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84aa8db3_33702922",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 12
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-31T18:58:39Z",
+      "side": 1,
+      "message": "Same for this.",
+      "range": {
+        "startLine": 1872,
+        "startChar": 12,
+        "endLine": 1872,
+        "endChar": 24
+      },
+      "revId": "a443b910e1bb955ed0d8519ca23e090b8484f4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
