@@ -16,6 +16,24 @@
       "message": "Looks like Linux still needs some integration work.\n\nDo we care about selecting the Dawn backend at all?",
       "revId": "df7e1569ab4b0d237fee83398b3d569b77640577",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd90d372_974d0469",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-31T19:00:55Z",
+      "side": 1,
+      "message": "Fixed the Linux integration. Eventually we might want to select the back-end but I believe WebGPU in Chrome only selects one backend per OS right now.",
+      "parentUuid": "6f1aef32_bc410796",
+      "revId": "df7e1569ab4b0d237fee83398b3d569b77640577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
