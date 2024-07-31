@@ -70,6 +70,24 @@
       "parentUuid": "a0825d95_6e5a7c49",
       "revId": "918e3ee8384347e09e1ecd8d777fa2c42b2372df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0393cac_4a709631",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 6517,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-31T18:34:09Z",
+      "side": 1,
+      "message": "Talked offline. Agreed that this is correct while begin very conservative. For posterity, an optimization would be to remove the check for shader_write (as in https://chromium-review.googlesource.com/c/angle/angle/+/5434967?tab\u003dchecks) but retain the buffer _and_ update that it\u0027s being used for write without issuing the barrier.\n\nThat removes unnecessary barriers for situations other than ssbo_write-after-ssbo_write, but as Charlie said might hit application misuse.",
+      "parentUuid": "f4d92ae1_29dbd913",
+      "revId": "918e3ee8384347e09e1ecd8d777fa2c42b2372df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
