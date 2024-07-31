@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1efca94_bb4640d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-31T14:33:15Z",
+      "side": 1,
+      "message": "This seems unnecessarily complicated, why not map the entire buffer and just add `+offset`? We do that in Vulkan, there doesn\u0027t seem to be any benefit to mapping the buffer partially.",
+      "revId": "9a527b65fc89a3f996f3a65b36232893dc07740d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
