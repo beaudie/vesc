@@ -16,6 +16,24 @@
       "message": "Thank you Shabi for putting this together. Have you tested this with some of the shaders the customer supplied in the bug and does it successfully reject all of them?",
       "revId": "f91ed2701d498e67265249567a829492df6b6fcf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5591e4c5_91d0470e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-31T01:42:50Z",
+      "side": 1,
+      "message": "Yes I did. I asked them to run their fuzzer with this as well, but I don\u0027t believe they have done that yet.",
+      "parentUuid": "52adec8e_31eaaa7f",
+      "revId": "f91ed2701d498e67265249567a829492df6b6fcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
