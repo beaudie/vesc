@@ -50,6 +50,46 @@
       "message": "This probably belongs in `renderer/renderer_utils.h` or something, it\u0027s a backend detail, not really a generic \"math\" thing",
       "revId": "a1041e20a8cdeaf2629e8e3d5c08e11beebff775",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45c6394b_d424a669",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-31T14:44:30Z",
+      "side": 1,
+      "message": "Should there be a mechanism for cleaning up these textures if the texture is never redefined? Holding onto these large objects will be costly when the expectation of MSRTT is that it\u0027s \"for free\" memory-wise.",
+      "revId": "a1041e20a8cdeaf2629e8e3d5c08e11beebff775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ccee7de_3bc12bdd",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-07-31T14:44:30Z",
+      "side": 1,
+      "message": "This and the other tests skipped on Metal can be added to angle_end2end_tests_expectations.txt instead.",
+      "range": {
+        "startLine": 985,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 34
+      },
+      "revId": "a1041e20a8cdeaf2629e8e3d5c08e11beebff775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
