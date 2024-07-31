@@ -34,6 +34,24 @@
       "parentUuid": "e3bcdf86_b34f1c4d",
       "revId": "918e3ee8384347e09e1ecd8d777fa2c42b2372df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0825d95_6e5a7c49",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 6517,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-31T13:21:55Z",
+      "side": 1,
+      "message": "I\u0027m just trying to stop more of GL leaking into namespace vk, but I guess this function is already pretty GL-centric.\n\nOk, looks like _apps_ are fine, and these are just test bugs. I\u0027ll see about fixing them and then we can clean this back up.",
+      "parentUuid": "825402c0_cd06b3fc",
+      "revId": "918e3ee8384347e09e1ecd8d777fa2c42b2372df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
