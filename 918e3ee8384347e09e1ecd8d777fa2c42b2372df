@@ -52,6 +52,24 @@
       "parentUuid": "825402c0_cd06b3fc",
       "revId": "918e3ee8384347e09e1ecd8d777fa2c42b2372df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4d92ae1_29dbd913",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 6517,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-07-31T13:55:25Z",
+      "side": 1,
+      "message": "Looked into `KHR-GLES31.core.compute_shader.pipeline-gen-draw-commands`, the problem seems to be something different; it\u0027s not the same thing as the write-after-access issue we talked about in the other CL.\n\nIn that test, there\u0027s a dispatch, then `glMemoryBarrier(GL_COMMAND_BARRIER_BIT)`, then an indirect draw call. With the debug change, what happens is that this call doesn\u0027t generate a barrier:\n\n```\nangle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)\n{\n    ...\n\n    // Process indirect buffer after command buffer has started.\n    mOutsideRenderPassCommands-\u003ebufferRead(this, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,\n                                           vk::PipelineStage::DrawIndirect, \u0026buffer);\n```\n\nBasically, that depends on the first dispatch call to result in `bufferWrite` so that `bufferRead` generates a barrier. And the first dispatch call\u0027s `bufferWrite` shouldn\u0027t depend on a pre-existing memory barrier (like, it may be filling the buffer for the first time).\n\nLet\u0027s talk about this later today, it looks like there\u0027s a misunderstanding here.",
+      "parentUuid": "a0825d95_6e5a7c49",
+      "revId": "918e3ee8384347e09e1ecd8d777fa2c42b2372df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
