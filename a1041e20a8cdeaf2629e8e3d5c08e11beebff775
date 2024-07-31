@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91e5f57f_5a724205",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-31T15:43:22Z",
+      "side": 1,
+      "message": "In the next CL I will use memoryless storage for this. This extension is only enabled on Tiled GPUs though. Enabling it on non tilers is currently only for testing. So I don\u0027t think it\u0027s high priority to add garbage collector for this.",
+      "parentUuid": "45c6394b_d424a669",
+      "revId": "a1041e20a8cdeaf2629e8e3d5c08e11beebff775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ccee7de_3bc12bdd",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 8
