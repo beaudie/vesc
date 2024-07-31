@@ -22,6 +22,41 @@
       },
       "revId": "7b4c5c7aa97646cabba2b0193722dabed2b0292f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39c16f92_e18d240b",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-07-31T01:06:02Z",
+      "side": 1,
+      "message": "nit: What kind of struct is this tree constructed from?",
+      "fixSuggestions": [
+        {
+          "fixId": "e6940675_0914aa58",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+              "range": {
+                "startLine": 145,
+                "startChar": 0,
+                "endLine": 146,
+                "endChar": 0
+              },
+              "replacement": "// Given an expression such as the following (which is the result of indexing a struct uniform):\n"
+            }
+          ]
+        }
+      ],
+      "revId": "7b4c5c7aa97646cabba2b0193722dabed2b0292f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
