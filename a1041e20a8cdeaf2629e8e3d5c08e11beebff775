@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e092ca6_bb81e8a0",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-31T17:56:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3207a9b0_ab3c5111",
+      "revId": "a1041e20a8cdeaf2629e8e3d5c08e11beebff775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45c6394b_d424a669",
@@ -100,6 +118,30 @@
       "writtenOn": "2024-07-31T14:44:30Z",
       "side": 1,
       "message": "This and the other tests skipped on Metal can be added to angle_end2end_tests_expectations.txt instead.",
+      "range": {
+        "startLine": 985,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 34
+      },
+      "revId": "a1041e20a8cdeaf2629e8e3d5c08e11beebff775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff2056bb_8cc4f235",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-07-31T17:56:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ccee7de_3bc12bdd",
       "range": {
         "startLine": 985,
         "startChar": 0,
