@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "99fba7d4d54d1a0a7d4cbf6e8f3d46a617d8ab84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ea724bd_ac1f5cd0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-01T00:57:10Z",
+      "side": 1,
+      "message": "A little surprising, generally the linked pipeline itself doesn\u0027t provide much info, everything comes from the libraries themselves, but yeah the spec just says pipeline should be created with it.",
+      "revId": "99fba7d4d54d1a0a7d4cbf6e8f3d46a617d8ab84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
