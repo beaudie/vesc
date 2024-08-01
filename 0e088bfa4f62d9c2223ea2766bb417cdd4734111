@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4f362ba_22a19494",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 10
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-01T14:06:36Z",
+      "side": 1,
+      "message": "Consider adding Metal renderer tag to that bug and using `anglebug.com` to avoid an extra redirect.",
+      "revId": "0e088bfa4f62d9c2223ea2766bb417cdd4734111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43b5aed7_54a156a8",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-01T14:06:36Z",
+      "side": 1,
+      "message": "This check technically needs Apple GPU, not any particular CPU architecture. Of course the result is the same in practice.\n\nWe should harmonize various platform-detection helpers throughout the Metal backend some day. No action for now, just a comment.",
+      "revId": "0e088bfa4f62d9c2223ea2766bb417cdd4734111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ae4e211_3119856d",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-01T14:06:36Z",
+      "side": 1,
+      "message": "The function seems small and self-contained enough to be defined inline.",
+      "revId": "0e088bfa4f62d9c2223ea2766bb417cdd4734111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
