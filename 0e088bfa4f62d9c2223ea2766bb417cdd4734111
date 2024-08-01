@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a529fc04_6e4c9e4e",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 10
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-01T17:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4f362ba_22a19494",
+      "revId": "0e088bfa4f62d9c2223ea2766bb417cdd4734111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "43b5aed7_54a156a8",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 10
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-01T14:06:36Z",
       "side": 1,
       "message": "This check technically needs Apple GPU, not any particular CPU architecture. Of course the result is the same in practice.\n\nWe should harmonize various platform-detection helpers throughout the Metal backend some day. No action for now, just a comment.",
+      "revId": "0e088bfa4f62d9c2223ea2766bb417cdd4734111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4550ff1_d1481265",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-01T17:24:22Z",
+      "side": 1,
+      "message": "Actually you are right, I have changed this to check for Apple GPU.",
+      "parentUuid": "43b5aed7_54a156a8",
       "revId": "0e088bfa4f62d9c2223ea2766bb417cdd4734111",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -48,6 +84,24 @@
       "writtenOn": "2024-08-01T14:06:36Z",
       "side": 1,
       "message": "The function seems small and self-contained enough to be defined inline.",
+      "revId": "0e088bfa4f62d9c2223ea2766bb417cdd4734111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1a53667_c4320084",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-01T17:24:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ae4e211_3119856d",
       "revId": "0e088bfa4f62d9c2223ea2766bb417cdd4734111",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
