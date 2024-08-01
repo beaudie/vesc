@@ -16,6 +16,24 @@
       "message": "Nice, though looks like some tests are failing",
       "revId": "513ed06214bdb5b96c1b33c3f68d2d1614310a68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c9e2ded_415d59e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-01T18:31:26Z",
+      "side": 1,
+      "message": "I think that is infra noise. It all passing with other try",
+      "parentUuid": "ecea5180_d30abcfd",
+      "revId": "513ed06214bdb5b96c1b33c3f68d2d1614310a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
