@@ -4512,7 +4512,6 @@ angle::Result UtilsVk::generateFragmentShadingRate(
     ContextVk *contextVk,
     vk::ImageHelper *shadingRateAttachmentImageHelper,
     vk::ImageViewHelper *shadingRateAttachmentImageViewHelper,
-    const bool isGainZero,
     const GenerateFragmentShadingRateParameters &shadingRateParameters)
 {
     ANGLE_TRY(ensureGenerateFragmentShadingRateResourcesInitialized(contextVk));
@@ -4555,10 +4554,8 @@ angle::Result UtilsVk::generateFragmentShadingRate(
     vkUpdateDescriptorSets(contextVk->getDevice(), 1, writeInfos, 0, nullptr);
 
     vk::RefCounted<vk::ShaderModule> *computeShader = nullptr;
-    uint32_t shaderFlags =
-        isGainZero ? 0 : vk::InternalShader::GenerateFragmentShadingRate_comp::kCombinedGain;
-    ANGLE_TRY(contextVk->getShaderLibrary().getGenerateFragmentShadingRate_comp(
-        contextVk, shaderFlags, &computeShader));
+    ANGLE_TRY(contextVk->getShaderLibrary().getGenerateFragmentShadingRate_comp(contextVk, 0,
+                                                                                &computeShader));
 
     // Record the command
     vk::OutsideRenderPassCommandBuffer *commandBuffer;

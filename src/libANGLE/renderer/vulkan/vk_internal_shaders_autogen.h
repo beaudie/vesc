@@ -137,11 +137,7 @@ constexpr size_t kArrayLen = 0x00000001;
 
 namespace GenerateFragmentShadingRate_comp
 {
-enum flags
-{
-    kCombinedGain = 0x00000001,
-};
-constexpr size_t kArrayLen = 0x00000002;
+constexpr size_t kArrayLen = 0x00000001;
 }  // namespace GenerateFragmentShadingRate_comp
 
 namespace GenerateMipmap_comp

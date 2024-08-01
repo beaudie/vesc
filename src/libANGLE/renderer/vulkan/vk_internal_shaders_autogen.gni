@@ -63,7 +63,6 @@ angle_vulkan_internal_shaders = [
   "shaders/gen/ExportStencil.frag.00000000.inc",
   "shaders/gen/FullScreenTri.vert.00000000.inc",
   "shaders/gen/GenerateFragmentShadingRate.comp.00000000.inc",
-  "shaders/gen/GenerateFragmentShadingRate.comp.00000001.inc",
   "shaders/gen/GenerateMipmap.comp.00000000.inc",
   "shaders/gen/GenerateMipmap.comp.00000001.inc",
   "shaders/gen/GenerateMipmap.comp.00000002.inc",

@@ -330,7 +330,6 @@ class UtilsVk : angle::NonCopyable
         ContextVk *contextVk,
         vk::ImageHelper *shadingRateAttachmentImageHelper,
         vk::ImageViewHelper *shadingRateAttachmentImageViewHelper,
-        const bool isGainZero,
         const GenerateFragmentShadingRateParameters &shadingRateParameters);
 
   private:

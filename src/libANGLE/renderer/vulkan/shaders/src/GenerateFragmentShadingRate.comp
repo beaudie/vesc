@@ -76,11 +76,5 @@ void main()
     }
 
     ivec2 pos = ivec2(i,j);
-    uint val = 0;
-
-#if CombinedGain != 0
-    val = computeValue(pos);
-#endif
-
-    imageStore(fragmentShadingRateImage, pos, ivec4(val, 0, 0, 0));
+    imageStore(fragmentShadingRateImage, pos, ivec4(computeValue(pos), 0, 0, 0));
 }
