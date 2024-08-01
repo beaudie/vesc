@@ -11,12 +11,13 @@ import sys
 import os
 
 usage = """\
-Usage: commit_id.py check                - check if git is present
-       commit_id.py get_git_dirs         - prints work-tree and common git directories
-       commit_id.py unpack <ref_file>    - check if <ref_file> exists, and if not
-                                           create it based on .git/packed-refs
-       commit_id.py position             - print commit position
-       commit_id.py gen <file_to_write>  - generate commit.h"""
+Usage: commit_id.py check                         - check if git is present
+       commit_id.py get_git_dirs                  - prints work-tree and common git directories
+       commit_id.py unpack <ref_file>             - check if <ref_file> exists, and if not
+                                                    create it based on .git/packed-refs
+       commit_id.py position                      - print commit position
+       commit_id.py gen <file_to_write>           - generate commit.h with HEAD hash value
+       commit_id.py genFetchHead <file_to_write>  - generate commit.h with FETCH_HEAD hash value"""
 
 
 def grab_output(command, cwd):
@@ -32,8 +33,8 @@ def get_git_common_dir(cwd):
     return grab_output('git rev-parse --git-common-dir', cwd)
 
 
-def get_commit_position(cwd):
-    return grab_output('git rev-list HEAD --count', cwd)
+def get_commit_position(cwd, git_pointer):
+    return grab_output('git rev-list ' + git_pointer + ' --count', cwd)
 
 
 def does_git_dir_exist(cwd):
@@ -60,7 +61,6 @@ def unpack_ref(ref_file, ref_file_full_path, packed_refs_full_path):
 
     with open(ref_file_full_path, 'w') as fout:
         fout.write(git_hash + '\n')
-
 
 if len(sys.argv) < 2:
     sys.exit(usage)
@@ -99,12 +99,12 @@ elif operation == 'unpack':
     sys.exit(0)
 elif operation == 'position':
     if git_dir_exists:
-        print(get_commit_position(cwd))
+        print(get_commit_position(cwd, 'HEAD'))
     else:
         print("0")
     sys.exit(0)
 
-if len(sys.argv) < 3 or operation != 'gen':
+if len(sys.argv) < 3 or (operation != 'gen' and operation != 'genFetchHead'):
     sys.exit(usage)
 
 output_file = sys.argv[2]
@@ -115,9 +115,18 @@ commit_position = '0'
 
 if git_dir_exists:
     try:
-        commit_id = grab_output('git rev-parse --short=%d HEAD' % commit_id_size, cwd) or commit_id
-        commit_date = grab_output('git show -s --format=%ci HEAD', cwd) or commit_date
-        commit_position = get_commit_position(cwd) or commit_position
+        if operation == 'gen':
+            commit_id = grab_output('git rev-parse --short=%d HEAD' % commit_id_size,
+                                    cwd) or commit_id
+            commit_date = grab_output('git show -s --format=%ci HEAD', cwd) or commit_date
+            commit_position = get_commit_position(cwd, HEAD) or commit_position
+        elif operation == 'genFetchHead':
+            commit_id = grab_output('git rev-parse --short=%d FETCH_HEAD' % commit_id_size,
+                                    cwd) or commit_id
+            commit_date = grab_output('git show -s --format=%ci FETCH_HEAD', cwd) or commit_date
+            commit_position = get_commit_position(cwd, FETCH_HEAD) or commit_position
+        else:
+            print("invalid argument, saving unknown hash")
     except:
         pass
 

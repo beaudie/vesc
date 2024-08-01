@@ -109,7 +109,7 @@ function generate_angle_commit_file() {
     # compile time in Android will end with up "unknown hash".
     # See b/348044346.
     python3 src/commit_id.py \
-        gen \
+        genFetchHead \
         angle_commit.h
 }
 
