@@ -11,12 +11,13 @@ import sys
 import os
 
 usage = """\
-Usage: commit_id.py check                - check if git is present
-       commit_id.py get_git_dirs         - prints work-tree and common git directories
-       commit_id.py unpack <ref_file>    - check if <ref_file> exists, and if not
-                                           create it based on .git/packed-refs
-       commit_id.py position             - print commit position
-       commit_id.py gen <file_to_write>  - generate commit.h"""
+Usage: commit_id.py check                                                         - check if git is present
+       commit_id.py get_git_dirs                                                  - prints work-tree and common git directories
+       commit_id.py unpack <ref_file>                                             - check if <ref_file> exists, and if not
+                                                                                    create it based on .git/packed-refs
+       commit_id.py position                                                      - print commit position
+       commit_id.py gen <file_to_write>                                           - generate commit.h with HEAD hash value
+       commit_id.py gen_with_baked_angle_hash <file_to_write> <baked_angle_hash>  - generate commit.h with <baked_angle_hash> hash value"""
 
 
 def grab_output(command, cwd):
@@ -61,7 +62,6 @@ def unpack_ref(ref_file, ref_file_full_path, packed_refs_full_path):
     with open(ref_file_full_path, 'w') as fout:
         fout.write(git_hash + '\n')
 
-
 if len(sys.argv) < 2:
     sys.exit(usage)
 
@@ -72,7 +72,7 @@ aosp_angle_path = os.path.join(os.path.dirname('.'), 'external', 'angle')
 aosp = os.path.exists(aosp_angle_path)
 cwd = aosp_angle_path if aosp else os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
 git_dir_exists = does_git_dir_exist(cwd)
-
+baked_angle_hash = 'unknown'
 if operation == 'check':
     if git_dir_exists:
         print("1")
@@ -104,7 +104,11 @@ elif operation == 'position':
         print("0")
     sys.exit(0)
 
-if len(sys.argv) < 3 or operation != 'gen':
+if operation == 'gen_with_baked_angle_hash':
+    if len(sys.argv) < 4:
+        sys.exit(usage)
+    baked_angle_hash = sys.argv[3]
+elif len(sys.argv) < 3 or operation != 'gen':
     sys.exit(usage)
 
 output_file = sys.argv[2]
@@ -113,7 +117,10 @@ commit_id = 'unknown hash'
 commit_date = 'unknown date'
 commit_position = '0'
 
-if git_dir_exists:
+if operation == 'gen_with_baked_angle_hash':
+    commit_id = baked_angle_hash
+
+if git_dir_exists and operation == 'gen':
     try:
         commit_id = grab_output('git rev-parse --short=%d HEAD' % commit_id_size, cwd) or commit_id
         commit_date = grab_output('git show -s --format=%ci HEAD', cwd) or commit_date
