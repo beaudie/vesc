@@ -23,6 +23,7 @@ trap 'failure ${LINENO} "$BASH_COMMAND"' ERR
 cd "${0%/*}/.."
 
 GN_OUTPUT_DIRECTORY=out/Android
+ANGLE_UPSTREAM_HASH=unknown
 
 function generate_Android_bp_file() {
     abis=(
@@ -108,14 +109,29 @@ function generate_angle_commit_file() {
     # access to .git is not guaranteed, and ANGLE git hash generated during
     # compile time in Android will end with up "unknown hash".
     # See b/348044346.
-    python3 src/commit_id.py \
-        gen \
-        angle_commit.h
+    if [[ "$ANGLE_UPSTREAM_HASH" == "unknown" ]];then
+        python3 src/commit_id.py \
+            gen \
+            angle_commit.h
+    else
+      python3 src/commit_id.py \
+        gen_with_baked_angle_hash \
+        angle_commit.h \
+        ${ANGLE_UPSTREAM_HASH}
+    fi
 }
 
 if [[ "$1" == "--genAndroidBp" ]];then
     generate_Android_bp_file "$2"
     exit 0
+fi
+
+if [[ "$1" == "--angleBakedHash" ]];then
+    if [[ $# -ne 2 ]]; then
+        echo "Incorrect number of arguments. Usage: roll_aosp.sh --angleBakedHash angleBakedHashValue"
+        exit 85
+    fi
+  ANGLE_UPSTREAM_HASH="$2"
 fi
 
 # Check out depot_tools locally and add it to the path
