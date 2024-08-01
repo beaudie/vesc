@@ -113,7 +113,9 @@ commit_id = 'unknown hash'
 commit_date = 'unknown date'
 commit_position = '0'
 
-if git_dir_exists:
+commit_id = os.environ.get('ANGLE_UPSTREAM_HASH', 'unknown hash')
+
+if git_dir_exists and commit_id == 'unknown hash':
     try:
         commit_id = grab_output('git rev-parse --short=%d HEAD' % commit_id_size, cwd) or commit_id
         commit_date = grab_output('git show -s --format=%ci HEAD', cwd) or commit_date
