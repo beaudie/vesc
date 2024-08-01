@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07e16815_d14f9a93",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 12
+      },
+      "lineNbr": 1840,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-01T17:24:32Z",
+      "side": 1,
+      "message": "Done. I have changed this to use `BlitParams.operator\u003d` explicitly instead.",
+      "parentUuid": "0314050e_4dab565c",
+      "range": {
+        "startLine": 1840,
+        "startChar": 4,
+        "endLine": 1840,
+        "endChar": 62
+      },
+      "revId": "a443b910e1bb955ed0d8519ca23e090b8484f4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84aa8db3_33702922",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-31T18:58:39Z",
       "side": 1,
       "message": "Same for this.",
+      "range": {
+        "startLine": 1872,
+        "startChar": 12,
+        "endLine": 1872,
+        "endChar": 24
+      },
+      "revId": "a443b910e1bb955ed0d8519ca23e090b8484f4d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb98d700_5b45edd1",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 12
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-01T17:24:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84aa8db3_33702922",
       "range": {
         "startLine": 1872,
         "startChar": 12,
