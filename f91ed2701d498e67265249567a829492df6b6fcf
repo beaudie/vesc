@@ -52,6 +52,24 @@
       "parentUuid": "5591e4c5_91d0470e",
       "revId": "f91ed2701d498e67265249567a829492df6b6fcf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a8e0475_c1e57981",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-01T17:11:46Z",
+      "side": 1,
+      "message": "The change is ready (just tweaked it a bit to give a compile error message too), but given that the workaround has already landed, my suggestion is to wait a week for Canary/Dev to make sure the infinite-loop detection logic is correct.",
+      "parentUuid": "f0277936_88077ad3",
+      "revId": "f91ed2701d498e67265249567a829492df6b6fcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
