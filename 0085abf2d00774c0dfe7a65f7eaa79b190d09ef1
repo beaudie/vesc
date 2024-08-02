@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e24fe9b_867a60db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-02T17:29:32Z",
+      "side": 1,
+      "message": "Wow, I did not enable it? That might actually causing the VkEvent overhead problem.",
+      "revId": "0085abf2d00774c0dfe7a65f7eaa79b190d09ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2be6279f_d7b7cda8",
