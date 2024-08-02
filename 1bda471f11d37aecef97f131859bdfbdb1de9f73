@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1284c6aa_23829154",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-02T23:37:49Z",
+      "side": 1,
+      "message": "lgtm\n\nGreat work implementing this, passing earlier tests and enhancing this one!",
+      "revId": "1bda471f11d37aecef97f131859bdfbdb1de9f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
