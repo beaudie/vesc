@@ -3700,8 +3700,9 @@ angle::Result Renderer::createDeviceAndQueue(vk::Context *context, uint32_t queu
     mDefaultUniformBufferSize = std::min(
         mDefaultUniformBufferSize, getPhysicalDeviceProperties().limits.maxUniformBufferRange);
 
-    // Initialize the vulkan pipeline cache.
-    ANGLE_TRY(ensurePipelineCacheInitialized(context));
+    // Initialize the vulkan pipeline cache. BlobCache is required to mark cache as initialized.
+    ASSERT(!mPipelineCacheInitialized);
+    ANGLE_TRY(ensurePipelineCacheInitialized(context, true));
 
     // Track the set of supported pipeline stages.  This is used when issuing image layout
     // transitions that cover many stages (such as AllGraphicsReadOnly) to mask out unsupported
@@ -5322,7 +5323,8 @@ angle::Result Renderer::initPipelineCache(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result Renderer::ensurePipelineCacheInitialized(vk::Context *context)
+angle::Result Renderer::ensurePipelineCacheInitialized(vk::Context *context,
+                                                       bool isBlobCacheRequired)
 {
     // If it is initialized already, there is nothing to do
     if (mPipelineCacheInitialized)
@@ -5339,11 +5341,23 @@ angle::Result Renderer::ensurePipelineCacheInitialized(vk::Context *context)
     }
 
     // We should now create the pipeline cache with the blob cache pipeline data.
+    vk::DeviceScoped<vk::PipelineCache> tempPipelineCache(mDevice);
+    vk::PipelineCache &pipelineCache =
+        mPipelineCache.valid() ? tempPipelineCache.get() : mPipelineCache;
     bool loadedFromBlobCache = false;
-    ANGLE_TRY(initPipelineCache(context, &mPipelineCache, &loadedFromBlobCache));
+    ANGLE_TRY(initPipelineCache(context, &pipelineCache, &loadedFromBlobCache));
     if (loadedFromBlobCache)
     {
+        if (tempPipelineCache.get().valid())
+        {
+            ANGLE_VK_TRY(context, mPipelineCache.merge(mDevice, 1, tempPipelineCache.get().ptr()));
+        }
         ANGLE_TRY(getPipelineCacheSize(context, &mPipelineCacheSizeAtLastSync));
+    }
+    else if (isBlobCacheRequired)
+    {
+        // Keep cache as not initialized for now until blob functions are set.
+        return angle::Result::Continue;
     }
 
     mPipelineCacheInitialized = true;
@@ -5354,7 +5368,8 @@ angle::Result Renderer::ensurePipelineCacheInitialized(vk::Context *context)
 angle::Result Renderer::getPipelineCache(vk::Context *context,
                                          vk::PipelineCacheAccess *pipelineCacheOut)
 {
-    ANGLE_TRY(ensurePipelineCacheInitialized(context));
+    // BlobCache is no longer required to mark cache as initialized.
+    ANGLE_TRY(ensurePipelineCacheInitialized(context, false));
 
     angle::SimpleMutex *pipelineCacheMutex =
         (context->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)

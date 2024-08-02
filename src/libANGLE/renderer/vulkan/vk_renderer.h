@@ -827,7 +827,7 @@ class Renderer : angle::NonCopyable
     angle::Result initPipelineCache(vk::Context *context,
                                     vk::PipelineCache *pipelineCache,
                                     bool *success);
-    angle::Result ensurePipelineCacheInitialized(vk::Context *context);
+    angle::Result ensurePipelineCacheInitialized(vk::Context *context, bool isBlobCacheRequired);
 
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     VkFormatFeatureFlags getFormatFeatureBits(angle::FormatID formatID,
