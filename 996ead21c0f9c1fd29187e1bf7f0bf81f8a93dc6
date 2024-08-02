@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb56a973_52c9e8e3",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-08-02T20:07:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0665a4a_5d03aaa3",
+      "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54b1761f_ab394f60",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-02T16:10:31Z",
       "side": 1,
       "message": "This needs a format feature check, VK_FORMAT_R8_UINT may not support VK_IMAGE_USAGE_STORAGE_BIT. And then you can choose to use CPU or Compute based on whether the feature exists (instead of an ANGLE feature).\n\nThe spec says with `shaderStorageImageExtendedFormats` storage usage is required, so you could also keep it simple and initialize the ANGLE feature with `!shaderStorageImageExtendedFormats` and use the feature to add the STORAGE_BIT or not.",
+      "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "352cece1_264d9699",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-08-02T20:07:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54b1761f_ab394f60",
       "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fdc10ba_9f630b7e",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/GenerateFragmentShadingRate.comp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-08-02T20:07:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd26b8a7_c5d320b3",
+      "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8c2913f_724b74f4",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-08-02T16:10:31Z",
       "side": 1,
       "message": "nit: Have you played with this to see what\u0027s optimal? 1024 invocations is larger than any vendor\u0027s natural subgroup size, and performance will vary based on how they divide each workgroup between native subgroups.\n\nYou might want to at least try 8x8x1.",
+      "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e434aabf_f1b9f686",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/GenerateFragmentShadingRate.comp",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-08-02T20:07:21Z",
+      "side": 1,
+      "message": "\u003e Have you played with this to see what\u0027s optimal?\n\nswitching to 8x8 workgroup size breaks the foveation. Need to look into why this is happening. Can we defer this optimization to a follow up change?",
+      "parentUuid": "f8c2913f_724b74f4",
       "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
