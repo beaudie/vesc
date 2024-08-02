@@ -474,6 +474,14 @@ GLint LimitToInt(const LargerInt physicalDeviceValue)
         physicalDeviceValue, static_cast<LargerInt>(std::numeric_limits<int32_t>::max() / 2)));
 }
 
+template <typename LargerInt>
+GLint64 LimitToInt64(const LargerInt physicalDeviceValue)
+{
+    static_assert(sizeof(LargerInt) >= sizeof(GLint64), "Incorrect usage of LimitToInt64");
+    return static_cast<GLint64>(
+        std::min(physicalDeviceValue, static_cast<LargerInt>(std::numeric_limits<int64_t>::max())));
+}
+
 bool TextureHasAnyRedefinedLevels(const gl::CubeFaceArray<gl::TexLevelMask> &redefinedLevels);
 bool IsTextureLevelRedefined(const gl::CubeFaceArray<gl::TexLevelMask> &redefinedLevels,
                              gl::TextureType textureType,
