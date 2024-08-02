@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcc082b1_d0405b99",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-02T09:17:12Z",
+      "side": 1,
+      "message": "Consider using `Fixed:` instead of `Bug:` to auto-close the issue on merge.",
+      "revId": "89e70bd7b8e073a6c5c5582251ba7f48d1b1695e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
