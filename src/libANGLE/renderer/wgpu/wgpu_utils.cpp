@@ -243,6 +243,9 @@ void GenerateCaps(const wgpu::Device &device,
 
     glCaps->maxSamples = kMaxSampleCount;
 
+    // GL limitations
+    glLimitations->noInvertedDepthRange = true;
+
     // Max version
     *maxSupportedESVersion = gl::Version(3, 2);
 
