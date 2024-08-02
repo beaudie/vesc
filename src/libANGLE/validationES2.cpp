@@ -4051,7 +4051,7 @@ bool ValidateDepthRangef(const PrivateState &state,
                          GLfloat zNear,
                          GLfloat zFar)
 {
-    if (state.isWebGL() && zNear > zFar)
+    if ((state.isWebGL() || state.getLimitations().noInvertedDepthRange) && zNear > zFar)
     {
         errors->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidDepthRange);
         return false;

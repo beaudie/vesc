@@ -163,6 +163,9 @@ struct Limitations
 
     // An extra limit for WebGL texture size. Ignored if 0.
     GLint webGLTextureSizeLimit = 0;
+
+    // Near and far depth planes cannot be inverted. zNear must be <= zFar.
+    bool noInvertedDepthRange = false;
 };
 
 struct TypePrecision
