@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0665a4a_5d03aaa3",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-02T16:10:31Z",
+      "side": 1,
+      "message": "Please use the new bug IDs",
+      "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54b1761f_ab394f60",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-02T16:10:31Z",
+      "side": 1,
+      "message": "This needs a format feature check, VK_FORMAT_R8_UINT may not support VK_IMAGE_USAGE_STORAGE_BIT. And then you can choose to use CPU or Compute based on whether the feature exists (instead of an ANGLE feature).\n\nThe spec says with `shaderStorageImageExtendedFormats` storage usage is required, so you could also keep it simple and initialize the ANGLE feature with `!shaderStorageImageExtendedFormats` and use the feature to add the STORAGE_BIT or not.",
+      "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd26b8a7_c5d320b3",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/GenerateFragmentShadingRate.comp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-02T16:10:31Z",
+      "side": 1,
+      "message": "Missing copyright notice",
+      "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c2913f_724b74f4",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/GenerateFragmentShadingRate.comp",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-02T16:10:31Z",
+      "side": 1,
+      "message": "nit: Have you played with this to see what\u0027s optimal? 1024 invocations is larger than any vendor\u0027s natural subgroup size, and performance will vary based on how they divide each workgroup between native subgroups.\n\nYou might want to at least try 8x8x1.",
+      "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
