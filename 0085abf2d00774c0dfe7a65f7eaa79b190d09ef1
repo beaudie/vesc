@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "762df331_13dc066e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-02T17:55:39Z",
+      "side": 1,
+      "message": "If that significantly helps, it would be amazing! Maybe we could bring back more of the VkEvent usage you had to remove too!",
+      "parentUuid": "0e24fe9b_867a60db",
+      "revId": "0085abf2d00774c0dfe7a65f7eaa79b190d09ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2be6279f_d7b7cda8",
