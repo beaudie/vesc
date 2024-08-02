@@ -205,6 +205,7 @@ class Buffer final : public ThreadSafeRefCountObject<BufferID>,
     void addContentsObserver(Texture *texture);
     void removeContentsObserver(Texture *texture);
     bool hasContentsObserver(Texture *texture) const;
+    uint64_t getContentUniqueSerial() const { return mContentUniqueSerial; }
 
   private:
     angle::Result bufferDataImpl(Context *context,
@@ -228,6 +229,7 @@ class Buffer final : public ThreadSafeRefCountObject<BufferID>,
     angle::ObserverBinding mImplObserver;
 
     angle::FastVector<ContentsObserver, angle::kMaxFixedObservers> mContentsObservers;
+    uint64_t mContentUniqueSerial;
     mutable IndexRangeCache mIndexRangeCache;
 };
 

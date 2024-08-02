@@ -46,7 +46,8 @@ BufferState::~BufferState() {}
 Buffer::Buffer(rx::GLImplFactory *factory, BufferID id)
     : RefCountObject(factory->generateSerial(), id),
       mImpl(factory->createBuffer(mState)),
-      mImplObserver(this, kImplementationSubjectIndex)
+      mImplObserver(this, kImplementationSubjectIndex),
+      mContentUniqueSerial(0)
 {
     mImplObserver.bind(mImpl);
 }
@@ -491,6 +492,7 @@ bool Buffer::hasContentsObserver(Texture *texture) const
 
 void Buffer::onContentsChange()
 {
+    ++mContentUniqueSerial;
     for (const ContentsObserver &contentsObserver : mContentsObservers)
     {
         if (contentsObserver.bufferIndex != ContentsObserver::kBufferTextureIndex)

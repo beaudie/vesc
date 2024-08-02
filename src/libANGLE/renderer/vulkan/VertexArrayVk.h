@@ -216,6 +216,8 @@ class VertexArrayVk : public VertexArrayImpl
 
     // Track client and/or emulated attribs that we have to stream their buffer contents
     gl::AttributesMask mStreamingVertexAttribsMask;
+    // Track client and/or emulated attribs that we have to do data conversion
+    gl::AttributesMask mNeedsConversionAttribsMask;
 
     // The attrib/binding dirty bits that requires graphics pipeline update
     gl::VertexArray::DirtyBindingBits mBindingDirtyBitsRequiresPipelineUpdate;

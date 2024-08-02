@@ -584,7 +584,7 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 // internal storage and take action if buffer storage has changed while not
                 // observing.
                 if (contextVk->getRenderer()->getFeatures().compressVertexData.enabled ||
-                    mContentsObservers->any())
+                    mNeedsConversionAttribsMask.any())
                 {
                     // We may have lost buffer content change when it became non-current. In that
                     // case we always assume buffer has changed. If compressVertexData.enabled is
@@ -762,11 +762,6 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         mStreamingVertexAttribsMask.set(attribIndex, isStreamingVertexAttrib);
         bool compressed = false;
 
-        if (bufferGL)
-        {
-            mContentsObservers->disableForBuffer(bufferGL, static_cast<uint32_t>(attribIndex));
-        }
-
         if (!isStreamingVertexAttrib && bufferGL->getSize() > 0)
         {
             BufferVk *bufferVk                  = vk::GetImpl(bufferGL);
@@ -785,11 +780,10 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             bool needsConversion =
                 numVertices > 0 &&
                 (vertexFormat.getVertexLoadRequiresConversion(compressed) || !bindingIsAligned);
+            mNeedsConversionAttribsMask.set(attribIndex, needsConversion);
 
             if (needsConversion)
             {
-                mContentsObservers->enableForBuffer(bufferGL, static_cast<uint32_t>(attribIndex));
-
                 WarnOnVertexFormatConversion(contextVk, vertexFormat, compressed, true);
 
                 ConversionBuffer *conversion = bufferVk->getVertexConversionBuffer(
@@ -881,6 +875,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         }
         else
         {
+            mNeedsConversionAttribsMask.reset(attribIndex);
             vk::BufferHelper &emptyBuffer           = contextVk->getEmptyBuffer();
             mCurrentArrayBuffers[attribIndex]       = &emptyBuffer;
             mCurrentArrayBufferSerial[attribIndex]  = emptyBuffer.getBufferSerial();
