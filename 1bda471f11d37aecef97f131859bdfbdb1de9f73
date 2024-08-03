@@ -16,6 +16,52 @@
       "message": "lgtm\n\nGreat work implementing this, passing earlier tests and enhancing this one!",
       "revId": "1bda471f11d37aecef97f131859bdfbdb1de9f73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c24c371_86bad6c0",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-03T08:15:52Z",
+      "side": 1,
+      "message": "typo: converted",
+      "range": {
+        "startLine": 1383,
+        "startChar": 51,
+        "endLine": 1383,
+        "endChar": 58
+      },
+      "revId": "1bda471f11d37aecef97f131859bdfbdb1de9f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02557152_92fe5b61",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-03T08:15:52Z",
+      "side": 1,
+      "message": "typo: that",
+      "range": {
+        "startLine": 1385,
+        "startChar": 89,
+        "endLine": 1385,
+        "endChar": 92
+      },
+      "revId": "1bda471f11d37aecef97f131859bdfbdb1de9f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
