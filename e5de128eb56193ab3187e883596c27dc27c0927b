@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ea8be33_016b9b13",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-04T20:13:26Z",
+      "side": 1,
+      "message": "Duplicate calculation (same with vertex above), later recalculated in maxVaryingComponents too.",
+      "range": {
+        "startLine": 196,
+        "startChar": 41,
+        "endLine": 196,
+        "endChar": 97
+      },
+      "revId": "e5de128eb56193ab3187e883596c27dc27c0927b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e670e09_954d60ac",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-04T20:13:26Z",
+      "side": 1,
+      "message": "I suspect limiting to 64-bit will one day cause trouble, either a test trying max size OOMs or someone queries the value as 32-bit and gets overflowed negative value and crash or something like that.\n\nYou could remove the new `LimitToInt64` then too\n\n```suggestion\n    glCaps-\u003emaxUniformBlockSize      \u003d rx::LimitToInt(limitsWgpu.maxBufferSize);\n```",
+      "revId": "e5de128eb56193ab3187e883596c27dc27c0927b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
