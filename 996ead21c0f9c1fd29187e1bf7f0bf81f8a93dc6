@@ -139,6 +139,24 @@
       "parentUuid": "f8c2913f_724b74f4",
       "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c21fb96e_15b2de3c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/GenerateFragmentShadingRate.comp",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-08-04T20:55:55Z",
+      "side": 1,
+      "message": "shabi pointed out that i missed updating `kPixelWorkgroupSize` in `UtilsVk::generateFragmentShadingRate`",
+      "parentUuid": "e434aabf_f1b9f686",
+      "revId": "996ead21c0f9c1fd29187e1bf7f0bf81f8a93dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
