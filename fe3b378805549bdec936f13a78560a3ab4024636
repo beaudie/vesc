@@ -34,6 +34,40 @@
       "parentUuid": "295220fb_0458bb18",
       "revId": "fe3b378805549bdec936f13a78560a3ab4024636",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bef7752_ac46480c",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-05T12:33:21Z",
+      "side": 1,
+      "message": "Verified, this `blendable` should also be `display-\u003esupportsMacGPUFamily(1) || (display-\u003esupportsAppleGPUFamily(7) \u0026\u0026 display-\u003esupports32BitFloatFiltering())` (bug in feature set tables, will be fixed)\n\nThis will enable EXT_float_blend on iPads with M1, M2, M4",
+      "revId": "fe3b378805549bdec936f13a78560a3ab4024636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f41b25dc_3efe338d",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-05T12:33:21Z",
+      "side": 1,
+      "message": "There could be a #endif, to avoid nested #if",
+      "revId": "fe3b378805549bdec936f13a78560a3ab4024636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
