@@ -788,6 +788,16 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
             if (needsConversion)
             {
+                if (vertexFormat.getIntendedFormatID() == angle::FormatID::R16G16_SSCALED &&
+                    vertexFormat.getActualBufferFormatID(compressed) ==
+                        angle::FormatID::R16G16B16_SSCALED)
+                {
+                    needsConversion = false;
+                }
+            }
+
+            if (needsConversion)
+            {
                 mContentsObservers->enableForBuffer(bufferGL, static_cast<uint32_t>(attribIndex));
 
                 WarnOnVertexFormatConversion(contextVk, vertexFormat, compressed, true);
