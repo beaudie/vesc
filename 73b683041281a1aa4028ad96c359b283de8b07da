@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2cd7b6d_467095ab",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-05T15:04:44Z",
+      "side": 1,
+      "message": "Can remove this function now?",
+      "revId": "73b683041281a1aa4028ad96c359b283de8b07da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
