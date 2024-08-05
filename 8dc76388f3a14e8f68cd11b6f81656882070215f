@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d660de4_77aea985",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-05T16:00:48Z",
+      "side": 1,
+      "message": "I lost +2 after a rebase, may I have +2 again? thanks.",
+      "revId": "8dc76388f3a14e8f68cd11b6f81656882070215f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
