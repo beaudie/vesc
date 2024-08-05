@@ -276,7 +276,7 @@ angle::Result WindowSurfaceWgpu::initializeImpl(const egl::Display *display)
     wgpu::SwapChainDescriptor swapChainDesc = {};
     swapChainDesc.usage = wgpu::TextureUsage::RenderAttachment | wgpu::TextureUsage::CopySrc |
                           wgpu::TextureUsage::CopyDst;
-    swapChainDesc.format                    = wgpu::TextureFormat::BGRA8Unorm;
+    swapChainDesc.format = mSurface.GetPreferredFormat(displayWgpu->getAdapter());
     swapChainDesc.width                     = size.width;
     swapChainDesc.height                    = size.height;
     swapChainDesc.presentMode               = wgpu::PresentMode::Mailbox;
@@ -306,14 +306,17 @@ angle::Result WindowSurfaceWgpu::swapImpl(const gl::Context *context)
 
 angle::Result WindowSurfaceWgpu::updateCurrentTexture(const egl::Display *display)
 {
+    DisplayWgpu *displayWgpu = webgpu::GetImpl(display);
     wgpu::Texture texture  = mSwapChain.GetCurrentTexture();
     wgpu::TextureView view = mSwapChain.GetCurrentTextureView();
 
-    ANGLE_TRY(mColorAttachment.texture.initExternal(angle::FormatID::B8G8R8A8_UNORM,
-                                                    angle::FormatID::B8G8R8A8_UNORM, texture));
+    wgpu::TextureFormat wgpuFormat = mSurface.GetPreferredFormat(displayWgpu->getAdapter());
+    angle::FormatID angleFormat    = webgpu::GetFormatIDFromWgpuTextureFormat(wgpuFormat);
+
+    ANGLE_TRY(mColorAttachment.texture.initExternal(angleFormat, angleFormat, texture));
 
     mColorAttachment.renderTarget.set(&mColorAttachment.texture, view, webgpu::LevelIndex(0), 0,
-                                      mColorAttachment.texture.toWgpuTextureFormat());
+                                      wgpuFormat);
 
     return angle::Result::Continue;
 }
