@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e6961ba_3ae72c36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-05T22:04:14Z",
+      "side": 1,
+      "message": "Thank you for putting this together. lgtm with a few requests.",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8537069_dc216d9a",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 1477,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-05T22:04:14Z",
+      "side": 1,
+      "message": "Would you move this to frontend_features.json? Even though the problematic shaders have only been seen on the Vulkan backend, I would like the WebGL implementation to reject these shaders on all platforms so that the issues are more visible to all developers.\n\nWould you also consider renaming this to \"reject_webgl_shaders_with...\" since it\u0027s tested only in WebGL compatibility mode?",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef815afe_11813b2b",
+        "filename": "src/compiler/translator/tree_ops/HasInfiniteLoopAndAlsoNestedSwitches.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-05T22:04:14Z",
+      "side": 1,
+      "message": "Is there any opportunity to share code with your other workarounds which prune the problematic constructs?",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a69a8a5_4d964460",
+        "filename": "src/compiler/translator/tree_ops/HasInfiniteLoopAndAlsoNestedSwitches.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-05T22:04:14Z",
+      "side": 1,
+      "message": "Please update this comment; this doesn\u0027t prune loops like your earlier workarounds do.",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb605ca1_91f2a03b",
+        "filename": "src/compiler/translator/tree_ops/HasInfiniteLoopAndAlsoNestedSwitches.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-05T22:04:14Z",
+      "side": 1,
+      "message": "Does this properly handle \"while (false)\" which would not be an infinite loop? What about something like \"for (i \u003d 0; i \u003c 5;)\" or \"for (i \u003d 0; i !\u003d 0;)\"?",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9e14045_391701fc",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-05T22:04:14Z",
+      "side": 1,
+      "message": "Similarly to above, could this be moved to backend-independent code?",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ca90b6f_8a54d4b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4357,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-05T22:04:14Z",
+      "side": 1,
+      "message": "Similarly to above, could this be moved to frontend code so it\u0027s backend-independent?",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f7709c3_d4b7c057",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9168,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-05T22:04:14Z",
+      "side": 1,
+      "message": "Could you add a second test which adds a conditional return or break from the while(true) loop and which asserts the shader does compile?",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
