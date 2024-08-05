@@ -59,7 +59,7 @@ egl::ConfigSet DisplayWgpu::generateConfigs()
 {
     egl::Config config;
     config.renderTargetFormat    = GL_RGBA8;
-    config.depthStencilFormat    = GL_DEPTH24_STENCIL8;
+    config.depthStencilFormat    = GL_STENCIL_INDEX8;
     config.bufferSize            = 32;
     config.redSize               = 8;
     config.greenSize             = 8;

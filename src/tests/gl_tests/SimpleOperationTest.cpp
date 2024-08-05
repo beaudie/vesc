@@ -1575,6 +1575,7 @@ TEST_P(SimpleOperationTest, DrawSingleMultiSampleWithAlphaToCoverage)
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     SimpleOperationTest,
+    ES2_WEBGPU(),
     ES3_METAL().enable(Feature::ForceBufferGPUStorage),
     ES3_METAL().disable(Feature::HasExplicitMemBarrier).disable(Feature::HasCheapRenderPass),
     WithVulkanSecondaries(ES3_VULKAN_SWIFTSHADER()));
