@@ -5693,6 +5693,17 @@ VkFormatFeatureFlags Renderer::getFormatFeatureBits(angle::FormatID formatID,
             {
                 deviceProperties.*features |= VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
             }
+            /*if (formatID == angle::FormatID::R8G8B8A8_USCALED)
+            {
+                // for black_desert_mobile
+                deviceProperties.*features &= ~VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
+                // deviceProperties.*features |= VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
+            }*/
+            if (formatID == angle::FormatID::R16G16_SSCALED)
+            {
+                // for gangstar_vegas
+                deviceProperties.bufferFeatures &= ~VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
+            }
         }
     }
 

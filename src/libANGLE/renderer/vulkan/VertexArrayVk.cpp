@@ -786,6 +786,25 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 numVertices > 0 &&
                 (vertexFormat.getVertexLoadRequiresConversion(compressed) || !bindingIsAligned);
 
+            if (needsConversion && bindingIsAligned)
+            {
+                if (vertexFormat.getIntendedFormatID() == angle::FormatID::R16G16_SSCALED &&
+                    vertexFormat.getActualBufferFormatID(compressed) ==
+                        angle::FormatID::R16G16B16_SSCALED)
+                {
+                    const gl::ProgramExecutable *executable =
+                        contextVk->getState().getProgramExecutable();
+                    GLenum attribType =
+                        executable->getActiveAttributeType(static_cast<GLint>(attribIndex));
+                    ASSERT(attribType != GL_NONE);
+                    const gl::UniformTypeInfo &info = gl::GetUniformTypeInfo(attribType);
+                    if (info.componentCount <= static_cast<int>(intendedFormat.channelCount))
+                    {
+                        needsConversion = false;
+                    }
+                }
+            }
+
             if (needsConversion)
             {
                 mContentsObservers->enableForBuffer(bufferGL, static_cast<uint32_t>(attribIndex));

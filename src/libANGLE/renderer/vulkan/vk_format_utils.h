@@ -128,6 +128,10 @@ class Format final : private angle::NonCopyable
         return angle::Format::Get(compressed ? mActualCompressedBufferFormatID
                                              : mActualBufferFormatID);
     }
+    angle::FormatID getActualBufferFormatID(bool compressed) const
+    {
+        return compressed ? mActualCompressedBufferFormatID : mActualBufferFormatID;
+    }
 
     VkFormat getActualBufferVkFormat(bool compressed) const
     {

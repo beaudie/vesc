@@ -2400,6 +2400,19 @@ GLuint ProgramExecutable::getAttributeLocation(const std::string &name) const
     return static_cast<GLuint>(-1);
 }
 
+GLenum ProgramExecutable::getActiveAttributeType(GLint attribLocation) const
+{
+    ASSERT(attribLocation != -1);
+    for (const ProgramInput &attribute : mProgramInputs)
+    {
+        if (attribute.getLocation() == attribLocation)
+        {
+            return attribute.getType();
+        }
+    }
+    return GL_NONE;
+}
+
 void ProgramExecutable::getActiveUniform(GLuint index,
                                          GLsizei bufsize,
                                          GLsizei *length,

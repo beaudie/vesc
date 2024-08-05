@@ -590,6 +590,7 @@ class ProgramExecutable final : public angle::Subject
                             GLchar *name) const;
     GLint getActiveAttributeMaxLength() const;
     GLuint getAttributeLocation(const std::string &name) const;
+    GLenum getActiveAttributeType(GLint attribLocation) const;
 
     void getActiveUniform(GLuint index,
                           GLsizei bufsize,
