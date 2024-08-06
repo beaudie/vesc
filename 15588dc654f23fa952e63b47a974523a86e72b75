@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28999e65_c3c270b2",
+        "filename": "src/compiler/translator/msl/AstHelpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-06T10:58:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac99d5b9_c447bc43",
+      "revId": "15588dc654f23fa952e63b47a974523a86e72b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a267f4a4_a9584207",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-08-06T09:40:18Z",
       "side": 1,
       "message": "Since this comment would become obsolete immediately after landing the CL, it could be removed.",
+      "range": {
+        "startLine": 4541,
+        "startChar": 71,
+        "endLine": 4542,
+        "endChar": 73
+      },
+      "revId": "15588dc654f23fa952e63b47a974523a86e72b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "260655d1_bd40dca0",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4542,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-06T10:58:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a267f4a4_a9584207",
       "range": {
         "startLine": 4541,
         "startChar": 71,
