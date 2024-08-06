@@ -42,25 +42,25 @@ constexpr VkClearDepthStencilValue kRobustInitDepthStencilValue = {1.0f, 0};
 constexpr VkImageAspectFlags kDepthStencilAspects =
     VK_IMAGE_ASPECT_STENCIL_BIT | VK_IMAGE_ASPECT_DEPTH_BIT;
 
-constexpr angle::PackedEnumMap<PipelineStage, VkPipelineStageFlagBits> kPipelineStageFlagBitMap = {
-    {PipelineStage::TopOfPipe, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT},
-    {PipelineStage::DrawIndirect, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT},
-    {PipelineStage::VertexInput, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT},
-    {PipelineStage::VertexShader, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT},
-    {PipelineStage::TessellationControl, VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT},
-    {PipelineStage::TessellationEvaluation, VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT},
-    {PipelineStage::GeometryShader, VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT},
-    {PipelineStage::TransformFeedback, VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT},
+constexpr angle::PackedEnumMap<PipelineStage, VkPipelineStageFlagBits2> kPipelineStageFlagBitMap = {
+    {PipelineStage::TopOfPipe, VK_PIPELINE_STAGE_2_TOP_OF_PIPE_BIT},
+    {PipelineStage::DrawIndirect, VK_PIPELINE_STAGE_2_DRAW_INDIRECT_BIT},
+    {PipelineStage::VertexInput, VK_PIPELINE_STAGE_2_VERTEX_INPUT_BIT},
+    {PipelineStage::VertexShader, VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT},
+    {PipelineStage::TessellationControl, VK_PIPELINE_STAGE_2_TESSELLATION_CONTROL_SHADER_BIT},
+    {PipelineStage::TessellationEvaluation, VK_PIPELINE_STAGE_2_TESSELLATION_EVALUATION_SHADER_BIT},
+    {PipelineStage::GeometryShader, VK_PIPELINE_STAGE_2_GEOMETRY_SHADER_BIT},
+    {PipelineStage::TransformFeedback, VK_PIPELINE_STAGE_2_TRANSFORM_FEEDBACK_BIT_EXT},
     {PipelineStage::FragmentShadingRate,
-     VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR},
-    {PipelineStage::EarlyFragmentTest, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT},
-    {PipelineStage::FragmentShader, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
-    {PipelineStage::LateFragmentTest, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT},
-    {PipelineStage::ColorAttachmentOutput, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
-    {PipelineStage::ComputeShader, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
-    {PipelineStage::Transfer, VK_PIPELINE_STAGE_TRANSFER_BIT},
-    {PipelineStage::BottomOfPipe, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT},
-    {PipelineStage::Host, VK_PIPELINE_STAGE_HOST_BIT}};
+     VK_PIPELINE_STAGE_2_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR},
+    {PipelineStage::EarlyFragmentTest, VK_PIPELINE_STAGE_2_EARLY_FRAGMENT_TESTS_BIT},
+    {PipelineStage::FragmentShader, VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT},
+    {PipelineStage::LateFragmentTest, VK_PIPELINE_STAGE_2_LATE_FRAGMENT_TESTS_BIT},
+    {PipelineStage::ColorAttachmentOutput, VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT},
+    {PipelineStage::ComputeShader, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT},
+    {PipelineStage::Transfer, VK_PIPELINE_STAGE_2_TRANSFER_BIT},
+    {PipelineStage::BottomOfPipe, VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT},
+    {PipelineStage::Host, VK_PIPELINE_STAGE_2_HOST_BIT}};
 
 constexpr gl::ShaderMap<PipelineStage> kPipelineStageShaderMap = {
     {gl::ShaderType::Vertex, PipelineStage::VertexShader},
@@ -78,7 +78,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "Undefined",
             VK_IMAGE_LAYOUT_UNDEFINED,
-            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT,
             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
             // Transition to: we don't expect to transition into Undefined.
             0,
@@ -96,12 +96,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "ColorWrite",
             VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ColorAttachmentOutput,
             EventStage::ColorAttachmentOutput,
@@ -113,12 +113,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "ColorWriteAndInput",
             VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ_KHR,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ColorAttachmentOutput,
             EventStage::ColorAttachmentOutput,
@@ -130,12 +130,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "MSRTTEmulationColorUnresolveAndResolve",
             VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::ColorAttachmentOutputAndFragmentShader,
@@ -150,9 +150,9 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllDepthStencilPipelineStageFlags,
             kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTest,
@@ -167,9 +167,9 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllDepthStencilPipelineStageFlags,
             kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTest,
@@ -181,12 +181,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "DepthWriteStencilReadFragmentShaderStencilRead",
             VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTestAndFragmentShader,
@@ -201,9 +201,9 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
             EventStage::AllFragmentTestAndAllShaders,
@@ -218,9 +218,9 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllDepthStencilPipelineStageFlags,
             kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTest,
@@ -232,12 +232,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "DepthReadStencilWriteFragmentShaderDepthRead",
             VK_IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::EarlyFragmentTest,
             EventStage::AllFragmentTestAndFragmentShader,
@@ -252,9 +252,9 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
             EventStage::AllFragmentTestAndAllShaders,
@@ -269,7 +269,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllDepthStencilPipelineStageFlags,
             kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -284,10 +284,10 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             ImageMemoryBarrierData{
             "DepthReadStencilReadFragmentShaderRead",
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -304,7 +304,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
             kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -318,12 +318,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "ColorWriteFragmentShaderFeedback",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::ColorAttachmentOutputAndFragmentShader,
@@ -335,12 +335,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "ColorWriteAllShadersFeedback",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
@@ -353,12 +353,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "DepthStencilFragmentShaderFeedback",
             VK_IMAGE_LAYOUT_GENERAL,
-            kAllDepthStencilPipelineStageFlags | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            kAllDepthStencilPipelineStageFlags | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            kAllDepthStencilPipelineStageFlags | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+            kAllDepthStencilPipelineStageFlags | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::AllFragmentTestAndFragmentShader,
@@ -373,9 +373,9 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllDepthStencilPipelineStageFlags | kAllShadersPipelineStageFlags,
             kAllDepthStencilPipelineStageFlags | kAllShadersPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
@@ -389,12 +389,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             "DepthStencilResolve",
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
             // Note: depth/stencil resolve uses color output stage and mask!
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ColorAttachmentOutput,
             EventStage::ColorAttachmentOutput,
@@ -407,12 +407,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             "MSRTTEmulationDepthStencilUnresolveAndResolve",
             VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
             // Note: depth/stencil resolve uses color output stage and mask!
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::ColorAttachmentOutputAndFragmentShader,
@@ -426,7 +426,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
             // Transition to: do not delay execution of commands in the second synchronization
             // scope. Allow layout transition to be delayed until present semaphore is signaled.
-            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT,
             // Transition from: use same stages as in Acquire Image Semaphore stage mask in order to
             // build a dependency chain from the Acquire Image Semaphore to the layout transition's
             // first synchronization scope.
@@ -453,12 +453,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             "SharedPresent",
             VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR,
             // All currently possible stages for SharedPresent
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_TRANSFER_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_TRANSFER_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT,
+            VK_ACCESS_2_MEMORY_READ_BIT | VK_ACCESS_2_MEMORY_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_MEMORY_WRITE_BIT,
+            VK_ACCESS_2_MEMORY_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::BottomOfPipe,
             EventStage::ColorAttachmentOutputAndFragmentShaderAndTransfer,
@@ -479,12 +479,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             // layout.  If the content is not already defined, the first operation may not be a
             // glWaitSemaphore, but in this case undefined layout is appropriate.
             VK_IMAGE_LAYOUT_UNDEFINED,
-            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            VK_PIPELINE_STAGE_HOST_BIT | VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_2_HOST_BIT | VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
             // Transition to: we don't expect to transition into PreInitialized.
             0,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_MEMORY_WRITE_BIT,
+            VK_ACCESS_2_MEMORY_WRITE_BIT,
             ResourceAccess::ReadOnly,
             PipelineStage::InvalidEnum,
             // We do not directly using this layout in SetEvent. We transit to internal layout before using
@@ -497,10 +497,10 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "ExternalShadersReadOnly",
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -516,12 +516,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "ExternalShadersWrite",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::TopOfPipe,
@@ -535,10 +535,10 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "TransferSrc",
             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_2_TRANSFER_BIT,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_TRANSFER_READ_BIT,
+            VK_ACCESS_2_TRANSFER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -552,12 +552,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "TransferDst",
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_2_TRANSFER_BIT,
             // Transition to: all writes must happen after barrier.
-            VK_ACCESS_TRANSFER_WRITE_BIT,
+            VK_ACCESS_2_TRANSFER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_TRANSFER_WRITE_BIT,
+            VK_ACCESS_2_TRANSFER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::Transfer,
             EventStage::Transfer,
@@ -569,12 +569,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "TransferSrcDst",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_2_TRANSFER_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT,
+            VK_ACCESS_2_TRANSFER_READ_BIT | VK_ACCESS_2_TRANSFER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_TRANSFER_WRITE_BIT,
+            VK_ACCESS_2_TRANSFER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::Transfer,
             EventStage::Transfer,
@@ -586,7 +586,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "HostCopy",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT,
             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
             // Transition to: we don't expect to transition into HostCopy on the GPU.
             0,
@@ -606,10 +606,10 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "VertexShaderReadOnly",
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
-            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -623,12 +623,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "VertexShaderWrite",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
-            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::VertexShader,
             EventStage::VertexShader,
@@ -643,7 +643,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kPreFragmentStageFlags,
             kPreFragmentStageFlags,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -661,9 +661,9 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kPreFragmentStageFlags,
             kPreFragmentStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
@@ -676,10 +676,10 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "FragmentShadingRateAttachmentReadOnly",
             VK_IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_FRAGMENT_SHADING_RATE_ATTACHMENT_READ_BIT_KHR,
+            VK_ACCESS_2_FRAGMENT_SHADING_RATE_ATTACHMENT_READ_BIT_KHR,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -693,10 +693,10 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "FragmentShaderReadOnly",
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -710,12 +710,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "FragmentShaderWrite",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::FragmentShader,
             EventStage::FragmentShader,
@@ -727,10 +727,10 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "ComputeShaderReadOnly",
             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -744,12 +744,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "ComputeShaderWrite",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
+            VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             PipelineStage::ComputeShader,
             EventStage::ComputeShader,
@@ -764,7 +764,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllShadersPipelineStageFlags,
             kAllShadersPipelineStageFlags,
             // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
             ResourceAccess::ReadOnly,
@@ -782,9 +782,9 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             kAllShadersPipelineStageFlags,
             kAllShadersPipelineStageFlags,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
@@ -797,12 +797,12 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageMemoryBarrierData{
             "TransferDstAndComputeWrite",
             VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_2_TRANSFER_BIT,
             // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_TRANSFER_WRITE_BIT | VK_ACCESS_TRANSFER_READ_BIT,
+            VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT | VK_ACCESS_2_TRANSFER_WRITE_BIT | VK_ACCESS_2_TRANSFER_READ_BIT,
             // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_TRANSFER_WRITE_BIT,
+            VK_ACCESS_2_SHADER_WRITE_BIT | VK_ACCESS_2_TRANSFER_WRITE_BIT,
             ResourceAccess::ReadWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::ComputeShader,
@@ -1239,8 +1239,8 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(Renderer *renderer, ImageLayout 
         layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
         // If the replacement layout causes a feedback loop, use the GENERAL layout
-        if ((transition.dstStageMask &
-             (VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT)) != 0)
+        if ((transition.dstStageMask & (VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT |
+                                        VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT)) != 0)
         {
             layout = VK_IMAGE_LAYOUT_GENERAL;
         }
@@ -1255,7 +1255,7 @@ PipelineStageGroup GetPipelineStageGroupFromStageFlags(VkPipelineStageFlags dstS
     {
         return PipelineStageGroup::FragmentOnly;
     }
-    else if (dstStageMask == VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT)
+    else if (dstStageMask == VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT)
     {
         return PipelineStageGroup::ComputeOnly;
     }
@@ -4868,7 +4868,7 @@ void QueryHelper::writeTimestampToPrimary(ContextVk *contextVk, PrimaryCommandBu
 
     const QueryPool &queryPool = getQueryPool();
     resetQueryPoolImpl(contextVk, queryPool, primary);
-    primary->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
+    primary->writeTimestamp(VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
 }
 
 void QueryHelper::writeTimestamp(ContextVk *contextVk,
@@ -4876,7 +4876,7 @@ void QueryHelper::writeTimestamp(ContextVk *contextVk,
 {
     const QueryPool &queryPool = getQueryPool();
     resetQueryPoolImpl(contextVk, queryPool, commandBuffer);
-    commandBuffer->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
+    commandBuffer->writeTimestamp(VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
 }
 
 bool QueryHelper::hasSubmittedCommands() const
@@ -5710,8 +5710,8 @@ void BufferHelper::changeQueueFamily(uint32_t srcQueueFamilyIndex,
     bufferMemoryBarrier.offset                = getOffset();
     bufferMemoryBarrier.size                  = getSize();
 
-    commandBuffer->bufferBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                 VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, &bufferMemoryBarrier);
+    commandBuffer->bufferBarrier(VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+                                 VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, &bufferMemoryBarrier);
 }
 
 void BufferHelper::acquireFromExternal(DeviceQueueIndex externalQueueFamilyIndex,
@@ -8124,12 +8124,12 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
             barrier.subresourceRange.baseMipLevel = mipLevel.get() - 1;
             barrier.oldLayout                     = getCurrentLayout(renderer);
             barrier.newLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-            barrier.srcAccessMask                 = VK_ACCESS_TRANSFER_WRITE_BIT;
-            barrier.dstAccessMask                 = VK_ACCESS_TRANSFER_READ_BIT;
+            barrier.srcAccessMask                 = VK_ACCESS_2_TRANSFER_WRITE_BIT;
+            barrier.dstAccessMask                 = VK_ACCESS_2_TRANSFER_READ_BIT;
 
             // We can do it for all layers at once.
-            commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                        VK_PIPELINE_STAGE_TRANSFER_BIT, barrier);
+            commandBuffer->imageBarrier(VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+                                        VK_PIPELINE_STAGE_2_TRANSFER_BIT, barrier);
             VkImageBlit blit                   = {};
             blit.srcOffsets[0]                 = {0, 0, 0};
             blit.srcOffsets[1]                 = {mipWidth, mipHeight, mipDepth};
@@ -8157,28 +8157,28 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
     // after glGenerateMipmap call.
     barrier.oldLayout     = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
     barrier.newLayout     = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    barrier.dstAccessMask = VK_ACCESS_2_SHADER_READ_BIT;
     if (baseLevel.get() > 0)
     {
         // [0:baseLevel-1] from TRANSFER_DST to SHADER_READ
         barrier.subresourceRange.baseMipLevel = 0;
         barrier.subresourceRange.levelCount   = baseLevel.get();
-        commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, barrier);
+        commandBuffer->imageBarrier(VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+                                    VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT, barrier);
     }
     // [maxLevel:mLevelCount-1] from TRANSFER_DST to SHADER_READ
     ASSERT(mLevelCount > maxLevel.get());
     barrier.subresourceRange.baseMipLevel = maxLevel.get();
     barrier.subresourceRange.levelCount   = mLevelCount - maxLevel.get();
-    commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, barrier);
+    commandBuffer->imageBarrier(VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+                                VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT, barrier);
     // [baseLevel:maxLevel-1] from TRANSFER_SRC to SHADER_READ
     barrier.oldLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-    barrier.srcAccessMask                 = VK_ACCESS_TRANSFER_READ_BIT;
+    barrier.srcAccessMask                 = VK_ACCESS_2_TRANSFER_READ_BIT;
     barrier.subresourceRange.baseMipLevel = baseLevel.get();
     barrier.subresourceRange.levelCount   = maxLevel.get() - baseLevel.get();
-    commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, barrier);
+    commandBuffer->imageBarrier(VK_PIPELINE_STAGE_2_TRANSFER_BIT,
+                                VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT, barrier);
 
     // This is just changing the internal state of the image helper so that the next call
     // to changeLayout will use this layout as the "oldLayout" argument.
@@ -8186,7 +8186,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
     // since the only write here is transfer, hence mLastNonShaderReadOnlyLayout is set to
     // ImageLayout::TransferDst.
     mLastNonShaderReadOnlyLayout = ImageLayout::TransferDst;
-    mCurrentShaderReadStageMask  = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    mCurrentShaderReadStageMask  = VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT;
     mCurrentLayout               = ImageLayout::FragmentShaderReadOnly;
 
     contextVk->trackImageWithOutsideRenderPassEvent(this);

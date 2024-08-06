@@ -1022,26 +1022,28 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
     // > subpass being ended. End-of-subpass multisample resolves are treated as color attachment
     // > writes for the purposes of synchronization. This applies to resolve operations for both
     // > color and depth/stencil attachments. That is, they are considered to execute in the
-    // > VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT pipeline stage and their writes are
-    // > synchronized with VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT.
+    // > VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT pipeline stage and their writes are
+    // > synchronized with VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT.
 
     subpassDependencies->push_back({});
     VkSubpassDependency2 *dependency = &subpassDependencies->back();
 
-    constexpr VkPipelineStageFlags kColorWriteStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    constexpr VkPipelineStageFlags kColorWriteStage =
+        VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
     constexpr VkPipelineStageFlags kColorReadWriteStage =
-        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    constexpr VkAccessFlags kColorWriteFlags = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+    constexpr VkAccessFlags kColorWriteFlags = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT;
     constexpr VkAccessFlags kColorReadWriteFlags =
-        kColorWriteFlags | VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+        kColorWriteFlags | VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT;
 
     constexpr VkPipelineStageFlags kDepthStencilWriteStage =
-        VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        VK_PIPELINE_STAGE_2_LATE_FRAGMENT_TESTS_BIT;
     constexpr VkPipelineStageFlags kDepthStencilReadWriteStage =
-        VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-    constexpr VkAccessFlags kDepthStencilWriteFlags = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        VK_PIPELINE_STAGE_2_EARLY_FRAGMENT_TESTS_BIT;
+    constexpr VkAccessFlags kDepthStencilWriteFlags =
+        VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
     constexpr VkAccessFlags kDepthStencilReadWriteFlags =
-        kDepthStencilWriteFlags | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+        kDepthStencilWriteFlags | VK_ACCESS_2_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
 
     VkPipelineStageFlags attachmentWriteStages     = 0;
     VkPipelineStageFlags attachmentReadWriteStages = 0;
@@ -1080,9 +1082,9 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
     dependency->sType           = VK_STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2;
     dependency->srcSubpass      = kUnresolveSubpassIndex;
     dependency->dstSubpass      = kDrawSubpassIndex;
-    dependency->srcStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    dependency->srcStageMask    = VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT;
     dependency->dstStageMask    = kColorWriteStage;
-    dependency->srcAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+    dependency->srcAccessMask   = VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT;
     dependency->dstAccessMask   = kColorWriteFlags;
     dependency->dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 }
@@ -1092,17 +1094,17 @@ void InitializeUnresolveSubpassDependencies(const SubpassVector<VkSubpassDescrip
 //
 // For framebuffer fetch:
 //
-//     srcStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-//     dstStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-//     srcAccess = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-//     dstAccess = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT
+//     srcStage = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT
+//     dstStage = VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT
+//     srcAccess = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT
+//     dstAccess = VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT
 //
 // For advanced blend:
 //
-//     srcStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-//     dstStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-//     srcAccess = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-//     dstAccess = VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT
+//     srcStage = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT
+//     dstStage = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT
+//     srcAccess = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT
+//     dstAccess = VK_ACCESS_2_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT
 //
 // Subpass dependencies cannot be added after the fact at the end of the render pass due to render
 // pass compatibility rules.  ANGLE specifies a subpass self-dependency with the above stage/access
@@ -1136,18 +1138,18 @@ void InitializeDefaultSubpassSelfDependencies(
     dependency->sType         = VK_STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2;
     dependency->srcSubpass    = subpassIndex;
     dependency->dstSubpass    = subpassIndex;
-    dependency->srcStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency->dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    dependency->srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependency->srcStageMask  = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency->dstStageMask  = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency->srcAccessMask = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT;
     dependency->dstAccessMask = 0;
     if (!hasRasterizationOrderAttachmentAccess)
     {
-        dependency->dstStageMask |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-        dependency->dstAccessMask |= VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+        dependency->dstStageMask |= VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT;
+        dependency->dstAccessMask |= VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT;
     }
     if (hasBlendOperationAdvanced && !hasCoherentBlendOperationAdvanced)
     {
-        dependency->dstAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
+        dependency->dstAccessMask |= VK_ACCESS_2_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
     }
     dependency->dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     if (desc.viewCount() > 0)
@@ -6499,7 +6501,7 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
                                  descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     if (isUniformBuffer)
     {
-        commandBufferHelper->bufferRead(contextVk, VK_ACCESS_UNIFORM_READ_BIT,
+        commandBufferHelper->bufferRead(contextVk, VK_ACCESS_2_UNIFORM_READ_BIT,
                                         block.activeShaders(), &bufferHelper);
     }
     else
@@ -6512,18 +6514,18 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
             // marked read-only.  This also helps BufferVk make better decisions during
             // buffer data uploads and copies by knowing that the buffers are not actually
             // being written to.
-            commandBufferHelper->bufferRead(contextVk, VK_ACCESS_SHADER_READ_BIT,
+            commandBufferHelper->bufferRead(contextVk, VK_ACCESS_2_SHADER_READ_BIT,
                                             block.activeShaders(), &bufferHelper);
         }
-        else if ((bufferHelper.getCurrentWriteAccess() & VK_ACCESS_SHADER_WRITE_BIT) != 0 &&
+        else if ((bufferHelper.getCurrentWriteAccess() & VK_ACCESS_2_SHADER_WRITE_BIT) != 0 &&
                  (memoryBarrierBits & kBufferMemoryBarrierBits) == 0)
         {
             // Buffer is already in shader write access, and this is not from memoryBarrier call,
             // then skip the WAW barrier since GL spec says driver is not required to insert barrier
             // here. We still need to maintain object life time tracking here.
             // Based on discussion here https://gitlab.khronos.org/opengl/API/-/issues/144, the
-            // above check of VK_ACCESS_SHADER_WRITE_BIT bit can be removed and instead rely on app
-            // issue glMemoryBarrier. But almost all usage I am seeing does not issue
+            // above check of VK_ACCESS_2_SHADER_WRITE_BIT bit can be removed and instead rely on
+            // app issue glMemoryBarrier. But almost all usage I am seeing does not issue
             // glMemoryBarrier before SSBO write. They only issue glMemoryBarrier after the SSBO
             // write. This is to ensure we do not break the existing usage even if we think they are
             // out of spec.
@@ -6532,7 +6534,7 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
         else
         {
             // We set the SHADER_READ_BIT to be conservative.
-            VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+            VkAccessFlags accessFlags = VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT;
             for (const gl::ShaderType shaderType : block.activeShaders())
             {
                 const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
@@ -6643,9 +6645,9 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
         for (const gl::ShaderType shaderType : atomicCounterBuffer.activeShaders())
         {
             const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
-            commandBufferHelper->bufferWrite(contextVk,
-                                             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-                                             pipelineStage, &bufferHelper);
+            commandBufferHelper->bufferWrite(
+                contextVk, VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT,
+                pipelineStage, &bufferHelper);
         }
 
         VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();

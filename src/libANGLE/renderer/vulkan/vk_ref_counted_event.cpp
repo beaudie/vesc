@@ -20,29 +20,29 @@ namespace
 // Predefined VkPipelineStageFlags for RefCountedEvent
 constexpr angle::PackedEnumMap<EventStage, VkPipelineStageFlags>
     kEventStageAndPipelineStageFlagsMap = {
-        {EventStage::Transfer, VK_PIPELINE_STAGE_TRANSFER_BIT},
-        {EventStage::VertexShader, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT},
-        {EventStage::FragmentShader, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
-        {EventStage::ComputeShader, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
+        {EventStage::Transfer, VK_PIPELINE_STAGE_2_TRANSFER_BIT},
+        {EventStage::VertexShader, VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT},
+        {EventStage::FragmentShader, VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT},
+        {EventStage::ComputeShader, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT},
         {EventStage::AllShaders, kAllShadersPipelineStageFlags},
         {EventStage::PreFragmentShaders, kPreFragmentStageFlags},
         {EventStage::FragmentShadingRate,
-         VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR},
-        {EventStage::ColorAttachmentOutput, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
+         VK_PIPELINE_STAGE_2_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR},
+        {EventStage::ColorAttachmentOutput, VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT},
         {EventStage::ColorAttachmentOutputAndFragmentShader,
-         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+         VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT},
         {EventStage::ColorAttachmentOutputAndFragmentShaderAndTransfer,
-         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT |
-             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+         VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_TRANSFER_BIT |
+             VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT},
         {EventStage::ColorAttachmentOutputAndAllShaders,
-         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags},
+         VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags},
         {EventStage::AllFragmentTest, kAllDepthStencilPipelineStageFlags},
         {EventStage::AllFragmentTestAndFragmentShader,
-         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags},
+         VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags},
         {EventStage::AllFragmentTestAndAllShaders,
          kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags},
         {EventStage::TransferAndComputeShader,
-         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT}};
+         VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_2_TRANSFER_BIT}};
 
 void DestroyRefCountedEvents(VkDevice device, RefCountedEventCollector &events)
 {

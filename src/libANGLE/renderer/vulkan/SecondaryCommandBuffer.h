@@ -1419,8 +1419,8 @@ ANGLE_INLINE void SecondaryCommandBuffer::bufferBarrier(
     const VkBufferMemoryBarrier *bufferMemoryBarrier)
 {
     // Used only during queue family ownership transfers
-    ASSERT(srcStageMask == VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
-    ASSERT(dstStageMask == VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
+    ASSERT(srcStageMask == VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT);
+    ASSERT(dstStageMask == VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT);
 
     BufferBarrierParams *paramStruct = initCommand<BufferBarrierParams>(CommandID::BufferBarrier);
     paramStruct->bufferMemoryBarrier = *bufferMemoryBarrier;
@@ -2145,7 +2145,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::writeTimestamp(VkPipelineStageFlagBits
                                                          const QueryPool &queryPool,
                                                          uint32_t query)
 {
-    ASSERT(pipelineStage == VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
+    ASSERT(pipelineStage == VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT);
 
     WriteTimestampParams *paramStruct =
         initCommand<WriteTimestampParams>(CommandID::WriteTimestamp);

@@ -243,9 +243,9 @@ angle::Result SyncHelper::serverWait(ContextVk *contextVk)
     // application asked for.
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
-    commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-                                   VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 0,
-                                   nullptr);
+    commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT,
+                                   VK_PIPELINE_STAGE_2_TOP_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr,
+                                   0, nullptr);
     return angle::Result::Continue;
 }
 
@@ -527,7 +527,7 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
 
     // Add semaphore to next submit job.
     contextVk->addWaitSemaphore(waitSemaphore.get().getHandle(),
-                                VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
+                                VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT);
     contextVk->addGarbage(&waitSemaphore.get());  // This releases the handle.
     return angle::Result::Continue;
 }

@@ -329,8 +329,8 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const BufferBarrierParams *params =
                         getParamPtr<BufferBarrierParams>(currentCommand);
-                    vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                         VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 1,
+                    vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+                                         VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, 0, 0, nullptr, 1,
                                          &params->bufferMemoryBarrier, 0, nullptr);
                     break;
                 }
@@ -809,7 +809,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const WriteTimestampParams *params =
                         getParamPtr<WriteTimestampParams>(currentCommand);
-                    vkCmdWriteTimestamp(cmdBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+                    vkCmdWriteTimestamp(cmdBuffer, VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT,
                                         params->queryPool, params->query);
                     break;
                 }

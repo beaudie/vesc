@@ -150,11 +150,11 @@ angle::Result CLCommandQueueVk::enqueueReadBuffer(const cl::Buffer &buffer,
         if (!mComputePassCommands->getCommandBuffer().empty() && bufferVk.isWritable())
         {
             VkMemoryBarrier memoryBarrier = {
-                VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr, VK_ACCESS_SHADER_WRITE_BIT,
-                VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT};
+                VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr, VK_ACCESS_2_SHADER_WRITE_BIT,
+                VK_ACCESS_2_MEMORY_READ_BIT | VK_ACCESS_2_MEMORY_WRITE_BIT};
             mComputePassCommands->getCommandBuffer().pipelineBarrier(
-                VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1,
-                &memoryBarrier, 0, nullptr, 0, nullptr);
+                VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, 0,
+                1, &memoryBarrier, 0, nullptr, 0, nullptr);
         }
 
         mComputePassCommands->getCommandBuffer().copyBuffer(
@@ -458,10 +458,10 @@ angle::Result CLCommandQueueVk::enqueueMarker(CLEventImpl::CreateFunc &eventCrea
     // This deprecated API is essentially a super-set of clEnqueueBarrier, where we also return an
     // event object (i.e. marker) since clEnqueueBarrier does not provide this
     VkMemoryBarrier memoryBarrier = {VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr,
-                                     VK_ACCESS_SHADER_WRITE_BIT,
-                                     VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT};
+                                     VK_ACCESS_2_SHADER_WRITE_BIT,
+                                     VK_ACCESS_2_MEMORY_READ_BIT | VK_ACCESS_2_MEMORY_WRITE_BIT};
     mComputePassCommands->getCommandBuffer().pipelineBarrier(
-        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1,
+        VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, 0, 1,
         &memoryBarrier, 0, nullptr, 0, nullptr);
 
     ANGLE_TRY(createEvent(&eventCreateFunc));
@@ -488,11 +488,11 @@ angle::Result CLCommandQueueVk::enqueueBarrierWithWaitList(const cl::EventPtrs &
     // waits for all commands previously enqueued in command_queue to complete before it completes
     if (waitEvents.empty())
     {
-        VkMemoryBarrier memoryBarrier = {VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr,
-                                         VK_ACCESS_SHADER_WRITE_BIT,
-                                         VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT};
+        VkMemoryBarrier memoryBarrier = {
+            VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr, VK_ACCESS_2_SHADER_WRITE_BIT,
+            VK_ACCESS_2_MEMORY_READ_BIT | VK_ACCESS_2_MEMORY_WRITE_BIT};
         mComputePassCommands->getCommandBuffer().pipelineBarrier(
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1,
+            VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, 0, 1,
             &memoryBarrier, 0, nullptr, 0, nullptr);
     }
     else
@@ -510,10 +510,10 @@ angle::Result CLCommandQueueVk::enqueueBarrier()
     std::scoped_lock<std::mutex> sl(mCommandQueueMutex);
 
     VkMemoryBarrier memoryBarrier = {VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr,
-                                     VK_ACCESS_SHADER_WRITE_BIT,
-                                     VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT};
+                                     VK_ACCESS_2_SHADER_WRITE_BIT,
+                                     VK_ACCESS_2_MEMORY_READ_BIT | VK_ACCESS_2_MEMORY_WRITE_BIT};
     mComputePassCommands->getCommandBuffer().pipelineBarrier(
-        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1,
+        VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, 0, 1,
         &memoryBarrier, 0, nullptr, 0, nullptr);
 
     return angle::Result::Continue;
@@ -663,11 +663,11 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
 
     if (needsBarrier)
     {
-        VkMemoryBarrier memoryBarrier = {VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr,
-                                         VK_ACCESS_SHADER_WRITE_BIT,
-                                         VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT};
+        VkMemoryBarrier memoryBarrier = {
+            VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr, VK_ACCESS_2_SHADER_WRITE_BIT,
+            VK_ACCESS_2_MEMORY_READ_BIT | VK_ACCESS_2_MEMORY_WRITE_BIT};
         mComputePassCommands->getCommandBuffer().pipelineBarrier(
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 1,
+            VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, 0, 1,
             &memoryBarrier, 0, nullptr, 0, nullptr);
     }
 
@@ -722,11 +722,11 @@ angle::Result CLCommandQueueVk::processWaitlist(const cl::EventPtrs &waitEvents)
                 // As long as there is at least one dependant command in same queue,
                 // we just need to insert one execution barrier
                 VkMemoryBarrier memoryBarrier = {
-                    VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr, VK_ACCESS_SHADER_WRITE_BIT,
-                    VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT};
+                    VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr, VK_ACCESS_2_SHADER_WRITE_BIT,
+                    VK_ACCESS_2_MEMORY_READ_BIT | VK_ACCESS_2_MEMORY_WRITE_BIT};
                 mComputePassCommands->getCommandBuffer().pipelineBarrier(
-                    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0,
-                    1, &memoryBarrier, 0, nullptr, 0, nullptr);
+                    VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT,
+                    0, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
 
                 insertedBarrier = true;
             }

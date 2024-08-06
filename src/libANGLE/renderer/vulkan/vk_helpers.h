@@ -49,9 +49,9 @@ constexpr VkImageCreateFlags kVkImageCreateFlagsNone = 0;
 constexpr VkFilter kDefaultYCbCrChromaFilter = VK_FILTER_LINEAR;
 
 constexpr VkPipelineStageFlags kSwapchainAcquireImageWaitStageFlags =
-    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |          // First use is a blit command.
-    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |  // First use is a draw command.
-    VK_PIPELINE_STAGE_TRANSFER_BIT;                  // First use is a clear without scissor.
+    VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT |          // First use is a blit command.
+    VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT |  // First use is a draw command.
+    VK_PIPELINE_STAGE_2_TRANSFER_BIT;                  // First use is a clear without scissor.
 
 // For each level, write  layers that don't conflict in parallel.  The layer is hashed to
 // `layer % kMaxParallelLayerWrites` and used to track whether that subresource is currently
@@ -3718,24 +3718,24 @@ class CommandBufferAccess : angle::NonCopyable
 
     void onBufferTransferRead(BufferHelper *buffer)
     {
-        onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, PipelineStage::Transfer, buffer);
+        onBufferRead(VK_ACCESS_2_TRANSFER_READ_BIT, PipelineStage::Transfer, buffer);
     }
     void onBufferTransferWrite(BufferHelper *buffer)
     {
-        onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, PipelineStage::Transfer, buffer);
+        onBufferWrite(VK_ACCESS_2_TRANSFER_WRITE_BIT, PipelineStage::Transfer, buffer);
     }
     void onBufferSelfCopy(BufferHelper *buffer)
     {
-        onBufferWrite(VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT,
+        onBufferWrite(VK_ACCESS_2_TRANSFER_READ_BIT | VK_ACCESS_2_TRANSFER_WRITE_BIT,
                       PipelineStage::Transfer, buffer);
     }
     void onBufferComputeShaderRead(BufferHelper *buffer)
     {
-        onBufferRead(VK_ACCESS_SHADER_READ_BIT, PipelineStage::ComputeShader, buffer);
+        onBufferRead(VK_ACCESS_2_SHADER_READ_BIT, PipelineStage::ComputeShader, buffer);
     }
     void onBufferComputeShaderWrite(BufferHelper *buffer)
     {
-        onBufferWrite(VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+        onBufferWrite(VK_ACCESS_2_SHADER_WRITE_BIT | VK_ACCESS_2_SHADER_READ_BIT,
                       PipelineStage::ComputeShader, buffer);
     }
 
