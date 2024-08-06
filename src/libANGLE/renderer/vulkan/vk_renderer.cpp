@@ -1002,6 +1002,7 @@ void UnpackHeaderDataForPipelineCache(CacheDataHeader *data,
 }
 
 void ComputePipelineCacheVkChunkKey(VkPhysicalDeviceProperties physicalDeviceProperties,
+                                    const uint8_t slotIndex,
                                     const uint8_t chunkIndex,
                                     angle::BlobCacheKey *hashOut)
 {
@@ -1016,6 +1017,9 @@ void ComputePipelineCacheVkChunkKey(VkPhysicalDeviceProperties physicalDevicePro
     // Add the vendor and device id too for good measure.
     hashStream << std::hex << physicalDeviceProperties.vendorID;
     hashStream << std::hex << physicalDeviceProperties.deviceID;
+
+    // Add slotIndex to generate unique keys for each slot.
+    hashStream << std::hex << static_cast<uint32_t>(slotIndex);
 
     // Add chunkIndex to generate unique key for chunks.
     hashStream << std::hex << static_cast<uint32_t>(chunkIndex);
@@ -1057,50 +1061,102 @@ void CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
     // pipelineCache into several parts to store seperately. There is no function to
     // query the limit size in android.
     constexpr size_t kMaxBlobCacheSize = 64 * 1024;
-    size_t compressedOffset            = 0;
 
     const size_t numChunks = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
                                                 kMaxBlobCacheSize - sizeof(CacheDataHeader));
     ASSERT(numChunks <= UINT16_MAX);
-    size_t chunkSize = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
-                                          static_cast<unsigned int>(numChunks));
+    const size_t chunkSize = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
+                                                static_cast<unsigned int>(numChunks));
     uint32_t compressedDataCRC = 0;
     if (kEnableCRCForPipelineCache)
     {
         compressedDataCRC = angle::GenerateCrc(compressedData.data(), compressedData.size());
     }
 
-    for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
+    uint8_t previousSlotIndex = 0;
+    const uint8_t slotIndex   = globalOps->getNextPipelineBlobCacheSlotIndex(&previousSlotIndex);
+
+    angle::MemoryBuffer keyData;
+    if (!keyData.resize(sizeof(CacheDataHeader) + chunkSize))
     {
-        if (chunkIndex == numChunks - 1)
+        ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW,
+                           "Skip syncing pipeline cache data due to out of memory.");
+        return;
+    }
+
+    // This loop will store all chunks unconditionally in the first run, and verify-store any
+    // missing chunks in the subsequent runs.  Loop will exit when all chunks are stored, or
+    // if number of missing chunks in each run is not decreasing (cache is full or it evicts
+    // newly added items, while keeps the old ones).
+    uint32_t prevStoredChunkCount = 0;
+    uint32_t storedChunkCount     = 0;
+    while (prevStoredChunkCount == 0 ||
+           (storedChunkCount > 0 && storedChunkCount < prevStoredChunkCount))
+    {
+        prevStoredChunkCount = storedChunkCount;
+        storedChunkCount     = 0;
+
+        // Store chunks in revers order, so when 0 chunk is available - all chunks are available.
+        size_t compressedOffset = numChunks * chunkSize;
+        for (size_t chunkIndex = numChunks; chunkIndex-- > 0;)
         {
-            chunkSize = compressedData.size() - compressedOffset;
+            compressedOffset -= chunkSize;
+
+            keyData.setSize(sizeof(CacheDataHeader) +
+                            std::min(chunkSize, compressedData.size() - compressedOffset));
+
+            // Create unique hash key.
+            angle::BlobCacheKey chunkCacheHash;
+            ComputePipelineCacheVkChunkKey(physicalDeviceProperties, slotIndex, chunkIndex,
+                                           &chunkCacheHash);
+
+            if (prevStoredChunkCount > 0)
+            {
+                angle::BlobCacheValue value;
+                if (globalOps->getBlob(chunkCacheHash, &value) && value.size() == keyData.size())
+                {
+                    continue;
+                }
+            }
+
+            // Add the header data, followed by the compressed data.
+            ASSERT(cacheData.size() <= UINT32_MAX);
+            CacheDataHeader headerData = {};
+            PackHeaderDataForPipelineCache(
+                compressedDataCRC, static_cast<uint32_t>(cacheData.size()),
+                static_cast<uint16_t>(numChunks), static_cast<uint16_t>(chunkIndex), &headerData);
+            memcpy(keyData.data(), &headerData, sizeof(CacheDataHeader));
+            memcpy(keyData.data() + sizeof(CacheDataHeader),
+                   compressedData.data() + compressedOffset,
+                   keyData.size() - sizeof(CacheDataHeader));
+
+            globalOps->putBlob(chunkCacheHash, keyData);
+
+            ++storedChunkCount;
         }
 
-        angle::MemoryBuffer keyData;
-        if (!keyData.resize(sizeof(CacheDataHeader) + chunkSize))
+        if (prevStoredChunkCount == 0)
         {
-            ANGLE_PERF_WARNING(contextVk->getDebug(), GL_DEBUG_SEVERITY_LOW,
-                               "Skip syncing pipeline cache data due to out of memory.");
-            return;
+            // Erase data from the previous slot. Since cache data size is always increasing, use
+            // current numChunks for simplicity (to avoid storing previous numChunks).
+            if (previousSlotIndex != slotIndex)
+            {
+                keyData.setSize(globalOps->isBlobCacheSupportsZeroSizedValues() ? 0 : 1);
+                for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
+                {
+                    egl::BlobCache::Key chunkCacheHash;
+                    ComputePipelineCacheVkChunkKey(physicalDeviceProperties, previousSlotIndex,
+                                                   chunkIndex, &chunkCacheHash);
+                    globalOps->putBlob(chunkCacheHash, keyData);
+                }
+            }
+            // If blob cache evicts old items first, then freshly stored chunks must remain in the
+            // cache in case of eviction (assuming cache is not full).
+            if (globalOps->isBlobCacheEvictsOldItemsFirst())
+            {
+                break;
+            }
         }
-
-        // Add the header data, followed by the compressed data.
-        ASSERT(cacheData.size() <= UINT32_MAX);
-        CacheDataHeader headerData = {};
-        PackHeaderDataForPipelineCache(compressedDataCRC, static_cast<uint32_t>(cacheData.size()),
-                                       static_cast<uint16_t>(numChunks),
-                                       static_cast<uint16_t>(chunkIndex), &headerData);
-        memcpy(keyData.data(), &headerData, sizeof(CacheDataHeader));
-        memcpy(keyData.data() + sizeof(CacheDataHeader), compressedData.data() + compressedOffset,
-               chunkSize);
-        compressedOffset += chunkSize;
-
-        // Create unique hash key.
-        angle::BlobCacheKey chunkCacheHash;
-        ComputePipelineCacheVkChunkKey(physicalDeviceProperties, chunkIndex, &chunkCacheHash);
-
-        globalOps->putBlob(chunkCacheHash, keyData);
     }
 }
 
@@ -1140,15 +1196,32 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
     // Make sure that the bool output is initialized to false.
     *success = false;
 
-    // Compute the hash key of chunkIndex 0 and find the first cache data in blob cache.
     angle::BlobCacheKey chunkCacheHash;
-    ComputePipelineCacheVkChunkKey(physicalDeviceProperties, 0, &chunkCacheHash);
     angle::BlobCacheValue keyData;
 
-    if (!globalOps->getBlob(chunkCacheHash, &keyData) || keyData.size() < sizeof(CacheDataHeader))
+    const uint8_t firstSlotIndex = globalOps->getNextPipelineBlobCacheSlotIndex(nullptr);
+    uint8_t slotIndex            = firstSlotIndex;
+
+    // Iterate over available slots until data is found (only expected single slot with data).
+    while (true)
     {
-        // Nothing in the cache.
-        return angle::Result::Continue;
+        // Compute the hash key of chunkIndex 0 and find the first cache data in blob cache.
+        ComputePipelineCacheVkChunkKey(physicalDeviceProperties, slotIndex, 0, &chunkCacheHash);
+
+        if (globalOps->getBlob(chunkCacheHash, &keyData) &&
+            keyData.size() >= sizeof(CacheDataHeader))
+        {
+            break;
+        }
+        // Nothing in the cache for current slotIndex.
+
+        slotIndex = globalOps->getNextPipelineBlobCacheSlotIndex(nullptr);
+        if (slotIndex == firstSlotIndex)
+        {
+            // Nothing in all slots.
+            return angle::Result::Continue;
+        }
+        // Try next slot.
     }
 
     // Get the number of chunks and other values from the header for data validation.
@@ -1192,48 +1265,55 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
     // To combine the parts of the pipelineCache data.
     for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
     {
-        // Get the unique key by chunkIndex.
-        ComputePipelineCacheVkChunkKey(physicalDeviceProperties, chunkIndex, &chunkCacheHash);
-
-        if (!globalOps->getBlob(chunkCacheHash, &keyData) ||
-            keyData.size() < sizeof(CacheDataHeader))
+        // Avoid processing 0 chunk again.
+        if (chunkIndex > 0)
         {
-            // Can't find every part of the cache data.
-            WARN() << "Failed to get pipeline cache chunk " << chunkIndex << " of " << numChunks;
-            return angle::Result::Continue;
-        }
+            // Get the unique key by chunkIndex.
+            ComputePipelineCacheVkChunkKey(physicalDeviceProperties, slotIndex, chunkIndex,
+                                           &chunkCacheHash);
 
-        // Validate the header values and ensure there is enough space to store.
-        uint32_t checkCacheVersion;
-        uint32_t checkCompressedDataCRC;
-        uint32_t checkUncompressedCacheDataSize;
-        size_t checkNumChunks;
-        size_t checkChunkIndex;
+            if (!globalOps->getBlob(chunkCacheHash, &keyData) ||
+                keyData.size() < sizeof(CacheDataHeader))
+            {
+                // Can't find every part of the cache data.
+                WARN() << "Failed to get pipeline cache chunk " << chunkIndex << " of "
+                       << numChunks;
+                return angle::Result::Continue;
+            }
 
-        memcpy(&headerData, keyData.data(), sizeof(CacheDataHeader));
-        UnpackHeaderDataForPipelineCache(&headerData, &checkCacheVersion, &checkCompressedDataCRC,
-                                         &checkUncompressedCacheDataSize, &checkNumChunks,
-                                         &checkChunkIndex);
+            // Validate the header values and ensure there is enough space to store.
+            uint32_t checkCacheVersion;
+            uint32_t checkCompressedDataCRC;
+            uint32_t checkUncompressedCacheDataSize;
+            size_t checkNumChunks;
+            size_t checkChunkIndex;
 
-        chunkSize = keyData.size() - sizeof(CacheDataHeader);
-        bool isHeaderDataCorrupted =
-            (checkCacheVersion != cacheVersion) || (checkNumChunks != numChunks) ||
-            (checkUncompressedCacheDataSize != uncompressedCacheDataSize) ||
-            (checkCompressedDataCRC != compressedDataCRC) || (checkChunkIndex != chunkIndex) ||
-            (compressedData.size() < compressedSize + chunkSize);
-        if (isHeaderDataCorrupted)
-        {
-            WARN() << "Pipeline cache chunk header corrupted: " << "checkCacheVersion = "
-                   << checkCacheVersion << ", cacheVersion = " << cacheVersion
-                   << ", checkNumChunks = " << checkNumChunks << ", numChunks = " << numChunks
-                   << ", checkUncompressedCacheDataSize = " << checkUncompressedCacheDataSize
-                   << ", uncompressedCacheDataSize = " << uncompressedCacheDataSize
-                   << ", checkCompressedDataCRC = " << checkCompressedDataCRC
-                   << ", compressedDataCRC = " << compressedDataCRC
-                   << ", checkChunkIndex = " << checkChunkIndex << ", chunkIndex = " << chunkIndex
-                   << ", compressedData.size() = " << compressedData.size()
-                   << ", (compressedSize + chunkSize) = " << (compressedSize + chunkSize);
-            return angle::Result::Continue;
+            memcpy(&headerData, keyData.data(), sizeof(CacheDataHeader));
+            UnpackHeaderDataForPipelineCache(
+                &headerData, &checkCacheVersion, &checkCompressedDataCRC,
+                &checkUncompressedCacheDataSize, &checkNumChunks, &checkChunkIndex);
+
+            chunkSize = keyData.size() - sizeof(CacheDataHeader);
+            bool isHeaderDataCorrupted =
+                (checkCacheVersion != cacheVersion) || (checkNumChunks != numChunks) ||
+                (checkUncompressedCacheDataSize != uncompressedCacheDataSize) ||
+                (checkCompressedDataCRC != compressedDataCRC) || (checkChunkIndex != chunkIndex) ||
+                (compressedData.size() < compressedSize + chunkSize);
+            if (isHeaderDataCorrupted)
+            {
+                WARN() << "Pipeline cache chunk header corrupted: " << "checkCacheVersion = "
+                       << checkCacheVersion << ", cacheVersion = " << cacheVersion
+                       << ", checkNumChunks = " << checkNumChunks << ", numChunks = " << numChunks
+                       << ", checkUncompressedCacheDataSize = " << checkUncompressedCacheDataSize
+                       << ", uncompressedCacheDataSize = " << uncompressedCacheDataSize
+                       << ", checkCompressedDataCRC = " << checkCompressedDataCRC
+                       << ", compressedDataCRC = " << compressedDataCRC
+                       << ", checkChunkIndex = " << checkChunkIndex
+                       << ", chunkIndex = " << chunkIndex
+                       << ", compressedData.size() = " << compressedData.size()
+                       << ", (compressedSize + chunkSize) = " << (compressedSize + chunkSize);
+                return angle::Result::Continue;
+            }
         }
 
         memcpy(compressedData.data() + compressedSize, keyData.data() + sizeof(CacheDataHeader),
