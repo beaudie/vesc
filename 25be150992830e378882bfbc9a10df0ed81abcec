@@ -34,6 +34,24 @@
       "parentUuid": "8e09e320_7784e119",
       "revId": "25be150992830e378882bfbc9a10df0ed81abcec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78035ee1_007cf4d4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-06T16:31:46Z",
+      "side": 1,
+      "message": "\u003e which means the blob cache functions are never set at this point.\n\nThanks. I did not investigated that far. I thought maybe it is possible (because of the `if (loadedFromBlobCache)` check in `createDeviceAndQueue()`).\n\n\u003e and no need to touch anything else? You could probably just assert that loadedFromBlobCache is false too.\n\nYes. I was thinking to bring the old code back, but decided to modify the method.\nA also like the idea of adding `ASSERT` - this will make clear that blob function can\u0027t be set prior to Display initialization.\n\nHowever, I have one question left.\nWhat is the point initializing `mPipelineCache` in `createDeviceAndQueue` at all?\nWhy not just wait until `Renderer::getPipelineCache()`?\n\nThe only place `mPipelineCache` is accessed directly is `Renderer::syncPipelineCacheVk()`, but the following change will add `!mPipelineCacheInitialized` check.\n\nMaybe I move this https://chromium-review.googlesource.com/c/angle/angle/+/5756575/1?usp\u003drelated-change\nbefore this change and remove `mPipelineCache` initialization from `createDeviceAndQueue()`?",
+      "parentUuid": "10445ba3_dcaf20db",
+      "revId": "25be150992830e378882bfbc9a10df0ed81abcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
