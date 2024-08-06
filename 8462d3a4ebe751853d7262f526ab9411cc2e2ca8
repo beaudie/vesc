@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c7a8d85_6e89f96c",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 1477,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T14:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8537069_dc216d9a",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef815afe_11813b2b",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-08-05T22:04:14Z",
       "side": 1,
       "message": "Is there any opportunity to share code with your other workarounds which prune the problematic constructs?",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a65dbc29_62fe63f0",
+        "filename": "src/compiler/translator/tree_ops/HasInfiniteLoopAndAlsoNestedSwitches.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T14:33:56Z",
+      "side": 1,
+      "message": "Rejecting all infinite loops now (nested switch or not). Removed this and using the existing prune path to reject the shader.",
+      "parentUuid": "ef815afe_11813b2b",
       "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "306b58c1_18c8e60a",
+        "filename": "src/compiler/translator/tree_ops/HasInfiniteLoopAndAlsoNestedSwitches.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T14:33:56Z",
+      "side": 1,
+      "message": "No longer applicable",
+      "parentUuid": "8a69a8a5_4d964460",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb605ca1_91f2a03b",
@@ -82,6 +136,24 @@
       "writtenOn": "2024-08-05T22:04:14Z",
       "side": 1,
       "message": "Does this properly handle \"while (false)\" which would not be an infinite loop? What about something like \"for (i \u003d 0; i \u003c 5;)\" or \"for (i \u003d 0; i !\u003d 0;)\"?",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a14b9600_6a40aacc",
+        "filename": "src/compiler/translator/tree_ops/HasInfiniteLoopAndAlsoNestedSwitches.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T14:33:56Z",
+      "side": 1,
+      "message": "`while (false)` is pruned as a no-op in a previous pass already.\n\nNo to the other two cases. I\u0027ve been considering doing some more const propagation by detecting constant variables and replacing them with their value, but that doesn\u0027t provide any value in terms of infinite loop detection as it\u0027s very easy to make a variable _look_ mutated but actually stay const at runtime.",
+      "parentUuid": "cb605ca1_91f2a03b",
       "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d5528a1_ceb20be3",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T14:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9e14045_391701fc",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ca90b6f_8a54d4b2",
@@ -120,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74ecce9c_9884e13a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T14:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ca90b6f_8a54d4b2",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f7709c3_d4b7c057",
@@ -133,6 +241,24 @@
       "writtenOn": "2024-08-05T22:04:14Z",
       "side": 1,
       "message": "Could you add a second test which adds a conditional return or break from the while(true) loop and which asserts the shader does compile?",
+      "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37d26113_44efb93a",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9168,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T14:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f7709c3_d4b7c057",
       "revId": "8462d3a4ebe751853d7262f526ab9411cc2e2ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
