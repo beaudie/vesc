@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53d0571a_7f579d87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T19:50:17Z",
+      "side": 1,
+      "message": "`WebGPU: ` for uniformity",
+      "revId": "1681f12dd81dd2b64cb15e9cec07360339abda7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
