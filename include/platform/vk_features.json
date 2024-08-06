@@ -1634,6 +1634,13 @@
                 "Prefer host cached + non-coherent memory for buffers with dynamic/stream usage."
             ],
             "issue": "https://issuetracker.google.com/347601787"
+        },
+        {
+            "name": "use_dual_pipeline_blob_cache_slots",
+            "category": "Features",
+            "description": [
+                "Wether DisplayVk will use single or dual slots to store PipelineCacheVk data."
+            ]
         }
     ]
 }
