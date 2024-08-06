@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e87b82f_b1bacc71",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T19:51:16Z",
+      "side": 1,
+      "message": "Please prefix with `WebGPU: `",
+      "revId": "9d0afcd42ca6a8ab99271a13049c5a5896304fb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
