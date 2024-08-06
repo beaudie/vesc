@@ -70,6 +70,24 @@
       "parentUuid": "78035ee1_007cf4d4",
       "revId": "25be150992830e378882bfbc9a10df0ed81abcec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65e3c213_a91ca6df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-06T16:59:43Z",
+      "side": 1,
+      "message": "\u003e You\u0027re probably right, maybe we should just delete this line.\n\nDone.",
+      "parentUuid": "837b8fc9_16b91ff9",
+      "revId": "25be150992830e378882bfbc9a10df0ed81abcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
