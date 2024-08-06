@@ -8,6 +8,7 @@
 
 #include "common/system_utils.h"
 #include "compiler/translator/IntermRebuild.h"
+#include "compiler/translator/msl/AstHelpers.h"
 #include "compiler/translator/tree_ops/SimplifyLoopConditions.h"
 #include "compiler/translator/tree_ops/msl/SeparateCompoundExpressions.h"
 #include "compiler/translator/util.h"
@@ -261,9 +262,7 @@ class Separator : public TIntermRebuild
             return;
         }
         auto &bindingMap = getCurrBindingMap();
-        const Name name  = mIdGen.createNewName();
-        auto *var =
-            new TVariable(&mSymbolTable, name.rawName(), &newExpr.getType(), name.symbolType());
+        auto *var        = &CreateTemporaryVariable(mSymbolTable, mIdGen, newExpr.getType());
         auto *decl = new TIntermDeclaration(var, &newExpr);
         pushStmt(*decl);
         mExprMap[&oldExpr] = new TIntermSymbol(var);
@@ -496,11 +495,7 @@ class Separator : public TIntermRebuild
         TIntermTyped *then  = node.getTrueExpression();
         TIntermTyped *else_ = node.getFalseExpression();
 
-        const Name name = mIdGen.createNewName();
-        TType *newType  = new TType(node.getType());
-        newType->setInterfaceBlock(nullptr);
-        auto *var = new TVariable(&mSymbolTable, name.rawName(), newType, name.symbolType());
-
+        auto *var               = &CreateTemporaryVariable(mSymbolTable, mIdGen, node.getType());
         TIntermTyped *newElse   = pullMappedExpr(else_, false);
         TIntermBlock *elseBlock = &buildBlockWithTailAssign(*var, *newElse);
         TIntermTyped *newThen   = pullMappedExpr(then, true);

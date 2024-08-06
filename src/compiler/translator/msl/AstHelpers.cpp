@@ -39,6 +39,18 @@ const TVariable &sh::CreateInstanceVariable(TSymbolTable &symbolTable,
     return *var;
 }
 
+const TVariable &sh::CreateTemporaryVariable(TSymbolTable &symbolTable,
+                                             IdGen &idGen,
+                                             const TType &type)
+{
+    const Name name = idGen.createNewName();
+    TType *newType  = new TType(type);
+    newType->setInterfaceBlock(nullptr);
+    newType->setQualifier(EvqTemporary);
+    auto *var = new TVariable(&symbolTable, name.rawName(), newType, name.symbolType());
+    return *var;
+}
+
 static void AcquireFunctionExtras(TFunction &dest, const TFunction &src)
 {
     if (src.isDefined())

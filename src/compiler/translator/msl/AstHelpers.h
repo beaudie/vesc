@@ -28,6 +28,10 @@ const TVariable &CreateInstanceVariable(TSymbolTable &symbolTable,
                                         TQualifier qualifier = TQualifier::EvqTemporary,
                                         const TSpan<const unsigned int> *arraySizes = nullptr);
 
+const TVariable &CreateTemporaryVariable(TSymbolTable &symbolTable,
+                                         IdGen &idGen,
+                                         const TType &type);
+
 // The input sequence should be discarded from AST after this is called.
 TIntermSequence &CloneSequenceAndPrepend(const TIntermSequence &seq, TIntermNode &node);
 
