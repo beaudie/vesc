@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05d8e6a0_7ba06fdf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-06T22:03:19Z",
+      "side": 1,
+      "message": "This is a bit confusing to read (which I still not quite fully understand even thoigh I read a few times). Would it possible to break into two steps instead of one while loop?",
+      "range": {
+        "startLine": 1087,
+        "startChar": 6,
+        "endLine": 1088,
+        "endChar": 46
+      },
+      "revId": "4c62d95f5a7a117a08828ed29cbeda48ba7f1391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "436d6044_cb2d355f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-06T22:03:19Z",
+      "side": 1,
+      "message": "It will read better to code in a more normal way:\n```\n        for (int chunkIndex \u003d numChunks-1; chunkIndex\u003e\u003d0; chunkIndex--)\n```",
+      "range": {
+        "startLine": 1101,
+        "startChar": 0,
+        "endLine": 1101,
+        "endChar": 62
+      },
+      "revId": "4c62d95f5a7a117a08828ed29cbeda48ba7f1391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
