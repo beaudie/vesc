@@ -1494,6 +1494,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://issuetracker.google.com/347601787"
     };
 
+    FeatureInfo useDualPipelineBlobCacheSlots = {
+        "useDualPipelineBlobCacheSlots",
+        FeatureCategory::VulkanFeatures,
+        "Wether DisplayVk will use single or dual slots to store PipelineCacheVk data.",
+        &members,
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

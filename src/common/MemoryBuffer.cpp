@@ -31,7 +31,8 @@ bool MemoryBuffer::resize(size_t size)
         if (mData)
         {
             free(mData);
-            mData = nullptr;
+            mData     = nullptr;
+            mCapacity = 0;
         }
         mSize = 0;
         return true;
@@ -56,15 +57,16 @@ bool MemoryBuffer::resize(size_t size)
         free(mData);
     }
 
-    mData = newMemory;
-    mSize = size;
+    mData     = newMemory;
+    mCapacity = size;
+    mSize     = size;
 
     return true;
 }
 
-void MemoryBuffer::trim(size_t size)
+void MemoryBuffer::setSize(size_t size)
 {
-    ASSERT(size <= mSize);
+    ASSERT(size <= mCapacity);
     mSize = size;
 }
 

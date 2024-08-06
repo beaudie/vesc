@@ -273,6 +273,25 @@ const char *CLPlatformVk::getWSIExtension()
 }
 
 // vk::GlobalOps
+uint8_t CLPlatformVk::getNextPipelineBlobCacheSlotIndex(uint8_t *previousSlotIndexOut)
+{
+    if (previousSlotIndexOut != nullptr)
+    {
+        *previousSlotIndexOut = 0;
+    }
+    return 0;
+}
+
+bool DisplayVk::isBlobCacheSupportsZeroSizedValues() const
+{
+    return true;
+}
+
+bool DisplayVk::isBlobCacheEvictsOldItemsFirst() const
+{
+    return true;
+}
+
 void CLPlatformVk::putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value)
 {
     std::scoped_lock<angle::SimpleMutex> lock(mBlobCacheMutex);
