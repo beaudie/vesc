@@ -15575,6 +15575,55 @@ void main()
     glDeleteShader(shader);
 }
 
+// Test
+TEST_P(GLSLTest_ES3, TEST)
+{
+    constexpr char kVS[] = R"(#version 300 es
+void c(inout vec4 d) {
+    bool e = true;
+    while(true) {
+        if (!e)
+            break;
+        e = false;
+        switch(0) {
+        case 4096:
+            return;
+        }
+    }
+    bool f = true;
+    while(f) {
+        vec4 m;
+        d = m;
+    }
+}
+void main() {
+    vec4 g;
+    c(g);
+    while(true) {
+        vec2 i = g.yw;
+        uint k = packUnorm2x16(i);
+        switch(k) {
+        case 0u:
+            break;
+        default:
+            switch(k) {
+            case 4u:
+                gl_Position = g;
+                return;
+            case 7u:
+                return;
+            default:
+                break;
+            }
+            while(true)
+                c(g);
+        }
+    }
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, essl3_shaders::fs::Red());
+}
+
 // Test that initializing global variables with complex constants work
 TEST_P(GLSLTest_ES3, InitGlobalComplexConstant)
 {
