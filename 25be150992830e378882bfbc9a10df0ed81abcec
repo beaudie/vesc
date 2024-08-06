@@ -16,6 +16,24 @@
       "message": "I think we can make the logic in this change simpler. `createDeviceAndQueue` is called when creating the display, which means the blob cache functions are _never_ set at this point.\n\nSo from here, we should only just call a function that inits the pipeline cache without attempting to load anything from the cache.\n\nThen the usual calls to `ensurePipelineCacheInitialized` from `Renderer::getPipelineCache()` can just work as they did before.",
       "revId": "25be150992830e378882bfbc9a10df0ed81abcec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10445ba3_dcaf20db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T16:08:41Z",
+      "side": 1,
+      "message": "Looks like you can just bring back this code from the CL that broke this (https://chromium-review.googlesource.com/c/angle/angle/+/5375102) here:\n\n```\n    {\n        std::unique_lock\u003cstd::mutex\u003e lock(mPipelineCacheMutex);\n        bool loadedFromBlobCache \u003d false;\n        ANGLE_TRY(initPipelineCache(context, \u0026mPipelineCache, \u0026loadedFromBlobCache));\n        if (loadedFromBlobCache)\n        {\n            ANGLE_TRY(getPipelineCacheSize(context, \u0026mPipelineCacheSizeAtLastSync));\n        }\n    }\n```\n\nand no need to touch anything else? You could probably just assert that `loadedFromBlobCache` is false too.",
+      "parentUuid": "8e09e320_7784e119",
+      "revId": "25be150992830e378882bfbc9a10df0ed81abcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
