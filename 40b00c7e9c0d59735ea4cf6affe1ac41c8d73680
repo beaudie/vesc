@@ -70,6 +70,24 @@
       "parentUuid": "db95ce51_98db7c11",
       "revId": "40b00c7e9c0d59735ea4cf6affe1ac41c8d73680",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6c4aabc_40c8d2a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-06T14:03:31Z",
+      "side": 1,
+      "message": "EGL extensions usually specify a default backwards compatible value for new attributes when they are not specified. EGL_DONT_CARE is ok, or 0, whatever makes sense for the context but there is no universal value that AttributeMap::get should handle. You probably want to use EGL_DONT_CARE here and specify it the same way as NULL for the other parameters.",
+      "parentUuid": "a5d6c7fa_1f801cf2",
+      "revId": "40b00c7e9c0d59735ea4cf6affe1ac41c8d73680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
