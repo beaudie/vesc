@@ -16,6 +16,24 @@
       "message": "Might be safer to just unconditionally set these?",
       "revId": "fb9fdfd0f444a225e211a8b41a0cfafccc48516f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d37c2ee_0b7f25c6",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-06T14:06:20Z",
+      "side": 1,
+      "message": "I figure that it saves us processing and validating 2 commands in almost every renderpass. We should have lots of test coverage here too.",
+      "parentUuid": "0432c94f_797c5fcc",
+      "revId": "fb9fdfd0f444a225e211a8b41a0cfafccc48516f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
