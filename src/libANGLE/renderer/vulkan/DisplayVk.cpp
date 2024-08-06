@@ -30,6 +30,24 @@ namespace rx
 
 namespace
 {
+#if defined(ANGLE_EGL_BLOB_CACHE_SUPPORTS_ZERO_SIZED_VALUES)
+constexpr bool kEglBlobCacheSupportsZeroSizedValues = true;
+#else
+constexpr bool kEglBlobCacheSupportsZeroSizedValues = false;
+#endif
+
+#if defined(ANGLE_EGL_BLOB_CACHE_EVICTS_OLD_ITEMS_FIRST)
+constexpr bool kEglBlobCacheEvictsOldItemsFirst = true;
+#else
+constexpr bool kEglBlobCacheEvictsOldItemsFirst = false;
+#endif
+
+#if defined(ANGLE_EGL_BLOB_CACHE_EVICTS_ONLY_NECESSARY_ITEMS)
+constexpr bool kEglBlobCacheEvictsOnlyNecessaryItems = true;
+#else
+constexpr bool kEglBlobCacheEvictsOnlyNecessaryItems = false;
+#endif
+
 // Query surface format and colorspace support.
 void GetSupportedFormatColorspaces(VkPhysicalDevice physicalDevice,
                                    const angle::FeaturesVk &featuresVk,
@@ -154,7 +172,8 @@ DisplayVk::DisplayVk(const egl::DisplayState &state)
     : DisplayImpl(state),
       vk::Context(new vk::Renderer()),
       mScratchBuffer(1000u),
-      mSupportedColorspaceFormatsMap{}
+      mSupportedColorspaceFormatsMap{},
+      mCurrentPipelineBlobCacheSlotIndex(0)
 {}
 
 DisplayVk::~DisplayVk()
@@ -660,6 +679,34 @@ void DisplayVk::populateFeatureList(angle::FeatureList *features)
 }
 
 // vk::GlobalOps
+uint8_t DisplayVk::getNextPipelineBlobCacheSlotIndex(uint8_t *previousSlotIndexOut)
+{
+    if (previousSlotIndexOut != nullptr)
+    {
+        *previousSlotIndexOut = mCurrentPipelineBlobCacheSlotIndex;
+    }
+    if (getFeatures().useDualPipelineBlobCacheSlots.enabled)
+    {
+        mCurrentPipelineBlobCacheSlotIndex = 1 - mCurrentPipelineBlobCacheSlotIndex;
+    }
+    return mCurrentPipelineBlobCacheSlotIndex;
+}
+
+bool DisplayVk::isBlobCacheSupportsZeroSizedValues() const
+{
+    return kEglBlobCacheSupportsZeroSizedValues;
+}
+
+bool DisplayVk::isBlobCacheEvictsOldItemsFirst() const
+{
+    return kEglBlobCacheEvictsOldItemsFirst;
+}
+
+bool DisplayVk::isBlobCacheEvictsOnlyNecessaryItems() const
+{
+    return kEglBlobCacheEvictsOnlyNecessaryItems;
+}
+
 void DisplayVk::putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value)
 {
     getBlobCache()->putApplication(key, value);

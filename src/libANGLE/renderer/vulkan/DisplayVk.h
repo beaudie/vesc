@@ -125,6 +125,11 @@ class DisplayVk : public DisplayImpl, public vk::Context, public vk::GlobalOps
     void initSupportedSurfaceFormatColorspaces();
 
     // vk::GlobalOps
+    uint8_t getNextPipelineBlobCacheSlotIndex(uint8_t *previousSlotIndexOut) override;
+    bool isBlobCacheSupportsZeroSizedValues() const override;
+    bool isBlobCacheEvictsOldItemsFirst() const override;
+    bool isBlobCacheEvictsOnlyNecessaryItems() const override;
+
     void putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value) override;
     bool getBlob(const angle::BlobCacheKey &key, angle::BlobCacheValue *valueOut) override;
     std::shared_ptr<angle::WaitableEvent> postMultiThreadWorkerTask(
@@ -135,6 +140,8 @@ class DisplayVk : public DisplayImpl, public vk::Context, public vk::GlobalOps
 
     // Map of supported colorspace and associated surface format set.
     angle::HashMap<VkColorSpaceKHR, std::unordered_set<VkFormat>> mSupportedColorspaceFormatsMap;
+
+    uint8_t mCurrentPipelineBlobCacheSlotIndex;
 };
 
 }  // namespace rx
