@@ -34,6 +34,24 @@
       "parentUuid": "0432c94f_797c5fcc",
       "revId": "fb9fdfd0f444a225e211a8b41a0cfafccc48516f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3cf371d_fb3ce104",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T14:13:08Z",
+      "side": 1,
+      "message": "Ack, though I\u0027m not sure we do have test coverage. If you can\u0027t find one, could you add a test that starts the render pass with a small viewport, then changes the viewport to cover the entire render pass and make sure that applies? If the `!mCommandBuffer.hasSetViewportCommand()` is accidentally removed for example, that would fail the test.\n\nSame with scissor.\n\nI\u0027ve been adding these sorts of tests to `StateChangeTest`, like `StateChangeTestES3.PrimitiveRestart` etc.",
+      "parentUuid": "4d37c2ee_0b7f25c6",
+      "revId": "fb9fdfd0f444a225e211a8b41a0cfafccc48516f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
