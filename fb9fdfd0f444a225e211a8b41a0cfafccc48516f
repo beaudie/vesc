@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0432c94f_797c5fcc",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T02:39:30Z",
+      "side": 1,
+      "message": "Might be safer to just unconditionally set these?",
+      "revId": "fb9fdfd0f444a225e211a8b41a0cfafccc48516f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
