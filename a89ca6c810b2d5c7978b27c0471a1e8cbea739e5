@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90141adc_4406acbb",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 19
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-06T21:24:27Z",
+      "side": 1,
+      "message": "There\u0027s an iOS build failure when rolling this to Chromium complaining that `supportsMemoryless` is set but not used.\n\nDid you mean to do this? https://chromium-review.googlesource.com/c/angle/angle/+/5765976 If yes, please +2.\n\nOtherwise the value is set for iOS and TV but not actually used.",
+      "revId": "a89ca6c810b2d5c7978b27c0471a1e8cbea739e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
