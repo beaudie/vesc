@@ -37,19 +37,20 @@ enum class BarrierType
 };
 
 constexpr VkPipelineStageFlags kPreFragmentStageFlags =
-    VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-    VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT | VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+    VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_2_TESSELLATION_CONTROL_SHADER_BIT |
+    VK_PIPELINE_STAGE_2_TESSELLATION_EVALUATION_SHADER_BIT |
+    VK_PIPELINE_STAGE_2_GEOMETRY_SHADER_BIT;
 
 constexpr VkPipelineStageFlags kAllShadersPipelineStageFlags =
-    kPreFragmentStageFlags | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
-    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+    kPreFragmentStageFlags | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT |
+    VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT;
 
 constexpr VkPipelineStageFlags kAllDepthStencilPipelineStageFlags =
-    VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+    VK_PIPELINE_STAGE_2_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_2_LATE_FRAGMENT_TESTS_BIT;
 
 constexpr VkPipelineStageFlags kFragmentAndAttachmentPipelineStageFlags =
-    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT |
-    VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_2_EARLY_FRAGMENT_TESTS_BIT |
+    VK_PIPELINE_STAGE_2_LATE_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
 
 // We group VK_PIPELINE_STAGE_*_BITs into different groups. The expectation is that execution within
 // Fragment/PreFragment/Compute will not overlap. This information is used to optimize the usage of
@@ -130,8 +131,8 @@ enum class EventStage : uint32_t
 
 // Initialize EventStage to VkPipelineStageFlags mapping table.
 void InitializeEventAndPipelineStagesMap(
-    angle::PackedEnumMap<EventStage, VkPipelineStageFlags> *mapping,
-    VkPipelineStageFlags supportedVulkanPipelineStageMask);
+    angle::PackedEnumMap<EventStage, VkPipelineStageFlags2> *mapping,
+    VkPipelineStageFlags2 supportedVulkanPipelineStageMask);
 
 // VkCmdWaitEvents requires srcStageMask must be the bitwise OR of the stageMask parameter used in
 // previous calls to vkCmdSetEvent (See VUID-vkCmdWaitEvents-srcStageMask-01158). This mean we must
@@ -412,10 +413,10 @@ class EventBarrier : angle::NonCopyable
           mEvent(VK_NULL_HANDLE)
     {}
 
-    EventBarrier(VkPipelineStageFlags srcStageMask,
-                 VkPipelineStageFlags dstStageMask,
-                 VkAccessFlags srcAccess,
-                 VkAccessFlags dstAccess,
+    EventBarrier(VkPipelineStageFlags2 srcStageMask,
+                 VkPipelineStageFlags2 dstStageMask,
+                 VkAccessFlags2 srcAccess,
+                 VkAccessFlags2 dstAccess,
                  const VkEvent &event)
         : mSrcStageMask(srcStageMask),
           mDstStageMask(dstStageMask),
@@ -427,17 +428,14 @@ class EventBarrier : angle::NonCopyable
         ASSERT(mEvent != VK_NULL_HANDLE);
     }
 
-    EventBarrier(VkPipelineStageFlags srcStageMask,
-                 VkPipelineStageFlags dstStageMask,
-                 const VkEvent &event,
-                 const VkImageMemoryBarrier &imageMemoryBarrier)
-        : mSrcStageMask(srcStageMask),
-          mDstStageMask(dstStageMask),
+    EventBarrier(const VkEvent &event, const VkImageMemoryBarrier2 &imageMemoryBarrier2)
+        : mSrcStageMask(imageMemoryBarrier2.srcStageMask),
+          mDstStageMask(imageMemoryBarrier2.dstStageMask),
           mMemoryBarrierSrcAccess(0),
           mMemoryBarrierDstAccess(0),
           mImageMemoryBarrierCount(1),
           mEvent(event),
-          mImageMemoryBarrier(imageMemoryBarrier)
+          mImageMemoryBarrier(imageMemoryBarrier2)
     {
         ASSERT(mEvent != VK_NULL_HANDLE);
         ASSERT(mImageMemoryBarrier.image != VK_NULL_HANDLE);
@@ -466,7 +464,7 @@ class EventBarrier : angle::NonCopyable
 
     bool hasEvent(const VkEvent &event) const { return mEvent == event; }
 
-    void addAdditionalStageAccess(VkPipelineStageFlags dstStageMask, VkAccessFlags dstAccess)
+    void addAdditionalStageAccess(VkPipelineStageFlags2 dstStageMask, VkAccessFlags2 dstAccess)
     {
         mDstStageMask |= dstStageMask;
         mMemoryBarrierDstAccess |= dstAccess;
@@ -478,13 +476,13 @@ class EventBarrier : angle::NonCopyable
 
   private:
     friend class EventBarrierArray;
-    VkPipelineStageFlags mSrcStageMask;
-    VkPipelineStageFlags mDstStageMask;
-    VkAccessFlags mMemoryBarrierSrcAccess;
-    VkAccessFlags mMemoryBarrierDstAccess;
+    VkPipelineStageFlags2 mSrcStageMask;
+    VkPipelineStageFlags2 mDstStageMask;
+    VkAccessFlags2 mMemoryBarrierSrcAccess;
+    VkAccessFlags2 mMemoryBarrierDstAccess;
     uint32_t mImageMemoryBarrierCount;
     VkEvent mEvent;
-    VkImageMemoryBarrier mImageMemoryBarrier;
+    VkImageMemoryBarrier2 mImageMemoryBarrier;
 };
 
 class EventBarrierArray final
@@ -496,18 +494,22 @@ class EventBarrierArray final
 
     // Add the additional stageMask to the existing waitEvent.
     void addAdditionalStageAccess(const RefCountedEvent &waitEvent,
-                                  VkPipelineStageFlags dstStageMask,
-                                  VkAccessFlags dstAccess);
+                                  VkPipelineStageFlags2 dstStageMask,
+                                  VkAccessFlags2 dstAccess);
 
     void addMemoryEvent(Renderer *renderer,
                         const RefCountedEvent &waitEvent,
-                        VkPipelineStageFlags dstStageMask,
-                        VkAccessFlags dstAccess);
+                        VkPipelineStageFlags2 dstStageMask,
+                        VkAccessFlags2 dstAccess);
 
-    void addImageEvent(Renderer *renderer,
-                       const RefCountedEvent &waitEvent,
-                       VkPipelineStageFlags dstStageMask,
-                       const VkImageMemoryBarrier &imageMemoryBarrier);
+    //    void addImageEvent(Renderer *renderer,
+    //                       const RefCountedEvent &waitEvent,
+    //                       VkPipelineStageFlags dstStageMask,
+    //                       const VkImageMemoryBarrier &imageMemoryBarrier);
+
+    void addImageEvent2(Renderer *renderer,
+                        const RefCountedEvent &waitEvent,
+                        const VkImageMemoryBarrier2 &imageMemoryBarrier2);
 
     void reset() { ASSERT(mBarriers.empty()); }
 

@@ -523,11 +523,11 @@ class Renderer : angle::NonCopyable
         return mSupportedBufferWritePipelineStageMask;
     }
 
-    VkPipelineStageFlags getPipelineStageMask(EventStage eventStage) const
+    VkPipelineStageFlags2 getPipelineStageMask(EventStage eventStage) const
     {
         return mEventStageAndPipelineStageFlagsMap[eventStage];
     }
-    VkPipelineStageFlags getEventPipelineStageMask(const RefCountedEvent &refCountedEvent) const
+    VkPipelineStageFlags2 getEventPipelineStageMask(const RefCountedEvent &refCountedEvent) const
     {
         return mEventStageAndPipelineStageFlagsMap[refCountedEvent.getEventStage()];
     }
@@ -853,6 +853,10 @@ class Renderer : angle::NonCopyable
     // should be flushed.
     void calculatePendingGarbageSizeLimit();
 
+    void initializeVkAccessFlagsMap();
+
+    void initializeVkPipelineStageFlagsMap();
+
     template <typename CommandBufferHelperT, typename RecyclerT>
     angle::Result getCommandBufferImpl(vk::Context *context,
                                        vk::SecondaryCommandPool *commandPool,
@@ -1059,6 +1063,8 @@ class Renderer : angle::NonCopyable
     SamplerCache mSamplerCache;
     SamplerYcbcrConversionCache mYuvConversionCache;
     angle::HashMap<VkFormat, uint32_t> mVkFormatDescriptorCountMap;
+    angle::HashMap<VkAccessFlagBits2, VkAccessFlagBits> mVkAccessFlagMap;
+    angle::HashMap<VkPipelineStageFlagBits2, VkPipelineStageFlagBits> mVkPipelineStageFlagMap;
     vk::ActiveHandleCounter mActiveHandleCounts;
     angle::SimpleMutex mActiveHandleCountsMutex;
 
@@ -1094,7 +1100,7 @@ class Renderer : angle::NonCopyable
     VkPipelineStageFlags mSupportedBufferWritePipelineStageMask;
     VkShaderStageFlags mSupportedVulkanShaderStageMask;
     // The 1:1 mapping between EventStage and VkPipelineStageFlags
-    angle::PackedEnumMap<EventStage, VkPipelineStageFlags> mEventStageAndPipelineStageFlagsMap;
+    angle::PackedEnumMap<EventStage, VkPipelineStageFlags2> mEventStageAndPipelineStageFlagsMap;
     angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> mImageLayoutAndMemoryBarrierDataMap;
 
     // Use thread pool to compress cache data.

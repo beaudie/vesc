@@ -329,8 +329,8 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const BufferBarrierParams *params =
                         getParamPtr<BufferBarrierParams>(currentCommand);
-                    vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                         VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 1,
+                    vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT,
+                                         VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, 0, 0, nullptr, 1,
                                          &params->bufferMemoryBarrier, 0, nullptr);
                     break;
                 }
@@ -523,6 +523,23 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                                          0, nullptr, 0, nullptr, 1, imageMemoryBarriers);
                     break;
                 }
+                case CommandID::ImageBarrier2:
+                {
+                    const ImageBarrier2Params *params =
+                        getParamPtr<ImageBarrier2Params>(currentCommand);
+                    const VkImageMemoryBarrier2 *imageMemoryBarriers2 =
+                        GetFirstArrayParameter<VkImageMemoryBarrier2>(params);
+                    VkDependencyInfo pDependencyInfo         = {};
+                    pDependencyInfo.sType                    = VK_STRUCTURE_TYPE_DEPENDENCY_INFO;
+                    pDependencyInfo.memoryBarrierCount       = 0;
+                    pDependencyInfo.pMemoryBarriers          = nullptr;
+                    pDependencyInfo.bufferMemoryBarrierCount = 0;
+                    pDependencyInfo.pBufferMemoryBarriers    = nullptr;
+                    pDependencyInfo.imageMemoryBarrierCount  = 1;
+                    pDependencyInfo.pImageMemoryBarriers     = imageMemoryBarriers2;
+                    vkCmdPipelineBarrier2(cmdBuffer, &pDependencyInfo);
+                    break;
+                }
                 case CommandID::ImageWaitEvent:
                 {
                     const ImageWaitEventParams *params =
@@ -532,6 +549,23 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                     vkCmdWaitEvents(cmdBuffer, 1, &(params->event), params->srcStageMask,
                                     params->dstStageMask, 0, nullptr, 0, nullptr, 1,
                                     imageMemoryBarriers);
+                    break;
+                }
+                case CommandID::ImageWaitEvent2:
+                {
+                    const ImageWaitEvent2Params *params =
+                        getParamPtr<ImageWaitEvent2Params>(currentCommand);
+                    const VkImageMemoryBarrier2 *imageMemoryBarriers2 =
+                        GetFirstArrayParameter<VkImageMemoryBarrier2>(params);
+                    VkDependencyInfo pDependencyInfo         = {};
+                    pDependencyInfo.sType                    = VK_STRUCTURE_TYPE_DEPENDENCY_INFO;
+                    pDependencyInfo.memoryBarrierCount       = 0;
+                    pDependencyInfo.pMemoryBarriers          = nullptr;
+                    pDependencyInfo.bufferMemoryBarrierCount = 0;
+                    pDependencyInfo.pBufferMemoryBarriers    = nullptr;
+                    pDependencyInfo.imageMemoryBarrierCount  = 1;
+                    pDependencyInfo.pImageMemoryBarriers     = imageMemoryBarriers2;
+                    vkCmdWaitEvents2(cmdBuffer, 1, &(params->event), &pDependencyInfo);
                     break;
                 }
                 case CommandID::InsertDebugUtilsLabel:
@@ -556,6 +590,24 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                         GetFirstArrayParameter<VkMemoryBarrier>(params);
                     vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0,
                                          1, memoryBarriers, 0, nullptr, 0, nullptr);
+                    break;
+                }
+                case CommandID::MemoryBarrier2:
+                {
+                    const MemoryBarrier2Params *params =
+                        getParamPtr<MemoryBarrier2Params>(currentCommand);
+
+                    const VkMemoryBarrier2 *memoryBarriers2 =
+                        GetFirstArrayParameter<VkMemoryBarrier2>(params);
+                    VkDependencyInfo pDependencyInfo         = {};
+                    pDependencyInfo.sType                    = VK_STRUCTURE_TYPE_DEPENDENCY_INFO;
+                    pDependencyInfo.memoryBarrierCount       = 1;
+                    pDependencyInfo.pMemoryBarriers          = memoryBarriers2;
+                    pDependencyInfo.bufferMemoryBarrierCount = 0;
+                    pDependencyInfo.pBufferMemoryBarriers    = nullptr;
+                    pDependencyInfo.imageMemoryBarrierCount  = 0;
+                    pDependencyInfo.pImageMemoryBarriers     = nullptr;
+                    vkCmdPipelineBarrier2(cmdBuffer, &pDependencyInfo);
                     break;
                 }
                 case CommandID::NextSubpass:
@@ -811,6 +863,14 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                         getParamPtr<WriteTimestampParams>(currentCommand);
                     vkCmdWriteTimestamp(cmdBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
                                         params->queryPool, params->query);
+                    break;
+                }
+                case CommandID::WriteTimestamp2:
+                {
+                    const WriteTimestampParams *params =
+                        getParamPtr<WriteTimestampParams>(currentCommand);
+                    vkCmdWriteTimestamp2(cmdBuffer, VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT,
+                                         params->queryPool, params->query);
                     break;
                 }
                 default:

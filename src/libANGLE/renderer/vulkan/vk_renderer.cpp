@@ -3710,35 +3710,35 @@ angle::Result Renderer::createDeviceAndQueue(vk::Context *context, uint32_t queu
     mSupportedVulkanShaderStageMask =
         VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT;
     mSupportedBufferWritePipelineStageMask =
-        VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
-        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+        VK_PIPELINE_STAGE_2_TRANSFER_BIT | VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT |
+        VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT;
 
     if (!mPhysicalDeviceFeatures.tessellationShader)
     {
-        unsupportedStages |= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-                             VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+        unsupportedStages |= VK_PIPELINE_STAGE_2_TESSELLATION_CONTROL_SHADER_BIT |
+                             VK_PIPELINE_STAGE_2_TESSELLATION_EVALUATION_SHADER_BIT;
     }
     else
     {
         mSupportedVulkanShaderStageMask |=
             VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT | VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
         mSupportedBufferWritePipelineStageMask |=
-            VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-            VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+            VK_PIPELINE_STAGE_2_TESSELLATION_CONTROL_SHADER_BIT |
+            VK_PIPELINE_STAGE_2_TESSELLATION_EVALUATION_SHADER_BIT;
     }
     if (!mPhysicalDeviceFeatures.geometryShader)
     {
-        unsupportedStages |= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        unsupportedStages |= VK_PIPELINE_STAGE_2_GEOMETRY_SHADER_BIT;
     }
     else
     {
         mSupportedVulkanShaderStageMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
-        mSupportedBufferWritePipelineStageMask |= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        mSupportedBufferWritePipelineStageMask |= VK_PIPELINE_STAGE_2_GEOMETRY_SHADER_BIT;
     }
 
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        mSupportedBufferWritePipelineStageMask |= VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT;
+        mSupportedBufferWritePipelineStageMask |= VK_PIPELINE_STAGE_2_TRANSFORM_FEEDBACK_BIT_EXT;
     }
 
     // Initialize the barrierData tables by removing unsupported pipeline stage bits
@@ -3780,6 +3780,15 @@ void Renderer::calculatePendingGarbageSizeLimit()
     mPendingGarbageSizeLimit =
         static_cast<VkDeviceSize>(maxHeapSize * kGarbageSizeLimitCoefficient);
 }
+
+void Renderer::initializeVkAccessFlagsMap()
+{
+    mVkAccessFlagMap[VK_ACCESS_2_NONE]                      = VK_ACCESS_NONE;
+    mVkAccessFlagMap[VK_ACCESS_2_NONE_KHR]                  = VK_ACCESS_NONE_KHR;
+    mVkAccessFlagMap[VK_ACCESS_2_INDIRECT_COMMAND_READ_BIT] = VK_ACCESS_INDIRECT_COMMAND_READ_BIT;
+}
+
+void Renderer::initializeVkPipelineStageFlagsMap() {}
 
 void Renderer::initializeValidationMessageSuppressions()
 {
@@ -5925,7 +5934,7 @@ angle::Result Renderer::submitPriorityDependency(vk::Context *context,
     QueueSerial queueSerial(index, generateQueueSerial(index));
     semaphore.get().setQueueSerial(queueSerial);
     ANGLE_TRY(queueSubmitWaitSemaphore(context, dstContextPriority, semaphore.get().get(),
-                                       VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, queueSerial));
+                                       VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, queueSerial));
 
     return angle::Result::Continue;
 }

@@ -48,10 +48,10 @@ constexpr VkImageCreateFlags kVkImageCreateFlagsNone = 0;
 // min & mag filters are linear.
 constexpr VkFilter kDefaultYCbCrChromaFilter = VK_FILTER_LINEAR;
 
-constexpr VkPipelineStageFlags kSwapchainAcquireImageWaitStageFlags =
-    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |          // First use is a blit command.
-    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |  // First use is a draw command.
-    VK_PIPELINE_STAGE_TRANSFER_BIT;                  // First use is a clear without scissor.
+constexpr VkPipelineStageFlags2 kSwapchainAcquireImageWaitStageFlags =
+    VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT |          // First use is a blit command.
+    VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT |  // First use is a draw command.
+    VK_PIPELINE_STAGE_2_TRANSFER_BIT;                  // First use is a clear without scissor.
 
 // For each level, write  layers that don't conflict in parallel.  The layer is hashed to
 // `layer % kMaxParallelLayerWrites` and used to track whether that subresource is currently
@@ -765,13 +765,13 @@ struct ImageMemoryBarrierData
     // The stage in which the image is used (or Bottom/Top if not using any specific stage).  Unless
     // Bottom/Top (Bottom used for transition to and Top used for transition from), the two values
     // should match.
-    VkPipelineStageFlags dstStageMask;
-    VkPipelineStageFlags srcStageMask;
+    VkPipelineStageFlags2 dstStageMask;
+    VkPipelineStageFlags2 srcStageMask;
     // Access mask when transitioning into this layout.
-    VkAccessFlags dstAccessMask;
+    VkAccessFlags2 dstAccessMask;
     // Access mask when transitioning out from this layout.  Note that source access mask never
     // needs a READ bit, as WAR hazards don't need memory barriers (just execution barriers).
-    VkAccessFlags srcAccessMask;
+    VkAccessFlags2 srcAccessMask;
     // Read or write.
     ResourceAccess type;
     // *CommandBufferHelper track an array of PipelineBarriers. This indicates which array element
@@ -789,7 +789,7 @@ void InitializeImageLayoutAndMemoryBarrierDataMap(
     angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> *mapping,
     VkPipelineStageFlags supportedVulkanPipelineStageMask);
 bool EventAndPipelineBarrierHaveMatchingStageFlags(
-    const angle::PackedEnumMap<EventStage, VkPipelineStageFlags> &eventStageMap,
+    const angle::PackedEnumMap<EventStage, VkPipelineStageFlags2> &eventStageMap,
     const angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> &barrierDataMap);
 
 // This wraps data and API for vkCmdPipelineBarrier call
@@ -813,20 +813,38 @@ class PipelineBarrier : angle::NonCopyable
         {
             return;
         }
-
         // Issue vkCmdPipelineBarrier call
-        VkMemoryBarrier memoryBarrier = {};
+        VkMemoryBarrier2 memoryBarrier = {};
         uint32_t memoryBarrierCount   = 0;
         if (mMemoryBarrierDstAccess != 0)
         {
-            memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+            memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER_2;
+            memoryBarrier.srcStageMask  = mSrcStageMask;
             memoryBarrier.srcAccessMask = mMemoryBarrierSrcAccess;
+            memoryBarrier.dstStageMask  = mDstStageMask;
             memoryBarrier.dstAccessMask = mMemoryBarrierDstAccess;
             memoryBarrierCount++;
         }
-        primary->pipelineBarrier(
+
+        primary->pipelineBarrier2(
             mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
             static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
+
+        // TODO: Fallback to pipelineBarrier if VK_KHR_synchronization2 extension is not supported
+        //                // Issue vkCmdPipelineBarrier call
+        //        VkMemoryBarrier memoryBarrier = {};
+        //        uint32_t memoryBarrierCount   = 0;
+        //        if (mMemoryBarrierDstAccess != 0)
+        //        {
+        //            memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        //            memoryBarrier.srcAccessMask = mMemoryBarrierSrcAccess;
+        //            memoryBarrier.dstAccessMask = mMemoryBarrierDstAccess;
+        //            memoryBarrierCount++;
+        //        }
+        //        primary->pipelineBarrier(
+        //            mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier, 0,
+        //            nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
+        //            mImageMemoryBarriers.data());
 
         reset();
     }
@@ -843,10 +861,10 @@ class PipelineBarrier : angle::NonCopyable
         other->reset();
     }
 
-    void mergeMemoryBarrier(VkPipelineStageFlags srcStageMask,
-                            VkPipelineStageFlags dstStageMask,
-                            VkAccessFlags srcAccess,
-                            VkAccessFlags dstAccess)
+    void mergeMemoryBarrier(VkPipelineStageFlags2 srcStageMask,
+                            VkPipelineStageFlags2 dstStageMask,
+                            VkAccessFlags2 srcAccess,
+                            VkAccessFlags2 dstAccess)
     {
         mSrcStageMask |= srcStageMask;
         mDstStageMask |= dstStageMask;
@@ -854,9 +872,9 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierDstAccess |= dstAccess;
     }
 
-    void mergeImageBarrier(VkPipelineStageFlags srcStageMask,
-                           VkPipelineStageFlags dstStageMask,
-                           const VkImageMemoryBarrier &imageMemoryBarrier)
+    void mergeImageBarrier(VkPipelineStageFlags2 srcStageMask,
+                           VkPipelineStageFlags2 dstStageMask,
+                           const VkImageMemoryBarrier2 &imageMemoryBarrier)
     {
         ASSERT(imageMemoryBarrier.pNext == nullptr);
         mSrcStageMask |= srcStageMask;
@@ -876,32 +894,32 @@ class PipelineBarrier : angle::NonCopyable
     void addDiagnosticsString(std::ostringstream &out) const;
 
   private:
-    VkPipelineStageFlags mSrcStageMask;
-    VkPipelineStageFlags mDstStageMask;
-    VkAccessFlags mMemoryBarrierSrcAccess;
-    VkAccessFlags mMemoryBarrierDstAccess;
-    std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
+    VkPipelineStageFlags2 mSrcStageMask;
+    VkPipelineStageFlags2 mDstStageMask;
+    VkAccessFlags2 mMemoryBarrierSrcAccess;
+    VkAccessFlags2 mMemoryBarrierDstAccess;
+    std::vector<VkImageMemoryBarrier2> mImageMemoryBarriers;
 };
 
 class PipelineBarrierArray final
 {
   public:
     void mergeMemoryBarrier(PipelineStage stageIndex,
-                            VkPipelineStageFlags srcStageMask,
-                            VkPipelineStageFlags dstStageMask,
-                            VkAccessFlags srcAccess,
-                            VkAccessFlags dstAccess)
+                            VkPipelineStageFlags2 srcStageMask,
+                            VkPipelineStageFlags2 dstStageMask,
+                            VkAccessFlags2 srcAccess,
+                            VkAccessFlags2 dstAccess)
     {
         mBarriers[stageIndex].mergeMemoryBarrier(srcStageMask, dstStageMask, srcAccess, dstAccess);
         mBarrierMask.set(stageIndex);
     }
 
     void mergeImageBarrier(PipelineStage stageIndex,
-                           VkPipelineStageFlags srcStageMask,
-                           VkPipelineStageFlags dstStageMask,
-                           const VkImageMemoryBarrier &imageMemoryBarrier)
+                           VkPipelineStageFlags2 srcStageMask,
+                           VkPipelineStageFlags2 dstStageMask,
+                           const VkImageMemoryBarrier2 &imageMemoryBarrier2)
     {
-        mBarriers[stageIndex].mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
+        mBarriers[stageIndex].mergeImageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier2);
         mBarrierMask.set(stageIndex);
     }
 
@@ -1018,13 +1036,13 @@ class BufferHelper : public ReadWriteResource
     // Returns true if the image is owned by an external API or instance.
     bool isReleasedToExternal() const;
 
-    void recordReadBarrier(VkAccessFlags readAccessType,
-                           VkPipelineStageFlags readStage,
+    void recordReadBarrier(VkAccessFlags2 readAccessType,
+                           VkPipelineStageFlags2 readStage,
                            PipelineStage stageIndex,
                            PipelineBarrierArray *barriers);
 
     void recordWriteBarrier(VkAccessFlags writeAccessType,
-                            VkPipelineStageFlags writeStage,
+                            VkPipelineStageFlags2 writeStage,
                             PipelineStage stageIndex,
                             PipelineBarrierArray *barriers);
 
@@ -1057,7 +1075,7 @@ class BufferHelper : public ReadWriteResource
     void initializeBarrierTracker(Context *context);
 
     // Returns the current VkAccessFlags bits
-    VkAccessFlags getCurrentWriteAccess() const { return mCurrentWriteAccess; }
+    VkAccessFlags2 getCurrentWriteAccess() const { return mCurrentWriteAccess; }
 
   private:
     // Only called by DynamicBuffer.
@@ -1077,10 +1095,10 @@ class BufferHelper : public ReadWriteResource
 
     // For memory barriers.
     DeviceQueueIndex mCurrentDeviceQueueIndex;
-    VkFlags mCurrentWriteAccess;
-    VkFlags mCurrentReadAccess;
-    VkPipelineStageFlags mCurrentWriteStages;
-    VkPipelineStageFlags mCurrentReadStages;
+    VkFlags64 mCurrentWriteAccess;
+    VkFlags64 mCurrentReadAccess;
+    VkPipelineStageFlags2 mCurrentWriteStages;
+    VkPipelineStageFlags2 mCurrentReadStages;
 
     BufferSerial mSerial;
     // Manages the descriptorSet cache that created with this BufferHelper object.
@@ -1416,7 +1434,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     template <class DerivedT>
     void assertCanBeRecycledImpl();
 
-    void bufferReadImpl(VkAccessFlags readAccessType,
+    void bufferReadImpl(VkAccessFlags2 readAccessType,
                         PipelineStage readStage,
                         BufferHelper *buffer);
     void bufferReadImpl(VkAccessFlags readAccessType,
@@ -2939,7 +2957,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                       VkImageAspectFlags aspectMask,
                                       ImageLayout newLayout,
                                       uint32_t newQueueFamilyIndex,
-                                      VkImageMemoryBarrier *imageMemoryBarrier) const;
+                                      VkImageMemoryBarrier2 *imageMemoryBarrier2) const;
 
     // Generalized to accept both "primary" and "secondary" command buffers.
     template <typename CommandBufferT>
@@ -3179,7 +3197,7 @@ class ImageHelper final : public Resource, public angle::Subject
     DeviceQueueIndex mCurrentDeviceQueueIndex;
     // For optimizing transition between different shader readonly layouts
     ImageLayout mLastNonShaderReadOnlyLayout;
-    VkPipelineStageFlags mCurrentShaderReadStageMask;
+    VkPipelineStageFlags2 mCurrentShaderReadStageMask;
     // Track how it is being used by current open renderpass.
     RenderPassUsageFlags mRenderPassUsageFlags;
     // The QueueSerial that associated with the last barrier.
@@ -3718,24 +3736,24 @@ class CommandBufferAccess : angle::NonCopyable
 
     void onBufferTransferRead(BufferHelper *buffer)
     {
-        onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, PipelineStage::Transfer, buffer);
+        onBufferRead(VK_ACCESS_2_TRANSFER_READ_BIT, PipelineStage::Transfer, buffer);
     }
     void onBufferTransferWrite(BufferHelper *buffer)
     {
-        onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, PipelineStage::Transfer, buffer);
+        onBufferWrite(VK_ACCESS_2_TRANSFER_WRITE_BIT, PipelineStage::Transfer, buffer);
     }
     void onBufferSelfCopy(BufferHelper *buffer)
     {
-        onBufferWrite(VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT,
+        onBufferWrite(VK_ACCESS_2_TRANSFER_READ_BIT | VK_ACCESS_2_TRANSFER_WRITE_BIT,
                       PipelineStage::Transfer, buffer);
     }
     void onBufferComputeShaderRead(BufferHelper *buffer)
     {
-        onBufferRead(VK_ACCESS_SHADER_READ_BIT, PipelineStage::ComputeShader, buffer);
+        onBufferRead(VK_ACCESS_2_SHADER_READ_BIT, PipelineStage::ComputeShader, buffer);
     }
     void onBufferComputeShaderWrite(BufferHelper *buffer)
     {
-        onBufferWrite(VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT,
+        onBufferWrite(VK_ACCESS_2_SHADER_WRITE_BIT | VK_ACCESS_2_SHADER_READ_BIT,
                       PipelineStage::ComputeShader, buffer);
     }
 
