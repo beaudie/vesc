@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d59107b2_18b556b2",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-08-06T14:52:24Z",
+      "side": 1,
+      "message": "Maybe the roller could set an env var instead? (that was one of the options Eric suggested)\n\nThen there would be no need to modify roll_aosp.sh, and just handle the env var in commit_id.py (exported env vars are automatically propagated to subprocesses by default). I think this would reduce the overall integration complexity by avoiding handling of additional command-line args both in this script and in python - just need to add comments for clarity",
+      "range": {
+        "startLine": 129,
+        "startChar": 5,
+        "endLine": 129,
+        "endChar": 32
+      },
+      "revId": "2849e0453598669104e8308ba54bcbf5ccc373c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
