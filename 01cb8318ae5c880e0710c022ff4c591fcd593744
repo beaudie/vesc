@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37002d3a_d7042713",
+        "filename": "src/commit_id.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-07T23:17:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13525801_740b5ecc",
+      "range": {
+        "startLine": 117,
+        "startChar": 2,
+        "endLine": 117,
+        "endChar": 11
+      },
+      "revId": "01cb8318ae5c880e0710c022ff4c591fcd593744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d2c1924_f5c6c1c0",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-08-07T04:45:58Z",
       "side": 1,
       "message": "How about moving most of this info to roll_aosp.sh right where this script is invoked, and just mention roll_aosp.sh here? This way it would be more visible I think",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 28
+      },
+      "revId": "01cb8318ae5c880e0710c022ff4c591fcd593744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "971e260f_1c0dbc51",
+        "filename": "src/commit_id.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-07T23:17:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d2c1924_f5c6c1c0",
       "range": {
         "startLine": 118,
         "startChar": 0,
@@ -84,6 +132,30 @@
       "side": 1,
       "message": "I was going to say, the default value for `.get()` is None, so this could just be:\n\n```\ncommit_id \u003d os.environ.get(\u0027ANGLE_UPSTREAM_HASH\u0027)\n\nif git_dir_exists and commit_id is not None:\n```",
       "parentUuid": "7208d60e_1e886125",
+      "range": {
+        "startLine": 124,
+        "startChar": 32,
+        "endLine": 124,
+        "endChar": 49
+      },
+      "revId": "01cb8318ae5c880e0710c022ff4c591fcd593744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7a1d0f4_2920cffe",
+        "filename": "src/commit_id.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-07T23:17:00Z",
+      "side": 1,
+      "message": "Thank you both.\n\nI have removed the default `unknown hash` value when calling `os.environ.get`, and use the `unknown hash` as a fallback value at the time when we output the `ANGLE_COMMIT_HASH` value.",
+      "parentUuid": "d3177b38_ad2a4cdf",
       "range": {
         "startLine": 124,
         "startChar": 32,
