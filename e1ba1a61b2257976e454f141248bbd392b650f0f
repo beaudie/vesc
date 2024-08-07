@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afdc99dd_f6a98b8b",
+        "filename": "src/commit_id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-08-07T23:59:18Z",
+      "side": 1,
+      "message": "This won\u0027t work as intended without parentheses:\n```\n\u003e\u003e\u003e (\u0027abc %s\u0027 % None or \u0027unknown\u0027)\n\u0027abc None\u0027\n\u003e\u003e\u003e (\u0027abc %s\u0027 % (None or \u0027unknown\u0027))\n\u0027abc unknown\u0027\n```",
+      "range": {
+        "startLine": 131,
+        "startChar": 49,
+        "endLine": 131,
+        "endChar": 76
+      },
+      "revId": "e1ba1a61b2257976e454f141248bbd392b650f0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
