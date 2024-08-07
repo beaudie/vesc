@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "04d12208_78d101f1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-07T12:47:16Z",
+      "side": 1,
+      "message": "I have added two additional functions: `StorePipelineCacheVkChunks()` and `ErasePipelineCacheVkChunks()`.\nNow code in `CompressAndStorePipelineCacheVk()` should be more straightforward.",
+      "parentUuid": "55035c76_976d895a",
+      "range": {
+        "startLine": 1087,
+        "startChar": 6,
+        "endLine": 1088,
+        "endChar": 46
+      },
+      "revId": "4c62d95f5a7a117a08828ed29cbeda48ba7f1391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "436d6044_cb2d355f",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 2
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Do not like this either, just wanted to preserve original type (`size_t`) for consistency. Otherwise this place will use `int` and other still use `size_t`.\n\nAlternatively I can replace with while:\n```\nsize_t chunkIndex \u003d numChunks;\nwhile (chunkIndex \u003e 0){\n    --chunkIndex;\n\n    const size_t compressedOffset \u003d chunkIndex * chunkSize;\n```",
       "parentUuid": "436d6044_cb2d355f",
+      "range": {
+        "startLine": 1101,
+        "startChar": 0,
+        "endLine": 1101,
+        "endChar": 62
+      },
+      "revId": "4c62d95f5a7a117a08828ed29cbeda48ba7f1391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29be719a_ca5ab65e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-07T12:47:16Z",
+      "side": 1,
+      "message": "I replaced the `for` loop with `while` (as shown above) to preserve `size_t` type. Updated loop is in the new  `StorePipelineCacheVkChunks()` function.",
+      "parentUuid": "7089c3cc_12a1511b",
       "range": {
         "startLine": 1101,
         "startChar": 0,
