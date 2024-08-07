@@ -87,9 +87,18 @@ class Debug : angle::NonCopyable
     size_t getGroupStackDepth() const;
 
     // Helper for ANGLE_PERF_WARNING
-    void insertPerfWarning(GLenum severity, bool isLastRepeat, const char *message) const;
+    static void InsertPerfWarning(const Debug *debug,
+                                  GLenum severity,
+                                  bool isLastRepeat,
+                                  const char *message);
 
   private:
+    static void LogMessage(GLenum type,
+                           GLenum severity,
+                           const std::string &message,
+                           gl::LogSeverity logSeverity,
+                           angle::EntryPoint entryPoint);
+
     bool isMessageEnabled(GLenum source, GLenum type, GLuint id, GLenum severity) const;
 
     void pushDefaultGroup();
@@ -196,17 +205,22 @@ ANGLE_INLINE bool PerfCounterBelowMaxRepeat(std::atomic<uint32_t> *counter, bool
 }  // namespace
 
 // Generate a perf warning.  Only outputs the same message a few times to avoid spamming the logs.
-#define ANGLE_PERF_WARNING(debug, severity, ...)                              \
-    do                                                                        \
-    {                                                                         \
-        static std::atomic<uint32_t> sRepeatCount = 0;                        \
-        bool isLastRepeat                         = false;                    \
-        if (PerfCounterBelowMaxRepeat(&sRepeatCount, &isLastRepeat))          \
-        {                                                                     \
-            char ANGLE_MESSAGE[200];                                          \
-            snprintf(ANGLE_MESSAGE, sizeof(ANGLE_MESSAGE), __VA_ARGS__);      \
-            (debug).insertPerfWarning(severity, isLastRepeat, ANGLE_MESSAGE); \
-        }                                                                     \
+#define ANGLE_PERF_WARNING(debug, severity, ...) \
+    ANGLE_PERF_WARNING_OR_LOG(&(debug), severity, __VA_ARGS__)
+
+// Generate a perf warning.  Only outputs the same message a few times to avoid spamming the logs.
+// "debug" parameter may be null, in which case only log output is performed.
+#define ANGLE_PERF_WARNING_OR_LOG(debug, severity, ...)                                 \
+    do                                                                                  \
+    {                                                                                   \
+        static std::atomic<uint32_t> sRepeatCount = 0;                                  \
+        bool isLastRepeat                         = false;                              \
+        if (PerfCounterBelowMaxRepeat(&sRepeatCount, &isLastRepeat))                    \
+        {                                                                               \
+            char ANGLE_MESSAGE[200];                                                    \
+            snprintf(ANGLE_MESSAGE, sizeof(ANGLE_MESSAGE), __VA_ARGS__);                \
+            gl::Debug::InsertPerfWarning(debug, severity, isLastRepeat, ANGLE_MESSAGE); \
+        }                                                                               \
     } while (0)
 
 #endif  // LIBANGLE_DEBUG_H_
