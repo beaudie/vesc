@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc6e98f4_130d0b68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-07T21:10:05Z",
+      "side": 1,
+      "message": "Good question - looking at CL spec, I don\u0027t happen to see any explicit mention of this. For these CL objects, they contain the ICD Loader\u0027s dispatch table\nhttps://github.com/KhronosGroup/OpenCL-ICD-Loader/blob/main/loader/icd_dispatch.h#L104\n\nThe event object being opaque ptr to user here, the driver setting this to nullptr initially is more of preventing-possible-segfault insurance in the case when user or driver does not init the ptr to nullptr, loader could deref junk data for API entrypoints in dispatch table (ran into this during CL-ANGLE bringup).\n\nWe also do the same in our current conformant native driver today, so I would presume this to be legal by that metric.",
+      "parentUuid": "676073f8_76a09615",
+      "revId": "0c0427b75e2f3d43fc8eb498716bedf3544798d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73cbbbef_5cf50c78",
         "filename": "src/libANGLE/cl_utils.h",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2024-08-07T15:38:38Z",
       "side": 1,
       "message": "For readability, I would prefer this is a simple targeted function function. Something like InitializeOutputEvent(cl_event *event). Returning a wrapper class that sometimes drops assignments (but not move or copy) is risky if it gets used elsewhere later.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 0
+      },
+      "revId": "0c0427b75e2f3d43fc8eb498716bedf3544798d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a489603d_3ca98d0c",
+        "filename": "src/libANGLE/cl_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-07T21:10:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "73cbbbef_5cf50c78",
       "range": {
         "startLine": 56,
         "startChar": 0,
