@@ -34,6 +34,24 @@
       "parentUuid": "97aee2c8_6d5a02d8",
       "revId": "dd3974aba44ae914d4595059b5a204878a403f56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df7926e6_434ad8d5",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-08-07T08:33:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6d7ebba7_1994b25e",
+      "revId": "dd3974aba44ae914d4595059b5a204878a403f56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
