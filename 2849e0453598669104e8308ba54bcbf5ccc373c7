@@ -22,6 +22,30 @@
       },
       "revId": "2849e0453598669104e8308ba54bcbf5ccc373c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "801baa71_7da57196",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-07T00:46:08Z",
+      "side": 1,
+      "message": "Thanks Roman.\n\nCan you please check if patchset 6 implements the `env var` idea?\n\nI assume that in the skia roller config file `angle-android-master.cfg`, we will be able to call `export ANGLE_UPSTREAM_HASH ${rolling_to}`, before calling `./scripts/roll_aosp.sh`?",
+      "parentUuid": "d59107b2_18b556b2",
+      "range": {
+        "startLine": 129,
+        "startChar": 5,
+        "endLine": 129,
+        "endChar": 32
+      },
+      "revId": "2849e0453598669104e8308ba54bcbf5ccc373c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
