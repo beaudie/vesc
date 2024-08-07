@@ -39,6 +39,30 @@
       },
       "revId": "ab9f6cb3dbcf17e4e788034c21eb24363f65dd7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99108e71_79e6be1b",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-07T23:44:22Z",
+      "side": 1,
+      "message": "nice catch",
+      "parentUuid": "f02c412c_9ee658e7",
+      "range": {
+        "startLine": 105,
+        "startChar": 25,
+        "endLine": 105,
+        "endChar": 38
+      },
+      "revId": "ab9f6cb3dbcf17e4e788034c21eb24363f65dd7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
