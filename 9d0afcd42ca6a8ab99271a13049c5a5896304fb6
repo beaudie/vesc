@@ -16,6 +16,29 @@
       "message": "Please prefix with `WebGPU: `",
       "revId": "9d0afcd42ca6a8ab99271a13049c5a5896304fb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9baed693_1e04e137",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-08-07T07:52:21Z",
+      "side": 1,
+      "message": "`setStencilReadMask` seems flipped with `setStencilWriteMask`",
+      "range": {
+        "startLine": 195,
+        "startChar": 25,
+        "endLine": 195,
+        "endChar": 43
+      },
+      "revId": "9d0afcd42ca6a8ab99271a13049c5a5896304fb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
