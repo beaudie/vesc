@@ -68,6 +68,30 @@
       },
       "revId": "01cb8318ae5c880e0710c022ff4c591fcd593744",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3177b38_ad2a4cdf",
+        "filename": "src/commit_id.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1118354
+      },
+      "writtenOn": "2024-08-07T12:28:01Z",
+      "side": 1,
+      "message": "I was going to say, the default value for `.get()` is None, so this could just be:\n\n```\ncommit_id \u003d os.environ.get(\u0027ANGLE_UPSTREAM_HASH\u0027)\n\nif git_dir_exists and commit_id is not None:\n```",
+      "parentUuid": "7208d60e_1e886125",
+      "range": {
+        "startLine": 124,
+        "startChar": 32,
+        "endLine": 124,
+        "endChar": 49
+      },
+      "revId": "01cb8318ae5c880e0710c022ff4c591fcd593744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
