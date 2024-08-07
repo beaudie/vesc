@@ -16,6 +16,24 @@
       "message": "Need to move these back out of the `if`, because this is chained to `instanceInfo` which is used after this variable goes out of scope.",
       "revId": "58b1b35e2cad89c9c807c684371afb012a64e529",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "874c3421_3abd0e1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1960,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-08-07T18:29:55Z",
+      "side": 1,
+      "message": "oh c++, the land of UB freedom 😎\n\nThanks Shabi :)",
+      "parentUuid": "6bab7a3b_59319b51",
+      "revId": "58b1b35e2cad89c9c807c684371afb012a64e529",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
