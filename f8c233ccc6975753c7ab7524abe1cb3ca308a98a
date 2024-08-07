@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4027b819_2972eb17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-07T17:57:11Z",
+      "side": 1,
+      "message": "Fixes this **linux-test** crashes: https://chromium-review.googlesource.com/c/angle/angle/+/5756576?checksPatchset\u003d4\u0026attempt\u003dall\u0026checksRunsSelected\u003dlinux-test\u0026tab\u003dchecks\n\n```\nkillpg at ??:?\nisMessageEnabled at Debug.cpp:371\ngl::Debug::insertPerfWarning(unsigned int, bool, char const*) const at Debug.cpp:365\nrx::vk::(anonymous namespace)::CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties const\u0026, rx::vk::GlobalOps*, rx::ContextVk*, std::__Cr::vector\u003cunsigned char, std::__Cr::allocator\u003cunsigned char\u003e \u003e const\u0026, unsigned long) at vk_renderer.cpp:?\n```",
+      "revId": "f8c233ccc6975753c7ab7524abe1cb3ca308a98a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
