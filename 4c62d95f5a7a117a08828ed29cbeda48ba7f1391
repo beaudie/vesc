@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "55035c76_976d895a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-07T09:58:49Z",
+      "side": 1,
+      "message": "I agree, that it is bit confusing...\n\n\u003e Would it possible to break into two steps instead of one while loop?\n\nIn that case the second loop will contain all the logic of the first loop (storing the chunk) + this code:\n```\nif (prevStoredChunkCount \u003e 0)\n{\n    angle::BlobCacheValue value;\n    if (globalOps-\u003egetBlob(chunkCacheHash, \u0026value) \u0026\u0026 value.size() \u003d\u003d keyData.size())\n    {\n        continue;\n    }\n}\n```\n\nTo splint into two steps need to refactor the inner loop into separate function first, to avoid a lot of copy-pasting.\n\nPhrase \"store all chunks unconditionally\" refers to `if (prevStoredChunkCount \u003e 0)` condition, which means that the loop runs **not** for the first time.\n\nSo in the first run of the loop we skip checking if chunks are present.\nIn the subsequent runs we check if chunks are present before storing (restoring) them.\nIf after the run all chunks are present - external loop exits.\nIf number of restored chunks is bigger or same as in the previous run (not decreasing) - loop also exits, but this time cache is not saved (I will probably need to add a performance warning in this case). This logic exist to avoid infinite loop, in case if blob cache is full or for some reason unable to store all chunks.\nNormal case should be 2 runs: 1st - stores, 2nd - verifies.\n\nLet me try to refactor this code and make it more clear.",
+      "parentUuid": "05d8e6a0_7ba06fdf",
+      "range": {
+        "startLine": 1087,
+        "startChar": 6,
+        "endLine": 1088,
+        "endChar": 46
+      },
+      "revId": "4c62d95f5a7a117a08828ed29cbeda48ba7f1391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "436d6044_cb2d355f",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2024-08-06T22:03:19Z",
       "side": 1,
       "message": "It will read better to code in a more normal way:\n```\n        for (int chunkIndex \u003d numChunks-1; chunkIndex\u003e\u003d0; chunkIndex--)\n```",
+      "range": {
+        "startLine": 1101,
+        "startChar": 0,
+        "endLine": 1101,
+        "endChar": 62
+      },
+      "revId": "4c62d95f5a7a117a08828ed29cbeda48ba7f1391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7089c3cc_12a1511b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-07T09:58:49Z",
+      "side": 1,
+      "message": "Do not like this either, just wanted to preserve original type (`size_t`) for consistency. Otherwise this place will use `int` and other still use `size_t`.\n\nAlternatively I can replace with while:\n```\nsize_t chunkIndex \u003d numChunks;\nwhile (chunkIndex \u003e 0){\n    --chunkIndex;\n\n    const size_t compressedOffset \u003d chunkIndex * chunkSize;\n```",
+      "parentUuid": "436d6044_cb2d355f",
       "range": {
         "startLine": 1101,
         "startChar": 0,
