@@ -156,6 +156,41 @@ void Debug::insertMessage(GLenum source,
     insertMessage(source, type, id, severity, std::move(messageCopy), logSeverity, entryPoint);
 }
 
+void Debug::LogMessage(GLenum type,
+                       GLenum severity,
+                       const std::string &message,
+                       gl::LogSeverity logSeverity,
+                       angle::EntryPoint entryPoint)
+{
+    // output all messages to the debug log
+    const char *messageTypeString = GLMessageTypeToString(type);
+    const char *severityString    = GLSeverityToString(severity);
+    std::ostringstream messageStream;
+    if (entryPoint != angle::EntryPoint::Invalid)
+    {
+        messageStream << GetEntryPointName(entryPoint) << ": ";
+    }
+    messageStream << "GL " << messageTypeString << ": " << severityString << ": " << message;
+    switch (logSeverity)
+    {
+        case gl::LOG_FATAL:
+            FATAL() << messageStream.str();
+            break;
+        case gl::LOG_ERR:
+            ERR() << messageStream.str();
+            break;
+        case gl::LOG_WARN:
+            WARN() << messageStream.str();
+            break;
+        case gl::LOG_INFO:
+            INFO() << messageStream.str();
+            break;
+        case gl::LOG_EVENT:
+            ANGLE_LOG(EVENT) << messageStream.str();
+            break;
+    }
+}
+
 void Debug::insertMessage(GLenum source,
                           GLenum type,
                           GLuint id,
@@ -164,35 +199,7 @@ void Debug::insertMessage(GLenum source,
                           gl::LogSeverity logSeverity,
                           angle::EntryPoint entryPoint) const
 {
-    {
-        // output all messages to the debug log
-        const char *messageTypeString = GLMessageTypeToString(type);
-        const char *severityString    = GLSeverityToString(severity);
-        std::ostringstream messageStream;
-        if (entryPoint != angle::EntryPoint::Invalid)
-        {
-            messageStream << GetEntryPointName(entryPoint) << ": ";
-        }
-        messageStream << "GL " << messageTypeString << ": " << severityString << ": " << message;
-        switch (logSeverity)
-        {
-            case gl::LOG_FATAL:
-                FATAL() << messageStream.str();
-                break;
-            case gl::LOG_ERR:
-                ERR() << messageStream.str();
-                break;
-            case gl::LOG_WARN:
-                WARN() << messageStream.str();
-                break;
-            case gl::LOG_INFO:
-                INFO() << messageStream.str();
-                break;
-            case gl::LOG_EVENT:
-                ANGLE_LOG(EVENT) << messageStream.str();
-                break;
-        }
-    }
+    LogMessage(type, severity, message, logSeverity, entryPoint);
 
     if (!isMessageEnabled(source, type, id, severity))
     {
@@ -353,7 +360,10 @@ size_t Debug::getGroupStackDepth() const
     return mGroups.size();
 }
 
-void Debug::insertPerfWarning(GLenum severity, bool isLastRepeat, const char *message) const
+void Debug::InsertPerfWarning(const Debug *debug,
+                              GLenum severity,
+                              bool isLastRepeat,
+                              const char *message)
 {
     std::string msg = message;
     if (isLastRepeat)
@@ -361,9 +371,16 @@ void Debug::insertPerfWarning(GLenum severity, bool isLastRepeat, const char *me
         msg += " (this message will no longer repeat)";
     }
 
+    if (debug == nullptr)
+    {
+        LogMessage(GL_DEBUG_TYPE_PERFORMANCE, severity, message, gl::LOG_INFO,
+                   angle::EntryPoint::Invalid);
+        return;
+    }
+
     // Note: insertMessage will acquire GetDebugMutex(), so it must be released before this call.
-    insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_PERFORMANCE, 0, severity, std::move(msg),
-                  gl::LOG_INFO, angle::EntryPoint::Invalid);
+    debug->insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_PERFORMANCE, 0, severity,
+                         std::move(msg), gl::LOG_INFO, angle::EntryPoint::Invalid);
 }
 
 bool Debug::isMessageEnabled(GLenum source, GLenum type, GLuint id, GLenum severity) const
