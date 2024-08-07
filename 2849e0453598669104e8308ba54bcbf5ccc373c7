@@ -46,6 +46,30 @@
       },
       "revId": "2849e0453598669104e8308ba54bcbf5ccc373c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18506c42_89de9e39",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-08-07T04:33:26Z",
+      "side": 1,
+      "message": "Yeah I think something like this should work!\n\nAsked about this option and var naming here: https://skia-review.googlesource.com/c/skia-autoroll-internal-config/+/886636/comment/0aee6502_90e4bcbc/",
+      "parentUuid": "801baa71_7da57196",
+      "range": {
+        "startLine": 129,
+        "startChar": 5,
+        "endLine": 129,
+        "endChar": 32
+      },
+      "revId": "2849e0453598669104e8308ba54bcbf5ccc373c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
