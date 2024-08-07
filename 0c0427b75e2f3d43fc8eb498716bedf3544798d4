@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "676073f8_76a09615",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-07T15:38:38Z",
+      "side": 1,
+      "message": "I\u0027m not sure about what the OpenCL spec says on this but OpenGL says that if an error occurs, output parameters are unchanged.",
+      "revId": "0c0427b75e2f3d43fc8eb498716bedf3544798d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73cbbbef_5cf50c78",
+        "filename": "src/libANGLE/cl_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-07T15:38:38Z",
+      "side": 1,
+      "message": "For readability, I would prefer this is a simple targeted function function. Something like InitializeOutputEvent(cl_event *event). Returning a wrapper class that sometimes drops assignments (but not move or copy) is risky if it gets used elsewhere later.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 0
+      },
+      "revId": "0c0427b75e2f3d43fc8eb498716bedf3544798d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
