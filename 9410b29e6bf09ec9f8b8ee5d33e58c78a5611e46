@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fb9a166_bc5455d7",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-07T14:27:34Z",
+      "side": 1,
+      "message": "nit: please mention this in the commit message.",
+      "range": {
+        "startLine": 824,
+        "startChar": 0,
+        "endLine": 824,
+        "endChar": 57
+      },
+      "revId": "9410b29e6bf09ec9f8b8ee5d33e58c78a5611e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
