@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fd13bab_1ab5fff2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-08T20:19:53Z",
+      "side": 1,
+      "message": "There is already a test that could expose this bug `MultisampledRenderToTextureES3Test.DrawCopyRedefineClearCopyThenDraw`. It uses an RGB texture and MSRTT. However the issue can only be observed on Arm Mac. Because on Intel/AMD GPUs, `DontCare` action still loads the old texture content which has alpha\u003d1, hence there would be no garbage values.",
+      "parentUuid": "70de633d_6d870dfc",
+      "revId": "fb2cfadde62c3764ca08a21927f078e36cdecb5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99ae750b_9ba3c937",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-08T20:10:24Z",
       "side": 1,
       "message": "Only asking - is this the correct condition in all cases? Thinking about strange cases like an RG texture attachment and the write mask is (red\u003dtrue, green\u003dtrue, blue\u003dfalse, alpha\u003dfalse). The \"false\" bits would be a no-op with respect to the texture\u0027s format. Is this OK?",
+      "revId": "fb2cfadde62c3764ca08a21927f078e36cdecb5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83f8422c_916f6a92",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-08T20:19:53Z",
+      "side": 1,
+      "message": "Currently, write mask !\u003d MTLColorWriteMaskAll is only used for emulated formats. RG textures are not emulated, hence it will have default write mask\u003dall.\n\nOn the other hand, I think the even if the condition might catch some cases that don\u0027t need clearing as you said, it is still a correct operation because clearing to zeros still satisfy `DontCare` intention (i.e. the application doesn\u0027t care what is the initial values).",
+      "parentUuid": "99ae750b_9ba3c937",
       "revId": "fb2cfadde62c3764ca08a21927f078e36cdecb5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
