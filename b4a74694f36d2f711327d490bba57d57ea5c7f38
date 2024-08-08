@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad16b208_e89ffe09",
+        "filename": "src/libANGLE/renderer/metal/gen_mtl_format_table.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-08T15:14:26Z",
+      "side": 1,
+      "message": "So the enums are not even visible on these compilation targets?",
+      "revId": "b4a74694f36d2f711327d490bba57d57ea5c7f38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
