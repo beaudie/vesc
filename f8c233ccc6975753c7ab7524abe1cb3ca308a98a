@@ -33,6 +33,24 @@
       "message": "The log functionality here is not critical, so my suggestion is to just remove the dependency to contextVk altogether instead.\n\nFor the failed compression and OOM cases, my suggestion is to just WARN(). They are never supposed to actually happen.\n\nFor the too-large error, I suggest doing something like this:\n\n```\nstatic bool warned \u003d false;\nif (!warned)\n{\n    WARN() \u003c\u003c \"... (this message will not repeat)\";\n    warned \u003d true;\n}\n```\n\nThen you can remove `contextVk` from all this and undo the changes to `Debug.*`",
       "revId": "f8c233ccc6975753c7ab7524abe1cb3ca308a98a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed82c1b6_07710306",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-08T08:49:51Z",
+      "side": 1,
+      "message": "I was thinking that performance warning was somewhat important, so tried to preserver original functionality as much as possible, without affecting the performance. Wanted to do a right thing)\n\nDone.",
+      "parentUuid": "62c17bb1_8434f69d",
+      "revId": "f8c233ccc6975753c7ab7524abe1cb3ca308a98a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
