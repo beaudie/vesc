@@ -16,6 +16,24 @@
       "message": "This condition should include tvOS and visionOS.",
       "revId": "e91f423d04ad5be1be4c5ffe46b5fe4b6cca2c8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "475efc41_9f185d42",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-08T10:28:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f2c7c904_fabd2cf2",
+      "revId": "e91f423d04ad5be1be4c5ffe46b5fe4b6cca2c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
