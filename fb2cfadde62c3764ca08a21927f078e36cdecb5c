@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70de633d_6d870dfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-08T20:10:24Z",
+      "side": 1,
+      "message": "lgtm\n\nPossible to write a test for this?",
+      "revId": "fb2cfadde62c3764ca08a21927f078e36cdecb5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99ae750b_9ba3c937",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-08T20:10:24Z",
+      "side": 1,
+      "message": "Only asking - is this the correct condition in all cases? Thinking about strange cases like an RG texture attachment and the write mask is (red\u003dtrue, green\u003dtrue, blue\u003dfalse, alpha\u003dfalse). The \"false\" bits would be a no-op with respect to the texture\u0027s format. Is this OK?",
+      "revId": "fb2cfadde62c3764ca08a21927f078e36cdecb5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
