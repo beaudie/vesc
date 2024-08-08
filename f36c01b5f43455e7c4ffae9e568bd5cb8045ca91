@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7504456f_7d0af702",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-08T22:35:50Z",
+      "side": 1,
+      "message": "One thing I don\u0027t quite excited is that from what I read here, a successful write actually involves write and read(verify), correct? It would be nice that write only involves write. You only check the last dword to ensure a write is successful. But I am not sure if that is robust enough though.",
+      "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
