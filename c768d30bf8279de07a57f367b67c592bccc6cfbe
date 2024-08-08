@@ -16,6 +16,24 @@
       "message": "Apple7 symbol below requires iOS 14.0 but the macro above passes with iOS 13.0. Should this line be more strict?",
       "revId": "c768d30bf8279de07a57f367b67c592bccc6cfbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c7025e8_674c5f3f",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-08T12:41:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "acc71e09_bf65b19c",
+      "revId": "c768d30bf8279de07a57f367b67c592bccc6cfbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
