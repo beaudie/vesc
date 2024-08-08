@@ -51,6 +51,24 @@
       "parentUuid": "62c17bb1_8434f69d",
       "revId": "f8c233ccc6975753c7ab7524abe1cb3ca308a98a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3200389c_52a45684",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-08T14:26:21Z",
+      "side": 1,
+      "message": "Thank you. The perf warnings are ANGLE\u0027s attempt at being helpful to devs. They\u0027d be nice to preserve, but are sacrifice-able if they affect performance. In this case, the message is still there, just less visible.",
+      "parentUuid": "ed82c1b6_07710306",
+      "revId": "f8c233ccc6975753c7ab7524abe1cb3ca308a98a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
