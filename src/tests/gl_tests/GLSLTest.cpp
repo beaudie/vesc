@@ -19995,6 +19995,33 @@ void main()
     verifyAttachment2DColor(3, textures[3], GL_TEXTURE_2D, 0, GLColor::white);
 }
 
+// Test for Metal GLSL, ensure that if statements aren't expanded poorly.
+TEST_P(GLSLTest, IfStatementExpansionPrevention)
+{
+    const char kFragmentShader[] = R"(precision mediump float;
+float select(int x)
+{
+    if (x == 0 ) {return 0.0;}
+    if (x == 1 ) {return 1.0;}
+    if (x == 2 ) {return 0.0;}
+    if (x == 3 ) {return 1.0;}
+    return 0.0;
+}
+
+void main()
+{
+     gl_FragColor = vec4(select(0),select(1),select(2),select(3));
+}
+
+)";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFragmentShader);
+    glUseProgram(program);
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
