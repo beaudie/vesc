@@ -256,7 +256,8 @@ class Separator : public TIntermRebuild
             pushStmt(newExpr);
             return;
         }
-        if (IsIndex(newExpr))
+
+        if (IsIndex(newExpr) || !newExpr.hasSideEffects())
         {
             mExprMap[&oldExpr] = &newExpr;
             return;
