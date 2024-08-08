@@ -256,14 +256,9 @@ class Separator : public TIntermRebuild
             return;
         }
 
-        if (IsIndex(newExpr))
+        if (IsIndex(newExpr) || !newExpr.hasSideEffects())
         {
             mExprMap[&oldExpr] = &newExpr;
-            return;
-        }
-        if (!oldExpr.hasSideEffects())
-        {
-            pushStmt(oldExpr);
             return;
         }
         auto &bindingMap = getCurrBindingMap();
