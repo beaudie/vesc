@@ -16,6 +16,24 @@
       "message": "So the enums are not even visible on these compilation targets?",
       "revId": "b4a74694f36d2f711327d490bba57d57ea5c7f38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecbc5dec_a1f7d02d",
+        "filename": "src/libANGLE/renderer/metal/gen_mtl_format_table.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-08T15:21:11Z",
+      "side": 1,
+      "message": "iOS SDK before 16.4:\n```\nMTLPixelFormatBC1_RGBA API_AVAILABLE(macos(10.11), macCatalyst(13.0)) API_UNAVAILABLE(ios) \u003d 130\n```\niOS SDK starting with 16.4:\n```\nMTLPixelFormatBC1_RGBA API_AVAILABLE(macos(10.11), macCatalyst(13.0), ios(16.4)) \u003d 130\n```",
+      "parentUuid": "ad16b208_e89ffe09",
+      "revId": "b4a74694f36d2f711327d490bba57d57ea5c7f38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
