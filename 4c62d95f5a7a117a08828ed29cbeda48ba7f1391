@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b5d8521_1e0dc9eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-08T08:41:13Z",
+      "side": 1,
+      "message": "Assume resolved status, because of \"+1\".",
+      "parentUuid": "04d12208_78d101f1",
+      "range": {
+        "startLine": 1087,
+        "startChar": 6,
+        "endLine": 1088,
+        "endChar": 46
+      },
+      "revId": "4c62d95f5a7a117a08828ed29cbeda48ba7f1391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "436d6044_cb2d355f",
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "I replaced the `for` loop with `while` (as shown above) to preserve `size_t` type. Updated loop is in the new  `StorePipelineCacheVkChunks()` function.",
       "parentUuid": "7089c3cc_12a1511b",
+      "range": {
+        "startLine": 1101,
+        "startChar": 0,
+        "endLine": 1101,
+        "endChar": 62
+      },
+      "revId": "4c62d95f5a7a117a08828ed29cbeda48ba7f1391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcc35793_11aaf88f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-08T08:41:13Z",
+      "side": 1,
+      "message": "Assume resolved status, because of \"+1\".",
+      "parentUuid": "29be719a_ca5ab65e",
       "range": {
         "startLine": 1101,
         "startChar": 0,
