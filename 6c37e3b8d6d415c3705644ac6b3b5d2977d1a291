@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aad789bc_68188c15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-09T14:59:26Z",
+      "side": 1,
+      "message": "During some debugging I needed CRC32 hash function. I searched in the ANGLE code and found that there is already `GenerateCrc()` function that uses `crc32_z()`, but I was not sure if it calculates correct hash. Long story short, I decided to upload this change.",
+      "revId": "6c37e3b8d6d415c3705644ac6b3b5d2977d1a291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
