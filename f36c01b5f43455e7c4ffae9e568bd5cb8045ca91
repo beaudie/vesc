@@ -52,6 +52,24 @@
       "parentUuid": "a817d4d1_cc1f3f47",
       "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e51cedba_ff149922",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-09T17:47:28Z",
+      "side": 1,
+      "message": "\u003e This is possible if implement LRU eviction in the blob cache and set angle_egl_blob_cache_evicts_old_items_first \u003d true.\n\nShouldn\u0027t we do that instead of fix ANGLE?",
+      "parentUuid": "c1a8c2d5_ae5caa81",
+      "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
