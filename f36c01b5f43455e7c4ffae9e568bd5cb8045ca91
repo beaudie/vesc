@@ -34,6 +34,24 @@
       "parentUuid": "7504456f_7d0af702",
       "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1a8c2d5_ae5caa81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-09T11:56:48Z",
+      "side": 1,
+      "message": "Below are promissed tests with **8MB** chunks:\n\n\nPerformance overhead on Android S921B, that uses MultifileBlobCache.\n\n\n**Cache size limited to 64MB:**\n```\n    Uncompressed cache size:   64 557 308 bytes\n    Compressed cache size:     18 393 752 bytes\n    Chunk size:                 6 131 251\n    Number of chunks:                   3\n    Compression time:           2 292.620 ms (86.91 %)\n    Generate CRC time:              3.017 ms ( 0.11 %)\n    Store chunks cache:           221.544 ms ( 8.40 %)\n    Overhead:\n    Erase previous cache:         105.824 ms ( 4.01 %)\n    Verify all chunks present:     15.021 ms ( 0.57 %)\n        Sub total:                120.845 ms ( 4.58 %) \u003c- overhead\n    TOTAL:                      2 638.030 ms\n```\nTo my surprise, with 8MB chunks overhead is actually larger than with 64K chunks, when saving 64MB cache. And now, erase is the most expensive.\n\nThis is explained by the `MultifileBlobCache` implementation. It defers writing a blob to a thread. New blob is added to the \"hot cache\", which is the size of the maximum blob size. Because we use blob of the maximum size, next write forces wait for the previous write to finish. So, writing blob `2` is fast (async), but writing `1` and `0` - slow (around 100 ms per write). Erase after writing `0` chunk probably also triggers waiting for that write (need to check why). Maybe `MultifileBlobCache` can be optimized to allow more async writes at the time.\n\n**Unlimited cache size:**\n```\n    Uncompressed cache size:  264 518 908 bytes\n    Compressed cache size:     77 494 760 bytes\n    Chunk size:                 7 749 476\n    Number of chunks:                  10\n    Compression time:           9 553.730 ms (87.96 %)\n    Generate CRC time:              5.493 ms ( 0.05 %)\n    Store chunks cache:          1141.260 ms (10.51 %)\n    Overhead:\n    Erase previous cache:         125.741 ms ( 1.16 %)\n    Verify all chunks present:     34.713 ms ( 0.32 %)\n        Sub total:                160.454 ms ( 1.48 %) \u003c- overhead\n    TOTAL:                      2 638.030 ms\n```\n\nSaving larger cache data (and more chunks), relative overhead is a lot less (only 1.48 %). Absolute overhead increased not by much: `120.845 -\u003e 160.454 -\u003e +32.78%`\n\nIMO, such overhead acceptable.\n\nProblem corrupting exiting cache is not fictional. I started to solve this problem after obtained the error in `GetAndDecompressPipelineCacheVk()`, after which the entire cache data was erased.",
+      "parentUuid": "a817d4d1_cc1f3f47",
+      "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
