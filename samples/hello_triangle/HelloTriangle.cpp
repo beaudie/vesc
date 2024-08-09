@@ -24,16 +24,26 @@ class HelloTriangleSample : public SampleApplication
 
     bool initialize() override
     {
-        constexpr char kVS[] = R"(attribute vec4 vPosition;
+        constexpr char kVS[] = R"(attribute vec2 aPosition;
+attribute vec4 aColor;
+
+varying vec4 vColor;
+
+uniform mat3 translationMatrix;
+uniform mat3 projectionMatrix;
+
 void main()
 {
-    gl_Position = vPosition;
+   gl_PointSize = 10.0;
+   gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aPosition, 1.0)).xy, 0.0, 1.0);
+    vColor = aColor;
 })";
 
         constexpr char kFS[] = R"(precision mediump float;
+varying vec4 vColor;
 void main()
 {
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    gl_FragColor = vColor;
 })";
 
         mProgram = CompileProgram(kVS, kFS);
@@ -42,7 +52,74 @@ void main()
             return false;
         }
 
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glUseProgram(mProgram);
+
+        glClearColor(0.0f, 1.0f, 0.0f, 0.0f);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+        GLuint renderbuffer;
+        glGenRenderbuffers(1, &renderbuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+        glRenderbufferStorageMultisampleANGLE(GL_RENDERBUFFER, 4, GL_RGBA8, getWindow()->getWidth(),
+                                              getWindow()->getHeight());
+
+        glGenFramebuffers(1, &mFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                  renderbuffer);
+
+        GLfloat vertices[] = {
+            90.0000,  90.0000,  1.0000, 0.0000, 1.0000, 1.0000,  // 0
+            310.0000, 90.0000,  0.0000, 1.0000, 1.0000, 1.0000,  // 1
+            90.0000,  310.0000, 1.0000, 1.0000, 0.0000, 1.0000,  // 2
+            310.0000, 310.0000, 1.0000, 1.0000, 1.0000, 1.0000,  // 3
+
+            100.0000, 100.0000, 0.1333, 0.1333, 0.1333, 1.0000,  // 4
+            300.0000, 100.0000, 0.1333, 0.1333, 0.1333, 1.0000,  // 5
+            100.0000, 300.0000, 0.1333, 0.1333, 0.1333, 1.0000,  // 6
+            300.0000, 300.0000, 0.1333, 0.1333, 0.1333, 1.0000,  // 7
+        };
+
+        GLuint vertexBuffer;
+        glGenBuffers(1, &vertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(glGetAttribLocation(mProgram, "aPosition"), 2, GL_FLOAT, GL_FALSE,
+                              6 * sizeof(float), vertices);
+        glEnableVertexAttribArray(glGetAttribLocation(mProgram, "aPosition"));
+
+        glVertexAttribPointer(glGetAttribLocation(mProgram, "aColor"), 4, GL_FLOAT, GL_FALSE,
+                              6 * sizeof(float), vertices + 2);
+        glEnableVertexAttribArray(glGetAttribLocation(mProgram, "aColor"));
+
+        const GLushort indices[] = {0, 0, 1, 2, 3, 3, 4, 4, 5, 6, 7, 7};
+
+        GLuint indexBuffer;
+        glGenBuffers(1, &indexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+        const GLint projectionMatrixLocation  = glGetUniformLocation(mProgram, "projectionMatrix");
+        const GLint translationMatrixLocation = glGetUniformLocation(mProgram, "translationMatrix");
+
+        GLfloat projectionMatrix[] = {0.005, 0, 0, 0, -0.005, 0, -1, 1, 1};
+
+        GLfloat translationMatrix[] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
+
+        glUniformMatrix3fv(projectionMatrixLocation, 1, false, projectionMatrix);
+        glUniformMatrix3fv(translationMatrixLocation, 1, false, translationMatrix);
+
+        // Load the vertex data
+        glVertexAttribPointer(glGetAttribLocation(mProgram, "aPosition"), 2, GL_FLOAT, GL_FALSE,
+                              6 * sizeof(float), 0);
+        glEnableVertexAttribArray(glGetAttribLocation(mProgram, "aPosition"));
+
+        glVertexAttribPointer(glGetAttribLocation(mProgram, "aColor"), 4, GL_FLOAT, GL_FALSE,
+                              6 * sizeof(float), (void *)(sizeof(float) * 2));
+        glEnableVertexAttribArray(glGetAttribLocation(mProgram, "aColor"));
 
         return true;
     }
@@ -51,28 +128,26 @@ void main()
 
     void draw() override
     {
-        GLfloat vertices[] = {
-            0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f,
-        };
-
         // Set the viewport
         glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 
         // Clear the color buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Use the program object
-        glUseProgram(mProgram);
+        glDrawElements(GL_TRIANGLE_STRIP, 12, GL_UNSIGNED_SHORT, 0);
 
-        // Load the vertex data
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-        glEnableVertexAttribArray(0);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, mFBO);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBlitFramebufferANGLE(0, 0, getWindow()->getWidth(), getWindow()->getHeight(), 0, 0,
+                               getWindow()->getWidth(), getWindow()->getHeight(),
+                               GL_COLOR_BUFFER_BIT, GL_NEAREST);
     }
 
   private:
     GLuint mProgram;
+    GLuint mFBO;
 };
 
 int main(int argc, char **argv)
