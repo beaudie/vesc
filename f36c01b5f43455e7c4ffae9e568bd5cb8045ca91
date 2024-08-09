@@ -16,6 +16,24 @@
       "message": "One thing I don\u0027t quite excited is that from what I read here, a successful write actually involves write and read(verify), correct? It would be nice that write only involves write. You only check the last dword to ensure a write is successful. But I am not sure if that is robust enough though.",
       "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a817d4d1_cc1f3f47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-09T09:53:35Z",
+      "side": 1,
+      "message": "\u003e One thing I don\u0027t quite excited is that from what I read here, a successful write actually involves write and read(verify), correct?\n\nUnfortunately yes.\n\nActually it is: write -\u003e erase -\u003e check/restore (only if `isBlobCacheEvictsOldItemsFirst() \u003d\u003d false`).\n\n\nCheck is the most expensive (if exclude write). Erase is cheap. But overall, erase + check will be not noticeable compared to get PSO data, Compression and actual writing.\n\nCheck/restore will only take long time if cache is full and eviction happening.\n\nThe `MultifileBlobCache` here: https://android.googlesource.com/platform/frameworks/native/+/refs/heads/main/opengl/libs/EGL/MultifileBlobCache.cpp\nsupposed to evict oldest items in the `MultifileBlobCache::applyLRU()` method. However, the actual implementation simply iterates over the `unordered_map` evicting almost randomly.\n\nBecause of the possible random eviction, blob cache may evict chunks `1..N-1` when writing chunk `0` (reverse order).\n\nEven restoring missing chunks, in the second pass may trigger another eviction, that would require another check, and another check..., until all items are present, or number of missing items is not decreasing.\n\n`MultifileBlobCache` for example, evicts in the order the items appear in the `unordered_map`. Eviction order is not 100% random, but depends on the hash value. Because of that, there may be situation, when same items are evicted again and again, preventing writing all chunks, even while there is a space in the cache.\n\nIf update `MultifileBlobCache` so it has true LRU eviction, then we can set `angle_egl_blob_cache_evicts_old_items_first \u003d true` and avoid relatively expensive item checking.\n\n\u003e It would be nice that write only involves write.\n\nThis is possible if implement LRU eviction in the blob cache and set `angle_egl_blob_cache_evicts_old_items_first \u003d true`.\n\n\u003e You only check the last dword to ensure a write is successful. But I am not sure if that is robust enough though.\n\nSorry I do not quite understand what is this \"dword\"...\n\nMaybe you wanted to write \"last chunk\"?\n\nIf so, than this will be not enough. Eviction may choose to evict chunk `1` after writing chunk `0`, but keep the chunk `N-1` (writing in reverse order).\n\nUnfortunately, need to verify all chunks.\n\nI already suggested to Shahbaz to use 8MB chunks instead of 64K, this shuld decrease the overhead. Our platform supports 8MB blobs, so I will test and report the overhead with 8MB chunks.",
+      "parentUuid": "7504456f_7d0af702",
+      "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
