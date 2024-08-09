@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7804770e_05a27189",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-09T13:17:55Z",
+      "side": 1,
+      "message": "Looks good and compiles for visionOS. Need to check the runtime properties once we get the inegrations running again.",
+      "revId": "e439d4fb2efd22dd29fdd54a991401041ca74323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
