@@ -69,6 +69,24 @@
       "parentUuid": "99ae750b_9ba3c937",
       "revId": "fb2cfadde62c3764ca08a21927f078e36cdecb5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d153183d_edda4a3e",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-09T00:08:47Z",
+      "side": 1,
+      "message": "Thanks, sounds fine.",
+      "parentUuid": "83f8422c_916f6a92",
+      "revId": "fb2cfadde62c3764ca08a21927f078e36cdecb5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
