@@ -26,6 +26,8 @@ class ImageIndex;
 
 namespace rx
 {
+class ConversionBuffer;
+
 namespace vk
 {
 constexpr VkBufferUsageFlags kVertexBufferUsageFlags =
@@ -3918,8 +3920,8 @@ class LineLoopHelper final : angle::NonCopyable
     static void Draw(uint32_t count, uint32_t baseVertex, RenderPassCommandBuffer *commandBuffer);
 
   private:
-    BufferHelper mDynamicIndexBuffer;
-    BufferHelper mDynamicIndirectBuffer;
+    ConversionBuffer *mDynamicIndexBuffer;
+    ConversionBuffer *mDynamicIndirectBuffer;
 };
 
 enum class PresentMode

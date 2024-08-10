@@ -11,14 +11,12 @@
 #define LIBANGLE_RENDERER_VULKAN_VERTEXARRAYVK_H_
 
 #include "libANGLE/renderer/VertexArrayImpl.h"
+#include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
 {
-class BufferVk;
-struct ConversionBuffer;
-
 enum class BufferBindingDirty
 {
     No,
@@ -205,9 +203,9 @@ class VertexArrayVk : public VertexArrayImpl
     // Cached element array buffers for improving performance.
     vk::BufferHelperQueue mCachedStreamIndexBuffers;
 
-    vk::BufferHelper mStreamedIndexData;
-    vk::BufferHelper mTranslatedByteIndexData;
-    vk::BufferHelper mTranslatedByteIndirectData;
+    ConversionBuffer mStreamedIndexData;
+    ConversionBuffer mTranslatedByteIndexData;
+    ConversionBuffer mTranslatedByteIndirectData;
 
     vk::LineLoopHelper mLineLoopHelper;
     Optional<GLint> mLineLoopBufferFirstIndex;
