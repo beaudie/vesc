@@ -18,8 +18,9 @@
 namespace rx
 {
 // Conversion buffers hold translated index and vertex data.
-struct ConversionBuffer
+class ConversionBuffer
 {
+  public:
     ConversionBuffer(vk::Renderer *renderer,
                      VkBufferUsageFlags usageFlags,
                      size_t initialSize,
@@ -28,12 +29,38 @@ struct ConversionBuffer
     ~ConversionBuffer();
 
     ConversionBuffer(ConversionBuffer &&other);
+    bool dirty() const { return mEntireBufferDirty || !mDirtyRanges.empty(); }
+    void clearDirtyRanges()
+    {
+        ASSERT(dirty());
+        mEntireBufferDirty = false;
+        mDirtyRanges.clear();
+    }
+    void release(vk::Renderer *renderer) { mData->release(renderer); }
+    bool valid() const { return mData && mData->valid(); }
+    vk::BufferHelper *getBuffer() const { return mData.get(); }
+    void setEntireBufferDirty() { mEntireBufferDirty = true; }
+    void addDirtyBufferRange(size_t offset, size_t size)
+    {
+        mDirtyRanges.emplace_back(offset, size);
+    }
 
-    // One state value determines if we need to re-stream vertex data.
-    bool dirty;
+  private:
+    // state value determines if we need to re-stream vertex data. mEntireBufferDirty indicates
+    // entire buffer data has changed. mDirtyRanges should be ignored when mEntireBufferDirty is
+    // true. If mEntireBufferDirty is false, mDirtyRanges is the ranges of data that has been
+    // modified. Note that there is no guarantee that ranges will not overlap.
+    bool mEntireBufferDirty;
+    struct Range
+    {
+        Range(size_t offsetIn, size_t sizeIn) : offset(offsetIn), size(sizeIn) {}
+        size_t offset;
+        size_t size;
+    };
+    std::vector<Range> mDirtyRanges;
 
     // Where the conversion data is stored.
-    std::unique_ptr<vk::BufferHelper> data;
+    std::unique_ptr<vk::BufferHelper> mData;
 };
 
 enum class BufferUpdateType
@@ -201,8 +228,9 @@ class BufferVk : public BufferImpl
                                VkMemoryPropertyFlags memoryPropertyFlags,
                                size_t size) const;
 
-    struct VertexConversionBuffer : public ConversionBuffer
+    class VertexConversionBuffer : public ConversionBuffer
     {
+      public:
         VertexConversionBuffer(vk::Renderer *renderer,
                                angle::FormatID formatIDIn,
                                GLuint strideIn,
@@ -211,11 +239,16 @@ class BufferVk : public BufferImpl
         ~VertexConversionBuffer();
 
         VertexConversionBuffer(VertexConversionBuffer &&other);
+        bool match(angle::FormatID formatID, GLuint stride, size_t offset) const
+        {
+            return mFormatID == formatID && mStride == stride && mOffset == offset;
+        }
 
+      private:
         // The conversion is identified by the triple of {format, stride, offset}.
-        angle::FormatID formatID;
-        GLuint stride;
-        size_t offset;
+        angle::FormatID mFormatID;
+        GLuint mStride;
+        size_t mOffset;
     };
 
     vk::BufferHelper mBuffer;

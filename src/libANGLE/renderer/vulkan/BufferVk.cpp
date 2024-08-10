@@ -281,14 +281,14 @@ ConversionBuffer::ConversionBuffer(vk::Renderer *renderer,
                                    size_t initialSize,
                                    size_t alignment,
                                    bool hostVisible)
-    : dirty(true)
+    : mEntireBufferDirty(true)
 {
-    data = std::make_unique<vk::BufferHelper>();
+    mData = std::make_unique<vk::BufferHelper>();
 }
 
 ConversionBuffer::~ConversionBuffer()
 {
-    ASSERT(!data || !data->valid());
+    ASSERT(!mData || !mData->valid());
 }
 
 ConversionBuffer::ConversionBuffer(ConversionBuffer &&other) = default;
@@ -304,9 +304,9 @@ BufferVk::VertexConversionBuffer::VertexConversionBuffer(vk::Renderer *renderer,
                        kConvertedArrayBufferInitialSize,
                        vk::kVertexBufferAlignment,
                        hostVisible),
-      formatID(formatIDIn),
-      stride(strideIn),
-      offset(offsetIn)
+      mFormatID(formatIDIn),
+      mStride(strideIn),
+      mOffset(offsetIn)
 {}
 
 BufferVk::VertexConversionBuffer::VertexConversionBuffer(VertexConversionBuffer &&other) = default;
@@ -350,7 +350,7 @@ angle::Result BufferVk::release(ContextVk *contextVk)
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
     {
-        buffer.data->release(renderer);
+        buffer.release(renderer);
     }
     mVertexConversionBuffers.clear();
 
@@ -1179,9 +1179,9 @@ ConversionBuffer *BufferVk::getVertexConversionBuffer(vk::Renderer *renderer,
 {
     for (VertexConversionBuffer &buffer : mVertexConversionBuffers)
     {
-        if (buffer.formatID == formatID && buffer.stride == stride && buffer.offset == offset)
+        if (buffer.match(formatID, stride, offset))
         {
-            ASSERT(buffer.data && buffer.data->valid());
+            ASSERT(buffer.valid());
             return &buffer;
         }
     }
@@ -1194,7 +1194,7 @@ void BufferVk::dataUpdated()
 {
     for (VertexConversionBuffer &buffer : mVertexConversionBuffers)
     {
-        buffer.dirty = true;
+        buffer.setEntireBufferDirty();
     }
     // Now we have valid data
     mHasValidData = true;
