@@ -17,7 +17,7 @@
 namespace rx
 {
 class BufferVk;
-struct ConversionBuffer;
+class ConversionBuffer;
 
 enum class BufferBindingDirty
 {

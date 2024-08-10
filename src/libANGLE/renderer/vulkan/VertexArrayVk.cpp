@@ -484,12 +484,11 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     ASSERT(vertexFormat.getVertexInputAlignment(compressed) <= vk::kVertexBufferAlignment);
 
     // Allocate buffer for results
-    vk::BufferHelper *dstBuffer = conversion->data.get();
+    vk::BufferHelper *dstBuffer = conversion->getBuffer();
     ANGLE_TRY(contextVk->initBufferForVertexConversion(dstBuffer, numVertices * dstFormatSize,
                                                        vk::MemoryHostVisibility::NonVisible));
 
-    ASSERT(conversion->dirty);
-    conversion->dirty = false;
+    conversion->clearDirtyRanges();
 
     vk::BufferHelper *srcBufferHelper = &srcBuffer->getBuffer();
 
@@ -533,7 +532,7 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     srcBytes += binding.getOffset() + relativeOffset;
     ASSERT(vertexFormat.getVertexInputAlignment(compressed) <= vk::kVertexBufferAlignment);
 
-    vk::BufferHelper *dstBufferHelper = conversion->data.get();
+    vk::BufferHelper *dstBufferHelper = conversion->getBuffer();
     // Allocate buffer for results
     ANGLE_TRY(contextVk->initBufferForVertexConversion(dstBufferHelper, numVertices * dstFormatSize,
                                                        vk::MemoryHostVisibility::Visible));
@@ -545,8 +544,7 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     mCurrentArrayBuffers[attribIndex]      = dstBufferHelper;
     mCurrentArrayBufferSerial[attribIndex] = dstBufferHelper->getBufferSerial();
 
-    ASSERT(conversion->dirty);
-    conversion->dirty = false;
+    conversion->clearDirtyRanges();
 
     return angle::Result::Continue;
 }
@@ -795,7 +793,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 ConversionBuffer *conversion = bufferVk->getVertexConversionBuffer(
                     renderer, intendedFormat.id, binding.getStride(),
                     binding.getOffset() + attrib.relativeOffset, !bindingIsAligned);
-                if (conversion->dirty)
+                if (conversion->dirty())
                 {
                     if (compressed)
                     {
@@ -829,7 +827,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     bufferOnly = false;
                 }
 
-                vk::BufferHelper *bufferHelper         = conversion->data.get();
+                vk::BufferHelper *bufferHelper         = conversion->getBuffer();
                 mCurrentArrayBuffers[attribIndex]      = bufferHelper;
                 mCurrentArrayBufferSerial[attribIndex] = bufferHelper->getBufferSerial();
                 VkDeviceSize bufferOffset;

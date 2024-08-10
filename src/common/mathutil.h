@@ -778,6 +778,7 @@ class Range
 
 typedef Range<int> RangeI;
 typedef Range<unsigned int> RangeUI;
+typedef Range<unsigned long> RangeUL;
 static_assert(std::is_trivially_copyable<RangeUI>(),
               "RangeUI should be trivial copyable so that we can memcpy");
 
