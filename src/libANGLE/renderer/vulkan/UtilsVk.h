@@ -229,9 +229,9 @@ class UtilsVk : angle::NonCopyable
     angle::Result convertLineLoopIndexIndirectBuffer(
         ContextVk *contextVk,
         vk::BufferHelper *srcIndirectBuffer,
+        vk::BufferHelper *srcIndexBuffer,
         vk::BufferHelper *dstIndirectBuffer,
         vk::BufferHelper *dstIndexBuffer,
-        vk::BufferHelper *srcIndexBuffer,
         const ConvertLineLoopIndexIndirectParameters &params);
 
     angle::Result convertLineLoopArrayIndirectBuffer(

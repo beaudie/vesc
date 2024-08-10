@@ -7353,10 +7353,11 @@ angle::Result ContextVk::initBufferForImageCopy(vk::BufferHelper *bufferHelper,
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::initBufferForVertexConversion(vk::BufferHelper *bufferHelper,
+angle::Result ContextVk::initBufferForVertexConversion(ConversionBuffer *conversionBuffer,
                                                        size_t size,
                                                        vk::MemoryHostVisibility hostVisibility)
 {
+    vk::BufferHelper *bufferHelper = conversionBuffer->getBuffer();
     if (bufferHelper->valid())
     {
         // If size is big enough and it is idle, then just reuse the existing buffer. Or if current
@@ -7381,6 +7382,9 @@ angle::Result ContextVk::initBufferForVertexConversion(vk::BufferHelper *bufferH
 
         bufferHelper->release(mRenderer);
     }
+
+    //  Mark entire buffer dirty if we have to reallocate the buffer.
+    conversionBuffer->setEntireBufferDirty();
 
     uint32_t memoryTypeIndex = mRenderer->getVertexConversionBufferMemoryTypeIndex(hostVisibility);
     size_t alignment         = static_cast<size_t>(mRenderer->getVertexConversionBufferAlignment());
