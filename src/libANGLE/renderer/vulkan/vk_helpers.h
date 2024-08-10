@@ -26,6 +26,8 @@ class ImageIndex;
 
 namespace rx
 {
+class ConversionBuffer;
+
 namespace vk
 {
 constexpr VkBufferUsageFlags kVertexBufferUsageFlags =
@@ -3845,7 +3847,6 @@ class CommandBufferAccess : angle::NonCopyable
     AccessResources mAccessResources;
 };
 
-// This class' responsibility is to create index buffers needed to support line loops in Vulkan.
 enum class PresentMode
 {
     ImmediateKHR               = VK_PRESENT_MODE_IMMEDIATE_KHR,
