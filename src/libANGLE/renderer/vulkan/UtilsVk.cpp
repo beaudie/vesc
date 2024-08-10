@@ -2144,9 +2144,9 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
 angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
     ContextVk *contextVk,
     vk::BufferHelper *srcIndirectBuffer,
+    vk::BufferHelper *srcIndexBuffer,
     vk::BufferHelper *dstIndirectBuffer,
     vk::BufferHelper *dstIndexBuffer,
-    vk::BufferHelper *srcIndexBuffer,
     const ConvertLineLoopIndexIndirectParameters &params)
 {
     ANGLE_TRY(ensureConvertIndexIndirectLineLoopResourcesInitialized(contextVk));
