@@ -3172,7 +3172,7 @@ vk::BufferHelper *TextureVk::getRGBAConversionBufferHelper(vk::Renderer *rendere
     const VkDeviceSize bindingOffset                          = bufferBinding.getOffset();
     ConversionBuffer *conversion                              = bufferVk->getVertexConversionBuffer(
         renderer, formatID, 16, static_cast<uint32_t>(bindingOffset), false);
-    return conversion->data.get();
+    return conversion->getBuffer();
 }
 
 angle::Result TextureVk::convertBufferToRGBA(ContextVk *contextVk, size_t &conversionBufferSize)
@@ -3193,14 +3193,14 @@ angle::Result TextureVk::convertBufferToRGBA(ContextVk *contextVk, size_t &conve
         bufferVk->getVertexConversionBuffer(renderer, imageUniformFormat->getIntendedFormatID(), 16,
                                             static_cast<uint32_t>(bindingOffset), false);
     mBufferContentsObservers->enableForBuffer(getBuffer().get());
-    vk::BufferHelper *conversionBufferHelper = conversion->data.get();
+    vk::BufferHelper *conversionBufferHelper = conversion->getBuffer();
     if (!conversionBufferHelper->valid())
     {
         ANGLE_TRY(contextVk->initBufferForVertexConversion(
             conversionBufferHelper, conversionBufferSize, vk::MemoryHostVisibility::NonVisible));
     }
 
-    if (conversion->dirty)
+    if (conversion->dirty())
     {
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
         UtilsVk &utilsVk               = contextVk->getUtils();
@@ -3210,7 +3210,7 @@ angle::Result TextureVk::convertBufferToRGBA(ContextVk *contextVk, size_t &conve
         ANGLE_TRY(utilsVk.copyRgbToRgba(contextVk, imageUniformFormat->getIntendedFormat(),
                                         &bufferHelper, static_cast<uint32_t>(bindingOffset),
                                         static_cast<uint32_t>(pixelCount), conversionBufferHelper));
-        conversion->dirty = false;
+        conversion->clearDirtyRanges();
     }
 
     return angle::Result::Continue;
