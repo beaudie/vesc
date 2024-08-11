@@ -1190,6 +1190,9 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                                             &colorReadRT->getImageForCopy());
     }
 
+    // Prefer to fall back to renderable format instead of CPU copy.
+    ANGLE_TRY(ensureRenderable(contextVk, nullptr));
+
     // If it's possible to perform the copy with a draw call, do that.
     if (CanCopyWithDraw(renderer, srcActualFormatID, srcTilingMode, dstActualFormatID,
                         destTilingMode))
@@ -1265,6 +1268,9 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
                                             sourceLevelGL, sourceBox.z, sourceBox,
                                             &source->getImage());
     }
+
+    // Prefer to fall back to renderable format instead of CPU copy.
+    ANGLE_TRY(ensureRenderable(contextVk, nullptr));
 
     // If it's possible to perform the copy with a draw call, do that.
     if (CanCopyWithDraw(renderer, srcFormatID, srcTilingMode, dstFormatID, dstTilingMode))
@@ -1700,8 +1706,7 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
     // Assume all multisample texture types must be renderable.
     if (type == gl::TextureType::_2DMultisample || type == gl::TextureType::_2DMultisampleArray)
     {
-        TextureUpdateResult updateResult = TextureUpdateResult::ImageUnaffected;
-        ANGLE_TRY(ensureRenderable(contextVk, &updateResult));
+        ANGLE_TRY(ensureRenderable(contextVk, nullptr));
     }
 
     const vk::Format &format = renderer->getFormat(internalformat);
@@ -4211,7 +4216,7 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    // luminance/alpha  format never fallback for rendering and if we ever do fallback, the
+    // luminance/alpha format never fallback for rendering and if we ever do fallback, the
     // following code may not handle it properly.
     ASSERT(!format.getIntendedFormat().isLUMA());
 
@@ -4266,7 +4271,10 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk,
     ANGLE_TRY(respecifyImageStorage(contextVk));
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
-    *updateResultOut = TextureUpdateResult::ImageRespecified;
+    if (updateResultOut != nullptr)
+    {
+        *updateResultOut = TextureUpdateResult::ImageRespecified;
+    }
 
     return refreshImageViews(contextVk);
 }
