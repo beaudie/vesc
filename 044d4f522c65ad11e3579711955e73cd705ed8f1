@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "590660ef_d5eea28d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-12T19:11:00Z",
+      "side": 1,
+      "message": "The change seems fine and passing tests, no need to split the host-visible buffer changes (that was to help debug the issue).\n\nShould we land it?",
+      "parentUuid": "bc9a5e39_92c259d9",
+      "revId": "044d4f522c65ad11e3579711955e73cd705ed8f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f57909de_f9ad6db8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
