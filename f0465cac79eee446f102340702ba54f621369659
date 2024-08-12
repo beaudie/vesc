@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db0111bd_102ce375",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-12T16:12:40Z",
+      "side": 1,
+      "message": "This was also seen in https://ci.chromium.org/ui/p/chromium/builders/ci/ios-angle-builder/220231/overview, so you should be able to test this with ios-angle-try-intel on the reland (it has some failing tests, ignore this until I suppress them).",
+      "revId": "f0465cac79eee446f102340702ba54f621369659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
