@@ -16,6 +16,24 @@
       "message": "Assuming that Skia uses fallback paths when these extensions are not available, is it the case that those fallbacks are more performant than ANGLE\u0027s emulation?",
       "revId": "de220a64980117dc43523dd3352461380175fabc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb79e127_5d85752e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-12T19:35:24Z",
+      "side": 1,
+      "message": "I haven\u0027t tested enough configurations to know for sure. My reasoning is:\n - I\u0027d rather start from an equivalent state and re-add this if it turns out to be faster instead of trying to figure out why performance is different.\n - The multidraw emulation is broken for non-WebGL cases. Client-side arrays do not work.",
+      "parentUuid": "a8bd013f_8a279751",
+      "revId": "de220a64980117dc43523dd3352461380175fabc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
