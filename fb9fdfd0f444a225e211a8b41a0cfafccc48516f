@@ -52,6 +52,24 @@
       "parentUuid": "4d37c2ee_0b7f25c6",
       "revId": "fb9fdfd0f444a225e211a8b41a0cfafccc48516f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad32f7f5_fe608a0e",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-12T19:59:45Z",
+      "side": 1,
+      "message": "Done, added the tests. They\u0027re not enabled for WebGPU yet because we can\u0027t draw the uniform color program yet but I manually verified that the tests cover all permutations of of the parameters to the viewport and scissor call skipping.",
+      "parentUuid": "c3cf371d_fb3ce104",
+      "revId": "fb9fdfd0f444a225e211a8b41a0cfafccc48516f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
