@@ -70,6 +70,24 @@
       "parentUuid": "c1a8c2d5_ae5caa81",
       "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dd3625a_e04b8965",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-12T11:12:38Z",
+      "side": 1,
+      "message": "\u003e Shouldn\u0027t we do that instead of fix ANGLE?\n\nThis will only fix problem (2) (see the commit message).\n\nBecause there may be different blob cache implementations, there is `angle_egl_blob_cache_evicts_old_items_first` build option. Currently it is `false` by default, because all known to me implementations do not have working LRU eviction logic. One LRU eviction is more common, we can change it to `true` by default. And once all/majority will have LRU - remove the variable and the associated code.\n\nProblem (1) however, still requires dual slots and reversing chunks storing order.\n\nIn the current situation with blob cache implementations, problem (2) is more likely to happen on practice. Actually, it happen multiple times during my testing. That is why I started investigation and prepared the commit. However, I originally thought that issue was the problem (1), but since issue still reproduced, I found and fixed (workaround) problem (2).",
+      "parentUuid": "e51cedba_ff149922",
+      "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
