@@ -106,6 +106,24 @@
       "parentUuid": "8dd3625a_e04b8965",
       "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70525a01_65578a40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-12T16:24:44Z",
+      "side": 1,
+      "message": "One last question: is Samsung is multi-file blobcache or the previous single file blobcache?",
+      "parentUuid": "b9a5b6c6_d00f88a4",
+      "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
