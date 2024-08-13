@@ -16,6 +16,23 @@
       "message": "Shahbaz@\n\nHi, I want to introduce the changes in the following issue (1) into ANGLE (mainly involving Dawn), but when I run roll-dep and try to compile ANGLE locally, I get the following error:\n\n```\nninja: error: \u0027../../third_party/dawn/third_party/dxc/tools/clang/tools/dxcvalidator/dxcvalidator.cpp\u0027, needed by \u0027obj/third_party/dawn/third_party/gn/dxc/dxcvalidator_lib/dxcvalidator.obj\u0027, missing and no known rule to make it\n```\nI also encountered the following Presubmit warnings:\n\n```\n** Presubmit Warnings: 1 **\nexport_targets.py failed, this may just be due to your local checkout: Importing graph\n  (\u0027gn\u0027, \u0027desc\u0027, \u0027--format\u003djson\u0027, \u0027C:\\\\Users\\\\hocheung\\\\AppData\\\\Local\\\\Temp\\\\tmp1ivhxdog\u0027, \u0027*\u0027)\n\nProcessing graph\n  shared_library //:libEGL\nTraceback (most recent call last):\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 355, in \u003cmodule\u003e\n    libraries \u003d gather_libraries(ROOTS, descs)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 350, in gather_libraries\n    dag_traverse(roots, fn)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 110, in dag_traverse\n    recurse(x)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 95, in recurse\n    t \u003d pre_recurse_func(key)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 344, in fn\n    assert has_all_includes(target_name, descs), target_name\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 299, in has_all_includes\n    flat \u003d flattened_target(target_name, descs, stop_at_lib\u003dFalse)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 168, in flattened_target\n    dag_traverse(descs[target_name][\u0027deps\u0027], pre)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 110, in dag_traverse\n    recurse(x)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 103, in recurse\n    recurse(x)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 103, in recurse\n    recurse(x)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 103, in recurse\n    recurse(x)\n  [Previous line repeated 4 more times]\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 95, in recurse\n    t \u003d pre_recurse_func(key)\n  File \"D:\\work\\google\\angle\\scripts\\export_targets.py\", line 150, in pre\n    assert dep_type in EXPECTED_TYPES, (k, dep_type)\nAssertionError: (\u0027//third_party/dawn/third_party/gn/dxc:dxcompiler\u0027, \u0027loadable_module\u0027)\n```\n\nHow should I resolve the above errors and suppress warning?\n\n(1)https://issues.chromium.org/issues/355003178",
       "revId": "d5e55e47625418e9d0d5dc33da01b75d795e524c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43452ab4_c6d8ecff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3395304
+      },
+      "writtenOn": "2024-08-13T00:46:25Z",
+      "side": 1,
+      "message": "Friendly ping",
+      "revId": "d5e55e47625418e9d0d5dc33da01b75d795e524c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
