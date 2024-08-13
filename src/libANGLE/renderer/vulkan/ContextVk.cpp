@@ -544,7 +544,7 @@ void OnTextureBufferRead(vk::BufferHelper *buffer,
         // Note: if another range of the same buffer is simultaneously used for storage,
         // such as for transform feedback output, or SSBO, unnecessary barriers can be
         // generated.
-        commandBufferHelper->bufferRead(VK_ACCESS_SHADER_READ_BIT, vk::GetPipelineStage(stage),
+        commandBufferHelper->bufferRead(VK_ACCESS_2_SHADER_READ_BIT, vk::GetPipelineStage(stage),
                                         buffer);
     }
 }
@@ -558,7 +558,7 @@ void OnImageBufferWrite(BufferVk *bufferVk,
     // TODO: accept multiple stages in bufferWrite.  http://anglebug.com/42262235
     for (gl::ShaderType stage : stages)
     {
-        commandBufferHelper->bufferWrite(VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+        commandBufferHelper->bufferWrite(VK_ACCESS_2_SHADER_READ_BIT | VK_ACCESS_2_SHADER_WRITE_BIT,
                                          vk::GetPipelineStage(stage), &buffer);
     }
 }
@@ -1718,7 +1718,7 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
                         gl::DrawElementsType::InvalidEnum, nullptr, dirtyBitMask));
 
     // Process indirect buffer after render pass has started.
-    mRenderPassCommands->bufferRead(VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+    mRenderPassCommands->bufferRead(VK_ACCESS_2_INDIRECT_COMMAND_READ_BIT,
                                     vk::PipelineStage::DrawIndirect, indirectBuffer);
 
     return angle::Result::Continue;
@@ -2694,7 +2694,7 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *d
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
         if (arrayBuffer)
         {
-            mRenderPassCommands->bufferRead(VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+            mRenderPassCommands->bufferRead(VK_ACCESS_2_VERTEX_ATTRIBUTE_READ_BIT,
                                             vk::PipelineStage::VertexInput, arrayBuffer);
         }
     }
@@ -2716,7 +2716,7 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dir
     mRenderPassCommandBuffer->bindIndexBuffer(buffer, bufferOffset + mCurrentIndexBufferOffset,
                                               getVkIndexType(mCurrentDrawElementsType));
 
-    mRenderPassCommands->bufferRead(VK_ACCESS_INDEX_READ_BIT, vk::PipelineStage::VertexInput,
+    mRenderPassCommands->bufferRead(VK_ACCESS_2_INDEX_READ_BIT, vk::PipelineStage::VertexInput,
                                     elementArrayBuffer);
 
     return angle::Result::Continue;
@@ -2726,14 +2726,28 @@ angle::Result ContextVk::handleDirtyGraphicsFramebufferFetchBarrier(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    VkMemoryBarrier memoryBarrier = {};
-    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+    if (getFeatures().supportsSynchronization2.enabled)
+    {
+        VkMemoryBarrier2 memoryBarrier2 = {};
+        memoryBarrier2.sType            = VK_STRUCTURE_TYPE_MEMORY_BARRIER_2;
+        memoryBarrier2.srcStageMask     = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+        memoryBarrier2.srcAccessMask    = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT;
+        memoryBarrier2.dstStageMask     = VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT;
+        memoryBarrier2.dstAccessMask    = VK_ACCESS_2_INPUT_ATTACHMENT_READ_BIT;
+        mRenderPassCommandBuffer->pipelineBarrier2(GetLocalDependencyFlags(this), 1,
+                                                   &memoryBarrier2, 0, nullptr, 0, nullptr);
+    }
+    else
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
 
-    mRenderPassCommandBuffer->pipelineBarrier(
-        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-        GetLocalDependencyFlags(this), 1, &memoryBarrier, 0, nullptr, 0, nullptr);
+        mRenderPassCommandBuffer->pipelineBarrier(
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            GetLocalDependencyFlags(this), 1, &memoryBarrier, 0, nullptr, 0, nullptr);
+    }
 
     return angle::Result::Continue;
 }
@@ -2746,15 +2760,29 @@ angle::Result ContextVk::handleDirtyGraphicsBlendBarrier(DirtyBits::Iterator *di
         return angle::Result::Continue;
     }
 
-    VkMemoryBarrier memoryBarrier = {};
-    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
+    if (getFeatures().supportsSynchronization2.enabled)
+    {
+        VkMemoryBarrier2 memoryBarrier2 = {};
+        memoryBarrier2.sType            = VK_STRUCTURE_TYPE_MEMORY_BARRIER_2;
+        memoryBarrier2.srcStageMask     = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+        memoryBarrier2.srcAccessMask    = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT;
+        memoryBarrier2.dstStageMask     = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+        memoryBarrier2.dstAccessMask    = VK_ACCESS_2_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
+        mRenderPassCommandBuffer->pipelineBarrier2(GetLocalDependencyFlags(this), 1,
+                                                   &memoryBarrier2, 0, nullptr, 0, nullptr);
+    }
+    else
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
 
-    mRenderPassCommandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                              VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                              GetLocalDependencyFlags(this), 1, &memoryBarrier, 0,
-                                              nullptr, 0, nullptr);
+        mRenderPassCommandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                                  VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                                  GetLocalDependencyFlags(this), 1, &memoryBarrier,
+                                                  0, nullptr, 0, nullptr);
+    }
 
     return angle::Result::Continue;
 }
@@ -2949,7 +2977,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
         {
             vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
             ASSERT(bufferHelper);
-            mRenderPassCommands->bufferWrite(VK_ACCESS_SHADER_WRITE_BIT,
+            mRenderPassCommands->bufferWrite(VK_ACCESS_2_SHADER_WRITE_BIT,
                                              vk::PipelineStage::VertexShader, bufferHelper);
         }
 
@@ -3009,7 +3037,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     {
         vk::BufferHelper *bufferHelper = buffers[bufferIndex];
         ASSERT(bufferHelper);
-        mRenderPassCommands->bufferWrite(VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
+        mRenderPassCommands->bufferWrite(VK_ACCESS_2_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
                                          vk::PipelineStage::TransformFeedback, bufferHelper);
     }
 
@@ -3018,8 +3046,8 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     // buffers of the transform feedback object are used together.  The rest of the buffers are
     // simply retained so they don't get deleted too early.
     ASSERT(counterBuffers[0].valid());
-    mRenderPassCommands->bufferWrite(VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT |
-                                         VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT,
+    mRenderPassCommands->bufferWrite(VK_ACCESS_2_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT |
+                                         VK_ACCESS_2_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT,
                                      vk::PipelineStage::TransformFeedback, &counterBuffers[0]);
     for (size_t bufferIndex = 1; bufferIndex < bufferCount; ++bufferIndex)
     {
@@ -3824,13 +3852,13 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
 
         ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, getProtectionType(), &commandBuffer));
 
-        commandBuffer.setEvent(gpuReady.get().getHandle(), VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
-        commandBuffer.waitEvents(1, cpuReady.get().ptr(), VK_PIPELINE_STAGE_HOST_BIT,
-                                 VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, 0, nullptr, 0, nullptr, 0,
+        commandBuffer.setEvent(gpuReady.get().getHandle(), VK_PIPELINE_STAGE_2_ALL_GRAPHICS_BIT);
+        commandBuffer.waitEvents(1, cpuReady.get().ptr(), VK_PIPELINE_STAGE_2_HOST_BIT,
+                                 VK_PIPELINE_STAGE_2_ALL_GRAPHICS_BIT, 0, nullptr, 0, nullptr, 0,
                                  nullptr);
         timestampQuery.writeTimestampToPrimary(this, &commandBuffer);
 
-        commandBuffer.setEvent(gpuDone.get().getHandle(), VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
+        commandBuffer.setEvent(gpuDone.get().getHandle(), VK_PIPELINE_STAGE_2_ALL_GRAPHICS_BIT);
 
         ANGLE_VK_TRY(this, commandBuffer.end());
 
@@ -6659,7 +6687,7 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
     ANGLE_TRY(setupDispatch(context));
 
     // Process indirect buffer after command buffer has started.
-    mOutsideRenderPassCommands->bufferRead(VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
+    mOutsideRenderPassCommands->bufferRead(VK_ACCESS_2_INDIRECT_COMMAND_READ_BIT,
                                            vk::PipelineStage::DrawIndirect, &buffer);
 
     mOutsideRenderPassCommands->getCommandBuffer().dispatchIndirect(buffer.getBuffer(),
@@ -7640,14 +7668,31 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         // Make sure all writes to host-visible buffers are flushed.  We have no way of knowing
         // whether any buffer will be mapped for readback in the future, and we can't afford to
         // flush and wait on a one-pipeline-barrier command buffer on every map().
-        VkMemoryBarrier memoryBarrier = {};
-        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-        memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
-        memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;
+        if (getFeatures().supportsSynchronization2.enabled)
+        {
+            VkMemoryBarrier2 memoryBarrier2 = {};
+            memoryBarrier2.sType            = VK_STRUCTURE_TYPE_MEMORY_BARRIER_2;
+            memoryBarrier2.srcStageMask     = mRenderer->getSupportedBufferWritePipelineStageMask();
+            memoryBarrier2.srcAccessMask    = VK_ACCESS_2_MEMORY_WRITE_BIT;
+            memoryBarrier2.dstStageMask     = VK_PIPELINE_STAGE_2_HOST_BIT;
+            memoryBarrier2.dstAccessMask = VK_ACCESS_2_HOST_READ_BIT | VK_ACCESS_2_HOST_WRITE_BIT;
+            mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier2(memoryBarrier2);
+        }
+        else
+        {
+            VkMemoryBarrier memoryBarrier = {};
+            memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+            memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
+            memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;
 
-        mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
-            mRenderer->getSupportedBufferWritePipelineStageMask(), VK_PIPELINE_STAGE_HOST_BIT,
-            memoryBarrier);
+            const VkPipelineStageFlags supportedBufferWritePipelineStageMaskSync1 =
+                static_cast<VkPipelineStageFlags>(
+                    mRenderer->getSupportedBufferWritePipelineStageMask() >> 32);
+            mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
+                supportedBufferWritePipelineStageMaskSync1, VK_PIPELINE_STAGE_HOST_BIT,
+                memoryBarrier);
+        }
+
         mIsAnyHostVisibleBufferWritten = false;
     }
 
@@ -7757,7 +7802,7 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
     return angle::Result::Continue;
 }
 
-void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask)
+void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags2 stageMask)
 {
     mWaitSemaphores.push_back(semaphore);
     mWaitSemaphoreStageMasks.push_back(stageMask);
@@ -8117,13 +8162,27 @@ angle::Result ContextVk::flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirty
 
 angle::Result ContextVk::syncExternalMemory()
 {
-    VkMemoryBarrier memoryBarrier = {};
-    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+    if (getFeatures().supportsSynchronization2.enabled)
+    {
+        VkMemoryBarrier2 memoryBarrier2 = {};
+        memoryBarrier2.sType            = VK_STRUCTURE_TYPE_MEMORY_BARRIER_2;
+        memoryBarrier2.srcStageMask     = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT;
+        memoryBarrier2.srcAccessMask    = VK_ACCESS_2_MEMORY_WRITE_BIT;
+        memoryBarrier2.dstStageMask     = VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT;
+        memoryBarrier2.dstAccessMask = VK_ACCESS_2_MEMORY_READ_BIT | VK_ACCESS_2_MEMORY_WRITE_BIT;
+        mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier2(memoryBarrier2);
+    }
+    else
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
 
-    mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
-        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, memoryBarrier);
+        mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, memoryBarrier);
+    }
+
     return angle::Result::Continue;
 }
 
