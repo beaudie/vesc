@@ -50,6 +50,24 @@
       "message": "PTAL wgpu/ owners",
       "revId": "d5e55e47625418e9d0d5dc33da01b75d795e524c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d38d602e_54052005",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3395304
+      },
+      "writtenOn": "2024-08-13T09:40:10Z",
+      "side": 1,
+      "message": "@mpdenton@chromium.org\n\nHi, could you help me look into this issue? Thanks!",
+      "parentUuid": "e546a724_9b37c3ec",
+      "revId": "d5e55e47625418e9d0d5dc33da01b75d795e524c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
