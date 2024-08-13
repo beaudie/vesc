@@ -63,6 +63,7 @@ enum class CommandID : uint16_t
     BindVertexBuffers2,
     BlitImage,
     BufferBarrier,
+    BufferBarrier2,
     ClearAttachments,
     ClearColorImage,
     ClearDepthStencilImage,
@@ -87,13 +88,18 @@ enum class CommandID : uint16_t
     EndTransformFeedback,
     FillBuffer,
     ImageBarrier,
+    ImageBarrier2,
     ImageWaitEvent,
+    ImageWaitEvent2,
     InsertDebugUtilsLabel,
     MemoryBarrier,
+    MemoryBarrier2,
     NextSubpass,
     PipelineBarrier,
+    PipelineBarrier2,
     PushConstants,
     ResetEvent,
+    ResetEvent2,
     ResetQueryPool,
     ResolveImage,
     SetBlendConstants,
@@ -104,6 +110,7 @@ enum class CommandID : uint16_t
     SetDepthTestEnable,
     SetDepthWriteEnable,
     SetEvent,
+    SetEvent2,
     SetFragmentShadingRate,
     SetFrontFace,
     SetLineWidth,
@@ -119,7 +126,9 @@ enum class CommandID : uint16_t
     SetVertexInput,
     SetViewport,
     WaitEvents,
+    WaitEvents2,
     WriteTimestamp,
+    WriteTimestamp2,
 };
 
 // Header for every cmd in custom cmd buffer
@@ -218,6 +227,14 @@ struct BufferBarrierParams
     VkBufferMemoryBarrier bufferMemoryBarrier;
 };
 VERIFY_8_BYTE_ALIGNMENT(BufferBarrierParams)
+
+struct BufferBarrier2Params
+{
+    CommandHeader header;
+    uint32_t padding;
+    VkBufferMemoryBarrier2 bufferMemoryBarrier2;
+};
+VERIFY_8_BYTE_ALIGNMENT(BufferBarrier2Params)
 
 struct ClearAttachmentsParams
 {
@@ -478,6 +495,14 @@ struct ImageBarrierParams
 };
 VERIFY_8_BYTE_ALIGNMENT(ImageBarrierParams)
 
+struct ImageBarrier2Params
+{
+    CommandHeader header;
+
+    uint32_t padding;
+};
+VERIFY_8_BYTE_ALIGNMENT(ImageBarrier2Params)
+
 struct ImageWaitEventParams
 {
     CommandHeader header;
@@ -489,6 +514,15 @@ struct ImageWaitEventParams
 };
 VERIFY_8_BYTE_ALIGNMENT(ImageWaitEventParams)
 
+struct ImageWaitEvent2Params
+{
+    CommandHeader header;
+
+    uint32_t padding;
+    VkEvent event;
+};
+VERIFY_8_BYTE_ALIGNMENT(ImageWaitEvent2Params)
+
 struct MemoryBarrierParams
 {
     CommandHeader header;
@@ -496,6 +530,14 @@ struct MemoryBarrierParams
     uint32_t padding;
     VkPipelineStageFlags srcStageMask;
     VkPipelineStageFlags dstStageMask;
+};
+VERIFY_8_BYTE_ALIGNMENT(MemoryBarrierParams)
+
+struct MemoryBarrier2Params
+{
+    CommandHeader header;
+
+    uint32_t padding;
 };
 VERIFY_8_BYTE_ALIGNMENT(MemoryBarrierParams)
 
@@ -510,6 +552,15 @@ struct PipelineBarrierParams
     uint32_t imageMemoryBarrierCount;
 };
 VERIFY_8_BYTE_ALIGNMENT(PipelineBarrierParams)
+
+struct PipelineBarrierParams2
+{
+    CommandHeader header;               // 4 bytes
+    VkDependencyFlags dependencyFlags;  // 4 bytes
+    uint32_t memoryBarrierCount;        // 4 bytes
+    uint32_t imageMemoryBarrierCount;   // 4 bytes
+};
+VERIFY_8_BYTE_ALIGNMENT(PipelineBarrierParams2)
 
 struct PushConstantsParams
 {
@@ -530,6 +581,15 @@ struct ResetEventParams
     VkEvent event;
 };
 VERIFY_8_BYTE_ALIGNMENT(ResetEventParams)
+
+struct ResetEvent2Params
+{
+    CommandHeader header;
+    uint32_t padding;
+    VkEvent event;
+    VkPipelineStageFlags2 stageMask;
+};
+VERIFY_8_BYTE_ALIGNMENT(ResetEvent2Params)
 
 struct ResetQueryPoolParams
 {
@@ -618,6 +678,15 @@ struct SetEventParams
     VkEvent event;
 };
 VERIFY_8_BYTE_ALIGNMENT(SetEventParams)
+
+struct SetEvent2Params
+{
+    CommandHeader header;
+    uint32_t padding;
+    const VkDependencyInfo *dependencyInfo;
+    VkEvent event;
+};
+VERIFY_8_BYTE_ALIGNMENT(SetEvent2Params)
 
 struct SetFragmentShadingRateParams
 {
@@ -756,6 +825,14 @@ struct WaitEventsParams
 };
 VERIFY_8_BYTE_ALIGNMENT(WaitEventsParams)
 
+struct WaitEvents2Params
+{
+    CommandHeader header;
+
+    uint32_t eventCount;
+};
+VERIFY_8_BYTE_ALIGNMENT(WaitEvents2Params)
+
 struct WriteTimestampParams
 {
     CommandHeader header;
@@ -866,6 +943,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                        VkPipelineStageFlags dstStageMask,
                        const VkBufferMemoryBarrier *bufferMemoryBarrier);
 
+    void bufferBarrier2(const VkBufferMemoryBarrier2 *bufferMemoryBarrier);
+
     void clearAttachments(uint32_t attachmentCount,
                           const VkClearAttachment *attachments,
                           uint32_t rectCount,
@@ -958,16 +1037,21 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier &imageMemoryBarrier);
 
+    void imageBarrier2(const VkImageMemoryBarrier2 &imageMemoryBarrier2);
+
     void imageWaitEvent(const VkEvent &event,
                         VkPipelineStageFlags srcStageMask,
                         VkPipelineStageFlags dstStageMask,
                         const VkImageMemoryBarrier &imageMemoryBarrier);
+    void imageWaitEvent2(const VkEvent &event, const VkImageMemoryBarrier2 &imageMemoryBarrier2);
 
     void insertDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &label);
 
     void memoryBarrier(VkPipelineStageFlags srcStageMask,
                        VkPipelineStageFlags dstStageMask,
                        const VkMemoryBarrier &memoryBarrier);
+
+    void memoryBarrier2(const VkMemoryBarrier2 &memoryBarrier2);
 
     void nextSubpass(VkSubpassContents subpassContents);
 
@@ -981,6 +1065,14 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                          uint32_t imageMemoryBarrierCount,
                          const VkImageMemoryBarrier *imageMemoryBarriers);
 
+    void pipelineBarrier2(VkDependencyFlags dependencyFlags,
+                          uint32_t memoryBarrierCount,
+                          const VkMemoryBarrier2 *memoryBarriers,
+                          uint32_t bufferMemoryBarrierCount,
+                          const VkBufferMemoryBarrier2 *bufferMemoryBarriers,
+                          uint32_t imageMemoryBarrierCount,
+                          const VkImageMemoryBarrier2 *imageMemoryBarriers);
+
     void pushConstants(const PipelineLayout &layout,
                        VkShaderStageFlags flag,
                        uint32_t offset,
@@ -988,6 +1080,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                        const void *data);
 
     void resetEvent(VkEvent event, VkPipelineStageFlags stageMask);
+
+    void resetEvent2(VkEvent event, VkPipelineStageFlags2 stageMask2);
 
     void resetQueryPool(const QueryPool &queryPool, uint32_t firstQuery, uint32_t queryCount);
 
@@ -1008,6 +1102,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void setDepthTestEnable(VkBool32 depthTestEnable);
     void setDepthWriteEnable(VkBool32 depthWriteEnable);
     void setEvent(VkEvent event, VkPipelineStageFlags stageMask);
+    void setEvent2(VkEvent event, const VkDependencyInfo *dependencyInfo);
     void setFragmentShadingRate(const VkExtent2D *fragmentSize,
                                 VkFragmentShadingRateCombinerOpKHR ops[2]);
     void setFrontFace(VkFrontFace frontFace);
@@ -1041,10 +1136,17 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                     const VkBufferMemoryBarrier *bufferMemoryBarriers,
                     uint32_t imageMemoryBarrierCount,
                     const VkImageMemoryBarrier *imageMemoryBarriers);
+    void waitEvents2(uint32_t eventCount,
+                     const VkEvent *events,
+                     const VkDependencyInfo *dependencyInfos);
 
     void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
                         const QueryPool &queryPool,
                         uint32_t query);
+
+    void writeTimestamp2(VkPipelineStageFlagBits2 pipelineStage,
+                         const QueryPool &queryPool,
+                         uint32_t query);
 
     // No-op for compatibility
     VkResult end() { return VK_SUCCESS; }
@@ -1426,6 +1528,17 @@ ANGLE_INLINE void SecondaryCommandBuffer::bufferBarrier(
     paramStruct->bufferMemoryBarrier = *bufferMemoryBarrier;
 }
 
+ANGLE_INLINE void SecondaryCommandBuffer::bufferBarrier2(
+    const VkBufferMemoryBarrier2 *bufferMemoryBarrier2)
+{
+    ASSERT(bufferMemoryBarrier2->srcStageMask == VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT);
+    ASSERT(bufferMemoryBarrier2->dstStageMask == VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT);
+
+    BufferBarrier2Params *paramStruct =
+        initCommand<BufferBarrier2Params>(CommandID::BufferBarrier2);
+    paramStruct->bufferMemoryBarrier2 = *bufferMemoryBarrier2;
+}
+
 ANGLE_INLINE void SecondaryCommandBuffer::clearAttachments(uint32_t attachmentCount,
                                                            const VkClearAttachment *attachments,
                                                            uint32_t rectCount,
@@ -1744,6 +1857,18 @@ ANGLE_INLINE void SecondaryCommandBuffer::imageBarrier(
     storeArrayParameter(writePtr, &imageMemoryBarrier, imgBarrierSize);
 }
 
+ANGLE_INLINE void SecondaryCommandBuffer::imageBarrier2(
+    const VkImageMemoryBarrier2 &imageMemoryBarrier2)
+{
+    ASSERT(imageMemoryBarrier2.pNext == nullptr);
+
+    uint8_t *writePtr;
+    const ArrayParamSize imgBarrierSize = calculateArrayParameterSize<VkImageMemoryBarrier2>(1);
+    initCommand<ImageBarrier2Params>(CommandID::ImageBarrier2, imgBarrierSize.allocateBytes,
+                                     &writePtr);
+    storeArrayParameter(writePtr, &imageMemoryBarrier2, imgBarrierSize);
+}
+
 ANGLE_INLINE void SecondaryCommandBuffer::imageWaitEvent(
     const VkEvent &event,
     VkPipelineStageFlags srcStageMask,
@@ -1761,6 +1886,22 @@ ANGLE_INLINE void SecondaryCommandBuffer::imageWaitEvent(
     paramStruct->srcStageMask = srcStageMask;
     paramStruct->dstStageMask = dstStageMask;
     storeArrayParameter(writePtr, &imageMemoryBarrier, imgBarrierSize);
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::imageWaitEvent2(
+    const VkEvent &event,
+    const VkImageMemoryBarrier2 &imageMemoryBarrier2)
+{
+    ASSERT(imageMemoryBarrier2.pNext == nullptr);
+
+    uint8_t *writePtr;
+    const ArrayParamSize imgBarrier2Size = calculateArrayParameterSize<VkImageMemoryBarrier2>(1);
+
+    ImageWaitEvent2Params *paramStruct = initCommand<ImageWaitEvent2Params>(
+        CommandID::ImageWaitEvent2, imgBarrier2Size.allocateBytes, &writePtr);
+
+    paramStruct->event = event;
+    storeArrayParameter(writePtr, &imageMemoryBarrier2, imgBarrier2Size);
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::insertDebugUtilsLabelEXT(
@@ -1782,6 +1923,17 @@ ANGLE_INLINE void SecondaryCommandBuffer::memoryBarrier(VkPipelineStageFlags src
     paramStruct->srcStageMask = srcStageMask;
     paramStruct->dstStageMask = dstStageMask;
     storeArrayParameter(writePtr, &memoryBarrier, memBarrierSize);
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::memoryBarrier2(const VkMemoryBarrier2 &memoryBarrier2)
+{
+    ASSERT(memoryBarrier2.pNext == nullptr);
+
+    uint8_t *writePtr;
+    const ArrayParamSize memBarrierSize = calculateArrayParameterSize<VkMemoryBarrier2>(1);
+    initCommand<MemoryBarrier2Params>(CommandID::MemoryBarrier2, memBarrierSize.allocateBytes,
+                                      &writePtr);
+    storeArrayParameter(writePtr, &memoryBarrier2, memBarrierSize);
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::nextSubpass(VkSubpassContents subpassContents)
@@ -1830,6 +1982,42 @@ ANGLE_INLINE void SecondaryCommandBuffer::pipelineBarrier(
     }
 }
 
+ANGLE_INLINE void SecondaryCommandBuffer::pipelineBarrier2(
+    VkDependencyFlags dependencyFlags,
+    uint32_t memoryBarrierCount,
+    const VkMemoryBarrier2 *memoryBarriers,
+    uint32_t bufferMemoryBarrierCount,
+    const VkBufferMemoryBarrier2 *bufferMemoryBarriers,
+    uint32_t imageMemoryBarrierCount,
+    const VkImageMemoryBarrier2 *imageMemoryBarriers)
+{
+    // Other than for QFOT (where bufferBarrier() is used), ANGLE doesn't use buffer barriers.
+    // Memory barriers are used instead.
+    ASSERT(bufferMemoryBarrierCount == 0);
+    ASSERT(bufferMemoryBarriers == nullptr);
+
+    uint8_t *writePtr;
+    const ArrayParamSize memBarrierSize =
+        calculateArrayParameterSize<VkMemoryBarrier2>(memoryBarrierCount);
+    const ArrayParamSize imgBarrierSize =
+        calculateArrayParameterSize<VkImageMemoryBarrier2>(imageMemoryBarrierCount);
+    PipelineBarrierParams2 *paramStruct = initCommand<PipelineBarrierParams2>(
+        CommandID::PipelineBarrier2, memBarrierSize.allocateBytes + imgBarrierSize.allocateBytes,
+        &writePtr);
+    paramStruct->dependencyFlags         = dependencyFlags;
+    paramStruct->memoryBarrierCount      = memoryBarrierCount;
+    paramStruct->imageMemoryBarrierCount = imageMemoryBarrierCount;
+    // Copy variable sized data
+    if (memoryBarrierCount > 0)
+    {
+        writePtr = storeArrayParameter(writePtr, memoryBarriers, memBarrierSize);
+    }
+    if (imageMemoryBarrierCount > 0)
+    {
+        storeArrayParameter(writePtr, imageMemoryBarriers, imgBarrierSize);
+    }
+}
+
 ANGLE_INLINE void SecondaryCommandBuffer::pushConstants(const PipelineLayout &layout,
                                                         VkShaderStageFlags flag,
                                                         uint32_t offset,
@@ -1854,6 +2042,14 @@ ANGLE_INLINE void SecondaryCommandBuffer::resetEvent(VkEvent event, VkPipelineSt
     ResetEventParams *paramStruct = initCommand<ResetEventParams>(CommandID::ResetEvent);
     paramStruct->event            = event;
     paramStruct->stageMask        = stageMask;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::resetEvent2(VkEvent event,
+                                                      VkPipelineStageFlags2 stageMask2)
+{
+    ResetEvent2Params *paramStruct = initCommand<ResetEvent2Params>(CommandID::ResetEvent2);
+    paramStruct->event             = event;
+    paramStruct->stageMask         = stageMask2;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::resetQueryPool(const QueryPool &queryPool,
@@ -1943,6 +2139,14 @@ ANGLE_INLINE void SecondaryCommandBuffer::setEvent(VkEvent event, VkPipelineStag
     SetEventParams *paramStruct = initCommand<SetEventParams>(CommandID::SetEvent);
     paramStruct->event          = event;
     paramStruct->stageMask      = stageMask;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setEvent2(VkEvent event,
+                                                    const VkDependencyInfo *dependencyInfo)
+{
+    SetEvent2Params *paramStruct = initCommand<SetEvent2Params>(CommandID::SetEvent2);
+    paramStruct->event           = event;
+    paramStruct->dependencyInfo  = dependencyInfo;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::setFragmentShadingRate(
@@ -2141,6 +2345,22 @@ ANGLE_INLINE void SecondaryCommandBuffer::waitEvents(
     storeArrayParameter(writePtr, imageMemoryBarriers, imgBarrierSize);
 }
 
+ANGLE_INLINE void SecondaryCommandBuffer::waitEvents2(uint32_t eventCount,
+                                                      const VkEvent *events,
+                                                      const VkDependencyInfo *dependencyInfos)
+{
+    uint8_t *writePtr;
+    const ArrayParamSize eventSize = calculateArrayParameterSize<VkEvent>(eventCount);
+    const ArrayParamSize dependencyInfoSize =
+        calculateArrayParameterSize<VkDependencyInfo>(eventCount);
+    WaitEvents2Params *paramStruct = initCommand<WaitEvents2Params>(
+        CommandID::WaitEvents2, eventSize.allocateBytes + dependencyInfoSize.allocateBytes,
+        &writePtr);
+    paramStruct->eventCount = eventCount;
+    writePtr                = storeArrayParameter(writePtr, events, eventSize);
+    storeArrayParameter(writePtr, dependencyInfos, dependencyInfoSize);
+}
+
 ANGLE_INLINE void SecondaryCommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage,
                                                          const QueryPool &queryPool,
                                                          uint32_t query)
@@ -2149,6 +2369,18 @@ ANGLE_INLINE void SecondaryCommandBuffer::writeTimestamp(VkPipelineStageFlagBits
 
     WriteTimestampParams *paramStruct =
         initCommand<WriteTimestampParams>(CommandID::WriteTimestamp);
+    paramStruct->queryPool = queryPool.getHandle();
+    paramStruct->query     = query;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::writeTimestamp2(VkPipelineStageFlagBits2 pipelineStage,
+                                                          const QueryPool &queryPool,
+                                                          uint32_t query)
+{
+    ASSERT(pipelineStage == VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT);
+
+    WriteTimestampParams *paramStruct =
+        initCommand<WriteTimestampParams>(CommandID::WriteTimestamp2);
     paramStruct->queryPool = queryPool.getHandle();
     paramStruct->query     = query;
 }
