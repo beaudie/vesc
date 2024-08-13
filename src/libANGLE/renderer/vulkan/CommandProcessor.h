@@ -141,7 +141,7 @@ class CommandProcessorTask
     void initFlushWaitSemaphores(ProtectionType protectionType,
                                  egl::ContextPriority priority,
                                  std::vector<VkSemaphore> &&waitSemaphores,
-                                 std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
+                                 std::vector<VkPipelineStageFlags2> &&waitSemaphoreStageMasks);
 
     void initOutsideRenderPassProcessCommands(ProtectionType protectionType,
                                               egl::ContextPriority priority,
@@ -167,7 +167,7 @@ class CommandProcessorTask
                                ProtectionType protectionType,
                                egl::ContextPriority priority,
                                VkSemaphore waitSemaphore,
-                               VkPipelineStageFlags waitSemaphoreStageMask,
+                               VkPipelineStageFlags2 waitSemaphoreStageMask,
                                const QueueSerial &submitQueueSerial);
 
     CommandProcessorTask &operator=(CommandProcessorTask &&rhs);
@@ -180,7 +180,7 @@ class CommandProcessorTask
     const QueueSerial &getSubmitQueueSerial() const { return mSubmitQueueSerial; }
     CustomTask getTaskCommand() { return mTask; }
     std::vector<VkSemaphore> &getWaitSemaphores() { return mWaitSemaphores; }
-    std::vector<VkPipelineStageFlags> &getWaitSemaphoreStageMasks()
+    std::vector<VkPipelineStageFlags2> &getWaitSemaphoreStageMasks()
     {
         return mWaitSemaphoreStageMasks;
     }
@@ -190,7 +190,7 @@ class CommandProcessorTask
     ProtectionType getProtectionType() const { return mProtectionType; }
     VkCommandBuffer getOneOffCommandBuffer() const { return mOneOffCommandBuffer; }
     VkSemaphore getOneOffWaitSemaphore() const { return mOneOffWaitSemaphore; }
-    VkPipelineStageFlags getOneOffWaitSemaphoreStageMask() const
+    VkPipelineStageFlags2 getOneOffWaitSemaphoreStageMask() const
     {
         return mOneOffWaitSemaphoreStageMask;
     }
@@ -214,7 +214,7 @@ class CommandProcessorTask
 
     // Wait semaphores
     std::vector<VkSemaphore> mWaitSemaphores;
-    std::vector<VkPipelineStageFlags> mWaitSemaphoreStageMasks;
+    std::vector<VkPipelineStageFlags2> mWaitSemaphoreStageMasks;
 
     // ProcessCommands
     OutsideRenderPassCommandBufferHelper *mOutsideRenderPassCommandBuffer;
@@ -250,7 +250,7 @@ class CommandProcessorTask
     // Used by OneOffQueueSubmit
     VkCommandBuffer mOneOffCommandBuffer;
     VkSemaphore mOneOffWaitSemaphore;
-    VkPipelineStageFlags mOneOffWaitSemaphoreStageMask;
+    VkPipelineStageFlags2 mOneOffWaitSemaphoreStageMask;
 
     // Flush, Present & QueueWaitIdle data
     egl::ContextPriority mPriority;
@@ -439,7 +439,7 @@ class CommandQueue : angle::NonCopyable
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
                                     VkSemaphore waitSemaphore,
-                                    VkPipelineStageFlags waitSemaphoreStageMask,
+                                    VkPipelineStageFlags2 waitSemaphoreStageMask2,
                                     SubmitPolicy submitPolicy,
                                     const QueueSerial &submitQueueSerial);
 
@@ -471,7 +471,7 @@ class CommandQueue : angle::NonCopyable
     void flushWaitSemaphores(ProtectionType protectionType,
                              egl::ContextPriority priority,
                              std::vector<VkSemaphore> &&waitSemaphores,
-                             std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
+                             std::vector<VkPipelineStageFlags2> &&waitSemaphoreStageMasks);
     angle::Result flushOutsideRPCommands(Context *context,
                                          ProtectionType protectionType,
                                          egl::ContextPriority priority,
@@ -603,7 +603,7 @@ class CommandProcessor : public Context
                                               egl::ContextPriority contextPriority,
                                               VkCommandBuffer commandBufferHandle,
                                               VkSemaphore waitSemaphore,
-                                              VkPipelineStageFlags waitSemaphoreStageMask,
+                                              VkPipelineStageFlags2 waitSemaphoreStageMask,
                                               SubmitPolicy submitPolicy,
                                               const QueueSerial &submitQueueSerial);
     void enqueuePresent(egl::ContextPriority contextPriority,
@@ -614,7 +614,7 @@ class CommandProcessor : public Context
         ProtectionType protectionType,
         egl::ContextPriority priority,
         std::vector<VkSemaphore> &&waitSemaphores,
-        std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
+        std::vector<VkPipelineStageFlags2> &&waitSemaphoreStageMasks);
     angle::Result enqueueFlushOutsideRPCommands(
         Context *context,
         ProtectionType protectionType,
