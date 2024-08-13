@@ -160,6 +160,24 @@
       "parentUuid": "2706843a_4ffd159e",
       "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16dcd8a0_25ca0586",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-13T16:11:45Z",
+      "side": 1,
+      "message": "LGTM. I will leave to Shabi for the rest.",
+      "parentUuid": "5be9b3a2_4688f33a",
+      "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
