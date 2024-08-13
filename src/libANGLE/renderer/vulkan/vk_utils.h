@@ -1245,6 +1245,9 @@ void InitGetPastPresentationTimingGoogleFunction(VkDevice device);
 // VK_EXT_host_image_copy
 void InitHostImageCopyFunctions(VkDevice device);
 
+// VK_KHR_Synchronization2
+void InitSynchronization2Functions(VkDevice device);
+
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 
 // Promoted to Vulkan 1.1
