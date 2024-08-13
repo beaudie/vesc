@@ -142,6 +142,24 @@
       "parentUuid": "70525a01_65578a40",
       "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5be9b3a2_4688f33a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-13T15:42:20Z",
+      "side": 1,
+      "message": "Want to add an update regarding:\n\n\u003e This is possible if implement LRU eviction in the blob cache and set `angle_egl_blob_cache_evicts_old_items_first \u003d true`.\n\nSimply having LRU eviction is not enough to guarantee that all chunks will be present after writing. This is because blob cache may evict more entries than really necessary to write the new blob. The `MultifileBlobCache` for example, evicts entries until there is 50% free space.\n\nSo in order to avoid checking items after write, need to have a blob cache that evicts minimum number of entries necessary to write the new blob. For this need to add another build variable: `angle_egl_blob_cache_evicts_only_necessary_items`.\n\nI\u0027m currently experimenting with `MultifileBlobCache`: fix bugs, add LRU, update eviction logic, and so on. After this, I will update build variables and logic in this CL, to allow optimal ANGLE configuration for the used blob cache implementation.",
+      "parentUuid": "2706843a_4ffd159e",
+      "revId": "f36c01b5f43455e7c4ffae9e568bd5cb8045ca91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
