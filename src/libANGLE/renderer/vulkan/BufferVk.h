@@ -68,6 +68,7 @@ class VertexConversionBuffer : public ConversionBuffer
         GLuint stride;
         size_t offset;
         bool hostVisible;
+        bool offsetMustExactMatch;
     };
 
     VertexConversionBuffer(vk::Renderer *renderer, const CacheKey &cacheKey);
@@ -75,10 +76,33 @@ class VertexConversionBuffer : public ConversionBuffer
 
     VertexConversionBuffer(VertexConversionBuffer &&other);
 
-    bool match(const CacheKey &cacheKey) const
+    bool match(const CacheKey &cacheKey)
     {
-        return mCacheKey.formatID == cacheKey.formatID && mCacheKey.stride == cacheKey.stride &&
-               mCacheKey.offset == cacheKey.offset && mCacheKey.hostVisible == cacheKey.hostVisible;
+        if (mCacheKey.formatID != cacheKey.formatID || mCacheKey.stride != cacheKey.stride ||
+            mCacheKey.offsetMustExactMatch != cacheKey.offsetMustExactMatch ||
+            mCacheKey.hostVisible != cacheKey.hostVisible)
+        {
+            return false;
+        }
+        if (mCacheKey.offset == cacheKey.offset)
+        {
+            return true;
+        }
+        else if (!cacheKey.offsetMustExactMatch)
+        {
+            int64_t offsetGap = cacheKey.offset - mCacheKey.offset;
+            if ((offsetGap % cacheKey.stride) == 0)
+            {
+                if (cacheKey.offset < mCacheKey.offset)
+                {
+                    const gl::RangeULL dirtyRange{cacheKey.offset, mCacheKey.offset};
+                    addDirtyBufferRange(dirtyRange);
+                    mCacheKey.offset = cacheKey.offset;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     const CacheKey &getCacheKey() const { return mCacheKey; }
