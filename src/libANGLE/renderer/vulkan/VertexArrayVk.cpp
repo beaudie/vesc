@@ -859,10 +859,20 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 const VertexConversionBuffer::CacheKey cacheKey{
                     srcFormat.id, srcStride,
                     static_cast<size_t>(binding.getOffset()) + attrib.relativeOffset,
-                    !bindingIsAligned};
+                    !bindingIsAligned, false};
 
                 VertexConversionBuffer *conversion =
                     bufferVk->getVertexConversionBuffer(renderer, cacheKey);
+
+                // Converted buffer is tightly packed
+                uint32_t dstStride = vertexFormat.getActualBufferFormat(compressed).pixelBytes;
+                // Converted attribs are packed in their own VK buffer so offset is relative to the
+                // binding and coversion's offset
+                size_t srcRelativeOffset =
+                    binding.getOffset() + attrib.relativeOffset - conversion->getCacheKey().offset;
+                ASSERT(srcRelativeOffset == (srcRelativeOffset / srcStride) * srcStride);
+                size_t dstRelativeOffset = srcRelativeOffset / srcStride * dstStride;
+
                 if (conversion->dirty())
                 {
                     if (compressed)
@@ -903,13 +913,9 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     bufferHelper
                         ->getBufferForVertexArray(contextVk, bufferHelper->getSize(), &bufferOffset)
                         .getHandle();
-                mCurrentArrayBufferOffsets[attribIndex] = bufferOffset;
-                // Converted attribs are packed in their own VK buffer so offset is zero
+                mCurrentArrayBufferOffsets[attribIndex]         = bufferOffset + dstRelativeOffset;
                 mCurrentArrayBufferRelativeOffsets[attribIndex] = 0;
-
-                // Converted buffer is tightly packed
-                mCurrentArrayBufferStrides[attribIndex] =
-                    vertexFormat.getActualBufferFormat(compressed).pixelBytes;
+                mCurrentArrayBufferStrides[attribIndex]         = dstStride;
             }
             else
             {
