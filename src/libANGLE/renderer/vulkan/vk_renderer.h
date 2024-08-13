@@ -304,7 +304,7 @@ class Renderer : angle::NonCopyable
                                     vk::ProtectionType protectionType,
                                     egl::ContextPriority priority,
                                     VkSemaphore waitSemaphore,
-                                    VkPipelineStageFlags waitSemaphoreStageMasks,
+                                    VkPipelineStageFlags2 waitSemaphoreStageMasks,
                                     vk::SubmitPolicy submitPolicy,
                                     QueueSerial *queueSerialOut);
 
@@ -466,7 +466,7 @@ class Renderer : angle::NonCopyable
     angle::Result flushWaitSemaphores(vk::ProtectionType protectionType,
                                       egl::ContextPriority priority,
                                       std::vector<VkSemaphore> &&waitSemaphores,
-                                      std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
+                                      std::vector<VkPipelineStageFlags2> &&waitSemaphoreStageMasks);
     angle::Result flushRenderPassCommands(vk::Context *context,
                                           vk::ProtectionType protectionType,
                                           egl::ContextPriority priority,
@@ -518,16 +518,16 @@ class Renderer : angle::NonCopyable
     // Log cache stats for all caches
     void logCacheStats() const;
 
-    VkPipelineStageFlags getSupportedBufferWritePipelineStageMask() const
+    VkPipelineStageFlags2 getSupportedBufferWritePipelineStageMask() const
     {
         return mSupportedBufferWritePipelineStageMask;
     }
 
-    VkPipelineStageFlags getPipelineStageMask(EventStage eventStage) const
+    VkPipelineStageFlags2 getPipelineStageMask(EventStage eventStage) const
     {
         return mEventStageAndPipelineStageFlagsMap[eventStage];
     }
-    VkPipelineStageFlags getEventPipelineStageMask(const RefCountedEvent &refCountedEvent) const
+    VkPipelineStageFlags2 getEventPipelineStageMask(const RefCountedEvent &refCountedEvent) const
     {
         return mEventStageAndPipelineStageFlagsMap[refCountedEvent.getEventStage()];
     }
@@ -1091,10 +1091,10 @@ class Renderer : angle::NonCopyable
     // Note that this mask can have bits set that don't correspond to valid stages, so it's
     // strictly only useful for masking out unsupported stages in an otherwise valid set of
     // stages.
-    VkPipelineStageFlags mSupportedBufferWritePipelineStageMask;
+    VkPipelineStageFlags2 mSupportedBufferWritePipelineStageMask;
     VkShaderStageFlags mSupportedVulkanShaderStageMask;
     // The 1:1 mapping between EventStage and VkPipelineStageFlags
-    angle::PackedEnumMap<EventStage, VkPipelineStageFlags> mEventStageAndPipelineStageFlagsMap;
+    angle::PackedEnumMap<EventStage, VkPipelineStageFlags2> mEventStageAndPipelineStageFlagsMap;
     angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> mImageLayoutAndMemoryBarrierDataMap;
 
     // Use thread pool to compress cache data.
