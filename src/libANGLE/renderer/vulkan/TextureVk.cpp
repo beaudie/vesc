@@ -3206,9 +3206,9 @@ vk::BufferHelper *TextureVk::getRGBAConversionBufferHelper(vk::Renderer *rendere
 {
     BufferVk *bufferVk                                        = vk::GetImpl(getBuffer().get());
     const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
-    const VkDeviceSize bindingOffset                          = bufferBinding.getOffset();
-    ConversionBuffer *conversion                              = bufferVk->getVertexConversionBuffer(
-        renderer, formatID, 16, static_cast<uint32_t>(bindingOffset), false);
+    const VertexConversionBuffer::CacheKey cacheKey{
+        formatID, 16, static_cast<size_t>(bufferBinding.getOffset()), false, true};
+    VertexConversionBuffer *conversion = bufferVk->getVertexConversionBuffer(renderer, cacheKey);
     return conversion->getBuffer();
 }
 
@@ -3220,15 +3220,15 @@ angle::Result TextureVk::convertBufferToRGBA(ContextVk *contextVk, size_t &conve
         &renderer->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
     const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
     BufferVk *bufferVk                                        = vk::GetImpl(getBuffer().get());
-    const VkDeviceSize bindingOffset                          = bufferBinding.getOffset();
+    const size_t bindingOffset                                = bufferBinding.getOffset();
     const VkDeviceSize bufferSize                             = bufferVk->getSize();
     const VkDeviceSize bufferSizeFromOffset                   = bufferSize - bindingOffset;
     conversionBufferSize = roundUpPow2<size_t>(static_cast<size_t>((bufferSizeFromOffset / 3) * 4),
                                                4 * sizeof(uint32_t));
 
-    ConversionBuffer *conversion =
-        bufferVk->getVertexConversionBuffer(renderer, imageUniformFormat->getIntendedFormatID(), 16,
-                                            static_cast<uint32_t>(bindingOffset), false);
+    const VertexConversionBuffer::CacheKey cacheKey{imageUniformFormat->getIntendedFormatID(), 16,
+                                                    bindingOffset, false, true};
+    VertexConversionBuffer *conversion = bufferVk->getVertexConversionBuffer(renderer, cacheKey);
     mBufferContentsObservers->enableForBuffer(getBuffer().get());
     if (!conversion->valid())
     {
