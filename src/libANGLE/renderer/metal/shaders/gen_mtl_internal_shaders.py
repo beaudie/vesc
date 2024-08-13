@@ -145,8 +145,14 @@ def main():
         '../../angle_format_map.json', '../../angle_format.py', '../../gen_angle_format_table.py'
     ]
     src_files = [
-        'blit.metal', 'clear.metal', 'gen_indices.metal', 'gen_mipmap.metal', 'copy_buffer.metal',
-        'visibility.metal', 'rewrite_indices.metal'
+        'blit.metal',
+        'clear.metal',
+        'gen_indices.metal',
+        'gen_mipmap.metal',
+        'copy_buffer.metal',
+        'visibility.metal',
+        'rewrite_indices.metal',
+        'unresolve.metal',
     ]
 
     # auto_script parameters.

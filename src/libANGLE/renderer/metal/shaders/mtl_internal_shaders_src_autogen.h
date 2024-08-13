@@ -12,7 +12,7 @@ static char gDefaultMetallibSrc[] = R"(
 # 1 "temp_master_source.metal"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
-# 514 "<built-in>" 3
+# 521 "<built-in>" 3
 # 1 "<command line>" 1
 # 1 "<built-in>" 2
 # 1 "temp_master_source.metal" 2
@@ -45,6 +45,7 @@ enum
     kTextureTypeCube = 3,
     kTextureType3D = 4,
     kTextureTypeCount = 5,
+    kTextureTypeInvalid = kTextureTypeCount,
 };
 
 
@@ -3682,6 +3683,115 @@ kernel void genIndexBuffer(
     }
 }
 # 8 "temp_master_source.metal" 2
+# 1 "./unresolve.metal" 1
+# 11 "./unresolve.metal"
+using namespace rx::mtl_shader;
+
+
+#if __METAL_VERSION__ >= 210
+
+constant int kUnresolveFlags [[function_constant(3000)]];
+
+constant bool kUnresolveColor0 = (kUnresolveFlags & 0x1) != 0;
+constant bool kUnresolveColor1 = (kUnresolveFlags & 0x2) != 0;
+constant bool kUnresolveColor2 = (kUnresolveFlags & 0x4) != 0;
+constant bool kUnresolveColor3 = (kUnresolveFlags & 0x8) != 0;
+constant bool kUnresolveColor4 = (kUnresolveFlags & 0x10) != 0;
+constant bool kUnresolveColor5 = (kUnresolveFlags & 0x20) != 0;
+constant bool kUnresolveColor6 = (kUnresolveFlags & 0x40) != 0;
+constant bool kUnresolveColor7 = (kUnresolveFlags & 0x80) != 0;
+
+constant bool kUnresolveDepth = (kUnresolveFlags & 0x100) != 0;
+constant bool kUnresolveStencil = (kUnresolveFlags & 0x200) != 0;
+
+struct UnresolveParams
+{
+    int srcColorLevels[8];
+
+    int srcDepthLevel;
+
+    int srcStencilLevel;
+};
+
+vertex float4 unresolveVS(unsigned int vid [[vertex_id]])
+{
+    float4 position;
+    position.xy = select(float2(-1.0f), float2(1.0f), bool2(vid & uint2(2, 1)));
+    position.zw = float2(0.0, 1.0);
+
+    return position;
+}
+
+struct UnresolveFSOut
+{
+    float4 color0 [[color(0), function_constant(kUnresolveColor0)]];
+    float4 color1 [[color(1), function_constant(kUnresolveColor1)]];
+    float4 color2 [[color(2), function_constant(kUnresolveColor2)]];
+    float4 color3 [[color(3), function_constant(kUnresolveColor3)]];
+    float4 color4 [[color(4), function_constant(kUnresolveColor4)]];
+    float4 color5 [[color(5), function_constant(kUnresolveColor5)]];
+    float4 color6 [[color(6), function_constant(kUnresolveColor6)]];
+    float4 color7 [[color(7), function_constant(kUnresolveColor7)]];
+    float depth [[depth(any), function_constant(kUnresolveDepth)]];
+    uint32_t stencil [[stencil, function_constant(kUnresolveStencil)]];
+};
+
+fragment UnresolveFSOut
+unresolveFS(float4 fragPosition [[position]],
+            texture2d<float> srcColor0
+            [[texture(0), function_constant(kUnresolveColor0)]],
+            texture2d<float> srcColor1
+            [[texture(1), function_constant(kUnresolveColor1)]],
+            texture2d<float> srcColor2
+            [[texture(2), function_constant(kUnresolveColor2)]],
+            texture2d<float> srcColor3
+            [[texture(3), function_constant(kUnresolveColor3)]],
+            texture2d<float> srcColor4
+            [[texture(4), function_constant(kUnresolveColor4)]],
+            texture2d<float> srcColor5
+            [[texture(5), function_constant(kUnresolveColor5)]],
+            texture2d<float> srcColor6
+            [[texture(6), function_constant(kUnresolveColor6)]],
+            texture2d<float> srcColor7
+            [[texture(7), function_constant(kUnresolveColor7)]],
+            texture2d<float> srcDepth
+            [[texture(8), function_constant(kUnresolveDepth)]],
+            texture2d<uint> srcStencil
+            [[texture(9), function_constant(kUnresolveStencil)]],
+            constant UnresolveParams &options [[buffer(0)]])
+{
+    UnresolveFSOut output;
+
+    uint2 fragLocation = uint2(fragPosition.x, fragPosition.y);
+# 100 "./unresolve.metal"
+    do { if (kUnresolveColor0) { output.color0 = srcColor0.read(fragLocation, options.srcColorLevels[0]); } } while (0);
+    do { if (kUnresolveColor1) { output.color1 = srcColor1.read(fragLocation, options.srcColorLevels[1]); } } while (0);
+    do { if (kUnresolveColor2) { output.color2 = srcColor2.read(fragLocation, options.srcColorLevels[2]); } } while (0);
+    do { if (kUnresolveColor3) { output.color3 = srcColor3.read(fragLocation, options.srcColorLevels[3]); } } while (0);
+    do { if (kUnresolveColor4) { output.color4 = srcColor4.read(fragLocation, options.srcColorLevels[4]); } } while (0);
+    do { if (kUnresolveColor5) { output.color5 = srcColor5.read(fragLocation, options.srcColorLevels[5]); } } while (0);
+    do { if (kUnresolveColor6) { output.color6 = srcColor6.read(fragLocation, options.srcColorLevels[6]); } } while (0);
+    do { if (kUnresolveColor7) { output.color7 = srcColor7.read(fragLocation, options.srcColorLevels[7]); } } while (0);
+
+
+
+
+    if (kUnresolveDepth)
+    {
+        output.depth = srcDepth.read(fragLocation, options.srcDepthLevel).r;
+    }
+
+
+    if (kUnresolveStencil)
+    {
+        output.stencil = srcStencil.read(fragLocation, options.srcStencilLevel).r;
+    }
+
+    return output;
+}
+
+#endif
+# 9 "temp_master_source.metal" 2
 
 
 )";
