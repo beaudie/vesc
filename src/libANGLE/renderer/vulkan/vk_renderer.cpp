@@ -3709,39 +3709,39 @@ angle::Result Renderer::createDeviceAndQueue(vk::Context *context, uint32_t queu
     // Track the set of supported pipeline stages.  This is used when issuing image layout
     // transitions that cover many stages (such as AllGraphicsReadOnly) to mask out unsupported
     // stages, which avoids enumerating every possible combination of stages in the layouts.
-    VkPipelineStageFlags unsupportedStages = 0;
+    VkPipelineStageFlags2 unsupportedStages = 0;
     mSupportedVulkanShaderStageMask =
         VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT;
     mSupportedBufferWritePipelineStageMask =
-        VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
-        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+        VK_PIPELINE_STAGE_2_TRANSFER_BIT | VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT |
+        VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT;
 
     if (!mPhysicalDeviceFeatures.tessellationShader)
     {
-        unsupportedStages |= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-                             VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+        unsupportedStages |= VK_PIPELINE_STAGE_2_TESSELLATION_CONTROL_SHADER_BIT |
+                             VK_PIPELINE_STAGE_2_TESSELLATION_EVALUATION_SHADER_BIT;
     }
     else
     {
         mSupportedVulkanShaderStageMask |=
             VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT | VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
         mSupportedBufferWritePipelineStageMask |=
-            VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-            VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+            VK_PIPELINE_STAGE_2_TESSELLATION_CONTROL_SHADER_BIT |
+            VK_PIPELINE_STAGE_2_TESSELLATION_EVALUATION_SHADER_BIT;
     }
     if (!mPhysicalDeviceFeatures.geometryShader)
     {
-        unsupportedStages |= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        unsupportedStages |= VK_PIPELINE_STAGE_2_GEOMETRY_SHADER_BIT;
     }
     else
     {
         mSupportedVulkanShaderStageMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
-        mSupportedBufferWritePipelineStageMask |= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        mSupportedBufferWritePipelineStageMask |= VK_PIPELINE_STAGE_2_GEOMETRY_SHADER_BIT;
     }
 
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        mSupportedBufferWritePipelineStageMask |= VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT;
+        mSupportedBufferWritePipelineStageMask |= VK_PIPELINE_STAGE_2_TRANSFORM_FEEDBACK_BIT_EXT;
     }
 
     // Initialize the barrierData tables by removing unsupported pipeline stage bits
@@ -5276,6 +5276,7 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsSynchronization2,
                             mSynchronization2Features.synchronization2 == VK_TRUE);
+    // false);
 
     // Disable memory report feature overrides if extension is not supported.
     if ((mFeatures.logMemoryReportCallbacks.enabled || mFeatures.logMemoryReportStats.enabled) &&
@@ -5597,7 +5598,7 @@ angle::Result Renderer::queueSubmitOneOff(vk::Context *context,
                                           vk::ProtectionType protectionType,
                                           egl::ContextPriority priority,
                                           VkSemaphore waitSemaphore,
-                                          VkPipelineStageFlags waitSemaphoreStageMasks,
+                                          VkPipelineStageFlags2 waitSemaphoreStageMasks,
                                           vk::SubmitPolicy submitPolicy,
                                           QueueSerial *queueSerialOut)
 {
@@ -5938,7 +5939,7 @@ angle::Result Renderer::submitPriorityDependency(vk::Context *context,
     QueueSerial queueSerial(index, generateQueueSerial(index));
     semaphore.get().setQueueSerial(queueSerial);
     ANGLE_TRY(queueSubmitWaitSemaphore(context, dstContextPriority, semaphore.get().get(),
-                                       VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, queueSerial));
+                                       VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, queueSerial));
 
     return angle::Result::Continue;
 }
@@ -5991,7 +5992,7 @@ angle::Result Renderer::flushWaitSemaphores(
     vk::ProtectionType protectionType,
     egl::ContextPriority priority,
     std::vector<VkSemaphore> &&waitSemaphores,
-    std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+    std::vector<VkPipelineStageFlags2> &&waitSemaphoreStageMasks)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "Renderer::flushWaitSemaphores");
     if (isAsyncCommandQueueEnabled())
