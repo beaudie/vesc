@@ -68,6 +68,7 @@ class VertexConversionBuffer : public ConversionBuffer
         GLuint stride;
         size_t offset;
         bool hostVisible;
+        bool offsetMustExactMatch;
     };
 
     VertexConversionBuffer(vk::Renderer *renderer, const CacheKey &cacheKey);
@@ -75,10 +76,40 @@ class VertexConversionBuffer : public ConversionBuffer
 
     VertexConversionBuffer(VertexConversionBuffer &&other);
 
-    bool match(const CacheKey &cacheKey) const
+    bool match(const CacheKey &cacheKey)
     {
-        return mCacheKey.formatID == cacheKey.formatID && mCacheKey.stride == cacheKey.stride &&
-               mCacheKey.offset == cacheKey.offset && mCacheKey.hostVisible == cacheKey.hostVisible;
+        // If anything other than offset msiamtch, it can't reuse.
+        if (mCacheKey.formatID != cacheKey.formatID || mCacheKey.stride != cacheKey.stride ||
+            mCacheKey.offsetMustExactMatch != cacheKey.offsetMustExactMatch ||
+            mCacheKey.hostVisible != cacheKey.hostVisible)
+        {
+            return false;
+        }
+
+        // If offset matches, for sure we can reuse.
+        if (mCacheKey.offset == cacheKey.offset)
+        {
+            return true;
+        }
+
+        // If offset exact match is not required, we adjust the offset to reuse the buffer. Since we
+        // reused the buffer, the previous conversion result is still valid. We just need to convert
+        // the modified data.
+        if (!cacheKey.offsetMustExactMatch)
+        {
+            int64_t offsetGap = cacheKey.offset - mCacheKey.offset;
+            if ((offsetGap % cacheKey.stride) == 0)
+            {
+                if (cacheKey.offset < mCacheKey.offset)
+                {
+                    const gl::RangeULL dirtyRange{cacheKey.offset, mCacheKey.offset};
+                    addDirtyBufferRange(dirtyRange);
+                    mCacheKey.offset = cacheKey.offset;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     const CacheKey &getCacheKey() const { return mCacheKey; }
