@@ -36,6 +36,7 @@
 #include "libANGLE/renderer/vulkan/vk_resource.h"
 #include "libANGLE/trace.h"
 #include "platform/PlatformMethods.h"
+#include "vulkan/vulkan_core.h"
 
 // Consts
 namespace
@@ -2520,6 +2521,11 @@ void Renderer::appendDeviceExtensionFeaturesPromotedTo12(
     VkPhysicalDeviceFeatures2KHR *deviceFeatures,
     VkPhysicalDeviceProperties2 *deviceProperties)
 {
+    if (ExtensionFound(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceProperties, &mFloatControlProperties);
+    }
+
     if (ExtensionFound(VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME, deviceExtensionNames))
     {
         vk::AddToPNextChain(deviceFeatures, &mShaderFloat16Int8Features);
@@ -2799,6 +2805,10 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     mVariablePointersFeatures = {};
     mVariablePointersFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR;
+
+    // Rounding and denormal caps from VK_KHR_float_controls_properties
+    mFloatControlProperties       = {};
+    mFloatControlProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES;
 
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures = {};
@@ -4921,6 +4931,57 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
                                 !(isNvidia && nvidiaVersion.major < 525) &&
                                 !isQualcommProprietary &&
                                 !(isARM && armDriverVersion < ARMDriverVersion(47, 0, 0)));
+
+    // Rounding features from VK_KHR_float_controls extension, which is enabled on presence of
+    // VK_KHR_SPIRV_1_4 extension
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsDenormFtzFp16,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderDenormFlushToZeroFloat16 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsDenormFtzFp32,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderDenormFlushToZeroFloat32 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsDenormFtzFp64,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderDenormFlushToZeroFloat64 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsDenormPreserveFp16,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderDenormPreserveFloat16 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsDenormPreserveFp32,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderDenormPreserveFloat32 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsDenormPreserveFp64,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderDenormPreserveFloat64 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsRoundingModeRteFp16,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderRoundingModeRTEFloat16 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsRoundingModeRteFp32,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderRoundingModeRTEFloat32 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsRoundingModeRteFp64,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderRoundingModeRTEFloat64 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsRoundingModeRtzFp16,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderRoundingModeRTZFloat16 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsRoundingModeRtzFp32,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderRoundingModeRTZFloat32 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsRoundingModeRtzFp64,
+                            mFeatures.supportsSPIRV14.enabled &&
+                                mFloatControlProperties.shaderRoundingModeRTZFloat64 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsSignedZeroInfNanPreserveFp16,
+        mFeatures.supportsSPIRV14.enabled &&
+            mFloatControlProperties.shaderSignedZeroInfNanPreserveFloat16 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsSignedZeroInfNanPreserveFp32,
+        mFeatures.supportsSPIRV14.enabled &&
+            mFloatControlProperties.shaderSignedZeroInfNanPreserveFloat32 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsSignedZeroInfNanPreserveFp64,
+        mFeatures.supportsSPIRV14.enabled &&
+            mFloatControlProperties.shaderSignedZeroInfNanPreserveFloat64 == VK_TRUE);
 
     // Retain debug info in SPIR-V blob.
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSPIRVDebugInfo, getEnableValidationLayers());

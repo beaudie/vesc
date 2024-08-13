@@ -1509,6 +1509,111 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://issuetracker.google.com/347601787"
     };
 
+    FeatureInfo supportsRoundingModeRteFp16 = {
+        "supportsRoundingModeRteFp16",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsRoundingModeRteFp32 = {
+        "supportsRoundingModeRteFp32",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsRoundingModeRteFp64 = {
+        "supportsRoundingModeRteFp64",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsRoundingModeRtzFp16 = {
+        "supportsRoundingModeRtzFp16",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsRoundingModeRtzFp32 = {
+        "supportsRoundingModeRtzFp32",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsRoundingModeRtzFp64 = {
+        "supportsRoundingModeRtzFp64",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsDenormPreserveFp16 = {
+        "supportsDenormPreserveFp16",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsDenormPreserveFp32 = {
+        "supportsDenormPreserveFp32",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsDenormPreserveFp64 = {
+        "supportsDenormPreserveFp64",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsDenormFtzFp16 = {
+        "supportsDenormFtzFp16",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsDenormFtzFp32 = {
+        "supportsDenormFtzFp32",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsDenormFtzFp64 = {
+        "supportsDenormFtzFp64",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsSignedZeroInfNanPreserveFp16 = {
+        "supportsSignedZeroInfNanPreserveFp16",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsSignedZeroInfNanPreserveFp32 = {
+        "supportsSignedZeroInfNanPreserveFp32",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
+    FeatureInfo supportsSignedZeroInfNanPreserveFp64 = {
+        "supportsSignedZeroInfNanPreserveFp64",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports the Vk_KHR_shader_float_controls extension",
+        &members,
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
