@@ -487,7 +487,6 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
 // overhead.
 angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
                                                     BufferVk *srcBuffer,
-                                                    const gl::VertexBinding &binding,
                                                     size_t attribIndex,
                                                     const vk::Format &vertexFormat,
                                                     VertexConversionBuffer *conversion,
@@ -499,7 +498,7 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     unsigned srcFormatSize = srcFormat.pixelBytes;
     unsigned dstFormatSize = dstFormat.pixelBytes;
 
-    uint32_t srcStride = binding.getStride() == 0 ? srcFormatSize : binding.getStride();
+    uint32_t srcStride = conversion->getCacheKey().stride;
     uint32_t dstStride = dstFormatSize;
 
     ASSERT(srcStride % (srcFormat.pixelBytes / srcFormat.channelCount) == 0);
@@ -596,7 +595,6 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
 
 angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
                                                     BufferVk *srcBuffer,
-                                                    const gl::VertexBinding &binding,
                                                     size_t attribIndex,
                                                     const vk::Format &vertexFormat,
                                                     VertexConversionBuffer *conversion,
@@ -607,7 +605,7 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     unsigned srcFormatSize = vertexFormat.getIntendedFormat().pixelBytes;
     unsigned dstFormatSize = vertexFormat.getActualBufferFormat(compressed).pixelBytes;
 
-    uint32_t srcStride = binding.getStride() == 0 ? srcFormatSize : binding.getStride();
+    uint32_t srcStride = conversion->getCacheKey().stride;
     uint32_t dstStride = dstFormatSize;
 
     size_t numVertices = GetVertexCountForRange(
@@ -630,9 +628,9 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     {
         const uint8_t *srcBytes = reinterpret_cast<const uint8_t *>(src);
         srcBytes += conversion->getCacheKey().offset;
-        ANGLE_TRY(StreamVertexData(contextVk, dstBufferHelper, srcBytes,
-                                   numVertices * dstFormatSize, 0, numVertices, binding.getStride(),
-                                   vertexFormat.getVertexLoadFunction(compressed)));
+        ANGLE_TRY(StreamVertexData(
+            contextVk, dstBufferHelper, srcBytes, numVertices * dstFormatSize, 0, numVertices,
+            conversion->getCacheKey().stride, vertexFormat.getVertexLoadFunction(compressed)));
     }
     else
     {
@@ -925,17 +923,25 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
             if (needsConversion)
             {
-                mContentsObservers->enableForBuffer(bufferGL, static_cast<uint32_t>(attribIndex));
-
                 WarnOnVertexFormatConversion(contextVk, vertexFormat, compressed, true);
+
+                mContentsObservers->enableForBuffer(bufferGL, static_cast<uint32_t>(attribIndex));
 
                 const VertexConversionBuffer::CacheKey cacheKey{
                     intendedFormat.id, srcStride,
                     static_cast<size_t>(binding.getOffset()) + attrib.relativeOffset,
-                    !bindingIsAligned};
-
+                    !bindingIsAligned, false};
                 VertexConversionBuffer *conversion =
                     bufferVk->getVertexConversionBuffer(renderer, cacheKey);
+
+                // Converted buffer is tightly packed
+                uint32_t dstStride = vertexFormat.getActualBufferFormat(compressed).pixelBytes;
+                // Converted attribs are packed in their own VK buffer so offset is relative to the
+                // binding and coversion's offset
+                size_t srcRelativeOffset =
+                    binding.getOffset() + attrib.relativeOffset - conversion->getCacheKey().offset;
+                size_t dstRelativeOffset = srcRelativeOffset / srcStride * dstStride;
+
                 if (conversion->dirty())
                 {
                     if (compressed)
@@ -948,7 +954,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
                     if (bindingIsAligned)
                     {
-                        ANGLE_TRY(convertVertexBufferGPU(contextVk, bufferVk, binding, attribIndex,
+                        ANGLE_TRY(convertVertexBufferGPU(contextVk, bufferVk, attribIndex,
                                                          vertexFormat, conversion, compressed));
                     }
                     else
@@ -957,7 +963,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                             contextVk, GL_DEBUG_SEVERITY_HIGH,
                             "GPU stall due to vertex format conversion of unaligned data");
 
-                        ANGLE_TRY(convertVertexBufferCPU(contextVk, bufferVk, binding, attribIndex,
+                        ANGLE_TRY(convertVertexBufferCPU(contextVk, bufferVk, attribIndex,
                                                          vertexFormat, conversion, compressed));
                     }
 
@@ -976,13 +982,9 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     bufferHelper
                         ->getBufferForVertexArray(contextVk, bufferHelper->getSize(), &bufferOffset)
                         .getHandle();
-                mCurrentArrayBufferOffsets[attribIndex] = bufferOffset;
-                // Converted attribs are packed in their own VK buffer so offset is zero
+                mCurrentArrayBufferOffsets[attribIndex]         = bufferOffset + dstRelativeOffset;
                 mCurrentArrayBufferRelativeOffsets[attribIndex] = 0;
-
-                // Converted buffer is tightly packed
-                mCurrentArrayBufferStrides[attribIndex] =
-                    vertexFormat.getActualBufferFormat(compressed).pixelBytes;
+                mCurrentArrayBufferStrides[attribIndex]         = dstStride;
             }
             else
             {
