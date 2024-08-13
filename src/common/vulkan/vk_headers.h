@@ -144,6 +144,13 @@ extern PFN_vkCmdEndRenderingKHR vkCmdEndRenderingKHR;
 extern PFN_vkCmdSetRenderingAttachmentLocationsKHR vkCmdSetRenderingAttachmentLocationsKHR;
 extern PFN_vkCmdSetRenderingInputAttachmentIndicesKHR vkCmdSetRenderingInputAttachmentIndicesKHR;
 
+// VK_KHR_synchronization2
+extern FPN_vkCmdPipelineBarrier2KHR vkCmdPipelineBarrier2KHR;
+extern FPN_vkCmdWriteTimestamp2KHR vkCmdWriteTimestamp2KHR;
+extern FPN_vkCmdResetEvent2KHR vkCmdResetEvent2KHR;
+extern FPN_vkCmdWaitEvents2KHR vkCmdWaitEvents2KHR;
+extern FPN_vkCmdSetEvent2KHR vkCmdSetEvent2KHR;
+
 }  // namespace rx
 
 #endif  // ANGLE_SHARED_LIBVULKAN
