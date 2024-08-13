@@ -2454,10 +2454,12 @@ void Renderer::appendDeviceExtensionFeaturesNotPromoted(
 // - VK_KHR_sampler_ycbcr_conversion:       samplerYcbcrConversion (feature)
 // - VK_KHR_multiview:                      multiview (feature),
 //                                          maxMultiviewViewCount (property)
-// - VK_KHR_16bit_storage                   storageBuffer16BitAccess (feature)
+// - VK_KHR_16bit_storage:                  storageBuffer16BitAccess (feature)
 //                                          uniformAndStorageBuffer16BitAccess (feature)
 //                                          storagePushConstant16 (feature)
 //                                          storageInputOutput16 (feature)
+// - VK_KHR_variable_pointers:              variablePointers (feature)
+//                                          variablePointersStorageBuffer (feature)
 //
 //
 // Note that subgroup and protected memory features and properties came from unpublished extensions
@@ -2481,15 +2483,22 @@ void Renderer::appendDeviceExtensionFeaturesPromotedTo11(
         vk::AddToPNextChain(deviceFeatures, &mMultiviewFeatures);
         vk::AddToPNextChain(deviceProperties, &mMultiviewProperties);
     }
+
     if (ExtensionFound(VK_KHR_16BIT_STORAGE_EXTENSION_NAME, deviceExtensionNames))
     {
         vk::AddToPNextChain(deviceFeatures, &m16BitStorageFeatures);
+    }
+
+    if (ExtensionFound(VK_KHR_VARIABLE_POINTERS_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceFeatures, &mVariablePointersFeatures);
     }
 }
 
 // The following features and properties used by ANGLE have been promoted to Vulkan 1.2:
 //
-// - VK_KHR_shader_float16_int8:            shaderFloat16 (feature)
+// - VK_KHR_shader_float16_int8:            shaderFloat16 (feature),
+//                                          shaderInt8 (feature)
 // - VK_KHR_depth_stencil_resolve:          supportedDepthResolveModes (property),
 //                                          independentResolveNone (property)
 // - VK_KHR_driver_properties:              driverName (property),
@@ -2787,6 +2796,10 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     mBlendOperationAdvancedFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
 
+    mVariablePointersFeatures = {};
+    mVariablePointersFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR;
+
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures = {};
     mExternalFormatResolveFeatures.sType =
@@ -2867,6 +2880,7 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     m16BitStorageFeatures.pNext                       = nullptr;
     mSynchronization2Features.pNext                   = nullptr;
     mBlendOperationAdvancedFeatures.pNext             = nullptr;
+    mVariablePointersFeatures.pNext                   = nullptr;
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures.pNext   = nullptr;
     mExternalFormatResolveProperties.pNext = nullptr;
@@ -3196,6 +3210,7 @@ void Renderer::enableDeviceExtensionsNotPromoted(const vk::ExtensionNameList &de
 // - VK_KHR_external_memory
 // - VK_KHR_external_semaphore
 // - VK_KHR_external_fence
+// - VK_KHR_variable_pointers
 //
 void Renderer::enableDeviceExtensionsPromotedTo11(const vk::ExtensionNameList &deviceExtensionNames)
 {
@@ -3233,6 +3248,12 @@ void Renderer::enableDeviceExtensionsPromotedTo11(const vk::ExtensionNameList &d
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_16BIT_STORAGE_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &m16BitStorageFeatures);
+    }
+
+    if (ExtensionFound(VK_KHR_VARIABLE_POINTERS_EXTENSION_NAME, deviceExtensionNames))
+    {
+        mEnabledDeviceExtensions.push_back(VK_KHR_VARIABLE_POINTERS_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mVariablePointersFeatures);
     }
 }
 
