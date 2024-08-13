@@ -42,6 +42,8 @@ class ConversionBuffer
     vk::BufferHelper *getBuffer() const { return mData.get(); }
     void setEntireBufferDirty() { mEntireBufferDirty = true; }
     void addDirtyBufferRange(const gl::RangeULL &range) { mDirtyRanges.emplace_back(range); }
+    bool isEntireBufferDirty() const { return mEntireBufferDirty; }
+    const std::vector<gl::RangeULL> &getDirtyBufferRange() const { return mDirtyRanges; }
 
   private:
     // state value determines if we need to re-stream vertex data. mEntireBufferDirty indicates
