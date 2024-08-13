@@ -32,8 +32,10 @@ class ConversionBuffer
     ConversionBuffer(ConversionBuffer &&other);
 
     bool dirty() const { return mEntireBufferDirty || !mDirtyRanges.empty(); }
+    bool isEntireBufferDirty() const { return mEntireBufferDirty; }
     void setEntireBufferDirty() { mEntireBufferDirty = true; }
     void addDirtyBufferRange(const gl::RangeULL &range) { mDirtyRanges.emplace_back(range); }
+    const std::vector<gl::RangeULL> &getDirtyBufferRange() const { return mDirtyRanges; }
     void clearDirty()
     {
         mEntireBufferDirty = false;
