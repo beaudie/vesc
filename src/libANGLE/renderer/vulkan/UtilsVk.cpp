@@ -3186,13 +3186,26 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                             UnsignedCeilDivide(params.blitArea.height, 8), 1);
 
     // Add a barrier prior to copy.
-    VkMemoryBarrier memoryBarrier = {};
-    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_TRANSFER_READ_BIT;
+    if (renderer->getFeatures().supportsSynchronization2.enabled)
+    {
+        VkMemoryBarrier2 memoryBarrier2 = {};
+        memoryBarrier2.sType            = VK_STRUCTURE_TYPE_MEMORY_BARRIER_2;
+        memoryBarrier2.srcStageMask     = VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT;
+        memoryBarrier2.srcAccessMask    = VK_ACCESS_2_SHADER_WRITE_BIT;
+        memoryBarrier2.dstStageMask     = VK_PIPELINE_STAGE_2_TRANSFER_BIT;
+        memoryBarrier2.dstAccessMask    = VK_ACCESS_2_TRANSFER_READ_BIT;
+        commandBuffer->memoryBarrier2(memoryBarrier2);
+    }
+    else
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_TRANSFER_READ_BIT;
 
-    commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-                                 VK_PIPELINE_STAGE_TRANSFER_BIT, memoryBarrier);
+        commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                     VK_PIPELINE_STAGE_TRANSFER_BIT, memoryBarrier);
+    }
 
     // Copy the resulting buffer into dst.
     VkBufferImageCopy region           = {};
@@ -3549,13 +3562,26 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
                                      srcBuffer.get().getBuffer().getHandle(), 1, &srcRegion);
 
     // Add a barrier prior to dispatch call.
-    VkMemoryBarrier memoryBarrier = {};
-    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;
-    memoryBarrier.dstAccessMask   = VK_ACCESS_SHADER_READ_BIT;
+    if (renderer->getFeatures().supportsSynchronization2.enabled)
+    {
+        VkMemoryBarrier2 memoryBarrier2 = {};
+        memoryBarrier2.sType            = VK_STRUCTURE_TYPE_MEMORY_BARRIER_2;
+        memoryBarrier2.srcStageMask     = VK_PIPELINE_STAGE_2_TRANSFER_BIT;
+        memoryBarrier2.srcAccessMask    = VK_ACCESS_2_TRANSFER_WRITE_BIT;
+        memoryBarrier2.dstStageMask     = VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT;
+        memoryBarrier2.dstAccessMask    = VK_ACCESS_2_SHADER_READ_BIT;
+        commandBuffer->memoryBarrier2(memoryBarrier2);
+    }
+    else
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_SHADER_READ_BIT;
 
-    commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                 VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, memoryBarrier);
+        commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                     VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, memoryBarrier);
+    }
 
     // Set up ConvertVertex shader to convert between the formats.  Only the following three cases
     // are possible:
@@ -3651,11 +3677,25 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
                                       commandBufferHelper, shaderParams));
 
     // Add a barrier prior to copy.
-    memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
-    memoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
-
-    commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-                                 VK_PIPELINE_STAGE_TRANSFER_BIT, memoryBarrier);
+    if (renderer->getFeatures().supportsSynchronization2.enabled)
+    {
+        VkMemoryBarrier2 memoryBarrier2 = {};
+        memoryBarrier2.sType            = VK_STRUCTURE_TYPE_MEMORY_BARRIER_2;
+        memoryBarrier2.srcStageMask     = VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT;
+        memoryBarrier2.srcAccessMask    = VK_ACCESS_2_SHADER_WRITE_BIT;
+        memoryBarrier2.dstStageMask     = VK_PIPELINE_STAGE_2_TRANSFER_BIT;
+        memoryBarrier2.dstAccessMask    = VK_ACCESS_2_TRANSFER_READ_BIT;
+        commandBuffer->memoryBarrier2(memoryBarrier2);
+    }
+    else
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_TRANSFER_READ_BIT;
+        commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                     VK_PIPELINE_STAGE_TRANSFER_BIT, memoryBarrier);
+    }
 
     // Copy buffer into dst.  It's completely packed.
     VkBufferImageCopy dstRegion               = {};
