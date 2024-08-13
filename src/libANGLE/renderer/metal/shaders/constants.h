@@ -21,6 +21,7 @@ enum
     kTextureTypeCube          = 3,
     kTextureType3D            = 4,
     kTextureTypeCount         = 5,
+    kTextureTypeInvalid       = kTextureTypeCount,
 };
 
 // Metal doesn't support constexpr to be used as array size, so we need to use macro here
