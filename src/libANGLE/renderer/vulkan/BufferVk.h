@@ -57,6 +57,46 @@ class ConversionBuffer
     std::unique_ptr<vk::BufferHelper> mData;
 };
 
+class VertexConversionBuffer : public ConversionBuffer
+{
+  public:
+    VertexConversionBuffer(vk::Renderer *renderer,
+                           angle::FormatID formatIDIn,
+                           GLuint strideIn,
+                           size_t offsetIn,
+                           bool hostVisible);
+    ~VertexConversionBuffer();
+
+    VertexConversionBuffer(VertexConversionBuffer &&other);
+    bool match(angle::FormatID formatID, GLuint stride, size_t offset) const
+    {
+        return mFormatID == formatID && mStride == stride && mOffset == offset;
+    }
+    bool compatible(angle::FormatID formatID, GLuint stride, size_t offset) const
+    {
+        return mFormatID == formatID && mStride == stride && mOffset % mStride == 0 &&
+               (offset % mStride) == 0;
+    }
+    void adjustOffset(size_t offset)
+    {
+        ASSERT((mOffset - offset) % mStride == 0);
+        if (mOffset <= offset)
+        {
+            return;
+        }
+        mOffset = offset;
+        setEntireBufferDirty();
+    }
+    GLuint getStride() const { return mStride; }
+    size_t getOffset() const { return mOffset; }
+
+  private:
+    // The conversion is identified by the triple of {format, stride, offset}.
+    angle::FormatID mFormatID;
+    GLuint mStride;
+    size_t mOffset;
+};
+
 enum class BufferUpdateType
 {
     StorageRedefined,
@@ -156,11 +196,12 @@ class BufferVk : public BufferImpl
                                     GLbitfield access,
                                     void **mapPtr);
 
-    ConversionBuffer *getVertexConversionBuffer(vk::Renderer *renderer,
-                                                angle::FormatID formatID,
-                                                GLuint stride,
-                                                size_t offset,
-                                                bool hostVisible);
+    VertexConversionBuffer *getVertexConversionBuffer(vk::Renderer *renderer,
+                                                      angle::FormatID formatID,
+                                                      GLuint stride,
+                                                      size_t offset,
+                                                      bool offsetMustMatch,
+                                                      bool hostVisible);
 
   private:
     angle::Result updateBuffer(ContextVk *contextVk,
@@ -222,29 +263,6 @@ class BufferVk : public BufferImpl
                                BufferUsageType usageType,
                                VkMemoryPropertyFlags memoryPropertyFlags,
                                size_t size) const;
-
-    class VertexConversionBuffer : public ConversionBuffer
-    {
-      public:
-        VertexConversionBuffer(vk::Renderer *renderer,
-                               angle::FormatID formatIDIn,
-                               GLuint strideIn,
-                               size_t offsetIn,
-                               bool hostVisible);
-        ~VertexConversionBuffer();
-
-        VertexConversionBuffer(VertexConversionBuffer &&other);
-        bool match(angle::FormatID formatID, GLuint stride, size_t offset) const
-        {
-            return mFormatID == formatID && mStride == stride && mOffset == offset;
-        }
-
-      private:
-        // The conversion is identified by the triple of {format, stride, offset}.
-        angle::FormatID mFormatID;
-        GLuint mStride;
-        size_t mOffset;
-    };
 
     vk::BufferHelper mBuffer;
 

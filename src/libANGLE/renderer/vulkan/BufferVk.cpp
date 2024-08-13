@@ -295,11 +295,11 @@ ConversionBuffer::~ConversionBuffer()
 ConversionBuffer::ConversionBuffer(ConversionBuffer &&other) = default;
 
 // BufferVk::VertexConversionBuffer implementation.
-BufferVk::VertexConversionBuffer::VertexConversionBuffer(vk::Renderer *renderer,
-                                                         angle::FormatID formatIDIn,
-                                                         GLuint strideIn,
-                                                         size_t offsetIn,
-                                                         bool hostVisible)
+VertexConversionBuffer::VertexConversionBuffer(vk::Renderer *renderer,
+                                               angle::FormatID formatIDIn,
+                                               GLuint strideIn,
+                                               size_t offsetIn,
+                                               bool hostVisible)
     : ConversionBuffer(renderer,
                        vk::kVertexBufferUsageFlags,
                        kConvertedArrayBufferInitialSize,
@@ -310,9 +310,9 @@ BufferVk::VertexConversionBuffer::VertexConversionBuffer(vk::Renderer *renderer,
       mOffset(offsetIn)
 {}
 
-BufferVk::VertexConversionBuffer::VertexConversionBuffer(VertexConversionBuffer &&other) = default;
+VertexConversionBuffer::VertexConversionBuffer(VertexConversionBuffer &&other) = default;
 
-BufferVk::VertexConversionBuffer::~VertexConversionBuffer() = default;
+VertexConversionBuffer::~VertexConversionBuffer() = default;
 
 // BufferVk implementation.
 BufferVk::BufferVk(const gl::BufferState &state)
@@ -1170,17 +1170,20 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-ConversionBuffer *BufferVk::getVertexConversionBuffer(vk::Renderer *renderer,
-                                                      angle::FormatID formatID,
-                                                      GLuint stride,
-                                                      size_t offset,
-                                                      bool hostVisible)
+VertexConversionBuffer *BufferVk::getVertexConversionBuffer(vk::Renderer *renderer,
+                                                            angle::FormatID formatID,
+                                                            GLuint stride,
+                                                            size_t offset,
+                                                            bool offsetMustMatch,
+                                                            bool hostVisible)
 {
     for (VertexConversionBuffer &buffer : mVertexConversionBuffers)
     {
-        if (buffer.match(formatID, stride, offset))
+        if ((!offsetMustMatch && buffer.compatible(formatID, stride, offset)) ||
+            (offsetMustMatch && buffer.match(formatID, stride, offset)))
         {
             ASSERT(buffer.valid());
+            buffer.adjustOffset(offset);
             return &buffer;
         }
     }
