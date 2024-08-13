@@ -253,7 +253,7 @@ void CommandProcessorTask::initFlushWaitSemaphores(
     ProtectionType protectionType,
     egl::ContextPriority priority,
     std::vector<VkSemaphore> &&waitSemaphores,
-    std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+    std::vector<VkPipelineStageFlags2> &&waitSemaphoreStageMasks)
 {
     mTask                    = CustomTask::FlushWaitSemaphores;
     mPriority                = priority;
@@ -411,7 +411,7 @@ void CommandProcessorTask::initOneOffQueueSubmit(VkCommandBuffer commandBufferHa
                                                  ProtectionType protectionType,
                                                  egl::ContextPriority priority,
                                                  VkSemaphore waitSemaphore,
-                                                 VkPipelineStageFlags waitSemaphoreStageMask,
+                                                 VkPipelineStageFlags2 waitSemaphoreStageMask,
                                                  const QueueSerial &submitQueueSerial)
 {
     mTask                         = CustomTask::OneOffQueueSubmit;
@@ -915,7 +915,7 @@ angle::Result CommandProcessor::enqueueSubmitOneOffCommands(
     egl::ContextPriority contextPriority,
     VkCommandBuffer commandBufferHandle,
     VkSemaphore waitSemaphore,
-    VkPipelineStageFlags waitSemaphoreStageMask,
+    VkPipelineStageFlags2 waitSemaphoreStageMask,
     SubmitPolicy submitPolicy,
     const QueueSerial &submitQueueSerial)
 {
@@ -958,7 +958,7 @@ angle::Result CommandProcessor::enqueueFlushWaitSemaphores(
     ProtectionType protectionType,
     egl::ContextPriority priority,
     std::vector<VkSemaphore> &&waitSemaphores,
-    std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+    std::vector<VkPipelineStageFlags2> &&waitSemaphoreStageMasks)
 {
     CommandProcessorTask task;
     task.initFlushWaitSemaphores(protectionType, priority, std::move(waitSemaphores),
@@ -1331,7 +1331,7 @@ bool CommandQueue::isBusy(vk::Renderer *renderer) const
 void CommandQueue::flushWaitSemaphores(ProtectionType protectionType,
                                        egl::ContextPriority priority,
                                        std::vector<VkSemaphore> &&waitSemaphores,
-                                       std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+                                       std::vector<VkPipelineStageFlags2> &&waitSemaphoreStageMasks)
 {
     ASSERT(!waitSemaphores.empty());
     ASSERT(waitSemaphores.size() == waitSemaphoreStageMasks.size());
@@ -1406,8 +1406,15 @@ angle::Result CommandQueue::submitCommands(Context *context,
 
     // Move to local copy of vectors since queueSubmit will release the lock.
     std::vector<VkSemaphore> waitSemaphores = std::move(state.waitSemaphores);
-    std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks =
+    std::vector<VkPipelineStageFlags2> waitSemaphoreStageMasks2 =
         std::move(state.waitSemaphoreStageMasks);
+
+    // TODO: Add usage of vkQueueSubmit2
+    std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
+    for (VkPipelineStageFlags2 pipelineStageFlag2 : waitSemaphoreStageMasks2)
+    {
+        waitSemaphoreStageMasks.push_back(static_cast<VkPipelineStageFlags>(pipelineStageFlag2));
+    }
 
     mPerfCounters.commandQueueWaitSemaphoresTotal += waitSemaphores.size();
 
@@ -1466,7 +1473,7 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
                                               egl::ContextPriority contextPriority,
                                               VkCommandBuffer commandBufferHandle,
                                               VkSemaphore waitSemaphore,
-                                              VkPipelineStageFlags waitSemaphoreStageMask,
+                                              VkPipelineStageFlags2 waitSemaphoreStageMask2,
                                               SubmitPolicy submitPolicy,
                                               const QueueSerial &submitQueueSerial)
 {
@@ -1502,6 +1509,9 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
     {
         submitInfo.waitSemaphoreCount = 1;
         submitInfo.pWaitSemaphores    = &waitSemaphore;
+        // TODO: add VkQueueSubmit2 Usage
+        VkPipelineStageFlags waitSemaphoreStageMask =
+            static_cast<VkPipelineStageFlags>(waitSemaphoreStageMask2);
         submitInfo.pWaitDstStageMask  = &waitSemaphoreStageMask;
     }
 
