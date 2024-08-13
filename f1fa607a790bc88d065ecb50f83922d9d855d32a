@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c7fd831_1cf457ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-13T13:12:31Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/ui/p/chromium/builders/try/ios-angle-try-intel/166/overview passed (with a flake), so LGTM.",
+      "revId": "f1fa607a790bc88d065ecb50f83922d9d855d32a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
