@@ -717,7 +717,7 @@ class Range
 
     T length() const { return (empty() ? 0 : (mHigh - mLow)); }
 
-    bool intersects(Range<T> other)
+    bool intersects(const Range<T> &other) const
     {
         if (mLow <= other.mLow)
         {
@@ -727,6 +727,12 @@ class Range
         {
             return mLow < other.mHigh;
         }
+    }
+
+    void scissor(const Range<T> &other)
+    {
+        mLow  = std::max<T>(mLow, other.mLow);
+        mHigh = std::min<T>(mHigh, other.mHigh);
     }
 
     // Assumes that end is non-inclusive.. for example, extending to 5 will make "end" 6.
