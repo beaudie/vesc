@@ -481,7 +481,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             RenderPassClosureReason renderPassClosureReason);
     angle::Result finishImpl(RenderPassClosureReason renderPassClosureReason);
 
-    void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
+    void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags2 stageMask);
 
     template <typename T>
     void addGarbage(T *object)
@@ -1675,7 +1675,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Semaphores that must be flushed before the current commands. Flushed semaphores will be
     // waited on in the next submission.
     std::vector<VkSemaphore> mWaitSemaphores;
-    std::vector<VkPipelineStageFlags> mWaitSemaphoreStageMasks;
+    std::vector<VkPipelineStageFlags2> mWaitSemaphoreStageMasks;
     // Whether this context has wait semaphores (flushed and unflushed) that must be submitted.
     bool mHasWaitSemaphoresPendingSubmission;
 
