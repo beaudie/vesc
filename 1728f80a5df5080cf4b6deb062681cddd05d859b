@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc72d63b_5424b89b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116027
+      },
+      "writtenOn": "2024-08-13T09:28:29Z",
+      "side": 1,
+      "message": "Please take a look.\n\nPatchset #1 is the original reverted CL, https://crrev.com/c/5785953/1..4 is the difference between the two (but maybe looking at the final patchset is simpler).\n\nI\u0027ve tested that Chromium builds with this version of the patch (and fails with the version that was reverted).",
+      "revId": "1728f80a5df5080cf4b6deb062681cddd05d859b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
