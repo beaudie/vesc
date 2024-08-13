@@ -211,6 +211,13 @@ struct DepthSaturationParams
     uint32_t srcPitch;
 };
 
+struct UnresolveParams
+{
+    gl::DrawBufferMask unresolveColorMask;
+    bool unresolveDepth   = false;
+    bool unresolveStencil = false;
+};
+
 // Utils class for clear & blitting
 class ClearUtils final : angle::NonCopyable
 {
@@ -354,6 +361,57 @@ class DepthStencilBlitUtils final : angle::NonCopyable
     // Intermediate buffer for storing copied stencil data. Used when device doesn't support
     // writing stencil in shader.
     BufferRef mStencilCopyBuffer;
+};
+
+class UnresolveUtils final : angle::NonCopyable
+{
+  public:
+    angle::Result unresolveWithDraw(const gl::Context *context,
+                                    RenderCommandEncoder *cmdEncoder,
+                                    const UnresolveParams &params);
+
+  private:
+    struct ShaderKeyEqual
+    {
+        size_t operator()(const UnresolveParams &k1, const UnresolveParams &k2) const noexcept
+        {
+            return k1.unresolveColorMask == k2.unresolveColorMask &&
+                   k1.unresolveDepth == k2.unresolveDepth &&
+                   k1.unresolveStencil == k2.unresolveStencil;
+        }
+    };
+    struct ShaderKeyHash
+    {
+        size_t operator()(const UnresolveParams &k) const noexcept
+        {
+            uint32_t colorMask = static_cast<uint32_t>(k.unresolveColorMask.to_ulong());
+            return angle::HashMultiple(colorMask, k.unresolveDepth, k.unresolveStencil);
+        }
+    };
+    angle::Result ensureShadersInitialized(ContextMtl *ctx,
+                                           const UnresolveParams &params,
+                                           AutoObjCPtr<id<MTLFunction>> *fragmentShaderOut);
+
+    angle::Result setupStates(const gl::Context *context,
+                              RenderCommandEncoder *cmdEncoder,
+                              const UnresolveParams &params);
+
+    angle::Result setupUniforms(RenderCommandEncoder *cmdEncoder, const UnresolveParams &params);
+
+    gl::Extents getRenderSize(RenderCommandEncoder *cmdEncoder,
+                              const UnresolveParams &params) const;
+
+    angle::Result getUnresolveRenderPipelineState(
+        const gl::Context *context,
+        RenderCommandEncoder *cmdEncoder,
+        const UnresolveParams &params,
+        AutoObjCPtr<id<MTLRenderPipelineState>> *outPipelineState);
+
+    AutoObjCPtr<id<MTLFunction>> mVertexShader;
+
+    // Unresolve fragment shaders.
+    std::unordered_map<UnresolveParams, AutoObjCPtr<id<MTLFunction>>, ShaderKeyHash, ShaderKeyEqual>
+        mFragmentShaders;
 };
 
 // util class for generating index buffer
@@ -690,6 +748,10 @@ class RenderUtils : public Context, angle::NonCopyable
     angle::Result blitStencilViaCopyBuffer(const gl::Context *context,
                                            const StencilBlitViaBufferParams &params);
 
+    angle::Result unresolveWithDraw(const gl::Context *context,
+                                    RenderCommandEncoder *cmdEncoder,
+                                    const UnresolveParams &params);
+
     // See IndexGeneratorUtils
     angle::Result convertIndexBufferGPU(ContextMtl *contextMtl,
                                         const IndexConversionParams &params);
@@ -783,6 +845,8 @@ class RenderUtils : public Context, angle::NonCopyable
 
     std::array<ColorBlitUtils, angle::EnumSize<PixelType>()> mColorBlitUtils;
     ColorBlitUtils mCopyTextureFloatToUIntUtils;
+
+    UnresolveUtils mUnresolveUtils;
 
     DepthStencilBlitUtils mDepthStencilBlitUtils;
     IndexGeneratorUtils mIndexUtils;
