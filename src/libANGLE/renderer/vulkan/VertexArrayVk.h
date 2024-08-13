@@ -165,19 +165,15 @@ class VertexArrayVk : public VertexArrayImpl
 
     angle::Result convertVertexBufferGPU(ContextVk *contextVk,
                                          BufferVk *srcBuffer,
-                                         const gl::VertexBinding &binding,
                                          size_t attribIndex,
                                          const vk::Format &vertexFormat,
-                                         ConversionBuffer *conversion,
-                                         GLuint relativeOffset,
+                                         VertexConversionBuffer *conversion,
                                          bool compressed);
     angle::Result convertVertexBufferCPU(ContextVk *contextVk,
                                          BufferVk *srcBuffer,
-                                         const gl::VertexBinding &binding,
                                          size_t attribIndex,
                                          const vk::Format &vertexFormat,
-                                         ConversionBuffer *conversion,
-                                         GLuint relativeOffset,
+                                         VertexConversionBuffer *conversion,
                                          bool compress);
 
     angle::Result syncDirtyAttrib(ContextVk *contextVk,
