@@ -2454,10 +2454,12 @@ void Renderer::appendDeviceExtensionFeaturesNotPromoted(
 // - VK_KHR_sampler_ycbcr_conversion:       samplerYcbcrConversion (feature)
 // - VK_KHR_multiview:                      multiview (feature),
 //                                          maxMultiviewViewCount (property)
-// - VK_KHR_16bit_storage                   storageBuffer16BitAccess (feature)
+// - VK_KHR_16bit_storage:                  storageBuffer16BitAccess (feature)
 //                                          uniformAndStorageBuffer16BitAccess (feature)
 //                                          storagePushConstant16 (feature)
 //                                          storageInputOutput16 (feature)
+// - VK_KHR_variable_pointers:              variablePointers (property)
+//                                          variablePointersStorageBuffer (property)
 //
 //
 // Note that subgroup and protected memory features and properties came from unpublished extensions
@@ -2470,6 +2472,11 @@ void Renderer::appendDeviceExtensionFeaturesPromotedTo11(
 {
     vk::AddToPNextChain(deviceProperties, &mSubgroupProperties);
     vk::AddToPNextChain(deviceFeatures, &mProtectedMemoryFeatures);
+
+    if (ExtensionFound(VK_KHR_VARIABLE_POINTERS_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceFeatures, &mVariablePointersFeatures);
+    }
 
     if (ExtensionFound(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME, deviceExtensionNames))
     {
@@ -2786,6 +2793,11 @@ void Renderer::queryDeviceExtensionFeatures(const vk::ExtensionNameList &deviceE
     mBlendOperationAdvancedFeatures = {};
     mBlendOperationAdvancedFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
+
+    // use KHR if its not already reported as part of promoted 11 features
+    mVariablePointersFeatures = {};
+    mVariablePointersFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR;
 
 #if defined(ANGLE_PLATFORM_ANDROID)
     mExternalFormatResolveFeatures = {};
@@ -3258,6 +3270,9 @@ void Renderer::enableDeviceExtensionsPromotedTo12(const vk::ExtensionNameList &d
     if (mFeatures.supportsSPIRV14.enabled)
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);
+        mEnabledDeviceExtensions.push_back(VK_KHR_VARIABLE_POINTERS_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mVariablePointersFeatures);
+
         mEnabledDeviceExtensions.push_back(VK_KHR_SPIRV_1_4_EXTENSION_NAME);
     }
 
