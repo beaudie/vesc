@@ -2792,7 +2792,7 @@ VkResult WindowSurfaceVk::postProcessUnlockedTryAcquire(vk::Context *context)
             QueueSerial queueSerial;
             if (renderer->queueSubmitOneOff(context, std::move(primaryCommandBuffer),
                                             protectionType, egl::ContextPriority::Medium, semaphore,
-                                            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                            VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
                                             vk::SubmitPolicy::EnsureSubmitted,
                                             &queueSerial) != angle::Result::Continue)
             {
