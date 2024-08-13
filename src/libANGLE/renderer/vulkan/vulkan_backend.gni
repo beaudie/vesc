@@ -83,6 +83,8 @@ vulkan_backend_sources = [
   "VulkanSecondaryCommandBuffer.h",
   "android/vk_android_utils.cpp",
   "android/vk_android_utils.h",
+  "clspv_utils.cpp",
+  "clspv_utils.h",
   "spv_utils.cpp",
   "spv_utils.h",
   "vk_cache_utils.cpp",

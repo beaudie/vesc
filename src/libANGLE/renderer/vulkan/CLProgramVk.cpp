@@ -8,6 +8,7 @@
 #include "libANGLE/renderer/vulkan/CLProgramVk.h"
 #include "libANGLE/renderer/vulkan/CLContextVk.h"
 #include "libANGLE/renderer/vulkan/CLDeviceVk.h"
+#include "libANGLE/renderer/vulkan/clspv_utils.h"
 
 #include "libANGLE/CLContext.h"
 #include "libANGLE/CLKernel.h"
@@ -228,9 +229,6 @@ std::string ProcessBuildOptions(const std::vector<std::string> &optionTokens,
         default:
             break;
     }
-
-    // Other internal Clspv compiler flags that are needed/required
-    processedOptions += " --long-vector";
 
     return processedOptions;
 }
@@ -772,6 +770,8 @@ bool CLProgramVk::buildInternal(const cl::DevicePtrs &devices,
     const bool createLibrary     = std::find(optionTokens.begin(), optionTokens.end(),
                                              "-create-library") != optionTokens.end();
     std::string processedOptions = ProcessBuildOptions(optionTokens, buildType);
+    // add clspv compiler options
+    processedOptions += ClspvGetCompilerOptions(mContext->getRenderer());
 
     // Build for each associated device
     for (size_t i = 0; i < devices.size(); ++i)
