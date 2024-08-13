@@ -1819,64 +1819,30 @@ angle::Result FramebufferMtl::unresolveIfNeeded(const gl::Context *context,
     DisplayMtl *display    = contextMtl->getDisplay();
 
     const mtl::RenderPassDesc &renderPassDesc = encoder->renderPassDesc();
-    const gl::Rectangle renderArea            = this->getCompleteRenderArea();
 
-    mtl::BlitParams baseParams;
-    baseParams.dstTextureSize = gl::Extents(renderArea.width, renderArea.height, 1);
-    baseParams.dstRect        = renderArea;
-    baseParams.dstScissorRect = renderArea;
-    baseParams.dstFlipY       = false;
-
-    baseParams.srcNormalizedCoords =
-        mtl::NormalizedCoords(0, 0, renderArea.width, renderArea.height, renderArea);
-
-    baseParams.srcYFlipped = false;
-    baseParams.unpackFlipX = false;
-    baseParams.unpackFlipY = false;
-
+    mtl::UnresolveParams unresolveParams;
     // Unresolve any color attachment if the intended loadAction = MTLLoadActionLoad and the
     // respective MS texture is memoryless.
-    mtl::ColorBlitParams colorBlitParams;
-    colorBlitParams.BlitParams::operator=(baseParams);
     for (uint32_t colorIndexGL = 0; colorIndexGL < renderPassDesc.numColorAttachments;
          ++colorIndexGL)
     {
         const mtl::RenderPassColorAttachmentDesc &colorAttachment =
             renderPassDesc.colorAttachments[colorIndexGL];
 
-        if (colorAttachment.loadAction != MTLLoadActionLoad ||
-            !colorAttachment.hasImplicitMSTexture() ||
-            !colorAttachment.implicitMSTexture->shouldNotLoadStore())
+        if (colorAttachment.loadAction == MTLLoadActionLoad &&
+            colorAttachment.hasImplicitMSTexture() &&
+            colorAttachment.implicitMSTexture->shouldNotLoadStore())
         {
-            continue;
+            unresolveParams.unresolveColorMask.set(colorIndexGL);
         }
-        const RenderTargetMtl *colorRenderTarget = mColorRenderTargets[colorIndexGL];
-        const angle::Format &angleFormat = colorRenderTarget->getFormat().actualAngleFormat();
-
-        // Blit the resolve texture to the MS texture.
-        colorBlitParams.src      = colorAttachment.texture;
-        colorBlitParams.srcLevel = colorAttachment.level;
-        colorBlitParams.srcLayer = colorAttachment.sliceOrDepth;
-
-        colorBlitParams.enabledBuffers.reset();
-        colorBlitParams.enabledBuffers.set(colorIndexGL);
-        colorBlitParams.filter       = GL_NEAREST;
-        colorBlitParams.dstLuminance = angleFormat.isLUMA();
-
-        ANGLE_TRY(
-            display->getUtils().blitColorWithDraw(context, encoder, angleFormat, colorBlitParams));
     }
 
     // Similarly, unresolve depth/stencil attachments.
-    mtl::DepthStencilBlitParams dsBlitParams;
-    dsBlitParams.BlitParams::operator=(baseParams);
     const mtl::RenderPassDepthAttachmentDesc &depthAttachment = renderPassDesc.depthAttachment;
     if (depthAttachment.loadAction == MTLLoadActionLoad && depthAttachment.hasImplicitMSTexture() &&
         depthAttachment.implicitMSTexture->shouldNotLoadStore())
     {
-        dsBlitParams.src      = depthAttachment.texture;
-        dsBlitParams.srcLevel = depthAttachment.level;
-        dsBlitParams.srcLayer = depthAttachment.sliceOrDepth;
+        unresolveParams.unresolveDepth = true;
     }
 
     const mtl::RenderPassStencilAttachmentDesc &stencilAttachment =
@@ -1885,23 +1851,13 @@ angle::Result FramebufferMtl::unresolveIfNeeded(const gl::Context *context,
         stencilAttachment.hasImplicitMSTexture() &&
         stencilAttachment.implicitMSTexture->shouldNotLoadStore())
     {
-        if (mState.hasSeparateDepthAndStencilAttachments())
-        {
-            // Blit depth/stencil separately.
-            ANGLE_TRY(contextMtl->getDisplay()->getUtils().blitDepthStencilWithDraw(
-                context, encoder, dsBlitParams));
-            dsBlitParams.src = nullptr;
-        }
-
-        dsBlitParams.srcStencil = stencilAttachment.texture->getStencilView();
-        dsBlitParams.srcLevel   = stencilAttachment.level;
-        dsBlitParams.srcLayer   = stencilAttachment.sliceOrDepth;
+        unresolveParams.unresolveStencil = true;
     }
 
-    if (dsBlitParams.src || dsBlitParams.srcStencil)
+    if (unresolveParams.unresolveColorMask.any() || unresolveParams.unresolveDepth ||
+        unresolveParams.unresolveStencil)
     {
-        ANGLE_TRY(contextMtl->getDisplay()->getUtils().blitDepthStencilWithDraw(context, encoder,
-                                                                                dsBlitParams));
+        ANGLE_TRY(display->getUtils().unresolveWithDraw(context, encoder, unresolveParams));
     }
 
     return angle::Result::Continue;

@@ -152,6 +152,14 @@ struct CopyVertexUniforms
     uint32_t padding[3];
 };
 
+struct UnresolveUniforms
+{
+    uint32_t srcColorLevels[kMaxRenderTargets];
+    uint32_t srcDepthLevel;
+    uint32_t srcStencilLevel;
+    uint32_t padding[2];
+};
+
 // Class to automatically disable occlusion query upon entering block and re-able it upon
 // exiting block.
 struct ScopedDisableOcclusionQuery
@@ -913,6 +921,13 @@ angle::Result RenderUtils::blitStencilViaCopyBuffer(const gl::Context *context,
                                                     const StencilBlitViaBufferParams &params)
 {
     return mDepthStencilBlitUtils.blitStencilViaCopyBuffer(context, params);
+}
+
+angle::Result RenderUtils::unresolveWithDraw(const gl::Context *context,
+                                             RenderCommandEncoder *cmdEncoder,
+                                             const UnresolveParams &params)
+{
+    return mUnresolveUtils.unresolveWithDraw(context, cmdEncoder, params);
 }
 
 angle::Result RenderUtils::convertIndexBufferGPU(ContextMtl *contextMtl,
@@ -1781,6 +1796,258 @@ angle::Result DepthStencilBlitUtils::blitStencilViaCopyBuffer(
                                            : MTLBlitOptionNone);
 
     return angle::Result::Continue;
+}
+
+// UnresolveUtils implementation
+angle::Result UnresolveUtils::ensureShadersInitialized(
+    ContextMtl *ctx,
+    const UnresolveParams &params,
+    AutoObjCPtr<id<MTLFunction>> *fragmentShaderOut)
+{
+    ASSERT(ctx->getDisplay()->getFeatures().hasShaderStencilOutput.enabled);
+
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        if (!mVertexShader)
+        {
+            id<MTLLibrary> shaderLib = ctx->getDisplay()->getDefaultShadersLib();
+            id<MTLFunction> vertexShader =
+                [[shaderLib newFunctionWithName:@"unresolveVS"] ANGLE_MTL_AUTORELEASE];
+            if (!vertexShader)
+            {
+                ANGLE_MTL_HANDLE_ERROR(ctx,
+                                       "Failed to retrieve unresolve vertex shader \"unresolveVS\"",
+                                       GL_INVALID_OPERATION);
+                return angle::Result::Stop;
+            }
+
+            mVertexShader.retainAssign(vertexShader);
+        }
+
+        if (!(*fragmentShaderOut))
+        {
+            NSError *err             = nil;
+            id<MTLLibrary> shaderLib = ctx->getDisplay()->getDefaultShadersLib();
+            MTLFunctionConstantValues *funcConstants =
+                [[[MTLFunctionConstantValues alloc] init] ANGLE_MTL_AUTORELEASE];
+
+            int unresolveFlags = static_cast<int>(params.unresolveColorMask.to_ulong());
+            if (params.unresolveDepth)
+            {
+                unresolveFlags |= 0x100;
+            }
+            if (params.unresolveStencil)
+            {
+                unresolveFlags |= 0x200;
+            }
+            [funcConstants setConstantValue:&unresolveFlags
+                                       type:MTLDataTypeInt
+                                   withName:@"kUnresolveFlags"];
+
+            id<MTLFunction> fragmentShader =
+                [[shaderLib newFunctionWithName:@"unresolveFS"
+                                 constantValues:funcConstants
+                                          error:&err] ANGLE_MTL_AUTORELEASE];
+            if (err)
+            {
+                ANGLE_MTL_HANDLE_ERROR(ctx, FormatMetalErrorMessage(err).c_str(),
+                                       GL_INVALID_OPERATION);
+                return angle::Result::Stop;
+            }
+
+            fragmentShaderOut->retainAssign(fragmentShader);
+        }
+
+        return angle::Result::Continue;
+    }
+}
+
+angle::Result UnresolveUtils::getUnresolveRenderPipelineState(
+    const gl::Context *context,
+    RenderCommandEncoder *cmdEncoder,
+    const UnresolveParams &params,
+    AutoObjCPtr<id<MTLRenderPipelineState>> *outPipelineState)
+{
+    ContextMtl *contextMtl = GetImpl(context);
+    RenderPipelineDesc pipelineDesc;
+    const RenderPassDesc &renderPassDesc = cmdEncoder->renderPassDesc();
+
+    renderPassDesc.populateRenderPipelineOutputDesc(&pipelineDesc.outputDescriptor);
+    pipelineDesc.inputPrimitiveTopology = kPrimitiveTopologyClassTriangle;
+
+    AutoObjCPtr<id<MTLFunction>> &fragmentShader = mFragmentShaders[params];
+    ANGLE_TRY(ensureShadersInitialized(contextMtl, params, &fragmentShader));
+
+    return contextMtl->getPipelineCache().getRenderPipeline(
+        contextMtl, mVertexShader, fragmentShader, pipelineDesc, outPipelineState);
+}
+
+gl::Extents UnresolveUtils::getRenderSize(RenderCommandEncoder *cmdEncoder,
+                                          const UnresolveParams &params) const
+{
+    const RenderPassDesc &renderPassDesc = cmdEncoder->renderPassDesc();
+
+    if (params.unresolveColorMask.any())
+    {
+        size_t colorIdx = params.unresolveColorMask.first();
+        ASSERT(renderPassDesc.colorAttachments[colorIdx].texture);
+        // NOTE: we only accept 2D texture view being attachments in the render pass.
+        // This is generally OK because MSRTT only accepts 2D texture & cube texture targets.
+        // For a cube texture, its RenderTargetMtl will reference a face view which is 2D.
+        // See TextureMtl::getRenderTarget(). If this assumption would be changed in future, this
+        // assertion will be able to catch that.
+        ASSERT(renderPassDesc.colorAttachments[colorIdx].texture->textureType() ==
+               MTLTextureType2D);
+        return renderPassDesc.colorAttachments[colorIdx].texture->size(
+            renderPassDesc.colorAttachments[colorIdx].level);
+    }
+
+    if (params.unresolveDepth)
+    {
+        ASSERT(renderPassDesc.depthAttachment.texture);
+        ASSERT(renderPassDesc.depthAttachment.texture->textureType() == MTLTextureType2D);
+        return renderPassDesc.depthAttachment.texture->size(renderPassDesc.depthAttachment.level);
+    }
+
+    if (params.unresolveStencil)
+    {
+        ASSERT(renderPassDesc.stencilAttachment.texture);
+        ASSERT(renderPassDesc.stencilAttachment.texture->textureType() == MTLTextureType2D);
+        return renderPassDesc.stencilAttachment.texture->size(
+            renderPassDesc.stencilAttachment.level);
+    }
+    return {};
+}
+
+angle::Result UnresolveUtils::setupUniforms(RenderCommandEncoder *cmdEncoder,
+                                            const UnresolveParams &params)
+{
+    const RenderPassDesc &renderPassDesc = cmdEncoder->renderPassDesc();
+
+    UnresolveUniforms uniforms = {};
+
+    for (auto i : params.unresolveColorMask)
+    {
+        uniforms.srcColorLevels[i] = renderPassDesc.colorAttachments[i].level.get();
+    }
+
+    if (params.unresolveDepth)
+    {
+        uniforms.srcDepthLevel = renderPassDesc.depthAttachment.level.get();
+    }
+
+    if (params.unresolveStencil)
+    {
+        uniforms.srcStencilLevel = renderPassDesc.stencilAttachment.level.get();
+    }
+
+    cmdEncoder->setVertexData(uniforms, 0);
+    cmdEncoder->setFragmentData(uniforms, 0);
+
+    return angle::Result::Continue;
+}
+
+angle::Result UnresolveUtils::setupStates(const gl::Context *context,
+                                          RenderCommandEncoder *cmdEncoder,
+                                          const UnresolveParams &params)
+{
+    ContextMtl *contextMtl = mtl::GetImpl(context);
+
+    const RenderPassDesc &renderPassDesc = cmdEncoder->renderPassDesc();
+
+    // Generate render pipeline state
+    AutoObjCPtr<id<MTLRenderPipelineState>> renderPipelineState;
+    ANGLE_TRY(getUnresolveRenderPipelineState(context, cmdEncoder, params, &renderPipelineState));
+
+    cmdEncoder->setRenderPipelineState(renderPipelineState);
+
+    for (auto i : params.unresolveColorMask)
+    {
+        ASSERT(i < kMaxRenderTargets);
+        cmdEncoder->setFragmentTexture(renderPassDesc.colorAttachments[i].texture,
+                                       static_cast<uint32_t>(i));
+    }
+
+    // Set depth/stencil state
+    mtl::DepthStencilDesc dsStateDesc;
+    dsStateDesc.reset();
+    dsStateDesc.depthCompareFunction = MTLCompareFunctionAlways;
+
+    if (params.unresolveDepth)
+    {
+        cmdEncoder->setFragmentTexture(renderPassDesc.depthAttachment.texture, kMaxRenderTargets);
+        dsStateDesc.depthWriteEnabled = true;
+    }
+    else
+    {
+        dsStateDesc.depthWriteEnabled = false;
+    }
+
+    if (params.unresolveStencil)
+    {
+        cmdEncoder->setFragmentTexture(renderPassDesc.stencilAttachment.texture->getStencilView(),
+                                       kMaxRenderTargets + 1);
+
+        // Enable stencil write to framebuffer
+        dsStateDesc.frontFaceStencil.stencilCompareFunction = MTLCompareFunctionAlways;
+        dsStateDesc.backFaceStencil.stencilCompareFunction  = MTLCompareFunctionAlways;
+
+        dsStateDesc.frontFaceStencil.depthStencilPassOperation = MTLStencilOperationReplace;
+        dsStateDesc.backFaceStencil.depthStencilPassOperation  = MTLStencilOperationReplace;
+
+        dsStateDesc.frontFaceStencil.writeMask = kStencilMaskAll;
+        dsStateDesc.backFaceStencil.writeMask  = kStencilMaskAll;
+    }
+    else
+    {
+        dsStateDesc.frontFaceStencil.writeMask = 0;
+        dsStateDesc.backFaceStencil.writeMask  = 0;
+    }
+
+    cmdEncoder->setDepthStencilState(contextMtl->getDisplay()->getStateCache().getDepthStencilState(
+        contextMtl->getMetalDevice(), dsStateDesc));
+
+    // Viewport
+    gl::Extents renderSize = getRenderSize(cmdEncoder, params);
+    gl::Rectangle renderArea(0, 0, renderSize.width, renderSize.height);
+    MTLViewport viewportMtl       = GetViewport(renderArea);
+    MTLScissorRect scissorRectMtl = GetScissorRect(renderArea);
+    cmdEncoder->setViewport(viewportMtl);
+    cmdEncoder->setScissorRect(scissorRectMtl);
+
+    // Other states
+    cmdEncoder->setCullMode(MTLCullModeNone);
+    cmdEncoder->setTriangleFillMode(MTLTriangleFillModeFill);
+    cmdEncoder->setDepthBias(0, 0, 0);
+
+    return angle::Result::Continue;
+}
+
+angle::Result UnresolveUtils::unresolveWithDraw(const gl::Context *context,
+                                                RenderCommandEncoder *cmdEncoder,
+                                                const UnresolveParams &params)
+{
+    if (params.unresolveColorMask.none() && !params.unresolveDepth && !params.unresolveStencil)
+    {
+        return angle::Result::Continue;
+    }
+    ContextMtl *contextMtl = GetImpl(context);
+    ANGLE_TRY(setupStates(context, cmdEncoder, params));
+
+    ANGLE_TRY(setupUniforms(cmdEncoder, params));
+
+    angle::Result result;
+    {
+        // Need to disable occlusion query, otherwise blitting will affect the occlusion counting
+        ScopedDisableOcclusionQuery disableOcclusionQuery(contextMtl, cmdEncoder, &result);
+        // Draw the screen aligned quad
+        cmdEncoder->draw(MTLPrimitiveTypeTriangleStrip, 0, 4);
+    }
+
+    // Invalidate current context's state
+    contextMtl->invalidateState(context);
+
+    return result;
 }
 
 angle::Result IndexGeneratorUtils::getIndexConversionPipeline(
