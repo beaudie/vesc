@@ -169,18 +169,26 @@ class VulkanSecondaryCommandBuffer : public priv::CommandBuffer
                        VkPipelineStageFlags dstStageMask,
                        const VkBufferMemoryBarrier *bufferMemoryBarrier);
 
+    void bufferBarrier2(const VkBufferMemoryBarrier2 *bufferMemoryBarrier2);
+
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier &imageMemoryBarrier);
+
+    void imageBarrier2(const VkImageMemoryBarrier2 &imageMemoryBarrier2);
 
     void imageWaitEvent(const VkEvent &event,
                         VkPipelineStageFlags srcStageMask,
                         VkPipelineStageFlags dstStageMask,
                         const VkImageMemoryBarrier &imageMemoryBarrier);
 
+    void imageWaitEvent2(const VkEvent &event, const VkImageMemoryBarrier2 &imageMemoryBarrier2);
+
     void memoryBarrier(VkPipelineStageFlags srcStageMask,
                        VkPipelineStageFlags dstStageMask,
                        const VkMemoryBarrier &memoryBarrier);
+
+    void memoryBarrier2(const VkMemoryBarrier2 &memoryBarrier);
 
     void nextSubpass(VkSubpassContents subpassContents);
 
@@ -193,6 +201,14 @@ class VulkanSecondaryCommandBuffer : public priv::CommandBuffer
                          const VkBufferMemoryBarrier *bufferMemoryBarriers,
                          uint32_t imageMemoryBarrierCount,
                          const VkImageMemoryBarrier *imageMemoryBarriers);
+
+    void pipelineBarrier2(VkDependencyFlags dependencyFlags,
+                          uint32_t memoryBarrierCount,
+                          const VkMemoryBarrier2 *memoryBarriers2,
+                          uint32_t bufferMemoryBarrierCount,
+                          const VkBufferMemoryBarrier2 *bufferMemoryBarriers2,
+                          uint32_t imageMemoryBarrierCount,
+                          const VkImageMemoryBarrier2 *imageMemoryBarriers2);
 
     void pushConstants(const PipelineLayout &layout,
                        VkShaderStageFlags flag,
@@ -528,12 +544,34 @@ ANGLE_INLINE void VulkanSecondaryCommandBuffer::pipelineBarrier(
                                    imageMemoryBarrierCount, imageMemoryBarriers);
 }
 
+ANGLE_INLINE void VulkanSecondaryCommandBuffer::pipelineBarrier2(
+    VkDependencyFlags dependencyFlags,
+    uint32_t memoryBarrierCount,
+    const VkMemoryBarrier2 *memoryBarriers2,
+    uint32_t bufferMemoryBarrierCount,
+    const VkBufferMemoryBarrier2 *bufferMemoryBarriers2,
+    uint32_t imageMemoryBarrierCount,
+    const VkImageMemoryBarrier2 *imageMemoryBarriers2)
+{
+    onRecordCommand();
+    CommandBuffer::pipelineBarrier2(dependencyFlags, memoryBarrierCount, memoryBarriers2,
+                                    bufferMemoryBarrierCount, bufferMemoryBarriers2,
+                                    imageMemoryBarrierCount, imageMemoryBarriers2);
+}
+
 ANGLE_INLINE void VulkanSecondaryCommandBuffer::memoryBarrier(VkPipelineStageFlags srcStageMask,
                                                               VkPipelineStageFlags dstStageMask,
                                                               const VkMemoryBarrier &memoryBarrier)
 {
     onRecordCommand();
     CommandBuffer::memoryBarrier(srcStageMask, dstStageMask, memoryBarrier);
+}
+
+ANGLE_INLINE void VulkanSecondaryCommandBuffer::memoryBarrier2(
+    const VkMemoryBarrier2 &memoryBarrier2)
+{
+    onRecordCommand();
+    CommandBuffer::memoryBarrier2(memoryBarrier2);
 }
 
 ANGLE_INLINE void VulkanSecondaryCommandBuffer::bufferBarrier(
@@ -546,6 +584,13 @@ ANGLE_INLINE void VulkanSecondaryCommandBuffer::bufferBarrier(
                                    bufferMemoryBarrier, 0, nullptr);
 }
 
+ANGLE_INLINE void VulkanSecondaryCommandBuffer::bufferBarrier2(
+    const VkBufferMemoryBarrier2 *bufferMemoryBarrier2)
+{
+    onRecordCommand();
+    CommandBuffer::pipelineBarrier2(0, 0, nullptr, 1, bufferMemoryBarrier2, 0, nullptr);
+}
+
 ANGLE_INLINE void VulkanSecondaryCommandBuffer::imageBarrier(
     VkPipelineStageFlags srcStageMask,
     VkPipelineStageFlags dstStageMask,
@@ -553,6 +598,13 @@ ANGLE_INLINE void VulkanSecondaryCommandBuffer::imageBarrier(
 {
     onRecordCommand();
     CommandBuffer::imageBarrier(srcStageMask, dstStageMask, imageMemoryBarrier);
+}
+
+ANGLE_INLINE void VulkanSecondaryCommandBuffer::imageBarrier2(
+    const VkImageMemoryBarrier2 &imageMemoryBarrier2)
+{
+    onRecordCommand();
+    CommandBuffer::imageBarrier2(imageMemoryBarrier2);
 }
 
 ANGLE_INLINE void VulkanSecondaryCommandBuffer::imageWaitEvent(
@@ -564,6 +616,14 @@ ANGLE_INLINE void VulkanSecondaryCommandBuffer::imageWaitEvent(
     onRecordCommand();
     CommandBuffer::waitEvents(1, &event, srcStageMask, dstStageMask, 0, nullptr, 0, nullptr, 1,
                               &imageMemoryBarrier);
+}
+
+ANGLE_INLINE void VulkanSecondaryCommandBuffer::imageWaitEvent2(
+    const VkEvent &event,
+    const VkImageMemoryBarrier2 &imageMemoryBarrier2)
+{
+    onRecordCommand();
+    CommandBuffer::waitEvents2(1, &event, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier2);
 }
 
 ANGLE_INLINE void VulkanSecondaryCommandBuffer::nextSubpass(VkSubpassContents subpassContents)
