@@ -52,6 +52,24 @@
       "parentUuid": "bb9f5640_af399ed8",
       "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9389404_b4cb6823",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-14T17:54:52Z",
+      "side": 1,
+      "message": "I think the unused expectations are determined depending on \"test config\", like:\n```\nUsing test config with:\n  linux\n  nvidia\n  release\n  vulkan\n  gtx1660\n  nosan\n```\nin https://chromium-swarm.appspot.com/task?id\u003d6b6a99433c1ff910.\nSo this would be different for \"Pixel 6\" and \"Samsung S22\".\nNot sure, though.\nAlso I don\u0027t know where to find this output on Android.",
+      "parentUuid": "b2aa5853_117c385f",
+      "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
