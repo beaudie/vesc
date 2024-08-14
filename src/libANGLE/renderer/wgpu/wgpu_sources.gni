@@ -55,6 +55,8 @@ wgpu_backend_sources = [
   "wgpu_helpers.h",
   "wgpu_utils.cpp",
   "wgpu_utils.h",
+  "wgpu_wgsl_util.cpp",
+  "wgpu_wgsl_util.h",
 ]
 
 if (is_win) {

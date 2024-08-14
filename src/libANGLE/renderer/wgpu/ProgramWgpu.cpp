@@ -9,9 +9,13 @@
 
 #include "libANGLE/renderer/wgpu/ProgramWgpu.h"
 
+#include "common/PackedGLEnums_autogen.h"
 #include "common/debug.h"
+#include "common/log_utils.h"
+#include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/renderer/wgpu/ProgramExecutableWgpu.h"
 #include "libANGLE/renderer/wgpu/wgpu_utils.h"
+#include "libANGLE/renderer/wgpu/wgpu_wgsl_util.h"
 #include "libANGLE/trace.h"
 
 #include <dawn/webgpu_cpp.h>
@@ -20,16 +24,22 @@ namespace rx
 {
 namespace
 {
+const bool kOutputFinalSource = true;
+
 class CreateWGPUShaderModuleTask : public LinkSubTask
 {
   public:
     CreateWGPUShaderModuleTask(wgpu::Instance instance,
                                wgpu::Device device,
                                const gl::SharedCompiledShaderState &compiledShaderState,
+                               const gl::ProgramExecutable &executable,
+                               gl::ProgramMergedVaryings mergedVaryings,
                                TranslatedWGPUShaderModule &resultShaderModule)
         : mInstance(instance),
           mDevice(device),
           mCompiledShaderState(compiledShaderState),
+          mExecutable(executable),
+          mMergedVaryings(std::move(mergedVaryings)),
           mShaderModule(resultShaderModule)
     {}
 
@@ -43,8 +53,32 @@ class CreateWGPUShaderModuleTask : public LinkSubTask
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "CreateWGPUShaderModuleTask");
 
+        gl::ShaderType shaderType = mCompiledShaderState->shaderType;
+
+        std::string copiedSource = mCompiledShaderState->translatedSource;
+
+        if (shaderType == gl::ShaderType::Vertex)
+        {
+            webgpu::WgslAssignLocations(copiedSource, mExecutable.getProgramInputs());
+        }
+        else if (shaderType == gl::ShaderType::Fragment)
+        {
+            webgpu::WgslAssignLocations(copiedSource, mExecutable.getOutputVariables());
+        }
+        else
+        {
+            UNIMPLEMENTED();
+        }
+
+        webgpu::WgslAssignLocations(copiedSource, mMergedVaryings);
+
+        if (kOutputFinalSource)
+        {
+            std::cout << copiedSource;
+        }
+
         wgpu::ShaderModuleWGSLDescriptor shaderModuleWGSLDescriptor;
-        shaderModuleWGSLDescriptor.code = mCompiledShaderState->translatedSource.c_str();
+        shaderModuleWGSLDescriptor.code = copiedSource.c_str();
 
         wgpu::ShaderModuleDescriptor shaderModuleDescriptor;
         shaderModuleDescriptor.nextInChain = &shaderModuleWGSLDescriptor;
@@ -101,6 +135,9 @@ class CreateWGPUShaderModuleTask : public LinkSubTask
     wgpu::Instance mInstance;
     wgpu::Device mDevice;
     gl::SharedCompiledShaderState mCompiledShaderState;
+    // TODO check any lifetime issues?
+    const gl::ProgramExecutable &mExecutable;
+    gl::ProgramMergedVaryings mMergedVaryings;
 
     TranslatedWGPUShaderModule &mShaderModule;
 
@@ -134,8 +171,8 @@ class LinkTaskWgpu : public LinkTask
             if (shaders[shaderType])
             {
                 auto task = std::make_shared<CreateWGPUShaderModuleTask>(
-                    mInstance, mDevice, shaders[shaderType],
-                    executable->getShaderModule(shaderType));
+                    mInstance, mDevice, shaders[shaderType], *executable->getExecutable(),
+                    mergedVaryings, executable->getShaderModule(shaderType));
                 linkSubTasksOut->push_back(task);
             }
         }
