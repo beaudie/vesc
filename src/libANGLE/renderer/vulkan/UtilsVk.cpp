@@ -2243,7 +2243,8 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
 angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
                                            vk::BufferHelper *dst,
                                            vk::BufferHelper *src,
-                                           const ConvertVertexParameters &params)
+                                           const ConvertVertexParameters &params,
+                                           const std::vector<SrcDstOffset> &srcDstOffsets)
 {
     vk::CommandBufferAccess access;
     access.onBufferComputeShaderRead(src);
@@ -2347,7 +2348,8 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
             UNREACHABLE();
     }
 
-    return convertVertexBufferImpl(contextVk, dst, src, flags, commandBufferHelper, shaderParams);
+    return convertVertexBufferImpl(contextVk, dst, src, flags, commandBufferHelper, shaderParams,
+                                   srcDstOffsets);
 }
 
 angle::Result UtilsVk::convertVertexBufferImpl(
@@ -2356,7 +2358,8 @@ angle::Result UtilsVk::convertVertexBufferImpl(
     vk::BufferHelper *src,
     uint32_t flags,
     vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper,
-    const ConvertVertexShaderParams &shaderParams)
+    const ConvertVertexShaderParams &shaderParams,
+    const std::vector<SrcDstOffset> &srcDstOffsets)
 {
     ANGLE_TRY(ensureConvertVertexResourcesInitialized(contextVk));
 
@@ -2393,6 +2396,16 @@ angle::Result UtilsVk::convertVertexBufferImpl(
 
     commandBuffer->dispatch(UnsignedCeilDivide(shaderParams.outputCount, 64), 1, 1);
 
+    ConvertVertexShaderParams constants = shaderParams;
+    for (const SrcDstOffset &srcDstOffset : srcDstOffsets)
+    {
+        constants.componentCount = srcDstOffset.vertexCount * shaderParams.Nd;
+        constants.srcOffset      = srcDstOffset.srcOffset;
+        constants.dstOffset      = srcDstOffset.dstOffset;
+        commandBuffer->pushConstants(mPipelineLayouts[Function::ConvertVertexBuffer].get(),
+                                     VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(constants), &constants);
+        commandBuffer->dispatch(UnsignedCeilDivide(shaderParams.outputCount, 64), 1, 1);
+    }
     return angle::Result::Continue;
 }
 
@@ -3646,9 +3659,9 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
 
     // Use UintToUint conversion to preserve the bit pattern during transfer.
     const uint32_t flags = ConvertVertex_comp::kUintToUint;
-
+    std::vector<SrcDstOffset> emptySrcDstOffset;
     ANGLE_TRY(convertVertexBufferImpl(contextVk, &dstBuffer.get(), &srcBuffer.get(), flags,
-                                      commandBufferHelper, shaderParams));
+                                      commandBufferHelper, shaderParams, emptySrcDstOffset));
 
     // Add a barrier prior to copy.
     memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
@@ -3838,8 +3851,10 @@ angle::Result UtilsVk::copyRgbToRgba(ContextVk *contextVk,
             UNREACHABLE();
     }
 
+    std::vector<SrcDstOffset> emptySrcDstOffset;
+
     return convertVertexBufferImpl(contextVk, dstBuffer, srcBuffer, flags, commandBufferHelper,
-                                   shaderParams);
+                                   shaderParams, emptySrcDstOffset);
 }
 
 uint32_t GetEtcToBcFlags(const angle::Format &format)
