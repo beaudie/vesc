@@ -504,22 +504,24 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     vk::BufferHelper *srcBufferHelper = &srcBuffer->getBuffer();
 
     UtilsVk::ConvertVertexParameters params;
-    params.vertexCount = 0;
     params.srcFormat   = &srcFormat;
     params.dstFormat   = &dstFormat;
     params.srcStride   = srcStride;
 
     if (conversion->isEntireBufferDirty())
     {
-        params.vertexCount = maxNumVertices;
-        params.srcOffset   = conversion->getCacheKey().offset;
-        params.dstOffset   = 0;
+        params.offsetsAndVertexCounts.resize(1);
+        params.offsetsAndVertexCounts.back().vertexCount = static_cast<uint32_t>(maxNumVertices);
+        params.offsetsAndVertexCounts.back().srcOffset =
+            static_cast<uint32_t>(conversion->getCacheKey().offset);
+        params.offsetsAndVertexCounts.back().dstOffset = 0;
         ANGLE_TRY(contextVk->getUtils().convertVertexBuffer(contextVk, dstBuffer, srcBufferHelper,
                                                             params));
     }
     else
     {
         const std::vector<gl::RangeULL> &dirtyRanges = conversion->getDirtyBufferRange();
+        params.offsetsAndVertexCounts.reserve(dirtyRanges.size());
         for (const gl::RangeULL &dirtyRange : dirtyRanges)
         {
             ASSERT(!dirtyRange.empty());
@@ -553,12 +555,13 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
                 continue;
             }
 
-            params.vertexCount = numVertices;
-            params.srcOffset   = srcOffset;
-            params.dstOffset   = dstOffset;
-            ANGLE_TRY(contextVk->getUtils().convertVertexBuffer(contextVk, dstBuffer,
-                                                                srcBufferHelper, params));
+            params.offsetsAndVertexCounts.emplace_back();
+            params.offsetsAndVertexCounts.back().vertexCount = static_cast<uint32_t>(numVertices);
+            params.offsetsAndVertexCounts.back().srcOffset   = static_cast<uint32_t>(srcOffset);
+            params.offsetsAndVertexCounts.back().dstOffset   = static_cast<uint32_t>(dstOffset);
         }
+        ANGLE_TRY(contextVk->getUtils().convertVertexBuffer(contextVk, dstBuffer, srcBufferHelper,
+                                                            params));
     }
     conversion->clearDirty();
 
