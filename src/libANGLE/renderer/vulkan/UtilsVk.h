@@ -75,14 +75,19 @@ class UtilsVk : angle::NonCopyable
         uint32_t dstIndexBufferOffset    = 0;
     };
 
+    struct OffsetAndVertexCount
+    {
+        uint32_t srcOffset;
+        uint32_t dstOffset;
+        uint32_t vertexCount;
+    };
+
     struct ConvertVertexParameters
     {
-        size_t vertexCount;
         const angle::Format *srcFormat;
         const angle::Format *dstFormat;
         size_t srcStride;
-        size_t srcOffset;
-        size_t dstOffset;
+        std::vector<OffsetAndVertexCount> offsetsAndVertexCounts;
     };
 
     struct ClearFramebufferParameters
@@ -639,7 +644,8 @@ class UtilsVk : angle::NonCopyable
         vk::BufferHelper *src,
         uint32_t flags,
         vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper,
-        const ConvertVertexShaderParams &shaderParams);
+        const ConvertVertexShaderParams &shaderParams,
+        const std::vector<OffsetAndVertexCount> &offsetsAndVertexCounts);
 
     // Blits or resolves either color or depth/stencil, based on which view is given.
     angle::Result blitResolveImpl(ContextVk *contextVk,
