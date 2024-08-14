@@ -104,6 +104,24 @@
       "parentUuid": "51d9bc2a_433fddff",
       "revId": "d5e55e47625418e9d0d5dc33da01b75d795e524c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80f0c4f3_8b18f41e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3395304
+      },
+      "writtenOn": "2024-08-14T14:34:20Z",
+      "side": 1,
+      "message": "Ooo, you are right, I forgot to do gclient sync.\n\nBy the way, thanks for helping to trigger tryjobs, my account cannot trigger CQ+1 in ANGLE repo.",
+      "parentUuid": "8887c4b1_7031351b",
+      "revId": "d5e55e47625418e9d0d5dc33da01b75d795e524c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
