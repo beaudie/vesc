@@ -2289,19 +2289,15 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
     shaderParams.Nd = params.dstFormat->channelCount;
     shaderParams.Bd = params.dstFormat->pixelBytes / params.dstFormat->channelCount;
     shaderParams.Sd = shaderParams.Nd * shaderParams.Bd;
+
+    ASSERT(!params.offsetsAndVertexCounts.empty());
+    ASSERT(params.offsetsAndVertexCounts.back().vertexCount != 0);
+
     // The component size is expected to either be 1, 2 or 4 bytes.
     ASSERT(4 % shaderParams.Bs == 0);
     ASSERT(4 % shaderParams.Bd == 0);
     shaderParams.Es = 4 / shaderParams.Bs;
     shaderParams.Ed = 4 / shaderParams.Bd;
-    // Total number of output components is simply the number of vertices by number of components in
-    // each.
-    shaderParams.componentCount = static_cast<uint32_t>(params.vertexCount * shaderParams.Nd);
-    // Total number of 4-byte outputs is the number of components divided by how many components can
-    // fit in a 4-byte value.  Note that this value is also the invocation size of the shader.
-    shaderParams.outputCount = UnsignedCeilDivide(shaderParams.componentCount, shaderParams.Ed);
-    shaderParams.srcOffset   = static_cast<uint32_t>(params.srcOffset);
-    shaderParams.dstOffset   = static_cast<uint32_t>(params.dstOffset);
 
     bool isSrcA2BGR10 =
         params.srcFormat->vertexAttribType == gl::VertexAttribType::UnsignedInt2101010 ||
@@ -2377,7 +2373,8 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
             UNREACHABLE();
     }
 
-    return convertVertexBufferImpl(contextVk, dst, src, flags, commandBufferHelper, shaderParams);
+    return convertVertexBufferImpl(contextVk, dst, src, flags, commandBufferHelper, shaderParams,
+                                   params.offsetsAndVertexCounts);
 }
 
 angle::Result UtilsVk::convertVertexBufferImpl(
@@ -2386,7 +2383,8 @@ angle::Result UtilsVk::convertVertexBufferImpl(
     vk::BufferHelper *src,
     uint32_t flags,
     vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper,
-    const ConvertVertexShaderParams &shaderParams)
+    const ConvertVertexShaderParams &shaderParams,
+    const std::vector<OffsetAndVertexCount> &offsetsAndVertexCounts)
 {
     ANGLE_TRY(ensureConvertVertexResourcesInitialized(contextVk));
 
@@ -2421,8 +2419,25 @@ angle::Result UtilsVk::convertVertexBufferImpl(
                                   &mConvertVertex[flags], descriptorSet, &shaderParams,
                                   sizeof(shaderParams), commandBufferHelper));
 
-    commandBuffer->dispatch(UnsignedCeilDivide(shaderParams.outputCount, 64), 1, 1);
+    ConvertVertexShaderParams constants = shaderParams;
+    for (const OffsetAndVertexCount &offsetAndVertexCount : offsetsAndVertexCounts)
+    {
+        // Total number of output components is simply the number of vertices by number of
+        // components in each.
+        constants.componentCount =
+            static_cast<uint32_t>(offsetAndVertexCount.vertexCount * shaderParams.Nd);
+        // Total number of 4-byte outputs is the number of components divided by how many components
+        // can fit in a 4-byte value.  Note that this value is also the invocation size of the
+        // shader.
+        constants.outputCount = UnsignedCeilDivide(constants.componentCount, shaderParams.Ed);
+        constants.srcOffset   = static_cast<uint32_t>(offsetAndVertexCount.srcOffset);
+        constants.dstOffset   = static_cast<uint32_t>(offsetAndVertexCount.dstOffset);
 
+        commandBuffer->pushConstants(mPipelineLayouts[Function::ConvertVertexBuffer].get(),
+                                     VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(constants), &constants);
+
+        commandBuffer->dispatch(UnsignedCeilDivide(constants.outputCount, 64), 1, 1);
+    }
     return angle::Result::Continue;
 }
 
@@ -3587,6 +3602,12 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
                                  VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, memoryBarrier);
 
+    std::vector<OffsetAndVertexCount> offsetsAndVertexCounts;
+    offsetsAndVertexCounts.emplace_back();
+    offsetsAndVertexCounts.back().srcOffset   = 0;
+    offsetsAndVertexCounts.back().dstOffset   = 0;
+    offsetsAndVertexCounts.back().vertexCount = totalPixelCount;
+
     // Set up ConvertVertex shader to convert between the formats.  Only the following three cases
     // are possible:
     //
@@ -3615,14 +3636,6 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     ASSERT(4 % shaderParams.Bd == 0);
     shaderParams.Es = 4 / shaderParams.Bs;
     shaderParams.Ed = 4 / shaderParams.Bd;
-    // Total number of output components is simply the number of pixels by number of components in
-    // each.
-    shaderParams.componentCount = totalPixelCount * shaderParams.Nd;
-    // Total number of 4-byte outputs is the number of components divided by how many components can
-    // fit in a 4-byte value.  Note that this value is also the invocation size of the shader.
-    shaderParams.outputCount  = UnsignedCeilDivide(shaderParams.componentCount, shaderParams.Ed);
-    shaderParams.srcOffset    = 0;
-    shaderParams.dstOffset    = 0;
     shaderParams.isSrcHDR     = 0;
     shaderParams.isSrcA2BGR10 = 0;
 
@@ -3676,9 +3689,8 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
 
     // Use UintToUint conversion to preserve the bit pattern during transfer.
     const uint32_t flags = ConvertVertex_comp::kUintToUint;
-
     ANGLE_TRY(convertVertexBufferImpl(contextVk, &dstBuffer.get(), &srcBuffer.get(), flags,
-                                      commandBufferHelper, shaderParams));
+                                      commandBufferHelper, shaderParams, offsetsAndVertexCounts));
 
     // Add a barrier prior to copy.
     memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
@@ -3838,13 +3850,6 @@ angle::Result UtilsVk::copyRgbToRgba(ContextVk *contextVk,
     shaderParams.Sd = 16;  // dest stride
     shaderParams.Es = 4 / shaderParams.Bs;
     shaderParams.Ed = 4 / shaderParams.Bd;
-    // Total number of output components is simply the number of pixels by number of components in
-    // each.
-    shaderParams.componentCount = pixelCount * shaderParams.Nd;
-    // Total number of 4-byte outputs is the number of components divided by how many components can
-    // fit in a 4-byte value.  Note that this value is also the invocation size of the shader.
-    shaderParams.outputCount  = UnsignedCeilDivide(shaderParams.componentCount, shaderParams.Ed);
-    shaderParams.srcOffset    = srcOffset;
     shaderParams.dstOffset    = 0;
     shaderParams.isSrcHDR     = 0;
     shaderParams.isSrcA2BGR10 = 0;
@@ -3868,8 +3873,14 @@ angle::Result UtilsVk::copyRgbToRgba(ContextVk *contextVk,
             UNREACHABLE();
     }
 
+    std::vector<OffsetAndVertexCount> offsetsAndVertexCounts;
+    offsetsAndVertexCounts.emplace_back();
+    offsetsAndVertexCounts.back().srcOffset   = srcOffset;
+    offsetsAndVertexCounts.back().dstOffset   = 0;
+    offsetsAndVertexCounts.back().vertexCount = pixelCount;
+
     return convertVertexBufferImpl(contextVk, dstBuffer, srcBuffer, flags, commandBufferHelper,
-                                   shaderParams);
+                                   shaderParams, offsetsAndVertexCounts);
 }
 
 uint32_t GetEtcToBcFlags(const angle::Format &format)
