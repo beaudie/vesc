@@ -33,6 +33,23 @@
       "message": "Could you please help submit this CL? Thanks!\n\n@Geoff",
       "revId": "adac10921f6deaa19f29785d692d9800a277f58b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e64de49_927fb01e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-14T15:30:24Z",
+      "side": 1,
+      "message": "Yup, looks good.",
+      "revId": "adac10921f6deaa19f29785d692d9800a277f58b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
