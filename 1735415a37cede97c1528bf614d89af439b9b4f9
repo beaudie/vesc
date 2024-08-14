@@ -34,6 +34,24 @@
       "parentUuid": "488305d6_62977bb8",
       "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2aa5853_117c385f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-14T17:02:57Z",
+      "side": 1,
+      "message": "Thank you. Can I ask why that is not caught in presubmit? I see that we do run `angle_deqp_khr_gles3_vulkan_tests` in `android-arm64-exp-test` presubmit tests: https://screenshot.googleplex.com/5zim6YoqPztpLfa,",
+      "parentUuid": "bb9f5640_af399ed8",
+      "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
