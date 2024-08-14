@@ -20,20 +20,46 @@
 class HelloTriangleSample : public SampleApplication
 {
   public:
-    HelloTriangleSample(int argc, char **argv) : SampleApplication("HelloTriangle", argc, argv) {}
+    HelloTriangleSample(int argc, char **argv)
+        : SampleApplication("HelloTriangle", argc, argv, ClientType::ES3_0)
+    {}
 
     bool initialize() override
     {
-        constexpr char kVS[] = R"(attribute vec4 vPosition;
+        constexpr char kVS[] = R"(#version 300 es
+precision mediump float;
+
+out vec4 vColor;
+
 void main()
 {
-    gl_Position = vPosition;
+    if (gl_VertexID == 0)
+    {
+        gl_Position = vec4(0.0, 0.5, 0.0, 1.0);
+        vColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+    else if (gl_VertexID == 1)
+    {
+        gl_Position = vec4(-0.5, -0.5, 0.0, 1.0);
+        vColor = vec4(0.0, 1.0, 0.0, 1.0);
+    }
+    else if (gl_VertexID == 2)
+    {
+        gl_Position = vec4(0.5, -0.5, 0.0, 1.0);
+        vColor = vec4(0.0, 0.0, 1.0, 1.0);
+    }
 })";
 
-        constexpr char kFS[] = R"(precision mediump float;
+        constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+
+in vec4 vColor;
+
+out vec4 oColor;
+
 void main()
 {
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    oColor = vColor;
 })";
 
         mProgram = CompileProgram(kVS, kFS);
@@ -51,10 +77,6 @@ void main()
 
     void draw() override
     {
-        GLfloat vertices[] = {
-            0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f,
-        };
-
         // Set the viewport
         glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
 
@@ -63,10 +85,6 @@ void main()
 
         // Use the program object
         glUseProgram(mProgram);
-
-        // Load the vertex data
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-        glEnableVertexAttribArray(0);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
