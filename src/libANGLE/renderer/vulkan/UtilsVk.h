@@ -34,6 +34,13 @@
 
 namespace rx
 {
+struct SrcDstOffset
+{
+    uint32_t vertexCount = 0;
+    uint32_t srcOffset   = 0;
+    uint32_t dstOffset   = 0;
+};
+
 class UtilsVk : angle::NonCopyable
 {
   public:
@@ -244,7 +251,8 @@ class UtilsVk : angle::NonCopyable
     angle::Result convertVertexBuffer(ContextVk *contextVk,
                                       vk::BufferHelper *dst,
                                       vk::BufferHelper *src,
-                                      const ConvertVertexParameters &params);
+                                      const ConvertVertexParameters &params,
+                                      const std::vector<SrcDstOffset> &srcDstOffsets);
 
     angle::Result clearFramebuffer(ContextVk *contextVk,
                                    FramebufferVk *framebuffer,
@@ -638,7 +646,8 @@ class UtilsVk : angle::NonCopyable
         vk::BufferHelper *src,
         uint32_t flags,
         vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper,
-        const ConvertVertexShaderParams &shaderParams);
+        const ConvertVertexShaderParams &shaderParams,
+        const std::vector<SrcDstOffset> &srcDstOffsets);
 
     // Blits or resolves either color or depth/stencil, based on which view is given.
     angle::Result blitResolveImpl(ContextVk *contextVk,
