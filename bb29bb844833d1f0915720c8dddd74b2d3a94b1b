@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bac944f_59669107",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-14T13:24:38Z",
+      "side": 1,
+      "message": "Is it possible that `srcBuffer \u003d\u003d dstBuffer`? If that\u0027s the case, you should use `onBufferSelfCopy`. See this on the GL side: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/BufferVk.cpp;l\u003d260;drc\u003d24322b7d2991b60e198e9be0799c408936d96b70",
+      "revId": "bb29bb844833d1f0915720c8dddd74b2d3a94b1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
