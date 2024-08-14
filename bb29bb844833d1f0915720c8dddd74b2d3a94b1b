@@ -34,6 +34,24 @@
       "parentUuid": "5bac944f_59669107",
       "revId": "bb29bb844833d1f0915720c8dddd74b2d3a94b1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39976fc0_3c867711",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-14T18:54:45Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bad20a89_d4afd811",
+      "revId": "bb29bb844833d1f0915720c8dddd74b2d3a94b1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
