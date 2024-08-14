@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b44e8dad_889a4675",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-08-14T19:26:45Z",
+      "side": 1,
+      "message": "Trace notes have been updated with investigation info.",
+      "revId": "fb51c38e1bd0570a72d84281ca248d9dcc54783e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
