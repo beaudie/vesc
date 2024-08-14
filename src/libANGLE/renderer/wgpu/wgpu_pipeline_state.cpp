@@ -108,6 +108,20 @@ void RenderPipelineDesc::setColorWriteMask(size_t colorIndex, bool r, bool g, bo
     SetBitField(colorTarget.writeMask, gl_wgpu::GetColorWriteMask(r, g, b, a));
 }
 
+bool RenderPipelineDesc::setVertexAttribute(size_t attribIndex, PackedVertexAttribute &newAttrib)
+{
+    PackedVertexAttribute &currentAttrib = mVertexAttributes[attribIndex];
+    if (currentAttrib.offset == newAttrib.offset && currentAttrib.format == newAttrib.format &&
+        currentAttrib.shaderLocation == newAttrib.shaderLocation)
+    {
+        return false;
+    }
+    currentAttrib.offset         = newAttrib.offset;
+    currentAttrib.format         = newAttrib.format;
+    currentAttrib.shaderLocation = newAttrib.shaderLocation;
+    return true;
+}
+
 bool RenderPipelineDesc::setColorAttachmentFormat(size_t colorIndex, wgpu::TextureFormat format)
 {
     if (mColorTargetStates[colorIndex].format == static_cast<uint8_t>(format))
