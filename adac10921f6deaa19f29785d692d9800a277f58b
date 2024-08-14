@@ -16,6 +16,23 @@
       "message": "+David\n\nHi, could you please help me fix the errors and warnings I mentioned in the comment?\n\nIt seems to be related to your CL:\nhttps://dawn-review.googlesource.com/c/dawn/+/200248",
       "revId": "adac10921f6deaa19f29785d692d9800a277f58b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4b7c3ab_d26eeda0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3395304
+      },
+      "writtenOn": "2024-08-14T15:29:30Z",
+      "side": 1,
+      "message": "Could you please help submit this CL? Thanks!\n\n@Geoff",
+      "revId": "adac10921f6deaa19f29785d692d9800a277f58b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
