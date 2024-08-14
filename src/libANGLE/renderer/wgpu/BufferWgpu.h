@@ -55,6 +55,9 @@ class BufferWgpu : public BufferImpl
                                 bool primitiveRestartEnabled,
                                 gl::IndexRange *outRange) override;
 
+    webgpu::BufferHelper &getBuffer() { return mBuffer; }
+    GLint64 getSize() const { return mState.getSize(); }
+
   private:
     webgpu::BufferHelper mBuffer;
 };

@@ -541,6 +541,10 @@ inline size_t PackSampleCount(int32_t sampleCount)
     return gl::ScanForward(static_cast<uint32_t>(sampleCount));
 }
 
+size_t GetVertexCount(GLint64 usableBytes,
+                      const gl::VertexBinding &binding,
+                      uint32_t srcFormatSize);
+
 }  // namespace rx
 
 // MultiDraw macro patterns

@@ -1881,4 +1881,31 @@ void TextureRedefineGenerateMipmapLevels(gl::LevelIndex baseLevel,
         (*redefinedLevels)[face] &= ~levelsMask;
     }
 }
+
+size_t GetVertexCount(GLint64 usableBytes, const gl::VertexBinding &binding, uint32_t srcFormatSize)
+{
+    if (usableBytes < srcFormatSize)
+    {
+        return 0;
+    }
+
+    // Count the last vertex.  It may occupy less than a full stride.
+    // This is also correct if stride happens to be less than srcFormatSize.
+    size_t numVertices = 1;
+    usableBytes -= srcFormatSize;
+
+    GLuint stride = binding.getStride();
+    if (stride == 0)
+    {
+        stride = srcFormatSize;
+    }
+
+    // Count how many strides fit remaining space.
+    if (usableBytes > 0)
+    {
+        numVertices += static_cast<size_t>(bytes) / stride;
+    }
+
+    return numVertices;
+}
 }  // namespace rx

@@ -132,6 +132,22 @@ void ContextWgpu::setDepthStencilFormat(wgpu::TextureFormat format)
     }
 }
 
+void ContextWgpu::setVertexAttribute(size_t attribIndex, webgpu::PackedVertexAttribute newAttrib)
+{
+    if (mRenderPipelineDesc.setVertexAttribute(attribIndex, newAttrib))
+    {
+        invalidateCurrentRenderPipeline();
+    }
+}
+
+void ContextWgpu::setVertexAttributes(const gl::AttribArray<webgpu::PackedVertexAttribute> &attribs)
+{
+    for (size_t i = 0; i < attribs.size(); i++)
+    {
+        setVertexAttribute(i, attribs[i]);
+    }
+}
+
 angle::Result ContextWgpu::finish(const gl::Context *context)
 {
     ANGLE_TRY(flush(webgpu::RenderPassClosureReason::GLFinish));
