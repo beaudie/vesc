@@ -44,6 +44,13 @@ if (metal_internal_shader_compilation_supported) {
       rebase_path(_metal_internal_shaders_air_file, root_build_dir),
     ]
 
+    if (is_debug) {
+      args += [
+        "-gline-tables-only",
+        "-MO",
+      ]
+    }
+
     if (is_mac) {
       args += [
         "--std=macos-metal2.1",
