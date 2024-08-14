@@ -16,6 +16,24 @@
       "message": "Is it possible that `srcBuffer \u003d\u003d dstBuffer`? If that\u0027s the case, you should use `onBufferSelfCopy`. See this on the GL side: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/BufferVk.cpp;l\u003d260;drc\u003d24322b7d2991b60e198e9be0799c408936d96b70",
       "revId": "bb29bb844833d1f0915720c8dddd74b2d3a94b1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bad20a89_d4afd811",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-14T18:19:50Z",
+      "side": 1,
+      "message": "Good question - This scenario looks like an error-case for this OpenCL API\n```\nOtherwise, it returns one of the following errors:\n...\nCL_MEM_COPY_OVERLAP if src_buffer and dst_buffer are the same buffer or ...\n...\n```\nhttps://registry.khronos.org/OpenCL/specs/3.0-unified/html/OpenCL_API.html#clEnqueueCopyBuffer\n\nIt looks like we also catch this in `validationCL.cpp`.",
+      "parentUuid": "5bac944f_59669107",
+      "revId": "bb29bb844833d1f0915720c8dddd74b2d3a94b1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
