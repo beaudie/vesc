@@ -262,8 +262,33 @@ angle::Result RenderPipelineDesc::createPipeline(ContextWgpu *context,
     pipelineDesc.primitive.frontFace = UnpackFrontFace(mPrimitiveState.frontFace);
     pipelineDesc.primitive.cullMode  = static_cast<wgpu::CullMode>(mPrimitiveState.cullMode);
 
-    // TODO: setup the vertex attribute pipeline state
-    (void)mVertexAttributes;
+    std::vector<wgpu::VertexBufferLayout> buffers;
+    std::vector<wgpu::VertexAttribute> vertexAttribs;
+
+    for (PackedVertexAttribute packedAttrib : mVertexAttributes)
+    {
+        if (!packedAttrib.enabled)
+        {
+            continue;
+        }
+        wgpu::VertexBufferLayout newBufferLayout;
+        newBufferLayout.arrayStride    = packedAttrib.stride;
+        newBufferLayout.attributeCount = 1;
+        wgpu::VertexAttribute newAttribute;
+        newAttribute.format         = static_cast<wgpu::VertexFormat>(packedAttrib.format);
+        newAttribute.offset         = packedAttrib.offset;
+        newAttribute.shaderLocation = packedAttrib.shaderLocation;
+        vertexAttribs.push_back(newAttribute);
+        newBufferLayout.attributes = &newAttribute;
+        buffers.push_back(newBufferLayout);
+    }
+    // We only need to add a vertex state to the pipeline descriptor if there are any vertex
+    // attributes + buffer layouts.
+    if (!buffers.empty())
+    {
+        pipelineDesc.vertex.bufferCount = buffers.size();
+        pipelineDesc.vertex.buffers     = buffers.data();
+    }
 
     wgpu::FragmentState fragmentState;
     std::array<wgpu::ColorTargetState, gl::IMPLEMENTATION_MAX_DRAW_BUFFERS> colorTargets;

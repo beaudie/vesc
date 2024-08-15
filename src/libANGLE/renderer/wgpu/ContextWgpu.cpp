@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/wgpu/ContextWgpu.h"
 
+#include "VertexArrayWgpu.h"
 #include "common/debug.h"
 
 #include "libANGLE/Context.h"
@@ -62,6 +63,11 @@ ContextWgpu::ContextWgpu(const gl::State &state, gl::ErrorSet *errorSet, Display
         DIRTY_BIT_RENDER_PIPELINE_BINDING,  // The pipeline needs to be bound for each renderpass
         DIRTY_BIT_VIEWPORT,
         DIRTY_BIT_SCISSOR,
+        DIRTY_BIT_VERTEX_ATTRIBUTE,
+    };
+
+    mRenderPipelineDescDirtyBits = DirtyBits{
+        DIRTY_BIT_VERTEX_ATTRIBUTE,
     };
 }
 
@@ -136,7 +142,7 @@ void ContextWgpu::setVertexAttribute(size_t attribIndex, webgpu::PackedVertexAtt
 {
     if (mRenderPipelineDesc.setVertexAttribute(attribIndex, newAttrib))
     {
-        invalidateCurrentRenderPipeline();
+        mDirtyBits.set(DIRTY_BIT_VERTEX_ATTRIBUTE);
     }
 }
 
@@ -1026,6 +1032,10 @@ angle::Result ContextWgpu::setupDraw(const gl::Context *context,
                     ANGLE_TRY(handleDirtyScissor(&dirtyBitIter));
                     break;
 
+                case DIRTY_BIT_VERTEX_ATTRIBUTE:
+                    ANGLE_TRY(handleDirtyVertexAttribute(&dirtyBitIter));
+                    break;
+
                 default:
                     UNREACHABLE();
                     break;
@@ -1137,6 +1147,22 @@ angle::Result ContextWgpu::handleDirtyRenderPass(DirtyBits::Iterator *dirtyBitsI
     FramebufferWgpu *drawFramebufferWgpu = webgpu::GetImpl(mState.getDrawFramebuffer());
     ANGLE_TRY(drawFramebufferWgpu->startNewRenderPass(this));
     dirtyBitsIterator->setLaterBits(mNewRenderPassDirtyBits);
+    return angle::Result::Continue;
+}
+
+angle::Result ContextWgpu::handleDirtyVertexAttribute(DirtyBits::Iterator *dirtyBitsIterator)
+{
+    const gl::VertexArray *vertexArrayGl          = mState.getVertexArray();
+    VertexArrayWgpu *vertexArrayWgpu              = GetImplAs<VertexArrayWgpu>(vertexArrayGl);
+    std::vector<VertexBufferUpdate> bufferUpdates = vertexArrayWgpu->getBuffersToSet();
+    if (!bufferUpdates.empty())
+    {
+        for (VertexBufferUpdate bufferUpdate : bufferUpdates)
+        {
+            bufferUpdate.buffer->getBuffer().Unmap();
+            mCommandBuffer.setVertexBuffer(bufferUpdate.slot, bufferUpdate.buffer->getBuffer());
+        }
+    }
     return angle::Result::Continue;
 }
 

@@ -1878,16 +1878,14 @@ bool TranslatorWGSL::translate(TIntermBlock *root,
     // TODO(anglebug.com/42267100): delete this.
     if (getShaderType() == GL_VERTEX_SHADER)
     {
-        constexpr const char *kVertexShader = R"(@vertex
-fn main(@builtin(vertex_index) vertex_index : u32) -> @builtin(position) vec4f
-{
-    const pos = array(
-        vec2( 0.0,  0.5),
-        vec2(-0.5, -0.5),
-        vec2( 0.5, -0.5)
-    );
+        constexpr const char *kVertexShader = R"(
+struct Vertex {
+    @location(0) position: vec2f,
+};
 
-    return vec4f(pos[vertex_index % 3], 0, 1);
+@vertex fn main(vert: Vertex) -> @builtin(position) vec4f
+{
+    return vec4f(vert.position, 0.0, 1.0);
 })";
         sink << kVertexShader;
     }

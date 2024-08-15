@@ -298,6 +298,8 @@ class ContextWgpu : public ContextImpl
         DIRTY_BIT_VIEWPORT,
         DIRTY_BIT_SCISSOR,
 
+        DIRTY_BIT_VERTEX_ATTRIBUTE,
+
         DIRTY_BIT_MAX,
     };
 
@@ -314,6 +316,8 @@ class ContextWgpu : public ContextImpl
     DirtyBits mDirtyBits;
 
     DirtyBits mNewRenderPassDirtyBits;
+
+    DirtyBits mRenderPipelineDescDirtyBits;
 
     ANGLE_INLINE void invalidateCurrentRenderPipeline()
     {
@@ -338,6 +342,7 @@ class ContextWgpu : public ContextImpl
     angle::Result handleDirtyRenderPipelineBinding(DirtyBits::Iterator *dirtyBitsIterator);
     angle::Result handleDirtyViewport(DirtyBits::Iterator *dirtyBitsIterator);
     angle::Result handleDirtyScissor(DirtyBits::Iterator *dirtyBitsIterator);
+    angle::Result handleDirtyVertexAttribute(DirtyBits::Iterator *dirtyBitsIterator);
 
     angle::Result handleDirtyRenderPass(DirtyBits::Iterator *dirtyBitsIterator);
 

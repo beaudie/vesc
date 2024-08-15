@@ -5233,6 +5233,7 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     ES3_METAL().disable(Feature::HasExplicitMemBarrier).enable(Feature::HasCheapRenderPass),
     ES2_OPENGL().enable(Feature::ForceMinimumMaxVertexAttributes),
     ES2_OPENGLES().enable(Feature::ForceMinimumMaxVertexAttributes),
+    ES2_WEBGPU(),
     EMULATED_VAO_CONFIGS);
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
