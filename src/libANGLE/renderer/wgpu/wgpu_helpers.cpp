@@ -126,6 +126,10 @@ angle::Result ImageHelper::flushSingleLevelUpdates(ContextWgpu *contextWgpu,
     std::vector<wgpu::RenderPassColorAttachment> colorAttachments;
     wgpu::TextureView textureView;
     ANGLE_TRY(createTextureView(levelGL, 0, textureView));
+    bool updateDepth      = false;
+    bool updateStencil    = false;
+    float depthValue      = 1;
+    uint32_t stencilValue = 0;
     for (const SubresourceUpdate &srcUpdate : *currentLevelQueue)
     {
         if (!isTextureLevelInAllocatedImage(srcUpdate.targetLevel))
@@ -141,23 +145,38 @@ angle::Result ImageHelper::flushSingleLevelUpdates(ContextWgpu *contextWgpu,
             case UpdateSource::Clear:
                 if (deferredClears)
                 {
-                    deferredClears->store(deferredClearIndex, srcUpdate.clearData);
+                    deferredClears->store(deferredClearIndex, srcUpdate.clearData.clearValues);
                 }
                 else
                 {
-                    colorAttachments.push_back(
-                        CreateNewClearColorAttachment(srcUpdate.clearData.clearColor,
-                                                      srcUpdate.clearData.depthSlice, textureView));
+                    colorAttachments.push_back(CreateNewClearColorAttachment(
+                        srcUpdate.clearData.clearValues.clearColor,
+                        srcUpdate.clearData.clearValues.depthSlice, textureView));
+                    if (srcUpdate.clearData.hasDepth)
+                    {
+                        updateDepth = true;
+                        depthValue  = srcUpdate.clearData.clearValues.depthValue;
+                    }
+                    if (srcUpdate.clearData.hasStencil)
+                    {
+                        updateStencil = true;
+                        stencilValue  = srcUpdate.clearData.clearValues.stencilValue;
+                    }
                 }
                 break;
         }
     }
+    FramebufferWgpu *frameBuffer =
+        GetImplAs<FramebufferWgpu>(contextWgpu->getState().getDrawFramebuffer());
 
     if (!colorAttachments.empty())
     {
-        FramebufferWgpu *frameBuffer =
-            GetImplAs<FramebufferWgpu>(contextWgpu->getState().getDrawFramebuffer());
         frameBuffer->addNewColorAttachments(colorAttachments);
+    }
+    if (updateDepth || updateStencil)
+    {
+        frameBuffer->updateDepthStencilAttachment(CreateNewDepthStencilAttachment(
+            depthValue, stencilValue, textureView, updateDepth, updateStencil));
     }
     wgpu::CommandBuffer commandBuffer = encoder.Finish();
     queue.Submit(1, &commandBuffer);
@@ -225,10 +244,13 @@ angle::Result ImageHelper::stageTextureUpload(ContextWgpu *contextWgpu,
     return angle::Result::Continue;
 }
 
-void ImageHelper::stageClear(gl::LevelIndex targetLevel, ClearValues clearValues)
+void ImageHelper::stageClear(gl::LevelIndex targetLevel,
+                             ClearValues clearValues,
+                             bool hasDepth,
+                             bool hasStencil)
 {
-    appendSubresourceUpdate(targetLevel,
-                            SubresourceUpdate(UpdateSource::Clear, targetLevel, clearValues));
+    appendSubresourceUpdate(targetLevel, SubresourceUpdate(UpdateSource::Clear, targetLevel,
+                                                           clearValues, hasDepth, hasStencil));
 }
 
 void ImageHelper::removeStagedUpdates(gl::LevelIndex levelToRemove)
@@ -312,7 +334,17 @@ angle::Result ImageHelper::readPixels(rx::ContextWgpu *contextWgpu,
     encoder.CopyTextureToBuffer(&copyTexture, &copyBuffer, &copySize);
 
     wgpu::CommandBuffer commandBuffer = encoder.Finish();
+    fprintf(stderr, "submitting queue in readpixels\n");
     queue.Submit(1, &commandBuffer);
+    wgpu::FutureWaitInfo waitInfo;
+    waitInfo.future = queue.OnSubmittedWorkDone(
+        wgpu::CallbackMode::WaitAnyOnly,
+        [](wgpu::QueueWorkDoneStatus status) { fprintf(stderr, "finished submitted work\n"); });
+
+    wgpu::Instance instance = contextWgpu->getDisplay()->getInstance();
+    ANGLE_WGPU_TRY(contextWgpu, instance.WaitAny(1, &waitInfo, -1));
+    fprintf(stderr, "now moving on to mapImmediate\n");
+    // ASSERT(waitInfo.completed);
     encoder = nullptr;
 
     ANGLE_TRY(bufferHelper.mapImmediate(contextWgpu, wgpu::MapMode::Read, 0, allocationSize));
