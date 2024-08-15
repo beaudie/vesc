@@ -42,7 +42,20 @@ void main()
             return false;
         }
 
+        glUseProgram(mProgram);
+
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+        glGenBuffers(1, &mVertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+
+        GLfloat vertices[] = {
+            0.0f, 1.0f, -0.5f, -0.5f, 0.5f, -0.5f,
+        };
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(0);
 
         return true;
     }
@@ -51,28 +64,19 @@ void main()
 
     void draw() override
     {
-        GLfloat vertices[] = {
-            0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f,
-        };
-
         // Set the viewport
         glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
 
         // Clear the color buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Use the program object
-        glUseProgram(mProgram);
-
         // Load the vertex data
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-        glEnableVertexAttribArray(0);
-
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
   private:
     GLuint mProgram;
+    GLuint mVertexBuffer;
 };
 
 int main(int argc, char **argv)
