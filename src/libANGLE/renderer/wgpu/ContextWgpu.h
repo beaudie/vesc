@@ -282,6 +282,8 @@ class ContextWgpu : public ContextImpl
     void setColorAttachmentFormat(size_t colorIndex, wgpu::TextureFormat format);
     void setColorAttachmentFormats(const gl::DrawBuffersArray<wgpu::TextureFormat> &formats);
     void setDepthStencilFormat(wgpu::TextureFormat format);
+    void setVertexAttribute(size_t attribIndex, webgpu::PackedVertexAttribute newAttrib);
+    void setVertexAttributes(const gl::AttribArray<webgpu::PackedVertexAttribute> &attribs);
 
   private:
     // Dirty bits.
