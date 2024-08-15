@@ -653,6 +653,11 @@ def main():
         '--min-battery-level',
         help='Sleep between tests if battery level drops below this value (off by default)',
         type=int)
+    parser.add_argument(
+        '--not-at-origin',
+        help='Allow to run not at origin/main',
+        action='store_true',
+        default=False)
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -695,6 +700,11 @@ def logged_args():
 
 
 def run_traces(args):
+    angle_version = run_command('git rev-parse HEAD').stdout.strip()
+    angle_main_version = run_command('git rev-parse origin/main').stdout.strip()
+    if angle_version != angle_main_version and not args.not_at_origin:
+        raise Exception('HEAD not at origin/main (local commit? Also see --not-at-origin)')
+
     # Load trace names
     with open(os.path.join(DEFAULT_TEST_DIR, DEFAULT_TEST_JSON)) as f:
         traces = json.loads(f.read())
@@ -960,7 +970,6 @@ def run_traces(args):
     summary_writer = csv.writer(summary_file)
 
     android_version = run_adb_command('shell getprop ro.build.fingerprint').stdout.strip()
-    angle_version = run_command('git rev-parse HEAD').stdout.strip()
     # test_time = run_command('date \"+%Y%m%d\"').stdout.read().strip()
 
     summary_writer.writerow([
