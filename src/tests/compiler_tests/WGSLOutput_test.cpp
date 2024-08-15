@@ -101,7 +101,13 @@ TEST_F(WGSLOutputTest, BasicTranslation)
             returnFloat(doFoo(foo, 7.0 + 9.0).x);
         })";
     const std::string &outputString =
-        R"(_uoutColor : vec4<f32>;
+        R"(struct ANGLE_Output
+{
+  @builtin(frag_depth) gl_FragDepth_ : f32,
+};
+
+var<private> ANGLE_output : ANGLE_Output;
+var<private> _uoutColor : vec4<f32>;
 
 struct _uFoo
 {
@@ -133,19 +139,24 @@ fn _utakeArgs(_ux : vec2<f32>, _uy : f32) -> f32
   return _uy;
 }
 
-fn _umain()
+@fragment
+fn main() -> ANGLE_Output
 {
-  _ufoo : _uFoo;
-  ((_ufoo)._ux) = (2.0f);
-  ((_ufoo)._uy) = (2.0f);
-  ((_ufoo)._umultiArray) = (array<array<vec3<f32>, 3>, 2>(array<vec3<f32>, 3>(vec3<f32>(1.0f, 2.0f, 3.0f), vec3<f32>(1.0f, 2.0f, 3.0f), vec3<f32>(1.0f, 2.0f, 3.0f)), array<vec3<f32>, 3>(vec3<f32>(4.0f, 5.0f, 6.0f), vec3<f32>(4.0f, 5.0f, 6.0f), vec3<f32>(4.0f, 5.0f, 6.0f))));
-  _uarrIndex : i32 = (1i);
-  _uf : f32 = (((((_ufoo)._umultiArray)[0i])[1i]).x);
-  _uf2 : f32 = (((((_ufoo)._umultiArray)[0i])[clamp((_uarrIndex), 0, 2)]).x);
-  (gl_FragDepth) = ((_uf) + (_uf2));
-  _udoFoo(_ureturnFoo(_ufoo), _ureturnFloat(3.0f));
-  _utakeArgs(vec2<f32>(1.0f, 2.0f), (_ufoo)._ux);
-  _ureturnFloat((_udoFoo(_ufoo, 16.0f)).x);
+
+  {
+    var _ufoo : _uFoo;
+    ((_ufoo)._ux) = (2.0f);
+    ((_ufoo)._uy) = (2.0f);
+    ((_ufoo)._umultiArray) = (array<array<vec3<f32>, 3>, 2>(array<vec3<f32>, 3>(vec3<f32>(1.0f, 2.0f, 3.0f), vec3<f32>(1.0f, 2.0f, 3.0f), vec3<f32>(1.0f, 2.0f, 3.0f)), array<vec3<f32>, 3>(vec3<f32>(4.0f, 5.0f, 6.0f), vec3<f32>(4.0f, 5.0f, 6.0f), vec3<f32>(4.0f, 5.0f, 6.0f))));
+    var _uarrIndex : i32 = (1i);
+    var _uf : f32 = (((((_ufoo)._umultiArray)[0i])[1i]).x);
+    var _uf2 : f32 = (((((_ufoo)._umultiArray)[0i])[clamp((_uarrIndex), 0, 2)]).x);
+    ((ANGLE_output).gl_FragDepth_) = ((_uf) + (_uf2));
+    _udoFoo(_ureturnFoo(_ufoo), _ureturnFloat(3.0f));
+    _utakeArgs(vec2<f32>(1.0f, 2.0f), (_ufoo)._ux);
+    _ureturnFloat((_udoFoo(_ufoo, 16.0f)).x);
+  }
+  return ANGLE_output;
 }
 )";
     compile(shaderString);
@@ -218,10 +229,9 @@ TEST_F(WGSLOutputTest, ControlFlow)
           whileLoopDemo();
         })";
     const std::string &outputString =
-        R"(
-fn _uifElseDemo() -> i32
+        R"(fn _uifElseDemo() -> i32
 {
-  _ux : i32 = (5i);
+  var _ux : i32 = (5i);
   if ((_ux) == (5i))
   {
     return 6i;
@@ -241,7 +251,7 @@ fn _uifElseDemo() -> i32
 
 fn _uswitchDemo()
 {
-  _ux : i32 = (5i);
+  var _ux : i32 = (5i);
   switch _ux
   {
     case 5i, 6i:
@@ -270,7 +280,7 @@ fn _uswitchDemo()
 
 fn _uforLoopDemo()
 {
-  for (_ui : i32 = (0i); (_ui) < (5i); (_ui)++)
+  for (var _ui : i32 = (0i); (_ui) < (5i); (_ui)++)
   {
     if ((_ui) == (4i))
     {
@@ -288,7 +298,7 @@ fn _uforLoopDemo()
 
 fn _uwhileLoopDemo()
 {
-  _ui : i32 = (0i);
+  var _ui : i32 = (0i);
   while ((_ui) < (5i))
   {
     (_ui)++;
@@ -301,12 +311,48 @@ fn _uwhileLoopDemo()
   }
 }
 
-fn _umain()
+@fragment
+fn main()
 {
-  _uifElseDemo();
-  _uswitchDemo();
-  _uforLoopDemo();
-  _uwhileLoopDemo();
+
+  {
+    _uifElseDemo();
+    _uswitchDemo();
+    _uforLoopDemo();
+    _uwhileLoopDemo();
+  }
+}
+)";
+    compile(shaderString);
+    EXPECT_TRUE(foundInCode(outputString.c_str()));
+}
+
+TEST_F(WGSLOutputTest, GLFragColorWithUniform)
+{
+    const std::string &shaderString =
+        R"(
+uniform mediump vec4 u_color;
+void main(void)
+{
+    gl_FragColor = u_color;
+})";
+    const std::string &outputString =
+        R"(struct ANGLE_Output
+{
+  @location(0) gl_FragColor_ : vec4<f32>,
+};
+
+var<private> ANGLE_output : ANGLE_Output;
+var<uniform> _uu_color : vec4<f32>;
+
+@fragment
+fn main() -> ANGLE_Output
+{
+
+  {
+    ((ANGLE_output).gl_FragColor_) = (_uu_color);
+  }
+  return ANGLE_output;
 }
 )";
     compile(shaderString);
