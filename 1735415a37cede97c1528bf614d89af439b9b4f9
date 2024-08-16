@@ -88,6 +88,24 @@
       "parentUuid": "d9389404_b4cb6823",
       "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0004d72b_28d3cc73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-16T19:01:44Z",
+      "side": 1,
+      "message": "For this S22 test https://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-s22-test/824/overview\nhttps://chromium-swarm.appspot.com/task?id\u003d6ad671954fd8d710, I think the reason that suites failed was due to device screen is not turned on: https://screenshot.googleplex.com/62F5h9FVmJVj4mt.",
+      "parentUuid": "fc8fd913_85d01bf2",
+      "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
