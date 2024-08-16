@@ -22,6 +22,30 @@
       },
       "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24dd55ea_a1a5f62f",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-16T16:47:32Z",
+      "side": 1,
+      "message": "This is already disabled by default. Are you suggesting that we guard this by a compiler flag so that it won\u0027t be compiled in production builds? I\u0027m not sure its benefits worth that much trouble.\n\nOther backends such as vulkan also has several features for testing. And IMO this wouldn\u0027t affect perf that much since it\u0027s only checked once per render pass.",
+      "parentUuid": "fcd6c5b3_90ca8936",
+      "range": {
+        "startLine": 1461,
+        "startChar": 0,
+        "endLine": 1469,
+        "endChar": 0
+      },
+      "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
