@@ -4065,7 +4065,7 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
         uint32_t numIndices;
         ANGLE_TRY(setupLineLoopDraw(context, mode, first, count, gl::DrawElementsType::InvalidEnum,
                                     nullptr, &numIndices));
-        vk::LineLoopHelper::Draw(numIndices, 0, mRenderPassCommandBuffer);
+        LineLoopHelper::Draw(numIndices, 0, mRenderPassCommandBuffer);
     }
     else
     {
@@ -4135,7 +4135,7 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
     {
         uint32_t indexCount;
         ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &indexCount));
-        vk::LineLoopHelper::Draw(indexCount, 0, mRenderPassCommandBuffer);
+        LineLoopHelper::Draw(indexCount, 0, mRenderPassCommandBuffer);
     }
     else
     {
@@ -4157,7 +4157,7 @@ angle::Result ContextVk::drawElementsBaseVertex(const gl::Context *context,
     {
         uint32_t indexCount;
         ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &indexCount));
-        vk::LineLoopHelper::Draw(indexCount, baseVertex, mRenderPassCommandBuffer);
+        LineLoopHelper::Draw(indexCount, baseVertex, mRenderPassCommandBuffer);
     }
     else
     {
@@ -7350,15 +7350,14 @@ angle::Result ContextVk::initBufferForImageCopy(vk::BufferHelper *bufferHelper,
 
 angle::Result ContextVk::initBufferForVertexConversion(vk::BufferHelper *bufferHelper,
                                                        size_t size,
-                                                       vk::MemoryHostVisibility hostVisibility)
+                                                       MemoryHostVisibility hostVisibility)
 {
     if (bufferHelper->valid())
     {
         // If size is big enough and it is idle, then just reuse the existing buffer. Or if current
         // render pass uses the buffer, try to allocate a new one to avoid breaking the render pass.
         if (size <= bufferHelper->getSize() &&
-            (hostVisibility == vk::MemoryHostVisibility::Visible) ==
-                bufferHelper->isHostVisible() &&
+            (hostVisibility == MemoryHostVisibility::Visible) == bufferHelper->isHostVisible() &&
             !isRenderPassStartedAndUsesBuffer(*bufferHelper))
         {
             if (mRenderer->hasResourceUseFinished(bufferHelper->getResourceUse()))
@@ -7366,7 +7365,7 @@ angle::Result ContextVk::initBufferForVertexConversion(vk::BufferHelper *bufferH
                 bufferHelper->initializeBarrierTracker(this);
                 return angle::Result::Continue;
             }
-            else if (hostVisibility == vk::MemoryHostVisibility::NonVisible)
+            else if (hostVisibility == MemoryHostVisibility::NonVisible)
             {
                 // For device local buffer, we can reuse the buffer even if it is still GPU busy.
                 // The memory barrier should take care of this.
