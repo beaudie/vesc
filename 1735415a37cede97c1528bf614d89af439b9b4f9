@@ -70,6 +70,24 @@
       "parentUuid": "b2aa5853_117c385f",
       "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc8fd913_85d01bf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-16T18:55:32Z",
+      "side": 1,
+      "message": "Thanks Yuly. I checked that [swiftshader on Linux test](https://chromium-swarm.appspot.com/task?id\u003d6ad5de95ead7e410) for this change https://chromium-review.googlesource.com/c/angle/angle/+/5710888, does have these `unused expectations` message shows up in the log: https://screenshot.googleplex.com/9zS5i6iPabmM4Kg, but that doesn\u0027t make the test suite failed. I also recalled that Roman made this change https://chromium-review.googlesource.com/c/angle/angle/+/5238992 that makes test suite no longer fail if there are unused expectations found. I am surprised that that tests are failing on S22 due to \"unused expectations\".",
+      "parentUuid": "d9389404_b4cb6823",
+      "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
