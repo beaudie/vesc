@@ -720,6 +720,8 @@ def run_traces(args):
     output_file = open(raw_data_filename, 'w', newline='')
     output_writer = csv.writer(output_file)
 
+    log_file = open("log." + args.output_tag + ".txt", 'w')
+
     # Set some widths that allow easily reading the values, but fit on smaller monitors.
     column_width = {
         'trace': trace_width,
@@ -796,7 +798,8 @@ def run_traces(args):
         for i in range(int(args.loop_count)):
             print("\nStarting run %i with %s at %s\n" %
                   (i + 1, renderer, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-            for trace in fnmatch.filter(traces, args.filter):
+            for trace in ['antutu_refinery',
+                          'arena_of_valor']:  #fnmatch.filter(traces, args.filter):
                 # Remove any previous perf results
                 cleanup()
                 # Clear blob cache to avoid post-warmup cache eviction b/298028816
@@ -815,8 +818,22 @@ def run_traces(args):
                     power_thread.daemon = True
                     power_thread.start()
 
+                log_file.write('*** %.1f iteration %d trace %s\n' % (time.time(), i, trace))
+                log_file.write('\n*** thermalservice:\n%s\n' %
+                               run_adb_command('shell dumpsys thermalservice').stdout.strip())
+                log_file.write('\n*** battery:\n%s\n' %
+                               run_adb_command('shell dumpsys battery').stdout.strip())
+                log_file.flush()
                 logging.debug('Running %s' % test)
                 test_time = run_trace(test, args)
+                wall_time = get_test_time()
+                log_file.write('*** %.1f iteration %d trace %s done wall_time %s\n' %
+                               (time.time(), i, trace, wall_time))
+                log_file.write('\n*** thermalservice:\n%s\n' %
+                               run_adb_command('shell dumpsys thermalservice').stdout.strip())
+                log_file.write('\n*** battery:\n%s\n' %
+                               run_adb_command('shell dumpsys battery').stdout.strip())
+                log_file.flush()
 
                 gpu_power, cpu_power = 0, 0
                 if args.power:
@@ -828,7 +845,6 @@ def run_traces(args):
                         gpu_power = power_results['gpu']
                         cpu_power = power_results['cpu']
 
-                wall_time = get_test_time()
 
                 gpu_time = get_gpu_time() if args.vsync else '0'
 
