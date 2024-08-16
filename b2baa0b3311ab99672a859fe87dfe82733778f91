@@ -1,6 +1,57 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9db9478a_5ecd9c5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-16T22:44:54Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4d279f5_ed4ce697",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-16T22:44:54Z",
+      "side": 1,
+      "message": "Could you perhaps call this \"emulate_dont_care_load_with_random_clear\", here and throughout?",
+      "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a21c1e7_b4c55298",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-16T22:44:54Z",
+      "side": 1,
+      "message": "Is it desirable to create a new random_device each time this function\u0027s called? Only asking - probably not worth the complexity to reuse it.",
+      "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcd6c5b3_90ca8936",
@@ -38,6 +89,30 @@
       "side": 1,
       "message": "This is already disabled by default. Are you suggesting that we guard this by a compiler flag so that it won\u0027t be compiled in production builds? I\u0027m not sure its benefits worth that much trouble.\n\nOther backends such as vulkan also has several features for testing. And IMO this wouldn\u0027t affect perf that much since it\u0027s only checked once per render pass.",
       "parentUuid": "fcd6c5b3_90ca8936",
+      "range": {
+        "startLine": 1461,
+        "startChar": 0,
+        "endLine": 1469,
+        "endChar": 0
+      },
+      "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4c7e2a5_616320f1",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-16T22:44:54Z",
+      "side": 1,
+      "message": "It seems fine to me to leave this code in in production builds. It might aid in debugging Skia rendering issues down the line.",
+      "parentUuid": "24dd55ea_a1a5f62f",
       "range": {
         "startLine": 1461,
         "startChar": 0,
