@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9408fda3_e5cc70ec",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-08-16T00:57:08Z",
+      "side": 0,
+      "message": "Rather than add a flag, how about we check down here for HEAD and origin/main and report both like:\n```\nANGLE: 5714a2c24c48fb8f434cd6dc8eb77c7e241732f7 (origin/main 0bb0a886ffb4f03b4a29e94ced265e29e4229e7a)\n```\nThis will allow us to easily continue testing outside of git repos.",
+      "range": {
+        "startLine": 963,
+        "startChar": 0,
+        "endLine": 963,
+        "endChar": 68
+      },
+      "revId": "727c6dccb5037decbc2a673b4074a93d886233c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
