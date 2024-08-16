@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcd6c5b3_90ca8936",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-16T11:53:08Z",
+      "side": 1,
+      "message": "Would it make sense to exclude this from production builds?",
+      "range": {
+        "startLine": 1461,
+        "startChar": 0,
+        "endLine": 1469,
+        "endChar": 0
+      },
+      "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
