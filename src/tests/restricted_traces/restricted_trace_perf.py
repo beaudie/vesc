@@ -523,6 +523,91 @@ def collect_power(done_event, test_fixedtime, results):
     })
 
 
+PERFETTO_CFG = '''
+buffers {
+  size_kb: 131072
+  fill_policy: RING_BUFFER
+}
+buffers {
+  size_kb: 4096
+  fill_policy: RING_BUFFER
+}
+data_sources {
+  config {
+    name: "linux.ftrace"
+    ftrace_config {
+      ftrace_events: "sched/sched_process_free"
+      ftrace_events: "task/task_newtask"
+      ftrace_events: "task/task_rename"
+      ftrace_events: "sched/sched_switch"
+      ftrace_events: "power/suspend_resume"
+      ftrace_events: "power/cpu_frequency"
+      ftrace_events: "power/cpu_idle"
+      ftrace_events: "power/gpu_frequency"
+      ftrace_events: "gpu_mem/gpu_mem_total"
+
+      ftrace_events: "kgsl/gpu_frequency"
+
+      atrace_categories: "gfx"
+      atrace_categories: "freq"
+      atrace_categories: "power"
+
+      atrace_apps: "com.android.angle.test"
+      atrace_apps: "com.android.angle.test:test_process"
+
+      buffer_size_kb: 8192
+      drain_period_ms: 250
+      compact_sched {
+        enabled: true
+      }
+    }
+  }
+}
+data_sources {
+  config {
+    name: "linux.process_stats"
+    target_buffer: 1
+    process_stats_config {
+      scan_all_processes_on_start: true
+    }
+  }
+}
+data_sources {
+  config {
+    name: "linux.process_stats"
+    process_stats_config {
+      proc_stats_poll_ms: 2000
+      proc_stats_cache_ttl_ms: 20000
+    }
+  }
+}
+data_sources {
+  config {
+    name: "gpu.counters"
+    gpu_counter_config {
+      counter_period_ns: 1000000
+      counter_ids: 155
+    }
+  }
+}
+
+trigger_config {
+  trigger_mode: STOP_TRACING
+  triggers {
+    name: "angle_perf_stop"
+    stop_delay_ms: 1000
+  }
+  trigger_timeout_ms: 60000
+}
+
+flush_period_ms: 5000
+
+#write_into_file: true
+file_write_period_ms: 30000
+max_file_size_bytes: 100000000
+'''
+
+
 def get_thermal_info():
     out = run_adb_command('shell dumpsys android.hardware.thermal.IThermal/default').stdout
     result = [l for l in out.splitlines() if ('VIRTUAL-SKIN' in l and 'ThrottlingStatus:' in l)]
@@ -653,6 +738,7 @@ def main():
         '--min-battery-level',
         help='Sleep between tests if battery level drops below this value (off by default)',
         type=int)
+    parser.add_argument('--perfetto-trace-path', required=True)
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -719,6 +805,8 @@ def run_traces(args):
     raw_data_filename = "raw_data." + args.output_tag + ".csv"
     output_file = open(raw_data_filename, 'w', newline='')
     output_writer = csv.writer(output_file)
+
+    log_file = open("log." + args.output_tag + ".txt", 'w')
 
     # Set some widths that allow easily reading the values, but fit on smaller monitors.
     column_width = {
@@ -796,7 +884,8 @@ def run_traces(args):
         for i in range(int(args.loop_count)):
             print("\nStarting run %i with %s at %s\n" %
                   (i + 1, renderer, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-            for trace in fnmatch.filter(traces, args.filter):
+            for trace in ['antutu_refinery',
+                          'arena_of_valor']:  #fnmatch.filter(traces, args.filter):
                 # Remove any previous perf results
                 cleanup()
                 # Clear blob cache to avoid post-warmup cache eviction b/298028816
@@ -815,8 +904,43 @@ def run_traces(args):
                     power_thread.daemon = True
                     power_thread.start()
 
+                log_file.write('*** %.1f iteration %d trace %s\n' % (time.time(), i, trace))
+                log_file.write('\n*** thermalservice:\n%s\n' %
+                               run_adb_command('shell dumpsys thermalservice').stdout.strip())
+                log_file.write('\n*** battery:\n%s\n' %
+                               run_adb_command('shell dumpsys battery').stdout.strip())
+                log_file.flush()
                 logging.debug('Running %s' % test)
+
+                subprocess.check_call(
+                    ['adb', 'shell', 'rm', '-f', '/data/misc/perfetto-traces/rtperf.perfetto'])
+
+                perfetto_process = subprocess.Popen(
+                    'adb shell perfetto -c - --txt -o /data/misc/perfetto-traces/rtperf.perfetto <<EOF %s\nEOF'
+                    % PERFETTO_CFG,
+                    shell=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE)
+                ppath = os.path.join(args.perfetto_trace_path,
+                                     '%03d_%s_%s.perfetto' % (i, trace, renderer))
+
                 test_time = run_trace(test, args)
+
+                subprocess.check_call(
+                    'adb shell /system/bin/trigger_perfetto angle_perf_stop'.split())
+                if perfetto_process.wait() != 0:
+                    print('oops perfetto failed')
+                subprocess.check_call(
+                    ['adb', 'pull', '/data/misc/perfetto-traces/rtperf.perfetto', ppath])
+
+                wall_time = get_test_time()
+                log_file.write('*** %.1f iteration %d trace %s done wall_time %s\n' %
+                               (time.time(), i, trace, wall_time))
+                log_file.write('\n*** thermalservice:\n%s\n' %
+                               run_adb_command('shell dumpsys thermalservice').stdout.strip())
+                log_file.write('\n*** battery:\n%s\n' %
+                               run_adb_command('shell dumpsys battery').stdout.strip())
+                log_file.flush()
 
                 gpu_power, cpu_power = 0, 0
                 if args.power:
@@ -828,7 +952,6 @@ def run_traces(args):
                         gpu_power = power_results['gpu']
                         cpu_power = power_results['cpu']
 
-                wall_time = get_test_time()
 
                 gpu_time = get_gpu_time() if args.vsync else '0'
 
