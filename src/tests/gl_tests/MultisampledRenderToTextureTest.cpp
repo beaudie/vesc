@@ -4386,6 +4386,7 @@ ANGLE_INSTANTIATE_TEST_COMBINE_1(
     ANGLE_ALL_TEST_PLATFORMS_ES31,
     ES2_METAL().enable(Feature::EnableMultisampledRenderToTextureOnNonTilers),
     ES3_METAL().enable(Feature::EnableMultisampledRenderToTextureOnNonTilers),
+    ES3_METAL().enable(Feature::EmulateDontCareLoadWithClear),
     ES3_VULKAN()
         .disable(Feature::SupportsExtendedDynamicState)
         .disable(Feature::SupportsExtendedDynamicState2),
@@ -4407,6 +4408,7 @@ ANGLE_INSTANTIATE_TEST_COMBINE_1(
     ANGLE_ALL_TEST_PLATFORMS_ES3,
     ANGLE_ALL_TEST_PLATFORMS_ES31,
     ES3_METAL().enable(Feature::EnableMultisampledRenderToTextureOnNonTilers),
+    ES3_METAL().enable(Feature::EmulateDontCareLoadWithClear),
     ES3_VULKAN()
         .disable(Feature::SupportsExtendedDynamicState)
         .disable(Feature::SupportsExtendedDynamicState2),
