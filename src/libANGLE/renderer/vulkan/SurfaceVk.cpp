@@ -1875,11 +1875,8 @@ angle::Result WindowSurfaceVk::queryAndAdjustSurfaceCaps(ContextVk *contextVk,
 }
 
 angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
-                                                          bool presentOutOfDate,
-                                                          bool *swapchainRecreatedOut)
+                                                          bool presentOutOfDate)
 {
-    *swapchainRecreatedOut = false;
-
     bool swapIntervalChanged =
         !IsCompatiblePresentMode(mDesiredSwapchainPresentMode, mCompatiblePresentModes.data(),
                                  mCompatiblePresentModes.size());
@@ -1932,7 +1929,6 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
         mPreTransform = mSurfaceCaps.currentTransform;
     }
 
-    *swapchainRecreatedOut = true;
     return recreateSwapchain(contextVk, newSwapchainExtents);
 }
 
@@ -2025,24 +2021,23 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
 
 egl::Error WindowSurfaceVk::prepareSwap(const gl::Context *context)
 {
-    if (!mAcquireOperation.needToAcquireNextSwapchainImage)
+    // No special treatment required for non-blocking present modes.
+    const bool isBlockingPresentMode = mSwapchainPresentMode == vk::PresentMode::FifoKHR ||
+                                       mSwapchainPresentMode == vk::PresentMode::FifoRelaxedKHR;
+
+    const bool needToAcquireNextImageUnlocked =
+        isBlockingPresentMode && mAcquireOperation.needToAcquireNextSwapchainImage;
+
+    if (!needToAcquireNextImageUnlocked)
     {
         return egl::NoError();
     }
 
     vk::Renderer *renderer = vk::GetImpl(context)->getRenderer();
 
-    bool swapchainRecreated = false;
-    angle::Result result = prepareForAcquireNextSwapchainImage(context, false, &swapchainRecreated);
+    const angle::Result result = prepareForAcquireNextSwapchainImage(context, false);
     if (result != angle::Result::Continue)
     {
-        return angle::ToEGL(result, EGL_BAD_SURFACE);
-    }
-    if (swapchainRecreated || isSharedPresentMode())
-    {
-        // If swapchain is recreated or it is in shared present mode, acquire the image right away;
-        // it's not going to block.
-        result = doDeferredAcquireNextImageWithUsableSwapchain(context);
         return angle::ToEGL(result, EGL_BAD_SURFACE);
     }
 
@@ -2592,8 +2587,7 @@ void WindowSurfaceVk::deferAcquireNextImage()
 }
 
 angle::Result WindowSurfaceVk::prepareForAcquireNextSwapchainImage(const gl::Context *context,
-                                                                   bool presentOutOfDate,
-                                                                   bool *swapchainRecreatedOut)
+                                                                   bool presentOutOfDate)
 {
     ASSERT(!NeedToProcessAcquireNextImageResult(mAcquireOperation.unlockedTryAcquireResult));
 
@@ -2611,19 +2605,17 @@ angle::Result WindowSurfaceVk::prepareForAcquireNextSwapchainImage(const gl::Con
         ANGLE_TRY(computePresentOutOfDate(contextVk, result, &presentOutOfDate));
     }
 
-    return checkForOutOfDateSwapchain(contextVk, presentOutOfDate, swapchainRecreatedOut);
+    return checkForOutOfDateSwapchain(contextVk, presentOutOfDate);
 }
 
 angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *context,
                                                           bool presentOutOfDate)
 {
-    bool swapchainRecreated = false;
     // prepareForAcquireNextSwapchainImage() may recreate Swapchain even if there is an image
     // acquired. Avoid this, by skipping the prepare call.
     if (!NeedToProcessAcquireNextImageResult(mAcquireOperation.unlockedTryAcquireResult))
     {
-        ANGLE_TRY(
-            prepareForAcquireNextSwapchainImage(context, presentOutOfDate, &swapchainRecreated));
+        ANGLE_TRY(prepareForAcquireNextSwapchainImage(context, presentOutOfDate));
     }
     return doDeferredAcquireNextImageWithUsableSwapchain(context);
 }
@@ -2646,9 +2638,7 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImageWithUsableSwapchain(
         // continuing.
         if (ANGLE_UNLIKELY(result == VK_ERROR_OUT_OF_DATE_KHR))
         {
-            bool swapchainRecreated = false;
-            ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, true, &swapchainRecreated));
-            ASSERT(swapchainRecreated);
+            ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, true));
             // Try one more time and bail if we fail
             result = acquireNextSwapchainImage(contextVk);
         }
