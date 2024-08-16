@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f65901d5_1fcd46bf",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-16T14:05:07Z",
+      "side": 1,
+      "message": "There\u0027s nothing special about color attachments, if there\u0027s a new depth/stencil attachment, the same thing should be done. The `startRenderPassNewColorAttachments` name hints at a logical bug, could it be made more general to say `startRenderPassNewAttachments` and covers depth/stencil too?",
+      "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
