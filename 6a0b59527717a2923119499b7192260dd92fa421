@@ -39,6 +39,30 @@
       },
       "revId": "6a0b59527717a2923119499b7192260dd92fa421",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b2cda7c_0920b690",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-16T06:50:54Z",
+      "side": 1,
+      "message": "There\u0027s two places that use  \n  depthAttachment.loadAction \u003d MTLLoadActionClear;\n\nOne place uses correct excplict assignement of default value of 1.0. (mtl_utils.mm)\nOne place uses incorrect implicit value 0. (SurfaceMtl.mm)\n\nThis change fixes the bug and future similar bugs by setting the implicit value correct (1.0)\n\nIf I understand correctly, the depth load action clear is done in cases when we have marked the depth as \"don\u0027t care\", for example with invalidate framebuffer. With robustness / WebGL on, we have to have a defined value for the depth.",
+      "parentUuid": "40e41948_98609ba1",
+      "range": {
+        "startLine": 362,
+        "startChar": 24,
+        "endLine": 362,
+        "endChar": 27
+      },
+      "revId": "6a0b59527717a2923119499b7192260dd92fa421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
