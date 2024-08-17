@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48681ccf_ee6de383",
+        "filename": "src/compiler/translator/CodeGen.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-17T02:38:44Z",
+      "side": 1,
+      "message": "Why is there `ANGLE_ENABLE_WEBGPU` and `ANGLE_ENABLE_WGPU`?",
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58a650d8_e37fac5e",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-17T02:38:44Z",
+      "side": 1,
+      "message": "Having written this file, do you think it would be easier to generate this struct directly in the output generator? You could lazily add to the struct definition as you encounter the built-ins (and later user input/output) and then stitch the definition together with the rest of the generated output.",
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b845f653_400e8437",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-17T02:38:44Z",
+      "side": 1,
+      "message": "is `position` correct?",
+      "range": {
+        "startLine": 78,
+        "startChar": 73,
+        "endLine": 78,
+        "endChar": 81
+      },
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f15edec8_693b0d5d",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-17T02:38:44Z",
+      "side": 1,
+      "message": "nit: Use the immutable string builder",
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63b68243_2fceed81",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-17T02:38:44Z",
+      "side": 1,
+      "message": "Translator\u0027s convention is to refer to nodes by `*`. Later you are doing `\u0026AccessField(...)` anyway.\n\nSame with `TVariable` etc, feel free to use `*` and avoid `\u0026` on usage.",
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd2ca2f_e3820e44",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-17T02:38:44Z",
+      "side": 1,
+      "message": "No need for `#ifdef`, the `ASSERT` already turns into `void` in release.",
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56d3f19c_1a79d55b",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-17T02:38:44Z",
+      "side": 1,
+      "message": "```suggestion\n// VariableReplacementMap to replace old variable accesses with fields accesses of the appropriate\n```",
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
