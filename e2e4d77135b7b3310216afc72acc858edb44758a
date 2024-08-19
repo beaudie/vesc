@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22d5613e_4023fe24",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4852,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-19T21:56:24Z",
+      "side": 1,
+      "message": "This was not done in the old code. Was that a bug that\u0027s also fixed in this change?",
+      "revId": "e2e4d77135b7b3310216afc72acc858edb44758a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
