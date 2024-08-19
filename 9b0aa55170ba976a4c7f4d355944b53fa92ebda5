@@ -153,6 +153,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a386552_90a5387b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2881,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-19T17:52:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fb096ad_33791aa8",
+      "revId": "9b0aa55170ba976a4c7f4d355944b53fa92ebda5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed754c38_865d7ac0",
@@ -184,6 +202,24 @@
       "side": 1,
       "message": "I had this way, reasoning that I would have to update the SPIRV14 check on this. Re-read the extension spec post this comment, makes sense. Will update.",
       "parentUuid": "ed754c38_865d7ac0",
+      "revId": "9b0aa55170ba976a4c7f4d355944b53fa92ebda5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6308797c_a9b46d29",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3273,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-19T17:52:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19921184_1f06af1f",
       "revId": "9b0aa55170ba976a4c7f4d355944b53fa92ebda5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
