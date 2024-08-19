@@ -262,7 +262,9 @@ void ExpandMatrix(T *target, const GLfloat *value)
 {
     static_assert(colsSrc <= colsDst && rowsSrc <= rowsDst, "Can only expand!");
 
-    constexpr int kDstFlatSize = colsDst * rowsDst;
+    // For the last row, only write colsSrc values so that we don't overwrite any values packed at
+    // the end of this matrix.
+    constexpr int kDstFlatSize = (colsDst * (rowsDst - 1)) + colsSrc;
     T staging[kDstFlatSize]    = {0};
 
     for (int r = 0; r < rowsSrc; r++)
