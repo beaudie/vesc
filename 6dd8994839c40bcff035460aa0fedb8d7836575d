@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e72f1798_c0a9641a",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4390,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T12:54:02Z",
+      "side": 1,
+      "message": "Please also add this to RobustResourceInitTest, it should give us some good extra coverage.",
+      "range": {
+        "startLine": 4390,
+        "startChar": 8,
+        "endLine": 4390,
+        "endChar": 61
+      },
+      "revId": "6dd8994839c40bcff035460aa0fedb8d7836575d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
