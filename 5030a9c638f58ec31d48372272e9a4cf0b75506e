@@ -1,0 +1,265 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0120fd1e_14493a15",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T13:29:39Z",
+      "side": 1,
+      "message": "nit: const ref",
+      "range": {
+        "startLine": 285,
+        "startChar": 48,
+        "endLine": 285,
+        "endChar": 77
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "79afa74a_2e376cd5",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/wgpu/ContextWgpu.h",
+              "range": {
+                "startLine": 285,
+                "startChar": 0,
+                "endLine": 286,
+                "endChar": 0
+              },
+              "replacement": "    void setVertexAttribute(size_t attribIndex,\n                            const webgpu::PackedVertexAttribute \u0026newAttrib);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dbfdb8b_2af86ba5",
+        "filename": "src/libANGLE/renderer/wgpu/VertexArrayWgpu.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T13:29:39Z",
+      "side": 1,
+      "message": "If the attribute is not enabled, I would memset it to 0 so it will always be equal to other disabled attributes.",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 5
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "e66c1b3e_636d6f8e",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/wgpu/VertexArrayWgpu.cpp",
+              "range": {
+                "startLine": 105,
+                "startChar": 0,
+                "endLine": 105,
+                "endChar": 0
+              },
+              "replacement": "            memset(\u0026mCurrentAttribs[attribIndex], 0, sizeof(mCurrentAttribs[attribIndex]));\n"
+            }
+          ]
+        }
+      ],
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97bdeb85_ef105554",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T13:29:39Z",
+      "side": 1,
+      "message": "nit: const ref",
+      "range": {
+        "startLine": 111,
+        "startChar": 64,
+        "endLine": 111,
+        "endChar": 96
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "90975dd5_10a9e196",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.cpp",
+              "range": {
+                "startLine": 111,
+                "startChar": 0,
+                "endLine": 112,
+                "endChar": 0
+              },
+              "replacement": "bool RenderPipelineDesc::setVertexAttribute(size_t attribIndex,\n                                            const PackedVertexAttribute \u0026newAttrib)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0f9ef6b_fca025dd",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T13:29:39Z",
+      "side": 1,
+      "message": "Because this is a packed type, you can use memcmp and memcpy. We could actually pass the whole array of vertex attribs here and memcmp/memcpy them all at once instead of looping over them in ContextWgpu.",
+      "range": {
+        "startLine": 114,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 40
+      },
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5e31239_d7425133",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T13:29:39Z",
+      "side": 1,
+      "message": "the enabled bool could be packed here.",
+      "range": {
+        "startLine": 111,
+        "startChar": 13,
+        "endLine": 111,
+        "endChar": 21
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "ba57cedb_0dc0dfc2",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+              "range": {
+                "startLine": 111,
+                "startChar": 0,
+                "endLine": 112,
+                "endChar": 0
+              },
+              "replacement": "    uint16_t enabled : 1;\n"
+            },
+            {
+              "path": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+              "range": {
+                "startLine": 116,
+                "startChar": 0,
+                "endLine": 117,
+                "endChar": 0
+              },
+              "replacement": ""
+            }
+          ]
+        }
+      ],
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69e4f6fb_ad071b1a",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T13:29:39Z",
+      "side": 1,
+      "message": "The WebGPU spec says that maxVertexBufferArrayStride will be at least 2048 so we will want more than 8 bits. \n\nYou can add a new kVertexAttributeStrideBits, maybe set it as high as possible before the struct gets bigger? Probably 16. Please also update the maxVertexAttribStride [0] cap using a min of the webgpu limit and the value that this can hold.\n\n[0] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/wgpu/wgpu_utils.cpp;l\u003d137;drc\u003d057bc0f0f358002150de583408acdfbef5d45d80",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 19
+      },
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd244242_c47c0b06",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T13:29:39Z",
+      "side": 1,
+      "message": "has no definition, can be removed or moved to another patch",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 71
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "fc1a7978_ceed28b9",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+              "range": {
+                "startLine": 139,
+                "startChar": 0,
+                "endLine": 140,
+                "endChar": 0
+              },
+              "replacement": ""
+            }
+          ]
+        }
+      ],
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
