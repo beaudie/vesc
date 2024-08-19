@@ -33,6 +33,24 @@
       "message": "It looks like this file is supposed to use snake_case and other tools translate it to camelCase, so consider dont_care instead of DontCare.",
       "revId": "a2d2783231fb0728e4875302f583e521c51c2b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cff49a2_e5c1fb2c",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-19T18:11:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6382d641_b2b29bd6",
+      "revId": "a2d2783231fb0728e4875302f583e521c51c2b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
