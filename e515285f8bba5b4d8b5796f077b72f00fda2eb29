@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7aaaeba_2ea77a92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T12:50:49Z",
+      "side": 1,
+      "message": "LGTM, glad we could use the existing RGBX logic",
+      "revId": "e515285f8bba5b4d8b5796f077b72f00fda2eb29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
