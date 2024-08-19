@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc8a827b_da6f8266",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-19T13:04:03Z",
+      "side": 1,
+      "message": "Could you add a simple test for this? \n\nShould be enough to copy the body from RobustResourceInitTestES3.CheckDepthStencilRenderbufferIsCleared minus the framebuffer init code and test with the default framebuffer. RobustResourceInitTest.SurfaceInitialized already covers the color clearing for default framebuffers.",
+      "revId": "6a0b59527717a2923119499b7192260dd92fa421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "40e41948_98609ba1",
         "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
         "patchSetId": 1
