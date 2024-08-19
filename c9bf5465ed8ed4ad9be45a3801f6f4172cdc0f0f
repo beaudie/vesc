@@ -16,6 +16,24 @@
       "message": "That whole concept here is questionable. Calling `main()` is not legal in C++ (it is in C).\n\nhttps://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/n4950.pdf\n\n\"\"\"\n6.9.3.1 main function [basic.start.main]\nThe function main shall not be used within a program.\n\"\"\"\n\nThe Right Fix (tm) is to have main() and this here call the same function, not have this code here call main().",
       "revId": "c9bf5465ed8ed4ad9be45a3801f6f4172cdc0f0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec09c8fa_bf2bfca8",
+        "filename": "util/ios/ios_main.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1116027
+      },
+      "writtenOn": "2024-08-19T09:15:05Z",
+      "side": 1,
+      "message": "Reported as https://g-issues.chromium.org/issues/360769027",
+      "parentUuid": "efbce83c_e2986f7b",
+      "revId": "c9bf5465ed8ed4ad9be45a3801f6f4172cdc0f0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
