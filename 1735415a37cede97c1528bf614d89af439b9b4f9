@@ -106,6 +106,24 @@
       "parentUuid": "fc8fd913_85d01bf2",
       "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58e6a3ba_9be76944",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-19T10:55:09Z",
+      "side": 1,
+      "message": "It looks like the reason for failure in https://chromium-swarm.appspot.com/task?id\u003d6ad671954fd8d710 was that the first run with `--gtest_list_tests` arg to determine the list of tests to run had \"Line\" in the output (from the warning), and so \":Line:\" was erroneously added to `--gtest_filter` starting with \"I 22:22:53.196  212.104s run_tests_on_device(RFCT80DADWZ)  Note: Google Test filter \u003d *KHR?GLES3.shaders.preprocessor.invalid_conditionals.unterminated_elif_1_fragment:\".\nSo in the end it failed because there is no test called \"Line\".\nThe real error is in parsing the output of `--gtest_list_tests`.\n(Your screenshot is from a different test suite, both angle_deqp_khr_gles3_vulkan_tests and angle_deqp_gles31_vulkan_tests failed in build 824, gles31 was a flake due to anglebug.com/339457761).",
+      "parentUuid": "0004d72b_28d3cc73",
+      "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
