@@ -16,6 +16,24 @@
       "message": "This was not done in the old code. Was that a bug that\u0027s also fixed in this change?",
       "revId": "e2e4d77135b7b3310216afc72acc858edb44758a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78a96f25_208bb52f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4852,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-19T23:56:50Z",
+      "side": 1,
+      "message": "No. Previously initBufferForVertexConversion takes Vk::BufferHelper, not ConversionBuffer, so no dirty bits involved. Now initBufferForVertexConversion takes ConversionBuffer which will set dirty bits, so it is better to clear dirty bit after conversion to make it consistent. But, this code is not checking dirty bit, so even if you do not clear dirty bit it should still works. But keep dirty bits correctly is still better and safe.",
+      "parentUuid": "22d5613e_4023fe24",
+      "revId": "e2e4d77135b7b3310216afc72acc858edb44758a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
