@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3cf043b_d4fd5e90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-19T16:37:03Z",
+      "side": 1,
+      "message": "lgtm again",
+      "revId": "a2d2783231fb0728e4875302f583e521c51c2b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6382d641_b2b29bd6",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-19T16:37:03Z",
+      "side": 1,
+      "message": "It looks like this file is supposed to use snake_case and other tools translate it to camelCase, so consider dont_care instead of DontCare.",
+      "revId": "a2d2783231fb0728e4875302f583e521c51c2b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
