@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "296b008f_31f633e6",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-19T07:07:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4d279f5_ed4ce697",
+      "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a21c1e7_b4c55298",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-08-16T22:44:54Z",
       "side": 1,
       "message": "Is it desirable to create a new random_device each time this function\u0027s called? Only asking - probably not worth the complexity to reuse it.",
+      "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c626a099_069a5f28",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-19T07:07:06Z",
+      "side": 1,
+      "message": "I think recreating a new random_device locally is just for convenience. We could cache it in the RenderCommandEncoder class or globally but I think it\u0027s not important for a testing feature such as this. We could still get a different random value everytime this function is called or the test is first run.",
+      "parentUuid": "7a21c1e7_b4c55298",
       "revId": "b2baa0b3311ab99672a859fe87dfe82733778f91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
