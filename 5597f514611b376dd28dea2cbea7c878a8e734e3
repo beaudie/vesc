@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b45de575_8641c31f",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-08-19T07:24:07Z",
+      "side": 1,
+      "message": "I think that might be easier. I did it with AST transformations because I figured I\u0027d get more validation. And they\u0027re a little more modular, so they\u0027re more easily composable, and maybe a little easier to read because they can be more easily separated into different files rather than broken up and scattered into the output generator. But this step is to be done at the end anyways so it doesn\u0027t need to be composable, and all the AST transformation is a bit heavyweight and probably less performant at runtime, and obviously there are still some hooks in the output generator anyway.\n\nI\u0027d be okay rewriting this to be part of the output generator, it probably wouldn\u0027t take me that long, do you think it\u0027s worth it?",
+      "parentUuid": "58a650d8_e37fac5e",
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b845f653_400e8437",
         "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
         "patchSetId": 9
@@ -48,6 +66,30 @@
       "writtenOn": "2024-08-17T02:38:44Z",
       "side": 1,
       "message": "is `position` correct?",
+      "range": {
+        "startLine": 78,
+        "startChar": 73,
+        "endLine": 78,
+        "endChar": 81
+      },
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "804d9381_62d2795e",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-08-19T07:24:07Z",
+      "side": 1,
+      "message": "Yeah for whatever reason `position` is both the vertex shader\u0027s output (`gl_Position`) and also the fragment shader\u0027s input position of the fragment (`gl_FragCoord`): https://www.w3.org/TR/WGSL/#built-in-values-position",
+      "parentUuid": "b845f653_400e8437",
       "range": {
         "startLine": 78,
         "startChar": 73,
