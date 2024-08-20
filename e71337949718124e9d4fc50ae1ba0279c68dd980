@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23b07cd6_aa3583f0",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-20T23:24:49Z",
+      "side": 1,
+      "message": "Lets make this CL does exactly what you described: merge the dirty ranges since this is simpler implementation. I will do the comparison and fire up a separate CL to do individual dirtyRange if needed. We maybe able to just live with simpler one given that QComm will fix the unsupported format bug soon. This conversion code path will becomes less critical after their fix. But this CL is still an improvement.",
+      "parentUuid": "70c35a8c_c6edb61c",
+      "revId": "e71337949718124e9d4fc50ae1ba0279c68dd980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82b46ac5_4b51cd4a",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-08-20T01:45:46Z",
       "side": 1,
       "message": "What if stride is 0?",
+      "range": {
+        "startLine": 625,
+        "startChar": 74,
+        "endLine": 625,
+        "endChar": 83
+      },
+      "revId": "e71337949718124e9d4fc50ae1ba0279c68dd980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a721857_b3c64f2d",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-20T23:24:49Z",
+      "side": 1,
+      "message": "THis will never be 0. I have changed the stride in cacheKey always non zero (see line 882 bellow. Added an assertion here.",
+      "parentUuid": "82b46ac5_4b51cd4a",
       "range": {
         "startLine": 625,
         "startChar": 74,
