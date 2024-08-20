@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e450b872_0eb6b693",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-20T14:21:32Z",
+      "side": 1,
+      "message": "nit: the `\u003d` in this line should be aligned with the previous line. For some reason, clang-format did not enforce this on presubmit.",
+      "revId": "5faa8a36800069bb264fb08ab1cfc11a9dcb4371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
