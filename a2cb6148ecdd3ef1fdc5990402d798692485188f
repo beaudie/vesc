@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b65af2a5_9af5ba7b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-20T22:21:51Z",
+      "side": 1,
+      "message": "SGTM.",
+      "parentUuid": "e8d97b9a_050f7fc1",
+      "revId": "a2cb6148ecdd3ef1fdc5990402d798692485188f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fe1e539_177f57c6",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-08-20T01:32:51Z",
       "side": 1,
       "message": "(Avoid overloading as much as possible)\n\n```suggestion\n    void dataRangeUpdated(const gl::RangeULL \u0026range);\n```",
+      "range": {
+        "startLine": 235,
+        "startChar": 9,
+        "endLine": 235,
+        "endChar": 20
+      },
+      "revId": "a2cb6148ecdd3ef1fdc5990402d798692485188f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55225777_a55cc7f3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-20T22:21:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fe1e539_177f57c6",
       "range": {
         "startLine": 235,
         "startChar": 9,
