@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42eb62ea_e5015297",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:15:56Z",
+      "side": 1,
+      "message": "Maybe put this in `vk_utils`? Seems pretty vulkan-y",
+      "revId": "0d34a9aec7e3f667dfb1ec8077560b63305bc8cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
