@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6654f2a_b0b62a56",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:57:25Z",
+      "side": 1,
+      "message": "Please update the description of the features with something like this (also notice the `Vk` turned to `VK`)\n\n```suggestion\n                \"VkDevice supports the RTEFloat16 rounding mode from VK_KHR_shader_float_controls\"\n```",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5880364_ac56d31d",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1658,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:57:25Z",
+      "side": 1,
+      "message": "Please add an `issue` field to these too",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75c30c7e_3c9c9b8c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2513,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:57:25Z",
+      "side": 1,
+      "message": "Please update this comment too with the list of properties. It helps when trying to have a quick glance of what ANGLE uses.",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fde94a33_46ed3bae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:57:25Z",
+      "side": 1,
+      "message": "```suggestion\n    mVariablePointersFeatures.pNext                   \u003d nullptr;\n    mFloatControlProperties.pNext                     \u003d nullptr;\n```",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56a3c376_61878ecb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4938,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:57:25Z",
+      "side": 1,
+      "message": "Do these features really depend on SPIR-V 1.4?",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
