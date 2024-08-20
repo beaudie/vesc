@@ -160,6 +160,24 @@
       "parentUuid": "c7caedec_ecba48cd",
       "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92ceba04_cef1eef2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-20T17:17:53Z",
+      "side": 1,
+      "message": "I have created a bug https://buganizer.corp.google.com/issues/361100186 to track the problem. Thank you Yuly for all the detailed explanations!",
+      "parentUuid": "f92b826c_25123f7b",
+      "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
