@@ -16,6 +16,24 @@
       "message": "In relation to my comment in the previous CL, this is now missing a barrier if the ranges are overlapping.",
       "revId": "8dfb4ad916a9b0bbf7e733f29c4bbb7828399555",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f760c1ce_3fca0fb6",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2439,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-20T21:38:29Z",
+      "side": 1,
+      "message": "Agree. I need to check if merge the ranges into one versus convert each ranges which way is better. It depends on the usage pattern, but merge into one range certainly will be much simpler. The other option is detect if there is overlap or not and if overlap just merge into one. I am going to check some usage cases with traces we have and see which way makes more sense.",
+      "parentUuid": "9fd83f66_f0495476",
+      "revId": "8dfb4ad916a9b0bbf7e733f29c4bbb7828399555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
