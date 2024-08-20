@@ -16,6 +16,24 @@
       "message": "Awesome work Quyen fixing this! I don\u0027t know how ANGLE\u0027s RGB emulation code works so let me decline review of this and defer to Geoff\u0027s +2.",
       "revId": "b6e81d3f2e5a89c7fc992a75af087eb18adeb39d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8da584e_30ff4603",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-20T07:16:02Z",
+      "side": 1,
+      "message": "Thanks. A little bit more details on this CL:\n\nPreviously we used RGBA to emulate RGB in an IOSurface hence the alpha write was not disabled properly. Actually IOSurface pbuffer\u0027s alpha write was indeed disabled [1]. However the code didn\u0027t take into account the implicit MSAA texture. The implicit MSAA texture inherited the RGBA format from its IOSurface pbuffer, thus when a render pass used the implicit MSAA texture it thought that it\u0027s OK to write garbage values to the alpha channel.\n\nSo by using RGBX, metal backend can notice that both IOSurface pbuffer and its implicit MSAA textures have emulated alpha and apply alpha write disabling systematically to both of them [2].\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/IOSurfaceSurfaceMtl.mm;drc\u003d57a3e9a7aa7058882281a462fc858df53fb6a8d1;l\u003d200\n[2] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/mtl_utils.mm;drc\u003d57a3e9a7aa7058882281a462fc858df53fb6a8d1;l\u003d1431",
+      "parentUuid": "78b34806_09752b49",
+      "revId": "b6e81d3f2e5a89c7fc992a75af087eb18adeb39d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
