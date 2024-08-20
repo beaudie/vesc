@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35ac1c83_6b9878bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T21:31:53Z",
+      "side": 1,
+      "message": "Forgot to push?",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6654f2a_b0b62a56",
@@ -172,6 +189,24 @@
       "side": 1,
       "message": "Not really. I saw that the float controls extension is added to enabled ext list only on support of SPIR-V1.4 [1], and followed along.\n\nIf it is ok, I could change this to remove the SPIR-V1.4 dependency here.\n\n[1]: https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/vk_renderer.cpp#3258",
       "parentUuid": "56a3c376_61878ecb",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d773e600_a6269f77",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4938,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T21:31:53Z",
+      "side": 1,
+      "message": "It\u0027s fine, technically you don\u0027t need it, so removing it makes things cleaner, but no big deal.",
+      "parentUuid": "bedc5119_528bf261",
       "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
