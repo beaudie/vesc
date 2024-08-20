@@ -22,6 +22,30 @@
       },
       "revId": "30a3948e610c8afda62ef15eed45b7fcd6b1db3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b223a73c_6f08d35f",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-20T18:13:54Z",
+      "side": 1,
+      "message": "No, this is not a bug fix. The stride was only used as cache key before. 0 just means tightly packed, so should still work properly (since we also have the formatId as the key as well which makes key still unique). But I am going to use stride cached in the cache key directly in the later CL, so I want to pass in the actual stride here. Both are correct.",
+      "parentUuid": "6d9ede13_d1e12e3d",
+      "range": {
+        "startLine": 793,
+        "startChar": 36,
+        "endLine": 793,
+        "endChar": 60
+      },
+      "revId": "30a3948e610c8afda62ef15eed45b7fcd6b1db3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
