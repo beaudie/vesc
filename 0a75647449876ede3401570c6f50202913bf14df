@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c37588c_b26c91bb",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 2944,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-20T14:37:41Z",
+      "side": 1,
+      "message": "nit: Use `MTLPrimitiveTopologyClass` per Chromium\u0027s C++ style guide.",
+      "range": {
+        "startLine": 2944,
+        "startChar": 4,
+        "endLine": 2944,
+        "endChar": 8
+      },
+      "revId": "0a75647449876ede3401570c6f50202913bf14df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
