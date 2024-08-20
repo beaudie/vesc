@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab40a127_fc3f4b2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:45:46Z",
+      "side": 1,
+      "message": "Please add tests:\n\n- Setup buffer\n- One draw (ensures conversion done)\n- Multiple updates to the buffer\n- Draw again (ensure all the buffer is correct)\n\nNeed at least 2 tests, one where the updates are to separate regions, another to overlapping regions.",
+      "revId": "e71337949718124e9d4fc50ae1ba0279c68dd980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70c35a8c_c6edb61c",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:45:46Z",
+      "side": 1,
+      "message": "In practice, how far apart are these updates to the vertex buffer? If there are multiple updates to the vertex buffers, there will be a barrier between each conversion because of `convertVertexBuffer`. But that barrier can\u0027t just be removed because the updates here may be overlapping.\n\nWhat I\u0027m thinking is, would it hurt to simplify the code to:\n\n- Instead of tracking multiple ranges, track min(all lo offsets) to max(all hi offsets)\n- Instead of separate bool for entirely dirty, set the range to (0, size).\n- Unify the conversion paths here so they only work with a single range\n\nIn particular, the last step also helps reduce the chance of corner case bugs.",
+      "revId": "e71337949718124e9d4fc50ae1ba0279c68dd980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82b46ac5_4b51cd4a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:45:46Z",
+      "side": 1,
+      "message": "What if stride is 0?",
+      "range": {
+        "startLine": 625,
+        "startChar": 74,
+        "endLine": 625,
+        "endChar": 83
+      },
+      "revId": "e71337949718124e9d4fc50ae1ba0279c68dd980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
