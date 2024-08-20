@@ -142,6 +142,24 @@
       "parentUuid": "58e6a3ba_9be76944",
       "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f92b826c_25123f7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-20T14:11:57Z",
+      "side": 1,
+      "message": "It\u0027s a bug, yes.\nShould we fix?\nMaybe.\nI kind of like not having unused expectations, as I\u0027ve said in https://chromium-review.googlesource.com/c/angle/angle/+/5238992/2#message-1d20c4d588254963b691964dcbf37592878b320c.",
+      "parentUuid": "c7caedec_ecba48cd",
+      "revId": "1735415a37cede97c1528bf614d89af439b9b4f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
