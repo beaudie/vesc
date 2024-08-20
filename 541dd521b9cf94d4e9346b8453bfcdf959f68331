@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cefe017e_be0d70a0",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-20T16:03:52Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e6654f2a_b0b62a56",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5880364_ac56d31d",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-20T01:57:25Z",
       "side": 1,
       "message": "Please add an `issue` field to these too",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c89f32d_8a7429f9",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1658,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-20T16:03:52Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a5880364_ac56d31d",
       "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef34f314_236a0b91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2513,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-20T16:03:52Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "75c30c7e_3c9c9b8c",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fde94a33_46ed3bae",
@@ -69,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "517036a2_53ea14f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-20T16:03:52Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fde94a33_46ed3bae",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56a3c376_61878ecb",
@@ -82,6 +154,24 @@
       "writtenOn": "2024-08-20T01:57:25Z",
       "side": 1,
       "message": "Do these features really depend on SPIR-V 1.4?",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bedc5119_528bf261",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4938,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-20T16:03:52Z",
+      "side": 1,
+      "message": "Not really. I saw that the float controls extension is added to enabled ext list only on support of SPIR-V1.4 [1], and followed along.\n\nIf it is ok, I could change this to remove the SPIR-V1.4 dependency here.\n\n[1]: https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/vk_renderer.cpp#3258",
+      "parentUuid": "56a3c376_61878ecb",
       "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
