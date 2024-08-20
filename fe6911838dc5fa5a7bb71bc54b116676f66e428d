@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ca57183_0546515a",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-20T17:18:19Z",
+      "side": 1,
+      "message": "Could this be a single constexpr in the anonymous namespace above instead of duplicated 3 times?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 6
+      },
+      "revId": "fe6911838dc5fa5a7bb71bc54b116676f66e428d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
