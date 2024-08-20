@@ -952,12 +952,12 @@ void DisplayMtl::initializeExtensions() const
     mNativeExtensions.copyTextureCHROMIUM           = true;
     mNativeExtensions.copyCompressedTextureCHROMIUM = false;
 
-#if !ANGLE_PLATFORM_WATCHOS
-    if (@available(iOS 14.0, macOS 10.11, macCatalyst 14.0, tvOS 16.0, *))
+    // Check at runtime because the minimum tvOS deployment target is 15.0.
+    // Other deployment targets support this feature unconditionally.
+    if (@available(tvOS 16.0, *))
     {
         mNativeExtensions.textureMirrorClampToEdgeEXT = true;
     }
-#endif
 
     if (ANGLE_APPLE_AVAILABLE_XCI(10.11, 13.1, 11.0))
     {
