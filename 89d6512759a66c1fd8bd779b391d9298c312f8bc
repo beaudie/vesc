@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87855a59_aeff73ff",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-20T08:20:18Z",
+      "side": 1,
+      "message": "This looks incorrect. `TARGET_OS_MAC` includes all OSes.",
+      "revId": "89d6512759a66c1fd8bd779b391d9298c312f8bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a3199d_414e69c4",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1589,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-20T08:20:18Z",
+      "side": 1,
+      "message": "Should be `TARGET_OS_OSX`.",
+      "range": {
+        "startLine": 1589,
+        "startChar": 10,
+        "endLine": 1589,
+        "endChar": 20
+      },
+      "revId": "89d6512759a66c1fd8bd779b391d9298c312f8bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
