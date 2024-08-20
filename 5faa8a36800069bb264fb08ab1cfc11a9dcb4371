@@ -16,6 +16,24 @@
       "message": "nit: the `\u003d` in this line should be aligned with the previous line. For some reason, clang-format did not enforce this on presubmit.",
       "revId": "5faa8a36800069bb264fb08ab1cfc11a9dcb4371",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a352d713_df5a0517",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-20T17:21:07Z",
+      "side": 1,
+      "message": "Happens sometimes when the other line which needs formatting is not modified.",
+      "parentUuid": "e450b872_0eb6b693",
+      "revId": "5faa8a36800069bb264fb08ab1cfc11a9dcb4371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
