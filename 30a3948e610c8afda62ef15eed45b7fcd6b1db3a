@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d9ede13_d1e12e3d",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-20T01:26:31Z",
+      "side": 1,
+      "message": "Looks like in this case `getVertexConversionBuffer` was previously called with a stride of 0 instead of `srcFormatSize`?\n\nIs this a bugfix? Any regression test?",
+      "range": {
+        "startLine": 793,
+        "startChar": 36,
+        "endLine": 793,
+        "endChar": 60
+      },
+      "revId": "30a3948e610c8afda62ef15eed45b7fcd6b1db3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
