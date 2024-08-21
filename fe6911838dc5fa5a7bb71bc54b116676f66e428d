@@ -22,6 +22,30 @@
       },
       "revId": "fe6911838dc5fa5a7bb71bc54b116676f66e428d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76b5f0a7_a06c0d9b",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-21T09:07:46Z",
+      "side": 1,
+      "message": "The source is a extern symbol, not a constexpr. So likely not?\nThe option would be a getter function. I couldn\u0027t figure out a coherent way to do this. Since it\u0027s duplicated between two binaries (common and main lib), it would appear overly neurotic to solve the intrafile duplication but not the interfile duplication.\n\nI\u0027d like to keep it as is to land this patch, it changes fairly rarely.\nPlease comment if you\u0027d like further code to fix up. I can add the getter to common if you see that as the solution.",
+      "parentUuid": "3ca57183_0546515a",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 6
+      },
+      "revId": "fe6911838dc5fa5a7bb71bc54b116676f66e428d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
