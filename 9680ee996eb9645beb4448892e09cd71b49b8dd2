@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b49019a_5e79121f",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-21T22:32:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a1fbfd7_1a8e8b5e",
+      "revId": "9680ee996eb9645beb4448892e09cd71b49b8dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "226ff3ef_45936dce",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-08-21T22:18:32Z",
       "side": 1,
       "message": "Just to make it easier to find these _properties_ if someone is looking for them:\n\n```suggestion\n// - VK_KHR_shader_float_controls           shaderRoundingModeRTEFloat16 (property)\n//                                          shaderRoundingModeRTEFloat32 (property)\n//                                          shaderRoundingModeRTEFloat64 (property)\n//                                          shaderRoundingModeRTZFloat16 (property)\n//                                          shaderRoundingModeRTZFloat32 (property)\n//                                          shaderRoundingModeRTZFloat64 (property)\n//                                          shaderDenormPreserveFloat16 (property)\n//                                          shaderDenormPreserveFloat16 (property)\n//                                          shaderDenormPreserveFloat16 (property)\n//                                          shaderDenormFlushToZeroFloat16 (property)\n//                                          shaderDenormFlushToZeroFloat32 (property)\n//                                          shaderDenormFlushToZeroFloat64 (property)\n//                                          shaderSignedZeroInfNanPreserveFloat16 (property)\n//                                          shaderSignedZeroInfNanPreserveFloat32 (property)\n//                                          shaderSignedZeroInfNanPreserveFloat64 (property)\n\n```",
+      "range": {
+        "startLine": 2514,
+        "startChar": 0,
+        "endLine": 2528,
+        "endChar": 91
+      },
+      "revId": "9680ee996eb9645beb4448892e09cd71b49b8dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72e3b775_0672ec20",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2528,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-21T22:32:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "226ff3ef_45936dce",
       "range": {
         "startLine": 2514,
         "startChar": 0,
