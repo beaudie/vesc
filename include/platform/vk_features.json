@@ -279,6 +279,14 @@
             ],
             "issue": "http://anglebug.com/42267057"
         },
+		{
+            "name": "supports_clear_texture",
+            "category": "Features",
+            "description": [
+                "Enable GL_EXT_clear_texture"
+            ],
+            "issue": "http://anglebug.com/42266869"
+		},
         {
             "name": "supports_multiview",
             "category": "Features",
