@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09594eb6_01ef6d7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-21T13:56:40Z",
+      "side": 1,
+      "message": "Note you should be able to test the reland on ios-angle-try-intel",
+      "revId": "36f7e03a35784c2cd9feb4914c53b202666dbc37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
