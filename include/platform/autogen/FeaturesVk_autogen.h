@@ -273,6 +273,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/42267057"
     };
 
+    FeatureInfo supportsClearTexture = {
+        "supportsClearTexture",
+        FeatureCategory::VulkanFeatures,
+        "Enable GL_EXT_clear_texture",
+        &members, "http://anglebug.com/42266869"
+    };
+
     FeatureInfo supportsMultiview = {
         "supportsMultiview",
         FeatureCategory::VulkanFeatures,
