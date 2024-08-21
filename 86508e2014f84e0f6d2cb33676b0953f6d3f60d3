@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82ac6312_d8b7c2b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3594167
+      },
+      "writtenOn": "2024-08-21T00:19:21Z",
+      "side": 1,
+      "message": "CreaLinuxtheMaster@gmail.com",
+      "revId": "86508e2014f84e0f6d2cb33676b0953f6d3f60d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
