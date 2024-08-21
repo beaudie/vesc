@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f07da5de_01f844d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3316,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-21T22:57:54Z",
+      "side": 1,
+      "message": "These are a lot of features. Could these just be a bitfield instead of each one being a feature itself? The benefit is that it is packed and things like this check can be one instruction.",
+      "range": {
+        "startLine": 3304,
+        "startChar": 8,
+        "endLine": 3316,
+        "endChar": 62
+      },
+      "revId": "8c45ff02c5973ae2ee8a26ba88fe9544b12efa44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
