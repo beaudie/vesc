@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "353539b8_7acc9871",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-21T20:05:34Z",
+      "side": 1,
+      "message": "That\u0027s probably because of `mColorTextureInitialized` flag that is true on creation.",
+      "parentUuid": "761626b8_3c07ef12",
+      "revId": "6a0b59527717a2923119499b7192260dd92fa421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40e41948_98609ba1",
