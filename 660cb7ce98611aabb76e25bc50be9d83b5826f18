@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2720d8f9_8cdbaf4a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-21T20:47:24Z",
+      "side": 1,
+      "message": "nit: attention",
+      "revId": "660cb7ce98611aabb76e25bc50be9d83b5826f18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
