@@ -49,6 +49,7 @@ const char *gTraceInterpreter      = nullptr;
 const char *gPrintExtensionsToFile = nullptr;
 const char *gRequestedExtensions   = nullptr;
 bool gIncludeInactiveResources     = false;
+const char *gCurrentUser           = nullptr;
 
 namespace
 {
@@ -92,7 +93,8 @@ bool TraceTestArg(int *argc, char **argv, int argIndex)
                            &gPrintExtensionsToFile) ||
            ParseCStringArg("--request-extensions", argc, argv, argIndex, &gRequestedExtensions) ||
            ParseFlag("--include-inactive-resources", argc, argv, argIndex,
-                     &gIncludeInactiveResources);
+                     &gIncludeInactiveResources) ||
+           ParseCStringArg("--current-user", argc, argv, argIndex, &gCurrentUser);
 }
 }  // namespace
 }  // namespace angle

@@ -20,6 +20,10 @@
 #include "util/png_utils.h"
 #include "util/test_utils.h"
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include "util/android/AndroidWindow.h"
+#endif
+
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
@@ -834,12 +838,13 @@ bool FindTraceTestDataPath(const char *traceName, char *testDataDirOut, size_t m
     char relativeTestDataDir[kMaxPath] = {};
     snprintf(relativeTestDataDir, kMaxPath, "%s%c%s", kTraceTestFolder, GetPathSeparator(),
              traceName);
-    return angle::FindTestDataPath(relativeTestDataDir, testDataDirOut, maxDataDirLen);
+    return angle::FindTestDataPath(relativeTestDataDir, gCurrentUser, testDataDirOut,
+                                   maxDataDirLen);
 }
 
 bool FindRootTraceTestDataPath(char *testDataDirOut, size_t maxDataDirLen)
 {
-    return angle::FindTestDataPath(kTraceTestFolder, testDataDirOut, maxDataDirLen);
+    return angle::FindTestDataPath(kTraceTestFolder, gCurrentUser, testDataDirOut, maxDataDirLen);
 }
 
 TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
@@ -1863,7 +1868,7 @@ std::string FindTraceGzPath(const std::string &traceName)
     std::stringstream pathStream;
 
     char genDir[kMaxPath] = {};
-    if (!angle::FindTestDataPath("gen", genDir, kMaxPath))
+    if (!angle::FindTestDataPath("gen", gCurrentUser, genDir, kMaxPath))
     {
         return "";
     }
@@ -1883,9 +1888,17 @@ void TracePerfTest::initializeBenchmark()
         return;
     }
 
+    std::string baseDir = "";
+#if defined(ANGLE_TRACE_EXTERNAL_BINARIES)
+    if (gCurrentUser)
+    {
+        baseDir += AndroidWindow::GetApplicationDirectory(gCurrentUser) + "/angle_traces/";
+    }
+#endif
+
     if (gTraceInterpreter)
     {
-        mTraceReplay.reset(new TraceLibrary("angle_trace_interpreter", traceInfo));
+        mTraceReplay.reset(new TraceLibrary("angle_trace_interpreter", traceInfo, baseDir));
         if (strcmp(gTraceInterpreter, "gz") == 0)
         {
             std::string traceGzPath = FindTraceGzPath(traceInfo.name);
@@ -1902,7 +1915,7 @@ void TracePerfTest::initializeBenchmark()
         std::stringstream traceNameStr;
         traceNameStr << "angle_restricted_traces_" << traceInfo.name;
         std::string traceName = traceNameStr.str();
-        mTraceReplay.reset(new TraceLibrary(traceNameStr.str(), traceInfo));
+        mTraceReplay.reset(new TraceLibrary(traceNameStr.str(), traceInfo, baseDir));
     }
 
     LoadTraceEGL(TraceLoadProc);
@@ -2699,7 +2712,7 @@ void RegisterTraceTests()
     char rootTracePath[kMaxPath] = {};
     if (!FindRootTraceTestDataPath(rootTracePath, kMaxPath))
     {
-        ERR() << "Unable to find trace folder.";
+        ERR() << "Unable to find trace folder " << rootTracePath;
         return;
     }
 

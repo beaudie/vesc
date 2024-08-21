@@ -69,7 +69,11 @@ ANGLE_LIBTESTER_EXPORT bool deqp_libtester_init_platform(int argc,
 
         constexpr size_t kMaxDataDirLen = 1000;
         char deqpDataDir[kMaxDataDirLen];
-        if (!angle::FindTestDataPath(ANGLE_DEQP_DATA_DIR, deqpDataDir, kMaxDataDirLen))
+
+        // TODO (b/361388557): Look up the current user
+        const char *currentUser = nullptr;
+
+        if (!angle::FindTestDataPath(ANGLE_DEQP_DATA_DIR, currentUser, deqpDataDir, kMaxDataDirLen))
         {
             std::cout << "Failed to find dEQP data directory: " << ANGLE_DEQP_DATA_DIR << std::endl;
             return false;

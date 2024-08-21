@@ -96,6 +96,7 @@ namespace angle
 {
 // Find a test data file or directory.
 ANGLE_UTIL_EXPORT bool FindTestDataPath(const char *searchPath,
+                                        const char *currentUser,
                                         char *dataPathOut,
                                         size_t maxDataPathOutLen);
 }  // namespace angle

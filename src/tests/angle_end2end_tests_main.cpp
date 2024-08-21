@@ -58,7 +58,12 @@ int main(int argc, char **argv)
 
     constexpr size_t kMaxPath = 512;
     std::array<char, kMaxPath> foundDataPath;
-    if (!angle::FindTestDataPath(kTestExpectationsPath, foundDataPath.data(), foundDataPath.size()))
+
+    // TODO (b/361388557): Look up the current user
+    const char *currentUser = nullptr;
+
+    if (!angle::FindTestDataPath(kTestExpectationsPath, currentUser, foundDataPath.data(),
+                                 foundDataPath.size()))
     {
         std::cerr << "Unable to find test expectations path (" << kTestExpectationsPath << ")\n";
         return EXIT_FAILURE;

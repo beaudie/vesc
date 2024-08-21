@@ -41,6 +41,7 @@ extern bool gVsync;
 extern const char *gPrintExtensionsToFile;
 extern const char *gRequestedExtensions;
 extern bool gIncludeInactiveResources;
+extern const char *gCurrentUser;
 
 // Constant for when trace's frame count should be used
 constexpr int kAllFrames = -1;

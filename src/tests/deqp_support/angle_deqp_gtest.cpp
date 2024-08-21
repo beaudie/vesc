@@ -262,7 +262,11 @@ Optional<std::string> FindFileFromPath(const char *dirPath, const char *filePath
 
     constexpr size_t kMaxFoundPathLen = 1000;
     char foundPath[kMaxFoundPathLen];
-    if (angle::FindTestDataPath(path.c_str(), foundPath, kMaxFoundPathLen))
+
+    // TODO (b/361388557): Look up the current user
+    const char *currentUser = nullptr;
+
+    if (angle::FindTestDataPath(path.c_str(), currentUser, foundPath, kMaxFoundPathLen))
     {
         return std::string(foundPath);
     }

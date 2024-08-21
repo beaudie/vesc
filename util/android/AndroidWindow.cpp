@@ -202,6 +202,24 @@ void android_main(struct android_app *app)
     }
 }
 
+std::string AndroidWindow::GetApplicationDirectory(const char *currentUser)
+{
+    std::string applicationDir("/data/user/");
+
+    if (currentUser)
+    {
+        applicationDir += std::string(currentUser);
+    }
+    else
+    {
+        applicationDir += "0";
+    }
+
+    applicationDir += "/com.android.angle.test";
+
+    return applicationDir;
+}
+
 // static
 std::string AndroidWindow::GetExternalStorageDirectory()
 {
