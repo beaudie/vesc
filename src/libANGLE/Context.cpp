@@ -10029,6 +10029,20 @@ void Context::clearTexSubImage(TextureID texturePacked,
 {
     Texture *texture = getTexture(texturePacked);
 
+    // From the spec: For texture types that do not have certain dimensions, this command treats
+    // those dimensions as having a size of 1.  For example, to clear a portion of a two-dimensional
+    // texture, the application would use <zoffset> equal to zero and <depth> equal to one.
+    gl::TextureType textureType = texture->getState().getType();
+    bool is2D =
+        textureType == gl::TextureType::_2D || textureType == gl::TextureType::_2DMultisample;
+
+    // It is allowed to use extents of 0 as input args. In this case, the function should return
+    // with no changes to the texture.
+    if (width == 0 || height == 0 || (depth == 0 && !is2D))
+    {
+        return;
+    }
+
     // Sync the texture's state directly. EXT_clear_texture does not require that the texture is
     // bound.
     if (texture->hasAnyDirtyBit())
