@@ -448,7 +448,7 @@ inline bool IsGLES(const GPUTestConfig::API &api)
 // Check whether the backend API has been set to Vulkan in the constructor
 inline bool IsVulkan(const GPUTestConfig::API &api)
 {
-    return (api == GPUTestConfig::kAPIVulkan) || (api == GPUTestConfig::kAPISwiftShader);
+    return (api == GPUTestConfig::kAPIVulkan);
 }
 
 inline bool IsSwiftShader(const GPUTestConfig::API &api)

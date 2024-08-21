@@ -65,6 +65,7 @@
 // Windows
 42262429 WIN NVIDIA D3D11 : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
 40096654 WIN VULKAN : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
+40096654 WIN SWIFTSHADER : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
 40096654 WIN OPENGL : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
 40096654 WIN GLES : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
 42264595 WIN D3D11 : SimpleStateChangeTestES31.DrawThenChangeFBOThenDrawThenFlushInAnotherThreadThenDrawIndexed/* = SKIP
@@ -896,6 +897,7 @@ b/330697097 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachmen
 42264721 : GLSLTest_ES31.InterpolateAtWithSwizzle/* = SKIP
 
 42264855 VULKAN : GetImageTest.InconsistentTexture2D/* = SKIP
+42264855 SWIFTSHADER : GetImageTest.InconsistentTexture2D/* = SKIP
 
 40050011 D3D11 : GLSLTest_ES3.UnsuccessfulRelinkWithBindAttribLocation/* = SKIP
 40050011 SWIFTSHADER : GLSLTest_ES3.UnsuccessfulRelinkWithBindAttribLocation/* = SKIP
@@ -950,6 +952,7 @@ b/330697097 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachmen
 // Flaky Generally on AsyncCommandQueue.
 42266015 VULKAN : TimerQueriesTest.TimeElapsed/*_AsyncCommandQueue* = SKIP
 42266015 VULKAN : TimerQueriesTest.Timestamp/*_AsyncCommandQueue* = SKIP
+42266015 SWIFTSHADER : TimerQueriesTest.TimeElapsed/*_AsyncCommandQueue* = SKIP
 
 // Cubemap sampling with explicit derivatives
 42262458 PIXEL4ORXL VULKAN : CubeMapTextureTest.SampleCoordinateTransformGrad/* = SKIP
@@ -1003,6 +1006,9 @@ b/330697097 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachmen
 343922404 VULKAN : IncompatibleTextureTest.Test/ES3_*__SamplerTypeShadow_TextureTypeUnsignedNormalized_* = SKIP
 343922404 VULKAN : IncompatibleTextureTest.Test/ES3_*__SamplerTypeShadow_TextureTypeSignedNormalized_* = SKIP
 343922404 VULKAN : IncompatibleTextureTest.Test/ES3_*__SamplerTypeShadow_TextureTypeFloat_* = SKIP
+343922404 SWIFTSHADER : IncompatibleTextureTest.Test/ES3_*__SamplerTypeShadow_TextureTypeUnsignedNormalized_* = SKIP
+343922404 SWIFTSHADER : IncompatibleTextureTest.Test/ES3_*__SamplerTypeShadow_TextureTypeSignedNormalized_* = SKIP
+343922404 SWIFTSHADER : IncompatibleTextureTest.Test/ES3_*__SamplerTypeShadow_TextureTypeFloat_* = SKIP
 
 // Intel Mesa 19.0.2 appears to have a driver bug.
 // imageLoad isn't fully implemented for fragment shaders on D3D11.
@@ -1086,13 +1092,14 @@ b/330697097 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachmen
 42265943 WIN INTEL OPENGL : CompressedTextureETC2RGBA8Test.Test/* = SKIP
 
 // Takes several minutes to complete with ASAN / TSAN
-42263997 ASAN VULKAN SWIFTSHADER : ClipCullDistanceTest.SizeCheckCombined/* = SKIP
-42266388 TSAN VULKAN SWIFTSHADER : ClipCullDistanceTest.SizeCheckCombined/* = SKIP
+42263997 ASAN SWIFTSHADER : ClipCullDistanceTest.SizeCheckCombined/* = SKIP
+42266388 TSAN SWIFTSHADER : ClipCullDistanceTest.SizeCheckCombined/* = SKIP
 
 42266095 VULKAN : EGLRobustnessTestES3.Context*ResetOnInvalidLocalShaderVariableAccess_ShareGroupAfterProgramCreation/* = SKIP
 
 // EXT_multisample_compatibility exposed for the sake of GLES1, but not implemented on Vulkan
 42266123 VULKAN : EXTMultisampleCompatibilityTest.* = SKIP
+42266123 SWIFTSHADER : EXTMultisampleCompatibilityTest.* = SKIP
 
 // Missing geometry & tesselation shader interactions with clip / cull distance
 42264006 VULKAN : ClipCullDistanceTest.ClipDistanceInteractWithGeometryShader/* = SKIP
@@ -1190,6 +1197,7 @@ b/266235549 D3D11 : ComputeShaderTest.SSBOAliasOverWrite/* = SKIP
 
 // Incorrect image binding in Vulkan backend
 344950165 VULKAN : TextureTestES31.Texture2DLayered/* = SKIP
+344950165 SWIFTSHADER : TextureTestES31.Texture2DLayered/* = SKIP
 
 // Samsung Galaxy S22 (Xclipse)
 b/267953710 GALAXYS22 GLES : VulkanImageTest.DeviceVulkan/* = SKIP
@@ -1429,6 +1437,10 @@ b/328156792 PINEAPPLE VULKAN : WebGL2GLSLTest.InitUninitializedLocals/* = SKIP
 42266807 VULKAN : Texture2DBaseMaxTestES3.DepthRenderableWithColorRenderableBeyondMaxLevel/* = SKIP
 42266807 VULKAN : Texture2DBaseMaxTestES3.NotColorRenderableAfterColorRenderableBelowBaseLevel/* = SKIP
 42266807 VULKAN : Texture2DBaseMaxTestES3.DepthRenderableAfterColorRenderableBelowBaseLevel/* = SKIP
+42266807 SWIFTSHADER : Texture2DBaseMaxTestES3.NotColorRenderableWithColorRenderableBeyondMaxLevel/* = SKIP
+42266807 SWIFTSHADER : Texture2DBaseMaxTestES3.DepthRenderableWithColorRenderableBeyondMaxLevel/* = SKIP
+42266807 SWIFTSHADER : Texture2DBaseMaxTestES3.DepthRenderableAfterColorRenderableBelowBaseLevel/* = SKIP
+42266807 SWIFTSHADER : Texture2DBaseMaxTestES3.NotColorRenderableAfterColorRenderableBelowBaseLevel/* = SKIP
 42266807 WIN INTEL OPENGL : Texture2DBaseMaxTestES3.NotColorRenderableAfterColorRenderableBelowBaseLevel/* = SKIP
 42266807 WIN INTEL OPENGL : Texture2DBaseMaxTestES3.DepthRenderableAfterColorRenderableBelowBaseLevel/* = SKIP
 
