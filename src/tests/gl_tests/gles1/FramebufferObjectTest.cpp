@@ -127,6 +127,8 @@ TEST_P(FramebufferObjectTest, RenderbufferObject)
     EXPECT_GL_NO_ERROR();
     glBindRenderbufferOES(GL_RENDERBUFFER, rboId);
     EXPECT_GL_NO_ERROR();
+    glRenderbufferStorageOES(GL_RENDERBUFFER, GL_RGBA4, 32, 32);
+    EXPECT_GL_NO_ERROR();
     glRenderbufferStorageOES(GL_RENDERBUFFER, GL_RGBA8, 32, 32);
     EXPECT_GL_NO_ERROR();
 
