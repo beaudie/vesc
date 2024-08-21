@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b031554_5e671590",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-21T18:25:29Z",
+      "side": 1,
+      "message": "Yep I did 😞. Pushed now.",
+      "parentUuid": "35ac1c83_6b9878bb",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6654f2a_b0b62a56",
@@ -207,6 +225,24 @@
       "side": 1,
       "message": "It\u0027s fine, technically you don\u0027t need it, so removing it makes things cleaner, but no big deal.",
       "parentUuid": "bedc5119_528bf261",
+      "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f359ce02_da66729e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4938,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-21T18:25:29Z",
+      "side": 1,
+      "message": "Ack. Updated. I debated if it was simpler to just enable the extension if found, but in the end left it as conditional on the feature options.",
+      "parentUuid": "d773e600_a6269f77",
       "revId": "541dd521b9cf94d4e9346b8453bfcdf959f68331",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
