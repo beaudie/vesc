@@ -30,6 +30,8 @@ class _Global(object):
     initialized = False
     is_android = False
     current_suite = None
+    current_user = None
+    external_storage = None
     traces_outside_of_apk = False
     temp_dir = None
     use_run_as = True
@@ -57,13 +59,28 @@ def _RemovePrefix(str, prefix):
 
 
 def _InitializeAndroid(apk_path):
+    _Global.current_user = _AdbShell('am get-current-user').decode().strip()
+    logging.debug('Current user: %s', _Global.current_user)
+
     if _GetAdbRoot():
         # /data/local/tmp/ is not writable by apps.. So use the app path
-        _Global.temp_dir = '/data/data/com.android.angle.test/tmp/'
+        _Global.temp_dir = '/data/user/' + _Global.current_user + '/com.android.angle.test/tmp/'
+        # While we're at it, pretend app storage is external for speed
+        _Global.external_storage = '/data/user/' + _Global.current_user + '/com.android.angle.test/chromium_tests_root/'
+        # Newer Android versions require selinux disabled to load shared objects from home dir
+        _AdbShell('setenforce 0').decode()
     else:
         # /sdcard/ is slow (see https://crrev.com/c/3615081 for details)
         # logging will be fully-buffered, can be truncated on crashes
-        _Global.temp_dir = '/sdcard/Download/'
+        _Global.temp_dir = '/storage/emulated/' + _Global.current_user + '/'
+        _Global.external_storage = '/storage/emulated/' + _Global.current_user + '/chromium_tests_root/'
+
+    logging.debug('Temp dir: %s', _Global.temp_dir)
+    logging.debug('External storage: %s', _Global.external_storage)
+
+    if _Global.current_user is not '0':
+        # run-as is failing is the presence of multiple users
+        _Global.use_run_as = False
 
     apk_files = subprocess.check_output([_FindAapt(), 'list', apk_path]).decode().split()
     apk_so_libs = [posixpath.basename(f) for f in apk_files if f.endswith('.so')]
@@ -183,11 +200,11 @@ def _MakeTar(path, patterns):
 
 
 def _AddRestrictedTracesJson():
-    _MakeTar('/sdcard/chromium_tests_root/t.tar', [
+    _MakeTar(_Global.external_storage + 't.tar', [
         '../../src/tests/restricted_traces/*/*.json',
         '../../src/tests/restricted_traces/restricted_traces.json'
     ])
-    _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
+    _AdbShell('r=' + _Global.external_storage + '; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
 
 
 def _AddDeqpFiles(suite_name):
@@ -209,8 +226,8 @@ def _AddDeqpFiles(suite_name):
         # Harness crashes if vk_gl_cts_data/data dir doesn't exist, so add a file
         patterns.append('gen/vk_gl_cts_data/data/gles2/data/brick.png')
 
-    _MakeTar('/sdcard/chromium_tests_root/deqp.tar', patterns)
-    _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/deqp.tar -C $r/ && rm $r/deqp.tar')
+    _MakeTar(_Global.external_storage + 'deqp.tar', patterns)
+    _AdbShell('r=' + _Global.external_storage + '; tar -xf $r/deqp.tar -C $r/ && rm $r/deqp.tar')
 
 
 def _GetDeviceApkPath():
@@ -291,7 +308,7 @@ def _PrepareTestSuite(suite_name):
 
     _AdbShell('appops set com.android.angle.test MANAGE_EXTERNAL_STORAGE allow || true')
 
-    _AdbShell('mkdir -p /sdcard/chromium_tests_root/')
+    _AdbShell('mkdir -p ' + _Global.external_storage)
     _AdbShell('mkdir -p %s' % _Global.temp_dir)
 
     if suite_name == ANGLE_TRACE_TEST_SUITE:
@@ -303,7 +320,7 @@ def _PrepareTestSuite(suite_name):
     if suite_name == 'angle_end2end_tests':
         _AdbRun([
             'push', '../../src/tests/angle_end2end_tests_expectations.txt',
-            '/sdcard/chromium_tests_root/src/tests/angle_end2end_tests_expectations.txt'
+            _Global.external_storage + 'src/tests/angle_end2end_tests_expectations.txt'
         ])
 
 
@@ -322,7 +339,8 @@ def PrepareRestrictedTraces(traces):
         _AdbShell('mkdir -p ' + app_tmp_path +
                   ' && run-as com.android.angle.test mkdir -p angle_traces')
     else:
-        _AdbShell('mkdir -p ' + app_tmp_path + ' /data/data/com.android.angle.test/angle_traces/')
+        _AdbShell('mkdir -p ' + app_tmp_path + ' /data/user/' + _Global.current_user +
+                  '/com.android.angle.test/angle_traces/')
 
     def _HashesMatch(local_path, device_path):
         nonlocal total_size, skipped
@@ -334,7 +352,7 @@ def PrepareRestrictedTraces(traces):
             return False
 
     def _Push(local_path, path_from_root):
-        device_path = '/sdcard/chromium_tests_root/' + path_from_root
+        device_path = _Global.external_storage + path_from_root
         if not _HashesMatch(local_path, device_path):
             _AdbRun(['push', local_path, device_path])
 
@@ -345,7 +363,7 @@ def PrepareRestrictedTraces(traces):
             print('Is angle_restricted_traces set in gn args?')  # b/294861737
             sys.exit(1)
 
-        device_path = '/data/user/0/com.android.angle.test/angle_traces/' + lib_name
+        device_path = '/data/user/' + _Global.current_user + '/com.android.angle.test/angle_traces/' + lib_name
         if _HashesMatch(local_path, device_path):
             return
 
@@ -359,7 +377,10 @@ def PrepareRestrictedTraces(traces):
             finally:
                 _RemoveDeviceFile(tmp_path)
         else:
-            _AdbRun(['push', local_path, '/data/data/com.android.angle.test/angle_traces/'])
+            _AdbRun([
+                'push', local_path,
+                '/data/user/' + _Global.current_user + '/com.android.angle.test/angle_traces/'
+            ])
 
     # Set up each trace
     for idx, trace in enumerate(sorted(traces)):
@@ -445,7 +466,7 @@ def _SetCaptureProps(env, device_out_dir):
 def _RunInstrumentation(flags):
     with _TempDeviceFile() as temp_device_file:
         cmd = r'''
-am instrument -w \
+am instrument --user {user} -w \
     -e org.chromium.native_test.NativeTestInstrumentationTestRunner.StdoutFile {out} \
     -e org.chromium.native_test.NativeTest.CommandLineFlags "{flags}" \
     -e org.chromium.native_test.NativeTestInstrumentationTestRunner.ShardNanoTimeout "1000000000000000000" \
@@ -453,7 +474,7 @@ am instrument -w \
     com.android.angle.test.AngleUnitTestActivity \
     com.android.angle.test/org.chromium.build.gtest_apk.NativeTestInstrumentationTestRunner
         '''.format(
-            out=temp_device_file, flags=r' '.join(flags)).strip()
+            user=_Global.current_user, out=temp_device_file, flags=r' '.join(flags)).strip()
 
         capture_out_dir = os.environ.get('ANGLE_CAPTURE_OUT_DIR')
         if capture_out_dir:
