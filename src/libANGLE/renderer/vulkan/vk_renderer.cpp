@@ -4540,6 +4540,8 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, preferMSRTSSFlagByDefault,
                             mFeatures.supportsMultisampledRenderToSingleSampled.enabled && isARM);
 
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsClearTexture, false);
+
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsImage2dViewOf3d,
                             mImage2dViewOf3dFeatures.image2DViewOf3D == VK_TRUE);
 
