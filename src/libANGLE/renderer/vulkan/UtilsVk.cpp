@@ -2401,8 +2401,13 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                        const vk::ImageView *imageView,
                                        const vk::RenderPassDesc &renderPassDesc,
                                        const gl::Rectangle &renderArea,
+                                       const VkImageAspectFlags aspectFlags,
+                                       const vk::ImageLayout imageLayout,
                                        vk::RenderPassCommandBuffer **commandBufferOut)
 {
+    ASSERT(
+        (aspectFlags == VK_IMAGE_ASPECT_COLOR_BIT && imageLayout == vk::ImageLayout::ColorWrite) ||
+        imageLayout == vk::ImageLayout::DepthWriteStencilWrite);
     vk::Framebuffer framebuffer;
     vk::Framebuffer framebufferHandle;
     vk::RenderPassFramebuffer renderPassFramebuffer;
@@ -2442,10 +2447,9 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
 
     vk::AttachmentOpsArray renderPassAttachmentOps;
     vk::PackedClearValuesArray clearValues;
-    clearValues.store(vk::kAttachmentIndexZero, VK_IMAGE_ASPECT_COLOR_BIT, {});
+    clearValues.store(vk::kAttachmentIndexZero, aspectFlags, {});
 
-    renderPassAttachmentOps.initWithLoadStore(vk::kAttachmentIndexZero, vk::ImageLayout::ColorWrite,
-                                              vk::ImageLayout::ColorWrite);
+    renderPassAttachmentOps.initWithLoadStore(vk::kAttachmentIndexZero, imageLayout, imageLayout);
 
     ANGLE_TRY(contextVk->beginNewRenderPass(
         std::move(renderPassFramebuffer), renderArea, renderPassDesc, renderPassAttachmentOps,
@@ -2669,6 +2673,7 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
 
     vk::RenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(startRenderPass(contextVk, dst, &destView.get(), renderPassDesc, renderArea,
+                              VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorWrite,
                               &commandBuffer));
 
     UpdateColorAccess(contextVk, MakeColorBufferMask(0), MakeColorBufferMask(0));
@@ -3367,8 +3372,9 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     }
 
     vk::RenderPassCommandBuffer *commandBuffer;
-    ANGLE_TRY(
-        startRenderPass(contextVk, dst, destView, renderPassDesc, renderArea, &commandBuffer));
+    ANGLE_TRY(startRenderPass(contextVk, dst, destView, renderPassDesc, renderArea,
+                              VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorWrite,
+                              &commandBuffer));
 
     VkDescriptorSet descriptorSet;
     if (isYUV)
@@ -4400,8 +4406,9 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
     // A potential optimization is to reuse the already open render pass if it belongs to the
     // swapchain.
     vk::RenderPassCommandBuffer *commandBuffer;
-    ANGLE_TRY(
-        startRenderPass(contextVk, dst, destView, renderPassDesc, renderArea, &commandBuffer));
+    ANGLE_TRY(startRenderPass(contextVk, dst, destView, renderPassDesc, renderArea,
+                              VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorWrite,
+                              &commandBuffer));
 
     vk::RenderPassCommandBufferHelper *commandBufferHelper =
         &contextVk->getStartedRenderPassCommands();
