@@ -34,6 +34,24 @@
       "parentUuid": "e88008a9_9b092e04",
       "revId": "08feb460fec4a8a2373682a707b6100def222e12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b83f5eb_39ea5abc",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-21T21:18:34Z",
+      "side": 1,
+      "message": "On linux+nvidia I am seeing it goes down conversion code path, even without ForceFallbackFormat. And also it does run with ForceFallbackFormat enabled, so will for sure go down the conversion path.",
+      "parentUuid": "cfd0382d_f5e0b194",
+      "revId": "08feb460fec4a8a2373682a707b6100def222e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
