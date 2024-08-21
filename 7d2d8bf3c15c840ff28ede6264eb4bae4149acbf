@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccf202de_c531b514",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-21T14:02:00Z",
+      "side": 1,
+      "message": "All of these should be removable",
+      "revId": "7d2d8bf3c15c840ff28ede6264eb4bae4149acbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
