@@ -16,6 +16,24 @@
       "message": "nit: attention",
       "revId": "660cb7ce98611aabb76e25bc50be9d83b5826f18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a06e9c59_aed8f5cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-21T21:25:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2720d8f9_8cdbaf4a",
+      "revId": "660cb7ce98611aabb76e25bc50be9d83b5826f18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -140,6 +140,30 @@
       },
       "revId": "e71337949718124e9d4fc50ae1ba0279c68dd980",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2587c44e_b9196478",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-21T21:25:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a31a136_a0a3ddca",
+      "range": {
+        "startLine": 625,
+        "startChar": 74,
+        "endLine": 625,
+        "endChar": 83
+      },
+      "revId": "e71337949718124e9d4fc50ae1ba0279c68dd980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
