@@ -135,10 +135,36 @@ VkMemoryPropertyFlags GetStorageMemoryType(vk::Renderer *renderer,
 
 bool ShouldAllocateNewMemoryForUpdate(ContextVk *contextVk, size_t subDataSize, size_t bufferSize)
 {
-    // A sub data update with size > 50% of buffer size meets the threshold
-    // to acquire a new BufferHelper from the pool.
-    return contextVk->getRenderer()->getFeatures().preferCPUForBufferSubData.enabled ||
-           subDataSize > (bufferSize / 2);
+    // For GPU, a sub-data update with size > 50% of buffer size meets the threshold to acquire a
+    // new BufferHelper from the pool.
+    size_t halfBufferSize = bufferSize >> 1;
+    if (subDataSize > halfBufferSize)
+    {
+        return true;
+    }
+
+    // It is possible to use the CPU instead, but since it would need to create a duplicate of the
+    // buffer, a large enough buffer copy could result in a performance regression.
+    if (contextVk->getFeatures().preferCPUForBufferSubData.enabled)
+    {
+        // If the buffer is small enough, we can use the CPU for the sub-data update without
+        // significant regression.
+        constexpr size_t kBufferSizeSmallEnoughForCPU = 32 * 1024;
+        if (bufferSize < kBufferSizeSmallEnoughForCPU)
+        {
+            return true;
+        }
+
+        // To use CPU for the sub-data update in larger buffers, the update should be sizable enough
+        // compared to the whole buffer size.
+        size_t subDataThreshold = bufferSize >> 3;
+        if (subDataSize > subDataThreshold)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool ShouldUseCPUToCopyData(ContextVk *contextVk,
