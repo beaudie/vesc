@@ -422,6 +422,7 @@ enum class Feature
     UnsizedSRGBReadPixelsDoesntTransform,
     UploadDataToIosurfacesWithStagingBuffers,
     UploadTextureDataInChunks,
+    UseClearUpdateForTextureFullClear,
     UseCullModeDynamicState,
     UseDepthBiasEnableDynamicState,
     UseDepthCompareOpDynamicState,

@@ -248,6 +248,12 @@ struct FeaturesVk : FeatureSetBase
         &members,
     };
 
+    FeatureInfo useClearUpdateForTextureFullClear = {
+        "useClearUpdateForTextureFullClear",
+        FeatureCategory::VulkanWorkarounds,
+        &members,
+    };
+
     FeatureInfo disableFlippingBlitWithCommand = {
         "disableFlippingBlitWithCommand",
         FeatureCategory::VulkanWorkarounds,

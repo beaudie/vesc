@@ -297,6 +297,14 @@
             "issue": "http://anglebug.com/42262115"
         },
         {
+            "name": "use_clear_update_for_texture_full_clear",
+            "category": "Workarounds",
+            "description": [
+                "For EXT_clear_texture, full clears can be optimized if they are treated as clear updates."
+            ],
+            "issue": "http://anglebug.com/42266869"
+        },
+        {
             "name": "disable_flipping_blit_with_command",
             "category": "Workarounds",
             "description": [
