@@ -46,6 +46,30 @@
       },
       "revId": "8c45ff02c5973ae2ee8a26ba88fe9544b12efa44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ecee058_8a79f5fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3316,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-22T16:40:10Z",
+      "side": 1,
+      "message": "That was my motivaton as well, to override them if needed..",
+      "parentUuid": "8f4afa3d_bee440fc",
+      "range": {
+        "startLine": 3304,
+        "startChar": 8,
+        "endLine": 3316,
+        "endChar": 62
+      },
+      "revId": "8c45ff02c5973ae2ee8a26ba88fe9544b12efa44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
