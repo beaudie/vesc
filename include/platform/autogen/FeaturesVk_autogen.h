@@ -288,6 +288,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/42262115"
     };
 
+    FeatureInfo useClearUpdateForTextureFullClear = {
+        "useClearUpdateForTextureFullClear",
+        FeatureCategory::VulkanWorkarounds,
+        "For EXT_clear_texture, full clears can be optimized if they are treated as clear updates.",
+        &members, "http://anglebug.com/42266869"
+    };
+
     FeatureInfo disableFlippingBlitWithCommand = {
         "disableFlippingBlitWithCommand",
         FeatureCategory::VulkanWorkarounds,

@@ -5193,6 +5193,12 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
         mFeatures.supportsBlendOperationAdvanced.enabled &&
             mBlendOperationAdvancedFeatures.advancedBlendCoherentOperations == VK_TRUE);
 
+    // http://anglebug.com/42266869
+    // GL_EXT_clear_texture full clears can be optimized. Some platforms experience errors when
+    // clearing a 3D texture using the optimization.
+    // TODO: If not needed, it should be removed.
+    ANGLE_FEATURE_CONDITION(&mFeatures, useClearUpdateForTextureFullClear, true);
+
     // http://anglebug.com/42265410
     // Android expects VkPresentRegionsKHR rectangles with a bottom-left origin, while spec
     // states they should have a top-left origin.

@@ -8933,6 +8933,7 @@ void ImageHelper::restoreSubresourceContentImpl(gl::LevelIndex level,
 
 angle::Result ImageHelper::stagePartialClear(ContextVk *contextVk,
                                              const gl::Box &clearArea,
+                                             const bool isFullClear,
                                              gl::TextureType textureType,
                                              uint32_t levelIndex,
                                              uint32_t layerIndex,
@@ -8996,9 +8997,24 @@ angle::Result ImageHelper::stagePartialClear(ContextVk *contextVk,
         aspectFlags |= formatInfo.stencilBits > 0 ? VK_IMAGE_ASPECT_STENCIL_BIT : 0;
     }
 
-    appendSubresourceUpdate(gl::LevelIndex(levelIndex),
-                            SubresourceUpdate(aspectFlags, clearValue, textureType, levelIndex,
-                                              layerIndex, layerCount, clearArea));
+    if (isFullClear && contextVk->getFeatures().useClearUpdateForTextureFullClear.enabled)
+    {
+        bool useLayerAsDepth = textureType == gl::TextureType::CubeMap ||
+                               textureType == gl::TextureType::CubeMapArray ||
+                               textureType == gl::TextureType::_2DArray ||
+                               textureType == gl::TextureType::_2DMultisampleArray;
+        const gl::ImageIndex index = gl::ImageIndex::MakeFromType(
+            textureType, levelIndex, 0, (useLayerAsDepth) ? clearArea.depth : 1);
+
+        appendSubresourceUpdate(gl::LevelIndex(levelIndex),
+                                SubresourceUpdate(aspectFlags, clearValue, index));
+    }
+    else
+    {
+        appendSubresourceUpdate(gl::LevelIndex(levelIndex),
+                                SubresourceUpdate(aspectFlags, clearValue, textureType, levelIndex,
+                                                  layerIndex, layerCount, clearArea));
+    }
     return angle::Result::Continue;
 }
 
@@ -9835,10 +9851,10 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                     gl::Box clearArea =
                         gl::Box(clearPartialUpdate.offset, clearPartialUpdate.extent);
 
-                    // clearTexture() uses LOAD_OP_CLEAR in a render pass to clear the texture. If
-                    // the texture has the depth dimension or multiple layers, the clear will be
-                    // performed layer by layer. In case of the former, the z-dimension will be used
-                    // as the layer index.
+                    // clearTexture() uses LOAD_OP_CLEAR in a render pass to clear the texture.
+                    // If the texture has the depth dimension or multiple layers, the clear will
+                    // be performed layer by layer. In case of the former, the z-dimension will be
+                    // used as the layer index.
                     UtilsVk::ClearTextureParameters params = {};
                     params.aspectFlags                     = clearPartialUpdate.aspectFlags;
                     params.level                           = updateMipLevelVk;

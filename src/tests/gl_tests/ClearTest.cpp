@@ -3986,6 +3986,58 @@ TEST_P(ClearTextureEXTTest, Clear2DTexStorage)
 }
 
 // Test that a simple clear for the entire texture works.
+TEST_P(ClearTextureEXTTest, Clear3DSwSTestFail)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+    constexpr uint32_t kWidth  = 4;
+    constexpr uint32_t kHeight = 4;
+    constexpr uint32_t kDepth  = 4;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_3D, texture);
+    glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, kWidth, kHeight, kDepth);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, 0);
+
+    glClearTexImageEXT(texture, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::white);
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    // TEST: Using ATTACHMENT0 for all layers.
+    for (uint32_t z = 0; z < kDepth; ++z)
+    {
+        glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, z);
+        EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::white);
+    }
+}
+
+// Test that a simple clear for the entire texture works.
+TEST_P(ClearTextureEXTTest, Clear3DSwSTestPass)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+    constexpr uint32_t kWidth  = 4;
+    constexpr uint32_t kHeight = 4;
+    constexpr uint32_t kDepth  = 4;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_3D, texture);
+    glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, kWidth, kHeight, kDepth);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, 0);
+
+    glClearTexImageEXT(texture, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::white);
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    // TEST: Using ATTACHMENT0 for the first layer and ATTACHMENT1 for the rest
+    glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, 0);
+    EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::white);
+    for (uint32_t z = 1; z < kDepth; ++z)
+    {
+        glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, texture, 0, z);
+        EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::white);
+    }
+}
+
+// Test that a simple clear for the entire texture works.
 TEST_P(ClearTextureEXTTest, Clear3DWhole)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
