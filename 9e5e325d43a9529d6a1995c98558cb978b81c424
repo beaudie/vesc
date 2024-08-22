@@ -52,6 +52,24 @@
       "parentUuid": "75a2acea_f1d03cb3",
       "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "975bf2e7_9b139669",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-22T17:20:03Z",
+      "side": 1,
+      "message": "Patchset 1. Try with patchset 2.",
+      "parentUuid": "252ef728_e5e41ba5",
+      "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
