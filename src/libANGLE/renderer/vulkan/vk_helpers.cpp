@@ -8848,6 +8848,7 @@ void ImageHelper::restoreSubresourceContentImpl(gl::LevelIndex level,
 
 angle::Result ImageHelper::stagePartialClear(ContextVk *contextVk,
                                              const gl::Box &clearArea,
+                                             const bool isFullClear,
                                              gl::TextureType textureType,
                                              uint32_t levelIndex,
                                              uint32_t layerIndex,
@@ -8913,7 +8914,7 @@ angle::Result ImageHelper::stagePartialClear(ContextVk *contextVk,
 
     appendSubresourceUpdate(gl::LevelIndex(levelIndex),
                             SubresourceUpdate(aspectFlags, clearValue, textureType, levelIndex,
-                                              layerIndex, layerCount, clearArea));
+                                              layerIndex, layerCount, clearArea, isFullClear));
     return angle::Result::Continue;
 }
 
@@ -9750,34 +9751,44 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                     gl::Box clearArea =
                         gl::Box(clearPartialUpdate.offset, clearPartialUpdate.extent);
 
-                    // clearTexture() uses LOAD_OP_CLEAR in a render pass to clear the texture. If
-                    // the texture has the depth dimension or multiple layers, the clear will be
-                    // performed layer by layer. In case of the former, the z-dimension will be used
-                    // as the layer index.
-                    UtilsVk::ClearTextureParameters params = {};
-                    params.aspectFlags                     = clearPartialUpdate.aspectFlags;
-                    params.level                           = updateMipLevelVk;
-                    params.clearArea                       = clearArea;
-                    params.clearValue                      = clearPartialUpdate.clearValue;
-
-                    bool shouldUseDepthAsLayer =
-                        clearPartialUpdate.textureType == gl::TextureType::_3D;
-                    uint32_t clearBaseLayer =
-                        shouldUseDepthAsLayer ? clearArea.z : clearPartialUpdate.layerIndex;
-                    uint32_t clearLayerCount =
-                        shouldUseDepthAsLayer ? clearArea.depth : clearPartialUpdate.layerCount;
-
-                    for (uint32_t layerIndex = clearBaseLayer;
-                         layerIndex < clearBaseLayer + clearLayerCount; ++layerIndex)
+                    if (clearPartialUpdate.isFullClear)
                     {
-                        params.layer = layerIndex;
-                        ANGLE_TRY(contextVk->getUtils().clearTexture(contextVk, this, params));
+                        // TODO: Stage as UpdateSource::Clear?
+                        clear(renderer, clearPartialUpdate.aspectFlags,
+                              clearPartialUpdate.clearValue, updateMipLevelVk, updateBaseLayer,
+                              updateLayerCount, &commandBuffer->getCommandBuffer());
                     }
+                    else
+                    {
+                        // clearTexture() uses LOAD_OP_CLEAR in a render pass to clear the texture.
+                        // If the texture has the depth dimension or multiple layers, the clear will
+                        // be performed layer by layer. In case of the former, the z-dimension will
+                        // be used as the layer index.
+                        UtilsVk::ClearTextureParameters params = {};
+                        params.aspectFlags                     = clearPartialUpdate.aspectFlags;
+                        params.level                           = updateMipLevelVk;
+                        params.clearArea                       = clearArea;
+                        params.clearValue                      = clearPartialUpdate.clearValue;
 
-                    // Queue serial index becomes invalid after starting render pass for the op
-                    // above. Therefore, the outside command buffer should be re-acquired.
-                    ANGLE_TRY(
-                        contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBuffer));
+                        bool shouldUseDepthAsLayer =
+                            clearPartialUpdate.textureType == gl::TextureType::_3D;
+                        uint32_t clearBaseLayer =
+                            shouldUseDepthAsLayer ? clearArea.z : clearPartialUpdate.layerIndex;
+                        uint32_t clearLayerCount =
+                            shouldUseDepthAsLayer ? clearArea.depth : clearPartialUpdate.layerCount;
+
+                        for (uint32_t layerIndex = clearBaseLayer;
+                             layerIndex < clearBaseLayer + clearLayerCount; ++layerIndex)
+                        {
+                            params.layer = layerIndex;
+                            ANGLE_TRY(contextVk->getUtils().clearTexture(contextVk, this, params));
+                        }
+
+                        // Queue serial index becomes invalid after starting render pass for the op
+                        // above. Therefore, the outside command buffer should be re-acquired.
+                        ANGLE_TRY(
+                            contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBuffer));
+                    }
                     setContentDefined(updateMipLevelVk, 1, updateBaseLayer, updateLayerCount,
                                       clearPartialUpdate.aspectFlags);
                     break;
@@ -11152,7 +11163,8 @@ ImageHelper::SubresourceUpdate::SubresourceUpdate(const VkImageAspectFlags aspec
                                                   const uint32_t levelIndex,
                                                   const uint32_t layerIndex,
                                                   const uint32_t layerCount,
-                                                  const gl::Box &clearArea)
+                                                  const gl::Box &clearArea,
+                                                  const bool isFullClear)
     : updateSource(UpdateSource::ClearPartial)
 {
     data.clearPartial.aspectFlags = aspectFlags;
@@ -11164,6 +11176,7 @@ ImageHelper::SubresourceUpdate::SubresourceUpdate(const VkImageAspectFlags aspec
     data.clearPartial.extent      = {static_cast<uint32_t>(clearArea.width),
                                      static_cast<uint32_t>(clearArea.height),
                                      static_cast<uint32_t>(clearArea.depth)};
+    data.clearPartial.isFullClear = isFullClear;
     data.clearPartial.clearValue  = clearValue;
 }
 
