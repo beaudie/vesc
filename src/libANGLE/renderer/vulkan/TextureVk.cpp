@@ -845,10 +845,7 @@ angle::Result TextureVk::clearImage(const gl::Context *context,
         area.depth = 6;
     }
 
-    // TODO(http://anglebug.com/42266869): This function can be staged as a Clear update, which
-    // means it can be picked up as LOAD_OP_CLEAR (similar to FramebufferVk::clearImpl()), improving
-    // the performance.
-    return clearSubImageImpl(context, level, area, format, type, data);
+    return clearSubImageImpl(context, level, area, true, format, type, data);
 }
 
 angle::Result TextureVk::clearSubImage(const gl::Context *context,
@@ -858,12 +855,13 @@ angle::Result TextureVk::clearSubImage(const gl::Context *context,
                                        GLenum type,
                                        const uint8_t *data)
 {
-    return clearSubImageImpl(context, level, area, format, type, data);
+    return clearSubImageImpl(context, level, area, false, format, type, data);
 }
 
 angle::Result TextureVk::clearSubImageImpl(const gl::Context *context,
                                            GLint level,
                                            const gl::Box &clearArea,
+                                           bool isFullClear,
                                            GLenum format,
                                            GLenum type,
                                            const uint8_t *data)
@@ -897,9 +895,9 @@ angle::Result TextureVk::clearSubImageImpl(const gl::Context *context,
     {
         uint32_t baseLayer  = useLayerAsDepth ? clearArea.z : 0;
         uint32_t layerCount = useLayerAsDepth ? clearArea.depth : 1;
-        ANGLE_TRY(mImage->stagePartialClear(contextVk, clearArea, mState.getType(), level,
-                                            baseLayer, layerCount, type, formatInfo, vkFormat,
-                                            getRequiredImageAccess(), data));
+        ANGLE_TRY(mImage->stagePartialClear(contextVk, clearArea, isFullClear, mState.getType(),
+                                            level, baseLayer, layerCount, type, formatInfo,
+                                            vkFormat, getRequiredImageAccess(), data));
     }
     else
     {
