@@ -22,6 +22,30 @@
       },
       "revId": "8c45ff02c5973ae2ee8a26ba88fe9544b12efa44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f4afa3d_bee440fc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-22T01:26:37Z",
+      "side": 1,
+      "message": "The benefit of individual features is that they can be toggled on and off, like for testing you could easily check what happens if the device doesn\u0027t support `RtzFp64`.",
+      "parentUuid": "f07da5de_01f844d0",
+      "range": {
+        "startLine": 3304,
+        "startChar": 8,
+        "endLine": 3316,
+        "endChar": 62
+      },
+      "revId": "8c45ff02c5973ae2ee8a26ba88fe9544b12efa44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
