@@ -9124,6 +9124,7 @@ void ImageHelper::restoreSubresourceContentImpl(gl::LevelIndex level,
 
 angle::Result ImageHelper::stagePartialClear(ContextVk *contextVk,
                                              const gl::Box &clearArea,
+                                             const bool isFullClear,
                                              gl::TextureType textureType,
                                              uint32_t levelIndex,
                                              uint32_t layerIndex,
@@ -9164,9 +9165,9 @@ angle::Result ImageHelper::stagePartialClear(ContextVk *contextVk,
     loadFunctionInfo.loadFunction(contextVk->getImageLoadContext(), 1, 1, 1, intendedData, 1, 1,
                                   actualData.data(), 1, 1);
 
-    // VkClearValue is used for multisample images via vkCmdClearAttachments().
+    // VkClearValue is used for multisample images via vkCmdClearAttachments(), or for full clears.
     VkClearValue clearValue = {};
-    if (IsMultisampled(textureType))
+    if (IsMultisampled(textureType) || isFullClear)
     {
         if (formatInfo.isDepthOrStencil())
         {
@@ -9193,7 +9194,8 @@ angle::Result ImageHelper::stagePartialClear(ContextVk *contextVk,
     appendSubresourceUpdate(
         gl::LevelIndex(levelIndex),
         SubresourceUpdate(aspectFlags, clearValue, textureType, levelIndex, layerIndex, layerCount,
-                          actualData.data(), (stencilOnly) ? 1 : actualPixelSize, clearArea));
+                          actualData.data(), (stencilOnly) ? 1 : actualPixelSize, clearArea,
+                          isFullClear));
 
     return angle::Result::Continue;
 }
@@ -10033,7 +10035,14 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
                                 clearPartialUpdate.offset.z, clearPartialUpdate.extent.width,
                                 clearPartialUpdate.extent.height, clearPartialUpdate.extent.depth);
 
-                    if (IsMultisampled(clearPartialUpdate.textureType))
+                    if (clearPartialUpdate.isFullClear)
+                    {
+                        // TODO: Stage as UpdateSource::Clear?
+                        clear(renderer, clearPartialUpdate.aspectFlags,
+                              clearPartialUpdate.clearValue, updateMipLevelVk, updateBaseLayer,
+                              updateLayerCount, &commandBuffer->getCommandBuffer());
+                    }
+                    else if (IsMultisampled(clearPartialUpdate.textureType))
                     {
                         for (uint32_t layerIndex = 0; layerIndex < clearPartialUpdate.layerCount;
                              ++layerIndex)
@@ -11435,7 +11444,8 @@ ImageHelper::SubresourceUpdate::SubresourceUpdate(VkImageAspectFlags aspectFlags
                                                   uint32_t layerCount,
                                                   uint8_t *clearData,
                                                   uint32_t dataSize,
-                                                  gl::Box clearArea)
+                                                  gl::Box clearArea,
+                                                  const bool isFullClear)
     : updateSource(UpdateSource::ClearPartial)
 {
     data.clearPartial.aspectFlags = aspectFlags;
@@ -11447,6 +11457,7 @@ ImageHelper::SubresourceUpdate::SubresourceUpdate(VkImageAspectFlags aspectFlags
     data.clearPartial.extent      = {static_cast<uint32_t>(clearArea.width),
                                      static_cast<uint32_t>(clearArea.height),
                                      static_cast<uint32_t>(clearArea.depth)};
+    data.clearPartial.isFullClear = isFullClear;
     data.clearPartial.clearValue  = clearValue;
     data.clearPartial.dataSize    = dataSize;
     memcpy(data.clearPartial.data, clearData, dataSize);
