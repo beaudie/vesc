@@ -70,6 +70,23 @@
       "parentUuid": "7b83f5eb_39ea5abc",
       "revId": "08feb460fec4a8a2373682a707b6100def222e12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "169a871d_da31a2e4",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-22T01:28:43Z",
+      "side": 1,
+      "message": "```suggestion\n    // Update data with two overlapping BufferSubData calls with different set of data.\n```",
+      "revId": "08feb460fec4a8a2373682a707b6100def222e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
