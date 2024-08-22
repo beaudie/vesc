@@ -106,6 +106,24 @@
       "parentUuid": "7fd53900_46db447a",
       "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "436baa11_e48fe301",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2024-08-22T22:23:38Z",
+      "side": 1,
+      "message": "I\u0027m using Battlestar, so I\u0027m not sure how easy it would be for you to reproduce, but here are the steps:\n\n1. Apply your patch to Android\u0027s udc-kiwi-dev branch: https://source.corp.google.com/h/googleplex-android/platform/superproject/udc/+/udc-kiwi-dev:external/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp\n\n2. Modify the Android.bp file here https://source.corp.google.com/h/googleplex-android/platform/superproject/udc/+/udc-kiwi-dev:external/angle/Android.bp;l\u003d808;drc\u003d5179d3cf830dd1f25e739dd4814db9d1694c6a3c to include `\"-DANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS\u003d1\",`\n\n3. Build the Android image as usual\n\n4. Launch Battlestar with that image.\n\n5. Look for the crash stack trace in Logcat",
+      "parentUuid": "e267eb78_7ce145c6",
+      "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
