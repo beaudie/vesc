@@ -1339,7 +1339,7 @@ b/328156792 PINEAPPLE VULKAN : ClearTestES3.RepeatedStencilClearWithBlitInBetwee
 b/328156792 PINEAPPLE VULKAN : ClearTestES31.Bind3DTextureAndClearUsingAttachment0/ES3_1_Vulkan = SKIP
 b/328156792 PINEAPPLE VULKAN : ClearTest.MaskedClearThenDrawWithUniform/* = SKIP
 b/328156792 PINEAPPLE VULKAN : ClearTest.Stencil8Scissored/* = SKIP
-b/328156792 PINEAPPLE VULKAN : ClearTextureEXTTest.StencilTexture/* = SKIP
+b/328156792 PINEAPPLE VULKAN : ClearTextureEXTTest.Clear3D*/* = SKIP
 b/328156792 PINEAPPLE VULKAN : DepthStencilTestES3.FramebufferClearThenStencilAttachedThenStencilTestState/* = SKIP
 b/328156792 PINEAPPLE VULKAN : DepthStencilTestES3.FramebufferClearThenStencilTestStateThenStencilAttached/* = SKIP
 b/328156792 PINEAPPLE VULKAN : DepthStencilTestES3.StencilTestStateThenFramebufferClearThenStencilAttached/* = SKIP
@@ -1347,7 +1347,6 @@ b/328156792 PINEAPPLE VULKAN : DepthStencilTest.StencilOnlyDrawThenCopyThenDraw/
 b/328156792 PINEAPPLE VULKAN : DepthStencilTest.StencilOnlyEmulatedWithPacked/* = SKIP
 b/328156792 PINEAPPLE VULKAN : DrawBuffersTest.NoneWithStencil/* = SKIP
 b/328156792 PINEAPPLE VULKAN : FramebufferTest_ES31.* = SKIP
-b/328156792 PINEAPPLE VULKAN : FramebufferTest_ES31.ClearTextureEXT2DMSStencil = SKIP
 b/328156792 PINEAPPLE VULKAN : GeometryShaderTest.LayeredFramebuffer* = SKIP
 b/328156792 PINEAPPLE VULKAN : GLSLTest.ConstantFoldedConstantsRetainPrecision/* = SKIP
 b/328156792 PINEAPPLE VULKAN : GLSLTest_ES31.ArrayOfArrayOfSamplerInStructDynamicIndex/* = SKIP
