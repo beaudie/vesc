@@ -840,6 +840,37 @@ TEST_P(VulkanPerformanceCounterTest, SubmittingOutsideCommandBufferTriggersEndRe
     EXPECT_PIXEL_COLOR_EQ(width / 2 + 1, 0, GLColor::green);
 }
 
+// Tests that a color image is cleared via vkCmdClearColorImage.
+TEST_P(VulkanPerformanceCounterTest, ClearTextureEXTFullColorImageClear2D)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clear_texture"));
+
+    uint32_t expectedFullImageClears = getPerfCounters().fullImageClears + 1;
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glClearTexImageEXT(tex, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_RECT_EQ(0, 0, 16, 16, GLColor::red);
+    EXPECT_EQ(getPerfCounters().fullImageClears, expectedFullImageClears);
+
+    glClearTexSubImageEXT(tex, 0, 0, 0, 0, 8, 8, 1, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glClearTexSubImageEXT(tex, 0, 8, 0, 0, 8, 8, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::blue);
+    glClearTexSubImageEXT(tex, 0, 0, 8, 0, 8, 8, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::cyan);
+    glClearTexSubImageEXT(tex, 0, 8, 8, 0, 8, 8, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::yellow);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_RECT_EQ(0, 0, 8, 8, GLColor::transparentBlack);
+    EXPECT_EQ(getPerfCounters().fullImageClears, expectedFullImageClears);
+}
+
 // Tests that mutable texture is uploaded with appropriate mip level attributes.
 TEST_P(VulkanPerformanceCounterTest, MutableTextureCompatibleMipLevelsInit)
 {
