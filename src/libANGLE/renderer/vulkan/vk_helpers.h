@@ -2459,6 +2459,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     angle::Result stagePartialClear(ContextVk *contextVk,
                                     const gl::Box &clearArea,
+                                    const bool isFullClear,
                                     gl::TextureType textureType,
                                     uint32_t levelIndex,
                                     uint32_t layerIndex,
