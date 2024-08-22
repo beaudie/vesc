@@ -17,7 +17,7 @@ declare_args() {
   angle_enable_custom_vulkan_cmd_buffers = true
 
   # Enable Vulkan GPU trace event capability
-  angle_enable_vulkan_gpu_trace_events = false
+  angle_enable_vulkan_gpu_trace_events = true
 }
 
 declare_args() {
