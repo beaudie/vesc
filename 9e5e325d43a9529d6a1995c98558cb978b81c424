@@ -160,6 +160,24 @@
       "parentUuid": "82f569b8_68a54a84",
       "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03a7c074_bf16122a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-23T21:40:38Z",
+      "side": 1,
+      "message": "I think you probbaly hitting other bugs related to traceGpuEvent. I am seeing this assertion if I force trace enabled and use angle as system default driver. \n08-23 14:37:06.641  7508  7508 F DEBUG   : Abort message: \u0027FATAL: vk_helpers.h:599 (getResult): \t! Assert failed in getResult (../../src/libANGLE/renderer/vulkan/vk_helpers.h:599): index \u003c mIntsPerResult\u0027\n\nLets land this CL and deal with other bugs separately.",
+      "parentUuid": "48ddfa7a_c274972d",
+      "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
