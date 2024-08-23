@@ -391,14 +391,10 @@ class WindowSurfaceVk : public SurfaceVk
     // Called when a swapchain image whose acquisition was deferred must be acquired.  This method
     // will recreate the swapchain (if needed due to present returning OUT_OF_DATE, swap interval
     // changing, surface size changing etc, by calling prepareForAcquireNextSwapchainImage()) and
-    // call the doDeferredAcquireNextImageWithUsableSwapchain() method.
+    // call acquireNextSwapchainImage() and sets up the acquired image.  On some platforms,
+    // vkAcquireNextImageKHR returns OUT_OF_DATE instead of present, which will also recreate the
+    // swapchain.
     angle::Result doDeferredAcquireNextImage(const gl::Context *context, bool presentOutOfDate);
-    // Calls acquireNextSwapchainImage() and sets up the acquired image.  On some platforms,
-    // vkAcquireNextImageKHR returns OUT_OF_DATE instead of present, so this function may still
-    // recreate the swapchain.  The main difference with doDeferredAcquireNextImage is that it does
-    // not check for surface property changes for the purposes of swapchain recreation (because
-    // that's already done by prepareForAcquireNextSwapchainImage.
-    angle::Result doDeferredAcquireNextImageWithUsableSwapchain(const gl::Context *context);
 
     EGLNativeWindowType mNativeWindowType;
     VkSurfaceKHR mSurface;
@@ -416,15 +412,12 @@ class WindowSurfaceVk : public SurfaceVk
                                   VkSwapchainKHR oldSwapchain);
     angle::Result queryAndAdjustSurfaceCaps(ContextVk *contextVk,
                                             VkSurfaceCapabilitiesKHR *surfaceCaps);
-    angle::Result checkForOutOfDateSwapchain(ContextVk *contextVk,
-                                             bool presentOutOfDate,
-                                             bool *swapchainRecreatedOut);
+    angle::Result checkForOutOfDateSwapchain(ContextVk *contextVk, bool presentOutOfDate);
     angle::Result resizeSwapchainImages(vk::Context *context, uint32_t imageCount);
     void releaseSwapchainImages(ContextVk *contextVk);
     void destroySwapChainImages(DisplayVk *displayVk);
     angle::Result prepareForAcquireNextSwapchainImage(const gl::Context *context,
-                                                      bool presentOutOfDate,
-                                                      bool *swapchainRecreatedOut);
+                                                      bool presentOutOfDate);
     // This method calls vkAcquireNextImageKHR() to acquire the next swapchain image.  It is called
     // when the swapchain is initially created and when present() finds the swapchain out of date.
     // Otherwise, it is scheduled to be called later by deferAcquireNextImage().
