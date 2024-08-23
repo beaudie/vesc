@@ -46,6 +46,40 @@
       },
       "revId": "68b77a614d10489327cf45d31d21c288f7b4cc06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e9eaf3a_4bbd46da",
+        "filename": "infra/config/main.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1260408
+      },
+      "writtenOn": "2024-08-23T19:48:08Z",
+      "side": 1,
+      "message": "```suggestion\ndef _generate_project_pyl(ctx):\n```",
+      "revId": "68b77a614d10489327cf45d31d21c288f7b4cc06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2e09787_2e2135e5",
+        "filename": "infra/config/main.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1260408
+      },
+      "writtenOn": "2024-08-23T19:48:08Z",
+      "side": 1,
+      "message": "```suggestion\n        \"# This is a non-LUCI generated file\",\n```Sec32fun32",
+      "revId": "68b77a614d10489327cf45d31d21c288f7b4cc06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

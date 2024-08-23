@@ -176,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8414f8cc_d91704fe",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1260408
+      },
+      "writtenOn": "2024-08-23T19:48:08Z",
+      "side": 1,
+      "message": "```suggestion\n        if \"-test\" in name:\n            test_mode \u003d \"compile_and_test\"\n```sec32fun32",
+      "parentUuid": "8ffff116_2c83151a",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 42
+      },
+      "revId": "bd49dc4c05d232e2dbc80206c46ad1b24cd40690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39276318_94c1ea59",
