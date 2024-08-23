@@ -142,6 +142,24 @@
       "parentUuid": "436baa11_e48fe301",
       "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48ddfa7a_c274972d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2024-08-23T17:30:30Z",
+      "side": 1,
+      "message": "\u003e IIRC, the issue is that ANGLE automatically puts trace events for the entire submission, right\n\nIt sounds like this is probably the cause but I haven\u0027t verified it. But yes probably a good idea to remove it.",
+      "parentUuid": "82f569b8_68a54a84",
+      "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
