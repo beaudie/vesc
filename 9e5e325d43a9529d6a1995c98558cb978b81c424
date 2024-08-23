@@ -124,6 +124,24 @@
       "parentUuid": "e267eb78_7ce145c6",
       "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82f569b8_68a54a84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-23T04:42:47Z",
+      "side": 1,
+      "message": "IIRC, the issue is that ANGLE automatically puts trace events for the entire submission, right? If that\u0027s causing too much trouble and is not worth fixing, we could just as easily remove it. It\u0027s nice to see the entire submission, but it doesn\u0027t provide actionable info anyway.\n\nWhat would be useful is events around texture / buffer data copies, UtilsVk render passes, dispatch calls (+ the existing event around render passes).",
+      "parentUuid": "436baa11_e48fe301",
+      "revId": "9e5e325d43a9529d6a1995c98558cb978b81c424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
