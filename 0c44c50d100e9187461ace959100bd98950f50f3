@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d26e6f3c_8aa99255",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3309,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-25T21:49:44Z",
+      "side": 1,
+      "message": "Need to add the features to `mEnabledFeatures` too.",
+      "revId": "0c44c50d100e9187461ace959100bd98950f50f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
