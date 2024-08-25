@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a41b5709_254bd934",
+        "filename": "src/tests/gl_tests/gles1/FramebufferObjectTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-08-25T23:53:08Z",
+      "side": 1,
+      "message": "This should error if the `GL_OES_framebuffer_object` extension is not supported, right?",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 25
+      },
+      "revId": "16aca786bde752944af85f83fd28cb3c4678fd7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
