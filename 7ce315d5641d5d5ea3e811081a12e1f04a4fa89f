@@ -34,6 +34,24 @@
       "parentUuid": "834d7f9d_3465f084",
       "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f622d226_696a95df",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-26T09:52:53Z",
+      "side": 1,
+      "message": "Sorry, I\u0027m confused what the extension is specced.\n\nSetting `mColorTextureInitialized` \u003d false here won\u0027t have any effect in majority of the time. The code block here is meant to be executed as a fallback when there is a timeout when we try to obtain the `CAMetalLayer`\u0027s texture. I don\u0027t think it\u0027s part of any extension.",
+      "parentUuid": "f60ab053_cddef2a1",
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
