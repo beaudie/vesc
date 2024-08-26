@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2acb4d00_9083cb16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-26T22:00:48Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01d2d7f5_165a79cc",
@@ -43,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e40a531e_a39df7b2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-26T22:00:48Z",
+      "side": 1,
+      "message": "It is legal for the clear area to be zero. However, the earlier CL added the validation for when the dimensions of that texture level were zero (i.e., the level is not defined yet).",
+      "parentUuid": "01d2d7f5_165a79cc",
+      "range": {
+        "startLine": 876,
+        "startChar": 4,
+        "endLine": 876,
+        "endChar": 78
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "33b16fa6_14e0d23c",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 23
@@ -54,6 +95,30 @@
       "writtenOn": "2024-08-26T20:01:56Z",
       "side": 1,
       "message": "This is doing a compute write to buffer and then copy from buffer to image. Can\u0027t you directly use compute shader write to image? Is that because of some formats does not support compute write? If yes, then I think all you need to do is have utility function fill the buffer and then stage the buffer to image which would reuse all logic for image update from buffer code. And you could use CPU to fill the buffer as well.",
+      "range": {
+        "startLine": 2272,
+        "startChar": 23,
+        "endLine": 2272,
+        "endChar": 35
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac922833_f8113d5e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-26T22:00:48Z",
+      "side": 1,
+      "message": "I think the image should be created with the storage usage bit so we can directly write to the image using `imageStore()`. However, it seems that `imageStore()` can only be used for color images.\nI also looked into `vkCmdFillBuffer()`, but it seems to only support a 4-byte input word.",
+      "parentUuid": "33b16fa6_14e0d23c",
       "range": {
         "startLine": 2272,
         "startChar": 23,
@@ -94,6 +159,30 @@
       "writtenOn": "2024-08-26T20:01:56Z",
       "side": 1,
       "message": "clearTexture also works for MS tetxure, right?",
+      "range": {
+        "startLine": 10043,
+        "startChar": 60,
+        "endLine": 10043,
+        "endChar": 74
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "783a50c1_ef255fb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 10043,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-26T22:00:48Z",
+      "side": 1,
+      "message": "Currently, `clearTexture()` does not work for MS textures, since `vkCmdCopyBufferToImage()` can only accept a single-sampled destination image. `clearTextureMS()` uses `vkCmdClearAttachments()` to accomplish this instead.",
+      "parentUuid": "65737b2f_154be0b7",
       "range": {
         "startLine": 10043,
         "startChar": 60,
