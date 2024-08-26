@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c75a1609_ab55868e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-26T21:41:09Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "61335e7102dad34f2e75c345fbfbfd57394444df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74af090f_c460474c",
@@ -50,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b89feaa5_cbb1d326",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-26T21:41:09Z",
+      "side": 1,
+      "message": "This is added to address the following exception included only for `glClearTexImageEXT()` in the spec:\n```\n        An INVALID_OPERATION error is generated if the image array identified by\n        \u003clevel\u003e has not previously been defined by a TexImage* or TexStorage*\n        command.\"\n```\n\nIn the code here, `extents` is for the current level of the texture. So if they are zeroes, this call should return with `GL_INVALID_OPERATION`.\n\nBefore adding this condition, the corresponding test still fails, but due to the following message (and issuing `GL_INVALID_VALUE` instead):\n```\nglClearTexImageEXT: GL error: HIGH: Invalid internal format 0x0000.\n```\n---\n\nHowever, it is still legal to use `glClearTexSubImageEXT()` if its input `width`, `height`, or `depth` are 0, which will return from the backend with no changes to the texture.\n* For 2D textures, `depth \u003d 1` is used for a valid call:\n```\n    For texture types that do not have certain dimensions, this\n    command treats those dimensions as having a size of 1.  For example,\n    to clear a portion of a two-dimensional texture, the application would\n    use \u003czoffset\u003e equal to zero and \u003cdepth\u003e equal to one.\n```",
+      "parentUuid": "04579442_05c9ddc3",
+      "range": {
+        "startLine": 323,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 80
+      },
+      "revId": "61335e7102dad34f2e75c345fbfbfd57394444df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1adc123e_9caa49c9",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 2
@@ -61,6 +102,30 @@
       "writtenOn": "2024-08-26T17:16:48Z",
       "side": 1,
       "message": "Is it needed because of new test is failing? Are we losing test coverage of RGB with added alpha bits?",
+      "range": {
+        "startLine": 180,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 26
+      },
+      "revId": "61335e7102dad34f2e75c345fbfbfd57394444df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1d2b460_425df464",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-26T21:41:09Z",
+      "side": 1,
+      "message": "This was added since the following tests were failing on the Vulkan backend:\n* `ClearTextureEXTTest.Luma`\n  * The second part using `GL_LUMINANCE_ALPHA` fails\n* `ClearTextureEXTTest.LumaAlphaFloat` (new test)\n\nIf we add this config, will it affect RGB-only tests?",
+      "parentUuid": "1adc123e_9caa49c9",
       "range": {
         "startLine": 180,
         "startChar": 8,
