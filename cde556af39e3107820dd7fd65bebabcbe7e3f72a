@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02c33ef0_56ce531d",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:34:33Z",
+      "side": 1,
+      "message": "You should be able to use the helpers like `CLRGBAFormatToID` to get an `angle::FormatID`, and then use `Renderer::getFormat()` to get the `VkFormat` out of it directly. Otherwise this is largely duplicating those autogened helpers.",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed136e01_c6514b9f",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:34:33Z",
+      "side": 1,
+      "message": "FYI, we have `ArraySize` to calculate the array size, but this can be even more easily done. C++ supports `std::begin` and `std::end` on arrays directly:\n\n```suggestion\n        minSupportedFormats.insert(\n            minSupportedFormats.end(), std::begin(mMinSupportedFormatsReadOrWrite),\n            std::end(mMinSupportedFormatsReadOrWrite));\n```",
+      "range": {
+        "startLine": 346,
+        "startChar": 0,
+        "endLine": 349,
+        "endChar": 92
+      },
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f12d551_0b73ec6a",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:34:33Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edb44a49_8c641d5e",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:34:33Z",
+      "side": 1,
+      "message": "```suggestion\n    for (cl_image_format format : minSupportedFormats)\n```",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad2fcd4a_418e3eb3",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:34:33Z",
+      "side": 1,
+      "message": "Does the implementation fall back to linear tiling if optimal is not supported?\n\nIs it perhaps better to ignore `linearTilingFeatures` and assume the format is not supported if it can\u0027t be optimal?",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aee7d4cd_00ae4a6f",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:34:33Z",
+      "side": 1,
+      "message": "```suggestion\n        *numImageFormats \u003d static_cast\u003ccl_uint\u003e(supportedFormats.size());\n```",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
