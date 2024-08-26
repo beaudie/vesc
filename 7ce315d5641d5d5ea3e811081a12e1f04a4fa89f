@@ -70,6 +70,24 @@
       "parentUuid": "f622d226_696a95df",
       "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceb32128_5803157b",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-26T09:58:13Z",
+      "side": 1,
+      "message": "Yeah, the existing code is definitively broken.\nWhat I mean is that:\n\nEGL_ANGLE_robust_resource_initialization does not specify that the color, stencil or depth is cleared after swap. The tests test that, but the spec doesn\u0027t say that.",
+      "parentUuid": "bfe41fbf_5e88af28",
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
