@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48478b7f_6bb5cc5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:52:28Z",
+      "side": 1,
+      "message": "Haven\u0027t gotten around for a full review yet",
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0ad207a_fc6691c5",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
+        "patchSetId": 23
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:52:28Z",
+      "side": 1,
+      "message": "These `#if`s cost us in binary size. Please use them only when absolutely necessary. That is when the _types_ need to change.\n\nFor numeric parameters, please pass whatever you need through the push constants. For example a bounds constant to check against `threadId`, a mask for the data, and a couple of bools for special cases (stencil, rgb)",
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
