@@ -51,6 +51,24 @@
       "parentUuid": "a0c71a86_c747a116",
       "revId": "fa5c0dafcd08ebd6a43d39f34aba09354e79784b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fadb84c9_b459a4f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-26T15:55:07Z",
+      "side": 1,
+      "message": "Yes I was referring to the failures in dry run. Thank you for clarifications.",
+      "parentUuid": "377f2436_7d7be82e",
+      "revId": "fa5c0dafcd08ebd6a43d39f34aba09354e79784b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
