@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b7e9e8d_3fff050b",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:18:07Z",
+      "side": 1,
+      "message": "This is not _creating_ a buffer",
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1dfe579_b582948a",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:18:07Z",
+      "side": 1,
+      "message": "The `Read` and `Write` calls here should depend on the copy direction. The current code is only correct for image-\u003ebuffer copy.",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 313,
+        "endChar": 42
+      },
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d05ceaa9_9b4666c7",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:18:07Z",
+      "side": 1,
+      "message": "```suggestion\n        // We need an execution barrier if image can be written to by kernel\n```",
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50f0b65d_cedfea2d",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:18:07Z",
+      "side": 1,
+      "message": "Without knowing much about CL\u0027s parameters, FYI there\u0027s some complexity with `z` vs `layer` for 3D vs 2D array images. On the GL side, GL uses `z` for both, but Vulkan is really particular about using `z` for 3D and `layer` for 2D array images.",
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c2074a9_9aa37201",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:18:07Z",
+      "side": 1,
+      "message": "Looks like the non-blocking path is currently incorrect, shouldn\u0027t this `if` be removed and `finish` be unconditional until this is fixed?\n\nAlso, couldn\u0027t the `mHostBufferUpdateList` mechanism be used to support this somehow?",
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb643b2f_6f6aceca",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:18:07Z",
+      "side": 1,
+      "message": "We tend to avoid `bool` in parameters, it\u0027s hard to understand on the call site. Please use an `enum class` and use that here, like `ImageBufferCopyDirection direction`",
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f958ce47_dfcebe6c",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:18:07Z",
+      "side": 1,
+      "message": "Same comment about `vkFlush/InvalidateMappedMemoryRanges`",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 54
+      },
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
