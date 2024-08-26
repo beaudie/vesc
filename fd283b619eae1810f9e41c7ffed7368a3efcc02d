@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4f1cabd_de39531e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T14:46:03Z",
+      "side": 1,
+      "message": "Ok so I thought this over, and I think my biggest concern is that this doesn\u0027t _guarantee_ recovery. It may _help_ in practice, but doesn\u0027t guarantee.\n\nIn particular, a future store to the blob cache may drop any of these chunks out of the control of this function, even if they all get in now. So the point to be robust is not when we _write_ the cache, but rather when we _read_ from it.\n\nSo first of all, this should really just be fixed in Vulkan. VK_KHR_pipeline_binary fixes it, but just in cases there are surprises, I added an item to maintenance9 so we get a proper \"split\" function eventually if we still have to continue using VkPipelineCache objects: https://gitlab.khronos.org/vulkan/vulkan/-/issues/3878\n\nThat said, maybe we can solve both of these problems _without_ any of the duplicate memory / readback+resave with your backwards writing trick. Say at some point we store the pipeline cache to the blob cache (call that version 1, or V1, and the chunks are V1_0, V1_1, ..., V1_n). Say we are storing an updated pipeline cache at version 2, or V2. Storing the chunks backwards, say the app gets killed in the middle. Now that blob cache has: `V1_0, V1_1, ..., V1_m, V2_m+1, ..., V2_n`.\n\nAnother situation is dropped chunks, say some chunks are dropped and we end up with  this: `V1_0, V1_1, ..., V1_m, V1_m+2, ..., V1_n` (that is, `V1_m+1` is dropped).\n\nIn both cases, we can observe that the prefix `V1_0, V1_1, ..., V1_m` is there, but the rest of the cache is unrecoverable. If we can reconstruct a subset of the pipeline cache with just those chunks, we can at least recover parts of the pipeline cache. This is not ideal, but it\u0027s \"better than nothing\", given that any unrelated blob cache store may destroy the entire pipeline cache (even with your fixes). The reason for writing backwards is if the entire cache doesn\u0027t fit in the blob cache, LRU would drop chunks from the end, so the prefix of V2 (if written all the way to chunk 0) is still retrievable.\n\nWhere this gets hairy is that the data recovered from chunks 0..m may have a partial blob in it, and loading that may blow up in the driver. For example, say from chunks of 0..m you recover 1000 KB of data, and the cache header and every blob in it is 64 KB (contrived example). This means that the 1000 KB of data have the header and 14 usable blobs, but also there is ~half of the next blob in there. However, this should be easy to make the driver robust against, i.e. Samsung\u0027s driver could be specifically made to make sure it drops the extra bytes that don\u0027t form a full blob.\n\nImplementing the above, there is no need for slots, erasing old contents or verifying things (which doesn\u0027t provide a guarantee anyway). The only things to change is:\n\n- Write chunks from the last to first\n- Be able to retrieve up-to-whatever-chunk-is-contiguously-present and decompress that\n- Based on a feature (knowing if the driver can handle an incomplete blob at the end), either take that data is whatever you could manage to keep and create a pipeline cache out of it, or drop it because there\u0027s no hope of recovery.\n\nThe decompress part may need some tricks, because missing the suffix of the data is probably going to confuse gzip. IIRC, it stores some data at the _end_ of the stream, which you would need to synthesize at the end of the incomplete data that\u0027s retrieved from the blob cache.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 47
+      },
+      "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
