@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae61308d_28f6c01b",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-26T09:36:32Z",
+      "side": 1,
+      "message": "I think the general pattern is to just call supportsAppleGPUFamily(1) for all platforms, instead of ifdefing with the knowledge that iOS family always supports it. It should take care of simulator case, which might not support memoryless theoretically on non-ASi machines.\n\nIt\u0027s clear from the context that the query is for memoryless support, so it\u0027d be ok for me if the temporary bool was omitted\nE.g.\n\n\n    if (context-\u003egetDisplay()-\u003esupportsAppleGPUFamily(1))\n    {\n      ...\n    }\n    else\n    {\n      ...\n    }\n\nOr a ternary operator.",
+      "revId": "04bfaa74331abbddaadcce9849c70f7f117ffa54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
