@@ -16,6 +16,24 @@
       "message": "I think this assignment should be moved to outside this code block. This block is only executed when 1st `[mMetalLayer nextDrawable]` call fails.",
       "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f60ab053_cddef2a1",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-26T09:39:30Z",
+      "side": 1,
+      "message": "Yep. It\u0027s just that that\u0027s not how the extension is specced..",
+      "parentUuid": "834d7f9d_3465f084",
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
