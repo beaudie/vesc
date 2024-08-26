@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e7a594e_c5d5cfac",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T17:57:46Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be like this instead? Otherwise READ_AND_WRITE ends up without `VK_IMAGE_USAGE_SAMPLED_BIT`, no?\n\n```suggestion\n    if (mMemory.getFlags().isSet(CL_MEM_WRITE_ONLY))\n```",
+      "revId": "c19e48ad6d231952dfb202652afb7542dccff43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c148d5b_2c60cfd5",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T17:57:46Z",
+      "side": 1,
+      "message": "Is memory always coherent with our allocations for CL? Otherwise this is missing `vkInvalidate/FlushMappedMemoryRanges`",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 307,
+        "endChar": 54
+      },
+      "revId": "c19e48ad6d231952dfb202652afb7542dccff43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c47bbf49_96229d9d",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T17:57:46Z",
+      "side": 1,
+      "message": "For a future change, please consider renaming `isSet` to `isAnySet`, it\u0027s confusing in that the name suggests it expects both to be set.",
+      "revId": "c19e48ad6d231952dfb202652afb7542dccff43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73f6efdd_fac80f9a",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T17:57:46Z",
+      "side": 1,
+      "message": "Is there a reason this function does a one-off submission + wait for it to finish? That\u0027s terribly inefficient.\n\nIdeally, you\u0027d want to pass in the context to this function, record a copy command to the command buffer and leave it be. If multi-context access is an issue, it would be fair to \"flush\" the context. There would nevertheless be some additional synchronization needed on the next access.\n\nIf you\u0027d rather continue with the one-off submission for now, please rename this to `copyToBufferOneOff`.",
+      "revId": "c19e48ad6d231952dfb202652afb7542dccff43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
