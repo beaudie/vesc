@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d12ce5f8_fc3d874d",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-26T17:18:34Z",
+      "side": 1,
+      "message": "Is there any document specifying that new textures start as zero? Given that when you initialized `mColorTextureInitialized` to true in previous patchset, the SurfaceInitialized test failed on try bots. I am not sure that textures\u0027 initial data are always zeros.\n\nI don\u0027t think there is any test testing only stencil buffer in the default framebuffer, hence this path might not have coverage.",
+      "range": {
+        "startLine": 401,
+        "startChar": 71,
+        "endLine": 401,
+        "endChar": 97
+      },
+      "revId": "b87c67003c577fb40eeafd4167a52a92137dcfed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

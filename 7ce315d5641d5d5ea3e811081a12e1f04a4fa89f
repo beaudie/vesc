@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "812bd79a_26d57556",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-26T17:18:34Z",
+      "side": 1,
+      "message": "Do you mean\n- some Surface might not have any color texture hence don\u0027t need to initialize color texture. I think every Surface will have a color texture, be it internally created or imported externally.\n- Or newly created metal textures always have zeros as initial data? It might be true but there are cases when the color texture is imported externally, such as `IOSurfaceSurfaceMtl`. In this case, it is not guaranteed that the first use of the texture in ANGLE would have zeros data.\n\nIMO to avoid such bugs and complicated logics such as knowing what type of Surface already have initialized color texture, I think maybe just treating all textures as uninitialized. That would only cost one clear before the 1st use.",
+      "parentUuid": "cd615809_418ed1d5",
+      "range": {
+        "startLine": 114,
+        "startChar": 9,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "834d7f9d_3465f084",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 2
