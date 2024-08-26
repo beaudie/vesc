@@ -20,6 +20,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "01d2d7f5_165a79cc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-26T20:01:56Z",
+      "side": 1,
+      "message": "Since in your earlier CL, zero dimension will generate INVALID_OP, this should be assertion.",
+      "range": {
+        "startLine": 876,
+        "startChar": 4,
+        "endLine": 876,
+        "endChar": 78
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33b16fa6_14e0d23c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-26T20:01:56Z",
+      "side": 1,
+      "message": "This is doing a compute write to buffer and then copy from buffer to image. Can\u0027t you directly use compute shader write to image? Is that because of some formats does not support compute write? If yes, then I think all you need to do is have utility function fill the buffer and then stage the buffer to image which would reuse all logic for image update from buffer code. And you could use CPU to fill the buffer as well.",
+      "range": {
+        "startLine": 2272,
+        "startChar": 23,
+        "endLine": 2272,
+        "endChar": 35
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0ad207a_fc6691c5",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
         "patchSetId": 23
@@ -31,6 +77,29 @@
       "writtenOn": "2024-08-26T18:52:28Z",
       "side": 1,
       "message": "These `#if`s cost us in binary size. Please use them only when absolutely necessary. That is when the _types_ need to change.\n\nFor numeric parameters, please pass whatever you need through the push constants. For example a bounds constant to check against `threadId`, a mask for the data, and a couple of bools for special cases (stencil, rgb)",
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65737b2f_154be0b7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 10043,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-26T20:01:56Z",
+      "side": 1,
+      "message": "clearTexture also works for MS tetxure, right?",
+      "range": {
+        "startLine": 10043,
+        "startChar": 60,
+        "endLine": 10043,
+        "endChar": 74
+      },
       "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
