@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27809c04_cf5baa82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-08-26T22:33:00Z",
+      "side": 1,
+      "message": "LGTM, +Geoff for review since this touches core ANGLE.",
+      "revId": "a3c131db4563d21cc66be500541c58e0484ab877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
