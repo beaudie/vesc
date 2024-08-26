@@ -22,6 +22,30 @@
       },
       "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb2d02ff_affbb1ad",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-26T17:57:54Z",
+      "side": 1,
+      "message": "Actually since for render pass attachment, the imageLayout are finalized at endRenderPass time, the actual imageLayout here doesn\u0027t really matter. You can just pick currentLayout and expect finalize***AtatchmentImageLayout to pick the right layout.",
+      "parentUuid": "1562a51c_19978964",
+      "range": {
+        "startLine": 2405,
+        "startChar": 61,
+        "endLine": 2405,
+        "endChar": 72
+      },
+      "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
