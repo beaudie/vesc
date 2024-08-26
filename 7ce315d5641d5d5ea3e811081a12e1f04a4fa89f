@@ -88,6 +88,24 @@
       "parentUuid": "bfe41fbf_5e88af28",
       "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0994ae32_ee3731f4",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-26T10:11:02Z",
+      "side": 1,
+      "message": "Ok I thought that you originally wanted to clear every texture in the swapchain. Since the swapchain has multiple textures, one clear would have been not enough to implement robust resource init. We would have needed some ways to clear every texture in the swapchain (that\u0027s probably what the original code wanted to do)\n\nIf you just want first swap\u0027s texture to be zeroized then `mColorTextureInitialized` should be `false` by default, shouldn\u0027t it? Currently it is set to `true` in constructor. So the very first swap will contain undefined values.",
+      "parentUuid": "ceb32128_5803157b",
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
