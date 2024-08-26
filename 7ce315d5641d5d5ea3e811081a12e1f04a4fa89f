@@ -153,6 +153,24 @@
       "parentUuid": "ceb32128_5803157b",
       "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1581246c_d1e11c50",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-26T11:11:11Z",
+      "side": 1,
+      "message": "Setting it true is the consistent case, the rest of the code was incorrect.",
+      "parentUuid": "0994ae32_ee3731f4",
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
