@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57980330_3fae8aad",
+        "filename": "src/libANGLE/renderer/vulkan/clspv_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-26T15:41:09Z",
+      "side": 1,
+      "message": "I was debating between namespace (clspv::) vs prefix (ClspvXXX) demarcation here. Ended up following the spv_utils.h convention.",
+      "revId": "3ab5b650572648c85ae8f1b1054aa9e06ceae369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
