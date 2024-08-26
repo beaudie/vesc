@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59241ed8_5f8fca30",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-08-26T23:07:03Z",
+      "side": 1,
+      "message": "Pre-submit was failing because these headers were not listed in the GN target.",
+      "revId": "fcaf1dbe2ce99d2841ba9a2c868f8472d5e7227f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
