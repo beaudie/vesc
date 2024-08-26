@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a137e0ac_281c5dba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-08-26T20:34:19Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the backends be setting those `multidrawEmulated`/`baseInstanceBaseVertexEmulated`/`baseInstanceEmulated` to false if the feature isn\u0027t emulated? e.g. Vulkan supports it and GL desktop may support it. But currently these `Emulated` flags are set to true and none of the backends modify them, so it just ends up disabling multidraw everywhere.",
+      "revId": "6fddb18d77a3b20b1de9c8cfa72966698e937683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
