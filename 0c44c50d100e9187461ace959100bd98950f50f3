@@ -34,6 +34,24 @@
       "parentUuid": "d26e6f3c_8aa99255",
       "revId": "0c44c50d100e9187461ace959100bd98950f50f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ce879d9_c27b16ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3309,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-26T15:39:14Z",
+      "side": 1,
+      "message": "I get confused between features and properties in vulkan. Here float controls are setup as device properties, and didnt add them to `mEnabledFeatures`. Can you confirm if this needs additional handling here.",
+      "parentUuid": "be5c1aa2_0969cc20",
+      "revId": "0c44c50d100e9187461ace959100bd98950f50f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
