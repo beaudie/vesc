@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9351a339_08315649",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-26T21:19:40Z",
+      "side": 1,
+      "message": "I think we can move this to `ClspvGetCompilerOptions` now (since this is a device feature that translates to a clspv compiler flag).",
+      "range": {
+        "startLine": 783,
+        "startChar": 8,
+        "endLine": 786,
+        "endChar": 80
+      },
+      "revId": "4ee024b7c13d2a8f63ca10cd4fcc836207fa886a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
