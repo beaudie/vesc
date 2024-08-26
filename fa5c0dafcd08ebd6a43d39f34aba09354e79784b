@@ -33,6 +33,24 @@
       "message": "LGTM but looks like there are more failing tests need to be skipped?",
       "revId": "fa5c0dafcd08ebd6a43d39f34aba09354e79784b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "377f2436_7d7be82e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-26T11:14:49Z",
+      "side": 1,
+      "message": "Not sure what you mean.\nThis CL skips the timing out tests on S24 and not the failing ones, that\u0027s the intention. I think there is no need to skip the failures for now, it can wait for the bigger deployment.\nIf you mean the failures in dry run, these look like flakes.",
+      "parentUuid": "a0c71a86_c747a116",
+      "revId": "fa5c0dafcd08ebd6a43d39f34aba09354e79784b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
