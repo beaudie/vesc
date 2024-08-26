@@ -52,6 +52,24 @@
       "parentUuid": "79f06215_c87562ef",
       "revId": "04bfaa74331abbddaadcce9849c70f7f117ffa54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad6e2c8b_458e7c8d",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-26T13:11:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e21598d_00a7940b",
+      "revId": "04bfaa74331abbddaadcce9849c70f7f117ffa54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
