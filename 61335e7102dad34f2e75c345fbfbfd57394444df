@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "04579442_05c9ddc3",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-26T18:43:10Z",
+      "side": 1,
+      "message": "Indeed, this looks strange. `kDestinationTextureTooSmall` is saying the texture is smaller than the extents provided. In this case, the area is certainly smaller than the texture so the error doesn\u0027t make sense.\n\nYou might want to instead no-op the call if extents are 0 in any direction.",
+      "parentUuid": "74af090f_c460474c",
+      "range": {
+        "startLine": 323,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 80
+      },
+      "revId": "61335e7102dad34f2e75c345fbfbfd57394444df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1adc123e_9caa49c9",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 2
