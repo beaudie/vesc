@@ -1,0 +1,74 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4323121e_34897b11",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-26T22:09:07Z",
+      "side": 1,
+      "message": "In the old code, stride could be zero. Now that stride is never 0 (line 832). Is this behavior change expected?",
+      "fixSuggestions": [
+        {
+          "fixId": "528479e7_96c2740b",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+              "range": {
+                "startLine": 45,
+                "startChar": 0,
+                "endLine": 46,
+                "endChar": 0
+              },
+              "replacement": "        return (offset % formatSize \u003d\u003d 0) \u0026\u0026 (stride \u003d\u003d 0 || stride % formatSize \u003d\u003d 0);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "feb2d2d5c2d58e1ed0e0bb4ffc99a563cd635a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8187bab6_e1f64ece",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-08-26T22:09:07Z",
+      "side": 1,
+      "message": "Can you please add more comments on how srcRelativeOffset and dstRelativeOffset are obtained? Some diagram like https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.h;l\u003d69;drc\u003d82dff63dbf9db05e9274e11d9128af7b9f51ceaa can be more helpful to understand the code.",
+      "fixSuggestions": [
+        {
+          "fixId": "eae1b56b_940877f6",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+              "range": {
+                "startLine": 871,
+                "startChar": 0,
+                "endLine": 871,
+                "endChar": 0
+              },
+              "replacement": "                //\n                // srcRelativeOffset is the offset of the attribute in the source buffer.\n                // dstRelativeOffset is the offset of the attribute in the destination buffer.\n                //\n                // The offset of the attribute in the destination buffer is calculated by\n                // subtracting the offset of the source buffer from the offset of the attribute in\n                // the source buffer.\n                //\n                // The offset of the attribute in the destination buffer is then divided by the\n                // stride of the destination buffer to get the offset of the attribute in the\n                // destination buffer relative to the beginning of the buffer.\n                //\n                // The offset of the attribute in the destination buffer relative to the beginning\n                // of the buffer is then multiplied by the stride of the destination buffer to get\n                // the offset of the attribute in the destination buffer relative to the beginning\n                // of the buffer.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "feb2d2d5c2d58e1ed0e0bb4ffc99a563cd635a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
