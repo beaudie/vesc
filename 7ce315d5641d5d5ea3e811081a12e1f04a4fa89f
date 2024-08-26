@@ -52,6 +52,24 @@
       "parentUuid": "f60ab053_cddef2a1",
       "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfe41fbf_5e88af28",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-26T09:54:05Z",
+      "side": 1,
+      "message": "I understand that the original code also set `mContentInitialized` to false in this block. I think it\u0027s also wrong.",
+      "parentUuid": "f622d226_696a95df",
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
