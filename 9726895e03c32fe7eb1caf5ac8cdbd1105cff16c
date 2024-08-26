@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1562a51c_19978964",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-26T17:29:02Z",
+      "side": 1,
+      "message": "can\u0027t you get it from image-\u003egetCurrentLayout()?",
+      "range": {
+        "startLine": 2405,
+        "startChar": 61,
+        "endLine": 2405,
+        "endChar": 72
+      },
+      "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
