@@ -156,8 +156,16 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
         ASSERT(!mFramebufferCacheManager.containsKey(sharedFramebufferCacheKey));
         mFramebufferCacheManager.addKey(sharedFramebufferCacheKey);
     }
-    void release(ContextVk *contextVk) { mFramebufferCacheManager.releaseKeys(contextVk); }
-    void destroy(vk::Renderer *renderer) { mFramebufferCacheManager.destroyKeys(renderer); }
+    void release(ContextVk *contextVk)
+    {
+        mFramebufferCacheManager.releaseKeys(contextVk);
+        mImage = nullptr;
+    }
+    void destroy(vk::Renderer *renderer)
+    {
+        mFramebufferCacheManager.destroyKeys(renderer);
+        mImage = nullptr;
+    }
 
   private:
     void reset();
