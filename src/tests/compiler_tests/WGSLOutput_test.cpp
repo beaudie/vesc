@@ -103,11 +103,11 @@ TEST_F(WGSLOutputTest, BasicTranslation)
     const std::string &outputString =
         R"(struct ANGLE_Output
 {
+  @location(@@@@@@) outColor : vec4<f32>,
   @builtin(frag_depth) gl_FragDepth_ : f32,
 };
 
 var<private> ANGLE_output : ANGLE_Output;
-var<private> _uoutColor : vec4<f32>;
 
 struct _uFoo
 {
@@ -351,6 +351,59 @@ fn main() -> ANGLE_Output
 
   {
     ((ANGLE_output).gl_FragColor_) = (_uu_color);
+  }
+  return ANGLE_output;
+}
+)";
+    compile(shaderString);
+    EXPECT_TRUE(foundInCode(outputString.c_str()));
+}
+
+TEST_F(WGSLVertexOutputTest, WrapMain)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        precision highp float;
+
+        void main()
+        {
+          if (gl_VertexID == 0) {
+            return;
+          }
+          gl_Position = vec4(0.0);
+          return;
+        })";
+    const std::string &outputString =
+        R"(struct ANGLE_Input
+{
+  @builtin(vertex_index) gl_VertexID_ : i32,
+};
+
+var<private> ANGLE_input : ANGLE_Input;
+
+struct ANGLE_Output
+{
+  @builtin(position) gl_Position_ : vec4<f32>,
+};
+
+var<private> ANGLE_output : ANGLE_Output;
+
+fn s1600()
+{
+  if (((ANGLE_input).gl_VertexID_) == (0i))
+  {
+    return;
+  }
+  ((ANGLE_output).gl_Position_) = (vec4<f32>(0.0f, 0.0f, 0.0f, 0.0f));
+  return;
+}
+
+@vertex
+fn main(ANGLE_input_temp : ANGLE_Input) -> ANGLE_Output
+{
+  ANGLE_input = ANGLE_input_temp;
+  {
+    s1600();
   }
   return ANGLE_output;
 }

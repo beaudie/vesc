@@ -205,7 +205,7 @@ TEST_P(RendererTest, CompileShader)
 // Link a simple program
 TEST_P(RendererTest, LinkProgram)
 {
-    ANGLE_GL_PROGRAM(prog, essl1_shaders::vs::Zero(), essl1_shaders::fs::Red());
+    ANGLE_GL_PROGRAM(prog, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Checkered());
 }
 
 // Draw a triangle using no vertex attributes
