@@ -46,6 +46,30 @@
       },
       "revId": "a2602533e4873be446c9003b6fb254bdaccee698",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e68de994_41c6ee77",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-27T22:28:32Z",
+      "side": 0,
+      "message": "Made a reland of the this change -- https://chromium-review.googlesource.com/c/angle/angle/+/5818733 -- with fixing these removals",
+      "parentUuid": "36938272_ff3e6ace",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 43
+      },
+      "revId": "a2602533e4873be446c9003b6fb254bdaccee698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
