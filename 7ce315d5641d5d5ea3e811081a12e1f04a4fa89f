@@ -146,6 +146,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9bd2b9b_76ea55c7",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-27T12:21:24Z",
+      "side": 1,
+      "message": "\u003e AFAIK EGL_ANGLE_iosurface_client_buffer doesn\u0027t say anything about importing the IOSurface as readonly.\n\nIt says: you can provide read-only hint.\n\n\u003e Currently the spec allows the IOSurface to be imported as RGB as well, and it would clear the IOSurface\u0027s alpha channel to 1 (as stated in the spec).\n\nDoesn\u0027t invalidate the position of preserving the existing IOSurface contents. It further establishes the position by explaining why it would change.\n\nRobust resource init spec also has the following overview:\n\n\u003e    This initialization ensures that access will not be provided by the\n\u003e    GL to previously allocated data not owned by the application.\n\u003e Seems to indicate it should clear the previous data not owned by the application.\n\nDoes not indicate anything. If app provides an IOSurface as source of pbuffer API, the app says it\u0027s their IOSurface and their contents. Why would they give an IOSurface that contains /etc/passwd in it?\n\nSame as with ANGLE_metal_texture_client_buffer. We don\u0027t clear the texture either. Should we assume that the caller puth /etc/passwd as data to the texture before submitting it to ANGLE_metal_texture_client_buffer?\n\nWhat\u0027s the difference between client-provided IOSurface and client provided MTLTexture?\n\nContrast if the API implementation internally asks IOSurface from the window system API, which doesn\u0027t guarantee the contents come from the caller. So this is the case when using the SurfaceMtl path for drawing to platform window. In this case, it\u0027s natural to flag for clear.\n\n\u003e This is beside the point of this patch. However, for the sake of discussion: it\u0027s not defined what should happen, the spec doesn\u0027t say.\n\u003e If it\u0027s not the point of this patch, then I think we probably shouldn\u0027t change the way color texture\u0027s initialized flag is set in this CL. This patch is about clearing depth, isn\u0027t it?\n\nIt is a bit over the top, but I got a request to write the test and the existing implementation is so buggy that it cannot pass the test due to buggy handling of the color buffer. There\u0027s even skipped tests that this patch fixes.\n\n\u003e FWIW \"initializing mColorTextureInitialized to true because color texture is initially Nil\" is a bit confusing to me. That flag is only used in initializeContents to avoid redundant clear.\n\nIt would reveal its pointlessness when written as:\n    bool mColorTextureInitialized \u003d false;\n    bool mDepthStencilTextureInitialized \u003d true;\n\nWhere obviously these two states should behave the exact same way.\n\n\nTrue is arguably the correct state for the initialization flag for the state machine that covers the texture initialization, and this IMO can be seen from the early outs of the cases that inspect the variable and act on the underlying object.\n\nI can also abandon this patch, it\u0027s not something we neccessarily want have to use in WebKit. I don\u0027t want to go over a simple bool variable so many times.",
+      "parentUuid": "4a393641_cb69e98f",
+      "range": {
+        "startLine": 114,
+        "startChar": 9,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "834d7f9d_3465f084",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 2
