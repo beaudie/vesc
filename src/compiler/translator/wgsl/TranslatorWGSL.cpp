@@ -9,6 +9,7 @@
 #include <iostream>
 #include <variant>
 
+#include "GLES2/gl2.h"
 #include "GLSLANG/ShaderLang.h"
 #include "common/log_utils.h"
 #include "compiler/translator/BaseTypes.h"
@@ -1570,10 +1571,17 @@ void OutputWGSLTraverser::emitStructDeclaration(const TType &type)
             {
                 mSink << "@builtin(" << builtinAnnotation->wgslBuiltinName << ") ";
             }
-            else if (auto *attributeLocationAnnotation =
+            else if (auto *locationAnnotation =
                          std::get_if<LocationAnnotation>(&pipelineAnnotation->second))
             {
-                mSink << "@location(" << attributeLocationAnnotation->location << ") ";
+                if (locationAnnotation->location == -1)
+                {
+                    mSink << "@location(@@@@@@) ";
+                }
+                else
+                {
+                    mSink << "@location(" << locationAnnotation->location << ") ";
+                }
             }
         }
         emitVariableDeclaration({field->symbolType(), field->name(), *field->type()}, evdConfig);
