@@ -16,6 +16,24 @@
       "message": "Hopefully the overnight run is green.",
       "revId": "fab445dea8147f897847b94f88b14b54ecf48d80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2660c89c_7446a213",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-27T13:32:48Z",
+      "side": 1,
+      "message": "No luck.\nTry using `Use-Permissive-Angle-Pixel-Comparison: True` for less goldens to triage.",
+      "parentUuid": "db57670d_b4310b61",
+      "revId": "fab445dea8147f897847b94f88b14b54ecf48d80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
