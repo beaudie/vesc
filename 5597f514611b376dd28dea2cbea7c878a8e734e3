@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5520b5c_e5856e32",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-08-27T18:28:44Z",
+      "side": 1,
+      "message": "Discussed offline, we\u0027ll land this and then maybe switch later.",
+      "parentUuid": "b45de575_8641c31f",
+      "revId": "5597f514611b376dd28dea2cbea7c878a8e734e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b845f653_400e8437",
