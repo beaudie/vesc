@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed0e2ed_ac588a57",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-27T17:10:44Z",
+      "side": 1,
+      "message": "Right, the stride passed in will not be zero. See line 832 bellow. Also added an assertion.",
+      "parentUuid": "4323121e_34897b11",
+      "revId": "feb2d2d5c2d58e1ed0e0bb4ffc99a563cd635a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8187bab6_e1f64ece",
@@ -67,6 +85,24 @@
           ]
         }
       ],
+      "revId": "feb2d2d5c2d58e1ed0e0bb4ffc99a563cd635a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "888f3c1e_07ad9d52",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-27T17:10:44Z",
+      "side": 1,
+      "message": "Added more comment and diagram, hopefully made it easier to understand.",
+      "parentUuid": "8187bab6_e1f64ece",
       "revId": "feb2d2d5c2d58e1ed0e0bb4ffc99a563cd635a83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
