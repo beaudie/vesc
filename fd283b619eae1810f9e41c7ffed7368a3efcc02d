@@ -22,6 +22,30 @@
       },
       "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f90321d7_e803324d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-27T16:46:01Z",
+      "side": 1,
+      "message": "\u003e my biggest concern is that this doesn\u0027t guarantee recovery. It may help in practice, but doesn\u0027t guarantee.\n\nI agree that this change does not provide 100% guarantee, however it \nnever promises this. It makes storing \"more\" robust, not 100% robust. Nothing is 100% safe in real life too, but you will always choose more safer way)\n\nIf blob cache is big enough to hold old + new data (dual slots) without eviction, then new data is guaranteed to be stored without corrupting old data.\n\nOtherwise, old data will still be corrupted in case of the problem 1 (termination). But guarantee to write all chunks (new data) if no termination (using verify or blob cache with conservative LRU).\n\n\n\u003e In particular, a future store to the blob cache may drop any of these \nchunks out of the control of this function, even if they all get in now.\n\nAgree that this problem exists, however it is a separate problem, not related to store corrupting old data.\n\nIn our use case, blob cache is exclusively used to write the VkPipelineCache data, and does not affected by this problem.\n\nI think we need to address both issues:\n- avoid store corrupting data when possible (this change).\n- verify new data is stored (only if blob cache does not have conservative LRU).\n- allow recovering if corruption happens (Vulkan driver + ANGLE change).\n\n\u003e So first of all, this should really just be fixed in Vulkan.\n\nTotally agree.\n\n\u003e Now that blob cache has: `V1_0, V1_1, ..., V1_m, V2_m+1, ..., V2_n`.\n\nThis is only true in case when new + old data size more than blob cache capacity (rare in our case - we have 256M capacity).\n\nIf new + old data do not exceed capacity we will have:\n`V1_0, V1_1, ..., V1_n, V2_m+1, ..., V2_n`.\n\nSo, we will still have `V1` thanks to dual slots.\n\nDual slots is useless only if new data is more or equal to the blob cache capacity (which should be avoided on practice).\n\nIn case when new + old data is more than capacity, but new data is less than capacity, we will preserve more of the `V1` in case of the termination, than when only using single slot.\n\n\u003e  If we can reconstruct a subset of the pipeline cache with just those \nchunks, we can at least recover parts of the pipeline cache. This is not\n ideal, but it\u0027s \"better than nothing\"\n\nAgree. This would be nice.\n\n\u003e Implementing the above, there is no need for slots, erasing old contents \nor verifying things (which doesn\u0027t provide a guarantee anyway). The only\n things to change is:\n\nProposed solution will improve nothing if driver requires full data (does not support partial load).\n\nIt does not solve Problem (1).\nWithout slots, writing new data will overwrite old data starting from last to 0 chunk. Terminating application before writing 0 chunk will partially erase old data. Because of that, we can only partially recover old data. Worst case there will be no chunks at all (because overwrite will delete old chunk first).\n\nSo IMO we still need dual slots and erasing.\n\nVerify is only used if Blob Cache does not have LRU that evicts only necessary blobs (not the current implementation, that evicts random blobs to 50% free capacity). So if we update the blob cache - then no need to add verify stage.\n\nI see your proposal as an addition to this commit - not a replacement.\nRecovering will help in cases if app terminates when old + new data is bigger than cache capacity, or if blob cache is used for other data (Shaders/Programs) and old chunks from PSO cache were evicted.\n\nIn other words, partial recover will make loading more robust, while dual slots - storing.\n\n\u003e The decompress part may need some tricks, because missing the suffix of \nthe data is probably going to confuse gzip. IIRC, it stores some data at\n the end of the stream, which you would need to synthesize at the end of the incomplete data that\u0027s retrieved from the blob cache.\n\nMay try to switch to 8M chunks and compress each individually. I do not expect big difference in performance (ratio and speed) - tests will tell...",
+      "parentUuid": "c4f1cabd_de39531e",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 47
+      },
+      "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
