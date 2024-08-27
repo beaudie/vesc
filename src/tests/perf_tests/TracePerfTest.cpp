@@ -1743,6 +1743,10 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         {
             skipTest("https://anglebug.com/42267118 fails on newer OS/driver");
         }
+        if (isNVIDIALinux && mParams->isVulkan())
+        {
+            skipTest("https://anglebug.com/362486580 fails on newer OS/driver");
+        }
     }
 
     if (traceNameIs("sonic_the_hedgehog"))
@@ -1798,6 +1802,10 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     if (traceNameIs("grand_mountain_adventure"))
     {
         addIntegerPrerequisite(GL_MAX_TEXTURE_SIZE, 11016);
+        if (isNVIDIALinux && mParams->isVulkan())
+        {
+            skipTest("https://anglebug.com/362486580 fails on newer OS/driver");
+        }
     }
 
     if (IsGalaxyS22())
