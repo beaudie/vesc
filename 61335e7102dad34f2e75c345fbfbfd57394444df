@@ -158,6 +158,30 @@
       },
       "revId": "61335e7102dad34f2e75c345fbfbfd57394444df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80f77064_cb23fe17",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-27T16:22:53Z",
+      "side": 1,
+      "message": "ClearTextureEXTTest.Luma was failing because it is using texture rendering to FBO0. This change should only affect the verifying the texture, so should be fine.",
+      "parentUuid": "a1d2b460_425df464",
+      "range": {
+        "startLine": 180,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 26
+      },
+      "revId": "61335e7102dad34f2e75c345fbfbfd57394444df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
