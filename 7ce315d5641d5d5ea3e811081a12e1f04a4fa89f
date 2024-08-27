@@ -192,6 +192,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "306d243f_d5a62bc6",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-27T17:00:32Z",
+      "side": 1,
+      "message": "I get that you do have some valid points about IOSurface. I\u0027ve just realized that IOSurface pbuffer actually doesn\u0027t support `EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE` attrib [1]. Hence robust init attribute would have been rejected by front-end before reaching IOSurfaceSurfaceMtl.\n\nThe reason for the simple bool variable\u0027s initialization\u0027s arguments is because of a concern that it would change the behavior of IOSurface pbuffer\u0027s initial state. And it might break how chrome work. MTLTexture client buffer is not relevant because it\u0027s a different API (it uses `EGLImage` not a pbuffer surface) and it\u0027s not used by chrome anw. I get that preserving the content is a valid use case (yes someone might want to do that). But that would also be achieved by omitting the robust init attrib from the surface\u0027s creation. And the current behavior of other backend\u0027s surface is that it will always initialize its content no matter what source it is from (there is no gate keeping flag) [2]. So that\u0027s reason for the original concern. But the truth is that it actually doesn\u0027t affect IOSurface so LGTM.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/dawn/third_party/angle/src/libANGLE/validationEGL.cpp;drc\u003d82dff63dbf9db05e9274e11d9128af7b9f51ceaa;l\u003d2887\n\n[2] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/SurfaceVk.cpp;drc\u003d82dff63dbf9db05e9274e11d9128af7b9f51ceaa;l\u003d782",
+      "parentUuid": "e3d180d6_29d88325",
+      "range": {
+        "startLine": 114,
+        "startChar": 9,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "834d7f9d_3465f084",
