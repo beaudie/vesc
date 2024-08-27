@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d84e5339_ab1eda9d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-27T10:05:50Z",
+      "side": 0,
+      "message": "Why?\n\nReviewers, please pay attention to unrelated changes.",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 43
+      },
+      "revId": "a2602533e4873be446c9003b6fb254bdaccee698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
