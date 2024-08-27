@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4408d72a_f7a463fa",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-27T09:42:32Z",
+      "side": 1,
+      "message": "\u003e nil color texture is known to be initialized and does not need initialization.\n\nNil color texture has zero pixels.\nNil color texture has zero undefined pixels.\nNil color texture has all its pixels defined.\nColor texture is considered initialized when color texture is nil.\nColor texture contents initialization flag starts as true, because the color texture contents is known to be initialized by the definition that there is no contents. \n\nColor texture initialization flag is modified when color texture is assigned or when the contents is cleared.\n\n\n\u003e imported externally, such as IOSurfaceSurfaceMtl. In this case, it is not guaranteed that the first use of the texture in ANGLE would have zeros data.\n\nThis is beside the point of this patch. However, for the sake of discussion: it\u0027s not defined what should happen, the spec doesn\u0027t say.\n\nHowever, by logic, the surfaces imported via EGL_ANGLE_iosurface_client_buffer are known to be in defined state and not subject to initialization. The API does not make sense otherwise, as it provides mechanism to do a read-only surface. Also the existing code does not work correctly for the inverse assumption case, e.g. the case where creating the Pbuffer surface would clear the underlying IOSurface.\n\n\n\u003e It\u0027s also possible that the EGLSurface is re-created for the same native window and may have contents already.\n\nAlready covered in this patch with the rule that whenever the color buffer is assigned, the contents flag is updated.",
+      "parentUuid": "8557261c_fe232213",
+      "range": {
+        "startLine": 114,
+        "startChar": 9,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "834d7f9d_3465f084",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 2

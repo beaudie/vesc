@@ -22,6 +22,30 @@
       },
       "revId": "b87c67003c577fb40eeafd4167a52a92137dcfed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a49b070_d0755b6b",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-27T09:42:32Z",
+      "side": 1,
+      "message": "\u003e Is there any document specifying that new textures start as zero? Given that when you initialized mColorTextureInitialized to true in previous patchset, the SurfaceInitialized test failed on try bots.\n\nThat was just the existing code being buggy.\n\n\u003e I am not sure that textures\u0027 initial data are always zeros.\n\nIf you read the code, that assumption is not present in the color buffer case or depth buffer, only in the stencil buffer case. I can of course change that for the stencil buffer, for the sake of getting this patch done.",
+      "parentUuid": "d12ce5f8_fc3d874d",
+      "range": {
+        "startLine": 401,
+        "startChar": 71,
+        "endLine": 401,
+        "endChar": 97
+      },
+      "revId": "b87c67003c577fb40eeafd4167a52a92137dcfed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
