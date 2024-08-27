@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t the backends be setting those `multidrawEmulated`/`baseInstanceBaseVertexEmulated`/`baseInstanceEmulated` to false if the feature isn\u0027t emulated? e.g. Vulkan supports it and GL desktop may support it. But currently these `Emulated` flags are set to true and none of the backends modify them, so it just ends up disabling multidraw everywhere.",
       "revId": "6fddb18d77a3b20b1de9c8cfa72966698e937683",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cebf2077_8a15ccbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-27T13:53:36Z",
+      "side": 1,
+      "message": "All backends currently emulate these extensions even if native support is possible so I made the limitation an opt-in:\n\nAll `ContextImpl::multiDraw*` entry points call `rx::MultiDrawArraysGeneral` which loops, sets uniforms and draws. [0]\n\n`Context::*BaseInstance` functions emulate using a uniform in the frontend. [1]\n\nIf we directly make API calls for these, we can mark them as non-emulated for VK/GL.\n\n[0] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp;l\u003d4290;drc\u003d82dff63dbf9db05e9274e11d9128af7b9f51ceaa\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Context.cpp;l\u003d6655;drc\u003dda5721601b98255415e63eeac78cd71f8d5c5b94",
+      "parentUuid": "a137e0ac_281c5dba",
+      "revId": "6fddb18d77a3b20b1de9c8cfa72966698e937683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
