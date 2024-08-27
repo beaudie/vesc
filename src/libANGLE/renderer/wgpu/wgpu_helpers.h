@@ -35,6 +35,13 @@ enum class UpdateSource
     Texture,
 };
 
+struct ClearUpdate
+{
+    ClearValues clearValues;
+    bool hasDepth;
+    bool hasStencil;
+};
+
 struct SubresourceUpdate
 {
     SubresourceUpdate() {}
@@ -51,15 +58,19 @@ struct SubresourceUpdate
 
     SubresourceUpdate(UpdateSource targetUpdateSource,
                       gl::LevelIndex newTargetLevel,
-                      ClearValues clearUpdate)
+                      ClearValues clearValues,
+                      bool hasDepth,
+                      bool hasStencil)
     {
         updateSource = targetUpdateSource;
         targetLevel  = newTargetLevel;
-        clearData    = clearUpdate;
+        clearData.clearValues = clearValues;
+        clearData.hasDepth    = hasDepth;
+        clearData.hasStencil  = hasStencil;
     }
 
     UpdateSource updateSource;
-    ClearValues clearData;
+    ClearUpdate clearData;
     wgpu::ImageCopyBuffer textureData;
 
     gl::LevelIndex targetLevel;
@@ -107,7 +118,10 @@ class ImageHelper
                                      const gl::ImageIndex &index,
                                      const uint8_t *pixels);
 
-    void stageClear(gl::LevelIndex targetLevel, ClearValues clearValues);
+    void stageClear(gl::LevelIndex targetLevel,
+                    ClearValues clearValues,
+                    bool hasDepth,
+                    bool hasStencil);
 
     void removeStagedUpdates(gl::LevelIndex levelToRemove);
 

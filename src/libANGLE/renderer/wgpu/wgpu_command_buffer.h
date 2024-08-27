@@ -159,7 +159,9 @@ struct SetStencilReferenceCommand
 
 struct SetVertexBufferCommand
 {
-    uint64_t pad;
+    uint32_t slot;
+    uint32_t pad;
+    wgpu::Buffer buffer;
 };
 
 struct SetViewportCommand
@@ -210,6 +212,7 @@ class CommandBuffer
     void setPipeline(wgpu::RenderPipeline pipeline);
     void setScissorRect(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
     void setViewport(float x, float y, float width, float height, float minDepth, float maxDepth);
+    void setVertexBuffer(uint32_t slot, wgpu::Buffer buffer);
 
     void clear();
 
