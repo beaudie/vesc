@@ -16,6 +16,24 @@
       "message": "Some tabs to be cleaned up. Also, we don\u0027t expect this to be disabled right? You don\u0027t need a feature for it TBH. Worst case, we may need a `Workarounds` feature to disable it where problematic, which we can add if necessary.",
       "revId": "64e664f3724da43d95cc7b323caf73b83de58003",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f231d508_1cb8f8cf",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-27T21:08:38Z",
+      "side": 1,
+      "message": "It seems that we don\u0027t need to disable this feature yet.\n\nOne reason I added this feature was that some platforms were failing in some stencil-only tests. However, it looks like they also fail in other stencil-only tests (currently being skipped).",
+      "parentUuid": "9d7eead0_26fa4a76",
+      "revId": "64e664f3724da43d95cc7b323caf73b83de58003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
