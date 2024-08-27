@@ -16,6 +16,29 @@
       "message": "LGTM, +Geoff for review since this touches core ANGLE.",
       "revId": "a3c131db4563d21cc66be500541c58e0484ab877",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "666c0c6d_9741e23f",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-08-27T14:03:20Z",
+      "side": 1,
+      "message": "OES_framebuffer_object also says the following color formats are allowed as renderbuffers:\n\n```\nRGBA4_OES\nRGB5_A1_OES\nRGB565_OES\n```\n\nCan you make sure they\u0027re added too?",
+      "range": {
+        "startLine": 1109,
+        "startChar": 279,
+        "endLine": 1109,
+        "endChar": 294
+      },
+      "revId": "a3c131db4563d21cc66be500541c58e0484ab877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
