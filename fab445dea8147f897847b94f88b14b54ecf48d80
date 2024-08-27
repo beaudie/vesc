@@ -68,6 +68,23 @@
       "message": "Some failures in https://ci.chromium.org/ui/p/angle/builders/try/linux-exp-test/18/overview are due to https://chromium-review.googlesource.com/c/angle/angle/+/5798053, let\u0027s try running again.\n\nI wish I could add the footer for you, but then I won\u0027t be able to be reviewer.",
       "revId": "fab445dea8147f897847b94f88b14b54ecf48d80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d5f88fb_911a6a38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-27T13:40:21Z",
+      "side": 1,
+      "message": "Triggered https://ci.chromium.org/ui/p/angle/builders/try/linux-exp-test/19/overview.",
+      "revId": "fab445dea8147f897847b94f88b14b54ecf48d80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
