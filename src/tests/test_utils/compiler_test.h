@@ -90,6 +90,8 @@ class MatchOutputCodeTest : public testing::Test
     // Test that the string is found in none of the outputs
     bool notFoundInCode(const char *stringToFind) const;
 
+    std::map<ShShaderOutput, std::string> mOutputCode;
+
   private:
     bool compileWithSettings(ShShaderOutput output,
                              const std::string &shaderString,
@@ -100,8 +102,6 @@ class MatchOutputCodeTest : public testing::Test
     GLenum mShaderType;
     ShCompileOptions mDefaultCompileOptions;
     ShBuiltInResources mResources;
-
-    std::map<ShShaderOutput, std::string> mOutputCode;
 };
 
 // Returns a pointer to a function call node with a mangled name functionName.
