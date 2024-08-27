@@ -170,6 +170,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e3d180d6_29d88325",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-27T12:34:32Z",
+      "side": 1,
+      "message": "\u003e Currently the spec allows the IOSurface to be imported as RGB as well, and it would clear the IOSurface\u0027s alpha channel to 1 (as stated in the spec).\n\nThis further indicates that the position is that the existing contents is the one that the caller wants preserved.\n\nWhy would it set the *ALPHA* channel only? The obvious point is that it wants to preserve RGB part as-is. What logic it would be to first overwrite alpha with 1.0 and then later overwrite RGB with 0.?",
+      "parentUuid": "a9bd2b9b_76ea55c7",
+      "range": {
+        "startLine": 114,
+        "startChar": 9,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "834d7f9d_3465f084",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 2
