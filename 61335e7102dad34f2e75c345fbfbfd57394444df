@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e179bc8_680a9f52",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-27T18:07:33Z",
+      "side": 1,
+      "message": "Updated the validation to use `getImageDesc().format.valid()` in the texture state, with this error message:\n```\nGL error: HIGH: The destination level of the destination texture must be defined\n```\n\nRegarding no-op for 0 dimension for the clear area, do you mean returning from the call before entering any backend? In that case, assertions can be added to the Vulkan backend.",
+      "parentUuid": "33809074_394f7d46",
+      "range": {
+        "startLine": 323,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 80
+      },
+      "revId": "61335e7102dad34f2e75c345fbfbfd57394444df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1adc123e_9caa49c9",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 2
