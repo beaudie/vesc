@@ -22,6 +22,30 @@
       },
       "revId": "e8b7f167bca6c4d58532643563593ddb22a8d3f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05078bce_cdeef304",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-08-27T17:51:43Z",
+      "side": 1,
+      "message": "Done, it shouldn\u0027t take too long to manually approve the images.",
+      "parentUuid": "9e7ccd01_bc8e2119",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 43
+      },
+      "revId": "e8b7f167bca6c4d58532643563593ddb22a8d3f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
