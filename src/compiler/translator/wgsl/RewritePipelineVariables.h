@@ -117,9 +117,6 @@ namespace sh
 // generated even though they won't be present in the GLSL AST. Same with the main function
 // parameters/return type, and the initialization of ANGLE_input and the return of ANGLE_ouput by
 // the main function.
-//
-// TODO(anglebug.com/42267100): for now this only deals with builtins, and not user-defined
-// inputs/outputs.
 const char kBuiltinInputStructType[]  = "ANGLE_Input";
 const char kBuiltinOutputStructType[] = "ANGLE_Output";
 const char kBuiltinInputStructName[]  = "ANGLE_input";
@@ -146,8 +143,6 @@ using PipelineAnnotationsMap = TMap<const TField *, PipelineAnnotation>;
 // Since WGSL does not allow empty structs, outvariables `needsInputStructOut` and
 // `needsOutputStructOut` indicate whether the structs should be used or not.
 // TODO(anglebug.com/42267100): collect outvariables into a struct.
-// TODO(anglebug.com/42267100): for now this only deals with builtins, and not user-defined
-// inputs/outputs.
 [[nodiscard]] bool PartiallyRewritePipelineVariables(TCompiler &compiler,
                                                      TIntermBlock &root,
                                                      PipelineAnnotationsMap &pipelineAnnotationsMap,
