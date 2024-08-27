@@ -61,18 +61,7 @@ constexpr size_t kArrayLen = 0x00000004;
 
 namespace ClearTexture_comp
 {
-enum PixelSize
-{
-    kPixel1Byte   = 0x00000000,
-    kPixel2Byte   = 0x00000001,
-    kPixel3Byte   = 0x00000002,
-    kPixel4Byte   = 0x00000003,
-    kPixel4ByteDS = 0x00000004,
-    kPixel8Byte   = 0x00000005,
-    kPixel8ByteDS = 0x00000006,
-    kPixel16Byte  = 0x00000007,
-};
-constexpr size_t kArrayLen = 0x00000008;
+constexpr size_t kArrayLen = 0x00000001;
 }  // namespace ClearTexture_comp
 
 namespace ConvertIndex_comp

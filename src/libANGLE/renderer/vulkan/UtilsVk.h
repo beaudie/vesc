@@ -414,8 +414,11 @@ class UtilsVk : angle::NonCopyable
         ClearTextureShaderParams();
 
         // Structure matching PushConstants in ClearTexture.comp
-        uint32_t data[4]    = {0};
-        uint32_t texelCount = 0;
+        uint32_t data[4]            = {0};
+        uint32_t texelCount         = 0;
+        uint32_t maxThreadId        = 0;
+        uint32_t dataSize           = 0;
+        uint32_t hasDepthAndStencil = 0;
     };
 
     struct ImageClearShaderParams

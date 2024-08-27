@@ -51,13 +51,6 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000002.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000003.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000000.inc"
-#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000001.inc"
-#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000002.inc"
-#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000003.inc"
-#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000004.inc"
-#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000005.inc"
-#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000006.inc"
-#include "libANGLE/renderer/vulkan/shaders/gen/ClearTexture.comp.00000007.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000002.inc"
@@ -224,13 +217,6 @@ constexpr CompressedShaderBlob kBlitResolveStencilNoExport_comp_shaders[] = {
 };
 constexpr CompressedShaderBlob kClearTexture_comp_shaders[] = {
     {kClearTexture_comp_00000000, sizeof(kClearTexture_comp_00000000)},
-    {kClearTexture_comp_00000001, sizeof(kClearTexture_comp_00000001)},
-    {kClearTexture_comp_00000002, sizeof(kClearTexture_comp_00000002)},
-    {kClearTexture_comp_00000003, sizeof(kClearTexture_comp_00000003)},
-    {kClearTexture_comp_00000004, sizeof(kClearTexture_comp_00000004)},
-    {kClearTexture_comp_00000005, sizeof(kClearTexture_comp_00000005)},
-    {kClearTexture_comp_00000006, sizeof(kClearTexture_comp_00000006)},
-    {kClearTexture_comp_00000007, sizeof(kClearTexture_comp_00000007)},
 };
 constexpr CompressedShaderBlob kConvertIndex_comp_shaders[] = {
     {kConvertIndex_comp_00000000, sizeof(kConvertIndex_comp_00000000)},

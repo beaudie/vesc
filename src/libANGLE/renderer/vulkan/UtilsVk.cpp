@@ -2369,8 +2369,13 @@ angle::Result UtilsVk::clearTexture(ContextVk *contextVk,
     // Initialize shader parameters.
     ClearTextureShaderParams shaderParams;
     shaderParams.texelCount = bufferTexels;
+    shaderParams.dataSize   = dataSize;
+    shaderParams.maxThreadId =
+        (dataSize < 4) ? UnsignedCeilDivide(bufferTexels * dataSize, 4) : bufferTexels;
+    shaderParams.hasDepthAndStencil = (shouldClearDS) ? 1 : 0;
     memcpy(shaderParams.data, data, dataSize);
 
+    // The input data is prepared for a more efficient copy op in the shader based on its size.
     // For textures with both depth and stencil components, the data for the two components will be
     // split and applied separately.
     uint32_t flags = 0;
@@ -2378,34 +2383,56 @@ angle::Result UtilsVk::clearTexture(ContextVk *contextVk,
     {
         case 1:
         {
-            flags |= ClearTexture_comp::kPixel1Byte;
+            uint32_t tempData    = shaderParams.data[0] & 0xFF;
+            shaderParams.data[0] = tempData | (tempData << 8) | (tempData << 16) | (tempData << 24);
             break;
         }
         case 2:
         {
-            flags |= ClearTexture_comp::kPixel2Byte;
+            uint32_t tempData    = shaderParams.data[0] & 0xFFFF;
+            shaderParams.data[0] = tempData | (tempData << 16);
             break;
         }
         case 3:
         {
-            flags |= ClearTexture_comp::kPixel3Byte;
+            uint32_t tempData    = shaderParams.data[0] & 0xFFFFFF;
+            shaderParams.data[0] = tempData | (tempData << 24);
+            shaderParams.data[1] = (tempData >> 8) | (tempData << 16);
+            shaderParams.data[2] = (tempData >> 16) | (tempData << 8);
             break;
         }
         case 4:
         {
-            flags |=
-                (shouldClearDS) ? ClearTexture_comp::kPixel4ByteDS : ClearTexture_comp::kPixel4Byte;
+            if (shouldClearDS)
+            {
+                uint32_t tempDepthData   = shaderParams.data[0] & 0xFFFFFF;
+                uint32_t tempStencilData = shaderParams.data[0] >> 24;
+                shaderParams.data[0]     = tempDepthData;
+                shaderParams.data[1]     = tempStencilData | (tempStencilData << 8) |
+                                       (tempStencilData << 16) | (tempStencilData << 24);
+            }
+            break;
+        }
+        case 6:
+        {
+            UNIMPLEMENTED();
             break;
         }
         case 8:
         {
-            flags |=
-                (shouldClearDS) ? ClearTexture_comp::kPixel8ByteDS : ClearTexture_comp::kPixel8Byte;
+            if (shouldClearDS)
+            {
+                uint32_t tempDepthData   = shaderParams.data[0];
+                uint32_t tempStencilData = shaderParams.data[1] & 0xFF;
+                shaderParams.data[0]     = tempDepthData;
+                shaderParams.data[1]     = tempStencilData | (tempStencilData << 8) |
+                                       (tempStencilData << 16) | (tempStencilData << 24);
+            }
             break;
         }
+        case 12:
         case 16:
         {
-            flags |= ClearTexture_comp::kPixel16Byte;
             break;
         }
         default:
