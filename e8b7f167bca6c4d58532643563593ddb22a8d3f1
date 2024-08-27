@@ -70,6 +70,30 @@
       },
       "revId": "e8b7f167bca6c4d58532643563593ddb22a8d3f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91fe548_b4562630",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-08-27T18:20:44Z",
+      "side": 1,
+      "message": "It may be possible to add a fallback that has us download all the positive images for the test and find the most similar one out of all of those to use. That would add a very large amount of overhead to the tests if we end up needing to use it, though. I also wouldn\u0027t want to add that until the automatic cleanup of old/unused images is live. Last I heard from Kaylee, the plan was to roll that to all instances eventually but they were still trialing it on Skia\u0027s instance.",
+      "parentUuid": "37daef5f_ac60bb19",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 43
+      },
+      "revId": "e8b7f167bca6c4d58532643563593ddb22a8d3f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b75ecf02_a73168e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-08-27T18:20:44Z",
+      "side": 1,
+      "message": "Triaged images. Everything looked good except for `life_is_strange`, which as some pretty obvious artifacting. I\u0027ve left that untriaged for you to take a look at.\n\nI\u0027ll suppress the other failures in the meantime.",
+      "revId": "d49a9adc7dac515360bc30f58faf531934f84d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
