@@ -46,6 +46,30 @@
       },
       "revId": "b87c67003c577fb40eeafd4167a52a92137dcfed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c511328_8e82b1d2",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-27T10:49:33Z",
+      "side": 1,
+      "message": "\u003e That was just the existing code being buggy.\n\nThe existing code didn\u0027t assume that the color texture content was already intialized. It set `mContentInitialized` to false by default, thus it didn\u0027t fail `SurfaceInitialized` test.\n\nActually I would like the know the official metal doc about mtl textures starting as zero. I only saw the spec saying `newBufferWithLength` will zeroize buffers\u0027 bytes, but nothing about `newTextureWithDescriptor`. This is a genuine question, since it would be useful to know and document internally.",
+      "parentUuid": "0a49b070_d0755b6b",
+      "range": {
+        "startLine": 401,
+        "startChar": 71,
+        "endLine": 401,
+        "endChar": 97
+      },
+      "revId": "b87c67003c577fb40eeafd4167a52a92137dcfed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

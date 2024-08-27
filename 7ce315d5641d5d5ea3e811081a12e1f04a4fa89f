@@ -122,6 +122,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a393641_cb69e98f",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-08-27T10:49:33Z",
+      "side": 1,
+      "message": "AFAIK `EGL_ANGLE_iosurface_client_buffer` doesn\u0027t say anything about importing the IOSurface as readonly. Hence the readonly statement doesn\u0027t make any sense. Currently the spec allows the IOSurface to be imported as RGB as well, and it would clear the IOSurface\u0027s alpha channel to 1 (as stated in the spec).\n\nRobust resource init spec also has the following overview:\n```\n    This initialization ensures that access will not be provided by the\n    GL to previously allocated data not owned by the application.\n```\nSeems to indicate it should clear the previous data not owned by the application.\n\n\u003e This is beside the point of this patch. However, for the sake of discussion: it\u0027s not defined what should happen, the spec doesn\u0027t say.\n\nIf it\u0027s not the point of this patch, then I think we probably shouldn\u0027t change the way color texture\u0027s initialized flag is set in this CL. This patch is about `clearing depth`, isn\u0027t it? FWIW \"initializing `mColorTextureInitialized` to true because color texture is initially Nil\" is a bit confusing to me. That flag is only used in `initializeContents` to avoid redundant clear. But inside that function, `mColorTexutere` must be **non-nil** by this point. In other words, there is no such case as `nil color texture` for the purposes of considering initializing contents. Color texture is never nil when it\u0027s used, it\u0027s just simply lazily created.\n\nThese are my two cents. Making `mColorTextureInitialized \u003d true` by default could change the way IOSurface pbuffer is initialized currently. That would affect chrome\u0027s assumptions. @Goeff WDYT.",
+      "parentUuid": "4408d72a_f7a463fa",
+      "range": {
+        "startLine": 114,
+        "startChar": 9,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "7ce315d5641d5d5ea3e811081a12e1f04a4fa89f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "834d7f9d_3465f084",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 2
