@@ -22,6 +22,30 @@
       },
       "revId": "a2602533e4873be446c9003b6fb254bdaccee698",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36938272_ff3e6ace",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-08-27T16:08:14Z",
+      "side": 0,
+      "message": "See that these got in as part of patchest 6. Probably a rebase miss from me :(. See that this patch got reverted. I will sumbit a new patchset with the fixes. I am reading that these omissions are causing the regressions -- let me know if you found something else with other changes in this patch.",
+      "parentUuid": "d84e5339_ab1eda9d",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 43
+      },
+      "revId": "a2602533e4873be446c9003b6fb254bdaccee698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
