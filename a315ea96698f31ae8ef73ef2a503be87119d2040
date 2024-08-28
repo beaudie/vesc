@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "080115a2_ce0e68ea",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-08-28T18:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33371b62_e1b6d86a",
+      "range": {
+        "startLine": 169,
+        "startChar": 32,
+        "endLine": 169,
+        "endChar": 76
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f21d8f5d_28173a31",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-08-28T15:34:32Z",
       "side": 1,
       "message": "Maybe will pass after VUID-vkCmdDraw-None-02721 is suppressed, try removing.",
+      "range": {
+        "startLine": 170,
+        "startChar": 32,
+        "endLine": 170,
+        "endChar": 92
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b8110c5_a76c99f5",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-08-28T18:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f21d8f5d_28173a31",
       "range": {
         "startLine": 170,
         "startChar": 32,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27d14a5f_615ba14c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1740,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-08-28T18:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2809bdf_5fcea7a8",
+      "range": {
+        "startLine": 1740,
+        "startChar": 21,
+        "endLine": 1740,
+        "endChar": 31
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56c6d64b_7713f643",
@@ -93,6 +165,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "333685ca_e16e0e56",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-08-28T18:05:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "56c6d64b_7713f643",
+      "range": {
+        "startLine": 1746,
+        "startChar": 12,
+        "endLine": 1746,
+        "endChar": 48
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f43ce4ab_65542b09",
@@ -106,6 +202,30 @@
       "writtenOn": "2024-08-28T15:34:32Z",
       "side": 1,
       "message": "Also VUID-vkCmdDraw-None-02721.",
+      "range": {
+        "startLine": 1802,
+        "startChar": 21,
+        "endLine": 1802,
+        "endChar": 45
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ce9dad8_a773e5e1",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-08-28T18:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f43ce4ab_65542b09",
       "range": {
         "startLine": 1802,
         "startChar": 21,
