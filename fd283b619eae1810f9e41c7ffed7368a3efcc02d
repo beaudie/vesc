@@ -70,6 +70,30 @@
       },
       "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05ded2db_61336cb7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-28T19:15:45Z",
+      "side": 1,
+      "message": "\u003e Have you disabled ANGLE\u0027s program cache? \n\nYes.\nDisabled shaders and programs.\nPreviously we used different blob caches for Programs/Shaders and for the Pipeline Cache.\n\n\u003e Not exactly, it could also happen if the application gets killed. \n\nI disagree.\n\nEven if app killed (same as terminated - problem 1) with dual slots, as long as writing new data fits into the cache without eviction - no corruption of old data. Only after fully writing new data we erase old data. So there is no point in time when we do not have complete set of data.\n\n\u003e But in particular, my example was for when you don\u0027t have dual slots, so V2 would overwrite the last chunks of V1.\n\nSorry, it was not clear to me. My understanding was V1 - first slot (old data), V2 - second (new data).\n\n\u003e FWIW, I have little objection to dual slot, that\u0027s obviously safer, \nthough we should be able to support both single and dual slots (so ANGLE\n wouldn\u0027t thrash the cache by double storage on devices with a small \nblob cache)\n\nDual slots is an option. Enabled by the `useDualPipelineBlobCacheSlots` feature.\nI may disable feature by default.\n\nThere is no trashing, since old data is erased.\nOnly negative is that writing 2 slots will evict other data (Shaders/Programs)...\n\u003e which would hopefully not be a problem for Samsung.\n\nI hope so too, but think that this may take some time.\n\n\u003e My suggestion is to prioritize fixing LRU in blob cache, it\u0027s a good change for all applications!\n\nI already fixed LRU in the blob cache and shared patches. But since I\u0027m not in control, I do no know when fixes will be applied.\n\nI implemented verify code in ANGLE as a worse case for platforms that does not have LRU cache.\n\nWithout verification and full blob cache, every store may end up with partial data if there is no LRU.\n\n\u003e Agreed, let\u0027s do both?\n\nYes.\n\nBut I think split into at least 3 CLs:\n1. dual slots (problem 1 in this CL)\n2. verify store after eviction (problem 2 in this CL) - may skip if always assume blob cache with conservative LRU eviction\n3. partial load support in ANGLE.",
+      "parentUuid": "4e6ba2f7_82e55f7b",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 47
+      },
+      "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
