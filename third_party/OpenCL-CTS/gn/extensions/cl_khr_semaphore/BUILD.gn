@@ -4,10 +4,25 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("cl_khr_semaphore") {
-  include_dirs = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_semaphore" ]
+ocl_cts_source("cl_khr_semaphore") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_semaphore/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_semaphore/test_semaphores.cpp",
   ]
+}
+
+ocl_cts_binary("cl_khr_semaphore") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_semaphore" ]
+  deps = [ ":source_test_cl_khr_semaphore" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_semaphore/main.cpp", ]
+}
+
+ocl_cts_library("cl_khr_semaphore") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_semaphore",
+  ]
+  deps = [ ":source_test_cl_khr_semaphore" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

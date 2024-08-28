@@ -4,15 +4,29 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("workgroups") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups" ]
+ocl_cts_source("workgroups") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups/test_wg_all.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups/test_wg_any.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups/test_wg_broadcast.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups/test_wg_scan_reduce.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups/test_wg_suggested_local_work_size.cpp",
   ]
+}
+
+ocl_cts_binary("workgroups") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups" ]
+  deps = [ ":source_test_workgroups" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups/main.cpp", ]
+}
+
+ocl_cts_library("workgroups") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/workgroups",
+  ]
+  deps = [ ":source_test_workgroups" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

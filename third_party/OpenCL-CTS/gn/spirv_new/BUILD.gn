@@ -3,14 +3,10 @@
 # found in the LICENSE file.
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
-
-ocl_cts_binary("spirv_new") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new" ]
+ocl_cts_source("spirv_new") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/reference_math.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/utility.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new/test_basic_versions.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new/test_cl_khr_spirv_no_integer_wrap_decoration.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new/test_decorate.cpp",
@@ -36,4 +32,21 @@ ocl_cts_binary("spirv_new") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new/test_op_vector_insert.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new/test_op_vector_times_scalar.cpp",
   ]
+}
+
+ocl_cts_binary("spirv_new") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new" ]
+  deps = [ ":source_test_spirv_new" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new/main.cpp", ]
+}
+
+ocl_cts_library("spirv_new") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/spirv_new",
+  ]
+  deps = [ ":source_test_spirv_new" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

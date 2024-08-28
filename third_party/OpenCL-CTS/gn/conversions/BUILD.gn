@@ -14,3 +14,19 @@ ocl_cts_binary("conversions") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/conversions/test_conversions.cpp",
   ]
 }
+
+ocl_cts_library("conversions") {
+  testonly = true
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/",
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/",
+  ]
+  deps = [ "$angle_root/third_party/googletest:gtest", ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/conversions/Sleep.cpp",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/conversions/basic_test_conversions.cpp",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/conversions/fplib.cpp",
+    "$angle_root/third_party/OpenCL-CTS/gtest/conversions_wrapper.cpp",
+  ]
+}

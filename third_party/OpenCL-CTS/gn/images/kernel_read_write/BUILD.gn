@@ -4,15 +4,9 @@
 
 import("//gni/angle.gni")
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
-
-ocl_cts_binary("image_streams") {
-  include_dirs = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/",
-  ]
+ocl_cts_source("image_streams") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/common.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write/test_cl_ext_image_from_buffer.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write/test_cl_ext_image_requirements_info.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write/test_common.cpp",
@@ -28,4 +22,21 @@ ocl_cts_binary("image_streams") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write/test_write_3D.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write/test_write_image.cpp",
   ]
+}
+
+ocl_cts_binary("image_streams") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write" ]
+  deps = [ ":source_test_image_streams" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write/main.cpp", ]
+}
+
+ocl_cts_library("image_streams") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/kernel_read_write",
+  ]
+  deps = [ ":source_test_image_streams" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

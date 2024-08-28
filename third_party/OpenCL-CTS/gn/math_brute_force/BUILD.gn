@@ -3,11 +3,7 @@
 # found in the LICENSE file.
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
-
-ocl_cts_binary("brute_force") {
-  include_dirs = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force",
-  ]
+ocl_cts_source("bruteforce") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/binary_double.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/binary_float.cpp",
@@ -27,7 +23,6 @@ ocl_cts_binary("brute_force") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/macro_unary_float.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/mad_double.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/mad_float.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/reference_math.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/sleep.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/ternary_double.cpp",
@@ -42,4 +37,21 @@ ocl_cts_binary("brute_force") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/unary_u_float.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/utility.cpp",
   ]
+}
+
+ocl_cts_binary("bruteforce") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force" ]
+  deps = [ ":source_test_bruteforce" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force/main.cpp", ]
+}
+
+ocl_cts_library("bruteforce") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/math_brute_force",
+  ]
+  deps = [ ":source_test_bruteforce" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

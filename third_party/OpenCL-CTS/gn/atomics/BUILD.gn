@@ -4,12 +4,26 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("atomics") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/atomics/" ]
+ocl_cts_source("atomics") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/atomics/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/atomics/test_atomics.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/atomics/test_indexed_cases.cpp",
   ]
+}
+
+ocl_cts_binary("atomics") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/atomics" ]
+  deps = [ ":source_test_atomics" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/atomics/main.cpp", ]
+}
+
+ocl_cts_library("atomics") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/atomics",
+  ]
+  deps = [ ":source_test_atomics" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

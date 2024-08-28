@@ -4,15 +4,29 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("vectors") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors" ]
+ocl_cts_source("vectors") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors/globals.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors/structs.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors/test_step.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors/test_vec_align.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors/type_replacer.cpp",
   ]
+}
+
+ocl_cts_binary("vectors") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors" ]
+  deps = [ ":source_test_vectors" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors/main.cpp", ]
+}
+
+ocl_cts_library("vectors") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/vectors",
+  ]
+  deps = [ ":source_test_vectors" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

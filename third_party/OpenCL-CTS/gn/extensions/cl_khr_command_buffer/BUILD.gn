@@ -4,8 +4,7 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("cl_khr_command_buffer") {
-  include_dirs = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer" ]
+ocl_cts_source("cl_khr_command_buffer") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer/basic_command_buffer.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer/command_buffer_event_sync.cpp",
@@ -20,7 +19,23 @@ ocl_cts_binary("cl_khr_command_buffer") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer/command_buffer_test_copy.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer/command_buffer_test_event_info.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer/command_buffer_test_fill.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer/svm_command_basic.cpp",
   ]
+}
+
+ocl_cts_binary("cl_khr_command_buffer") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer" ]
+  deps = [ ":source_test_cl_khr_command_buffer" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer/main.cpp", ]
+}
+
+ocl_cts_library("cl_khr_command_buffer") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/extensions/cl_khr_command_buffer",
+  ]
+  deps = [ ":source_test_cl_khr_command_buffer" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

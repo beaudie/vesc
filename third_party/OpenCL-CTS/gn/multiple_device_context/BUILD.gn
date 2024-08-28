@@ -4,11 +4,26 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("multiples") {
-  include_dirs = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/multiple_device_context" ]
+ocl_cts_source("multiples") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/multiple_device_context/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/multiple_device_context/test_multiple_contexts.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/multiple_device_context/test_multiple_devices.cpp",
   ]
+}
+
+ocl_cts_binary("multiples") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/multiple_device_context" ]
+  deps = [ ":source_test_multiples" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/multiple_device_context/main.cpp", ]
+}
+
+ocl_cts_library("multiples") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/multiple_device_context",
+  ]
+  deps = [ ":source_test_multiples" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

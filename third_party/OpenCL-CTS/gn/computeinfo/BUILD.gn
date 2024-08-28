@@ -4,14 +4,28 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("computeinfo") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/computeinfo" ]
+ocl_cts_source("computeinfo") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/computeinfo/conforming_version.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/computeinfo/device_uuid.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/computeinfo/extended_versioning.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/computeinfo/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/computeinfo/pci_bus_info.cpp",
   ]
+}
+
+ocl_cts_binary("computeinfo") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/computeinfo" ]
+  deps = [ ":source_test_computeinfo" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/computeinfo/main.cpp", ]
+}
+
+ocl_cts_library("computeinfo") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/computeinfo",
+  ]
+  deps = [ ":source_test_computeinfo" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

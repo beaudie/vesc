@@ -12,3 +12,17 @@ ocl_cts_binary("printf") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/printf/util_printf.cpp",
   ]
 }
+
+ocl_cts_library("printf") {
+  testonly = true
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/",
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/",
+  ]
+  deps = [ "$angle_root/third_party/googletest:gtest", ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/printf/util_printf.cpp",
+    "$angle_root/third_party/OpenCL-CTS/gtest/printf_wrapper.cpp",
+  ]
+}

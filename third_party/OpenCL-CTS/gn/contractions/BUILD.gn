@@ -3,9 +3,16 @@
 # found in the LICENSE file.
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
-
 ocl_cts_binary("contractions") {
   include_dirs =
       [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/contractions" ]
-  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/contractions/contractions.cpp" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/contractions/contractions.cpp", ]
+}
+
+ocl_cts_library("contractions") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/contractions",
+  ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/gtest/contractions_wrapper.cpp", ]
 }

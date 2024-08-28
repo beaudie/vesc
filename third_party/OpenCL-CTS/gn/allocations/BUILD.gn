@@ -4,14 +4,28 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("allocations") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/allocations" ]
+ocl_cts_source("allocations") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/allocations/allocation_execute.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/allocations/allocation_fill.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/allocations/allocation_functions.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/allocations/allocation_utils.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/allocations/main.cpp",
   ]
+}
+
+ocl_cts_binary("allocations") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/allocations" ]
+  deps = [ ":source_test_allocations" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/allocations/main.cpp", ]
+}
+
+ocl_cts_library("allocations") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/allocations",
+  ]
+  deps = [ ":source_test_allocations" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }
