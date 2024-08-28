@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "849824a0_c48dd1e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-08-28T00:49:51Z",
+      "side": 1,
+      "message": "lgtm+2\n\nVerified that all code paths are identical to earlier, just with the availability macro removed.",
+      "revId": "7b30dd0bdada191f60810e8b1a3333d4cc69daf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
