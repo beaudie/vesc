@@ -46,6 +46,30 @@
       },
       "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e6ba2f7_82e55f7b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-28T18:49:12Z",
+      "side": 1,
+      "message": "\u003e In our use case, blob cache is exclusively used to write the VkPipelineCache data, and does not affected by this problem.\n\nHave you disabled ANGLE\u0027s program cache? Every glProgramLink also writes to the blob cache.\n\n\u003e This is only true in case when new + old data size more than blob cache capacity\n\nNot exactly, it could also happen if the application gets killed. But in particular, my example was for when you _don\u0027t_ have dual slots, so V2 would overwrite the last chunks of V1. FWIW, I have little objection to dual slot, that\u0027s obviously safer, though we should be able to support both single and dual slots (so ANGLE wouldn\u0027t thrash the cache by double storage on devices with a small blob cache).\n\n\u003e Proposed solution will improve nothing if driver requires full data\n\nRight, my proposal is to ask drivers nicely to support this pattern, which would hopefully not be a problem for Samsung.\n\n\u003e Without slots, writing new data will overwrite old data starting from last to 0 chunk. Terminating application before writing 0 chunk will partially erase old data\n\nAlso correct, again if we have a configuration that uses dual slots and enable that on Samsung (which has a big blob cache), that\u0027s totally fine!\n\n\u003e Verify is only used if Blob Cache does not have LRU that evicts only necessary blobs\n\nMy suggestion is to prioritize fixing LRU in blob cache, it\u0027s a good change for all applications!\n\n\u003e May try to switch to 8M chunks and compress each individually.\n\nOh right, that\u0027d be easier!\n\n\u003e In other words, partial recover will make loading more robust, while dual slots - storing.\n\nAgreed, let\u0027s do both?",
+      "parentUuid": "f90321d7_e803324d",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 47
+      },
+      "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
