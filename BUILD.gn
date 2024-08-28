@@ -125,6 +125,7 @@ if (angle_build_all) {
     if (angle_build_mesa) {
       deps += [ "$angle_root/third_party/mesa" ]
     }
+    deps += [ "$angle_root/third_party/OpenCL-CTS/:cts" ]
   }
 }
 
