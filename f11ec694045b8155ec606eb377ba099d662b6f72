@@ -16,6 +16,24 @@
       "message": "Probably? Haven\u0027t verified deeply",
       "revId": "f11ec694045b8155ec606eb377ba099d662b6f72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f992fd46_d82009d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-28T14:58:00Z",
+      "side": 1,
+      "message": "I have reproduces `ASSERT(mSize \u003e 0);` in `FixedQueue\u003cT\u003e::pop()` by inserting sleep into the `ConcurrentPushPopWithResize` test.\n\nIt is just in the failed test there is no ASSERT - only unknown crash:\nhttps://ci.chromium.org/ui/p/angle/builders/try/mac-test/b8738432941440950449/test-results?q\u003dExactID%3Aninja%3A%2F%2Fsrc%2Ftests%3Aangle_unittests%2FFixedQueue.ConcurrentPushPopWithResize+VHash%3A0091e5aa8570c346\u0026clean\u003d\u0026sortby\u003d\u0026groupby\u003d\u0026cols\u003d\n\nI checked `FixedQueue` class and the test and did not find other errors. But I\u0027m not sure that the error that I found caused the crash that happening some times in `mac-test`.",
+      "parentUuid": "a736730a_86f43ff3",
+      "revId": "f11ec694045b8155ec606eb377ba099d662b6f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
