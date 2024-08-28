@@ -4,14 +4,8 @@
 
 import("//gni/angle.gni")
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
-
-ocl_cts_binary("cl_copy_images") {
-  include_dirs = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/clCopyImage",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/",
-  ]
+ocl_cts_source("cl_copy_images") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/clCopyImage/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/clCopyImage/test_copy_1D.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/clCopyImage/test_copy_1D_array.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/clCopyImage/test_copy_2D.cpp",
@@ -24,4 +18,21 @@ ocl_cts_binary("cl_copy_images") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/clCopyImage/test_loops.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/common.cpp",
   ]
+}
+
+ocl_cts_binary("cl_copy_images") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/clCopyImage" ]
+  deps = [ ":source_test_cl_copy_images" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/clCopyImage/main.cpp", ]
+}
+
+ocl_cts_library("cl_copy_images") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/images/clCopyImage",
+  ]
+  deps = [ ":source_test_cl_copy_images" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

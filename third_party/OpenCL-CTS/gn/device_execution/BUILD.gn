@@ -4,10 +4,7 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("device_execution") {
-  include_dirs = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution",
-  ]
+ocl_cts_source("device_execution") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution/device_info.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution/device_queue.cpp",
@@ -20,8 +17,24 @@ ocl_cts_binary("device_execution") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution/execute_block.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution/host_multi_queue.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution/host_queue_order.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution/nested_blocks.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution/utils.cpp",
   ]
+}
+
+ocl_cts_binary("device_execution") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution" ]
+  deps = [ ":source_test_device_execution" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution/main.cpp", ]
+}
+
+ocl_cts_library("device_execution") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/device_execution",
+  ]
+  deps = [ ":source_test_device_execution" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

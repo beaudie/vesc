@@ -1,14 +1,9 @@
 # Copyright 2024 The ANGLE Project Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
-
-ocl_cts_binary("api") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api" ]
+ocl_cts_source("api") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api/negative_platform.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api/test_api_consistency.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api/test_api_min_max.cpp",
@@ -43,4 +38,21 @@ ocl_cts_binary("api") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api/test_sub_group_dispatch.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api/test_zero_sized_enqueue.cpp",
   ]
+}
+
+ocl_cts_binary("api") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api" ]
+  deps = [ ":source_test_api" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api/main.cpp", ]
+}
+
+ocl_cts_library("api") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/api",
+  ]
+  deps = [ ":source_test_api" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

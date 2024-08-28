@@ -4,11 +4,8 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("pipes") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes" ]
+ocl_cts_source("pipes") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes/test_pipe_info.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes/test_pipe_limits.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes/test_pipe_query_functions.cpp",
@@ -16,4 +13,21 @@ ocl_cts_binary("pipes") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes/test_pipe_readwrite_errors.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes/test_pipe_subgroups.cpp",
   ]
+}
+
+ocl_cts_binary("pipes") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes" ]
+  deps = [ ":source_test_pipes" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes/main.cpp", ]
+}
+
+ocl_cts_library("pipes") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/pipes",
+  ]
+  deps = [ ":source_test_pipes" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

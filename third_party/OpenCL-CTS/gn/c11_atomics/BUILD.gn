@@ -4,13 +4,27 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("c11_atomics") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/c11_atomics" ]
+ocl_cts_source("c11_atomics") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/c11_atomics/common.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/c11_atomics/host_atomics.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/c11_atomics/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/c11_atomics/test_atomics.cpp",
   ]
+}
+
+ocl_cts_binary("c11_atomics") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/c11_atomics" ]
+  deps = [ ":source_test_c11_atomics" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/c11_atomics/main.cpp", ]
+}
+
+ocl_cts_library("c11_atomics") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/c11_atomics",
+  ]
+  deps = [ ":source_test_c11_atomics" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

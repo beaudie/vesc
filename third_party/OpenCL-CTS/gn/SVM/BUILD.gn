@@ -3,12 +3,8 @@
 # found in the LICENSE file.
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
-
-ocl_cts_binary("svm") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM" ]
+ocl_cts_source("svm") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM/test_allocate_shared_buffer.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM/test_byte_granularity.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM/test_cross_buffer_pointers.cpp",
@@ -23,4 +19,21 @@ ocl_cts_binary("svm") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM/test_shared_address_space_fine_grain_buffers.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM/test_shared_sub_buffers.cpp",
   ]
+}
+
+ocl_cts_binary("svm") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM" ]
+  deps = [ ":source_test_svm" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM/main.cpp", ]
+}
+
+ocl_cts_library("svm") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/SVM",
+  ]
+  deps = [ ":source_test_svm" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

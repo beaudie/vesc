@@ -4,6 +4,45 @@
 
 import("//gni/angle.gni")
 
+template("ocl_cts_source") {
+  source_set("source_test_$target_name") {
+    cflags = [
+      "-Wno-deprecated-declarations",
+      "-Wno-#warnings",
+      "-Wno-format",
+      "-Wno-vla-cxx-extension",
+      "-Wno-deprecated-volatile",
+      "-Wno-c++11-narrowing",
+    ]
+    defines = [ "CL_TARGET_OPENCL_VERSION=300" ]
+    deps = [
+      "$angle_root:cl_includes",
+      "$angle_root/third_party/OpenCL-CTS/gn:test_common",
+      "$angle_root/third_party/OpenCL-ICD-Loader:opencl_icd_loader",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs -= [ "//build/config/compiler:no_exceptions" ]
+    configs -= [ "//build/config/compiler:no_rtti" ]
+    include_dirs = [
+      "$angle_root/third_party/OpenCL-CTS/src/test_common",
+      "$angle_root/third_party/OpenCL-CTS/src/test_common/autotest",
+      "$angle_root/third_party/OpenCL-CTS/src/test_common/harness",
+      "$angle_root/third_party/OpenCL-CTS/src/test_common/miniz",
+      "$angle_root/third_party/OpenCL-ICD-Loader/src/loader",
+      "$angle_root/include",
+    ]
+
+    forward_variables_from(invoker,
+                           "*",
+                           [
+                             "configs",
+                             "deps",
+                             "include_dirs",
+                             "cflags",
+                           ])
+  }
+}
+
 template("ocl_cts_binary") {
   executable("test_$target_name") {
     cflags = [
@@ -29,6 +68,62 @@ template("ocl_cts_binary") {
       "$angle_root/third_party/OpenCL-CTS/src/test_common/harness",
       "$angle_root/third_party/OpenCL-CTS/src/test_common/miniz",
       "$angle_root/third_party/OpenCL-ICD-Loader/src/loader",
+      "$angle_root/include",
+    ]
+
+    forward_variables_from(invoker,
+                           "*",
+                           [
+                             "configs",
+                             "deps",
+                             "include_dirs",
+                             "cflags",
+                           ])
+    if (defined(invoker.configs)) {
+      configs += invoker.configs
+    }
+    if (defined(invoker.deps)) {
+      deps += invoker.deps
+    }
+    if (defined(invoker.include_dirs)) {
+      include_dirs += invoker.include_dirs
+    }
+    if (defined(invoker.cflags)) {
+      cflags += invoker.cflags
+    }
+  }
+}
+
+template("ocl_cts_library") {
+  shared_library("libtest_$target_name") {
+    cflags = [
+      "-Wno-deprecated-declarations",
+      "-Wno-#warnings",
+      "-Wno-format",
+      "-Wno-vla-cxx-extension",
+      "-Wno-deprecated-volatile",
+      "-Wno-c++11-narrowing",
+    ]
+    defines = [ "CL_TARGET_OPENCL_VERSION=300" ]
+    deps = [
+      "$angle_root:cl_includes",
+      "$angle_root/third_party/OpenCL-CTS/gn:test_common",
+      "$angle_root/third_party/OpenCL-ICD-Loader:opencl_icd_loader",
+    ]
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs -= [ "//build/config/compiler:no_exceptions" ]
+    configs -= [ "//build/config/compiler:no_rtti" ]
+    if (is_android) {
+      # Removing this config, otherwise APIs will not be visable
+      configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
+    }
+    include_dirs = [
+      "$angle_root/third_party/OpenCL-CTS/src/test_common",
+      "$angle_root/third_party/OpenCL-CTS/src/test_common/autotest",
+      "$angle_root/third_party/OpenCL-CTS/src/test_common/harness",
+      "$angle_root/third_party/OpenCL-CTS/src/test_common/miniz",
+      "$angle_root/third_party/OpenCL-ICD-Loader/src/loader",
+      "$angle_root/include",
     ]
 
     forward_variables_from(invoker,

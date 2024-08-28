@@ -4,12 +4,26 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("geometrics") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/geometrics" ]
+ocl_cts_source("geometrics") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/geometrics/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/geometrics/test_geometrics.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/geometrics/test_geometrics_double.cpp",
   ]
+}
+
+ocl_cts_binary("geometrics") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/geometrics" ]
+  deps = [ ":source_test_geometrics" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/geometrics/main.cpp", ]
+}
+
+ocl_cts_library("geometrics") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/geometrics",
+  ]
+  deps = [ ":source_test_geometrics" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

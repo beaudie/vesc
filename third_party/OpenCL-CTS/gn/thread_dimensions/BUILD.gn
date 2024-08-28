@@ -4,12 +4,25 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("thread_dimensions") {
-  include_dirs = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/thread_dimensions",
-  ]
+ocl_cts_source("thread_dimensions") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/thread_dimensions/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/thread_dimensions/test_thread_dimensions.cpp",
   ]
+}
+
+ocl_cts_binary("thread_dimensions") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/thread_dimensions" ]
+  deps = [ ":source_test_thread_dimensions" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/thread_dimensions/main.cpp", ]
+}
+
+ocl_cts_library("thread_dimensions") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/thread_dimensions",
+  ]
+  deps = [ ":source_test_thread_dimensions" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

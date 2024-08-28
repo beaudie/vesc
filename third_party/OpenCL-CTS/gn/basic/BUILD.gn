@@ -4,11 +4,8 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("basic") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic" ]
+ocl_cts_source("basic") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic/test_arraycopy.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic/test_arrayimagecopy.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic/test_arrayreadwrite.cpp",
@@ -72,4 +69,21 @@ ocl_cts_binary("basic") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic/test_work_item_functions.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic/test_writeimage.cpp",
   ]
+}
+
+ocl_cts_binary("basic") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic" ]
+  deps = [ ":source_test_basic" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic/main.cpp", ]
+}
+
+ocl_cts_library("basic") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/basic",
+  ]
+  deps = [ ":source_test_basic" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

@@ -4,17 +4,31 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("profiling") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling" ]
+ocl_cts_source("profiling") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling/copy.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling/execute.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling/execute_multipass.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling/readArray.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling/readImage.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling/writeArray.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling/writeImage.cpp",
   ]
+}
+
+ocl_cts_binary("profiling") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling" ]
+  deps = [ ":source_test_profiling" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling/main.cpp", ]
+}
+
+ocl_cts_library("profiling") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/profiling",
+  ]
+  deps = [ ":source_test_profiling" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

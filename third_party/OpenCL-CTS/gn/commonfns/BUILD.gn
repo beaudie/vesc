@@ -4,11 +4,8 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("commonfns") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns" ]
+ocl_cts_source("commonfns") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns/test_binary_fn.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns/test_clamp.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns/test_mix.cpp",
@@ -16,4 +13,21 @@ ocl_cts_binary("commonfns") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns/test_step.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns/test_unary_fn.cpp",
   ]
+}
+
+ocl_cts_binary("commonfns") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns" ]
+  deps = [ ":source_test_commonfns" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns/main.cpp", ]
+}
+
+ocl_cts_library("commonfns") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/commonfns",
+  ]
+  deps = [ ":source_test_commonfns" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

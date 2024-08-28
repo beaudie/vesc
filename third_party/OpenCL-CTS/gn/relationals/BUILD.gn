@@ -4,13 +4,27 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("relationals") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/relationals" ]
+ocl_cts_source("relationals") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/relationals/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/relationals/test_comparisons_fp.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/relationals/test_relationals.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/relationals/test_shuffles.cpp",
   ]
+}
+
+ocl_cts_binary("relationals") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/relationals" ]
+  deps = [ ":source_test_relationals" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/relationals/main.cpp", ]
+}
+
+ocl_cts_library("relationals") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/relationals",
+  ]
+  deps = [ ":source_test_relationals" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

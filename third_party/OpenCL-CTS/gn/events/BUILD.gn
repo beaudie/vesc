@@ -4,12 +4,9 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("events") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events" ]
+ocl_cts_source("events") {
   sources = [
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events/action_classes.cpp",
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events/test_callbacks.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events/test_event_dependencies.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events/test_events.cpp",
@@ -17,4 +14,21 @@ ocl_cts_binary("events") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events/test_userevents_multithreaded.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events/test_waitlists.cpp",
   ]
+}
+
+ocl_cts_binary("events") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events" ]
+  deps = [ ":source_test_events" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events/main.cpp", ]
+}
+
+ocl_cts_library("events") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/events",
+  ]
+  deps = [ ":source_test_events" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }

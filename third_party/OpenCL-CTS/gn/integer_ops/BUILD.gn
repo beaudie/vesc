@@ -4,11 +4,8 @@
 
 import("//third_party/OpenCL-CTS/gn/angle_ocl_cts.gni")
 
-ocl_cts_binary("integer_ops") {
-  include_dirs =
-      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops" ]
+ocl_cts_source("integer_ops") {
   sources = [
-    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops/main.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops/test_abs.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops/test_absdiff.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops/test_add_sat.cpp",
@@ -26,4 +23,21 @@ ocl_cts_binary("integer_ops") {
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops/test_upsample.cpp",
     "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops/verification_and_generation_functions.cpp",
   ]
+}
+
+ocl_cts_binary("integer_ops") {
+  include_dirs =
+      [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops" ]
+  deps = [ ":source_test_integer_ops" ]
+  sources = [ "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops/main.cpp", ]
+}
+
+ocl_cts_library("integer_ops") {
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/integer_ops",
+  ]
+  deps = [ ":source_test_integer_ops" ]
+  sources = [
+    "$angle_root/third_party/OpenCL-CTS/gtest/main_wrapper.cpp" ]
 }
