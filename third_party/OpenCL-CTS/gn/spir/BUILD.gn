@@ -28,7 +28,7 @@ ocl_cts_binary("spir") {
   }
   deps = [
     ":copy_spir",
-    "$angle_root/third_party/OpenCL-CTS/gn/math_brute_force:test_brute_force",
+    "$angle_root/third_party/OpenCL-CTS/gn/math_brute_force:test_bruteforce",
   ]
 }
 
