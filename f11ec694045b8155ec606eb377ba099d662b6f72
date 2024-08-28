@@ -51,6 +51,24 @@
       "message": "Thanks for fixing it!",
       "revId": "f11ec694045b8155ec606eb377ba099d662b6f72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12780333_f8670c28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-28T17:37:22Z",
+      "side": 1,
+      "message": "My pleasure.\nHope that I fixed error that actually was causing `mac-test` failures)",
+      "parentUuid": "d7a0e22d_9897ff2a",
+      "revId": "f11ec694045b8155ec606eb377ba099d662b6f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
