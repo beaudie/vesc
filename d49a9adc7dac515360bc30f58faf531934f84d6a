@@ -34,6 +34,24 @@
       "parentUuid": "b75ecf02_a73168e3",
       "revId": "d49a9adc7dac515360bc30f58faf531934f84d6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d13dfd9_4baa25ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-28T15:34:32Z",
+      "side": 1,
+      "message": "Yes, https://angle-gold.skia.org/diff?grouping\u003dname%3Dlife_is_strange%26source_type%3Dangle\u0026left\u003d46a204d80927ba4eacc09e00348c4633\u0026right\u003d4d08a5975ca21c0d7d1faf4939646cba\u0026changelist_id\u003d5814931\u0026crs\u003dgerrit doesn\u0027t look good, please suppress it.\n\nThis looks suspicious as well:\nhttps://angle-gold.skia.org/detail?grouping\u003dname%3Ddisney_mirrorverse%26source_type%3Dangle\u0026digest\u003d8fc64086c75b4c23db5d77f9c3f3b078\u0026changelist_id\u003d5814931\u0026crs\u003dgerrit\nBut apparently there is already some variance in these colors on positive images, so probably fine.",
+      "parentUuid": "36319bc9_d54e9ba7",
+      "revId": "d49a9adc7dac515360bc30f58faf531934f84d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

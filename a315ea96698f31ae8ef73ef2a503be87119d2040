@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33371b62_e1b6d86a",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-28T15:34:32Z",
+      "side": 1,
+      "message": "Try suppressing VUID-RuntimeSpirv-Location-06272 instead (see comment in trace tests how).",
+      "range": {
+        "startLine": 169,
+        "startChar": 32,
+        "endLine": 169,
+        "endChar": 76
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f21d8f5d_28173a31",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-28T15:34:32Z",
+      "side": 1,
+      "message": "Maybe will pass after VUID-vkCmdDraw-None-02721 is suppressed, try removing.",
+      "range": {
+        "startLine": 170,
+        "startChar": 32,
+        "endLine": 170,
+        "endChar": 92
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2809bdf_5fcea7a8",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1740,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-28T15:34:32Z",
+      "side": 1,
+      "message": "Looks like it just triggers VUID-vkCmdDraw-None-02721, I think it\u0027s better to disable it in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_renderer.cpp;l\u003d188;drc\u003d5a8eab96c6b7b99b8568feb902b8b85e2df7e19a if the produced Golden is OK.",
+      "range": {
+        "startLine": 1740,
+        "startChar": 21,
+        "endLine": 1740,
+        "endChar": 31
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56c6d64b_7713f643",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-28T15:34:32Z",
+      "side": 1,
+      "message": "nit: isNVIDIALinuxANGLE seems to be the new style",
+      "range": {
+        "startLine": 1746,
+        "startChar": 12,
+        "endLine": 1746,
+        "endChar": 48
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f43ce4ab_65542b09",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-08-28T15:34:32Z",
+      "side": 1,
+      "message": "Also VUID-vkCmdDraw-None-02721.",
+      "range": {
+        "startLine": 1802,
+        "startChar": 21,
+        "endLine": 1802,
+        "endChar": 45
+      },
+      "revId": "a315ea96698f31ae8ef73ef2a503be87119d2040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
