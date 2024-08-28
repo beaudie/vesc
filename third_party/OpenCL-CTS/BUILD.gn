@@ -4,6 +4,134 @@
 
 import("//gni/angle.gni")
 
+executable("cts") {
+  testonly = true
+  sources = [ "angle_oclcts_gtest.cpp" ]
+  deps = [
+    ":opencl_cts",
+    "$angle_root:angle_common",
+    "$angle_root:cl_includes",
+    "$angle_root/third_party/OpenCL-CTS/gn:test_common",
+    "$angle_root/third_party/OpenCL-ICD-Loader:opencl_icd_loader",
+    "$angle_root/util:angle_util",
+    "//third_party/googletest:gtest",
+  ]
+  cflags = [
+    "-Wno-deprecated-declarations",
+    "-Wno-#warnings",
+    "-Wno-format",
+    "-Wno-vla-cxx-extension",
+    "-Wno-deprecated-volatile",
+    "-Wno-c++11-narrowing",
+    "-DCL_TARGET_OPENCL_VERSION=300",
+  ]
+  include_dirs = [
+    "$angle_root/third_party/OpenCL-CTS/src/test_common",
+    "$angle_root/third_party/OpenCL-CTS/src/test_common/autotest",
+    "$angle_root/third_party/OpenCL-CTS/src/test_common/harness",
+    "$angle_root/third_party/OpenCL-CTS/src/test_common/miniz",
+    "$angle_root/third_party/OpenCL-CTS/src/test_conformance/",
+    "$angle_root/third_party/OpenCL-CTS/",
+    "$angle_root/src/tests/",
+  ]
+
+  #defines = [ "ANGLE_HAS_HISTOGRAMS=1" ]
+  configs -= [ "//build/config/compiler:chromium_code" ]
+  configs -= [ "//build/config/compiler:no_exceptions" ]
+
+  if (is_apple) {
+    # If a "build with ARC" config is present, remove it.
+    if (filter_include(configs, [ "//build/config/compiler:enable_arc" ]) !=
+        []) {
+      configs -= [ "//build/config/compiler:enable_arc" ]
+    }
+  }
+
+  if (is_ios) {
+    # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
+    check_includes = false
+  }
+
+  deps += [
+    "$angle_root:angle_common",
+    "$angle_root:includes",
+    "$angle_root/src/tests:angle_test_expectations",
+    "$angle_root/third_party/rapidjson:rapidjson",
+    "$angle_root/util:angle_test_utils",
+    "//testing/gmock",
+    "//testing/gtest",
+    "//third_party/googletest:gmock",
+  ]
+
+  data = [
+    "$angle_root/src/tests/py_utils/android_helper.py",
+    "$angle_root/src/tests/py_utils/angle_path_util.py",
+    "$angle_root/src/tests/py_utils/angle_test_util.py",
+    "//testing/scripts/common.py",
+    "//testing/xvfb.py",
+  ]
+
+  sources += [
+    "$angle_root/src/tests/test_utils/runner/HistogramWriter.h",
+    "$angle_root/src/tests/test_utils/runner/TestSuite.cpp",
+    "$angle_root/src/tests/test_utils/runner/TestSuite.h",
+  ]
+
+  if (angle_has_histograms) {
+    sources += [ "$angle_root/src/tests/test_utils/runner/HistogramWriter.cpp" ]
+    deps += [
+      "//third_party/catapult/tracing/tracing:histogram",
+      "//third_party/catapult/tracing/tracing:reserved_infos",
+    ]
+  }
+
+  if (angle_has_histograms) {
+    defines = [ "ANGLE_HAS_HISTOGRAMS=1" ]
+  } else {
+    defines = [ "ANGLE_HAS_HISTOGRAMS=0" ]
+  }
+  if (is_mac) {
+    if (angle_enable_metal) {
+      # On macOS, compiling Metal shader sometimes takes very long time due to internal caching
+      # mechanism. This hooking library is a way to bypass this caching mechanism.
+      data_deps += [ "$angle_root/src/libANGLE/renderer/metal/file_hooking:metal_shader_cache_file_hooking" ]
+    }
+    if (angle_enable_cgl) {
+      configs += [ "$angle_root:supports_automatic_graphics_switching" ]
+    }
+  }
+
+  if ((is_linux || is_chromeos) && !is_component_build) {
+    # Set rpath to find shared libs in a non-component build.
+    configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
+  }
+
+  #if (is_android) {
+  #  configs += [ "$angle_root:build_id_config" ]
+  #  #configs -= [ "//build/config/android:hide_all_but_jni" ]
+  #  use_default_launcher = false
+  #  generate_final_jni = false
+  #  android_manifest_template = "$angle_root/src/tests/test_utils/runner/android/java/AndroidManifest.xml.jinja2"
+  #
+  #   deps += [
+  #    "$angle_root/src/tests:native_test_java",
+  #   "$angle_root/src/tests:native_test_support_android",
+  # ]
+  #}
+  if (is_ios) {
+    # We use a special main function on iOS to initialize UIKit before the normal main runs.
+    ldflags = [
+      "-e",
+      "_ios_main",
+    ]
+    sources += [ "$angle_root/util/ios/ios_main.mm" ]
+  }
+
+  if (angle_has_build && is_win) {
+    data_deps += [ "//build/win:runtime_libs" ]
+  }
+}
+
 group("opencl_cts") {
   deps = [
     "$angle_root/third_party/OpenCL-CTS/gn/SVM:test_svm",
@@ -36,7 +164,7 @@ group("opencl_cts") {
     "$angle_root/third_party/OpenCL-CTS/gn/images/kernel_read_write:test_image_streams",
     "$angle_root/third_party/OpenCL-CTS/gn/images/samplerlessReads:test_samplerless_reads",
     "$angle_root/third_party/OpenCL-CTS/gn/integer_ops:test_integer_ops",
-    "$angle_root/third_party/OpenCL-CTS/gn/math_brute_force:test_brute_force",
+    "$angle_root/third_party/OpenCL-CTS/gn/math_brute_force:test_bruteforce",
     "$angle_root/third_party/OpenCL-CTS/gn/mem_host_flags:test_mem_host_flags",
     "$angle_root/third_party/OpenCL-CTS/gn/multiple_device_context:test_multiples",
     "$angle_root/third_party/OpenCL-CTS/gn/non_uniform_work_group:test_non_uniform_work_group",
