@@ -52,6 +52,24 @@
       "parentUuid": "cebf2077_8a15ccbc",
       "revId": "6fddb18d77a3b20b1de9c8cfa72966698e937683",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b394029_fd8b8342",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-28T18:19:25Z",
+      "side": 1,
+      "message": "At the very least, non-multi base vertex / base instance draw calls are not emulated in most backends so these limitations should be enabled only for specific GL versions.",
+      "parentUuid": "94bc9c01_3aa1a1cd",
+      "revId": "6fddb18d77a3b20b1de9c8cfa72966698e937683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
