@@ -34,6 +34,24 @@
       "parentUuid": "a137e0ac_281c5dba",
       "revId": "6fddb18d77a3b20b1de9c8cfa72966698e937683",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94bc9c01_3aa1a1cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-28T18:12:49Z",
+      "side": 1,
+      "message": "The linked issue says:\n\n\u003e The multidraw and base vertex base instance extensions are heavily emulated in ANGLE\u0027s GL backend, manipulating vertex arrays multiple times per draw.\n\nBut AFAICT, there\u0027s no manipulation of vertex arrays in `rx::MultiDrawArraysGeneral, just uniforms. Either way, this CL is tagged with `GL:`, maybe the intention was to only disable this for the GL backend? Is use of the extension really slower on Vulkan and other backends than _not_ using it?",
+      "parentUuid": "cebf2077_8a15ccbc",
+      "revId": "6fddb18d77a3b20b1de9c8cfa72966698e937683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
