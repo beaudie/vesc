@@ -2693,8 +2693,7 @@ void ReleaseCachedObject(Renderer *renderer, const DescriptorSetDescAndPool &des
 
 void DestroyCachedObject(Renderer *renderer, const FramebufferDesc &desc)
 {
-    // Framebuffer cache are implemented in a way that each cache entry tracks GPU progress and we
-    // always guarantee cache entries are released before calling destroy.
+    UNREACHABLE();
 }
 
 void DestroyCachedObject(Renderer *renderer, const DescriptorSetDescAndPool &descAndPool)

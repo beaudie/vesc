@@ -539,15 +539,6 @@ SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfac
 
 SurfaceVk::~SurfaceVk() {}
 
-void SurfaceVk::destroy(const egl::Display *display)
-{
-    DisplayVk *displayVk   = vk::GetImpl(display);
-    vk::Renderer *renderer = displayVk->getRenderer();
-
-    mColorRenderTarget.destroy(renderer);
-    mDepthStencilRenderTarget.destroy(renderer);
-}
-
 angle::Result SurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    GLenum binding,
                                                    const gl::ImageIndex &imageIndex,
@@ -687,9 +678,6 @@ void OffscreenSurfaceVk::destroy(const egl::Display *display)
     {
         mLockBufferHelper.destroy(vk::GetImpl(display)->getRenderer());
     }
-
-    // Call parent class to destroy any resources parent owns.
-    SurfaceVk::destroy(display);
 }
 
 egl::Error OffscreenSurfaceVk::unMakeCurrent(const gl::Context *context)
@@ -1063,9 +1051,6 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     mPresentSemaphoreRecycler.destroy(device);
     mPresentFenceRecycler.destroy(device);
-
-    // Call parent class to destroy any resources parent owns.
-    SurfaceVk::destroy(display);
 
     // Destroy the surface without holding the EGL lock.  This works around a specific deadlock
     // in Android.  On this platform:
