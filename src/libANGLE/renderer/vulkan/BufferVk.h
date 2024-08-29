@@ -108,6 +108,7 @@ class VertexConversionBuffer : public ConversionBuffer
             {
                 if (cacheKey.offset < mCacheKey.offset)
                 {
+                    ASSERT(false && "reuse happen");
                     addDirtyBufferRange(RangeDeviceSize(cacheKey.offset, mCacheKey.offset));
                     mCacheKey.offset = cacheKey.offset;
                 }
