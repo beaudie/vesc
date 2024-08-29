@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4b59179_47a6f9b2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10036,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T02:08:28Z",
+      "side": 1,
+      "message": "In case of a 2D texture, should we set `depth` to 1 here? Or handle it later in the backend?",
+      "range": {
+        "startLine": 10036,
+        "startChar": 9,
+        "endLine": 10036,
+        "endChar": 13
+      },
+      "revId": "579f6336a83155c83ea0a2455d235e55d7e1ec49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
