@@ -262,6 +262,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba6888df_c4d37e19",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
+        "patchSetId": 23
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T02:12:00Z",
+      "side": 1,
+      "message": "Sample: https://chromium-review.googlesource.com/c/angle/angle/+/5825118",
+      "parentUuid": "1f203054_74d18dd9",
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65737b2f_154be0b7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 23
