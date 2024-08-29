@@ -118,6 +118,30 @@
       },
       "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a4fe817_32909d30",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-29T09:33:30Z",
+      "side": 1,
+      "message": "\u003e We can put verification under a feature too, so that when LRU lands we can easily disable it.\n\nCurrently it is optional, but instead of adding features I used build variables.\n\n```\n# Blob cache evicts old items first    \nangle_egl_blob_cache_evicts_old_items_first \u003d false\n\n# Blob cache evicts only necessary items to store the new item\nangle_egl_blob_cache_evicts_only_necessary_items \u003d false\n```\n\nI decided to use build variables to describe blob cache implementation for ANGLE instead of adding features.\n\n`useDualPipelineBlobCacheSlots` is a feature, because it is unrelated to the blob cache implementation. It is a pure ANGLE behavior, as well as future feature of partial chunk loading.\n\nI\u0027m not sure if this is correct discussion, and I should use features instead of build variables in all cases.\n\n\u003e I\u0027ve been ooo for the past 10 days, I\u0027ll do a proper review of this change in the next few days.\n\nThanks!",
+      "parentUuid": "ea26d548_aea17e8d",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 47
+      },
+      "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
