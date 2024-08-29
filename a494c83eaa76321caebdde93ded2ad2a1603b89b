@@ -16,6 +16,97 @@
       "message": "Thanks!",
       "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a522216c_a9409446",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-29T14:34:49Z",
+      "side": 1,
+      "message": "The more important TODO here is to turn this into the equivalent of `FramebufferVk::clearImpl`, i.e. stage the clear as a full-clear instead of sub-clear. Because then the clear can be picked up later as LOAD_OP_CLEAR with a perf impact. Otherwise `EXT_clear_texture` is a convenience with dubious benefits.",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f37a806c_9707dcaa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 3357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-29T14:34:49Z",
+      "side": 1,
+      "message": "This looks fishy; after the syncState call, the front-end assumes that the texture is up-to-date. That is, `Texture::syncState` does `mDirtyBits.reset();`.\n\nOn the next draw call, the texture is still synced again, because adding the update notifies the texture that it\u0027s dirty, but most dirty bits will be lost.\n\nYou should be able to verify this with a test (please add):\n\n- Create a texture, initialize it, sample from it in a draw call (just to sync everything)\n- Change the swizzle of the texture (leading to `Texture::DIRTY_BIT_SWIZZLE_*` dirty bits being set)\n- Call `glClearTexSubImage` (which calls `syncState`, no-oped here, but results in the dirty bits being dropped)\n- Sample from the texture again (bug is that swizzle is not applied because `refreshImageViews` below under the if about swizzles is not run)\n\nYou could likely use this to avoid flushing the staged updates (I suggest doing that in a separate CL in case of bugs and reverts), but everything else here should still be done.",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ac20096_e0f09901",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2364,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-29T14:34:49Z",
+      "side": 1,
+      "message": "This is issuing a barrier on the image too early, so its previous usage cannot overlap with this compute shader.\n\nI suggest creating a new `access` after the dispatch call and get the outside RP commands again. Then you can `onBufferTransferRead` on that access and not have to manually specify the barrier below either.",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce407813_cc512dcb",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-29T14:34:49Z",
+      "side": 1,
+      "message": "Please wrap these in a `ClearTextureParameters` like the other functions. Same with the MS version",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 48
+      },
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91f03f22_45088e90",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
+        "patchSetId": 25
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-29T14:34:49Z",
+      "side": 1,
+      "message": "Discussion on whether compute is the right tool aside, this `barrier()` should be unnecessary, different shader invocations never write to the same location, right?",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

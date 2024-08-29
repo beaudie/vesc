@@ -227,6 +227,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59ee0910_f6c3257b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-29T14:34:49Z",
+      "side": 1,
+      "message": "I believe, the _real_ gain you may have with a UtilsVk shader is by using a fragment shader when the format is renderable. Then you can directly draw to the image and halve the bandwidth used. If you want to keep a compute based copy as a fallback, that\u0027s fine but you\u0027ll probably find that path is probably never hit in real apps (so a CPU buffer fill is just as fine).",
+      "parentUuid": "5025aa6a_9420e124",
+      "range": {
+        "startLine": 2272,
+        "startChar": 23,
+        "endLine": 2272,
+        "endChar": 35
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0ad207a_fc6691c5",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
         "patchSetId": 23
@@ -274,6 +298,24 @@
       "side": 1,
       "message": "Sample: https://chromium-review.googlesource.com/c/angle/angle/+/5825118",
       "parentUuid": "1f203054_74d18dd9",
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7996ca6d_ee980a5d",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
+        "patchSetId": 23
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-29T14:34:49Z",
+      "side": 1,
+      "message": "Something like that is totally fine! The shader is bound by memory bandwidth, so some ALU in between is going to come for free.",
+      "parentUuid": "ba6888df_c4d37e19",
       "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
