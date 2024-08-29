@@ -118,6 +118,30 @@
       },
       "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25f0c4cc_2f163bf6",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T18:55:26Z",
+      "side": 1,
+      "message": "Thanks. Code updated to derive the used image layout from `aspectFlags` instead of additional arg.",
+      "parentUuid": "7a37ca28_63d51c6f",
+      "range": {
+        "startLine": 2405,
+        "startChar": 61,
+        "endLine": 2405,
+        "endChar": 72
+      },
+      "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
