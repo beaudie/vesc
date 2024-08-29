@@ -46,6 +46,30 @@
       },
       "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc22f01c_2ca1828c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T01:29:04Z",
+      "side": 1,
+      "message": "In `startRenderPass()`, I tried using `image-\u003egetCurrentImageLayout()` instead of `imageLayout`. However, when running MS tests in the main CL (e.g., `ClearTextureEXT2DMS`), I get the following VUID: `VUID-vkCmdBeginRenderPass-initialLayout-00900`\nIf I also change the layout for `onImageRenderPassWrite()` to the same value, I get `SYNC-HAZARD-READ-AFTER-WRITE` in the same test.",
+      "parentUuid": "cb2d02ff_affbb1ad",
+      "range": {
+        "startLine": 2405,
+        "startChar": 61,
+        "endLine": 2405,
+        "endChar": 72
+      },
+      "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
