@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aec7fa63_f2aff6bd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T00:37:54Z",
+      "side": 1,
+      "message": "Thanks. The earlier CL has been updated. Therefore, this has been changed into an assert.",
+      "parentUuid": "e891c77f_d89494b1",
+      "range": {
+        "startLine": 876,
+        "startChar": 4,
+        "endLine": 876,
+        "endChar": 78
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33b16fa6_14e0d23c",
@@ -179,6 +203,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5025aa6a_9420e124",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T00:37:54Z",
+      "side": 1,
+      "message": "With the host, we should use a loop and `memcpy()` (or vector constructor?) to copy the input value (up to 16 bytes) into a new host-visible buffer and process it as a regular buffer update.\nHowever IIUC, with a compute shader, many threads should be simultaneously writing the related bytes to different parts of a new device-side buffer before it is transferred to the image. It should also reduce the host-device memory bandwidth usage in case of a discrete device.",
+      "parentUuid": "0c9f86e0_0587fb86",
+      "range": {
+        "startLine": 2272,
+        "startChar": 23,
+        "endLine": 2272,
+        "endChar": 35
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0ad207a_fc6691c5",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
         "patchSetId": 23
@@ -190,6 +238,24 @@
       "writtenOn": "2024-08-26T18:52:28Z",
       "side": 1,
       "message": "These `#if`s cost us in binary size. Please use them only when absolutely necessary. That is when the _types_ need to change.\n\nFor numeric parameters, please pass whatever you need through the push constants. For example a bounds constant to check against `threadId`, a mask for the data, and a couple of bools for special cases (stencil, rgb)",
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f203054_74d18dd9",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
+        "patchSetId": 23
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T00:37:54Z",
+      "side": 1,
+      "message": "Thanks! I agree. I can update the CL to move some parts of the work from the shader to the host (e.g., determining the elements to be copied), simplifying the shader to checking the input parameters and copying the appropriate bytes. This should result in a single shader (albeit a bit larger than each of the current shaders).",
+      "parentUuid": "b0ad207a_fc6691c5",
       "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -255,6 +321,30 @@
       "side": 1,
       "message": "SGTM. Put that in comment will be helpful.",
       "parentUuid": "783a50c1_ef255fb9",
+      "range": {
+        "startLine": 10043,
+        "startChar": 60,
+        "endLine": 10043,
+        "endChar": 74
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51a0017d_fd043d97",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 10043,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T00:37:54Z",
+      "side": 1,
+      "message": "Thanks. Comment added.",
+      "parentUuid": "e7c532af_0b783fe4",
       "range": {
         "startLine": 10043,
         "startChar": 60,
