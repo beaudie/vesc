@@ -142,6 +142,30 @@
       },
       "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df2a1bea_af90e3bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-29T13:51:13Z",
+      "side": 1,
+      "message": "Dynamic features is better IMO. You _could_ add a build variable to set the default value for the feature, but that would be about it.",
+      "parentUuid": "9a4fe817_32909d30",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 47
+      },
+      "revId": "fd283b619eae1810f9e41c7ffed7368a3efcc02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
