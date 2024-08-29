@@ -94,6 +94,30 @@
       },
       "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a37ca28_63d51c6f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-29T16:29:04Z",
+      "side": 1,
+      "message": "Yea, the UtilsVk should call colorImageDraw/depthStencilImagesDraw instead of imageWrite. Basically the UtilsVk\u0027s render pass never set up mColorAttachments, which is why the finalizeImageLayout stuff not doing the expected work, I think. Not sure exactly why, but we can leave it as is for now.",
+      "parentUuid": "b61fb8fe_851471e1",
+      "range": {
+        "startLine": 2405,
+        "startChar": 61,
+        "endLine": 2405,
+        "endChar": 72
+      },
+      "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
