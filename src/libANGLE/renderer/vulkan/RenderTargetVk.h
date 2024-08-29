@@ -156,10 +156,23 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
         ASSERT(!mFramebufferCacheManager.containsKey(sharedFramebufferCacheKey));
         mFramebufferCacheManager.addKey(sharedFramebufferCacheKey);
     }
-    void release(ContextVk *contextVk) { mFramebufferCacheManager.releaseKeys(contextVk); }
-    void destroy(vk::Renderer *renderer) { mFramebufferCacheManager.destroyKeys(renderer); }
+    void releaseFramebuffers(ContextVk *contextVk)
+    {
+        mFramebufferCacheManager.releaseKeys(contextVk);
+    }
+    void release(ContextVk *contextVk)
+    {
+        releaseFramebuffers(contextVk);
+        invalidate();
+    }
+    void destroy(vk::Renderer *renderer)
+    {
+        mFramebufferCacheManager.destroyKeys(renderer);
+        invalidate();
+    }
 
   private:
+    void invalidate();
     void reset();
 
     angle::Result getImageViewImpl(vk::Context *context,
