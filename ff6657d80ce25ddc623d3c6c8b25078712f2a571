@@ -344,6 +344,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b6c286a_c325add7",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
+        "patchSetId": 23
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T18:56:05Z",
+      "side": 1,
+      "message": "Thanks! I have merged that CL into this one.",
+      "parentUuid": "7996ca6d_ee980a5d",
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65737b2f_154be0b7",

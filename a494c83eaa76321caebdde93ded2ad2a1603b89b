@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2ab055d_3248312c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T18:56:05Z",
+      "side": 1,
+      "message": "Thanks. Updated the TODO comment.",
+      "parentUuid": "a522216c_a9409446",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f37a806c_9707dcaa",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db29346c_8635a1bf",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2364,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T18:56:05Z",
+      "side": 1,
+      "message": "Thanks! Moved the image access to after the dispatch call, replacing the memory barrier.",
+      "parentUuid": "5ac20096_e0f09901",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce407813_cc512dcb",
@@ -92,6 +128,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe489747_a9a9f875",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T18:56:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce407813_cc512dcb",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 48
+      },
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91f03f22_45088e90",
@@ -105,6 +165,24 @@
       "writtenOn": "2024-08-29T14:34:49Z",
       "side": 1,
       "message": "Discussion on whether compute is the right tool aside, this `barrier()` should be unnecessary, different shader invocations never write to the same location, right?",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2225e552_1d486dae",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ClearTexture.comp",
+        "patchSetId": 25
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T18:56:05Z",
+      "side": 1,
+      "message": "True. Removed the barrier.",
+      "parentUuid": "91f03f22_45088e90",
       "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
