@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "519076d0_cf85d8b5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-29T22:30:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9081f2b8_396080aa",
+      "revId": "b876e007bef7226f2dc2c41773b962ee92a4db42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "453acbae_c1ae78a2",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-29T03:56:45Z",
       "side": 1,
       "message": "Could you please add two tests, one where reuse happens and another where it doesn\u0027t happen? This sort of code is hard to verify yet easy to have corner case bugs, would be great to verify it with a nasty test that tries hard to break it.",
+      "revId": "b876e007bef7226f2dc2c41773b962ee92a4db42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "096f4f20_19824a0a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-08-29T22:30:09Z",
+      "side": 1,
+      "message": "There are deqp tests covering this. See https://ci.chromium.org/ui/p/angle/builders/try/linux-test/22490/overview.\nAlso quite some app traces on ARM as well: https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-test/21600/overview\n\nBut anyway, I have added two end2end tests here \nhttps://chromium-review.googlesource.com/c/angle/angle/+/5827285",
+      "parentUuid": "453acbae_c1ae78a2",
       "revId": "b876e007bef7226f2dc2c41773b962ee92a4db42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
