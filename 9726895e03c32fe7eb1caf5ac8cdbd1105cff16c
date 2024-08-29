@@ -70,6 +70,30 @@
       },
       "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b61fb8fe_851471e1",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-29T14:05:03Z",
+      "side": 1,
+      "message": "Given the ASSERT below, you can derive the layout from `aspectFlags`, no?",
+      "parentUuid": "dc22f01c_2ca1828c",
+      "range": {
+        "startLine": 2405,
+        "startChar": 61,
+        "endLine": 2405,
+        "endChar": 72
+      },
+      "revId": "9726895e03c32fe7eb1caf5ac8cdbd1105cff16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
