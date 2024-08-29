@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56757ae5_17aab626",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-08-29T00:24:05Z",
+      "side": 1,
+      "message": "The upstream CL will probably need to change significantly since the GLSL builtin types don\u0027t match the WGSL builtin types and so I might as well test out the string pasting version instead, which will make this CL much different as well.",
+      "revId": "b7cf9030d889a508a4603adefdc9943f7e939d27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
