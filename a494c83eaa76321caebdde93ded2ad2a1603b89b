@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8aa2c4f7_22073ae7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 3357,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T23:47:32Z",
+      "side": 1,
+      "message": "Thanks! I have added the test and removed this part.\nIn that case, `gl::Command::ClearTexture` is also no longer needed in the current CL?",
+      "parentUuid": "f37a806c_9707dcaa",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ac20096_e0f09901",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 25
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Thanks! Moved the image access to after the dispatch call, replacing the memory barrier.",
       "parentUuid": "5ac20096_e0f09901",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cd33407_f6ff727b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2364,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-29T23:47:32Z",
+      "side": 1,
+      "message": "I tried adding a second access after the dispatch, which includes a transfer-read buffer and a transfer-write image, before getting the CB again and removed the memory barrier. However, there were some error on SwS and some `AsyncCommandQueue` tests on Linux/Windows similar to below:\n```\n! Assert failed in commonInit (../../src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h:1126): mIsOpen\n```\nFor now, I have reverted this change.",
+      "parentUuid": "db29346c_8635a1bf",
       "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
