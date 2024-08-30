@@ -18,7 +18,7 @@ namespace rx
 class HardwareBufferImageSiblingVkAndroid : public ExternalImageSiblingVk
 {
   public:
-    HardwareBufferImageSiblingVkAndroid(EGLClientBuffer buffer);
+    HardwareBufferImageSiblingVkAndroid(EGLClientBuffer buffer, const egl::AttributeMap &attribs);
     ~HardwareBufferImageSiblingVkAndroid() override;
 
     static egl::Error ValidateHardwareBuffer(vk::Renderer *renderer,
@@ -60,6 +60,7 @@ class HardwareBufferImageSiblingVkAndroid : public ExternalImageSiblingVk
     size_t mSamples;
 
     vk::ImageHelper *mImage;
+    GLint mColorSpace;
 };
 
 }  // namespace rx
