@@ -106,6 +106,24 @@
       "parentUuid": "eaa2a315_35f15ad9",
       "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b09eafa0_6ac48da9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-30T15:47:47Z",
+      "side": 1,
+      "message": "👍 I was going to point out (2). that was the only difference I could think of.\n\nThe code you have here should be safe either way, so given (1), let\u0027s go with this.",
+      "parentUuid": "94928215_6787d445",
+      "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
