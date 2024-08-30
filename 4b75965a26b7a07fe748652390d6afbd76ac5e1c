@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e13e7a6f_fbcd3368",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-30T15:51:25Z",
+      "side": 1,
+      "message": "Is this call redundant?\n\n`getStatus()` above already calls it.",
+      "range": {
+        "startLine": 177,
+        "startChar": 14,
+        "endLine": 177,
+        "endChar": 34
+      },
+      "revId": "4b75965a26b7a07fe748652390d6afbd76ac5e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
