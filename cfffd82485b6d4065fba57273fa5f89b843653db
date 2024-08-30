@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d776bcf6_a234c9c3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-30T09:40:58Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org\n\nI\u0027m not sure what method (`postProcessUnlockedTryAcquire()` or `doDeferredAcquireNextImage()`) should be used here as well as in the `swapImpl()`.\n\nIn my understanding, `prepareSwap()` is technically optional. All other methods should still work even if `prepareSwap()` is not called.\n\nIf `swapImpl()` is mandatory, then need to keep `postProcessUnlockedTryAcquire()` here and also update `swapImpl()` to match it.\n\nAdditional note: in this change I returned use of `angle::ToEGL()` instead of directly returning `egl::EglBadSurface()`. In my understanding, this is the correct way when error was caused by Vulkan API.",
+      "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
