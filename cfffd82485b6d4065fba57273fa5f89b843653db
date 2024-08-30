@@ -52,6 +52,24 @@
       "parentUuid": "a2e14019_7421eb23",
       "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4874e4af_45d8539c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-30T13:34:52Z",
+      "side": 1,
+      "message": "Then the question is why `swapImpl()` calls `doDeferredAcquireNextImage()` and not `postProcessUnlockedTryAcquire()`?",
+      "parentUuid": "b88eeda9_c9b62b91",
+      "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
