@@ -11,6 +11,7 @@
 #include "common/android_util.h"
 
 #include "libANGLE/Display.h"
+#include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/android/AHBFunctions.h"
 #include "libANGLE/renderer/vulkan/android/DisplayVkAndroid.h"
@@ -135,7 +136,7 @@ gl::TextureType AhbDescUsageToTextureType(const AHardwareBuffer_Desc &ahbDescrip
 constexpr uint64_t kAHardwareBufferUsageFrontBuffer = (1ULL << 32);
 }  // namespace
 
-HardwareBufferImageSiblingVkAndroid::HardwareBufferImageSiblingVkAndroid(EGLClientBuffer buffer)
+HardwareBufferImageSiblingVkAndroid::HardwareBufferImageSiblingVkAndroid(EGLClientBuffer buffer, const egl::AttributeMap &attribs)
     : mBuffer(buffer),
       mFormat(GL_NONE),
       mRenderable(false),
@@ -144,8 +145,15 @@ HardwareBufferImageSiblingVkAndroid::HardwareBufferImageSiblingVkAndroid(EGLClie
       mLevelCount(0),
       mUsage(0),
       mSamples(0),
-      mImage(nullptr)
-{}
+      mImage(nullptr),
+      mColorSpace(EGL_GL_COLORSPACE_LINEAR_KHR)
+
+{
+    if (attribs.contains(EGL_GL_COLORSPACE_KHR))
+    {
+        mColorSpace = attribs.getAsInt(EGL_GL_COLORSPACE_KHR);
+    }
+}
 
 HardwareBufferImageSiblingVkAndroid::~HardwareBufferImageSiblingVkAndroid() {}
 
@@ -422,9 +430,15 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         displayVk, vkFormat->getActualRenderableImageFormatID(), &externalMemoryImageCreateInfo,
         &imageFormatListInfoStorage, &imageListFormatsStorage, &imageCreateFlags);
 
+    const vk::Format *vkColorspaceFormat = &renderer->getFormat(vkFormat->getIntendedFormatID());
+
+    if(mColorSpace == EGL_GL_COLORSPACE_SRGB_KHR) {
+        vkColorspaceFormat = &renderer->getFormat(ConvertToSRGB(vkFormat->getIntendedFormatID()));
+    }
+
     ANGLE_TRY(mImage->initExternal(
-        displayVk, textureType, vkExtents, vkFormat->getIntendedFormatID(),
-        vkFormat->getActualRenderableImageFormatID(), 1, usage, imageCreateFlags,
+        displayVk, textureType, vkExtents, vkColorspaceFormat->getIntendedFormatID(),
+        vkColorspaceFormat->getActualRenderableImageFormatID(), 1, usage, imageCreateFlags,
         vk::ImageLayout::ExternalPreInitialized, imageCreateInfoPNext, gl::LevelIndex(0),
         mLevelCount, layerCount, robustInitEnabled, hasProtectedContent(), conversionDesc));
 
