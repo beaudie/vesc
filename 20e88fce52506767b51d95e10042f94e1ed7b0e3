@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64b8a8cc_1f06b7a9",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-30T19:38:38Z",
+      "side": 1,
+      "message": "Initial implementation for backend enqueue calls is performed under a queue lock\n```suggestion\n    std::scoped_lock\u003cstd::mutex\u003e sl(mCommandQueueMutex);\n    CLImageVk \u0026imageVk \u003d image.getImpl\u003cCLImageVk\u003e();\n```",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 52
+      },
+      "revId": "20e88fce52506767b51d95e10042f94e1ed7b0e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22d46159_578d871b",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-30T19:38:38Z",
+      "side": 1,
+      "message": "```suggestion\n    std::scoped_lock\u003cstd::mutex\u003e sl(mCommandQueueMutex);\n    ANGLE_TRY(enqueueWaitForEvents(waitEvents));\n```",
+      "range": {
+        "startLine": 424,
+        "startChar": 4,
+        "endLine": 424,
+        "endChar": 48
+      },
+      "revId": "20e88fce52506767b51d95e10042f94e1ed7b0e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12adc18c_2814c63a",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-30T19:38:38Z",
+      "side": 1,
+      "message": "```suggestion\n    std::scoped_lock\u003cstd::mutex\u003e sl(mCommandQueueMutex);\n    ANGLE_TRY(enqueueWaitForEvents(waitEvents));\n```",
+      "range": {
+        "startLine": 454,
+        "startChar": 4,
+        "endLine": 454,
+        "endChar": 48
+      },
+      "revId": "20e88fce52506767b51d95e10042f94e1ed7b0e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e8879f1_2aa4f698",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-30T19:38:38Z",
+      "side": 1,
+      "message": "```suggestion\n    std::scoped_lock\u003cstd::mutex\u003e sl(mCommandQueueMutex);\n    CLImageVk \u0026srcImageVk   \u003d srcImage.getImpl\u003cCLImageVk\u003e();\n```",
+      "range": {
+        "startLine": 520,
+        "startChar": 4,
+        "endLine": 520,
+        "endChar": 60
+      },
+      "revId": "20e88fce52506767b51d95e10042f94e1ed7b0e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ceecb86_80c07e01",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-30T19:38:38Z",
+      "side": 1,
+      "message": "```suggestion\n    std::scoped_lock\u003cstd::mutex\u003e sl(mCommandQueueMutex);\n    CLBufferVk \u0026srcBufferVk \u003d srcBuffer.getImpl\u003cCLBufferVk\u003e();\n```",
+      "range": {
+        "startLine": 541,
+        "startChar": 4,
+        "endLine": 541,
+        "endChar": 62
+      },
+      "revId": "20e88fce52506767b51d95e10042f94e1ed7b0e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6e216c7_8d7d0ba0",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-08-30T19:38:38Z",
+      "side": 1,
+      "message": "```suggestion\n    std::scoped_lock\u003cstd::mutex\u003e sl(mCommandQueueMutex);\n    CLImageVk \u0026imageVk \u003d image.getImpl\u003cCLImageVk\u003e();\n```",
+      "range": {
+        "startLine": 565,
+        "startChar": 4,
+        "endLine": 565,
+        "endChar": 52
+      },
+      "revId": "20e88fce52506767b51d95e10042f94e1ed7b0e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
