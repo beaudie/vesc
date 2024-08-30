@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca844783_789871fd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 3357,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-30T21:37:57Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e3dec5ff_89b2cde6",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ac20096_e0f09901",
@@ -173,6 +191,24 @@
       "side": 1,
       "message": "Did you perhaps forget to refresh `commandBuffer` after reacquiring the command buffer helper?",
       "parentUuid": "9cd33407_f6ff727b",
+      "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa89ef06_16c7b25e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2364,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-08-30T21:37:57Z",
+      "side": 1,
+      "message": "Thanks! It should be fixed after refreshing the command buffer and re-acquiring it after the call.",
+      "parentUuid": "a1a51bd5_f508d35b",
       "revId": "a494c83eaa76321caebdde93ded2ad2a1603b89b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
