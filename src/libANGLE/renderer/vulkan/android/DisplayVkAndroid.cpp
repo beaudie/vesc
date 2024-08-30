@@ -151,7 +151,7 @@ ExternalImageSiblingImpl *DisplayVkAndroid::createExternalImageSibling(
     switch (target)
     {
         case EGL_NATIVE_BUFFER_ANDROID:
-            return new HardwareBufferImageSiblingVkAndroid(buffer);
+            return new HardwareBufferImageSiblingVkAndroid(buffer, attribs);
 
         default:
             return DisplayVk::createExternalImageSibling(context, target, buffer, attribs);
