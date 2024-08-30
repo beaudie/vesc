@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0261f4c3_28e9991c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-30T13:09:58Z",
+      "side": 1,
+      "message": "Maybe just call `reset()`?",
+      "revId": "2a8048925a2c4784414f113fe41329f94be9507b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
