@@ -52,6 +52,24 @@
       "parentUuid": "317712a0_66ce5220",
       "revId": "2a8048925a2c4784414f113fe41329f94be9507b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87b18b11_0b6235a6",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-30T19:32:49Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org\n\nRenamed `invalidate() -\u003e invalidateImageAndViews()` as well as `release() -\u003e releaseImageAndViews()`.\nAdded comments. Hope now it should be more clear)\n\n@cclao@google.com\n\nPlease take a look at new changes. Sorry, for making you review twice.",
+      "parentUuid": "c987fbc5_d2ca2762",
+      "revId": "2a8048925a2c4784414f113fe41329f94be9507b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
