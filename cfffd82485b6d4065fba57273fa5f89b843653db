@@ -34,6 +34,24 @@
       "parentUuid": "d776bcf6_a234c9c3",
       "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b88eeda9_c9b62b91",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-30T13:28:32Z",
+      "side": 1,
+      "message": "The entry points for a few functions call `EGL_PrepareSwapBuffersANGLE` automatically, such as `EGL_SwapBuffers*` and `EGL_QuerySurface64` with `EGL_BUFFER_AGE`. The backend relies on `prepareSwap()` having been called.\n\nSo using `NeedToProcessAcquireNextImageResult` and `postProcessUnlockedTryAcquire` was right here",
+      "parentUuid": "a2e14019_7421eb23",
+      "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
