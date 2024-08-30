@@ -33,6 +33,23 @@
       "message": "This LGTM but we should also disable FL9.3 D3D device creation at the same time since this effectively breaks it.",
       "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01862831_75d8f866",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-30T14:08:24Z",
+      "side": 1,
+      "message": "Slightly unrelated - does it assume full 4.1 support? If so, ANGLE should require FL 10.1. If not, we should probably rename it to `SH_HLSL_4_0_OUTPUT`.",
+      "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
