@@ -16,6 +16,24 @@
       "message": "fwiw, I don\u0027t think this is anything that is configurable.\nThis is more DisplayMtl::supportsSeparateDepthStencilBuffers() than a ANGLE feature condition.\nPattern match to: DisplayMtl::supportsDepth24Stencil8PixelFormat()",
       "revId": "b880d3b0dd82ad7cd9fdc16290ec36c225c08f77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82a3a68a_c3671a9d",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-08-30T06:47:12Z",
+      "side": 1,
+      "message": "resolve",
+      "parentUuid": "4cc1885c_495e6af0",
+      "revId": "b880d3b0dd82ad7cd9fdc16290ec36c225c08f77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
