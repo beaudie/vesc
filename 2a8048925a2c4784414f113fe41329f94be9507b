@@ -16,6 +16,24 @@
       "message": "Maybe just call `reset()`?",
       "revId": "2a8048925a2c4784414f113fe41329f94be9507b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "317712a0_66ce5220",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-30T13:16:58Z",
+      "side": 1,
+      "message": "This will break `WindowSurfaceVk`.\n\nIt calls `updateSwapchainImage()` that only updates pointers and reuses other members.\n\nIn this case need to remove `updateSwapchainImage()` and just call `init()` again?",
+      "parentUuid": "0261f4c3_28e9991c",
+      "revId": "2a8048925a2c4784414f113fe41329f94be9507b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
