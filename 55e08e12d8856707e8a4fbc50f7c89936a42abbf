@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1d32ec08_305d0f63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2024-08-30T21:53:21Z",
+      "side": 1,
+      "message": "@geofflang@chromium.org, good point. \n\nIf I remove FL9_X from `mAvailableFeaturesLevels` in `fx::Renderer11`, it might regress https://chromium-review.googlesource.com/c/angle/angle/+/4661673 which added the UWP portion of the code. I\u0027m not sure the original code even worked on FL9_1 and 9_2.",
+      "parentUuid": "eb9d0e10_887c9e2a",
+      "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01862831_75d8f866",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2024-08-30T14:08:24Z",
       "side": 1,
       "message": "Slightly unrelated - does it assume full 4.1 support? If so, ANGLE should require FL 10.1. If not, we should probably rename it to `SH_HLSL_4_0_OUTPUT`.",
+      "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bda3b3c2_e5d6b79c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2024-08-30T21:53:21Z",
+      "side": 1,
+      "message": "@geofflang@chromium.org can correct me if I am wrong but I believe ES3 requires feature level 10.1 whereas ES2 can be implemented with FL10_0.",
+      "parentUuid": "01862831_75d8f866",
       "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
