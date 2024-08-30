@@ -124,6 +124,24 @@
       "parentUuid": "94928215_6787d445",
       "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0322660_7260927c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-30T19:41:40Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org\n\nUpdated `getBufferAge()` to use `doDeferredAcquireNextImageWithUsableSwapchain()` and returned the ASSERT.\n\nAdded comments and `AcquireImageFromSwapImpl` test to cover point (2). Existing tests do not cover this particular case. Also added ASSERTs in to `present()` to catch possible errors, if image was not acquired/processed.\n\n@cclao@google.com\n\nPlease take a look at new changes. Thanks!",
+      "parentUuid": "b09eafa0_6ac48da9",
+      "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
