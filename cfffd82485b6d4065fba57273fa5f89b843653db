@@ -88,6 +88,24 @@
       "parentUuid": "4874e4af_45d8539c",
       "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94928215_6787d445",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3186,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-08-30T15:42:51Z",
+      "side": 1,
+      "message": "I found 2 reasons why need to use `doDeferredAcquireNextImage()` in `swapImpl()`:\n1. ANI in the `prepareSwap()` may return `VK_ERROR_OUT_OF_DATE_KHR`. We need to process this result and recreate the swapchain instead of returning error if only use `postProcessUnlockedTryAcquire()`.\n2. In case of shared present mode, `swapImpl()` may be called from `WindowSurfaceVk::onSharedPresentContextFlush()`.\n\nThe (1) is also true for `getBufferAge()`, but in this case we may use `doDeferredAcquireNextImageWithUsableSwapchain()` and keep the ASSERT.\n\nI\u0027m currently trying to write test to reproduce `mAcquireOperation.needToAcquireNextSwapchainImage \u003d\u003d true` in the `swapImpl()`.",
+      "parentUuid": "eaa2a315_35f15ad9",
+      "revId": "cfffd82485b6d4065fba57273fa5f89b843653db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
