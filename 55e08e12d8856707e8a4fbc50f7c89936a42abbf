@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fe4e757_4139d34f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2024-08-30T01:05:41Z",
+      "side": 1,
+      "message": "@Geoff, PTAL. \n\nIf you\u0027d like to hold off on merging until all of the code is removed as part of a larger change, let me know.",
+      "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
