@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f05e072d_37a6bb76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-30T13:19:34Z",
+      "side": 1,
+      "message": "Hard to follow the code with all the rotations, but I\u0027ve convinced myself this is correct",
+      "revId": "3524c8949480b989c498712cfe212c6141833d9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
