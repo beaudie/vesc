@@ -22,6 +22,30 @@
       },
       "revId": "4b75965a26b7a07fe748652390d6afbd76ac5e1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e73932c1_0e000aec",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-30T16:22:09Z",
+      "side": 1,
+      "message": "Yeah, looks like it: https://chromium-review.googlesource.com/c/angle/angle/+/5823558",
+      "parentUuid": "e13e7a6f_fbcd3368",
+      "range": {
+        "startLine": 177,
+        "startChar": 14,
+        "endLine": 177,
+        "endChar": 34
+      },
+      "revId": "4b75965a26b7a07fe748652390d6afbd76ac5e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
