@@ -86,6 +86,24 @@
       "parentUuid": "01862831_75d8f866",
       "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51c8a8f7_cccb119d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-30T22:05:20Z",
+      "side": 1,
+      "message": "That\u0027s correct (ignoring the optional `allowES3OnFL100` flag).\n\nMy point is that shader translation output is not necessarily 4.1, like in the case of ES 2.0 client context on FL 10_0. This is tangential to this CL but worth considering to better signal the intent, e.g., by calling the enum `SH_HLSL_4_X_OUTPUT`.",
+      "parentUuid": "bda3b3c2_e5d6b79c",
+      "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
