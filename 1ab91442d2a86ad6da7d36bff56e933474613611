@@ -33,6 +33,24 @@
       "message": "The global lock is still taken, right?",
       "revId": "1ab91442d2a86ad6da7d36bff56e933474613611",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "797550b1_b4095c53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-08-30T17:36:47Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "53c0fdb4_a346521b",
+      "revId": "1ab91442d2a86ad6da7d36bff56e933474613611",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
