@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82e0118a_9f8b9113",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-08-31T16:00:04Z",
+      "side": 1,
+      "message": "The compile guards are added in case the Metal backend is used on macOS 10.15, which does not support MSL 2.3. If that cannot happen, they could be removed.",
+      "revId": "f048491d4a644a939a76a19b98dc91b5ea3746e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
