@@ -18,31 +18,31 @@ namespace vk
 namespace
 {
 // Predefined VkPipelineStageFlags for RefCountedEvent
-constexpr angle::PackedEnumMap<EventStage, VkPipelineStageFlags>
+constexpr angle::PackedEnumMap<EventStage, VkPipelineStageFlags2>
     kEventStageAndPipelineStageFlagsMap = {
-        {EventStage::Transfer, VK_PIPELINE_STAGE_TRANSFER_BIT},
-        {EventStage::VertexShader, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT},
-        {EventStage::FragmentShader, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
-        {EventStage::ComputeShader, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
+        {EventStage::Transfer, VK_PIPELINE_STAGE_2_TRANSFER_BIT},
+        {EventStage::VertexShader, VK_PIPELINE_STAGE_2_VERTEX_SHADER_BIT},
+        {EventStage::FragmentShader, VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT},
+        {EventStage::ComputeShader, VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT},
         {EventStage::AllShaders, kAllShadersPipelineStageFlags},
         {EventStage::PreFragmentShaders, kPreFragmentStageFlags},
         {EventStage::FragmentShadingRate,
-         VK_PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR},
-        {EventStage::ColorAttachmentOutput, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
+         VK_PIPELINE_STAGE_2_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR},
+        {EventStage::ColorAttachmentOutput, VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT},
         {EventStage::ColorAttachmentOutputAndFragmentShader,
-         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+         VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT},
         {EventStage::ColorAttachmentOutputAndFragmentShaderAndTransfer,
-         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT |
-             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+         VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_2_TRANSFER_BIT |
+             VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT},
         {EventStage::ColorAttachmentOutputAndAllShaders,
-         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags},
+         VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT | kAllShadersPipelineStageFlags},
         {EventStage::AllFragmentTest, kAllDepthStencilPipelineStageFlags},
         {EventStage::AllFragmentTestAndFragmentShader,
-         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags},
+         VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | kAllDepthStencilPipelineStageFlags},
         {EventStage::AllFragmentTestAndAllShaders,
          kAllShadersPipelineStageFlags | kAllDepthStencilPipelineStageFlags},
         {EventStage::TransferAndComputeShader,
-         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT}};
+         VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_2_TRANSFER_BIT}};
 
 void DestroyRefCountedEvents(VkDevice device, RefCountedEventCollector &events)
 {
@@ -55,11 +55,11 @@ void DestroyRefCountedEvents(VkDevice device, RefCountedEventCollector &events)
 }  // namespace
 
 void InitializeEventAndPipelineStagesMap(
-    angle::PackedEnumMap<EventStage, VkPipelineStageFlags> *map,
-    VkPipelineStageFlags supportedVulkanPipelineStageMask)
+    angle::PackedEnumMap<EventStage, VkPipelineStageFlags2> *map,
+    VkPipelineStageFlags2 supportedVulkanPipelineStageMask)
 {
     *map = kEventStageAndPipelineStageFlagsMap;
-    for (VkPipelineStageFlags &flag : *map)
+    for (VkPipelineStageFlags2 &flag : *map)
     {
         flag &= supportedVulkanPipelineStageMask;
     }
@@ -241,7 +241,9 @@ void RefCountedEventRecycler::resetEvents(Context *context,
         ASSERT(!events.empty());
         for (const RefCountedEvent &refCountedEvent : events)
         {
-            VkPipelineStageFlags stageMask = renderer->getEventPipelineStageMask(refCountedEvent);
+            // TODO: use resetEvent2 when VK_KHR_Synchronization2 is supported
+            VkPipelineStageFlags stageMask = static_cast<VkPipelineStageFlags>(
+                renderer->getEventPipelineStageMask(refCountedEvent));
             commandbuffer->resetEvent(refCountedEvent.getEvent().getHandle(), stageMask);
         }
         mResettingQueue.emplace(queueSerial, std::move(events));
@@ -350,7 +352,7 @@ void EventBarrier::addDiagnosticsString(std::ostringstream &out) const
     }
 }
 
-void EventBarrier::execute(PrimaryCommandBuffer *primary)
+void EventBarrier::execute(const bool supportSynchronization2, PrimaryCommandBuffer *primary)
 {
     if (isEmpty())
     {
@@ -360,21 +362,36 @@ void EventBarrier::execute(PrimaryCommandBuffer *primary)
     ASSERT(mImageMemoryBarrierCount == 0 ||
            (mImageMemoryBarrierCount == 1 && mImageMemoryBarrier.image != VK_NULL_HANDLE));
 
-    // Issue vkCmdWaitEvents call
+    // Fallback to vkCmdWaitEvents
+    // TODO: add usage of vkCmdWaitEvents2 when VK_KHR_Synchronization2 is supported
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = mMemoryBarrierSrcAccess;
-    memoryBarrier.dstAccessMask   = mMemoryBarrierDstAccess;
+    memoryBarrier.srcAccessMask   = static_cast<VkAccessFlags>(mMemoryBarrierSrcAccess);
+    memoryBarrier.dstAccessMask   = static_cast<VkAccessFlags>(mMemoryBarrierDstAccess);
 
-    primary->waitEvents(1, &mEvent, mSrcStageMask, mDstStageMask, 1, &memoryBarrier, 0, nullptr,
-                        mImageMemoryBarrierCount,
-                        mImageMemoryBarrierCount == 0 ? nullptr : &mImageMemoryBarrier);
+    VkImageMemoryBarrier imageMemoryBarrier = {};
+    imageMemoryBarrier.sType                = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    imageMemoryBarrier.pNext                = nullptr;
+    imageMemoryBarrier.srcAccessMask =
+        static_cast<VkAccessFlags>(mImageMemoryBarrier.srcAccessMask);
+    imageMemoryBarrier.dstAccessMask =
+        static_cast<VkAccessFlags>(mImageMemoryBarrier.dstAccessMask);
+    imageMemoryBarrier.oldLayout           = mImageMemoryBarrier.oldLayout;
+    imageMemoryBarrier.newLayout           = mImageMemoryBarrier.newLayout;
+    imageMemoryBarrier.srcQueueFamilyIndex = mImageMemoryBarrier.srcQueueFamilyIndex;
+    imageMemoryBarrier.dstQueueFamilyIndex = mImageMemoryBarrier.dstQueueFamilyIndex;
+    imageMemoryBarrier.image               = mImageMemoryBarrier.image;
+    imageMemoryBarrier.subresourceRange    = mImageMemoryBarrier.subresourceRange;
+    primary->waitEvents(1, &mEvent, static_cast<VkPipelineStageFlags>(mSrcStageMask),
+                        static_cast<VkPipelineStageFlags>(mDstStageMask), 1, &memoryBarrier, 0,
+                        nullptr, mImageMemoryBarrierCount,
+                        mImageMemoryBarrierCount == 0 ? nullptr : &imageMemoryBarrier);
 }
 
 // EventBarrierArray implementation.
 void EventBarrierArray::addAdditionalStageAccess(const RefCountedEvent &waitEvent,
-                                                 VkPipelineStageFlags dstStageMask,
-                                                 VkAccessFlags dstAccess)
+                                                 VkPipelineStageFlags2 dstStageMask,
+                                                 VkAccessFlags2 dstAccess)
 {
     for (EventBarrier &barrier : mBarriers)
     {
@@ -389,11 +406,11 @@ void EventBarrierArray::addAdditionalStageAccess(const RefCountedEvent &waitEven
 
 void EventBarrierArray::addMemoryEvent(Renderer *renderer,
                                        const RefCountedEvent &waitEvent,
-                                       VkPipelineStageFlags dstStageMask,
-                                       VkAccessFlags dstAccess)
+                                       VkPipelineStageFlags2 dstStageMask,
+                                       VkAccessFlags2 dstAccess)
 {
     ASSERT(waitEvent.valid());
-    VkPipelineStageFlags stageFlags = renderer->getEventPipelineStageMask(waitEvent);
+    VkPipelineStageFlags2 stageFlags = renderer->getEventPipelineStageMask(waitEvent);
     // This should come down as WAW without layout change, dstStageMask should be the same as
     // event's stageMask. Otherwise you should get into addImageEvent.
     ASSERT(stageFlags == dstStageMask);
@@ -403,20 +420,17 @@ void EventBarrierArray::addMemoryEvent(Renderer *renderer,
 
 void EventBarrierArray::addImageEvent(Renderer *renderer,
                                       const RefCountedEvent &waitEvent,
-                                      VkPipelineStageFlags dstStageMask,
-                                      const VkImageMemoryBarrier &imageMemoryBarrier)
+                                      const VkImageMemoryBarrier2 &imageMemoryBarrier2)
 {
     ASSERT(waitEvent.valid());
-    VkPipelineStageFlags srcStageFlags = renderer->getEventPipelineStageMask(waitEvent);
-    mBarriers.emplace_back(srcStageFlags, dstStageMask, waitEvent.getEvent().getHandle(),
-                           imageMemoryBarrier);
+    mBarriers.emplace_back(waitEvent.getEvent().getHandle(), imageMemoryBarrier2);
 }
 
 void EventBarrierArray::execute(Renderer *renderer, PrimaryCommandBuffer *primary)
 {
     while (!mBarriers.empty())
     {
-        mBarriers.back().execute(primary);
+        mBarriers.back().execute(renderer->getFeatures().supportsSynchronization2.enabled, primary);
         mBarriers.pop_back();
     }
     reset();
