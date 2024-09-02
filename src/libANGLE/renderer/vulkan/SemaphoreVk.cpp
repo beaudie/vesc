@@ -85,8 +85,9 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
             ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
             // Queue ownership transfer.
-            bufferHelper.acquireFromExternal(vk::kExternalDeviceQueueIndex,
-                                             contextVk->getDeviceQueueIndex(), commandBuffer);
+            bufferHelper.acquireFromExternal(
+                contextVk->getRenderer()->getFeatures().supportsSynchronization2.enabled,
+                vk::kExternalDeviceQueueIndex, contextVk->getDeviceQueueIndex(), commandBuffer);
         }
     }
 
@@ -117,7 +118,7 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
         }
     }
 
-    contextVk->addWaitSemaphore(mSemaphore.getHandle(), VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
+    contextVk->addWaitSemaphore(mSemaphore.getHandle(), VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT);
     return angle::Result::Continue;
 }
 
@@ -143,7 +144,8 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
             ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
             // Queue ownership transfer.
-            bufferHelper.releaseToExternal(vk::kExternalDeviceQueueIndex, commandBuffer);
+            bufferHelper.releaseToExternal(renderer->getFeatures().supportsSynchronization2.enabled,
+                                           vk::kExternalDeviceQueueIndex, commandBuffer);
         }
     }
 
