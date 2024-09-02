@@ -1028,6 +1028,13 @@ PFN_vkCopyMemoryToImageEXT vkCopyMemoryToImageEXT                   = nullptr;
 PFN_vkGetImageSubresourceLayout2EXT vkGetImageSubresourceLayout2EXT = nullptr;
 PFN_vkTransitionImageLayoutEXT vkTransitionImageLayoutEXT           = nullptr;
 
+// VK_KHR_Synchronization2
+PFN_vkCmdPipelineBarrier2KHR vkCmdPipelineBarrier2KHR = nullptr;
+PFN_vkCmdWriteTimestamp2KHR vkCmdWriteTimestamp2KHR   = nullptr;
+PFN_vkCmdResetEvent2KHR vkCmdResetEvent2KHR           = nullptr;
+PFN_vkCmdWaitEvents2KHR vkCmdWaitEvents2KHR           = nullptr;
+PFN_vkCmdSetEvent2KHR vkCmdSetEvent2KHR               = nullptr;
+
 void InitDebugUtilsEXTFunctions(VkInstance instance)
 {
     GET_INSTANCE_FUNC(vkCreateDebugUtilsMessengerEXT);
@@ -1171,6 +1178,15 @@ void InitHostImageCopyFunctions(VkDevice device)
     GET_DEVICE_FUNC(vkCopyMemoryToImageEXT);
     GET_DEVICE_FUNC(vkGetImageSubresourceLayout2EXT);
     GET_DEVICE_FUNC(vkTransitionImageLayoutEXT);
+}
+
+void InitSynchronization2Functions(VkDevice device)
+{
+    GET_DEVICE_FUNC(vkCmdPipelineBarrier2KHR);
+    GET_DEVICE_FUNC(vkCmdWriteTimestamp2KHR);
+    GET_DEVICE_FUNC(vkCmdResetEvent2KHR);
+    GET_DEVICE_FUNC(vkCmdWaitEvents2KHR);
+    GET_DEVICE_FUNC(vkCmdSetEvent2KHR);
 }
 
 #    undef GET_INSTANCE_FUNC
