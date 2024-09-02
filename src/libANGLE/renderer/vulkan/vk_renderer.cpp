@@ -3558,6 +3558,10 @@ void Renderer::initDeviceExtensionEntryPoints()
         InitExternalMemoryHardwareBufferANDROIDFunctions(mDevice);
     }
 #    endif
+    if (mFeatures.supportsSynchronization2.enabled)
+    {
+        InitSynchronization2Functions(mDevice);
+    }
     // Extensions promoted to Vulkan 1.2
     {
         if (mFeatures.supportsHostQueryReset.enabled)
