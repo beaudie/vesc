@@ -65,8 +65,14 @@ using CLKernelArgsMap   = angle::HashMap<std::string, CLKernelArguments>;
 
 class CLKernelVk : public CLKernelImpl
 {
+  private:
+    static constexpr std::array<size_t, 3> kEmptyWorkgroupSize = {0, 0, 0};
+    static constexpr uint32_t kMaxKernelArgs                   = 255;
+
   public:
-    using Ptr = std::unique_ptr<CLKernelVk>;
+    using Ptr                 = std::unique_ptr<CLKernelVk>;
+    using KernelSpecConstants = angle::FastVector<std::pair<uint32_t, uint32_t>, kMaxKernelArgs>;
+
     CLKernelVk(const cl::Kernel &kernel,
                std::string &name,
                std::string &attributes,
@@ -80,6 +86,7 @@ class CLKernelVk : public CLKernelImpl
     CLProgramVk *getProgram() { return mProgram; }
     const std::string &getKernelName() { return mName; }
     const CLKernelArguments &getArgs() { return mArgs; }
+    const KernelSpecConstants &getSpecConstants() { return mSpecConstants; }
     vk::AtomicBindingPointer<vk::PipelineLayout> &getPipelineLayout() { return mPipelineLayout; }
     vk::DescriptorSetLayoutPointerArray &getDescriptorSetLayouts() { return mDescriptorSetLayouts; }
     cl::Kernel &getFrontendObject() { return const_cast<cl::Kernel &>(mKernel); }
@@ -91,8 +98,6 @@ class CLKernelVk : public CLKernelImpl
                                              cl::WorkgroupCount *workgroupCountOut);
 
   private:
-    static constexpr std::array<size_t, 3> kEmptyWorkgroupSize = {0, 0, 0};
-
     CLProgramVk *mProgram;
     CLContextVk *mContext;
     std::string mName;
@@ -100,6 +105,7 @@ class CLKernelVk : public CLKernelImpl
     CLKernelArguments mArgs;
     vk::ShaderProgramHelper mShaderProgramHelper;
     vk::ComputePipelineCache mComputePipelineCache;
+    KernelSpecConstants mSpecConstants;
     vk::AtomicBindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts{};
 };
