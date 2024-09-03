@@ -158,6 +158,24 @@
       "parentUuid": "bda3b3c2_e5d6b79c",
       "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec58649b_f47c295e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2024-09-03T21:06:35Z",
+      "side": 1,
+      "message": "Good point, @lexa.knyazev@gmail.com. We should tackle as a followup change.",
+      "parentUuid": "51c8a8f7_cccb119d",
+      "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
