@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d4a9505_1c84fa66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-03T19:14:18Z",
+      "side": 1,
+      "message": "Test added (`Clear2DRGBA4`).",
+      "parentUuid": "6b7e964d_c117b94e",
+      "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c24dc38f_9e3d48d4",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-09-03T14:55:07Z",
       "side": 1,
       "message": "nit: Please move these down to near where they are first used",
+      "range": {
+        "startLine": 2330,
+        "startChar": 0,
+        "endLine": 2332,
+        "endChar": 66
+      },
+      "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f056173_1234a420",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2332,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-03T19:14:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c24dc38f_9e3d48d4",
       "range": {
         "startLine": 2330,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f06f802_61584499",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2368,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-03T19:14:18Z",
+      "side": 1,
+      "message": "Thanks! The current default buffer alignment should already provide the extra space, but I agree that we should do it more explicitly. Done.",
+      "parentUuid": "5b86ec7b_d2277096",
+      "range": {
+        "startLine": 2366,
+        "startChar": 0,
+        "endLine": 2368,
+        "endChar": 57
+      },
+      "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "144474d4_9f4d135a",
@@ -81,6 +147,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52d83f85_782993b5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-03T19:14:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "144474d4_9f4d135a",
+      "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "522de8a7_df77ad61",
@@ -94,6 +178,24 @@
       "writtenOn": "2024-09-03T14:55:07Z",
       "side": 1,
       "message": "Nit: initialize a `VkBufferImageCopy` before the `if/else`, with the common data, then use that as initializer here and modify the fields that are necessary.",
+      "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efd3bbec_20c73d24",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2520,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-03T19:14:18Z",
+      "side": 1,
+      "message": "Thanks! Done.",
+      "parentUuid": "522de8a7_df77ad61",
       "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
