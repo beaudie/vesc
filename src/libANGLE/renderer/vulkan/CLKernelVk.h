@@ -80,6 +80,7 @@ class CLKernelVk : public CLKernelImpl
     CLProgramVk *getProgram() { return mProgram; }
     const std::string &getKernelName() { return mName; }
     const CLKernelArguments &getArgs() { return mArgs; }
+    const angle::HashMap<uint32_t, uint32_t> &getSpecConstants() { return mSpecConstants; }
     vk::AtomicBindingPointer<vk::PipelineLayout> &getPipelineLayout() { return mPipelineLayout; }
     vk::DescriptorSetLayoutPointerArray &getDescriptorSetLayouts() { return mDescriptorSetLayouts; }
     cl::Kernel &getFrontendObject() { return const_cast<cl::Kernel &>(mKernel); }
@@ -100,6 +101,7 @@ class CLKernelVk : public CLKernelImpl
     CLKernelArguments mArgs;
     vk::ShaderProgramHelper mShaderProgramHelper;
     vk::ComputePipelineCache mComputePipelineCache;
+    angle::HashMap<uint32_t, uint32_t> mSpecConstants;
     vk::AtomicBindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts{};
 };
