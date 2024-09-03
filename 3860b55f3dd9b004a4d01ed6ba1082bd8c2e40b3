@@ -225,6 +225,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "875f393a_8bc4469e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2646,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-03T21:30:29Z",
+      "side": 1,
+      "message": "Makes sense. However, it seems that this would need changes to `startRenderPass()` to add the clear value and the load/store ops to the input args, right? Should the changes be applied in the prior CL?",
+      "parentUuid": "3efe4865_e719deff",
+      "range": {
+        "startLine": 2619,
+        "startChar": 0,
+        "endLine": 2646,
+        "endChar": 66
+      },
+      "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "712362c6_5d2ea1b9",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 29
@@ -236,6 +260,24 @@
       "writtenOn": "2024-09-03T14:55:07Z",
       "side": 1,
       "message": "Since you have this already, suggest renaming this to `clearTexture` and call the other one `clearTextureThroughBuffer`.\n\nThen make the condition above be `is_multisampled || is_format_renderable` and get the faster fragment path for renderable formats right away.",
+      "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19a5114f_b8cfbfec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 9776,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-03T21:30:29Z",
+      "side": 1,
+      "message": "This can be done for the 2D textures. However, is it also applicable for other types (3D, cubemap, etc.) in a single pass? Or should it be done using 2D rectangles layer by layer?\n\nAlso, is there a function to show if a format is renderable? We already call `ensureRenderable()` when calling `TextureVk::clearSubImageImpl()`.",
+      "parentUuid": "712362c6_5d2ea1b9",
       "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
