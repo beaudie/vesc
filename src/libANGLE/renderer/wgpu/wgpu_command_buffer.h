@@ -67,7 +67,12 @@ struct DrawCommand
 
 struct DrawIndexedCommand
 {
-    uint64_t pad;
+    uint32_t indexCount;
+    uint32_t instanceCount;
+    uint32_t firstIndex;
+    uint32_t baseVertex;
+    uint32_t firstInstance;
+    uint32_t pad;
 };
 
 struct DrawIndexedIndirectCommand
@@ -127,7 +132,14 @@ struct SetBlendConstantCommand
 
 struct SetIndexBufferCommand
 {
-    uint64_t pad;
+    union
+    {
+        const wgpu::Buffer *buffer;
+        uint64_t padding;  // Pad to 64 bits on 32-bit systems
+    };
+    wgpu::IndexFormat format;
+    uint64_t offset;
+    uint64_t size;
 };
 
 struct SetLabelCommand
@@ -160,8 +172,12 @@ struct SetStencilReferenceCommand
 struct SetVertexBufferCommand
 {
     uint32_t slot;
-    uint32_t pad;
-    wgpu::Buffer buffer;
+    uint32_t pad0;
+    union
+    {
+        const wgpu::Buffer *buffer;
+        uint64_t pad1;  // Pad to 64 bits on 32-bit systems
+    };
 };
 
 struct SetViewportCommand
@@ -209,9 +225,18 @@ class CommandBuffer
               uint32_t instanceCount,
               uint32_t firstVertex,
               uint32_t firstInstance);
+    void drawIndexed(uint32_t indexCount,
+                     uint32_t instanceCount,
+                     uint32_t firstIndex,
+                     int32_t baseVertex,
+                     uint32_t firstInstance);
     void setPipeline(wgpu::RenderPipeline pipeline);
     void setScissorRect(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
     void setViewport(float x, float y, float width, float height, float minDepth, float maxDepth);
+    void setIndexBuffer(wgpu::Buffer buffer,
+                        wgpu::IndexFormat format,
+                        uint64_t offset,
+                        uint64_t size);
     void setVertexBuffer(uint32_t slot, wgpu::Buffer buffer);
 
     void clear();
@@ -264,6 +289,7 @@ class CommandBuffer
     // std::unordered_set required because it does not move elements and stored command reference
     // addresses in the set
     std::unordered_set<wgpu::RenderPipeline> mReferencedRenderPipelines;
+    std::unordered_set<wgpu::Buffer> mReferencedBuffers;
 
     void nextCommandBlock();
 
