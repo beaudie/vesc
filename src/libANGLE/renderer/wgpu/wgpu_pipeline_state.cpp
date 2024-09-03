@@ -47,6 +47,11 @@ constexpr wgpu::FrontFace UnpackFrontFace(uint32_t packedFrontFace)
     return static_cast<wgpu::FrontFace>(packedFrontFace + 1);
 }
 
+PackedVertexAttribute::PackedVertexAttribute()
+{
+    memset(this, 0, sizeof(PackedVertexAttribute));
+}
+
 // GraphicsPipelineDesc implementation.
 RenderPipelineDesc::RenderPipelineDesc()
 {
@@ -111,16 +116,12 @@ void RenderPipelineDesc::setColorWriteMask(size_t colorIndex, bool r, bool g, bo
 bool RenderPipelineDesc::setVertexAttribute(size_t attribIndex, PackedVertexAttribute &newAttrib)
 {
     PackedVertexAttribute &currentAttrib = mVertexAttributes[attribIndex];
-    if (currentAttrib.offset == newAttrib.offset && currentAttrib.format == newAttrib.format &&
-        currentAttrib.shaderLocation == newAttrib.shaderLocation)
+    if (memcmp(&currentAttrib, &newAttrib, sizeof(PackedVertexAttribute)) == 0)
     {
         return false;
     }
-    currentAttrib.offset         = newAttrib.offset;
-    currentAttrib.format         = newAttrib.format;
-    currentAttrib.shaderLocation = newAttrib.shaderLocation;
-    currentAttrib.stride         = newAttrib.stride;
-    currentAttrib.enabled        = true;
+
+    memcpy(&currentAttrib, &newAttrib, sizeof(PackedVertexAttribute));
     return true;
 }
 
@@ -263,8 +264,9 @@ angle::Result RenderPipelineDesc::createPipeline(ContextWgpu *context,
     pipelineDesc.primitive.frontFace = UnpackFrontFace(mPrimitiveState.frontFace);
     pipelineDesc.primitive.cullMode  = static_cast<wgpu::CullMode>(mPrimitiveState.cullMode);
 
-    std::vector<wgpu::VertexBufferLayout> buffers;
-    std::vector<wgpu::VertexAttribute> vertexAttribs;
+    size_t attribCount = 0;
+    gl::AttribArray<wgpu::VertexBufferLayout> vertexBuffers;
+    gl::AttribArray<wgpu::VertexAttribute> vertexAttribs;
 
     for (PackedVertexAttribute packedAttrib : mVertexAttributes)
     {
@@ -272,24 +274,22 @@ angle::Result RenderPipelineDesc::createPipeline(ContextWgpu *context,
         {
             continue;
         }
-        wgpu::VertexBufferLayout newBufferLayout;
-        newBufferLayout.arrayStride    = packedAttrib.stride;
-        newBufferLayout.attributeCount = 1;
-        wgpu::VertexAttribute newAttribute;
-        newAttribute.format         = static_cast<wgpu::VertexFormat>(packedAttrib.format);
-        newAttribute.offset         = packedAttrib.offset;
-        newAttribute.shaderLocation = packedAttrib.shaderLocation;
-        vertexAttribs.push_back(newAttribute);
-        newBufferLayout.attributes = &newAttribute;
-        buffers.push_back(newBufferLayout);
+
+        wgpu::VertexAttribute &newAttribute = vertexAttribs[attribCount];
+        newAttribute.format                 = static_cast<wgpu::VertexFormat>(packedAttrib.format);
+        newAttribute.offset                 = packedAttrib.offset;
+        newAttribute.shaderLocation         = packedAttrib.shaderLocation;
+
+        wgpu::VertexBufferLayout &newBufferLayout = vertexBuffers[attribCount];
+        newBufferLayout.arrayStride               = packedAttrib.stride;
+        newBufferLayout.attributeCount            = 1;
+        newBufferLayout.attributes                = &newAttribute;
+
+        attribCount++;
     }
-    // We only need to add a vertex state to the pipeline descriptor if there are any vertex
-    // attributes + buffer layouts.
-    if (!buffers.empty())
-    {
-        pipelineDesc.vertex.bufferCount = buffers.size();
-        pipelineDesc.vertex.buffers     = buffers.data();
-    }
+
+    pipelineDesc.vertex.bufferCount = attribCount;
+    pipelineDesc.vertex.buffers     = vertexBuffers.data();
 
     wgpu::FragmentState fragmentState;
     std::array<wgpu::ColorTargetState, gl::IMPLEMENTATION_MAX_DRAW_BUFFERS> colorTargets;

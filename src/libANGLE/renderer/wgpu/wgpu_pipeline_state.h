@@ -107,6 +107,8 @@ constexpr uint32_t kAttributeOffsetMaxBits = 15;
 
 struct PackedVertexAttribute final
 {
+    PackedVertexAttribute();
+
     uint16_t offset : kAttributeOffsetMaxBits;
     uint16_t pad0 : 1;
     uint8_t format : kVertexFormatBitCount;
