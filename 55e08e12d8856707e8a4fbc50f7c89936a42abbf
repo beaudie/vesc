@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba21a918_8ac75b30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2024-09-03T18:36:29Z",
+      "side": 1,
+      "message": "@geofflang@chromium.org, thank you for the squash reminder. Patchset #2 should have the changes you requested. From reading the docs, my understanding is the latest recommendation is to use Desktop Bridge which doesn\u0027t seem have any DirectX feature level requirements. See https://learn.microsoft.com/en-in/windows/msix/desktop/source-code-overview.",
+      "parentUuid": "782c78b4_8efe024f",
+      "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01862831_75d8f866",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
         "patchSetId": 1
