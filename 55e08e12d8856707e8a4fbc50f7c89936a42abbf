@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "782c78b4_8efe024f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-03T17:45:27Z",
+      "side": 1,
+      "message": "Ack. I see  the changes in the next patch. ANGLE doesn\u0027t squash by default so you should squash locally and re-upload.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4661673 mentions fixing Windows Store certification for QT apps. Are they not able to use D3D9?",
+      "parentUuid": "1d32ec08_305d0f63",
+      "revId": "55e08e12d8856707e8a4fbc50f7c89936a42abbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01862831_75d8f866",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
         "patchSetId": 1
