@@ -445,6 +445,8 @@ enum class Feature
     UseVkEventForImageBarrier,
     UseVmaForImageSuballocation,
     VaryingsRequireMatchingPrecisionInSpirv,
+    VerifyPipelineCacheInBlobCache,
+    VerifyPipelineCacheInBlobCacheUsingLoop,
     VertexIDDoesNotIncludeBaseVertex,
     WaitIdleBeforeSwapchainRecreation,
     WarmUpPipelineCacheAtLink,
