@@ -284,7 +284,7 @@ ConversionBuffer::ConversionBuffer(vk::Renderer *renderer,
     : mEntireBufferDirty(true)
 {
     mData = std::make_unique<vk::BufferHelper>();
-    mDirtyRange.invalidate();
+    mDirtyRanges.reserve(32);
 }
 
 ConversionBuffer::~ConversionBuffer()
@@ -628,7 +628,6 @@ angle::Result BufferVk::mapRange(const gl::Context *context,
                                  GLbitfield access,
                                  void **mapPtr)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "BufferVk::mapRange");
     return mapRangeImpl(vk::GetImpl(context), offset, length, access, mapPtr);
 }
 
