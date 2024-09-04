@@ -75,6 +75,14 @@ class UtilsVk : angle::NonCopyable
         uint32_t dstIndexBufferOffset    = 0;
     };
 
+    struct OffsetAndVertexCount
+    {
+        uint32_t srcOffset;
+        uint32_t dstOffset;
+        uint32_t vertexCount;
+    };
+    using AdditionalOffsetsAndVertexCount = std::vector<OffsetAndVertexCount>;
+
     struct ConvertVertexParameters
     {
         size_t vertexCount;
@@ -242,10 +250,12 @@ class UtilsVk : angle::NonCopyable
         vk::BufferHelper *dstIndexBuffer,
         const ConvertLineLoopArrayIndirectParameters &params);
 
-    angle::Result convertVertexBuffer(ContextVk *contextVk,
-                                      vk::BufferHelper *dst,
-                                      vk::BufferHelper *src,
-                                      const ConvertVertexParameters &params);
+    angle::Result convertVertexBuffer(
+        ContextVk *contextVk,
+        vk::BufferHelper *dst,
+        vk::BufferHelper *src,
+        const ConvertVertexParameters &params,
+        const AdditionalOffsetsAndVertexCount &additionalOffsetVertexCounts);
 
     angle::Result clearFramebuffer(ContextVk *contextVk,
                                    FramebufferVk *framebuffer,
@@ -639,7 +649,8 @@ class UtilsVk : angle::NonCopyable
         vk::BufferHelper *src,
         uint32_t flags,
         vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper,
-        const ConvertVertexShaderParams &shaderParams);
+        const ConvertVertexShaderParams &shaderParams,
+        const AdditionalOffsetsAndVertexCount &additionalOffsetVertexCounts);
 
     // Blits or resolves either color or depth/stencil, based on which view is given.
     angle::Result blitResolveImpl(ContextVk *contextVk,

@@ -18,6 +18,8 @@
 namespace rx
 {
 typedef gl::Range<VkDeviceSize> RangeDeviceSize;
+std::ostream &operator<<(std::ostream &os, const RangeDeviceSize &range);
+std::ostream &operator<<(std::ostream &os, const std::vector<RangeDeviceSize> &ranges);
 
 // Conversion buffers hold translated index and vertex data.
 class ConversionBuffer
@@ -26,7 +28,7 @@ class ConversionBuffer
     ConversionBuffer() : mEntireBufferDirty(true)
     {
         mData = std::make_unique<vk::BufferHelper>();
-        mDirtyRange.invalidate();
+        // mDirtyRange.invalidate();
     }
     ConversionBuffer(vk::Renderer *renderer,
                      VkBufferUsageFlags usageFlags,
@@ -40,12 +42,18 @@ class ConversionBuffer
     bool dirty() const { return mEntireBufferDirty || !mDirtyRange.empty(); }
     bool isEntireBufferDirty() const { return mEntireBufferDirty; }
     void setEntireBufferDirty() { mEntireBufferDirty = true; }
-    void addDirtyBufferRange(const RangeDeviceSize &range) { mDirtyRange.merge(range); }
-    const RangeDeviceSize &getDirtyBufferRange() const { return mDirtyRange; }
+    void addDirtyBufferRange(const RangeDeviceSize &range)
+    {
+        // mDirtyRange.merge(range);
+        mDirtyRange.emplace_back(range);
+    }
+    // const RangeDeviceSize &getDirtyBufferRange() const { return mDirtyRange; }
+    const std::vector<RangeDeviceSize> &getDirtyBufferRanges() const { return mDirtyRange; }
     void clearDirty()
     {
         mEntireBufferDirty = false;
-        mDirtyRange.invalidate();
+        // mDirtyRange.invalidate();
+        mDirtyRange.clear();
     }
 
     bool valid() const { return mData && mData->valid(); }
@@ -59,7 +67,8 @@ class ConversionBuffer
     // true. If mEntireBufferDirty is false, mDirtyRange is the ranges of data that has been
     // modified. Note that there is no guarantee that ranges will not overlap.
     bool mEntireBufferDirty;
-    RangeDeviceSize mDirtyRange;
+    // RangeDeviceSize mDirtyRange;
+    std::vector<RangeDeviceSize> mDirtyRange;
 
     // Where the conversion data is stored.
     std::unique_ptr<vk::BufferHelper> mData;
