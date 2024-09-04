@@ -1642,6 +1642,23 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://anglebug.com/42263322"
     };
 
+    FeatureInfo verifyPipelineCacheInBlobCache = {
+        "verifyPipelineCacheInBlobCache",
+        FeatureCategory::VulkanFeatures,
+        "Wether need to perform verification of stored PipelineCacheVk data chunks or not. "
+        "Relevant, when blob cache does not evict old items first (no LRU) or evicts more old items than required when storing a new item.",
+        &members, "https://anglebug.com/42263322"
+    };
+
+    FeatureInfo verifyPipelineCacheInBlobCacheUsingLoop = {
+        "verifyPipelineCacheInBlobCacheUsingLoop",
+        FeatureCategory::VulkanFeatures,
+        "Extension to the verify_pipeline_cache_in_blob_cache feature. "
+        "Wether verification should be performed multiple times (using loop) or single time. "
+        "Relevant, when blob cache does not evict old items first (no LRU).",
+        &members, "https://anglebug.com/42263322"
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
