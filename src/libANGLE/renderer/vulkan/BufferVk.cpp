@@ -19,6 +19,21 @@
 
 namespace rx
 {
+std::ostream &operator<<(std::ostream &os, const RangeDeviceSize &range)
+{
+    os << '{' << range.low() << ", " << range.high() << '}';
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const std::vector<RangeDeviceSize> &ranges)
+{
+    for (const RangeDeviceSize &range : ranges)
+    {
+        os << range;
+    }
+    return os;
+}
+
 VkBufferUsageFlags GetDefaultBufferUsageFlags(vk::Renderer *renderer)
 {
     // We could potentially use multiple backing buffers for different usages.
