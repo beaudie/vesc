@@ -18,6 +18,8 @@
 namespace rx
 {
 typedef gl::Range<VkDeviceSize> RangeDeviceSize;
+std::ostream &operator<<(std::ostream &os, const RangeDeviceSize &range);
+std::ostream &operator<<(std::ostream &os, const std::vector<RangeDeviceSize> &ranges);
 
 // Conversion buffers hold translated index and vertex data.
 class ConversionBuffer
@@ -40,12 +42,18 @@ class ConversionBuffer
     bool dirty() const { return mEntireBufferDirty || !mDirtyRange.empty(); }
     bool isEntireBufferDirty() const { return mEntireBufferDirty; }
     void setEntireBufferDirty() { mEntireBufferDirty = true; }
-    void addDirtyBufferRange(const RangeDeviceSize &range) { mDirtyRange.merge(range); }
+    void addDirtyBufferRange(const RangeDeviceSize &range)
+    {
+        mDirtyRange.merge(range);
+        mShadowDirtyRanges.emplace_back(range);
+    }
     const RangeDeviceSize &getDirtyBufferRange() const { return mDirtyRange; }
+    const std::vector<RangeDeviceSize> &getDirtyBufferRanges() const { return mShadowDirtyRanges; }
     void clearDirty()
     {
         mEntireBufferDirty = false;
         mDirtyRange.invalidate();
+        mShadowDirtyRanges.clear();
     }
 
     bool valid() const { return mData && mData->valid(); }
@@ -60,6 +68,7 @@ class ConversionBuffer
     // modified. Note that there is no guarantee that ranges will not overlap.
     bool mEntireBufferDirty;
     RangeDeviceSize mDirtyRange;
+    std::vector<RangeDeviceSize> mShadowDirtyRanges;
 
     // Where the conversion data is stored.
     std::unique_ptr<vk::BufferHelper> mData;

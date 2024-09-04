@@ -19,6 +19,21 @@
 
 namespace rx
 {
+std::ostream &operator<<(std::ostream &os, const RangeDeviceSize &range)
+{
+    os << '{' << range.low() << ", " << range.high() << ", len:" << range.length() << '}';
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const std::vector<RangeDeviceSize> &ranges)
+{
+    for (const RangeDeviceSize &range : ranges)
+    {
+        os << range;
+    }
+    return os;
+}
+
 VkBufferUsageFlags GetDefaultBufferUsageFlags(vk::Renderer *renderer)
 {
     // We could potentially use multiple backing buffers for different usages.
@@ -628,7 +643,6 @@ angle::Result BufferVk::mapRange(const gl::Context *context,
                                  GLbitfield access,
                                  void **mapPtr)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "BufferVk::mapRange");
     return mapRangeImpl(vk::GetImpl(context), offset, length, access, mapPtr);
 }
 
