@@ -1628,6 +1628,20 @@ struct FeaturesVk : FeatureSetBase
         &members,
     };
 
+    FeatureInfo hasBlobCacheThatEvictsOldItemsFirst = {
+        "hasBlobCacheThatEvictsOldItemsFirst",
+        FeatureCategory::VulkanFeatures,
+        "Specifies that blob cache evicts old items first.",
+        &members,
+    };
+
+    FeatureInfo hasBlobCacheThatEvictsOnlyNecessaryItems = {
+        "hasBlobCacheThatEvictsOnlyNecessaryItems",
+        FeatureCategory::VulkanFeatures,
+        "Specifies that blob cache evicts only necessary items to store the new item.",
+        &members,
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

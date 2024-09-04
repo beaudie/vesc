@@ -197,6 +197,8 @@ enum class Feature
     GenerateShareableShaders,
     GetDimensionsIgnoresBaseLevel,
     HasBaseVertexInstancedDraw,
+    HasBlobCacheThatEvictsOldItemsFirst,
+    HasBlobCacheThatEvictsOnlyNecessaryItems,
     HasBlobCacheWithZeroSizedValuesSupport,
     HasCheapRenderPass,
     HasDepthAutoResolve,

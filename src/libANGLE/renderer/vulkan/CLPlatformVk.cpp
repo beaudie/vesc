@@ -287,6 +287,16 @@ bool CLPlatformVk::isBlobCacheSupportsZeroSizedValues() const
     return true;
 }
 
+bool CLPlatformVk::isBlobCacheEvictsOldItemsFirst() const
+{
+    return true;
+}
+
+bool CLPlatformVk::isBlobCacheEvictsOnlyNecessaryItems() const
+{
+    return true;
+}
+
 void CLPlatformVk::putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value)
 {
     std::scoped_lock<angle::SimpleMutex> lock(mBlobCacheMutex);
