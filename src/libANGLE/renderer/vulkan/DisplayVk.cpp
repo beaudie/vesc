@@ -36,6 +36,18 @@ constexpr bool kEglBlobCacheSupportsZeroSizedValues = true;
 constexpr bool kEglBlobCacheSupportsZeroSizedValues = false;
 #endif
 
+#if defined(ANGLE_EGL_BLOB_CACHE_EVICTS_OLD_ITEMS_FIRST)
+constexpr bool kEglBlobCacheEvictsOldItemsFirst = true;
+#else
+constexpr bool kEglBlobCacheEvictsOldItemsFirst = false;
+#endif
+
+#if defined(ANGLE_EGL_BLOB_CACHE_EVICTS_ONLY_NECESSARY_ITEMS)
+constexpr bool kEglBlobCacheEvictsOnlyNecessaryItems = true;
+#else
+constexpr bool kEglBlobCacheEvictsOnlyNecessaryItems = false;
+#endif
+
 // Query surface format and colorspace support.
 void GetSupportedFormatColorspaces(VkPhysicalDevice physicalDevice,
                                    const angle::FeaturesVk &featuresVk,
@@ -683,6 +695,16 @@ uint8_t DisplayVk::getNextPipelineBlobCacheSlotIndex(uint8_t *previousSlotIndexO
 bool DisplayVk::isBlobCacheSupportsZeroSizedValues() const
 {
     return kEglBlobCacheSupportsZeroSizedValues;
+}
+
+bool DisplayVk::isBlobCacheEvictsOldItemsFirst() const
+{
+    return kEglBlobCacheEvictsOldItemsFirst;
+}
+
+bool DisplayVk::isBlobCacheEvictsOnlyNecessaryItems() const
+{
+    return kEglBlobCacheEvictsOnlyNecessaryItems;
 }
 
 void DisplayVk::putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value)

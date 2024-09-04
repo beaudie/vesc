@@ -37,6 +37,12 @@ declare_args() {
 
   # Blob cache supports storing items with zero sized values
   angle_egl_blob_cache_supports_zero_sized_values = false
+
+  # Blob cache evicts old items first
+  angle_egl_blob_cache_evicts_old_items_first = false
+
+  # Blob cache evicts only necessary items to store the new item
+  angle_egl_blob_cache_evicts_only_necessary_items = false
 }
 
 angle_source_set("angle_vk_mem_alloc_wrapper") {
@@ -91,6 +97,14 @@ config("angle_vulkan_backend_config") {
 
   if (angle_egl_blob_cache_supports_zero_sized_values) {
     defines += [ "ANGLE_EGL_BLOB_CACHE_SUPPORTS_ZERO_SIZED_VALUES" ]
+  }
+
+  if (angle_egl_blob_cache_evicts_old_items_first) {
+    defines += [ "ANGLE_EGL_BLOB_CACHE_EVICTS_OLD_ITEMS_FIRST" ]
+  }
+
+  if (angle_egl_blob_cache_evicts_only_necessary_items) {
+    defines += [ "ANGLE_EGL_BLOB_CACHE_EVICTS_ONLY_NECESSARY_ITEMS" ]
   }
 }
 
