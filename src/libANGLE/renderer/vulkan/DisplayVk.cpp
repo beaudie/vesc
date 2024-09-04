@@ -154,7 +154,8 @@ DisplayVk::DisplayVk(const egl::DisplayState &state)
     : DisplayImpl(state),
       vk::Context(new vk::Renderer()),
       mScratchBuffer(1000u),
-      mSupportedColorspaceFormatsMap{}
+      mSupportedColorspaceFormatsMap{},
+      mCurrentPipelineBlobCacheSlotIndex(0)
 {}
 
 DisplayVk::~DisplayVk()
@@ -660,6 +661,24 @@ void DisplayVk::populateFeatureList(angle::FeatureList *features)
 }
 
 // vk::GlobalOps
+uint8_t DisplayVk::getNextPipelineBlobCacheSlotIndex(uint8_t *previousSlotIndexOut)
+{
+    if (previousSlotIndexOut != nullptr)
+    {
+        *previousSlotIndexOut = mCurrentPipelineBlobCacheSlotIndex;
+    }
+    if (getFeatures().useDualPipelineBlobCacheSlots.enabled)
+    {
+        mCurrentPipelineBlobCacheSlotIndex = 1 - mCurrentPipelineBlobCacheSlotIndex;
+    }
+    return mCurrentPipelineBlobCacheSlotIndex;
+}
+
+bool DisplayVk::isBlobCacheSupportsZeroSizedValues() const
+{
+    return getFeatures().hasBlobCacheWithZeroSizedValuesSupport.enabled;
+}
+
 void DisplayVk::putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value)
 {
     getBlobCache()->putApplication(key, value);
