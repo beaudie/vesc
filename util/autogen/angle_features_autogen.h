@@ -253,7 +253,7 @@ enum class Feature
     PreferMonolithicPipelinesOverLibraries,
     PreferMSRTSSFlagByDefault,
     PreferSkippingInvalidateForEmulatedFormats,
-    PreferSubmitAtFBOBoundary,
+    PreferSubmitAtRenderPassEnd,
     PreferSubmitOnAnySamplesPassedQueryEnd,
     PreTransformTextureCubeGradDerivatives,
     PrintMetalShaders,

@@ -122,7 +122,7 @@ void ImagelessFramebufferAttachmentBenchmark::drawBenchmark()
 ImagelessFramebufferAttachmentParams ImagelessVulkanEnabledParams()
 {
     ImagelessFramebufferAttachmentParams params;
-    params.eglParameters = egl_platform::VULKAN().disable(Feature::PreferSubmitAtFBOBoundary);
+    params.eglParameters = egl_platform::VULKAN().disable(Feature::PreferSubmitAtRenderPassEnd);
     params.isImagelessFramebufferEnabled = true;
 
     return params;
@@ -132,7 +132,7 @@ ImagelessFramebufferAttachmentParams ImagelessVulkanDisabledParams()
 {
     ImagelessFramebufferAttachmentParams params;
     params.eglParameters = egl_platform::VULKAN()
-                               .disable(Feature::PreferSubmitAtFBOBoundary)
+                               .disable(Feature::PreferSubmitAtRenderPassEnd)
                                .disable(Feature::SupportsImagelessFramebuffer);
     params.isImagelessFramebufferEnabled = false;
 

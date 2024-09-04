@@ -641,10 +641,10 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://issuetracker.google.com/184850002"
     };
 
-    FeatureInfo preferSubmitAtFBOBoundary = {
-        "preferSubmitAtFBOBoundary",
+    FeatureInfo preferSubmitAtRenderPassEnd = {
+        "preferSubmitAtRenderPassEnd",
         FeatureCategory::VulkanWorkarounds,
-        "Submit commands to driver at each FBO boundary for performance improvements.",
+        "Submit commands to driver when a render pass ends for increased parallelism.",
         &members, "https://issuetracker.google.com/187425444"
     };
 

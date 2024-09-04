@@ -5681,7 +5681,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // If we are switching from user FBO to system frame buffer, we always submit work
                 // first so that these FBO rendering will not have to wait for ANI semaphore (which
                 // draw to system frame buffer must wait for).
-                if ((getFeatures().preferSubmitAtFBOBoundary.enabled ||
+                if ((getFeatures().preferSubmitAtRenderPassEnd.enabled ||
                      mState.getDrawFramebuffer()->isDefault()) &&
                     mRenderPassCommands->started())
                 {

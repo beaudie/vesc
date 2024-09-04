@@ -4840,7 +4840,7 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // Testing shows that on ARM and Qualcomm GPU, doing implicit flush at framebuffer boundary
     // improves performance. Most app traces shows frame time reduced and manhattan 3.1 offscreen
     // score improves 7%.
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary,
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtRenderPassEnd,
                             isTileBasedRenderer || isSwiftShader);
 
     // In order to support immutable samplers tied to external formats, we need to overallocate

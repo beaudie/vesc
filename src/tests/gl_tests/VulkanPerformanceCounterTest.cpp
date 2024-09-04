@@ -406,9 +406,9 @@ class VulkanPerformanceCounterTest : public ANGLETest<>
     {
         return isFeatureEnabled(Feature::PreferCPUForBufferSubData);
     }
-    bool hasPreferSubmitAtFBOBoundary() const
+    bool hasPreferSubmitAtRenderPassEnd() const
     {
-        return isFeatureEnabled(Feature::PreferSubmitAtFBOBoundary);
+        return isFeatureEnabled(Feature::PreferSubmitAtRenderPassEnd);
     }
     bool hasDisallowMixedDepthStencilLoadOpNoneAndLoad() const
     {
@@ -6993,7 +6993,7 @@ TEST_P(VulkanPerformanceCounterTest, VerifySubmitCountersForSwapBuffer)
     EXPECT_EQ(getPerfCounters().commandQueueSubmitCallsTotal, expectedCommandQueueSubmitCount);
 }
 
-// Tests that PreferSubmitAtFBOBoundary feature works properly. Bind to different FBO and should
+// Tests that PreferSubmitAtRenderPassEnd feature works properly. Bind to different FBO and should
 // trigger submit of previous FBO. In this specific test, we switch to system default framebuffer
 // which is always considered as "dirty".
 TEST_P(VulkanPerformanceCounterTest, VerifySubmitCounterForSwitchUserFBOToSystemFramebuffer)
@@ -7034,7 +7034,7 @@ TEST_P(VulkanPerformanceCounterTest, VerifySubmitCounterForSwitchUserFBOToSystem
               expectedCommandQueueWaitSemaphoreCount);
 }
 
-// Tests that PreferSubmitAtFBOBoundary feature works properly. Bind to different FBO and should
+// Tests that PreferSubmitAtRenderPassEnd feature works properly. Bind to different FBO and should
 // trigger submit of previous FBO. In this specific test, we test bind to a new user FBO which we
 // used to had a bug.
 TEST_P(VulkanPerformanceCounterTest, VerifySubmitCounterForSwitchUserFBOToDirtyUserFBO)
@@ -7054,7 +7054,7 @@ TEST_P(VulkanPerformanceCounterTest, VerifySubmitCounterForSwitchUserFBOToDirtyU
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
 
-    if (hasPreferSubmitAtFBOBoundary())
+    if (hasPreferSubmitAtRenderPassEnd())
     {
         // One submission coming from glBindFramebuffer and draw
         ++expectedCommandQueueSubmitCount;
