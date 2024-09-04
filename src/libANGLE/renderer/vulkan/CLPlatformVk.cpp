@@ -52,9 +52,15 @@ angle::Result CLPlatformVk::initBackendRenderer()
 {
     ASSERT(mRenderer != nullptr);
 
+    angle::FeatureOverrides featureOverrides;
+
+    // In memory |SizedMRUCache| does not require dual slot and support zero sized values.
+    featureOverrides.disabled.push_back("useDualPipelineBlobCacheSlots");
+    featureOverrides.enabled.push_back("hasBlobCacheWithZeroSizedValuesSupport");
+
     ANGLE_TRY(mRenderer->initialize(this, this, angle::vk::ICD::Default, 0, 0, kUseDebugLayers,
                                     getWSIExtension(), getWSILayer(), getWindowSystem(),
-                                    angle::FeatureOverrides{}));
+                                    featureOverrides));
 
     return angle::Result::Continue;
 }

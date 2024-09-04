@@ -1614,6 +1614,20 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://anglebug.com/360031000"
     };
 
+    FeatureInfo useDualPipelineBlobCacheSlots = {
+        "useDualPipelineBlobCacheSlots",
+        FeatureCategory::VulkanFeatures,
+        "Wether DisplayVk will use single or dual slots to store PipelineCacheVk data.",
+        &members, "https://anglebug.com/42263322"
+    };
+
+    FeatureInfo hasBlobCacheWithZeroSizedValuesSupport = {
+        "hasBlobCacheWithZeroSizedValuesSupport",
+        FeatureCategory::VulkanFeatures,
+        "Blob cache supports storing items with zero sized values.",
+        &members, "https://anglebug.com/42263322"
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
