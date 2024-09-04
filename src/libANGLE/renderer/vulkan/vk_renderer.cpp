@@ -1038,15 +1038,18 @@ void ComputePipelineCacheVkChunkKey(const VkPhysicalDeviceProperties &physicalDe
                                hashString.length(), hashOut->data());
 }
 
-void StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
-                                Renderer *renderer,
-                                const size_t cacheDataSize,
-                                const angle::MemoryBuffer &compressedData,
-                                const uint32_t compressedDataCRC,
-                                const size_t numChunks,
-                                const size_t chunkSize,
-                                const size_t slotIndex,
-                                angle::MemoryBuffer *scratchBuffer);
+// Returns the number of stored chunks.  "lastNumStoredChunks" is the number of chunks,
+// stored in the last call.  If it is positive, function will only restore missing chunks.
+size_t StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
+                                  Renderer *renderer,
+                                  const size_t lastNumStoredChunks,
+                                  const size_t cacheDataSize,
+                                  const angle::MemoryBuffer &compressedData,
+                                  const uint32_t compressedDataCRC,
+                                  const size_t numChunks,
+                                  const size_t chunkSize,
+                                  const size_t slotIndex,
+                                  angle::MemoryBuffer *scratchBuffer);
 
 // Erasing is done by writing 1/0-sized chunks starting from the 0 chunk.
 void ErasePipelineCacheVkChunks(vk::GlobalOps *globalOps,
@@ -1112,9 +1115,11 @@ void CompressAndStorePipelineCacheVk(vk::GlobalOps *globalOps,
         return;
     }
 
-    // Store all chunks.
-    StorePipelineCacheVkChunks(globalOps, renderer, cacheData.size(), compressedData,
-                               compressedDataCRC, numChunks, chunkSize, slotIndex, &scratchBuffer);
+    // Store all chunks without checking if they already exist (because they can't).
+    size_t numStoredChunks = StorePipelineCacheVkChunks(
+        globalOps, renderer, 0, cacheData.size(), compressedData, compressedDataCRC, numChunks,
+        chunkSize, slotIndex, &scratchBuffer);
+    ASSERT(numStoredChunks == numChunks);
 
     // Erase data from the previous slot. Since cache data size is always increasing, use current
     // numChunks for simplicity (to avoid storing previous numChunks).
@@ -1128,51 +1133,134 @@ void CompressAndStorePipelineCacheVk(vk::GlobalOps *globalOps,
     {
         ASSERT(!renderer->getFeatures().useDualPipelineBlobCacheSlots.enabled);
     }
+
+    if (!renderer->getFeatures().verifyPipelineCacheInBlobCache.enabled)
+    {
+        // No need to verify and restore possibly evicted chunks.
+        ASSERT(!renderer->getFeatures().verifyPipelineCacheInBlobCacheUsingLoop.enabled);
+        return;
+    }
+
+    // Verify and restore possibly evicted chunks.
+    do
+    {
+        const size_t lastNumStoredChunks = numStoredChunks;
+        numStoredChunks                  = StorePipelineCacheVkChunks(
+            globalOps, renderer, lastNumStoredChunks, cacheData.size(), compressedData,
+            compressedDataCRC, numChunks, chunkSize, slotIndex, &scratchBuffer);
+        // Number of stored chunks must decrease so the loop can eventually exit.
+        ASSERT(numStoredChunks < lastNumStoredChunks);
+
+    } while (renderer->getFeatures().verifyPipelineCacheInBlobCacheUsingLoop.enabled &&
+             numStoredChunks > 0);
 }
 
-void StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
-                                Renderer *renderer,
-                                const size_t cacheDataSize,
-                                const angle::MemoryBuffer &compressedData,
-                                const uint32_t compressedDataCRC,
-                                const size_t numChunks,
-                                const size_t chunkSize,
-                                const size_t slotIndex,
-                                angle::MemoryBuffer *scratchBuffer)
+size_t StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
+                                  Renderer *renderer,
+                                  const size_t lastNumStoredChunks,
+                                  const size_t cacheDataSize,
+                                  const angle::MemoryBuffer &compressedData,
+                                  const uint32_t compressedDataCRC,
+                                  const size_t numChunks,
+                                  const size_t chunkSize,
+                                  const size_t slotIndex,
+                                  angle::MemoryBuffer *scratchBuffer)
 {
     // Store chunks in revers order, so when 0 chunk is available - all chunks are available.
 
     const VkPhysicalDeviceProperties &physicalDeviceProperties =
         renderer->getPhysicalDeviceProperties();
 
-    ASSERT(scratchBuffer != nullptr && scratchBuffer->capacity() >= chunkSize);
-    angle::MemoryBuffer &keyData = *scratchBuffer;
+    // Assume that cache evicts old items first if verification using loop is disabled.
+    const bool cacheEvictsOldItems =
+        !renderer->getFeatures().verifyPipelineCacheInBlobCacheUsingLoop.enabled;
 
+    struct ChunkInfo
+    {
+        size_t index;
+        size_t compressedOffset;
+        size_t keyDataSize;
+        angle::BlobCacheKey cacheHash;
+    };
+
+    // Enough to store 32M data using 64K chunks.
+    constexpr size_t kFastChunkInfosSize = 512;
+    angle::FastVector<ChunkInfo, kFastChunkInfosSize> chunkInfos;
+
+    // Defer storing chunks until all missing chunks are found to avoid unecessary stores.
     size_t chunkIndex = numChunks;
     while (chunkIndex > 0)
     {
         --chunkIndex;
         const size_t compressedOffset = chunkIndex * chunkSize;
-        keyData.setSize(sizeof(CacheDataHeader) +
-                        std::min(chunkSize, compressedData.size() - compressedOffset));
-
-        // Add the header data, followed by the compressed data.
-        ASSERT(cacheDataSize <= UINT32_MAX);
-        CacheDataHeader headerData = {};
-        PackHeaderDataForPipelineCache(compressedDataCRC, static_cast<uint32_t>(cacheDataSize),
-                                       static_cast<uint16_t>(numChunks),
-                                       static_cast<uint16_t>(chunkIndex), &headerData);
-        memcpy(keyData.data(), &headerData, sizeof(CacheDataHeader));
-        memcpy(keyData.data() + sizeof(CacheDataHeader), compressedData.data() + compressedOffset,
-               keyData.size() - sizeof(CacheDataHeader));
+        const size_t keyDataSize =
+            sizeof(CacheDataHeader) + std::min(chunkSize, compressedData.size() - compressedOffset);
 
         // Create unique hash key.
         angle::BlobCacheKey chunkCacheHash;
         ComputePipelineCacheVkChunkKey(physicalDeviceProperties, slotIndex, chunkIndex,
                                        &chunkCacheHash);
 
-        globalOps->putBlob(chunkCacheHash, keyData);
+        // Need to check existing chunks if this is not the first time this function is called.
+        if (lastNumStoredChunks > 0)
+        {
+            angle::BlobCacheValue value;
+            if (globalOps->getBlob(chunkCacheHash, &value) && value.size() == keyDataSize)
+            {
+                if (cacheEvictsOldItems)
+                {
+                    // No need to check next chunks, since they are newer than the current and
+                    // should also be present.
+                    break;
+                }
+                continue;
+            }
+        }
+
+        chunkInfos.emplace_back(
+            ChunkInfo{chunkIndex, compressedOffset, keyDataSize, chunkCacheHash});
+
+        if (chunkInfos.size() == lastNumStoredChunks)
+        {
+            // No need to restore missing chunks, since new number is already same as was stored
+            // last time.
+            static bool warned = false;
+            if (!warned)
+            {
+                WARN() << "Skip syncing pipeline cache data due to not able to store "
+                       << chunkInfos.size() << " chunks (out of " << numChunks
+                       << ") into the blob cache. (this message will no longer repeat)";
+                warned = true;
+            }
+            chunkInfos.clear();
+            break;
+        }
     }
+
+    // Now store/restore chunks (if any).
+
+    ASSERT(scratchBuffer != nullptr && scratchBuffer->capacity() >= chunkSize);
+    angle::MemoryBuffer &keyData = *scratchBuffer;
+
+    for (const ChunkInfo &chunkInfo : chunkInfos)
+    {
+        keyData.setSize(chunkInfo.keyDataSize);
+
+        // Add the header data, followed by the compressed data.
+        ASSERT(cacheDataSize <= UINT32_MAX);
+        CacheDataHeader headerData = {};
+        PackHeaderDataForPipelineCache(compressedDataCRC, static_cast<uint32_t>(cacheDataSize),
+                                       static_cast<uint16_t>(numChunks),
+                                       static_cast<uint16_t>(chunkInfo.index), &headerData);
+        memcpy(keyData.data(), &headerData, sizeof(CacheDataHeader));
+        memcpy(keyData.data() + sizeof(CacheDataHeader),
+               compressedData.data() + chunkInfo.compressedOffset,
+               keyData.size() - sizeof(CacheDataHeader));
+
+        globalOps->putBlob(chunkInfo.cacheHash, keyData);
+    }
+
+    return chunkInfos.size();
 }
 
 void ErasePipelineCacheVkChunks(vk::GlobalOps *globalOps,
@@ -5334,6 +5422,11 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // Disable by default, because currently it is uncommon that blob cache supports storing
     // zero sized blobs (or erasing blobs).
     ANGLE_FEATURE_CONDITION(&mFeatures, useEmptyBlobsToEraseOldPipelineCacheFromBlobCache, false);
+
+    // Disable by default, assuming blob cache evicts only minimum number of old items.
+    ANGLE_FEATURE_CONDITION(&mFeatures, verifyPipelineCacheInBlobCache, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, verifyPipelineCacheInBlobCacheUsingLoop,
+                            mFeatures.verifyPipelineCacheInBlobCache.enabled);
 
     // On ARM, dynamic state for stencil write mask doesn't work correctly in the presence of
     // discard or alpha to coverage, if the static state provided when creating the pipeline has a
