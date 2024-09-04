@@ -1614,6 +1614,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://anglebug.com/360031000"
     };
 
+    FeatureInfo useDualPipelineBlobCacheSlots = {
+        "useDualPipelineBlobCacheSlots",
+        FeatureCategory::VulkanFeatures,
+        "Wether DisplayVk will use single or dual slots to store PipelineCacheVk data.",
+        &members,
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
