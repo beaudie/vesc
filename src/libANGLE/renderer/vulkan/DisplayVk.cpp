@@ -174,9 +174,10 @@ egl::Error DisplayVk::initialize(egl::Display *display)
     const uint32_t preferredDeviceId =
         static_cast<uint32_t>(attribs.get(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE, 0));
 
-    angle::Result result = mRenderer->initialize(
-        this, this, desiredICD, preferredVendorId, preferredDeviceId, useDebugLayers,
-        getWSIExtension(), getWSILayer(), getWindowSystem(), mState.featureOverrides);
+    angle::Result result =
+        mRenderer->initialize(this, this, desiredICD, preferredVendorId, preferredDeviceId,
+                              useDebugLayers, getWSIExtension(), getWSILayer(), getWindowSystem(),
+                              vk::ClientAPI::OpenGLES, mState.featureOverrides);
     ANGLE_TRY(angle::ToEGL(result, EGL_NOT_INITIALIZED));
 
     mDeviceQueueIndex = mRenderer->getDeviceQueueIndex(egl::ContextPriority::Medium);

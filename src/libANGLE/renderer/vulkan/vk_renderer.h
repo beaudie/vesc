@@ -149,6 +149,12 @@ enum class UseVulkanSwapchain
     No,
 };
 
+enum class ClientAPI
+{
+    OpenCL,
+    OpenGLES,
+};
+
 class Renderer : angle::NonCopyable
 {
   public:
@@ -164,6 +170,7 @@ class Renderer : angle::NonCopyable
                              const char *wsiExtension,
                              const char *wsiLayer,
                              angle::NativeWindowSystem nativeWindowSystem,
+                             ClientAPI clientAPI,
                              const angle::FeatureOverrides &featureOverrides);
 
     // Reload volk vk* function ptrs if needed for an already initialized Renderer
@@ -347,6 +354,7 @@ class Renderer : angle::NonCopyable
         mSuballocationGarbageList.add(this, std::move(garbage));
     }
 
+    uint32_t getNextPipelineCacheBlobCacheSlotIndex(uint32_t *previousSlotIndexOut);
     angle::Result getPipelineCache(vk::Context *context, vk::PipelineCacheAccess *pipelineCacheOut);
     angle::Result mergeIntoPipelineCache(vk::Context *context,
                                          const vk::PipelineCache &pipelineCache);
@@ -773,6 +781,7 @@ class Renderer : angle::NonCopyable
 
   private:
     angle::Result setupDevice(vk::Context *context,
+                              ClientAPI clientAPI,
                               const angle::FeatureOverrides &featureOverrides,
                               const char *wsiLayer,
                               UseVulkanSwapchain useVulkanSwapchain,
@@ -804,6 +813,7 @@ class Renderer : angle::NonCopyable
                                            UseVulkanSwapchain useVulkanSwapchain,
                                            bool canLoadDebugUtils);
     angle::Result enableDeviceExtensions(vk::Context *context,
+                                         ClientAPI clientAPI,
                                          const angle::FeatureOverrides &featureOverrides,
                                          UseVulkanSwapchain useVulkanSwapchain,
                                          angle::NativeWindowSystem nativeWindowSystem);
@@ -819,6 +829,7 @@ class Renderer : angle::NonCopyable
     void initializeDeviceExtensionEntryPointsFromCore() const;
 
     void initFeatures(const vk::ExtensionNameList &extensions,
+                      ClientAPI clientAPI,
                       const angle::FeatureOverrides &featureOverrides,
                       UseVulkanSwapchain useVulkanSwapchain,
                       angle::NativeWindowSystem nativeWindowSystem);
@@ -1020,6 +1031,7 @@ class Renderer : angle::NonCopyable
     //    enabled
     angle::SimpleMutex mPipelineCacheMutex;
     vk::PipelineCache mPipelineCache;
+    uint32_t mCurrentPipelineCacheBlobCacheSlotIndex;
     uint32_t mPipelineCacheVkUpdateTimeout;
     size_t mPipelineCacheSizeAtLastSync;
     std::atomic<bool> mPipelineCacheInitialized;

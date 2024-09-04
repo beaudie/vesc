@@ -54,7 +54,7 @@ angle::Result CLPlatformVk::initBackendRenderer()
 
     ANGLE_TRY(mRenderer->initialize(this, this, angle::vk::ICD::Default, 0, 0, kUseDebugLayers,
                                     getWSIExtension(), getWSILayer(), getWindowSystem(),
-                                    angle::FeatureOverrides{}));
+                                    vk::ClientAPI::OpenCL, angle::FeatureOverrides{}));
 
     return angle::Result::Continue;
 }
