@@ -502,9 +502,13 @@ namespace vs
 // A shader that sets gl_Position to zero.
 const char *Zero()
 {
-    return R"(void main()
+    return R"(attribute vec2 xy_position;
+void setPosition() {
+  gl_Position = vec4(xy_position.x, xy_position.y, 0.0, 1.0);
+}
+void main()
 {
-    gl_Position = vec4(0);
+  setPosition();
 })";
 }
 
