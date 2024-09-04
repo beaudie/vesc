@@ -679,6 +679,16 @@ bool DisplayVk::isBlobCacheSupportsZeroSizedValues() const
     return getFeatures().hasBlobCacheWithZeroSizedValuesSupport.enabled;
 }
 
+bool DisplayVk::isBlobCacheEvictsOldItemsFirst() const
+{
+    return getFeatures().hasBlobCacheThatEvictsOldItemsFirst.enabled;
+}
+
+bool DisplayVk::isBlobCacheEvictsOnlyNecessaryItems() const
+{
+    return getFeatures().hasBlobCacheThatEvictsOnlyNecessaryItems.enabled;
+}
+
 void DisplayVk::putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value)
 {
     getBlobCache()->putApplication(key, value);

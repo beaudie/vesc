@@ -197,6 +197,8 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::GenerateShareableShaders, "generateShareableShaders"},
     {Feature::GetDimensionsIgnoresBaseLevel, "getDimensionsIgnoresBaseLevel"},
     {Feature::HasBaseVertexInstancedDraw, "hasBaseVertexInstancedDraw"},
+    {Feature::HasBlobCacheThatEvictsOldItemsFirst, "hasBlobCacheThatEvictsOldItemsFirst"},
+    {Feature::HasBlobCacheThatEvictsOnlyNecessaryItems, "hasBlobCacheThatEvictsOnlyNecessaryItems"},
     {Feature::HasBlobCacheWithZeroSizedValuesSupport, "hasBlobCacheWithZeroSizedValuesSupport"},
     {Feature::HasCheapRenderPass, "hasCheapRenderPass"},
     {Feature::HasDepthAutoResolve, "hasDepthAutoResolve"},

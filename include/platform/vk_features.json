@@ -1783,6 +1783,20 @@
             "description": [
                 "Blob cache supports storing items with zero sized values."
             ]
+        },
+        {
+            "name": "has_blob_cache_that_evicts_old_items_first",
+            "category": "Features",
+            "description": [
+                "Specifies that blob cache evicts old items first."
+            ]
+        },
+        {
+            "name": "has_blob_cache_that_evicts_only_necessary_items",
+            "category": "Features",
+            "description": [
+                "Specifies that blob cache evicts only necessary items to store the new item."
+            ]
         }
     ]
 }
