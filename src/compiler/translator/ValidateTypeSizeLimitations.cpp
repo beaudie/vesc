@@ -102,13 +102,18 @@ class ValidateTypeSizeLimitationsTraverser : public TIntermTraverser
 
         // Compute the std140 layout of this variable, assuming
         // it's a member of a block (which it might not be).
-        Std140BlockEncoder layoutEncoder;
-        BlockEncoderVisitor visitor("", "", &layoutEncoder);
+        Std140BlockEncoder layoutEncoder140;
+        Std430BlockEncoder layoutEncoder430;
+        BlockLayoutEncoder *layoutEncoder =
+            variableType.getLayoutQualifier().blockStorage == EbsStd430 ? &layoutEncoder430
+                                                                        : &layoutEncoder140;
+
+        BlockEncoderVisitor visitor("", "", layoutEncoder);
         // Since the size limit's arbitrary, it doesn't matter
         // whether the row-major layout is correctly determined.
         bool isRowMajorLayout = false;
         TraverseShaderVariable(shaderVar, isRowMajorLayout, &visitor);
-        if (layoutEncoder.getCurrentOffset() > kMaxVariableSizeInBytes)
+        if (layoutEncoder->getCurrentOffset() > kMaxVariableSizeInBytes)
         {
             error(location, "Size of declared variable exceeds implementation-defined limit",
                   variable.name());
@@ -169,14 +174,14 @@ class ValidateTypeSizeLimitationsTraverser : public TIntermTraverser
             case EvqTessEvaluationIn:
             case EvqTessEvaluationOut:
 
-                if (layoutEncoder.getCurrentOffset() > kMaxPrivateVariableSizeInBytes)
+                if (layoutEncoder->getCurrentOffset() > kMaxPrivateVariableSizeInBytes)
                 {
                     error(location,
                           "Size of declared private variable exceeds implementation-defined limit",
                           variable.name());
                     return false;
                 }
-                mTotalPrivateVariablesSize += layoutEncoder.getCurrentOffset();
+                mTotalPrivateVariablesSize += layoutEncoder->getCurrentOffset();
                 break;
             default:
                 break;
