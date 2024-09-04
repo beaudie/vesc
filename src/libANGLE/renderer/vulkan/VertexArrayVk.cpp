@@ -554,6 +554,9 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     uint32_t srcStride = conversion->getCacheKey().stride;
     ASSERT(srcStride % (srcFormat.pixelBytes / srcFormat.channelCount) == 0);
 
+    WARN() << " mergedDirtyRange:" << conversion->getDirtyBufferRange()
+           << " detailedRange:" << conversion->getDirtyBufferRanges();
+
     size_t srcOffset, dstOffset, numVertices;
     ANGLE_TRY(CalculateOffsetAndVertexCountForConversion(contextVk, srcBuffer, conversion,
                                                          srcFormat, dstFormat, &srcOffset,
