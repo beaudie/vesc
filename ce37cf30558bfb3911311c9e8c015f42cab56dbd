@@ -34,6 +34,24 @@
       "parentUuid": "b6419fc0_610e0cec",
       "revId": "ce37cf30558bfb3911311c9e8c015f42cab56dbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "240078cf_b13de602",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-04T23:10:45Z",
+      "side": 1,
+      "message": "got rid of the setenforce changes, also tweaked when we use app storage instead of external storage (only when we have root with non-default user).",
+      "parentUuid": "48f03064_d27aaec8",
+      "revId": "ce37cf30558bfb3911311c9e8c015f42cab56dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
