@@ -1769,6 +1769,21 @@
                 "VkDevice supports SignedZeroInfNanPreserve execution mode for 64-bit floating point from VK_KHR_shader_float_controls extension"
             ],
             "issue": "https://anglebug.com/360031000"
+        },
+        {
+            "name": "use_dual_pipeline_blob_cache_slots",
+            "category": "Features",
+            "description": [
+                "Wether DisplayVk will use single or dual slots to store PipelineCacheVk data."
+            ]
+        },
+        {
+            "name": "use_empty_chunks_to_erase_pipeline_blob_cache_data",
+            "category": "Features",
+            "description": [
+                "Wether empty chunks will be used to erase previous PipelineCacheVk data from the blob cache. ",
+                "Otherwise, chunks with size 1 will be used instead."
+            ]
         }
     ]
 }

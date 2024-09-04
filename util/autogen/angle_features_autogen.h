@@ -425,6 +425,8 @@ enum class Feature
     UseDepthCompareOpDynamicState,
     UseDepthTestEnableDynamicState,
     UseDepthWriteEnableDynamicState,
+    UseDualPipelineBlobCacheSlots,
+    UseEmptyChunksToErasePipelineBlobCacheData,
     UseFrontFaceDynamicState,
     UseInstancedPointSpriteEmulation,
     UseIntermediateTextureForGenerateMipmap,
