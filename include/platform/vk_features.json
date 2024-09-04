@@ -1801,6 +1801,25 @@
                 "VkDevice supports initializing VkPipelineCache object from partial cache data."
             ],
             "issue": "https://anglebug.com/42263322"
+        },
+        {
+            "name": "verify_pipeline_cache_in_blob_cache",
+            "category": "Features",
+            "description": [
+                "Wether need to perform verification of stored PipelineCacheVk data chunks or not. ",
+                "Relevant, when blob cache does not evict old items first (no LRU) or evicts more old items than required when storing a new item."
+            ],
+            "issue": "https://anglebug.com/42263322"
+        },
+        {
+            "name": "verify_pipeline_cache_in_blob_cache_using_loop",
+            "category": "Features",
+            "description": [
+                "Extension to the verify_pipeline_cache_in_blob_cache feature. ",
+                "Wether verification should be performed multiple times (using loop) or single time. ",
+                "Relevant, when blob cache does not evict old items first (no LRU)."
+            ],
+            "issue": "https://anglebug.com/42263322"
         }
     ]
 }

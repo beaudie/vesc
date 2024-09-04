@@ -1054,6 +1054,7 @@ struct PipelineCacheVkChunkInfo
     size_t dataSize;
     uint32_t crc;
     angle::BlobCacheKey cacheHash;
+    mutable bool isMissing = false;
 };
 
 // Enough to store 32M data using 64K chunks.
@@ -1067,10 +1068,14 @@ PipelineCacheVkChunkInfos GetPipelineCacheVkChunkInfos(Renderer *renderer,
                                                        const size_t chunkSize,
                                                        const size_t slotIndex);
 
-void StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
-                                const PipelineCacheVkChunkInfos &chunkInfos,
-                                const size_t cacheDataSize,
-                                angle::MemoryBuffer *scratchBuffer);
+// Returns the number of stored chunks.  "lastNumStoredChunks" is the number of chunks,
+// stored in the last call.  If it is positive, function will only restore missing chunks.
+size_t StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
+                                  Renderer *renderer,
+                                  const size_t lastNumStoredChunks,
+                                  const PipelineCacheVkChunkInfos &chunkInfos,
+                                  const size_t cacheDataSize,
+                                  angle::MemoryBuffer *scratchBuffer);
 
 // Erasing is done by writing 1/0-sized chunks starting from the startChunk.
 void ErasePipelineCacheVkChunks(vk::GlobalOps *globalOps,
@@ -1137,8 +1142,10 @@ void CompressAndStorePipelineCacheVk(vk::GlobalOps *globalOps,
     PipelineCacheVkChunkInfos chunkInfos =
         GetPipelineCacheVkChunkInfos(renderer, compressedData, numChunks, chunkSize, slotIndex);
 
-    // Store all chunks.
-    StorePipelineCacheVkChunks(globalOps, chunkInfos, cacheData.size(), &scratchBuffer);
+    // Store all chunks without checking if they already exist (because they can't).
+    size_t numStoredChunks = StorePipelineCacheVkChunks(globalOps, renderer, 0, chunkInfos,
+                                                        cacheData.size(), &scratchBuffer);
+    ASSERT(numStoredChunks == numChunks);
 
     // Erase all chunks from the previous slot or any trailing chunks from the current slot.
     ASSERT(renderer->getFeatures().useDualPipelineBlobCacheSlots.enabled == isSlotChanged);
@@ -1148,6 +1155,25 @@ void CompressAndStorePipelineCacheVk(vk::GlobalOps *globalOps,
         ErasePipelineCacheVkChunks(globalOps, renderer, startChunk, previousNumChunks,
                                    previousSlotIndex, &scratchBuffer);
     }
+
+    if (!renderer->getFeatures().verifyPipelineCacheInBlobCache.enabled)
+    {
+        // No need to verify and restore possibly evicted chunks.
+        ASSERT(!renderer->getFeatures().verifyPipelineCacheInBlobCacheUsingLoop.enabled);
+        return;
+    }
+
+    // Verify and restore possibly evicted chunks.
+    do
+    {
+        const size_t lastNumStoredChunks = numStoredChunks;
+        numStoredChunks = StorePipelineCacheVkChunks(globalOps, renderer, lastNumStoredChunks,
+                                                     chunkInfos, cacheData.size(), &scratchBuffer);
+        // Number of stored chunks must decrease so the loop can eventually exit.
+        ASSERT(numStoredChunks < lastNumStoredChunks);
+
+    } while (renderer->getFeatures().verifyPipelineCacheInBlobCacheUsingLoop.enabled &&
+             numStoredChunks > 0);
 }
 
 PipelineCacheVkChunkInfos GetPipelineCacheVkChunkInfos(Renderer *renderer,
@@ -1184,12 +1210,72 @@ PipelineCacheVkChunkInfos GetPipelineCacheVkChunkInfos(Renderer *renderer,
     return chunkInfos;
 }
 
-void StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
-                                const PipelineCacheVkChunkInfos &chunkInfos,
-                                const size_t cacheDataSize,
-                                angle::MemoryBuffer *scratchBuffer)
+size_t StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
+                                  Renderer *renderer,
+                                  const size_t lastNumStoredChunks,
+                                  const PipelineCacheVkChunkInfos &chunkInfos,
+                                  const size_t cacheDataSize,
+                                  angle::MemoryBuffer *scratchBuffer)
 {
     // Store chunks in revers order, so when 0 chunk is available - all chunks are available.
+
+    size_t numChunksToStore = chunkInfos.size();
+
+    // Need to check existing chunks if this is not the first time this function is called.
+    if (lastNumStoredChunks > 0)
+    {
+        // Assume that cache evicts old items first if verification using loop is disabled.
+        const bool cacheEvictsOldItems =
+            !renderer->getFeatures().verifyPipelineCacheInBlobCacheUsingLoop.enabled;
+
+        numChunksToStore = 0;
+
+        // Defer storing chunks until all missing chunks are found to avoid unecessary stores.
+        size_t chunkIndex = chunkInfos.size();
+        while (chunkIndex > 0)
+        {
+            --chunkIndex;
+            const PipelineCacheVkChunkInfo &chunkInfo = chunkInfos[chunkIndex];
+
+            angle::BlobCacheValue value;
+            if (globalOps->getBlob(chunkInfo.cacheHash, &value) &&
+                value.size() == sizeof(CacheDataHeader) + chunkInfo.dataSize)
+            {
+                if (cacheEvictsOldItems)
+                {
+                    // No need to check next chunks, since they are newer than the current and
+                    // should also be present.
+                    break;
+                }
+                continue;
+            }
+
+            chunkInfo.isMissing = true;
+            ++numChunksToStore;
+
+            if (numChunksToStore == lastNumStoredChunks)
+            {
+                // No need to restore missing chunks, since new number is already same as was stored
+                // last time.
+                static bool warned = false;
+                if (!warned)
+                {
+                    WARN() << "Skip syncing pipeline cache data due to not able to store "
+                           << numChunksToStore << " chunks (out of " << chunkInfos.size()
+                           << ") into the blob cache. (this message will no longer repeat)";
+                    warned = true;
+                }
+                return 0;
+            }
+        }
+
+        if (numChunksToStore == 0)
+        {
+            return 0;
+        }
+    }
+
+    // Now store/restore chunks.
 
     // Last chunk have CRC of the entire data.
     const uint32_t compressedDataCRC = chunkInfos.back().crc;
@@ -1203,6 +1289,16 @@ void StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
         --chunkIndex;
         const PipelineCacheVkChunkInfo &chunkInfo = chunkInfos[chunkIndex];
 
+        if (lastNumStoredChunks > 0)
+        {
+            if (!chunkInfo.isMissing)
+            {
+                // Skip restoring chunk if it is not missing.
+                continue;
+            }
+            chunkInfo.isMissing = false;
+        }
+
         // Add the header data, followed by the compressed data.
         ASSERT(cacheDataSize <= UINT32_MAX);
         CacheDataHeader headerData = {};
@@ -1214,6 +1310,8 @@ void StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
 
         globalOps->putBlob(chunkInfo.cacheHash, keyData);
     }
+
+    return numChunksToStore;
 }
 
 void ErasePipelineCacheVkChunks(vk::GlobalOps *globalOps,
@@ -5423,6 +5521,11 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // Enable by default in case if some Vulkan ICDs support this behaviour or will support it in
     // the future.  No problem (other than wasted effort) on ICDs that do not support this.
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsPartialPipelineCacheData, true);
+
+    // Disable by default, assuming blob cache evicts only minimum number of old items.
+    ANGLE_FEATURE_CONDITION(&mFeatures, verifyPipelineCacheInBlobCache, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, verifyPipelineCacheInBlobCacheUsingLoop,
+                            mFeatures.verifyPipelineCacheInBlobCache.enabled);
 
     // On ARM, dynamic state for stencil write mask doesn't work correctly in the presence of
     // discard or alpha to coverage, if the static state provided when creating the pipeline has a
