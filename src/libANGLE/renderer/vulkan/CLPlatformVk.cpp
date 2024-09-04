@@ -287,6 +287,16 @@ bool CLPlatformVk::needUseEmptyChunksToErasePipelineBlobCacheData() const
     return true;
 }
 
+bool CLPlatformVk::needVerifyStoredPipelineBlobCacheChunks() const
+{
+    return false;
+}
+
+bool CLPlatformVk::needUsePipelineBlobCacheChunksVerificationLoop() const
+{
+    return false;
+}
+
 void CLPlatformVk::putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value)
 {
     std::scoped_lock<angle::SimpleMutex> lock(mBlobCacheMutex);

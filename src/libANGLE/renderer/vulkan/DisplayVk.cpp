@@ -679,6 +679,16 @@ bool DisplayVk::needUseEmptyChunksToErasePipelineBlobCacheData() const
     return getFeatures().useEmptyChunksToErasePipelineBlobCacheData.enabled;
 }
 
+bool DisplayVk::needVerifyStoredPipelineBlobCacheChunks() const
+{
+    return getFeatures().verifyStoredPipelineBlobCacheChunks.enabled;
+}
+
+bool DisplayVk::needUsePipelineBlobCacheChunksVerificationLoop() const
+{
+    return getFeatures().usePipelineBlobCacheChunksVerificationLoop.enabled;
+}
+
 void DisplayVk::putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value)
 {
     getBlobCache()->putApplication(key, value);

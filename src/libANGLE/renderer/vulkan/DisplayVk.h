@@ -127,6 +127,8 @@ class DisplayVk : public DisplayImpl, public vk::Context, public vk::GlobalOps
     // vk::GlobalOps
     uint8_t getNextPipelineBlobCacheSlotIndex(uint8_t *previousSlotIndexOut) override;
     bool needUseEmptyChunksToErasePipelineBlobCacheData() const override;
+    bool needVerifyStoredPipelineBlobCacheChunks() const override;
+    bool needUsePipelineBlobCacheChunksVerificationLoop() const override;
 
     void putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value) override;
     bool getBlob(const angle::BlobCacheKey &key, angle::BlobCacheValue *valueOut) override;

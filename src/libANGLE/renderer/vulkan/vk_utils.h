@@ -384,6 +384,8 @@ class GlobalOps : angle::NonCopyable
 
     virtual uint8_t getNextPipelineBlobCacheSlotIndex(uint8_t *previousSlotIndexOut) = 0;
     virtual bool needUseEmptyChunksToErasePipelineBlobCacheData() const              = 0;
+    virtual bool needVerifyStoredPipelineBlobCacheChunks() const                     = 0;
+    virtual bool needUsePipelineBlobCacheChunksVerificationLoop() const              = 0;
 
     virtual void putBlob(const angle::BlobCacheKey &key, const angle::MemoryBuffer &value) = 0;
     virtual bool getBlob(const angle::BlobCacheKey &key, angle::BlobCacheValue *valueOut)  = 0;

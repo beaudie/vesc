@@ -1629,6 +1629,23 @@ struct FeaturesVk : FeatureSetBase
         &members,
     };
 
+    FeatureInfo verifyStoredPipelineBlobCacheChunks = {
+        "verifyStoredPipelineBlobCacheChunks",
+        FeatureCategory::VulkanFeatures,
+        "Enables verification of stored PipelineCacheVk data chunks into the blob cache in case of eviction. "
+        "Relevant if blob cache does not have LRU eviction logic or it evicts more items than necessary.",
+        &members,
+    };
+
+    FeatureInfo usePipelineBlobCacheChunksVerificationLoop = {
+        "usePipelineBlobCacheChunksVerificationLoop",
+        FeatureCategory::VulkanFeatures,
+        "Addition to the verify_stored_pipeline_blob_cache_chunks feature (must be also enabled). "
+        "Enables repeated verification in a loop until all chunks are present or it is impossible to achieve that. "
+        "Relevant if blob cache evicts more items than necessary.",
+        &members,
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

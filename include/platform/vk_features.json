@@ -1784,6 +1784,23 @@
                 "Wether empty chunks will be used to erase previous PipelineCacheVk data from the blob cache. ",
                 "Otherwise, chunks with size 1 will be used instead."
             ]
+        },
+        {
+            "name": "verify_stored_pipeline_blob_cache_chunks",
+            "category": "Features",
+            "description": [
+                "Enables verification of stored PipelineCacheVk data chunks into the blob cache in case of eviction. ",
+                "Relevant if blob cache does not have LRU eviction logic or it evicts more items than necessary."
+            ]
+        },
+        {
+            "name": "use_pipeline_blob_cache_chunks_verification_loop",
+            "category": "Features",
+            "description": [
+                "Addition to the verify_stored_pipeline_blob_cache_chunks feature (must be also enabled). ",
+                "Enables repeated verification in a loop until all chunks are present or it is impossible to achieve that. ",
+                "Relevant if blob cache evicts more items than necessary."
+            ]
         }
     ]
 }
