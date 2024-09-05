@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64180e11_a61450b0",
+        "filename": "src/libANGLE/renderer/vulkan/clspv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-05T03:06:22Z",
+      "side": 1,
+      "message": "Side note: Really weird that you have to provide CLI args to the clspv API. If you ever get a chance to contribute to clspv, you may want to clean up this interface to be more program-friendly.",
+      "revId": "d7ba1da9b0d2211e42cae0e431b217ef92ca54cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
