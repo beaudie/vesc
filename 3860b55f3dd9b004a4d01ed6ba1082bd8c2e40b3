@@ -247,6 +247,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb278e88_272f612f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 2646,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-05T00:35:14Z",
+      "side": 1,
+      "message": "Updated `startRenderPass()` to take `VkClearValue*` and use `LOAD_OP_CLEAR` if used.",
+      "parentUuid": "875f393a_8bc4469e",
+      "range": {
+        "startLine": 2619,
+        "startChar": 0,
+        "endLine": 2646,
+        "endChar": 66
+      },
+      "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "712362c6_5d2ea1b9",
@@ -278,6 +302,24 @@
       "side": 1,
       "message": "This can be done for the 2D textures. However, is it also applicable for other types (3D, cubemap, etc.) in a single pass? Or should it be done using 2D rectangles layer by layer?\n\nAlso, is there a function to show if a format is renderable? We already call `ensureRenderable()` when calling `TextureVk::clearSubImageImpl()`.",
       "parentUuid": "712362c6_5d2ea1b9",
+      "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e67264fc_9fa8875b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 9776,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-05T00:35:14Z",
+      "side": 1,
+      "message": "The new `clearTexture()` is for the multisample or renderable textures. The old `clearTexture()` has been removed. For non-2D texture types, we perform the clear layer by layer.\nAlso, we no longer call `ensureRenderable()` in `clearSubImageImpl()`, since the non-renderable textures will go through a regular buffer update.",
+      "parentUuid": "19a5114f_b8cfbfec",
       "revId": "3860b55f3dd9b004a4d01ed6ba1082bd8c2e40b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

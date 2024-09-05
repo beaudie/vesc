@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3beebd0_28b70d0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-05T00:35:14Z",
+      "side": 1,
+      "message": "Thanks! The CL has been updated to utilize `LOAD_OP_CLEAR` for renderable textures. The compute shader path has been replaced with a buffer update for non-renderable textures.",
+      "revId": "91d90640df98337f16a11a59bf017acc19eadca9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ed37927_cb078442",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-05T00:35:14Z",
+      "side": 1,
+      "message": "Correct way to determine if the texture is renderable?",
+      "range": {
+        "startLine": 900,
+        "startChar": 8,
+        "endLine": 900,
+        "endChar": 69
+      },
+      "revId": "91d90640df98337f16a11a59bf017acc19eadca9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

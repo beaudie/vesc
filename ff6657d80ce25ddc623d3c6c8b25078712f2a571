@@ -273,6 +273,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dea6bdce_32320191",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-05T00:35:14Z",
+      "side": 1,
+      "message": "Removed the compute shader path. The non-renderable textures will use a host-side buffer filled with the pixel value, which will be staged as a buffer update. The renderable and multisample textures will use the new `clearTexture()`, which uses a render pass and `LOAD_OP_CLEAR`.",
+      "parentUuid": "985c0f24_385265b9",
+      "range": {
+        "startLine": 2272,
+        "startChar": 23,
+        "endLine": 2272,
+        "endChar": 35
+      },
+      "revId": "ff6657d80ce25ddc623d3c6c8b25078712f2a571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0ad207a_fc6691c5",
