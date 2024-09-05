@@ -900,6 +900,23 @@ b/330697097 PIXEL6 VULKAN : FramebufferTest_ES31.MultisampleResolveBothAttachmen
 40096879 IOS METAL : FramebufferTest_ES3.RenderSharedExponent/* = SKIP
 40096883 IOS METAL : Texture2DDepthStencilTestES3.TexSampleModes*Swizzled/* = SKIP
 
+// Simulator does not support compare functions in the sampler state
+365066518 IOS METAL : ShadowSamplerFunctionTest.*/* = SKIP
+
+// D3D11 backend does not support LOD options with shadow samplers
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureBias_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureOffsetBias_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureLod_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureLodOffset_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureGrad_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureGradOffset_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureProjBias_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureProjOffsetBias_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureProjLod_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureProjLodOffset_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureProjGrad_*_Mipmapped = SKIP
+365066518 D3D11 : ShadowSamplerFunctionTest.Texture2D/ES3_D3D11__TextureProjGradOffset_*_Mipmapped = SKIP
+
 // Test is disabled as it only pertains to desktop GLSL
 42264721 : GLSLTest_ES31.InterpolateAtWithSwizzle/* = SKIP
 
