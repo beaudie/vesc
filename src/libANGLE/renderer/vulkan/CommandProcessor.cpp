@@ -1577,6 +1577,12 @@ void CommandQueue::queuePresent(egl::ContextPriority contextPriority,
     std::lock_guard<angle::SimpleMutex> queueSubmitLock(mQueueSubmitMutex);
     VkQueue queue                      = getQueue(contextPriority);
     swapchainStatus->lastPresentResult = vkQueuePresentKHR(queue, &presentInfo);
+    static int n                       = 0;
+    if (++n == 2)
+    {
+        printf("delaying queuePresent by 2s\n");
+        usleep(2'000'000);
+    }
 }
 
 const angle::VulkanPerfCounters CommandQueue::getPerfCounters() const

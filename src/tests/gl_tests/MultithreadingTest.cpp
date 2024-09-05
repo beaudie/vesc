@@ -1136,6 +1136,39 @@ TEST_P(MultithreadingTest, NoFlushNoContextReturnsTimeout)
     EXPECT_EGL_TRUE(eglDestroySyncKHR(dpy, sync));
 }
 
+// Repro eglCreateSyncKHR delayed by egl lock
+TEST_P(MultithreadingTest, SyncLock)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension() || !hasGLSyncExtension());
+
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay dpy     = window->getDisplay();
+    EGLSurface surface = window->getSurface();
+
+    glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EGLSyncKHR sync = eglCreateSyncKHR(dpy, EGL_SYNC_FENCE_KHR, nullptr);
+    EXPECT_NE(sync, EGL_NO_SYNC_KHR);
+
+    std::thread thread = std::thread([&]() {
+        printf("thread sleeping 0.1s\n");
+        usleep(100'000);
+        constexpr GLuint64 kTimeout = 1'000'000'000;  // 1s
+        double t0                   = angle::GetCurrentSystemTime();
+        int result                  = eglClientWaitSyncKHR(dpy, sync, 0, kTimeout);
+        ASSERT_TRUE(result == EGL_CONDITION_SATISFIED_KHR);
+        printf("thread eglClientWaitSyncKHR took %.2lfs\n", angle::GetCurrentSystemTime() - t0);
+    });
+
+    eglSwapBuffers(dpy, surface);
+
+    thread.join();
+
+    EXPECT_EGL_TRUE(eglDestroySyncKHR(dpy, sync));
+}
+
 // Test that waiting on sync object that hasn't been flushed yet, but is later flushed by another
 // thread, correctly returns when the fence is signalled without a timeout.
 TEST_P(MultithreadingTest, CreateFenceThreadAClientWaitSyncThreadBDelayedFlush)
