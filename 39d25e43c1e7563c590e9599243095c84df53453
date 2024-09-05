@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99eba55e_07395ac4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-05T23:50:02Z",
+      "side": 1,
+      "message": "Suggestion:\n`Tests: Add end2end test library to AOSP build`",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 61
+      },
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "492ac140_c76d4e49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-05T23:50:02Z",
+      "side": 1,
+      "message": "Patchset 3 much tighter, thanks!",
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c20773bd_d5c2ff0d",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-05T23:50:02Z",
+      "side": 1,
+      "message": "This affects all the shared objects, right?  So a general optimization?",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 79
+      },
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adcde12d_2a8e11ed",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-05T23:50:02Z",
+      "side": 1,
+      "message": "Is this just to allow us to run against the system ANGLE, or was there another reason?",
+      "range": {
+        "startLine": 85,
+        "startChar": 12,
+        "endLine": 85,
+        "endChar": 48
+      },
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c0cbbc3_8057cb5f",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-05T23:50:02Z",
+      "side": 1,
+      "message": "It feels a little weird to have a negative check in with all these positive ones (I had to read it several times), but I don\u0027t have a better suggestion.",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 42
+      },
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
