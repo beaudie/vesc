@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae8bc52c_1f866a1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-05T03:11:16Z",
+      "side": 1,
+      "message": "LGTM with one suggestion on the type to use.",
+      "revId": "0e4bda373fa37271c3eacccdeabf7d65aa59c9a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b7f61c7_16334fe2",
+        "filename": "src/libANGLE/renderer/vulkan/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-05T03:11:16Z",
+      "side": 1,
+      "message": "Suggest making this an `enum class`. Then add an `InvalidEnum` and `EnumCount` entry at the end. The ability this gives you is that you can use `angle::PackedEnumMap\u003cSpecConstantID, ...\u003e` instead of a hash map.\n\nFor example, see `EventStage` in `vk_ref_counted_event.h`, and how `angle::PackedEnumMap\u003cEventStage, VkPipelineStageFlags\u003e` is used in the functions around there.\n\nNote that `angle::PackedEnumMap` is just a flat array indexed by these enums.",
+      "revId": "0e4bda373fa37271c3eacccdeabf7d65aa59c9a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
