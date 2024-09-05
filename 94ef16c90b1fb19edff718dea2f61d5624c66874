@@ -16,6 +16,24 @@
       "message": "This is doing what the name said: It will treat it like app called glFlush when it switches draw FBO. The only place it is used is at ContextVk.cpp line 5684, which is what its name implied.\n\nWe also do some implicit flush at other places, there is no feature flag for it and that is implemented with mHasDeferredFlush. That is different from this feature flag.",
       "revId": "94ef16c90b1fb19edff718dea2f61d5624c66874",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d4ff0c4_d30cbf1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-05T01:54:34Z",
+      "side": 1,
+      "message": "Oh that\u0027s a good point, somehow I thought we always flush after every render pass.",
+      "parentUuid": "561b7a65_b449b69e",
+      "revId": "94ef16c90b1fb19edff718dea2f61d5624c66874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
