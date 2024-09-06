@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28f1b1cc_37ec8faa",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 15
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T20:03:42Z",
+      "side": 1,
+      "message": "Yes, thanks!",
+      "parentUuid": "a3d27c69_f8737052",
+      "range": {
+        "startLine": 1774,
+        "startChar": 0,
+        "endLine": 1785,
+        "endChar": 13
+      },
+      "revId": "7e4fe08944ea95b47b820c89c7571ef7ceabb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4639c680_b3561818",
@@ -139,6 +163,24 @@
       "side": 1,
       "message": "Removed `ClientAPI` in patchset 17, and used `featureOverrides` instead in `CLPlatformVk`. Not sure if this is the better way. Please compare it with patches 16 with enum.",
       "parentUuid": "06176987_ccbf3154",
+      "revId": "7e4fe08944ea95b47b820c89c7571ef7ceabb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef280558_7693c0dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T20:03:42Z",
+      "side": 1,
+      "message": "Thanks, much better.\n\nUsing the feature overrides feels like an abuse, but the `ClientAPI` one was not great either. Let\u0027s just go with this for now.",
+      "parentUuid": "14544606_00e06c50",
       "revId": "7e4fe08944ea95b47b820c89c7571ef7ceabb4e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
