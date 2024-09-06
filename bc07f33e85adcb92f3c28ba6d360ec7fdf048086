@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17873332_1b271a9c",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:28:47Z",
+      "side": 1,
+      "message": "Please add an `\"issue\"` field to these for posterity.",
+      "range": {
+        "startLine": 1791,
+        "startChar": 0,
+        "endLine": 1799,
+        "endChar": 13
+      },
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed508129_27e2e4d2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:28:47Z",
+      "side": 1,
+      "message": "What is a \"necessary item\"?",
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bb5b794_cf57b981",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:28:47Z",
+      "side": 1,
+      "message": "Please put a cap on this, we don\u0027t want to loop infinitely for some reason.",
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91644314_cda7fe66",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5416,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:28:47Z",
+      "side": 1,
+      "message": "I would prefer if by default (in upstream), we don\u0027t do the verify-restore. Like I said, I very much prefer we fix the blob cache ASAP.\n\nCould you please change the defaults or rename the features in a way that verify-restore is opt-in for now?",
+      "range": {
+        "startLine": 5411,
+        "startChar": 0,
+        "endLine": 5416,
+        "endChar": 89
+      },
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aec5e88_0bed3bb2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:28:47Z",
+      "side": 1,
+      "message": "Again, please avoid `GlobalOps` for these, the ANGLE features should answer this, and the value should be independent of GL or CL.",
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
