@@ -1,0 +1,65 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2312fdf9_52904c1b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-06T22:51:36Z",
+      "side": 1,
+      "message": "You can restructure it to make it more readable. Something like below. That way you can explain each condition separately. Also try to avoid floating point math.\n\n```\nsize_t kHalfBufferSize \u003d bufferSize \u003e\u003e 1;\nif( subDataSize \u003e kHalfBufferSize )\n{\n    // ...\n    return true;\n}\n\nif(contextVk-\u003egetFeatures().preferCPUForBufferSubData.enabled)\n{\n     // ....\n     if(subDataSize \u003e (bufferSize \u003e\u003e 3));\n     {\n        return true;\n     }\n\n     // ...\n     if(bufferSize \u003c kBufferSizeSmallEnoughForCPU)\n     {\n        return true;\n     }\n}\n\nreturn false;\n```",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 0
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "d5de828b_df12837c",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+              "range": {
+                "startLine": 144,
+                "startChar": 0,
+                "endLine": 148,
+                "endChar": 0
+              },
+              "replacement": "    constexpr size_t kHalfBufferSize \u003d bufferSize / 2;\n    constexpr size_t kQuarterBufferSize \u003d bufferSize / 4;\n"
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+              "range": {
+                "startLine": 149,
+                "startChar": 0,
+                "endLine": 151,
+                "endChar": 0
+              },
+              "replacement": "    if (contextVk-\u003egetFeatures().preferCPUForBufferSubData.enabled)\n    {\n        // If the buffer is small enough, or if the update is significant enough, use CPU.\n        return subDataSize \u003e kHalfBufferSize || bufferSize \u003c kQuarterBufferSize;\n    }\n"
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+              "range": {
+                "startLine": 152,
+                "startChar": 0,
+                "endLine": 154,
+                "endChar": 0
+              },
+              "replacement": "    // Otherwise, use GPU if the update is significant enough.\n    return subDataSize \u003e kHalfBufferSize;\n"
+            }
+          ]
+        }
+      ],
+      "revId": "d6d600da0b3f5fdade65ee8046d2b97254c649e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
