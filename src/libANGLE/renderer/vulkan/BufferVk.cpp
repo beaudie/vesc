@@ -295,6 +295,23 @@ ConversionBuffer::~ConversionBuffer()
 
 ConversionBuffer::ConversionBuffer(ConversionBuffer &&other) = default;
 
+void ConversionBuffer::consolidateDirtyRanges()
+{
+    ASSERT(!mEntireBufferDirty);
+    for (size_t i = 1; i < mDirtyRanges.size(); i++)
+    {
+        for (size_t j = 0; j < i; j++)
+        {
+            if (mDirtyRanges[j].intersectsOrContinuous(mDirtyRanges[i]))
+            {
+                mDirtyRanges[j].merge(mDirtyRanges[i]);
+                mDirtyRanges[i].invalidate();
+                break;
+            }
+        }
+    }
+}
+
 // VertexConversionBuffer implementation.
 VertexConversionBuffer::VertexConversionBuffer(vk::Renderer *renderer, const CacheKey &cacheKey)
     : ConversionBuffer(renderer,
@@ -833,7 +850,14 @@ angle::Result BufferVk::unmapImpl(ContextVk *contextVk)
 
     if (mIsMappedForWrite)
     {
-        dataRangeUpdated(mMappedRange);
+        if (mMappedRange == RangeDeviceSize(0, static_cast<VkDeviceSize>(getSize())))
+        {
+            dataUpdated();
+        }
+        else
+        {
+            dataRangeUpdated(mMappedRange);
+        }
     }
 
     // Reset the mapping parameters
@@ -1171,8 +1195,15 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
         ANGLE_TRY(updateBuffer(contextVk, bufferSize, dataSource, updateSize, updateOffset));
     }
 
-    // Update conversions
-    dataRangeUpdated(RangeDeviceSize(updateOffset, updateOffset + updateSize));
+    // Update conversions.
+    if (updateOffset == 0 && updateSize == bufferSize)
+    {
+        dataUpdated();
+    }
+    else
+    {
+        dataRangeUpdated(RangeDeviceSize(updateOffset, updateOffset + updateSize));
+    }
 
     return angle::Result::Continue;
 }
