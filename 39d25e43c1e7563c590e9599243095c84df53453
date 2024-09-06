@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "83f4825a_e521a142",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-06T14:22:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99eba55e_07395ac4",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 61
+      },
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "492ac140_c76d4e49",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf575659_4b86903b",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-06T14:22:23Z",
+      "side": 1,
+      "message": "It only applies to end2end because output_name is set for everything else. I clarified the comment.",
+      "parentUuid": "c20773bd_d5c2ff0d",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 79
+      },
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "adcde12d_2a8e11ed",
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae60028d_35e58441",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-06T14:22:23Z",
+      "side": 1,
+      "message": "Right, that _additionally_ enables tests like `*/ES3_EGL` which will be using the system loader which will use the native GL drivers, ANGLE as the system driver, or ANGLE via the debug package (like our restricted trace tests). I don\u0027t know if we\u0027re going to be bundling ANGLE together with this lib in our tests, or set it up separately. Either way, I think it\u0027s good to have this as an option as it seems most flexible.",
+      "parentUuid": "adcde12d_2a8e11ed",
+      "range": {
+        "startLine": 85,
+        "startChar": 12,
+        "endLine": 85,
+        "endChar": 48
+      },
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c0cbbc3_8057cb5f",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-09-05T23:50:02Z",
       "side": 1,
       "message": "It feels a little weird to have a negative check in with all these positive ones (I had to read it several times), but I don\u0027t have a better suggestion.",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 42
+      },
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cae6b100_6c43b2eb",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-06T14:22:23Z",
+      "side": 1,
+      "message": "Yeah I don\u0027t love this either. I changed it to a positive check with a comment which I don\u0027t love either.. but I can\u0027t think of a cleaner way that wouldn\u0027t add other kind of complexity (new gn targets, templates etc)",
+      "parentUuid": "4c0cbbc3_8057cb5f",
       "range": {
         "startLine": 305,
         "startChar": 0,
