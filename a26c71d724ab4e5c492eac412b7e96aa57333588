@@ -34,6 +34,24 @@
       ],
       "revId": "a26c71d724ab4e5c492eac412b7e96aa57333588",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d6ad69f_8b782d7f",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-06T22:32:39Z",
+      "side": 1,
+      "message": "dstOffset is always multiple of dstStride. Since dstOffset is not multiple of 4 (see line 275), dstStride must not multiple of 4. Thus line 277 will at some point make dstOffset multiple of 4. I am not sure if there is an easy way to calculate it without while loop. But in practical this likely will never hit, or just loop once/twice and should be 4 bytes aligned. The test hit this is doing R16G16B16 which has dstStride of 6. Lets say dstOffset is 18, loop once will make it 12 which is 4 bytes aligned.",
+      "parentUuid": "e9a3b2f1_034a4b8b",
+      "revId": "a26c71d724ab4e5c492eac412b7e96aa57333588",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
