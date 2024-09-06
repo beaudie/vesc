@@ -1,0 +1,39 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a3b2f1_034a4b8b",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-06T21:20:57Z",
+      "side": 1,
+      "message": "How does `dstOffset -\u003d dstStride` guarantees that the dstOffset is 4 byte aligned?",
+      "fixSuggestions": [
+        {
+          "fixId": "0b0ba4ad_c02fb150",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+              "range": {
+                "startLine": 275,
+                "startChar": 0,
+                "endLine": 276,
+                "endChar": 0
+              },
+              "replacement": "    while ((dstOffset % 4) !\u003d 0 \u0026\u0026 srcLength \u003e 0)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "a26c71d724ab4e5c492eac412b7e96aa57333588",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
