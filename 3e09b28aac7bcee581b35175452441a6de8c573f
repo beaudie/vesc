@@ -45,6 +45,63 @@
       },
       "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b05dc7ac_fa940873",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_wgsl_util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:39:16Z",
+      "side": 1,
+      "message": "If you have two names `something` and `something_else`, you will accidentally match the latter when looking for the former.\n\n(See other comment below)",
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aea272b2_98f70b72",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_wgsl_util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:39:16Z",
+      "side": 1,
+      "message": "You might have elided the copy, but instead we\u0027re iterating over the string many many times.\n\nMay I suggest reworking the algorithm here so you can change the entire string in one pass?\n\nThe marker could be `@location(NAME)`, you can use a hashmap of `name-\u003elocation` that accumulates info for all inputs and outputs, then do this:\n\n```\nLoop\n  Find next instance of @location(\n  Extract NAME\n  Look up in the location map\n  Replace with location\n```\n\nIf the NAME can be correctly extracted from `@location(@@@@@@) NAME`, that\u0027s fine too. (Right now, there\u0027s the prefix bug).\n\nIf you do that, then making a single copy of the string in this single pass is not a big deal and you don\u0027t have to be smart about the `@@@@@@` and padding etc.",
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7210f591_45ddea10",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_wgsl_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:39:16Z",
+      "side": 1,
+      "message": "nit: Chromium style changed this rule, but so far we\u0027ve been following the former style of `*` for mutable, `const \u0026` for immutable. When called e.g. like `WglAssignLocations(shader, ...)` it\u0027s not obvious that `shader` is being modified.",
+      "range": {
+        "startLine": 20,
+        "startChar": 37,
+        "endLine": 20,
+        "endChar": 38
+      },
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
