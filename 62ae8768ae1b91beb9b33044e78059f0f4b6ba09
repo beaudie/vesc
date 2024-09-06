@@ -47,6 +47,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4d0a147_3eaee13f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-09-06T17:39:56Z",
+      "side": 1,
+      "message": "The bottom two of these have been closed as duplicates of the top one now. Could you remove them and leave in just \"Fixed: angleproject:362791944\"?",
+      "revId": "62ae8768ae1b91beb9b33044e78059f0f4b6ba09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6a3c495b_69cb9e7a",
@@ -60,6 +77,23 @@
       "writtenOn": "2024-09-06T16:57:45Z",
       "side": 1,
       "message": "Quyen\u0027s on leave so setting Geoff and myself as reviewers, with Alexey CC\u0027d.",
+      "revId": "62ae8768ae1b91beb9b33044e78059f0f4b6ba09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "274824cb_e953a342",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-09-06T17:39:56Z",
+      "side": 1,
+      "message": "lgtm. Nice work Dan thinking through the bottommost state transitions.",
       "revId": "62ae8768ae1b91beb9b33044e78059f0f4b6ba09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
