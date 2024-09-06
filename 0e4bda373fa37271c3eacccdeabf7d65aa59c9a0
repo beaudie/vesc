@@ -116,6 +116,24 @@
       "parentUuid": "3915e117_95e71947",
       "revId": "0e4bda373fa37271c3eacccdeabf7d65aa59c9a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91baf9d5_5719587d",
+        "filename": "src/libANGLE/renderer/vulkan/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-09-06T21:17:50Z",
+      "side": 1,
+      "message": "Ah perfect! Thanks @syoussefi@chromium.org - good stuff.\n\nPushing update now.",
+      "parentUuid": "b9be08ba_1dab4165",
+      "revId": "0e4bda373fa37271c3eacccdeabf7d65aa59c9a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
