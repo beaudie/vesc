@@ -71,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32a673f2_c2d8fd0a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3715,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-06T17:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e20a06d_5f59f356",
+      "range": {
+        "startLine": 3713,
+        "startChar": 0,
+        "endLine": 3715,
+        "endChar": 81
+      },
+      "revId": "c53e19853d32da9f99145c8cc753d2917ee09159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e1f26fd_ae6205ce",
@@ -84,6 +108,30 @@
       "writtenOn": "2024-09-06T14:18:05Z",
       "side": 1,
       "message": "```suggestion\n    return convertVertexBufferImpl(contextVk, dstBuffer, srcBuffer, flags, commandBufferHelper,\n                                   shaderParams, {});\n```",
+      "range": {
+        "startLine": 3905,
+        "startChar": 0,
+        "endLine": 3907,
+        "endChar": 56
+      },
+      "revId": "c53e19853d32da9f99145c8cc753d2917ee09159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99f7c9b2_9a9420b5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3907,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-06T17:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e1f26fd_ae6205ce",
       "range": {
         "startLine": 3905,
         "startChar": 0,
