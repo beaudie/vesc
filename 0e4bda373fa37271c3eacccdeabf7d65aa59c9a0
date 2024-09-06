@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53e589e8_4aa5263b",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-09-06T03:12:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ff93ae76_f0993d1f",
+      "range": {
+        "startLine": 168,
+        "startChar": 43,
+        "endLine": 168,
+        "endChar": 67
+      },
+      "revId": "0e4bda373fa37271c3eacccdeabf7d65aa59c9a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b7f61c7_16334fe2",
