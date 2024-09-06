@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "686eeeaf_486339dd",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-06T16:48:47Z",
+      "side": 1,
+      "message": "The problem is detecting overlapping is not cheap. You will need a double for loop  which comes with quite high cpu overhead. The compute only WAW barrier not that bad, it supposedly should just run in the order. Feel free to further tuning it though and we can always do more optimizations with follow up CL.",
+      "parentUuid": "a34bf021_a489b63e",
+      "range": {
+        "startLine": 2453,
+        "startChar": 0,
+        "endLine": 2455,
+        "endChar": 94
+      },
+      "revId": "c53e19853d32da9f99145c8cc753d2917ee09159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5e20a06d_5f59f356",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 18
