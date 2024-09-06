@@ -42,6 +42,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e904041_29bc5dfd",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T15:01:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0120fd1e_14493a15",
+      "range": {
+        "startLine": 285,
+        "startChar": 48,
+        "endLine": 285,
+        "endChar": 77
+      },
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7dbfdb8b_2af86ba5",
@@ -79,6 +103,30 @@
           ]
         }
       ],
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a53fdd66_25002942",
+        "filename": "src/libANGLE/renderer/wgpu/VertexArrayWgpu.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T15:01:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dbfdb8b_2af86ba5",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 5
+      },
       "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -124,6 +172,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94ef0806_5c206ba8",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T15:01:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97bdeb85_ef105554",
+      "range": {
+        "startLine": 111,
+        "startChar": 64,
+        "endLine": 111,
+        "endChar": 96
+      },
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0f9ef6b_fca025dd",
@@ -137,6 +209,30 @@
       "writtenOn": "2024-08-19T13:29:39Z",
       "side": 1,
       "message": "Because this is a packed type, you can use memcmp and memcpy. We could actually pass the whole array of vertex attribs here and memcmp/memcpy them all at once instead of looping over them in ContextWgpu.",
+      "range": {
+        "startLine": 114,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 40
+      },
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4ab090d_e6b8f481",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T15:01:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0f9ef6b_fca025dd",
       "range": {
         "startLine": 114,
         "startChar": 4,
@@ -198,6 +294,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26c479c0_8746a1a9",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T15:01:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5e31239_d7425133",
+      "range": {
+        "startLine": 111,
+        "startChar": 13,
+        "endLine": 111,
+        "endChar": 21
+      },
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69e4f6fb_ad071b1a",
@@ -211,6 +331,30 @@
       "writtenOn": "2024-08-19T13:29:39Z",
       "side": 1,
       "message": "The WebGPU spec says that maxVertexBufferArrayStride will be at least 2048 so we will want more than 8 bits. \n\nYou can add a new kVertexAttributeStrideBits, maybe set it as high as possible before the struct gets bigger? Probably 16. Please also update the maxVertexAttribStride [0] cap using a min of the webgpu limit and the value that this can hold.\n\n[0] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/wgpu/wgpu_utils.cpp;l\u003d137;drc\u003d057bc0f0f358002150de583408acdfbef5d45d80",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 19
+      },
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f4cb996_e48049d5",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T15:01:20Z",
+      "side": 1,
+      "message": "To clarify: when you mean the value that this can hold, do you mean the max value that `PackedVertexAttribute.stride` can hold? So in this specific case I\u0027d want to set `maxVertexAttribStride` to be the min of `limitsWgpu.maxVertexBufferArrayStride` and the max value of an uint16_t?",
+      "parentUuid": "69e4f6fb_ad071b1a",
       "range": {
         "startLine": 115,
         "startChar": 4,
@@ -258,6 +402,30 @@
           ]
         }
       ],
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ae55d6d_d1b6ccc0",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T15:01:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd244242_c47c0b06",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 71
+      },
       "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
