@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ad627f6_7b111267",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T19:57:03Z",
+      "side": 1,
+      "message": "Ack, thanks for following up. I mentioned \"sort\" exactly for this, if you sort by like beginning of range, I think a single for loop would let you merge the ranges (including overlap, not just contiguous) and you can remove the need for the barrier altogether.\n\nThe problem with the barrier is processing the ranges can\u0027t be done in parallel, but more importantly other compute stuff the app might have get blocked by accident.",
+      "parentUuid": "bb85a3f2_4c77e30b",
+      "range": {
+        "startLine": 2453,
+        "startChar": 0,
+        "endLine": 2455,
+        "endChar": 94
+      },
+      "revId": "c53e19853d32da9f99145c8cc753d2917ee09159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e20a06d_5f59f356",
