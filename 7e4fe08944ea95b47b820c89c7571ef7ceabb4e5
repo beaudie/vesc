@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0400765d_6786e8c5",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 15
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:19:42Z",
+      "side": 1,
+      "message": "Also, please add an `\"issue\"` field to these for posterity.",
+      "range": {
+        "startLine": 1774,
+        "startChar": 0,
+        "endLine": 1785,
+        "endChar": 13
+      },
+      "revId": "7e4fe08944ea95b47b820c89c7571ef7ceabb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4639c680_b3561818",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 15
