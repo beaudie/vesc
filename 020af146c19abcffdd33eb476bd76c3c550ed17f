@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69f80229_2f54eabf",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-06T19:44:09Z",
+      "side": 1,
+      "message": "nice, this looks much cleaner!",
+      "parentUuid": "2784ea07_6810955a",
+      "range": {
+        "startLine": 161,
+        "startChar": 4,
+        "endLine": 161,
+        "endChar": 16
+      },
+      "revId": "020af146c19abcffdd33eb476bd76c3c550ed17f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c153e5a_df48bd1f",
