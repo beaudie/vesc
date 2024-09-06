@@ -1507,6 +1507,13 @@ b/292285899 PIXEL4ORXL GLES : EGLSurfaceTest.DestroyAndRecreateWhileCurrent/* = 
 // EGL_experimental_present_path_angle D3D11 failure
 347060511 D3D11 : EGLPresentPathD3D11.ClientBufferPresentPathFast/* = SKIP
 
+// EGLImage colorspace renderbuffer failures on NVIDIA, INTEL and ANDROID
+40644776 WIN NVIDIA : ImageTest.SourceRenderbufferTargetTexture* = SKIP
+40644776 WIN NVIDIA : ImageTestES3.SourceRenderbufferTargetTextureExternalESSL3* = SKIP
+40644776 WIN INTEL  : ImageTest.SourceRenderbufferTargetTexture* = SKIP
+40644776 WIN INTEL  : ImageTestES3.SourceRenderbufferTargetTextureExternalESSL3* = SKIP
+40644776 ANDROID    : AttributeLayoutMemoryIndexed.Test/* = SKIP
+
 // Slow tests, should appear last in this file
 42263645 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
 42263645 : GLSLTest.VerifyMaxFragmentUniformVectors* = TIMEOUT
