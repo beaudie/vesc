@@ -609,9 +609,9 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     }
     else
     {
-        const std::vector<RangeDeviceSize> &dirtyRanges = conversion->getDirtyBufferRanges();
-
+        const std::vector<RangeDeviceSize> dirtyRanges = conversion->getDirtyBufferRanges();
         additionalOffsetVertexCounts.reserve(dirtyRanges.size());
+
         for (const RangeDeviceSize &dirtyRange : dirtyRanges)
         {
             uint32_t srcOffset, dstOffset, numVertices;
