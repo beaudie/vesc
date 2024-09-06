@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cb57be4_bfdac632",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5318,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-06T19:08:19Z",
+      "side": 1,
+      "message": "there is a bug here, you need to pass in some data here otherwise source attachment never gets initialized. Since `verifyResultsRenderbuffer` doesnt perform any reandering, all you will endup reading back will be transparent black",
+      "range": {
+        "startLine": 5318,
+        "startChar": 50,
+        "endLine": 5318,
+        "endChar": 52
+      },
+      "revId": "6c277c455f240377d91ff1b20cb483af8b36bdf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebc8b92d_2cfa8196",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7214,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-06T19:08:19Z",
+      "side": 1,
+      "message": "there is a bug here, when `GL_FRAMEBUFFER_SRGB_EXT` is enabled the color data will be encoded to srgb colorspace -\n```\nglUniform4fv(... linearColor ...)\nglEnable(GL_FRAMEBUFFER_SRGB_EXT);\ndrawQuad(...);\nEXPECT_PIXEL_COLOR_NEAR(... srgbColor ...);\n\nglDisable(GL_FRAMEBUFFER_SRGB_EXT);\ndrawQuad(...);\nEXPECT_PIXEL_COLOR_NEAR(... linearColor ...);\n```",
+      "range": {
+        "startLine": 7214,
+        "startChar": 35,
+        "endLine": 7214,
+        "endChar": 44
+      },
+      "revId": "6c277c455f240377d91ff1b20cb483af8b36bdf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
