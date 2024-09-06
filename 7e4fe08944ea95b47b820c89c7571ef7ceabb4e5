@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4f9e2e9_364362f4",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 15
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-06T16:16:53Z",
+      "side": 1,
+      "message": "I may use issue from the commit message?",
+      "parentUuid": "0400765d_6786e8c5",
+      "range": {
+        "startLine": 1774,
+        "startChar": 0,
+        "endLine": 1785,
+        "endChar": 13
+      },
+      "revId": "7e4fe08944ea95b47b820c89c7571ef7ceabb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4639c680_b3561818",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 15
@@ -37,6 +61,24 @@
       "writtenOn": "2024-09-06T14:10:39Z",
       "side": 1,
       "message": "Please don\u0027t use `GlobalOps` for this, this is for where things are different enough that vk::Renderer can\u0027t implement the code (different types involved, different objects, etc).\n\nWith the right `enum` passed to `Renderer::initialize()`, you can have the GL and CL sides configure the renderer so it can implement these functions itself. It seems to me two variables like `mPipelineCacheBlobCacheSlotCount` and `mNextPipelineCacheBlobCacheSlotIndex` in `Renderer` is enough to make this happen generically. No need for the `prevslot !\u003d nextslot` checks either, just use `...Count \u003e 1`\n\n---\n\nThe `isBlobCacheSupportsZeroSizedValues` function itself is unnecessary too, the `hasBlobCacheWithZeroSizedValuesSupport` feature is a property of the system, nothing to do with CL and GL.",
+      "revId": "7e4fe08944ea95b47b820c89c7571ef7ceabb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63b7e440_b55d4591",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-06T16:16:53Z",
+      "side": 1,
+      "message": "\u003e Please don\u0027t use GlobalOps for this\n\nSorry.\n\n\u003e With the right `enum` passed to `Renderer::initialize()`, you can have the GL and CL sides configure the renderer so it can implement these functions itself.\n\nSo I need to create some enum, but I\u0027m not sure how to name the type. or its members, and where to put it...\n\nAnd then `Renderer::initialize()` will use `switch` on this enum to configure the members?\n\nMaybe just enable/disable the `useDualPipelineBlobCacheSlots` feature depending on that `enum`?",
+      "parentUuid": "4639c680_b3561818",
       "revId": "7e4fe08944ea95b47b820c89c7571ef7ceabb4e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
