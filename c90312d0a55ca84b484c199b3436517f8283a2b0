@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eee9541d_5ce3a36f",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T14:54:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ed1a4be_88cb8a4e",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2baa414_a194d651",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4028e64f_114a0d0b",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T14:54:43Z",
+      "side": 1,
+      "message": "Ah, yes, you\u0027re right, we should do something with `clearValue`. I\u0027m going to now merge it with the deferred clears if there\u0027s any deferred clears at all, and either flush them or stage them as necessary.",
+      "parentUuid": "d2baa414_a194d651",
+      "range": {
+        "startLine": 182,
+        "startChar": 22,
+        "endLine": 182,
+        "endChar": 41
+      },
+      "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18ff6302_7c9519e6",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-08-17T00:58:59Z",
       "side": 1,
       "message": "This confuses me a little, aren\u0027t we looping through each of the color render targets (`mDeferredClears.getColorMask()` and `mRenderTargetCache.getColorDraw()`)? Why do they get a depth stencil clear value?",
+      "range": {
+        "startLine": 201,
+        "startChar": 46,
+        "endLine": 201,
+        "endChar": 55
+      },
+      "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33268ace_06ecea3a",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T14:54:43Z",
+      "side": 1,
+      "message": "Yes, you are right. They should not get a depth/stencil value that is my mistake 😊\n\nI added a conditional outside this loop to check if the deferred clears have a depth or stencil value deferred, and am staging that appropriately now.",
+      "parentUuid": "18ff6302_7c9519e6",
       "range": {
         "startLine": 201,
         "startChar": 46,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3d68039_15d50c48",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T14:54:43Z",
+      "side": 1,
+      "message": "Since I\u0027m now always merge the current clear command with deferred clears if there are any the blocks look a bit different.\n\n```\nif (mDeferredClears.any() {\n    if (isActiveRenderPass){\n    // block A \n    }\n    else {\n    // block B\n    }\n    return\n}\n\nif (isActiveRenderPass){\nend the current render pass\n}\nstart a new render pass\n```\n\nI think I can fully get rid of the second conditional to check if there\u0027s an active render pass since it also checks if there\u0027s a current render pass before trying to end it, but I think first checking if there are any deferred clears before checking if there\u0027s an active render pass makes more sense. Wdyt?",
+      "parentUuid": "414081eb_9188e1f5",
+      "range": {
+        "startLine": 209,
+        "startChar": 4,
+        "endLine": 209,
+        "endChar": 27
+      },
+      "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f65901d5_1fcd46bf",
         "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
         "patchSetId": 6
@@ -112,6 +208,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1cb3e2aa_a100a4c6",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T14:54:43Z",
+      "side": 1,
+      "message": "Ah, yes, that\u0027s true, I just overcomplicated this when adding the depth/stencil attachment support. I moved updating color and depth/stencil attachments into a new method `flushAttachmentUpdates` and made a more general `startRenderPassNewAttachments` as well. So now a new render pass is started if either the color attachments or depth/stencil attachment was changed.",
+      "parentUuid": "f65901d5_1fcd46bf",
+      "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5f7e0ff8_74a6b37d",
         "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
         "patchSetId": 6
@@ -123,6 +237,30 @@
       "writtenOn": "2024-08-17T00:58:59Z",
       "side": 1,
       "message": "maybe std::move()?",
+      "range": {
+        "startLine": 623,
+        "startChar": 56,
+        "endLine": 623,
+        "endChar": 78
+      },
+      "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "675c8880_21f9c0e2",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-06T14:54:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f7e0ff8_74a6b37d",
       "range": {
         "startLine": 623,
         "startChar": 56,
