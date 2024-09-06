@@ -365,6 +365,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75e26b23_8026ef7d",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-06T20:33:12Z",
+      "side": 1,
+      "message": "Yes exactly. We have to make sure our GL frontend limit reflects the maximum value we\u0027re able to store here. It\u0027s also limited by the the WebGPU limit.",
+      "parentUuid": "5f4cb996_e48049d5",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 19
+      },
+      "revId": "5030a9c638f58ec31d48372272e9a4cf0b75506e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd244242_c47c0b06",

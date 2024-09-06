@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd86e360_1d4fb066",
+        "filename": "src/libANGLE/renderer/wgpu/VertexArrayWgpu.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-06T20:33:12Z",
+      "side": 1,
+      "message": "This should be attribIndex since we\u0027re doing 1:1 attributes and location indices.",
+      "range": {
+        "startLine": 95,
+        "startChar": 65,
+        "endLine": 95,
+        "endChar": 66
+      },
+      "revId": "ce8e9f037a1975a4cb42ab5abc98aa718938d757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "133a3a71_cd85d735",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-06T20:33:12Z",
+      "side": 1,
+      "message": "Even though the kVertexAttributeStrideBits 16, we might as well write this as `uint16_t stride : kVertexAttributeStrideBits;`",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 20
+      },
+      "revId": "ce8e9f037a1975a4cb42ab5abc98aa718938d757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
