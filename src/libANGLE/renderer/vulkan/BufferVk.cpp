@@ -465,9 +465,16 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
 
     if (!mVertexConversionBuffers.empty())
     {
-        for (ConversionBuffer &buffer : mVertexConversionBuffers)
+        if (size > static_cast<size_t>(mState.getSize()))
         {
-            buffer.clearDirty();
+            mVertexConversionBuffers.clear();
+        }
+        else
+        {
+            for (ConversionBuffer &buffer : mVertexConversionBuffers)
+            {
+                buffer.clearDirty();
+            }
         }
     }
 
