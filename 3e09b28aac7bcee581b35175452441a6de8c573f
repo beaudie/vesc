@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46aec99b_7f48251e",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-06T12:51:27Z",
+      "side": 1,
+      "message": "This pattern looks like a good fit for a variadic template. I wrote a helper to do it:\n\n```\nnamespace impl\n{\n    size_t GetArgLength(const ImmutableString\u0026 str)\n    {\n        return str.length();\n    }\n\n    size_t GetArgLength(const char* str)\n    {\n        return std::strlen(str);\n    }\n\n    size_t GetArgsTotalSize()\n    {\n        return 0;\n    }\n\n    template \u003ctypename T, typename... Rest\u003e\n    size_t GetArgsTotalSize(const T\u0026 firstArg, Rest... rest)\n    {\n        return GetArgLength(firstArg) + GetArgsTotalSize(rest...);\n    }\n\n    void AppendStrings(ImmutableStringBuilder\u0026 builder)\n    {\n    }\n\n    template \u003ctypename T, typename... Rest\u003e\n    void AppendStrings(ImmutableStringBuilder\u0026 builder, const T\u0026 firstArg, Rest... rest)\n    {\n        builder \u003c\u003c firstArg;\n        AppendStrings(builder, rest...);\n    }\n}\n\ntemplate \u003ctypename... Args\u003e\nImmutableString BuildConcatenatedImmutableString(Args... args)\n{\n    ImmutableStringBuilder builder(impl::GetArgsTotalSize(args...));\n    impl::AppendStrings(builder, args...);\n    return builder;\n}\n```\n\nwhich lets this become: `ImmutableString globalStructVar \u003d BuildConcatenatedImmutableString(builtinReplacement, \" : \", globalType, \",\");`\n\nOnly drawback is for branches like in calculating `conversion` below you\u0027ll have to branch early and create two different strings.",
+      "range": {
+        "startLine": 310,
+        "startChar": 12,
+        "endLine": 311,
+        "endChar": 76
+      },
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9dbeb67_4a1d72e2",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-06T12:51:27Z",
+      "side": 1,
+      "message": "Should there be an else with UNREACHABLE or UNIMPLEMENTED here?",
+      "range": {
+        "startLine": 351,
+        "startChar": 12,
+        "endLine": 351,
+        "endChar": 13
+      },
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
