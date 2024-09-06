@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c7215d5_9b0a8ac8",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-06T12:55:02Z",
+      "side": 1,
+      "message": "So my idea was to get rid of the second function and just combine everything into one function.\n\nThis way we can also\n* combine `am get-current-user` with `id -u; which su || echo noroot; stat --format %a /data` above, such as `id -u; am get-current-user; which su || echo noroot; stat --format %a /data`. I think this makes sense as single query and also reduces roundtrips (hasn\u0027t been a focus but is always nice in case of a remote device). We can also rewrite it as `\u0027;\u0027.join(...)` if that feels more readable.\n* have `use_run_as` logic in one place\n\n\nOriginally _GetAdbRoot was just getting adb root but over time it accumulated stuff, and the name no longer makes sense. I think this is now more of a generic \"setup\", with getting adb root just being a part of it? We already have _InitializeAndroid though we\u0027re calling this from, so maybe just get rid of all helpers and have everything inlined in _InitializeAndroid. It\u0027s not going to be all that big. WDYT?",
+      "parentUuid": "25426f52_6ee10285",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 34
+      },
+      "revId": "5f4424682fd7adcbb2dd33b09d8fd0412f3182ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4fe9e982_f2f5e3d3",
         "filename": "src/tests/py_utils/android_helper.py",
         "patchSetId": 4
