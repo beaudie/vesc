@@ -98,6 +98,24 @@
       "parentUuid": "0b7f61c7_16334fe2",
       "revId": "0e4bda373fa37271c3eacccdeabf7d65aa59c9a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9be08ba_1dab4165",
+        "filename": "src/libANGLE/renderer/vulkan/cl_types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:44:18Z",
+      "side": 1,
+      "message": "Yeah, we have helpers for these too, they are common problems.\n\nFor your first problem, use `angle::AllEnums`. See for example `enum class DescriptorSetIndex` and how we iterate over the enums (keys):\n\n```\n    for (DescriptorSetIndex descriptorSetIndex : angle::AllEnums\u003cDescriptorSetIndex\u003e())\n```\n\nYou can then of course cheaply do `map[key]` to get the value.\n\n---\n\nRegarding `isUsed`, please use `angle::PackedEnumBitSet`. Then you can also use a range-for to get all the bits that are set efficiently, with the nicety that the returned bits are already cast to the enum values.",
+      "parentUuid": "3915e117_95e71947",
+      "revId": "0e4bda373fa37271c3eacccdeabf7d65aa59c9a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
