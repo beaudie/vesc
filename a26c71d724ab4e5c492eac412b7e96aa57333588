@@ -52,6 +52,24 @@
       "parentUuid": "e9a3b2f1_034a4b8b",
       "revId": "a26c71d724ab4e5c492eac412b7e96aa57333588",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e70f522f_2d365f79",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-06T23:57:07Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6d6ad69f_8b782d7f",
+      "revId": "a26c71d724ab4e5c492eac412b7e96aa57333588",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
