@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a34bf021_a489b63e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:18:05Z",
+      "side": 1,
+      "message": "If we sort the ranges and do a quick pass to merge overlapping ones, we can avoid this barrier. Or detect overlap and do barrier only if overlap.\n\nWhat I\u0027m hoping to avoid is unnecessary barriers when the application doesn\u0027t do overlapping updates.",
+      "range": {
+        "startLine": 2453,
+        "startChar": 0,
+        "endLine": 2455,
+        "endChar": 94
+      },
+      "revId": "c53e19853d32da9f99145c8cc753d2917ee09159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e20a06d_5f59f356",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3715,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:18:05Z",
+      "side": 1,
+      "message": "```suggestion\n    ANGLE_TRY(convertVertexBufferImpl(contextVk, \u0026dstBuffer.get(), \u0026srcBuffer.get(), flags,\n                                      commandBufferHelper, shaderParams, {}));\n```",
+      "range": {
+        "startLine": 3713,
+        "startChar": 0,
+        "endLine": 3715,
+        "endChar": 81
+      },
+      "revId": "c53e19853d32da9f99145c8cc753d2917ee09159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e1f26fd_ae6205ce",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3907,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:18:05Z",
+      "side": 1,
+      "message": "```suggestion\n    return convertVertexBufferImpl(contextVk, dstBuffer, srcBuffer, flags, commandBufferHelper,\n                                   shaderParams, {});\n```",
+      "range": {
+        "startLine": 3905,
+        "startChar": 0,
+        "endLine": 3907,
+        "endChar": 56
+      },
+      "revId": "c53e19853d32da9f99145c8cc753d2917ee09159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
