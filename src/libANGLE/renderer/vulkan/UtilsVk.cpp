@@ -2427,14 +2427,14 @@ angle::Result UtilsVk::convertVertexBufferImpl(
 
     commandBuffer->dispatch(UnsignedCeilDivide(shaderParams.outputCount, 64), 1, 1);
 
-    if (!additionalOffsetVertexCounts.empty())
+    if (!additionalOffsetVertexCounts.array.empty())
     {
         ConvertVertexShaderParams constants = shaderParams;
 
         VkMemoryBarrier memoryBarrier = {VK_STRUCTURE_TYPE_MEMORY_BARRIER, nullptr,
                                          VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_MEMORY_WRITE_BIT};
 
-        for (const OffsetAndVertexCount &offsetAndVertexCount : additionalOffsetVertexCounts)
+        for (const OffsetAndVertexCount &offsetAndVertexCount : additionalOffsetVertexCounts.array)
         {
             // Total number of output components is simply the number of vertices by number of
             // components in each.
@@ -2450,9 +2450,11 @@ angle::Result UtilsVk::convertVertexBufferImpl(
             commandBuffer->pushConstants(mPipelineLayouts[Function::ConvertVertexBuffer].get(),
                                          VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(constants),
                                          &constants);
-
-            commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-                                         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, memoryBarrier);
+            if (additionalOffsetVertexCounts.overlap)
+            {
+                commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, memoryBarrier);
+            }
             commandBuffer->dispatch(UnsignedCeilDivide(constants.outputCount, 64), 1, 1);
         }
     }

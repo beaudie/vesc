@@ -292,6 +292,43 @@ void CalculateOffsetAndVertexCountForDirtyRange(BufferVk *bufferVk,
     *srcOffsetOut   = static_cast<uint32_t>(srcOffset);
     *dstOffsetOut   = static_cast<uint32_t>(dstOffset);
 }
+
+bool CheckOverlapAndConsolidateDirtyRanges(const std::vector<RangeDeviceSize> &dirtyRanges,
+                                           std::vector<RangeDeviceSize> *mergedDirtyRangesOut)
+{
+    mergedDirtyRangesOut->reserve(dirtyRanges.size());
+    bool overlapFound = false;
+
+    for (const RangeDeviceSize &range : dirtyRanges)
+    {
+        bool append = true;
+
+        if (!overlapFound)
+        {
+            for (RangeDeviceSize &rangeOut : *mergedDirtyRangesOut)
+            {
+                if (rangeOut.intersects(range))
+                {
+                    overlapFound = true;
+                    break;
+                }
+
+                if (rangeOut.mergeOnlyIfContiguous(range))
+                {
+                    append = false;
+                    break;
+                }
+            }
+        }
+
+        if (append)
+        {
+            mergedDirtyRangesOut->emplace_back(range);
+        }
+    }
+
+    return overlapFound;
+}
 }  // anonymous namespace
 
 VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &state)
@@ -609,9 +646,12 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     }
     else
     {
-        const std::vector<RangeDeviceSize> &dirtyRanges = conversion->getDirtyBufferRanges();
+        std::vector<RangeDeviceSize> dirtyRanges;
 
-        additionalOffsetVertexCounts.reserve(dirtyRanges.size());
+        additionalOffsetVertexCounts.overlap =
+            CheckOverlapAndConsolidateDirtyRanges(conversion->getDirtyBufferRanges(), &dirtyRanges);
+        additionalOffsetVertexCounts.array.reserve(dirtyRanges.size());
+
         for (const RangeDeviceSize &dirtyRange : dirtyRanges)
         {
             uint32_t srcOffset, dstOffset, numVertices;
@@ -626,10 +666,10 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
             }
             else
             {
-                additionalOffsetVertexCounts.emplace_back();
-                additionalOffsetVertexCounts.back().srcOffset   = srcOffset;
-                additionalOffsetVertexCounts.back().dstOffset   = dstOffset;
-                additionalOffsetVertexCounts.back().vertexCount = numVertices;
+                additionalOffsetVertexCounts.array.emplace_back();
+                additionalOffsetVertexCounts.array.back().srcOffset   = srcOffset;
+                additionalOffsetVertexCounts.array.back().dstOffset   = dstOffset;
+                additionalOffsetVertexCounts.array.back().vertexCount = numVertices;
             }
         }
     }

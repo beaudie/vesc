@@ -729,6 +729,21 @@ class Range
         }
     }
 
+    bool mergeOnlyIfContiguous(const Range<T> &other)
+    {
+        if (mLow == other.mHigh)
+        {
+            mLow = other.mLow;
+            return true;
+        }
+        else if (mHigh == other.mLow)
+        {
+            mHigh = other.mHigh;
+            return true;
+        }
+        return false;
+    }
+
     void merge(const Range<T> &other)
     {
         if (mLow > other.mLow)
