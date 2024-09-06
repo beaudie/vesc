@@ -292,6 +292,31 @@ void CalculateOffsetAndVertexCountForDirtyRange(BufferVk *bufferVk,
     *srcOffsetOut   = static_cast<uint32_t>(srcOffset);
     *dstOffsetOut   = static_cast<uint32_t>(dstOffset);
 }
+
+/*void ConsolidateDirtyRanges(const std::vector<RangeDeviceSize> &dirtyRanges,
+                            std::vector<RangeDeviceSize> *mergedDirtyRangesOut)
+{
+    mergedDirtyRangesOut->reserve(dirtyRanges.size());
+
+    for (const RangeDeviceSize &range : dirtyRanges)
+    {
+        bool append = true;
+        for (RangeDeviceSize &rangeOut : *mergedDirtyRangesOut)
+        {
+            if (rangeOut.intersects(range))
+            {
+                rangeOut.merge(range);
+                append = false;
+                break;
+            }
+        }
+
+        if (append)
+        {
+            mergedDirtyRangesOut->emplace_back(range);
+        }
+    }
+}*/
 }  // anonymous namespace
 
 VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &state)
@@ -609,9 +634,10 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     }
     else
     {
-        const std::vector<RangeDeviceSize> &dirtyRanges = conversion->getDirtyBufferRanges();
-
+        conversion->consolidateDirtyRanges();
+        const std::vector<RangeDeviceSize> dirtyRanges = conversion->getDirtyBufferRanges();
         additionalOffsetVertexCounts.reserve(dirtyRanges.size());
+
         for (const RangeDeviceSize &dirtyRange : dirtyRanges)
         {
             uint32_t srcOffset, dstOffset, numVertices;
