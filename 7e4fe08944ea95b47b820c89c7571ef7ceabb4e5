@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4639c680_b3561818",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-06T14:10:39Z",
+      "side": 1,
+      "message": "Please don\u0027t use `GlobalOps` for this, this is for where things are different enough that vk::Renderer can\u0027t implement the code (different types involved, different objects, etc).\n\nWith the right `enum` passed to `Renderer::initialize()`, you can have the GL and CL sides configure the renderer so it can implement these functions itself. It seems to me two variables like `mPipelineCacheBlobCacheSlotCount` and `mNextPipelineCacheBlobCacheSlotIndex` in `Renderer` is enough to make this happen generically. No need for the `prevslot !\u003d nextslot` checks either, just use `...Count \u003e 1`\n\n---\n\nThe `isBlobCacheSupportsZeroSizedValues` function itself is unnecessary too, the `hasBlobCacheWithZeroSizedValuesSupport` feature is a property of the system, nothing to do with CL and GL.",
+      "revId": "7e4fe08944ea95b47b820c89c7571ef7ceabb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
