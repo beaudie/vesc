@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f887a042_fd11a419",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-06T16:26:26Z",
+      "side": 1,
+      "message": "Let\u0027s inline this into the caller? (I suggested this earlier but maybe it wasn\u0027t clear) Both make changes to `_Global` so having them separate now only hurts readability. If it feels like the caller is getting too big, maybe move out the adb root getting part to its own little helper, a free function that does _not_ mess with `_Global`",
+      "range": {
+        "startLine": 161,
+        "startChar": 4,
+        "endLine": 161,
+        "endChar": 16
+      },
+      "revId": "020af146c19abcffdd33eb476bd76c3c550ed17f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c153e5a_df48bd1f",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-06T16:26:26Z",
+      "side": 1,
+      "message": "Can we have this block next to the other one that changes use_run_as, for readability?",
+      "range": {
+        "startLine": 168,
+        "startChar": 16,
+        "endLine": 168,
+        "endChar": 34
+      },
+      "revId": "020af146c19abcffdd33eb476bd76c3c550ed17f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da108ebd_89dde7d8",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-06T16:26:26Z",
+      "side": 1,
+      "message": "just `assert current_user.isnumeric(), current_user` and avoid branching?",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 77
+      },
+      "revId": "020af146c19abcffdd33eb476bd76c3c550ed17f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
