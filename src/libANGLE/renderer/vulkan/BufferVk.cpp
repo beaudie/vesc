@@ -325,6 +325,27 @@ ConversionBuffer::~ConversionBuffer()
 
 ConversionBuffer::ConversionBuffer(ConversionBuffer &&other) = default;
 
+void ConversionBuffer::consolidateDirtyRanges()
+{
+    ASSERT(!mEntireBufferDirty);
+
+    auto comp = [](const RangeDeviceSize &a, const RangeDeviceSize &b) -> bool {
+        return a.low() < b.low();
+    };
+    std::sort(mDirtyRanges.begin(), mDirtyRanges.end(), comp);
+
+    for (size_t i = 1; i < mDirtyRanges.size(); i++)
+    {
+        size_t prev = i - 1;
+        if (mDirtyRanges[prev].intersectsOrContinuous(mDirtyRanges[i]))
+        {
+            mDirtyRanges[prev].merge(mDirtyRanges[i]);
+            mDirtyRanges[i].invalidate();
+            break;
+        }
+    }
+}
+
 // VertexConversionBuffer implementation.
 VertexConversionBuffer::VertexConversionBuffer(vk::Renderer *renderer, const CacheKey &cacheKey)
     : ConversionBuffer(renderer,
