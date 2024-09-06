@@ -204,6 +204,30 @@
       },
       "revId": "39d25e43c1e7563c590e9599243095c84df53453",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d6d038_52dcc878",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-06T15:27:02Z",
+      "side": 1,
+      "message": "Using if/else is easier to parse and understand, especially with the comment, LGTM",
+      "parentUuid": "cae6b100_6c43b2eb",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 42
+      },
+      "revId": "39d25e43c1e7563c590e9599243095c84df53453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
