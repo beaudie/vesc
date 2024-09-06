@@ -1121,6 +1121,43 @@ ImageLayerWriteMask GetImageLayerWriteMask(uint32_t layerStart, uint32_t layerCo
     layerMask = (layerMask << rotateShift) | (layerMask >> (kMaxParallelLayerWrites - rotateShift));
     return layerMask;
 }
+
+ImageSubresourceRange MakeImageSubresourceReadRange(gl::LevelIndex level,
+                                                    uint32_t levelCount,
+                                                    uint32_t layer,
+                                                    LayerMode layerMode,
+                                                    ImageViewColorspace readColorspace,
+                                                    ImageViewColorspace writeColorspace)
+{
+    ImageSubresourceRange range;
+
+    SetBitField(range.level, level.get());
+    SetBitField(range.levelCount, levelCount);
+    SetBitField(range.layer, layer);
+    SetBitField(range.layerMode, layerMode);
+    SetBitField(range.readColorspace, readColorspace == ImageViewColorspace::SRGB ? 1 : 0);
+    SetBitField(range.writeColorspace, writeColorspace == ImageViewColorspace::SRGB ? 1 : 0);
+
+    return range;
+}
+
+ImageSubresourceRange MakeImageSubresourceDrawRange(gl::LevelIndex level,
+                                                    uint32_t layer,
+                                                    LayerMode layerMode,
+                                                    ImageViewColorspace readColorspace,
+                                                    ImageViewColorspace writeColorspace)
+{
+    ImageSubresourceRange range;
+
+    SetBitField(range.level, level.get());
+    SetBitField(range.levelCount, 1);
+    SetBitField(range.layer, layer);
+    SetBitField(range.layerMode, layerMode);
+    SetBitField(range.readColorspace, readColorspace == ImageViewColorspace::SRGB ? 1 : 0);
+    SetBitField(range.writeColorspace, writeColorspace == ImageViewColorspace::SRGB ? 1 : 0);
+
+    return range;
+}
 }  // anonymous namespace
 
 // This is an arbitrary max. We can change this later if necessary.
@@ -6405,21 +6442,6 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result ImageHelper::initImageView(Context *context,
-                                         gl::TextureType textureType,
-                                         VkImageAspectFlags aspectMask,
-                                         const gl::SwizzleState &swizzleMap,
-                                         ImageView *imageViewOut,
-                                         LevelIndex baseMipLevelVk,
-                                         uint32_t levelCount,
-                                         VkImageUsageFlags imageUsageFlags)
-{
-    return initLayerImageView(context, textureType, aspectMask, swizzleMap, imageViewOut,
-                              baseMipLevelVk, levelCount, 0, mLayerCount,
-                              gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default,
-                              imageUsageFlags);
-}
-
 angle::Result ImageHelper::initLayerImageView(Context *context,
                                               gl::TextureType textureType,
                                               VkImageAspectFlags aspectMask,
@@ -6429,27 +6451,12 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
                                               uint32_t levelCount,
                                               uint32_t baseArrayLayer,
                                               uint32_t layerCount,
-                                              gl::SrgbWriteControlMode srgbWriteControlMode,
                                               gl::YuvSamplingMode yuvSamplingMode,
                                               VkImageUsageFlags imageUsageFlags) const
 {
-    angle::FormatID actualFormat = mActualFormatID;
-
-    // If we are initializing an imageview for use with EXT_srgb_write_control, we need to override
-    // the format to its linear counterpart. Formats that cannot be reinterpreted are exempt from
-    // this requirement.
-    if (srgbWriteControlMode == gl::SrgbWriteControlMode::Linear)
-    {
-        angle::FormatID linearFormat = ConvertToLinear(actualFormat);
-        if (linearFormat != angle::FormatID::NONE)
-        {
-            actualFormat = linearFormat;
-        }
-    }
-
     return initLayerImageViewImpl(context, textureType, aspectMask, swizzleMap, imageViewOut,
                                   baseMipLevelVk, levelCount, baseArrayLayer, layerCount,
-                                  GetVkFormatFromFormatID(actualFormat), imageUsageFlags,
+                                  GetVkFormatFromFormatID(mActualFormatID), imageUsageFlags,
                                   yuvSamplingMode);
 }
 
@@ -10774,13 +10781,15 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
 
         // Surely we have a view of this already!
         vk::ImageView srcView;
-        ANGLE_TRY(src->initImageView(contextVk, textureType, VK_IMAGE_ASPECT_COLOR_BIT,
-                                     gl::SwizzleState(), &srcView, vk::LevelIndex(0), 1,
-                                     vk::ImageHelper::kDefaultImageViewUsageFlags));
+        ANGLE_TRY(src->initLayerImageView(contextVk, textureType, VK_IMAGE_ASPECT_COLOR_BIT,
+                                          gl::SwizzleState(), &srcView, vk::LevelIndex(0), 1, 0,
+                                          mLayerCount, gl::YuvSamplingMode::Default,
+                                          vk::ImageHelper::kDefaultImageViewUsageFlags));
         vk::ImageView stagingView;
-        ANGLE_TRY(resolvedImage.get().initImageView(
+        ANGLE_TRY(resolvedImage.get().initLayerImageView(
             contextVk, textureType, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(), &stagingView,
-            vk::LevelIndex(0), 1, vk::ImageHelper::kDefaultImageViewUsageFlags));
+            vk::LevelIndex(0), 1, 0, mLayerCount, gl::YuvSamplingMode::Default,
+            vk::ImageHelper::kDefaultImageViewUsageFlags));
 
         UtilsVk::CopyImageParameters params = {};
         params.srcOffset[0]                 = srcOffset.x;
@@ -11362,12 +11371,18 @@ ComputePipelineOptions GetComputePipelineOptions(vk::PipelineRobustness robustne
 }
 
 // ImageViewHelper implementation.
-ImageViewHelper::ImageViewHelper() : mCurrentBaseMaxLevelHash(0), mLinearColorspace(true) {}
+ImageViewHelper::ImageViewHelper()
+    : mCurrentBaseMaxLevelHash(0),
+      mReadColorspace(ImageViewColorspace::Invalid),
+      mWriteColorspace(ImageViewColorspace::Invalid)
+{}
 
 ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
 {
     std::swap(mCurrentBaseMaxLevelHash, other.mCurrentBaseMaxLevelHash);
-    std::swap(mLinearColorspace, other.mLinearColorspace);
+    std::swap(mReadColorspace, other.mReadColorspace);
+    std::swap(mWriteColorspace, other.mWriteColorspace);
+    std::swap(mColorspaceState, other.mColorspaceState);
 
     std::swap(mPerLevelRangeLinearReadImageViews, other.mPerLevelRangeLinearReadImageViews);
     std::swap(mPerLevelRangeSRGBReadImageViews, other.mPerLevelRangeSRGBReadImageViews);
@@ -11399,6 +11414,9 @@ void ImageViewHelper::init(Renderer *renderer)
 void ImageViewHelper::release(Renderer *renderer, const ResourceUse &use)
 {
     mCurrentBaseMaxLevelHash = 0;
+    mReadColorspace          = ImageViewColorspace::Invalid;
+    mWriteColorspace         = ImageViewColorspace::Invalid;
+    mColorspaceState.reset();
 
     std::vector<vk::GarbageObject> garbage;
     // Release the read views
@@ -11485,6 +11503,9 @@ bool ImageViewHelper::isImageViewGarbageEmpty() const
 void ImageViewHelper::destroy(VkDevice device)
 {
     mCurrentBaseMaxLevelHash = 0;
+    mReadColorspace          = ImageViewColorspace::Invalid;
+    mWriteColorspace         = ImageViewColorspace::Invalid;
+    mColorspaceState.reset();
 
     // Release the read views
     DestroyImageViews(&mPerLevelRangeLinearReadImageViews, device);
@@ -11553,6 +11574,7 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
     ASSERT(maxLevel < 16);
     ASSERT(baseLevel.get() < 16);
     mCurrentBaseMaxLevelHash = static_cast<uint8_t>(baseLevel.get() << 4 | maxLevel);
+    updateColorspace(image);
 
     if (mCurrentBaseMaxLevelHash >= mPerLevelRangeLinearReadImageViews.size())
     {
@@ -11573,14 +11595,18 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
     }
 
     // Since we don't have a readImageView, we must create ImageViews for the new max level
-    ANGLE_TRY(initReadViewsImpl(contextVk, viewType, image, formatSwizzle, readSwizzle, baseLevel,
-                                levelCount, baseLayer, layerCount, imageUsageFlags));
-
     if (requiresSRGBViews)
     {
-        ANGLE_TRY(initSRGBReadViewsImpl(contextVk, viewType, image, formatSwizzle, readSwizzle,
-                                        baseLevel, levelCount, baseLayer, layerCount,
-                                        imageUsageFlags));
+        // Initialize image views for both linear and srgb colorspaces
+        ANGLE_TRY(initLinearAndSrgbReadViewsImpl(contextVk, viewType, image, formatSwizzle,
+                                                 readSwizzle, baseLevel, levelCount, baseLayer,
+                                                 layerCount, imageUsageFlags));
+    }
+    else
+    {
+        // Initialize image view for image's format's colorspace
+        ANGLE_TRY(initReadViewsImpl(contextVk, viewType, image, formatSwizzle, readSwizzle,
+                                    baseLevel, levelCount, baseLayer, layerCount, imageUsageFlags));
     }
 
     return angle::Result::Continue;
@@ -11598,35 +11624,32 @@ angle::Result ImageViewHelper::initReadViewsImpl(ContextVk *contextVk,
                                                  VkImageUsageFlags imageUsageFlags)
 {
     ASSERT(mImageViewSerial.valid());
+    ASSERT(mReadColorspace != ImageViewColorspace::Invalid);
 
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(image.getIntendedFormat());
-    mLinearColorspace                    = !image.getActualFormat().isSRGB;
 
     if (HasBothDepthAndStencilAspects(aspectFlags))
     {
         ANGLE_TRY(image.initLayerImageView(contextVk, viewType, VK_IMAGE_ASPECT_DEPTH_BIT,
                                            readSwizzle, &getReadImageView(), baseLevel, levelCount,
-                                           baseLayer, layerCount, gl::SrgbWriteControlMode::Default,
-                                           gl::YuvSamplingMode::Default, imageUsageFlags));
+                                           baseLayer, layerCount, gl::YuvSamplingMode::Default,
+                                           imageUsageFlags));
         ANGLE_TRY(image.initLayerImageView(
             contextVk, viewType, VK_IMAGE_ASPECT_STENCIL_BIT, readSwizzle,
             &mPerLevelRangeStencilReadImageViews[mCurrentBaseMaxLevelHash], baseLevel, levelCount,
-            baseLayer, layerCount, gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default,
-            imageUsageFlags));
+            baseLayer, layerCount, gl::YuvSamplingMode::Default, imageUsageFlags));
     }
     else
     {
-        ANGLE_TRY(image.initLayerImageView(contextVk, viewType, aspectFlags, readSwizzle,
-                                           &getReadImageView(), baseLevel, levelCount, baseLayer,
-                                           layerCount, gl::SrgbWriteControlMode::Default,
-                                           gl::YuvSamplingMode::Default, imageUsageFlags));
+        ANGLE_TRY(image.initLayerImageView(
+            contextVk, viewType, aspectFlags, readSwizzle, &getReadImageView(), baseLevel,
+            levelCount, baseLayer, layerCount, gl::YuvSamplingMode::Default, imageUsageFlags));
 
         if (image.getActualFormat().isYUV)
         {
             ANGLE_TRY(image.initLayerImageView(contextVk, viewType, aspectFlags, readSwizzle,
                                                &getSamplerExternal2DY2YEXTImageView(), baseLevel,
                                                levelCount, baseLayer, layerCount,
-                                               gl::SrgbWriteControlMode::Default,
                                                gl::YuvSamplingMode::Y2Y, imageUsageFlags));
         }
     }
@@ -11640,57 +11663,78 @@ angle::Result ImageViewHelper::initReadViewsImpl(ContextVk *contextVk,
 
     if (!image.getActualFormat().isBlock)
     {
-        ANGLE_TRY(image.initLayerImageView(contextVk, fetchType, aspectFlags, formatSwizzle,
-                                           &getCopyImageView(), baseLevel, levelCount, baseLayer,
-                                           layerCount, gl::SrgbWriteControlMode::Default,
-                                           gl::YuvSamplingMode::Default, imageUsageFlags));
+        ANGLE_TRY(image.initLayerImageView(
+            contextVk, fetchType, aspectFlags, formatSwizzle, &getCopyImageView(), baseLevel,
+            levelCount, baseLayer, layerCount, gl::YuvSamplingMode::Default, imageUsageFlags));
     }
     return angle::Result::Continue;
 }
 
-angle::Result ImageViewHelper::initSRGBReadViewsImpl(ContextVk *contextVk,
-                                                     gl::TextureType viewType,
-                                                     const ImageHelper &image,
-                                                     const gl::SwizzleState &formatSwizzle,
-                                                     const gl::SwizzleState &readSwizzle,
-                                                     LevelIndex baseLevel,
-                                                     uint32_t levelCount,
-                                                     uint32_t baseLayer,
-                                                     uint32_t layerCount,
-                                                     VkImageUsageFlags imageUsageFlags)
+angle::Result ImageViewHelper::initLinearAndSrgbReadViewsImpl(ContextVk *contextVk,
+                                                              gl::TextureType viewType,
+                                                              const ImageHelper &image,
+                                                              const gl::SwizzleState &formatSwizzle,
+                                                              const gl::SwizzleState &readSwizzle,
+                                                              LevelIndex baseLevel,
+                                                              uint32_t levelCount,
+                                                              uint32_t baseLayer,
+                                                              uint32_t layerCount,
+                                                              VkImageUsageFlags imageUsageFlags)
 {
+    ASSERT(mReadColorspace != ImageViewColorspace::Invalid);
+
     // When we select the linear/srgb counterpart formats, we must first make sure they're
     // actually supported by the ICD. If they are not supported by the ICD, then we treat that as if
     // there is no counterpart format. (In this case, the relevant extension should not be exposed)
-    angle::FormatID srgbOverrideFormat = ConvertToSRGB(image.getActualFormatID());
-    ASSERT((srgbOverrideFormat == angle::FormatID::NONE) ||
-           (HasNonRenderableTextureFormatSupport(contextVk->getRenderer(), srgbOverrideFormat)));
+    const bool imageFormatIsSrgb      = image.getActualFormat().isSRGB;
+    const angle::FormatID imageFormat = image.getActualFormatID();
+    angle::FormatID srgbFormat = imageFormatIsSrgb ? imageFormat : ConvertToSRGB(imageFormat);
+    ASSERT((srgbFormat == angle::FormatID::NONE) ||
+           (HasNonRenderableTextureFormatSupport(contextVk->getRenderer(), srgbFormat)));
 
-    angle::FormatID linearOverrideFormat = ConvertToLinear(image.getActualFormatID());
-    ASSERT((linearOverrideFormat == angle::FormatID::NONE) ||
-           (HasNonRenderableTextureFormatSupport(contextVk->getRenderer(), linearOverrideFormat)));
-
-    angle::FormatID linearFormat = (linearOverrideFormat != angle::FormatID::NONE)
-                                       ? linearOverrideFormat
-                                       : image.getActualFormatID();
+    angle::FormatID linearFormat = !imageFormatIsSrgb ? imageFormat : ConvertToLinear(imageFormat);
     ASSERT(linearFormat != angle::FormatID::NONE);
 
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(image.getIntendedFormat());
 
-    if (!mPerLevelRangeLinearReadImageViews[mCurrentBaseMaxLevelHash].valid())
+    if (HasBothDepthAndStencilAspects(aspectFlags))
     {
         ANGLE_TRY(image.initReinterpretedLayerImageView(
-            contextVk, viewType, aspectFlags, readSwizzle,
+            contextVk, viewType, VK_IMAGE_ASPECT_DEPTH_BIT, readSwizzle,
             &mPerLevelRangeLinearReadImageViews[mCurrentBaseMaxLevelHash], baseLevel, levelCount,
             baseLayer, layerCount, imageUsageFlags, linearFormat));
-    }
-    if (srgbOverrideFormat != angle::FormatID::NONE &&
-        !mPerLevelRangeSRGBReadImageViews[mCurrentBaseMaxLevelHash].valid())
-    {
+
         ANGLE_TRY(image.initReinterpretedLayerImageView(
-            contextVk, viewType, aspectFlags, readSwizzle,
-            &mPerLevelRangeSRGBReadImageViews[mCurrentBaseMaxLevelHash], baseLevel, levelCount,
-            baseLayer, layerCount, imageUsageFlags, srgbOverrideFormat));
+            contextVk, viewType, VK_IMAGE_ASPECT_STENCIL_BIT, readSwizzle,
+            &mPerLevelRangeStencilReadImageViews[mCurrentBaseMaxLevelHash], baseLevel, levelCount,
+            baseLayer, layerCount, imageUsageFlags, linearFormat));
+    }
+    else
+    {
+        if (!mPerLevelRangeLinearReadImageViews[mCurrentBaseMaxLevelHash].valid())
+        {
+            ANGLE_TRY(image.initReinterpretedLayerImageView(
+                contextVk, viewType, aspectFlags, readSwizzle,
+                &mPerLevelRangeLinearReadImageViews[mCurrentBaseMaxLevelHash], baseLevel,
+                levelCount, baseLayer, layerCount, imageUsageFlags, linearFormat));
+        }
+
+        if (srgbFormat != angle::FormatID::NONE &&
+            !mPerLevelRangeSRGBReadImageViews[mCurrentBaseMaxLevelHash].valid())
+        {
+            ANGLE_TRY(image.initReinterpretedLayerImageView(
+                contextVk, viewType, aspectFlags, readSwizzle,
+                &mPerLevelRangeSRGBReadImageViews[mCurrentBaseMaxLevelHash], baseLevel, levelCount,
+                baseLayer, layerCount, imageUsageFlags, srgbFormat));
+        }
+
+        if (image.getActualFormat().isYUV)
+        {
+            ANGLE_TRY(image.initLayerImageView(contextVk, viewType, aspectFlags, readSwizzle,
+                                               &getSamplerExternal2DY2YEXTImageView(), baseLevel,
+                                               levelCount, baseLayer, layerCount,
+                                               gl::YuvSamplingMode::Y2Y, imageUsageFlags));
+        }
     }
 
     gl::TextureType fetchType = viewType;
@@ -11710,15 +11754,16 @@ angle::Result ImageViewHelper::initSRGBReadViewsImpl(ContextVk *contextVk,
                 &mPerLevelRangeLinearCopyImageViews[mCurrentBaseMaxLevelHash], baseLevel,
                 levelCount, baseLayer, layerCount, imageUsageFlags, linearFormat));
         }
-        if (srgbOverrideFormat != angle::FormatID::NONE &&
+        if (srgbFormat != angle::FormatID::NONE &&
             !mPerLevelRangeSRGBCopyImageViews[mCurrentBaseMaxLevelHash].valid())
         {
             ANGLE_TRY(image.initReinterpretedLayerImageView(
                 contextVk, fetchType, aspectFlags, formatSwizzle,
                 &mPerLevelRangeSRGBCopyImageViews[mCurrentBaseMaxLevelHash], baseLevel, levelCount,
-                baseLayer, layerCount, imageUsageFlags, srgbOverrideFormat));
+                baseLayer, layerCount, imageUsageFlags, srgbFormat));
         }
     }
+
     return angle::Result::Continue;
 }
 
@@ -11777,20 +11822,58 @@ angle::Result ImageViewHelper::getLevelLayerStorageImageView(Context *contextVk,
                                                  1, imageUsageFlags, formatID);
 }
 
+angle::Result ImageViewHelper::getLevelLayerDrawImageViewImpl(Context *context,
+                                                              const ImageHelper &image,
+                                                              LevelIndex levelVk,
+                                                              uint32_t layer,
+                                                              uint32_t layerCount,
+                                                              ImageView *imageViewOut)
+{
+    ASSERT(imageViewOut != nullptr);
+
+    // If we are initializing an imageview for use with EXT_srgb_write_control, we need to override
+    // the format to its linear counterpart. Formats that cannot be reinterpreted are exempt from
+    // this requirement.
+    angle::FormatID actualFormat = image.getActualFormatID();
+    angle::FormatID linearFormat = ConvertToLinear(actualFormat);
+    angle::FormatID sRGBFormat   = ConvertToSRGB(actualFormat);
+    if (mWriteColorspace == ImageViewColorspace::Linear && linearFormat != angle::FormatID::NONE)
+    {
+        actualFormat = linearFormat;
+    }
+    else if (mWriteColorspace == ImageViewColorspace::SRGB && sRGBFormat != angle::FormatID::NONE)
+    {
+        actualFormat = sRGBFormat;
+    }
+
+    // Note that these views are specifically made to be used as framebuffer attachments, and
+    // therefore don't have swizzle.
+    return image.initReinterpretedLayerImageView(
+        context, Get2DTextureType(layerCount, image.getSamples()), image.getAspectFlags(),
+        gl::SwizzleState(), imageViewOut, levelVk, 1, layer, layerCount,
+        vk::ImageHelper::kDefaultImageViewUsageFlags, actualFormat);
+}
+
 angle::Result ImageViewHelper::getLevelDrawImageView(Context *context,
                                                      const ImageHelper &image,
                                                      LevelIndex levelVk,
                                                      uint32_t layer,
                                                      uint32_t layerCount,
-                                                     gl::SrgbWriteControlMode mode,
                                                      const ImageView **imageViewOut)
 {
     ASSERT(image.valid());
     ASSERT(mImageViewSerial.valid());
     ASSERT(!image.getActualFormat().isBlock);
 
-    ImageSubresourceRange range = MakeImageSubresourceDrawRange(
-        image.toGLLevel(levelVk), layer, GetLayerMode(image, layerCount), mode);
+    if (mWriteColorspace == ImageViewColorspace::Invalid)
+    {
+        updateColorspace(image);
+    }
+    ASSERT(mWriteColorspace != ImageViewColorspace::Invalid);
+
+    ImageSubresourceRange range = MakeImageSubresourceDrawRange(image.toGLLevel(levelVk), layer,
+                                                                GetLayerMode(image, layerCount),
+                                                                mReadColorspace, mWriteColorspace);
 
     std::unique_ptr<ImageView> &view = mSubresourceDrawImageViews[range];
     if (view)
@@ -11802,28 +11885,26 @@ angle::Result ImageViewHelper::getLevelDrawImageView(Context *context,
     view          = std::make_unique<ImageView>();
     *imageViewOut = view.get();
 
-    // Lazily allocate the image view.
-    // Note that these views are specifically made to be used as framebuffer attachments, and
-    // therefore don't have swizzle.
-    gl::TextureType viewType = Get2DTextureType(layerCount, image.getSamples());
-    return image.initLayerImageView(context, viewType, image.getAspectFlags(), gl::SwizzleState(),
-                                    view.get(), levelVk, 1, layer, layerCount, mode,
-                                    gl::YuvSamplingMode::Default,
-                                    vk::ImageHelper::kDefaultImageViewUsageFlags);
+    return getLevelLayerDrawImageViewImpl(context, image, levelVk, layer, layerCount, view.get());
 }
 
 angle::Result ImageViewHelper::getLevelLayerDrawImageView(Context *context,
                                                           const ImageHelper &image,
                                                           LevelIndex levelVk,
                                                           uint32_t layer,
-                                                          gl::SrgbWriteControlMode mode,
                                                           const ImageView **imageViewOut)
 {
     ASSERT(image.valid());
     ASSERT(mImageViewSerial.valid());
     ASSERT(!image.getActualFormat().isBlock);
 
-    LayerLevelImageViewVector &imageViews = (mode == gl::SrgbWriteControlMode::Linear)
+    if (mWriteColorspace == ImageViewColorspace::Invalid)
+    {
+        updateColorspace(image);
+    }
+    ASSERT(mWriteColorspace != ImageViewColorspace::Invalid);
+
+    LayerLevelImageViewVector &imageViews = (mWriteColorspace == ImageViewColorspace::Linear)
                                                 ? mLayerLevelDrawImageViewsLinear
                                                 : mLayerLevelDrawImageViews;
 
@@ -11837,13 +11918,7 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(Context *context,
         return angle::Result::Continue;
     }
 
-    // Lazily allocate the image view itself.
-    // Note that these views are specifically made to be used as framebuffer attachments, and
-    // therefore don't have swizzle.
-    gl::TextureType viewType = Get2DTextureType(1, image.getSamples());
-    return image.initLayerImageView(
-        context, viewType, image.getAspectFlags(), gl::SwizzleState(), imageView, levelVk, 1, layer,
-        1, mode, gl::YuvSamplingMode::Default, vk::ImageHelper::kDefaultImageViewUsageFlags);
+    return getLevelLayerDrawImageViewImpl(context, image, levelVk, layer, 1, imageView);
 }
 
 angle::Result ImageViewHelper::initFragmentShadingRateView(ContextVk *contextVk, ImageHelper *image)
@@ -11863,62 +11938,115 @@ angle::Result ImageViewHelper::initFragmentShadingRateView(ContextVk *contextVk,
     // - gl::SwizzleState   == gl::SwizzleState()
     // - baseMipLevelVk     == vk::LevelIndex(0)
     // - levelCount         == 1
-    return image->initImageView(contextVk, gl::TextureType::_2D, VK_IMAGE_ASPECT_COLOR_BIT,
-                                gl::SwizzleState(), &mFragmentShadingRateImageView,
-                                vk::LevelIndex(0), 1, image->getUsage());
+    return image->initLayerImageView(contextVk, gl::TextureType::_2D, VK_IMAGE_ASPECT_COLOR_BIT,
+                                     gl::SwizzleState(), &mFragmentShadingRateImageView,
+                                     vk::LevelIndex(0), 1, 0, image->getLayerCount(),
+                                     gl::YuvSamplingMode::Default, image->getUsage());
 }
 
-ImageOrBufferViewSubresourceSerial ImageViewHelper::getSubresourceSerial(
+angle::FormatID ImageViewHelper::getColorspaceOverrideFormatForWrite(angle::FormatID format) const
+{
+    ASSERT(mWriteColorspace != ImageViewColorspace::Invalid);
+
+    angle::FormatID colorspaceOverrideFormat = format;
+    angle::FormatID linearFormat             = ConvertToLinear(format);
+    angle::FormatID sRGBFormat               = ConvertToSRGB(format);
+    if (mWriteColorspace == ImageViewColorspace::Linear && linearFormat != angle::FormatID::NONE)
+    {
+        colorspaceOverrideFormat = linearFormat;
+    }
+    else if (mWriteColorspace == ImageViewColorspace::SRGB && sRGBFormat != angle::FormatID::NONE)
+    {
+        colorspaceOverrideFormat = sRGBFormat;
+    }
+
+    return colorspaceOverrideFormat;
+}
+
+void ImageViewHelper::updateColorspace(const ImageHelper &image) const
+{
+    const angle::Format &imageFormat = image.getActualFormat();
+
+    // Initialize colorspace based on image's format's colorspace
+    mReadColorspace  = imageFormat.isSRGB ? ImageViewColorspace::SRGB : ImageViewColorspace::Linear;
+    mWriteColorspace = imageFormat.isSRGB ? ImageViewColorspace::SRGB : ImageViewColorspace::Linear;
+
+    // Process EGL image colorspace override state
+    if (!imageFormat.isSRGB && mColorspaceState.eglImageColorspace == egl::ImageColorspace::SRGB)
+    {
+        mReadColorspace  = ImageViewColorspace::SRGB;
+        mWriteColorspace = ImageViewColorspace::SRGB;
+    }
+    else if (imageFormat.isSRGB &&
+             mColorspaceState.eglImageColorspace == egl::ImageColorspace::Linear)
+    {
+        mReadColorspace  = ImageViewColorspace::Linear;
+        mWriteColorspace = ImageViewColorspace::Linear;
+    }
+
+    // Process srgb decode and srgb override state
+    if (mReadColorspace == ImageViewColorspace::Linear)
+    {
+        if (mColorspaceState.srgbOverride == gl::SrgbOverride::SRGB &&
+            rx::ConvertToSRGB(imageFormat.id) != angle::FormatID::NONE &&
+            mColorspaceState.srgbDecode != gl::SrgbDecode::Skip)
+        {
+            mReadColorspace = ImageViewColorspace::SRGB;
+        }
+    }
+    else
+    {
+        ASSERT(mReadColorspace == ImageViewColorspace::SRGB);
+
+        if (mColorspaceState.srgbDecode == gl::SrgbDecode::Skip &&
+            !mColorspaceState.hasStaticTexelFetchAccess)
+        {
+            mReadColorspace = ImageViewColorspace::Linear;
+        }
+    }
+
+    // Process srgb write control state
+    if (mWriteColorspace == ImageViewColorspace::SRGB &&
+        mColorspaceState.srgbWriteControl == gl::SrgbWriteControlMode::Linear)
+    {
+        mWriteColorspace = ImageViewColorspace::Linear;
+    }
+
+    ASSERT(mReadColorspace != ImageViewColorspace::Invalid);
+    ASSERT(mWriteColorspace != ImageViewColorspace::Invalid);
+}
+
+ImageOrBufferViewSubresourceSerial ImageViewHelper::getSubresourceSerial(gl::LevelIndex levelGL,
+                                                                         uint32_t levelCount,
+                                                                         uint32_t layer,
+                                                                         LayerMode layerMode) const
+{
+    return getSubresourceSerialForColorspace(levelGL, levelCount, layer, layerMode,
+                                             mReadColorspace);
+}
+
+ImageOrBufferViewSubresourceSerial ImageViewHelper::getSubresourceSerialForColorspace(
     gl::LevelIndex levelGL,
     uint32_t levelCount,
     uint32_t layer,
     LayerMode layerMode,
-    SrgbDecodeMode srgbDecodeMode,
-    gl::SrgbOverride srgbOverrideMode) const
+    ImageViewColorspace readColorspace) const
 {
     ASSERT(mImageViewSerial.valid());
 
     ImageOrBufferViewSubresourceSerial serial;
     serial.viewSerial  = mImageViewSerial;
     serial.subresource = MakeImageSubresourceReadRange(levelGL, levelCount, layer, layerMode,
-                                                       srgbDecodeMode, srgbOverrideMode);
+                                                       readColorspace, mWriteColorspace);
     return serial;
 }
 
-ImageSubresourceRange MakeImageSubresourceReadRange(gl::LevelIndex level,
-                                                    uint32_t levelCount,
-                                                    uint32_t layer,
-                                                    LayerMode layerMode,
-                                                    SrgbDecodeMode srgbDecodeMode,
-                                                    gl::SrgbOverride srgbOverrideMode)
+ImageSubresourceRange ImageViewHelper::getSubresourceDrawRange(gl::LevelIndex level,
+                                                               uint32_t layer,
+                                                               LayerMode layerMode) const
 {
-    ImageSubresourceRange range;
-
-    SetBitField(range.level, level.get());
-    SetBitField(range.levelCount, levelCount);
-    SetBitField(range.layer, layer);
-    SetBitField(range.layerMode, layerMode);
-    SetBitField(range.srgbDecodeMode, srgbDecodeMode);
-    SetBitField(range.srgbMode, srgbOverrideMode);
-
-    return range;
-}
-
-ImageSubresourceRange MakeImageSubresourceDrawRange(gl::LevelIndex level,
-                                                    uint32_t layer,
-                                                    LayerMode layerMode,
-                                                    gl::SrgbWriteControlMode srgbWriteControlMode)
-{
-    ImageSubresourceRange range;
-
-    SetBitField(range.level, level.get());
-    SetBitField(range.levelCount, 1);
-    SetBitField(range.layer, layer);
-    SetBitField(range.layerMode, layerMode);
-    SetBitField(range.srgbDecodeMode, 0);
-    SetBitField(range.srgbMode, srgbWriteControlMode);
-
-    return range;
+    return MakeImageSubresourceDrawRange(level, layer, layerMode, mReadColorspace,
+                                         mWriteColorspace);
 }
 
 // BufferViewHelper implementation.
