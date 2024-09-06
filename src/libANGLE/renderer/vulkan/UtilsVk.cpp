@@ -2431,11 +2431,11 @@ angle::Result UtilsVk::convertVertexBufferImpl(
 
     commandBuffer->dispatch(UnsignedCeilDivide(shaderParams.outputCount, 64), 1, 1);
 
-    if (!additionalOffsetVertexCounts.empty())
+    if (!additionalOffsetVertexCounts.array.empty())
     {
         ConvertVertexShaderParams constants = shaderParams;
 
-        for (const OffsetAndVertexCount &offsetAndVertexCount : additionalOffsetVertexCounts)
+        for (const OffsetAndVertexCount &offsetAndVertexCount : additionalOffsetVertexCounts.array)
         {
             // Total number of output components is simply the number of vertices by number of
             // components in each.

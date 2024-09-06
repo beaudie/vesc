@@ -81,7 +81,12 @@ class UtilsVk : angle::NonCopyable
         uint32_t dstOffset;
         uint32_t vertexCount;
     };
-    using OffsetAndVertexCounts = std::vector<OffsetAndVertexCount>;
+
+    struct OffsetAndVertexCounts
+    {
+        bool overlap;
+        std::vector<OffsetAndVertexCount> array;
+    };
 
     struct ConvertVertexParameters
     {
