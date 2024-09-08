@@ -851,7 +851,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
   private:
     void initializeDefaultResources();
+    void acquireSharedObjects();
     void releaseSharedObjects();
+    void releaseWeakSharedObjects();
 
     angle::Result prepareForDraw(PrimitiveMode mode);
     angle::Result prepareForClear(GLbitfield mask);

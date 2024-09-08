@@ -50,7 +50,9 @@ class ResourceManagerBase : angle::NonCopyable
     ResourceManagerBase();
 
     void addRef();
+    void addWeakRef();
     void release(const Context *context);
+    void releaseWeakRef();
 
   protected:
     virtual void reset(const Context *context) = 0;
@@ -60,6 +62,7 @@ class ResourceManagerBase : angle::NonCopyable
 
   private:
     size_t mRefCount;
+    size_t mWeakRefCount;
 };
 
 template <typename ResourceType, typename ImplT, typename IDType>
