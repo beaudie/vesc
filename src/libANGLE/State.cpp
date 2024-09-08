@@ -81,12 +81,12 @@ T *AllocateOrGetSharedResourceManager(const State *shareContextState,
     {
         T *resourceManager = (*shareContextState).*member;
         ASSERT(!resourceManager || resourceManager == shareResources || !shareResources);
-        resourceManager->addRef();
+        resourceManager->addWeakRef();
         return resourceManager;
     }
     else if (shareResources)
     {
-        shareResources->addRef();
+        shareResources->addWeakRef();
         return shareResources;
     }
     else

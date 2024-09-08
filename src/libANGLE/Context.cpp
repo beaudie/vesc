@@ -839,8 +839,8 @@ egl::Error Context::onDestroy(const egl::Display *display)
 {
     if (!mHasBeenCurrent)
     {
-        // Shared objects and ShareGroup must be released regardless.
-        releaseSharedObjects();
+        // If it has never been current, release just the weak ref counts on shared objects
+        releaseWeakSharedObjects();
         mState.mShareGroup->release(display);
         // The context is never current, so default resources are not allocated.
         return egl::NoError();
@@ -929,6 +929,20 @@ egl::Error Context::onDestroy(const egl::Display *display)
     return egl::NoError();
 }
 
+void Context::acquireSharedObjects()
+{
+    mState.mBufferManager->addRef();
+    mState.mProgramPipelineManager->addRef();
+    mState.mShaderProgramManager->addRef();
+    mState.mTextureManager->addRef();
+    mState.mRenderbufferManager->addRef();
+    mState.mSamplerManager->addRef();
+    mState.mSyncManager->addRef();
+    mState.mFramebufferManager->addRef();
+    mState.mMemoryObjectManager->addRef();
+    mState.mSemaphoreManager->addRef();
+}
+
 void Context::releaseSharedObjects()
 {
     mState.mBufferManager->release(this);
@@ -944,6 +958,20 @@ void Context::releaseSharedObjects()
     mState.mFramebufferManager->release(this);
     mState.mMemoryObjectManager->release(this);
     mState.mSemaphoreManager->release(this);
+}
+
+void Context::releaseWeakSharedObjects()
+{
+    mState.mBufferManager->releaseWeakRef();
+    mState.mProgramPipelineManager->releaseWeakRef();
+    mState.mShaderProgramManager->releaseWeakRef();
+    mState.mTextureManager->releaseWeakRef();
+    mState.mRenderbufferManager->releaseWeakRef();
+    mState.mSamplerManager->releaseWeakRef();
+    mState.mSyncManager->releaseWeakRef();
+    mState.mFramebufferManager->releaseWeakRef();
+    mState.mMemoryObjectManager->releaseWeakRef();
+    mState.mSemaphoreManager->releaseWeakRef();
 }
 
 Context::~Context() {}
@@ -984,6 +1012,7 @@ egl::Error Context::makeCurrent(egl::Display *display,
         ContextPrivateScissor(getMutablePrivateState(), getMutablePrivateStateCache(), 0, 0, width,
                               height);
 
+        acquireSharedObjects();
         mHasBeenCurrent = true;
     }
 

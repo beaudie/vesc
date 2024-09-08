@@ -40,7 +40,7 @@ IDType AllocateEmptyObject(HandleAllocator *handleAllocator,
 
 }  // anonymous namespace
 
-ResourceManagerBase::ResourceManagerBase() : mRefCount(1) {}
+ResourceManagerBase::ResourceManagerBase() : mRefCount(0), mWeakRefCount(1) {}
 
 ResourceManagerBase::~ResourceManagerBase() = default;
 
@@ -49,11 +49,24 @@ void ResourceManagerBase::addRef()
     mRefCount++;
 }
 
+void ResourceManagerBase::addWeakRef()
+{
+    mWeakRefCount++;
+}
+
 void ResourceManagerBase::release(const Context *context)
 {
     if (--mRefCount == 0)
     {
         reset(context);
+    }
+    releaseWeakRef();
+}
+
+void ResourceManagerBase::releaseWeakRef()
+{
+    if (--mWeakRefCount == 0)
+    {
         delete this;
     }
 }
