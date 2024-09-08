@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "520d4899_1d80aa9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-08T22:56:22Z",
+      "side": 1,
+      "message": "per EGL spec -\n```\nAll resources associated with ctx are marked for deletion as soon as possible. When\nmultiple contexts share objects (see eglCreateContext), such shared objects are\nnot deleted until after all contexts on the share list are destroyed, unless the\nobjects are first explicitly deleted by the application\n```",
+      "revId": "3bca1a44562e2459c5be203f25578af02f86e8b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
