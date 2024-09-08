@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ca26e25_f15e0d43",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-08T15:16:59Z",
+      "side": 1,
+      "message": "nit: Just use `/ 2`. The intention is clear, and the compiler automatically turns it into `\u003e\u003e 1`.\n\n```suggestion\n    if (subDataSize \u003e bufferSize / 2)\n```",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 37
+      },
+      "revId": "9d128d3f0dfd54d5d430a407b3a5b59d63ac965d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bd9b204_ca63bd34",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-08T15:16:59Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand this comment, on the face of it, if the buffer is in use by the GPU, the CPU _shouldn\u0027t_ access it. Unless the GPU is only reading from it.\n\nEither way, the `if` that follows has nothing to do with whether the buffer is in use by the GPU.",
+      "revId": "9d128d3f0dfd54d5d430a407b3a5b59d63ac965d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71f8063b_bc8a832a",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-08T15:16:59Z",
+      "side": 1,
+      "message": "nit:\n\n\n\n```suggestion\n        constexpr size_t kCpuCopyBufferSizeThreshold \u003d 32 * 1024;\n        if (bufferSize \u003c kCpuCopyBufferSizeThreshold)\n```",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 54
+      },
+      "revId": "9d128d3f0dfd54d5d430a407b3a5b59d63ac965d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efd5eb02_1d3efa3a",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-08T15:16:59Z",
+      "side": 1,
+      "message": "ditto:\n\n\n\n```suggestion\n        if (subDataSize \u003e bufferSize / 8)\n```",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 43
+      },
+      "revId": "9d128d3f0dfd54d5d430a407b3a5b59d63ac965d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
