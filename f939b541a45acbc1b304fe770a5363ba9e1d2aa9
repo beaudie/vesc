@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9ecea50_218d5fc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-09T14:42:11Z",
+      "side": 1,
+      "message": "The previous change and reasoning is over here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4414232\n\nNot clear to me why `sdk_version` got set to min in that.",
+      "revId": "f939b541a45acbc1b304fe770a5363ba9e1d2aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
