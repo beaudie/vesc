@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdfcb885_69953492",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-09T13:26:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17873332_1b271a9c",
+      "range": {
+        "startLine": 1791,
+        "startChar": 0,
+        "endLine": 1799,
+        "endChar": 13
+      },
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed508129_27e2e4d2",
@@ -61,6 +85,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4527b4e6_d63371bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-09T13:26:36Z",
+      "side": 1,
+      "message": "I removed this wording in the current code.",
+      "parentUuid": "8a8e7909_e3f11bd2",
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2bb5b794_cf57b981",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 4
@@ -90,6 +132,24 @@
       "side": 1,
       "message": "`numStoredChunks` always decreasing, it is impossible to have infinite loop. Worse case is top call the function for each chunk. I will add `ASSERT()` to make it clear and to catch possible errors.",
       "parentUuid": "2bb5b794_cf57b981",
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bf6a79b_6929c5d9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-09T13:26:36Z",
+      "side": 1,
+      "message": "Added `ASSERT()`, so now it should be clear that loop will exit eventually.",
+      "parentUuid": "368b217a_5ce16374",
       "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -191,6 +251,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20c2534e_1595d0d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5416,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-09T13:26:36Z",
+      "side": 1,
+      "message": "Added `verifyPipelineCacheInBlobCache` and `verifyPipelineCacheInBlobCacheUsingLoop` which are both `false` by default.",
+      "parentUuid": "9d5c834a_df63d70a",
+      "range": {
+        "startLine": 5411,
+        "startChar": 0,
+        "endLine": 5416,
+        "endChar": 89
+      },
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8aec5e88_0bed3bb2",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
@@ -202,6 +286,24 @@
       "writtenOn": "2024-09-06T14:28:47Z",
       "side": 1,
       "message": "Again, please avoid `GlobalOps` for these, the ANGLE features should answer this, and the value should be independent of GL or CL.",
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ab8a79e_c201b1d6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-09T13:26:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aec5e88_0bed3bb2",
       "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
