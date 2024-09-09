@@ -43,6 +43,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "570b592f_9700a9df",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-09T16:04:21Z",
+      "side": 1,
+      "message": "Suggest: If buffer is small enough, the cost of barrier associated with GPU copy likely exceeds overhead with CPU copy. Duplicate a buffer allows CPU to write to the buffer immediately thus avoids barriers that prevents parallel.",
+      "range": {
+        "startLine": 151,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 34
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "77c366a8_f0f419ff",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+              "range": {
+                "startLine": 151,
+                "startChar": 0,
+                "endLine": 153,
+                "endChar": 0
+              },
+              "replacement": "        // If buffer is small enough, the cost of barrier associated with GPU copy likely exceeds\n        // overhead with CPU copy. Duplicate a buffer allows CPU to write to the buffer immediately\n        // thus avoids barrier.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "9d128d3f0dfd54d5d430a407b3a5b59d63ac965d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71f8063b_bc8a832a",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 4
