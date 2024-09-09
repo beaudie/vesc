@@ -1753,9 +1753,17 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     if (samples > 1)
     {
         VkImageUsageFlags usage = kSurfaceVkColorImageUsageFlags;
+        VkMemoryPropertyFlags propertyFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
         if (NeedsInputAttachmentUsage(renderer->getFeatures()))
         {
             usage |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+        }
+
+        if (renderer->getMemoryProperties().hasLazilyAllocatedMemory())
+        {
+            usage |= VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+            propertyFlags |= VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
         }
 
         // Create a multisampled image that will be rendered to, and then resolved to a swapchain
@@ -1767,8 +1775,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
             context, gl::TextureType::_2D, vkExtents, Is90DegreeRotation(getPreTransform()), format,
             samples, usage, gl::LevelIndex(0), 1, 1, robustInit, mState.hasProtectedContent()));
         ANGLE_TRY(mColorImageMS.initMemoryAndNonZeroFillIfNeeded(
-            context, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vk::MemoryAllocationType::SwapchainMSAAImage));
+            context, mState.hasProtectedContent(), renderer->getMemoryProperties(), propertyFlags,
+            vk::MemoryAllocationType::SwapchainMSAAImage));
 
         // Initialize the color render target with the multisampled targets.  If not multisampled,
         // the render target will be updated to refer to a swapchain image on every acquire.
