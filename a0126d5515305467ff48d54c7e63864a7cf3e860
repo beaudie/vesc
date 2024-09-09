@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ada58ba9_a49c2c83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-09-09T19:22:40Z",
+      "side": 1,
+      "message": "FYI, the flake of dEQP-GLES3.functional.shaders.builtin_functions.precision.length.mediump_vertex.vec3 was https://issues.angleproject.org/issues/42265067 .",
+      "revId": "a0126d5515305467ff48d54c7e63864a7cf3e860",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
