@@ -16,6 +16,64 @@
       "message": "Thanks",
       "revId": "65cc7089e3bdc85e233612fca83b4a7a6f8fa307",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ec24abc_a5bb301f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-09T18:40:53Z",
+      "side": 1,
+      "message": "LGTM now with better comments.",
+      "revId": "65cc7089e3bdc85e233612fca83b4a7a6f8fa307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1b0d7fa_f22b3219",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-09T18:40:53Z",
+      "side": 1,
+      "message": "This comment also did not explain why  it should be sizable enough. Suggest:\nThis threshold is chosen based on perf data collected from pixel devices. At 1/8 of buffer size, the CPU overhead associated with extra data copy weights less than serialization caused by barriers.",
+      "range": {
+        "startLine": 160,
+        "startChar": 11,
+        "endLine": 161,
+        "endChar": 45
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "421addd3_21f94589",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+              "range": {
+                "startLine": 161,
+                "startChar": 0,
+                "endLine": 162,
+                "endChar": 0
+              },
+              "replacement": "        // compared to the whole buffer size. This threshold is chosen based on perf data collected\n        // from pixel devices. At 1/8 of buffer size, the CPU overhead associated with the CPU\n        // update is less than the GPU overhead associated with the GPU copy.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "65cc7089e3bdc85e233612fca83b4a7a6f8fa307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
