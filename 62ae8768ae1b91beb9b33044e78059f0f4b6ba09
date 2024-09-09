@@ -143,6 +143,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb73a48f_adc114bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-09-09T01:36:09Z",
+      "side": 1,
+      "message": "Geoff, Alexey is always telling me to put `Fixed:`, so now I\u0027m in the habit of doing that.",
+      "parentUuid": "8ce58deb_fe46d0b1",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 5
+      },
+      "revId": "62ae8768ae1b91beb9b33044e78059f0f4b6ba09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4d0a147_3eaee13f",
@@ -156,6 +180,24 @@
       "writtenOn": "2024-09-06T17:39:56Z",
       "side": 1,
       "message": "The bottom two of these have been closed as duplicates of the top one now. Could you remove them and leave in just \"Fixed: angleproject:362791944\"?",
+      "revId": "62ae8768ae1b91beb9b33044e78059f0f4b6ba09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "846b7618_68e9f6ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2024-09-09T01:36:09Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f4d0a147_3eaee13f",
       "revId": "62ae8768ae1b91beb9b33044e78059f0f4b6ba09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
