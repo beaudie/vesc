@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7a265a1_ca352d7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-10T16:55:55Z",
+      "side": 1,
+      "message": "nit: `ESSL -\u003e ` is implicit, `WGSL: ...` is sufficient.",
+      "revId": "4b4903e08212b2f33990c8db110a3638aec94468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69837408_fc3518ab",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_wgsl_util.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-10T16:55:55Z",
+      "side": 1,
+      "message": "Please move this to the cpp. You can have the template forward declaration here, have the implementation in cpp, and then instantiate it for the `T`s that you want.\n\nHere\u0027s an example of how we do that elsewhere: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_cache_utils.cpp;l\u003d6666;drc\u003df8fc8ac36280440cd34dae318e0d492e3af42bab",
+      "revId": "4b4903e08212b2f33990c8db110a3638aec94468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
