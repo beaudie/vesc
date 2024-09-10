@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f536e11_b345dac5",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-10T10:30:14Z",
+      "side": 1,
+      "message": "kUnpackedStencilIndex",
+      "range": {
+        "startLine": 647,
+        "startChar": 38,
+        "endLine": 647,
+        "endChar": 57
+      },
+      "revId": "fbbc9cb8e901e001ee09575a44253b5523af28a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
