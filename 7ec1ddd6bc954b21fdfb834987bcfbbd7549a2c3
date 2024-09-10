@@ -105,6 +105,30 @@
       },
       "revId": "7ec1ddd6bc954b21fdfb834987bcfbbd7549a2c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8395d9e9_94a824c3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-10T22:41:41Z",
+      "side": 1,
+      "message": "Thanks for the update, LGTM. I can rest easier knowing the lack of barrier is _by spec_ correct",
+      "parentUuid": "6e78c69e_29e65815",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 72
+      },
+      "revId": "7ec1ddd6bc954b21fdfb834987bcfbbd7549a2c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
