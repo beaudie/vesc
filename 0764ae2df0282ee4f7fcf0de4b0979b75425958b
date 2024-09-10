@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2125470_be53d661",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-09-10T01:41:26Z",
+      "side": 1,
+      "message": "lgtm\n\nThis fix seems fine as-is, and per your follow-on crbug.com/364924731 , we can investigate any more general fixes later.",
+      "revId": "0764ae2df0282ee4f7fcf0de4b0979b75425958b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
