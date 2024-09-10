@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "262abade_f431f672",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-10T17:33:55Z",
+      "side": 1,
+      "message": "What is the reason that we don\u0027t want to use reference?",
+      "revId": "421fccb597314f11f1b6df5bbeb4bc24663bacde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
