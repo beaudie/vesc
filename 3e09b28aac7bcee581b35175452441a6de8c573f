@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5617eccb_d85f6354",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-10T07:19:09Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "46aec99b_7f48251e",
+      "range": {
+        "startLine": 310,
+        "startChar": 12,
+        "endLine": 311,
+        "endChar": 76
+      },
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9dbeb67_4a1d72e2",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-09-06T12:51:27Z",
       "side": 1,
       "message": "Should there be an else with UNREACHABLE or UNIMPLEMENTED here?",
+      "range": {
+        "startLine": 351,
+        "startChar": 12,
+        "endLine": 351,
+        "endChar": 13
+      },
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "323e181c_6e2f91b8",
+        "filename": "src/compiler/translator/wgsl/RewritePipelineVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-10T07:19:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9dbeb67_4a1d72e2",
       "range": {
         "startLine": 351,
         "startChar": 12,
@@ -64,6 +112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eee97e0_d6e8e4f1",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_wgsl_util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-10T07:19:09Z",
+      "side": 1,
+      "message": "Ugh",
+      "parentUuid": "b05dc7ac_fa940873",
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aea272b2_98f70b72",
@@ -81,6 +147,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8618803_a2ceb5e1",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_wgsl_util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-10T07:19:09Z",
+      "side": 1,
+      "message": "\u003e If the NAME can be correctly extracted from @location(@@@@@@) NAME, that\u0027s fine too. (Right now, there\u0027s the prefix bug).\n\nI matched `@location(@@@@@@) NAME : `, if that works.",
+      "parentUuid": "aea272b2_98f70b72",
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7210f591_45ddea10",
@@ -94,6 +178,30 @@
       "writtenOn": "2024-09-06T14:39:16Z",
       "side": 1,
       "message": "nit: Chromium style changed this rule, but so far we\u0027ve been following the former style of `*` for mutable, `const \u0026` for immutable. When called e.g. like `WglAssignLocations(shader, ...)` it\u0027s not obvious that `shader` is being modified.",
+      "range": {
+        "startLine": 20,
+        "startChar": 37,
+        "endLine": 20,
+        "endChar": 38
+      },
+      "revId": "3e09b28aac7bcee581b35175452441a6de8c573f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "affc30ac_cac9d0d6",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_wgsl_util.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-10T07:19:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7210f591_45ddea10",
       "range": {
         "startLine": 20,
         "startChar": 37,
