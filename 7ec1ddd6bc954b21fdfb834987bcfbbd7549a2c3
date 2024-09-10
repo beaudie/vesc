@@ -34,6 +34,29 @@
       "parentUuid": "9c949dcf_22d837fc",
       "revId": "7ec1ddd6bc954b21fdfb834987bcfbbd7549a2c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c09290f7_8c54069c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-10T21:12:55Z",
+      "side": 1,
+      "message": "If the ranges are: `[0, 10]`, `[30, 40]` and `[10, 30]`, this code doesn\u0027t coalesce it to `[0, 40]`, but rather produces `[0, 30]` and `[30, 40]`, right?\n\nThat\u0027s why I mentioned the need for sorting by begin offset first.\n\nAnother example is `[0, 10]`, [25, 40]` and `[10, 30]`, where this produces `[0, 30]` and `[25, 40]`, **which overlap**!",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 72
+      },
+      "revId": "7ec1ddd6bc954b21fdfb834987bcfbbd7549a2c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
