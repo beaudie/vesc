@@ -227,7 +227,7 @@ angle::Result RenderPipelineDesc::createPipeline(ContextWgpu *context,
     pipelineDesc.layout = pipelineLayout;
 
     pipelineDesc.vertex.module        = shaders[gl::ShaderType::Vertex];
-    pipelineDesc.vertex.entryPoint    = "main";
+    pipelineDesc.vertex.entryPoint    = "wgslMain";
     pipelineDesc.vertex.constantCount = 0;
     pipelineDesc.vertex.constants     = nullptr;
     pipelineDesc.vertex.bufferCount   = 0;
@@ -256,7 +256,7 @@ angle::Result RenderPipelineDesc::createPipeline(ContextWgpu *context,
     if (shaders[gl::ShaderType::Fragment])
     {
         fragmentState.module        = shaders[gl::ShaderType::Fragment];
-        fragmentState.entryPoint    = "main";
+        fragmentState.entryPoint    = "wgslMain";
         fragmentState.constantCount = 0;
         fragmentState.constants     = nullptr;
 
