@@ -201,27 +201,6 @@ Memory::Memory(const Image &image,
       mImpl(nullptr),
       mSize(0u),
       mMapCount(0u)
-{
-    ANGLE_CL_IMPL_TRY(context.getImpl().createImage(image, flags, format, desc, hostPtr, &mImpl));
-    switch (image.getDescriptor().type)
-    {
-        case MemObjectType::Image1D_Array:
-            mSize = image.getSliceSize() * image.getDescriptor().arraySize;
-            break;
-        case MemObjectType::Image2D:
-            mSize = image.getSliceSize();
-            break;
-        case MemObjectType::Image2D_Array:
-            mSize = image.getSliceSize() * image.getDescriptor().arraySize;
-            break;
-        case MemObjectType::Image3D:
-            mSize = image.getSliceSize() * image.getDescriptor().depth;
-            break;
-        default:
-            // 1D, 1D-buffer and buffer
-            mSize = image.getRowSize();
-            break;
-    }
-}
+{}
 
 }  // namespace cl
