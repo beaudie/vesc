@@ -57,6 +57,30 @@
       },
       "revId": "7ec1ddd6bc954b21fdfb834987bcfbbd7549a2c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e78c69e_29e65815",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-10T21:25:56Z",
+      "side": 1,
+      "message": "Right, it will add extra overhead which based on my the actual data I am looking will not really help. There is no such kind of overlap I am seeing. The only overlap I am seeing is that there are occasionally two identical ranges that are 80 bytes length. This simple logic will catch that. This makes sense that app really will not overlap the updates anyway.",
+      "parentUuid": "c09290f7_8c54069c",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 72
+      },
+      "revId": "7ec1ddd6bc954b21fdfb834987bcfbbd7549a2c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
