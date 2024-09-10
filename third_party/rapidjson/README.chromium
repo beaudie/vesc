@@ -1,5 +1,6 @@
 Name: RapidJSON
 URL: https://github.com/TenCent/rapidjson
+Version: 781a4e667d84aeedbeb8184b7b62425ea66ec59f
 License: MIT
 License File: src/license.txt
 Shipped: no
