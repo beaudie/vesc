@@ -1793,6 +1793,14 @@
                 "Whether to use empty blobs or 1-sized blobs to erase old PipelineCacheVk data from the blob cache."
             ],
             "issue": "https://anglebug.com/42263322"
+        },
+        {
+            "name": "supports_partial_pipeline_cache_data",
+            "category": "Features",
+            "description": [
+                "VkDevice supports initializing VkPipelineCache object from partial cache data."
+            ],
+            "issue": "https://anglebug.com/42263322"
         }
     ]
 }
