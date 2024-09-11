@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "815402c0_2c7d12ed",
+        "filename": "src/libANGLE/CLMemory.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-09-11T22:37:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3add29d_cbe29124",
+      "revId": "79995ba69768cae3a6195912714985839aa4cbb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c48acc2_04e5cc7b",
