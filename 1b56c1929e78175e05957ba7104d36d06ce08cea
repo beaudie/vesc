@@ -52,6 +52,24 @@
       "parentUuid": "f4b66484_beedac05",
       "revId": "1b56c1929e78175e05957ba7104d36d06ce08cea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f720247_4b6d9574",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-11T01:24:05Z",
+      "side": 1,
+      "message": "Oh right, yeah this looks like left-over from the double-loop implementation. Good catch!",
+      "parentUuid": "553979d0_3b7e306d",
+      "revId": "1b56c1929e78175e05957ba7104d36d06ce08cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
