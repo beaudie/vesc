@@ -216,16 +216,14 @@ void InsertInitCode(TCompiler *compiler,
                      initializedSymbol->getQualifier() == EvqCullDistance)
             {
                 // The built-in may have been implicitly resized.
-                initializedSymbol =
-                    new TIntermSymbol(&FindSymbolNode(root, tempVariableName)->variable());
+                initializedSymbol = ReferenceGlobalVariable(tempVariableName, *symbolTable);
             }
         }
         else
         {
             if (tempVariableName != "")
             {
-                initializedSymbol =
-                    new TIntermSymbol(&FindSymbolNode(root, tempVariableName)->variable());
+                initializedSymbol = ReferenceGlobalVariable(tempVariableName, *symbolTable);
             }
             else
             {
