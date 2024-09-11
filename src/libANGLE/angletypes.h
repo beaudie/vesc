@@ -1279,6 +1279,13 @@ bool DecompressBlob(const uint8_t *compressedData,
                     const size_t compressedSize,
                     size_t maxUncompressedDataSize,
                     MemoryBuffer *uncompressedData);
+// Decompresses potentially partial data.  Because of this, uncompressedSize must be specified
+// explicitly.  In case of partial decompress, function will succeed and set partialOut to true.
+bool DecompressPartialBlob(const uint8_t *compressedData,
+                           const size_t compressedSize,
+                           const size_t uncompressedSize,
+                           MemoryBuffer *uncompressedData,
+                           bool *partialOut);
 uint32_t GenerateCRC32(const uint8_t *data, size_t size);
 uint32_t InitCRC32();
 uint32_t UpdateCRC32(uint32_t prevCrc32, const uint8_t *data, size_t size);
