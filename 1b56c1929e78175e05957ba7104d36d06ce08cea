@@ -34,6 +34,24 @@
       "parentUuid": "48fe943d_513ccef1",
       "revId": "1b56c1929e78175e05957ba7104d36d06ce08cea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "553979d0_3b7e306d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-11T01:15:59Z",
+      "side": 1,
+      "message": "My question is with the `break` at line 344, once `[1]` is merged into `[0]`, the `break` will end the for loop, and we won\u0027t continue checking for [2].. Is that expected?",
+      "parentUuid": "f4b66484_beedac05",
+      "revId": "1b56c1929e78175e05957ba7104d36d06ce08cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
