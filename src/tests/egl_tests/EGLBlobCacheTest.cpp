@@ -18,6 +18,7 @@
 #include "test_utils/MultiThreadSteps.h"
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
+#include "util/random_utils.h"
 #include "util/test_utils.h"
 
 using namespace angle;
@@ -49,8 +50,11 @@ std::ostream &operator<<(std::ostream &os, CacheOpResult result)
 
 namespace
 {
+std::mutex gApplicationCacheMutex;
 std::map<std::vector<uint8_t>, std::vector<uint8_t>> gApplicationCache;
 CacheOpResult gLastCacheOpResult = CacheOpResult::ValueNotSet;
+std::vector<uint8_t> gSingleBlobLoadModeKey;
+bool gSingleBlobLoadMode = false;
 
 void SetBlob(const void *key, EGLsizeiANDROID keySize, const void *value, EGLsizeiANDROID valueSize)
 {
@@ -59,6 +63,8 @@ void SetBlob(const void *key, EGLsizeiANDROID keySize, const void *value, EGLsiz
 
     std::vector<uint8_t> valueVec(valueSize);
     memcpy(valueVec.data(), value, valueSize);
+
+    std::lock_guard<std::mutex> lock(gApplicationCacheMutex);
 
     gApplicationCache[keyVec] = valueVec;
 
@@ -83,6 +89,8 @@ void SetCorruptedBlob(const void *key,
     ++valueVec[2 * valueVec.size() / 3];
     ++valueVec[3 * valueVec.size() / 4];
 
+    std::lock_guard<std::mutex> lock(gApplicationCacheMutex);
+
     gApplicationCache[keyVec] = valueVec;
 
     gLastCacheOpResult = CacheOpResult::SetSuccess;
@@ -96,7 +104,12 @@ EGLsizeiANDROID GetBlob(const void *key,
     std::vector<uint8_t> keyVec(keySize);
     memcpy(keyVec.data(), key, keySize);
 
-    auto entry = gApplicationCache.find(keyVec);
+    std::lock_guard<std::mutex> lock(gApplicationCacheMutex);
+
+    auto entry =
+        (!gSingleBlobLoadMode || gSingleBlobLoadModeKey.empty() || keyVec == gSingleBlobLoadModeKey)
+            ? gApplicationCache.find(keyVec)
+            : gApplicationCache.end();
     if (entry == gApplicationCache.end())
     {
         // A compile+link operation can generate multiple queries to the cache; one per shader and
@@ -110,6 +123,11 @@ EGLsizeiANDROID GetBlob(const void *key,
         return 0;
     }
 
+    if (gSingleBlobLoadMode && gSingleBlobLoadModeKey.empty())
+    {
+        gSingleBlobLoadModeKey = keyVec;
+    }
+
     if (entry->second.size() <= static_cast<size_t>(valueSize))
     {
         memcpy(value, entry->second.data(), entry->second.size());
@@ -121,6 +139,12 @@ EGLsizeiANDROID GetBlob(const void *key,
     }
 
     return entry->second.size();
+}
+
+size_t GetApplicationCacheSize()
+{
+    std::lock_guard<std::mutex> lock(gApplicationCacheMutex);
+    return gApplicationCache.size();
 }
 
 void WaitProgramBinaryReady(GLuint program)
@@ -157,7 +181,11 @@ class EGLBlobCacheTest : public ANGLETest<>
         mHasBlobCache      = IsEGLDisplayExtensionEnabled(display, kEGLExtName);
     }
 
-    void testTearDown() override { gApplicationCache.clear(); }
+    void testTearDown() override
+    {
+        gApplicationCache.clear();
+        gSingleBlobLoadMode = false;
+    }
 
     bool programBinaryAvailable() { return IsGLExtensionEnabled("GL_OES_get_program_binary"); }
 
@@ -670,6 +698,134 @@ TEST_P(EGLBlobCacheInternalRejectionTest, ShaderCacheFunctional)
     glDeleteShader(shaderID);
 }
 
+class EGLBlobCachePartialPipelineCacheTest : public EGLBlobCacheTest
+{
+  protected:
+    void testTearDown() override
+    {
+        // Switch to the single blob load mode on first teardown (Display recreate).
+        if (!gSingleBlobLoadMode)
+        {
+            gSingleBlobLoadModeKey.clear();
+            gSingleBlobLoadMode = true;
+            return;
+        }
+        EGLBlobCacheTest::testTearDown();
+    }
+};
+
+// Tests partial load and decompression of pipeline cache data from the blob cache.
+TEST_P(EGLBlobCachePartialPipelineCacheTest, Functional)
+{
+    ANGLE_SKIP_TEST_IF(
+        !getEGLWindow()->isFeatureEnabled(Feature::SupportsPartialPipelineCacheData));
+    ANGLE_SKIP_TEST_IF(
+        !getEGLWindow()->isFeatureEnabled(Feature::SyncMonolithicPipelinesToBlobCache));
+    ANGLE_SKIP_TEST_IF(
+        !getEGLWindow()->isFeatureEnabled(Feature::EnableAsyncPipelineCacheCompression));
+
+    constexpr char kVertShaderSrc[] = R"(#version 300 es
+precision highp float;
+in vec4 a_position;
+out vec4 v_position;
+void main()
+{
+    v_position = a_position;
+    gl_Position = a_position;
+})";
+
+    constexpr char kFragShaderSrcFmt[] = R"(#version 300 es
+precision mediump float;
+const int texSize = %zu;
+const vec4 texData[texSize * texSize] = vec4[texSize * texSize](%s);
+in vec4 v_position;
+out vec4 out_fragColor;
+void main()
+{
+    ivec2 texDataCoords = ivec2((v_position.xy + vec2(1.0, 1.0)) * float(texSize) * 0.5);
+    out_fragColor = texData[texDataCoords.y * texSize + texDataCoords.x];
+})";
+
+    constexpr size_t kTexSize         = 16;
+    constexpr size_t kMaxProgramCount = 1024;
+    constexpr size_t kMinChunkCount   = 2;
+
+    size_t maxProgramCount = kMaxProgramCount;
+
+    // First iteration will generate the pipeline cache data, and second iteration will test partial
+    // pipeline cache data load and decompression.
+    for (int iteration = 0; iteration < 2; ++iteration)
+    {
+        // Use same seed in both iterations.
+        angle::RNG rng(0);
+
+        EGLDisplay display = getEGLWindow()->getDisplay();
+
+        EXPECT_TRUE(mHasBlobCache);
+        eglSetBlobCacheFuncsANDROID(display, SetBlob, GetBlob);
+        ASSERT_EGL_SUCCESS();
+
+        // In the first iteration we are expecting to hit |kMinChunkCount| until |kMaxProgramCount|
+        // is reached.  Second iteration will simply create same programs.
+        for (size_t programIndex = 0; programIndex < maxProgramCount; ++programIndex)
+        {
+            // Generate random texture data.
+            std::stringstream ss;
+            ss.imbue(std::locale::classic());
+            for (size_t y = 0; y < kTexSize; ++y)
+            {
+                for (size_t x = 0; x < kTexSize; ++x)
+                {
+                    ss << "vec4(" << rng.randomFloat() << "," << rng.randomFloat() << ","
+                       << rng.randomFloat() << "," << rng.randomFloat() << ")";
+                    if (y * kTexSize + x < kTexSize * kTexSize - 1)
+                    {
+                        ss << ",";
+                    }
+                }
+            }
+            const std::string texData = ss.str();
+
+            // Compose fragment shader using generated texture data.
+            std::vector<char> fragShaderSrc(sizeof(kFragShaderSrcFmt) + texData.size() + 64);
+            snprintf(fragShaderSrc.data(), fragShaderSrc.size(), kFragShaderSrcFmt, kTexSize,
+                     texData.c_str());
+
+            // Create program.
+            ANGLE_GL_PROGRAM(program, kVertShaderSrc, fragShaderSrc.data());
+            EXPECT_GL_NO_ERROR();
+
+            // Draw using the program to trigger pipeline compilation.
+            drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+            EXPECT_GL_NO_ERROR();
+
+            if (iteration == 0)
+            {
+                // Use swap to eventually trigger pipeline cache synchronization to disk.
+                eglSwapBuffers(display, getEGLWindow()->getSurface());
+                ASSERT_EGL_SUCCESS();
+
+                // Stop when desired number of chunks reached.
+                if (GetApplicationCacheSize() >= kMinChunkCount)
+                {
+                    maxProgramCount = programIndex + 1;
+                    break;
+                }
+            }
+        }
+
+        if (iteration == 0)
+        {
+            // Try increasing |kTexSize| or |kMaxProgramCount| if this check fails.
+            EXPECT_GE(GetApplicationCacheSize(), kMinChunkCount);
+
+            // Recreate the Display to make it retrieve the pipeline cache data.
+            // Note: |testTearDown| will switch blob cache to single blob load mode.
+            recreateTestFixture();
+        }
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(EGLBlobCacheTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
@@ -715,3 +871,13 @@ GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLBlobCacheInternalRejectionTest)
 ANGLE_INSTANTIATE_TEST(EGLBlobCacheInternalRejectionTest,
                        ES2_OPENGL().enable(Feature::CorruptProgramBinaryForTesting),
                        ES2_OPENGLES().enable(Feature::CorruptProgramBinaryForTesting));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLBlobCachePartialPipelineCacheTest);
+ANGLE_INSTANTIATE_TEST(EGLBlobCachePartialPipelineCacheTest,
+                       // Configure features, so only global pipeline cache is stored.
+                       ES3_VULKAN()
+                           .enable(Feature::DisableProgramCaching)
+                           .disable(Feature::CacheCompiledShader)
+                           .disable(Feature::WarmUpPipelineCacheAtLink)
+                           .disable(Feature::SupportsGraphicsPipelineLibrary)
+                           .disable(Feature::UseDualPipelineBlobCacheSlots));
