@@ -16,6 +16,23 @@
       "message": "The issue was originally found via running existing end2end tests with:\n```\n--gtest_filter\u003dClearTestES3.ClearMultipleAttachmentsIndividually/ES3_OpenGL:MaskedScissoredClearTest.Test/ES3_OpenGL__scissored_clear_c_mask_c:ClearTextureEXTTest.InterleavedUploads/ES3_OpenGL\n```\non `win-test` Intel bots. As the workaround is trivial, it\u0027s enabled unconditionally.",
       "revId": "580316d13f961960ca611bedab290ca4e0deb08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeb7d47f_58eb669e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-11T15:59:08Z",
+      "side": 1,
+      "message": "Any known drivers or is this just defensive?",
+      "revId": "580316d13f961960ca611bedab290ca4e0deb08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
