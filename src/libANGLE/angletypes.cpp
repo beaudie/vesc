@@ -1070,6 +1070,59 @@ GLsizeiptr GetBoundBufferAvailableSize(const OffsetBindingPointer<Buffer> &bindi
    //
 namespace angle
 {
+namespace
+{
+// Modified version of zlib_internal::UncompressHelper() function.
+// In case of partial (but not corrupted) source data, result will be Z_OK, dest_partial true, and
+// dest buffer will contain partially decompressed data.
+int GzipPartialUncompressHelper(Bytef *dest,
+                                uLongf *dest_length,
+                                bool *dest_partial,
+                                const Bytef *source,
+                                uLong source_length)
+{
+    const int kWindowBitsToGetGzipHeader = 16;
+    const int kGzipZlibStreamWrapperType = MAX_WBITS + kWindowBitsToGetGzipHeader;
+
+    z_stream stream;
+
+    // FIXME(cavalcantii): z_const is not defined as 'const'.
+    stream.next_in  = static_cast<z_const Bytef *>(const_cast<Bytef *>(source));
+    stream.avail_in = static_cast<uInt>(source_length);
+    if (static_cast<uLong>(stream.avail_in) != source_length)
+        return Z_BUF_ERROR;
+
+    stream.next_out  = dest;
+    stream.avail_out = static_cast<uInt>(*dest_length);
+    if (static_cast<uLong>(stream.avail_out) != *dest_length)
+        return Z_BUF_ERROR;
+
+    stream.zalloc = static_cast<alloc_func>(0);
+    stream.zfree  = static_cast<free_func>(0);
+
+    int err = inflateInit2(&stream, kGzipZlibStreamWrapperType);
+    if (err != Z_OK)
+        return err;
+
+    err = inflate(&stream, Z_FINISH);
+
+    // Treat partial source data same as Z_STREAM_END.
+    *dest_partial = (err == Z_BUF_ERROR && stream.avail_in == 0);
+
+    if (err != Z_STREAM_END && !*dest_partial)
+    {
+        inflateEnd(&stream);
+        if (err == Z_NEED_DICT || err == Z_BUF_ERROR)
+            return Z_DATA_ERROR;
+        return err;
+    }
+    *dest_length = stream.total_out;
+
+    err = inflateEnd(&stream);
+    return err;
+}
+}  // anonymous namespace
+
 bool CompressBlob(const size_t cacheSize, const uint8_t *cacheData, MemoryBuffer *compressedData)
 {
     uLong uncompressedSize       = static_cast<uLong>(cacheSize);
@@ -1122,6 +1175,28 @@ bool DecompressBlob(const uint8_t *compressedData,
         return false;
     }
 
+    bool partial = false;
+    if (!DecompressPartialBlob(compressedData, compressedSize, uncompressedSize, uncompressedData,
+                               &partial))
+    {
+        return false;
+    }
+
+    if (partial)
+    {
+        ERR() << "Unexpected partial decompression.";
+        return false;
+    }
+
+    return true;
+}
+
+bool DecompressPartialBlob(const uint8_t *compressedData,
+                           const size_t compressedSize,
+                           const size_t uncompressedSize,
+                           MemoryBuffer *uncompressedData,
+                           bool *partialOut)
+{
     // Allocate enough memory.
     if (!uncompressedData->resize(uncompressedSize))
     {
@@ -1129,9 +1204,9 @@ bool DecompressBlob(const uint8_t *compressedData,
         return false;
     }
 
-    uLong destLen = uncompressedSize;
-    int zResult   = zlib_internal::GzipUncompressHelper(
-        uncompressedData->data(), &destLen, compressedData, static_cast<uLong>(compressedSize));
+    uLong destLen = static_cast<uLong>(uncompressedSize);
+    int zResult   = GzipPartialUncompressHelper(uncompressedData->data(), &destLen, partialOut,
+                                                compressedData, static_cast<uLong>(compressedSize));
 
     if (zResult != Z_OK)
     {
@@ -1142,6 +1217,12 @@ bool DecompressBlob(const uint8_t *compressedData,
     // Trim to actual size.
     ASSERT(destLen <= uncompressedSize);
     uncompressedData->setSize(destLen);
+
+    if (!*partialOut && uncompressedSize > destLen)
+    {
+        WARN() << "Invalid uncompressedSize: " << uncompressedSize
+               << " (actual uncompressed size: " << destLen << ")";
+    }
 
     return true;
 }
