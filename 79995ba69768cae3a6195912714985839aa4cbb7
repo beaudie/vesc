@@ -70,6 +70,30 @@
       },
       "revId": "79995ba69768cae3a6195912714985839aa4cbb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eec1ebbe_9c459fb1",
+        "filename": "src/libANGLE/CLMemory.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-09-11T19:20:44Z",
+      "side": 1,
+      "message": "The size here is dependent on the state of the child class, which is not completely setup at call time of parent constructor.",
+      "parentUuid": "87e086ad_508fc78e",
+      "range": {
+        "startLine": 202,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 16
+      },
+      "revId": "79995ba69768cae3a6195912714985839aa4cbb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
