@@ -1050,9 +1050,10 @@ void StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
                                 const size_t slotIndex,
                                 angle::MemoryBuffer *scratchBuffer);
 
-// Erasing is done by writing 1/0-sized chunks starting from the 0 chunk.
+// Erasing is done by writing 1/0-sized chunks starting from the startChunk.
 void ErasePipelineCacheVkChunks(vk::GlobalOps *globalOps,
                                 Renderer *renderer,
+                                const size_t startChunk,
                                 const size_t numChunks,
                                 const size_t slotIndex,
                                 angle::MemoryBuffer *scratchBuffer);
@@ -1113,22 +1114,20 @@ void CompressAndStorePipelineCacheVk(vk::GlobalOps *globalOps,
 
     size_t previousSlotIndex = 0;
     const size_t slotIndex   = renderer->getNextPipelineCacheBlobCacheSlotIndex(&previousSlotIndex);
+    const size_t previousNumChunks = renderer->updatePipelineCacheChunkCount(numChunks);
+    const bool isSlotChanged       = (slotIndex != previousSlotIndex);
 
     // Store all chunks.
     StorePipelineCacheVkChunks(globalOps, renderer, cacheData.size(), compressedData,
                                compressedDataCRC, numChunks, chunkSize, slotIndex, &scratchBuffer);
 
-    // Erase data from the previous slot. Since cache data size is always increasing, use current
-    // numChunks for simplicity (to avoid storing previous numChunks).
-    if (previousSlotIndex != slotIndex)
+    // Erase all chunks from the previous slot or any trailing chunks from the current slot.
+    ASSERT(renderer->getFeatures().useDualPipelineBlobCacheSlots.enabled == isSlotChanged);
+    if (isSlotChanged || previousNumChunks > numChunks)
     {
-        ASSERT(renderer->getFeatures().useDualPipelineBlobCacheSlots.enabled);
-        ErasePipelineCacheVkChunks(globalOps, renderer, numChunks, previousSlotIndex,
-                                   &scratchBuffer);
-    }
-    else
-    {
-        ASSERT(!renderer->getFeatures().useDualPipelineBlobCacheSlots.enabled);
+        const size_t startChunk = isSlotChanged ? 0 : numChunks;
+        ErasePipelineCacheVkChunks(globalOps, renderer, startChunk, previousNumChunks,
+                                   previousSlotIndex, &scratchBuffer);
     }
 }
 
@@ -1178,6 +1177,7 @@ void StorePipelineCacheVkChunks(vk::GlobalOps *globalOps,
 
 void ErasePipelineCacheVkChunks(vk::GlobalOps *globalOps,
                                 Renderer *renderer,
+                                const size_t startChunk,
                                 const size_t numChunks,
                                 const size_t slotIndex,
                                 angle::MemoryBuffer *scratchBuffer)
@@ -1191,7 +1191,7 @@ void ErasePipelineCacheVkChunks(vk::GlobalOps *globalOps,
     keyData.setSize(
         renderer->getFeatures().useEmptyBlobsToEraseOldPipelineCacheFromBlobCache.enabled ? 0 : 1);
 
-    for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
+    for (size_t chunkIndex = startChunk; chunkIndex < numChunks; ++chunkIndex)
     {
         egl::BlobCache::Key chunkCacheHash;
         ComputePipelineCacheVkChunkKey(physicalDeviceProperties, slotIndex, chunkIndex,
@@ -1298,6 +1298,8 @@ angle::Result GetAndDecompressPipelineCacheVk(vk::Context *context,
         return angle::Result::Continue;
     }
 
+    renderer->updatePipelineCacheChunkCount(numChunks);
+
     size_t chunkSize      = keyData.size() - sizeof(CacheDataHeader);
     size_t compressedSize = 0;
 
@@ -1305,6 +1307,9 @@ angle::Result GetAndDecompressPipelineCacheVk(vk::Context *context,
     angle::MemoryBuffer compressedData;
     ANGLE_VK_CHECK(context, compressedData.resize(chunkSize * numChunks),
                    VK_ERROR_INITIALIZATION_FAILED);
+
+    // Assume all chunks are present.
+    bool allChunksPresent = true;
 
     // To combine the parts of the pipelineCache data.
     for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
@@ -1322,7 +1327,8 @@ angle::Result GetAndDecompressPipelineCacheVk(vk::Context *context,
                 // Can't find every part of the cache data.
                 WARN() << "Failed to get pipeline cache chunk " << chunkIndex << " of "
                        << numChunks;
-                return angle::Result::Continue;
+                allChunksPresent = false;
+                break;
             }
 
             // Validate the header values and ensure there is enough space to store.
@@ -1345,8 +1351,9 @@ angle::Result GetAndDecompressPipelineCacheVk(vk::Context *context,
                 (compressedData.size() < compressedSize + chunkSize);
             if (isHeaderDataCorrupted)
             {
-                WARN() << "Pipeline cache chunk header corrupted: " << "checkCacheVersion = "
-                       << checkCacheVersion << ", cacheVersion = " << cacheVersion
+                WARN() << "Pipeline cache chunk header corrupted or old chunk: "
+                       << "checkCacheVersion = " << checkCacheVersion
+                       << ", cacheVersion = " << cacheVersion
                        << ", checkNumChunks = " << checkNumChunks << ", numChunks = " << numChunks
                        << ", checkUncompressedCacheDataSize = " << checkUncompressedCacheDataSize
                        << ", uncompressedCacheDataSize = " << uncompressedCacheDataSize
@@ -1356,7 +1363,8 @@ angle::Result GetAndDecompressPipelineCacheVk(vk::Context *context,
                        << ", chunkIndex = " << chunkIndex
                        << ", compressedData.size() = " << compressedData.size()
                        << ", (compressedSize + chunkSize) = " << (compressedSize + chunkSize);
-                return angle::Result::Continue;
+                allChunksPresent = false;
+                break;
             }
         }
 
@@ -1365,8 +1373,15 @@ angle::Result GetAndDecompressPipelineCacheVk(vk::Context *context,
         compressedSize += chunkSize;
     }
 
+    // Try to decompress partial data if supported.
+    if (!allChunksPresent && !renderer->getFeatures().supportsPartialPipelineCacheData.enabled)
+    {
+        return angle::Result::Continue;
+    }
+
     // CRC for compressed data and size for decompressed data should match the values in the header.
-    if (kEnableCRCForPipelineCache)
+    // Skip CRC check if not all chunks are present.
+    if (kEnableCRCForPipelineCache && allChunksPresent)
     {
         uint32_t computedCompressedDataCRC =
             angle::GenerateCRC32(compressedData.data(), compressedSize);
@@ -1395,16 +1410,27 @@ angle::Result GetAndDecompressPipelineCacheVk(vk::Context *context,
         }
     }
 
+    bool partialDecompress = false;
     ANGLE_VK_CHECK(context,
-                   angle::DecompressBlob(compressedData.data(), compressedSize,
-                                         uncompressedCacheDataSize, uncompressedData),
+                   angle::DecompressPartialBlob(compressedData.data(), compressedSize,
+                                                uncompressedCacheDataSize, uncompressedData,
+                                                &partialDecompress),
                    VK_ERROR_INITIALIZATION_FAILED);
 
-    if (uncompressedData->size() != uncompressedCacheDataSize)
+    if (uncompressedData->size() != uncompressedCacheDataSize || !allChunksPresent ||
+        partialDecompress)
     {
         WARN() << "Expected uncompressed size = " << uncompressedCacheDataSize
-               << ", Actual uncompressed size = " << uncompressedData->size();
-        return angle::Result::Continue;
+               << ", Actual uncompressed size = " << uncompressedData->size()
+               << ", All chunks are present = " << (allChunksPresent ? "true" : "false")
+               << ", Partial decompress = " << (partialDecompress ? "true" : "false");
+        if (allChunksPresent || !partialDecompress)
+        {
+            WARN() << "Discarding invalid data.";
+            return angle::Result::Continue;
+        }
+        // Only use partial data when not all chunks were present (when it is expected).
+        WARN() << "Using partial data.";
     }
 
     *success = true;
@@ -1611,6 +1637,7 @@ Renderer::Renderer()
       mDeviceLocalVertexConversionBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
       mVertexConversionBufferAlignment(1),
       mCurrentPipelineCacheBlobCacheSlotIndex(0),
+      mPipelineCacheChunkCount(0),
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mPipelineCacheSizeAtLastSync(0),
       mPipelineCacheInitialized(false),
@@ -5336,6 +5363,10 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     // zero sized blobs (or erasing blobs).
     ANGLE_FEATURE_CONDITION(&mFeatures, useEmptyBlobsToEraseOldPipelineCacheFromBlobCache, false);
 
+    // Enable by default in case if some Vulkan ICDs support this behaviour or will support it in
+    // the future.  No problem (other than wasted effort) on ICDs that do not support this.
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsPartialPipelineCacheData, true);
+
     // On ARM, dynamic state for stencil write mask doesn't work correctly in the presence of
     // discard or alpha to coverage, if the static state provided when creating the pipeline has a
     // value of 0.
@@ -5605,6 +5636,13 @@ size_t Renderer::getNextPipelineCacheBlobCacheSlotIndex(size_t *previousSlotInde
         mCurrentPipelineCacheBlobCacheSlotIndex = 1 - mCurrentPipelineCacheBlobCacheSlotIndex;
     }
     return mCurrentPipelineCacheBlobCacheSlotIndex;
+}
+
+size_t Renderer::updatePipelineCacheChunkCount(size_t chunkCount)
+{
+    const size_t previousChunkCount = mPipelineCacheChunkCount;
+    mPipelineCacheChunkCount        = chunkCount;
+    return previousChunkCount;
 }
 
 angle::Result Renderer::getPipelineCache(vk::Context *context,
