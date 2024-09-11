@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90ced749_3a22d283",
+        "filename": "src/compiler/translator/ImmutableStringBuilder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-11T17:41:53Z",
+      "side": 0,
+      "message": "Err, I wasn\u0027t sure if there was an advantage to using the std:: namespace here",
+      "range": {
+        "startLine": 87,
+        "startChar": 14,
+        "endLine": 87,
+        "endChar": 15
+      },
+      "revId": "9f002018ee550790febd83b994ed5364fe1d2b3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
