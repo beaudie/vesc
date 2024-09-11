@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81e89835_5b09a16c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-11T17:41:26Z",
+      "side": 1,
+      "message": "Blocking angle -\u003e skia roll: https://logs.chromium.org/logs/skia/6bf8c235fe9e0611/+/steps/ninja/0/stdout",
+      "revId": "0f703a33866558b3a30f82e44a04f598570692c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
