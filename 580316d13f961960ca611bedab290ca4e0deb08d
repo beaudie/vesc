@@ -33,6 +33,24 @@
       "message": "Any known drivers or is this just defensive?",
       "revId": "580316d13f961960ca611bedab290ca4e0deb08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38b8807b_e140c855",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-09-11T16:03:46Z",
+      "side": 1,
+      "message": "See details in the comment above. Confirmed in multiple driver generations.",
+      "parentUuid": "aeb7d47f_58eb669e",
+      "revId": "580316d13f961960ca611bedab290ca4e0deb08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
