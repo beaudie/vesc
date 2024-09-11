@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c48acc2_04e5cc7b",
+        "filename": "src/libANGLE/CLMemory.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-11T17:48:20Z",
+      "side": 1,
+      "message": "Is this not being used? It was set before this CL but remain 0 after the change.",
+      "range": {
+        "startLine": 202,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 16
+      },
+      "revId": "79995ba69768cae3a6195912714985839aa4cbb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
