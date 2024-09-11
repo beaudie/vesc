@@ -51,6 +51,24 @@
       "parentUuid": "9aeaa8a7_bbf90f5f",
       "revId": "a6ff0e61f95a4b1a57df84527491e82ef419ae61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fa25e54_5dd2fd2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-11T21:57:54Z",
+      "side": 1,
+      "message": "in existing code the enums `vk::SrgbDecodeMode` and `gl::SrgbOverride` are littered all over the place. Most of the change here is removing those scattered enums and consolidating them in a single place",
+      "parentUuid": "a089cc14_40e466a9",
+      "revId": "a6ff0e61f95a4b1a57df84527491e82ef419ae61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
