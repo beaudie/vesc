@@ -16,6 +16,24 @@
       "message": "If we break as soon as we find one overlapping dirty range, in below case:\n\n[1, 3] (valid), [3, 5] (valid), [4, 6] (valid)\n\nwill end up with:\n\n[1, 5] (valid), [3, 5] (invalid), [4, 6] (valid)\n\nThe two valid ranges [1, 5] and [4, 6] are still overlapping. Is this expected?",
       "revId": "1b56c1929e78175e05957ba7104d36d06ce08cea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4b66484_beedac05",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-11T01:04:43Z",
+      "side": 1,
+      "message": "This loop merges each element into something behind it (if it can), so once `[1]` is merged into `[0]` and it\u0027s invalidated, we go to check for `[2]`, which will also get merged to `[0]` and become invalid.",
+      "parentUuid": "48fe943d_513ccef1",
+      "revId": "1b56c1929e78175e05957ba7104d36d06ce08cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
