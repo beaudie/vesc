@@ -70,6 +70,24 @@
       "parentUuid": "553979d0_3b7e306d",
       "revId": "1b56c1929e78175e05957ba7104d36d06ce08cea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7eadd88_77a29080",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-11T17:27:36Z",
+      "side": 1,
+      "message": "Thanks yuxin. Good catch. Fixed now.",
+      "parentUuid": "5f720247_4b6d9574",
+      "revId": "1b56c1929e78175e05957ba7104d36d06ce08cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
