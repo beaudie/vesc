@@ -22,6 +22,30 @@
       },
       "revId": "79995ba69768cae3a6195912714985839aa4cbb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "133278dd_45f2191f",
+        "filename": "src/libANGLE/CLMemory.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-09-11T17:53:30Z",
+      "side": 1,
+      "message": "This is now being set as part of CLImage constructor -- https://chromium-review.googlesource.com/c/angle/angle/+/5854004/1/src/libANGLE/CLImage.cpp",
+      "parentUuid": "4c48acc2_04e5cc7b",
+      "range": {
+        "startLine": 202,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 16
+      },
+      "revId": "79995ba69768cae3a6195912714985839aa4cbb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
