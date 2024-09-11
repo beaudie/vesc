@@ -27,7 +27,8 @@ class SymbolFinder : public TIntermTraverser
 
     void visitSymbol(TIntermSymbol *node) override
     {
-        if (node->variable().symbolType() != SymbolType::Empty && node->getName() == mSymbolName)
+        if (mNodeFound == nullptr && node->variable().symbolType() != SymbolType::Empty &&
+            node->getName() == mSymbolName)
         {
             mNodeFound = node;
         }
