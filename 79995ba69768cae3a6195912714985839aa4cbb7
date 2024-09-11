@@ -46,6 +46,30 @@
       },
       "revId": "79995ba69768cae3a6195912714985839aa4cbb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87e086ad_508fc78e",
+        "filename": "src/libANGLE/CLMemory.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-11T17:58:19Z",
+      "side": 1,
+      "message": "I see. It is a bit odd that child class is initialization parent class variable. Can\u0027t the size passed into Memory\u0027s constructor?",
+      "parentUuid": "133278dd_45f2191f",
+      "range": {
+        "startLine": 202,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 16
+      },
+      "revId": "79995ba69768cae3a6195912714985839aa4cbb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
