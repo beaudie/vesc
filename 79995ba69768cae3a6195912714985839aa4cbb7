@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3add29d_cbe29124",
+        "filename": "src/libANGLE/CLMemory.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-09-11T19:25:56Z",
+      "side": 1,
+      "message": "I could probably remove the reference to the Image here as well. Will push an update.",
+      "revId": "79995ba69768cae3a6195912714985839aa4cbb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c48acc2_04e5cc7b",
         "filename": "src/libANGLE/CLMemory.cpp",
         "patchSetId": 1
