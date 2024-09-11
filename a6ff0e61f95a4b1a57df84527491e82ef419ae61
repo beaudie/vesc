@@ -69,6 +69,24 @@
       "parentUuid": "a089cc14_40e466a9",
       "revId": "a6ff0e61f95a4b1a57df84527491e82ef419ae61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71396c6d_319a7905",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-11T22:15:40Z",
+      "side": 1,
+      "message": "But you also skipped bunch of tests in this CL, so there are some functional changes here as well. I am also happen to not familiar with the color space code here, which also made me hard to review this. If you could separate out the mechanical changes that bears no behavior difference into its own CL, then it will be much easier for me to digest.",
+      "parentUuid": "0fa25e54_5dd2fd2f",
+      "revId": "a6ff0e61f95a4b1a57df84527491e82ef419ae61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
