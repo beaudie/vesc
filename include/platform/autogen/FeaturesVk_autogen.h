@@ -1651,6 +1651,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://anglebug.com/42263322"
     };
 
+    FeatureInfo supportsPartialPipelineCacheData = {
+        "supportsPartialPipelineCacheData",
+        FeatureCategory::VulkanFeatures,
+        "VkDevice supports initializing VkPipelineCache object from partial cache data.",
+        &members, "https://anglebug.com/42263322"
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

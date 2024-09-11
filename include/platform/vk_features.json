@@ -1811,6 +1811,14 @@
                 "Relevant, when blob cache does not evict old items first (no LRU) or evicts more old items than required when storing a new item."
             ],
             "issue": "https://anglebug.com/42263322"
+        },
+        {
+            "name": "supports_partial_pipeline_cache_data",
+            "category": "Features",
+            "description": [
+                "VkDevice supports initializing VkPipelineCache object from partial cache data."
+            ],
+            "issue": "https://anglebug.com/42263322"
         }
     ]
 }
