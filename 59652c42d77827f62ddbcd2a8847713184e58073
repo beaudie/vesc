@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a8219c3_2bffa16e",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-12T18:21:32Z",
+      "side": 1,
+      "message": "I also renamed RenderTargetWgpu\u0027s `flushStagedUpdates` to `flushImageStagedUpdates` to also make it clearer and easier to differentiate from ImageHelper\u0027s methods. This was an extra helpful comment as it also made me realize that there was a bug in `flushSingleLevelUpdates` when storing a defered clear 😊",
+      "parentUuid": "69d407bb_51535b48",
+      "range": {
+        "startLine": 500,
+        "startChar": 0,
+        "endLine": 504,
+        "endChar": 71
+      },
+      "revId": "59652c42d77827f62ddbcd2a8847713184e58073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f3b5076_b0d816d2",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-09-10T21:37:19Z",
       "side": 1,
       "message": "We don\u0027t do default args, they end up confusing things on the call site. _Especially_ with `bool`:\n\n```\nstageClear(...)\nstageClear(..., true)\nstageClear(..., false, true)\n```\n\nThat\u0027s unreadable.\n\nYou could probably directly use `GPUTextureAspect` instead of the two variables.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 45
+      },
+      "revId": "59652c42d77827f62ddbcd2a8847713184e58073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68058cea_94679b70",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-12T18:21:32Z",
+      "side": 1,
+      "message": "Hmm don\u0027t think `GPUTextureAspect` would work since its options are `all`, `depth-only`, and `stencil-only` so it\u0027d be tricky to define a clear w/o a depth/stencil attachment. I\u0027ll keep the variables for now, I couldn\u0027t find anything in the webgpu spec that could function as a \"check if there\u0027s a depth or stencil value\" or default no-op values for each depth/stencil value.",
+      "parentUuid": "6f3b5076_b0d816d2",
       "range": {
         "startLine": 123,
         "startChar": 0,

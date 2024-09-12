@@ -213,6 +213,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0de46213_9462c81c",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-12T18:21:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b1a1371_ec710446",
+      "range": {
+        "startLine": 209,
+        "startChar": 4,
+        "endLine": 209,
+        "endChar": 27
+      },
+      "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f65901d5_1fcd46bf",
@@ -244,6 +268,24 @@
       "side": 1,
       "message": "Ah, yes, that\u0027s true, I just overcomplicated this when adding the depth/stencil attachment support. I moved updating color and depth/stencil attachments into a new method `flushAttachmentUpdates` and made a more general `startRenderPassNewAttachments` as well. So now a new render pass is started if either the color attachments or depth/stencil attachment was changed.",
       "parentUuid": "f65901d5_1fcd46bf",
+      "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12968d78_f1bc3280",
+        "filename": "src/libANGLE/renderer/wgpu/FramebufferWgpu.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-12T18:21:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cb3e2aa_a100a4c6",
       "revId": "c90312d0a55ca84b484c199b3436517f8283a2b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
