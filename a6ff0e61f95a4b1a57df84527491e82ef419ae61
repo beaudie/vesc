@@ -87,6 +87,24 @@
       "parentUuid": "0fa25e54_5dd2fd2f",
       "revId": "a6ff0e61f95a4b1a57df84527491e82ef419ae61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afe337ff_3831f53d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-12T15:56:26Z",
+      "side": 1,
+      "message": "\u003e But you also skipped bunch of tests in this CL\n\nthose tests are the ones that this CL enabled, they were all skipped previous to this CL. The newly enabled tests are failing on some platforms, most likely due to bugs in their vulkan implementation. All of the newly enabled tests pass without issues on Win + AMD 6600XT and Android + Samsung GPU\n\n\u003e If you could separate out the mechanical changes\n\nlet me see what i can do",
+      "parentUuid": "71396c6d_319a7905",
+      "revId": "a6ff0e61f95a4b1a57df84527491e82ef419ae61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
