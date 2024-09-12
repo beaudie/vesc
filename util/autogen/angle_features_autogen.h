@@ -315,6 +315,7 @@ enum class Feature
     SupportsDepthClipControl,
     SupportsDepthStencilIndependentResolveNone,
     SupportsDepthStencilResolve,
+    SupportsDoubleBufferSwapchainOnFifoMode,
     SupportsDynamicRendering,
     SupportsDynamicRenderingLocalRead,
     SupportsExtendedDynamicState,
