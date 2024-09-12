@@ -485,6 +485,8 @@ class WindowSurfaceVk : public SurfaceVk
     VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
     VkColorSpaceKHR mSurfaceColorSpace;
 
+    DisplayVk *mDisplay = nullptr;
+
     // Present modes that are compatible with the current mode.  If mDesiredSwapchainPresentMode is
     // in this list, mode switch can happen without the need to recreate the swapchain.  Fast
     // vector's size is 6, as there are currently only 6 possible present modes.
