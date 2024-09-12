@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28ebfa56_2cdf7109",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-12T20:07:42Z",
+      "side": 1,
+      "message": "I don\u0027t think we have a public-ready version of this doc, mostly because it would require some brushing up probably. I can remove the link if you feel it\u0027s an issue, although would outside folks actually care about the roller script?",
+      "parentUuid": "c4bb9dfd_92e97297",
+      "range": {
+        "startLine": 139,
+        "startChar": 2,
+        "endLine": 139,
+        "endChar": 130
+      },
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c2809dd_c3dcf615",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 6
@@ -37,6 +61,30 @@
       "writtenOn": "2024-09-12T19:42:38Z",
       "side": 1,
       "message": "This might all be better in a new `roll_aosp.md`?",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 45
+      },
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "013a3b65_23470904",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-12T20:07:42Z",
+      "side": 1,
+      "message": "I find inline documentation much easier to use _and maintain_ than a doc elsewhere, until it completely blows up. I had considered .md but I think this is better.",
+      "parentUuid": "6c2809dd_c3dcf615",
       "range": {
         "startLine": 141,
         "startChar": 0,
