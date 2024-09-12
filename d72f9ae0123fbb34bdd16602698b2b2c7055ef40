@@ -68,6 +68,24 @@
       "parentUuid": "25aa833f_e435dfb5",
       "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea274a00_2b722a13",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-12T19:31:52Z",
+      "side": 1,
+      "message": "I see. Thank you for the explanations. Maybe add a comment to clarify again what is included in `git_add_paths`:\n\n```\n# Add all changes under git_add_paths to sync changes (including deletion) in those dirs to AOSP, this means:\n\n1. Delete files under delete_after_codegen_paths.\n2. Add files under copy_to_aosp_paths\n```\n\nI know this is stated in line 194, I just felt it is clearer to restate what we mean with `git_add_paths`. So feel free keep the current comment, both way works.",
+      "parentUuid": "2d5f6435_7d8b629a",
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
