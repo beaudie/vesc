@@ -203,7 +203,7 @@ egl::Error SurfaceMtl::getMscRate(EGLint *numerator, EGLint *denominator)
     return egl::EglBadAccess();
 }
 
-void SurfaceMtl::setSwapInterval(EGLint interval) {}
+void SurfaceMtl::setSwapInterval(const egl::Display *display, EGLint interval) {}
 
 void SurfaceMtl::setFixedWidth(EGLint width)
 {
