@@ -16,6 +16,24 @@
       "message": "shouldn\u0027t `VUID-VkVertexInputBindingDivisorDescriptionEXT-divisor-01870` be associated with this ticket?\n\nref: https://crrev.com/c/4610083, and then https://g-issues.angleproject.org/issues/42266639",
       "revId": "16048659befa0bcebefd6a9077b307a10b49255d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81987940_0188f8fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-09-12T16:50:29Z",
+      "side": 1,
+      "message": "Since the VUID was renamed, I\u0027d like to associate the new VUID name with the bug where the problem was initially reported.",
+      "parentUuid": "e6f0192a_9726891d",
+      "revId": "16048659befa0bcebefd6a9077b307a10b49255d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
