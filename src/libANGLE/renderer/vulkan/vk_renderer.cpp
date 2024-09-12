@@ -935,14 +935,14 @@ class CacheDataHeader
   public:
     void setData(uint32_t compressedDataCRC,
                  uint32_t cacheDataSize,
-                 uint16_t numChunks,
-                 uint16_t chunkIndex)
+                 size_t numChunks,
+                 size_t chunkIndex)
     {
         mVersion           = kPipelineCacheVersion;
         mCompressedDataCRC = compressedDataCRC;
         mCacheDataSize     = cacheDataSize;
-        mNumChunks         = numChunks;
-        mChunkIndex        = chunkIndex;
+        SetBitField(mNumChunks, numChunks);
+        SetBitField(mChunkIndex, chunkIndex);
     }
 
     void getData(uint32_t *versionOut,
@@ -982,8 +982,8 @@ ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 // Pack header data for the pipeline cache key data.
 void PackHeaderDataForPipelineCache(uint32_t compressedDataCRC,
                                     uint32_t cacheDataSize,
-                                    uint16_t numChunks,
-                                    uint16_t chunkIndex,
+                                    size_t numChunks,
+                                    size_t chunkIndex,
                                     CacheDataHeader *dataOut)
 {
     dataOut->setData(compressedDataCRC, cacheDataSize, numChunks, chunkIndex);
@@ -1000,8 +1000,8 @@ void UnpackHeaderDataForPipelineCache(CacheDataHeader *data,
     data->getData(versionOut, compressedDataCRCOut, cacheDataSizeOut, numChunksOut, chunkIndexOut);
 }
 
-void ComputePipelineCacheVkChunkKey(VkPhysicalDeviceProperties physicalDeviceProperties,
-                                    const uint8_t chunkIndex,
+void ComputePipelineCacheVkChunkKey(const VkPhysicalDeviceProperties &physicalDeviceProperties,
+                                    const size_t chunkIndex,
                                     angle::BlobCacheKey *hashOut)
 {
     std::ostringstream hashStream("ANGLE Pipeline Cache: ", std::ios_base::ate);
@@ -1090,8 +1090,7 @@ void CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
         ASSERT(cacheData.size() <= UINT32_MAX);
         CacheDataHeader headerData = {};
         PackHeaderDataForPipelineCache(compressedDataCRC, static_cast<uint32_t>(cacheData.size()),
-                                       static_cast<uint16_t>(numChunks),
-                                       static_cast<uint16_t>(chunkIndex), &headerData);
+                                       numChunks, chunkIndex, &headerData);
         memcpy(keyData.data(), &headerData, sizeof(CacheDataHeader));
         memcpy(keyData.data() + sizeof(CacheDataHeader), compressedData.data() + compressedOffset,
                chunkSize);
