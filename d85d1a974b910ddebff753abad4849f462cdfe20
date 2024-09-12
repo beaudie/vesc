@@ -16,6 +16,29 @@
       "message": "hi all,\nplease help to reivew the changes\n\nthanks\n\nhailin",
       "revId": "d85d1a974b910ddebff753abad4849f462cdfe20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f6792ce_d7fb6c65",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-12T22:40:29Z",
+      "side": 1,
+      "message": "preferDoubleBufferSwapchainOnFifoMode",
+      "range": {
+        "startLine": 125,
+        "startChar": 32,
+        "endLine": 125,
+        "endChar": 71
+      },
+      "revId": "d85d1a974b910ddebff753abad4849f462cdfe20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
