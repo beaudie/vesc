@@ -50,6 +50,24 @@
       "message": "I think it would be clearer if we add this part of the original comment:\n\n```\nso we delete everything not explicitly allowed\n```",
       "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d5f6435_7d8b629a",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-12T15:24:46Z",
+      "side": 1,
+      "message": "It might be clearer but it would also be incorrect and misleading :)\n\nWe don\u0027t delete everything not explicitly allowed. What happens is:\n* We delete what we explicitly chose to delete with `delete_after_codegen_paths`\n* git commands automatically ignore sub-dirs that have `.git` in them - which is the case for many, but not all, deps\n * To avoid the git behavior above in case we do want those files in aosp, we delete those `.git` subdirs - so after that files that we `git add` actually become part of the git commit and the aosp repository\n\nNote that this step is only the last part of this process where we `git add` all of the things we did above, so I don\u0027t think it\u0027s the right place to describe what is going on. That\u0027s why I have an entire \"overview\" section above to try to explain that. I know this is confusing, LMK if you have ideas how to make it more clear.",
+      "parentUuid": "25aa833f_e435dfb5",
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
