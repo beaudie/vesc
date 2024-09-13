@@ -131,6 +131,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "672cfbd7_923ab3cb",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-13T00:15:24Z",
+      "side": 1,
+      "message": "Talked offline to clarify. Would you please add https://gist.github.com/claraj/e5563befe6c2fb108ad0efb6de47f265. in the comment?",
+      "parentUuid": "9f83db9f_c2cf20d3",
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "25aa833f_e435dfb5",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 6
