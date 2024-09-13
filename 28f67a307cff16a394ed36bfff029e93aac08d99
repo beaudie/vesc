@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd1dab2a_0a895bb3",
+        "filename": "src/tests/restricted_traces/sync_restricted_traces_to_cipd.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-13T20:56:10Z",
+      "side": 1,
+      "message": "For simplicity, can you put the actual command to run here?  Then we can copy/paste when we forget.",
+      "range": {
+        "startLine": 96,
+        "startChar": 72,
+        "endLine": 96,
+        "endChar": 133
+      },
+      "revId": "28f67a307cff16a394ed36bfff029e93aac08d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
