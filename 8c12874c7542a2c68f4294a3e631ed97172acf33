@@ -16,6 +16,24 @@
       "message": "This CL broke iOS compilation because `setSwapInterval` overloads in `src/libANGLE/renderer/gl/eagl/` were not updated.",
       "revId": "8c12874c7542a2c68f4294a3e631ed97172acf33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74f60117_18f01f29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-13T17:31:00Z",
+      "side": 1,
+      "message": "Sample compilation error: https://chromium-review.googlesource.com/c/chromium/src/+/5858965.",
+      "parentUuid": "8da7d086_d8f36f6f",
+      "revId": "8c12874c7542a2c68f4294a3e631ed97172acf33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
