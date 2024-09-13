@@ -34,6 +34,24 @@
       "parentUuid": "8da7d086_d8f36f6f",
       "revId": "8c12874c7542a2c68f4294a3e631ed97172acf33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5940962_01a115d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2024-09-13T18:55:19Z",
+      "side": 1,
+      "message": "sorry. add another cl to fix the build issue.\nhttps://chromium-review.googlesource.com/c/angle/angle/+/5862027",
+      "parentUuid": "8da7d086_d8f36f6f",
+      "revId": "8c12874c7542a2c68f4294a3e631ed97172acf33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
