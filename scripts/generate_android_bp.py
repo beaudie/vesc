@@ -712,6 +712,32 @@ def get_blueprint_targets_from_build_info(build_info: BuildInfo) -> List[Tuple[s
 
     return generated_targets
 
+def handle_angle_non_conformant_extensions_and_versions(
+    generated_targets: List[Tuple[str, dict]],
+    blueprint_targets: List[dict],
+):
+    """Replace the non conformant cflags with a separate cc_defaults.
+    
+    The downstream can custom the cflags easier.
+    """
+    expose_non_conformant_extensions_and_versions_cflag = \
+        '-DANGLE_EXPOSE_NON_CONFORMANT_EXTENSIONS_AND_VERSIONS'
+    angle_non_conformant_extensions_and_versions_defaults_name = \
+        'angle_non_conformant_extensions_and_versions_cflags'
+
+    blueprint_targets.append(('cc_defaults', {
+        'name': angle_non_conformant_extensions_and_versions_defaults_name,
+        'cflags': [expose_non_conformant_extensions_and_versions_cflag],
+    }))
+
+    for _, bp in generated_targets:
+        if 'cflags' in bp:
+            cflags = set(bp['cflags'])
+            if expose_non_conformant_extensions_and_versions_cflag not in cflags:
+                continue
+            cflags.remove(expose_non_conformant_extensions_and_versions_cflag)
+            bp['cflags'] = list(cflags)
+            bp['defaults'].append(angle_non_conformant_extensions_and_versions_defaults_name)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -758,6 +784,8 @@ def main():
         }))
 
     generated_targets = get_blueprint_targets_from_build_info(build_info)
+
+    handle_angle_non_conformant_extensions_and_versions(generated_targets, blueprint_targets)
 
     # Move cflags that are repeated in each target to cc_defaults
     all_cflags = [set(bp['cflags']) for _, bp in generated_targets if 'cflags' in bp]
