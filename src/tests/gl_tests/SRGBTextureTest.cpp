@@ -249,28 +249,27 @@ TEST_P(SRGBTextureTest, SRGBDecodeTextureParameter)
 
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_sRGB_decode"));
 
-    GLColor linearColor = kLinearColor;
-    GLColor srgbColor   = kNonlinearColor;
-
     GLTexture tex;
     glBindTexture(GL_TEXTURE_2D, tex);
     glTexImage2D(GL_TEXTURE_2D, 0, getSRGBA8TextureInternalFormat(), 1, 1, 0,
-                 getSRGBA8TextureFormat(), GL_UNSIGNED_BYTE, &linearColor);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SRGB_DECODE_EXT, GL_DECODE_EXT);
+                 getSRGBA8TextureFormat(), GL_UNSIGNED_BYTE, kLinearColor.data());
     ASSERT_GL_NO_ERROR();
 
     glUseProgram(mProgram);
     glUniform1i(mTextureLocation, 0);
-
     glDisable(GL_DEPTH_TEST);
-    drawQuad(mProgram, "position", 0.5f);
 
-    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SRGB_DECODE_EXT, GL_DECODE_EXT);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kNonlinearColor, 1.0);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SRGB_DECODE_EXT, GL_SKIP_DECODE_EXT);
     drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kLinearColor, 1.0);
 
-    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SRGB_DECODE_EXT, GL_DECODE_EXT);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kNonlinearColor, 1.0);
 }
 
 // Test basic functionality of SRGB override using the texture parameter
@@ -278,30 +277,29 @@ TEST_P(SRGBTextureTest, SRGBOverrideTextureParameter)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_format_sRGB_override"));
 
-    GLColor linearColor = kLinearColor;
-    GLColor srgbColor   = kNonlinearColor;
-
     GLenum internalFormat = getClientMajorVersion() >= 3 ? GL_RGBA8 : GL_RGBA;
 
     GLTexture tex;
     glBindTexture(GL_TEXTURE_2D, tex);
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                 &linearColor);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_NONE);
+                 kLinearColor.data());
     ASSERT_GL_NO_ERROR();
 
     glUseProgram(mProgram);
     glUniform1i(mTextureLocation, 0);
-
     glDisable(GL_DEPTH_TEST);
-    drawQuad(mProgram, "position", 0.5f);
 
-    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_NONE);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kLinearColor, 1.0);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_SRGB);
     drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kNonlinearColor, 1.0);
 
-    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_NONE);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kLinearColor, 1.0);
 }
 
 // Test that all supported formats can be overridden
