@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3d6cc89_637816cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-13T20:34:24Z",
+      "side": 1,
+      "message": "Could you share a diff that this results in?",
+      "revId": "85db2ef7f1b4eba629151db3e294cc780ffba41d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a747a894_7ddeceb7",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-13T20:34:24Z",
+      "side": 1,
+      "message": "Let\u0027s use short names for local vars, code will be less verbose / more readable\n\nMaybe something like non_conform_cflag and non_conform_defaults",
+      "range": {
+        "startLine": 724,
+        "startChar": 4,
+        "endLine": 724,
+        "endChar": 55
+      },
+      "revId": "85db2ef7f1b4eba629151db3e294cc780ffba41d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dbf303c_707c3212",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-13T20:34:24Z",
+      "side": 1,
+      "message": "one-line comment about moving a cflag to cc_defaults? Or if you could find a name for the helper that describes that we wouldn\u0027t need a comment",
+      "range": {
+        "startLine": 790,
+        "startChar": 4,
+        "endLine": 790,
+        "endChar": 55
+      },
+      "revId": "85db2ef7f1b4eba629151db3e294cc780ffba41d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
