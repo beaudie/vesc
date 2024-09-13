@@ -130,6 +130,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37de34e1_d9506697",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-13T17:20:39Z",
+      "side": 1,
+      "message": "Awesome, thank you Roman.",
+      "parentUuid": "bb45e05f_81d7d5bd",
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f83db9f_c2cf20d3",
