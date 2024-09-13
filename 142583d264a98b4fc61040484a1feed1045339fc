@@ -22,6 +22,30 @@
       },
       "revId": "142583d264a98b4fc61040484a1feed1045339fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "303d231c_169987dd",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1377582
+      },
+      "writtenOn": "2024-09-13T21:57:13Z",
+      "side": 1,
+      "message": "Done. Test by running `scripts/roll_aosp.sh --genAndroidBp` again and no new changes to `Android.bp`.",
+      "parentUuid": "b6df171a_5f811f74",
+      "range": {
+        "startLine": 733,
+        "startChar": 0,
+        "endLine": 738,
+        "endChar": 39
+      },
+      "revId": "142583d264a98b4fc61040484a1feed1045339fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
