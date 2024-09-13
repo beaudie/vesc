@@ -112,6 +112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb45e05f_81d7d5bd",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-13T13:38:46Z",
+      "side": 1,
+      "message": "Rewrote this section and added some examples, lmk if still unclear.",
+      "parentUuid": "4e455de3_db578708",
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f83db9f_c2cf20d3",
@@ -143,6 +161,24 @@
       "side": 1,
       "message": "Talked offline to clarify. Would you please add https://gist.github.com/claraj/e5563befe6c2fb108ad0efb6de47f265. in the comment?",
       "parentUuid": "9f83db9f_c2cf20d3",
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a38ec8_b8bf6a41",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-13T13:38:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "672cfbd7_923ab3cb",
       "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
