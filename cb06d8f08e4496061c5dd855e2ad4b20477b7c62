@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acc5e805_b0ddd5d0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-13T01:01:39Z",
+      "side": 1,
+      "message": "Eeep, please don\u0027t do this. Instead, have `Surface::setSwapInterval` take the `Display` pointer from the entry point, and forward it to `SurfaceImpl::setSwapInterval`.",
+      "revId": "cb06d8f08e4496061c5dd855e2ad4b20477b7c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

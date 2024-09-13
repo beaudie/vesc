@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74daa7fa_9d1ca8ff",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-13T01:01:39Z",
+      "side": 0,
+      "message": "```suggestion\n    //   nvidia + windowed mode), we could get away with a smaller number.\n    //\n    // For simplicity, we always allocate at least three images, unless double buffer FIFO is\n    // specifically preferred.\n```",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 64
+      },
+      "revId": "7dcfc32b3a84b21bd6d7d699940cfdbbced52af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
