@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/vulkan/vk_renderer.h"
 
 #include <fcntl.h>
+#include <sys/stat.h>
 
 namespace rx
 {
@@ -257,6 +258,28 @@ VkSamplerYcbcrRange GetYcbcrRange(const egl::AttributeMap &attribs)
                : VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
 }
 
+bool IsSameDmaBuf(int fd1, int fd2)
+{
+    if (fd1 == fd2)
+    {
+        return true;
+    }
+
+    struct stat buf1;
+    struct stat buf2;
+    if (fstat(fd1, &buf1) == -1 || fstat(fd2, &buf2) == -1)
+    {
+        return false;
+    }
+
+    // kcmp(KCMP_FILE) is the only way to tell if two fds refer to the same file.  But it is
+    // relatively new, rarely used, and often disallowed in sandboxed environments.
+    //
+    // Check inode numbers and file sizes instead.  On recent kernels, dmabufs have unique inode
+    // numbers.
+    return buf1.st_dev == buf2.st_dev && buf1.st_ino == buf2.st_ino && buf1.st_size == buf2.st_size;
+}
+
 angle::Result GetAllocateInfo(const egl::AttributeMap &attribs,
                               VkImage image,
                               uint32_t planeCount,
@@ -282,7 +305,7 @@ angle::Result GetAllocateInfo(const egl::AttributeMap &attribs,
         bool areFdsIdentical = true;
         for (uint32_t plane = 1; plane < planeCount; ++plane)
         {
-            if (attribs.getAsInt(kFds[plane]) != attribs.getAsInt(kFds[0]))
+            if (!IsSameDmaBuf(attribs.getAsInt(kFds[plane]), attribs.getAsInt(kFds[0])))
             {
                 areFdsIdentical = false;
                 break;
