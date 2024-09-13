@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6df171a_5f811f74",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-13T21:06:37Z",
+      "side": 1,
+      "message": "This can be reduced to something like (not tested, please re-test before submission as there is no presubmit):\n```\n        if \u0027cflags\u0027 in bp and non_conform_cflag in bp[\u0027cflags\u0027]:\n            bp[\u0027cflags\u0027] \u003d list(set(bp[\u0027cflags\u0027]) - {non_conform_cflag})\n            bp[\u0027defaults\u0027].append(non_conform_defaults)\n```",
+      "range": {
+        "startLine": 733,
+        "startChar": 0,
+        "endLine": 738,
+        "endChar": 39
+      },
+      "revId": "142583d264a98b4fc61040484a1feed1045339fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
