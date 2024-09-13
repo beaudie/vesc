@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36fb8025_f7347ec9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1377582
+      },
+      "writtenOn": "2024-09-13T20:01:26Z",
+      "side": 1,
+      "message": "The diff for the Android.bp can be found here: https://paste.googleplex.com/5172608623706112",
+      "revId": "cec190fd282cff9e8e6ab8d523eafe5663bb5682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
