@@ -3297,6 +3297,12 @@ spirv::IdRef OutputSPIRVTraverser::createAtomicBuiltIn(TIntermOperator *node,
     // For images, convert the pointer to the image to a pointer to a texel in the image.
     if (isImage)
     {
+        // image can be of float type as well
+        if (IsFloatImage(operandBasicType))
+        {
+            resultTypeId = spirv::IdRef(vk::spirv::kIdFloat);
+        }
+
         const spirv::IdRef texelTypePointerId =
             mBuilder.getTypePointerId(resultTypeId, spv::StorageClassImage);
         const spirv::IdRef texelPointerId = mBuilder.getNewId({});
