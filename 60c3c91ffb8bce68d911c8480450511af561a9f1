@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "117a5625_7cc34d29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T14:47:12Z",
+      "side": 1,
+      "message": "The failure on the bots aside, the perma-emulation was rather intentional. Does it have any performance implications _at all_? My expectation would be that the float-uint bitcasts are completely free, and the atomic load is independent of the format anyway.\n\nSo, what\u0027s the motivation for this change?",
+      "revId": "60c3c91ffb8bce68d911c8480450511af561a9f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
