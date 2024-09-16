@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4bfd4fd0_5f0a01f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-16T18:17:55Z",
+      "side": 1,
+      "message": "Bug is that chunk is passed as `uint8_t` into `ComputePipelineCacheVkChunkKey()`.\n\nAs the results, chunks `256, 257, 258, ...` will have same hashes as `0, 1, 2, ...`",
+      "parentUuid": "396dd2df_f9fe4e02",
+      "revId": "5e4a2489d35c66b4a784164e3951a423f3caed68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8b70e49_06da46cf",
         "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
         "patchSetId": 2
@@ -31,6 +49,30 @@
       "writtenOn": "2024-09-16T13:38:24Z",
       "side": 1,
       "message": "We have a macro to cast and then verify no data was lost:\n\n```suggestion\n        SetBitField(mNumChunks, numChunks);\n        SetBitField(mChunkIndex, chunkIndex);\n```",
+      "range": {
+        "startLine": 954,
+        "startChar": 0,
+        "endLine": 957,
+        "endChar": 63
+      },
+      "revId": "5e4a2489d35c66b4a784164e3951a423f3caed68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f86f557_fdf2b086",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-16T18:17:55Z",
+      "side": 1,
+      "message": "Thanks. Will change.",
+      "parentUuid": "f8b70e49_06da46cf",
       "range": {
         "startLine": 954,
         "startChar": 0,
