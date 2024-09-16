@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d4b5747_a7522175",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T14:38:41Z",
+      "side": 1,
+      "message": "Follow up idea: I don\u0027t recall the details, but if the spec ids are ANGLE-controlled, you might want to consider using an enum instead of `uint32_t` for them and a `PackedEnumMap` instead of `HashMap`.",
+      "revId": "5d95a249edddd39e0404b99b4802509887c11257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
