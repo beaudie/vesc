@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17bdbe6b_5721dbf4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T04:13:12Z",
+      "side": 1,
+      "message": "```suggestion\n    bool anyAttachmentWithColorspaceOverride       \u003d false;\n```",
+      "range": {
+        "startLine": 541,
+        "startChar": 9,
+        "endLine": 541,
+        "endChar": 42
+      },
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f2608ad_b0d2a044",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T04:13:12Z",
+      "side": 1,
+      "message": "Is this logically correct? What happens if I have a texture, bind it to two different framebuffers, then set the sRGB write control modes to two different states in the framebuffers? Given that these RTs update the ImageViewHelper class (shared between the framebuffers), it looks like state is leaked from one FBO to the other.\n\nLike, take this test:\n\n* Setup texture\n* Setup FBO 1 using texture, configure sRGB write control mode to some state\n* Setup FBO 2 using texture, configure sRGB write control mode to another state\n* Draw with FBO 2\n* Draw with FBO 1\n* Verify write through FBO2 used second state, and write through FBO1 used first state\n\nDoes the test pass?",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b99e27a_18cd98bd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3448,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T04:13:12Z",
+      "side": 1,
+      "message": "Could I please ask for some state-change tests? That is intended to make sure caches are updated accordingly. Basically, for each of the states in `ColorspaceState` which can be toggled, need a test like:\n\n* Draw with said state disabled\n* Enable the state and draw\n* Disable the state and draw\n* Verify\n\nThe draw calls could be to different parts of framebuffer (selected with glViewport/glScissor) so verify can be in the end. For `hasStaticTexelFetchAccess`, can use two different programs, with and without `texelFetch`, instead of a state change.",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "660e5ba3_92744e4a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3723,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T04:13:12Z",
+      "side": 1,
+      "message": "`mImageCreateFlags` is supposed to be initialized with `mImage-\u003egetCreateFlags()`. See `TextureVk::setImageHelper`.\n\nDid you see a failure here? Could this be asserted instead?",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "860ce6fc_b1971657",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3786,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T04:13:12Z",
+      "side": 1,
+      "message": "Could you please add a test for this if there isn\u0027t one already?",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0979a0a_b205b8fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 12020,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T04:13:12Z",
+      "side": 1,
+      "message": "nit: Use a local variable to avoid duplicating the logic for read/write while the values are identical. Later, initialize the read/write members with that local variable before further adjustment.",
+      "range": {
+        "startLine": 12005,
+        "startChar": 0,
+        "endLine": 12020,
+        "endChar": 5
+      },
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10d4fa4f_e57588fa",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 20
+      },
+      "lineNbr": 1566,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T04:13:12Z",
+      "side": 1,
+      "message": "No renderer? These fail on the platforms regardless of GL, Vulkan, D3D?",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
