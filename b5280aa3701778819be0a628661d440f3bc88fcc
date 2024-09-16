@@ -70,6 +70,24 @@
       "parentUuid": "ac236b6a_ff38982b",
       "revId": "b5280aa3701778819be0a628661d440f3bc88fcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d56f57ac_3c3ac765",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-16T19:45:12Z",
+      "side": 0,
+      "message": "\u003e remove the unused expectation entry, re-upload CL, and then they will see the newly failing tests?\n\nRight, this can be done but the workflow is not great. Ideally we would somehow get notified about unused tests without necessarily making things go red, but I don\u0027t know an easy way to implement it in the current infra and then it\u0027s also not clear if constantly monitoring this vs doing a cleanup from time to time is the better option.",
+      "parentUuid": "f811ecdf_a64a52a0",
+      "revId": "b5280aa3701778819be0a628661d440f3bc88fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
