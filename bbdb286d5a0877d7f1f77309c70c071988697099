@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb6e9f41_e706a5e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-16T21:37:20Z",
+      "side": 1,
+      "message": "Thanks a lot for factor out this CL. It is much better to understand now.\n\nThe description could be a bit better. This just described what it was. Some description that describes what this CL does could be helpful. Something like: \n\ngl::SrgbWriteControlMode parameter has been removed from getLevelLayerDrawImageView API. getLevelLayerDrawImageView now assumes SrgbWriteControlMode is default mode. \n\n....",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 36
+      },
+      "revId": "bbdb286d5a0877d7f1f77309c70c071988697099",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
