@@ -22,6 +22,30 @@
       },
       "revId": "9886da1124b568b712bbee3274552b7eb61aff00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7f589cf_5cfc2c7f",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3503,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-16T23:25:12Z",
+      "side": 1,
+      "message": "_lockPlanes API is only needed if we need to upload data to AHB. I have added this skip condition to only those tests that pass in a valid color to be uploaded (`{{kBlack, 4}}` in this specific test)\n\nfor tests that dont need to upload data i have not added the skip but instead clarified with a comment - `so we don\u0027t need ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT`",
+      "parentUuid": "b04d5666_d53e0a32",
+      "range": {
+        "startLine": 3503,
+        "startChar": 0,
+        "endLine": 3503,
+        "endChar": 51
+      },
+      "revId": "9886da1124b568b712bbee3274552b7eb61aff00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
