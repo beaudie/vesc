@@ -46,6 +46,30 @@
       },
       "revId": "9886da1124b568b712bbee3274552b7eb61aff00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42f017af_f6afb8cb",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3503,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-16T23:33:39Z",
+      "side": 1,
+      "message": "But writeAHBData() also has an implementation even without ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT.\n\nOr maybe it relly does not matter at all, since. lockPlanes is supported if __ANDROID_API__ \u003e\u003d 29. And Almost all ANGLE use meet that except chrome which may not need AHB at all.",
+      "parentUuid": "d7f589cf_5cfc2c7f",
+      "range": {
+        "startLine": 3503,
+        "startChar": 0,
+        "endLine": 3503,
+        "endChar": 51
+      },
+      "revId": "9886da1124b568b712bbee3274552b7eb61aff00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
