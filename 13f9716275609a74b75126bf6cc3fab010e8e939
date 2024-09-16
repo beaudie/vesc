@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef6a15b1_6c716045",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T01:31:54Z",
+      "side": 1,
+      "message": "What about not-so-recent kernels?",
+      "revId": "13f9716275609a74b75126bf6cc3fab010e8e939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
