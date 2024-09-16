@@ -16,6 +16,24 @@
       "message": "Does it mean it is ok if there is no benefit in creating monolithic pipelines when `graphicsPipelineLibraryFastLinking` is true? As long as there is no regressions.",
       "revId": "8a95e2a0130f4b633f878a0b338f28a53d6063d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c3d561f_7313f266",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5183,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T17:16:42Z",
+      "side": 1,
+      "message": "`graphicsPipelineLibraryFastLinking` just says if linking pipelines is fast or not. I recently learned that fast-link is not an indication that the result is performant, it typically isn\u0027t. FWIW, we want all drivers to expose `graphicsPipelineLibraryFastLinking`, because we want the library link to be fast (otherwise what was the point? 😄)\n\nWhat this toggle does is to let ANGLE (slowly) build monolithic pipelines in the background and swap them in for the fast-linked pipelines when ready. So if the fast-linked pipeline is not very performant, a few seconds later the inefficiency is gone.",
+      "parentUuid": "ed9875df_91a21e84",
+      "revId": "8a95e2a0130f4b633f878a0b338f28a53d6063d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
