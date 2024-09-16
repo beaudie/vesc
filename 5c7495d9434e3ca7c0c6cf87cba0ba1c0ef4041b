@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d44553e_0329c994",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T14:18:05Z",
+      "side": 1,
+      "message": "Could you please add unit tests for this, like in a file named `Decompress_unittest.cpp`",
+      "revId": "5c7495d9434e3ca7c0c6cf87cba0ba1c0ef4041b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1344071c_224bc57b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5367,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T14:18:05Z",
+      "side": 1,
+      "message": "Slightly worried if a blob inside the VkPipelineCache data is partial and a driver blows up when it sees it.\n\nCan we put this to the test? You could add a test in `EGLBlobCacheTest.cpp` that does something like this:\n\n* Create many programs (with different shaders) with the `GL_PROGRAM_BINARY_RETRIEVABLE_HINT` hint, maybe also draw with them?\n* Do that until there are at least 2 chunks in the pipeline cache data. With the binary-retrievable hint + some other configs (like no warm up, no graphics pipeline library), you can probably avoid getting anything in the blob cache except the VkPipelineCache data. If necessary, we can also parse the header to be sure.\n* Recreate the display and make it retrieve the pipeline cache data. Pretend that only chunk 0 is available. Issue draw calls with the same programs as the first run (they would all hit or miss the cache, but shouldn\u0027t blow up if matching the blob that was cut off between chunks)",
+      "revId": "5c7495d9434e3ca7c0c6cf87cba0ba1c0ef4041b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
