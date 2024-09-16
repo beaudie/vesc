@@ -1,0 +1,39 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3e4e733_a34f6b75",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-16T17:22:33Z",
+      "side": 0,
+      "message": "Question: how are we going to keep the expectation files up-to-date? For example, if the dEQP test gets renamed, if the dEQP test gets removed, there is no easy way for us to know if the test names listed in the expectation files are still valid, other than having someone run each item in the expectation file and remove them if the test runner says \"0 test ran\".\n\nMaybe it is still better to just let the test process die when there are out-dated entries in the expectation files? People would notice what\u0027s wrong immediately and fix the outdated items in the expectation files.",
+      "fixSuggestions": [
+        {
+          "fixId": "0395b0e8_52f93de2",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+              "range": {
+                "startLine": 485,
+                "startChar": 0,
+                "endLine": 485,
+                "endChar": 0
+              },
+              "replacement": "// TODO(jplate) Add a mechanism to keep the test expectations up to date.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "b5280aa3701778819be0a628661d440f3bc88fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
