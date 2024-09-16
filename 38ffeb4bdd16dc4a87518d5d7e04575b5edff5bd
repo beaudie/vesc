@@ -50,10 +50,10 @@
         "allowOverrideInChildProjects": false
       },
       "applicabilityExpressionResult": {
-        "value": {"expression":{"expressionString":"is:review-enforced_gerrit"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["is:review-enforced_gerrit"]}
+        "value": {"expression":{"expressionString":"is:review-enforced_gerrit"},"status":"PASS","errorMessage":{"value":null},"passingAtoms":["is:review-enforced_gerrit"],"failingAtoms":[]}
       },
       "submittabilityExpressionResult": {
-        "value": {"expression":{"expressionString":"is:review-enforcement-satisfied_gerrit"},"status":"NOT_EVALUATED","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":[]}
+        "value": {"expression":{"expressionString":"is:review-enforced_gerrit"},"status":"PASS","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["is:review-enforcement-satisfied_gerrit"]}
       },
       "overrideExpressionResult": {},
       "patchSetCommitId": "38ffeb4bdd16dc4a87518d5d7e04575b5edff5bd",
@@ -61,7 +61,9 @@
         "value": false
       },
       "forced": {},
-      "hidden": {}
+      "hidden": {
+        "value": true
+      }
     },
     {
       "submitRequirement": {
