@@ -1597,11 +1597,14 @@ angle::Result CommandQueue::retireFinishedCommandsAndCleanupGarbage(Context *con
     vk::Renderer *renderer = context->getRenderer();
     if (!renderer->isAsyncCommandBufferResetEnabled())
     {
-        // Do immediate command buffer reset
+        // Do immediate command buffer reset and garbage cleanup
         ANGLE_TRY(retireFinishedCommands(context));
+        renderer->cleanupGarbage();
     }
-
-    renderer->requestAsyncCommandsAndGarbageCleanup(context);
+    else
+    {
+        renderer->requestAsyncCommandsAndGarbageCleanup(context);
+    }
 
     return angle::Result::Continue;
 }
