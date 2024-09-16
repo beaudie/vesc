@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/wgpu/ContextWgpu.h"
 
+#include "VertexArrayWgpu.h"
 #include "common/debug.h"
 
 #include "libANGLE/Context.h"
@@ -62,6 +63,7 @@ ContextWgpu::ContextWgpu(const gl::State &state, gl::ErrorSet *errorSet, Display
         DIRTY_BIT_RENDER_PIPELINE_BINDING,  // The pipeline needs to be bound for each renderpass
         DIRTY_BIT_VIEWPORT,
         DIRTY_BIT_SCISSOR,
+        DIRTY_BIT_VERTEX_BUFFERS,
     };
 }
 
@@ -132,12 +134,27 @@ void ContextWgpu::setDepthStencilFormat(wgpu::TextureFormat format)
     }
 }
 
-void ContextWgpu::setVertexAttributes(const gl::AttribArray<webgpu::PackedVertexAttribute> &attribs)
+void ContextWgpu::setVertexAttribute(size_t attribIndex, webgpu::PackedVertexAttribute newAttrib)
 {
-    if (mRenderPipelineDesc.setVertexAttributes(attribs))
+    if (mRenderPipelineDesc.setVertexAttribute(attribIndex, newAttrib))
     {
         invalidateCurrentRenderPipeline();
     }
+}
+
+void ContextWgpu::invalidateVertexBuffer(size_t slot)
+{
+    if (mCurrentRenderPipelineAllAttributes[slot])
+    {
+        mDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
+        mDirtyVertexBuffers.set(slot);
+    }
+}
+
+void ContextWgpu::invalidateVertexBuffers()
+{
+    mDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
+    mDirtyVertexBuffers = mCurrentRenderPipelineAllAttributes;
 }
 
 angle::Result ContextWgpu::finish(const gl::Context *context)
@@ -613,7 +630,7 @@ angle::Result ContextWgpu::syncState(const gl::Context *context,
                     invalidateCurrentRenderPipeline();
                 }
             }
-                break;
+            break;
             case gl::state::DIRTY_BIT_STENCIL_OPS_BACK:
             {
                 wgpu::StencilOperation failOp =
@@ -627,7 +644,7 @@ angle::Result ContextWgpu::syncState(const gl::Context *context,
                     invalidateCurrentRenderPipeline();
                 }
             }
-                break;
+            break;
             case gl::state::DIRTY_BIT_STENCIL_WRITEMASK_FRONT:
                 if (mRenderPipelineDesc.setStencilWriteMask(
                         glState.getDepthStencilState().stencilWritemask))
@@ -676,6 +693,7 @@ angle::Result ContextWgpu::syncState(const gl::Context *context,
             case gl::state::DIRTY_BIT_RENDERBUFFER_BINDING:
                 break;
             case gl::state::DIRTY_BIT_VERTEX_ARRAY_BINDING:
+                invalidateCurrentRenderPipeline();
                 break;
             case gl::state::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING:
                 break;
@@ -1018,6 +1036,11 @@ angle::Result ContextWgpu::setupDraw(const gl::Context *context,
                     ANGLE_TRY(handleDirtyScissor(&dirtyBitIter));
                     break;
 
+                case DIRTY_BIT_VERTEX_BUFFERS:
+                    ANGLE_TRY(handleDirtyVertexBuffers(mDirtyVertexBuffers, &dirtyBitIter));
+                    mDirtyVertexBuffers.reset();
+                    break;
+
                 default:
                     UNREACHABLE();
                     break;
@@ -1042,6 +1065,8 @@ angle::Result ContextWgpu::handleDirtyRenderPipelineDesc(DirtyBits::Iterator *di
     {
         dirtyBitsIterator->setLaterBit(DIRTY_BIT_RENDER_PIPELINE_BINDING);
     }
+    mCurrentRenderPipelineAllAttributes =
+        executable->getExecutable()->getActiveAttribLocationsMask();
 
     return angle::Result::Continue;
 }
@@ -1129,6 +1154,27 @@ angle::Result ContextWgpu::handleDirtyRenderPass(DirtyBits::Iterator *dirtyBitsI
     FramebufferWgpu *drawFramebufferWgpu = webgpu::GetImpl(mState.getDrawFramebuffer());
     ANGLE_TRY(drawFramebufferWgpu->startNewRenderPass(this));
     dirtyBitsIterator->setLaterBits(mNewRenderPassDirtyBits);
+    mDirtyVertexBuffers = mCurrentRenderPipelineAllAttributes;
+    return angle::Result::Continue;
+}
+
+angle::Result ContextWgpu::handleDirtyVertexBuffers(const gl::AttributesMask &slots,
+                                                    DirtyBits::Iterator *dirtyBitsIterator)
+{
+    VertexArrayWgpu *vertexArrayWgpu = GetImplAs<VertexArrayWgpu>(mState.getVertexArray());
+    for (size_t slot : slots)
+    {
+        webgpu::BufferHelper *buffer = vertexArrayWgpu->getVertexBuffer(slot);
+        if (!buffer)
+        {
+            continue;
+        }
+        if (buffer->getMappedState())
+        {
+            ANGLE_TRY(buffer->unmap());
+        }
+        mCommandBuffer.setVertexBuffer(static_cast<uint32_t>(slot), buffer->getBuffer());
+    }
     return angle::Result::Continue;
 }
 
