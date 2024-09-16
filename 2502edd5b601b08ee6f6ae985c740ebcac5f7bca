@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7572b1fd_0d4cd2c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 11408,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-16T23:11:43Z",
+      "side": 1,
+      "message": "Do you really need Invlalid? What will be wrong if initialize to Linear? If we can get rid of Invalid, some logic can be simpler, for example hasColorspaceOverrideForRead() could be simply\n`return image.getActualFormat().isSRGB !\u003d mReadColorspace;`",
+      "range": {
+        "startLine": 11408,
+        "startChar": 0,
+        "endLine": 11408,
+        "endChar": 52
+      },
+      "revId": "2502edd5b601b08ee6f6ae985c740ebcac5f7bca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
