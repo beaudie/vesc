@@ -85,6 +85,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0014232e_3596c9bb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T17:12:15Z",
+      "side": 1,
+      "message": "Ok, replace FBO with Context. You can create a multi-threaded test for it with the above sequence. Before drawing in context1/FBO1, you\u0027d need to use sync objects and rebind the texture, but I don\u0027t believe any of that would update the ImageViewHelper.",
+      "parentUuid": "8829c622_9dfa8b8f",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b99e27a_18cd98bd",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
