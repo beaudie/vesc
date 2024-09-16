@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97e29807_ef4ee5c8",
+        "filename": "src/libANGLE/CLImage.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T04:18:15Z",
+      "side": 1,
+      "message": "Can the desc be made to have 1 for 1D images so you wouldn\u0027t need the switch? Same with array size and 3D depth below.",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 21
+      },
+      "revId": "064d5252a915ec251a1bea0fa99fe85591f3ce0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
