@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5116fd42_666eb7f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T13:45:12Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "118d4ef40d479e6d9aa4cccd15c4140ba6b05312",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48ff029d_5adf9d96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T13:45:12Z",
+      "side": 1,
+      "message": "To avoid getting security people worried, could you please initialize the memory to something fixed if size is \u003e 0?",
+      "revId": "118d4ef40d479e6d9aa4cccd15c4140ba6b05312",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
