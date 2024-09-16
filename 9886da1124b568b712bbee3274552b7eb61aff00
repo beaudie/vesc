@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b04d5666_d53e0a32",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3503,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-16T23:21:35Z",
+      "side": 1,
+      "message": "What if it support AHB but not _lockPlanes API? Previously the test will still run, but after this CL, the test will be skipped. The test appears can run without lockPlanes API.\n\nSame thing for a few other tests as well.",
+      "range": {
+        "startLine": 3503,
+        "startChar": 0,
+        "endLine": 3503,
+        "endChar": 51
+      },
+      "revId": "9886da1124b568b712bbee3274552b7eb61aff00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
