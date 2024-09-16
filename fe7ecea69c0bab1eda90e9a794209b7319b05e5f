@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4fee05a_2f2bdb69",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-16T16:28:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17bdbe6b_5721dbf4",
+      "range": {
+        "startLine": 541,
+        "startChar": 9,
+        "endLine": 541,
+        "endChar": 42
+      },
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f2608ad_b0d2a044",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-09-16T04:13:12Z",
       "side": 1,
       "message": "Is this logically correct? What happens if I have a texture, bind it to two different framebuffers, then set the sRGB write control modes to two different states in the framebuffers? Given that these RTs update the ImageViewHelper class (shared between the framebuffers), it looks like state is leaked from one FBO to the other.\n\nLike, take this test:\n\n* Setup texture\n* Setup FBO 1 using texture, configure sRGB write control mode to some state\n* Setup FBO 2 using texture, configure sRGB write control mode to another state\n* Draw with FBO 2\n* Draw with FBO 1\n* Verify write through FBO2 used second state, and write through FBO1 used first state\n\nDoes the test pass?",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8829c622_9dfa8b8f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-16T16:28:19Z",
+      "side": 1,
+      "message": "sRGB write control mode is context state not framebuffer state, so toggling context state should affect all fbos",
+      "parentUuid": "1f2608ad_b0d2a044",
       "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -60,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43c31220_e7827799",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3448,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-16T16:28:19Z",
+      "side": 1,
+      "message": "working on it",
+      "parentUuid": "1b99e27a_18cd98bd",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "660e5ba3_92744e4a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
@@ -77,6 +137,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "afed0599_a0c52908",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3723,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-16T16:28:19Z",
+      "side": 1,
+      "message": "\u003e mImageCreateFlags is supposed to be initialized with mImage-\u003egetCreateFlags()\n\nthat is true for an EGLImage target texture which will inherit the flags from `ImageHelper` but an EGLImage source texture will not. This was causing an unnecessary respecifyStorage / refreshImageViews call on the texture during syncState on platforms that support `VK_KHR_image_format_list`",
+      "parentUuid": "660e5ba3_92744e4a",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "860ce6fc_b1971657",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 20
@@ -88,6 +166,24 @@
       "writtenOn": "2024-09-16T04:13:12Z",
       "side": 1,
       "message": "Could you please add a test for this if there isn\u0027t one already?",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af68847c_926f8a8b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3786,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-16T16:28:19Z",
+      "side": 1,
+      "message": "working on it",
+      "parentUuid": "860ce6fc_b1971657",
       "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -115,6 +211,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcc9d618_83243dd6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 12020,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-16T16:28:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0979a0a_b205b8fd",
+      "range": {
+        "startLine": 12005,
+        "startChar": 0,
+        "endLine": 12020,
+        "endChar": 5
+      },
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10d4fa4f_e57588fa",
@@ -128,6 +248,24 @@
       "writtenOn": "2024-09-16T04:13:12Z",
       "side": 1,
       "message": "No renderer? These fail on the platforms regardless of GL, Vulkan, D3D?",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f421796_68464cd1",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 20
+      },
+      "lineNbr": 1566,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-16T16:28:19Z",
+      "side": 1,
+      "message": "on windows there are some that fail with d3d and some with vulkan, the rest of the backends are skipped. although im not sure why `Texture3DCopy` tests are being flaky, those tests have nothing to do with sRGB",
+      "parentUuid": "10d4fa4f_e57588fa",
       "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
