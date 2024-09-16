@@ -299,6 +299,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce164411_a09292f1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5416,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-16T19:36:57Z",
+      "side": 1,
+      "message": "\u003e So `verifyPipelineCacheInBlobCache` would tell whether we want verification or not\n\nYes, but it will be strange to not want verification if platform is not LRU. Without LRU, cache will be almost 100% corrupted once it become full. Verification and restore is a must without LRU.\n\nI think we can define this by default:\n- `hasBlobCacheThatEvictsOldItemsFirst \u003d true` - assume LRU implementation\n- `verifyPipelineCacheInBlobCache \u003d !hasBlobCacheThatEvictsOldItemsFirst` - verify only if not LRU (also assume LRU that evicts minimum number of items)",
+      "parentUuid": "99946790_65f5e215",
+      "range": {
+        "startLine": 5411,
+        "startChar": 0,
+        "endLine": 5416,
+        "endChar": 89
+      },
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8aec5e88_0bed3bb2",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
