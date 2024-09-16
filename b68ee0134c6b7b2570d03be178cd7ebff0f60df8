@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c53daf61_8d424e7d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T14:35:01Z",
+      "side": 1,
+      "message": "`isMissing` is local to this function, I suggest taking it out of the chunk info and storing it in e.g. a `std::vector\u003cbool\u003e` locally in this function.",
+      "revId": "b68ee0134c6b7b2570d03be178cd7ebff0f60df8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

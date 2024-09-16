@@ -275,6 +275,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "99946790_65f5e215",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5416,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T14:35:01Z",
+      "side": 1,
+      "message": "Sorry about the delays, I was at the F2F last week.\n\nThank you, `verifyPipelineCacheInBlobCache` looks good. For `verifyPipelineCacheInBlobCacheUsingLoop`, looking at the code and your explanation, using `hasBlobCacheThatEvictsOldItemsFirst` instead kind of makes more sense to me.\n\nSo `verifyPipelineCacheInBlobCache` would tell whether _we_ want verification or not, and `hasBlobCacheThatEvictsOldItemsFirst` would tell whether _the platform_ is LRU or not.",
+      "parentUuid": "20c2534e_1595d0d0",
+      "range": {
+        "startLine": 5411,
+        "startChar": 0,
+        "endLine": 5416,
+        "endChar": 89
+      },
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8aec5e88_0bed3bb2",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
