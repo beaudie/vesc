@@ -52,6 +52,24 @@
       "parentUuid": "d3e4e733_a34f6b75",
       "revId": "b5280aa3701778819be0a628661d440f3bc88fcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f811ecdf_a64a52a0",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-16T18:33:08Z",
+      "side": 0,
+      "message": "\u003e A test might be passing now but still say fail in the expectation.\n\nWe do have logs showing [mismatching expectations](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/deqp_support/angle_deqp_gtest.cpp;l\u003d569;drc\u003d59f6d962e6c88f011b8dcc044f5637ab7ffb7710), although it won\u0027t flag crashing / alert on bot so no one is actively cleaning up the mismatch expectations.\n\n\u003e Letting the suite die is also not great because when a test is renamed we won\u0027t see the newly failing tests, we would just see an \"unused expectation\" crash.\n\nI think in that case, people will have remove the unused expectation entry, re-upload CL, and then they will see the newly failing tests?\n\n\u003e Also I described my reasoning on why I dislike manual rolls, which crashing on unused expectations forces, on the previous CL.\n\nOk, it is probably a minor thing comparing to other work we need to do.",
+      "parentUuid": "ac236b6a_ff38982b",
+      "revId": "b5280aa3701778819be0a628661d440f3bc88fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
