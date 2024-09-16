@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3604a828_30f114c9",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-16T15:37:07Z",
+      "side": 1,
+      "message": "Resolved",
+      "parentUuid": "28ebfa56_2cdf7109",
+      "range": {
+        "startLine": 139,
+        "startChar": 2,
+        "endLine": 139,
+        "endChar": 130
+      },
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c2809dd_c3dcf615",
@@ -109,6 +133,30 @@
       "side": 1,
       "message": "I find inline documentation much easier to use _and maintain_ than a doc elsewhere, until it completely blows up. I had considered .md but I think this is better.",
       "parentUuid": "6c2809dd_c3dcf615",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 45
+      },
+      "revId": "d72f9ae0123fbb34bdd16602698b2b2c7055ef40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0975f0a_385abf9c",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-16T15:37:07Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "013a3b65_23470904",
       "range": {
         "startLine": 141,
         "startChar": 0,
