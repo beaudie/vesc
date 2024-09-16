@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3fcdd4b_ffee5fdc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T15:24:25Z",
+      "side": 1,
+      "message": "nit: Redundant parentheses are noise\n\n```suggestion\n        isCubeMap ? gl::kCubeMapTextureTargetMin : gl::TextureTypeToTarget(mState.getType(), 0);\n```",
+      "revId": "7e8e56047c97ceb30314b564302c99caa5d187c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7500ce5_616c8d6a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T15:24:25Z",
+      "side": 1,
+      "message": "Reminder to definitely follow up on this, having it turn into LOAD_OP_CLEAR might be the only thing in this extension that\u0027s worth using it for on tilers.",
+      "revId": "7e8e56047c97ceb30314b564302c99caa5d187c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "397584a1_b18295ce",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T15:24:25Z",
+      "side": 1,
+      "message": "nit: Please deduplicate with the code in `TextureVk::setSubImageImpl`",
+      "range": {
+        "startLine": 973,
+        "startChar": 0,
+        "endLine": 985,
+        "endChar": 5
+      },
+      "revId": "7e8e56047c97ceb30314b564302c99caa5d187c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4ab5166_4d2f6de1",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2325,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T15:24:25Z",
+      "side": 1,
+      "message": "The RP closes at some point in the future anyway, so the clear will sooner or later apply. The bigger problem is that if the render area expands due to a scissor change, the clear covers an area larger than expected:\n\n```suggestion\n    // closed and the render area grows due to scissor change, the clear area unexpectedly\n    // changes.  This can be avoided if the scissor code takes LOAD_OP_CLEAR into account\n    // before deciding to grow the render pass\u0027s render area.\n```",
+      "revId": "7e8e56047c97ceb30314b564302c99caa5d187c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0cb0575_ca7c4c99",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2582,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T15:24:25Z",
+      "side": 1,
+      "message": "nit: would be good to explain why this works after saying it\u0027s intentional.",
+      "revId": "7e8e56047c97ceb30314b564302c99caa5d187c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
