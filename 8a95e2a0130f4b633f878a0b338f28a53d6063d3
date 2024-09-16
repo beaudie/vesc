@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed9875df_91a21e84",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5183,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-16T16:58:38Z",
+      "side": 1,
+      "message": "Does it mean it is ok if there is no benefit in creating monolithic pipelines when `graphicsPipelineLibraryFastLinking` is true? As long as there is no regressions.",
+      "revId": "8a95e2a0130f4b633f878a0b338f28a53d6063d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
