@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92c1a0bc_37b3eb26",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-09-16T22:15:40Z",
+      "side": 1,
+      "message": "Removing this change.",
+      "revId": "a6203f7fc2fbd180c0b042b9a9567cd7c3e95a65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
