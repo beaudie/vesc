@@ -286,6 +286,24 @@
       "parentUuid": "10d4fa4f_e57588fa",
       "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b1cdb3c_ca73b433",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 20
+      },
+      "lineNbr": 1566,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-16T17:13:29Z",
+      "side": 1,
+      "message": "Ok, it\u0027d be preferable to skip these separately by renderer, as the fix (and subsequent unsuppress) is likely to be different for each.",
+      "parentUuid": "2f421796_68464cd1",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
