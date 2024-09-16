@@ -121,6 +121,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "411867f9_05cf903d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-16T20:31:45Z",
+      "side": 1,
+      "message": "\u003e Before drawing in context1/FBO1, you\u0027d need to use sync objects and rebind the texture\n\ni missed the \"rebind the texture\" suggestion. did you mean rebind as color attachment to fbo in context1 even though there was no state change in context1 or a state change in the fbo in context1?",
+      "parentUuid": "04adb95b_75b5bdba",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b99e27a_18cd98bd",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
