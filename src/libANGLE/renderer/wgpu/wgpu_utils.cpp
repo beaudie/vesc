@@ -168,8 +168,8 @@ void GenerateCaps(const wgpu::Device &device,
     glCaps->maxVertexAttribStride =
         rx::LimitToInt(std::min(limitsWgpu.maxVertexBufferArrayStride,
                                 static_cast<uint32_t>(std::numeric_limits<uint16_t>::max())));
-    glCaps->maxElementsIndices    = std::numeric_limits<GLint>::max();
-    glCaps->maxElementsVertices   = std::numeric_limits<GLint>::max();
+    glCaps->maxElementsIndices  = std::numeric_limits<GLint>::max();
+    glCaps->maxElementsVertices = std::numeric_limits<GLint>::max();
     glCaps->vertexHighpFloat.setIEEEFloat();
     glCaps->vertexMediumpFloat.setIEEEHalfFloat();
     glCaps->vertexLowpFloat.setIEEEHalfFloat();
@@ -581,5 +581,20 @@ wgpu::StencilOperation getStencilOp(const GLenum glStencilOp)
             return wgpu::StencilOperation::Keep;
     }
 }
+
+uint32_t GetFirstIndexForDrawCall(gl::DrawElementsType indexType, const void *indices)
+{
+    const size_t indexSize =
+        (indexType == gl::DrawElementsType::UnsignedInt) ? sizeof(GLuint) : sizeof(GLushort);
+    const uintptr_t indexBufferByteOffset = reinterpret_cast<uintptr_t>(indices);
+    if (indexBufferByteOffset % indexSize != 0)
+    {
+        // WebGPU only allows offsetting index buffers by multiples of the index size
+        UNIMPLEMENTED();
+    }
+
+    return static_cast<uint32_t>(indexBufferByteOffset / indexSize);
+}
+
 }  // namespace gl_wgpu
 }  // namespace rx

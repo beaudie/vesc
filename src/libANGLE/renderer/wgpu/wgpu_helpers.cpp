@@ -347,6 +347,7 @@ angle::Result ImageHelper::readPixels(rx::ContextWgpu *contextWgpu,
 
     wgpu::CommandBuffer commandBuffer = encoder.Finish();
     queue.Submit(1, &commandBuffer);
+
     encoder = nullptr;
 
     ANGLE_TRY(bufferHelper.mapImmediate(contextWgpu, wgpu::MapMode::Read, 0, allocationSize));
