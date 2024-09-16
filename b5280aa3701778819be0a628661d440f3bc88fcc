@@ -34,6 +34,24 @@
       ],
       "revId": "b5280aa3701778819be0a628661d440f3bc88fcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac236b6a_ff38982b",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-16T17:52:17Z",
+      "side": 0,
+      "message": "I too would prefer a better solution but:\n\nThis is only one case of \"bad\" expectations. A test might be passing now but still say fail in the expectation. A pattern might be too broad. The case of an unused expectation might be the least problematic of all?..\n\nLetting the suite die is also not great because when a test is renamed we won\u0027t see the newly failing tests, we would just see an \"unused expectation\" crash.\n\nAlso I described my reasoning on why I dislike manual rolls, which crashing on unused expectations forces, on the previous CL (we might disagree on the weight of this but the point is still there): https://chromium-review.googlesource.com/c/angle/angle/+/5238992/comments/5d250be2_d3062a94",
+      "parentUuid": "d3e4e733_a34f6b75",
+      "revId": "b5280aa3701778819be0a628661d440f3bc88fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
