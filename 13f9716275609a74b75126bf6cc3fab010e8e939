@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d30c66c7_b87e67aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1146485
+      },
+      "writtenOn": "2024-09-16T16:09:42Z",
+      "side": 1,
+      "message": "It will be hit-or-miss according to https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id\u003d370704e707a5f2d3c9a1d4ed8bd8cd67507d7bb5.  `get_next_ino` is 32-bit and is global.  Duplicated inode numbers happen when it overflows.\n\nkcmp is preferred.  I can take care of cros as issues come up.  But I might need help for other setups (if any).",
+      "revId": "13f9716275609a74b75126bf6cc3fab010e8e939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef6a15b1_6c716045",
