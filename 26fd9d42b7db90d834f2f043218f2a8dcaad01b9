@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff800999_fe1b3a05",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-17T23:19:06Z",
+      "side": 1,
+      "message": "nit",
+      "range": {
+        "startLine": 1345,
+        "startChar": 42,
+        "endLine": 1345,
+        "endChar": 56
+      },
+      "revId": "26fd9d42b7db90d834f2f043218f2a8dcaad01b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e02a0749_f89124e1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-17T23:19:06Z",
+      "side": 1,
+      "message": "Is there a change in performance/memory after this CL?",
+      "range": {
+        "startLine": 710,
+        "startChar": 12,
+        "endLine": 715,
+        "endChar": 13
+      },
+      "revId": "26fd9d42b7db90d834f2f043218f2a8dcaad01b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
