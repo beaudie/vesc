@@ -34,6 +34,24 @@
       "parentUuid": "d6b2fb27_8d4fb15e",
       "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8cea800_857248f8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-09-17T18:58:54Z",
+      "side": 1,
+      "message": "If only Win/Intel treats `depth \u003d 0` as a clear-op, it\u0027s likely a driver bug that will be implicitly bypassed by exiting early here.\n\nThis means that this part should be removed and the tests updated, right?",
+      "parentUuid": "ace28b8c_295db863",
+      "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
