@@ -16,6 +16,29 @@
       "message": "Roman PTAL",
       "revId": "91a7f1ae56c5404a128a0a2ab476c71b7adc7ebb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e609ac4_a670e75c",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-17T19:10:46Z",
+      "side": 1,
+      "message": "These concatenations look a bit odd without the slash, maybe drop the trailing slash from storage_dir/cache_dir? (also out file path repeats quite a bit, could be a helper function that references _global internally which would be a bit easier to read)",
+      "range": {
+        "startLine": 127,
+        "startChar": 37,
+        "endLine": 127,
+        "endChar": 69
+      },
+      "revId": "91a7f1ae56c5404a128a0a2ab476c71b7adc7ebb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
