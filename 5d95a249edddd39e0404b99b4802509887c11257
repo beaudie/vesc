@@ -34,6 +34,24 @@
       "parentUuid": "9d4b5747_a7522175",
       "revId": "5d95a249edddd39e0404b99b4802509887c11257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91023e20_93f4f7f8",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-09-17T21:01:05Z",
+      "side": 1,
+      "message": "Yep, went ahead and changed to `FastVector`. CTS run that uses `ArgumentWorkgroup` looks good as well:\n```\n$ ./test_c11_atomics atomic_init 2\u003e /dev/null | grep -e ArgumentWorkgroup -e PASSED -e FAILED\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %99 \u003d OpExtInst %25 %87 ArgumentWorkgroup %91 %97 %98 %97 %96\n         %99 \u003d OpExtInst %25 %87 ArgumentWorkgroup %91 %97 %98 %97 %96\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\n         %97 \u003d OpExtInst %24 %85 ArgumentWorkgroup %89 %95 %96 %95 %94\nPASSED sub-test.\nPASSED test.\n```\n\nDone.",
+      "parentUuid": "e828f67b_01d22629",
+      "revId": "5d95a249edddd39e0404b99b4802509887c11257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
