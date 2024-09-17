@@ -88,6 +88,24 @@
       "parentUuid": "16ca0e9c_c14cbd2b",
       "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2589ae94_78a6f8d6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-09-17T22:11:04Z",
+      "side": 1,
+      "message": "Do you mean `ClearTextureEXTTest.Clear2DWithZeroDepth`? It should not fail as the frontend is supposed to no-op it.",
+      "parentUuid": "1a32e99d_6e786047",
+      "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
