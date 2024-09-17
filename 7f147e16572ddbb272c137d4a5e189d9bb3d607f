@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e8cd3f4_bb768c82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-17T22:34:04Z",
+      "side": 1,
+      "message": "Most of the SimpleUniformTests pass as well but there are a couple that don\u0027t and it\u0027s not really worth naming each passing test individually at the moment. Enabled these deqp tests though.",
+      "parentUuid": "44d4c4ba_24a9baed",
+      "revId": "7f147e16572ddbb272c137d4a5e189d9bb3d607f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7892def_6ab7c2e8",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-09-17T17:31:12Z",
       "side": 1,
       "message": "nit: this is equivalent to `*blockSizeOut \u003d blockEncoder.getCurrentOffset();` unless you plan on adding more logic based on block size of 0 later.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 11
+      },
+      "revId": "7f147e16572ddbb272c137d4a5e189d9bb3d607f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22c04608_671ea7cf",
+        "filename": "src/libANGLE/renderer/wgpu/ProgramWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-17T22:34:04Z",
+      "side": 1,
+      "message": "I will also change this in Vulkan, I think it was there because of a TODO that has probably been resolved.",
+      "parentUuid": "a7892def_6ab7c2e8",
       "range": {
         "startLine": 65,
         "startChar": 0,
