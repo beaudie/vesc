@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7892def_6ab7c2e8",
+        "filename": "src/libANGLE/renderer/wgpu/ProgramWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-17T17:31:12Z",
+      "side": 1,
+      "message": "nit: this is equivalent to `*blockSizeOut \u003d blockEncoder.getCurrentOffset();` unless you plan on adding more logic based on block size of 0 later.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 11
+      },
+      "revId": "7f147e16572ddbb272c137d4a5e189d9bb3d607f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
