@@ -22,6 +22,30 @@
       },
       "revId": "84a3ae69efee7299f9a7baf9614af8e203e70ea7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "729c53c9_f2b680e7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5194,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-09-17T16:02:17Z",
+      "side": 1,
+      "message": "2 more dead machines now 😞\nhttps://chromium-swarm.appspot.com/task?id\u003d6c19574c54986f10\nhttps://chromium-swarm.appspot.com/task?id\u003d6c19574e4820ab10\n\nPlease make sure it passes on other bots before trying win-exp-test to avoid killing more machines.",
+      "parentUuid": "8c8250fa_4db8977b",
+      "range": {
+        "startLine": 5194,
+        "startChar": 28,
+        "endLine": 5194,
+        "endChar": 77
+      },
+      "revId": "84a3ae69efee7299f9a7baf9614af8e203e70ea7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
