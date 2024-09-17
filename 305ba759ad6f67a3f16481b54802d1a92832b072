@@ -16,6 +16,24 @@
       "message": "Nice, this leakage was very annoying!\nNot sure if this affects just Android, though.",
       "revId": "305ba759ad6f67a3f16481b54802d1a92832b072",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcc4a474_cd376f24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-17T19:28:30Z",
+      "side": 1,
+      "message": "setRequestedOrientation is naturally android specific, and that\u0027s what I narrowed it down to in my tests. Other things might be happening too but I\u0027ll start with this as it\u0027s a case I understand.",
+      "parentUuid": "bc472d49_4bba1fb6",
+      "revId": "305ba759ad6f67a3f16481b54802d1a92832b072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
