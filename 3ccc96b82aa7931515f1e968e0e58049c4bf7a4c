@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b31db2ab_e17939c6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-17T22:50:05Z",
+      "side": 1,
+      "message": "[1]\n\nbecause we call this with value cached in `mCurrentFramebufferDesc.getWriteControlMode()` which always reflects the latest write control state of the current context, we end up getting the correct imageviews",
+      "range": {
+        "startLine": 2736,
+        "startChar": 37,
+        "endLine": 2736,
+        "endChar": 63
+      },
+      "revId": "3ccc96b82aa7931515f1e968e0e58049c4bf7a4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
