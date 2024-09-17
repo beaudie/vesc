@@ -1307,14 +1307,14 @@ void PackedClearValuesArray::store(PackedAttachmentIndex index,
                                    const VkClearValue &clearValue)
 {
     ASSERT(aspectFlags != 0);
-    if (aspectFlags != VK_IMAGE_ASPECT_STENCIL_BIT)
-    {
-        storeNoDepthStencil(index, clearValue);
-    }
+    // To store stencil only value, caller must combine the depth and stencil and then use depth
+    // aspect to store.
+    ASSERT(aspectFlags != VK_IMAGE_ASPECT_STENCIL_BIT);
+    storeDepthStencil(index, clearValue);
 }
 
-void PackedClearValuesArray::storeNoDepthStencil(PackedAttachmentIndex index,
-                                                 const VkClearValue &clearValue)
+void PackedClearValuesArray::storeDepthStencil(PackedAttachmentIndex index,
+                                               const VkClearValue &clearValue)
 {
     mValues[index.get()] = clearValue;
 }
@@ -3220,7 +3220,7 @@ void RenderPassCommandBufferHelper::updateRenderPassDepthStencilClear(
     }
 
     // Bypass special D/S handling. This clear values array stores values packed.
-    mClearValues.storeNoDepthStencil(mDepthStencilAttachmentIndex, combinedClearValue);
+    mClearValues.storeDepthStencil(mDepthStencilAttachmentIndex, combinedClearValue);
 }
 
 void RenderPassCommandBufferHelper::growRenderArea(ContextVk *contextVk,

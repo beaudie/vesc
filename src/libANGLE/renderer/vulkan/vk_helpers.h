@@ -1151,7 +1151,7 @@ class PackedClearValuesArray final
     void store(PackedAttachmentIndex index,
                VkImageAspectFlags aspectFlags,
                const VkClearValue &clearValue);
-    void storeNoDepthStencil(PackedAttachmentIndex index, const VkClearValue &clearValue);
+    void storeDepthStencil(PackedAttachmentIndex index, const VkClearValue &clearValue);
     const VkClearValue &operator[](PackedAttachmentIndex index) const
     {
         return mValues[index.get()];
