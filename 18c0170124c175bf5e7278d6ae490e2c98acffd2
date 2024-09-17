@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6b2fb27_8d4fb15e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-09-17T17:23:21Z",
+      "side": 1,
+      "message": "Overriding `depth \u003d 0` to 1 for 2D textures contradicts the spec quote above. Shouldn\u0027t it be a no-op?",
+      "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
