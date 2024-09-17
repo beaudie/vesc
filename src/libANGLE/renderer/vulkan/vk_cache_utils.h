@@ -1375,7 +1375,7 @@ class PipelineCacheAccess
 };
 
 // Monolithic pipeline creation tasks are created as soon as a pipeline is created out of libraries.
-// However, they are not immediately posted to the worker queue to allow pacing.  One each use of a
+// However, they are not immediately posted to the worker queue to allow pacing.  On each use of a
 // pipeline, an attempt is made to post the task.
 class CreateMonolithicPipelineTask : public Context, public angle::Closure
 {
