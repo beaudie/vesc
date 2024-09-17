@@ -160,6 +160,24 @@
       "parentUuid": "bebae546_ae39c3cb",
       "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "876a7882_c3698959",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-09-17T23:35:10Z",
+      "side": 1,
+      "message": "Yes because the failure is no longer observable.",
+      "parentUuid": "0c389a93_9fd24fe8",
+      "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
