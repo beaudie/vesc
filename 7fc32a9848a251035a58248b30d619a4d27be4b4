@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23199c05_c6e96a68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-09-17T20:18:53Z",
+      "side": 1,
+      "message": "@Geoff @Shahbaz Thanks for the comments. For the past few weeks and currently, I\u0027ve been working on enabling OpenCL CTS in ANGLE to build on top of gtest. However, I will look at these reviews soon.",
+      "revId": "7fc32a9848a251035a58248b30d619a4d27be4b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
