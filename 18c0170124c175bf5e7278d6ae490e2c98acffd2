@@ -106,6 +106,24 @@
       "parentUuid": "1a32e99d_6e786047",
       "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "094b8661_41fe5eb6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10041,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-17T22:16:59Z",
+      "side": 1,
+      "message": "\u003e `ClearTextureEXTTest.Clear2DWithZeroDepth`\n\nYes.\n\n\u003e It should not fail as the frontend is supposed to no-op it.\n\nIf we return early from the frontend, wouldn\u0027t the driver bug above remain masked?",
+      "parentUuid": "2589ae94_78a6f8d6",
+      "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
