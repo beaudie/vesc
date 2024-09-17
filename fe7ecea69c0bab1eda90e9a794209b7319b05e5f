@@ -193,6 +193,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f4c48600_1f0653e9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-17T21:12:56Z",
+      "side": 1,
+      "message": "so to avoid duplication, do i remove the `srgbWriteControl` member from `mColorspaceState` and `mWriteColorspace` from `ImageViewHelper` class? Also add back `srgbWriteControl` parameter to all `get...DrawImageView...` calls?\n\nhave i understood your suggestion correctly?",
+      "parentUuid": "75644e4f_f9a47391",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b99e27a_18cd98bd",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
