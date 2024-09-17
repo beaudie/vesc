@@ -39,6 +39,30 @@
       },
       "revId": "91a7f1ae56c5404a128a0a2ab476c71b7adc7ebb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a87b711_8f73971e",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-17T19:23:26Z",
+      "side": 1,
+      "message": "by the way python\u0027s string interpolation can do function calls https://peps.python.org/pep-0498/#expression-evaluation\n\nso you could, if you like, make it into something like:\n`f\u0027shell rm -rf {_stdout_path()} {_gpumem_path()}\u0027`",
+      "parentUuid": "2e609ac4_a670e75c",
+      "range": {
+        "startLine": 127,
+        "startChar": 37,
+        "endLine": 127,
+        "endChar": 69
+      },
+      "revId": "91a7f1ae56c5404a128a0a2ab476c71b7adc7ebb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
