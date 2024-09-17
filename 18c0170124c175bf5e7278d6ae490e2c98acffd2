@@ -142,6 +142,24 @@
       "parentUuid": "094b8661_41fe5eb6",
       "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c389a93_9fd24fe8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10041,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-17T23:21:07Z",
+      "side": 1,
+      "message": "I see. Thanks for the clarification. I have restored the early return.\n\nShould the skip for Win/Intel be removed as well?",
+      "parentUuid": "bebae546_ae39c3cb",
+      "revId": "18c0170124c175bf5e7278d6ae490e2c98acffd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
