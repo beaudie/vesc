@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "44d4c4ba_24a9baed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-17T17:32:17Z",
+      "side": 1,
+      "message": "Ah, you can also remove expectations for get_uniform.\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/deqp_support/deqp_gles2_test_expectations.txt;l\u003d387;drc\u003d005345d4858e3b10f81d22eba89d7d7a602c4c32",
+      "revId": "7f147e16572ddbb272c137d4a5e189d9bb3d607f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7892def_6ab7c2e8",
         "filename": "src/libANGLE/renderer/wgpu/ProgramWgpu.cpp",
         "patchSetId": 3
