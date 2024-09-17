@@ -168,6 +168,24 @@
       "message": "nit: would be good to explain why this works after saying it\u0027s intentional.",
       "revId": "7e8e56047c97ceb30314b564302c99caa5d187c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74deddc7_28b6038c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2582,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-17T23:23:31Z",
+      "side": 1,
+      "message": "The `store()` function has been split into `storeColor()` and `storeDepthStencil()` in this CL: https://chromium-review.googlesource.com/c/angle/angle/+/5870921\n\nFor `storeDepthStencil()`, it is expected to pack the depth and stencil value together.\n\nAfter the CL above, the `clearAspectFlags` method has been replaced.",
+      "parentUuid": "d0cb0575_ca7c4c99",
+      "revId": "7e8e56047c97ceb30314b564302c99caa5d187c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
