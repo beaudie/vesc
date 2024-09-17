@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c8250fa_4db8977b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5194,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-09-17T15:47:20Z",
+      "side": 1,
+      "message": "Windows Intel UHD 770 machines have 32.0.101.5762 driver, so they support VK_EXT_graphics_pipeline_library, which will cause this to be enabled and kill the machines.",
+      "range": {
+        "startLine": 5194,
+        "startChar": 28,
+        "endLine": 5194,
+        "endChar": 77
+      },
+      "revId": "84a3ae69efee7299f9a7baf9614af8e203e70ea7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
