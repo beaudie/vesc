@@ -16,6 +16,24 @@
       "message": "Follow up idea: I don\u0027t recall the details, but if the spec ids are ANGLE-controlled, you might want to consider using an enum instead of `uint32_t` for them and a `PackedEnumMap` instead of `HashMap`.",
       "revId": "5d95a249edddd39e0404b99b4802509887c11257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e828f67b_01d22629",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-09-17T18:22:32Z",
+      "side": 1,
+      "message": "Yeah, not ANGLE controlled (we get these from clspv per kernel arg/ordinal for certain kernel args). For EnumMap we would need 0-255 (max kernel arg count) of `ARGn` entries in enum class. Also the kernel arg\u0027s spec const ID could potentially fall out of range of max kernel arg size `255` depending on what we get from clspv (would need some assert to tell us to bump size up within reason).\n\nActually, perhaps `angle::FastVector\u003cstd::pair\u003cuint32_t, uint32_t\u003e, 255\u003e` makes more sense, as we really dont need the benefit of individual fast lookup of these guys.",
+      "parentUuid": "9d4b5747_a7522175",
+      "revId": "5d95a249edddd39e0404b99b4802509887c11257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
