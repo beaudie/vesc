@@ -5187,16 +5187,11 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
     ANGLE_FEATURE_CONDITION(&mFeatures, hasEffectivePipelineCacheSerialization,
                             !isSwiftShader && !nvVersionLessThan520);
 
-    // When the driver sets graphicsPipelineLibraryFastLinking, it means that monolithic pipelines
-    // are just a bundle of the libraries, and that there is no benefit in creating monolithic
-    // pipelines.
-    //
-    // Note: for testing purposes, this is enabled on SwiftShader despite the fact that it doesn't
-    // need it.  This should be undone once there is at least one bot that supports
-    // VK_EXT_graphics_pipeline_library without graphicsPipelineLibraryFastLinking
-    ANGLE_FEATURE_CONDITION(
-        &mFeatures, preferMonolithicPipelinesOverLibraries,
-        !mGraphicsPipelineLibraryProperties.graphicsPipelineLibraryFastLinking || isSwiftShader);
+    // Practically all drivers still prefer to do cross-stage linking.
+    // graphicsPipelineLibraryFastLinking allows them to quickly produce working pipelines, but it
+    // is typically not as efficient as complete pipelines.
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferMonolithicPipelinesOverLibraries,
+                            mFeatures.supportsGraphicsPipelineLibrary.enabled);
 
     // Whether the pipeline caches should merge into the global pipeline cache.  This should only be
     // enabled on platforms if:
@@ -5497,7 +5492,8 @@ angle::Result Renderer::getPipelineCache(vk::Context *context,
     ANGLE_TRY(ensurePipelineCacheInitialized(context));
 
     angle::SimpleMutex *pipelineCacheMutex =
-        (context->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)
+        context->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled ||
+                context->getFeatures().preferMonolithicPipelinesOverLibraries.enabled
             ? &mPipelineCacheMutex
             : nullptr;
 
