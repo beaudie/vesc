@@ -323,6 +323,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3046d9f9_e24f54a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5416,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-17T15:20:24Z",
+      "side": 1,
+      "message": "Sounds good",
+      "parentUuid": "ce164411_a09292f1",
+      "range": {
+        "startLine": 5411,
+        "startChar": 0,
+        "endLine": 5416,
+        "endChar": 89
+      },
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8aec5e88_0bed3bb2",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
