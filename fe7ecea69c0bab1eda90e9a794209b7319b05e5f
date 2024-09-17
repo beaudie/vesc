@@ -175,6 +175,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "75644e4f_f9a47391",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-17T16:22:15Z",
+      "side": 1,
+      "message": "That\u0027s a whole can of worms TBH. There might be things we need to do on bind, but for this particular problem, I think you\u0027re much better off just adding another array-ness to the relevant views in ImageViewHelper to select the views based on the srgb write mode.",
+      "parentUuid": "724c950d_933c3c4f",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b99e27a_18cd98bd",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
