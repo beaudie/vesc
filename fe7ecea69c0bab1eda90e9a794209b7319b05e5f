@@ -157,6 +157,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "724c950d_933c3c4f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-17T16:18:07Z",
+      "side": 1,
+      "message": "\u003e I think modifying the image views based on a per-context or per-framebuffer state is just going to be problematic\n\nthis is true if it is not texture\u0027s state. thankfully write control is the only such state, all other colorspace state like decode and override are texture state\n\nso, we just need special handling for writecontrol and building on your comment -\n\u003e we don\u0027t do anything on bind\n\nwe could enhance this to hook into observer interface which marks the observing framebuffer\u0027s `DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE` bit as dirty so a subsequent draw will do the right thing",
+      "parentUuid": "4bce8b79_e5162189",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b99e27a_18cd98bd",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
