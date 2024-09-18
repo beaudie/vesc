@@ -22,6 +22,30 @@
       },
       "revId": "28f67a307cff16a394ed36bfff029e93aac08d99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73a4ce3a_16c85a1b",
+        "filename": "src/tests/restricted_traces/sync_restricted_traces_to_cipd.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-09-18T17:29:42Z",
+      "side": 1,
+      "message": "Error message after:\n\n```\nERROR:root:\"RequiredExtensions\" missing from animal_crossing.json. Please run retrace_restricted_traces.py with \"get_min_reqs\":\n  ./src/tests/restricted_traces/retrace_restricted_traces.py get_min_reqs out/LinuxDebug --traces \"animal_crossing\"\n```",
+      "parentUuid": "cd1dab2a_0a895bb3",
+      "range": {
+        "startLine": 96,
+        "startChar": 72,
+        "endLine": 96,
+        "endChar": 133
+      },
+      "revId": "28f67a307cff16a394ed36bfff029e93aac08d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
