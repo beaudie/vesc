@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e36ce64_cb4790d8",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-18T14:27:33Z",
+      "side": 1,
+      "message": "Unused",
+      "revId": "fc543d8925085d7a0ac438e9f195f48ddf3141e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9089fdae_1f6de738",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-18T14:27:33Z",
+      "side": 1,
+      "message": "Unused",
+      "revId": "fc543d8925085d7a0ac438e9f195f48ddf3141e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac62133d_243b0560",
         "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.h",
         "patchSetId": 9
