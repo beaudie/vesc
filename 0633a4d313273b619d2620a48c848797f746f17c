@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e50b308_81ca4e81",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10049,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-18T14:10:27Z",
+      "side": 1,
+      "message": "nit: remember to remove comments before landing",
+      "revId": "0633a4d313273b619d2620a48c848797f746f17c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "687b35f6_27f48f51",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4680,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-18T14:10:27Z",
+      "side": 1,
+      "message": "nit: remember to remove comments before landing",
+      "revId": "0633a4d313273b619d2620a48c848797f746f17c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
