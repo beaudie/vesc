@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04a2010_34d547ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-09-18T18:36:20Z",
+      "side": 1,
+      "message": "Example json diff output:\n```\nGet Min Requirements modifications to animal_crossing.json:\n--- \n+++ \n@@ -1,4 +1,8 @@\n {\n+    \"RequiredExtensions\": [\n+        \"GL_EXT_texture_cube_map_array\",\n+        \"GL_EXT_texture_filter_anisotropic\"\n+    ],\n     \"TraceFiles\": [\n         \"animal_crossing_context2.cpp\",\n         \"animal_crossing_context2.h\",\nFinished get_min_reqs for all traces specified\n\n```",
+      "revId": "049b03f68b1ba74cbce6e58063b58fe19c1f977a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
