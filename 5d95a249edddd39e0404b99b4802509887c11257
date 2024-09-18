@@ -52,6 +52,24 @@
       "parentUuid": "e828f67b_01d22629",
       "revId": "5d95a249edddd39e0404b99b4802509887c11257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db03cb21_1380de88",
+        "filename": "src/libANGLE/renderer/vulkan/CLKernelVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-18T00:23:19Z",
+      "side": 1,
+      "message": "Ack. FWIW, we generally avoid `std::pair`, it\u0027s quick to use but ultimately hard to read. Feel free to change to a little struct.",
+      "parentUuid": "91023e20_93f4f7f8",
+      "revId": "5d95a249edddd39e0404b99b4802509887c11257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
