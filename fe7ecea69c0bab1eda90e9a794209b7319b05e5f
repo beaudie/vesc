@@ -496,6 +496,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d20c309_9d8024f2",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3786,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-18T16:46:01Z",
+      "side": 1,
+      "message": "Yes, see this change: https://chromium-review.googlesource.com/c/angle/angle/+/4657058",
+      "parentUuid": "715f7647_bcec30aa",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0979a0a_b205b8fd",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 20
