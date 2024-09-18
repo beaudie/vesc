@@ -10041,6 +10041,21 @@ void Context::clearTexSubImage(TextureID texturePacked,
                                              static_cast<const uint8_t *>(data)));
 }
 
+void Context::texStorageAttribs2D(GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width,
+                             GLsizei height, const GLint *attrib_list)
+{
+    //Extents size(width, height, 1);
+    //Texture *texture = getTextureByType(target);
+    //ANGLE_CONTEXT_TRY(texture->setStorage(this, target, levels, internalFormat, size));
+    UNIMPLEMENTED();
+}
+
+void Context::texStorageAttribs3D(GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width,
+                             GLsizei height, GLsizei depth, const GLint *attrib_list)
+{
+    UNIMPLEMENTED();
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Debug *debug,
                    const angle::FrontendFeatures &frontendFeatures,
