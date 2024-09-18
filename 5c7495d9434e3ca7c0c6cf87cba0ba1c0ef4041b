@@ -87,6 +87,24 @@
       "parentUuid": "dbae459f_ca838a0d",
       "revId": "5c7495d9434e3ca7c0c6cf87cba0ba1c0ef4041b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad3b8266_ac82dd9a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5367,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-18T15:12:38Z",
+      "side": 1,
+      "message": "Take care!\n\nWe\u0027ll have to notify vendors to adjust their drivers for this usage.",
+      "parentUuid": "cfb5bdb4_f580d2e5",
+      "revId": "5c7495d9434e3ca7c0c6cf87cba0ba1c0ef4041b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
