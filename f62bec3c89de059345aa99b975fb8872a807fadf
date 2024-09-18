@@ -16,6 +16,24 @@
       "message": "i see this failure on many bots but am not able to root-cause it -\n```\n[ RUN      ] MultithreadingTestES3.SharedSrgbTextureMultipleContexts/ES3_Vulkan\n../../src/tests/gl_tests/MultithreadingTest.cpp:3810: Failure\nValue of: threadSynchronization.waitForStep(Step::Thread1Draw2)\n  Actual: false\nExpected: true\n../../src/tests/gl_tests/MultithreadingTest.cpp:3867: Failure\nExpected: (currentStep) !\u003d (Step::Abort), actual: 4-byte object \u003c06-00 00-00\u003e vs 4-byte object \u003c06-00 00-00\u003e\n```\nany suggestions?",
       "revId": "f62bec3c89de059345aa99b975fb8872a807fadf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d89e2e3d_da27b21c",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 3737,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-18T22:10:08Z",
+      "side": 1,
+      "message": "looks like this multi-threaded test is causing a lot of instability in the bots that did not exist before? 😢",
+      "parentUuid": "0ef410f5_b45cb0ae",
+      "revId": "f62bec3c89de059345aa99b975fb8872a807fadf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
