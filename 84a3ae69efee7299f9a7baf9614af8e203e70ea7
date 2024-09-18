@@ -46,6 +46,30 @@
       },
       "revId": "84a3ae69efee7299f9a7baf9614af8e203e70ea7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "238a31a0_567a32cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-18T15:34:09Z",
+      "side": 1,
+      "message": "Yeah sorry about that, it\u0027s disabled for intel/windows now",
+      "parentUuid": "729c53c9_f2b680e7",
+      "range": {
+        "startLine": 5194,
+        "startChar": 28,
+        "endLine": 5194,
+        "endChar": 77
+      },
+      "revId": "84a3ae69efee7299f9a7baf9614af8e203e70ea7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
