@@ -7010,8 +7010,16 @@ VkResult PipelineCacheAccess::createGraphicsPipeline(vk::Context *context,
                                                      vk::Pipeline *pipelineOut)
 {
     std::unique_lock<angle::SimpleMutex> lock = getLock();
+    std::cout << std::this_thread::get_id() << ": " << mPipelineCache->getHandle()
+              << " create graphics pipeline " << mMutex << std::endl;
 
-    return pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache);
+    const VkResult result =
+        pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache);
+
+    std::cout << std::this_thread::get_id() << ": " << mPipelineCache->getHandle()
+              << " create graphics pipeline ... done" << std::endl;
+
+    return result;
 }
 
 VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
@@ -7019,6 +7027,8 @@ VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
                                                     vk::Pipeline *pipelineOut)
 {
     std::unique_lock<angle::SimpleMutex> lock = getLock();
+    std::cout << std::this_thread::get_id() << ": " << mPipelineCache->getHandle()
+              << " create compute pipeline " << mMutex << std::endl;
 
     return pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache);
 }
@@ -7034,8 +7044,13 @@ void PipelineCacheAccess::merge(Renderer *renderer, const vk::PipelineCache &pip
     ASSERT(isThreadSafe());
 
     std::unique_lock<angle::SimpleMutex> lock = getLock();
+    std::cout << std::this_thread::get_id() << ": " << mPipelineCache->getHandle()
+              << " merge pipeline " << mMutex << std::endl;
 
     mPipelineCache->merge(renderer->getDevice(), 1, pipelineCache.ptr());
+
+    std::cout << std::this_thread::get_id() << ": " << mPipelineCache->getHandle()
+              << " merge pipeline ... done" << std::endl;
 }
 }  // namespace vk
 
