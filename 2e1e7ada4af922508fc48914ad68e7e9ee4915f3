@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cbfe266a_a5c75fd1",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-09-18T19:21:32Z",
+      "side": 1,
+      "message": "Oops, yeah I figure some of these old patches would conflict.\n\nWill do.",
+      "parentUuid": "e2feffa8_32e02641",
+      "revId": "2e1e7ada4af922508fc48914ad68e7e9ee4915f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "97655041_2713cc31",
         "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2024-09-16T14:41:59Z",
       "side": 1,
       "message": "Why downgrade to 32-bit?",
+      "revId": "2e1e7ada4af922508fc48914ad68e7e9ee4915f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39f064b5_42b490f6",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-09-18T19:21:32Z",
+      "side": 1,
+      "message": "My understanding is that larger address range benefit has more to do with SVM feature of OpenCL (Shared Virtual Memory) that was introduced in 2.0 spec (optional for 3.0).\n\nDriver supporting SVM allows pointer sharing between host and device (sharing entire host addressing space w/o need for map/unmap of resource). We currently do not support this in ANGLE, so we dont really take advantage of this too much (i.e. 32-bit GPU VA is enough).",
+      "parentUuid": "97655041_2713cc31",
       "revId": "2e1e7ada4af922508fc48914ad68e7e9ee4915f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
