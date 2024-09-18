@@ -69,6 +69,24 @@
       "parentUuid": "97655041_2713cc31",
       "revId": "2e1e7ada4af922508fc48914ad68e7e9ee4915f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "585aa582_bbd05f2e",
+        "filename": "src/libANGLE/renderer/vulkan/CLDeviceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-18T19:24:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "39f064b5_42b490f6",
+      "revId": "2e1e7ada4af922508fc48914ad68e7e9ee4915f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
