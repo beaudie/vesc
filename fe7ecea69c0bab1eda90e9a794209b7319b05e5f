@@ -354,6 +354,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "99909ced_aea92d7f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3448,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-18T16:26:53Z",
+      "side": 1,
+      "message": "\u003e For hasStaticTexelFetchAccess, can use two different programs, with and without texelFetch\n\nforgot to mention this, it looks like this path was only used for seamful cubemap emulation, do we care about it now?",
+      "parentUuid": "6469e7ae_cdbd60ee",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "660e5ba3_92744e4a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
