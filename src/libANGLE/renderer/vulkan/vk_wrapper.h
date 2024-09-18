@@ -16,6 +16,8 @@
 #include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
 #include "libANGLE/trace.h"
 
+#include <iostream>
+
 namespace rx
 {
 enum class DescriptorSetIndex : uint32_t;
@@ -93,6 +95,16 @@ struct HandleTypeHelper<priv::CommandBuffer>
 };
 
 #undef ANGLE_HANDLE_TYPE_HELPER_FUNC
+
+class [[nodiscard]] ScopedLog
+{
+  public:
+    ScopedLog(const char *prefix) : mPrefix(prefix) { std::cout << prefix << std::endl; }
+    ~ScopedLog() { std::cout << mPrefix << " ... done" << std::endl; }
+
+  private:
+    const char *mPrefix;
+};
 
 // Base class for all wrapped vulkan objects. Implements several common helper routines.
 template <typename DerivedT, typename HandleT>
@@ -1783,6 +1795,8 @@ ANGLE_INLINE void PipelineCache::destroy(VkDevice device)
 {
     if (valid())
     {
+        ScopedLog log("Pipeline cache destroy");
+        std::cout << std::this_thread::get_id() << " " << mHandle << std::endl;
         vkDestroyPipelineCache(device, mHandle, nullptr);
         mHandle = VK_NULL_HANDLE;
     }
@@ -1792,6 +1806,8 @@ ANGLE_INLINE VkResult PipelineCache::init(VkDevice device,
                                           const VkPipelineCacheCreateInfo &createInfo)
 {
     ASSERT(!valid());
+    ScopedLog log("Pipeline cache init");
+    std::cout << std::this_thread::get_id() << " " << mHandle << std::endl;
     // Note: if we are concerned with memory usage of this cache, we should give it custom
     // allocators.  Also, failure of this function is of little importance.
     return vkCreatePipelineCache(device, &createInfo, nullptr, &mHandle);
@@ -1802,6 +1818,8 @@ ANGLE_INLINE VkResult PipelineCache::merge(VkDevice device,
                                            const VkPipelineCache *srcCaches) const
 {
     ASSERT(valid());
+    ScopedLog log("Pipeline cache merge");
+    std::cout << std::this_thread::get_id() << " " << mHandle << std::endl;
     return vkMergePipelineCaches(device, mHandle, srcCacheCount, srcCaches);
 }
 
@@ -1810,6 +1828,8 @@ ANGLE_INLINE VkResult PipelineCache::getCacheData(VkDevice device,
                                                   void *cacheData) const
 {
     ASSERT(valid());
+    ScopedLog log("Pipeline cache get data");
+    std::cout << std::this_thread::get_id() << " " << mHandle << std::endl;
 
     // Note: vkGetPipelineCacheData can return VK_INCOMPLETE if cacheSize is smaller than actual
     // size. There are two usages of this function.  One is with *cacheSize == 0 to query the size
@@ -1835,6 +1855,8 @@ ANGLE_INLINE VkResult Pipeline::initGraphics(VkDevice device,
                                              const PipelineCache &pipelineCacheVk)
 {
     ASSERT(!valid());
+    ScopedLog log("Pipeline create graphics");
+    std::cout << std::this_thread::get_id() << " " << pipelineCacheVk.getHandle() << std::endl;
     return vkCreateGraphicsPipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, nullptr,
                                      &mHandle);
 }
@@ -1844,6 +1866,8 @@ ANGLE_INLINE VkResult Pipeline::initCompute(VkDevice device,
                                             const PipelineCache &pipelineCacheVk)
 {
     ASSERT(!valid());
+    ScopedLog log("Pipeline create compute");
+    std::cout << std::this_thread::get_id() << " " << pipelineCacheVk.getHandle() << std::endl;
     return vkCreateComputePipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, nullptr,
                                     &mHandle);
 }
