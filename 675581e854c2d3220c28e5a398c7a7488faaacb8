@@ -16,6 +16,24 @@
       "message": "Would be good to make the `LimitToInt` code limit to `INT_MAX / 2 + 1` right in this change to make sure this fails for the reason we want it to fail.\n\nAlternatively, you can cast `maxSize` here to `uint32_t`, and round it up to a multiple of 4, so that regardless of `maxSize`, the test uses a multiple of four offset.",
       "revId": "675581e854c2d3220c28e5a398c7a7488faaacb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b869714_6ae20fe0",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2006,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-19T18:44:49Z",
+      "side": 1,
+      "message": "Changed the `LimitToInt()` limit to `INT_MAX / 2 + 1`.\nI also wanted to add a new test to round up the size to a multiple of 4, but then it could sometimes fail due to the offset being perceived as a negative value.",
+      "parentUuid": "a6009a25_fff8c32a",
+      "revId": "675581e854c2d3220c28e5a398c7a7488faaacb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
