@@ -243,6 +243,8 @@ constexpr bool kHasATrace = true;
 void *gLibAndroid = nullptr;
 bool (*gATraceIsEnabled)(void);
 bool (*gATraceSetCounter)(const char *counterName, int64_t counterValue);
+void (*gATraceBeginSection)(const char *sectionName);
+void (*gATraceEndSection)(void);
 
 void SetupATrace()
 {
@@ -251,6 +253,9 @@ void SetupATrace()
         gLibAndroid       = dlopen("libandroid.so", RTLD_NOW | RTLD_LOCAL);
         gATraceIsEnabled  = (decltype(gATraceIsEnabled))dlsym(gLibAndroid, "ATrace_isEnabled");
         gATraceSetCounter = (decltype(gATraceSetCounter))dlsym(gLibAndroid, "ATrace_setCounter");
+        gATraceBeginSection =
+            (decltype(gATraceBeginSection))dlsym(gLibAndroid, "ATrace_beginSection");
+        gATraceEndSection = (decltype(gATraceEndSection))dlsym(gLibAndroid, "ATrace_endSection");
     }
 }
 
@@ -266,6 +271,22 @@ void ATraceCounter(const char *counterName, int64_t counterValue)
         gATraceSetCounter(counterName, counterValue);
     }
 }
+
+void ATraceBeginSection(const char *sectionName)
+{
+    if (ATraceEnabled())
+    {
+        gATraceBeginSection(sectionName);
+    }
+}
+
+void ATraceEndSection(void)
+{
+    if (ATraceEnabled())
+    {
+        gATraceEndSection();
+    }
+}
 #else
 constexpr bool kHasATrace = false;
 void SetupATrace() {}
@@ -274,8 +295,19 @@ bool ATraceEnabled()
     return false;
 }
 void ATraceCounter(const char *counterName, int64_t counterValue) {}
+void ATraceBeginSection(const char *sectionName) {}
+void ATraceEndSection(void) {}
 #endif
 }  // anonymous namespace
+
+SectionTrace::SectionTrace(const char *sectionName)
+{
+    ATraceBeginSection(sectionName);
+}
+SectionTrace::~SectionTrace()
+{
+    ATraceEndSection();
+}
 
 TraceEvent::TraceEvent(char phaseIn,
                        const char *categoryNameIn,
