@@ -6,6 +6,7 @@
 // CLProgramVk.cpp: Implements the class methods for CLProgramVk.
 
 #include "libANGLE/renderer/vulkan/CLProgramVk.h"
+#include "common/PackedEnums.h"
 #include "libANGLE/renderer/vulkan/CLContextVk.h"
 #include "libANGLE/renderer/vulkan/CLDeviceVk.h"
 #include "libANGLE/renderer/vulkan/clspv_utils.h"
@@ -19,6 +20,8 @@
 
 #include "clspv/Compiler.h"
 
+#include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "spirv/unified1/NonSemanticClspvReflection.h"
 #include "spirv/unified1/spirv.hpp"
 
@@ -394,9 +397,15 @@ CLProgramVk::~CLProgramVk()
     {
         pool.reset();
     }
-    mPoolBinding.reset();
+    for (vk::RefCountedDescriptorPoolBinding &binding : mDescriptorPoolBindings)
+    {
+        binding.reset();
+    }
     mShader.get().destroy(mContext->getDevice());
-    mMetaDescriptorPool.destroy(mContext->getRenderer());
+    for (DescriptorSetIndex index : angle::AllEnums<DescriptorSetIndex>())
+    {
+        mMetaDescriptorPools[index].destroy(mContext->getRenderer());
+    }
 }
 
 angle::Result CLProgramVk::build(const cl::DevicePtrs &devices,
@@ -661,60 +670,7 @@ angle::Result CLProgramVk::createKernel(const cl::Kernel &kernel,
         ANGLE_CL_RETURN_ERROR(CL_OUT_OF_HOST_MEMORY);
     }
 
-    // Update push contant range and add layout bindings for arguments
-    vk::DescriptorSetLayoutDesc descriptorSetLayoutDesc;
-    VkPushConstantRange pcRange = devProgram->pushConstRange;
-    for (const auto &arg : kernelImpl->getArgs())
-    {
-        VkDescriptorType descType = VK_DESCRIPTOR_TYPE_MAX_ENUM;
-        switch (arg.type)
-        {
-            case NonSemanticClspvReflectionArgumentStorageBuffer:
-            case NonSemanticClspvReflectionArgumentPodStorageBuffer:
-                descType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-                break;
-            case NonSemanticClspvReflectionArgumentUniform:
-            case NonSemanticClspvReflectionArgumentPodUniform:
-            case NonSemanticClspvReflectionArgumentPointerUniform:
-                descType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                break;
-            case NonSemanticClspvReflectionArgumentPodPushConstant:
-                // Get existing push constant range and see if we need to update
-                if (arg.pushConstOffset + arg.pushConstantSize > pcRange.offset + pcRange.size)
-                {
-                    pcRange.size = arg.pushConstOffset + arg.pushConstantSize - pcRange.offset;
-                }
-                continue;
-            default:
-                continue;
-        }
-        descriptorSetLayoutDesc.addBinding(arg.descriptorBinding, descType, 1,
-                                           VK_SHADER_STAGE_COMPUTE_BIT, nullptr);
-    }
-
-    // Get descriptor set layout from cache (creates if missed)
-    ANGLE_CL_IMPL_TRY_ERROR(
-        mContext->getDescriptorSetLayoutCache().getDescriptorSetLayout(
-            mContext, descriptorSetLayoutDesc,
-            &kernelImpl->getDescriptorSetLayouts()[DescriptorSetIndex::ShaderResource]),
-        CL_INVALID_OPERATION);
-
-    // Get pipeline layout from cache (creates if missed)
-    vk::PipelineLayoutDesc pipelineLayoutDesc;
-    pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::ShaderResource,
-                                                 descriptorSetLayoutDesc);
-    pipelineLayoutDesc.updatePushConstantRange(pcRange.stageFlags, pcRange.offset, pcRange.size);
-    ANGLE_CL_IMPL_TRY_ERROR(mContext->getPipelineLayoutCache().getPipelineLayout(
-                                mContext, pipelineLayoutDesc, kernelImpl->getDescriptorSetLayouts(),
-                                &kernelImpl->getPipelineLayout()),
-                            CL_INVALID_OPERATION);
-
-    // Setup descriptor pool
-    ANGLE_CL_IMPL_TRY_ERROR(
-        mMetaDescriptorPool.bindCachedDescriptorPool(
-            mContext, descriptorSetLayoutDesc, 1, &mContext->getDescriptorSetLayoutCache(),
-            &mDescriptorPools[DescriptorSetIndex::ShaderResource]),
-        CL_INVALID_OPERATION);
+    ANGLE_TRY(kernelImpl->init());
 
     *kernelOut = std::move(kernelImpl);
 
@@ -977,15 +933,19 @@ angle::spirv::Blob CLProgramVk::stripReflection(const DeviceProgramData *deviceP
     return binaryStripped;
 }
 
-angle::Result CLProgramVk::allocateDescriptorSet(const vk::DescriptorSetLayout &descriptorSetLayout,
+angle::Result CLProgramVk::allocateDescriptorSet(const DescriptorSetIndex setIndex,
+                                                 const vk::DescriptorSetLayout &descriptorSetLayout,
+                                                 vk::CommandBufferHelperCommon *commandBuffer,
                                                  VkDescriptorSet *descriptorSetOut)
 {
-    if (mDescriptorPools[DescriptorSetIndex::ShaderResource].get().valid())
+    if (mDescriptorPools[setIndex].get().valid())
     {
-        ANGLE_CL_IMPL_TRY_ERROR(
-            mDescriptorPools[DescriptorSetIndex::ShaderResource].get().allocateDescriptorSet(
-                mContext, descriptorSetLayout, &mPoolBinding, descriptorSetOut),
-            CL_INVALID_OPERATION);
+        ANGLE_CL_IMPL_TRY_ERROR(mDescriptorPools[setIndex].get().allocateDescriptorSet(
+                                    mContext, descriptorSetLayout,
+                                    &mDescriptorPoolBindings[setIndex], descriptorSetOut),
+                                CL_INVALID_OPERATION);
+
+        commandBuffer->retainResource(&mDescriptorPoolBindings[setIndex].get());
     }
     return angle::Result::Continue;
 }
