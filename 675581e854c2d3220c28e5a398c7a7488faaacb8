@@ -34,6 +34,24 @@
       "parentUuid": "a6009a25_fff8c32a",
       "revId": "675581e854c2d3220c28e5a398c7a7488faaacb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d92dc884_92b475f4",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2006,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-19T18:46:54Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3b869714_6ae20fe0",
+      "revId": "675581e854c2d3220c28e5a398c7a7488faaacb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
