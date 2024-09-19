@@ -2112,7 +2112,12 @@ void TracePerfTest::drawBenchmark()
     beginInternalTraceEvent(frameName);
 
     startGpuTimer();
-    mTraceReplay->replayFrame(mCurrentFrame);
+    {
+        std::ostringstream frameIndexString;
+        frameIndexString << "frameIndex" << mCurrentFrame;
+        SectionTrace(frameIndexString.str().c_str());
+        mTraceReplay->replayFrame(mCurrentFrame);
+    }
     stopGpuTimer();
 
     updatePerfCounters();
