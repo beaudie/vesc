@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ceefe8a_831c8a0d",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-19T16:50:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bca6a469_4d317a82",
+      "revId": "5c7495d9434e3ca7c0c6cf87cba0ba1c0ef4041b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1344071c_224bc57b",
@@ -103,6 +121,24 @@
       "side": 1,
       "message": "Take care!\n\nWe\u0027ll have to notify vendors to adjust their drivers for this usage.",
       "parentUuid": "cfb5bdb4_f580d2e5",
+      "revId": "5c7495d9434e3ca7c0c6cf87cba0ba1c0ef4041b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4ddd27d_ea9529de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5367,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-09-19T16:50:15Z",
+      "side": 1,
+      "message": "Checked on Windows.\n\n**NVIDIA GeForce RTX 3060 Laptop GPU (version 2228289536 or 531.68)** \nReturns `VK_ERROR_OUT_OF_DEVICE_MEMORY` from `vkCreatePipelineCache()` (similar to Mali, but different error).\n\n**Intel(R) UHD Graphics (version 1659119)**\nCauses infinite loop in `finishResourceUse()`, because same fence first returns `VK_NOT_READY` from `vkGetFenceStatus()`, but then returns immediately (without changing fence status) from `vkWaitForFences()` with `VK_SUCCESS`.\n\nBecause of all the failures, I disabled the feature by default for now.",
+      "parentUuid": "ad3b8266_ac82dd9a",
       "revId": "5c7495d9434e3ca7c0c6cf87cba0ba1c0ef4041b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
