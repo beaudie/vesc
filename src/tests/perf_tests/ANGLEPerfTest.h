@@ -39,6 +39,13 @@ class Event;
         ASSERT_EQ(static_cast<GLenum>(expected), static_cast<GLenum>(actual))
 #endif  // !defined(ASSERT_GLENUM_EQ)
 
+class SectionTrace
+{
+  public:
+    SectionTrace(const char *sectionName);
+    ~SectionTrace();
+};
+
 // These are trace events according to Google's "Trace Event Format".
 // See https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU
 // Only a subset of the properties are implemented.

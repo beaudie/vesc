@@ -2107,12 +2107,15 @@ void TracePerfTest::drawBenchmark()
                           mOffscreenFramebuffers[mTotalFrameCount % mMaxOffscreenBufferCount]);
     }
 
-    char frameName[32];
-    snprintf(frameName, sizeof(frameName), "Frame %u", mCurrentFrame);
-    beginInternalTraceEvent(frameName);
+    std::ostringstream frameName;
+    frameName << "Frame " << mCurrentFrame;
+    beginInternalTraceEvent(frameName.str().c_str());
 
     startGpuTimer();
-    mTraceReplay->replayFrame(mCurrentFrame);
+    {
+        SectionTrace(frameName.str().c_str());
+        mTraceReplay->replayFrame(mCurrentFrame);
+    }
     stopGpuTimer();
 
     updatePerfCounters();
@@ -2181,7 +2184,7 @@ void TracePerfTest::drawBenchmark()
         swap();
     }
 
-    endInternalTraceEvent(frameName);
+    endInternalTraceEvent(frameName.str().c_str());
 
     if (mCurrentFrame == mEndFrame)
     {
