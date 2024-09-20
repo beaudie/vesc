@@ -44,17 +44,19 @@ void main()
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
+        // Load the vertex data
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, mVertices);
+        glEnableVertexAttribArray(0);
+
         return true;
     }
 
     void destroy() override { glDeleteProgram(mProgram); }
 
+    void step(float dt, double totalTime) override { mVertices[1] = sin(totalTime); }
+
     void draw() override
     {
-        GLfloat vertices[] = {
-            0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f,
-        };
-
         // Set the viewport
         glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
 
@@ -64,15 +66,15 @@ void main()
         // Use the program object
         glUseProgram(mProgram);
 
-        // Load the vertex data
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-        glEnableVertexAttribArray(0);
-
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
   private:
     GLuint mProgram;
+
+    GLfloat mVertices[9] = {
+        0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f,
+    };
 };
 
 int main(int argc, char **argv)
