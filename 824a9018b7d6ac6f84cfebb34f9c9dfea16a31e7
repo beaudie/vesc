@@ -16,6 +16,29 @@
       "message": "shabi, charlie - anything else needed here?",
       "revId": "824a9018b7d6ac6f84cfebb34f9c9dfea16a31e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee43fcfd_e00cf6c6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-20T20:49:12Z",
+      "side": 1,
+      "message": "Worth to add `if(srgbWriteControlMode !\u003d mCurrentFramebufferDesc.getColorWriteControlMode())` check to skip updateColorAttachmentColorspace, given most time they will not change.",
+      "range": {
+        "startLine": 2522,
+        "startChar": 0,
+        "endLine": 2522,
+        "endChar": 81
+      },
+      "revId": "824a9018b7d6ac6f84cfebb34f9c9dfea16a31e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
