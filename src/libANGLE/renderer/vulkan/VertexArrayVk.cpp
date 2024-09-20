@@ -304,6 +304,7 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
       mCurrentArrayBufferDivisors{},
       mCurrentElementArrayBuffer(nullptr),
       mLineLoopHelper(contextVk->getRenderer()),
+      mOriginalElementArrayBuffer(nullptr),
       mDirtyLineLoopTranslation(true)
 {
     vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
@@ -795,6 +796,11 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 {
                     mCurrentElementArrayBuffer = nullptr;
                 }
+
+                // Since the line loop element array buffer will undergo conversion, there should be
+                // a pointer to the original buffer in case of multiple line loop draw calls from
+                // the same buffer.
+                mOriginalElementArrayBuffer = mCurrentElementArrayBuffer;
 
                 mLineLoopBufferFirstIndex.reset();
                 mLineLoopBufferLastIndex.reset();
