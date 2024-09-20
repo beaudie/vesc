@@ -34,6 +34,24 @@
       "parentUuid": "e5ea9b6e_a4d518ff",
       "revId": "4d613ca7ffbb95c0996843588c1276ffe70a18c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cb1e506_8cd73631",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-20T21:00:38Z",
+      "side": 0,
+      "message": "Oh right, you can change `kMaxCompatiblePresentModes` to something definitely too big, like 10, then check if `presentModeCount` stays `kMaxCompatiblePresentModes`.\n\nOnce we know the struct didn\u0027t have any effect, all we need to do is resize it to 1 and push `mDesiredSwapchainPresentMode`; every present mode is compatible with itself, we can pretend that\u0027s what the driver returned and the rest of the code is supposed to handle that.",
+      "parentUuid": "bbca0d51_ffec7af5",
+      "revId": "4d613ca7ffbb95c0996843588c1276ffe70a18c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
