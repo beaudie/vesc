@@ -16,6 +16,24 @@
       "message": "This might not be what we want. Thoughts:\n\nAre there any other scenarios the allow list was protecting us against? Any state we don\u0027t want to get into?\n\nI know we don\u0027t allow transform feedback, for example\n\nWe also don\u0027t want to allow glBindFramebuffer\n\nOr glDrawBuffers\n\nSo we can\u0027t just drop the allow list\n\nWe either need to keep it or turn it into a ban list\n\nFurthermore ... if we keep the ban list, we might as well keep the EXT implementation\n\nThe easiest path forward might be to keep the ban list and just do PLS introspection",
       "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "980e4a84_2e8e0da4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-20T14:24:30Z",
+      "side": 1,
+      "message": "Is this purely removing the implementation of ANGLE_pls over EXT_pls, or is there some form of support for EXT_pls (as an extension ANGLE would expose) that\u0027s being lost at the same time?\n\nI\u0027m asking because we\u0027re looking into exposing EXT_pls from the Vulkan backend, if there\u0027s anything to be salvaged from this for that purpose, I\u0027d like that part to stay at least.\n\n(otherwise I have no stake in this)",
+      "parentUuid": "d4b3191d_88c712af",
+      "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
