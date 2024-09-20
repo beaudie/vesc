@@ -462,6 +462,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a61e4fa2_cf1049c6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3448,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-20T17:53:13Z",
+      "side": 1,
+      "message": "fyi - and when i say \"aleardy here\" i mean i have either extended existing tests or added new tests as per request",
+      "parentUuid": "3ea4b4c0_33d56483",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "660e5ba3_92744e4a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
