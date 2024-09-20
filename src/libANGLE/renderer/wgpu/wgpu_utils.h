@@ -153,6 +153,8 @@ enum class RenderPassClosureReason
     GLFinish,
     EGLSwapBuffers,
     GLReadPixels,
+    IndexRangeReadback,
+    VertexArrayStreaming,
 
     InvalidEnum,
     EnumCount = InvalidEnum,
