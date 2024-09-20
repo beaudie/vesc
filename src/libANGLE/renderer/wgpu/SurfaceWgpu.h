@@ -128,6 +128,7 @@ class WindowSurfaceWgpu : public SurfaceWgpu
 
     angle::Result swapImpl(const gl::Context *context);
 
+    angle::Result configureSurface(const egl::Display *display, const gl::Extents &size);
     angle::Result updateCurrentTexture(const egl::Display *display);
 
     virtual angle::Result createWgpuSurface(const egl::Display *display,
@@ -137,9 +138,11 @@ class WindowSurfaceWgpu : public SurfaceWgpu
 
     EGLNativeWindowType mNativeWindow;
     wgpu::Surface mSurface;
-    wgpu::SwapChain mSwapChain;
+    bool mSurfaceConfigured = false;
 
-    gl::Extents mCurrentSwapChainSize;
+    wgpu::SurfaceTexture mCurrentTexture;
+
+    gl::Extents mCurrentSurfaceSize;
 
     AttachmentImage mColorAttachment;
     AttachmentImage mDepthStencilAttachment;
