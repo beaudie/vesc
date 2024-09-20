@@ -488,7 +488,9 @@ class LineLoopIndirectTest : public LineLoopTest
                  const void *indices,
                  GLuint indicesSize,
                  GLuint firstIndex,
-                 bool useBuffersAsUboFirst)
+                 bool useBuffersAsUboFirst,
+                 uint32_t consecutiveLineLoopCalls,
+                 uint32_t consecutiveNonLineLoopCalls)
     {
         struct DrawCommand
         {
@@ -558,8 +560,17 @@ class LineLoopIndirectTest : public LineLoopTest
         ASSERT_GL_NO_ERROR();
 
         glEnable(GL_BLEND);
-        glDrawElementsIndirect(GL_LINE_LOOP, indexType, nullptr);
-        ASSERT_GL_NO_ERROR();
+
+        for (uint32_t i = 0; i < consecutiveLineLoopCalls; i++)
+        {
+            glDrawElementsIndirect(GL_LINE_LOOP, indexType, nullptr);
+            ASSERT_GL_NO_ERROR();
+        }
+        for (uint32_t i = 0; i < consecutiveNonLineLoopCalls; i++)
+        {
+            glDrawElements(GL_LINE_STRIP, 5, indexType, nullptr);
+            ASSERT_GL_NO_ERROR();
+        }
 
         glBindBuffer(GL_DRAW_INDIRECT_BUFFER, 0);
 
@@ -599,7 +610,8 @@ TEST_P(LineLoopIndirectTest, UByteIndexIndirectBuffer)
     static const GLubyte indices[] = {0, 7, 6, 9, 8, 0};
 
     // Start at index 1.
-    runTest(GL_UNSIGNED_BYTE, reinterpret_cast<const void *>(indices), sizeof(indices), 1, false);
+    runTest(GL_UNSIGNED_BYTE, reinterpret_cast<const void *>(indices), sizeof(indices), 1, false, 1,
+            0);
 }
 
 TEST_P(LineLoopIndirectTest, UShortIndexIndirectBuffer)
@@ -614,7 +626,8 @@ TEST_P(LineLoopIndirectTest, UShortIndexIndirectBuffer)
     static const GLushort indices[] = {0, 7, 6, 9, 8, 0};
 
     // Start at index 1.
-    runTest(GL_UNSIGNED_SHORT, reinterpret_cast<const void *>(indices), sizeof(indices), 1, false);
+    runTest(GL_UNSIGNED_SHORT, reinterpret_cast<const void *>(indices), sizeof(indices), 1, false,
+            1, 0);
 }
 
 // Test that uploading data to buffer that's in use then using it for line loop elements works.
@@ -633,7 +646,8 @@ TEST_P(LineLoopIndirectTest, UseAsUBOThenUpdateThenUByteIndexIndirectBuffer)
     static const GLubyte indices[] = {0, 7, 6, 9, 8, 0};
 
     // Start at index 1.
-    runTest(GL_UNSIGNED_BYTE, reinterpret_cast<const void *>(indices), sizeof(indices), 1, true);
+    runTest(GL_UNSIGNED_BYTE, reinterpret_cast<const void *>(indices), sizeof(indices), 1, true, 1,
+            0);
 }
 
 // Test that uploading data to buffer that's in use then using it for line loop elements works.
@@ -652,7 +666,49 @@ TEST_P(LineLoopIndirectTest, UseAsUBOThenUpdateThenUShortIndexIndirectBuffer)
     static const GLushort indices[] = {0, 7, 6, 9, 8, 0};
 
     // Start at index 1.
-    runTest(GL_UNSIGNED_SHORT, reinterpret_cast<const void *>(indices), sizeof(indices), 1, true);
+    runTest(GL_UNSIGNED_SHORT, reinterpret_cast<const void *>(indices), sizeof(indices), 1, true, 1,
+            0);
+}
+
+// Test that two back-to-back indirect line-loop draws that share the same index buffer works.
+TEST_P(LineLoopIndirectTest, TwoIndirectDrawsShareIndexBuffer)
+{
+    // http://anglebug.com/42264370
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsQualcomm());
+
+    // Old drivers buggy with optimized ConvertIndexIndirectLineLoop shader.
+    // http://anglebug.com/40096699
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsVulkan());
+
+    // Disable D3D11 SDK Layers warnings checks, see ANGLE issue 667 for details
+    ignoreD3D11SDKLayersWarnings();
+
+    static const GLushort indices[] = {0, 7, 6, 9, 8, 0};
+
+    // Start at index 1.
+    runTest(GL_UNSIGNED_SHORT, reinterpret_cast<const void *>(indices), sizeof(indices), 1, true, 2,
+            0);
+}
+
+// Test that one indirect line-loop followed by one non-line-loop draw that share the same index
+// buffer works.
+TEST_P(LineLoopIndirectTest, IndirectAndElementDrawsShareIndexBuffer)
+{
+    // http://anglebug.com/42264370
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsQualcomm());
+
+    // Old drivers buggy with optimized ConvertIndexIndirectLineLoop shader.
+    // http://anglebug.com/40096699
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsVulkan());
+
+    // Disable D3D11 SDK Layers warnings checks, see ANGLE issue 667 for details
+    ignoreD3D11SDKLayersWarnings();
+
+    static const GLubyte indices[] = {7, 6, 9, 8, 7, 0};
+
+    // Start at index 0. The line-loop and the non-line-loop calls should draw the same object.
+    runTest(GL_UNSIGNED_BYTE, reinterpret_cast<const void *>(indices), sizeof(indices), 0, true, 1,
+            1);
 }
 
 ANGLE_INSTANTIATE_TEST_ES2(LineLoopTest);
