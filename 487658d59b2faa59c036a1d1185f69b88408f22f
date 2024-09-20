@@ -52,6 +52,24 @@
       "parentUuid": "980e4a84_2e8e0da4",
       "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "452f5b63_0647b5a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-09-20T23:42:05Z",
+      "side": 1,
+      "message": "Opinions, not strong ones:\n\nChris, did your experiments outside ANGLE show that using native EXT_pls wasn\u0027t faster than using shader images / framebuffer fetch? If so I\u0027m in favor of removing this code path and continuing to simplify the ANGLE_pls spec.\n\nChanging the allowlist to a ban list would make the ANGLE_pls spec easier to understand. There\u0027s a risk that new GLES extensions would require updates to the ANGLE_pls spec, but I think we can assume GLES isn\u0027t evolving quickly any more.\n\nWith ANGLE_pls\u0027s EXT_pls backend removed, are all the earlier constraints still needed, like forbidding transform feedback from being enabled? The less state in the extension, the simpler the browser-side implementation will be. The underlying EXT_pls doesn\u0027t document restrictions on transform feedback.\n\nI\u0027m all in favor of exposing the real EXT_pls in the Vulkan backend and don\u0027t want to take steps backward from that goal, but am also keenly interested in getting ANGLE_pls over the finish line.",
+      "parentUuid": "ea2e0667_c8654d87",
+      "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
