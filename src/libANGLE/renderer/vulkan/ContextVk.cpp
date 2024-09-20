@@ -4436,6 +4436,9 @@ angle::Result ContextVk::multiDrawElementsIndirectHelper(const gl::Context *cont
     mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
     mCurrentIndexBufferOffset = 0;
 
+    // Reset the current element array buffer (in case of conversion from a previous draw).
+    vertexArrayVk->resetCurrentElementArrayBuffer();
+
     if (vertexArrayVk->getStreamingVertexAttribsMask().any())
     {
         // Handling instanced vertex attributes is not covered for drawcount > 1.
