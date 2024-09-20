@@ -426,6 +426,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b100f5a_ccb77842",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3448,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-20T14:31:57Z",
+      "side": 1,
+      "message": "Sorry I missed that you were mentioning the tests already exist. Would you mind expanding them a bit?\n\n- SRGBTextureTest.SRGBDecodeTextureParameter: This goes from DECODE to SKIP_DECODE, need to do one more draw to go from SKIP_DECODE back to DECODE to test transitions both ways\n- SRGBTextureTest.SRGBOverrideTextureParameter: Similarly, goes from NONE to SRGB, needs another draw to test transition back to NONE\n- A test is needed for hasStaticTexelFetchAccess change; basically have two programs one where `texelFetch` is used, one where it isn\u0027t and make sure switching between the programs changes srgb mode correctly.",
+      "parentUuid": "c2b0e2fc_0e6433c2",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "660e5ba3_92744e4a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
