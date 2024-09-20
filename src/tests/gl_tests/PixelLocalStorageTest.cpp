@@ -2882,12 +2882,10 @@ GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(PixelLocalStorageTest);
                                    (EXT_shader_framebuffer_fetch_non_coherent). */        \
             .enable(Feature::EmulatePixelLocalStorage)                                    \
             .disable(Feature::SupportsShaderFramebufferFetchEXT)                          \
-            .disable(Feature::SupportsShaderPixelLocalStorageEXT),                        \
         PLATFORM(API, OPENGLES) /* OpenGL ES noncoherent (shader images). */              \
             .enable(Feature::EmulatePixelLocalStorage)                                    \
             .disable(Feature::SupportsShaderFramebufferFetchEXT)                          \
             .disable(Feature::SupportsShaderFramebufferFetchNonCoherentEXT)               \
-            .disable(Feature::SupportsShaderPixelLocalStorageEXT),                        \
         PLATFORM(API, VULKAN) /* Vulkan coherent. */                                      \
             .enable(Feature::AsyncCommandQueue)                                           \
             .enable(Feature::EmulatePixelLocalStorage),                                   \
