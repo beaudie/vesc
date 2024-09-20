@@ -4205,7 +4205,7 @@ gl::Version Renderer::getMaxSupportedESVersion() const
     // Limit to ES3.1 if there are any blockers for 3.2.
     ensureCapsInitialized();
     if (!mFeatures.exposeNonConformantExtensionsAndVersions.enabled &&
-        !CanSupportGLES32(mNativeExtensions))
+        !CanSupportGLES32(mNativeExtensions, mNativeTextureCaps))
     {
         maxVersion = LimitVersionTo(maxVersion, {3, 1});
     }

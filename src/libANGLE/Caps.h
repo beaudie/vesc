@@ -421,6 +421,7 @@ struct Caps
 };
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions);
+bool DetermineGLES32FormatSupport(const TextureCapsMap &textureCaps);
 }  // namespace gl
 
 namespace egl

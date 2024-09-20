@@ -1328,7 +1328,8 @@ void Renderer::ensureCapsInitialized() const
     LogMissingExtensionsForGLES32(mNativeExtensions);
 }
 
-bool CanSupportGLES32(const gl::Extensions &nativeExtensions)
+bool CanSupportGLES32(const gl::Extensions &nativeExtensions,
+                      const gl::TextureCapsMap &textureCapsMap)
 {
     std::vector<bool> requiredExtensions = GetRequiredGLES32ExtensionList(nativeExtensions);
     for (uint32_t index = 0; index < requiredExtensions.size(); index++)
@@ -1337,6 +1338,11 @@ bool CanSupportGLES32(const gl::Extensions &nativeExtensions)
         {
             return false;
         }
+    }
+
+    if (!gl::DetermineGLES32FormatSupport(textureCapsMap))
+    {
+        return false;
     }
 
     return true;

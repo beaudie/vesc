@@ -504,6 +504,20 @@ static bool DetermineASTCOESTExtureSupport(const TextureCapsMap &textureCaps)
     return GetFormatSupport(textureCaps, requiredFormats, true, true, false, false, false);
 }
 
+// Check for GLES 3.2 format support by checking if certain formats require being color-renderable
+// or renderbuffer support. In addition, some ASTC textures (LDR profile) should also be supported.
+// If these conditions are not met, ANGLE should fall back to GLES 3.1.
+bool DetermineGLES32FormatSupport(const TextureCapsMap &textureCaps)
+{
+    constexpr GLenum requiredCRFormats[] = {
+        GL_R16F, GL_RG16F, GL_RGBA16F, GL_R32F, GL_RG32F, GL_RGBA32F, GL_R11F_G11F_B10F,
+    };
+
+    // TODO: Should also check ASTC here or just the extension would be enough? Stencil8?
+    return GetFormatSupport(textureCaps, requiredCRFormats, false, false, true, true, false) &&
+           DetermineASTCLDRTextureSupport(textureCaps);
+}
+
 // Check for GL_ETC1_RGB8_OES support
 static bool DetermineETC1RGB8TextureSupport(const TextureCapsMap &textureCaps)
 {
