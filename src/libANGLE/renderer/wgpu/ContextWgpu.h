@@ -288,6 +288,9 @@ class ContextWgpu : public ContextImpl
     void invalidateVertexBuffers();
     void invalidateIndexBuffer();
 
+    void ensureCommandEncoderCreated();
+    wgpu::CommandEncoder &getCurrentCommandEncoder();
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
