@@ -48,7 +48,10 @@ class VertexArrayWgpu : public VertexArrayImpl
     angle::Result syncDirtyElementArrayBuffer(ContextWgpu *contextWgpu);
 
     gl::AttribArray<webgpu::PackedVertexAttribute> mCurrentAttribs;
+    gl::AttribArray<webgpu::BufferHelper> mStreamingArrayBuffers;
     gl::AttribArray<webgpu::BufferHelper *> mCurrentArrayBuffers;
+
+    webgpu::BufferHelper mStreamingIndexBuffer;
     webgpu::BufferHelper *mCurrentIndexBuffer = nullptr;
 };
 
