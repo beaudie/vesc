@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b3191d_88c712af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2024-09-20T06:36:14Z",
+      "side": 1,
+      "message": "This might not be what we want. Thoughts:\n\nAre there any other scenarios the allow list was protecting us against? Any state we don\u0027t want to get into?\n\nI know we don\u0027t allow transform feedback, for example\n\nWe also don\u0027t want to allow glBindFramebuffer\n\nOr glDrawBuffers\n\nSo we can\u0027t just drop the allow list\n\nWe either need to keep it or turn it into a ban list\n\nFurthermore ... if we keep the ban list, we might as well keep the EXT implementation\n\nThe easiest path forward might be to keep the ban list and just do PLS introspection",
+      "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
