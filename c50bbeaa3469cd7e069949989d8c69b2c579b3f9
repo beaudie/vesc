@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a28ebbd_cbe9e960",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-20T20:46:53Z",
+      "side": 1,
+      "message": "I suggest opening a public bug with Vulkan-Loader about the lack of this emulation (based on the Chat thread I linked you to), then link to that bug here. `b/...` is not public, and the comment is not descriptive of what\u0027s really going on.\n\nThen LunarG would also have a tracking issue to not forget this bug 😊",
+      "revId": "c50bbeaa3469cd7e069949989d8c69b2c579b3f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
