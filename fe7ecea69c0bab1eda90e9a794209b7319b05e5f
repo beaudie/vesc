@@ -444,6 +444,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ea4b4c0_33d56483",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3448,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-20T15:13:07Z",
+      "side": 1,
+      "message": "\u003e need to do one more draw to go from SKIP_DECODE back to DECODE to test transitions both ways\n\nalready here -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5841290/35/src/tests/gl_tests/SRGBTextureTest.cpp#273\n\n\u003e needs another draw to test transition back to NONE\n\nalready here -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5841290/35/src/tests/gl_tests/SRGBTextureTest.cpp#353\n\n\u003e basically have two programs one where texelFetch is used, one where it isn\u0027t\n\naleardy here -\u003e\n1. this draw happens with program that doesnt have texelfetch -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5841290/35/src/tests/gl_tests/SRGBTextureTest.cpp#316\n2. this draw happens with a program that has texelfetch -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5841290/35/src/tests/gl_tests/SRGBTextureTest.cpp#324",
+      "parentUuid": "0b100f5a_ccb77842",
+      "revId": "fe7ecea69c0bab1eda90e9a794209b7319b05e5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "660e5ba3_92744e4a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 20
