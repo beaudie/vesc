@@ -31,13 +31,12 @@ class SimpleVertexShaderSample : public SampleApplication
 
     bool initialize() override
     {
-        constexpr char kVS[] = R"(uniform mat4 u_mvpMatrix;
-attribute vec4 a_position;
+        constexpr char kVS[] = R"(attribute vec4 a_position;
 attribute vec2 a_texcoord;
 varying vec2 v_texcoord;
 void main()
 {
-    gl_Position = u_mvpMatrix * a_position;
+    gl_Position = a_position;
     v_texcoord = a_texcoord;
 })";
 
@@ -58,11 +57,9 @@ void main()
         mPositionLoc = glGetAttribLocation(mProgram, "a_position");
         mTexcoordLoc = glGetAttribLocation(mProgram, "a_texcoord");
 
-        // Get the uniform locations
-        mMVPMatrixLoc = glGetUniformLocation(mProgram, "u_mvpMatrix");
-
         // Generate the geometry data
         GenerateCubeGeometry(0.5f, &mCube);
+        mTransformedCubePositions.resize(mCube.positions.size());
 
         // Set an initial rotation
         mRotation = 45.0f;
@@ -70,6 +67,15 @@ void main()
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
+
+        // Load the vertex position
+        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0,
+                              mTransformedCubePositions.data());
+        glEnableVertexAttribArray(mPositionLoc);
+
+        // Load the texcoord data
+        glVertexAttribPointer(mTexcoordLoc, 2, GL_FLOAT, GL_FALSE, 0, mCube.texcoords.data());
+        glEnableVertexAttribArray(mTexcoordLoc);
 
         return true;
     }
@@ -83,15 +89,17 @@ void main()
         Matrix4 perspectiveMatrix = Matrix4::perspective(
             60.0f, float(getWindow()->getWidth()) / getWindow()->getHeight(), 1.0f, 20.0f);
 
-        Matrix4 modelMatrix = Matrix4::translate(angle::Vector3(0.0f, 0.0f, -2.0f)) *
+        Matrix4 modelMatrix = Matrix4::translate(angle::Vector3(0.0f, 0.0f, -3.0f)) *
                               Matrix4::rotate(mRotation, angle::Vector3(1.0f, 0.0f, 1.0f));
 
         Matrix4 viewMatrix = Matrix4::identity();
 
         Matrix4 mvpMatrix = perspectiveMatrix * viewMatrix * modelMatrix;
 
-        // Load the matrices
-        glUniformMatrix4fv(mMVPMatrixLoc, 1, GL_FALSE, mvpMatrix.data);
+        for (size_t i = 0; i < mCube.positions.size(); i++)
+        {
+            mTransformedCubePositions[i] = Matrix4::transform(mvpMatrix, mCube.positions[i]);
+        }
     }
 
     void draw() override
@@ -104,14 +112,6 @@ void main()
 
         // Use the program object
         glUseProgram(mProgram);
-
-        // Load the vertex position
-        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, mCube.positions.data());
-        glEnableVertexAttribArray(mPositionLoc);
-
-        // Load the texcoord data
-        glVertexAttribPointer(mTexcoordLoc, 2, GL_FLOAT, GL_FALSE, 0, mCube.texcoords.data());
-        glEnableVertexAttribArray(mTexcoordLoc);
 
         // Draw the cube
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mCube.indices.size()), GL_UNSIGNED_SHORT,
@@ -126,14 +126,12 @@ void main()
     GLint mPositionLoc;
     GLint mTexcoordLoc;
 
-    // Uniform locations
-    GLuint mMVPMatrixLoc;
-
     // Current rotation
     float mRotation;
 
     // Geometry data
     CubeGeometry mCube;
+    std::vector<angle::Vector3> mTransformedCubePositions;
 };
 
 int main(int argc, char **argv)
