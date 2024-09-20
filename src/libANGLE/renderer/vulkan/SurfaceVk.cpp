@@ -1673,28 +1673,43 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         VkSurfaceCapabilities2KHR surfaceCaps2 = {};
         surfaceCaps2.sType                     = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR;
 
-        mCompatiblePresentModes.resize(kMaxCompatiblePresentModes);
-
         VkSurfacePresentModeCompatibilityEXT compatibleModes = {};
         compatibleModes.sType            = VK_STRUCTURE_TYPE_SURFACE_PRESENT_MODE_COMPATIBILITY_EXT;
-        compatibleModes.presentModeCount = kMaxCompatiblePresentModes;
-        compatibleModes.pPresentModes    = mCompatiblePresentModes.data();
+        compatibleModes.presentModeCount = 0;
+        compatibleModes.pPresentModes    = nullptr;
         vk::AddToPNextChain(&surfaceCaps2, &compatibleModes);
 
         ANGLE_VK_TRY(context, vkGetPhysicalDeviceSurfaceCapabilities2KHR(
                                   renderer->getPhysicalDevice(), &surfaceInfo2, &surfaceCaps2));
 
-        mCompatiblePresentModes.resize(compatibleModes.presentModeCount);
+        if (compatibleModes.presentModeCount > 0)
+        {
+            compatibleModes.presentModeCount =
+                std::min(compatibleModes.presentModeCount, kMaxCompatiblePresentModes);
+            mCompatiblePresentModes.resize(compatibleModes.presentModeCount);
+            compatibleModes.pPresentModes = mCompatiblePresentModes.data();
 
-        // The implementation must always return the given present mode as compatible with itself.
-        ASSERT(IsCompatiblePresentMode(mDesiredSwapchainPresentMode, mCompatiblePresentModes.data(),
-                                       mCompatiblePresentModes.size()));
+            ANGLE_VK_TRY(context, vkGetPhysicalDeviceSurfaceCapabilities2KHR(
+                                      renderer->getPhysicalDevice(), &surfaceInfo2, &surfaceCaps2));
+
+            // The implementation must always return the given present mode as compatible with
+            // itself.
+            ASSERT(IsCompatiblePresentMode(mDesiredSwapchainPresentMode,
+                                           mCompatiblePresentModes.data(),
+                                           mCompatiblePresentModes.size()));
+        }
+        else
+        {
+            // b/368647924: nvidia + mesa-vulkan-drivers on Linux => presentModeCount remains 0
+            mCompatiblePresentModes.resize(1);
+            mCompatiblePresentModes[0] = swapchainInfo.presentMode;
+        }
 
         // Vulkan spec says "The per-present mode image counts may be less-than or greater-than the
         // image counts returned when VkSurfacePresentModeEXT is not provided.". Use the per present
         // mode imageCount here. Otherwise we may get into
         // VUID-VkSwapchainCreateInfoKHR-presentMode-02839.
-        mSurfaceCaps                = surfaceCaps2.surfaceCapabilities;
+        mSurfaceCaps   = surfaceCaps2.surfaceCapabilities;
         mMinImageCount = GetMinImageCount(renderer, mSurfaceCaps, mDesiredSwapchainPresentMode);
         swapchainInfo.minImageCount = mMinImageCount;
     }
