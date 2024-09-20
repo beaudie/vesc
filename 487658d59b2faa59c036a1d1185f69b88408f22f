@@ -34,6 +34,24 @@
       "parentUuid": "d4b3191d_88c712af",
       "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea2e0667_c8654d87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2024-09-20T15:41:55Z",
+      "side": 1,
+      "message": "For context, the thought was that we could simplify the ANGLE_pls spec and speed up release by dropping this backend. That\u0027s a super cool idea to expose EXT_pls. I don\u0027t *think* any of this could could be used for that specific purpose, but if exposing it on the GL backend, maybe PLSProgramCache could be reused for implementing EXT_pls2 over EXT_pls.",
+      "parentUuid": "980e4a84_2e8e0da4",
+      "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
