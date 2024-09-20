@@ -16,6 +16,29 @@
       "message": "Can we just always add this FrameIndex trace? The cost should be minimum",
       "revId": "3d8d0c8a716ce94f161bf47bbd77548c4a0a3b50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c41420d5_357be504",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2115,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-20T18:12:16Z",
+      "side": 1,
+      "message": "Could we call it `TraceFrameIndex`? Everything else here has this `Trace` prefix",
+      "range": {
+        "startLine": 2115,
+        "startChar": 19,
+        "endLine": 2115,
+        "endChar": 29
+      },
+      "revId": "3d8d0c8a716ce94f161bf47bbd77548c4a0a3b50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
