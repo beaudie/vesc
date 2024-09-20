@@ -205,6 +205,7 @@ class VertexArrayVk : public VertexArrayImpl
     LineLoopHelper mLineLoopHelper;
     Optional<GLint> mLineLoopBufferFirstIndex;
     Optional<size_t> mLineLoopBufferLastIndex;
+    vk::BufferHelper *mOriginalLineLoopElementArrayBuffer;
     bool mDirtyLineLoopTranslation;
 
     // Track client and/or emulated attribs that we have to stream their buffer contents

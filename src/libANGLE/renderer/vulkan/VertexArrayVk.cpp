@@ -304,6 +304,7 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
       mCurrentArrayBufferDivisors{},
       mCurrentElementArrayBuffer(nullptr),
       mLineLoopHelper(contextVk->getRenderer()),
+      mOriginalLineLoopElementArrayBuffer(nullptr),
       mDirtyLineLoopTranslation(true)
 {
     vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
@@ -428,8 +429,8 @@ angle::Result VertexArrayVk::handleLineLoopIndexIndirect(ContextVk *contextVk,
                                                          vk::BufferHelper **indirectBufferOut)
 {
     ANGLE_TRY(mLineLoopHelper.streamIndicesIndirect(
-        contextVk, glIndexType, mCurrentElementArrayBuffer, srcIndirectBuf, indirectBufferOffset,
-        &mCurrentElementArrayBuffer, indirectBufferOut));
+        contextVk, glIndexType, mOriginalLineLoopElementArrayBuffer, srcIndirectBuf,
+        indirectBufferOffset, &mCurrentElementArrayBuffer, indirectBufferOut));
 
     return angle::Result::Continue;
 }
@@ -795,6 +796,11 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 {
                     mCurrentElementArrayBuffer = nullptr;
                 }
+
+                // Since the line loop element array buffer will undergo conversion, there should be
+                // a pointer to the original buffer in case of multiple line loop draw calls from
+                // the same buffer.
+                mOriginalLineLoopElementArrayBuffer = mCurrentElementArrayBuffer;
 
                 mLineLoopBufferFirstIndex.reset();
                 mLineLoopBufferLastIndex.reset();
