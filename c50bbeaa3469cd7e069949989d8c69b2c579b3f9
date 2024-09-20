@@ -70,6 +70,24 @@
       "parentUuid": "4d7fb172_4eec942a",
       "revId": "c50bbeaa3469cd7e069949989d8c69b2c579b3f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49ea68e7_6d925641",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-20T21:01:27Z",
+      "side": 1,
+      "message": "Race condition. In that case, please use `http://anglebug.com/NNNNNNN` because to the unsuspecting readers, `b/` is not a link.",
+      "parentUuid": "d8ba816c_9ec8e94e",
+      "revId": "c50bbeaa3469cd7e069949989d8c69b2c579b3f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
