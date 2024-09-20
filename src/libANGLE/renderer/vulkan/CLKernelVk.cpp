@@ -15,7 +15,10 @@
 #include "libANGLE/CLKernel.h"
 #include "libANGLE/CLProgram.h"
 #include "libANGLE/cl_utils.h"
+#include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
+#include "spirv/unified1/NonSemanticClspvReflection.h"
+#include "vulkan/vulkan_core.h"
 
 namespace rx
 {
@@ -85,6 +88,14 @@ angle::Result CLKernelVk::init()
         }
         descriptorSetLayoutDesc.addBinding(arg.descriptorBinding, descType, 1,
                                            VK_SHADER_STAGE_COMPUTE_BIT, nullptr);
+    }
+
+    if (usesPrintf())
+    {
+        mDescriptorSetLayoutDescs[DescriptorSetIndex::Printf].addBinding(
+            mProgram->getDeviceProgramData(mName.c_str())
+                ->reflectionData.printfBufferStorage.binding,
+            VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_COMPUTE_BIT, nullptr);
     }
 
     // Get pipeline layout from cache (creates if missed)
@@ -281,6 +292,12 @@ angle::Result CLKernelVk::getOrCreateComputePipeline(vk::PipelineCacheAccess *pi
         mContext, &mComputePipelineCache, pipelineCache, getPipelineLayout().get(),
         vk::ComputePipelineOptions{}, PipelineSource::Draw, pipelineOut, mName.c_str(),
         &computeSpecializationInfo);
+}
+
+bool CLKernelVk::usesPrintf() const
+{
+    return mProgram->getDeviceProgramData(mName.c_str())->getKernelFlags(mName) &
+           NonSemanticClspvReflectionMayUsePrintf;
 }
 
 }  // namespace rx
