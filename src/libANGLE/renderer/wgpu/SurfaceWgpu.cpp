@@ -199,8 +199,11 @@ egl::Error WindowSurfaceWgpu::initialize(const egl::Display *display)
 
 void WindowSurfaceWgpu::destroy(const egl::Display *display)
 {
+    if (mSurfaceConfigured)
+    {
+        mSurface.Unconfigure();
+    }
     mSurface   = nullptr;
-    mSwapChain = nullptr;
     mColorAttachment.renderTarget.reset();
     mColorAttachment.texture.resetImage();
     mDepthStencilAttachment.renderTarget.reset();
@@ -233,12 +236,12 @@ void WindowSurfaceWgpu::setSwapInterval(const egl::Display *display, EGLint inte
 
 EGLint WindowSurfaceWgpu::getWidth() const
 {
-    return mCurrentSwapChainSize.width;
+    return mCurrentSurfaceSize.width;
 }
 
 EGLint WindowSurfaceWgpu::getHeight() const
 {
-    return mCurrentSwapChainSize.height;
+    return mCurrentSurfaceSize.height;
 }
 
 EGLint WindowSurfaceWgpu::getSwapBehavior() const
@@ -294,10 +297,10 @@ angle::Result WindowSurfaceWgpu::initializeImpl(const egl::Display *display)
 
     ANGLE_TRY(createWgpuSurface(display, &mSurface));
 
-    const egl::Config *config = mState.config;
-    ASSERT(config->renderTargetFormat != GL_NONE);
     gl::Extents size;
     ANGLE_TRY(getCurrentWindowSize(display, &size));
+
+    const egl::Config *config = mState.config;
     if (config->depthStencilFormat != GL_NONE)
     {
         const webgpu::Format &dsWebgpuFormat = displayWgpu->getFormat(config->depthStencilFormat);
@@ -306,18 +309,7 @@ angle::Result WindowSurfaceWgpu::initializeImpl(const egl::Display *display)
                                                device, &mDepthStencilAttachment));
     }
 
-    const webgpu::Format &webgpuFormat      = displayWgpu->getFormat(config->renderTargetFormat);
-    wgpu::SwapChainDescriptor swapChainDesc = {};
-    swapChainDesc.usage = wgpu::TextureUsage::RenderAttachment | wgpu::TextureUsage::CopySrc |
-                          wgpu::TextureUsage::CopyDst;
-    swapChainDesc.format                    = webgpuFormat.getActualWgpuTextureFormat();
-    swapChainDesc.width                     = size.width;
-    swapChainDesc.height                    = size.height;
-    swapChainDesc.presentMode               = wgpu::PresentMode::Mailbox;
-    mSwapChain                              = device.CreateSwapChain(mSurface, &swapChainDesc);
-
-    mCurrentSwapChainSize = size;
-
+    ANGLE_TRY(configureSurface(display, size));
     ANGLE_TRY(updateCurrentTexture(display));
 
     return angle::Result::Continue;
@@ -330,23 +322,84 @@ angle::Result WindowSurfaceWgpu::swapImpl(const gl::Context *context)
 
     ANGLE_TRY(contextWgpu->flush(webgpu::RenderPassClosureReason::EGLSwapBuffers));
 
-    mSwapChain.Present();
+    mSurface.Present();
 
-    ANGLE_TRY(getCurrentWindowSize(display, &mCurrentSwapChainSize));
+    gl::Extents size;
+    ANGLE_TRY(getCurrentWindowSize(display, &size));
+    if (size != mCurrentSurfaceSize)
+    {
+        ANGLE_TRY(configureSurface(display, size));
+    }
+
     ANGLE_TRY(updateCurrentTexture(display));
 
     return angle::Result::Continue;
 }
 
+angle::Result WindowSurfaceWgpu::configureSurface(const egl::Display *display,
+                                                  const gl::Extents &size)
+{
+    if (mSurfaceConfigured)
+    {
+        mSurface.Unconfigure();
+        mSurfaceConfigured = false;
+    }
+
+    DisplayWgpu *displayWgpu = webgpu::GetImpl(display);
+    wgpu::Device &device     = displayWgpu->getDevice();
+    wgpu::Adapter &adapter   = displayWgpu->getAdapter();
+
+    wgpu::SurfaceCapabilities surfaceCapabilities;
+    wgpu::Status getCapabilitiesStatus = mSurface.GetCapabilities(adapter, &surfaceCapabilities);
+    if (getCapabilitiesStatus != wgpu::Status::Success)
+    {
+        ERR() << "wgpu::Surface::GetCapabilities failed: "
+              << gl::FmtHex(static_cast<uint32_t>(getCapabilitiesStatus));
+        return angle::Result::Stop;
+    }
+
+    // Default to the always supported Fifo present mode. Use Mailbox if it's available.
+    wgpu::PresentMode presentMode = wgpu::PresentMode::Fifo;
+    for (size_t i = 0; i < surfaceCapabilities.presentModeCount; i++)
+    {
+        if (surfaceCapabilities.presentModes[i] == wgpu::PresentMode::Mailbox)
+        {
+            presentMode = wgpu::PresentMode::Mailbox;
+        }
+    }
+
+    const egl::Config *config = mState.config;
+    ASSERT(config->renderTargetFormat != GL_NONE);
+
+    const webgpu::Format &webgpuFormat       = displayWgpu->getFormat(config->renderTargetFormat);
+    wgpu::SurfaceConfiguration surfaceConfig = {};
+    surfaceConfig.device                     = device;
+    surfaceConfig.format                     = webgpuFormat.getActualWgpuTextureFormat();
+    surfaceConfig.usage = wgpu::TextureUsage::RenderAttachment | wgpu::TextureUsage::CopySrc |
+                          wgpu::TextureUsage::CopyDst;
+    surfaceConfig.width       = size.width;
+    surfaceConfig.height      = size.height;
+    surfaceConfig.presentMode = presentMode;
+
+    mSurface.Configure(&surfaceConfig);
+    mSurfaceConfigured = true;
+
+    mCurrentSurfaceSize = size;
+    return angle::Result::Continue;
+}
+
 angle::Result WindowSurfaceWgpu::updateCurrentTexture(const egl::Display *display)
 {
-    wgpu::Texture texture  = mSwapChain.GetCurrentTexture();
-    wgpu::TextureView view = mSwapChain.GetCurrentTextureView();
+    mSurface.GetCurrentTexture(&mCurrentTexture);
 
-    wgpu::TextureFormat wgpuFormat = texture.GetFormat();
+    wgpu::TextureFormat wgpuFormat = mCurrentTexture.texture.GetFormat();
     angle::FormatID angleFormat    = webgpu::GetFormatIDFromWgpuTextureFormat(wgpuFormat);
 
-    ANGLE_TRY(mColorAttachment.texture.initExternal(angleFormat, angleFormat, texture));
+    ANGLE_TRY(
+        mColorAttachment.texture.initExternal(angleFormat, angleFormat, mCurrentTexture.texture));
+
+    wgpu::TextureView view;
+    ANGLE_TRY(mColorAttachment.texture.createTextureView(gl::LevelIndex(0), 0, view));
 
     mColorAttachment.renderTarget.set(&mColorAttachment.texture, view, webgpu::LevelIndex(0), 0,
                                       wgpuFormat);
