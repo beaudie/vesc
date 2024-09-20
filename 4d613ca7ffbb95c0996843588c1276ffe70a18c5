@@ -16,6 +16,24 @@
       "message": "You can avoid the double-query by leaving the above as-is, then remove this assert and do this instead:\n\n```\n// \u003cmention of the bug\u003e\nif (mCompatiblePresentModes.empty())\n{\n    mCompatiblePresentModes.push_back(mDesiredSwapchainPresentMode);\n}\n```\n\nEverything else can be left untouched if I\u0027m not mistaken.",
       "revId": "4d613ca7ffbb95c0996843588c1276ffe70a18c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbca0d51_ffec7af5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-20T20:54:21Z",
+      "side": 0,
+      "message": "I don\u0027t think this works? mCompatiblePresentModes is fixedvector\u003ckMaxCompatiblePresentModes\u003e and we have no way to get the correct size. Note that `vkGetPhysicalDeviceSurfaceCapabilities2KHR` doesn\u0027t return 0 - it has no effect at all.\n\nI did mess up my initial implementation though. Updated. Happy to simplify if there is a way.",
+      "parentUuid": "e5ea9b6e_a4d518ff",
+      "revId": "4d613ca7ffbb95c0996843588c1276ffe70a18c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
