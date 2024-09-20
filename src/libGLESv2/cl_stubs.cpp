@@ -236,6 +236,14 @@ cl_int RetainCommandQueue(cl_command_queue command_queue)
 cl_int ReleaseCommandQueue(cl_command_queue command_queue)
 {
     CommandQueue &queue = command_queue->cast<CommandQueue>();
+
+    // Perform implicit submission
+    // https://registry.khronos.org/OpenCL/specs/3.0-unified/html/OpenCL_API.html#clReleaseCommandQueue
+    if (IsError(queue.finish()))
+    {
+        WARN() << "Failed to perform submission on queue!";
+    }
+
     if (queue.release())
     {
         delete &queue;
