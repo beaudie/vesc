@@ -51,6 +51,10 @@ constexpr angle::PackedEnumMap<webgpu::RenderPassClosureReason, const char *>
         {webgpu::RenderPassClosureReason::EGLSwapBuffers,
          "Render pass closed due to eglSwapBuffers"},
         {webgpu::RenderPassClosureReason::GLReadPixels, "Render pass closed due to glReadPixels"},
+        {webgpu::RenderPassClosureReason::IndexRangeReadback,
+         "Render pass closed due to index buffer read back for streamed client data"},
+        {webgpu::RenderPassClosureReason::VertexArrayStreaming,
+         "Render pass closed for uploading streamed client data"},
     }};
 
 }  // namespace
@@ -160,6 +164,19 @@ void ContextWgpu::invalidateVertexBuffers()
 void ContextWgpu::invalidateIndexBuffer()
 {
     mDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+}
+
+void ContextWgpu::ensureCommandEncoderCreated()
+{
+    if (!mCurrentCommandEncoder)
+    {
+        mCurrentCommandEncoder = getDevice().CreateCommandEncoder(nullptr);
+    }
+}
+
+wgpu::CommandEncoder &ContextWgpu::getCurrentCommandEncoder()
+{
+    return mCurrentCommandEncoder;
 }
 
 angle::Result ContextWgpu::finish(const gl::Context *context)
@@ -965,10 +982,7 @@ void ContextWgpu::handleError(GLenum errorCode,
 
 angle::Result ContextWgpu::startRenderPass(const wgpu::RenderPassDescriptor &desc)
 {
-    if (!mCurrentCommandEncoder)
-    {
-        mCurrentCommandEncoder = getDevice().CreateCommandEncoder(nullptr);
-    }
+    ensureCommandEncoderCreated();
 
     mCurrentRenderPass = mCurrentCommandEncoder.BeginRenderPass(&desc);
     mDirtyBits |= mNewRenderPassDirtyBits;
@@ -1214,9 +1228,10 @@ angle::Result ContextWgpu::handleDirtyVertexBuffers(const gl::AttributesMask &sl
         webgpu::BufferHelper *buffer = vertexArrayWgpu->getVertexBuffer(slot);
         if (!buffer)
         {
-            // Missing streamed client data
+            // Missing default attribute support
+            ASSERT(!mState.getVertexArray()->getVertexAttribute(slot).enabled);
             UNIMPLEMENTED();
-            continue;
+            return angle::Result::Continue;
         }
         if (buffer->getMappedState())
         {
@@ -1232,12 +1247,7 @@ angle::Result ContextWgpu::handleDirtyIndexBuffer(gl::DrawElementsType indexType
 {
     VertexArrayWgpu *vertexArrayWgpu = GetImplAs<VertexArrayWgpu>(mState.getVertexArray());
     webgpu::BufferHelper *buffer     = vertexArrayWgpu->getIndexBuffer();
-    if (!buffer)
-    {
-        // Missing streamed client data
-        UNIMPLEMENTED();
-        return angle::Result::Continue;
-    }
+    ASSERT(buffer);
     if (buffer->getMappedState())
     {
         ANGLE_TRY(buffer->unmap());
