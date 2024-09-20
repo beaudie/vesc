@@ -409,6 +409,11 @@ void ANGLEPerfTest::runTrial(double maxRunTime, int maxStepsToRun, RunTrialPolic
     double lastLoopWallTime = 0;
     while (mRunning)
     {
+        if (ATraceEnabled())
+        {
+            ATraceCounter("TraceFrameIndex", loopStepsPerformed + 1);
+        }
+
         // When ATrace enabled, track average frame time before the first frame of each trace loop.
         if (ATraceEnabled() && stepAlignment > 1 && runPolicy == RunTrialPolicy::RunContinuously &&
             mTrialNumStepsPerformed % stepAlignment == 0)
