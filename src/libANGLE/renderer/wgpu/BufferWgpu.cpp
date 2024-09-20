@@ -168,6 +168,37 @@ angle::Result BufferWgpu::getIndexRange(const gl::Context *context,
                                         bool primitiveRestartEnabled,
                                         gl::IndexRange *outRange)
 {
+    ContextWgpu *contextWgpu = webgpu::GetImpl(context);
+    wgpu::Device device      = webgpu::GetDevice(context);
+
+    if (mBuffer.getMappedState())
+    {
+        ANGLE_TRY(mBuffer.unmap());
+    }
+
+    // Create a staging buffer just big enough for this index range
+    const GLuint typeBytes = gl::GetDrawElementsTypeSize(type);
+    const uint64_t size    = count * typeBytes;
+
+    webgpu::BufferHelper stagingBuffer;
+    ANGLE_TRY(stagingBuffer.initBuffer(device, size,
+                                       wgpu::BufferUsage::CopyDst | wgpu::BufferUsage::MapRead,
+                                       webgpu::MapAtCreation::No));
+
+    // Copy the source buffer to staging and flush the commands
+    contextWgpu->ensureCommandEncoderCreated();
+    wgpu::CommandEncoder &commandEncoder = contextWgpu->getCurrentCommandEncoder();
+    commandEncoder.CopyBufferToBuffer(mBuffer.getBuffer(), offset, stagingBuffer.getBuffer(), 0,
+                                      size);
+
+    ANGLE_TRY(contextWgpu->flush(webgpu::RenderPassClosureReason::IndexRangeReadback));
+
+    // Read back from the staging buffer and compute the index range
+    ANGLE_TRY(stagingBuffer.mapImmediate(contextWgpu, wgpu::MapMode::Read, 0, size));
+    const uint8_t *data = stagingBuffer.getMapReadPointer(0, size);
+    *outRange           = gl::ComputeIndexRange(type, data, count, primitiveRestartEnabled);
+    ANGLE_TRY(stagingBuffer.unmap());
+
     return angle::Result::Continue;
 }
 
