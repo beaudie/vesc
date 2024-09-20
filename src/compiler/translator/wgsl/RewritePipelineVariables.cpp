@@ -27,7 +27,7 @@
 #include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 #include "compiler/translator/util.h"
-#include "compiler/translator/wgsl/WriteTypeName.h"
+#include "compiler/translator/wgsl/Utils.h"
 
 namespace sh
 {
@@ -395,7 +395,6 @@ bool RewritePipelineVarOutputBuilder::GenerateMainFunctionAndIOStructs(
     TIntermBlock &root,
     RewritePipelineVarOutput &outVarReplacements)
 {
-
     GlobalVars globalVars = FindGlobalVars(root);
 
     if (!RewritePipelineVarOutputBuilder::GeneratePipelineStructStrings(
