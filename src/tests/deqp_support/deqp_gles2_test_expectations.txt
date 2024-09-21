@@ -409,13 +409,10 @@ b/328156792 PINEAPPLE VULKAN : dEQP-GLES2.functional.uniform_api.value.assigned.
 356399840 WGPU : dEQP-GLES2.functional.fbo.completeness.renderable.texture.stencil.stencil_index8 = FAIL
 356399840 WGPU : dEQP-GLES2.functional.fbo.render.* = FAIL
 356399840 WGPU : dEQP-GLES2.functional.fragment_ops.* = FAIL
-356399840 WGPU : dEQP-GLES2.functional.lifetime.attach.deleted_input.renderbuffer_framebuffer = FAIL
 356399840 WGPU : dEQP-GLES2.functional.lifetime.attach.deleted_input.shader_program = FAIL
-356399840 WGPU : dEQP-GLES2.functional.lifetime.attach.deleted_output.renderbuffer_framebuffer = FAIL
 356399840 WGPU : dEQP-GLES2.functional.negative_api.texture.generatemipmap_npot_wdt_hgt = FAIL
 356399840 WGPU : dEQP-GLES2.functional.polygon_offset.* = FAIL
 356399840 WGPU : dEQP-GLES2.functional.rasterization.* = FAIL
-356399840 WGPU : dEQP-GLES2.functional.read_pixels.* = FAIL
 356399840 WGPU : dEQP-GLES2.functional.shaders.* = FAIL
 356399840 WGPU : dEQP-GLES2.functional.state_query.shader.uniform_value_* = FAIL
 356399840 WGPU : dEQP-GLES2.functional.texture.* = FAIL
