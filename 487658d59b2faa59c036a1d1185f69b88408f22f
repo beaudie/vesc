@@ -70,6 +70,24 @@
       "parentUuid": "ea2e0667_c8654d87",
       "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d47b4e3f_0ce9638d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-21T02:00:21Z",
+      "side": 1,
+      "message": "Ok, looks like there isn\u0027t much, if needs be, we can recover anything we can from PLSProgramCache after this change lands.\n\nW.r.t transform feedback, pausing and restarting transform feedback causes a render pass break in the Vulkan backend due to some needed barrier (some detail of VK_EXT_transform_feedback). That\u0027s the reason I believe this restriction exists in ANGLE_pls right now.",
+      "parentUuid": "452f5b63_0647b5a8",
+      "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
