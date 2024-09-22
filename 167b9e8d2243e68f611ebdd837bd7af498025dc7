@@ -52,6 +52,24 @@
       "parentUuid": "8de443dd_b0105fdd",
       "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2de44d53_826b3088",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5743,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-09-22T02:50:28Z",
+      "side": 1,
+      "message": "Proposed fix is not good enough, still deadlocks with a different callstack:\n\n```\n \tlibGLESv2.dll!std::__Cr::__libcpp_mutex_lock(void * * __m) Line 68\tC++\n \tlibGLESv2.dll!std::__Cr::mutex::lock() Line 29\tC++\n \tlibGLESv2.dll!angle::priv::MutexOnStd::lock() Line 107\tC++\n \tlibGLESv2.dll!std::__Cr::unique_lock\u003cangle::priv::MutexOnStd\u003e::unique_lock(angle::priv::MutexOnStd \u0026 __m) Line 40\tC++\n \tlibGLESv2.dll!rx::vk::PipelineCacheAccess::getLock() Line 6996\tC++\n\u003e\tlibGLESv2.dll!rx::vk::PipelineCacheAccess::getCacheData(rx::vk::Context * context, unsigned __int64 * cacheSize, void * cacheData) Line 7018\tC++\n \tlibGLESv2.dll!rx::vk::Renderer::getPipelineCacheSize(rx::vk::Context * context, unsigned __int64 * pipelineCacheSizeOut) Line 5735\tC++\n \tlibGLESv2.dll!rx::vk::Renderer::ensurePipelineCacheInitialized(rx::vk::Context * context) Line 5631\tC++\n \tlibGLESv2.dll!rx::vk::Renderer::getPipelineCache(rx::vk::Context * context, rx::vk::PipelineCacheAccess * pipelineCacheOut) Line 5653\tC++\n \tlibGLESv2.dll!rx::ContextVk::createGraphicsPipeline() Line 2088\tC++\n```",
+      "parentUuid": "eeff3ae1_903c500c",
+      "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
