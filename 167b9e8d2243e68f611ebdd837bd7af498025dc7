@@ -34,6 +34,24 @@
       "parentUuid": "054c2aa2_0214cfcd",
       "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeff3ae1_903c500c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5743,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-09-22T02:47:34Z",
+      "side": 1,
+      "message": "Possible fix:\n```\ndiff --git a/src/libANGLE/renderer/vulkan/vk_renderer.cpp b/src/libANGLE/renderer/vulkan/vk_renderer.cpp\nindex 4290be8384..d2967facac 100644\n--- a/src/libANGLE/renderer/vulkan/vk_renderer.cpp\n+++ b/src/libANGLE/renderer/vulkan/vk_renderer.cpp\n@@ -5631,13 +5631,14 @@ angle::Result Renderer::ensurePipelineCacheInitialized(vk::Context *context)\n     // We should now create the pipeline cache with the blob cache pipeline data.\n     bool loadedFromBlobCache \u003d false;\n     ANGLE_TRY(initPipelineCache(context, \u0026mPipelineCache, \u0026loadedFromBlobCache));\n+\n+    mPipelineCacheInitialized \u003d true;\n+\n     if (loadedFromBlobCache)\n     {\n         ANGLE_TRY(getPipelineCacheSize(context, \u0026mPipelineCacheSizeAtLastSync));\n     }\n\n-    mPipelineCacheInitialized \u003d true;\n-\n     return angle::Result::Continue;\n }\n```",
+      "parentUuid": "8de443dd_b0105fdd",
+      "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
