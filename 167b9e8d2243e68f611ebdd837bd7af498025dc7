@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "054c2aa2_0214cfcd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5743,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-09-22T02:39:13Z",
+      "side": 1,
+      "message": "Major issue discovered.\n\nThis introduced recursion in ensurePiplineCacheInitialized, so it can deadlock with itself:\n\n```\n \tlibGLESv2.dll!std::__Cr::unique_lock\u003cangle::priv::MutexOnStd\u003e::unique_lock(angle::priv::MutexOnStd \u0026 __m) Line 40\tC++\n \tlibGLESv2.dll!rx::vk::Renderer::ensurePipelineCacheInitialized(rx::vk::Context * context) Line 5615\tC++\n \tlibGLESv2.dll!rx::vk::Renderer::getPipelineCache(rx::vk::Context * context, rx::vk::PipelineCacheAccess * pipelineCacheOut) Line 5652\tC++\n\u003e\tlibGLESv2.dll!rx::vk::Renderer::getPipelineCacheSize(rx::vk::Context * context, unsigned __int64 * pipelineCacheSizeOut) Line 5733\tC++\n \tlibGLESv2.dll!rx::vk::Renderer::ensurePipelineCacheInitialized(rx::vk::Context * context) Line 5628\tC++\n \tlibGLESv2.dll!rx::vk::Renderer::getPipelineCache(rx::vk::Context * context, rx::vk::PipelineCacheAccess * pipelineCacheOut) Line 5652\tC++\n \tlibGLESv2.dll!rx::ContextVk::createGraphicsPipeline() Line 2088\tC++\n```",
+      "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
