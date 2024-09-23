@@ -1130,12 +1130,14 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result setupIndexedIndirectDraw(const gl::Context *context,
                                            gl::PrimitiveMode mode,
                                            gl::DrawElementsType indexType,
+                                           vk::BufferHelper *indexBuffer,
                                            vk::BufferHelper *indirectBuffer);
 
     angle::Result setupLineLoopIndexedIndirectDraw(const gl::Context *context,
                                                    gl::PrimitiveMode mode,
                                                    gl::DrawElementsType indexType,
-                                                   vk::BufferHelper *srcIndirectBuf,
+                                                   vk::BufferHelper *srcIndexBuffer,
+                                                   vk::BufferHelper *srcIndirectBuffer,
                                                    VkDeviceSize indirectBufferOffset,
                                                    vk::BufferHelper **indirectBufferOut);
     angle::Result setupLineLoopIndirectDraw(const gl::Context *context,
@@ -1531,6 +1533,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // The offset we had the last time we bound the index buffer.
     const GLvoid *mLastIndexBufferOffset;
+    vk::BufferHelper *mCurrentElementArrayBuffer;
     VkDeviceSize mCurrentIndexBufferOffset;
     gl::DrawElementsType mCurrentDrawElementsType;
     angle::PackedEnumMap<gl::DrawElementsType, VkIndexType> mIndexTypeMap;
