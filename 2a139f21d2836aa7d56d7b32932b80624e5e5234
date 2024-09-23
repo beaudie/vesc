@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d599c34a_60e39723",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1171626
+      },
+      "writtenOn": "2024-09-23T09:06:50Z",
+      "side": 1,
+      "message": "Is this duplicated to line 882-888?",
+      "revId": "2a139f21d2836aa7d56d7b32932b80624e5e5234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
