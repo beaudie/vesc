@@ -5003,8 +5003,7 @@ TEST_P(ClearTextureEXTTest, ClearTextureAfterMaskedClearBug)
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     ClearTest,
     ES3_VULKAN().enable(Feature::ForceFallbackFormat),
-    ES3_VULKAN().enable(Feature::PreferDrawClearOverVkCmdClearAttachments),
-    ES2_WEBGPU());
+    ES3_VULKAN().enable(Feature::PreferDrawClearOverVkCmdClearAttachments));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ClearTestES3);
 ANGLE_INSTANTIATE_TEST_ES3_AND(

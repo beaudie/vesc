@@ -147,7 +147,8 @@ struct CombinedPrintToStringParamName
         ES2_VULKAN_SWIFTSHADER()                                                                   \
             .enable(Feature::EnableParallelCompileAndLink)                                         \
             .enable(Feature::AsyncCommandQueue)                                                    \
-            .disable(Feature::SupportsGraphicsPipelineLibrary)
+            .disable(Feature::SupportsGraphicsPipelineLibrary),                                    \
+        ES2_WEBGPU()
 
 #define ANGLE_ALL_TEST_PLATFORMS_ES3                                                   \
     ANGLE_TEST_PLATFORMS_ES3_SYSTEM_EGL                                                \
