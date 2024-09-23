@@ -247,7 +247,10 @@ class Renderer : angle::NonCopyable
 
     const vk::Format &getFormat(angle::FormatID formatID) const { return mFormatTable[formatID]; }
 
-    angle::Result getPipelineCacheSize(vk::Context *context, size_t *pipelineCacheSizeOut);
+    angle::Result getPipelineCacheDataIfNew(vk::Context *context,
+                                            size_t *pipelineCacheSizeOut,
+                                            size_t lastSyncSize,
+                                            std::vector<uint8_t> *pipelineCacheDataOut);
     angle::Result syncPipelineCacheVk(vk::Context *context,
                                       vk::GlobalOps *globalOps,
                                       const gl::Context *contextGL);
