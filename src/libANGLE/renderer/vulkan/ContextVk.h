@@ -1135,8 +1135,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result setupLineLoopIndexedIndirectDraw(const gl::Context *context,
                                                    gl::PrimitiveMode mode,
                                                    gl::DrawElementsType indexType,
+                                                   vk::BufferHelper *srcIndexBuf,
                                                    vk::BufferHelper *srcIndirectBuf,
                                                    VkDeviceSize indirectBufferOffset,
+                                                   vk::BufferHelper **indexBufferOut,
                                                    vk::BufferHelper **indirectBufferOut);
     angle::Result setupLineLoopIndirectDraw(const gl::Context *context,
                                             gl::PrimitiveMode mode,
