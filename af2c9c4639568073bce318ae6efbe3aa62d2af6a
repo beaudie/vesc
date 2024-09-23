@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "612eef88_8a22c34a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4440,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-23T23:41:55Z",
+      "side": 1,
+      "message": "Added the test `IndirectAndElementDrawsShareIndexBuffer`.",
+      "parentUuid": "da536cc6_9c75aec5",
+      "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "542f2d62_84b94e55",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 3
@@ -65,6 +83,30 @@
           ]
         }
       ],
+      "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b30df4d_81564348",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-23T23:41:55Z",
+      "side": 1,
+      "message": "I tried defining a local buffer pointer, `dstIndexBuffer`, in `multiDrawElementsIndirectHelper()` and passed it here to replace the output `mCurrentElementArrayBuffer` here. The test no longer crashes, but it fails, even with one line-loop draw.",
+      "parentUuid": "542f2d62_84b94e55",
+      "range": {
+        "startLine": 433,
+        "startChar": 9,
+        "endLine": 433,
+        "endChar": 35
+      },
       "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -202,6 +244,30 @@
       "side": 1,
       "message": "If the bug is limited to ContextVk::multiDrawElementsIndirectHelper, then the easy fix is make setupLineLoopIndexedIndirectDraw to return a new buffer pointer that holds the final data and then send that buffer to mRenderPassCommandBuffer-\u003edrawIndexedIndirect call. You dont modify mCurrentElementArrayBuffer and also dont cache the pointer anywhere.",
       "parentUuid": "13ff500f_f43d9784",
+      "range": {
+        "startLine": 803,
+        "startChar": 0,
+        "endLine": 803,
+        "endChar": 73
+      },
+      "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a56a70f_86257575",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-23T23:41:55Z",
+      "side": 1,
+      "message": "It seems that `mRenderPassCommandBuffer-\u003edrawIndexedIndirect()` only takes the indirect buffer, which is separate from the current element buffer. I will look further to see if we can leave `mCurrentElementArrayBuffer` unchanged by conversion, etc. and use a new local buffer pointer for the draw.",
+      "parentUuid": "34aa65c1_839a586c",
       "range": {
         "startLine": 803,
         "startChar": 0,
