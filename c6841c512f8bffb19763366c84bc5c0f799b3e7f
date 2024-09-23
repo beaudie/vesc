@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d317764_4932b0dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2024-09-23T20:22:20Z",
+      "side": 1,
+      "message": "Most tests look happy on this except for `angle_deqp_gles3_metal_tests`. Both shards for that have \u003e 100 failing tests due to\n\n```\n*** Terminating app due to uncaught exception \u0027NSInvalidArgumentException\u0027, reason: \u0027*** -[__NSArrayM insertObject:atIndex:]: object cannot be nil\u0027\n```\n\nIs there some workaround that we can enable for this?",
+      "revId": "c6841c512f8bffb19763366c84bc5c0f799b3e7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
