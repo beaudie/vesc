@@ -305,6 +305,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d3ce20b_ac927ba6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-23T20:23:26Z",
+      "side": 1,
+      "message": "\u003e Has the list of failures shrunk?\n\nshould have checked internally. Yup, the MSAA related failures are now gone, thanks. resolving this comment",
+      "parentUuid": "a93a19ce_0d09d70a",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcbdb173_ab588d5d",
