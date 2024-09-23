@@ -872,23 +872,37 @@ egl::Error Renderer11::initializeD3DDevice()
             createD3D11on12Device =
                 attributes.get(EGL_PLATFORM_ANGLE_D3D11ON12_ANGLE, EGL_FALSE) == EGL_TRUE;
 
+            mD3d12Module = LoadLibrary(TEXT("d3d12.dll"));
+            if (mD3d12Module == nullptr)
+            {
+                return egl::EglNotInitialized(D3D11_INIT_MISSING_DEP)
+                       << "Could not load D3D12 library.";
+            }
+
+            D3D12CreateDevice = reinterpret_cast<PFN_D3D12_CREATE_DEVICE>(
+                GetProcAddress(mD3d12Module, "D3D12CreateDevice"));
+            if (D3D12CreateDevice == nullptr)
+            {
+                return egl::EglNotInitialized(D3D11_INIT_MISSING_DEP)
+                       << "Could not retrieve D3D12CreateDevice address.";
+            }
+            D3D12CreateDevice = reinterpret_cast<PFN_D3D12_CREATE_DEVICE>(
+                GetProcAddress(mD3d12Module, "D3D12CreateDevice"));
+            if (D3D12CreateDevice == nullptr)
+            {
+                return egl::EglNotInitialized(D3D11_INIT_MISSING_DEP)
+                       << "Could not retrieve D3D12CreateDevice address.";
+            }
+            if (mDxgiAdapter)
+            {
+                // Passing nullptr into pAdapter chooses the default adapter which will be the
+                // hardware adapter if it exists.
+                result = D3D12CreateDevice(mDxgiAdapter.Get(), mAvailableFeatureLevels[0],
+                                           IID_PPV_ARGS(&mDevice12));
+            }
+
             if (createD3D11on12Device)
             {
-                mD3d12Module = LoadLibrary(TEXT("d3d12.dll"));
-                if (mD3d12Module == nullptr)
-                {
-                    return egl::EglNotInitialized(D3D11_INIT_MISSING_DEP)
-                           << "Could not load D3D12 library.";
-                }
-
-                D3D12CreateDevice = reinterpret_cast<PFN_D3D12_CREATE_DEVICE>(
-                    GetProcAddress(mD3d12Module, "D3D12CreateDevice"));
-                if (D3D12CreateDevice == nullptr)
-                {
-                    return egl::EglNotInitialized(D3D11_INIT_MISSING_DEP)
-                           << "Could not retrieve D3D12CreateDevice address.";
-                }
-
                 D3D11On12CreateDevice = reinterpret_cast<PFN_D3D11ON12_CREATE_DEVICE>(
                     GetProcAddress(mD3d11Module, "D3D11On12CreateDevice"));
                 if (D3D11On12CreateDevice == nullptr)
