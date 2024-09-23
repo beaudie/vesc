@@ -104,7 +104,7 @@ constexpr uint32_t kVertexFormatBitCount = 5;
 
 // A maximum offset of 4096 covers almost every Vulkan driver on desktop (80%) and mobile (99%). The
 // next highest values to meet native drivers are 16 bits or 32 bits.
-constexpr uint32_t kAttributeOffsetMaxBits = 15;
+constexpr uint32_t kAttributeOffsetMaxBits = 31;
 
 // In WebGPU, the maxVertexBufferArrayStride will be at least 2048.
 constexpr uint32_t kVertexAttributeStrideBits = 16;
@@ -113,8 +113,8 @@ struct PackedVertexAttribute final
 {
     PackedVertexAttribute();
 
-    uint16_t offset : kAttributeOffsetMaxBits;
-    uint16_t enabled : 1;
+    uint32_t offset : kAttributeOffsetMaxBits;
+    uint32_t enabled : 1;
     uint8_t format : kVertexFormatBitCount;
     uint8_t pad1 : 3;
     uint8_t shaderLocation;
@@ -122,7 +122,7 @@ struct PackedVertexAttribute final
 };
 
 constexpr size_t kPackedVertexAttributeSize = sizeof(PackedVertexAttribute);
-static_assert(kPackedVertexAttributeSize == 6, "Size mismatch");
+static_assert(kPackedVertexAttributeSize == 8, "Size mismatch");
 
 class RenderPipelineDesc final
 {
