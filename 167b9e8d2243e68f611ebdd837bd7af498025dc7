@@ -88,6 +88,24 @@
       "parentUuid": "2de44d53_826b3088",
       "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bcebef1_b7931856",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5743,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-23T16:04:22Z",
+      "side": 1,
+      "message": "I ran into this as well, I don\u0027t think that CL fixes it: https://chromium-review.googlesource.com/c/angle/angle/+/5883153/comment/f620ab10_8da1bc49/",
+      "parentUuid": "e8a2f07d_a758f672",
+      "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
