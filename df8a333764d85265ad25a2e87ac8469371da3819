@@ -50,6 +50,47 @@
       "message": "Looks good to me. You can land it by adding it to the expectation file to skip the failed test.",
       "revId": "df8a333764d85265ad25a2e87ac8469371da3819",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c17ef679_35a52765",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-23T17:42:23Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "318323a7_ed0cd2f3",
+      "revId": "df8a333764d85265ad25a2e87ac8469371da3819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d712d348_80db7e9b",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-23T17:42:23Z",
+      "side": 1,
+      "message": "Suggestion: This can be replaced with an integer (e.g., `consecutiveLineLoopCalls`), and the line loop call below will be in a for-loop using this number instead.",
+      "range": {
+        "startLine": 492,
+        "startChar": 17,
+        "endLine": 492,
+        "endChar": 43
+      },
+      "revId": "df8a333764d85265ad25a2e87ac8469371da3819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
