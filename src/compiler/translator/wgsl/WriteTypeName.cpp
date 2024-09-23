@@ -39,7 +39,15 @@ void WriteWgslBareTypeName(StringStreamType &output, const TType &type)
             break;
 
         case TBasicType::EbtStruct:
-            WriteNameOf(output, *type.getStruct());
+            if (type.getStruct()->symbolType() == SymbolType::Empty)
+            {
+                // Nameless structs unimplemented
+                UNIMPLEMENTED();
+            }
+            else
+            {
+                WriteNameOf(output, *type.getStruct());
+            }
             break;
 
         case TBasicType::EbtInterfaceBlock:
