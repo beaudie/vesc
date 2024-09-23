@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae3c6c77_dd989d17",
+        "filename": "src/compiler/translator/wgsl/OutputUniformBlocks.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-23T21:31:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1b9b6ef_07dfa2e0",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 482
+      },
+      "revId": "c783d3d1cc090af40670260b2ab35a5d2b92f776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97e76331_7aad10a0",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-09-23T16:42:40Z",
       "side": 1,
       "message": "Reminder to clean this comment up",
+      "revId": "c783d3d1cc090af40670260b2ab35a5d2b92f776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19d9854a_a186b16c",
+        "filename": "src/compiler/translator/wgsl/OutputUniformBlocks.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-23T21:31:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97e76331_7aad10a0",
       "revId": "c783d3d1cc090af40670260b2ab35a5d2b92f776",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
