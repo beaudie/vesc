@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b626504_2f699c18",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-23T21:50:11Z",
+      "side": 1,
+      "message": "Ideally, yes, but that would mean making a more persistent change to the device (shell setprop) so we\u0027d need to figure out how to make sure it gets reset in all possible failure cases which makes it a bit trickier.",
+      "parentUuid": "401fa653_3837fa03",
+      "range": {
+        "startLine": 12,
+        "startChar": 56,
+        "endLine": 14,
+        "endChar": 66
+      },
+      "revId": "f31d8dfb21b07849e43bb797fda59e9fb9b6c1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3626113c_a01c1df4",
