@@ -135,6 +135,30 @@
       },
       "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34aa65c1_839a586c",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-23T19:30:30Z",
+      "side": 1,
+      "message": "If the bug is limited to ContextVk::multiDrawElementsIndirectHelper, then the easy fix is make setupLineLoopIndexedIndirectDraw to return a new buffer pointer that holds the final data and then send that buffer to mRenderPassCommandBuffer-\u003edrawIndexedIndirect call. You dont modify mCurrentElementArrayBuffer and also dont cache the pointer anywhere.",
+      "parentUuid": "13ff500f_f43d9784",
+      "range": {
+        "startLine": 803,
+        "startChar": 0,
+        "endLine": 803,
+        "endChar": 73
+      },
+      "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
