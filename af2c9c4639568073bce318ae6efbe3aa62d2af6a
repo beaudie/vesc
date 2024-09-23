@@ -1,0 +1,75 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d14fba0e_f73e36ae",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-23T17:18:05Z",
+      "side": 1,
+      "message": "What if element buffer gets converted by other code, for example, by VertexArrayVk::convertIndexBufferIndirectGPU? You will be latching a wrong buffer here.",
+      "range": {
+        "startLine": 803,
+        "startChar": 0,
+        "endLine": 803,
+        "endChar": 73
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "2ae8282b_bddfdf79",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+              "range": {
+                "startLine": 362,
+                "startChar": 0,
+                "endLine": 363,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+              "range": {
+                "startLine": 374,
+                "startChar": 0,
+                "endLine": 375,
+                "endChar": 0
+              },
+              "replacement": "    ANGLE_TRY(contextVk-\u003egetUtils().convertIndexBuffer(contextVk, dst, src, params,\n                                                       mCurrentElementArrayBuffer));\n"
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+              "range": {
+                "startLine": 417,
+                "startChar": 0,
+                "endLine": 418,
+                "endChar": 0
+              },
+              "replacement": "        contextVk, srcIndirectBuf, srcIndexBuf, dstIndirectBuf, dstIndexBuf, params,\n        mCurrentElementArrayBuffer));\n"
+            },
+            {
+              "path": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+              "range": {
+                "startLine": 726,
+                "startChar": 0,
+                "endLine": 728,
+                "endChar": 0
+              },
+              "replacement": "    BufferVk *bufferVk \u003d vk::GetImpl(mState.getElementArrayBuffer());\n    mCurrentElementArrayBuffer \u003d\n        mOriginalElementArrayBuffer ? mOriginalElementArrayBuffer : \u0026bufferVk-\u003egetBuffer();\n"
+            }
+          ]
+        }
+      ],
+      "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
