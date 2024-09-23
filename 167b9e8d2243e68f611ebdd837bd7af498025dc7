@@ -124,6 +124,24 @@
       "parentUuid": "9bcebef1_b7931856",
       "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a5a2c8e_e667558e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5743,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-23T17:04:29Z",
+      "side": 1,
+      "message": "yeah patchset 3 works here",
+      "parentUuid": "407248ae_da812a11",
+      "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
