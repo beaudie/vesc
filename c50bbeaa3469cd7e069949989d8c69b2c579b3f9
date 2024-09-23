@@ -124,6 +124,24 @@
       "parentUuid": "978a814c_0777ff2e",
       "revId": "c50bbeaa3469cd7e069949989d8c69b2c579b3f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4932e25b_046638b1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-23T14:17:38Z",
+      "side": 1,
+      "message": "ah my bad, I updated cl description not this",
+      "parentUuid": "5d49f41f_65a89c26",
+      "revId": "c50bbeaa3469cd7e069949989d8c69b2c579b3f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
