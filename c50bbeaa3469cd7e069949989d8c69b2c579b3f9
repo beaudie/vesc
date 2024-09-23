@@ -88,6 +88,24 @@
       "parentUuid": "d8ba816c_9ec8e94e",
       "revId": "c50bbeaa3469cd7e069949989d8c69b2c579b3f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "978a814c_0777ff2e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-23T14:09:42Z",
+      "side": 1,
+      "message": "changed to angleproject:",
+      "parentUuid": "49ea68e7_6d925641",
+      "revId": "c50bbeaa3469cd7e069949989d8c69b2c579b3f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
