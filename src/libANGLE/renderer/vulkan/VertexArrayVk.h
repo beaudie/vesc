@@ -68,21 +68,26 @@ class VertexArrayVk : public VertexArrayImpl
                                         const void *indices);
 
     angle::Result handleLineLoop(ContextVk *contextVk,
+                                 gl::Buffer *elementArrayBuffer,
                                  GLint firstVertex,
                                  GLsizei vertexOrIndexCount,
                                  gl::DrawElementsType indexTypeOrInvalid,
                                  const void *indices,
+                                 vk::BufferHelper **indexBufferOut,
                                  uint32_t *indexCountOut);
 
     angle::Result handleLineLoopIndexIndirect(ContextVk *contextVk,
                                               gl::DrawElementsType glIndexType,
+                                              vk::BufferHelper *srcIndexBuf,
                                               vk::BufferHelper *srcIndirectBuf,
                                               VkDeviceSize indirectBufferOffset,
+                                              vk::BufferHelper **indexBufferOut,
                                               vk::BufferHelper **indirectBufferOut);
 
     angle::Result handleLineLoopIndirectDraw(const gl::Context *context,
                                              vk::BufferHelper *indirectBufferVk,
                                              VkDeviceSize indirectBufferOffset,
+                                             vk::BufferHelper **indexBufferOut,
                                              vk::BufferHelper **indirectBufferOut);
 
     const gl::AttribArray<VkBuffer> &getCurrentArrayBufferHandles() const
@@ -129,20 +134,30 @@ class VertexArrayVk : public VertexArrayImpl
     void updateCurrentElementArrayBuffer();
 
     vk::BufferHelper *getCurrentElementArrayBuffer() const { return mCurrentElementArrayBuffer; }
+    void setElementArrayBufferForDraw(vk::BufferHelper *elementArrayForDraw)
+    {
+        ASSERT(elementArrayForDraw != nullptr && elementArrayForDraw->valid());
+        mCurrentElementArrayBuffer = elementArrayForDraw;
+    }
 
     angle::Result convertIndexBufferGPU(ContextVk *contextVk,
                                         BufferVk *bufferVk,
+                                        vk::BufferHelper **indexBufferOut,
                                         const void *indices);
 
     angle::Result convertIndexBufferIndirectGPU(ContextVk *contextVk,
+                                                vk::BufferHelper *srcIndexBuf,
                                                 vk::BufferHelper *srcIndirectBuf,
                                                 VkDeviceSize srcIndirectBufOffset,
+                                                vk::BufferHelper **indexBufferVkOut,
                                                 vk::BufferHelper **indirectBufferVkOut);
 
     angle::Result convertIndexBufferCPU(ContextVk *contextVk,
                                         gl::DrawElementsType indexType,
                                         size_t indexCount,
                                         const void *sourcePointer,
+                                        vk::BufferHelper *srcIndexBuffer,
+                                        vk::BufferHelper **indexBufferOut,
                                         BufferBindingDirty *bufferBindingDirty);
 
     const gl::AttributesMask &getStreamingVertexAttribsMask() const

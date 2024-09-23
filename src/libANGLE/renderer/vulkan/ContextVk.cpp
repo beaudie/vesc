@@ -1625,12 +1625,14 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
     }
 
     VertexArrayVk *vertexArrayVk         = getVertexArray();
-    const gl::Buffer *elementArrayBuffer = vertexArrayVk->getState().getElementArrayBuffer();
+    gl::Buffer *elementArrayBuffer       = vertexArrayVk->getState().getElementArrayBuffer();
+    vk::BufferHelper *currentIndexBuffer = nullptr;
+
     if (!elementArrayBuffer)
     {
         BufferBindingDirty bindingDirty;
-        ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(this, indexType, indexCount, indices,
-                                                       &bindingDirty));
+        ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(
+            this, indexType, indexCount, indices, nullptr, &currentIndexBuffer, &bindingDirty));
         mCurrentIndexBufferOffset = 0;
 
         // We only set dirty bit when the bound buffer actually changed.
@@ -1656,8 +1658,10 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
         // mCurrentElementArrayBuffer.
         if (mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
         {
-            vertexArrayVk->updateCurrentElementArrayBuffer();
+            elementArrayBuffer = vertexArrayVk->getState().getElementArrayBuffer();
         }
+        BufferVk *bufferVk = vk::GetImpl(elementArrayBuffer);
+        currentIndexBuffer = &bufferVk->getBuffer();
 
         if (shouldConvertUint8VkIndexType(indexType) && mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
         {
@@ -1665,11 +1669,8 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                   "Potential inefficiency emulating uint8 vertex attributes due to "
                                   "lack of hardware support");
 
-            BufferVk *bufferVk             = vk::GetImpl(elementArrayBuffer);
-            vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
-
-            if (bufferHelper.isHostVisible() &&
-                mRenderer->hasResourceUseFinished(bufferHelper.getResourceUse()))
+            if (currentIndexBuffer->isHostVisible() &&
+                mRenderer->hasResourceUseFinished(currentIndexBuffer->getResourceUse()))
             {
                 uint8_t *src = nullptr;
                 ANGLE_TRY(
@@ -1680,18 +1681,21 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                          reinterpret_cast<uintptr_t>(indices);
                 BufferBindingDirty bindingDirty;
                 ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(this, indexType, byteCount, src,
-                                                               &bindingDirty));
+                                                               currentIndexBuffer,
+                                                               &currentIndexBuffer, &bindingDirty));
                 ANGLE_TRY(bufferVk->unmapImpl(this));
             }
             else
             {
-                ANGLE_TRY(vertexArrayVk->convertIndexBufferGPU(this, bufferVk, indices));
+                ANGLE_TRY(vertexArrayVk->convertIndexBufferGPU(this, bufferVk, &currentIndexBuffer,
+                                                               indices));
             }
 
             mCurrentIndexBufferOffset = 0;
         }
     }
 
+    vertexArrayVk->setElementArrayBufferForDraw(currentIndexBuffer);
     return setupDraw(context, mode, 0, indexCount, instanceCount, indexType, indices,
                      mIndexedDirtyBitsMask);
 }
@@ -1727,10 +1731,13 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
 angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
                                                   gl::PrimitiveMode mode,
                                                   gl::DrawElementsType indexType,
+                                                  vk::BufferHelper *indexBuffer,
                                                   vk::BufferHelper *indirectBuffer)
 {
     ASSERT(mode != gl::PrimitiveMode::LineLoop);
 
+    VertexArrayVk *vertexArrayVk = getVertexArray();
+    vertexArrayVk->setElementArrayBufferForDraw(indexBuffer);
     if (indexType != mCurrentDrawElementsType)
     {
         mCurrentDrawElementsType = indexType;
@@ -1743,19 +1750,25 @@ angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
 angle::Result ContextVk::setupLineLoopIndexedIndirectDraw(const gl::Context *context,
                                                           gl::PrimitiveMode mode,
                                                           gl::DrawElementsType indexType,
+                                                          vk::BufferHelper *srcIndexBuf,
                                                           vk::BufferHelper *srcIndirectBuf,
                                                           VkDeviceSize indirectBufferOffset,
+                                                          vk::BufferHelper **indexBufferOut,
                                                           vk::BufferHelper **indirectBufferOut)
 {
     ASSERT(mode == gl::PrimitiveMode::LineLoop);
 
     vk::BufferHelper *dstIndirectBuf = nullptr;
+    vk::BufferHelper *dstIndexBuf    = nullptr;
 
     VertexArrayVk *vertexArrayVk = getVertexArray();
-    ANGLE_TRY(vertexArrayVk->handleLineLoopIndexIndirect(this, indexType, srcIndirectBuf,
-                                                         indirectBufferOffset, &dstIndirectBuf));
+    ANGLE_TRY(vertexArrayVk->handleLineLoopIndexIndirect(this, indexType, srcIndexBuf,
+                                                         srcIndirectBuf, indirectBufferOffset,
+                                                         &dstIndexBuf, &dstIndirectBuf));
 
     *indirectBufferOut = dstIndirectBuf;
+    *indexBufferOut    = dstIndexBuf;
+    vertexArrayVk->setElementArrayBufferForDraw(dstIndexBuf);
 
     if (indexType != mCurrentDrawElementsType)
     {
@@ -1774,13 +1787,16 @@ angle::Result ContextVk::setupLineLoopIndirectDraw(const gl::Context *context,
 {
     ASSERT(mode == gl::PrimitiveMode::LineLoop);
 
+    vk::BufferHelper *indexBufferHelperOut    = nullptr;
     vk::BufferHelper *indirectBufferHelperOut = nullptr;
 
     VertexArrayVk *vertexArrayVk = getVertexArray();
-    ANGLE_TRY(vertexArrayVk->handleLineLoopIndirectDraw(
-        context, indirectBuffer, indirectBufferOffset, &indirectBufferHelperOut));
+    ANGLE_TRY(vertexArrayVk->handleLineLoopIndirectDraw(context, indirectBuffer,
+                                                        indirectBufferOffset, &indexBufferHelperOut,
+                                                        &indirectBufferHelperOut));
 
     *indirectBufferOut = indirectBufferHelperOut;
+    vertexArrayVk->setElementArrayBufferForDraw(indexBufferHelperOut);
 
     if (gl::DrawElementsType::UnsignedInt != mCurrentDrawElementsType)
     {
@@ -1801,8 +1817,14 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
 {
     mCurrentIndexBufferOffset    = 0;
     VertexArrayVk *vertexArrayVk = getVertexArray();
-    ANGLE_TRY(vertexArrayVk->handleLineLoop(this, firstVertex, vertexOrIndexCount,
-                                            indexTypeOrInvalid, indices, numIndicesOut));
+
+    gl::Buffer *elementArrayBuffer   = vertexArrayVk->getState().getElementArrayBuffer();
+    vk::BufferHelper *dstIndexBuffer = vertexArrayVk->getCurrentElementArrayBuffer();
+
+    ANGLE_TRY(vertexArrayVk->handleLineLoop(this, elementArrayBuffer, firstVertex,
+                                            vertexOrIndexCount, indexTypeOrInvalid, indices,
+                                            &dstIndexBuffer, numIndicesOut));
+    vertexArrayVk->setElementArrayBufferForDraw(dstIndexBuffer);
     ANGLE_TRY(onIndexBufferChange(nullptr));
     mCurrentDrawElementsType = indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum
                                    ? indexTypeOrInvalid
@@ -4432,6 +4454,10 @@ angle::Result ContextVk::multiDrawElementsIndirectHelper(const gl::Context *cont
     vk::BufferHelper *currentIndirectBuf  = &vk::GetImpl(indirectBuffer)->getBuffer();
     VkDeviceSize currentIndirectBufOffset = reinterpret_cast<VkDeviceSize>(indirect);
 
+    gl::Buffer *indexBuffer = mState.getTargetBuffer(gl::BufferBinding::ElementArray);
+    ASSERT(indexBuffer);
+    vk::BufferHelper *currentIndexBuf = &vk::GetImpl(indexBuffer)->getBuffer();
+
     // Reset the index buffer offset
     mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
     mCurrentIndexBufferOffset = 0;
@@ -4465,12 +4491,9 @@ angle::Result ContextVk::multiDrawElementsIndirectHelper(const gl::Context *cont
             "Potential inefficiency emulating uint8 vertex attributes due to lack "
             "of hardware support");
 
-        vk::BufferHelper *dstIndirectBuf;
-
         ANGLE_TRY(vertexArrayVk->convertIndexBufferIndirectGPU(
-            this, currentIndirectBuf, currentIndirectBufOffset, &dstIndirectBuf));
-
-        currentIndirectBuf       = dstIndirectBuf;
+            this, currentIndexBuf, currentIndirectBuf, currentIndirectBufOffset, &currentIndexBuf,
+            &currentIndirectBuf));
         currentIndirectBufOffset = 0;
     }
 
@@ -4478,18 +4501,15 @@ angle::Result ContextVk::multiDrawElementsIndirectHelper(const gl::Context *cont
     {
         // Line loop only supports handling at most one indirect parameter.
         ASSERT(drawcount <= 1);
-
-        vk::BufferHelper *dstIndirectBuf;
-
-        ANGLE_TRY(setupLineLoopIndexedIndirectDraw(context, mode, type, currentIndirectBuf,
-                                                   currentIndirectBufOffset, &dstIndirectBuf));
-
-        currentIndirectBuf       = dstIndirectBuf;
+        ANGLE_TRY(setupLineLoopIndexedIndirectDraw(context, mode, type, currentIndexBuf,
+                                                   currentIndirectBuf, currentIndirectBufOffset,
+                                                   &currentIndexBuf, &currentIndirectBuf));
         currentIndirectBufOffset = 0;
     }
     else
     {
-        ANGLE_TRY(setupIndexedIndirectDraw(context, mode, type, currentIndirectBuf));
+        ANGLE_TRY(
+            setupIndexedIndirectDraw(context, mode, type, currentIndexBuf, currentIndirectBuf));
     }
 
     mRenderPassCommandBuffer->drawIndexedIndirect(
