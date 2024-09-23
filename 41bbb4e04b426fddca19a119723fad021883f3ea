@@ -22,6 +22,30 @@
       },
       "revId": "41bbb4e04b426fddca19a119723fad021883f3ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae3b6e67_f6e4b4d2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5749,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-23T16:16:24Z",
+      "side": 1,
+      "message": "ah I\u0027m guessing the idea was that we don\u0027t need the lock in this function as it\u0027s already called under lock? If so, removing this line does avoid the deadlock I ran into.",
+      "parentUuid": "f620ab10_8da1bc49",
+      "range": {
+        "startLine": 5749,
+        "startChar": 51,
+        "endLine": 5749,
+        "endChar": 70
+      },
+      "revId": "41bbb4e04b426fddca19a119723fad021883f3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
