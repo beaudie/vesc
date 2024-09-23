@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f620ab10_8da1bc49",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5749,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-23T16:03:19Z",
+      "side": 1,
+      "message": "deadlock here, we lock this mutex on line 5623, then call into this function and attempt to lock it again",
+      "range": {
+        "startLine": 5749,
+        "startChar": 51,
+        "endLine": 5749,
+        "endChar": 70
+      },
+      "revId": "41bbb4e04b426fddca19a119723fad021883f3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
