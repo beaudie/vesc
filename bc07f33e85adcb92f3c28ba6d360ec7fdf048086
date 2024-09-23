@@ -101,6 +101,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b80647b_2f91387f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-23T19:25:33Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4527b4e6_d63371bc",
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bb5b794_cf57b981",
@@ -150,6 +168,24 @@
       "side": 1,
       "message": "Added `ASSERT()`, so now it should be clear that loop will exit eventually.",
       "parentUuid": "368b217a_5ce16374",
+      "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc0e5c28_be2fceb0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-23T19:25:33Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4bf6a79b_6929c5d9",
       "revId": "bc07f33e85adcb92f3c28ba6d360ec7fdf048086",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
