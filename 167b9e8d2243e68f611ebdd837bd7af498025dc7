@@ -106,6 +106,24 @@
       "parentUuid": "e8a2f07d_a758f672",
       "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "407248ae_da812a11",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5743,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-23T16:46:23Z",
+      "side": 1,
+      "message": "Sorry about that, did the latest version of that CL fix it?",
+      "parentUuid": "9bcebef1_b7931856",
+      "revId": "167b9e8d2243e68f611ebdd837bd7af498025dc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
