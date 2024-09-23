@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0601844_5eef2f2e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-23T17:17:03Z",
+      "side": 1,
+      "message": "fwiw this repros the deadlock so it might be not that rare:\n```\n% autoninja -C out/AndroidPerformance angle_apks angle_trace_perf_tests \u0026\u0026 adb install -r --force-queryable ./out/AndroidPerformance/apks/AngleLibraries.apk \u0026\u0026 out/AndroidPerformance/angle_trace_tests --gtest_filter\u003d\u0027*manhattan_31\u0027 --max-steps-performed\u003d1 \u0026\u0026 (cd src/tests/restricted_traces; python3 restricted_trace_perf.py -f \u0027*manhattan_31\u0027 --fixedtime 1 --loop-count 1 --renderer vulkan --output-tag test)\n```\n\nWe didn\u0027t hit this on CI because `restricted_trace_perf.py` runs differently: it enables ANGLE via `angle_gl_driver_selection_values` which enables blobcache. CI loads ANGLE from the same apk as the test lib and this way blobcache isn\u0027t enabled at all",
+      "range": {
+        "startLine": 12,
+        "startChar": 56,
+        "endLine": 14,
+        "endChar": 66
+      },
+      "revId": "f31d8dfb21b07849e43bb797fda59e9fb9b6c1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3626113c_a01c1df4",
