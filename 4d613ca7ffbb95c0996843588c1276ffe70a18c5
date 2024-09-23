@@ -52,6 +52,24 @@
       "parentUuid": "bbca0d51_ffec7af5",
       "revId": "4d613ca7ffbb95c0996843588c1276ffe70a18c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bd7f98f_68bf88a2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-23T13:47:05Z",
+      "side": 0,
+      "message": "I mean.. ewww.. but okay the code diff would be smaller, I\u0027ll do it this way if you prefer.",
+      "parentUuid": "4cb1e506_8cd73631",
+      "revId": "4d613ca7ffbb95c0996843588c1276ffe70a18c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
