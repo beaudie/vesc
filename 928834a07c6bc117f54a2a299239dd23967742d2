@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "917f7aef_083a8dfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-23T14:13:50Z",
+      "side": 1,
+      "message": "Thank you",
+      "revId": "928834a07c6bc117f54a2a299239dd23967742d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e6eb90d_485588f4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1690,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-23T14:13:50Z",
+      "side": 1,
+      "message": "```suggestion\n\n        // http://anglebug.com/368647924: vulkan loader causes extension to be listed when not\n        // actually supported.  kCompatiblePresentModesSize is above max count to catch this case\n        // and work around it.\n```",
+      "range": {
+        "startLine": 1688,
+        "startChar": 0,
+        "endLine": 1690,
+        "endChar": 93
+      },
+      "revId": "928834a07c6bc117f54a2a299239dd23967742d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
