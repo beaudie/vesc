@@ -289,6 +289,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a93a19ce_0d09d70a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-23T16:40:18Z",
+      "side": 1,
+      "message": "I believe he\u0027s done with whatever he was doing for MSRTT. Has the list of failures shrunk? If you\u0027re still failing any, would be good to do quick check to see what\u0027s actually failing. (a depth test? something more disastrous?)",
+      "parentUuid": "3c59cf7e_1b0e3c96",
+      "revId": "99617bacdc648c2834e568f82b8f0a5e2b540bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcbdb173_ab588d5d",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 1
