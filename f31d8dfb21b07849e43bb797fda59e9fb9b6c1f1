@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "401fa653_3837fa03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2024-09-23T17:30:38Z",
+      "side": 1,
+      "message": "Can a CI change be made to ensure the blob cache gets exercised?",
+      "parentUuid": "c0601844_5eef2f2e",
+      "range": {
+        "startLine": 12,
+        "startChar": 56,
+        "endLine": 14,
+        "endChar": 66
+      },
+      "revId": "f31d8dfb21b07849e43bb797fda59e9fb9b6c1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3626113c_a01c1df4",
