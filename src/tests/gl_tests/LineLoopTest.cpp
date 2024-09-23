@@ -484,6 +484,15 @@ void main()
 class LineLoopIndirectTest : public LineLoopTest
 {
   protected:
+    struct DrawCommand
+    {
+        GLuint count;
+        GLuint primCount;
+        GLuint firstIndex;
+        GLint baseVertex;
+        GLuint reservedMustBeZero;
+    };
+
     void runTest(GLenum indexType,
                  const void *indices,
                  GLuint indicesSize,
@@ -491,15 +500,6 @@ class LineLoopIndirectTest : public LineLoopTest
                  bool useBuffersAsUboFirst,
                  GLuint numConsecutiveLineLoopCalls)
     {
-        struct DrawCommand
-        {
-            GLuint count;
-            GLuint primCount;
-            GLuint firstIndex;
-            GLint baseVertex;
-            GLuint reservedMustBeZero;
-        };
-
         glClear(GL_COLOR_BUFFER_BIT);
 
         static const GLfloat loopPositions[] = {0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.0f,
@@ -680,6 +680,81 @@ TEST_P(LineLoopIndirectTest, TwoIndirectDrawsShareIndexBuffer)
     // Start at index 1.
     runTest(GL_UNSIGNED_SHORT, reinterpret_cast<const void *>(indices), sizeof(indices), 1, false,
             2);
+}
+
+// Test that one indirect line-loop followed by one non-line-loop draw that share the same index
+// buffer works.
+TEST_P(LineLoopIndirectTest, IndirectAndElementDrawsShareIndexBuffer)
+{
+    // http://anglebug.com/42264370
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsQualcomm());
+
+    // Old drivers buggy with optimized ConvertIndexIndirectLineLoop shader.
+    // http://anglebug.com/40096699
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsVulkan());
+
+    // Disable D3D11 SDK Layers warnings checks, see ANGLE issue 667 for details
+    ignoreD3D11SDKLayersWarnings();
+
+    // The line-loop and the non-line-loop calls should draw the same object.
+    GLuint firstIndex                     = 10;
+    static const GLubyte indices[]        = {0, 6, 9, 8, 7, 6, 0, 0, 9, 8, 7, 6, 9, 8, 0};
+    static const GLfloat loopPositions[]  = {0.0f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.0f,
+                                             0.0f,  0.0f, 0.0f, 0.0f, 0.0f, -0.5f, -0.5f,
+                                             -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
+    static const GLfloat stripPositions[] = {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
+    static const GLubyte stripIndices[]   = {1, 0, 3, 2, 1};
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(mProgram);
+    ASSERT_GL_NO_ERROR();
+
+    GLVertexArray vertexArray;
+    GLBuffer vertBuffer;
+    GLBuffer buf;
+
+    glBindVertexArray(vertexArray);
+    glBindBuffer(GL_ARRAY_BUFFER, vertBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buf);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(loopPositions), loopPositions, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(mPositionLocation);
+    glVertexAttribPointer(mPositionLocation, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glUniform4f(mColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+
+    GLBuffer indirectBuf;
+    DrawCommand cmdBuffer = {};
+    cmdBuffer.count       = 4;
+    cmdBuffer.firstIndex  = firstIndex;
+    cmdBuffer.primCount   = 1;
+
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, indirectBuf);
+    glBufferData(GL_DRAW_INDIRECT_BUFFER, sizeof(DrawCommand), &cmdBuffer, GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    glEnable(GL_BLEND);
+
+    glDrawElementsIndirect(GL_LINE_LOOP, GL_UNSIGNED_BYTE, nullptr);
+    ASSERT_GL_NO_ERROR();
+    glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_BYTE, reinterpret_cast<const void *>(1));
+    ASSERT_GL_NO_ERROR();
+    glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_BYTE, reinterpret_cast<const void *>(8));
+    ASSERT_GL_NO_ERROR();
+
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    glEnableVertexAttribArray(mPositionLocation);
+    glVertexAttribPointer(mPositionLocation, 2, GL_FLOAT, GL_FALSE, 0, stripPositions);
+    glUniform4f(mColorLocation, 0, 1, 0, 1);
+    glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_BYTE, stripIndices);
+
+    checkPixels();
 }
 
 ANGLE_INSTANTIATE_TEST_ES2(LineLoopTest);
