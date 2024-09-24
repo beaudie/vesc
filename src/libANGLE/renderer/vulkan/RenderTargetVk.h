@@ -155,6 +155,11 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     {
         ASSERT(!mFramebufferCacheManager.containsKey(sharedFramebufferCacheKey));
         mFramebufferCacheManager.addKey(sharedFramebufferCacheKey);
+        if (mFramebufferCacheManager.getNumberOfCachedKey() > 1000)
+        {
+            ALOG("onNewFramebuffer: excessive cachedKey %zu",
+                 mFramebufferCacheManager.getNumberOfCachedKey());
+        }
     }
     void releaseFramebuffers(ContextVk *contextVk)
     {

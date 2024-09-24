@@ -68,6 +68,8 @@ BufferBlock::~BufferBlock()
 
 void BufferBlock::destroy(Renderer *renderer)
 {
+    ALOG("BufferBlock::destroy cachedKey.size=%zu",
+         mDescriptorSetCacheManager.getNumberOfCachedKey());
     VkDevice device = renderer->getDevice();
 
     mDescriptorSetCacheManager.destroyKeys(renderer);
@@ -108,6 +110,7 @@ VkResult BufferBlock::init(Context *context,
     mMemoryTypeIndex      = memoryTypeIndex;
     mMappedMemory         = nullptr;
     mSerial               = renderer->getResourceSerialFactory().generateBufferSerial();
+    ALOG("BufferBlock::init");
 
     return VK_SUCCESS;
 }
@@ -135,6 +138,7 @@ void BufferBlock::initWithoutVirtualBlock(Context *context,
     mMemoryTypeIndex      = memoryTypeIndex;
     mMappedMemory         = nullptr;
     mSerial               = renderer->getResourceSerialFactory().generateBufferSerial();
+    ALOG("BufferBlock::initWithoutVirtualBlock");
 }
 
 VkResult BufferBlock::map(const VkDevice device)
@@ -161,6 +165,8 @@ VkResult BufferBlock::allocate(VkDeviceSize size,
 
 void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)
 {
+    WARN() << "BufferBlock::free cachedKey.size="
+           << mDescriptorSetCacheManager.getNumberOfCachedKey();
     std::unique_lock<angle::SimpleMutex> lock(mVirtualBlockMutex);
     mVirtualBlock.free(allocation, offset);
 }

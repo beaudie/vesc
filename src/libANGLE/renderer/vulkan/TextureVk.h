@@ -353,6 +353,11 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     void onNewDescriptorSet(const vk::SharedDescriptorSetCacheKey &sharedCacheKey)
     {
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
+        if (mDescriptorSetCacheManager.getNumberOfCachedKey() > 1000)
+        {
+            ALOG("TextureVk::onNewDescriptorSet: excessive cachedKey %zu",
+                 mDescriptorSetCacheManager.getNumberOfCachedKey());
+        }
     }
 
     // Check if the texture is consistently specified. Used for flushing mutable textures.

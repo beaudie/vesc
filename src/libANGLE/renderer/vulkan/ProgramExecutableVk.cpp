@@ -1757,6 +1757,12 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
 
     if (*newSharedCacheKeyOut != nullptr)
     {
+        ALOG("ProgramExecutableVk::getOrAllocateDescriptorSet this:%p setIndex=%u cacheSize=%zu",
+             this, ToUnderlying(setIndex), mDescriptorPools[setIndex].get().getTotalCacheSize());
+        if (mDescriptorPools[setIndex].get().getTotalCacheSize() == 1500)
+        {
+            mDescriptorPools[setIndex].get().dumpCacheKey();
+        }
         // Cache miss. A new cache entry has been created.
         descriptorSetDesc.updateDescriptorSet(context->getRenderer(), writeDescriptorDescs,
                                               updateBuilder, mDescriptorSets[setIndex]);

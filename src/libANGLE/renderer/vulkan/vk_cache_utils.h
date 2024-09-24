@@ -1241,6 +1241,7 @@ class SamplerDesc final
 
     size_t hash() const;
     bool operator==(const SamplerDesc &other) const;
+    void streamOut(std::ostream &ostr) const;
 
   private:
     // 32*4 bits for floating point data.
@@ -1766,6 +1767,7 @@ class DescriptorSetDesc
     size_t hash() const;
 
     void resize(size_t count) { mDescriptorInfos.resize(count); }
+    size_t getSize() const { return mDescriptorInfos.size(); }
 
     size_t getKeySizeBytes() const { return mDescriptorInfos.size() * sizeof(DescriptorInfoDesc); }
 
@@ -1777,6 +1779,10 @@ class DescriptorSetDesc
     }
 
     DescriptorInfoDesc &getInfoDesc(uint32_t infoDescIndex)
+    {
+        return mDescriptorInfos[infoDescIndex];
+    }
+    const DescriptorInfoDesc &getInfoDesc(uint32_t infoDescIndex) const
     {
         return mDescriptorInfos[infoDescIndex];
     }
@@ -1923,6 +1929,9 @@ class DescriptorSetDescBuilder final
 
     const uint32_t *getDynamicOffsets() const { return mDynamicOffsets.data(); }
     size_t getDynamicOffsetsSize() const { return mDynamicOffsets.size(); }
+    bool assertBufferBlocksHasSharedCacheKey(
+        const vk::SharedDescriptorSetCacheKey &newSharedCacheKey) const;
+    void clearBufferBlocks() { mBufferBlocks.clear(); }
 
   private:
     void setEmptyBuffer(uint32_t infoDescIndex,
@@ -1932,6 +1941,7 @@ class DescriptorSetDescBuilder final
     DescriptorSetDesc mDesc;
     angle::FastVector<DescriptorDescHandles, kFastDescriptorSetDescLimit> mHandles;
     angle::FastVector<uint32_t, kFastDescriptorSetDescLimit> mDynamicOffsets;
+    std::vector<BufferBlock *> mBufferBlocks;
 };
 
 // Specialized update for textures.
@@ -2127,6 +2137,7 @@ class SharedCacheKeyManager
     bool containsKey(const SharedCacheKeyT &key) const;
     bool empty() const { return mSharedCacheKeys.empty(); }
     void assertAllEntriesDestroyed();
+    size_t getNumberOfCachedKey() const { return mSharedCacheKeys.size(); }
 
   private:
     // Tracks an array of cache keys with refcounting. Note this owns one refcount of
@@ -2740,6 +2751,9 @@ class DescriptorSetCache final : angle::NonCopyable
     }
 
     bool empty() const { return mPayload.empty(); }
+
+    void dumpCacheKey() const;
+    void analyzeCacheMiss(const vk::DescriptorSetDesc &desc) const;
 
   private:
     class dsCacheEntry

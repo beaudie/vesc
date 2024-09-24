@@ -2851,7 +2851,11 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
         // A new cache entry has been created. We record this cache key in the images and buffers so
         // that the descriptorSet cache can be destroyed when buffer/image is destroyed.
         updateShaderResourcesWithSharedCacheKey(newSharedCacheKey);
+        ALOG("has***Buffers{%d, %d, %d, %d, %d}", hasUniformBuffers, hasStorageBuffers,
+             hasAtomicCounterBuffers, hasImages, hasFramebufferFetch);
+        ASSERT(mShaderBuffersDescriptorDesc.assertBufferBlocksHasSharedCacheKey(newSharedCacheKey));
     }
+    mShaderBuffersDescriptorDesc.clearBufferBlocks();
 
     // Record usage of storage buffers and images in the command buffer to aid handling of
     // glMemoryBarrier.
@@ -2909,7 +2913,9 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
         // buffers so that the descriptorSet cache can be destroyed when buffer/image is
         // destroyed.
         updateShaderResourcesWithSharedCacheKey(newSharedCacheKey);
+        ASSERT(mShaderBuffersDescriptorDesc.assertBufferBlocksHasSharedCacheKey(newSharedCacheKey));
     }
+    mShaderBuffersDescriptorDesc.clearBufferBlocks();
 
     return angle::Result::Continue;
 }

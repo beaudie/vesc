@@ -5747,12 +5747,26 @@ bool SamplerDesc::operator==(const SamplerDesc &other) const
     return memcmp(this, &other, sizeof(SamplerDesc)) == 0;
 }
 
+void SamplerDesc::streamOut(std::ostream &ostr) const
+{
+    ostr << "{" << mMipLodBias << ", " << mMaxAnisotropy << ", " << mMinLod << ", " << mMaxLod
+         << *(uint64_t *)(&mYcbcrConversionDesc) << ", " << mPadding << "{" << mBorderColor.red
+         << "," << mBorderColor.green << "," << mBorderColor.blue << "," << mBorderColor.alpha
+         << "}" << "}";
+    ostr << "\n";
+}
+
 // SamplerHelper implementation.
 SamplerHelper::SamplerHelper(ContextVk *contextVk)
     : mSamplerSerial(contextVk->getRenderer()->getResourceSerialFactory().generateSamplerSerial())
-{}
+{
+    ALOG("SamplerHelper created");
+}
 
-SamplerHelper::~SamplerHelper() {}
+SamplerHelper::~SamplerHelper()
+{
+    ALOG("SamplerHelper destroyed");
+}
 
 SamplerHelper::SamplerHelper(SamplerHelper &&samplerHelper)
 {
@@ -6131,14 +6145,13 @@ void DescriptorSetDesc::updateDescriptorSet(Renderer *renderer,
 
 void DescriptorSetDesc::streamOut(std::ostream &ostr) const
 {
-    ostr << mDescriptorInfos.size() << " descriptor descs:\n";
-
+    ostr << mDescriptorInfos.size() << " descriptor descs:";
     for (uint32_t index = 0; index < mDescriptorInfos.size(); ++index)
     {
         const DescriptorInfoDesc &infoDesc = mDescriptorInfos[index];
-        ostr << "{" << infoDesc.imageLayoutOrRange << ", " << infoDesc.imageSubresourceRange << ", "
-             << infoDesc.imageViewSerialOrOffset << ", " << infoDesc.samplerOrBufferSerial << "}";
-        ostr << "\n";
+        ostr << "{" << infoDesc.samplerOrBufferSerial << ", " << infoDesc.imageViewSerialOrOffset
+             << ", " << infoDesc.imageLayoutOrRange << ", " << infoDesc.imageSubresourceRange
+             << "}";
     }
 }
 
@@ -6177,6 +6190,8 @@ void DescriptorSetDescBuilder::updateUniformBuffer(uint32_t bindingIndex,
     infoDesc.imageSubresourceRange = 0;
 
     mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
+    //    ALOG("DescriptorSetDescBuilder::updateUniformBuffer buffer:0x%llx", (unsigned long
+    //    long)(bufferHelper.getBuffer().getHandle()));
 }
 
 void DescriptorSetDescBuilder::updateTransformFeedbackBuffer(
@@ -6205,6 +6220,8 @@ void DescriptorSetDescBuilder::updateTransformFeedbackBuffer(
     infoDesc.imageSubresourceRange = 0;
 
     mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
+    ALOG("DescriptorSetDescBuilder::updateTransformFeedbackBuffer buffer:0x%llx",
+         (unsigned long long)(bufferHelper.getBuffer().getHandle()));
 }
 
 void DescriptorSetDescBuilder::updateUniformsAndXfb(
@@ -6321,6 +6338,9 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
                 infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
                 memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource,
                        sizeof(uint32_t));
+                //    ALOG("DescriptorSetDescBuilder::UpdatePreCacheActiveTextures samplerVk:%p
+                //    isSamplerExternalY2Y=%d, sampler:0x%llx",samplerVk, isSamplerExternalY2Y,
+                //    (unsigned long long)(samplerHelper.getSamplerSerial().getValue()));
             }
         }
     }
@@ -6415,6 +6435,8 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
                     context, samplerState.getSRGBDecode(), samplerUniform.isTexelFetchStaticUse(),
                     isSamplerExternalY2Y);
                 mHandles[infoIndex].imageView = imageView.getHandle();
+                ALOG("DescriptorSetDescBuilder::updateFullActiveTextures sampler:0x%llx",
+                     (unsigned long long)(samplerHelper.getSamplerSerial().getValue()));
             }
         }
     }
@@ -6534,6 +6556,9 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
 
     DescriptorInfoDesc &infoDesc   = mDesc.getInfoDesc(infoDescIndex);
     infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+    mBufferBlocks.emplace_back(bufferHelper.getBufferBlock());
+    //    ALOG("DescriptorSetDescBuilder::updateOneShaderBuffer buffer:0x%llx", (unsigned long
+    //    long)(bufferHelper.getBlockSerial().getValue()));
     if (IsDynamicDescriptor(descriptorType))
     {
         SetBitField(mDynamicOffsets[infoDescIndex], offset);
@@ -6646,6 +6671,9 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
         SetBitField(infoDesc.imageLayoutOrRange, range);
         SetBitField(infoDesc.imageViewSerialOrOffset, offset);
         infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+        mBufferBlocks.emplace_back(bufferHelper.getBufferBlock());
+        ALOG("DescriptorSetDescBuilder::updateAtomicCounters sampler:0x%llx",
+             (unsigned long long)(bufferHelper.getBlockSerial().getValue()));
         infoDesc.imageSubresourceRange = 0;
 
         mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
@@ -6884,10 +6912,27 @@ void DescriptorSetDescBuilder::updateDescriptorSet(Renderer *renderer,
                               descriptorSet);
 }
 
+bool DescriptorSetDescBuilder::assertBufferBlocksHasSharedCacheKey(
+    const vk::SharedDescriptorSetCacheKey &newSharedCacheKey) const
+{
+    bool allHasCacheKey = true;
+    for (BufferBlock *block : mBufferBlocks)
+    {
+        bool blockHasCacheKeyd = block->containSharedCacheKey(newSharedCacheKey);
+        ASSERT(blockHasCacheKeyd);
+        allHasCacheKey = allHasCacheKey && blockHasCacheKeyd;
+    }
+    return allHasCacheKey;
+}
+
 // SharedCacheKeyManager implementation.
 template <class SharedCacheKeyT>
 void SharedCacheKeyManager<SharedCacheKeyT>::addKey(const SharedCacheKeyT &key)
 {
+    /*    if(mSharedCacheKeys.size()>50)
+        {
+            ALOG("mSharedCacheKeys.size = %zu", mSharedCacheKeys.size());
+        }*/
     // If there is invalid key in the array, use it instead of keep expanding the array
     for (SharedCacheKeyT &sharedCacheKey : mSharedCacheKeys)
     {
@@ -7028,6 +7073,139 @@ void PipelineCacheAccess::merge(Renderer *renderer, const vk::PipelineCache &pip
     mPipelineCache->merge(renderer->getDevice(), 1, pipelineCache.ptr());
 }
 }  // namespace vk
+
+// DescriptorSetCache implementation.
+void DescriptorSetCache::dumpCacheKey() const
+{
+    for (const auto &iter : mPayload)
+    {
+        const vk::DescriptorSetDesc &desc = iter.first;
+        std::ostringstream os;
+        desc.streamOut(os);
+        ALOG("%s\n", os.str().c_str());
+    }
+    ALOG("*******************\n");
+}
+
+void DescriptorSetCache::analyzeCacheMiss(const vk::DescriptorSetDesc &desc) const
+{
+    size_t n = desc.getSize();
+
+    bool matchFound_Ignore_samplerOrBufferSerial = false;
+    for (const auto &iter : mPayload)
+    {
+        const vk::DescriptorSetDesc &cachedDesc = iter.first;
+        if (n != cachedDesc.getSize())
+            continue;
+
+        // Any match if ignore imageSubresourceRange
+        uint32_t i;
+        for (i = 0; i < n; i++)
+        {
+            if (cachedDesc.getInfoDesc(i).imageViewSerialOrOffset !=
+                    desc.getInfoDesc(i).imageViewSerialOrOffset ||
+                cachedDesc.getInfoDesc(i).imageLayoutOrRange !=
+                    desc.getInfoDesc(i).imageLayoutOrRange ||
+                cachedDesc.getInfoDesc(i).imageSubresourceRange !=
+                    desc.getInfoDesc(i).imageSubresourceRange)
+            {
+                break;
+            }
+        }
+        if (i == n)
+        {
+            matchFound_Ignore_samplerOrBufferSerial = true;
+        }
+    }
+
+    bool matchFound_Ignore_imageViewSerialOrOffset = false;
+    for (const auto &iter : mPayload)
+    {
+        const vk::DescriptorSetDesc &cachedDesc = iter.first;
+        if (n != cachedDesc.getSize())
+            continue;
+
+        // Any match if ignore imageSubresourceRange
+        uint32_t i;
+        for (i = 0; i < n; i++)
+        {
+            if (cachedDesc.getInfoDesc(i).samplerOrBufferSerial !=
+                    desc.getInfoDesc(i).samplerOrBufferSerial ||
+                cachedDesc.getInfoDesc(i).imageLayoutOrRange !=
+                    desc.getInfoDesc(i).imageLayoutOrRange ||
+                cachedDesc.getInfoDesc(i).imageSubresourceRange !=
+                    desc.getInfoDesc(i).imageSubresourceRange)
+            {
+                break;
+            }
+        }
+        if (i == n)
+        {
+            matchFound_Ignore_imageViewSerialOrOffset = true;
+        }
+    }
+
+    bool matchFound_Ignore_imageLayoutOrRange = false;
+    for (const auto &iter : mPayload)
+    {
+        const vk::DescriptorSetDesc &cachedDesc = iter.first;
+        if (n != cachedDesc.getSize())
+            continue;
+
+        // Any match if ignore imageSubresourceRange
+        uint32_t i;
+        for (i = 0; i < n; i++)
+        {
+            if (cachedDesc.getInfoDesc(i).imageViewSerialOrOffset !=
+                    desc.getInfoDesc(i).imageViewSerialOrOffset ||
+                cachedDesc.getInfoDesc(i).samplerOrBufferSerial !=
+                    desc.getInfoDesc(i).samplerOrBufferSerial ||
+                cachedDesc.getInfoDesc(i).imageSubresourceRange !=
+                    desc.getInfoDesc(i).imageSubresourceRange)
+            {
+                break;
+            }
+        }
+        if (i == n)
+        {
+            matchFound_Ignore_imageLayoutOrRange = true;
+        }
+    }
+
+    bool matchFound_Ignore_imageSubresourceRange = false;
+    for (const auto &iter : mPayload)
+    {
+        const vk::DescriptorSetDesc &cachedDesc = iter.first;
+        if (n != cachedDesc.getSize())
+            continue;
+
+        // Any match if ignore imageSubresourceRange
+        uint32_t i;
+        for (i = 0; i < n; i++)
+        {
+            if (cachedDesc.getInfoDesc(i).samplerOrBufferSerial !=
+                    desc.getInfoDesc(i).samplerOrBufferSerial ||
+                cachedDesc.getInfoDesc(i).imageViewSerialOrOffset !=
+                    desc.getInfoDesc(i).imageViewSerialOrOffset ||
+                cachedDesc.getInfoDesc(i).imageLayoutOrRange !=
+                    desc.getInfoDesc(i).imageLayoutOrRange)
+            {
+                break;
+            }
+        }
+        if (i == n)
+        {
+            matchFound_Ignore_imageSubresourceRange = true;
+        }
+    }
+
+    std::ostringstream os;
+    desc.streamOut(os);
+    ALOG("cache miss because of Ignore{%d, %d, %d %d} Desc:%s",
+         matchFound_Ignore_samplerOrBufferSerial, matchFound_Ignore_imageViewSerialOrOffset,
+         matchFound_Ignore_imageLayoutOrRange, matchFound_Ignore_imageSubresourceRange,
+         os.str().c_str());
+}
 
 // UpdateDescriptorSetsBuilder implementation.
 UpdateDescriptorSetsBuilder::UpdateDescriptorSetsBuilder()
@@ -8267,6 +8445,8 @@ angle::Result SamplerYcbcrConversionCache::getSamplerYcbcrConversion(
     *vkSamplerYcbcrConversionOut = insertedSamplerYcbcrConversion.getHandle();
 
     context->getRenderer()->onAllocateHandle(vk::HandleType::SamplerYcbcrConversion);
+    ALOG("getSamplerYcbcrConversion::getSamplerYcbcrConversion cache miss. mPayload.size=%zu",
+         payload.size());
 
     return angle::Result::Continue;
 }
@@ -8320,7 +8500,13 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     samplerOut->set(&insertedSampler);
 
     contextVk->getRenderer()->onAllocateHandle(vk::HandleType::Sampler);
-
+    ALOG("SamplerCache::getSampler cache miss. mPayload.size=%zu", mPayload.size());
+    if (mPayload.size() > 100)
+    {
+        std::ostringstream os;
+        desc.streamOut(os);
+        ALOG("%s\n", os.str().c_str());
+    }
     return angle::Result::Continue;
 }
 }  // namespace rx

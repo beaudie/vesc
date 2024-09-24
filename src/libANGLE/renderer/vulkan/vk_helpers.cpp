@@ -4382,6 +4382,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
         mCacheStats.hit();
         return angle::Result::Continue;
     }
+    // mDescriptorSetCache.analyzeCacheMiss(desc);
 
     ANGLE_TRY(allocateDescriptorSet(context, descriptorSetLayout, bindingOut, descriptorSetOut));
     // The pool is still in use every time a new descriptor set is allocated from it.
@@ -4396,6 +4397,13 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     bindingOut->get().onNewDescriptorSetAllocated(*newSharedCacheKeyOut);
 
     return angle::Result::Continue;
+}
+
+void DynamicDescriptorPool::dumpCacheKey()
+{
+    ALOG("\n\nthis=%p", this);
+    ALOG("mDescriptorPools.size=%zu", mDescriptorPools.size());
+    mDescriptorSetCache.dumpCacheKey();
 }
 
 angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
@@ -11625,6 +11633,7 @@ void ImageViewHelper::init(Renderer *renderer)
     if (!mImageViewSerial.valid())
     {
         mImageViewSerial = renderer->getResourceSerialFactory().generateImageOrBufferViewSerial();
+        WARN() << "**** mImageViewSerial:" << mImageViewSerial.getValue();
     }
 }
 
@@ -11704,6 +11713,7 @@ void ImageViewHelper::release(Renderer *renderer, const ResourceUse &use)
 
     // Update image view serial.
     mImageViewSerial = renderer->getResourceSerialFactory().generateImageOrBufferViewSerial();
+    WARN() << "**** mImageViewSerial:" << mImageViewSerial.getValue();
 }
 
 bool ImageViewHelper::isImageViewGarbageEmpty() const
@@ -11770,6 +11780,7 @@ void ImageViewHelper::destroy(VkDevice device)
     // Destroy fragment shading rate view
     mFragmentShadingRateImageView.destroy(device);
 
+    WARN() << "**** mImageViewSerial:" << mImageViewSerial.getValue();
     mImageViewSerial = kInvalidImageOrBufferViewSerial;
 }
 
@@ -12298,6 +12309,7 @@ void BufferViewHelper::init(Renderer *renderer, VkDeviceSize offset, VkDeviceSiz
     if (!mViewSerial.valid())
     {
         mViewSerial = renderer->getResourceSerialFactory().generateImageOrBufferViewSerial();
+        WARN() << "**** mViewSerial:" << mViewSerial.getValue();
     }
 
     mInitialized = true;
@@ -12328,6 +12340,7 @@ void BufferViewHelper::release(ContextVk *contextVk)
         renderer->collectGarbage(mUse, std::move(garbage));
         // Update image view serial.
         mViewSerial = renderer->getResourceSerialFactory().generateImageOrBufferViewSerial();
+        WARN() << "**** mViewSerial:" << mViewSerial.getValue();
     }
 
     mUse.reset();
@@ -12339,6 +12352,7 @@ void BufferViewHelper::release(ContextVk *contextVk)
 
 void BufferViewHelper::destroy(VkDevice device)
 {
+    WARN() << "**** mViewSerial:" << mViewSerial.getValue();
     for (auto &formatAndView : mViews)
     {
         BufferView &view = formatAndView.second;

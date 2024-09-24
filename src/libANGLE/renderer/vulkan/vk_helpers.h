@@ -318,6 +318,11 @@ class DescriptorPoolHelper final : public Resource
     void onNewDescriptorSetAllocated(const vk::SharedDescriptorSetCacheKey &sharedCacheKey)
     {
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
+        if (mDescriptorSetCacheManager.getNumberOfCachedKey() > 1000)
+        {
+            ALOG("DescriptorPoolHelper::onNewDescriptorSetAllocated: excessive cachedKey %zu",
+                 mDescriptorSetCacheManager.getNumberOfCachedKey());
+        }
     }
     bool hasValidDescriptorSet() const { return mValidDescriptorSets != 0; }
 
@@ -373,7 +378,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                              RefCountedDescriptorPoolBinding *bindingOut,
                                              VkDescriptorSet *descriptorSetOut,
                                              SharedDescriptorSetCacheKey *sharedCacheKeyOut);
-
+    void dumpCacheKey();
     void releaseCachedDescriptorSet(Renderer *renderer, const DescriptorSetDesc &desc);
     void destroyCachedDescriptorSet(Renderer *renderer, const DescriptorSetDesc &desc);
 
@@ -387,6 +392,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     {
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
     }
+    size_t getTotalCacheSize() const { return mDescriptorSetCache.getTotalCacheSize(); }
 
     // Release the pool if it is no longer been used and contains no valid descriptorSet.
     void checkAndReleaseUnusedPool(Renderer *renderer, RefCountedDescriptorPoolHelper *pool);
@@ -1035,6 +1041,11 @@ class BufferHelper : public ReadWriteResource
     void onNewDescriptorSet(const SharedDescriptorSetCacheKey &sharedCacheKey)
     {
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
+        if (mDescriptorSetCacheManager.getNumberOfCachedKey() > 1000)
+        {
+            ALOG("BufferHelper::onNewDescriptorSet: excessive cachedKey %zu",
+                 mDescriptorSetCacheManager.getNumberOfCachedKey());
+        }
     }
 
     angle::Result initializeNonZeroMemory(Context *context,

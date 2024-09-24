@@ -86,6 +86,11 @@ class BufferBlock final : angle::NonCopyable
     void onNewDescriptorSet(const SharedDescriptorSetCacheKey &sharedCacheKey)
     {
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
+        /*        if(mDescriptorSetCacheManager.getNumberOfCachedKey() > 1000)
+                {
+                    ALOG("BufferBlock::onNewDescriptorSet: excessive cachedKey %zu this:%p",
+           mDescriptorSetCacheManager.getNumberOfCachedKey(), this);
+                }*/
     }
     void releaseAllCachedDescriptorSetCacheKeys(Renderer *renderer)
     {
@@ -93,6 +98,11 @@ class BufferBlock final : angle::NonCopyable
         {
             mDescriptorSetCacheManager.releaseKeys(renderer);
         }
+    }
+
+    bool containSharedCacheKey(const vk::SharedDescriptorSetCacheKey &newSharedCacheKey) const
+    {
+        return mDescriptorSetCacheManager.containsKey(newSharedCacheKey);
     }
 
   private:
