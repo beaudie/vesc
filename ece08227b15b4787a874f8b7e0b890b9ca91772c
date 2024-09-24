@@ -144,6 +144,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d0abc9f_5bf53bac",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-24T19:21:07Z",
+      "side": 1,
+      "message": "I can interpret \"properties (format, usage, dimensions, etc.) not supported by the EGL implementation\" to mean that if usage has AHB_RENDERABLE but EGL/GL cannot render to it then it should fail. So I guess Mohan is kind of right here, if usage has AHB_RENDERABLE, we should check if format is renderable.\n\nIn practice it probably doesn\u0027t matter though, hard to imagine AHB is renderable but the format is not in Vulkan. But I\u0027ll add the `if (AHB_RENDERABLE)`/`else` to this based on that spec quote.",
+      "parentUuid": "cc1b8f0b_fe058fbb",
+      "revId": "ece08227b15b4787a874f8b7e0b890b9ca91772c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "160c3e4d_efe514d6",
