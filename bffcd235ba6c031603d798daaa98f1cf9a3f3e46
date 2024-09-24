@@ -88,6 +88,24 @@
       "parentUuid": "b05484b1_97711fcd",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f30533e8_fe655238",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-24T22:04:15Z",
+      "side": 1,
+      "message": "\u003e The validate_display error is not relevant. It showed up in the passing test logs, too\n\nAck\n\n\u003e Let me try to get a symbolized crash callstack\n\nappreciate it, that would be very helpful. The attached log dint even have a stack trace which is what made me think the failure was a mutex deadlock or some other type of hang\n\nalso, i see this failure was reported for swiftshader, does this mean vendor ICDs like pixel bots had no issues with this test?",
+      "parentUuid": "b4812921_49800a69",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
