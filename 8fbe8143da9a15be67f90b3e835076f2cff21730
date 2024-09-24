@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b768e158_7b794843",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5340,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-09-24T11:48:32Z",
+      "side": 1,
+      "message": "Our bot failures were on 32.0.101.5762, which looks to me newer then 31.0.101.5379.",
+      "range": {
+        "startLine": 5340,
+        "startChar": 65,
+        "endLine": 5340,
+        "endChar": 85
+      },
+      "revId": "8fbe8143da9a15be67f90b3e835076f2cff21730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
