@@ -191,7 +191,7 @@ egl::Error HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(
     else
     {
         angle::FormatID formatID = vk::GetFormatIDFromVkFormat(bufferFormatProperties.format);
-        if (!HasFullTextureFormatSupport(renderer, formatID))
+        if (!HasNonRenderableTextureFormatSupport(renderer, formatID))
         {
             return egl::EglBadParameter()
                    << "AHardwareBuffer format " << bufferFormatProperties.format
