@@ -34,6 +34,24 @@
       "parentUuid": "31a76b79_7f42f95c",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "514c9640_9ded32a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-24T21:44:21Z",
+      "side": 1,
+      "message": "I added some information in https://g-issues.angleproject.org/issues/40644776. I should say that it is more accurate to say the test crashed rather than hanging / time out.\n\nI am not very familiar with Skia APIs. @nscobie@google.com, do you happen to know how to translate this `DMSAA_dst_read` test https://cs.android.com/android/platform/superproject/main/+/main:external/skia/tests/DMSAATest.cpp;l\u003d166;drc\u003dd262a68a1e0c3b640274b094a7f1e3a5b75563e9 to a test that only involves EGL/GLES calls?",
+      "parentUuid": "854496f3_7657216f",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
