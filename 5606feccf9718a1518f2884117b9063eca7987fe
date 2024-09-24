@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "538ca087_87e46f9e",
+        "filename": "src/compiler/translator/wgsl/OutputUniformBlocks.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-24T20:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97caa5a7_181a759c",
+      "range": {
+        "startLine": 44,
+        "startChar": 30,
+        "endLine": 44,
+        "endChar": 55
+      },
+      "revId": "5606feccf9718a1518f2884117b9063eca7987fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e933620_57af333f",
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Wouldn\u0027t this make the var name the same as the type of the var? Does WGSL compile that? 😊",
       "parentUuid": "95505663_bfb1ba08",
+      "range": {
+        "startLine": 74,
+        "startChar": 19,
+        "endLine": 74,
+        "endChar": 44
+      },
+      "revId": "5606feccf9718a1518f2884117b9063eca7987fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c1a004a_bbdff211",
+        "filename": "src/compiler/translator/wgsl/OutputUniformBlocks.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-24T20:10:49Z",
+      "side": 1,
+      "message": "Ah whoops I confused the type and variable name. You can ignore this.",
+      "parentUuid": "c479339e_522904c4",
       "range": {
         "startLine": 74,
         "startChar": 19,
