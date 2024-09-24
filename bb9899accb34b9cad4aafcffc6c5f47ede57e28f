@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6086563_b7dbf8b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-24T19:13:47Z",
+      "side": 1,
+      "message": "Bug: chromium:368263759",
+      "revId": "bb9899accb34b9cad4aafcffc6c5f47ede57e28f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
