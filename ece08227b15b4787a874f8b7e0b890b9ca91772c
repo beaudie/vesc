@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb227b1e_4731645c",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-24T16:56:58Z",
+      "side": 1,
+      "message": "Agree with what Geoff said. This is just to ensure AHB is at least useful. The render ability will be validated when it is attached to FBO. The spec mohan pasted above just says it can be supported by EGL implementation, it does not say you have to do a full validation. I don\u0027t think this change will break EGL conformance (at least it passes bots).",
+      "parentUuid": "08ef5d94_5a98e6e5",
+      "revId": "ece08227b15b4787a874f8b7e0b890b9ca91772c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "160c3e4d_efe514d6",
