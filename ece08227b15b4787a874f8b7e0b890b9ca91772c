@@ -16,6 +16,24 @@
       "message": "i am unable to access the bug but this should really be dictated by the AHB usage flags since this EGLImage could end up creating a texture target that is a color attachment. So, something like -\n```\nif (AHB has sampling usage)\n{\n    // validate support for `HasNonRenderableTextureFormatSupport`\n}\n\nif (AHB has rendering usage)\n{\n    // validate support for `HasFullTextureFormatSupport`\n}\n```",
       "revId": "ece08227b15b4787a874f8b7e0b890b9ca91772c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d46d0fa0_00a80c34",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-24T13:26:24Z",
+      "side": 1,
+      "message": "That probably makes sense, but I figured if the format is not renderable, then the application would be stopped from using it as a color attachment at the _GLES_ level already, don\u0027t you think so?\n\nLike say the AHB has ASTC format (assuming that\u0027s possible), the app can\u0027t render to ASTC because of GLES validation, and that\u0027s independent from whether the source is AHB or not.\n\nOh, or is it the case that you can have an AHB with say RGBA8 but without the renderable usage and you still cannot render into it? In that case, the problem really is that we\u0027re missing the usage check, changing the format check wouldn\u0027t fix that.",
+      "parentUuid": "6d555104_8bbb4b72",
+      "revId": "ece08227b15b4787a874f8b7e0b890b9ca91772c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
