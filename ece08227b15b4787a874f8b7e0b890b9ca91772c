@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a4fd4f_83187781",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-24T17:07:05Z",
+      "side": 1,
+      "message": "\u003e The render ability will be validated when it is attached to FBO\n\nbut that is too late for validation, it is more of a run time failure. Validation should really happen during image creation\n\n\u003e just says it can be supported by EGL implementation\n\nbut if a vendor cant support it we need to error out and fail validation, right?\n\n\u003e I don\u0027t think this change will break EGL conformance\n\nNot surprised, GLES / EGL conformance testing esp. as it relates to platform specific extensions is almost non-existent",
+      "parentUuid": "eb227b1e_4731645c",
+      "revId": "ece08227b15b4787a874f8b7e0b890b9ca91772c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "160c3e4d_efe514d6",
