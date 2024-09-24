@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d555104_8bbb4b72",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-24T13:20:55Z",
+      "side": 1,
+      "message": "i am unable to access the bug but this should really be dictated by the AHB usage flags since this EGLImage could end up creating a texture target that is a color attachment. So, something like -\n```\nif (AHB has sampling usage)\n{\n    // validate support for `HasNonRenderableTextureFormatSupport`\n}\n\nif (AHB has rendering usage)\n{\n    // validate support for `HasFullTextureFormatSupport`\n}\n```",
+      "revId": "ece08227b15b4787a874f8b7e0b890b9ca91772c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
