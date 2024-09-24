@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "08ef5d94_5a98e6e5",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-24T16:15:45Z",
+      "side": 1,
+      "message": "\u003e if the format is not renderable, then the application would be stopped from using it as a color attachment at the GLES level already, don\u0027t you think so?\n\nnot really. The app can choose AHB usage much before it \"imports\" memory into any API. AHB module will have no idea if Vulkan API is capable of supporting sampling / rendering to a particular format\n\n\u003e you can have an AHB with say RGBA8 but without the renderable usage and you still cannot render into it?\n\nyes. say we have format RGB565, some vendors can render to it but some cant. An app will ideally have a fallback mechanism where it tries creating an EGLImage with AHB RGB565 format + rendering usage and if that fails it falls back to RGBA888 or some other format\n\n\u003e I think we only need to verify that we can sample (minimal usage) here\n\nthis function is called by EGL validation layer to make sure to error out and emit error code per spec -\n```\nIf \u003ctarget\u003e is EGL_NATIVE_BUFFER_ANDROID and \u003cbuffer\u003e was created\nwith properties (format, usage, dimensions, etc.) not supported by\nthe EGL implementation, the error EGL_BAD_PARAMETER is generated.\"\n```",
+      "parentUuid": "88110c9e_a6973713",
+      "revId": "ece08227b15b4787a874f8b7e0b890b9ca91772c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "160c3e4d_efe514d6",
