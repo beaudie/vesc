@@ -72,6 +72,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "08e44ade_b97d641b",
+        "filename": "src/compiler/translator/wgsl/OutputUniformBlocks.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-09-24T18:33:20Z",
+      "side": 1,
+      "message": "nit: ANGLE_DefaultUniformBlock",
+      "range": {
+        "startLine": 18,
+        "startChar": 44,
+        "endLine": 18,
+        "endChar": 69
+      },
+      "revId": "5606feccf9718a1518f2884117b9063eca7987fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "16caf35d_4a9cc8ff",
         "filename": "src/compiler/translator/wgsl/Utils.h",
         "patchSetId": 4
