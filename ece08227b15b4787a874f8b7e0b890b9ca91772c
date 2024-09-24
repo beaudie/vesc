@@ -126,6 +126,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc1b8f0b_fe058fbb",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-24T17:38:15Z",
+      "side": 1,
+      "message": "\u003e But what if app never use it in FBO?\n\nthere is no way to predict future use, so the best we can do is validate according to spec\n\n\u003e I don\u0027t think spec says you have to fail in this case right away at EGLImage creation time\n\nthe spec does say this about `eglCreateImageKHR` -\n```\n    Add to the list of error conditions for eglCreateImageKHR:\n      ...\n\n       * If \u003ctarget\u003e is EGL_NATIVE_BUFFER_ANDROID and \u003cbuffer\u003e was created\n         with properties (format, usage, dimensions, etc.) not supported by\n         the EGL implementation, the error EGL_BAD_PARAMETER is generated.\"\n```\n\nbut will defer this to you all",
+      "parentUuid": "47b70f5a_5b47a66b",
+      "revId": "ece08227b15b4787a874f8b7e0b890b9ca91772c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "160c3e4d_efe514d6",
