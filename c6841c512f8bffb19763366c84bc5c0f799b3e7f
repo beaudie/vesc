@@ -16,6 +16,23 @@
       "message": "Most tests look happy on this except for `angle_deqp_gles3_metal_tests`. Both shards for that have \u003e 100 failing tests due to\n\n```\n*** Terminating app due to uncaught exception \u0027NSInvalidArgumentException\u0027, reason: \u0027*** -[__NSArrayM insertObject:atIndex:]: object cannot be nil\u0027\n```\n\nIs there some workaround that we can enable for this?",
       "revId": "c6841c512f8bffb19763366c84bc5c0f799b3e7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83492826_3e48752e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-09-24T11:56:05Z",
+      "side": 1,
+      "message": "Thank you, was just thinking that I need to enable these today 😊\n\nThe crashes in AMDRadeonX6000MTLDriver look specific to this GPU model, I\u0027ll skip them after this lands (would be faster, since I can rubber stamp these).",
+      "revId": "c6841c512f8bffb19763366c84bc5c0f799b3e7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
