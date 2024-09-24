@@ -16,6 +16,24 @@
       "message": "This change broke an Android test `org.skia.skqp.SkQPRunner#UnitTest_DMSAA_dst_read`.\n\nTo repro:\n\n```\ncd \u003cyour aosp-main repo\u003e\nsource build/envsetup.sh\nlunch aosp_cf_x86_64_phone-trunk_staging-userdebug\nm\nm cts\ncvd reset -y; cvd create --gpu_mode\u003dguest_swiftshader\ncts-tradefed run commandAndExit cts-dev --log-level-display\u003dINFO -m CtsSkQPTestCases -t org.skia.skqp.SkQPRunner#UnitTest_DMSAA_dst_read\n```\n\nAfter this change, the test hanged and eventually timedout.",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "854496f3_7657216f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-24T21:17:35Z",
+      "side": 1,
+      "message": "thanks for reporting this but im surprised the change causes a test hang / timeout. Unfortunately i dont have access to the bug tagged in the revert, could you post the details to the anglebug of this change? Also, i do not have an AOSP environment to repro the failure, is there an end2end test or a deqp test that can repro the issue?",
+      "parentUuid": "31a76b79_7f42f95c",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
