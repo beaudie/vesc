@@ -52,6 +52,24 @@
       "parentUuid": "854496f3_7657216f",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b05484b1_97711fcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-24T21:49:33Z",
+      "side": 1,
+      "message": "thanks for the log @yuxinhu@google.com but in the attached file `org.skia.skqp.SkQPRunner#UnitTest_DMSAA_dst_read.txt` i dont see any crash signature. All i see is this and nothing else -\n```\n09-24 19:44:11.537  4633  4645 I TestRunner: run started: 1 tests\n09-24 19:44:11.538  4633  4645 I TestRunner: started: UnitTest_DMSAA_dst_read(org.skia.skqp.SkQPRunner)\n09-24 19:44:11.542  4633  4645 E libEGL  : validate_display:547 error 3008 (EGL_BAD_DISPLAY)\n```\nand then nothing else. There is a display validation error, im not sure if that is normal for this test though",
+      "parentUuid": "514c9640_9ded32a0",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
