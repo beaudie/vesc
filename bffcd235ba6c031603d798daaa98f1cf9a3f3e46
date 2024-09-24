@@ -70,6 +70,24 @@
       "parentUuid": "514c9640_9ded32a0",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4812921_49800a69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-24T21:58:12Z",
+      "side": 1,
+      "message": "The `validate_display` error is not relevant. It showed up in the passing test logs, too. Below is the log of the same test when it passes:\n\n```\n09-24 19:29:22.059  4547  4559 I TestRunner: run started: 1 tests\n09-24 19:29:22.060  4547  4559 I TestRunner: started: UnitTest_DMSAA_dst_read(org.skia.skqp.SkQPRunner)\n09-24 19:29:22.062  4547  4559 E libEGL  : validate_display:547 error 3008 (EGL_BAD_DISPLAY)\n...\n09-24 19:29:22.314  4547  4559 W SwiftShader: external/swiftshader/src/Vulkan/VkPhysicalDevice.cpp:675 WARNING: UNSUPPORTED: curExtension-\u003esType: 1000338000\n09-24 19:29:22.314  4547  4559 W SwiftShader: external/swiftshader/src/Vulkan/VkPhysicalDevice.cpp:675 WARNING: UNSUPPORTED: curExtension-\u003esType: 1000437000\n09-24 19:29:22.316  4547  4559 E libEGL  : validate_display:547 error 3008 (EGL_BAD_DISPLAY)\n09-24 19:29:22.464  4547  4559 I TestRunner: finished: UnitTest_DMSAA_dst_read(org.skia.skqp.SkQPRunner)\n09-24 19:29:22.466  4547  4559 I org.skia.skqp: Test \u0027UnitTest_DMSAA_dst_read\u0027 complete (1/1). [pass]\n```\n\nIn the failed test log, if you search for the PID of the test 4645, you will see these lines:\n\n```\n09-24 19:44:11.538  4633  4645 I TestRunner: started: UnitTest_DMSAA_dst_read(org.skia.skqp.SkQPRunner)\n09-24 19:44:11.542  4633  4645 E libEGL  : validate_display:547 error 3008 (EGL_BAD_DISPLAY)\n09-24 19:55:29.365  4645  4645 E crash_dump64: failed to get the guest state header for thread 3697: Bad address\n09-24 19:55:29.367  4645  4645 I crash_dump64: obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace\n09-24 19:55:29.368  4645  4645 I crash_dump64: performing dump of process 642 (target tid \u003d 642)\n```\n\nMy read is that `crash_dump64` indicates the process crashed. Let me try to get a symbolized crash callstack.",
+      "parentUuid": "b05484b1_97711fcd",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
