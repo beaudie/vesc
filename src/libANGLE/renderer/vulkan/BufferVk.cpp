@@ -728,6 +728,10 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
             }
             ANGLE_TRY(renderer->finishResourceUse(contextVk, mBuffer.getWriteResourceUse()));
         }
+        if (!mBuffer.isCoherent())
+        {
+            ANGLE_TRY(mBuffer.flush(renderer));
+        }
         if (hostVisible)
         {
             return mBuffer.mapWithOffset(contextVk, mapPtrBytes, static_cast<size_t>(offset));
