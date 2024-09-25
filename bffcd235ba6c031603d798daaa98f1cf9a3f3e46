@@ -142,6 +142,24 @@
       "parentUuid": "24dc33b6_277c2fc3",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c5d8fd8_b9625d11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-25T17:40:49Z",
+      "side": 1,
+      "message": "\u003e If you do have to access to it, could you grab the tombstone files?\n\nWhen I ran the test locally I don\u0027t see any tombstone files. The logcat stops printing any information on the test process after the test starts.\n\n\u003e do you know if the failure with swiftshader is intermittent or is does it repro 100%? if it is a timing issue, it could show up on other vendor ICDs as well.\n\nThe failure is 100% repro with swiftshader.\n\nThe best next action I can think of is reaching out to Skia team and understand what the test tries to do. Let me comment on the bug angleproject:40644776.",
+      "parentUuid": "9a30801c_7ba000cb",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
