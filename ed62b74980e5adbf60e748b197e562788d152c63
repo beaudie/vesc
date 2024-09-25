@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13fb155d_8b0d78d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-25T18:23:36Z",
+      "side": 1,
+      "message": "If you want to call the function from third_party/angle/src/compiler/translator/tree_ops/msl/SeparateCompoundStructDeclarations.h to name the structs instead, I wouldn\u0027t stop you 😎",
+      "revId": "ed62b74980e5adbf60e748b197e562788d152c63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
