@@ -66,6 +66,16 @@ ADDITIONAL_MIXINS = {
             }
         }
     },
+    'win10_intel_uhd_770_canary': {
+        'swarming': {
+            'dimensions': {
+                'display_attached': '1',
+                'gpu': '8086:4680-32.0.101.5762',
+                'os': 'Windows-10-19045.3930',
+                'pool': 'chromium.tests.gpu'
+            }
+        }
+    },
 }
 
 MIXIN_FILE_NAME = os.path.join(THIS_DIR, 'mixins.pyl')
