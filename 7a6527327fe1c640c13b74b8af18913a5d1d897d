@@ -22,6 +22,30 @@
       },
       "revId": "7a6527327fe1c640c13b74b8af18913a5d1d897d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bbc0b3c_b2b82e90",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1548815
+      },
+      "writtenOn": "2024-09-25T13:49:44Z",
+      "side": 1,
+      "message": "Thanks for the suggestion. `invalidate` sounds more appropriate.",
+      "parentUuid": "b773e71a_dfa96778",
+      "range": {
+        "startLine": 733,
+        "startChar": 30,
+        "endLine": 733,
+        "endChar": 35
+      },
+      "revId": "7a6527327fe1c640c13b74b8af18913a5d1d897d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
