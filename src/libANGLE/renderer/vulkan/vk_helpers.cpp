@@ -5681,6 +5681,13 @@ angle::Result BufferHelper::mapWithOffset(Context *context, uint8_t **ptrOut, si
     uint8_t *mapBufPointer;
     ANGLE_TRY(map(context, &mapBufPointer));
     *ptrOut = mapBufPointer + offset;
+
+    vk::Renderer *renderer = context->getRenderer();
+    if (!isCoherent())
+    {
+        ANGLE_TRY(invalidate(renderer));
+    }
+
     return angle::Result::Continue;
 }
 
