@@ -730,7 +730,13 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         }
         if (hostVisible)
         {
-            return mBuffer.mapWithOffset(contextVk, mapPtrBytes, static_cast<size_t>(offset));
+            ANGLE_TRY(mBuffer.mapWithOffset(contextVk, mapPtrBytes, static_cast<size_t>(offset)));
+
+            if (!mBuffer.isCoherent())
+            {
+                ANGLE_TRY(mBuffer.invalidate(renderer));
+            }
+            return angle::Result::Continue;
         }
         return handleDeviceLocalBufferMap(contextVk, offset, length, mapPtrBytes);
     }
