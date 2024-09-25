@@ -234,6 +234,30 @@
       },
       "revId": "5606feccf9718a1518f2884117b9063eca7987fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10f52104_e79cf3c6",
+        "filename": "src/compiler/translator/wgsl/Utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-09-25T18:44:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16caf35d_4a9cc8ff",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "5606feccf9718a1518f2884117b9063eca7987fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
