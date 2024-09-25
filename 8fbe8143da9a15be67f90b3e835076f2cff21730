@@ -22,6 +22,30 @@
       },
       "revId": "8fbe8143da9a15be67f90b3e835076f2cff21730",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dfec055_d62d6793",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5340,
+      "author": {
+        "id": 1316721
+      },
+      "writtenOn": "2024-09-25T01:50:42Z",
+      "side": 1,
+      "message": "I think the driver version in issue description should be 5333, not 5762 (this version cannot reproduce the issue).\n\nSee https://ci.chromium.org/ui/p/angle/builders/ci/win-exp-test/706/overview",
+      "parentUuid": "b768e158_7b794843",
+      "range": {
+        "startLine": 5340,
+        "startChar": 65,
+        "endLine": 5340,
+        "endChar": 85
+      },
+      "revId": "8fbe8143da9a15be67f90b3e835076f2cff21730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
