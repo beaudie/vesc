@@ -178,6 +178,24 @@
       "parentUuid": "0c5d8fd8_b9625d11",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f6db15e_a2f9c15f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-25T21:15:47Z",
+      "side": 1,
+      "message": "\u003e interesting, and the test eventually timesout or does the device become unresponsive and forces a reboot?\n\nThe test eventually timesout. I am not observing the device getting frozen or rebooted.\n\n\u003e  Is it possible to force disable the following features in Renderer::appBasedFeatureOverrides and rerun the test?\n\nI have disabled the three features, however, the test still hanged.",
+      "parentUuid": "fd371450_3693af7b",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
