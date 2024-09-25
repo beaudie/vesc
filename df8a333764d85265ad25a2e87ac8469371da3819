@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7673dff_fe3a9bb9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3616483
+      },
+      "writtenOn": "2024-09-25T09:12:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "578106e2_a16c14db",
+      "revId": "df8a333764d85265ad25a2e87ac8469371da3819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8859d95e_9698fdaf",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-09-23T16:44:55Z",
       "side": 1,
       "message": "This _test_?",
+      "revId": "df8a333764d85265ad25a2e87ac8469371da3819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "867e5691_a59f8470",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3616483
+      },
+      "writtenOn": "2024-09-25T09:12:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8859d95e_9698fdaf",
       "revId": "df8a333764d85265ad25a2e87ac8469371da3819",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -83,6 +119,30 @@
       "writtenOn": "2024-09-23T17:42:23Z",
       "side": 1,
       "message": "Suggestion: This can be replaced with an integer (e.g., `consecutiveLineLoopCalls`), and the line loop call below will be in a for-loop using this number instead.",
+      "range": {
+        "startLine": 492,
+        "startChar": 17,
+        "endLine": 492,
+        "endChar": 43
+      },
+      "revId": "df8a333764d85265ad25a2e87ac8469371da3819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "119d4d32_2d2cdd92",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 3616483
+      },
+      "writtenOn": "2024-09-25T09:12:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d712d348_80db7e9b",
       "range": {
         "startLine": 492,
         "startChar": 17,
