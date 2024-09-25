@@ -276,6 +276,30 @@
       },
       "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36d25043_ba0345dd",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-25T01:01:23Z",
+      "side": 1,
+      "message": "It seems that `mCurrentElementArrayBuffer` is being used for `vkCmdBindIndexBuffer()` when the index buffer dirty bit is being handled. I have updated the change so we would determine the index buffer using local pointers and then set `mCurrentElementArrayBuffer` to the final pointer before the binding point (via `setElementArrayBufferForDraw()`) and then draw.",
+      "parentUuid": "8a56a70f_86257575",
+      "range": {
+        "startLine": 803,
+        "startChar": 0,
+        "endLine": 803,
+        "endChar": 73
+      },
+      "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
