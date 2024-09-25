@@ -3082,10 +3082,12 @@ void RenderPassCommandBufferHelper::invalidateRenderPassDepthAttachment(
 
 void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
     const gl::DepthStencilState &dsState,
+    GLuint framebufferStencilSize,
     const gl::Rectangle &invalidateArea)
 {
     const bool isStencilWriteEnabled =
-        dsState.stencilTest && (!dsState.isStencilNoOp() || !dsState.isStencilBackNoOp());
+        dsState.stencilTest && (!dsState.isStencilNoOp(framebufferStencilSize) ||
+                                !dsState.isStencilBackNoOp(framebufferStencilSize));
     mStencilAttachment.invalidate(invalidateArea, isStencilWriteEnabled,
                                   getRenderPassWriteCommandCount());
 }
