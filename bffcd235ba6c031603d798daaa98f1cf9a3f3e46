@@ -124,6 +124,24 @@
       "parentUuid": "f30533e8_fe655238",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a30801c_7ba000cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-25T11:46:30Z",
+      "side": 1,
+      "message": "\u003e The test indeed hanged\n\nif you do have to access to it, could you grab the tombstone files? they will have the state of all threads in the process just before the hang\n\n\u003e On other pixel devices the test still passed with this change\n\ndo you know if the failure with swiftshader is intermittent or is does it repro 100%? if it is a timing issue, it could show up on other vendor ICDs as well",
+      "parentUuid": "24dc33b6_277c2fc3",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
