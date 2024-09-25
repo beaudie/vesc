@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85ea8335_28bc9733",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2024-09-25T11:52:23Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "780605f8_c4abee1d",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2024-09-25T11:52:23Z",
+      "side": 1,
+      "message": "nit: no need to unconfigure before releasing the last reference. Everything will be freed anyway.",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ac99646_b60ec5d7",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2024-09-25T11:52:23Z",
+      "side": 1,
+      "message": "We don\u0027t need to unconfigure before configuring. Configuring repeatedly works.",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "211c959d_d03becf0",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2024-09-25T11:52:23Z",
+      "side": 1,
+      "message": "nit: capabilities don\u0027t change over time so we could get the capabilities only once.",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d2a9ca8_6e3a2350",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2024-09-25T11:52:23Z",
+      "side": 1,
+      "message": "nit: we might want to check `currentTexture.status` here.",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a0b360c_c11b7353",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2024-09-25T11:52:23Z",
+      "side": 1,
+      "message": "[1]",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c319c8f_c0e4a7fd",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2024-09-25T11:52:23Z",
+      "side": 1,
+      "message": "We don\u0027t really need to keep this around, the wgpu::Texture and wgpu::TextureView references in [1] keep the textures alive.",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
