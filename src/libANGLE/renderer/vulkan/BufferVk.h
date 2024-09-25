@@ -176,6 +176,9 @@ class BufferVk : public BufferImpl
                                              VkDeviceSize offset,
                                              VkDeviceSize size,
                                              uint8_t **mapPtr);
+    angle::Result handleHostVisibleBufferMap(ContextVk *contextVk,
+                                             VkDeviceSize offset,
+                                             uint8_t **mapPtr);
     angle::Result setDataImpl(ContextVk *contextVk,
                               size_t bufferSize,
                               const BufferDataSource &dataSource,

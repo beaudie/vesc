@@ -606,6 +606,19 @@ angle::Result BufferVk::handleDeviceLocalBufferMap(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferVk::handleHostVisibleBufferMap(ContextVk *contextVk,
+                                                   VkDeviceSize offset,
+                                                   uint8_t **mapPtr)
+{
+    vk::Renderer *renderer = contextVk->getRenderer();
+    if (!mBuffer.isCoherent())
+    {
+        ANGLE_TRY(mBuffer.invalidate(renderer));
+    }
+
+    return mBuffer.mapWithOffset(contextVk, mapPtr, static_cast<size_t>(offset));
+}
+
 angle::Result BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr)
 {
     ASSERT(mBuffer.valid());
@@ -708,7 +721,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
     {
         if (hostVisible)
         {
-            return mBuffer.mapWithOffset(contextVk, mapPtrBytes, static_cast<size_t>(offset));
+            return handleHostVisibleBufferMap(contextVk, offset, mapPtrBytes);
         }
         return handleDeviceLocalBufferMap(contextVk, offset, length, mapPtrBytes);
     }
@@ -730,7 +743,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         }
         if (hostVisible)
         {
-            return mBuffer.mapWithOffset(contextVk, mapPtrBytes, static_cast<size_t>(offset));
+            return handleHostVisibleBufferMap(contextVk, offset, mapPtrBytes);
         }
         return handleDeviceLocalBufferMap(contextVk, offset, length, mapPtrBytes);
     }
@@ -744,7 +757,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
     // Write case, buffer not in use.
     if (isExternalBuffer() || !isCurrentlyInUse(contextVk->getRenderer()))
     {
-        return mBuffer.mapWithOffset(contextVk, mapPtrBytes, static_cast<size_t>(offset));
+        return handleHostVisibleBufferMap(contextVk, offset, mapPtrBytes);
     }
 
     // Write case, buffer in use.
