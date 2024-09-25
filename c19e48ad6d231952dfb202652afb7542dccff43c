@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4084e6e4_9136c5bb",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1576727
+      },
+      "writtenOn": "2024-09-25T22:49:59Z",
+      "side": 1,
+      "message": "Shahbaz if you are talking about IO Coherency allocations (assume so since its memory allocations) between GPU and CPU, there are some parts (HW generation derivatives) where we don\u0027t have IO Coherency.",
+      "parentUuid": "0c148d5b_2c60cfd5",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 307,
+        "endChar": 54
+      },
+      "revId": "c19e48ad6d231952dfb202652afb7542dccff43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c47bbf49_96229d9d",
