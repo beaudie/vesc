@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9710dde_ba1376d6",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-25T14:00:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "780605f8_c4abee1d",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ac99646_b60ec5d7",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-09-25T11:52:23Z",
       "side": 1,
       "message": "We don\u0027t need to unconfigure before configuring. Configuring repeatedly works.",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f37d9c19_2b6be493",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-25T14:00:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac99646_b60ec5d7",
       "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "379f9237_ee039854",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-25T14:00:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "211c959d_d03becf0",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d2a9ca8_6e3a2350",
@@ -82,6 +136,24 @@
       "writtenOn": "2024-09-25T11:52:23Z",
       "side": 1,
       "message": "nit: we might want to check `currentTexture.status` here.",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9bad0ba_875218e7",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-25T14:00:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d2a9ca8_6e3a2350",
       "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca45e784_98309294",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-25T14:00:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a0b360c_c11b7353",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c319c8f_c0e4a7fd",
@@ -116,6 +206,24 @@
       "writtenOn": "2024-09-25T11:52:23Z",
       "side": 1,
       "message": "We don\u0027t really need to keep this around, the wgpu::Texture and wgpu::TextureView references in [1] keep the textures alive.",
+      "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c89058_c33c2b60",
+        "filename": "src/libANGLE/renderer/wgpu/SurfaceWgpu.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-25T14:00:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c319c8f_c0e4a7fd",
       "revId": "1ff32faba6a3014b9dcb2931b765e60926d5b880",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
