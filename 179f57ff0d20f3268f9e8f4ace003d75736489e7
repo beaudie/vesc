@@ -34,6 +34,24 @@
       "parentUuid": "20d1abba_f90e4445",
       "revId": "179f57ff0d20f3268f9e8f4ace003d75736489e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fa4e365_2f28d9a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-09-25T09:17:00Z",
+      "side": 1,
+      "message": "I placed the #if defined(ANGLE_ENABLE_CL) inside cl_types.h and around all of the cl autogen methods headers/defintions.",
+      "parentUuid": "87d6534b_a97f101b",
+      "revId": "179f57ff0d20f3268f9e8f4ace003d75736489e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
