@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bd6120d_74f4d001",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-09-25T15:57:45Z",
+      "side": 1,
+      "message": "PTAL. Test expectation updates coming in the next patch.",
+      "revId": "0d0b70fffeb35741834062f9ac6683df2334323c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
