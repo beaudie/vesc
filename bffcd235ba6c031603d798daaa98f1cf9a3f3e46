@@ -106,6 +106,24 @@
       "parentUuid": "b4812921_49800a69",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24dc33b6_277c2fc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-09-25T01:54:03Z",
+      "side": 1,
+      "message": "\u003e The attached log dint even have a stack trace which is what made me think the failure was a mutex deadlock or some other type of hang.\n\nI think you are right. The test indeed hanged, instead of crashing.\n\n\u003e also, i see this failure was reported for swiftshader, does this mean vendor ICDs like pixel bots had no issues with this test?\n\nOn other pixel devices the test still passed with this change. Yes the test hang so far is only reported on swiftshader backend.",
+      "parentUuid": "f30533e8_fe655238",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
