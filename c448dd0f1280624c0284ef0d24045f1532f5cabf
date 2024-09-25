@@ -60,6 +60,47 @@
       ],
       "revId": "c448dd0f1280624c0284ef0d24045f1532f5cabf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ed9f4aa_2c0172a5",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-25T20:42:28Z",
+      "side": 1,
+      "message": "It seems that `false` here will also trigger the error.",
+      "range": {
+        "startLine": 685,
+        "startChar": 92,
+        "endLine": 685,
+        "endChar": 96
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "1c855ca6_a66afd67",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/gl_tests/LineLoopTest.cpp",
+              "range": {
+                "startLine": 685,
+                "startChar": 0,
+                "endLine": 686,
+                "endChar": 0
+              },
+              "replacement": "    runTest(GL_UNSIGNED_SHORT, reinterpret_cast\u003cconst void *\u003e(indices), sizeof(indices), 1, false,\n"
+            }
+          ]
+        }
+      ],
+      "revId": "c448dd0f1280624c0284ef0d24045f1532f5cabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
