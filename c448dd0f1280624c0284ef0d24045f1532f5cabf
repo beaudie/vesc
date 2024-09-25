@@ -1,0 +1,65 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f70bbf2e_a1eb2ad0",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-25T17:56:17Z",
+      "side": 1,
+      "message": "Thanks.\n* If-statement is not needed. If `i` starts from 0, the indirect draw calls can all be merged into the loop, including the line above.\n* Suggestion: Move `ASSERT_GL_NO_ERROR()` to inside the loop?",
+      "range": {
+        "startLine": 563,
+        "startChar": 8,
+        "endLine": 563,
+        "endChar": 44
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "70702b91_31a54a0b",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/gl_tests/LineLoopTest.cpp",
+              "range": {
+                "startLine": 562,
+                "startChar": 0,
+                "endLine": 564,
+                "endChar": 0
+              },
+              "replacement": "        for (uint i \u003d 0; i \u003c numConsecutiveLineLoopCalls; i++)\n"
+            },
+            {
+              "path": "src/tests/gl_tests/LineLoopTest.cpp",
+              "range": {
+                "startLine": 565,
+                "startChar": 0,
+                "endLine": 569,
+                "endChar": 0
+              },
+              "replacement": "            glDrawElementsIndirect(GL_LINE_LOOP, indexType, nullptr);\n            ASSERT_GL_NO_ERROR();\n"
+            },
+            {
+              "path": "src/tests/gl_tests/LineLoopTest.cpp",
+              "range": {
+                "startLine": 570,
+                "startChar": 0,
+                "endLine": 571,
+                "endChar": 0
+              },
+              "replacement": ""
+            }
+          ]
+        }
+      ],
+      "revId": "c448dd0f1280624c0284ef0d24045f1532f5cabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
