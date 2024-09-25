@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b773e71a_dfa96778",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1001646
+      },
+      "writtenOn": "2024-09-25T12:12:48Z",
+      "side": 1,
+      "message": "I wonder if we should `invalidate` instead.",
+      "range": {
+        "startLine": 733,
+        "startChar": 30,
+        "endLine": 733,
+        "endChar": 35
+      },
+      "revId": "7a6527327fe1c640c13b74b8af18913a5d1d897d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
