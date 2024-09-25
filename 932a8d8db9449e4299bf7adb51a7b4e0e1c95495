@@ -16,6 +16,24 @@
       "message": "Cody, PTAL.",
       "revId": "932a8d8db9449e4299bf7adb51a7b4e0e1c95495",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9606057c_d96400a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-25T14:40:54Z",
+      "side": 1,
+      "message": "Sucks to suppress over a handful of single pixel differences, but maintaining on Nvidia Windows not that high of a priority.",
+      "parentUuid": "c3535998_7059d56a",
+      "revId": "932a8d8db9449e4299bf7adb51a7b4e0e1c95495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
