@@ -4735,10 +4735,8 @@ void Context::clear(GLbitfield mask)
     }
 
     // If all stencil bits are masked, don't attempt to clear stencil.
-    if (mState.getDrawFramebuffer()->getStencilAttachment() == nullptr ||
-        (angle::BitMask<uint32_t>(
-             mState.getDrawFramebuffer()->getStencilAttachment()->getStencilSize()) &
-         mState.getDepthStencilState().stencilWritemask) == 0)
+    if (mState.getDepthStencilState().isStencilMaskedOut(
+            mState.getDrawFramebuffer()->getStencilBitCount()))
     {
         mask &= ~GL_STENCIL_BUFFER_BIT;
     }
@@ -4754,7 +4752,9 @@ void Context::clear(GLbitfield mask)
     ANGLE_CONTEXT_TRY(mState.getDrawFramebuffer()->clear(this, mask));
 }
 
-bool Context::isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const
+bool Context::isClearBufferMaskedOut(GLenum buffer,
+                                     GLint drawbuffer,
+                                     GLuint framebufferStencilSize) const
 {
     switch (buffer)
     {
@@ -4763,10 +4763,10 @@ bool Context::isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const
         case GL_DEPTH:
             return mState.getDepthStencilState().isDepthMaskedOut();
         case GL_STENCIL:
-            return mState.getDepthStencilState().isStencilMaskedOut();
+            return mState.getDepthStencilState().isStencilMaskedOut(framebufferStencilSize);
         case GL_DEPTH_STENCIL:
             return mState.getDepthStencilState().isDepthMaskedOut() &&
-                   mState.getDepthStencilState().isStencilMaskedOut();
+                   mState.getDepthStencilState().isStencilMaskedOut(framebufferStencilSize);
         default:
             UNREACHABLE();
             return true;
@@ -4778,7 +4778,8 @@ bool Context::noopClearBuffer(GLenum buffer, GLint drawbuffer) const
     Framebuffer *framebufferObject = mState.getDrawFramebuffer();
 
     return !IsClearBufferEnabled(framebufferObject->getState(), buffer, drawbuffer) ||
-           mState.isRasterizerDiscardEnabled() || isClearBufferMaskedOut(buffer, drawbuffer);
+           mState.isRasterizerDiscardEnabled() ||
+           isClearBufferMaskedOut(buffer, drawbuffer, framebufferObject->getStencilBitCount());
 }
 
 void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *values)
