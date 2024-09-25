@@ -160,6 +160,24 @@
       "parentUuid": "9a30801c_7ba000cb",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd371450_3693af7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-09-25T18:48:57Z",
+      "side": 1,
+      "message": "\u003e When I ran the test locally I don\u0027t see any tombstone files. The logcat stops printing any information on the test process after the test starts.\n\ninteresting, and the test eventually timesout or does the device become unresponsive and forces a reboot?\n\n\u003e The failure is 100% repro with swiftshader\n\ngood that it is deterministic failure but still not seeing the relation to this change. We have had such hangs internally when dealing with buggy pipeline cache related changes. Is it possible to force disable the following features in `Renderer::appBasedFeatureOverrides` and rerun the test?\n```\nmergeProgramPipelineCachesToGlobalCache\npreferMonolithicPipelinesOverLibraries\nsyncMonolithicPipelinesToBlobCache\n```\nthere could be a bug in pipelinecache merge code leading to a deadlock?\n\n\u003e reaching out to Skia team and understand what the test tries to do\n\non internal CI i ran that test with ANGLE trace enabled, i have attached the trace log to the bug (`UnitTest_DMSAA_dst_read_GLES_API_trace.txt`).\n\nIt looks like the test doesn\u0027t even use an sRGB format resource, so i am even more confused now",
+      "parentUuid": "0c5d8fd8_b9625d11",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
