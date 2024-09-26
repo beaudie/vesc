@@ -3443,6 +3443,74 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// Test that clearing a 3D image bound to a layered framebuffer works using attachment 0.
+TEST_P(ClearTestES31, Bind3DTextureAndClearUsingAttachment0)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_geometry_shader"));
+
+    constexpr uint32_t kSize            = 16;
+    constexpr uint32_t kAttachmentCount = 4;
+    std::vector<uint8_t> pixelData(kSize * kSize * 4, 255);
+
+    GLTexture texture3D;
+    glBindTexture(GL_TEXTURE_3D, texture3D);
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, kSize, kSize, kAttachmentCount, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, pixelData.data());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_LAYERS, kAttachmentCount);
+    glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture3D, 0);
+    ASSERT_GL_NO_ERROR();
+
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    for (uint32_t i = 0; i < kAttachmentCount; ++i)
+    {
+        // TODO: GL_COLOR_ATTACHMENT0 below (instead of GL_COLOR_ATTACHMENT0 + i) causes errors on
+        // some platforms.
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture3D, 0, i);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
+// Test that clearing a 3D image bound to a layered framebuffer works using multiple attachments.
+TEST_P(ClearTestES31, Bind3DTextureAndClearUsingMultipleAttachment)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_geometry_shader"));
+
+    constexpr uint32_t kSize            = 16;
+    constexpr uint32_t kAttachmentCount = 4;
+    std::vector<uint8_t> pixelData(kSize * kSize * 4, 255);
+
+    GLTexture texture3D;
+    glBindTexture(GL_TEXTURE_3D, texture3D);
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, kSize, kSize, kAttachmentCount, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, pixelData.data());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_LAYERS, kAttachmentCount);
+    glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture3D, 0);
+    ASSERT_GL_NO_ERROR();
+
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    for (uint32_t i = 0; i < kAttachmentCount; ++i)
+    {
+        // TODO: GL_COLOR_ATTACHMENT0 below (instead of GL_COLOR_ATTACHMENT0 + i) causes errors on
+        // some platforms.
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, texture3D, 0, i);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
 // Test that reclearing depth to the same value works if depth is blit after clear, and depth is
 // modified in between with a draw call.
 TEST_P(ClearTestES3, RepeatedDepthClearWithBlitAfterClearAndDrawInBetween)
