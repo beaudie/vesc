@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26c4ac53_2218e9a5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T23:30:42Z",
+      "side": 1,
+      "message": "Thanks. I have added `mCurrentElementArrayBuffer` for `ContextVk`, which is now used for this purpose.",
+      "parentUuid": "f09d8855_0642cf23",
+      "range": {
+        "startLine": 1827,
+        "startChar": 0,
+        "endLine": 1827,
+        "endChar": 64
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d287889_54e8f6c8",
@@ -112,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee3d9f75_4b1d578e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T23:30:42Z",
+      "side": 1,
+      "message": "Thanks for the clarification. Done.",
+      "parentUuid": "67f32328_749b7250",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 85
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f645500e_8208e365",
@@ -135,6 +183,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56b56252_56ba2a3e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T23:30:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f645500e_8208e365",
+      "range": {
+        "startLine": 380,
+        "startChar": 29,
+        "endLine": 380,
+        "endChar": 58
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2d9aff7_a3c02979",
@@ -148,6 +220,30 @@
       "writtenOn": "2024-09-26T17:04:45Z",
       "side": 1,
       "message": "Also no need to touch this function.",
+      "range": {
+        "startLine": 470,
+        "startChar": 29,
+        "endLine": 470,
+        "endChar": 50
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ee72fd6_092ae441",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T23:30:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2d9aff7_a3c02979",
       "range": {
         "startLine": 470,
         "startChar": 29,
