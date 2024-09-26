@@ -70,6 +70,30 @@
       },
       "revId": "8fbe8143da9a15be67f90b3e835076f2cff21730",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77555868_74e98be0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5340,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-09-26T14:37:23Z",
+      "side": 1,
+      "message": "Sorry, tested on 5762, not 5379.",
+      "parentUuid": "314e7bfa_7f3e69f8",
+      "range": {
+        "startLine": 5340,
+        "startChar": 65,
+        "endLine": 5340,
+        "endChar": 85
+      },
+      "revId": "8fbe8143da9a15be67f90b3e835076f2cff21730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
