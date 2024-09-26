@@ -928,6 +928,75 @@ TEST_P(VertexAttributeTest, UnsignedPacked1010102ExtensionNormalized)
     };
 }
 
+// Test when the three vertex attribute index are enabled, but only two indexes are passed into
+// data, the application expect not crash.
+TEST_P(VertexAttributeTest, VertexAttribPointerCopyBufferFromInvalidAddress)
+{
+    const GLfloat vertices[] = {
+        // position   // color                // texCoord
+        -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // Lower left corner
+        1.0f,  -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,  // Bottom right corner
+        0.0f,  1.0f,  0.0f, 0.0f, 1.0f, 1.0f, 0.5f, 1.0f   // Top
+    };
+
+    constexpr char kVS[] = R"(
+        attribute highp vec2 position;
+        attribute mediump vec4 color;
+        attribute highp vec2 texCoord;
+        varying mediump vec4 fragColor;
+        varying highp vec2 fragTexCoord;
+        void main() {
+            gl_Position = vec4(position, 0.0, 1.0);
+            fragColor = color;
+            fragTexCoord = texCoord;
+        }
+    )";
+
+    constexpr char kFS[] = R"(
+        precision mediump float;
+        varying mediump vec4 fragColor;
+        varying highp vec2 fragTexCoord;
+        void main() {
+           if(fragTexCoord.x > 0.5){
+                gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+           }else{
+                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+           }
+        }
+    )";
+
+    mProgram = CompileProgram(kVS, kFS);
+    ASSERT_NE(0u, mProgram);
+    glBindAttribLocation(mProgram, 0, "position");
+    glBindAttribLocation(mProgram, 1, "color");
+    glBindAttribLocation(mProgram, 2, "texCoord");
+    glUseProgram(mProgram);
+    EXPECT_GL_NO_ERROR();
+
+    glGenBuffers(1, &mBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    EXPECT_GL_NO_ERROR();
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)0);
+    // Missing VertexAttribPointer at index 1
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+                          (GLvoid *)(6 * sizeof(GLfloat)));
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    EXPECT_GL_NO_ERROR();
+
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that mixing array and current vertex attribute values works with the same matrix input
 TEST_P(VertexAttributeTest, MixedMatrixSources)
 {
