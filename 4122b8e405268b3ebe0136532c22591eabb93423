@@ -16,6 +16,24 @@
       "message": "Retracer notes:\n  If retracing an existing trace, any associated `addExtensionPrerequisite()` calls must be removed from `TracePerfTest.cpp` and the tracename.json file must be made writable\n  Trace/extension cases can be tested by adding the `--request-extensions` parameter. Multiple extensions *must* be contained by quotation marks and only a single space can be used as a separator.\n  Traces run with all extensions enabled by default. To run a trace with no extensions enabled, add `--request-extensions \"\"` to the angle_trace_tests command line",
       "revId": "4122b8e405268b3ebe0136532c22591eabb93423",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "951bdff7_c49e9df2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-09-26T19:16:05Z",
+      "side": 1,
+      "message": "Can these go in the script itself, or markdown?",
+      "parentUuid": "7c8cfeab_d557f366",
+      "revId": "4122b8e405268b3ebe0136532c22591eabb93423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
