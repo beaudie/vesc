@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "390a6f19_f5008f89",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T18:11:00Z",
+      "side": 1,
+      "message": "Be more explicit: `indexBuffer`.\nAlso vertBuf to vertexBuffer to be consistent.\nSimilarly make name more readable for `preTestUBOAndInitUpdateBuffers` function.",
+      "range": {
+        "startLine": 498,
+        "startChar": 34,
+        "endLine": 498,
+        "endChar": 37
+      },
+      "revId": "c7bba2e3d9bb25e597a3b68500b036408c65aa28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "267ed414_249426ea",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T18:11:00Z",
+      "side": 1,
+      "message": "This function does not do anything line loop special. Better name it `initIndirectBuffer`?",
+      "range": {
+        "startLine": 535,
+        "startChar": 9,
+        "endLine": 535,
+        "endChar": 41
+      },
+      "revId": "c7bba2e3d9bb25e597a3b68500b036408c65aa28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fce29b1_5bbec108",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T18:11:00Z",
+      "side": 1,
+      "message": "uniform is not vertexAttrib. Setting uniform here is a odd.",
+      "range": {
+        "startLine": 551,
+        "startChar": 0,
+        "endLine": 551,
+        "endChar": 72
+      },
+      "revId": "c7bba2e3d9bb25e597a3b68500b036408c65aa28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
