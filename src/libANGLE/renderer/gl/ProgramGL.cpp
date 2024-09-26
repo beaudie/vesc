@@ -766,6 +766,9 @@ void ProgramGL::linkResources(const gl::ProgramLinkedResources &resources)
     std::map<int, unsigned int> sizeMap;
     getAtomicCounterBufferSizeMap(&sizeMap);
     resources.atomicCounterBufferLinker.link(sizeMap);
+
+    resources.pixelLocalStorageLinker.link(
+        mState.getAttachedShader(gl::ShaderType::Fragment)->pixelLocalStorageFormats);
 }
 
 void ProgramGL::onUniformBlockBinding(gl::UniformBlockIndex uniformBlockIndex)
