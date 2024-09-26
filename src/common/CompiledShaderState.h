@@ -5,7 +5,7 @@
 //
 // CompiledShaderState.h:
 //   Defines a struct containing any data that is needed to build
-//   a ShaderState from a TCompiler.
+//   a CompiledShaderState from a TCompiler.
 //
 
 #ifndef COMMON_COMPILEDSHADERSTATE_H_
@@ -102,6 +102,9 @@ struct CompiledShaderState
     GLenum tessGenSpacing;
     GLenum tessGenVertexOrder;
     GLenum tessGenPointMode;
+
+    // GL_ANGLE_shader_pixel_local_storage.
+    std::vector<ShPixelLocalStorageFormat> pixelLocalStorageFormats;
 };
 
 using SharedCompiledShaderState = std::shared_ptr<CompiledShaderState>;
