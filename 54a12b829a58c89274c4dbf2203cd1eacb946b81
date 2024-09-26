@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c5b96b60_7f4b20d8",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1001646
+      },
+      "writtenOn": "2024-09-26T01:08:09Z",
+      "side": 1,
+      "message": "Not a GPU or Vulkan expert here, but I wonder if we should call `invalidate` after we map the buffer?",
+      "revId": "54a12b829a58c89274c4dbf2203cd1eacb946b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08096bc6_6a097e27",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
