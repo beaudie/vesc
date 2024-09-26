@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6645e67_9e22495c",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-09-26T09:48:49Z",
+      "side": 1,
+      "message": "Since the test fails on all backends, please remove `VULKAN`.",
+      "revId": "c443211e47f3588054d2fd8482080b2360a47237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
