@@ -88,6 +88,24 @@
       "parentUuid": "452f5b63_0647b5a8",
       "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5602b25_c56066b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2024-09-26T01:31:53Z",
+      "side": 1,
+      "message": "\u003e did your experiments outside ANGLE show that using native EXT_pls wasn\u0027t faster than using shader images / framebuffer fetch?\n\nThey did. The only advantage of EXT_pls is being able to go memoryless, but that\u0027s not going to be supported by WebGL anyway. In fact, I think EXT_pls is strictly worse because we have to explicitly clear and store with fullscreen draws. Let\u0027s just drop it.\n\n\u003e pausing and restarting transform feedback causes a render pass break\n\nConsidering Chrome already causes render pass breaks every time it interrupts, I would vote in favor of just living with the break during transform feedback.\n\n\u003e are all the earlier constraints still needed?\n\nI think we can greatly simplify it. I think we just need to disallow modifying or changing the currently bound framebuffer while PLS is active and everything else is fair game.",
+      "parentUuid": "d47b4e3f_0ce9638d",
+      "revId": "487658d59b2faa59c036a1d1185f69b88408f22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
