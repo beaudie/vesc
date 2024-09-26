@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed8f1da6_3d18b35e",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T18:24:24Z",
+      "side": 1,
+      "message": "IsStencilWriteMaskedOut",
+      "range": {
+        "startLine": 24,
+        "startChar": 5,
+        "endLine": 24,
+        "endChar": 23
+      },
+      "revId": "baa1c05ade7f4efefe07e1dd12107a124dca7844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
