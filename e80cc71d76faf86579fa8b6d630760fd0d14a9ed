@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f09d8855_0642cf23",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T17:04:45Z",
+      "side": 1,
+      "message": "The alternative way is instead of modify vertexArrayVk::mCurrentElementArrayBuffer, you add a ContextVk::mCurrentElementArrayBuffer and you will set context\u0027s element buffer pointer here. And then you also update context\u0027s element buffer pointer in `ContextVk::setupIndexedDraw`. Then you change vkCmdBindIndexBuffer to use `contextVk::mCurrentElelementArrayBuffer` instead of `VertexArrayVk::mCurrentElelementArrayBuffer`.  Note that  ContextVk already has `mCurrentIndexBufferOffset`, so it will be consistent as well.\n\nI think this way the code will look cleaner.",
+      "range": {
+        "startLine": 1827,
+        "startChar": 0,
+        "endLine": 1827,
+        "endChar": 64
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d287889_54e8f6c8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T17:04:45Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to touch `convertIndexBufferGPU` function. All you need to do is make sure lineloop code not modify `VertexArrayVk::mCurrentElementArrayBuffer` pointer",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 85
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f645500e_8208e365",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T17:04:45Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to touch this function",
+      "range": {
+        "startLine": 380,
+        "startChar": 29,
+        "endLine": 380,
+        "endChar": 58
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2d9aff7_a3c02979",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T17:04:45Z",
+      "side": 1,
+      "message": "Also no need to touch this function.",
+      "range": {
+        "startLine": 470,
+        "startChar": 29,
+        "endLine": 470,
+        "endChar": 50
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
