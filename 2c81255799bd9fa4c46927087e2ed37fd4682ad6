@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "2c81255799bd9fa4c46927087e2ed37fd4682ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d1ffa06_f3b8e436",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-09-26T00:02:48Z",
+      "side": 1,
+      "message": "lgtm\n\nI\u0027d say let\u0027s take this simplification step and see what comes of it. Would very much like to get this extension over the finish line.",
+      "revId": "2c81255799bd9fa4c46927087e2ed37fd4682ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
