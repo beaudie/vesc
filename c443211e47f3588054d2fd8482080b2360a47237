@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b0683713_928d291e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T18:52:53Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we allow to crash? This appears to me it app bug and you will expect a crash. Implementation may choose to not crash but handle it nicely, but crash is also within spec if I understand correctly. This is essentially similar to you provide a client buffer but the client buffer pointer is invalid or client mempry allocation is smaller than what shader will read. You may get crash in these cases. Note that the attributes are being used by shader.",
+      "range": {
+        "startLine": 10,
+        "startChar": 38,
+        "endLine": 10,
+        "endChar": 70
+      },
+      "revId": "c443211e47f3588054d2fd8482080b2360a47237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6645e67_9e22495c",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 2
