@@ -90,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67f32328_749b7250",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T21:16:09Z",
+      "side": 1,
+      "message": "I mean this function will still modify VertexArrayVk::mCurrentElementArrayBuffer. All you do is make sure lineloop code does not modify VertexArrayVk::mCurrentElementArrayBuffer. lineloop will read VertexArrayVk::mCurrentElementArrayBuffer. And with my other suggestion, lineloop will update ContextVk::mCurrentElementArrayBuffer. Other primitive mode will essentially have ContextVk::mCurrentElementArrayBuffer equal VertexArrayVk::mCurrentElementArrayBuffer.",
+      "parentUuid": "835cdd9c_36ee2e43",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 85
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f645500e_8208e365",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 7
