@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "363e12f1_f62a425b",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-26T18:21:25Z",
+      "side": 0,
+      "message": "This probably should renamed to stencilTestMask to reflect the separate test and write masks.",
+      "range": {
+        "startLine": 170,
+        "startChar": 12,
+        "endLine": 170,
+        "endChar": 23
+      },
+      "revId": "036e3ff1f216ebf1daf5a059119b5be054aa929b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
