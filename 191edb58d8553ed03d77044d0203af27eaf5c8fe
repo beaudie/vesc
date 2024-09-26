@@ -22,6 +22,30 @@
       },
       "revId": "191edb58d8553ed03d77044d0203af27eaf5c8fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10673c45_d772081c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5688,
+      "author": {
+        "id": 1548815
+      },
+      "writtenOn": "2024-09-26T03:15:16Z",
+      "side": 1,
+      "message": "Much cleaner. Thanks.",
+      "parentUuid": "ff039036_f77270b2",
+      "range": {
+        "startLine": 5688,
+        "startChar": 29,
+        "endLine": 5688,
+        "endChar": 37
+      },
+      "revId": "191edb58d8553ed03d77044d0203af27eaf5c8fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
