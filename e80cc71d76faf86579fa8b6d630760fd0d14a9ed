@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d068120b_a7686c14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T21:00:53Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f09d8855_0642cf23",
@@ -37,6 +54,30 @@
       "writtenOn": "2024-09-26T17:04:45Z",
       "side": 1,
       "message": "I don\u0027t think you need to touch `convertIndexBufferGPU` function. All you need to do is make sure lineloop code not modify `VertexArrayVk::mCurrentElementArrayBuffer` pointer",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 85
+      },
+      "revId": "e80cc71d76faf86579fa8b6d630760fd0d14a9ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "835cdd9c_36ee2e43",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T21:00:53Z",
+      "side": 1,
+      "message": "If we remove `indexBufferOut`, should we use `mTranslatedByteIndexData` for the index buffer directly instead? (Also for the other two functions)",
+      "parentUuid": "4d287889_54e8f6c8",
       "range": {
         "startLine": 352,
         "startChar": 0,

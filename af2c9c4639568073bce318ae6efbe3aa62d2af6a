@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "047cad13_9519d0b6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4440,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T21:00:53Z",
+      "side": 1,
+      "message": "Updated the test to use different parts of the same index buffer (middle for the line-loop, and two other indices for non-line-loop calls).\nIt seems to pass using the original solution as well. But it is still cleaner to minimize changing `mCurrentElementArrayBuffer`.",
+      "parentUuid": "612eef88_8a22c34a",
+      "revId": "af2c9c4639568073bce318ae6efbe3aa62d2af6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "542f2d62_84b94e55",
