@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3418ee35_175f2c8c",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T23:30:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "390a6f19_f5008f89",
+      "range": {
+        "startLine": 498,
+        "startChar": 34,
+        "endLine": 498,
+        "endChar": 37
+      },
+      "revId": "c7bba2e3d9bb25e597a3b68500b036408c65aa28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "267ed414_249426ea",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09b4f444_4debe7d0",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T23:30:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "267ed414_249426ea",
+      "range": {
+        "startLine": 535,
+        "startChar": 9,
+        "endLine": 535,
+        "endChar": 41
+      },
+      "revId": "c7bba2e3d9bb25e597a3b68500b036408c65aa28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fce29b1_5bbec108",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-09-26T18:11:00Z",
       "side": 1,
       "message": "uniform is not vertexAttrib. Setting uniform here is a odd.",
+      "range": {
+        "startLine": 551,
+        "startChar": 0,
+        "endLine": 551,
+        "endChar": 72
+      },
+      "revId": "c7bba2e3d9bb25e597a3b68500b036408c65aa28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aa7d896_806e878c",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T23:30:55Z",
+      "side": 1,
+      "message": "Removed. It is now called in each unit test directly.",
+      "parentUuid": "8fce29b1_5bbec108",
       "range": {
         "startLine": 551,
         "startChar": 0,
