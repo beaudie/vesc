@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c66b3fea_a4bd8892",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-26T16:10:35Z",
+      "side": 1,
+      "message": "Given that these are `static`, I suggest moving them out to another file. You can create `cl_format_utils.h` and `cl_format_utils.cpp` next to these files, and let the backends use them. No need for `#ifdef`.",
+      "revId": "0d4b899cf424d1487f76724eab54b382b88cc7bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
