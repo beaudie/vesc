@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b34c43b_1395f8c6",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T20:52:35Z",
+      "side": 1,
+      "message": "`GLuint`?",
+      "range": {
+        "startLine": 492,
+        "startChar": 17,
+        "endLine": 492,
+        "endChar": 21
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "f0422b05_f736dfd6",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/gl_tests/LineLoopTest.cpp",
+              "range": {
+                "startLine": 492,
+                "startChar": 0,
+                "endLine": 493,
+                "endChar": 0
+              },
+              "replacement": "                 GLuint numConsecutiveLineLoopCalls)\n"
+            },
+            {
+              "path": "src/tests/gl_tests/LineLoopTest.cpp",
+              "range": {
+                "startLine": 562,
+                "startChar": 0,
+                "endLine": 563,
+                "endChar": 0
+              },
+              "replacement": "        for (GLuint i \u003d 0; i \u003c numConsecutiveLineLoopCalls; i++)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "75e254dfbef64b5e66ce506c48fca97fee924968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "863f1a52_0aa961c0",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-09-26T20:52:35Z",
+      "side": 1,
+      "message": "`GLuint`?",
+      "range": {
+        "startLine": 562,
+        "startChar": 13,
+        "endLine": 562,
+        "endChar": 17
+      },
+      "revId": "75e254dfbef64b5e66ce506c48fca97fee924968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
