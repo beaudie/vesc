@@ -48,6 +48,7 @@ void VertexBinding::onContainerBindingChanged(const Context *context, int incr) 
 
 VertexAttribute::VertexAttribute(GLuint bindingIndex)
     : enabled(false),
+      isInitialized(false),
       format(&angle::Format::Get(angle::FormatID::R32G32B32A32_FLOAT)),
       pointer(nullptr),
       relativeOffset(0),
@@ -58,6 +59,7 @@ VertexAttribute::VertexAttribute(GLuint bindingIndex)
 
 VertexAttribute::VertexAttribute(VertexAttribute &&attrib)
     : enabled(attrib.enabled),
+      isInitialized(attrib.isInitialized),
       format(attrib.format),
       pointer(attrib.pointer),
       relativeOffset(attrib.relativeOffset),
@@ -71,6 +73,7 @@ VertexAttribute &VertexAttribute::operator=(VertexAttribute &&attrib)
     if (this != &attrib)
     {
         enabled                 = attrib.enabled;
+        isInitialized           = attrib.isInitialized;
         format                  = attrib.format;
         pointer                 = attrib.pointer;
         relativeOffset          = attrib.relativeOffset;

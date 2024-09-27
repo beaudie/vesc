@@ -5875,8 +5875,26 @@ void Context::disableVertexAttribArray(GLuint index)
 
 void Context::enableVertexAttribArray(GLuint index)
 {
+    ensureVertexAttribInitialized(index);
     mState.setEnableVertexAttribArray(index, true);
     mStateCache.onVertexArrayStateChange(this);
+}
+
+void Context::ensureVertexAttribInitialized(GLuint index)
+{
+    if (!mState.getVertexArray()->getVertexAttribute(index).isInitialized)
+    {
+        // If this is the first time the feature is enabled, some of its attributes should be set to
+        // their initial values. As per the glVertexAttribPointer() spec, some args have an initial
+        // value:
+        // - size: 4
+        // - type: GL_FLOAT
+        // - stride: 0
+        // - pointer: 0
+        vertexAttribPointer(index, 4, VertexAttribType::Float, false, 0, nullptr);
+    }
+
+    ASSERT(mState.getVertexArray()->getVertexAttribute(index).isInitialized);
 }
 
 void Context::vertexAttribPointer(GLuint index,
@@ -5888,6 +5906,7 @@ void Context::vertexAttribPointer(GLuint index,
 {
     mState.setVertexAttribPointer(this, index, mState.getTargetBuffer(BufferBinding::Array), size,
                                   type, ConvertToBool(normalized), stride, ptr);
+    mState.getVertexArray()->setVertexAttributeAsInitialized(index);
     mStateCache.onVertexArrayStateChange(this);
 }
 
@@ -5897,6 +5916,7 @@ void Context::vertexAttribFormat(GLuint attribIndex,
                                  GLboolean normalized,
                                  GLuint relativeOffset)
 {
+    ensureVertexAttribInitialized(attribIndex);
     mState.setVertexAttribFormat(attribIndex, size, type, ConvertToBool(normalized), false,
                                  relativeOffset);
     mStateCache.onVertexArrayFormatChange(this);
@@ -5907,12 +5927,14 @@ void Context::vertexAttribIFormat(GLuint attribIndex,
                                   VertexAttribType type,
                                   GLuint relativeOffset)
 {
+    ensureVertexAttribInitialized(attribIndex);
     mState.setVertexAttribFormat(attribIndex, size, type, false, true, relativeOffset);
     mStateCache.onVertexArrayFormatChange(this);
 }
 
 void Context::vertexAttribBinding(GLuint attribIndex, GLuint bindingIndex)
 {
+    ensureVertexAttribInitialized(attribIndex);
     mState.setVertexAttribBinding(this, attribIndex, bindingIndex);
     mStateCache.onVertexArrayStateChange(this);
 }
@@ -5929,6 +5951,7 @@ void Context::vertexAttribIPointer(GLuint index,
                                    GLsizei stride,
                                    const void *pointer)
 {
+    ensureVertexAttribInitialized(index);
     mState.setVertexAttribIPointer(this, index, mState.getTargetBuffer(BufferBinding::Array), size,
                                    type, stride, pointer);
     mStateCache.onVertexArrayStateChange(this);

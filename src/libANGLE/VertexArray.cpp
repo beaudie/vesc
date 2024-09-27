@@ -522,6 +522,13 @@ void VertexArray::setVertexAttribDivisor(const Context *context, size_t attribIn
     setVertexBindingDivisor(context, attribIndex, divisor);
 }
 
+void VertexArray::setVertexAttributeAsInitialized(GLuint attribIndex)
+{
+    ASSERT(attribIndex < getMaxAttribs());
+    VertexAttribute &attrib = mState.mVertexAttributes[attribIndex];
+    attrib.isInitialized    = true;
+}
+
 void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 {
     ASSERT(attribIndex < getMaxAttribs());
