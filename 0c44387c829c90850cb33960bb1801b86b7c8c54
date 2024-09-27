@@ -94,6 +94,30 @@
       },
       "revId": "0c44387c829c90850cb33960bb1801b86b7c8c54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8847451a_7d2d1148",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T22:21:32Z",
+      "side": 1,
+      "message": "template them also not nice either. Anyway LGTM. Just wondering if there is better way to do it.",
+      "parentUuid": "e835a932_ba698e74",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "0c44387c829c90850cb33960bb1801b86b7c8c54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
