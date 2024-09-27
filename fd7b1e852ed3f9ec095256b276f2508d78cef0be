@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cb011d0_c32ed025",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T16:27:40Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "fd7b1e852ed3f9ec095256b276f2508d78cef0be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "580e184e_24227d9b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T16:27:40Z",
+      "side": 1,
+      "message": "intead of pass indexBuffer from argument, you can also do this:\n```\n    VertexArrayVk *vertexArrayVk \u003d getVertexArray();\n    mCurrentElementArrayBuffer \u003d vertexArrayVk-\u003egetCurrentElementArrayBuffer();\n```\nWhich should further limit your diff to mostly lineloop only code.",
+      "range": {
+        "startLine": 1737,
+        "startChar": 0,
+        "endLine": 1737,
+        "endChar": 45
+      },
+      "revId": "fd7b1e852ed3f9ec095256b276f2508d78cef0be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
