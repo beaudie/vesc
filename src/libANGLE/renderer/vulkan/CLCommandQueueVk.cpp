@@ -26,6 +26,7 @@
 #include "libANGLE/cl_utils.h"
 
 #include "spirv/unified1/NonSemanticClspvReflection.h"
+#include "vulkan/vulkan_core.h"
 
 namespace rx
 {
@@ -257,13 +258,31 @@ angle::Result CLCommandQueueVk::enqueueCopyBuffer(const cl::Buffer &srcBuffer,
     CLBufferVk *dstBufferVk = &dstBuffer.getImpl<CLBufferVk>();
 
     vk::CommandBufferAccess access;
-    access.onBufferTransferRead(&srcBufferVk->getBuffer());
-    access.onBufferTransferWrite(&dstBufferVk->getBuffer());
+    if (srcBufferVk->isSubBuffer() && dstBufferVk->isSubBuffer() &&
+        (srcBufferVk->getParent() == dstBufferVk->getParent()))
+    {
+        // this is a self copy
+        access.onBufferSelfCopy(&srcBufferVk->getBuffer());
+    }
+    else
+    {
+        access.onBufferTransferRead(&srcBufferVk->getBuffer());
+        access.onBufferTransferWrite(&dstBufferVk->getBuffer());
+    }
 
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(getCommandBuffer(access, &commandBuffer));
 
-    const VkBufferCopy copyRegion = {srcOffset, dstOffset, size};
+    VkBufferCopy copyRegion = {srcOffset, dstOffset, size};
+    // update the offset in the case of sub-buffers
+    if (srcBufferVk->getOffset())
+    {
+        copyRegion.srcOffset += srcBufferVk->getOffset();
+    }
+    if (dstBufferVk->getOffset())
+    {
+        copyRegion.dstOffset += dstBufferVk->getOffset();
+    }
     commandBuffer->copyBuffer(srcBufferVk->getBuffer().getBuffer(),
                               dstBufferVk->getBuffer().getBuffer(), 1, &copyRegion);
 
@@ -739,9 +758,7 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
                     kernelArgDescSetBuilder.allocDescriptorBufferInfo();
                 bufferInfo.range  = clMem->getSize();
                 bufferInfo.offset = clMem->getOffset();
-                bufferInfo.buffer = vkMem.isSubBuffer()
-                                        ? vkMem.getParent()->getBuffer().getBuffer().getHandle()
-                                        : vkMem.getBuffer().getBuffer().getHandle();
+                bufferInfo.buffer = vkMem.getBuffer().getBuffer().getHandle();
                 VkWriteDescriptorSet &writeDescriptorSet =
                     kernelArgDescSetBuilder.allocWriteDescriptorSet();
                 writeDescriptorSet.descriptorCount = 1;
@@ -851,8 +868,26 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
 
 angle::Result CLCommandQueueVk::flushComputePassCommands()
 {
-    mLastFlushedQueueSerial = mComputePassCommands->getQueueSerial();
+    if (mComputePassCommands->empty())
+    {
+        return angle::Result::Continue;
+    }
 
+    // Flush any host visible buffers by adding appropriate barriers
+    if (mComputePassCommands->getAndResetHasHostVisibleBufferWrite())
+    {
+        // Make sure all writes to host-visible buffers are flushed.
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;
+
+        mComputePassCommands->getCommandBuffer().memoryBarrier(
+            VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+            VK_PIPELINE_STAGE_HOST_BIT, memoryBarrier);
+    }
+
+    mLastFlushedQueueSerial = mComputePassCommands->getQueueSerial();
     // Here, we flush our compute cmds to RendererVk's primary command buffer
     ANGLE_TRY(mContext->getRenderer()->flushOutsideRPCommands(
         mContext, getProtectionType(), egl::ContextPriority::Medium, &mComputePassCommands));
@@ -1049,7 +1084,7 @@ angle::Result CLCommandQueueVk::onResourceAccess(const vk::CommandBufferAccess &
         if (mComputePassCommands->usesBufferForWrite(*bufferAccess.buffer))
         {
             // read buffers only need a new command buffer if previously used for write
-            ANGLE_TRY(flushComputePassCommands());
+            ANGLE_TRY(flush());
         }
 
         mComputePassCommands->bufferRead(bufferAccess.accessType, bufferAccess.stage,
@@ -1061,7 +1096,7 @@ angle::Result CLCommandQueueVk::onResourceAccess(const vk::CommandBufferAccess &
         if (mComputePassCommands->usesBuffer(*bufferAccess.buffer))
         {
             // write buffers always need a new command buffer
-            ANGLE_TRY(flushComputePassCommands());
+            ANGLE_TRY(flush());
         }
 
         mComputePassCommands->bufferWrite(bufferAccess.accessType, bufferAccess.stage,
