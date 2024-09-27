@@ -230,9 +230,18 @@ class CLCommandQueueVk : public CLCommandQueueImpl
 
     cl_mem getOrCreatePrintfBuffer();
 
+    angle::Result waitForCommandCompletion();
+
   private:
     static constexpr size_t kMaxDependencyTrackerSize    = 64;
     static constexpr size_t kMaxHostBufferUpdateListSize = 16;
+
+    void launchDispatchEventLoop();
+    void terminateDispatchEventLoop();
+    void notifyDispatchEventLoop();
+    angle::Result processResourcesForSerial(const QueueSerial queueSerial);
+
+    angle::Result resetCommandBufferWithError(cl_int errorCode);
 
     vk::ProtectionType getProtectionType() const { return vk::ProtectionType::Unprotected; }
 
@@ -244,6 +253,8 @@ class CLCommandQueueVk : public CLCommandQueueImpl
 
     angle::Result submitCommands();
     angle::Result finishInternal();
+    angle::Result flushInternal();
+
     angle::Result syncHostBuffers();
     angle::Result flushComputePassCommands();
     angle::Result processWaitlist(const cl::EventPtrs &waitEvents);
@@ -267,9 +278,14 @@ class CLCommandQueueVk : public CLCommandQueueImpl
     vk::SecondaryCommandPools mCommandPool;
     vk::OutsideRenderPassCommandBufferHelper *mComputePassCommands;
     vk::SecondaryCommandMemoryAllocator mOutsideRenderPassCommandsAllocator;
-    SerialIndex mCurrentQueueSerialIndex;
+
+    // Queue Serials for this command queue
+    SerialIndex mQueueSerialIndex;
     QueueSerial mLastSubmittedQueueSerial;
     QueueSerial mLastFlushedQueueSerial;
+    // All submitted queue serials over the lifetime of this command queue
+    vk::ResourceUse mSubmittedResourceUse;
+
     std::mutex mCommandQueueMutex;
 
     // Created event objects associated with this command queue
@@ -294,6 +310,11 @@ class CLCommandQueueVk : public CLCommandQueueImpl
 
     // List of buffer refs that need host syncing
     cl::MemoryPtrs mHostBufferUpdateList;
+
+    // Dispatch loop state
+    std::atomic<bool> mIsLoopTerminating;
+    std::atomic<uint32_t> mDispatchesInQueue;
+    std::thread mDispatchLoopThread;
 };
 
 }  // namespace rx
