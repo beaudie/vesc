@@ -223,9 +223,12 @@ class TracePerfTest : public ANGLERenderTest
     std::vector<TimeSample> mTimeline;
 
     bool mUseTimestampQueries                                           = false;
+    // Note: more than 2 offscreen buffers can cause races, surface is double buffered so real-world
+    // apps can rely on (now broken) assumptions about GPU completion of a previous frame
     static constexpr int mMaxOffscreenBufferCount                       = 2;
     std::array<GLuint, mMaxOffscreenBufferCount> mOffscreenFramebuffers = {0, 0};
     std::array<GLuint, mMaxOffscreenBufferCount> mOffscreenTextures     = {0, 0};
+    std::array<GLsync, mMaxOffscreenBufferCount> mOffscreenSyncs        = {0, 0};
     GLuint mOffscreenDepthStencil                                       = 0;
     int mWindowWidth                                                    = 0;
     int mWindowHeight                                                   = 0;
@@ -2113,6 +2116,14 @@ void TracePerfTest::drawBenchmark()
         // ping pong between them for each frame.
         glBindFramebuffer(GL_FRAMEBUFFER,
                           mOffscreenFramebuffers[mTotalFrameCount % mMaxOffscreenBufferCount]);
+
+        GLsync sync = mOffscreenSyncs[mTotalFrameCount % mMaxOffscreenBufferCount];
+        if (sync)
+        {
+            constexpr GLuint64 kTimeout = 2'000'000'000;  // 2 seconds
+            glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, kTimeout);
+            glDeleteSync(sync);
+        }
     }
 
     char frameName[32];
@@ -2141,9 +2152,8 @@ void TracePerfTest::drawBenchmark()
             glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentReadFBO);
 
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-            glBindFramebuffer(
-                GL_READ_FRAMEBUFFER,
-                mOffscreenFramebuffers[mOffscreenFrameCount % mMaxOffscreenBufferCount]);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER,
+                              mOffscreenFramebuffers[mTotalFrameCount % mMaxOffscreenBufferCount]);
 
             uint32_t frameX  = (mOffscreenFrameCount % kFramesPerXY) % kFramesPerX;
             uint32_t frameY  = (mOffscreenFrameCount % kFramesPerXY) / kFramesPerX;
@@ -2157,6 +2167,9 @@ void TracePerfTest::drawBenchmark()
             {
                 glDisable(GL_SCISSOR_TEST);
             }
+
+            mOffscreenSyncs[mTotalFrameCount % mMaxOffscreenBufferCount] =
+                glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
             glBlitFramebuffer(0, 0, mWindowWidth, mWindowHeight, windowX, windowY,
                               windowX + kOffscreenFrameWidth, windowY + kOffscreenFrameHeight,
