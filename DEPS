@@ -1670,8 +1670,8 @@ deps = {
   'src/tests/restricted_traces/cod_mobile': {
       'packages': [
         {
-            'package': 'angle/traces/cod_mobile',
-            'version': 'version:5',
+            'package': 'experimental/google.com/cnorthrop/angle/traces/cod_mobile',
+            'version': 'version:1',
         },
       ],
       'dep_type': 'cipd',
