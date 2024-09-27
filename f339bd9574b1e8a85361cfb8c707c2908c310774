@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d491c0ee_5b31e5d0",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T21:01:47Z",
+      "side": 1,
+      "message": "If possible, make it non virtual. people expect getSize is cheap. Maybe cache the size here?",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 39
+      },
+      "revId": "f339bd9574b1e8a85361cfb8c707c2908c310774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "322499a5_b6b8d468",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T21:01:47Z",
+      "side": 1,
+      "message": "```suggestion\n    bool isMapped() const { return mMappedMemory !\u003d nullptr; }\n```",
+      "range": {
+        "startLine": 55,
+        "startChar": 9,
+        "endLine": 55,
+        "endChar": 17
+      },
+      "revId": "f339bd9574b1e8a85361cfb8c707c2908c310774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
