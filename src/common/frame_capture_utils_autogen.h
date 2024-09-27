@@ -74,6 +74,8 @@ enum class ParamType
     TFramebufferIDPointer,
     TGLDEBUGPROC,
     TGLDEBUGPROCKHR,
+    TGLGETBLOBPROCANGLE,
+    TGLSETBLOBPROCANGLE,
     TGLbitfield,
     TGLboolean,
     TGLbooleanConstPointer,
@@ -191,7 +193,7 @@ enum class ParamType
     TvoidPointerPointer,
 };
 
-constexpr uint32_t kParamTypeCount = 172;
+constexpr uint32_t kParamTypeCount = 174;
 
 union ParamValue
 {
@@ -252,6 +254,8 @@ union ParamValue
     gl::FramebufferID *FramebufferIDPointerVal;
     GLDEBUGPROC GLDEBUGPROCVal;
     GLDEBUGPROCKHR GLDEBUGPROCKHRVal;
+    GLGETBLOBPROCANGLE GLGETBLOBPROCANGLEVal;
+    GLSETBLOBPROCANGLE GLSETBLOBPROCANGLEVal;
     GLbitfield GLbitfieldVal;
     GLboolean GLbooleanVal;
     const GLboolean *GLbooleanConstPointerVal;
@@ -743,6 +747,20 @@ inline GLDEBUGPROCKHR GetParamVal<ParamType::TGLDEBUGPROCKHR, GLDEBUGPROCKHR>(
     const ParamValue &value)
 {
     return value.GLDEBUGPROCKHRVal;
+}
+
+template <>
+inline GLGETBLOBPROCANGLE GetParamVal<ParamType::TGLGETBLOBPROCANGLE, GLGETBLOBPROCANGLE>(
+    const ParamValue &value)
+{
+    return value.GLGETBLOBPROCANGLEVal;
+}
+
+template <>
+inline GLSETBLOBPROCANGLE GetParamVal<ParamType::TGLSETBLOBPROCANGLE, GLSETBLOBPROCANGLE>(
+    const ParamValue &value)
+{
+    return value.GLSETBLOBPROCANGLEVal;
 }
 
 template <>
@@ -1629,6 +1647,10 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TGLDEBUGPROC, T>(value);
         case ParamType::TGLDEBUGPROCKHR:
             return GetParamVal<ParamType::TGLDEBUGPROCKHR, T>(value);
+        case ParamType::TGLGETBLOBPROCANGLE:
+            return GetParamVal<ParamType::TGLGETBLOBPROCANGLE, T>(value);
+        case ParamType::TGLSETBLOBPROCANGLE:
+            return GetParamVal<ParamType::TGLSETBLOBPROCANGLE, T>(value);
         case ParamType::TGLbitfield:
             return GetParamVal<ParamType::TGLbitfield, T>(value);
         case ParamType::TGLboolean:
@@ -2225,6 +2247,20 @@ template <>
 inline void SetParamVal<ParamType::TGLDEBUGPROCKHR>(GLDEBUGPROCKHR valueIn, ParamValue *valueOut)
 {
     valueOut->GLDEBUGPROCKHRVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TGLGETBLOBPROCANGLE>(GLGETBLOBPROCANGLE valueIn,
+                                                        ParamValue *valueOut)
+{
+    valueOut->GLGETBLOBPROCANGLEVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TGLSETBLOBPROCANGLE>(GLSETBLOBPROCANGLE valueIn,
+                                                        ParamValue *valueOut)
+{
+    valueOut->GLSETBLOBPROCANGLEVal = valueIn;
 }
 
 template <>
@@ -3148,6 +3184,12 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TGLDEBUGPROCKHR:
             SetParamVal<ParamType::TGLDEBUGPROCKHR>(valueIn, valueOut);
+            break;
+        case ParamType::TGLGETBLOBPROCANGLE:
+            SetParamVal<ParamType::TGLGETBLOBPROCANGLE>(valueIn, valueOut);
+            break;
+        case ParamType::TGLSETBLOBPROCANGLE:
+            SetParamVal<ParamType::TGLSETBLOBPROCANGLE>(valueIn, valueOut);
             break;
         case ParamType::TGLbitfield:
             SetParamVal<ParamType::TGLbitfield>(valueIn, valueOut);

@@ -229,6 +229,7 @@ const ProcEntry g_procTable[] = {
     {"glBlitFramebufferANGLE", P(GL_BlitFramebufferANGLE)},
     {"glBlitFramebufferNV", P(GL_BlitFramebufferNV)},
     DESKTOP_ONLY("glBlitNamedFramebuffer", GL_BlitNamedFramebuffer)
+    {"glBlobCacheCallbacksANGLE", P(GL_BlobCacheCallbacksANGLE)},
     {"glBufferData", P(GL_BufferData)},
     DESKTOP_ONLY("glBufferStorage", GL_BufferStorage)
     {"glBufferStorageEXT", P(GL_BufferStorageEXT)},
@@ -670,6 +671,7 @@ const ProcEntry g_procTable[] = {
     DESKTOP_ONLY("glGetPixelMapuiv", GL_GetPixelMapuiv)
     DESKTOP_ONLY("glGetPixelMapusv", GL_GetPixelMapusv)
     {"glGetPointerv", P(GL_GetPointerv)},
+    {"glGetPointervANGLE", P(GL_GetPointervANGLE)},
     {"glGetPointervKHR", P(GL_GetPointervKHR)},
     {"glGetPointervRobustANGLERobustANGLE", P(GL_GetPointervRobustANGLERobustANGLE)},
     DESKTOP_ONLY("glGetPolygonStipple", GL_GetPolygonStipple)

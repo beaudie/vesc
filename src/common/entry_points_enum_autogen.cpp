@@ -618,6 +618,8 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glBlitFramebufferNV";
         case EntryPoint::GLBlitNamedFramebuffer:
             return "glBlitNamedFramebuffer";
+        case EntryPoint::GLBlobCacheCallbacksANGLE:
+            return "glBlobCacheCallbacksANGLE";
         case EntryPoint::GLBufferData:
             return "glBufferData";
         case EntryPoint::GLBufferStorage:
@@ -1500,6 +1502,8 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glGetPixelMapusv";
         case EntryPoint::GLGetPointerv:
             return "glGetPointerv";
+        case EntryPoint::GLGetPointervANGLE:
+            return "glGetPointervANGLE";
         case EntryPoint::GLGetPointervKHR:
             return "glGetPointervKHR";
         case EntryPoint::GLGetPointervRobustANGLERobustANGLE:
