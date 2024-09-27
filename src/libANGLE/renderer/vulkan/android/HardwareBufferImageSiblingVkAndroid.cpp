@@ -392,7 +392,9 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
             // If not renderable, don't burn a slot on it.
             vkFormat = &renderer->getFormat(angle::FormatID::NONE);
         }
+    }
 
+    if (isExternal || imageFormat.isYUV) {
         // Note from Vulkan spec: Since GL_OES_EGL_image_external does not require the same sampling
         // and conversion calculations as Vulkan does, achieving identical results between APIs may
         // not be possible on some implementations.
