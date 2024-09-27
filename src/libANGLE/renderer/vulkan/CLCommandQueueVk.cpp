@@ -132,6 +132,8 @@ angle::Result CLCommandQueueVk::enqueueReadBuffer(const cl::Buffer &buffer,
         ANGLE_TRY(finishInternal());
         auto bufferVk = &buffer.getImpl<CLBufferVk>();
         ANGLE_TRY(bufferVk->copyTo(ptr, offset, size));
+
+        ANGLE_TRY(createEvent(eventCreateFunc, true));
     }
     else
     {
@@ -172,9 +174,9 @@ angle::Result CLCommandQueueVk::enqueueReadBuffer(const cl::Buffer &buffer,
         mComputePassCommands->getCommandBuffer().copyBuffer(
             bufferVk.getBuffer().getBuffer(), transferBufferVk.getBuffer().getBuffer(), 1,
             &copyRegion);
-    }
 
-    ANGLE_TRY(createEvent(eventCreateFunc));
+        ANGLE_TRY(createEvent(eventCreateFunc));
+    }
 
     return angle::Result::Continue;
 }
@@ -198,7 +200,7 @@ angle::Result CLCommandQueueVk::enqueueWriteBuffer(const cl::Buffer &buffer,
         ANGLE_TRY(finishInternal());
     }
 
-    ANGLE_TRY(createEvent(eventCreateFunc));
+    ANGLE_TRY(createEvent(eventCreateFunc, true));
 
     return angle::Result::Continue;
 }
@@ -752,7 +754,7 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
                 writeDescriptorSet.sType       = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                 writeDescriptorSet.dstSet =
                     kernelVk.getDescriptorSet(DescriptorSetIndex::KernelArguments);
-                writeDescriptorSet.dstBinding  = arg.descriptorBinding;
+                writeDescriptorSet.dstBinding = arg.descriptorBinding;
                 break;
             }
             case NonSemanticClspvReflectionArgumentPodPushConstant:
@@ -919,11 +921,11 @@ angle::Result CLCommandQueueVk::submitCommands()
     return angle::Result::Continue;
 }
 
-angle::Result CLCommandQueueVk::createEvent(CLEventImpl::CreateFunc *createFunc)
+angle::Result CLCommandQueueVk::createEvent(CLEventImpl::CreateFunc *createFunc, bool blocking)
 {
     if (createFunc != nullptr)
     {
-        *createFunc = [this](const cl::Event &event) {
+        *createFunc = [this, blocking](const cl::Event &event) {
             auto eventVk = new (std::nothrow) CLEventVk(event);
             if (eventVk == nullptr)
             {
@@ -931,16 +933,26 @@ angle::Result CLCommandQueueVk::createEvent(CLEventImpl::CreateFunc *createFunc)
                 ANGLE_CL_SET_ERROR(CL_OUT_OF_HOST_MEMORY);
                 return CLEventImpl::Ptr(nullptr);
             }
-            eventVk->setQueueSerial(mComputePassCommands->getQueueSerial());
 
-            // Save a reference to this event
-            mAssociatedEvents.push_back(cl::EventPtr{&eventVk->getFrontendObject()});
-
-            if (mCommandQueue.getProperties().intersects(CL_QUEUE_PROFILING_ENABLE))
+            if (blocking)
             {
-                if (IsError(mCommandQueue.getImpl<CLCommandQueueVk>().flush()))
+                if (IsError(eventVk->setStatusAndExecuteCallback(CL_COMPLETE)))
                 {
                     ANGLE_CL_SET_ERROR(CL_OUT_OF_RESOURCES);
+                }
+            }
+            else
+            {
+                eventVk->setQueueSerial(mComputePassCommands->getQueueSerial());
+                // Save a reference to this event
+                mAssociatedEvents.push_back(cl::EventPtr{&eventVk->getFrontendObject()});
+
+                if (mCommandQueue.getProperties().intersects(CL_QUEUE_PROFILING_ENABLE))
+                {
+                    if (IsError(mCommandQueue.getImpl<CLCommandQueueVk>().flush()))
+                    {
+                        ANGLE_CL_SET_ERROR(CL_OUT_OF_RESOURCES);
+                    }
                 }
             }
 
