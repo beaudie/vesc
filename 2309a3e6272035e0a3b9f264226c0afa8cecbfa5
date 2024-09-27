@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e925c40b_531554c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T21:04:06Z",
+      "side": 1,
+      "message": "I am going to rely on shabi for this given that I am not closely watching CL code.",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
