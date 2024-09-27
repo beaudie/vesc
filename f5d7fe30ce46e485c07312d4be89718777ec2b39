@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e28cb8b_2b2a74d8",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-27T19:11:52Z",
+      "side": 1,
+      "message": "This doesn\u0027t work, mMaxOffscreenBufferCount is 2 so mTotalFrameCount-2 % 2 is just mTotalFrameCount % 2.\n\nThe way I understood your suggestion is:\n\n1. current frame N\n2. previous frame N-1\n3. frame N-2\n\nWhich is why I have 3 syncs (but I might be getting something backwards).",
+      "parentUuid": "03196402_e9aa7271",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 0
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1315cc6d_2ef5d72c",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2024-09-27T18:24:45Z",
       "side": 1,
       "message": "This is redundant",
+      "range": {
+        "startLine": 2167,
+        "startChar": 70,
+        "endLine": 2167,
+        "endChar": 79
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "011a16c9_3a8d4f41",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2167,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-27T19:11:52Z",
+      "side": 1,
+      "message": "That\u0027s to account for negative numbers, -1 % N is -1",
+      "parentUuid": "1315cc6d_2ef5d72c",
       "range": {
         "startLine": 2167,
         "startChar": 70,
@@ -60,6 +108,30 @@
       "writtenOn": "2024-09-27T18:24:45Z",
       "side": 1,
       "message": "-1. You should keep waiting until it is done.",
+      "range": {
+        "startLine": 2170,
+        "startChar": 67,
+        "endLine": 2170,
+        "endChar": 85
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bf359ac_b1f421d6",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2170,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-27T19:11:52Z",
+      "side": 1,
+      "message": "It does block until it\u0027s done. Actually GL_TIMEOUT_IGNORED might not be meant to be used with this call. Replaced with a 1s constant. Same behavior.",
+      "parentUuid": "e48aefb7_1a007b4d",
       "range": {
         "startLine": 2170,
         "startChar": 67,
@@ -107,6 +179,30 @@
           ]
         }
       ],
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "132b2f94_6260815d",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2172,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-27T19:11:52Z",
+      "side": 1,
+      "message": "oh, I thought we need to wait right before glBlitFramebuffer, as that\u0027s where we\u0027ll be reading the offscreen frame pixels. Line 2119 binds the offscreen framebuffer for writing. So we want blocking to happen before we start _writing_ not reading?",
+      "parentUuid": "91f3684e_e1b5127c",
+      "range": {
+        "startLine": 2166,
+        "startChar": 12,
+        "endLine": 2172,
+        "endChar": 13
+      },
       "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
