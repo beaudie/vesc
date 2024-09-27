@@ -1244,6 +1244,8 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
         mergeClientAttribsRange(renderer, activeStreamedAttribs, startVertex,
                                 startVertex + vertexCount, mergeRanges, mergedIndexes);
 
+    // TODO: Maybe we should check if the pointer is null? If so, skip?
+
     for (size_t attribIndex : activeStreamedAttribs)
     {
         const gl::VertexAttribute &attrib = attribs[attribIndex];

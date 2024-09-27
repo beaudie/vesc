@@ -5876,6 +5876,18 @@ void Context::disableVertexAttribArray(GLuint index)
 void Context::enableVertexAttribArray(GLuint index)
 {
     mState.setEnableVertexAttribArray(index, true);
+    if (!mState.getVertexArray()->getVertexAttribute(index).isInitialized)
+    {
+        // If this is the first time the feature is enabled, some of its attributes should be set to
+        // their initial values. As per the glVertexAttribPointer() spec, some args have an initial
+        // value:
+        // - size: 4
+        // - type: GL_FLOAT
+        // - stride: 0
+        // - pointer: 0
+        mState.getVertexArray()->setVertexAttributeAsInitialized(index);
+        vertexAttribPointer(index, 4, VertexAttribType::Float, false, 0, nullptr);
+    }
     mStateCache.onVertexArrayStateChange(this);
 }
 

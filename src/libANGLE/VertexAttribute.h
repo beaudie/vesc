@@ -82,6 +82,10 @@ struct VertexAttribute final : private angle::NonCopyable
     GLint64 getCachedElementLimit() const { return mCachedElementLimit; }
 
     bool enabled;  // For glEnable/DisableVertexAttribArray
+
+    // Setting default value when enabled for the first time.
+    bool isInitialized;
+
     const angle::Format *format;
 
     const void *pointer;

@@ -339,6 +339,8 @@ class VertexArray final : public angle::ObserverInterface,
         mBufferAccessValidationEnabled = enabled;
     }
 
+    void setVertexAttributeAsInitialized(GLuint attribIndex);
+
   private:
     ~VertexArray() override;
 
