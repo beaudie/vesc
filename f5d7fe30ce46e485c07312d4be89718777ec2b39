@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fab8146_585182df",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-27T22:23:22Z",
+      "side": 1,
+      "message": "I kept data as is for now to keep CL simple, as e.g. `mOffscreenFramebuffers.data()` is used directly in a couple of places, but I can refactor in a follow up CL.",
+      "parentUuid": "4b865bca_e6cbb11f",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 0
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1315cc6d_2ef5d72c",
@@ -317,6 +341,30 @@
       "side": 1,
       "message": "\u003e does this mean we need to insert the fence after glBlitFramebuffer? Or maybe even further down, like after glFlush?\nBefore or after blitFB is all fine. I personally prefer before blitFB, mainly because that is the point of time where the fence would be inserted if you are running on screen. But either way will give you correct result.\n\n\u003e so we don\u0027t want those to be changed until glBlitFramebuffer completely finishes.. right? \nRight, but no matter where you insert fence, they will not change. Everything you call in a single context should be serialized. BlitFB implementation (i.e, ANGLE) will ensure it the blit does not occur after rendering. The problem we try to fix here is the application\u0027s CPU access to buffer, which is out of ANGLE\u0027s control.",
       "parentUuid": "cfe6d1dc_ad399162",
+      "range": {
+        "startLine": 2166,
+        "startChar": 12,
+        "endLine": 2172,
+        "endChar": 13
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6044d98_385829ac",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2172,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-27T22:23:22Z",
+      "side": 1,
+      "message": "Thanks for the explanation! I did as you suggested.",
+      "parentUuid": "7e00ce92_69a42571",
       "range": {
         "startLine": 2166,
         "startChar": 12,
