@@ -70,6 +70,30 @@
       },
       "revId": "0c44387c829c90850cb33960bb1801b86b7c8c54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e835a932_ba698e74",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-09-27T21:50:59Z",
+      "side": 1,
+      "message": "\u003e would it create conflict with aliased index?\n\nI wouldn\u0027t think so. There is no state that is currently shared between GL and CL. Renderer instance is created from scratch for CL.\n\n\u003e could just create another type enum class CLDescriptorSetIndex?\n\nThere were types defined with enum types -- `PipelineLayoutDesc` that we were leveraging on -- https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/vk_cache_utils.h#1111 -- which probably have to _templatized_. As GL and CL were independent went this route.",
+      "parentUuid": "a981df9c_2723b537",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "0c44387c829c90850cb33960bb1801b86b7c8c54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
