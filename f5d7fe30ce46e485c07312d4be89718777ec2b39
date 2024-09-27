@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6b6917d_660cecc9",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T19:34:15Z",
+      "side": 1,
+      "message": "This is exactly what you want: Its is ping-pong between two buffers. Before you encode a frame that renders to buffer i (i being 0 or 1), you need to wait previous render to finish. So you end up waiting for mOffscreenSyncs[mTotalFrameCount % 2] is correct.",
+      "parentUuid": "5e28cb8b_2b2a74d8",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 0
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1315cc6d_2ef5d72c",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 1
@@ -197,6 +221,30 @@
       "side": 1,
       "message": "oh, I thought we need to wait right before glBlitFramebuffer, as that\u0027s where we\u0027ll be reading the offscreen frame pixels. Line 2119 binds the offscreen framebuffer for writing. So we want blocking to happen before we start _writing_ not reading?",
       "parentUuid": "91f3684e_e1b5127c",
+      "range": {
+        "startLine": 2166,
+        "startChar": 12,
+        "endLine": 2172,
+        "endChar": 13
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8563905e_6f225d02",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2172,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T19:34:15Z",
+      "side": 1,
+      "message": "Right. Before we call replayFrame (which end up using CPU to write to buffer).\n\nAlso, you don\u0027t need to glDeleteSync. You can keep reusing them",
+      "parentUuid": "132b2f94_6260815d",
       "range": {
         "startLine": 2166,
         "startChar": 12,
