@@ -251,8 +251,20 @@ angle::Result CLCommandQueueVk::enqueueCopyBuffer(const cl::Buffer &srcBuffer,
 
     ANGLE_TRY(processWaitlist(waitEvents));
 
-    CLMemoryVk *srcBufferVk = &srcBuffer.getImpl<CLMemoryVk>();
-    CLMemoryVk *dstBufferVk = &dstBuffer.getImpl<CLMemoryVk>();
+    CLBufferVk *srcBufferVk = &srcBuffer.getImpl<CLBufferVk>();
+    CLBufferVk *dstBufferVk = &dstBuffer.getImpl<CLBufferVk>();
+
+    // Special case of src and dst being sub-buffers with same parent
+    if (srcBufferVk->isSubBuffer() && dstBufferVk->isSubBuffer() &&
+        (srcBufferVk->getParent() == dstBufferVk->getParent()))
+    {
+        uint8_t *dstPtr = nullptr;
+        ANGLE_TRY(dstBufferVk->map(dstPtr, dstOffset));
+        ANGLE_TRY(srcBufferVk->copyTo(dstPtr, srcOffset, size));
+
+        ANGLE_TRY(createEvent(eventCreateFunc, true));
+        return angle::Result::Continue;
+    }
 
     vk::CommandBufferAccess access;
     access.onBufferTransferRead(&srcBufferVk->getBuffer());
@@ -261,7 +273,16 @@ angle::Result CLCommandQueueVk::enqueueCopyBuffer(const cl::Buffer &srcBuffer,
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(getCommandBuffer(access, &commandBuffer));
 
-    const VkBufferCopy copyRegion = {srcOffset, dstOffset, size};
+    VkBufferCopy copyRegion = {srcOffset, dstOffset, size};
+    // update the offset in the case of sub-buffers
+    if (srcBufferVk->getOffset())
+    {
+        copyRegion.srcOffset += srcBufferVk->getOffset();
+    }
+    if (dstBufferVk->getOffset())
+    {
+        copyRegion.dstOffset += dstBufferVk->getOffset();
+    }
     commandBuffer->copyBuffer(srcBufferVk->getBuffer().getBuffer(),
                               dstBufferVk->getBuffer().getBuffer(), 1, &copyRegion);
 
@@ -740,9 +761,7 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
                     kernelArgDescSetBuilder.allocDescriptorBufferInfo();
                 bufferInfo.range  = clMem->getSize();
                 bufferInfo.offset = clMem->getOffset();
-                bufferInfo.buffer = vkMem.isSubBuffer()
-                                        ? vkMem.getParent()->getBuffer().getBuffer().getHandle()
-                                        : vkMem.getBuffer().getBuffer().getHandle();
+                bufferInfo.buffer = vkMem.getBuffer().getBuffer().getHandle();
                 VkWriteDescriptorSet &writeDescriptorSet =
                     kernelArgDescSetBuilder.allocWriteDescriptorSet();
                 writeDescriptorSet.descriptorCount = 1;
