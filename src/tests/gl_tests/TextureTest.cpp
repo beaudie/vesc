@@ -2756,6 +2756,130 @@ TEST_P(Texture2DTest, PBOWithMultipleDraws)
     EXPECT_EQ(expected, actual);
 }
 
+// Almost mirrors UnitTest_DMSAA_dst_read test from Android skqp test suite
+TEST_P(Texture2DTestES3, UnitTest_DMSAA_dst_read)
+{
+    glEnable(GL_MULTISAMPLE);
+
+    GLTexture texture;
+    glActiveTexture(GL_TEXTURE31);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 16, 16);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    GLFramebuffer fboTexture;
+    glBindFramebuffer(GL_FRAMEBUFFER, fboTexture);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    GLFramebuffer fboRenderbuffer;
+    GLRenderbuffer renderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, fboRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, 16, 16);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderbuffer);
+    glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    GLSampler sampler;
+    glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.000000);
+    glBindSampler(0, sampler);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fboRenderbuffer);
+    glViewport(0, 0, 16, 16);
+    glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+
+    // Create blue program
+    ANGLE_GL_PROGRAM(drawBlue, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+    ASSERT_GL_NO_ERROR();
+
+    glDisable(GL_BLEND);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_STENCIL_TEST);
+
+    glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+    drawQuad(drawBlue, essl1_shaders::PositionAttrib(), 0.5f);
+
+    glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(0, 6, 10, 10);
+
+    // Create green program
+    ANGLE_GL_PROGRAM(drawGreen, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    ASSERT_GL_NO_ERROR();
+    drawQuad(drawGreen, essl1_shaders::PositionAttrib(), 0.5f);
+
+    // Blit fboRenderbuffer onto fboTexture
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fboRenderbuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboTexture);
+    glDisable(GL_SCISSOR_TEST);
+    glBlitFramebuffer(0, 6, 10, 16, 0, 6, 10, 16, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    GLenum attachment = GL_COLOR_ATTACHMENT0;
+    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, &attachment);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fboTexture);
+    std::array<GLubyte, 10 * 10 * 4> pixelData;
+    glReadPixels(0, 6, 10, 10, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data());
+
+    glClearColor(1.000000, 1.000000, 1.000000, 1.000000);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fboRenderbuffer);
+    glUseProgram(drawBlue);
+
+    glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+    drawQuad(drawBlue, essl1_shaders::PositionAttrib(), 0.5f);
+
+    glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+    // Create checkered program
+    ANGLE_GL_PROGRAM(drawCheckered, essl1_shaders::vs::Passthrough(),
+                     essl1_shaders::fs::Checkered());
+    ASSERT_GL_NO_ERROR();
+    glEnable(GL_SCISSOR_TEST);
+    drawQuad(drawCheckered, essl1_shaders::PositionAttrib(), 0.5f);
+
+    // Blit fboRenderbuffer onto fboTexture
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fboRenderbuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboTexture);
+    glDisable(GL_SCISSOR_TEST);
+    glBlitFramebuffer(0, 6, 10, 16, 0, 6, 10, 16, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    attachment = GL_COLOR_ATTACHMENT0;
+    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, &attachment);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fboRenderbuffer);
+    glUseProgram(drawBlue);
+    glEnable(GL_FRAMEBUFFER_SRGB_EXT);
+    drawQuad(drawBlue, essl1_shaders::PositionAttrib(), 0.5f);
+
+    glDisable(GL_FRAMEBUFFER_SRGB_EXT);
+    glUseProgram(drawCheckered);
+    glEnable(GL_SCISSOR_TEST);
+    drawQuad(drawCheckered, essl1_shaders::PositionAttrib(), 0.5f);
+
+    // Blit fboRenderbuffer onto fboTexture
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fboRenderbuffer);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboTexture);
+    glDisable(GL_SCISSOR_TEST);
+    glBlitFramebuffer(0, 6, 10, 16, 0, 6, 10, 16, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    attachment = GL_COLOR_ATTACHMENT0;
+    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, &attachment);
+    glFinish();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fboTexture);
+    glReadPixels(0, 6, 10, 10, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data());
+}
+
 // Test that stencil texture uploads work.
 TEST_P(Texture2DTestES3, TexImageWithStencilData)
 {
