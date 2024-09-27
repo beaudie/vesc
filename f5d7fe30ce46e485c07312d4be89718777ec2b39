@@ -1,0 +1,114 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03196402_e9aa7271",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T18:24:45Z",
+      "side": 1,
+      "message": "I don\u0027t know if there is a bug here, but sounds a bit suspicious, given mNumSyncs is 3. The way I was thinking this:\n```\n    std::array\u003cGLsync, mMaxOffscreenBufferCount\u003e mOffscreenSyncs                       \u003d {};\n```\nAnd then you just wait for `mOffscreenSyncs[(mTotalFrameCount-2) % mMaxOffscreenBufferCount]`",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 0
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1315cc6d_2ef5d72c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2167,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T18:24:45Z",
+      "side": 1,
+      "message": "This is redundant",
+      "range": {
+        "startLine": 2167,
+        "startChar": 70,
+        "endLine": 2167,
+        "endChar": 79
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e48aefb7_1a007b4d",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2170,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T18:24:45Z",
+      "side": 1,
+      "message": "-1. You should keep waiting until it is done.",
+      "range": {
+        "startLine": 2170,
+        "startChar": 67,
+        "endLine": 2170,
+        "endChar": 85
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91f3684e_e1b5127c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2172,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-27T18:24:45Z",
+      "side": 1,
+      "message": "To simulate native_surface\u0027s behavior, you should add sync here, and wait at line 2119.",
+      "range": {
+        "startLine": 2166,
+        "startChar": 12,
+        "endLine": 2172,
+        "endChar": 13
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "2654b077_62f83ff3",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/perf_tests/TracePerfTest.cpp",
+              "range": {
+                "startLine": 2173,
+                "startChar": 0,
+                "endLine": 2173,
+                "endChar": 0
+              },
+              "replacement": "           GLsync sync \u003d\n               mOffscreenSyncs[(mTotalFrameCount - (mNumSyncs - 1) + mNumSyncs) % mNumSyncs];\n           if (sync)\n           {\n               glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);\n               glDeleteSync(sync);\n           }\n"
+            }
+          ]
+        }
+      ],
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
