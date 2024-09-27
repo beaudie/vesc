@@ -52,6 +52,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5a30542_cd574fa6",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 3616483
+      },
+      "writtenOn": "2024-09-27T01:01:25Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "7b34c43b_1395f8c6",
+      "range": {
+        "startLine": 492,
+        "startChar": 17,
+        "endLine": 492,
+        "endChar": 21
+      },
+      "revId": "75e254dfbef64b5e66ce506c48fca97fee924968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "863f1a52_0aa961c0",
@@ -65,6 +89,30 @@
       "writtenOn": "2024-09-26T20:52:35Z",
       "side": 1,
       "message": "`GLuint`?",
+      "range": {
+        "startLine": 562,
+        "startChar": 13,
+        "endLine": 562,
+        "endChar": 17
+      },
+      "revId": "75e254dfbef64b5e66ce506c48fca97fee924968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f768bb92_adde3a56",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 3616483
+      },
+      "writtenOn": "2024-09-27T01:01:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "863f1a52_0aa961c0",
       "range": {
         "startLine": 562,
         "startChar": 13,
