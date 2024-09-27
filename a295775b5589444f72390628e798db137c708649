@@ -22,6 +22,30 @@
       },
       "revId": "a295775b5589444f72390628e798db137c708649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2535a458_d06b3217",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-09-27T21:19:07Z",
+      "side": 1,
+      "message": "Good point. I think I had this to mimic the ContextVk interface -- https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/ContextVk.h#232 -- could change this.",
+      "parentUuid": "4392afe7_1aef793c",
+      "range": {
+        "startLine": 95,
+        "startChar": 25,
+        "endLine": 95,
+        "endChar": 47
+      },
+      "revId": "a295775b5589444f72390628e798db137c708649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
