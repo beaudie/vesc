@@ -277,6 +277,30 @@
       },
       "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfe6d1dc_ad399162",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2172,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-09-27T20:36:09Z",
+      "side": 1,
+      "message": "(as discussed offline need the delete sync stuff as it seems sync objects can\u0027t be un-signaled)\n\nI\u0027m still unsure at which point I need to insert the fence. Waiting before writing to the offscreen framebuffer makes sense, so that we don\u0027t corrupt the data that is currently being used. But does this mean we need to insert the fence _after_ glBlitFramebuffer? Or maybe even further down, like after glFlush? glBlitFramebuffer grabs pixels from the offscreen framebuffer, so we don\u0027t want those to be changed until glBlitFramebuffer completely finishes.. right? (I feel I might missing some details about CPU vs GPU completion to reason about this)",
+      "parentUuid": "8563905e_6f225d02",
+      "range": {
+        "startLine": 2166,
+        "startChar": 12,
+        "endLine": 2172,
+        "endChar": 13
+      },
+      "revId": "f5d7fe30ce46e485c07312d4be89718777ec2b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
