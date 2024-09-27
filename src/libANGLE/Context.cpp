@@ -9965,6 +9965,13 @@ void Context::clearTexSubImage(TextureID texturePacked,
                                              static_cast<const uint8_t *>(data)));
 }
 
+void Context::blobCacheCallbacks(GLSETBLOBPROCANGLE set,
+                                 GLGETBLOBPROCANGLE get,
+                                 const void *userParam)
+{
+    UNIMPLEMENTED();
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Debug *debug,
                    const angle::FrontendFeatures &frontendFeatures,
