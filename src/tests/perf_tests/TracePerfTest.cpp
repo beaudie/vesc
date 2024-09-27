@@ -226,6 +226,8 @@ class TracePerfTest : public ANGLERenderTest
     static constexpr int mMaxOffscreenBufferCount                       = 2;
     std::array<GLuint, mMaxOffscreenBufferCount> mOffscreenFramebuffers = {0, 0};
     std::array<GLuint, mMaxOffscreenBufferCount> mOffscreenTextures     = {0, 0};
+    static constexpr int mNumSyncs                                      = 3;
+    std::array<GLsync, mNumSyncs> mOffscreenSyncs                       = {};
     GLuint mOffscreenDepthStencil                                       = 0;
     int mWindowWidth                                                    = 0;
     int mWindowHeight                                                   = 0;
@@ -2020,6 +2022,9 @@ void TracePerfTest::initializeBenchmark()
                                       mOffscreenDepthStencil);
             glBindTexture(GL_TEXTURE_2D, 0);
         }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 
     // Potentially slow. Can load a lot of resources.
@@ -2081,16 +2086,14 @@ void TracePerfTest::sampleTime()
 
 void TracePerfTest::drawBenchmark()
 {
-    constexpr uint32_t kFramesPerX  = 6;
-    constexpr uint32_t kFramesPerY  = 4;
+    constexpr uint32_t kFramesPerX  = 5;
+    constexpr uint32_t kFramesPerY  = 2;
     constexpr uint32_t kFramesPerXY = kFramesPerY * kFramesPerX;
 
-    const uint32_t kOffscreenOffsetX =
-        static_cast<uint32_t>(static_cast<double>(mTestParams.windowWidth) / 3.0f);
-    const uint32_t kOffscreenOffsetY =
-        static_cast<uint32_t>(static_cast<double>(mTestParams.windowHeight) / 3.0f);
-    const uint32_t kOffscreenWidth  = kOffscreenOffsetX;
-    const uint32_t kOffscreenHeight = kOffscreenOffsetY;
+    const uint32_t kOffscreenOffsetX = 0;
+    const uint32_t kOffscreenOffsetY = 0;
+    const uint32_t kOffscreenWidth   = mTestParams.windowWidth;
+    const uint32_t kOffscreenHeight  = mTestParams.windowHeight;
 
     const uint32_t kOffscreenFrameWidth = static_cast<uint32_t>(
         static_cast<double>(kOffscreenWidth / static_cast<double>(kFramesPerX)));
@@ -2113,6 +2116,8 @@ void TracePerfTest::drawBenchmark()
         // ping pong between them for each frame.
         glBindFramebuffer(GL_FRAMEBUFFER,
                           mOffscreenFramebuffers[mTotalFrameCount % mMaxOffscreenBufferCount]);
+        mOffscreenSyncs[mTotalFrameCount % mNumSyncs] =
+            glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
     }
 
     char frameName[32];
@@ -2156,6 +2161,14 @@ void TracePerfTest::drawBenchmark()
             if (scissorTest)
             {
                 glDisable(GL_SCISSOR_TEST);
+            }
+
+            GLsync sync =
+                mOffscreenSyncs[(mTotalFrameCount - (mNumSyncs - 1) + mNumSyncs) % mNumSyncs];
+            if (sync)
+            {
+                glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+                glDeleteSync(sync);
             }
 
             glBlitFramebuffer(0, 0, mWindowWidth, mWindowHeight, windowX, windowY,
@@ -2703,28 +2716,35 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
     glReadPixels(0, 0, mTestParams.windowWidth, mTestParams.windowHeight, GL_RGBA, GL_UNSIGNED_BYTE,
                  pixelData.data());
 
-    // Convert to RGB and flip y.
-    std::vector<uint8_t> rgbData(pixelCount * 3);
-    for (EGLint y = 0; y < mTestParams.windowHeight; ++y)
+    static uint64_t fcrc = 0;
+    if (crc32(0, pixelData.data(), pixelData.size()) != fcrc)
     {
-        for (EGLint x = 0; x < mTestParams.windowWidth; ++x)
-        {
-            EGLint srcPixel = x + y * mTestParams.windowWidth;
-            EGLint dstPixel = x + (mTestParams.windowHeight - y - 1) * mTestParams.windowWidth;
-            memcpy(&rgbData[dstPixel * 3], &pixelData[srcPixel * 4], 3);
-        }
+        fcrc = crc32(0, pixelData.data(), pixelData.size());
+        printf("crc %lX\n", fcrc);
     }
 
-    if (!angle::SavePNGRGB(screenshotName.c_str(), "ANGLE Screenshot", mTestParams.windowWidth,
-                           mTestParams.windowHeight, rgbData))
-    {
-        failTest(std::string("Error saving screenshot: ") + screenshotName);
-        return;
-    }
-    else
-    {
-        printf("Saved screenshot: '%s'\n", screenshotName.c_str());
-    }
+    // // Convert to RGB and flip y.
+    // std::vector<uint8_t> rgbData(pixelCount * 3);
+    // for (EGLint y = 0; y < mTestParams.windowHeight; ++y)
+    // {
+    //     for (EGLint x = 0; x < mTestParams.windowWidth; ++x)
+    //     {
+    //         EGLint srcPixel = x + y * mTestParams.windowWidth;
+    //         EGLint dstPixel = x + (mTestParams.windowHeight - y - 1) * mTestParams.windowWidth;
+    //         memcpy(&rgbData[dstPixel * 3], &pixelData[srcPixel * 4], 3);
+    //     }
+    // }
+
+    // if (!angle::SavePNGRGB(screenshotName.c_str(), "ANGLE Screenshot", mTestParams.windowWidth,
+    //                        mTestParams.windowHeight, rgbData))
+    // {
+    //     failTest(std::string("Error saving screenshot: ") + screenshotName);
+    //     return;
+    // }
+    // else
+    // {
+    //     printf("Saved screenshot: '%s'\n", screenshotName.c_str());
+    // }
 }
 }  // anonymous namespace
 
