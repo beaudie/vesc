@@ -22,6 +22,30 @@
       },
       "revId": "0c44387c829c90850cb33960bb1801b86b7c8c54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f9f0806_552727e6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-09-27T21:12:31Z",
+      "side": 1,
+      "message": "\u003e Is there ways to not aliasing? It kind of looks odd to me.\n\nI wrestled with this, and settled on this as I could loop through and also refer the entries through enum ids. The other option I had was fixed array, and refer through individual entries.\n\n\u003e When CL is enabled, is CL and GL in the same library or two library\n\nThey are in the same library (compiled at the same time).",
+      "parentUuid": "5d905f51_790ae3ae",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "0c44387c829c90850cb33960bb1801b86b7c8c54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
