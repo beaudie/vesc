@@ -16,6 +16,24 @@
       "message": "Thanks Chris for pushing this forward. This CL is failing a lot of tests; it looks like maybe it\u0027s generating invalid shaders which fail to compile, and that breaks the tests.\n\n```\n[ RUN      ] KHR-NoContext.es32.robustness.getnuniform\nWriting test results to C:\\b\\s\\w\\itghr5ut6x\\ANG7906.tmp\n\nCaught exception 3221225477 EXCEPTION_ACCESS_VIOLATION\nBacktrace:\n    gl::ProgramLinkedResourcesLinker::linkResources (o:\\src\\libANGLE\\ProgramLinkedResources.cpp:1738)\n    rx::`anonymous namespace\u0027::LinkTaskVk::link (o:\\src\\libANGLE\\renderer\\vulkan\\ProgramVk.cpp:83)\n    gl::Program::MainLinkTask::linkImpl (o:\\src\\libANGLE\\Program.cpp:703)\n    gl::Program::MainLinkTask::operator() (o:\\src\\libANGLE\\Program.cpp:628)\n    std::__Cr::__function::__policy_invoker\u003cvoid (void *)\u003e::__call_impl\u003cstd::__Cr::__function::__default_alloc_func\u003c`lambda at ..\\..\\src\\libANGLE\\Context.cpp:9331:29\u0027,void (void *)\u003e \u003e (o:\\third_party\\libc++\\src\\include\\__functional\\function.h:611)\n    angle::UnlockedTailCall::runImpl (o:\\src\\libANGLE\\angletypes.cpp:1187)\n    GL_LinkProgram (o:\\src\\libGLESv2\\entry_points_gles_2_0_autogen.cpp:2725)\n    glcts::RobustBufferAccessBehavior::Program::Link (o:\\third_party\\VK-GL-CTS\\src\\external\\openglcts\\modules\\common\\glcRobustBufferAccessBehaviorTests.cpp:425)\n    glcts::RobustBufferAccessBehavior::GetnUniformTest::iterate (o:\\third_party\\VK-GL-CTS\\src\\external\\openglcts\\modules\\common\\glcRobustnessTests.cpp:265)\n    tcu::RandomOrderExecutor::executeInner (o:\\src\\tests\\deqp_support\\tcuRandomOrderExecutor.cpp:268)\n    tcu::RandomOrderExecutor::execute (o:\\src\\tests\\deqp_support\\tcuRandomOrderExecutor.cpp:191)\n    deqp_libtester_run (o:\\src\\tests\\deqp_support\\angle_deqp_libtester_main.cpp:157)\n    angle::`anonymous namespace\u0027::dEQPTest::TestBody (o:\\src\\tests\\deqp_support\\angle_deqp_gtest.cpp:743)\n...\n```\n\nCould you dig into one or two of the failures and fix them locally?",
       "revId": "6b0f45a0866c09c9e8e3040bead887acb1a9488f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15f3bfd2_372231a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2024-09-28T00:57:05Z",
+      "side": 1,
+      "message": "Thanks for pointing this one out Ken. Yep, that\u0027s the code I modified. Is there a link that goes over how to launch this test locally?",
+      "parentUuid": "befd8a83_966fc954",
+      "revId": "6b0f45a0866c09c9e8e3040bead887acb1a9488f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
