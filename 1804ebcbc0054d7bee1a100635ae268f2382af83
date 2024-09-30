@@ -185,6 +185,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "48b3a363_16353d00",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1550788
+      },
+      "writtenOn": "2024-09-30T21:18:32Z",
+      "side": 1,
+      "message": "Err my understanding is it should never be 0. \"It *must* not be zero.\"\n\nWhen `isExternal` is false, `bufferFormatProperties.format` is an equivalent VkFormat and `bufferFormatProperties.externalFormat` should still be the original external format that it was mapped from.",
+      "parentUuid": "6bebd06b_7ed8734b",
+      "range": {
+        "startLine": 416,
+        "startChar": 22,
+        "endLine": 416,
+        "endChar": 59
+      },
+      "revId": "1804ebcbc0054d7bee1a100635ae268f2382af83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "183c4752_77414505",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 1
