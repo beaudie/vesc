@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "183c4752_77414505",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-30T19:34:33Z",
+      "side": 1,
+      "message": "It should be imageFormat.id if it is not external format.",
+      "range": {
+        "startLine": 420,
+        "startChar": 69,
+        "endLine": 420,
+        "endChar": 90
+      },
+      "revId": "1804ebcbc0054d7bee1a100635ae268f2382af83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
