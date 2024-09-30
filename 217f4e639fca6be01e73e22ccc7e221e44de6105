@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6b55e6f_f88be762",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1550788
+      },
+      "writtenOn": "2024-09-30T23:22:51Z",
+      "side": 1,
+      "message": "Appreciate the prompt review!\n\nI don\u0027t have CQ+2 rights so if someone wouldn\u0027t mind doing so when they have a chance. Thanks!",
+      "revId": "217f4e639fca6be01e73e22ccc7e221e44de6105",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
