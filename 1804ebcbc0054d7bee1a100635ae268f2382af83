@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "397818de_70051a97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-30T19:36:27Z",
+      "side": 1,
+      "message": "Thank you, we discussed this internally and the change makes sense. It should be good to land once you address Charlie\u0027s comment.",
+      "revId": "1804ebcbc0054d7bee1a100635ae268f2382af83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "183c4752_77414505",
