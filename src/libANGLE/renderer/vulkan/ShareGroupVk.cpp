@@ -160,6 +160,10 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
     DisplayVk *displayVk   = vk::GetImpl(display);
     vk::Renderer *renderer = displayVk->getRenderer();
 
+    ALOG("mMaxSharedCacheKeyCountPerBufferBlock=%zu\n",
+         renderer->mMaxSharedCacheKeyCountPerBufferBlock);
+    ALOG("mMaxSharedCacheKeyCountPerDescriptorPool=%zu\n",
+         renderer->mMaxSharedCacheKeyCountPerDescriptorPool);
     mRefCountedEventsGarbageRecycler.destroy(renderer);
 
     for (std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)

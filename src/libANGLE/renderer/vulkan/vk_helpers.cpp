@@ -4162,6 +4162,9 @@ angle::Result DescriptorPoolHelper::init(Context *context,
 
 void DescriptorPoolHelper::destroy(Renderer *renderer)
 {
+    renderer->mMaxSharedCacheKeyCountPerDescriptorPool =
+        std::max(renderer->mMaxSharedCacheKeyCountPerDescriptorPool,
+                 mDescriptorSetCacheManager.getMaxCacheKeyCount());
     mDescriptorSetCacheManager.destroyKeys(renderer);
     mDescriptorSetGarbageList.clear();
     mDescriptorPool.destroy(renderer->getDevice());
@@ -4266,6 +4269,8 @@ angle::Result DynamicDescriptorPool::init(Context *context,
 
 void DynamicDescriptorPool::destroy(Renderer *renderer)
 {
+    ALOG("maxCachedDescriptorCount=%zu\n", mDescriptorSetCache.getMaxCachedDescriptorCount());
+
     for (std::unique_ptr<RefCountedDescriptorPoolHelper> &pool : mDescriptorPools)
     {
         ASSERT(!pool->isReferenced());

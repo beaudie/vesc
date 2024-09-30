@@ -778,6 +778,9 @@ class Renderer : angle::NonCopyable
         return mPlaceHolderDescriptorSetLayout;
     }
 
+    size_t mMaxSharedCacheKeyCountPerBufferBlock    = 0;
+    size_t mMaxSharedCacheKeyCountPerDescriptorPool = 0;
+
   private:
     angle::Result setupDevice(vk::Context *context,
                               const angle::FeatureOverrides &featureOverrides,

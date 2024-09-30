@@ -2120,7 +2120,7 @@ template <class SharedCacheKeyT>
 class SharedCacheKeyManager
 {
   public:
-    SharedCacheKeyManager() = default;
+    SharedCacheKeyManager() : mMaxCacheKeyCount(0) {}
     ~SharedCacheKeyManager() { ASSERT(empty()); }
     // Store the pointer to the cache key and retains it
     void addKey(const SharedCacheKeyT &key);
@@ -2135,11 +2135,13 @@ class SharedCacheKeyManager
     bool containsKey(const SharedCacheKeyT &key) const;
     bool empty() const { return mSharedCacheKeys.empty(); }
     void assertAllEntriesDestroyed();
+    size_t getMaxCacheKeyCount() const { return mMaxCacheKeyCount; }
 
   private:
     // Tracks an array of cache keys with refcounting. Note this owns one refcount of
     // SharedCacheKeyT object.
     std::vector<SharedCacheKeyT> mSharedCacheKeys;
+    size_t mMaxCacheKeyCount;
 };
 
 using FramebufferCacheManager   = SharedCacheKeyManager<SharedFramebufferCacheKey>;
@@ -2692,7 +2694,7 @@ class SamplerYcbcrConversionCache final
 class DescriptorSetCache final : angle::NonCopyable
 {
   public:
-    DescriptorSetCache() = default;
+    DescriptorSetCache() : mMaxCachedDescriptorCount(0) {}
     ~DescriptorSetCache() { ASSERT(mPayload.empty()); }
 
     DescriptorSetCache(DescriptorSetCache &&other) : DescriptorSetCache()
@@ -2703,6 +2705,8 @@ class DescriptorSetCache final : angle::NonCopyable
     DescriptorSetCache &operator=(DescriptorSetCache &&other)
     {
         std::swap(mPayload, other.mPayload);
+        mMaxCachedDescriptorCount       = other.mMaxCachedDescriptorCount;
+        other.mMaxCachedDescriptorCount = false;
         return *this;
     }
 
@@ -2727,6 +2731,7 @@ class DescriptorSetCache final : angle::NonCopyable
                                           vk::RefCountedDescriptorPoolHelper *pool)
     {
         mPayload.emplace(desc, std::make_unique<dsCacheEntry>(descriptorSet, pool));
+        mMaxCachedDescriptorCount = std::max<size_t>(mPayload.size(), mMaxCachedDescriptorCount);
     }
 
     ANGLE_INLINE void eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
@@ -2749,6 +2754,8 @@ class DescriptorSetCache final : angle::NonCopyable
 
     bool empty() const { return mPayload.empty(); }
 
+    ANGLE_INLINE size_t getMaxCachedDescriptorCount() const { return mMaxCachedDescriptorCount; }
+
   private:
     class dsCacheEntry
     {
@@ -2767,6 +2774,7 @@ class DescriptorSetCache final : angle::NonCopyable
         vk::RefCountedDescriptorPoolHelper *mPool;
     };
     angle::HashMap<vk::DescriptorSetDesc, std::unique_ptr<dsCacheEntry>> mPayload;
+    size_t mMaxCachedDescriptorCount;
 };
 
 // There is 1 default uniform binding used per stage.

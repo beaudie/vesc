@@ -68,6 +68,10 @@ BufferBlock::~BufferBlock()
 
 void BufferBlock::destroy(Renderer *renderer)
 {
+    renderer->mMaxSharedCacheKeyCountPerBufferBlock =
+        std::max(renderer->mMaxSharedCacheKeyCountPerBufferBlock,
+                 mDescriptorSetCacheManager.getMaxCacheKeyCount());
+
     VkDevice device = renderer->getDevice();
 
     mDescriptorSetCacheManager.destroyKeys(renderer);
