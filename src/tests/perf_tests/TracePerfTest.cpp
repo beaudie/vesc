@@ -2171,8 +2171,8 @@ void TracePerfTest::drawBenchmark()
 
             if (frameX == kFramesPerX - 1 && frameY == kFramesPerY - 1)
             {
-                swap();
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                swap();
                 glClear(GL_COLOR_BUFFER_BIT);
                 mOffscreenFrameCount = 0;
             }
