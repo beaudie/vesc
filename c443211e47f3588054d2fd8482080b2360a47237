@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3419519c_40c458b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-30T17:39:33Z",
+      "side": 1,
+      "message": "\u003e and the attribute without data is not used in the shader, similar to the fragTexCoord parameter in the shader I wrote in the test.\n\nBut the new test in PS7 does use all three attributes. I do expect this case to crash if attrib is used and enabled but no data provided. And qualcomm driver and desktop GPUs are all crashing which indicates crashing is an accepting behavior here.",
+      "parentUuid": "72445ce4_29776e4b",
+      "range": {
+        "startLine": 10,
+        "startChar": 38,
+        "endLine": 10,
+        "endChar": 70
+      },
+      "revId": "c443211e47f3588054d2fd8482080b2360a47237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6645e67_9e22495c",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 2
