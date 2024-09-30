@@ -6324,7 +6324,8 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
                     sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
                 ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getImageViewSubresourceSerial(samplerState);
+                    textureVk->getImageViewSubresourceSerial(
+                        samplerState, samplerUniform.isTexelFetchStaticUse());
 
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
                 SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
@@ -6408,7 +6409,8 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
                     sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
                 ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getImageViewSubresourceSerial(samplerState);
+                    textureVk->getImageViewSubresourceSerial(
+                        samplerState, samplerUniform.isTexelFetchStaticUse());
 
                 textureVk->onNewDescriptorSet(sharedCacheKey);
 
