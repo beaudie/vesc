@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "785b2be6_5c2f0732",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-30T19:42:10Z",
+      "side": 1,
+      "message": "should also assert it is 0 when isExternal\u003d\u003dfalse",
+      "range": {
+        "startLine": 416,
+        "startChar": 22,
+        "endLine": 416,
+        "endChar": 59
+      },
+      "revId": "1804ebcbc0054d7bee1a100635ae268f2382af83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "183c4752_77414505",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 1
