@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "418ed36d_952ba02c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-30T20:58:27Z",
+      "side": 1,
+      "message": "Since the other two variables around it say `IndexBuffer`, might as well call this `mCurrentIndexBuffer`",
+      "revId": "19d13e40d6a4afe75415639081ceaf647f700bc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e21feea_17548479",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-30T20:58:27Z",
+      "side": 1,
+      "message": "\u003e should draw the same object\n\nIIUC, the line strip is also overwriting the line loop, right? This is a little bit risky, as errors in one draw could be masked by the other draw.\n\nCould we do something like changing the viewport in between the loop and non-loop draw so that the two objects are drawn in different parts of the framebuffer? Would also be good if the objects are actually different, so we can be sure we\u0027re not accidentally using the index buffer that was intended for the other draw.",
+      "revId": "19d13e40d6a4afe75415639081ceaf647f700bc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
