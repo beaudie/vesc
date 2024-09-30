@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51358882_540f74c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-30T20:22:36Z",
+      "side": 1,
+      "message": "I suggest dropping this CL. You can very well call `std::count` at call site, which is already clear what it does (wrappers are always a layer of mental overhead)\n\nI see in the next CL it\u0027s used only once, and inside an ASSERT. Not really worth adding a utility for it (and then unit tests and all that)",
+      "revId": "1b092209e9368144fac75f7638df1cda316d7945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
