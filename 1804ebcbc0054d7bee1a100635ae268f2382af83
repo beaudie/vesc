@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eb73767_d402a44e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1550788
+      },
+      "writtenOn": "2024-09-30T20:06:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e8e07c9_462930d6",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "1804ebcbc0054d7bee1a100635ae268f2382af83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09bc1d90_5448da33",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-09-30T19:43:24Z",
       "side": 1,
       "message": "Bug: b/368429977\nBug: b/352595520",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 29
+      },
+      "revId": "1804ebcbc0054d7bee1a100635ae268f2382af83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0a413fc_5f1fe109",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1550788
+      },
+      "writtenOn": "2024-09-30T20:06:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09bc1d90_5448da33",
       "range": {
         "startLine": 9,
         "startChar": 0,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c83ee873_fdf718b2",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1550788
+      },
+      "writtenOn": "2024-09-30T20:06:42Z",
+      "side": 1,
+      "message": "Per spec:\n\"externalFormat is an implementation-defined external format identifier for use with VkExternalFormatANDROID. It must not be zero.\n\nformat is the Vulkan format corresponding to the Android hardware buffer’s format, or VK_FORMAT_UNDEFINED if there is not an equivalent Vulkan format.\"\n\nCorrect me if I\u0027m wrong, but here `isExternal` actually means it\u0027s an external format without an equivalent VkFormat. So externalFormat can still be populated in this case.",
+      "parentUuid": "785b2be6_5c2f0732",
+      "range": {
+        "startLine": 416,
+        "startChar": 22,
+        "endLine": 416,
+        "endChar": 59
+      },
+      "revId": "1804ebcbc0054d7bee1a100635ae268f2382af83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "183c4752_77414505",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 1
@@ -100,6 +172,30 @@
       "writtenOn": "2024-09-30T19:34:33Z",
       "side": 1,
       "message": "It should be imageFormat.id if it is not external format.",
+      "range": {
+        "startLine": 420,
+        "startChar": 69,
+        "endLine": 420,
+        "endChar": 90
+      },
+      "revId": "1804ebcbc0054d7bee1a100635ae268f2382af83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18b753a6_39ef0bb0",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1550788
+      },
+      "writtenOn": "2024-09-30T20:06:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "183c4752_77414505",
       "range": {
         "startLine": 420,
         "startChar": 69,
