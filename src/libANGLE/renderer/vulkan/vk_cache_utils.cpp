@@ -6908,6 +6908,7 @@ void SharedCacheKeyManager<SharedCacheKeyT>::addKey(const SharedCacheKeyT &key)
         }
     }
     mSharedCacheKeys.emplace_back(key);
+    mMaxCacheKeyCount = std::max<size_t>(mSharedCacheKeys.size(), mMaxCacheKeyCount);
 }
 
 template <class SharedCacheKeyT>
