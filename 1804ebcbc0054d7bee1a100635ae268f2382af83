@@ -209,6 +209,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8162086_0371b84a",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-09-30T21:57:28Z",
+      "side": 1,
+      "message": "I see. Then I think you should pass in 0 to YcbcrConversionDesc::update() isExternal\u003d\u003dfalse. Otherwise, if you look atYcbcrConversionDesc::update() implementation, it will end up with mIsExternalFormat set to true, which appears to me incorrect.",
+      "parentUuid": "48b3a363_16353d00",
+      "range": {
+        "startLine": 416,
+        "startChar": 22,
+        "endLine": 416,
+        "endChar": 59
+      },
+      "revId": "1804ebcbc0054d7bee1a100635ae268f2382af83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "183c4752_77414505",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 1
