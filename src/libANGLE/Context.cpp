@@ -3936,6 +3936,9 @@ Extensions Context::generateSupportedExtensions() const
     supportedExtensions.extensionPackEs31aANDROID =
         CanSupportAEP(getClientVersion(), supportedExtensions);
 
+    // Blob cache extension is provided by the ANGLE frontend
+    supportedExtensions.blobCacheANGLE = true;
+
     return supportedExtensions;
 }
 
@@ -8970,6 +8973,11 @@ void Context::endPixelLocalStorageWithStoreOpsStore()
     endPixelLocalStorage(n, storeops.data());
 }
 
+bool Context::areBlobCacheFuncsSet() const
+{
+    return mState.getBlobCacheCallbacks().getFunction && mState.getBlobCacheCallbacks().setFunction;
+}
+
 void Context::pixelLocalStorageBarrier()
 {
     if (getExtensions().shaderPixelLocalStorageCoherentANGLE)
@@ -10045,7 +10053,7 @@ void Context::blobCacheCallbacks(GLSETBLOBPROCANGLE set,
                                  GLGETBLOBPROCANGLE get,
                                  const void *userParam)
 {
-    UNIMPLEMENTED();
+    mState.getBlobCacheCallbacks() = {set, get, userParam};
 }
 
 // ErrorSet implementation.
