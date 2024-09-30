@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab04c538_e935d27b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1548815
+      },
+      "writtenOn": "2024-09-30T06:27:37Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "0958f830_ece7062b",
+      "range": {
+        "startLine": 609,
+        "startChar": 24,
+        "endLine": 609,
+        "endChar": 50
+      },
+      "revId": "8662015a4fa79b2ae34f20e4ce2dc14dfcc07a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aff74ff7_beca9c63",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-09-28T03:30:46Z",
       "side": 1,
       "message": "Does `GL_MAP_UNSYNCHRONIZED_BIT` have any bearing on this? IIRC, that\u0027s only about synchronizing with the GPU (i.e. the app has taken care of making sure the GPU is not using the buffer), it doesn\u0027t have anything to do with the CPU caches.",
+      "revId": "8662015a4fa79b2ae34f20e4ce2dc14dfcc07a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6c0ebed_b508e7fa",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1548815
+      },
+      "writtenOn": "2024-09-30T06:27:37Z",
+      "side": 1,
+      "message": "Right, `GL_MAP_UNSYNCHRONIZED_BIT` probably doesn\u0027t have anything to with CPU caches.",
+      "parentUuid": "aff74ff7_beca9c63",
       "revId": "8662015a4fa79b2ae34f20e4ce2dc14dfcc07a62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
