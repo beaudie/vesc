@@ -16,6 +16,57 @@
       "message": "I am going to rely on shabi for this given that I am not closely watching CL code.",
       "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fce687f_6110c156",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-30T20:37:58Z",
+      "side": 1,
+      "message": "```suggestion\n                    UNREACHABLE();\n```",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0421991f_fdd846f5",
+        "filename": "src/libANGLE/renderer/vulkan/clspv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-30T20:37:58Z",
+      "side": 1,
+      "message": "```suggestion\n    char conversion \u003d std::tolower(getPrintfConversionSpecifier(formatString));\n```",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2491ce42_f72b88ff",
+        "filename": "src/libANGLE/renderer/vulkan/clspv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-09-30T20:37:58Z",
+      "side": 1,
+      "message": "Any security concerns here? The format string is in control of the shader, so they could easily cause OOB access here. Not sure if there are any uses beyond the application hurting itself.\n\nDoing a complete printf implementation on the other hand seems overkill",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
