@@ -170,7 +170,7 @@ AutoObjCPtr<id<MTLLibrary>> LibraryCache::getOrCompileShaderLibrary(
             NewMetalLibraryFromMetallib(metalDevice, memory_buffer.data(), memory_buffer.size());
         auto cache_key =
             GenerateBlobCacheKeyForShaderLibrary(source, macros, disableFastMath, usesInvariance);
-        displayMtl->getBlobCache()->put(cache_key, std::move(memory_buffer));
+        displayMtl->getBlobCache()->put(nullptr, cache_key, std::move(memory_buffer));
         return entry.library;
     }
 
