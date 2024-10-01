@@ -69,6 +69,24 @@
       "parentUuid": "5e21feea_17548479",
       "revId": "19d13e40d6a4afe75415639081ceaf647f700bc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b30b7be4_1ef4b429",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-01T02:07:04Z",
+      "side": 1,
+      "message": "Marked as resolved.",
+      "parentUuid": "024b7698_533ede68",
+      "revId": "19d13e40d6a4afe75415639081ceaf647f700bc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
