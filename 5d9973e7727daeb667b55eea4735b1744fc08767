@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa9a58f8_beaa5719",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1548815
+      },
+      "writtenOn": "2024-10-01T04:08:12Z",
+      "side": 1,
+      "message": "Could one of you please help submit the change? I don\u0027t have CQ+2 permission.",
+      "revId": "5d9973e7727daeb667b55eea4735b1744fc08767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
