@@ -575,26 +575,15 @@ angle::Result ContextWgpu::syncState(const gl::Context *context,
             case gl::state::DIRTY_BIT_DEPTH_RANGE:
                 mDirtyBits.set(DIRTY_BIT_VIEWPORT);
                 break;
-            case gl::state::DIRTY_BIT_BLEND_ENABLED:
-                break;
             case gl::state::DIRTY_BIT_BLEND_COLOR:
+                mDirtyBits.set(DIRTY_BIT_BLEND_CONSTANT);
                 break;
+            case gl::state::DIRTY_BIT_BLEND_ENABLED:
             case gl::state::DIRTY_BIT_BLEND_FUNCS:
-                break;
             case gl::state::DIRTY_BIT_BLEND_EQUATIONS:
-                break;
             case gl::state::DIRTY_BIT_COLOR_MASK:
-            {
-                const gl::BlendStateExt &blendStateExt = mState.getBlendStateExt();
-                for (size_t i = 0; i < blendStateExt.getDrawBufferCount(); i++)
-                {
-                    bool r, g, b, a;
-                    blendStateExt.getColorMaskIndexed(i, &r, &g, &b, &a);
-                    mRenderPipelineDesc.setColorWriteMask(i, r, g, b, a);
-                }
-                invalidateCurrentRenderPipeline();
-            }
-            break;
+                setRenderPipelineDescColorTarget(dirtyBit);
+                break;
             case gl::state::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
                 break;
             case gl::state::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED:
@@ -1063,7 +1052,9 @@ angle::Result ContextWgpu::setupDraw(const gl::Context *context,
                 case DIRTY_BIT_SCISSOR:
                     ANGLE_TRY(handleDirtyScissor(&dirtyBitIter));
                     break;
-
+                case DIRTY_BIT_BLEND_CONSTANT:
+                    mCommandBuffer.setBlendConstant(mState.getBlendColor());
+                    break;
                 case DIRTY_BIT_VERTEX_BUFFERS:
                     ANGLE_TRY(handleDirtyVertexBuffers(mDirtyVertexBuffers, &dirtyBitIter));
                     mDirtyVertexBuffers.reset();
@@ -1245,6 +1236,42 @@ angle::Result ContextWgpu::handleDirtyIndexBuffer(gl::DrawElementsType indexType
     mCommandBuffer.setIndexBuffer(buffer->getBuffer(), gl_wgpu::GetIndexFormat(indexType), 0, -1);
     mCurrentIndexBufferType = indexType;
     return angle::Result::Continue;
+}
+
+void ContextWgpu::setRenderPipelineDescColorTarget(size_t dirtyBit)
+{
+    const gl::BlendStateExt &blendStateExt = mState.getBlendStateExt();
+    const gl::DrawBufferMask &enabledMask  = blendStateExt.getEnabledMask();
+    for (size_t i = 0; i < blendStateExt.getDrawBufferCount(); i++)
+    {
+        switch (dirtyBit)
+        {
+            // We only care about the handful of the dirty bits that relate to the
+            // wgpu::ColorTargetState
+            case gl::state::DIRTY_BIT_BLEND_ENABLED:
+                mRenderPipelineDesc.setBlendEnabled(i, enabledMask[i]);
+                invalidateCurrentRenderPipeline();
+                break;
+            case gl::state::DIRTY_BIT_BLEND_FUNCS:
+                mRenderPipelineDesc.setBlendFactors(i, blendStateExt);
+                invalidateCurrentRenderPipeline();
+                break;
+            case gl::state::DIRTY_BIT_BLEND_EQUATIONS:
+                mRenderPipelineDesc.setBlendOps(i, blendStateExt);
+                invalidateCurrentRenderPipeline();
+                break;
+            case gl::state::DIRTY_BIT_COLOR_MASK:
+            {
+                bool r, g, b, a;
+                blendStateExt.getColorMaskIndexed(i, &r, &g, &b, &a);
+                mRenderPipelineDesc.setColorWriteMask(i, r, g, b, a);
+                invalidateCurrentRenderPipeline();
+            }
+            break;
+            default:
+                break;
+        }
+    }
 }
 
 }  // namespace rx
