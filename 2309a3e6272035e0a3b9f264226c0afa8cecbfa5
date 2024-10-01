@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce4f9167_d62b8c87",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-01T21:47:18Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7fce687f_6110c156",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0421991f_fdd846f5",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa173915_91a78147",
+        "filename": "src/libANGLE/renderer/vulkan/clspv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-01T21:47:18Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0421991f_fdd846f5",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2491ce42_f72b88ff",
@@ -65,6 +101,24 @@
       "writtenOn": "2024-09-30T20:37:58Z",
       "side": 1,
       "message": "Any security concerns here? The format string is in control of the shader, so they could easily cause OOB access here. Not sure if there are any uses beyond the application hurting itself.\n\nDoing a complete printf implementation on the other hand seems overkill",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5996ba46_a2f86bed",
+        "filename": "src/libANGLE/renderer/vulkan/clspv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-01T21:47:18Z",
+      "side": 1,
+      "message": "\u003e  Not sure if there are any uses beyond the application hurting itself.\n\nI would think so too. The semantics here would be similar to use of the cl buffer in CL kernel.",
+      "parentUuid": "2491ce42_f72b88ff",
       "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
