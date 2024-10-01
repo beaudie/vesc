@@ -16,6 +16,24 @@
       "message": "This is not supposed to happen, is it? There are fallbacks and such",
       "revId": "26a3a2abf3c3e62082b4a2ab0f4348ed18ddd78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aa27135_18fa143d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-10-01T15:34:02Z",
+      "side": 1,
+      "message": "The fallbacks aren\u0027t implemented yet so marking this as UNIMPLEMENTED for now makes sense, actually.",
+      "parentUuid": "73799add_1454b38d",
+      "revId": "26a3a2abf3c3e62082b4a2ab0f4348ed18ddd78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
