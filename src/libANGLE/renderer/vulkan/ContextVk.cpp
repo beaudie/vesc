@@ -7123,9 +7123,11 @@ angle::Result ContextVk::initBufferAllocation(vk::BufferHelper *bufferHelper,
                                               uint32_t memoryTypeIndex,
                                               size_t allocationSize,
                                               size_t alignment,
-                                              BufferUsageType bufferUsageType)
+                                              BufferUsageType bufferUsageType,
+                                              bool uniformBuffer)
 {
-    vk::BufferPool *pool = getDefaultBufferPool(allocationSize, memoryTypeIndex, bufferUsageType);
+    vk::BufferPool *pool =
+        getDefaultBufferPool(allocationSize, memoryTypeIndex, bufferUsageType, uniformBuffer);
     VkResult result      = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize,
                                                            alignment, bufferUsageType, pool);
     if (ANGLE_LIKELY(result == VK_SUCCESS))
@@ -7336,7 +7338,7 @@ angle::Result ContextVk::initBufferForBufferCopy(vk::BufferHelper *bufferHelper,
     uint32_t memoryTypeIndex = mRenderer->getStagingBufferMemoryTypeIndex(coherency);
     size_t alignment         = mRenderer->getStagingBufferAlignment();
     return initBufferAllocation(bufferHelper, memoryTypeIndex, size, alignment,
-                                BufferUsageType::Dynamic);
+                                BufferUsageType::Dynamic, false);
 }
 
 angle::Result ContextVk::initBufferForImageCopy(vk::BufferHelper *bufferHelper,
@@ -7358,7 +7360,7 @@ angle::Result ContextVk::initBufferForImageCopy(vk::BufferHelper *bufferHelper,
     size_t stagingAlignment = static_cast<size_t>(mRenderer->getStagingBufferAlignment());
 
     ANGLE_TRY(initBufferAllocation(bufferHelper, memoryTypeIndex, allocationSize, stagingAlignment,
-                                   BufferUsageType::Static));
+                                   BufferUsageType::Static, false));
 
     *offset  = roundUp(bufferHelper->getOffset(), static_cast<VkDeviceSize>(imageCopyAlignment));
     *dataPtr = bufferHelper->getMappedMemory() + (*offset) - bufferHelper->getOffset();
@@ -7408,7 +7410,7 @@ angle::Result ContextVk::initBufferForVertexConversion(ConversionBuffer *convers
     size_t sizeToAllocate = roundUp(size, alignment);
 
     return initBufferAllocation(bufferHelper, memoryTypeIndex, sizeToAllocate, alignment,
-                                BufferUsageType::Static);
+                                BufferUsageType::Static, false);
 }
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Command command)

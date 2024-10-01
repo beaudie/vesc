@@ -177,6 +177,17 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
         }
     }
 
+    for (std::unique_ptr<vk::BufferPool> &pool : mUniformBufferPools)
+    {
+        if (pool)
+        {
+            // If any context uses display texture share group, it is expected that a
+            // BufferBlock may still in used by textures that outlived ShareGroup.  The
+            // non-empty BufferBlock will be put into Renderer's orphan list instead.
+            pool->destroy(renderer, mState.hasAnyContextWithDisplayTextureShareGroup());
+        }
+    }
+
     mPipelineLayoutCache.destroy(renderer);
     mDescriptorSetLayoutCache.destroy(renderer);
 
@@ -294,8 +305,29 @@ void TextureUpload::onTextureRelease(TextureVk *textureVk)
 vk::BufferPool *ShareGroupVk::getDefaultBufferPool(vk::Renderer *renderer,
                                                    VkDeviceSize size,
                                                    uint32_t memoryTypeIndex,
-                                                   BufferUsageType usageType)
+                                                   BufferUsageType usageType,
+                                                   bool uniformBuffer)
 {
+    if (uniformBuffer)
+    {
+        if (!mUniformBufferPools[memoryTypeIndex])
+        {
+            const vk::Allocator &allocator = renderer->getAllocator();
+            VkBufferUsageFlags usageFlags  = GetDefaultBufferUsageFlags(renderer);
+
+            VkMemoryPropertyFlags memoryPropertyFlags;
+            allocator.getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlags);
+
+            std::unique_ptr<vk::BufferPool> pool  = std::make_unique<vk::BufferPool>();
+            vma::VirtualBlockCreateFlags vmaFlags = vma::VirtualBlockCreateFlagBits::GENERAL;
+            pool->initWithFlags(renderer, vmaFlags, usageFlags, 0, memoryTypeIndex,
+                                memoryPropertyFlags);
+            mUniformBufferPools[memoryTypeIndex] = std::move(pool);
+        }
+
+        return mUniformBufferPools[memoryTypeIndex].get();
+    }
+
     if (!mDefaultBufferPools[memoryTypeIndex])
     {
         const vk::Allocator &allocator = renderer->getAllocator();
@@ -325,6 +357,14 @@ void ShareGroupVk::pruneDefaultBufferPools(vk::Renderer *renderer)
     }
 
     for (std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
+    {
+        if (pool)
+        {
+            pool->pruneEmptyBuffers(renderer);
+        }
+    }
+
+    for (std::unique_ptr<vk::BufferPool> &pool : mUniformBufferPools)
     {
         if (pool)
         {
@@ -370,6 +410,14 @@ void ShareGroupVk::calculateTotalBufferCount(size_t *bufferCount, VkDeviceSize *
             *totalSize += pool->getMemorySize();
         }
     }
+    for (const std::unique_ptr<vk::BufferPool> &pool : mUniformBufferPools)
+    {
+        if (pool)
+        {
+            *bufferCount += pool->getBufferCount();
+            *totalSize += pool->getMemorySize();
+        }
+    }
 }
 
 void ShareGroupVk::logBufferPools() const
@@ -377,6 +425,16 @@ void ShareGroupVk::logBufferPools() const
     for (size_t i = 0; i < mDefaultBufferPools.size(); i++)
     {
         const std::unique_ptr<vk::BufferPool> &pool = mDefaultBufferPools[i];
+        if (pool && pool->getBufferCount() > 0)
+        {
+            std::ostringstream log;
+            pool->addStats(&log);
+            INFO() << "Pool[" << i << "]:" << log.str();
+        }
+    }
+    for (size_t i = 0; i < mUniformBufferPools.size(); i++)
+    {
+        const std::unique_ptr<vk::BufferPool> &pool = mUniformBufferPools[i];
         if (pool && pool->getBufferCount() > 0)
         {
             std::ostringstream log;

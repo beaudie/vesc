@@ -507,7 +507,8 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
                 buffer.get(),
                 renderer->getVertexConversionBufferMemoryTypeIndex(
                     vk::MemoryHostVisibility::Visible),
-                amount, renderer->getVertexConversionBufferAlignment(), BufferUsageType::Static));
+                amount, renderer->getVertexConversionBufferAlignment(), BufferUsageType::Static,
+                false));
             memcpy(buffer->getMappedMemory(), sourcePointer, amount);
             ANGLE_TRY(buffer->flush(renderer));
 

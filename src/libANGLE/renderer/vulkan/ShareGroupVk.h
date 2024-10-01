@@ -63,7 +63,8 @@ class ShareGroupVk : public ShareGroupImpl
     vk::BufferPool *getDefaultBufferPool(vk::Renderer *renderer,
                                          VkDeviceSize size,
                                          uint32_t memoryTypeIndex,
-                                         BufferUsageType usageType);
+                                         BufferUsageType usageType,
+                                         bool uniformBuffer);
     void pruneDefaultBufferPools(vk::Renderer *renderer);
     bool isDueForBufferPoolPrune(vk::Renderer *renderer);
 
@@ -140,6 +141,7 @@ class ShareGroupVk : public ShareGroupImpl
 
     // The per shared group buffer pools that all buffers should sub-allocate from.
     vk::BufferPoolPointerArray mDefaultBufferPools;
+    vk::BufferPoolPointerArray mUniformBufferPools;
 
     // The system time when last pruneEmptyBuffer gets called.
     double mLastPruneTime;
