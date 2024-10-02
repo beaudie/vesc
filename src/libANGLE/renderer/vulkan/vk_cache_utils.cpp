@@ -6378,17 +6378,9 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
 
             uint32_t infoIndex = writeDescriptorDescs[info.binding].descriptorInfoIndex +
                                  arrayElement + samplerUniform.getOuterArrayOffset();
-            DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
 
             if (textureTypes[textureUnit] == gl::TextureType::Buffer)
             {
-                ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getBufferViewSerial();
-                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
-                infoDesc.imageLayoutOrRange      = 0;
-                infoDesc.samplerOrBufferSerial   = 0;
-                infoDesc.imageSubresourceRange   = 0;
-
                 textureVk->onNewDescriptorSet(sharedCacheKey);
 
                 const BufferView *view = nullptr;
@@ -6407,17 +6399,7 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
                 const gl::SamplerState &samplerState =
                     sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
-                ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getImageViewSubresourceSerial(samplerState);
-
                 textureVk->onNewDescriptorSet(sharedCacheKey);
-
-                ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
-                SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
-                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
-                infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
-                memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource,
-                       sizeof(uint32_t));
 
                 mHandles[infoIndex].sampler = samplerHelper.get().getHandle();
 
