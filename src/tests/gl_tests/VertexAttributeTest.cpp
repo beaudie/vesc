@@ -407,6 +407,51 @@ class VertexAttributeTest : public ANGLETest<>
         glBufferSubData(GL_ARRAY_BUFFER, quadVerticesSize, sizeof(Vector3), &quadVertices[0]);
     }
 
+    void InitAttribProgram()
+    {
+        const GLfloat vertices[] = {
+            // position         // color          // texCoord
+            -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,  // Lower left corner
+            1.0f,  -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // Bottom right corner
+            0.0f,  1.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.5f, 1.0f   // Top
+        };
+
+        constexpr char kVS[] = R"(
+            attribute vec3 position;
+            attribute vec3 color;
+            attribute vec2 texCoord;
+            varying vec3 fragColor;
+            varying vec2 fragTexCoord;
+            void main() {
+                gl_Position = vec4(position, 1.0);
+                fragColor = color;
+                fragTexCoord = texCoord;
+            }
+        )";
+
+        constexpr char kFS[] = R"(
+            precision mediump float;
+            varying vec3 fragColor;
+            varying vec2 fragTexCoord;
+            void main() {
+                gl_FragColor = vec4(fragColor, 1.0);
+            }
+        )";
+
+        mProgram = CompileProgram(kVS, kFS);
+        ASSERT_NE(0u, mProgram);
+        glBindAttribLocation(mProgram, 0, "position");
+        glBindAttribLocation(mProgram, 1, "color");
+        glBindAttribLocation(mProgram, 2, "texCoord");
+        glUseProgram(mProgram);
+        EXPECT_GL_NO_ERROR();
+
+        glGenBuffers(1, &mBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        EXPECT_GL_NO_ERROR();
+    }
+
     GLuint mProgram;
     GLint mTestAttrib;
     GLint mExpectedAttrib;
@@ -3809,6 +3854,82 @@ void main()
         ASSERT_GL_NO_ERROR();
         EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
     }
+}
+
+// Test when VertexAttrib index 0/1/2 is enabled, but only index 0/1 data are provided.
+TEST_P(VertexAttributeTest, VertexAttribPointerCopyBufferFromInvalidIndex2)
+{
+    InitAttribProgram();
+
+    // CASE1: 0 1 2 -> 0 1 hole
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    EXPECT_GL_NO_ERROR();
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+                          (GLvoid *)(3 * sizeof(GLfloat)));
+    // Missing VertexAttribPointer at index 2
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    EXPECT_GL_NO_ERROR();
+
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test when VertexAttrib index 0/1/2 is enabled, but only index 0/2 data are provided.
+TEST_P(VertexAttributeTest, VertexAttribPointerCopyBufferFromInvalidIndex1)
+{
+    InitAttribProgram();
+
+    // CASE2: 0 1 2 -> 0 hole 2
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    EXPECT_GL_NO_ERROR();
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)0);
+    // Missing VertexAttribPointer at index 1
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+                          (GLvoid *)(6 * sizeof(GLfloat)));
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    EXPECT_GL_NO_ERROR();
+
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test when VertexAttrib index 0/1/2 is enabled, but only index 1/s data are provided.
+TEST_P(VertexAttributeTest, VertexAttribPointerCopyBufferFromInvalidIndex0)
+{
+    InitAttribProgram();
+
+    // CASE3: 0 1 2 -> hole 1 2
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    EXPECT_GL_NO_ERROR();
+
+    // Missing VertexAttribPointer at index 0
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+                          (GLvoid *)(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+                          (GLvoid *)(6 * sizeof(GLfloat)));
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    EXPECT_GL_NO_ERROR();
+
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+    EXPECT_GL_NO_ERROR();
 }
 
 // Test that default unsigned integer attribute works correctly even if there is a gap in
