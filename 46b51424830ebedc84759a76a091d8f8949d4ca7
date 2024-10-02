@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48f5c98c_88a4a038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-02T15:07:26Z",
+      "side": 1,
+      "message": "PTAL - @yuxinhu@google.com confirmed that this change doesnt cause issues with skqp tests, i would like to land this and give it some soaking time in the CI process",
+      "revId": "46b51424830ebedc84759a76a091d8f8949d4ca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
