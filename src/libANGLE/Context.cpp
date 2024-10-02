@@ -10256,9 +10256,22 @@ void StateCache::updateActiveAttribsMask(Context *context)
     const VertexArray *vao = glState.getVertexArray();
     ASSERT(vao);
 
+    // TODO: Improve?
+    AttributesMask attribsWithValidData;
+    for (auto iter = vao->getEnabledAttributesMask().begin();
+         iter != vao->getEnabledAttributesMask().end(); ++iter)
+    {
+        auto &attrib = vao->getVertexAttribute(*iter);
+        if (attrib.pointer != nullptr ||
+            vao->getVertexBinding(attrib.bindingIndex).getBuffer().get() != nullptr)
+        {
+            attribsWithValidData.set(*iter);
+        }
+    }
+
     const AttributesMask &clientAttribs  = vao->getClientAttribsMask();
     const AttributesMask &enabledAttribs = vao->getEnabledAttributesMask();
-    const AttributesMask &activeEnabled  = activeAttribs & enabledAttribs;
+    const AttributesMask &activeEnabled  = activeAttribs & enabledAttribs & attribsWithValidData;
 
     mCachedActiveClientAttribsMask   = activeEnabled & clientAttribs;
     mCachedActiveBufferedAttribsMask = activeEnabled & ~clientAttribs;
