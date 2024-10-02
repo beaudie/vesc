@@ -88,4 +88,11 @@
 
 42267265 SWIFTSHADER : KHR-GL46.primitive_restart.restart_mode = FAIL
 
+// Undefined behvaior in CTS test
+370917919 : KHR-GLES3.framebuffer_blit.multisampled_to_singlesampled_blit = FAIL
+
+// Test bug where tessellation shader support is not queried
+370792795 : KHR-GLES31.core.tessellation_shader.* = SKIP
+
+
 355292302 : KHR-GL46.api.coverage* = FAIL
