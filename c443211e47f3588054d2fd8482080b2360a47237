@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d097804_3540b953",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-02T18:18:20Z",
+      "side": 1,
+      "message": "Looking at the test in PS1, it looks like the attribute can only be eliminated after cross-stage optimization. http://anglebug.com/42266831\n\nThat\u0027s something we should do at some point, but I\u0027d like to get our translator in better shape before we can do that. If there\u0027s a way to just stop the crash until that can happen, that might be the best course of action today.",
+      "parentUuid": "3419519c_40c458b9",
+      "range": {
+        "startLine": 10,
+        "startChar": 38,
+        "endLine": 10,
+        "endChar": 70
+      },
+      "revId": "c443211e47f3588054d2fd8482080b2360a47237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6645e67_9e22495c",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 2
