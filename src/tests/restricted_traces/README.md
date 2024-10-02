@@ -245,7 +245,7 @@ ANGLE   : INFO: Finished recording graphics API capture
 
 Next, we want to pull those files over to the host and run some scripts.
 ```
-cd $CHROMIUM_SRC/third_party/angle/src/tests/restricted_traces
+cd src/tests/restricted_traces
 mkdir -p $LABEL
 adb pull /sdcard/Android/data/$PACKAGE_NAME/angle_capture/. $LABEL/
 ```
@@ -267,6 +267,25 @@ export VERSION=1
 jq ".traces = (.traces + [\"$LABEL $VERSION\"] | unique)" restricted_traces.json | sponge restricted_traces.json
 ```
 
+## Get the trace's minimum requirements
+
+By default, the trace's JSON file with contain the GL level used to generate the trace,
+typically 3.2.  We want it to run as many places as possible, so we can use the following
+script to idenify minimum requirements
+```
+src/tests/restricted_traces/retrace_restricted_traces.py get_min_reqs out/<config> --traces $LABEL
+```
+
+This will print out what it changed, i.e.:
+```
+Get Min Requirements modifications to <trace_name>.json:
+...
++    "RequiredExtensions": [
++        "GL_EXT_texture_filter_anisotropic"
++    ],
+Finished get_min_reqs for all traces specified`
+```
+
 ## Run code auto-generation
 
 The [`gen_restricted_traces`](gen_restricted_traces.py) script auto-generates entries
@@ -284,6 +303,24 @@ After this you should be able to `git diff` and see changes in the following fil
 Note the absence of the traces themselves listed above. They are automatically
 ignored by [`.gitignore`](.gitignore) since they won't be checked in directly
 to the repo.
+
+## Upload the trace to experimental
+
+To verify no further changes are needed to JSON, we want to run them as experimental
+before adding to official list.
+
+This can only be done by a Googler.
+
+To do so, place as `x` in front of the version, i.e.:
+```
+    "warhammer_40000_freeblade x1",
+```
+Upload it to experimental:
+```
+vpython3 sync_restricted_traces_to_cipd.py -f warhammer_40000_freeblade
+```
+And run it through CQ, checking for errors and good image results.
+Add any additional required extensions to the JSON file.
 
 ## Upload your trace to CIPD
 
