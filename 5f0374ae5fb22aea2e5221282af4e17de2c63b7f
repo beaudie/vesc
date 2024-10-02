@@ -16,6 +16,24 @@
       "message": "nit: please keep PS1 like the autoroll created it and make your changes in PS2.\n\nLooks like the new tests need suppressions.",
       "revId": "5f0374ae5fb22aea2e5221282af4e17de2c63b7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "132405bd_6fef4379",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-02T16:05:10Z",
+      "side": 1,
+      "message": "Will do. The change is in `deqp.gni` and I also sneaked in a trivial clean up in `ProgramExecutableVk.h` I had lying around.",
+      "parentUuid": "785a5ca5_4ba47c19",
+      "revId": "5f0374ae5fb22aea2e5221282af4e17de2c63b7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
