@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "632d4a41_07b5a551",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-02T23:00:31Z",
+      "side": 1,
+      "message": "PTAL - @yuxinhu@google.com confirmed that test passes with patchset 3",
+      "revId": "b3435b54b8335d6b304b7953a1e7ed614e94016a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
