@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e596ddfd_c585e958",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-02T17:21:12Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "ce4f9167_d62b8c87",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0421991f_fdd846f5",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Acknowledged",
       "parentUuid": "0421991f_fdd846f5",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40ba04cc_01ce1590",
+        "filename": "src/libANGLE/renderer/vulkan/clspv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-02T17:21:12Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "aa173915_91a78147",
       "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
