@@ -5876,6 +5876,9 @@ void Context::disableVertexAttribArray(GLuint index)
 void Context::enableVertexAttribArray(GLuint index)
 {
     mState.setEnableVertexAttribArray(index, true);
+    //    mState.setVertexAttribPointer(this, index, mState.getTargetBuffer(BufferBinding::Array),
+    //    4,
+    //                                  VertexAttribType::Float, false, 0, 0);
     mStateCache.onVertexArrayStateChange(this);
 }
 
@@ -10256,9 +10259,23 @@ void StateCache::updateActiveAttribsMask(Context *context)
     const VertexArray *vao = glState.getVertexArray();
     ASSERT(vao);
 
+    // TODO: Improve?
+    AttributesMask attribsWithValidData;
+    for (auto iter = vao->getEnabledAttributesMask().begin();
+         iter != vao->getEnabledAttributesMask().end(); ++iter)
+    {
+        uint64_t bit = *iter;
+        auto &attrib = vao->getVertexAttribute(bit);
+        if (attrib.pointer != nullptr ||
+            vao->getVertexBinding(attrib.bindingIndex).getBuffer().get() != nullptr)
+        {
+            attribsWithValidData.set(bit);
+        }
+    }
+
     const AttributesMask &clientAttribs  = vao->getClientAttribsMask();
     const AttributesMask &enabledAttribs = vao->getEnabledAttributesMask();
-    const AttributesMask &activeEnabled  = activeAttribs & enabledAttribs;
+    const AttributesMask &activeEnabled  = activeAttribs & enabledAttribs & attribsWithValidData;
 
     mCachedActiveClientAttribsMask   = activeEnabled & clientAttribs;
     mCachedActiveBufferedAttribsMask = activeEnabled & ~clientAttribs;
