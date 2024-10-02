@@ -95,6 +95,10 @@
 // New failures with latest dEQP roll (2020-04-28)
 42263198 SWIFTSHADER : KHR-GLES31.core.nearest_edge.offset_left = FAIL
 
+// Test bug where tessellation shader support is not queried
+370792795 SWIFTSHADER : KHR-GLES31.core.tessellation_shader.vertex.vertex_ordering = SKIP
+370792795 SWIFTSHADER : KHR-GLES31.core.tessellation_shader.vertex.vertex_spacing* = SKIP
+
 // Test timeout due to it loops so many glTexStorageMultisample calls
 42264342 VULKAN NVIDIA : KHR-GLES31.core.texture_storage_multisample.APIDependencies.fbo_with_renderbuffer_and_multisample_texture_attachments_with_different_number_of_samples = SKIP
 
