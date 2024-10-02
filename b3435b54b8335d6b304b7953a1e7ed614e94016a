@@ -33,6 +33,24 @@
       "message": "Can you still try to make the end2end test to fail with your original CL, if possible?",
       "revId": "b3435b54b8335d6b304b7953a1e7ed614e94016a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af041500_02ac6646",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-02T23:14:02Z",
+      "side": 1,
+      "message": "i tried all of last night and a full day today but am unable to get swiftshader to cause a hang on my windows machine. i am hoping that @romanl@google.com gets some bandwidth and can bring this -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5895158 to a state where it fails",
+      "parentUuid": "835ed509_3e2aca7b",
+      "revId": "b3435b54b8335d6b304b7953a1e7ed614e94016a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
