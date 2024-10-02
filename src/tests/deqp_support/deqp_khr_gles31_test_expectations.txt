@@ -95,6 +95,10 @@
 // New failures with latest dEQP roll (2020-04-28)
 42263198 SWIFTSHADER : KHR-GLES31.core.nearest_edge.offset_left = FAIL
 
+// Test bug where tessellation shader support is not queried
+370792795 SWIFTSHADER : KHR-GLES31.core.tessellation_shader.vertex.vertex_ordering = SKIP
+370792795 SWIFTSHADER : KHR-GLES31.core.tessellation_shader.vertex.vertex_spacing* = SKIP
+
 // Test timeout due to it loops so many glTexStorageMultisample calls
 42264342 VULKAN NVIDIA : KHR-GLES31.core.texture_storage_multisample.APIDependencies.fbo_with_renderbuffer_and_multisample_texture_attachments_with_different_number_of_samples = SKIP
 
@@ -254,6 +258,10 @@
 42264522 PIXEL4ORXL VULKAN : KHR-GLES31.core.sample_variables.mask.rgba8ui.samples_4.mask_7 = SKIP
 42264522 PIXEL4ORXL VULKAN : KHR-GLES31.core.sample_variables.mask.rgba8ui.samples_4.mask_zero = SKIP
 
+// Test bug where tessellation shader support is not queried
+370792795 PIXEL4ORXL VULKAN : KHR-GLES31.core.tessellation_shader.vertex.vertex_ordering = SKIP
+370792795 PIXEL4ORXL VULKAN : KHR-GLES31.core.tessellation_shader.vertex.vertex_spacing* = SKIP
+
 // Slow tests
 42264292 SWIFTSHADER : KHR-GLES31.core.arrays_of_arrays.SizedDeclarationsPrimitive = TIMEOUT
 42264814 SWIFTSHADER : KHR-GLES31.core.arrays_of_arrays.ConstructorsAndUnsizedDeclConstructors1 = TIMEOUT
@@ -340,6 +348,10 @@ b/267953710 GALAXYS22 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-input
 345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.tessellation_shader_triangles_tessellation.inner_tessellation_level_rounding = SKIP
 345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.vertex.vertex_ordering = SKIP
 345306326 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.vertex.vertex_spacing = SKIP
+
+// Test bug where tessellation shader support is not queried
+370792795 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.vertex.vertex_ordering = SKIP
+370792795 PIXEL6 VULKAN : KHR-GLES31.core.tessellation_shader.vertex.vertex_spacing* = SKIP
 
 // Samsung Galaxy S23
 42266598 GALAXYS23 VULKAN : KHR-GLES31.core.arrays_of_arrays.InteractionFunctionCalls2 = SKIP
