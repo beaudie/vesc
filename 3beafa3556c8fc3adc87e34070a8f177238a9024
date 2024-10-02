@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8c8adcc_f09edae5",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-10-02T21:29:06Z",
+      "side": 1,
+      "message": "nit: maybe gl::State::DirtyBits::Iterator to make it obvious which bit this is?",
+      "range": {
+        "startLine": 1241,
+        "startChar": 51,
+        "endLine": 1241,
+        "endChar": 57
+      },
+      "revId": "3beafa3556c8fc3adc87e34070a8f177238a9024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
