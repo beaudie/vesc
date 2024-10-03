@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6bb7f81_6369a632",
+        "filename": "src/tests/deqp_support/deqp_khr_gles3_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-03T17:26:31Z",
+      "side": 1,
+      "message": "Is this bug number correct? b/42264814",
+      "revId": "49ce9e440f0cc34973fcebfd55568bc58e987319",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
