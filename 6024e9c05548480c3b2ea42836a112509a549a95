@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbc4e4e3_00214ac0",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 15842,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-03T19:18:23Z",
+      "side": 0,
+      "message": "Should this test be salvaged with swizzling removed?",
+      "revId": "6024e9c05548480c3b2ea42836a112509a549a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
