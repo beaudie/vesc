@@ -6163,9 +6163,17 @@ std::ostream &operator<<(std::ostream &os, const DescriptorSetDesc &desc)
 
 // DescriptorSetDescBuilder implementation.
 DescriptorSetDescBuilder::DescriptorSetDescBuilder() = default;
+
 DescriptorSetDescBuilder::DescriptorSetDescBuilder(size_t descriptorCount)
 {
     resize(descriptorCount);
+}
+
+DescriptorSetDescBuilder::DescriptorSetDescBuilder(const DescriptorSetDesc &desc)
+{
+    mDesc = desc;
+    mHandles.resize(desc.size());
+    mDynamicOffsets.resize(desc.size());
 }
 
 DescriptorSetDescBuilder::~DescriptorSetDescBuilder() {}
@@ -6264,21 +6272,21 @@ void DescriptorSetDescBuilder::updateUniformsAndXfb(
     }
 }
 
-void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
-                                  const std::vector<gl::SamplerBinding> &samplerBindings,
-                                  const gl::ActiveTextureMask &activeTextures,
-                                  const gl::ActiveTextureArray<TextureVk *> &textures,
-                                  const gl::SamplerBindingVector &samplers,
-                                  DescriptorSetDesc *desc)
+void DescriptorSetDescBuilder::updatePreCacheActiveTextures(
+    const gl::ProgramExecutable &executable,
+    const std::vector<gl::SamplerBinding> &samplerBindings,
+    const gl::ActiveTextureMask &activeTextures,
+    const gl::ActiveTextureArray<TextureVk *> &textures,
+    const gl::SamplerBindingVector &samplers)
 {
     const ProgramExecutableVk *executableVk = vk::GetImpl(&executable);
-
-    desc->resize(executableVk->getTextureWriteDescriptorDescs().getTotalDescriptorCount());
     const WriteDescriptorDescs &writeDescriptorDescs =
         executableVk->getTextureWriteDescriptorDescs();
 
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk->getVariableInfoMap();
     const std::vector<gl::LinkedUniform> &uniforms        = executable.getUniforms();
+
+    resize(executableVk->getTextureWriteDescriptorDescs().getTotalDescriptorCount());
 
     for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
     {
@@ -6308,7 +6316,7 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
 
             uint32_t infoIndex = writeDescriptorDescs[info.binding].descriptorInfoIndex +
                                  arrayElement + samplerUniform.getOuterArrayOffset();
-            DescriptorInfoDesc &infoDesc = desc->getInfoDesc(infoIndex);
+            DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
 
             if (textureVk->getState().getType() == gl::TextureType::Buffer)
             {
@@ -6385,17 +6393,9 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
 
             uint32_t infoIndex = writeDescriptorDescs[info.binding].descriptorInfoIndex +
                                  arrayElement + samplerUniform.getOuterArrayOffset();
-            DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
 
             if (textureTypes[textureUnit] == gl::TextureType::Buffer)
             {
-                ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getBufferViewSerial();
-                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
-                infoDesc.imageLayoutOrRange      = 0;
-                infoDesc.samplerOrBufferSerial   = 0;
-                infoDesc.imageSubresourceRange   = 0;
-
                 textureVk->onNewDescriptorSet(sharedCacheKey);
 
                 const BufferView *view = nullptr;
@@ -6414,17 +6414,7 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
                 const gl::SamplerState &samplerState =
                     sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
-                ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getImageViewSubresourceSerial(samplerState);
-
                 textureVk->onNewDescriptorSet(sharedCacheKey);
-
-                ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
-                SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
-                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
-                infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
-                memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource,
-                       sizeof(uint32_t));
 
                 mHandles[infoIndex].sampler = samplerHelper.get().getHandle();
 
