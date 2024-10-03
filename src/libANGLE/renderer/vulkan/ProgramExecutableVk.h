@@ -220,7 +220,7 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                               PipelineType pipelineType,
                                               UpdateDescriptorSetsBuilder *updateBuilder,
                                               vk::CommandBufferHelperCommon *commandBufferHelper,
-                                              const vk::DescriptorSetDesc &texturesDesc);
+                                              vk::DescriptorSetDescBuilder &texturesDesc);
 
     angle::Result updateShaderResourcesDescriptorSet(
         vk::Context *context,
