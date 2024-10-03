@@ -6252,21 +6252,22 @@ void DescriptorSetDescBuilder::updateUniformsAndXfb(
     }
 }
 
-void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
-                                  const std::vector<gl::SamplerBinding> &samplerBindings,
-                                  const gl::ActiveTextureMask &activeTextures,
-                                  const gl::ActiveTextureArray<TextureVk *> &textures,
-                                  const gl::SamplerBindingVector &samplers,
-                                  DescriptorSetDesc *desc)
+angle::Result DescriptorSetDescBuilder::updatePreCacheActiveTextures(
+    Context *context,
+    const gl::ProgramExecutable &executable,
+    const std::vector<gl::SamplerBinding> &samplerBindings,
+    const gl::ActiveTextureMask &activeTextures,
+    const gl::ActiveTextureArray<TextureVk *> &textures,
+    const gl::SamplerBindingVector &samplers)
 {
     const ProgramExecutableVk *executableVk = vk::GetImpl(&executable);
-
-    desc->resize(executableVk->getTextureWriteDescriptorDescs().getTotalDescriptorCount());
     const WriteDescriptorDescs &writeDescriptorDescs =
         executableVk->getTextureWriteDescriptorDescs();
 
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk->getVariableInfoMap();
     const std::vector<gl::LinkedUniform> &uniforms        = executable.getUniforms();
+
+    resize(executableVk->getTextureWriteDescriptorDescs().getTotalDescriptorCount());
 
     for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
     {
@@ -6296,7 +6297,7 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
 
             uint32_t infoIndex = writeDescriptorDescs[info.binding].descriptorInfoIndex +
                                  arrayElement + samplerUniform.getOuterArrayOffset();
-            DescriptorInfoDesc &infoDesc = desc->getInfoDesc(infoIndex);
+            DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
 
             if (textureVk->getState().getType() == gl::TextureType::Buffer)
             {
@@ -6331,6 +6332,7 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
             }
         }
     }
+    return angle::Result::Continue;
 }
 
 angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
@@ -6346,14 +6348,12 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
     const std::vector<gl::SamplerBinding> &samplerBindings = executable.getSamplerBindings();
     const std::vector<GLuint> &samplerBoundTextureUnits = executable.getSamplerBoundTextureUnits();
     const std::vector<gl::LinkedUniform> &uniforms      = executable.getUniforms();
-    const gl::ActiveTextureTypeArray &textureTypes      = executable.getActiveSamplerTypes();
 
     for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
     {
         const gl::SamplerBinding &samplerBinding = samplerBindings[samplerIndex];
         uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(samplerIndex);
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
-
         if (samplerUniform.activeShaders().none())
         {
             continue;
@@ -6374,19 +6374,11 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
 
             uint32_t infoIndex = writeDescriptorDescs[info.binding].descriptorInfoIndex +
                                  arrayElement + samplerUniform.getOuterArrayOffset();
-            DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
 
-            if (textureTypes[textureUnit] == gl::TextureType::Buffer)
+            textureVk->onNewDescriptorSet(sharedCacheKey);
+
+            if (textureVk->getState().getType() == gl::TextureType::Buffer)
             {
-                ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getBufferViewSerial();
-                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
-                infoDesc.imageLayoutOrRange      = 0;
-                infoDesc.samplerOrBufferSerial   = 0;
-                infoDesc.imageSubresourceRange   = 0;
-
-                textureVk->onNewDescriptorSet(sharedCacheKey);
-
                 const BufferView *view = nullptr;
                 ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, &samplerBinding,
                                                                false, &view));
@@ -6403,19 +6395,6 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
                 const gl::SamplerState &samplerState =
                     sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
-                ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getImageViewSubresourceSerial(
-                        samplerState, samplerUniform.isTexelFetchStaticUse());
-
-                textureVk->onNewDescriptorSet(sharedCacheKey);
-
-                ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
-                SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
-                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
-                infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
-                memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource,
-                       sizeof(uint32_t));
-
                 mHandles[infoIndex].sampler = samplerHelper.get().getHandle();
 
                 const ImageView &imageView = textureVk->getReadImageView(
@@ -6425,7 +6404,6 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
             }
         }
     }
-
     return angle::Result::Continue;
 }
 
