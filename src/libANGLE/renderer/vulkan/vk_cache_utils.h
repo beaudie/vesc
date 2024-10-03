@@ -1910,10 +1910,14 @@ class DescriptorSetDescBuilder final
                                          FramebufferVk *framebufferVk,
                                          const WriteDescriptorDescs &writeDescriptorDescs);
 
-    // Specific helpers for image descriptors.
-    void updatePreCacheActiveTextures(const gl::ActiveTextureMask &activeTextures,
-                                      const gl::ActiveTextureArray<TextureVk *> &textures,
-                                      const gl::SamplerBindingVector &samplers);
+    // Specialized update for textures.
+    angle::Result updatePreCacheActiveTextures(
+        Context *context,
+        const gl::ProgramExecutable &executable,
+        const std::vector<gl::SamplerBinding> &samplerBindings,
+        const gl::ActiveTextureMask &activeTextures,
+        const gl::ActiveTextureArray<TextureVk *> &textures,
+        const gl::SamplerBindingVector &samplers);
 
     angle::Result updateFullActiveTextures(Context *context,
                                            const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -1922,7 +1926,7 @@ class DescriptorSetDescBuilder final
                                            const gl::ActiveTextureArray<TextureVk *> &textures,
                                            const gl::SamplerBindingVector &samplers,
                                            PipelineType pipelineType,
-                                           const SharedDescriptorSetCacheKey &sharedCacheKey);
+                                           const SharedDescriptorSetCacheKey &sharedCacheKey) const;
 
     void updateDescriptorSet(Renderer *renderer,
                              const WriteDescriptorDescs &writeDescriptorDescs,
@@ -1941,14 +1945,6 @@ class DescriptorSetDescBuilder final
     angle::FastVector<DescriptorDescHandles, kFastDescriptorSetDescLimit> mHandles;
     angle::FastVector<uint32_t, kFastDescriptorSetDescLimit> mDynamicOffsets;
 };
-
-// Specialized update for textures.
-void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
-                                  const std::vector<gl::SamplerBinding> &samplerBindings,
-                                  const gl::ActiveTextureMask &activeTextures,
-                                  const gl::ActiveTextureArray<TextureVk *> &textures,
-                                  const gl::SamplerBindingVector &samplers,
-                                  DescriptorSetDesc *desc);
 
 // In the FramebufferDesc object:
 //  - Depth/stencil serial is at index 0
