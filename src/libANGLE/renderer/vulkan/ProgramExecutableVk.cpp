@@ -1820,13 +1820,13 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
     PipelineType pipelineType,
+    const vk::DescriptorSetDescBuilder &texturesDesc,
     UpdateDescriptorSetsBuilder *updateBuilder,
-    vk::CommandBufferHelperCommon *commandBufferHelper,
-    const vk::DescriptorSetDesc &texturesDesc)
+    vk::CommandBufferHelperCommon *commandBufferHelper)
 {
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(mDescriptorPools[DescriptorSetIndex::Texture].get().getOrAllocateDescriptorSet(
-        context, commandBufferHelper, texturesDesc,
+        context, commandBufferHelper, texturesDesc.getDesc(),
         mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
         &mDescriptorPoolBindings[DescriptorSetIndex::Texture],
         &mDescriptorSets[DescriptorSetIndex::Texture], &newSharedCacheKey));
@@ -1834,14 +1834,11 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
     if (newSharedCacheKey != nullptr)
     {
-        vk::DescriptorSetDescBuilder fullDesc(
-            mTextureWriteDescriptorDescs.getTotalDescriptorCount());
         // Cache miss. A new cache entry has been created.
-        ANGLE_TRY(fullDesc.updateFullActiveTextures(
-            context, mVariableInfoMap, mTextureWriteDescriptorDescs, *mExecutable, textures,
-            samplers, pipelineType, newSharedCacheKey));
-        fullDesc.updateDescriptorSet(context->getRenderer(), mTextureWriteDescriptorDescs,
-                                     updateBuilder, mDescriptorSets[DescriptorSetIndex::Texture]);
+        texturesDesc.updateTexturesWithSharedCacheKey(*mExecutable, textures, newSharedCacheKey);
+        texturesDesc.updateDescriptorSet(context->getRenderer(), mTextureWriteDescriptorDescs,
+                                         updateBuilder,
+                                         mDescriptorSets[DescriptorSetIndex::Texture]);
     }
     else
     {
