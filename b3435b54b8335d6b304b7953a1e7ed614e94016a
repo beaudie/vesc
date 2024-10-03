@@ -51,6 +51,24 @@
       "parentUuid": "835ed509_3e2aca7b",
       "revId": "b3435b54b8335d6b304b7953a1e7ed614e94016a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e29a0269_fc160a4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-03T13:07:04Z",
+      "side": 1,
+      "message": "My current focus is on figuring out why we see differences in (ANGLE) behavior between cuttlefish and linux+sws. No guarantee this will lead us to a repro but it might, and either way it is something we need to know for future issues. I will post my findings on the chat thread.",
+      "parentUuid": "af041500_02ac6646",
+      "revId": "b3435b54b8335d6b304b7953a1e7ed614e94016a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
