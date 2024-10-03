@@ -1834,8 +1834,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
     if (newSharedCacheKey != nullptr)
     {
-        vk::DescriptorSetDescBuilder fullDesc(
-            mTextureWriteDescriptorDescs.getTotalDescriptorCount());
+        ASSERT(mTextureWriteDescriptorDescs.getTotalDescriptorCount() == texturesDesc.size());
+        vk::DescriptorSetDescBuilder fullDesc(texturesDesc);
         // Cache miss. A new cache entry has been created.
         ANGLE_TRY(fullDesc.updateFullActiveTextures(
             context, mVariableInfoMap, mTextureWriteDescriptorDescs, *mExecutable, textures,

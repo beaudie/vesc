@@ -1773,6 +1773,7 @@ class DescriptorSetDesc
 
     size_t hash() const;
 
+    size_t size() const { return mDescriptorInfos.size(); }
     void resize(size_t count) { mDescriptorInfos.resize(count); }
 
     size_t getKeySizeBytes() const { return mDescriptorInfos.size() * sizeof(DescriptorInfoDesc); }
@@ -1830,6 +1831,7 @@ class DescriptorSetDescBuilder final
   public:
     DescriptorSetDescBuilder();
     DescriptorSetDescBuilder(size_t descriptorCount);
+    DescriptorSetDescBuilder(const DescriptorSetDesc &desc);
     ~DescriptorSetDescBuilder();
 
     DescriptorSetDescBuilder(const DescriptorSetDescBuilder &other);
