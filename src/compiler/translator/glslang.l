@@ -301,12 +301,6 @@ O           [0-7]
 "iimage1DArray"     |
 "uimage1DArray"     |
 
-"sampler1DArray"    |
-"sampler1DArrayShadow" |
-"isampler1D"        |
-"isampler1DArray"   |
-"usampler1D"        |
-"usampler1DArray"   |
 "isampler2DRect"    |
 "usampler2DRect"    {
     if (context->getShaderVersion() < 300) {
@@ -382,8 +376,6 @@ O           [0-7]
 "fvec3"        |
 "fvec4"        |
 
-"sampler1D"    |
-"sampler1DShadow" |
 "sampler2DRectShadow" |
 
 "sizeof"       |
