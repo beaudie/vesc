@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49d7c2f4_b5a32e1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-03T23:54:01Z",
+      "side": 1,
+      "message": "Is the Win/Vulkan failure a flake or reproducible failure? Since this CL is in the GL backend I assume it\u0027s completely unrelated.\n\nPlease comment on crbug.com/371021301 regarding stability of the Win/Vulkan test suites.\n\nlgtm to move forward with this given it passes tests.",
+      "revId": "c3347b4991c6854767dbb655a0834f6cb894d66a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
