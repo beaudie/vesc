@@ -157,6 +157,24 @@
       "parentUuid": "2491ce42_f72b88ff",
       "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "821516ea_92da73da",
+        "filename": "src/libANGLE/renderer/vulkan/clspv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-03T02:19:14Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5996ba46_a2f86bed",
+      "revId": "2309a3e6272035e0a3b9f264226c0afa8cecbfa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
