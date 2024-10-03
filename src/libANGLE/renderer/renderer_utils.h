@@ -600,6 +600,13 @@ inline size_t PackSampleCount(int32_t sampleCount)
     return gl::ScanForward(static_cast<uint32_t>(sampleCount));
 }
 
+// Checks if it is a ETC texture format
+bool IsETCFormat(angle::FormatID formatID);
+// Checks if it is a BC texture format
+bool IsBCFormat(angle::FormatID formatID);
+// Checks if it is a ASTC texture format
+bool IsASTCFormat(angle::FormatID formatID);
+
 }  // namespace rx
 
 // MultiDraw macro patterns

@@ -280,10 +280,6 @@ VkImageCreateFlags GetMinimalImageCreateFlags(Renderer *renderer,
 bool HasFullTextureFormatSupport(vk::Renderer *renderer, angle::FormatID formatID);
 // Checks if a Vulkan format supports all the features except rendering.
 bool HasNonRenderableTextureFormatSupport(vk::Renderer *renderer, angle::FormatID formatID);
-// Checks if it is a ETC texture format
-bool IsETCFormat(angle::FormatID formatID);
-// Checks if it is a BC texture format
-bool IsBCFormat(angle::FormatID formatID);
 
 angle::FormatID GetTranscodeBCFormatID(angle::FormatID formatID);
 

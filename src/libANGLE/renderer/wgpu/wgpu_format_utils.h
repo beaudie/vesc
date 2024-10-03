@@ -92,12 +92,10 @@ class Format final : private angle::NonCopyable
   private:
     friend class FormatTable;
     // This is an auto-generated method in vk_format_table_autogen.cpp.
-    void initialize(const angle::Format &intendedAngleFormat);
+    void initialize(wgpu::Device &wgpuDevice, const angle::Format &intendedAngleFormat);
 
     // These are used in the format table init.
-    void initImageFallback(const ImageFormatInitInfo *info, int numInfo);
-
-    void initBufferFallback(const BufferFormatInitInfo *fallbackInfo, int numInfo);
+    void initImageFallback(wgpu::Device &wgpuDevice, const ImageFormatInitInfo *info, int numInfo);
 
     angle::FormatID mIntendedFormatID;
     GLenum mIntendedGLFormat;
@@ -121,7 +119,7 @@ class FormatTable final : angle::NonCopyable
     FormatTable();
     ~FormatTable();
 
-    void initialize();
+    void initialize(wgpu::Device &wgpuDevice);
 
     ANGLE_INLINE const Format &operator[](GLenum internalFormat) const
     {

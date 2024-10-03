@@ -38,7 +38,7 @@ namespace rx
 namespace webgpu
 {{
 
-void Format::initialize(const angle::Format &angleFormat)
+void Format::initialize(wgpu::Device &wgpuDevice, const angle::Format &angleFormat)
 {{
     switch (angleFormat.id)
     {{
@@ -116,7 +116,7 @@ image_struct_template = "{{{image}, {image_initializer}}}"
 
 image_fallback_template = """{{
 static constexpr ImageFormatInitInfo kInfo[] = {{{image_list}}};
-initImageFallback(kInfo, ArraySize(kInfo));
+initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
 }}"""
 
 buffer_basic_template = """mActualBufferFormatID = {buffer};
@@ -182,7 +182,6 @@ def gen_format_case(angle, internal_format, wgpu_json_data):
                                                               type == "buffer"):
             assert format not in fallbacks
             fallbacks = [format] + fallbacks
-
         return fallbacks
 
     def image_args(format):
