@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e83d7fa0_4686fb12",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-04T21:33:39Z",
+      "side": 1,
+      "message": "SG, will do",
+      "parentUuid": "a1d8af13_11809410",
+      "range": {
+        "startLine": 2000,
+        "startChar": 0,
+        "endLine": 2007,
+        "endChar": 77
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9789df69_48e68192",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 2
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2eb67d2_f50d8b22",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-04T21:33:39Z",
+      "side": 1,
+      "message": "There is already a comment about that above where we\u0027re binding buffers \"No glBlitFramebuffer on gles1 so render a single frame to screen\" but I\u0027ll copy it here as well",
+      "parentUuid": "9789df69_48e68192",
+      "range": {
+        "startLine": 2194,
+        "startChar": 12,
+        "endLine": 2194,
+        "endChar": 23
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f30e75b8_dedee51e",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 2
@@ -77,6 +125,30 @@
       "writtenOn": "2024-10-04T17:41:15Z",
       "side": 1,
       "message": "What drove this change?  Were we off by one before?",
+      "range": {
+        "startLine": 2206,
+        "startChar": 0,
+        "endLine": 2207,
+        "endChar": 23
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfc1ac6e_3b492d0e",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-04T21:33:39Z",
+      "side": 1,
+      "message": "it\u0027s the same as https://crrev.com/c/5899374\n\nswap-\u003esaveScreenshot calls glBindFramebuffer(0), but not for gles1 because that crashes the native driver.\n\nDo we need a comment here, or do it a different way?",
+      "parentUuid": "f30e75b8_dedee51e",
       "range": {
         "startLine": 2206,
         "startChar": 0,
