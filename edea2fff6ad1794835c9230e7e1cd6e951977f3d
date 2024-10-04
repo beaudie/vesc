@@ -246,6 +246,30 @@
       },
       "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0938bf97_ed499883",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T19:16:15Z",
+      "side": 1,
+      "message": "It would on 32-bit systems, which is a good thing. Otherwise you\u0027re using `first()` on a 64-bit type on 32-bit archs (I\u0027m surprised this even compiled)",
+      "parentUuid": "72ec0bcf_6345e441",
+      "range": {
+        "startLine": 2150,
+        "startChar": 44,
+        "endLine": 2150,
+        "endChar": 59
+      },
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
