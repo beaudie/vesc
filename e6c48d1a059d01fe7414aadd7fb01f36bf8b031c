@@ -34,6 +34,24 @@
       "parentUuid": "3fc084e6_ae53d985",
       "revId": "e6c48d1a059d01fe7414aadd7fb01f36bf8b031c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23b0b747_e90f4af6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-04T19:42:11Z",
+      "side": 1,
+      "message": "Basically you override the c++ operator \"\u003c\u003c\" for this class, so that you can use the normal c++ operator \"\u003c\u003c\" to print out this class just like a basic type.",
+      "parentUuid": "594a2649_28c5fa90",
+      "revId": "e6c48d1a059d01fe7414aadd7fb01f36bf8b031c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
