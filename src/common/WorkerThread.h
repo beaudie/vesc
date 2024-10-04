@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 // WorkerThread:
-//   Asychronous tasks/threads for ANGLE, similar to a TaskRunner in Chromium.
+//   Asynchronous tasks/threads for ANGLE, similar to a TaskRunner in Chromium.
 //   Can be implemented as different targets, depending on platform.
 //
 
@@ -25,11 +25,11 @@ namespace angle
 
 class WorkerThreadPool;
 
-// A callback function with no return value and no arguments.
-class Closure
+// A callback function representing a |WorkerThreadPool| task.
+class WorkerTask
 {
   public:
-    virtual ~Closure()        = default;
+    virtual ~WorkerTask()     = default;
     virtual void operator()() = 0;
 };
 
@@ -118,7 +118,8 @@ class WorkerThreadPool : angle::NonCopyable
 
     // Returns an event to wait on for the task to finish.  If the pool fails to create the task,
     // returns null.  This function is thread-safe.
-    virtual std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<Closure> &task) = 0;
+    virtual std::shared_ptr<WaitableEvent> postWorkerTask(
+        const std::shared_ptr<WorkerTask> &task) = 0;
 
     virtual bool isAsync() = 0;
 

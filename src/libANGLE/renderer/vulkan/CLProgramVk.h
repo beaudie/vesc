@@ -313,7 +313,7 @@ class CLProgramVk : public CLProgramImpl
     angle::SimpleMutex mProgramMutex;
 };
 
-class CLAsyncBuildTask : public angle::Closure
+class CLAsyncBuildTask : public angle::WorkerTask
 {
   public:
     CLAsyncBuildTask(CLProgramVk *programVk,

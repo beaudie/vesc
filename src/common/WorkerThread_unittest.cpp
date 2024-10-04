@@ -19,7 +19,7 @@ namespace
 // Tests simple worker pool application.
 TEST(WorkerPoolTest, SimpleTask)
 {
-    class TestTask : public Closure
+    class TestTask : public WorkerTask
     {
       public:
         void operator()() override { fired = true; }
