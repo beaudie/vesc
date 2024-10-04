@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "864e13db_4216e1f0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6919,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T18:43:18Z",
+      "side": 1,
+      "message": "Better to just use an old-fashioned loop since you need the index? Or is `deque::operator[]` not as fast as it needs to be?\n\n```suggestion\n    size_t emptySlot \u003d kInvalidSlot;\n    for (size_t slot \u003d 0; slot \u003c mSharedCacheKeys.size(); ++slot)\n    {\n        SharedCacheKeyT \u0026sharedCacheKey \u003d mSharedCacheKeys[slot];\n        if (*sharedCacheKey.get() \u003d\u003d nullptr)\n        {\n            mEmptySlotBits[slot / kSlotBitCount].set(slot % kSlotBitCount);\n            emptySlot \u003d slot;\n        }\n    }\n```",
+      "range": {
+        "startLine": 6910,
+        "startChar": 0,
+        "endLine": 6919,
+        "endChar": 5
+      },
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1685fe05_da923ab3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6942,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T18:43:18Z",
+      "side": 1,
+      "message": "Could the code that releases an entry reset the right bit so we don\u0027t have to refresh this?",
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3e6fffa_4da2cdd6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6962,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T18:43:18Z",
+      "side": 1,
+      "message": "Just to be a bit more explicit about what bits are set:\n\n```suggestion\n    mEmptySlotBits.emplace_back(0xFFFF\u0027FFFE);\n```",
+      "range": {
+        "startLine": 6962,
+        "startChar": 32,
+        "endLine": 6962,
+        "endChar": 34
+      },
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29d98fdd_5fc5742b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T18:43:18Z",
+      "side": 1,
+      "message": "nit: You should be able to use `angle::BitSet` and let it choose the storage automatically from the bit count\n\n```suggestion\n    using SlotBitMask                     \u003d angle::BitSet\u003ckSlotBitCount\u003e;\n```",
+      "range": {
+        "startLine": 2150,
+        "startChar": 44,
+        "endLine": 2150,
+        "endChar": 59
+      },
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
