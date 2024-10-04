@@ -196,6 +196,24 @@
       "parentUuid": "fd371450_3693af7b",
       "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9606a93_744bc123",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-04T02:34:43Z",
+      "side": 1,
+      "message": "this fixes the underlying bug in blit -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/5895158",
+      "parentUuid": "6f6db15e_a2f9c15f",
+      "revId": "bffcd235ba6c031603d798daaa98f1cf9a3f3e46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
