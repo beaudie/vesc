@@ -386,7 +386,7 @@ class GlobalOps : angle::NonCopyable
     virtual bool getBlob(const angle::BlobCacheKey &key, angle::BlobCacheValue *valueOut)  = 0;
 
     virtual std::shared_ptr<angle::WaitableEvent> postMultiThreadWorkerTask(
-        const std::shared_ptr<angle::Closure> &task) = 0;
+        const std::shared_ptr<angle::WorkerTask> &task) = 0;
 
     virtual void notifyDeviceLost() = 0;
 };
