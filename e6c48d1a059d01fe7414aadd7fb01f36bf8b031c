@@ -16,6 +16,24 @@
       "message": "can you add an example here on how to use the new operator \u003c\u003c with WARN()/INFO()?",
       "revId": "e6c48d1a059d01fe7414aadd7fb01f36bf8b031c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "594a2649_28c5fa90",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-04T19:41:09Z",
+      "side": 1,
+      "message": "Its just normal c++ way:\nWARN() \u003c\u003c \"cache miss. cacheKey: \" \u003c\u003c texturesDesc;",
+      "parentUuid": "3fc084e6_ae53d985",
+      "revId": "e6c48d1a059d01fe7414aadd7fb01f36bf8b031c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
