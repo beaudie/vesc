@@ -190,6 +190,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f7f14c6_dea70d85",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6956,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-04T19:36:40Z",
+      "side": 1,
+      "message": "Add more comment here. I don\u0027t think you need another if check. Comment should be enough to serve the purpose.",
+      "parentUuid": "7cd8d434_e9b8d890",
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3e6fffa_4da2cdd6",
