@@ -63,13 +63,13 @@ WorkerThreadPool::~WorkerThreadPool() = default;
 class SingleThreadedWorkerPool final : public WorkerThreadPool
 {
   public:
-    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<Closure> &task) override;
+    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
     bool isAsync() override;
 };
 
 // SingleThreadedWorkerPool implementation.
 std::shared_ptr<WaitableEvent> SingleThreadedWorkerPool::postWorkerTask(
-    const std::shared_ptr<Closure> &task)
+    const std::shared_ptr<WorkerTask> &task)
 {
     // Thread safety: This function is thread-safe because the task is run on the calling thread
     // itself.
@@ -91,14 +91,14 @@ class AsyncWorkerPool final : public WorkerThreadPool
 
     ~AsyncWorkerPool() override;
 
-    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<Closure> &task) override;
+    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
 
     bool isAsync() override;
 
   private:
     void createThreads();
 
-    using Task = std::pair<std::shared_ptr<AsyncWaitableEvent>, std::shared_ptr<Closure>>;
+    using Task = std::pair<std::shared_ptr<AsyncWaitableEvent>, std::shared_ptr<WorkerTask>>;
 
     // Thread's main loop
     void threadLoop();
@@ -146,7 +146,8 @@ void AsyncWorkerPool::createThreads()
     }
 }
 
-std::shared_ptr<WaitableEvent> AsyncWorkerPool::postWorkerTask(const std::shared_ptr<Closure> &task)
+std::shared_ptr<WaitableEvent> AsyncWorkerPool::postWorkerTask(
+    const std::shared_ptr<WorkerTask> &task)
 {
     // Thread safety: This function is thread-safe because access to |mTaskQueue| is protected by
     // |mMutex|.
@@ -181,13 +182,13 @@ void AsyncWorkerPool::threadLoop()
             mTaskQueue.pop();
         }
 
-        auto &waitable = task.first;
-        auto &closure  = task.second;
+        auto &waitable   = task.first;
+        auto &workerTask = task.second;
 
-        // Note: always add an ANGLE_TRACE_EVENT* macro in the closure.  Then the job will show up
-        // in traces.
-        (*closure)();
-        // Release shared_ptr<Closure> before notifying the event to allow for destructor based
+        // Note: always add an ANGLE_TRACE_EVENT* macro in the worker task.  Then the job will show
+        // up in traces.
+        (*workerTask)();
+        // Release shared_ptr<WorkerTask> before notifying the event to allow for destructor based
         // dependencies (example: anglebug.com/42267099)
         task.second.reset();
         waitable->markAsReady();
@@ -209,7 +210,7 @@ class DelegateWorkerPool final : public WorkerThreadPool
     DelegateWorkerPool(PlatformMethods *platform) : mPlatform(platform) {}
     ~DelegateWorkerPool() override = default;
 
-    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<Closure> &task) override;
+    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
 
     bool isAsync() override;
 
@@ -217,12 +218,12 @@ class DelegateWorkerPool final : public WorkerThreadPool
     PlatformMethods *mPlatform;
 };
 
-// A function wrapper to execute the closure and to notify the waitable
+// A function wrapper to execute the worker task and to notify the waitable
 // event after the execution.
 class DelegateWorkerTask
 {
   public:
-    DelegateWorkerTask(const std::shared_ptr<Closure> &task,
+    DelegateWorkerTask(const std::shared_ptr<WorkerTask> &task,
                        std::shared_ptr<AsyncWaitableEvent> waitable)
         : mTask(task), mWaitable(waitable)
     {}
@@ -242,13 +243,13 @@ class DelegateWorkerTask
   private:
     ~DelegateWorkerTask() = default;
 
-    std::shared_ptr<Closure> mTask;
+    std::shared_ptr<WorkerTask> mTask;
     std::shared_ptr<AsyncWaitableEvent> mWaitable;
 };
 
 ANGLE_NO_SANITIZE_CFI_ICALL
 std::shared_ptr<WaitableEvent> DelegateWorkerPool::postWorkerTask(
-    const std::shared_ptr<Closure> &task)
+    const std::shared_ptr<WorkerTask> &task)
 {
     if (mPlatform->postWorkerTask == nullptr)
     {
