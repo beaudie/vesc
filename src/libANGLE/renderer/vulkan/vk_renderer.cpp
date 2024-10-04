@@ -1302,7 +1302,7 @@ void ErasePipelineCacheVkChunks(vk::GlobalOps *globalOps,
     }
 }
 
-class CompressAndStorePipelineCacheTask : public angle::Closure
+class CompressAndStorePipelineCacheTask : public angle::WorkerTask
 {
   public:
     CompressAndStorePipelineCacheTask(vk::GlobalOps *globalOps,

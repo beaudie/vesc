@@ -9320,7 +9320,7 @@ std::shared_ptr<angle::WorkerThreadPool> Context::getLinkSubTaskThreadPool() con
 }
 
 std::shared_ptr<angle::WaitableEvent> Context::postCompileLinkTask(
-    const std::shared_ptr<angle::Closure> &task,
+    const std::shared_ptr<angle::WorkerTask> &task,
     angle::JobThreadSafety safety,
     angle::JobResultExpectancy resultExpectancy) const
 {

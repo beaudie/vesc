@@ -138,7 +138,7 @@ class AstcDecompressorContextCache
     std::unordered_map<Key, Value, KeyHash> mContexts;
 };
 
-struct DecompressTask : public Closure
+struct DecompressTask : public WorkerTask
 {
     DecompressTask(astcenc_context *context,
                    uint32_t threadIndex,
