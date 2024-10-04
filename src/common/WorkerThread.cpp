@@ -27,36 +27,50 @@
 
 namespace angle
 {
+namespace
+{
+std::shared_ptr<WaitableEvent> RunInline(const std::shared_ptr<WorkerTask> &task)
+{
+    auto waitable = std::make_shared<AsyncWaitableEvent>();
+    (*task)();
+    waitable->markAsReady();
+    return std::static_pointer_cast<WaitableEvent>(std::move(waitable));
+}
+}  // anonymous namespace
 
+// WaitableEvent implementation.
 WaitableEvent::WaitableEvent()  = default;
 WaitableEvent::~WaitableEvent() = default;
 
-void WaitableEventDone::wait() {}
-
-bool WaitableEventDone::isReady()
-{
-    return true;
-}
-
+// AsyncWaitableEvent implementation.
 void AsyncWaitableEvent::markAsReady()
 {
-    std::lock_guard<std::mutex> lock(mMutex);
-    mIsReady = true;
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        // Using release ordering to provide synchronization to |isReady|'s acquire load, which does
+        // not happen under the mutex.
+        mIsReady.store(1, std::memory_order_release);
+    }
     mCondition.notify_all();
 }
 
 void AsyncWaitableEvent::wait()
 {
-    std::unique_lock<std::mutex> lock(mMutex);
-    mCondition.wait(lock, [this] { return mIsReady; });
+    if (!isReady())
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        // Using relaxed ordering because mutex lock provides necessary synchronization.
+        mCondition.wait(lock, [this] { return mIsReady.load(std::memory_order_relaxed) != 0; });
+    }
 }
 
 bool AsyncWaitableEvent::isReady()
 {
-    std::lock_guard<std::mutex> lock(mMutex);
-    return mIsReady;
+    // Using acquire ordering to synchronize with |markAsReady|'s release store.
+    return mIsReady.load(std::memory_order_acquire) != 0;
 }
 
+// WorkerThreadPool implementation.
 WorkerThreadPool::WorkerThreadPool()  = default;
 WorkerThreadPool::~WorkerThreadPool() = default;
 
@@ -73,8 +87,7 @@ std::shared_ptr<WaitableEvent> SingleThreadedWorkerPool::postWorkerTask(
 {
     // Thread safety: This function is thread-safe because the task is run on the calling thread
     // itself.
-    (*task)();
-    return std::make_shared<WaitableEventDone>();
+    return RunInline(task);
 }
 
 bool SingleThreadedWorkerPool::isAsync()
@@ -112,7 +125,6 @@ class AsyncWorkerPool final : public WorkerThreadPool
 };
 
 // AsyncWorkerPool implementation.
-
 AsyncWorkerPool::AsyncWorkerPool(size_t numThreads) : mDesiredThreadCount(numThreads)
 {
     ASSERT(numThreads != 0);
@@ -247,6 +259,7 @@ class DelegateWorkerTask
     std::shared_ptr<AsyncWaitableEvent> mWaitable;
 };
 
+// DelegateWorkerPool implementation.
 ANGLE_NO_SANITIZE_CFI_ICALL
 std::shared_ptr<WaitableEvent> DelegateWorkerPool::postWorkerTask(
     const std::shared_ptr<WorkerTask> &task)
@@ -255,8 +268,7 @@ std::shared_ptr<WaitableEvent> DelegateWorkerPool::postWorkerTask(
     {
         // In the unexpected case where the platform methods have been changed during execution and
         // postWorkerTask is no longer usable, simply run the task on the calling thread.
-        (*task)();
-        return std::make_shared<WaitableEventDone>();
+        return RunInline(task);
     }
 
     // Thread safety: This function is thread-safe because the |postWorkerTask| platform method is
@@ -275,7 +287,8 @@ bool DelegateWorkerPool::isAsync()
 {
     return mPlatform->postWorkerTask != nullptr;
 }
-#endif
+
+#endif  // ANGLE_DELEGATE_WORKERS
 
 // static
 std::shared_ptr<WorkerThreadPool> WorkerThreadPool::Create(size_t numThreads,
