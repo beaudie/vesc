@@ -61,7 +61,7 @@ std::string GetShaderDumpFilePath(size_t shaderHash, const char *suffix)
     return path.str();
 }
 
-class CompileTask final : public angle::Closure
+class CompileTask final : public angle::WorkerTask
 {
   public:
     // Translate and compile

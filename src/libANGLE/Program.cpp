@@ -528,7 +528,7 @@ ShaderType ProgramState::getAttachedTransformFeedbackStage() const
 }
 
 // The common portion of parallel link and load jobs
-class Program::MainLinkLoadTask : public angle::Closure
+class Program::MainLinkLoadTask : public angle::WorkerTask
 {
   public:
     MainLinkLoadTask(const std::shared_ptr<angle::WorkerThreadPool> &subTaskWorkerPool,
