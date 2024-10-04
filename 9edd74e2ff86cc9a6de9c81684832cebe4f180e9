@@ -16,6 +16,24 @@
       "message": "Why is this removed? It\u0027s still a valid comment!",
       "revId": "9edd74e2ff86cc9a6de9c81684832cebe4f180e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dd9ae85_ecf51500",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-04T03:24:54Z",
+      "side": 0,
+      "message": "isnt this an exact copy of the comment that starts on line 1403?",
+      "parentUuid": "9f5fd42d_138c1fc9",
+      "revId": "9edd74e2ff86cc9a6de9c81684832cebe4f180e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
