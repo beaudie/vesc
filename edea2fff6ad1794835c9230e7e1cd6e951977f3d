@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4e43518_38fbb76d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6919,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-04T18:59:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "864e13db_4216e1f0",
+      "range": {
+        "startLine": 6910,
+        "startChar": 0,
+        "endLine": 6919,
+        "endChar": 5
+      },
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1685fe05_da923ab3",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-10-04T18:43:18Z",
       "side": 1,
       "message": "Could the code that releases an entry reset the right bit so we don\u0027t have to refresh this?",
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc7795ef_d4032c3d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6942,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-04T18:59:35Z",
+      "side": 1,
+      "message": "No. For example, the cache contains two textures. When one texture is deleted, the cache entry will be destroyed. But we do not know what is the other texture that also uses the same cache, since there is no back pointer to all objects that participated in this cache. That is why we have to rely on refresh here.",
+      "parentUuid": "1685fe05_da923ab3",
       "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -78,6 +120,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "75928318_1d82c7e2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6956,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-04T18:59:35Z",
+      "side": 1,
+      "message": "Because majority of usage uses less than 64 entries, so one uint64_t is enough. But if it goes beyond that, I immediately jump to eight uint64_t to avoid storage reallocation.",
+      "parentUuid": "cc13467f_d20cb6e2",
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3e6fffa_4da2cdd6",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 3
@@ -89,6 +149,30 @@
       "writtenOn": "2024-10-04T18:43:18Z",
       "side": 1,
       "message": "Just to be a bit more explicit about what bits are set:\n\n```suggestion\n    mEmptySlotBits.emplace_back(0xFFFF\u0027FFFE);\n```",
+      "range": {
+        "startLine": 6962,
+        "startChar": 32,
+        "endLine": 6962,
+        "endChar": 34
+      },
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8a25e83_e652e400",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6962,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-04T18:59:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3e6fffa_4da2cdd6",
       "range": {
         "startLine": 6962,
         "startChar": 32,
@@ -112,6 +196,30 @@
       "writtenOn": "2024-10-04T18:43:18Z",
       "side": 1,
       "message": "nit: You should be able to use `angle::BitSet` and let it choose the storage automatically from the bit count\n\n```suggestion\n    using SlotBitMask                     \u003d angle::BitSet\u003ckSlotBitCount\u003e;\n```",
+      "range": {
+        "startLine": 2150,
+        "startChar": 44,
+        "endLine": 2150,
+        "endChar": 59
+      },
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72ec0bcf_6345e441",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-04T18:59:35Z",
+      "side": 1,
+      "message": "explicit is better though. The logic in angle::BitSet seems quite complicated, I am not sure if it will end up picking BitSetArray though.",
+      "parentUuid": "29d98fdd_5fc5742b",
       "range": {
         "startLine": 2150,
         "startChar": 44,
