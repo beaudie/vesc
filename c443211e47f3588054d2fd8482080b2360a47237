@@ -170,6 +170,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f748d348_cdf55575",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-04T16:54:37Z",
+      "side": 1,
+      "message": "But even with PS2, the test also crash on native GLES driver on qualcomm, so the spec does not really asking for not crash?\n\nSince there is real app use it this way, I do agree we should land PS2 and add a nullptr check to avoid crash for now.",
+      "parentUuid": "d87968c3_9c621b21",
+      "range": {
+        "startLine": 10,
+        "startChar": 38,
+        "endLine": 10,
+        "endChar": 70
+      },
+      "revId": "c443211e47f3588054d2fd8482080b2360a47237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6645e67_9e22495c",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 2
