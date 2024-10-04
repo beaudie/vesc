@@ -83,6 +83,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5103abd2_1ef8f09f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6942,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T19:19:30Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bc7795ef_d4032c3d",
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc13467f_d20cb6e2",
@@ -150,6 +168,24 @@
       "side": 1,
       "message": "No, this is intended this way. Basically first time, it will just let c++ runtime allocate storage, which is one uint64_t. Like I pointed out above, that satisfy the majority usage case. But if this is not enough, if we let c++ run time to handle, it will try to allocate 2 uint64_t, and next time 4, and then 8,... This logic basically overrides that by immediately jump to 8 so that we will almost never needs to reallocate.",
       "parentUuid": "75928318_1d82c7e2",
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cd8d434_e9b8d890",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6956,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T19:19:30Z",
+      "side": 1,
+      "message": "Ah, maybe making that explicit is better, like this?\n\n```suggestion\n    // On first insertion, let `deque` allocate a single entry for minimal memory overhead\n    // If that ever exceeds, reserve a larger chunk for efficiency.\n    if (mEmptySlotBits.size() \u003d\u003d 1)\n```",
+      "parentUuid": "21e2c013_b6e6dfe0",
       "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
