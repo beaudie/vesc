@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "2e517090cccdcce3bafe84a3cd325f4af193f8e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d45a99ec_c5d99e30",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T02:50:56Z",
+      "side": 1,
+      "message": "This is making it fall back to the least optimal path. But we _could_ use `vkCmdResolveImage` instead here. If you move the condition to `canResolveWithSubpass` below, it\u0027ll be better!",
+      "range": {
+        "startLine": 1407,
+        "startChar": 45,
+        "endLine": 1407,
+        "endChar": 72
+      },
+      "revId": "2e517090cccdcce3bafe84a3cd325f4af193f8e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
