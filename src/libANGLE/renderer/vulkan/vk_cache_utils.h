@@ -1732,8 +1732,6 @@ class WriteDescriptorDescs
     size_t getTotalDescriptorCount() const { return mCurrentInfoIndex; }
     size_t getDynamicDescriptorSetCount() const { return mDynamicDescriptorSetCount; }
 
-    void streamOut(std::ostream &os) const;
-
   private:
     bool hasWriteDescAtIndex(uint32_t bindingIndex) const
     {
@@ -1756,6 +1754,7 @@ class WriteDescriptorDescs
     size_t mDynamicDescriptorSetCount = 0;
     uint32_t mCurrentInfoIndex        = 0;
 };
+std::ostream &operator<<(std::ostream &os, const WriteDescriptorDescs &desc);
 
 class DescriptorSetDesc
 {
@@ -1773,6 +1772,7 @@ class DescriptorSetDesc
 
     size_t hash() const;
 
+    size_t size() const { return mDescriptorInfos.size(); }
     void resize(size_t count) { mDescriptorInfos.resize(count); }
 
     size_t getKeySizeBytes() const { return mDescriptorInfos.size() * sizeof(DescriptorInfoDesc); }
@@ -1789,18 +1789,22 @@ class DescriptorSetDesc
         return mDescriptorInfos[infoDescIndex];
     }
 
+    const DescriptorInfoDesc &getInfoDesc(uint32_t infoDescIndex) const
+    {
+        return mDescriptorInfos[infoDescIndex];
+    }
+
     void updateDescriptorSet(Renderer *renderer,
                              const WriteDescriptorDescs &writeDescriptorDescs,
                              UpdateDescriptorSetsBuilder *updateBuilder,
                              const DescriptorDescHandles *handles,
                              VkDescriptorSet descriptorSet) const;
 
-    void streamOut(std::ostream &os) const;
-
   private:
     // After a preliminary minimum size, use heap memory.
     angle::FastVector<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
 };
+std::ostream &operator<<(std::ostream &os, const DescriptorSetDesc &desc);
 
 class DescriptorPoolHelper;
 using RefCountedDescriptorPoolHelper = RefCounted<DescriptorPoolHelper>;
