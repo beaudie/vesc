@@ -4085,7 +4085,7 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
         uint32_t numIndices;
         ANGLE_TRY(setupLineLoopDraw(context, mode, first, count, gl::DrawElementsType::InvalidEnum,
                                     nullptr, &numIndices));
-        LineLoopHelper::Draw(numIndices, 0, mRenderPassCommandBuffer);
+        mRenderPassCommandBuffer->draw(numIndices, 0);
     }
     else
     {
