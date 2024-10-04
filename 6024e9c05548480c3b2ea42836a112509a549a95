@@ -16,6 +16,24 @@
       "message": "Should this test be salvaged with swizzling removed?",
       "revId": "6024e9c05548480c3b2ea42836a112509a549a95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffa5222e_74957e20",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 15842,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T02:39:12Z",
+      "side": 0,
+      "message": "The test was written _specifically_ because swizzle of the interpolant cannot be represented in SPIR-V and a transformation would have been needed: https://chromium-review.googlesource.com/c/angle/angle/+/3035588/8//COMMIT_MSG\n\nThe test probably doesn\u0027t add any value without it, it\u0027d be a very basic interpolate test that should be covered by whatever deqp has?",
+      "parentUuid": "fbc4e4e3_00214ac0",
+      "revId": "6024e9c05548480c3b2ea42836a112509a549a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
