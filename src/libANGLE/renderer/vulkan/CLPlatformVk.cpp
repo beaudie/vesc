@@ -303,7 +303,7 @@ bool CLPlatformVk::getBlob(const angle::BlobCacheKey &key, angle::BlobCacheValue
 }
 
 std::shared_ptr<angle::WaitableEvent> CLPlatformVk::postMultiThreadWorkerTask(
-    const std::shared_ptr<angle::Closure> &task)
+    const std::shared_ptr<angle::WorkerTask> &task)
 {
     return mPlatform.getMultiThreadPool()->postWorkerTask(task);
 }

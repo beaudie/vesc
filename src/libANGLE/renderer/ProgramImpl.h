@@ -44,14 +44,14 @@ namespace rx
 // 1. Program::link calls into ProgramImpl::link
 //   - ProgramImpl::link runs whatever needs the Context, such as releasing resources
 //   - ProgramImpl::link returns a LinkTask
-// 2. Program::link implements a closure that calls the front-end link and passes the results to
+// 2. Program::link implements a WorkerTask that calls the front-end link and passes the results to
 //    the backend's LinkTask.
 // 3. The LinkTask potentially returns a set of LinkSubTasks to be scheduled by the worker pool
 // 4. Once the link is resolved, the post-link finalization is run
 //
 // In the above, steps 1 and 4 are done under the share group lock.  Steps 2 and 3 can be done in
 // threads or without holding the share group lock if the backend supports it.
-class LinkSubTask : public angle::Closure
+class LinkSubTask : public angle::WorkerTask
 {
   public:
     ~LinkSubTask() override                                                           = default;
