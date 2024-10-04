@@ -1826,7 +1826,7 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
     mCurrentDrawElementsType = indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum
                                    ? indexTypeOrInvalid
                                    : gl::DrawElementsType::UnsignedInt;
-    return setupDraw(context, mode, firstVertex, vertexOrIndexCount, 1, indexTypeOrInvalid, indices,
+    return setupDraw(context, mode, firstVertex, *numIndicesOut, 1, indexTypeOrInvalid, indices,
                      mIndexedDirtyBitsMask);
 }
 
