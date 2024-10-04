@@ -20,7 +20,6 @@
 #endif  // !defined(ANGLE_STD_ASYNC_WORKERS) && & !defined(ANGLE_ENABLE_WINDOWS_UWP)
 
 #if ANGLE_DELEGATE_WORKERS || ANGLE_STD_ASYNC_WORKERS
-#    include <future>
 #    include <queue>
 #    include <thread>
 #endif  // ANGLE_DELEGATE_WORKERS || ANGLE_STD_ASYNC_WORKERS
@@ -37,6 +36,27 @@ std::shared_ptr<WaitableEvent> RunInline(const std::shared_ptr<WorkerTask> &task
     return waitable;
 }
 }  // anonymous namespace
+
+class AsyncTask final : public AsyncWaitableEvent
+{
+  public:
+    explicit AsyncTask(const std::shared_ptr<WorkerTask> &workerTask);
+    ~AsyncTask() override;
+
+    void runAndMarkAsReady();
+
+  private:
+    std::shared_ptr<WorkerTask> mWorkerTask;
+};
+
+class AsyncTaskWorkerPool : public WorkerThreadPool
+{
+  public:
+    // WorkerThreadPool
+    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) final;
+
+    virtual void postAsyncTask(std::shared_ptr<AsyncTask> &&task) = 0;
+};
 
 // WaitableEvent implementation.
 WaitableEvent::WaitableEvent()  = default;
@@ -70,13 +90,52 @@ bool AsyncWaitableEvent::isReady()
     return mIsReady.load(std::memory_order_acquire) != 0;
 }
 
+// AsyncTask implementation.
+AsyncTask::AsyncTask(const std::shared_ptr<WorkerTask> &workerTask) : mWorkerTask(workerTask)
+{
+    ASSERT(mWorkerTask);
+}
+
+AsyncTask::~AsyncTask()
+{
+    ASSERT(!mWorkerTask || !isReady());
+}
+
+void AsyncTask::runAndMarkAsReady()
+{
+    ASSERT(mWorkerTask);
+
+    // Note: always add an ANGLE_TRACE_EVENT* macro in the worker task.  Then the job will show up
+    // in traces.
+    (*mWorkerTask)();
+
+    // Release shared_ptr<WorkerTask> before notifying the event to allow for destructor based
+    // dependencies (example: anglebug.com/42267099)
+    mWorkerTask.reset();
+    markAsReady();
+}
+
 // WorkerThreadPool implementation.
 WorkerThreadPool::WorkerThreadPool()  = default;
 WorkerThreadPool::~WorkerThreadPool() = default;
 
+// AsyncTaskWorkerPool implementation.
+std::shared_ptr<WaitableEvent> AsyncTaskWorkerPool::postWorkerTask(
+    const std::shared_ptr<WorkerTask> &task)
+{
+    // Thread safety: This function is thread-safe because |postAsyncTask| is expected to be
+    // thread-safe.
+    auto asyncTask = std::make_shared<AsyncTask>(task);
+
+    postAsyncTask(std::shared_ptr<AsyncTask>(asyncTask));
+
+    return asyncTask;
+}
+
 class SingleThreadedWorkerPool final : public WorkerThreadPool
 {
   public:
+    // WorkerThreadPool
     std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
     bool isAsync() override;
 };
@@ -97,30 +156,115 @@ bool SingleThreadedWorkerPool::isAsync()
 
 #if ANGLE_STD_ASYNC_WORKERS
 
-class AsyncWorkerPool final : public WorkerThreadPool
+// Notes:
+//   "Locked" suffix means, that the mutex MUST be locked for the entire duration of the call.
+//   "Unlocked" suffix means, that the function MUST not be called under the mutex lock.
+
+class WorkerThreadLoopPolicy
 {
   public:
-    AsyncWorkerPool(size_t numThreads);
+    virtual ~WorkerThreadLoopPolicy() = default;
+    // Ensures that there is a next task and it can be run, or returns false.  Allowed to wait on
+    // the conditional variable using the passed |lock|.  The |lock| MUST be in a locked state
+    // before and after the call.
+    virtual bool ensureHasNextTaskToRun(std::unique_lock<std::mutex> *lock) = 0;
+};
 
-    ~AsyncWorkerPool() override;
+// Base for the |AsyncWorkerPool| class.
+class MultiThreadedWorkerPool : public AsyncTaskWorkerPool
+{
+  public:
+    // AsyncTaskWorkerPool
+    void postAsyncTask(std::shared_ptr<AsyncTask> &&task) final;
 
-    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
+  protected:
+    // Runs tasks from the |mTaskQueue| until |policy->ensureHasNextTaskToRun| returns false.
+    // Designed to be called from multiple threads.
+    void runThreadLoop(WorkerThreadLoopPolicy *policy);
 
-    bool isAsync() override;
+    bool isTaskQueueEmptyLocked() const { return mTaskQueue.empty(); }
+    std::shared_ptr<AsyncTask> &getNextTaskLocked();
+
+    // Begins to create new or wake existing thread.
+    // |*needToEndStartThreadOut| is true upon entry, assigning false will skip the end call.
+    virtual void beginStartThreadLocked(bool *needToEndStartThreadOut) = 0;
+    // Ends to create new or wake existing thread.
+    // Called if |*needToEndStartThreadOut| remains true when the correspondng begin call ends.
+    virtual void endStartThreadUnlocked() = 0;
+
+    std::mutex mMutex;  // Protects access to the fields in this class
 
   private:
-    void createThreads();
+    std::queue<std::shared_ptr<AsyncTask>> mTaskQueue;
+};
 
-    using Task = std::pair<std::shared_ptr<AsyncWaitableEvent>, std::shared_ptr<WorkerTask>>;
+// MultiThreadedWorkerPool implementation.
+void MultiThreadedWorkerPool::postAsyncTask(std::shared_ptr<AsyncTask> &&task)
+{
+    // Thread safety: This function is thread-safe because member access is protected by |mMutex|.
+    bool needToEndStartThread = true;
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
 
+        mTaskQueue.emplace(std::move(task));
+
+        beginStartThreadLocked(&needToEndStartThread);
+    }
+    if (needToEndStartThread)
+    {
+        endStartThreadUnlocked();
+    }
+}
+
+void MultiThreadedWorkerPool::runThreadLoop(WorkerThreadLoopPolicy *policy)
+{
+    while (true)
+    {
+        std::shared_ptr<AsyncTask> task;
+        {
+            std::unique_lock<std::mutex> lock(mMutex);
+            if (!policy->ensureHasNextTaskToRun(&lock))
+            {
+                return;
+            }
+            task = std::move(getNextTaskLocked());
+            mTaskQueue.pop();
+        }
+
+        task->runAndMarkAsReady();
+    }
+}
+
+std::shared_ptr<AsyncTask> &MultiThreadedWorkerPool::getNextTaskLocked()
+{
+    ASSERT(!isTaskQueueEmptyLocked());
+    return mTaskQueue.front();
+}
+
+class AsyncWorkerPool final : public MultiThreadedWorkerPool, WorkerThreadLoopPolicy
+{
+  public:
+    explicit AsyncWorkerPool(size_t numThreads);
+    ~AsyncWorkerPool() override;
+
+    // WorkerThreadPool
+    bool isAsync() override;
+
+  protected:
+    // MultiThreadedWorkerPool
+    void beginStartThreadLocked(bool *needToEndStartThreadOut) override;
+    void endStartThreadUnlocked() override;
+
+  private:
     // Thread's main loop
     void threadLoop();
 
+    // WorkerThreadLoopPolicy
+    bool ensureHasNextTaskToRun(std::unique_lock<std::mutex> *lock) override;
+
     bool mTerminated = false;
-    std::mutex mMutex;                 // Protects access to the fields in this class
     std::condition_variable mCondVar;  // Signals when work is available in the queue
-    std::queue<Task> mTaskQueue;
-    std::deque<std::thread> mThreads;
+    std::vector<std::thread> mThreads;
     size_t mDesiredThreadCount;
 };
 
@@ -133,7 +277,7 @@ AsyncWorkerPool::AsyncWorkerPool(size_t numThreads) : mDesiredThreadCount(numThr
 AsyncWorkerPool::~AsyncWorkerPool()
 {
     {
-        std::unique_lock<std::mutex> lock(mMutex);
+        std::lock_guard<std::mutex> lock(mMutex);
         mTerminated = true;
     }
     mCondVar.notify_all();
@@ -144,67 +288,36 @@ AsyncWorkerPool::~AsyncWorkerPool()
     }
 }
 
-void AsyncWorkerPool::createThreads()
+void AsyncWorkerPool::beginStartThreadLocked(bool *needToEndStartThreadOut)
 {
+    // If all threads already created, try waking a possibly waiting thread.
     if (mDesiredThreadCount == mThreads.size())
     {
+        ASSERT(*needToEndStartThreadOut);
         return;
     }
-    ASSERT(mThreads.empty());
 
-    for (size_t i = 0; i < mDesiredThreadCount; ++i)
-    {
-        mThreads.emplace_back(&AsyncWorkerPool::threadLoop, this);
-    }
+    // Otherwise, create a new thread (does not require the end call).
+    *needToEndStartThreadOut = false;
+    mThreads.emplace_back(&AsyncWorkerPool::threadLoop, this);
 }
 
-std::shared_ptr<WaitableEvent> AsyncWorkerPool::postWorkerTask(
-    const std::shared_ptr<WorkerTask> &task)
+void AsyncWorkerPool::endStartThreadUnlocked()
 {
-    // Thread safety: This function is thread-safe because access to |mTaskQueue| is protected by
-    // |mMutex|.
-    auto waitable = std::make_shared<AsyncWaitableEvent>();
-    {
-        std::lock_guard<std::mutex> lock(mMutex);
-
-        // Lazily create the threads on first task
-        createThreads();
-
-        mTaskQueue.push(std::make_pair(waitable, task));
-    }
     mCondVar.notify_one();
-    return waitable;
 }
 
 void AsyncWorkerPool::threadLoop()
 {
     angle::SetCurrentThreadName("ANGLE-Worker");
 
-    while (true)
-    {
-        Task task;
-        {
-            std::unique_lock<std::mutex> lock(mMutex);
-            mCondVar.wait(lock, [this] { return !mTaskQueue.empty() || mTerminated; });
-            if (mTerminated)
-            {
-                return;
-            }
-            task = mTaskQueue.front();
-            mTaskQueue.pop();
-        }
+    runThreadLoop(this);
+}
 
-        auto &waitable   = task.first;
-        auto &workerTask = task.second;
-
-        // Note: always add an ANGLE_TRACE_EVENT* macro in the worker task.  Then the job will show
-        // up in traces.
-        (*workerTask)();
-        // Release shared_ptr<WorkerTask> before notifying the event to allow for destructor based
-        // dependencies (example: anglebug.com/42267099)
-        task.second.reset();
-        waitable->markAsReady();
-    }
+bool AsyncWorkerPool::ensureHasNextTaskToRun(std::unique_lock<std::mutex> *lock)
+{
+    mCondVar.wait(*lock, [this] { return !isTaskQueueEmptyLocked() || mTerminated; });
+    return !mTerminated;
 }
 
 bool AsyncWorkerPool::isAsync()
@@ -219,11 +332,11 @@ bool AsyncWorkerPool::isAsync()
 class DelegateWorkerPool final : public WorkerThreadPool
 {
   public:
-    DelegateWorkerPool(PlatformMethods *platform) : mPlatform(platform) {}
+    explicit DelegateWorkerPool(PlatformMethods *platform) : mPlatform(platform) {}
     ~DelegateWorkerPool() override = default;
 
+    // WorkerThreadPool
     std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
-
     bool isAsync() override;
 
   private:
