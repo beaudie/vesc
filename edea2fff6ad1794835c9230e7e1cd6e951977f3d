@@ -60,6 +60,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6691f5ac_9c628cf4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6956,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-04T18:58:45Z",
+      "side": 1,
+      "message": "Looks like it should have been if it _is_ empty!",
+      "parentUuid": "cc13467f_d20cb6e2",
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3e6fffa_4da2cdd6",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 3
