@@ -666,7 +666,7 @@ bool DisplayVk::getBlob(const angle::BlobCacheKey &key, angle::BlobCacheValue *v
 }
 
 std::shared_ptr<angle::WaitableEvent> DisplayVk::postMultiThreadWorkerTask(
-    const std::shared_ptr<angle::Closure> &task)
+    const std::shared_ptr<angle::WorkerTask> &task)
 {
     return mState.multiThreadPool->postWorkerTask(task);
 }
