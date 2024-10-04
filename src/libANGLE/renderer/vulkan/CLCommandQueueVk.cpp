@@ -34,7 +34,7 @@
 namespace rx
 {
 
-class CLAsyncFinishTask : public angle::Closure
+class CLAsyncFinishTask : public angle::WorkerTask
 {
   public:
     CLAsyncFinishTask(CLCommandQueueVk *queueVk) : mQueueVk(queueVk) {}
