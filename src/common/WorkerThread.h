@@ -71,8 +71,8 @@ class WaitableEvent : angle::NonCopyable
     }
 };
 
-// A waitable event that can be completed asynchronously
-class AsyncWaitableEvent final : public WaitableEvent
+// A waitable event that can be completed asynchronously and is a base class for the |AsyncTask|.
+class AsyncWaitableEvent : public WaitableEvent
 {
   public:
     AsyncWaitableEvent()           = default;
