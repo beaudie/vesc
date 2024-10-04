@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dc0ccf4_d04379bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-04T17:41:15Z",
+      "side": 1,
+      "message": "LGTM, a couple minor change requests.",
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1d8af13_11809410",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-04T17:41:15Z",
+      "side": 1,
+      "message": "This would read better if you moved it above the window scaling code, then we\u0027re doing all the gles1 checks in one spot.\n\nActually, I just ran on desktop and you only see a small corner of a gles1 test instead of the full screen.  Can we just remove the scaling for gles1?",
+      "range": {
+        "startLine": 2000,
+        "startChar": 0,
+        "endLine": 2007,
+        "endChar": 77
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9789df69_48e68192",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-04T17:41:15Z",
+      "side": 1,
+      "message": "Can you add a comment or TODO explaining that we haven\u0027t hooked up onscreen grid display for GLES1?",
+      "range": {
+        "startLine": 2194,
+        "startChar": 12,
+        "endLine": 2194,
+        "endChar": 23
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f30e75b8_dedee51e",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-04T17:41:15Z",
+      "side": 1,
+      "message": "What drove this change?  Were we off by one before?",
+      "range": {
+        "startLine": 2206,
+        "startChar": 0,
+        "endLine": 2207,
+        "endChar": 23
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
