@@ -40,7 +40,7 @@
 
 namespace angle
 {
-class Closure;
+class WorkerTask;
 class FrameCapture;
 class FrameCaptureShared;
 struct FrontendFeatures;
@@ -738,7 +738,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     std::shared_ptr<angle::WorkerThreadPool> getShaderCompileThreadPool() const;
     std::shared_ptr<angle::WorkerThreadPool> getLinkSubTaskThreadPool() const;
     std::shared_ptr<angle::WaitableEvent> postCompileLinkTask(
-        const std::shared_ptr<angle::Closure> &task,
+        const std::shared_ptr<angle::WorkerTask> &task,
         angle::JobThreadSafety safety,
         angle::JobResultExpectancy resultExpectancy) const;
 
