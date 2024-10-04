@@ -71,14 +71,6 @@ class WaitableEvent : angle::NonCopyable
     }
 };
 
-// A waitable event that is always ready.
-class WaitableEventDone final : public WaitableEvent
-{
-  public:
-    void wait() override;
-    bool isReady() override;
-};
-
 // A waitable event that can be completed asynchronously
 class AsyncWaitableEvent final : public WaitableEvent
 {
@@ -96,7 +88,7 @@ class AsyncWaitableEvent final : public WaitableEvent
     // threads to the member fields.
     std::mutex mMutex;
 
-    bool mIsReady = false;
+    std::atomic_int mIsReady{0};
     std::condition_variable mCondition;
 };
 
