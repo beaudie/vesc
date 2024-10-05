@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b770cbc9_41231695",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T09:52:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b7e9e8d_3fff050b",
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1dfe579_b582948a",
@@ -54,6 +72,24 @@
       "writtenOn": "2024-08-26T18:18:07Z",
       "side": 1,
       "message": "```suggestion\n        // We need an execution barrier if image can be written to by kernel\n```",
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88ac61c0_51904cc2",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T09:52:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d05ceaa9_9b4666c7",
       "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
