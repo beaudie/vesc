@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d59fe7_79d9299d",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T09:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed136e01_c6514b9f",
+      "range": {
+        "startLine": 346,
+        "startChar": 0,
+        "endLine": 349,
+        "endChar": 92
+      },
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f12d551_0b73ec6a",
@@ -54,6 +78,24 @@
       "writtenOn": "2024-08-26T18:34:33Z",
       "side": 1,
       "message": "Ditto",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8097c435_c72ed6fc",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T09:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f12d551_0b73ec6a",
       "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76cd8961_d3168817",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T09:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edb44a49_8c641d5e",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad2fcd4a_418e3eb3",
@@ -92,6 +152,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74000e1a_445a1397",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T09:32:00Z",
+      "side": 1,
+      "message": "Seems simply optimal is utilized in ImageHelper::initStaging() https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/vk_helpers.cpp#6741. I\u0027ll remove linearTilingFeatures check.",
+      "parentUuid": "ad2fcd4a_418e3eb3",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aee7d4cd_00ae4a6f",
@@ -105,6 +183,24 @@
       "writtenOn": "2024-08-26T18:34:33Z",
       "side": 1,
       "message": "```suggestion\n        *numImageFormats \u003d static_cast\u003ccl_uint\u003e(supportedFormats.size());\n```",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cccd930_b9b27711",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T09:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aee7d4cd_00ae4a6f",
       "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
