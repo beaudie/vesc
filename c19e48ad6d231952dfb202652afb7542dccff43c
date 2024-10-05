@@ -175,6 +175,24 @@
       "parentUuid": "4574aae3_ceb071e4",
       "revId": "c19e48ad6d231952dfb202652afb7542dccff43c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4177899a_30040869",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T09:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ada4df1_00b7f650",
+      "revId": "c19e48ad6d231952dfb202652afb7542dccff43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
