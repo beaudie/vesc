@@ -262,6 +262,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef0cbef1_454dc6bf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6956,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-05T21:20:11Z",
+      "side": 1,
+      "message": "I wanted to point out that the `if (mEmptySlotBits.size() \u003d\u003d 1)` would also avoid the unnecessary duplicate calls to reserve, but given that this path is not often taken, I figured it\u0027s not a big deal 😊",
+      "parentUuid": "4d678299_42f93135",
+      "revId": "edea2fff6ad1794835c9230e7e1cd6e951977f3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3e6fffa_4da2cdd6",
