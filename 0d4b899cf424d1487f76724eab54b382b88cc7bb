@@ -34,6 +34,24 @@
       "parentUuid": "c66b3fea_a4bd8892",
       "revId": "0d4b899cf424d1487f76724eab54b382b88cc7bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d648b4f_ab6b64eb",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-05T21:23:25Z",
+      "side": 1,
+      "message": "Ack, missed that the implementation is in the autogen\u0027ed cpp.",
+      "parentUuid": "68a31d0d_4068d5ae",
+      "revId": "0d4b899cf424d1487f76724eab54b382b88cc7bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
