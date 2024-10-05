@@ -16,6 +16,24 @@
       "message": "Given that these are `static`, I suggest moving them out to another file. You can create `cl_format_utils.h` and `cl_format_utils.cpp` next to these files, and let the backends use them. No need for `#ifdef`.",
       "revId": "0d4b899cf424d1487f76724eab54b382b88cc7bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a31d0d_4068d5ae",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T08:24:28Z",
+      "side": 1,
+      "message": "While this would remove the need for an ifdef around these methods, it would require changing the entire approach to the ANGLE format table generator python script to separate the OpenCL formats from the remaining ANGLE formats. Furthermore, the methods would have to be taken out of the ANGLE format struct https://chromium-review.googlesource.com/c/angle/angle/+/5798054/8/src/libANGLE/renderer/Format.h#25. \n\nI believe that it is much more convenient having these methods all in the same file \u003cFormat.h/Format_table_autogen.cpp\u003e and specific struct since that\u0027s where all of the other ANGLE format ID utils are.\n\nSimilarly, GL has their own static method for returning the ANGLE format IDs https://chromium-review.googlesource.com/c/angle/angle/+/5798054/8/src/libANGLE/renderer/Format.h#53. \n\nThe reason why the #if defined(ANGLE_ENABLE_CL) is necessary is due to the circular dependency issue that was occurring from the winuwp build as discussed earlier in the comment chain for this review.",
+      "parentUuid": "c66b3fea_a4bd8892",
+      "revId": "0d4b899cf424d1487f76724eab54b382b88cc7bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
