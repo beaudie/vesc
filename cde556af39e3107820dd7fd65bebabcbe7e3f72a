@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f31b1d07_f6a5aabf",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-05T09:45:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02c33ef0_56ce531d",
+      "revId": "cde556af39e3107820dd7fd65bebabcbe7e3f72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed136e01_c6514b9f",
