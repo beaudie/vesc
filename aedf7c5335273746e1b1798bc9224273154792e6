@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a18f2048_221e6cf4",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-05T21:27:41Z",
+      "side": 1,
+      "message": "tiny nit: since these are constants, our style is to start them with `k`\n\n```suggestion\n    static constexpr cl_image_format kMinSupportedFormatsReadOrWrite[11] \u003d {\n```",
+      "range": {
+        "startLine": 116,
+        "startChar": 37,
+        "endLine": 116,
+        "endChar": 68
+      },
+      "revId": "aedf7c5335273746e1b1798bc9224273154792e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4650cf6_315179f8",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-05T21:27:41Z",
+      "side": 1,
+      "message": "```suggestion\n    static constexpr cl_image_format kMinSupportedFormatsReadAndWrite[18] \u003d {\n```",
+      "range": {
+        "startLine": 122,
+        "startChar": 37,
+        "endLine": 122,
+        "endChar": 69
+      },
+      "revId": "aedf7c5335273746e1b1798bc9224273154792e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
