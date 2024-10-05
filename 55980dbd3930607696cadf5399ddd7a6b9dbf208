@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a53f4f6_181059da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3377245
+      },
+      "writtenOn": "2024-10-05T04:22:45Z",
+      "side": 1,
+      "message": "src/common/spirv/angle_spirv_utils.cpp",
+      "revId": "55980dbd3930607696cadf5399ddd7a6b9dbf208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
