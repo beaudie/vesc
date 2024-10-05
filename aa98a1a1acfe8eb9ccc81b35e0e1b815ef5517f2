@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6db147c4_ecf78a33",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3390,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-05T23:47:06Z",
+      "side": 1,
+      "message": "Use-after-free here. Need a `MakeStaticString` call like the other function.",
+      "revId": "aa98a1a1acfe8eb9ccc81b35e0e1b815ef5517f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
