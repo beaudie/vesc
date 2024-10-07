@@ -16,6 +16,24 @@
       "message": "Use-after-free here. Need a `MakeStaticString` call like the other function.",
       "revId": "aa98a1a1acfe8eb9ccc81b35e0e1b815ef5517f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bde0637_df4d3d52",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3390,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T16:17:13Z",
+      "side": 1,
+      "message": "Whoops, thanks.",
+      "parentUuid": "6db147c4_ecf78a33",
+      "revId": "aa98a1a1acfe8eb9ccc81b35e0e1b815ef5517f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
