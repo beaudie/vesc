@@ -10502,6 +10502,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
     const Extensions &exts = context->getExtensions();
     bool isGLES3           = context->getClientMajorVersion() >= 3;
     bool isGLES31          = context->getClientVersion() >= Version(3, 1);
+    bool isGLES32          = context->getClientVersion() >= Version(3, 2);
 
     mCachedValidBindTextureTypes = {{
         {TextureType::_2D, true},
@@ -10512,7 +10513,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
         {TextureType::External, exts.EGLImageExternalOES || exts.EGLStreamConsumerExternalNV},
         {TextureType::Rectangle, exts.textureRectangleANGLE},
         {TextureType::CubeMap, true},
-        {TextureType::CubeMapArray, exts.textureCubeMapArrayAny()},
+        {TextureType::CubeMapArray, isGLES32 || exts.textureCubeMapArrayAny()},
         {TextureType::VideoImage, exts.videoTextureWEBGL},
         {TextureType::Buffer, exts.textureBufferAny()},
     }};
