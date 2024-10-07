@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02ca3b8b_9635b19c",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-10-07T17:58:26Z",
+      "side": 0,
+      "message": "Just curious, what brought changes to this `infra/specs/mixins.pyl` file?",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 21,
+        "endChar": 62
+      },
+      "revId": "605c2f8506adbf48448b168d440a9c2c66944786",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0290cc29_d4920343",
+        "filename": "src/libANGLE/renderer/metal/shaders/mtl_internal_shaders_autogen.metal",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-10-07T17:58:26Z",
+      "side": 0,
+      "message": "I know this was likely an artifact of running the autogen stuff, but wondering what this value change did here? @syoussefi@chromium.org - is this a benign update here?\n\nJust want to make sure since this OpenCL related change is touching Metal stuff.",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 5
+      },
+      "revId": "605c2f8506adbf48448b168d440a9c2c66944786",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
