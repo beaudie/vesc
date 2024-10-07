@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "859dfd36_1ffdf88c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-07T13:34:38Z",
+      "side": 1,
+      "message": "Looking at this some more, it seems this is done to reduce the window size, we first do /\u003d 4 then *\u003d 4 here. I\u0027m guessing that was done to reduce the impact from the onscreen drawing, but given we\u0027re rendering a bunch of frames how about we just drop this scaling altogether? Makes everything simpler.",
+      "parentUuid": "e83d7fa0_4686fb12",
+      "range": {
+        "startLine": 2000,
+        "startChar": 0,
+        "endLine": 2007,
+        "endChar": 77
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9789df69_48e68192",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 2
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "There is already a comment about that above where we\u0027re binding buffers \"No glBlitFramebuffer on gles1 so render a single frame to screen\" but I\u0027ll copy it here as well",
       "parentUuid": "9789df69_48e68192",
+      "range": {
+        "startLine": 2194,
+        "startChar": 12,
+        "endLine": 2194,
+        "endChar": 23
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c482d0be_5f0b3f86",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-07T13:34:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2eb67d2_f50d8b22",
       "range": {
         "startLine": 2194,
         "startChar": 12,
