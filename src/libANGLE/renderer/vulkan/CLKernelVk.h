@@ -124,6 +124,8 @@ class CLKernelVk : public CLKernelImpl
 
     VkDescriptorSet &getDescriptorSet(DescriptorSetIndex index) { return mDescriptorSets[index]; }
 
+    std::vector<uint8_t> &getPodArgumentsData() { return mPodArgumentsData; }
+
     bool usesPrintf() const;
 
   private:
@@ -134,6 +136,10 @@ class CLKernelVk : public CLKernelImpl
     std::string mName;
     std::string mAttributes;
     CLKernelArguments mArgs;
+
+    // Copy of the pod data
+    std::vector<uint8_t> mPodArgumentsData;
+
     vk::ShaderProgramHelper mShaderProgramHelper;
     vk::ComputePipelineCache mComputePipelineCache;
     KernelSpecConstants mSpecConstants;
