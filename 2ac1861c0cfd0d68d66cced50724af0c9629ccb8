@@ -1,0 +1,246 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47a2615b_56cd2119",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "Cool stuff!  Some questions and clarification requests.",
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b18a0389_4b49d55d",
+        "filename": "extensions/ANGLE_blob_cache.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "My quick searches are showing \"persistent\" as the preferred spelling.",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 14
+      },
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1299befb_314357c2",
+        "filename": "extensions/ANGLE_blob_cache.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "`userParam` isn\u0027t described in the extension if you can give it a blurb?  What\u0027s it for?",
+      "range": {
+        "startLine": 98,
+        "startChar": 48,
+        "endLine": 98,
+        "endChar": 57
+      },
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3e77e4d_35975e9a",
+        "filename": "src/tests/gl_tests/BlobCacheTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "2024",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "5cda9555_69b8cb27",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/gl_tests/BlobCacheTest.cpp",
+              "range": {
+                "startLine": 2,
+                "startChar": 0,
+                "endLine": 3,
+                "endChar": 0
+              },
+              "replacement": "// Copyright 2024 The ANGLE Project Authors. All rights reserved.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed2b7fc0_9ec906ec",
+        "filename": "src/tests/gl_tests/BlobCacheTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "These tests should get cache hits even if `GL_OES_get_program_binary` isn\u0027t available, right?  That\u0027s just a way to ensure caching is complete before checking its status?",
+      "range": {
+        "startLine": 223,
+        "startChar": 8,
+        "endLine": 223,
+        "endChar": 30
+      },
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b94579_43be9fbb",
+        "filename": "src/tests/gl_tests/BlobCacheTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "I don\u0027t see any Waits in this one, still  need to check for the extension?",
+      "range": {
+        "startLine": 290,
+        "startChar": 8,
+        "endLine": 290,
+        "endChar": 32
+      },
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43872dfe_ad987b60",
+        "filename": "src/tests/gl_tests/BlobCacheTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "Can you add a pointer to where that recompile happens?",
+      "range": {
+        "startLine": 488,
+        "startChar": 70,
+        "endLine": 488,
+        "endChar": 98
+      },
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4098f126_a7e4cedc",
+        "filename": "src/tests/gl_tests/BlobCacheTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "Worth noting here that you passed `SetCorruptedBlob` as the set func here, otherwise I was scanning for the direct Corrupt call.",
+      "range": {
+        "startLine": 488,
+        "startChar": 46,
+        "endLine": 488,
+        "endChar": 62
+      },
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4f93e70_a30ca868",
+        "filename": "src/tests/gl_tests/BlobCacheTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "Worth noting here that the test is invoked with `CorruptProgramBinaryForTesting`, otherwise not clear why it should be rejected.",
+      "range": {
+        "startLine": 535,
+        "startChar": 35,
+        "endLine": 535,
+        "endChar": 60
+      },
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "775cf293_6deec195",
+        "filename": "src/tests/gl_tests/BlobCacheTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-07T15:58:21Z",
+      "side": 1,
+      "message": "I didn\u0027t realize until the end of my review that the tests are based on `EGLBlobCacheTest.cpp`, so take my feedback with that grain of salt.",
+      "range": {
+        "startLine": 584,
+        "startChar": 23,
+        "endLine": 584,
+        "endChar": 36
+      },
+      "revId": "2ac1861c0cfd0d68d66cced50724af0c9629ccb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
