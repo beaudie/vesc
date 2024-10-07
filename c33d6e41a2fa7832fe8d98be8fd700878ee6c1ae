@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef399c82_2c40021a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-07T16:13:12Z",
+      "side": 1,
+      "message": "I see updates, but I don\u0027t know if the comments are resolved or not. FYI, in case you are waiting for re-reviews or something, the signal for me to know when the change is ready again is when the threads are resolved.\n\nIf there are unresolved threads, what I interpret is that you\u0027re still working on the change. So if you do apply feedback, please resolve the corresponding threads (after uploading the change).\n\nJust wanted to mention this to avoid confusion 😊",
+      "revId": "c33d6e41a2fa7832fe8d98be8fd700878ee6c1ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "481115a3_f2956e1a",
+        "filename": "src/libANGLE/renderer/vulkan/cl_types.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-07T16:13:12Z",
+      "side": 1,
+      "message": "Style nit:\n\n```suggestion\n    ToImage,\n    ToBuffer,\n```",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 18
+      },
+      "revId": "c33d6e41a2fa7832fe8d98be8fd700878ee6c1ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
