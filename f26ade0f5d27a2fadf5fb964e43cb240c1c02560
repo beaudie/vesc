@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75d3175b_05ab0f44",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-07T07:43:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1dfe579_b582948a",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 313,
+        "endChar": 42
+      },
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d05ceaa9_9b4666c7",
@@ -159,6 +183,24 @@
       "writtenOn": "2024-08-26T18:18:07Z",
       "side": 1,
       "message": "We tend to avoid `bool` in parameters, it\u0027s hard to understand on the call site. Please use an `enum class` and use that here, like `ImageBufferCopyDirection direction`",
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "765b1f65_c708bd1d",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-07T07:43:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb643b2f_6f6aceca",
       "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
