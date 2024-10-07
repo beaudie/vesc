@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a40f5be5_4f909feb",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-07T21:33:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a18f2048_221e6cf4",
+      "range": {
+        "startLine": 116,
+        "startChar": 37,
+        "endLine": 116,
+        "endChar": 68
+      },
+      "revId": "aedf7c5335273746e1b1798bc9224273154792e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4650cf6_315179f8",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-05T21:27:41Z",
       "side": 1,
       "message": "```suggestion\n    static constexpr cl_image_format kMinSupportedFormatsReadAndWrite[18] \u003d {\n```",
+      "range": {
+        "startLine": 122,
+        "startChar": 37,
+        "endLine": 122,
+        "endChar": 69
+      },
+      "revId": "aedf7c5335273746e1b1798bc9224273154792e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab55c930_759bffcf",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-07T21:33:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4650cf6_315179f8",
       "range": {
         "startLine": 122,
         "startChar": 37,
