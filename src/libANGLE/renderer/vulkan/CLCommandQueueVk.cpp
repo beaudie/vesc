@@ -757,9 +757,12 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
             }
             case NonSemanticClspvReflectionArgumentPodPushConstant:
             {
+                // Spec requires the size and offset to be multiple of 4, round up for size and
+                // round down for offset to ensure this
                 mComputePassCommands->getCommandBuffer().pushConstants(
                     kernelVk.getPipelineLayout().get(), VK_SHADER_STAGE_COMPUTE_BIT,
-                    arg.pushConstOffset, arg.pushConstantSize, arg.handle);
+                    roundDownPow2(arg.pushConstOffset, 4u), roundUpPow2(arg.pushConstantSize, 4u),
+                    arg.handle);
                 break;
             }
             case NonSemanticClspvReflectionArgumentSampler:
