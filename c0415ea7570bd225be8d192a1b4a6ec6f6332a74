@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc1fb31e_c21fe1f1",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-07T16:27:35Z",
+      "side": 1,
+      "message": "FYI, you can add the set callback entry point to this list to make it lockless since the pointers live in `PrivateState`.",
+      "revId": "c0415ea7570bd225be8d192a1b4a6ec6f6332a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
