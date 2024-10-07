@@ -194,6 +194,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "afb3b364_3ed787b5",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-10-07T17:42:06Z",
+      "side": 1,
+      "message": "Please keep the top-level locking. The hang issue is likely due to a few lines below where we call\n```\nANGLE_TRY(finish());\n```\nin the blocking case where we try to grab the lock twice. Can you try using `finishInternal()` instead, as that does not grab the queue lock here.",
+      "parentUuid": "9346dc58_ba838863",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 52
+      },
+      "revId": "20e88fce52506767b51d95e10042f94e1ed7b0e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22d46159_578d871b",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
         "patchSetId": 10
