@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4f4d96f_ebed63bb",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-08T17:23:11Z",
+      "side": 1,
+      "message": "This can cause a GPU bubble, why not use `commandBuffer-\u003ecopyBuffer` for this case too?",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 64
+      },
+      "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
