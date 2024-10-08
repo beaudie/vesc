@@ -52,6 +52,24 @@
       "parentUuid": "4ddc5819_b717f3ba",
       "revId": "b3d85ccef0e7d2f3a5ad49424067d39ff8d611c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deb4b536_1d4648dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-08T16:22:52Z",
+      "side": 1,
+      "message": "ok, i took a look with beyond compare and i have left a comment here -\u003e https://issues.angleproject.org/issues/40644776#comment48\n\ntl;dr - a few pixel\u0027s R/G/B color component value is off by 1\n\nPrevious code would use a draw with an ANGLE shader to emulate a resolve by averaging values in the shader. The condition that forced us down this path was overly broad and has been narrowed now. This makes ANGLE take the more optimal path by using the Vulkan ICD\u0027s resolve APIs.\n\nPlease go ahead and refresh the reference images",
+      "parentUuid": "cec59139_882c237d",
+      "revId": "b3d85ccef0e7d2f3a5ad49424067d39ff8d611c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
