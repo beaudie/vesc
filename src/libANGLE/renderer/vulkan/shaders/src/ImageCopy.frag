@@ -32,6 +32,8 @@
 #define SRC_RESOURCE_NAME texture3D
 #elif SrcIsYUV
 #define SRC_RESOURCE_NAME sampler2D
+#elif SrcIs2DMS
+#define SRC_RESOURCE_NAME sampler2DMS
 #else
 #error "Not all source types are accounted for"
 #endif
@@ -140,6 +142,8 @@ void main()
 #elif SrcIsYUV
     SrcType srcValue = texture(
         src, vec2(params.srcOffset + srcSubImageCoords) / textureSize(src, 0), params.srcMip);
+#elif SrcIs2DMS
+    SrcType srcValue = texelFetch(src, ivec2(params.srcOffset + srcSubImageCoords), params.srcMip);
 #else
 #error "Not all source types are accounted for"
 #endif
