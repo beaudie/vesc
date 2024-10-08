@@ -2137,4 +2137,23 @@ void TextureRedefineGenerateMipmapLevels(gl::LevelIndex baseLevel,
         (*redefinedLevels)[face] &= ~levelsMask;
     }
 }
+
+bool IsETCFormat(angle::FormatID formatID)
+{
+    return formatID >= angle::FormatID::EAC_R11G11_SNORM_BLOCK &&
+           formatID <= angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK;
+}
+
+bool IsBCFormat(angle::FormatID formatID)
+{
+    return formatID >= angle::FormatID::BC1_RGBA_UNORM_BLOCK &&
+           formatID <= angle::FormatID::BC7_RGBA_UNORM_SRGB_BLOCK;
+}
+
+bool IsASTCFormat(angle::FormatID formatID)
+{
+    return formatID >= angle::FormatID::ASTC_4x4_SRGB_BLOCK &&
+           formatID <= angle::FormatID::ASTC_6x6x6_UNORM_SRGB_BLOCK;
+}
+
 }  // namespace rx

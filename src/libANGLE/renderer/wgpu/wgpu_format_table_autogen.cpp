@@ -19,7 +19,7 @@ namespace rx
 namespace webgpu
 {
 
-void Format::initialize(const angle::Format &angleFormat)
+void Format::initialize(wgpu::Device &wgpuDevice, const angle::Format &angleFormat)
 {
     switch (angleFormat.id)
     {
@@ -117,7 +117,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_10x10_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -128,7 +128,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_10x10_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -139,7 +139,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_10x5_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -150,7 +150,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_10x5_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -161,7 +161,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_10x6_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -172,7 +172,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_10x6_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -183,7 +183,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_10x8_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -194,7 +194,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_10x8_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -205,7 +205,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_12x10_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -216,7 +216,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_12x10_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -227,7 +227,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_12x12_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -238,7 +238,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_12x12_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -265,7 +265,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_4x4_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -276,7 +276,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_4x4_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -303,7 +303,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_5x4_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -314,7 +314,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_5x4_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -333,7 +333,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_5x5_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -344,7 +344,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_5x5_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -371,7 +371,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_6x5_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -382,7 +382,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_6x5_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -401,7 +401,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_6x6_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -412,7 +412,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_6x6_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -439,7 +439,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_8x5_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -450,7 +450,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_8x5_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -461,7 +461,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_8x6_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -472,7 +472,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_8x6_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -483,7 +483,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_8x8_SRGB_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -494,7 +494,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ASTC_8x8_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -548,13 +548,10 @@ void Format::initialize(const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::B8G8R8A8_UNORM_SRGB:
-            mIntendedGLFormat = GL_BGRA8_SRGB_ANGLEX;
-            {
-                static constexpr ImageFormatInitInfo kInfo[] = {
-                    {angle::FormatID::B8G8R8A8_UNORM_SRGB, nullptr},
-                    {angle::FormatID::R8G8B8A8_UNORM_SRGB, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
-            }
+            mIntendedGLFormat         = GL_BGRA8_SRGB_ANGLEX;
+            mActualImageFormatID      = angle::FormatID::B8G8R8A8_UNORM_SRGB;
+            mImageInitializerFunction = nullptr;
+            mIsRenderable             = true;
 
             break;
 
@@ -808,7 +805,7 @@ void Format::initialize(const angle::Format &angleFormat)
                 static constexpr ImageFormatInitInfo kInfo[] = {
                     {angle::FormatID::ETC2_R8G8B8A8_UNORM_BLOCK, nullptr},
                     {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
-                initImageFallback(kInfo, ArraySize(kInfo));
+                initImageFallback(wgpuDevice, kInfo, ArraySize(kInfo));
             }
 
             break;
@@ -1497,13 +1494,9 @@ void Format::initialize(const angle::Format &angleFormat)
         case angle::FormatID::R32G32B32_UINT:
             mIntendedGLFormat = GL_RGB32UI;
 
-            {
-                static constexpr BufferFormatInitInfo kInfo[] = {
-                    {angle::FormatID::R32G32B32_UINT, CopyNativeVertexData<GLuint, 3, 3, 0>, false},
-                    {angle::FormatID::R32G32B32A32_UINT, CopyNativeVertexData<GLuint, 3, 4, 1>,
-                     true}};
-                initBufferFallback(kInfo, ArraySize(kInfo));
-            }
+            mActualBufferFormatID         = angle::FormatID::R32G32B32_UINT;
+            mVertexLoadFunction           = CopyNativeVertexData<GLuint, 3, 3, 0>;
+            mVertexLoadRequiresConversion = false;
             break;
 
         case angle::FormatID::R32G32B32_UNORM:

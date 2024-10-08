@@ -3787,7 +3787,7 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     }
 
     if (renderer->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
-        IsETCFormat(intendedImageFormatID) && IsBCFormat(actualImageFormatID))
+        rx::IsETCFormat(intendedImageFormatID) && rx::IsBCFormat(actualImageFormatID))
     {
         mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT |
                              VK_IMAGE_CREATE_EXTENDED_USAGE_BIT |

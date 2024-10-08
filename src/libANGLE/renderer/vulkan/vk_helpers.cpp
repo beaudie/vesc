@@ -8138,7 +8138,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                            glExtents.height, &bufferImageHeight));
 
         if (contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
-            IsETCFormat(vkFormat.getIntendedFormatID()) && IsBCFormat(storageFormat.id))
+            rx::IsETCFormat(vkFormat.getIntendedFormatID()) && rx::IsBCFormat(storageFormat.id))
         {
             useComputeTransCoding =
                 shouldUseComputeForTransCoding(vk::LevelIndex(index.getLevelIndex()));
@@ -9608,7 +9608,7 @@ angle::Result ImageHelper::flushStagedUpdatesImpl(ContextVk *contextVk,
     CommandBufferAccess transferAccess;
     OutsideRenderPassCommandBufferHelper *commandBuffer = nullptr;
     bool transCoding = renderer->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
-                       IsETCFormat(intendedFormat) && IsBCFormat(actualformat);
+                       rx::IsETCFormat(intendedFormat) && rx::IsBCFormat(actualformat);
 
     if (transCoding)
     {
