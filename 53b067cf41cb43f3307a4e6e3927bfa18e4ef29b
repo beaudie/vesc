@@ -113,6 +113,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23d649db_d6a596ee",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-08T20:41:57Z",
+      "side": 1,
+      "message": "I see, that /\u003d 4 logic is making the window *smaller* though which further increases the size difference?.. Dropping, we can figure out if we need something different if we run into something and understand the reason behind this.",
+      "parentUuid": "d3a802be_82ae7604",
+      "range": {
+        "startLine": 2000,
+        "startChar": 0,
+        "endLine": 2007,
+        "endChar": 77
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9789df69_48e68192",
@@ -245,6 +269,30 @@
       "side": 1,
       "message": "A comment would help.  That means it is basically redundant on non-GLES1 but that\u0027s okay.",
       "parentUuid": "dfc1ac6e_3b492d0e",
+      "range": {
+        "startLine": 2206,
+        "startChar": 0,
+        "endLine": 2207,
+        "endChar": 23
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86aa66a5_cfa345f6",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-08T20:41:57Z",
+      "side": 1,
+      "message": "Started untangling this in https://crrev.com/c/5916767, now I have questions about the onscreen path... I added a comment here to clarify. This is preserving the current behavior but we\u0027ll be changing that behavior later to get \"regular\" screenshots, and \"grid\" screenshots under a different flag.",
+      "parentUuid": "cfbed0e2_6cdbfd09",
       "range": {
         "startLine": 2206,
         "startChar": 0,
