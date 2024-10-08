@@ -101,6 +101,15 @@ void CommandBuffer::setViewport(float x,
     mHasSetViewportCommand = true;
 }
 
+void CommandBuffer::setBlendConstant(const gl::ColorF glColor)
+{
+    SetBlendConstantCommand *setBlendConstantCommand = initCommand<CommandID::SetBlendConstant>();
+    setBlendConstantCommand->r                       = glColor.red;
+    setBlendConstantCommand->g                       = glColor.green;
+    setBlendConstantCommand->b                       = glColor.blue;
+    setBlendConstantCommand->a                       = glColor.alpha;
+}
+
 void CommandBuffer::setIndexBuffer(wgpu::Buffer buffer,
                                    wgpu::IndexFormat format,
                                    uint64_t offset,
@@ -179,6 +188,19 @@ void CommandBuffer::recordCommands(wgpu::RenderPassEncoder encoder)
                         drawIndexedCommand.indexCount, drawIndexedCommand.instanceCount,
                         drawIndexedCommand.firstIndex, drawIndexedCommand.baseVertex,
                         drawIndexedCommand.firstInstance);
+                    break;
+                }
+
+                case CommandID::SetBlendConstant:
+                {
+                    const SetBlendConstantCommand &setBlendConstantCommand =
+                        GetCommandAndIterate<CommandID::SetBlendConstant>(&currentCommand);
+                    wgpu::Color blendConstantColor;
+                    blendConstantColor.r = setBlendConstantCommand.r;
+                    blendConstantColor.g = setBlendConstantCommand.g;
+                    blendConstantColor.b = setBlendConstantCommand.b;
+                    blendConstantColor.a = setBlendConstantCommand.a;
+                    encoder.SetBlendConstant(&blendConstantColor);
                     break;
                 }
 

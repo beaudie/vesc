@@ -595,5 +595,72 @@ uint32_t GetFirstIndexForDrawCall(gl::DrawElementsType indexType, const void *in
     return static_cast<uint32_t>(indexBufferByteOffset / indexSize);
 }
 
+uint32_t PackGLBlendFactor(gl::BlendFactorType blendFactor)
+{
+    switch (blendFactor)
+    {
+        case gl::BlendFactorType::Zero:
+            return static_cast<uint8_t>(wgpu::BlendFactor::Zero);
+        case gl::BlendFactorType::One:
+            return static_cast<uint8_t>(wgpu::BlendFactor::One);
+        case gl::BlendFactorType::SrcColor:
+            return static_cast<uint8_t>(wgpu::BlendFactor::Src);
+        case gl::BlendFactorType::DstColor:
+            return static_cast<uint8_t>(wgpu::BlendFactor::Dst);
+        case gl::BlendFactorType::OneMinusSrcColor:
+            return static_cast<uint8_t>(wgpu::BlendFactor::OneMinusSrc);
+        case gl::BlendFactorType::SrcAlpha:
+            return static_cast<uint8_t>(wgpu::BlendFactor::SrcAlpha);
+        case gl::BlendFactorType::OneMinusSrcAlpha:
+            return static_cast<uint8_t>(wgpu::BlendFactor::OneMinusSrcAlpha);
+        case gl::BlendFactorType::DstAlpha:
+            return static_cast<uint8_t>(wgpu::BlendFactor::DstAlpha);
+        case gl::BlendFactorType::OneMinusDstAlpha:
+            return static_cast<uint8_t>(wgpu::BlendFactor::OneMinusDstAlpha);
+        case gl::BlendFactorType::OneMinusDstColor:
+            return static_cast<uint8_t>(wgpu::BlendFactor::OneMinusDst);
+        case gl::BlendFactorType::SrcAlphaSaturate:
+            return static_cast<uint8_t>(wgpu::BlendFactor::SrcAlphaSaturated);
+        case gl::BlendFactorType::ConstantColor:
+            return static_cast<uint8_t>(wgpu::BlendFactor::Constant);
+        case gl::BlendFactorType::ConstantAlpha:
+            return static_cast<uint8_t>(wgpu::BlendFactor::Constant);
+        case gl::BlendFactorType::OneMinusConstantColor:
+            return static_cast<uint8_t>(wgpu::BlendFactor::OneMinusConstant);
+        case gl::BlendFactorType::OneMinusConstantAlpha:
+            return static_cast<uint8_t>(wgpu::BlendFactor::OneMinusConstant);
+        case gl::BlendFactorType::Src1Color:
+            return static_cast<uint8_t>(wgpu::BlendFactor::Src1);
+        case gl::BlendFactorType::Src1Alpha:
+            return static_cast<uint8_t>(wgpu::BlendFactor::Src1Alpha);
+        case gl::BlendFactorType::OneMinusSrc1Color:
+            return static_cast<uint8_t>(wgpu::BlendFactor::OneMinusSrc1);
+        case gl::BlendFactorType::OneMinusSrc1Alpha:
+            return static_cast<uint8_t>(wgpu::BlendFactor::OneMinusSrc1Alpha);
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+uint32_t PackGLBlendOp(gl::BlendEquationType blendOp)
+{
+    switch (blendOp)
+    {
+        case gl::BlendEquationType::Add:
+            return static_cast<uint8_t>(wgpu::BlendOperation::Add);
+        case gl::BlendEquationType::Subtract:
+            return static_cast<uint8_t>(wgpu::BlendOperation::Subtract);
+        case gl::BlendEquationType::ReverseSubtract:
+            return static_cast<uint8_t>(wgpu::BlendOperation::ReverseSubtract);
+        case gl::BlendEquationType::Min:
+            return static_cast<uint8_t>(wgpu::BlendOperation::Min);
+        case gl::BlendEquationType::Max:
+            return static_cast<uint8_t>(wgpu::BlendOperation::Max);
+        default:
+            return 0;
+    }
+}
+
 }  // namespace gl_wgpu
 }  // namespace rx

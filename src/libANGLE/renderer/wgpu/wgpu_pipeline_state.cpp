@@ -113,6 +113,34 @@ void RenderPipelineDesc::setColorWriteMask(size_t colorIndex, bool r, bool g, bo
     SetBitField(colorTarget.writeMask, gl_wgpu::GetColorWriteMask(r, g, b, a));
 }
 
+void RenderPipelineDesc::setBlendEnabled(size_t colorIndex, bool enabled)
+{
+    PackedColorTargetState &colorTarget = mColorTargetStates[colorIndex];
+    SetBitField(colorTarget.blendEnabled, enabled);
+}
+
+void RenderPipelineDesc::setBlendFactors(size_t colorIndex, const gl::BlendStateExt &blendStateExt)
+{
+    PackedColorTargetState &colorTarget = mColorTargetStates[colorIndex];
+    SetBitField(colorTarget.colorBlendSrcFactor,
+                gl_wgpu::PackGLBlendFactor(blendStateExt.getSrcColorIndexed(colorIndex)));
+    SetBitField(colorTarget.colorBlendDstFactor,
+                gl_wgpu::PackGLBlendFactor(blendStateExt.getDstColorIndexed(colorIndex)));
+    SetBitField(colorTarget.alphaBlendSrcFactor,
+                gl_wgpu::PackGLBlendFactor(blendStateExt.getSrcAlphaIndexed(colorIndex)));
+    SetBitField(colorTarget.alphaBlendDstFactor,
+                gl_wgpu::PackGLBlendFactor(blendStateExt.getDstAlphaIndexed(colorIndex)));
+}
+
+void RenderPipelineDesc::setBlendOps(size_t colorIndex, const gl::BlendStateExt &blendStateExt)
+{
+    PackedColorTargetState &colorTarget = mColorTargetStates[colorIndex];
+    SetBitField(colorTarget.colorBlendOp,
+                gl_wgpu::PackGLBlendOp(blendStateExt.getEquationColorIndexed(colorIndex)));
+    SetBitField(colorTarget.alphaBlendOp,
+                gl_wgpu::PackGLBlendOp(blendStateExt.getEquationAlphaIndexed(colorIndex)));
+}
+
 bool RenderPipelineDesc::setVertexAttribute(size_t attribIndex, PackedVertexAttribute &newAttrib)
 {
     PackedVertexAttribute &currentAttrib = mVertexAttributes[attribIndex];

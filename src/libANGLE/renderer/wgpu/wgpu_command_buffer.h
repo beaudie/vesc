@@ -127,7 +127,10 @@ struct SetBindGroupCommand
 
 struct SetBlendConstantCommand
 {
-    uint64_t pad;
+    float r;
+    float g;
+    float b;
+    float a;
 };
 
 struct SetIndexBufferCommand
@@ -234,6 +237,7 @@ class CommandBuffer
     void setPipeline(wgpu::RenderPipeline pipeline);
     void setScissorRect(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
     void setViewport(float x, float y, float width, float height, float minDepth, float maxDepth);
+    void setBlendConstant(const gl::ColorF glColor);
     void setIndexBuffer(wgpu::Buffer buffer,
                         wgpu::IndexFormat format,
                         uint64_t offset,
