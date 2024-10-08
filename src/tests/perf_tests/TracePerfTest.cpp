@@ -203,7 +203,8 @@ class TracePerfTest : public ANGLERenderTest
     };
 
     void sampleTime();
-    void saveScreenshot(const std::string &screenshotName) override;
+    void saveScreenshotIfEnabled();
+    void saveScreenshot(const std::string &screenshotName);
     void swap();
 
     std::unique_ptr<const TracePerfParams> mParams;
@@ -2189,9 +2190,11 @@ void TracePerfTest::drawBenchmark()
                                   GL_COLOR_BUFFER_BIT, GL_NEAREST);
             }
 
+            // GL_READ_FRAMEBUFFER is already set correctly for glReadPixels
+            saveScreenshotIfEnabled();
+
             if (frameX == kFramesPerX - 1 && frameY == kFramesPerY - 1)
             {
-                bindFramebuffer(GL_FRAMEBUFFER, 0);
                 swap();
                 glClear(GL_COLOR_BUFFER_BIT);
                 mOffscreenFrameCount = 0;
@@ -2214,6 +2217,12 @@ void TracePerfTest::drawBenchmark()
     }
     else
     {
+        // Only unbind the framebuffer on context versions where it's available.
+        if (mParams->traceInfo.contextClientMajorVersion > 1)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
+        saveScreenshotIfEnabled();
         swap();
     }
 
@@ -2684,7 +2693,11 @@ void TracePerfTest::onReplayDiscardFramebufferEXT(GLenum target,
 
 void TracePerfTest::swap()
 {
-    // Capture a screenshot if enabled.
+    getGLWindow()->swap();
+}
+
+void TracePerfTest::saveScreenshotIfEnabled()
+{
     if (gScreenshotDir != nullptr && gSaveScreenshots && !mScreenshotSaved &&
         (static_cast<uint32_t>(mScreenshotFrame) == mCurrentIteration ||
          mScreenshotFrame == kAllFrames))
@@ -2707,8 +2720,6 @@ void TracePerfTest::swap()
         // Only set this value if we're capturing a single frame
         mScreenshotSaved = mScreenshotFrame != kAllFrames;
     }
-
-    getGLWindow()->swap();
 }
 
 void TracePerfTest::saveScreenshot(const std::string &screenshotName)
@@ -2718,12 +2729,6 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
     // RGBA 4-byte data.
     uint32_t pixelCount = mTestParams.windowWidth * mTestParams.windowHeight;
     std::vector<uint8_t> pixelData(pixelCount * 4);
-
-    // Only unbind the framebuffer on context versions where it's available.
-    if (mParams->traceInfo.contextClientMajorVersion > 1)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
 
     glFinish();
 
