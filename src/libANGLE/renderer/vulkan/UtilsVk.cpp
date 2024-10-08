@@ -3484,6 +3484,10 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     {
         flags |= ImageCopy_frag::kSrcIs2DArray;
     }
+    else if (src->getSamples() > 1)
+    {
+        flags |= ImageCopy_frag::kSrcIs2DMS;
+    }
     else
     {
         flags |= ImageCopy_frag::kSrcIs2D;
@@ -3492,9 +3496,6 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     vk::RenderPassDesc renderPassDesc;
     renderPassDesc.setSamples(dst->getSamples());
     renderPassDesc.packColorAttachment(0, dst->getActualFormatID());
-
-    // Copy from multisampled image is not supported.
-    ASSERT(src->getSamples() == 1);
 
     vk::GraphicsPipelineDesc pipelineDesc;
     pipelineDesc.initDefaults(contextVk, vk::GraphicsPipelineSubset::Complete,
