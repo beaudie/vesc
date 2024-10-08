@@ -244,6 +244,30 @@
       },
       "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f12b560b_13c51b32",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-08T22:31:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f958ce47_dfcebe6c",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 54
+      },
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
