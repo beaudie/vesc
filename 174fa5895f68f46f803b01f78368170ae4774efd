@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53560083_418ae4c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-08T19:33:42Z",
+      "side": 1,
+      "message": "Nice work!\n\nOne request for a comment.\n\nWe may have to circle back on the scaling in final image at some point, but I think it was just a creative choice to match other offscreen designs.",
+      "revId": "174fa5895f68f46f803b01f78368170ae4774efd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

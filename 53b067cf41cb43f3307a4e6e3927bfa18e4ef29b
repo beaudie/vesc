@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3a802be_82ae7604",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-08T19:33:42Z",
+      "side": 1,
+      "message": "The size of the blit destination might matter on some hardware, but I\u0027m fine dropping it.",
+      "parentUuid": "859dfd36_1ffdf88c",
+      "range": {
+        "startLine": 2000,
+        "startChar": 0,
+        "endLine": 2007,
+        "endChar": 77
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9789df69_48e68192",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 2
@@ -197,6 +221,30 @@
       "side": 1,
       "message": "it\u0027s the same as https://crrev.com/c/5899374\n\nswap-\u003esaveScreenshot calls glBindFramebuffer(0), but not for gles1 because that crashes the native driver.\n\nDo we need a comment here, or do it a different way?",
       "parentUuid": "f30e75b8_dedee51e",
+      "range": {
+        "startLine": 2206,
+        "startChar": 0,
+        "endLine": 2207,
+        "endChar": 23
+      },
+      "revId": "53b067cf41cb43f3307a4e6e3927bfa18e4ef29b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfbed0e2_6cdbfd09",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-08T19:33:42Z",
+      "side": 1,
+      "message": "A comment would help.  That means it is basically redundant on non-GLES1 but that\u0027s okay.",
+      "parentUuid": "dfc1ac6e_3b492d0e",
       "range": {
         "startLine": 2206,
         "startChar": 0,
