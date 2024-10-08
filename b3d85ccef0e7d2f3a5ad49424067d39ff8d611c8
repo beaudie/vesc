@@ -16,6 +16,24 @@
       "message": "This patch appears to change some behaviour when running in Chrome on SwiftShader. Looks like antialiased edges are different.\n\nThe failed roll: https://chromium-review.googlesource.com/c/chromium/src/+/5913565?\n\nTake a look at the \"image_diff\" in the list of failed tests.",
       "revId": "b3d85ccef0e7d2f3a5ad49424067d39ff8d611c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ddc5819_b717f3ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-08T13:42:41Z",
+      "side": 1,
+      "message": "We can rebase these tests if it\u0027s expected but it\u0027s fairly rare that we make changes which change the behaviour so we should confirm it\u0027s intentional.",
+      "parentUuid": "031536c0_876f2bc3",
+      "revId": "b3d85ccef0e7d2f3a5ad49424067d39ff8d611c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
