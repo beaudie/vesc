@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bb6aedd_02c94205",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-08T01:50:50Z",
+      "side": 1,
+      "message": "Maybe there\u0027s a more generic fix possible here. The key here is that it\u0027s _enabled_ but invalid. What if we make the rest of the code think that it\u0027s _not_ enabled when invalid?\n\nLike, we maintain a mask of enabled vertex attributes, we can also maintain a mask of valid vertex attributes. Then `\u0026` them together before iterating over enabled vertex attributes. The code just needs to make sure it uses some `getEnabledAttributes()` helper that does the `\u0026`.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 85
+      },
+      "revId": "086f675d6c636563d07001149a6a65fe99f82f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
