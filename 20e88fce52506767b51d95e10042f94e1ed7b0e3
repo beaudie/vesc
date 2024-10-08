@@ -266,6 +266,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5da873be_82d9cbc6",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-10-08T00:51:07Z",
+      "side": 1,
+      "message": "Also, I see `enqueueBarrier()` used - that\u0027s also under a queue lock. I would instead use `mComputePassCommands-\u003egetCommandBuffer().pipelineBarrier` in those spots directly.",
+      "parentUuid": "a2c22d37_462fd645",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 52
+      },
+      "revId": "20e88fce52506767b51d95e10042f94e1ed7b0e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22d46159_578d871b",
         "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
         "patchSetId": 10
