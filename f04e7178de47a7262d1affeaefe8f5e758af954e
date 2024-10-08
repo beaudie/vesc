@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acd3cfea_121006eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-08T17:30:33Z",
+      "side": 1,
+      "message": "Clarifying why this is fine independently from others\u0027 choices:\n\n```suggestion\n    // The buffer usage flags don\u0027t particularly affect the buffer in any known drivers,\n    // use all the bits that ANGLE needs.\n```",
+      "revId": "f04e7178de47a7262d1affeaefe8f5e758af954e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
