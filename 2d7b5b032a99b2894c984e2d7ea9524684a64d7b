@@ -22,6 +22,30 @@
       },
       "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65008a2b_899fdc7e",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-08T18:58:47Z",
+      "side": 1,
+      "message": "I recall hitting some validation error messages using the same buffer in the copyBuffer command. Looking at the spec now, the only req seems to be non-overlapping region. Let me check again.",
+      "parentUuid": "e4f4d96f_ebed63bb",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 64
+      },
+      "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
