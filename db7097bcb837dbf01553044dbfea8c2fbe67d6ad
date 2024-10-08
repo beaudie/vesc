@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d969d88_76708e01",
+        "filename": "src/libANGLE/renderer/CLExtensions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-08T17:41:30Z",
+      "side": 1,
+      "message": "May I suggest instead to make and `initializeExtensionsImpl` function that takes `hasExtension` as a parameter, then make `initializeExtensions` pass its current `hasExtension` (string look up) and add another `hasExtension` in this function that does an array look up?\n\nIt\u0027s no big deal (one-time init code), but I can\u0027t bear to watch an array turn into a string so that a less efficient look up can be used :P\n\n---\n\nEdit: if `initializeExtensions` (the one that takes a string) is no longer used, feel free to remove it and simplify even more.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 0
+      },
+      "revId": "db7097bcb837dbf01553044dbfea8c2fbe67d6ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1355a22_807e212f",
+        "filename": "src/libANGLE/renderer/CLExtensions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-08T17:41:30Z",
+      "side": 1,
+      "message": "Per our style, please avoid overloading when possible. This could be `initializeVersionedExtensions` for example.",
+      "revId": "db7097bcb837dbf01553044dbfea8c2fbe67d6ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
