@@ -416,6 +416,40 @@ TEST_P(MultisampleTestES3, RenderPassResolveToFBOThenSwap)
     }
 }
 
+// Test that CopyTexImage2D from an MSAA default fbo works
+TEST_P(MultisampleTestES3, CopyTexImage2DFromMsaaDefaultFbo)
+{
+    // Clear the default framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(0.25, 0.5, 0.75, 0.25);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Create a texture for copy
+    GLTexture copyTexture;
+    glBindTexture(GL_TEXTURE_2D, copyTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWindowWidth, kWindowHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    constexpr int kCopyWidth  = 10;
+    constexpr int kCopyHeight = 5;
+    // Copy MSAA default framebuffer into the texture
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, kCopyWidth, kCopyHeight, 0);
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer readFbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, readFbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, copyTexture, 0);
+
+    const GLColor kResult = GLColor(63, 127, 191, 63);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, kResult, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kCopyWidth - 1, 0, kResult, 1);
+    EXPECT_PIXEL_COLOR_NEAR(0, kCopyHeight - 1, kResult, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kCopyWidth - 1, kCopyHeight - 1, kResult, 1);
+    EXPECT_PIXEL_COLOR_NEAR(kCopyWidth / 2, kCopyHeight / 2, kResult, 1);
+}
+
 class MultisampleResolveTest : public ANGLETest<>
 {
   protected:
