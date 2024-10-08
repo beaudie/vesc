@@ -170,6 +170,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c2e189_9baadeb0",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-08T00:26:12Z",
+      "side": 1,
+      "message": "Changed to unconditional.\n\nI have later patches that I need to cherry pick over that address clEnqueueMapImage further.\n\nThe main reason mHostBufferUpdateList isn\u0027t utilized is syncHostBuffers() (ran on mHostBufferUpdateList) https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp#580 is meant to perform CPU copies. For images, there were cases where tiling is utilized. To handle this, GPU copies were utilized.",
+      "parentUuid": "1c2074a9_9aa37201",
+      "revId": "f26ade0f5d27a2fadf5fb964e43cb240c1c02560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb643b2f_6f6aceca",
