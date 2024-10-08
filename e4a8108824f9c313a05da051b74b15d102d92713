@@ -16,6 +16,24 @@
       "message": "Per our style, please avoid default values for function args.\n\nWe also tend to avoid `bool` args and use `enum class` for them. I see `bool blocking` is all over this class though, so that could be a cleanup for another time.",
       "revId": "e4a8108824f9c313a05da051b74b15d102d92713",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d54b9d7_fc4dee21",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-08T19:43:38Z",
+      "side": 1,
+      "message": "I see, the enum could be the event enum itself here. Let me spin a new version.",
+      "parentUuid": "e3b989b9_6bc99bb5",
+      "revId": "e4a8108824f9c313a05da051b74b15d102d92713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
