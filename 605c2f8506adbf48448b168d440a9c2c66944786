@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d704a6f_edc72a58",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-08T22:41:21Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d04c2846_acb821db",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 21,
+        "endChar": 62
+      },
+      "revId": "605c2f8506adbf48448b168d440a9c2c66944786",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0290cc29_d4920343",
