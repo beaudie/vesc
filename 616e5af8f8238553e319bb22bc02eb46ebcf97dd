@@ -16,6 +16,24 @@
       "message": "CL says:\n\n\u003e The maximum value of pattern_size is the size of the largest integer or floating-point vector data type supported by the OpenCL device.\n\nVulkan has `vkCmdFillBuffer` that implements this functionality using 32-bit values. You should be able to use that more efficient and less-GPU-bubbly command for at least some cases (`patternSize` equal to 1, 2 and 4). For the rest, eventually you\u0027d want to use an ANGLE-internal compute shader to do the buffer fill (A CL version of UtilsVk).",
       "revId": "616e5af8f8238553e319bb22bc02eb46ebcf97dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b798aff9_24606561",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-08T19:40:30Z",
+      "side": 1,
+      "message": "\u003e be able to use that more efficient and less-GPU-bubbly command for at least some cases (patternSize equal to 1, 2 and 4)\n\nYes, this was the reason I had this way. See your point and like the idea of setting up a compute shader. Is it ok if I take it up as a separate patch, want to get some of the dependent patches pulled in meanwhile.",
+      "parentUuid": "f4f40e38_b9cd07dd",
+      "revId": "616e5af8f8238553e319bb22bc02eb46ebcf97dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
