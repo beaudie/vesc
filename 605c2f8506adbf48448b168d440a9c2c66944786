@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d04c2846_acb821db",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-08T01:47:54Z",
+      "side": 0,
+      "message": "Ah no, perhaps a bad merge conflict resolution. Please revert the changes under `infra/`",
+      "parentUuid": "904e6784_5b3f09d8",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 21,
+        "endChar": 62
+      },
+      "revId": "605c2f8506adbf48448b168d440a9c2c66944786",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0290cc29_d4920343",
         "filename": "src/libANGLE/renderer/metal/shaders/mtl_internal_shaders_autogen.metal",
         "patchSetId": 9
