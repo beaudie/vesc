@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a09c5b8_5f3a3916",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-10-08T15:49:13Z",
+      "side": 1,
+      "message": "Shabi, PTAL.\nGeoff, FYI.",
+      "revId": "8da75b48d444eddd8522027648445d9dc658772b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
