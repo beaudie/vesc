@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53adc109_ea43fe1f",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1056,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-10-08T19:34:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6aea6baa_0ded7937",
+      "range": {
+        "startLine": 1056,
+        "startChar": 20,
+        "endLine": 1056,
+        "endChar": 76
+      },
+      "revId": "3beafa3556c8fc3adc87e34070a8f177238a9024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8c8adcc_f09edae5",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2056004e_5cb17b99",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-10-08T19:34:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8c8adcc_f09edae5",
+      "range": {
+        "startLine": 1241,
+        "startChar": 51,
+        "endLine": 1241,
+        "endChar": 57
+      },
+      "revId": "3beafa3556c8fc3adc87e34070a8f177238a9024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52464b7b_1d22f24a",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-10-04T19:29:09Z",
       "side": 1,
       "message": "UNREACHABLE to avoid calling this for unexpected dirty bits.",
+      "range": {
+        "startLine": 1272,
+        "startChar": 16,
+        "endLine": 1272,
+        "endChar": 22
+      },
+      "revId": "3beafa3556c8fc3adc87e34070a8f177238a9024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d57c779_b5f0b15d",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-10-08T19:34:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52464b7b_1d22f24a",
       "range": {
         "startLine": 1272,
         "startChar": 16,
@@ -128,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a089824_d52adce5",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_command_buffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-10-08T19:34:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aea714d5_72476c9c",
+      "range": {
+        "startLine": 240,
+        "startChar": 26,
+        "endLine": 240,
+        "endChar": 36
+      },
+      "revId": "3beafa3556c8fc3adc87e34070a8f177238a9024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22cb1e27_2eb22e80",
@@ -141,6 +237,30 @@
       "writtenOn": "2024-10-04T19:29:09Z",
       "side": 1,
       "message": "nit: these would fit better in wgpu_util.h\u0027s `gl_wgpu` namespace.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 1
+      },
+      "revId": "3beafa3556c8fc3adc87e34070a8f177238a9024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0882c401_b07c3370",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1516597
+      },
+      "writtenOn": "2024-10-08T19:34:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22cb1e27_2eb22e80",
       "range": {
         "startLine": 50,
         "startChar": 0,
