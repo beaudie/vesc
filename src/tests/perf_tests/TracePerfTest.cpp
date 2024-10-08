@@ -203,8 +203,15 @@ class TracePerfTest : public ANGLERenderTest
     };
 
     void sampleTime();
-    void saveScreenshot(const std::string &screenshotName) override;
-    void swap();
+
+    const bool kSaveOffscreenGridScreenshots = false;  // Change to also save FB 0 in offscreen
+    enum class ScreenshotType
+    {
+        kFrame,
+        kGrid,  // Grid of frames (framebuffer 0) in offscreen mode
+    };
+    void saveScreenshotIfEnabled(ScreenshotType screenshotType);
+    void saveScreenshot(const std::string &screenshotName);
 
     std::unique_ptr<const TracePerfParams> mParams;
 
@@ -2156,6 +2163,10 @@ void TracePerfTest::drawBenchmark()
 
     updatePerfCounters();
 
+    GLint currentDrawFBO, currentReadFBO;
+    glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentDrawFBO);
+    glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentReadFBO);
+
     if (mParams->surfaceType == SurfaceType::Offscreen)
     {
         if (gMinimizeGPUWork)
@@ -2166,10 +2177,6 @@ void TracePerfTest::drawBenchmark()
         }
         else
         {
-            GLint currentDrawFBO, currentReadFBO;
-            glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentDrawFBO);
-            glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentReadFBO);
-
             bindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             bindFramebuffer(GL_READ_FRAMEBUFFER,
                             mOffscreenFramebuffers[mTotalFrameCount % mMaxOffscreenBufferCount]);
@@ -2197,11 +2204,17 @@ void TracePerfTest::drawBenchmark()
                                   GL_COLOR_BUFFER_BIT, GL_NEAREST);
             }
 
+            // GL_READ_FRAMEBUFFER is already set correctly for glReadPixels
+            saveScreenshotIfEnabled(ScreenshotType::kFrame);
+
             if (frameX == kFramesPerX - 1 && frameY == kFramesPerY - 1)
             {
-                // Bind default framebuffer to save the "grid" screenshot (when enabled)
                 bindFramebuffer(GL_FRAMEBUFFER, 0);
-                swap();
+                if (kSaveOffscreenGridScreenshots && !gles1)
+                {
+                    saveScreenshotIfEnabled(ScreenshotType::kGrid);
+                }
+                getGLWindow()->swap();
                 glClear(GL_COLOR_BUFFER_BIT);
                 mOffscreenFrameCount = 0;
             }
@@ -2215,16 +2228,19 @@ void TracePerfTest::drawBenchmark()
             {
                 glEnable(GL_SCISSOR_TEST);
             }
-            bindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
-            bindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
         }
 
         mTotalFrameCount++;
     }
     else
     {
-        swap();
+        bindFramebuffer(GL_FRAMEBUFFER, 0);
+        saveScreenshotIfEnabled(ScreenshotType::kFrame);
+        getGLWindow()->swap();
     }
+
+    bindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
+    bindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
 
     endInternalTraceEvent(frameName);
 
@@ -2691,9 +2707,8 @@ void TracePerfTest::onReplayDiscardFramebufferEXT(GLenum target,
     }
 }
 
-void TracePerfTest::swap()
+void TracePerfTest::saveScreenshotIfEnabled(ScreenshotType screenshotType)
 {
-    // Capture a screenshot if enabled.
     if (gScreenshotDir != nullptr && gSaveScreenshots && !mScreenshotSaved &&
         (static_cast<uint32_t>(mScreenshotFrame) == mCurrentIteration ||
          mScreenshotFrame == kAllFrames))
@@ -2705,7 +2720,8 @@ void TracePerfTest::swap()
         // Add a marker to the name for any screenshot that isn't start frame
         if (mStartFrame != static_cast<uint32_t>(mScreenshotFrame))
         {
-            screenshotNameStr << "_frame" << mCurrentIteration;
+            screenshotNameStr << (screenshotType == ScreenshotType::kFrame ? "_frame" : "_grid")
+                              << mCurrentIteration;
         }
 
         screenshotNameStr << ".png";
@@ -2716,8 +2732,6 @@ void TracePerfTest::swap()
         // Only set this value if we're capturing a single frame
         mScreenshotSaved = mScreenshotFrame != kAllFrames;
     }
-
-    getGLWindow()->swap();
 }
 
 void TracePerfTest::saveScreenshot(const std::string &screenshotName)
@@ -2727,12 +2741,6 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
     // RGBA 4-byte data.
     uint32_t pixelCount = mTestParams.windowWidth * mTestParams.windowHeight;
     std::vector<uint8_t> pixelData(pixelCount * 4);
-
-    // Only unbind the framebuffer on context versions where it's available.
-    if (mParams->traceInfo.contextClientMajorVersion > 1)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
 
     glFinish();
 
