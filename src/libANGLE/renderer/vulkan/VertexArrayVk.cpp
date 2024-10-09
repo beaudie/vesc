@@ -96,11 +96,11 @@ angle::Result StreamVertexData(ContextVk *contextVk,
 {
     vk::Renderer *renderer = contextVk->getRenderer();
 
-    // If the source pointer is null, it should not be accessed.
-    if (srcData == nullptr)
-    {
-        return angle::Result::Continue;
-    }
+    //    // If the source pointer is null, it should not be accessed.
+    //    if (srcData == nullptr)
+    //    {
+    //        return angle::Result::Continue;
+    //    }
 
     uint8_t *dst = dstBufferHelper->getMappedMemory() + dstOffset;
 
@@ -916,7 +916,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                                              bool bufferOnly)
 {
     vk::Renderer *renderer = contextVk->getRenderer();
-    if (attrib.enabled)
+    if (attrib.enabled && mState.getValidAttribsMask()[attribIndex])
     {
         const vk::Format &vertexFormat = renderer->getFormat(attrib.format->id);
 
