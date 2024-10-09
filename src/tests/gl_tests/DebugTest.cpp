@@ -496,7 +496,7 @@ TEST_P(DebugTestES3, MessageControl2)
 }
 
 // Test basic usage of setting and getting labels
-TEST_P(DebugTestES3, ObjectLabels)
+TEST_P(DebugTestES3, ObjectLabelsKHR)
 {
     ANGLE_SKIP_TEST_IF(!mDebugExtensionAvailable);
 
@@ -663,6 +663,36 @@ TEST_P(DebugTestES32, DebugGroup)
     // Pop the test debug group and expect no error
     glPopDebugGroup();
     ASSERT_GL_NO_ERROR();
+}
+
+// Simple test for setting and getting labels using ES32 core APIs
+TEST_P(DebugTestES32, ObjectLabels)
+{
+    GLuint renderbuffer = 0;
+    glGenRenderbuffers(1, &renderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+
+    const std::string &label = "renderbuffer";
+    glObjectLabel(GL_RENDERBUFFER, renderbuffer, -1, label.c_str());
+
+    std::vector<char> labelBuf(label.length() + 1);
+    GLsizei labelLengthBuf = 0;
+    glGetObjectLabel(GL_RENDERBUFFER, renderbuffer, static_cast<GLsizei>(labelBuf.size()),
+                     &labelLengthBuf, labelBuf.data());
+
+    EXPECT_EQ(static_cast<GLsizei>(label.length()), labelLengthBuf);
+    EXPECT_STREQ(label.c_str(), labelBuf.data());
+
+    ASSERT_GL_NO_ERROR();
+
+    glDeleteRenderbuffers(1, &renderbuffer);
+
+    glObjectLabel(GL_RENDERBUFFER, renderbuffer, -1, label.c_str());
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    glGetObjectLabel(GL_RENDERBUFFER, renderbuffer, static_cast<GLsizei>(labelBuf.size()),
+                     &labelLengthBuf, labelBuf.data());
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(DebugTestES3);
