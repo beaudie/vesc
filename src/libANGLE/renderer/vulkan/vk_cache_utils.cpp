@@ -5235,6 +5235,12 @@ void FramebufferHelper::release(ContextVk *contextVk)
     contextVk->addGarbage(&mFramebuffer);
 }
 
+// DescriptorSetHelper implementation.
+void DescriptorSetHelper::release()
+{
+    mPool->addGarbage(std::move(*this));
+}
+
 // DescriptorSetDesc implementation.
 size_t DescriptorSetDesc::hash() const
 {
