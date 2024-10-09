@@ -46,6 +46,30 @@
       },
       "revId": "a42d8c6131c1307f3cf50bd74b88bc6d4ea7063f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d9c3101_8625b871",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3602,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-09T21:09:10Z",
+      "side": 1,
+      "message": "Okay, it isn\u0027t obvious, but you can glean it from a combination of requiring `GL_ARM_shader_framebuffer_fetch` and invoking `MultipleRenderTargetTest`.",
+      "parentUuid": "55cc37fa_2dd872d0",
+      "range": {
+        "startLine": 3602,
+        "startChar": 49,
+        "endLine": 3602,
+        "endChar": 68
+      },
+      "revId": "a42d8c6131c1307f3cf50bd74b88bc6d4ea7063f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
