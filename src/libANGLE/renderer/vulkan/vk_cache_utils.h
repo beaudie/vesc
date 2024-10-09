@@ -1597,27 +1597,51 @@ class FramebufferHelper : public Resource
 };
 
 // Class DescriptorSetHelper. This is a wrapper of VkDescriptorSet with GPU resource use tracking.
+class DescriptorPoolHelper;
 class DescriptorSetHelper final : public Resource
 {
   public:
-    DescriptorSetHelper(const VkDescriptorSet &descriptorSet) { mDescriptorSet = descriptorSet; }
-    DescriptorSetHelper(const ResourceUse &use, const VkDescriptorSet &descriptorSet)
+    DescriptorSetHelper() : mDescriptorSet(VK_NULL_HANDLE), mPool(nullptr) {}
+    DescriptorSetHelper(const VkDescriptorSet &descriptorSet, DescriptorPoolHelper *pool)
+        : mDescriptorSet(descriptorSet), mPool(pool)
+    {}
+    DescriptorSetHelper(const ResourceUse &use,
+                        const VkDescriptorSet &descriptorSet,
+                        DescriptorPoolHelper *pool)
+        : mDescriptorSet(descriptorSet), mPool(pool)
     {
-        mUse           = use;
-        mDescriptorSet = descriptorSet;
+        mUse = use;
     }
-    DescriptorSetHelper(DescriptorSetHelper &&other) : Resource(std::move(other))
+    DescriptorSetHelper(DescriptorSetHelper &&other)
+        : Resource(std::move(other)), mDescriptorSet(other.mDescriptorSet), mPool(other.mPool)
     {
-        mDescriptorSet       = other.mDescriptorSet;
         other.mDescriptorSet = VK_NULL_HANDLE;
+        other.mPool          = nullptr;
     }
 
+    ~DescriptorSetHelper() override
+    {
+        ASSERT(mDescriptorSet == VK_NULL_HANDLE);
+        ASSERT(!mPool);
+    }
+
+    void destroy();
+
     VkDescriptorSet getDescriptorSet() const { return mDescriptorSet; }
+    DescriptorPoolHelper *getPool() const { return mPool; }
+
+    bool valid() const { return mDescriptorSet != VK_NULL_HANDLE; }
+
+    void onBind();
+    void onUnbind();
 
   private:
     VkDescriptorSet mDescriptorSet;
+    friend class DescriptorPoolHelper;
+    DescriptorPoolHelper *mPool;
 };
-using DescriptorSetList = std::deque<DescriptorSetHelper>;
+using DescriptorSetPointer = SharedPtr<DescriptorSetHelper>;
+using DescriptorSetList    = std::deque<DescriptorSetPointer>;
 
 ANGLE_INLINE PipelineHelper::PipelineHelper(Pipeline &&pipeline, CacheLookUpFeedback feedback)
     : mPipeline(std::move(pipeline)), mCacheLookUpFeedback(feedback)
@@ -2756,33 +2780,27 @@ class DescriptorSetCache final : angle::NonCopyable
 
     void resetCache() { mPayload.clear(); }
 
-    ANGLE_INLINE bool getDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                       VkDescriptorSet *descriptorSetOut,
-                                       vk::RefCountedDescriptorPoolHelper **poolOut)
+    bool getDescriptorSet(const vk::DescriptorSetDesc &desc,
+                          vk::DescriptorSetPointer *descriptorSetOut)
     {
         auto iter = mPayload.find(desc);
         if (iter != mPayload.end())
         {
-            *descriptorSetOut = iter->second->getDescriptorSet();
-            *poolOut          = iter->second->getPool();
+            *descriptorSetOut = iter->second;
             return true;
         }
         return false;
     }
 
-    ANGLE_INLINE void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                          VkDescriptorSet descriptorSet,
-                                          vk::RefCountedDescriptorPoolHelper *pool)
+    void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                             const vk::DescriptorSetPointer &descriptorSetHelper)
     {
-        mPayload.emplace(desc, std::make_unique<dsCacheEntry>(descriptorSet, pool));
+        mPayload.emplace(desc, descriptorSetHelper);
     }
 
-    ANGLE_INLINE void eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
-    {
-        mPayload.erase(desc);
-    }
+    void eraseDescriptorSet(const vk::DescriptorSetDesc &desc) { mPayload.erase(desc); }
 
-    ANGLE_INLINE size_t getTotalCacheSize() const { return mPayload.size(); }
+    size_t getTotalCacheSize() const { return mPayload.size(); }
 
     size_t getTotalCacheKeySizeBytes() const
     {
@@ -2794,27 +2812,10 @@ class DescriptorSetCache final : angle::NonCopyable
         }
         return totalSize;
     }
-
     bool empty() const { return mPayload.empty(); }
 
   private:
-    class dsCacheEntry
-    {
-      public:
-        dsCacheEntry(VkDescriptorSet descriptorSet, vk::RefCountedDescriptorPoolHelper *pool)
-            : mDescriptorSet(descriptorSet), mPool(pool)
-        {}
-        VkDescriptorSet getDescriptorSet() const { return mDescriptorSet; }
-        vk::RefCountedDescriptorPoolHelper *getPool() const { return mPool; }
-
-      private:
-        VkDescriptorSet mDescriptorSet;
-        // Weak pointer to the pool this descriptorSet allocated from. The RefCount is tracking if
-        // this pool is bound as the current pool in any ProgramExecutableVk or not, so we should
-        // not add refcount from the cache.
-        vk::RefCountedDescriptorPoolHelper *mPool;
-    };
-    angle::HashMap<vk::DescriptorSetDesc, std::unique_ptr<dsCacheEntry>> mPayload;
+    angle::HashMap<vk::DescriptorSetDesc, vk::DescriptorSetPointer> mPayload;
 };
 
 // There is 1 default uniform binding used per stage.

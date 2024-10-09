@@ -21,6 +21,7 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/android/vk_android_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_ref_counted_event.h"
 #include "libANGLE/renderer/vulkan/vk_renderer.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -4170,7 +4171,7 @@ angle::Result DescriptorPoolHelper::init(Context *context,
 
     if (mDescriptorPool.valid())
     {
-        ASSERT(renderer->hasResourceUseFinished(getResourceUse()));
+        ASSERT(mValidDescriptorSets == 0);
         mDescriptorPool.destroy(renderer->getDevice());
     }
 
@@ -4200,33 +4201,34 @@ angle::Result DescriptorPoolHelper::init(Context *context,
 void DescriptorPoolHelper::destroy(Renderer *renderer)
 {
     mDescriptorSetCacheManager.destroyKeys(renderer);
-    mDescriptorSetGarbageList.clear();
+    resetGarbage();
+    ASSERT(renderer->hasResourceUseFinished(mUse));
     mDescriptorPool.destroy(renderer->getDevice());
 }
 
 void DescriptorPoolHelper::release(Renderer *renderer)
 {
-    mDescriptorSetGarbageList.clear();
-
+    resetGarbage();
     GarbageObjects garbageObjects;
     garbageObjects.emplace_back(GetGarbage(&mDescriptorPool));
     renderer->collectGarbage(mUse, std::move(garbageObjects));
-    mUse.reset();
 }
 
 bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
                                                  const DescriptorSetLayout &descriptorSetLayout,
-                                                 VkDescriptorSet *descriptorSetsOut)
+                                                 DescriptorSetPointer *descriptorSetHelperOut)
 {
+    ASSERT(!(*descriptorSetHelperOut));
+
     // Try to reuse descriptorSet garbage first
     if (!mDescriptorSetGarbageList.empty())
     {
         Renderer *renderer = context->getRenderer();
 
-        DescriptorSetHelper &garbage = mDescriptorSetGarbageList.front();
-        if (renderer->hasResourceUseFinished(garbage.getResourceUse()))
+        DescriptorSetPointer &garbage = mDescriptorSetGarbageList.front();
+        if (renderer->hasResourceUseFinished(garbage->getResourceUse()))
         {
-            *descriptorSetsOut = garbage.getDescriptorSet();
+            *descriptorSetHelperOut = std::move(garbage);
             mDescriptorSetGarbageList.pop_front();
             mValidDescriptorSets++;
             return true;
@@ -4241,16 +4243,36 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
         allocInfo.descriptorSetCount          = 1;
         allocInfo.pSetLayouts                 = descriptorSetLayout.ptr();
 
-        VkResult result = mDescriptorPool.allocateDescriptorSets(context->getDevice(), allocInfo,
-                                                                 descriptorSetsOut);
+        VkDescriptorSet descriptorSet;
+        VkResult result =
+            mDescriptorPool.allocateDescriptorSets(context->getDevice(), allocInfo, &descriptorSet);
+        ++context->getPerfCounters().descriptorSetAllocations;
         // If fail, it means our own accounting has a bug.
         ASSERT(result == VK_SUCCESS);
         mFreeDescriptorSets--;
         mValidDescriptorSets++;
+
+        DescriptorSetHelper descriptorSetHelper(descriptorSet, this);
+        *descriptorSetHelperOut = DescriptorSetPointer(std::move(descriptorSetHelper));
         return true;
     }
 
     return false;
+}
+
+void DescriptorPoolHelper::resetGarbage()
+{
+    while (!mDescriptorSetGarbageList.empty())
+    {
+        ASSERT(mDescriptorSetGarbageList.front().unique());
+        ASSERT(mDescriptorSetGarbageList.front().valid());
+        // Because we do not use VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT when pool is
+        // created, We can't free each individual descriptor set before destroying the pool, we
+        // simply nuke the descriptorSet so that it won't hit assertion.
+        mDescriptorSetGarbageList.front()->mDescriptorSet = VK_NULL_HANDLE;
+        mDescriptorSetGarbageList.front()->mPool          = nullptr;
+        mDescriptorSetGarbageList.pop_front();
+    }
 }
 
 // DynamicDescriptorPool implementation.
@@ -4322,7 +4344,7 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
     Context *context,
     const DescriptorSetLayout &descriptorSetLayout,
     DescriptorPoolPointer *poolOut,
-    VkDescriptorSet *descriptorSetOut)
+    DescriptorSetPointer *descriptorSetOut)
 {
     ASSERT(!mDescriptorPools.empty());
     ASSERT(descriptorSetLayout.getHandle() == mCachedDescriptorSetLayout);
@@ -4374,15 +4396,14 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     const DescriptorSetDesc &desc,
     const DescriptorSetLayout &descriptorSetLayout,
     DescriptorPoolPointer *poolOut,
-    VkDescriptorSet *descriptorSetOut,
+    DescriptorSetPointer *descriptorSetOut,
     SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
     // First scan the descriptorSet cache.
-    vk::RefCountedDescriptorPoolHelper *refCountedPoolOut;
-    if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut, &refCountedPoolOut))
+    if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut))
     {
         *newSharedCacheKeyOut = nullptr;
-        *poolOut              = refCountedPoolOut;
+        *poolOut = std::move(DescriptorPoolPointer(descriptorSetOut->getRefCountedStorage()));
         mCacheStats.hit();
         return angle::Result::Continue;
     }
@@ -4390,9 +4411,9 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     ANGLE_TRY(allocateDescriptorSet(context, descriptorSetLayout, poolOut, descriptorSetOut));
     ++context->getPerfCounters().descriptorSetAllocations;
 
-    mDescriptorSetCache.insertDescriptorSet(desc, *descriptorSetOut,
-                                            poolOut->getRefCountedStorage());
+    mDescriptorSetCache.insertDescriptorSet(desc, *descriptorSetOut);
     mCacheStats.missAndIncrementSize();
+
     // Let pool know there is a shared cache key created and destroys the shared cache key
     // when it destroys the pool.
     *newSharedCacheKeyOut = CreateSharedDescriptorSetCacheKey(desc, this);
@@ -4445,46 +4466,35 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 void DynamicDescriptorPool::releaseCachedDescriptorSet(Renderer *renderer,
                                                        const DescriptorSetDesc &desc)
 {
-    VkDescriptorSet descriptorSet;
-    RefCountedDescriptorPoolHelper *poolOut;
-    if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet, &poolOut))
+    DescriptorSetPointer descriptorSet;
+    if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet))
     {
-        // Remove from the cache hash map
+        // Remove from the cache hash map. Note that we can't delete it until refcount goes to 0
         mDescriptorSetCache.eraseDescriptorSet(desc);
         mCacheStats.decrementSize();
 
-        // Wrap it with helper object so that it can be GPU tracked and add it to resource list.
-        DescriptorSetHelper descriptorSetHelper(poolOut->get().getResourceUse(), descriptorSet);
-        poolOut->get().addGarbage(std::move(descriptorSetHelper));
-        checkAndReleaseUnusedPool(renderer, poolOut);
+        if (descriptorSet.unique())
+        {
+            DescriptorPoolHelper *pool = descriptorSet->getPool();
+            pool->addGarbage(std::move(descriptorSet));
+            checkAndReleaseUnusedPool(renderer, pool);
+        }
     }
 }
 
 void DynamicDescriptorPool::destroyCachedDescriptorSet(Renderer *renderer,
                                                        const DescriptorSetDesc &desc)
 {
-    VkDescriptorSet descriptorSet;
-    RefCountedDescriptorPoolHelper *poolOut;
-    if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet, &poolOut))
-    {
-        // Remove from the cache hash map
-        mDescriptorSetCache.eraseDescriptorSet(desc);
-        mCacheStats.decrementSize();
-
-        // Put descriptorSet to the garbage list for reuse.
-        DescriptorSetHelper descriptorSetHelper(descriptorSet);
-        poolOut->get().addGarbage(std::move(descriptorSetHelper));
-        checkAndReleaseUnusedPool(renderer, poolOut);
-    }
+    releaseCachedDescriptorSet(renderer, desc);
 }
 
 void DynamicDescriptorPool::checkAndReleaseUnusedPool(Renderer *renderer,
-                                                      RefCountedDescriptorPoolHelper *pool)
+                                                      DescriptorPoolPointer *pool)
 {
     // If pool still contains any valid descriptorSet cache, then don't destroy it. Note that even
     // if pool has no valid descriptorSet, pool itself may still be bound to a program until it gets
     // unbound when next descriptorSet gets allocated. We always keep at least one pool around.
-    if (mDescriptorPools.size() < 2 || pool->get().hasValidDescriptorSet() || pool->isReferenced())
+    if (mDescriptorPools.size() < 2 || (*pool)->hasValidDescriptorSet() || !pool->unique())
     {
         return;
     }
@@ -4499,9 +4509,9 @@ void DynamicDescriptorPool::checkAndReleaseUnusedPool(Renderer *renderer,
         }
     }
     // There must be a match
-    ASSERT(poolIndex != mDescriptorPools.size());
-    ASSERT(pool->get().valid());
-    pool->get().release(renderer);
+    ASSERT(hasPool((*pool).get());
+    ASSERT(pool->valid());
+    (*pool)->release(renderer);
 }
 
 // For testing only!
@@ -4526,6 +4536,18 @@ uint32_t DynamicDescriptorPool::GetMaxSetsPerPoolMultiplierForTesting()
 void DynamicDescriptorPool::SetMaxSetsPerPoolMultiplierForTesting(uint32_t maxSetsPerPoolMultiplier)
 {
     mMaxSetsPerPoolMultiplier = maxSetsPerPoolMultiplier;
+}
+
+bool DynamicDescriptorPool::hasPool(const DescriptorPoolHelper *other) const
+{
+    for (const DescriptorPoolPointer &pool : mDescriptorPools)
+    {
+        if (pool.get() == other)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 // DynamicallyGrowingPool implementation

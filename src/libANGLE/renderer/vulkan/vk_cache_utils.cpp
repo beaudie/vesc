@@ -5254,6 +5254,20 @@ void FramebufferHelper::release(ContextVk *contextVk)
     contextVk->addGarbage(&mFramebuffer);
 }
 
+// DescriptorSetHelper implementation.
+void DescriptorSetHelper::destroy()
+{
+    if (valid())
+    {
+        // Since the pool is created without VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT, we
+        // don't call vkFreeDescriptorSets. We always add to garbage list so that it can be
+        // recycled.
+        DescriptorSetPointer other(std::move(*this));
+        other->getPool()->addGarbage(std::move(other));
+        ASSERT(!valid());
+    }
+}
+
 // DescriptorSetDesc implementation.
 size_t DescriptorSetDesc::hash() const
 {
