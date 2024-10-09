@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cda785f_93401bfc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-09T16:10:35Z",
+      "side": 1,
+      "message": "One last nit, please avoid overloading (it hurts `grep`ability)\n\n\n\n```suggestion\n    angle::Result initFromCreateInfo(Context *context,\n```",
+      "revId": "1bb9d97dc81c0c8f654d1e6697ed822c89683d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
