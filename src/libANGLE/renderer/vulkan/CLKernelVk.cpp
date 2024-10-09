@@ -34,10 +34,6 @@ CLKernelVk::CLKernelVk(const cl::Kernel &kernel,
 {
     mShaderProgramHelper.setShader(gl::ShaderType::Compute,
                                    mKernel.getProgram().getImpl<CLProgramVk>().getShaderModule());
-    for (DescriptorSetIndex index : angle::AllEnums<DescriptorSetIndex>())
-    {
-        mDescriptorSets[index] = VK_NULL_HANDLE;
-    }
 }
 
 CLKernelVk::~CLKernelVk()
