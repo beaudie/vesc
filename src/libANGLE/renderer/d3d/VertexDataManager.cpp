@@ -538,7 +538,7 @@ angle::Result VertexDataManager::storeDynamicAttrib(const gl::Context *context,
     const auto &binding = *translated->binding;
 
     gl::Buffer *buffer = binding.getBuffer().get();
-    ASSERT(buffer || attrib.pointer);
+    // ASSERT(buffer || attrib.pointer);
     ASSERT(attrib.enabled);
 
     BufferD3D *storage = buffer ? GetImplAs<BufferD3D>(buffer) : nullptr;
@@ -555,7 +555,7 @@ angle::Result VertexDataManager::storeDynamicAttrib(const gl::Context *context,
         ANGLE_TRY(storage->getData(context, &sourceData));
         sourceData += static_cast<int>(ComputeVertexAttributeOffset(attrib, binding));
     }
-    else
+    else if (attrib.pointer != nullptr)
     {
         // Attributes using client memory ignore the VERTEX_ATTRIB_BINDING state.
         // https://www.opengl.org/registry/specs/ARB/vertex_attrib_binding.txt
@@ -571,9 +571,12 @@ angle::Result VertexDataManager::storeDynamicAttrib(const gl::Context *context,
     size_t totalCount = gl::ComputeVertexBindingElementCount(
         binding.getDivisor(), count, static_cast<size_t>(std::max(instances, 1)));
 
-    ANGLE_TRY(mStreamingBuffer.storeDynamicAttribute(
-        context, attrib, binding, translated->currentValueType, firstVertexIndex,
-        static_cast<GLsizei>(totalCount), instances, baseInstance, &streamOffset, sourceData));
+    if (sourceData != nullptr)
+    {
+        ANGLE_TRY(mStreamingBuffer.storeDynamicAttribute(
+            context, attrib, binding, translated->currentValueType, firstVertexIndex,
+            static_cast<GLsizei>(totalCount), instances, baseInstance, &streamOffset, sourceData));
+    }
 
     VertexBuffer *vertexBuffer = mStreamingBuffer.getVertexBuffer();
 

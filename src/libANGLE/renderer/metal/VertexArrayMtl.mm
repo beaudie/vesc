@@ -540,7 +540,7 @@ angle::Result VertexArrayMtl::updateClientAttribs(const gl::Context *context,
 
         // Source client memory pointer
         const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
-        ASSERT(src);
+        // ASSERT(src);
 
         GLint startElement;
         size_t elementCount;
@@ -564,74 +564,78 @@ angle::Result VertexArrayMtl::updateClientAttribs(const gl::Context *context,
                              (binding.getStride() < format.actualAngleFormat().pixelBytes) ||
                              bytesIntendedToUse > mInlineDataMaxSize;
 
-        if (!needStreaming)
+        if (src != nullptr)
         {
-            // Data will be uploaded directly as inline constant data
-            mCurrentArrayBuffers[attribIndex]            = nullptr;
-            mCurrentArrayInlineDataPointers[attribIndex] = src;
-            mCurrentArrayInlineDataSizes[attribIndex]    = bytesIntendedToUse;
-            mCurrentArrayBufferOffsets[attribIndex]      = 0;
-            mCurrentArrayBufferFormats[attribIndex]      = &format;
-            mCurrentArrayBufferStrides[attribIndex]      = binding.getStride();
-        }
-        else
-        {
-            GLuint convertedStride;
-            // Need to stream the client vertex data to a buffer.
-            const mtl::VertexFormat &streamFormat =
-                GetVertexConversionFormat(contextMtl, attrib.format->id, &convertedStride);
-
-            // Allocate space for startElement + elementCount so indexing will work.  If we don't
-            // start at zero all the indices will be off.
-            // Only elementCount vertices will be used by the upcoming draw so that is all we copy.
-            size_t bytesToAllocate = (startElement + elementCount) * convertedStride;
-            src += startElement * binding.getStride();
-            size_t destOffset = startElement * convertedStride;
-
-            mCurrentArrayBufferFormats[attribIndex] = &streamFormat;
-            mCurrentArrayBufferStrides[attribIndex] = convertedStride;
-
-            if (bytesToAllocate <= mInlineDataMaxSize)
+            if (!needStreaming)
             {
-                // If the data is small enough, use host memory instead of creating GPU buffer. To
-                // avoid synchronizing access to GPU buffer that is still in use.
-                angle::MemoryBuffer &convertedClientArray =
-                    mConvertedClientSmallArrays[attribIndex];
-                if (bytesToAllocate > convertedClientArray.size())
-                {
-                    ANGLE_CHECK_GL_ALLOC(contextMtl, convertedClientArray.resize(bytesToAllocate));
-                }
-
-                ASSERT(streamFormat.vertexLoadFunction);
-                streamFormat.vertexLoadFunction(src, binding.getStride(), elementCount,
-                                                convertedClientArray.data() + destOffset);
-
+                // Data will be uploaded directly as inline constant data
                 mCurrentArrayBuffers[attribIndex]            = nullptr;
-                mCurrentArrayInlineDataPointers[attribIndex] = convertedClientArray.data();
-                mCurrentArrayInlineDataSizes[attribIndex]    = bytesToAllocate;
+                mCurrentArrayInlineDataPointers[attribIndex] = src;
+                mCurrentArrayInlineDataSizes[attribIndex]    = bytesIntendedToUse;
                 mCurrentArrayBufferOffsets[attribIndex]      = 0;
+                mCurrentArrayBufferFormats[attribIndex]      = &format;
+                mCurrentArrayBufferStrides[attribIndex]      = binding.getStride();
             }
             else
             {
-                // Stream the client data to a GPU buffer. Synchronization might happen if buffer is
-                // in use.
-                mDynamicVertexData.updateAlignment(contextMtl,
-                                                   streamFormat.actualAngleFormat().pixelBytes);
-                ANGLE_TRY(StreamVertexData(contextMtl, &mDynamicVertexData, src, bytesToAllocate,
-                                           destOffset, elementCount, binding.getStride(),
-                                           streamFormat.vertexLoadFunction,
-                                           &mConvertedArrayBufferHolders[attribIndex],
-                                           &mCurrentArrayBufferOffsets[attribIndex]));
-                if (contextMtl->getDisplay()->getFeatures().flushAfterStreamVertexData.enabled)
-                {
-                    // WaitUntilScheduled is needed for this workaround. NoWait does not have the
-                    // needed effect.
-                    contextMtl->flushCommandBuffer(mtl::WaitUntilScheduled);
-                }
+                GLuint convertedStride;
+                // Need to stream the client vertex data to a buffer.
+                const mtl::VertexFormat &streamFormat =
+                    GetVertexConversionFormat(contextMtl, attrib.format->id, &convertedStride);
 
-                mCurrentArrayBuffers[attribIndex] = &mConvertedArrayBufferHolders[attribIndex];
-            }
-        }  // if (needStreaming)
+                // Allocate space for startElement + elementCount so indexing will work.  If we
+                // don't start at zero all the indices will be off. Only elementCount vertices will
+                // be used by the upcoming draw so that is all we copy.
+                size_t bytesToAllocate = (startElement + elementCount) * convertedStride;
+                src += startElement * binding.getStride();
+                size_t destOffset = startElement * convertedStride;
+
+                mCurrentArrayBufferFormats[attribIndex] = &streamFormat;
+                mCurrentArrayBufferStrides[attribIndex] = convertedStride;
+
+                if (bytesToAllocate <= mInlineDataMaxSize)
+                {
+                    // If the data is small enough, use host memory instead of creating GPU buffer.
+                    // To avoid synchronizing access to GPU buffer that is still in use.
+                    angle::MemoryBuffer &convertedClientArray =
+                        mConvertedClientSmallArrays[attribIndex];
+                    if (bytesToAllocate > convertedClientArray.size())
+                    {
+                        ANGLE_CHECK_GL_ALLOC(contextMtl,
+                                             convertedClientArray.resize(bytesToAllocate));
+                    }
+
+                    ASSERT(streamFormat.vertexLoadFunction);
+                    streamFormat.vertexLoadFunction(src, binding.getStride(), elementCount,
+                                                    convertedClientArray.data() + destOffset);
+
+                    mCurrentArrayBuffers[attribIndex]            = nullptr;
+                    mCurrentArrayInlineDataPointers[attribIndex] = convertedClientArray.data();
+                    mCurrentArrayInlineDataSizes[attribIndex]    = bytesToAllocate;
+                    mCurrentArrayBufferOffsets[attribIndex]      = 0;
+                }
+                else
+                {
+                    // Stream the client data to a GPU buffer. Synchronization might happen if
+                    // buffer is in use.
+                    mDynamicVertexData.updateAlignment(contextMtl,
+                                                       streamFormat.actualAngleFormat().pixelBytes);
+                    ANGLE_TRY(StreamVertexData(contextMtl, &mDynamicVertexData, src,
+                                               bytesToAllocate, destOffset, elementCount,
+                                               binding.getStride(), streamFormat.vertexLoadFunction,
+                                               &mConvertedArrayBufferHolders[attribIndex],
+                                               &mCurrentArrayBufferOffsets[attribIndex]));
+                    if (contextMtl->getDisplay()->getFeatures().flushAfterStreamVertexData.enabled)
+                    {
+                        // WaitUntilScheduled is needed for this workaround. NoWait does not have
+                        // the needed effect.
+                        contextMtl->flushCommandBuffer(mtl::WaitUntilScheduled);
+                    }
+
+                    mCurrentArrayBuffers[attribIndex] = &mConvertedArrayBufferHolders[attribIndex];
+                }
+            }  // if (needStreaming)
+        }
     }
 
     mVertexArrayDirty = true;

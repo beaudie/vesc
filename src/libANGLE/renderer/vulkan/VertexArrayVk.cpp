@@ -96,11 +96,11 @@ angle::Result StreamVertexData(ContextVk *contextVk,
 {
     vk::Renderer *renderer = contextVk->getRenderer();
 
-    // If the source pointer is null, it should not be accessed.
-    if (srcData == nullptr)
-    {
-        return angle::Result::Continue;
-    }
+    //    // If the source pointer is null, it should not be accessed.
+    //    if (srcData == nullptr)
+    //    {
+    //        return angle::Result::Continue;
+    //    }
 
     uint8_t *dst = dstBufferHelper->getMappedMemory() + dstOffset;
 
@@ -1253,6 +1253,11 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
 
     for (size_t attribIndex : activeStreamedAttribs)
     {
+        if (!mState.getValidAttribsMask().test(attribIndex))
+        {
+            continue;
+        }
+
         const gl::VertexAttribute &attrib = attribs[attribIndex];
         ASSERT(attrib.enabled);
         const gl::VertexBinding &binding = bindings[attrib.bindingIndex];
