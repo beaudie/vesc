@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeeafdd5_54a79d5f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5347,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-09T16:02:09Z",
+      "side": 1,
+      "message": "```suggestion\n\n    // http://issuetracker.google.com/42266906: Samsung Vulkan driver with API level \u003c 1.3.244 has a bug in imageless\n    //             framebuffer support.\n    //\n    // http://issuetracker.google.com/369693310: Qualcomm with imageless framebuffers, vkCreateFramebuffer loops forever.\n    //\n    // http://issuetracker.google.com/372273294: PowerVR with imageless framebuffer spends enormous amounts of time in\n```",
+      "range": {
+        "startLine": 5341,
+        "startChar": 0,
+        "endLine": 5347,
+        "endChar": 89
+      },
+      "revId": "4ddbf69d27f5f7a2170fab026bb2e10701495898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
