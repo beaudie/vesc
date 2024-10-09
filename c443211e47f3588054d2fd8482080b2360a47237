@@ -194,6 +194,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "399350db_593b535c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3653504
+      },
+      "writtenOn": "2024-10-09T02:13:41Z",
+      "side": 1,
+      "message": "In the test VertexAttribPointerCopyBufferFromInvalidIndex1 on PS2, an attribute without a value (i.e., color) was used. Later, in PS7, the vertex shader (VS) and fragment shader (FS) were rewritten based on the behavior of the crashed applications. The color, which wasn\u0027t passed a value, was simply passed from the VS to the FS, but the color value was not actually used in the FS.",
+      "parentUuid": "f748d348_cdf55575",
+      "range": {
+        "startLine": 10,
+        "startChar": 38,
+        "endLine": 10,
+        "endChar": 70
+      },
+      "revId": "c443211e47f3588054d2fd8482080b2360a47237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6645e67_9e22495c",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 2
