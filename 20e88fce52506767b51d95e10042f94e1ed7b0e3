@@ -312,6 +312,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c815c3d_87e1e23f",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-09T05:11:56Z",
+      "side": 1,
+      "message": "It works when also replacing finish() with finishInternal(). Went ahead and updated with finish()\u003d\u003efinishInternal(), enqueueWaitForEvents()\u003d\u003eprocessWaitList, and enqueueBarrier\u003d\u003emComputePassCommands-\u003egetCommandBuffer().pipelineBarrier().",
+      "parentUuid": "b5f70209_615484c5",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 52
+      },
+      "revId": "20e88fce52506767b51d95e10042f94e1ed7b0e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22d46159_578d871b",
