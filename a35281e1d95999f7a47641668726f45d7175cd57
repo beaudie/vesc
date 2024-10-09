@@ -22,6 +22,30 @@
       },
       "revId": "a35281e1d95999f7a47641668726f45d7175cd57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69d432ff_c46bd6c7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5350,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-09T15:56:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "813b4df8_6d4055d0",
+      "range": {
+        "startLine": 5350,
+        "startChar": 80,
+        "endLine": 5350,
+        "endChar": 89
+      },
+      "revId": "a35281e1d95999f7a47641668726f45d7175cd57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
