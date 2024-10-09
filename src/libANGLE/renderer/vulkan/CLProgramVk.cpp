@@ -431,10 +431,6 @@ CLProgramVk::~CLProgramVk()
     {
         pool.reset();
     }
-    for (vk::RefCountedDescriptorPoolBinding &binding : mDescriptorPoolBindings)
-    {
-        binding.reset();
-    }
     mShader.get().destroy(mContext->getDevice());
     for (DescriptorSetIndex index : angle::AllEnums<DescriptorSetIndex>())
     {
@@ -969,16 +965,15 @@ angle::spirv::Blob CLProgramVk::stripReflection(const DeviceProgramData *deviceP
 angle::Result CLProgramVk::allocateDescriptorSet(const DescriptorSetIndex setIndex,
                                                  const vk::DescriptorSetLayout &descriptorSetLayout,
                                                  vk::CommandBufferHelperCommon *commandBuffer,
-                                                 VkDescriptorSet *descriptorSetOut)
+                                                 vk::DescriptorSetPointer *descriptorSetOut)
 {
     if (mDescriptorPools[setIndex])
     {
         ANGLE_CL_IMPL_TRY_ERROR(mDescriptorPools[setIndex]->allocateDescriptorSet(
-                                    mContext, descriptorSetLayout,
-                                    &mDescriptorPoolBindings[setIndex], descriptorSetOut),
+                                    mContext, descriptorSetLayout, descriptorSetOut),
                                 CL_INVALID_OPERATION);
 
-        commandBuffer->retainResource(&mDescriptorPoolBindings[setIndex].get());
+        commandBuffer->retainResource(descriptorSetOut->get());
     }
     return angle::Result::Continue;
 }
