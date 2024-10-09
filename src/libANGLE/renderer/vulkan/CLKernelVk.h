@@ -122,7 +122,10 @@ class CLKernelVk : public CLKernelImpl
 
     const vk::PipelineLayoutDesc &getPipelineLayoutDesc() { return mPipelineLayoutDesc; }
 
-    VkDescriptorSet &getDescriptorSet(DescriptorSetIndex index) { return mDescriptorSets[index]; }
+    vk::RefCountedDescriptorSetHelper &getDescriptorSet(DescriptorSetIndex index)
+    {
+        return mDescriptorSets[index];
+    }
 
     bool usesPrintf() const;
 
@@ -140,7 +143,7 @@ class CLKernelVk : public CLKernelImpl
     vk::AtomicBindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts{};
 
-    vk::DescriptorSetArray<VkDescriptorSet> mDescriptorSets;
+    vk::DescriptorSetArray<vk::RefCountedDescriptorSetHelper> mDescriptorSets;
 
     vk::DescriptorSetArray<vk::DescriptorSetLayoutDesc> mDescriptorSetLayoutDescs;
     vk::PipelineLayoutDesc mPipelineLayoutDesc;
