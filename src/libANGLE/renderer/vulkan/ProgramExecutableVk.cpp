@@ -1761,10 +1761,7 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
         descriptorSetDesc.updateDescriptorSet(context->getRenderer(), writeDescriptorDescs,
                                               updateBuilder, mDescriptorSets[setIndex]);
     }
-    else
-    {
-        commandBufferHelper->retainResource(&mDescriptorPoolBindings[setIndex].get());
-    }
+    commandBufferHelper->retainResource(&mDescriptorPoolBindings[setIndex].get());
 
     return angle::Result::Continue;
 }
@@ -1843,11 +1840,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
         fullDesc.updateDescriptorSet(context->getRenderer(), mTextureWriteDescriptorDescs,
                                      updateBuilder, mDescriptorSets[DescriptorSetIndex::Texture]);
     }
-    else
-    {
-        commandBufferHelper->retainResource(
-            &mDescriptorPoolBindings[DescriptorSetIndex::Texture].get());
-    }
+    commandBufferHelper->retainResource(
+        &mDescriptorPoolBindings[DescriptorSetIndex::Texture].get());
 
     return angle::Result::Continue;
 }
