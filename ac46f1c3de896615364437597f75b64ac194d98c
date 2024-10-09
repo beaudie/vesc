@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2630f853_cbc3f456",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2308,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-09T02:02:09Z",
+      "side": 1,
+      "message": "Shall we remove the `!IsGLExtensionEnabled(\"GL_EXT_shader_framebuffer_fetch\")`? `!is_coherent` already checks this.",
+      "revId": "ac46f1c3de896615364437597f75b64ac194d98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
