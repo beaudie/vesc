@@ -5235,6 +5235,19 @@ void FramebufferHelper::release(ContextVk *contextVk)
     contextVk->addGarbage(&mFramebuffer);
 }
 
+// DescriptorSetHelper implementation.
+DescriptorSetHelper::~DescriptorSetHelper()
+{
+    ASSERT(mDescriptorSet == VK_NULL_HANDLE);
+    ASSERT(!mPool);
+}
+
+void DescriptorSetHelper::destroy()
+{
+    mDescriptorSet = VK_NULL_HANDLE;
+    mPool          = nullptr;
+}
+
 // DescriptorSetDesc implementation.
 size_t DescriptorSetDesc::hash() const
 {
