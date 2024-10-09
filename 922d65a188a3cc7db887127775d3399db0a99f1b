@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b4b1b61_1399a87b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-09T20:31:40Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org - if you can provide some info on the optimization you had in mind to the shader i can work on a follow up change that implements that",
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "229ba48d_68d71ab5",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-09T20:31:40Z",
+      "side": 1,
+      "message": "i wasnt sure if it better to have this as `sampler2DMS`, any suggestions?",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
