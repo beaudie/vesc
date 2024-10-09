@@ -268,11 +268,11 @@ class DynamicBuffer : angle::NonCopyable
 // Can be used to share descriptor pools between multiple ProgramVks and the ContextVk.
 class CommandBufferHelperCommon;
 
-class DescriptorPoolHelper final : public Resource
+class DescriptorPoolHelper final
 {
   public:
     DescriptorPoolHelper();
-    ~DescriptorPoolHelper() override;
+    ~DescriptorPoolHelper();
 
     bool valid() { return mDescriptorPool.valid(); }
 
@@ -284,23 +284,29 @@ class DescriptorPoolHelper final : public Resource
 
     bool allocateDescriptorSet(Context *context,
                                const DescriptorSetLayout &descriptorSetLayout,
-                               VkDescriptorSet *descriptorSetsOut);
+                               DescriptorSetPointer *descriptorSetHelperOut);
 
-    void addGarbage(DescriptorSetHelper &&garbage)
+    void addGarbage(DescriptorSetPointer &&garbage)
     {
+        ASSERT(garbage.unique());
         mValidDescriptorSets--;
+        mGarbageResourceUse.merge(garbage->getResourceUse());
         mDescriptorSetGarbageList.emplace_back(std::move(garbage));
     }
+    bool hasGarbage() const { return !mDescriptorSetGarbageList.empty(); }
 
     void onNewDescriptorSetAllocated(const vk::SharedDescriptorSetCacheKey &sharedCacheKey)
     {
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
     }
     bool hasValidDescriptorSet() const { return mValidDescriptorSets != 0; }
+    const vk::ResourceUse &getGarbageResourceUse() const { return mGarbageResourceUse; }
 
   private:
+    void resetGarbage(ResourceUse *use);
+
     // Track the number of descriptorSets allocated out of this pool that are valid. DescriptorSets
-    // that have been allocated but in the mDescriptorSetGarbageList is considered as inactive.
+    // that have been allocated but in the mDescriptorSetGarbageList is considered as invalid.
     uint32_t mValidDescriptorSets;
     // Track the number of remaining descriptorSets in the pool that can be allocated.
     uint32_t mFreeDescriptorSets;
@@ -312,6 +318,8 @@ class DescriptorPoolHelper final : public Resource
     DescriptorSetList mDescriptorSetGarbageList;
     // Manages the texture descriptor set cache that allocated from this pool
     vk::DescriptorSetCacheManager mDescriptorSetCacheManager;
+    // Track aggregate resource use of mDescriptorSetGarbageList
+    vk::ResourceUse mGarbageResourceUse;
 };
 
 using RefCountedDescriptorPoolBinding = BindingPointer<DescriptorPoolHelper>;
@@ -344,14 +352,12 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // By convention, sets are indexed according to the constants in vk_cache_utils.h.
     angle::Result allocateDescriptorSet(Context *context,
                                         const DescriptorSetLayout &descriptorSetLayout,
-                                        RefCountedDescriptorPoolBinding *bindingOut,
-                                        VkDescriptorSet *descriptorSetOut);
+                                        DescriptorSetPointer *descriptorSetOut);
 
     angle::Result getOrAllocateDescriptorSet(Context *context,
                                              const DescriptorSetDesc &desc,
                                              const DescriptorSetLayout &descriptorSetLayout,
-                                             RefCountedDescriptorPoolBinding *bindingOut,
-                                             VkDescriptorSet *descriptorSetOut,
+                                             DescriptorSetPointer *descriptorSetOut,
                                              SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
     void releaseCachedDescriptorSet(Renderer *renderer, const DescriptorSetDesc &desc);
@@ -369,13 +375,14 @@ class DynamicDescriptorPool final : angle::NonCopyable
     }
 
     // Release the pool if it is no longer been used and contains no valid descriptorSet.
-    void checkAndReleaseUnusedPool(Renderer *renderer, RefCountedDescriptorPoolHelper *pool);
+    void checkAndReleaseUnusedPool(Renderer *renderer, DescriptorPoolHelper *pool);
 
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
     static void SetMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool);
     static uint32_t GetMaxSetsPerPoolMultiplierForTesting();
     static void SetMaxSetsPerPoolMultiplierForTesting(uint32_t maxSetsPerPool);
+    bool hasPool(const DescriptorPoolHelper *pool) const;
 
   private:
     angle::Result allocateNewPool(Context *context);
