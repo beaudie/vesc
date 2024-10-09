@@ -89,6 +89,7 @@ void VertexArrayState::setAttribBinding(const Context *context,
     bool isMapped = newBinding.getBuffer().get() && newBinding.getBuffer()->isMapped();
     mCachedMappedArrayBuffers.set(attribIndex, isMapped);
     mEnabledAttributesMask.set(attribIndex, attrib.enabled);
+    mValidAttribsMask.set(attribIndex, newBinding.getBuffer().get() != nullptr);
     updateCachedMutableOrNonPersistentArrayBuffers(attribIndex);
     mCachedInvalidMappedArrayBuffer = mCachedMappedArrayBuffers & mEnabledAttributesMask &
                                       mCachedMutableOrImpersistentArrayBuffers;
@@ -430,6 +431,12 @@ void VertexArray::bindVertexBuffer(const Context *context,
         bindVertexBufferImpl(context, bindingIndex, boundBuffer, offset, stride);
     if (dirtyBindingBits.any())
     {
+        const AttributesMask boundAttribMask =
+            mState.mVertexBindings[bindingIndex].getBoundAttributesMask();
+        for (size_t attribIndex : boundAttribMask)
+        {
+            mState.mValidAttribsMask.set(attribIndex, boundBuffer != nullptr);
+        }
         mDirtyBits.set(DIRTY_BIT_BINDING_0 + bindingIndex);
         mDirtyBindingBits[bindingIndex] |= dirtyBindingBits;
     }
@@ -620,6 +627,12 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
 
     mState.mNullPointerClientMemoryAttribsMask.set(attribIndex,
                                                    boundBuffer == nullptr && pointer == nullptr);
+    mState.mValidAttribsMask.set(attribIndex, boundBuffer != nullptr || pointer != nullptr);
+}
+
+AttributesMask VertexArray::getValidAttribsMask() const
+{
+    return mState.getValidAttribsMask();
 }
 
 void VertexArray::setVertexAttribPointer(const Context *context,
