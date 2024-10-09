@@ -22,6 +22,30 @@
       },
       "revId": "086f675d6c636563d07001149a6a65fe99f82f05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b05d8caa_259a2d2d",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-09T18:39:47Z",
+      "side": 1,
+      "message": "We could track the validity of each attribute based on whether it has a null pointer and whether is bound to a buffer (and other factors?). In that case, should each backend ignore updating it if it is not enabled and valid (e.g., in `syncDirtyAttrib()`)? Or do you mean using it would be skipped in `updateStreamedAttribs()` if invalid?",
+      "parentUuid": "4bb6aedd_02c94205",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 85
+      },
+      "revId": "086f675d6c636563d07001149a6a65fe99f82f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
