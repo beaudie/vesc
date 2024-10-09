@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df53ba9_4163c457",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3602,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-09T19:26:06Z",
+      "side": 1,
+      "message": "Can you clarify why you chose these three shaders to add the additional check?",
+      "range": {
+        "startLine": 3602,
+        "startChar": 49,
+        "endLine": 3602,
+        "endChar": 68
+      },
+      "revId": "a42d8c6131c1307f3cf50bd74b88bc6d4ea7063f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
