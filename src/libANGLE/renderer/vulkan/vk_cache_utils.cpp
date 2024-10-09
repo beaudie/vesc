@@ -5235,6 +5235,12 @@ void FramebufferHelper::release(ContextVk *contextVk)
     contextVk->addGarbage(&mFramebuffer);
 }
 
+// DescriptorSetHelper implementation.
+void DescriptorSetHelper::release()
+{
+    mPool->addGarbage(std::move(*this));
+}
+
 // DescriptorSetDesc implementation.
 size_t DescriptorSetDesc::hash() const
 {
@@ -8390,5 +8396,35 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     contextVk->getRenderer()->onAllocateHandle(vk::HandleType::Sampler);
 
     return angle::Result::Continue;
+}
+
+// DescriptorSetCache implementation.
+bool DescriptorSetCache::getDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                          vk::RefCountedDescriptorSetHelper **descriptorSetOut)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        *descriptorSetOut = iter->second;
+        return true;
+    }
+    return false;
+}
+
+void DescriptorSetCache::insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                             vk::RefCountedDescriptorSetHelper *descriptorSetHelper)
+{
+    mPayload.emplace(desc, descriptorSetHelper);
+}
+
+size_t DescriptorSetCache::getTotalCacheKeySizeBytes() const
+{
+    size_t totalSize = 0;
+    for (const auto &iter : mPayload)
+    {
+        const vk::DescriptorSetDesc &desc = iter.first;
+        totalSize += desc.getKeySizeBytes();
+    }
+    return totalSize;
 }
 }  // namespace rx

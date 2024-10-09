@@ -815,6 +815,12 @@ class BindingPointer final : angle::NonCopyable
         other.mRefCounted = nullptr;
     }
 
+    /*void set(T &&object)
+    {
+        RC refCountedObject(object);
+        set(&refCountedObject);
+    }*/
+
     void set(RC *refCounted)
     {
         if (mRefCounted)
