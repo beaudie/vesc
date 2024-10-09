@@ -33,6 +33,40 @@
       "message": "Seems legit",
       "revId": "606c8605cc8d9381e7b50561081039626963f432",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4aaf70d6_08eabe08",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10511,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-09T19:33:39Z",
+      "side": 1,
+      "message": "This type is also core in ES 3.2.",
+      "revId": "606c8605cc8d9381e7b50561081039626963f432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b2aa931_0d703f28",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10518,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-09T19:33:39Z",
+      "side": 1,
+      "message": "And this one too.",
+      "revId": "606c8605cc8d9381e7b50561081039626963f432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
