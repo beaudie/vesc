@@ -260,29 +260,6 @@ class DynamicBuffer : angle::NonCopyable
     BufferHelperQueue mBufferFreeList;
 };
 
-// Class DescriptorSetHelper. This is a wrapper of VkDescriptorSet with GPU resource use tracking.
-class DescriptorSetHelper final : public Resource
-{
-  public:
-    DescriptorSetHelper(const VkDescriptorSet &descriptorSet) { mDescriptorSet = descriptorSet; }
-    DescriptorSetHelper(const ResourceUse &use, const VkDescriptorSet &descriptorSet)
-    {
-        mUse           = use;
-        mDescriptorSet = descriptorSet;
-    }
-    DescriptorSetHelper(DescriptorSetHelper &&other) : Resource(std::move(other))
-    {
-        mDescriptorSet       = other.mDescriptorSet;
-        other.mDescriptorSet = VK_NULL_HANDLE;
-    }
-
-    VkDescriptorSet getDescriptorSet() const { return mDescriptorSet; }
-
-  private:
-    VkDescriptorSet mDescriptorSet;
-};
-using DescriptorSetList = std::deque<DescriptorSetHelper>;
-
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
 // allocate new pools internally as needed. Renderer takes care of the lifetime of the discarded
 // pools. Note that we used a fixed layout for descriptor pools in ANGLE.
@@ -307,7 +284,7 @@ class DescriptorPoolHelper final : public Resource
 
     bool allocateDescriptorSet(Context *context,
                                const DescriptorSetLayout &descriptorSetLayout,
-                               VkDescriptorSet *descriptorSetsOut);
+                               DescriptorSetHelper *descriptorSetHelperOut);
 
     void addGarbage(DescriptorSetHelper &&garbage)
     {
@@ -364,14 +341,14 @@ class DynamicDescriptorPool final : angle::NonCopyable
     angle::Result allocateDescriptorSet(Context *context,
                                         const DescriptorSetLayout &descriptorSetLayout,
                                         RefCountedDescriptorPoolBinding *bindingOut,
-                                        VkDescriptorSet *descriptorSetOut);
+                                        DescriptorSetHelper *descriptorSetHelperOut);
 
-    angle::Result getOrAllocateDescriptorSet(Context *context,
-                                             const DescriptorSetDesc &desc,
-                                             const DescriptorSetLayout &descriptorSetLayout,
-                                             RefCountedDescriptorPoolBinding *bindingOut,
-                                             VkDescriptorSet *descriptorSetOut,
-                                             SharedDescriptorSetCacheKey *sharedCacheKeyOut);
+    angle::Result getOrAllocateDescriptorSet(
+        Context *context,
+        const DescriptorSetDesc &desc,
+        const DescriptorSetLayout &descriptorSetLayout,
+        RefCountedDescriptorSetBinding *descriptorSetBindingOut,
+        SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
     void releaseCachedDescriptorSet(Renderer *renderer, const DescriptorSetDesc &desc);
     void destroyCachedDescriptorSet(Renderer *renderer, const DescriptorSetDesc &desc);
@@ -387,8 +364,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
     }
 
+    bool hasPool(const DescriptorPoolHelper *pool) const;
     // Release the pool if it is no longer been used and contains no valid descriptorSet.
-    void checkAndReleaseUnusedPool(Renderer *renderer, RefCountedDescriptorPoolHelper *pool);
+    void checkAndReleaseUnusedPool(Renderer *renderer, DescriptorPoolHelper *pool);
 
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
