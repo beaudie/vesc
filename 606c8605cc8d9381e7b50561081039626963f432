@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36eb36e9_e0e0d5b9",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10511,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-10-09T20:30:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4aaf70d6_08eabe08",
+      "revId": "606c8605cc8d9381e7b50561081039626963f432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b2aa931_0d703f28",
@@ -65,6 +83,24 @@
       "writtenOn": "2024-10-09T19:33:39Z",
       "side": 1,
       "message": "And this one too.",
+      "revId": "606c8605cc8d9381e7b50561081039626963f432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a60f973_f435410e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10518,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2024-10-09T20:30:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b2aa931_0d703f28",
       "revId": "606c8605cc8d9381e7b50561081039626963f432",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
