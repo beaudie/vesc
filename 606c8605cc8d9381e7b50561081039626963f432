@@ -16,6 +16,23 @@
       "message": "LGTM, adding Geoff and Shabi for a core review.  See the bug details for why we\u0027re hitting this.\n\nNote this affects `isValidBindTextureType` which is used in validation.",
       "revId": "606c8605cc8d9381e7b50561081039626963f432",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53fbe86c_07620615",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-09T16:15:52Z",
+      "side": 1,
+      "message": "Seems legit",
+      "revId": "606c8605cc8d9381e7b50561081039626963f432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
