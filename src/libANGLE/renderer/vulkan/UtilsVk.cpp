@@ -4726,20 +4726,20 @@ angle::Result UtilsVk::allocateDescriptorSetWithLayout(
     const vk::DescriptorSetLayout &descriptorSetLayout,
     VkDescriptorSet *descriptorSetOut)
 {
-    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    vk::RefCountedDescriptorPoolBinding poolBinding;
 
-    ANGLE_TRY(descriptorPool.allocateDescriptorSet(contextVk, descriptorSetLayout,
-                                                   &descriptorPoolBinding, descriptorSetOut));
+    ANGLE_TRY(descriptorPool.allocateDescriptorSet(contextVk, descriptorSetLayout, &poolBinding,
+                                                   descriptorSetOut));
 
     // Add the individual descriptorSet in the resource use list. Because this is a one time use
     // descriptorSet, we immediately put in the garbage list for recycle.
-    vk::DescriptorSetHelper descriptorSetHelper(*descriptorSetOut);
+    vk::DescriptorSetHelper descriptorSetHelper(*descriptorSetOut, &poolBinding.get());
     commandBufferHelper->retainResource(&descriptorSetHelper);
-    descriptorPoolBinding.get().addGarbage(std::move(descriptorSetHelper));
+    poolBinding.get().addGarbage(std::move(descriptorSetHelper));
 
     // Since the eviction is relying on the pool's mUse, we need to update pool's mUse here.
-    commandBufferHelper->retainResource(&descriptorPoolBinding.get());
-    descriptorPoolBinding.reset();
+    commandBufferHelper->retainResource(&poolBinding.get());
+    poolBinding.reset();
 
     return angle::Result::Continue;
 }
