@@ -16,6 +16,24 @@
       "message": "Looks like CQ+2 didn\u0027t submit it. Do we need to hit \"Submit\" button to bypass CQ? I don\u0027t have access to that either though.",
       "revId": "3f1bd3387361480960d79ade151315b0f539e029",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed74f780_a7550962",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-09T15:40:12Z",
+      "side": 1,
+      "message": "Right, I didn\u0027t realize it is on branch. Branch works differently. Let me give it another try.",
+      "parentUuid": "95feebca_9f507f6c",
+      "revId": "3f1bd3387361480960d79ade151315b0f539e029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
