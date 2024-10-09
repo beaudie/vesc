@@ -16,6 +16,23 @@
       "message": "Note: presubmit fails because of a `clang-format` bug. We\u0027ll have to force-submit this.\n\nThe same failure happened a few days ago when I touched the `builtin_variables.json` file when removing Desktop GL support.",
       "revId": "6961396f996e5af683c85effdd7654cba13d798a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "049930ca_6401871e",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-09T21:59:21Z",
+      "side": 1,
+      "message": "Do you mean `comment` here?",
+      "revId": "6961396f996e5af683c85effdd7654cba13d798a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
