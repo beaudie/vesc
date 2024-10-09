@@ -34,14 +34,17 @@ CLKernelVk::CLKernelVk(const cl::Kernel &kernel,
 {
     mShaderProgramHelper.setShader(gl::ShaderType::Compute,
                                    mKernel.getProgram().getImpl<CLProgramVk>().getShaderModule());
-    for (DescriptorSetIndex index : angle::AllEnums<DescriptorSetIndex>())
-    {
-        mDescriptorSets[index] = VK_NULL_HANDLE;
-    }
 }
 
 CLKernelVk::~CLKernelVk()
 {
+    for (vk::DescriptorSetPointer &descriptorSet : mDescriptorSets)
+    {
+        if (descriptorSet)
+        {
+            descriptorSet->onUnbind();
+        }
+    }
     for (auto &dsLayouts : mDescriptorSetLayouts)
     {
         dsLayouts.reset();

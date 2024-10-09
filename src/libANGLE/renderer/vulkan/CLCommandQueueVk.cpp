@@ -622,9 +622,17 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
                 CL_INVALID_OPERATION);
 
             // Allocate descriptor set
+            if (kernelVk.getDescriptorSet(index))
+            {
+                kernelVk.getDescriptorSet(index)->onUnbind();
+            }
             ANGLE_TRY(kernelVk.getProgram()->allocateDescriptorSet(
                 index, kernelVk.getDescriptorSetLayouts()[*layoutIndex].get(), mComputePassCommands,
                 &kernelVk.getDescriptorSet(index)));
+            if (kernelVk.getDescriptorSet(index))
+            {
+                kernelVk.getDescriptorSet(index)->onBind();
+            }
 
             ++layoutIndex;
         }
@@ -751,7 +759,8 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
                 writeDescriptorSet.pBufferInfo = &bufferInfo;
                 writeDescriptorSet.sType       = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                 writeDescriptorSet.dstSet =
-                    kernelVk.getDescriptorSet(DescriptorSetIndex::KernelArguments);
+                    kernelVk.getDescriptorSet(DescriptorSetIndex::KernelArguments)
+                        ->getDescriptorSet();
                 writeDescriptorSet.dstBinding  = arg.descriptorBinding;
                 break;
             }
@@ -802,7 +811,8 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
         writeDescriptorSet.descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         writeDescriptorSet.pBufferInfo     = &bufferInfo;
         writeDescriptorSet.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        writeDescriptorSet.dstSet          = kernelVk.getDescriptorSet(DescriptorSetIndex::Printf);
+        writeDescriptorSet.dstSet =
+            kernelVk.getDescriptorSet(DescriptorSetIndex::Printf)->getDescriptorSet();
         writeDescriptorSet.dstBinding      = kernelVk.getProgram()
                                             ->getDeviceProgramData(kernelVk.getKernelName().c_str())
                                             ->reflectionData.printfBufferStorage.binding;
@@ -820,9 +830,10 @@ angle::Result CLCommandQueueVk::processKernelResources(CLKernelVk &kernelVk,
                 updateDescriptorSetsBuilders[index].flushDescriptorSetUpdates(
                     mContext->getRenderer()->getDevice());
 
+            VkDescriptorSet descriptorSet = kernelVk.getDescriptorSet(index)->getDescriptorSet();
             mComputePassCommands->getCommandBuffer().bindDescriptorSets(
                 kernelVk.getPipelineLayout().get(), VK_PIPELINE_BIND_POINT_COMPUTE,
-                *descriptorSetIndex, 1, &kernelVk.getDescriptorSet(index), 0, nullptr);
+                *descriptorSetIndex, 1, &descriptorSet, 0, nullptr);
 
             ++descriptorSetIndex;
         }
