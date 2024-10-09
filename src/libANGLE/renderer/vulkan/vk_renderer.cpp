@@ -5340,11 +5340,14 @@ void Renderer::initFeatures(const vk::ExtensionNameList &deviceExtensionNames,
             !(IsLinux() && isIntel && isMesaLessThan22_2) && !(IsAndroid() && isGalaxyS23));
 
     // Samsung Vulkan driver with API level < 1.3.244 has a bug in imageless framebuffer support.
+    // b/372273294: When using imageless framebuffers, ANGLE doesn't cache framebuffer objects,
+    // instead adding them to garbage collection.  On PowerVR, this causes lots of time to be
+    // spent in framebuffer destruction and creation.
     const bool isSamsungDriverWithImagelessFramebufferBug =
         isSamsung && mPhysicalDeviceProperties.apiVersion < VK_MAKE_VERSION(1, 3, 244);
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsImagelessFramebuffer,
                             mImagelessFramebufferFeatures.imagelessFramebuffer == VK_TRUE &&
-                                !isSamsungDriverWithImagelessFramebufferBug);
+                                !isSamsungDriverWithImagelessFramebufferBug && !isPowerVR);
 
     if (ExtensionFound(VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME, deviceExtensionNames))
     {
