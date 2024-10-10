@@ -46,6 +46,30 @@
       },
       "revId": "086f675d6c636563d07001149a6a65fe99f82f05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80c4dc19_a2135b05",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-10T15:49:26Z",
+      "side": 1,
+      "message": "The criteria for invalid can be as limited as we want, because we only have evidence that nullptr is a problem in apps, right? So yes, just limiting to nullptr/not-bound-to-any-buffer should be sufficient to work around this problem.\n\nIn terms of what to do with it, I haven\u0027t looked deeply into all the places that need to be touched, but perhaps its sufficient to just pretend (everywhere) that invalid attribs are !enabled?",
+      "parentUuid": "b05d8caa_259a2d2d",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 85
+      },
+      "revId": "086f675d6c636563d07001149a6a65fe99f82f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
