@@ -174,6 +174,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2aded282_6ce6a87c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-10T19:31:09Z",
+      "side": 1,
+      "message": "I\u0027d say, do the loop and actually resolve it, it\u0027s surprising otherwise IMO.",
+      "parentUuid": "6037ea34_f8653172",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de5b4443_7edba4e0",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
         "patchSetId": 3
