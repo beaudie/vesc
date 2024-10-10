@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51689c1f_f213c1c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-10T02:08:21Z",
+      "side": 1,
+      "message": "Thank you, I just wanted to say we should be able to remove some meaningless combinations by doing this:\n\n- Pull the entire shader into a header file\n- Have ImageCopy.frag include it, also a new ImageCopyFloat.frag include it\n- Move the YUV and MS flags to ImageCopyFloat.frag.json\n- Have UtilsVk choose between ImageCopy and ImageCopyFloat\n\nThat should remove 16 impossible combinations with YUV/MS and int/uint src and destination.",
+      "parentUuid": "3b4b1b61_1399a87b",
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "229ba48d_68d71ab5",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
         "patchSetId": 3
