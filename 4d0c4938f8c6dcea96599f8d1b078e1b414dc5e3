@@ -16,6 +16,24 @@
       "message": "Drive-by: A comment that the caller should do the retain would be useful for the future",
       "revId": "4d0c4938f8c6dcea96599f8d1b078e1b414dc5e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c40e7b26_e3c30d4a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4369,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-10T16:42:30Z",
+      "side": 1,
+      "message": "Yea, but better way to do it is remove the commandBufferHelper from the argument here so that you can\u0027t do it in this function.",
+      "parentUuid": "04ef9adc_aa16ca97",
+      "revId": "4d0c4938f8c6dcea96599f8d1b078e1b414dc5e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
