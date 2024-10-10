@@ -222,6 +222,7 @@ class StateCache final : angle::NonCopyable
     AttributesMask getActiveBufferedAttribsMask() const { return mCachedActiveBufferedAttribsMask; }
     AttributesMask getActiveClientAttribsMask() const { return mCachedActiveClientAttribsMask; }
     AttributesMask getActiveDefaultAttribsMask() const { return mCachedActiveDefaultAttribsMask; }
+    AttributesMask getValidAttribsMask() const { return mCachedValidAttribsMask; }
     bool hasAnyEnabledClientAttrib() const { return mCachedHasAnyEnabledClientAttrib; }
     bool hasAnyActiveClientAttrib() const { return mCachedActiveClientAttribsMask.any(); }
 
@@ -414,6 +415,7 @@ class StateCache final : angle::NonCopyable
     AttributesMask mCachedActiveBufferedAttribsMask;
     AttributesMask mCachedActiveClientAttribsMask;
     AttributesMask mCachedActiveDefaultAttribsMask;
+    AttributesMask mCachedValidAttribsMask;
 
     // Given a vertex attribute's stride, the corresponding vertex buffer can fit a number of such
     // attributes.  A draw call that attempts to use more vertex attributes thus needs to fail (when
