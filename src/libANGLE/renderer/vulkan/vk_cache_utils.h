@@ -293,7 +293,8 @@ class alignas(4) RenderPassDesc final
     // sRGB
     uint8_t mSrgbWriteControl : 1;
 
-    // Framebuffer fetch
+    // Framebuffer fetch.  Note, this must be within the first 32 bits of this struct because of the
+    // transition bit set in `updateRenderPassFramebufferFetchMode`.
     uint8_t mHasFramebufferFetch : 1;
 
     // Depth/stencil resolve
@@ -856,6 +857,8 @@ class GraphicsPipelineDesc final
     void updateRenderPassDesc(GraphicsPipelineTransitionBits *transition,
                               const RenderPassDesc &renderPassDesc);
     void setRenderPassSampleCount(GLint samples);
+    void updateRenderPassFramebufferFetchMode(bool hasFramebufferFetch,
+                                              GraphicsPipelineTransitionBits *transition);
     void setRenderPassFramebufferFetchMode(bool hasFramebufferFetch);
     bool getRenderPassFramebufferFetchMode() const
     {
