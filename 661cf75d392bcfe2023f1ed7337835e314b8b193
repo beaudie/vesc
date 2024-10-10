@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5b442e4_6b5b7077",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2168,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-10T22:34:05Z",
+      "side": 1,
+      "message": "Cody noticed this fails on some native drivers\n\nlooks like the extension doesn\u0027t support splitting draw \u0026 read https://registry.khronos.org/OpenGL/extensions/OES/OES_framebuffer_object.txt    \n```\nAccepted by the \u003ctarget\u003e parameter of BindFramebufferOES,\n    CheckFramebufferStatusOES, FramebufferTexture{2D|3D}OES,\n    FramebufferRenderbufferOES, and\n    GetFramebufferAttachmentParameterivOES:\n\n        FRAMEBUFFER_OES                     0x8D40\n\n...\n\n    Accepted by GetIntegerv():\n\n        FRAMEBUFFER_BINDING_OES             0x8CA6\n        RENDERBUFFER_BINDING_OES            0x8CA7\n        MAX_RENDERBUFFER_SIZE_OES           0x84E8\n```\n\nso we need another patch for gles1, glGetIntegerv(FRAMEBUFFER_BINDING_OES) and bindFramebuffer(FRAMEBUFFER_OES, that)\n\nThis CL only moves these calls out of `--offscreen`, this problem is not new. But now we hit it without `--offscreen`",
+      "range": {
+        "startLine": 2166,
+        "startChar": 0,
+        "endLine": 2168,
+        "endChar": 64
+      },
+      "revId": "661cf75d392bcfe2023f1ed7337835e314b8b193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
