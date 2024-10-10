@@ -16,6 +16,24 @@
       "message": "Please revert this, again, likely coming from a lack of `gclient sync` after a rebase",
       "revId": "2ad5ecc71c9ee5f077808a9c58d68d8d38951265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24baf437_df502927",
+        "filename": ".gitmodules",
+        "patchSetId": 27
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-10T02:12:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5977795_507bd42b",
+      "revId": "2ad5ecc71c9ee5f077808a9c58d68d8d38951265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
