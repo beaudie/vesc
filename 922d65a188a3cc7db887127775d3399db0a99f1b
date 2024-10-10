@@ -102,6 +102,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e49040e_005d4307",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-10T16:09:59Z",
+      "side": 1,
+      "message": "the spec is unclear when it comes to interaction between `glCopyTexImage2D` and MSAA but i am using this sentence as the basis for implementation -\n```\nThe image is taken from the current color buffer exactly as if these arguments were\npassed to ReadPixels \n```\nand it looks like re: MSAA, the `glReadPixels` spec says something to the effect of \"combine samples in an implementation defined way\"\n\nso, for consistency we will need to resolve it but should this be independent of sample coverage or any such state?",
+      "parentUuid": "28e6a91b_c54b8014",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de5b4443_7edba4e0",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
         "patchSetId": 3
@@ -113,6 +137,24 @@
       "writtenOn": "2024-10-10T02:12:00Z",
       "side": 1,
       "message": "`params.srcMip` doesn\u0027t make sense here. It happens to be 0, so you\u0027re always reading sample 0.",
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd89cf21_3a6603e0",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-10T16:09:59Z",
+      "side": 1,
+      "message": "yup, will introduce a new `params.sampleCount` to help with the for-loop",
+      "parentUuid": "de5b4443_7edba4e0",
       "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
