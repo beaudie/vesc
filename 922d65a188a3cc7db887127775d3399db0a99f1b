@@ -126,6 +126,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84a1dfb7_adf19b6c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-10T17:51:25Z",
+      "side": 1,
+      "message": "So in glReadPixels we were allowed to not resolve and copy sample 0 instead? Where does the spec say that?",
+      "parentUuid": "5e49040e_005d4307",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de5b4443_7edba4e0",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
         "patchSetId": 3
