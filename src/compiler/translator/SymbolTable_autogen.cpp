@@ -1716,7 +1716,7 @@ constexpr const TVariable *p00E00E_o_00E_o_00E[4] = {
     &BuiltInVariable::kpt_o_00E};
 constexpr const TVariable *p00F00F00F[3]    = {&BuiltInVariable::kpt00F, &BuiltInVariable::kpt00F,
                                                &BuiltInVariable::kpt00F};
-constexpr const TVariable *p00G[1]          = {&BuiltInVariable::kpt00G};
+constexpr const TVariable *p00G[1]             = {&BuiltInVariable::kpt00G};
 constexpr const TVariable *p00I00D[2]       = {&BuiltInVariable::kpt00I, &BuiltInVariable::kpt00D};
 constexpr const TVariable *p00I10B00B10D[4] = {&BuiltInVariable::kpt00I, &BuiltInVariable::kpt10B,
                                                &BuiltInVariable::kpt00B, &BuiltInVariable::kpt10D};
