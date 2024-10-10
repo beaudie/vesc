@@ -33,6 +33,24 @@
       "message": "Do you mean `comment` here?",
       "revId": "6961396f996e5af683c85effdd7654cba13d798a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ffe5d27_9e063b31",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-10T02:20:12Z",
+      "side": 1,
+      "message": "Lol, yes",
+      "parentUuid": "049930ca_6401871e",
+      "revId": "6961396f996e5af683c85effdd7654cba13d798a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
