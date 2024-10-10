@@ -82,6 +82,8 @@ class VertexArrayState final : angle::NonCopyable
         return mNullPointerClientMemoryAttribsMask;
     }
 
+    AttributesMask getValidAttribsMask() const { return mValidAttribsMask; }
+
     VertexArrayBufferBindingMask getBufferBindingMask() const { return mBufferBindingMask; }
 
     VertexArrayID id() const { return mId; }
@@ -113,6 +115,7 @@ class VertexArrayState final : angle::NonCopyable
     // attribs.
     AttributesMask mClientMemoryAttribsMask;
     AttributesMask mNullPointerClientMemoryAttribsMask;
+    AttributesMask mValidAttribsMask;
 
     // Used for validation cache. Indexed by attribute.
     AttributesMask mCachedMappedArrayBuffers;
@@ -338,6 +341,8 @@ class VertexArray final : public angle::ObserverInterface,
     {
         mBufferAccessValidationEnabled = enabled;
     }
+
+    AttributesMask getValidAttribsMask() const;
 
   private:
     ~VertexArray() override;
