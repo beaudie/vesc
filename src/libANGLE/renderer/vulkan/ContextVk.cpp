@@ -2427,6 +2427,23 @@ angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirt
         ANGLE_TRY(handleDirtyGraphicsPipelineDesc(dirtyBitsIterator, dirtyBitMask));
     }
 
+    // For dynamic rendering, the FramebufferVk's render pass desc does not track whether
+    // framebuffer fetch is in use.  In that case, ContextVk updates the command buffer's render
+    // pass desc only:
+    //
+    // - When the render pass starts
+    // - When the program binding changes (see |invalidateProgramExecutableHelper|)
+    if (getFeatures().preferDynamicRendering.enabled)
+    {
+        if (mState.getProgramExecutable()->usesFramebufferFetch())
+        {
+            // Note: this function sets a dirty bit through onColorAccessChange() not through
+            // |dirtyBitsIterator|, but that dirty bit is always set on new render passes, so it
+            // won't be missed.
+            onFramebufferFetchUse();
+        }
+    }
+
     return angle::Result::Continue;
 }
 
@@ -5390,33 +5407,44 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
         resetCurrentGraphicsPipeline();
 
         const bool hasFramebufferFetch = executable->usesFramebufferFetch();
-        if (mIsInFramebufferFetchMode != hasFramebufferFetch)
+        if (getFeatures().preferDynamicRendering.enabled)
         {
-            ASSERT(getDrawFramebuffer()->getRenderPassDesc().hasFramebufferFetch() ==
-                   mIsInFramebufferFetchMode);
-
-            ANGLE_TRY(switchToFramebufferFetchMode(hasFramebufferFetch));
-
-            // When framebuffer fetch is enabled, attachments can be read from even if output is
-            // masked, so update their access.
-            onColorAccessChange();
+            if (hasFramebufferFetch)
+            {
+                onFramebufferFetchUse();
+            }
         }
-
-        // If permanentlySwitchToFramebufferFetchMode is enabled,
-        // mIsInFramebufferFetchMode will remain true throughout the entire time.
-        // If we switch from a program that doesn't use framebuffer fetch and doesn't
-        // read/write to the framebuffer color attachment, to a
-        // program that uses framebuffer fetch and needs to read from the framebuffer
-        // color attachment, we will miss the call
-        // onColorAccessChange() above and miss setting the dirty bit
-        // DIRTY_BIT_COLOR_ACCESS. This means we will not call
-        // handleDirtyGraphicsColorAccess that updates the access value of
-        // framebuffer color attachment from unused to readonly. This makes the
-        // color attachment to continue using LoadOpNone, and the second program
-        // will not be able to read the value in the color attachment.
-        if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled && hasFramebufferFetch)
+        else
         {
-            onColorAccessChange();
+            if (mIsInFramebufferFetchMode != hasFramebufferFetch)
+            {
+                ASSERT(getDrawFramebuffer()->getRenderPassDesc().hasFramebufferFetch() ==
+                       mIsInFramebufferFetchMode);
+
+                ANGLE_TRY(switchToFramebufferFetchMode(hasFramebufferFetch));
+
+                // When framebuffer fetch is enabled, attachments can be read from even if output is
+                // masked, so update their access.
+                onColorAccessChange();
+            }
+
+            // If permanentlySwitchToFramebufferFetchMode is enabled,
+            // mIsInFramebufferFetchMode will remain true throughout the entire time.
+            // If we switch from a program that doesn't use framebuffer fetch and doesn't
+            // read/write to the framebuffer color attachment, to a
+            // program that uses framebuffer fetch and needs to read from the framebuffer
+            // color attachment, we will miss the call
+            // onColorAccessChange() above and miss setting the dirty bit
+            // DIRTY_BIT_COLOR_ACCESS. This means we will not call
+            // handleDirtyGraphicsColorAccess that updates the access value of
+            // framebuffer color attachment from unused to readonly. This makes the
+            // color attachment continue using LoadOpNone, and the second program
+            // will not be able to read the value in the color attachment.
+            if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled &&
+                hasFramebufferFetch)
+            {
+                onColorAccessChange();
+            }
         }
 
         updateStencilWriteWorkaround();
@@ -5733,8 +5761,12 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     mCachedDrawFramebufferColorAttachmentMask, newColorAttachmentMask);
                 mCachedDrawFramebufferColorAttachmentMask = newColorAttachmentMask;
 
-                // The framebuffer may not be in sync with usage of framebuffer fetch programs.
-                drawFramebufferVk->switchToFramebufferFetchMode(this, mIsInFramebufferFetchMode);
+                if (!getFeatures().preferDynamicRendering.enabled)
+                {
+                    // The framebuffer may not be in sync with usage of framebuffer fetch programs.
+                    drawFramebufferVk->switchToFramebufferFetchMode(this,
+                                                                    mIsInFramebufferFetchMode);
+                }
 
                 onDrawFramebufferRenderPassDescChange(drawFramebufferVk, nullptr);
 
@@ -8931,6 +8963,8 @@ const angle::PerfMonitorCounterGroups &ContextVk::getPerfMonitorCounters()
 
 angle::Result ContextVk::switchToFramebufferFetchMode(bool hasFramebufferFetch)
 {
+    ASSERT(!getFeatures().preferDynamicRendering.enabled);
+
     // If framebuffer fetch is permanent, make sure we never switch out of it.
     if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled && mIsInFramebufferFetchMode)
     {
@@ -8956,15 +8990,30 @@ angle::Result ContextVk::switchToFramebufferFetchMode(bool hasFramebufferFetch)
 
     // Clear the render pass cache; all render passes will be incompatible from now on with the
     // old ones.
-    if (!getFeatures().preferDynamicRendering.enabled &&
-        getFeatures().permanentlySwitchToFramebufferFetchMode.enabled)
+    if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled)
     {
         mRenderPassCache.clear(this);
     }
 
-    mRenderer->onFramebufferFetchUsed();
+    mRenderer->onFramebufferFetchUse();
 
     return angle::Result::Continue;
+}
+
+void ContextVk::onFramebufferFetchUse()
+{
+    ASSERT(getFeatures().preferDynamicRendering.enabled);
+
+    if (mRenderPassCommands->started())
+    {
+        mRenderPassCommands->setFramebufferFetchMode();
+
+        // When framebuffer fetch is enabled, attachments can be read from even if output is
+        // masked, so update their access.
+        onColorAccessChange();
+    }
+
+    mRenderer->onFramebufferFetchUse();
 }
 
 ANGLE_INLINE angle::Result ContextVk::allocateQueueSerialIndex()

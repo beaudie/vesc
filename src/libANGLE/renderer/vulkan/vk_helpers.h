@@ -1910,6 +1910,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     const RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
     const AttachmentOpsArray &getAttachmentOps() const { return mAttachmentOps; }
 
+    void setFramebufferFetchMode() { mRenderPassDesc.setFramebufferFetchMode(true); }
+
     void setImageOptimizeForPresent(ImageHelper *image) { mImageOptimizeForPresent = image; }
 
     void setGLMemoryBarrierIssued()
