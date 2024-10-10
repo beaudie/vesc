@@ -2674,7 +2674,8 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
         }
     }
 
-    if (contextVk->isInFramebufferFetchMode())
+    if (!contextVk->getFeatures().preferDynamicRendering.enabled &&
+        contextVk->isInFramebufferFetchMode())
     {
         mRenderPassDesc.setFramebufferFetchMode(true);
     }
@@ -3832,6 +3833,10 @@ angle::Result FramebufferVk::flushDeferredClears(ContextVk *contextVk)
 
 void FramebufferVk::switchToFramebufferFetchMode(ContextVk *contextVk, bool hasFramebufferFetch)
 {
+    // Framebuffer fetch use by the shader does not affect the framebuffer object in any way with
+    // dynamic rendering.
+    ASSERT(!contextVk->getFeatures().preferDynamicRendering.enabled);
+
     // The switch happens once, and is permanent.
     if (mCurrentFramebufferDesc.hasFramebufferFetch() == hasFramebufferFetch)
     {
@@ -3842,20 +3847,6 @@ void FramebufferVk::switchToFramebufferFetchMode(ContextVk *contextVk, bool hasF
 
     mRenderPassDesc.setFramebufferFetchMode(hasFramebufferFetch);
     contextVk->onDrawFramebufferRenderPassDescChange(this, nullptr);
-
-    if (contextVk->getFeatures().preferDynamicRendering.enabled)
-    {
-        // Note: with dynamic rendering, |onDrawFramebufferRenderPassDescChange| is really
-        // unnecessary, but is called for simplicity.  The downside is unnecessary recreation of
-        // pipelines, which is mitigated by |permanentlySwitchToFramebufferFetchMode| which is
-        // automatically enabled with |preferDynamicRendering|.
-        //
-        // If |onDrawFramebufferRenderPassDescChange| is to be optimized away, care must be taken
-        // as GraphicsPipelineDesc::mRenderPassDesc::mHasFramebufferFetch can get out of sync with
-        // FramebufferDesc::mHasFramebufferFetch, and
-        // RenderPassCommandBufferHelper::mRenderPassDesc::mHasFramebufferFetch.
-        return;
-    }
 
     // Make sure framebuffer is recreated.
     releaseCurrentFramebuffer(contextVk);

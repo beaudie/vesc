@@ -4758,6 +4758,14 @@ void GraphicsPipelineDesc::setRenderPassSampleCount(GLint samples)
     mSharedNonVertexInput.renderPass.setSamples(samples);
 }
 
+void GraphicsPipelineDesc::updateRenderPassFramebufferFetchMode(
+    bool hasFramebufferFetch,
+    GraphicsPipelineTransitionBits *transition)
+{
+    setRenderPassFramebufferFetchMode(hasFramebufferFetch);
+    transition->set(ANGLE_GET_TRANSITION_BIT(mSharedNonVertexInput.renderPass));
+}
+
 void GraphicsPipelineDesc::setRenderPassFramebufferFetchMode(bool hasFramebufferFetch)
 {
     mSharedNonVertexInput.renderPass.setFramebufferFetchMode(hasFramebufferFetch);
