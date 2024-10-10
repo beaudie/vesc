@@ -74,6 +74,47 @@
       },
       "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28e6a91b_c54b8014",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-10T02:12:00Z",
+      "side": 1,
+      "message": "What does the spec require? If it\u0027s supposed to resolve the image, then you should pass in the sample count, have a loop and read all the samples and calculate the average.\n\nMaybe we can verify this with a test? The test could use `gl_SampleID` to initialize the samples differently, then after the copy you can verify the average value is copied. I happen to have written a similar test just the other day you can copy a lot from: https://chromium-review.googlesource.com/c/angle/angle/+/5917026",
+      "parentUuid": "229ba48d_68d71ab5",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de5b4443_7edba4e0",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-10T02:12:00Z",
+      "side": 1,
+      "message": "`params.srcMip` doesn\u0027t make sense here. It happens to be 0, so you\u0027re always reading sample 0.",
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
