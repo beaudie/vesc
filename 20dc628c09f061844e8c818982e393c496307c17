@@ -16,6 +16,24 @@
       "message": "If I may suggest, as the only test in the world that\u0027s testing this functionality, to use values where a mixup of channels doesn\u0027t go unnoticed? 😊\n\nCopying from the other test:\n\nThis in the shader:\n\n```\n    case 0:\n        color \u003d vec4(1.0, 0.9, 0.8, 0.7);\n        break;\n    case 1:\n        color \u003d vec4(0.0, 0.1, 0.2, 0.3);\n        break;\n    case 2:\n        color \u003d vec4(0.5, 0.25, 0.75, 1.0);\n        break;\n    default:\n        color \u003d vec4(0.4, 0.6, 0.2, 0.8);\n        break;\n```\n\nand `121, 118, 124, 178` as the expected color would do.",
       "revId": "20dc628c09f061844e8c818982e393c496307c17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54b6c22a_7a34ad08",
+        "filename": "src/tests/gl_tests/MultisampleTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-11T15:30:36Z",
+      "side": 1,
+      "message": "\u003e as the only test in the world that\u0027s testing this functionality\n\nlol",
+      "parentUuid": "00e82b26_22851858",
+      "revId": "20dc628c09f061844e8c818982e393c496307c17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
