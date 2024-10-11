@@ -196,6 +196,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19b50859_b657ae80",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-11T04:01:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2aded282_6ce6a87c",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de5b4443_7edba4e0",
@@ -227,6 +251,24 @@
       "side": 1,
       "message": "yup, will introduce a new `params.sampleCount` to help with the for-loop",
       "parentUuid": "de5b4443_7edba4e0",
+      "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7da37683_a8e2c134",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-11T04:01:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd89cf21_3a6603e0",
       "revId": "922d65a188a3cc7db887127775d3399db0a99f1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
