@@ -1754,7 +1754,7 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
         commandBufferHelper->retainResource(mDescriptorSets[setIndex].get());
     }
 
-    ANGLE_TRY(mDescriptorPools[setIndex].get().getOrAllocateDescriptorSet(
+    ANGLE_TRY(mDescriptorPools[setIndex]->getOrAllocateDescriptorSet(
         context, descriptorSetDesc.getDesc(), mDescriptorSetLayouts[setIndex].get(),
         &mDescriptorSets[setIndex], newSharedCacheKeyOut));
     ASSERT(mDescriptorSets[setIndex]);
@@ -1778,7 +1778,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
     vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
-    if (!mDescriptorPools[DescriptorSetIndex::ShaderResource].get().valid())
+    if (!mDescriptorPools[DescriptorSetIndex::ShaderResource])
     {
         *newSharedCacheKeyOut = nullptr;
         return angle::Result::Continue;
@@ -1831,7 +1831,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     }
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
-    ANGLE_TRY(mDescriptorPools[DescriptorSetIndex::Texture].get().getOrAllocateDescriptorSet(
+    ANGLE_TRY(mDescriptorPools[DescriptorSetIndex::Texture]->getOrAllocateDescriptorSet(
         context, texturesDesc, mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
         &mDescriptorSets[DescriptorSetIndex::Texture], &newSharedCacheKey));
     ASSERT(mDescriptorSets[DescriptorSetIndex::Texture]);
