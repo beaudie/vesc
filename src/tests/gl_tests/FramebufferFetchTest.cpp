@@ -1789,10 +1789,79 @@ class FramebufferFetchES31 : public ANGLETest<>
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
+    void createFramebufferWithDepthStencil(GLRenderbuffer *color,
+                                           GLRenderbuffer *depthStencil,
+                                           GLFramebuffer *fbo);
+
+    // Helpers for tests that don't care whether coherent or non-coherent framebuffer fetch is
+    // enabled, because they are testing something orthogonal to coherence.  They only account for
+    // GL_EXT_shader_framebuffer_fetch and GL_EXT_shader_framebuffer_fetch_non_coherent, not the ARM
+    // variant or depth/stencil.
+    WhichExtension chooseBetweenCoherentOrIncoherent();
+    std::string makeShaderPreamble(WhichExtension whichExtension, uint32_t colorAttachmentCount);
+
     bool mCoherentExtension;
     bool mARMExtension;
     bool mBothExtensions;
 };
+
+void FramebufferFetchES31::createFramebufferWithDepthStencil(GLRenderbuffer *color,
+                                                             GLRenderbuffer *depthStencil,
+                                                             GLFramebuffer *fbo)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, *fbo);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, *color);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kViewportWidth, kViewportHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, *color);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, *depthStencil);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, kViewportWidth, kViewportHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              *depthStencil);
+
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    ASSERT_GL_NO_ERROR();
+}
+
+FramebufferFetchES31::WhichExtension FramebufferFetchES31::chooseBetweenCoherentOrIncoherent()
+{
+    const bool isCoherent = IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch");
+    EXPECT_TRUE(isCoherent || IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+
+    return isCoherent ? COHERENT : NON_COHERENT;
+}
+
+std::string FramebufferFetchES31::makeShaderPreamble(WhichExtension whichExtension,
+                                                     uint32_t colorAttachmentCount)
+{
+    std::ostringstream fs;
+    fs << "#version 310 es\n";
+    switch (whichExtension)
+    {
+        case COHERENT:
+            fs << "#extension GL_EXT_shader_framebuffer_fetch : require\n";
+            break;
+        case NON_COHERENT:
+            fs << "#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require\n";
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+
+    for (uint32_t location = 0; location < colorAttachmentCount; ++location)
+    {
+        fs << "layout(";
+        if (whichExtension == NON_COHERENT)
+        {
+            fs << "noncoherent, ";
+        }
+        fs << "location = " << location << ") inout highp vec4 color" << location << ";\n";
+    }
+
+    return fs.str();
+}
 
 // Test coherent extension with inout qualifier
 TEST_P(FramebufferFetchES31, BasicInout_Coherent)
@@ -2304,10 +2373,11 @@ TEST_P(FramebufferFetchES31, ProgramPipeline_NonCoherent)
 // multisampling.
 TEST_P(FramebufferFetchES31, MultiSampled)
 {
-    const bool isCoherent = IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch");
-    ANGLE_SKIP_TEST_IF(!isCoherent &&
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch") &&
                        !IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_sample_variables"));
+
+    const WhichExtension whichExtension = chooseBetweenCoherentOrIncoherent();
 
     // Create a single-sampled framebuffer as the resolve target
     GLRenderbuffer resolve;
@@ -2366,19 +2436,10 @@ void main (void)
     // ensures that framebuffer fetch on a multisampled framebuffer implicitly enables sample
     // shading.
     std::ostringstream fs;
-    fs << "#version 310 es\n";
-    if (isCoherent)
-    {
-        fs << "#extension GL_EXT_shader_framebuffer_fetch : require\n";
-    }
-    else
-    {
-        fs << "#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require\n";
-    }
-    fs << R"(inout highp vec4 color;
-void main()
+    fs << makeShaderPreamble(whichExtension, 1);
+    fs << R"(void main()
 {
-    color *= color;
+    color0 *= color0;
 })";
 
     ANGLE_GL_PROGRAM(square, essl31_shaders::vs::Passthrough(), fs.str().c_str());
@@ -3717,9 +3778,9 @@ TEST_P(FramebufferFetchES31, MultipleRenderTarget_Both_Complex)
 // Test that using the maximum number of color attachments works.
 TEST_P(FramebufferFetchES31, MaximumColorAttachments)
 {
-    const bool isCoherent = IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch");
-    ANGLE_SKIP_TEST_IF(!isCoherent &&
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch") &&
                        !IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+    const WhichExtension whichExtension = chooseBetweenCoherentOrIncoherent();
 
     GLint maxDrawBuffers = 0;
     glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
@@ -3745,23 +3806,14 @@ TEST_P(FramebufferFetchES31, MaximumColorAttachments)
     // Create two programs, one to initialize the attachments and another to read back the contents
     // with framebuffer fetch and blend.
     std::ostringstream initFs;
-    std::ostringstream fetchFs;
     initFs << "#version 310 es\n";
-    if (isCoherent)
-    {
-        initFs << "#extension GL_EXT_shader_framebuffer_fetch : require\n";
-    }
-    else
-    {
-        initFs << "#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require\n";
-    }
-    fetchFs << initFs.str();
-
     for (GLint index = 0; index < maxDrawBuffers; ++index)
     {
         initFs << "layout(location=" << index << ") out highp vec4 color" << index << ";\n";
-        fetchFs << "layout(location=" << index << ") inout highp vec4 color" << index << ";\n";
     }
+
+    std::ostringstream fetchFs;
+    fetchFs << makeShaderPreamble(whichExtension, maxDrawBuffers);
 
     initFs << R"(void main()
 {
@@ -3788,7 +3840,7 @@ TEST_P(FramebufferFetchES31, MaximumColorAttachments)
     ANGLE_GL_PROGRAM(fetch, essl31_shaders::vs::Passthrough(), fetchFs.str().c_str());
 
     drawQuad(init, essl31_shaders::PositionAttrib(), 0.0f);
-    if (!isCoherent)
+    if (whichExtension == NON_COHERENT)
     {
         glFramebufferFetchBarrierEXT();
     }
@@ -3811,6 +3863,135 @@ TEST_P(FramebufferFetchES31, MaximumColorAttachments)
         EXPECT_PIXEL_NEAR(0, 0, expectR, expectG, expectB, expectA, 1);
     }
 }
+
+// Test that depth framebuffer fetch works.
+TEST_P(FramebufferFetchES31, Depth)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ARM_shader_framebuffer_fetch_depth_stencil"));
+
+    const char kFS[] = R"(#version 310 es
+#extension GL_ARM_shader_framebuffer_fetch_depth_stencil : require
+
+highp out vec4 color;
+
+void main()
+{
+    color = vec4(gl_LastFragDepthARM, 0, 0, 1);
+})";
+
+    GLRenderbuffer color, depth;
+    GLFramebuffer fbo;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, color);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kViewportWidth, kViewportHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, color);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, depth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kViewportWidth, kViewportHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth);
+
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    ASSERT_GL_NO_ERROR();
+
+    glClearDepthf(0.4f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Passthrough(), kFS);
+    drawQuad(program, essl31_shaders::PositionAttrib(), 0.0f);
+
+    EXPECT_PIXEL_RECT_EQ(0, 0, kViewportWidth, kViewportHeight, GLColor(102, 0, 0, 255));
+}
+
+// Test that stencil framebuffer fetch works.
+TEST_P(FramebufferFetchES31, Stencil)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ARM_shader_framebuffer_fetch_depth_stencil"));
+
+    const char kFS[] = R"(#version 310 es
+#extension GL_ARM_shader_framebuffer_fetch_depth_stencil : require
+
+highp out vec4 color;
+
+void main()
+{
+    bool correct = gl_LastFragStencilARM == 0xE5;
+    color = vec4(correct, 0, 0, 1);
+})";
+
+    GLRenderbuffer color, stencil;
+    GLFramebuffer fbo;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, color);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kViewportWidth, kViewportHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, color);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, stencil);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, kViewportWidth, kViewportHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencil);
+
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    ASSERT_GL_NO_ERROR();
+
+    glClearStencil(0xE5);
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Passthrough(), kFS);
+    drawQuad(program, essl31_shaders::PositionAttrib(), 0.0f);
+
+    EXPECT_PIXEL_RECT_EQ(0, 0, kViewportWidth, kViewportHeight, GLColor::red);
+}
+
+// Test that depth and stencil framebuffer fetch work simultaneously and with redeclaration.
+TEST_P(FramebufferFetchES31, DepthStencil)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ARM_shader_framebuffer_fetch_depth_stencil"));
+
+    const char kFS[] = R"(#version 310 es
+#extension GL_ARM_shader_framebuffer_fetch_depth_stencil : require
+
+highp out vec4 color;
+
+highp float gl_LastFragDepthARM;
+highp int gl_LastFragStencilARM;
+
+void main()
+{
+    bool correct = gl_LastFragStencilARM == 0x3C;
+    color = vec4(correct, gl_LastFragDepthARM, 0, 1);
+})";
+
+    GLRenderbuffer color, depthStencil;
+    GLFramebuffer fbo;
+    createFramebufferWithDepthStencil(&color, &depthStencil, &fbo);
+
+    glClearDepthf(0.8f);
+    glClearStencil(0x3C);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Passthrough(), kFS);
+    drawQuad(program, essl31_shaders::PositionAttrib(), 0.0f);
+
+    EXPECT_PIXEL_RECT_EQ(0, 0, kViewportWidth, kViewportHeight, GLColor(255, 204, 0, 255));
+
+    // TODO add a variant with default framebuffer
+    // TODO add a variant with texture
+    // TODO add a variant with EGL images?! Too far?
+}
+
+// TODO: add D/S FF tests with and without other FFs
+// TODO: add MSAA D/S FF test
+// TODO: add MSRTT D/S FF tests
+// TODO: add multi-layer test, is that a thing for D/S?
+// TODO: add PPO D/S FF test
+// TODO: add separate D FF and S FF tests, also with PPO
+// TODO: add test that reads from D in one call, S in another, none in the last.
+// TODO: add test that draws with no FF, then does D/S FF, then doesn't again.
+// TODO: add test that uses max color attachments and D/S, should not lack input attachment desc
+//       sets.  Similar to MaximumColorAttachments.
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(FramebufferFetchES31);
 ANGLE_INSTANTIATE_TEST_ES31_AND(FramebufferFetchES31,
