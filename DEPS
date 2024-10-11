@@ -43,7 +43,11 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
+<<<<<<< PATCH SET (8504c6 ting the new windows SDK.)
+  'chromium_revision': '4e2f404fca4ff501b23c25b4fd97d98e5371a5a3',
+=======
   'chromium_revision': '91bda6332316b00fb704bc841beb5ef02ce6ed08',
+>>>>>>> BASE      (8f3678 Vulkan: Refactor ImageCopy shader)
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
