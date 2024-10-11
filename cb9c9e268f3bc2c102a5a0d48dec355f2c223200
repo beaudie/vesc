@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baf98a65_5bed58af",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-11T15:50:08Z",
+      "side": 1,
+      "message": "I might be contradicting myself, but I think we might as well save the grid by default.  If not, let\u0027s turn this into a `GetEnvironmentVarOrAndroidProperty`.",
+      "range": {
+        "startLine": 207,
+        "startChar": 15,
+        "endLine": 207,
+        "endChar": 44
+      },
+      "revId": "cb9c9e268f3bc2c102a5a0d48dec355f2c223200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ff7cdfb_d91f4a01",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2213,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-11T15:50:08Z",
+      "side": 1,
+      "message": "Can you include a comment about why gles1 doesn\u0027t get this?",
+      "range": {
+        "startLine": 2213,
+        "startChar": 54,
+        "endLine": 2213,
+        "endChar": 59
+      },
+      "revId": "cb9c9e268f3bc2c102a5a0d48dec355f2c223200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ba4f610_868edccf",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2724,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-11T15:50:08Z",
+      "side": 1,
+      "message": "Slight preference for:\n```\n_grid1\n_grid2\n_grid3\n```\nbut not a big deal.",
+      "range": {
+        "startLine": 2724,
+        "startChar": 33,
+        "endLine": 2724,
+        "endChar": 50
+      },
+      "revId": "cb9c9e268f3bc2c102a5a0d48dec355f2c223200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
