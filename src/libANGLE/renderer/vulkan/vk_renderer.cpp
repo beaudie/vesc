@@ -1319,7 +1319,7 @@ class CompressAndStorePipelineCacheTask : public angle::WorkerTask
           mMaxTotalSize(kMaxTotalSize)
     {}
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "CompressAndStorePipelineCacheVk");
         CompressAndStorePipelineCacheVk(mGlobalOps, mRenderer, mCacheData, mMaxTotalSize);

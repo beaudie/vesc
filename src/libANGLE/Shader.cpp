@@ -97,7 +97,7 @@ class CompileTask final : public angle::WorkerTask
     {}
     ~CompileTask() override = default;
 
-    void operator()() override { mResult = compileImpl(); }
+    void operator()(angle::WaitableEvent *event) override { mResult = compileImpl(); }
 
     angle::Result getResult()
     {
