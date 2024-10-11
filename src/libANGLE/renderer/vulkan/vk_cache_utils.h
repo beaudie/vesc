@@ -1580,6 +1580,29 @@ class FramebufferHelper : public Resource
     Framebuffer mFramebuffer;
 };
 
+// Class DescriptorSetHelper. This is a wrapper of VkDescriptorSet with GPU resource use tracking.
+class DescriptorSetHelper final : public Resource
+{
+  public:
+    DescriptorSetHelper(const VkDescriptorSet &descriptorSet) { mDescriptorSet = descriptorSet; }
+    DescriptorSetHelper(const ResourceUse &use, const VkDescriptorSet &descriptorSet)
+    {
+        mUse           = use;
+        mDescriptorSet = descriptorSet;
+    }
+    DescriptorSetHelper(DescriptorSetHelper &&other) : Resource(std::move(other))
+    {
+        mDescriptorSet       = other.mDescriptorSet;
+        other.mDescriptorSet = VK_NULL_HANDLE;
+    }
+
+    VkDescriptorSet getDescriptorSet() const { return mDescriptorSet; }
+
+  private:
+    VkDescriptorSet mDescriptorSet;
+};
+using DescriptorSetList = std::deque<DescriptorSetHelper>;
+
 ANGLE_INLINE PipelineHelper::PipelineHelper(Pipeline &&pipeline, CacheLookUpFeedback feedback)
     : mPipeline(std::move(pipeline)), mCacheLookUpFeedback(feedback)
 {}
