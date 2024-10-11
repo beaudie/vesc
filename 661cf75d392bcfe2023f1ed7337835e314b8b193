@@ -22,6 +22,30 @@
       },
       "revId": "661cf75d392bcfe2023f1ed7337835e314b8b193",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f188ab0_362a58e6",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2168,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-11T14:41:27Z",
+      "side": 1,
+      "message": "Reverted the onscreen part, will look into this issue and onscreen separately.",
+      "parentUuid": "a5b442e4_6b5b7077",
+      "range": {
+        "startLine": 2166,
+        "startChar": 0,
+        "endLine": 2168,
+        "endChar": 64
+      },
+      "revId": "661cf75d392bcfe2023f1ed7337835e314b8b193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
