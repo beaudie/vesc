@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1a0de77f_2aaef5ff",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-11T16:00:31Z",
+      "side": 1,
+      "message": "One issue with that would be that we don\u0027t have a limit on the number of screenshots saved when set to all frames (-1)\n\nFor regular screenshots, we just end up overwriting the files over and over - so the screenshots are actually from the _last_ loop not from the _first_ loop, unlike capturing a single screenshot when we remember that screenshot was saved and don\u0027t capture it again.\n\nFor offscreen screenshots, numbers will keep increasing so we can end up with a ton of screenshots when running lighter traces for a fixed time rather than fixed number of steps. Probably not what we want by default?..\n\nI didn\u0027t want to add another cmdline flag but `GetEnvironmentVarOrAndroidProperty` sounds good!",
+      "parentUuid": "baf98a65_5bed58af",
+      "range": {
+        "startLine": 207,
+        "startChar": 15,
+        "endLine": 207,
+        "endChar": 44
+      },
+      "revId": "cb9c9e268f3bc2c102a5a0d48dec355f2c223200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ff7cdfb_d91f4a01",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 6
