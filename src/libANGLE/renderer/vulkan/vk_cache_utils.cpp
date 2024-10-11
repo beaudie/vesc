@@ -8410,4 +8410,7 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
+
+// DescriptorSetCache implementation.
+
 }  // namespace rx

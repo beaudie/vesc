@@ -969,7 +969,7 @@ angle::spirv::Blob CLProgramVk::stripReflection(const DeviceProgramData *deviceP
 angle::Result CLProgramVk::allocateDescriptorSet(const DescriptorSetIndex setIndex,
                                                  const vk::DescriptorSetLayout &descriptorSetLayout,
                                                  vk::CommandBufferHelperCommon *commandBuffer,
-                                                 VkDescriptorSet *descriptorSetOut)
+                                                 vk::DescriptorSetPointer *descriptorSetOut)
 {
     if (mDynamicDescriptorPools[setIndex])
     {
@@ -979,6 +979,7 @@ angle::Result CLProgramVk::allocateDescriptorSet(const DescriptorSetIndex setInd
             CL_INVALID_OPERATION);
 
         commandBuffer->retainResource(mDescriptorPools[setIndex].get());
+        commandBuffer->retainResource(descriptorSetOut->get());
     }
     return angle::Result::Continue;
 }
