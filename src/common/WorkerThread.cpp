@@ -289,11 +289,16 @@ class AsyncWorkerPool final : public WorkerThreadPool
 
     bool ensureHasNextTaskToRun(std::unique_lock<std::mutex> *lock);
 
+    void incrementNotifiedThreadCountLocked(size_t n);
+    void decrementNotifiedThreadCountLocked(size_t n);
+
     bool mTerminated = false;
     std::condition_variable mCondVar;  // Signals when work is available in the queue
     MultiThreadedTaskQueue mTaskQueue;
     std::vector<std::thread> mThreads;
     size_t mDesiredThreadCount;
+    size_t mWaitingThreadCount  = 0;
+    size_t mNotifiedThreadCount = 0;
 };
 
 // AsyncWorkerPool implementation.
@@ -305,7 +310,9 @@ AsyncWorkerPool::AsyncWorkerPool(size_t numThreads) : mDesiredThreadCount(numThr
 AsyncWorkerPool::~AsyncWorkerPool()
 {
     {
-        auto lock   = mTaskQueue.lockMutex();
+        auto lock = mTaskQueue.lockMutex();
+        ASSERT(mWaitingThreadCount >= mNotifiedThreadCount);
+        incrementNotifiedThreadCountLocked(mWaitingThreadCount - mNotifiedThreadCount);
         mTerminated = true;
     }
     mCondVar.notify_all();
@@ -314,21 +321,30 @@ AsyncWorkerPool::~AsyncWorkerPool()
         ASSERT(thread.get_id() != std::this_thread::get_id());
         thread.join();
     }
+    ASSERT(mWaitingThreadCount == 0);
+    ASSERT(mNotifiedThreadCount == 0);
 }
 
 void AsyncWorkerPool::beginStartThreadLocked(bool *needToEndStartThreadOut)
 {
-    // If all threads already created, try waking a possibly waiting thread.
-    if (mDesiredThreadCount == mThreads.size())
+    // Try to wake a waiting thread to avoid creating new thread unnecessarily.
+    if (mWaitingThreadCount > mNotifiedThreadCount)
     {
+        incrementNotifiedThreadCountLocked(1);
         ASSERT(*needToEndStartThreadOut);
         return;
     }
 
-    // Otherwise, create a new thread (does not require the end call).
+    // Otherwise, try to create a new thread (does not require the end call).
     *needToEndStartThreadOut = false;
-    mTaskQueue.incrementFreeThreadCount(1);
-    mThreads.emplace_back(&AsyncWorkerPool::threadLoop, this);
+    if (mThreads.size() < mDesiredThreadCount)
+    {
+        mTaskQueue.incrementFreeThreadCount(1);
+        mThreads.emplace_back(&AsyncWorkerPool::threadLoop, this);
+        return;
+    }
+
+    // All threads are created and running, so nothing to do.
 }
 
 void AsyncWorkerPool::endStartThreadUnlocked()
@@ -359,8 +375,54 @@ void AsyncWorkerPool::threadLoop()
 
 bool AsyncWorkerPool::ensureHasNextTaskToRun(std::unique_lock<std::mutex> *lock)
 {
-    mCondVar.wait(*lock, [this] { return !mTaskQueue.isEmptyLocked() || mTerminated; });
+    bool isWaiting = false;
+    mCondVar.wait(*lock, [this, &isWaiting] {
+        const bool isConditionMet = (!mTaskQueue.isEmptyLocked() || mTerminated);
+        // Start or skip waiting.
+        if (!isWaiting)
+        {
+            if (!isConditionMet)
+            {
+                ++mWaitingThreadCount;
+                isWaiting = true;
+            }
+        }
+        // Filter spurious wakeups.
+        else if (mNotifiedThreadCount == 0)
+        {
+            // When terminated, all threads MUST be notified.
+            ASSERT(!mTerminated);
+            return false;
+        }
+        // Continue or stop waiting.
+        else
+        {
+            decrementNotifiedThreadCountLocked(1);
+            if (isConditionMet)
+            {
+                ASSERT(mWaitingThreadCount > 0);
+                --mWaitingThreadCount;
+            }
+        }
+        return isConditionMet;
+    });
     return !mTerminated;
+}
+
+void AsyncWorkerPool::incrementNotifiedThreadCountLocked(size_t n)
+{
+    ASSERT(mNotifiedThreadCount + n <= mWaitingThreadCount);
+    // Mark the notified thread as free to prevent unecessary notifies in the future.
+    mTaskQueue.incrementFreeThreadCount(n);
+    mNotifiedThreadCount += n;
+}
+
+void AsyncWorkerPool::decrementNotifiedThreadCountLocked(size_t n)
+{
+    ASSERT(mNotifiedThreadCount >= n);
+    // Thread was marked as free when was notified.
+    mTaskQueue.decrementFreeThreadCount(n);
+    mNotifiedThreadCount -= n;
 }
 
 bool AsyncWorkerPool::isAsync()
