@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55accd04_add3048d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-11T20:36:41Z",
+      "side": 1,
+      "message": "Thanks Roman - ignoring the GLES1 complications, this is a definite improvement!",
+      "revId": "17762a03821e95f3ea4ea779e08470df09e38d55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
