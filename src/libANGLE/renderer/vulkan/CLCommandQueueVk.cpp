@@ -35,7 +35,7 @@ class CLAsyncFinishTask : public angle::WorkerTask
   public:
     CLAsyncFinishTask(CLCommandQueueVk *queueVk) : mQueueVk(queueVk) {}
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "CLCommandQueueVk::finish (async)");
         if (IsError(mQueueVk->finish()))
