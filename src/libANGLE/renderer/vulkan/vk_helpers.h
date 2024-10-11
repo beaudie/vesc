@@ -260,29 +260,6 @@ class DynamicBuffer : angle::NonCopyable
     BufferHelperQueue mBufferFreeList;
 };
 
-// Class DescriptorSetHelper. This is a wrapper of VkDescriptorSet with GPU resource use tracking.
-class DescriptorSetHelper final : public Resource
-{
-  public:
-    DescriptorSetHelper(const VkDescriptorSet &descriptorSet) { mDescriptorSet = descriptorSet; }
-    DescriptorSetHelper(const ResourceUse &use, const VkDescriptorSet &descriptorSet)
-    {
-        mUse           = use;
-        mDescriptorSet = descriptorSet;
-    }
-    DescriptorSetHelper(DescriptorSetHelper &&other) : Resource(std::move(other))
-    {
-        mDescriptorSet       = other.mDescriptorSet;
-        other.mDescriptorSet = VK_NULL_HANDLE;
-    }
-
-    VkDescriptorSet getDescriptorSet() const { return mDescriptorSet; }
-
-  private:
-    VkDescriptorSet mDescriptorSet;
-};
-using DescriptorSetList = std::deque<DescriptorSetHelper>;
-
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
 // allocate new pools internally as needed. Renderer takes care of the lifetime of the discarded
 // pools. Note that we used a fixed layout for descriptor pools in ANGLE.
