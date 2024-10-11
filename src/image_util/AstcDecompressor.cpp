@@ -152,7 +152,7 @@ struct DecompressTask : public WorkerTask
           image(image)
     {}
 
-    void operator()() override
+    void operator()(WaitableEvent *event) override
     {
         result = astcenc_decompress_image(context, data, dataLength, image, &kSwizzle, threadIndex);
     }

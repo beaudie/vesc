@@ -625,7 +625,7 @@ class Program::MainLinkTask final : public Program::MainLinkLoadTask
     {}
     ~MainLinkTask() override = default;
 
-    void operator()() override { mResult = linkImpl(); }
+    void operator()(angle::WaitableEvent *event) override { mResult = linkImpl(); }
 
   private:
     angle::Result linkImpl();
@@ -651,7 +651,7 @@ class Program::MainLoadTask final : public Program::MainLinkLoadTask
     {}
     ~MainLoadTask() override = default;
 
-    void operator()() override { mResult = loadImpl(); }
+    void operator()(angle::WaitableEvent *event) override { mResult = loadImpl(); }
 
   private:
     angle::Result loadImpl();

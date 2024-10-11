@@ -106,6 +106,12 @@ bool operator!=(const FixedVector<T, N, Storage> &a, const FixedVector<T, N, Sto
 }
 
 template <class T, size_t N, class Storage>
+bool operator<(const FixedVector<T, N, Storage> &a, const FixedVector<T, N, Storage> &b)
+{
+    return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
+}
+
+template <class T, size_t N, class Storage>
 FixedVector<T, N, Storage>::FixedVector() = default;
 
 template <class T, size_t N, class Storage>

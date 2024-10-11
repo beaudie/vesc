@@ -89,7 +89,7 @@ class CreateWGPUShaderModuleTask : public LinkSubTask
         return mResult;
     }
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "CreateWGPUShaderModuleTask");
 
