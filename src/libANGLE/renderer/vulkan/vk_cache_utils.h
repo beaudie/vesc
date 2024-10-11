@@ -1418,7 +1418,7 @@ class CreateMonolithicPipelineTask : public Context, public angle::WorkerTask
     const RenderPassDesc &getRenderPassDesc() const { return mDesc.getRenderPassDesc(); }
     void setCompatibleRenderPass(const RenderPass *compatibleRenderPass);
 
-    void operator()() override;
+    void operator()(angle::WaitableEvent *event) override;
 
     VkResult getResult() const { return mResult; }
     Pipeline &getPipeline() { return mPipeline; }
