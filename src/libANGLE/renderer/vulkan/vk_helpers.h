@@ -333,6 +333,10 @@ class DynamicDescriptorPool final : angle::NonCopyable
                        size_t setSizeCount,
                        const DescriptorSetLayout &descriptorSetLayout);
     void destroy(Renderer *renderer);
+    // Used only by SharedPtr. Since MetaDescriptorPool always keep the last refCount and it
+    // explicitly calls destroy(renderer) before last refcount goes away, we should just do
+    // assertion here.
+    void destroy() { ASSERT(!valid()); }
 
     bool valid() const { return !mDescriptorPools.empty(); }
 
@@ -394,7 +398,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
 };
 
 using RefCountedDescriptorPool = RefCounted<DynamicDescriptorPool>;
-using DescriptorPoolPointer    = BindingPointer<DynamicDescriptorPool>;
+using DynamicDescriptorPoolPointer = SharedPtr<DynamicDescriptorPool>;
 
 // Maps from a descriptor set layout (represented by DescriptorSetLayoutDesc) to a set of
 // DynamicDescriptorPools. The purpose of the class is so multiple GL Programs can share descriptor
@@ -411,15 +415,15 @@ class MetaDescriptorPool final : angle::NonCopyable
                                            const DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
                                            uint32_t descriptorCountMultiplier,
                                            DescriptorSetLayoutCache *descriptorSetLayoutCache,
-                                           DescriptorPoolPointer *descriptorPoolOut);
+                                           DynamicDescriptorPoolPointer *dynamicDescriptorPoolOut);
 
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
     {
         for (const auto &iter : mPayload)
         {
-            const vk::RefCountedDescriptorPool &pool = iter.second;
-            pool.get().accumulateDescriptorCacheStats(cacheType, accum);
+            const vk::DynamicDescriptorPoolPointer &pool = iter.second;
+            pool->accumulateDescriptorCacheStats(cacheType, accum);
         }
     }
 
@@ -427,8 +431,8 @@ class MetaDescriptorPool final : angle::NonCopyable
     {
         for (auto &iter : mPayload)
         {
-            vk::RefCountedDescriptorPool &pool = iter.second;
-            pool.get().resetDescriptorCacheStats();
+            vk::DynamicDescriptorPoolPointer &pool = iter.second;
+            pool->resetDescriptorCacheStats();
         }
     }
 
@@ -438,15 +442,15 @@ class MetaDescriptorPool final : angle::NonCopyable
 
         for (const auto &iter : mPayload)
         {
-            const RefCountedDescriptorPool &pool = iter.second;
-            totalSize += pool.get().getTotalCacheKeySizeBytes();
+            const DynamicDescriptorPoolPointer &pool = iter.second;
+            totalSize += pool->getTotalCacheKeySizeBytes();
         }
 
         return totalSize;
     }
 
   private:
-    std::unordered_map<DescriptorSetLayoutDesc, RefCountedDescriptorPool> mPayload;
+    std::unordered_map<DescriptorSetLayoutDesc, DynamicDescriptorPoolPointer> mPayload;
 };
 
 template <typename Pool>
