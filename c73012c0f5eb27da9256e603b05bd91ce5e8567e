@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ca10751_905ff556",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002032
+      },
+      "writtenOn": "2024-10-11T13:05:27Z",
+      "side": 1,
+      "message": "lgtm, confirmed locally that this fixes my checkout. Don\u0027t forget to stop the autoroller before submitting the revert.",
+      "revId": "c73012c0f5eb27da9256e603b05bd91ce5e8567e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
