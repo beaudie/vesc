@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10d3e0ad_e35124e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2024-10-11T13:47:37Z",
+      "side": 1,
+      "message": "Thank you!\nIt looks like remote repo history was overwritten, so this LGTM.",
+      "revId": "11b6e89a87fe47b172fd31fb5c39089273ad497f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
