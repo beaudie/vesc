@@ -427,7 +427,7 @@ angle::Result CLProgramVk::init(const size_t *lengths,
 
 CLProgramVk::~CLProgramVk()
 {
-    for (vk::BindingPointer<rx::vk::DynamicDescriptorPool> &pool : mDescriptorPools)
+    for (vk::DescriptorPoolPointer &pool : mDescriptorPools)
     {
         pool.reset();
     }
@@ -968,9 +968,9 @@ angle::Result CLProgramVk::allocateDescriptorSet(
     vk::CommandBufferHelperCommon *commandBuffer,
     vk::RefCountedDescriptorSetHelper *descriptorSetOut)
 {
-    if (mDescriptorPools[setIndex].get().valid())
+    if (mDescriptorPools[setIndex])
     {
-        ANGLE_CL_IMPL_TRY_ERROR(mDescriptorPools[setIndex].get().allocateDescriptorSet(
+        ANGLE_CL_IMPL_TRY_ERROR(mDescriptorPools[setIndex]->allocateDescriptorSet(
                                     mContext, descriptorSetLayout, descriptorSetOut),
                                 CL_INVALID_OPERATION);
 

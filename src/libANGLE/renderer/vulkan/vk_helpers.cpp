@@ -4291,6 +4291,7 @@ DynamicDescriptorPool::DynamicDescriptorPool()
 DynamicDescriptorPool::~DynamicDescriptorPool()
 {
     ASSERT(mDescriptorSetCache.empty());
+    ASSERT(mDescriptorPools.empty());
 }
 
 DynamicDescriptorPool::DynamicDescriptorPool(DynamicDescriptorPool &&other)
@@ -12623,9 +12624,9 @@ void MetaDescriptorPool::destroy(Renderer *renderer)
 {
     for (auto &iter : mPayload)
     {
-        RefCountedDescriptorPool &refCountedPool = iter.second;
-        ASSERT(!refCountedPool.isReferenced());
-        refCountedPool.get().destroy(renderer);
+        DescriptorPoolPointer &pool = iter.second;
+        ASSERT(pool.unique());
+        pool->destroy(renderer);
     }
 
     mPayload.clear();
@@ -12641,8 +12642,7 @@ angle::Result MetaDescriptorPool::bindCachedDescriptorPool(
     auto cacheIter = mPayload.find(descriptorSetLayoutDesc);
     if (cacheIter != mPayload.end())
     {
-        RefCountedDescriptorPool &descriptorPool = cacheIter->second;
-        descriptorPoolOut->set(&descriptorPool);
+        *descriptorPoolOut = cacheIter->second;
         return angle::Result::Continue;
     }
 
@@ -12656,8 +12656,7 @@ angle::Result MetaDescriptorPool::bindCachedDescriptorPool(
 
     auto insertIter = mPayload.emplace(descriptorSetLayoutDesc, std::move(newDescriptorPool));
 
-    RefCountedDescriptorPool &descriptorPool = insertIter.first->second;
-    descriptorPoolOut->set(&descriptorPool);
+    *descriptorPoolOut = insertIter.first->second;
 
     return angle::Result::Continue;
 }
