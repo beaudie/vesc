@@ -43,6 +43,8 @@ class AsyncTask final : public AsyncWaitableEvent
     explicit AsyncTask(const std::shared_ptr<WorkerTask> &workerTask);
     ~AsyncTask() override;
 
+    void run();
+    void markAsReady();
     void runAndMarkAsReady();
 
   private:
@@ -101,7 +103,7 @@ AsyncTask::~AsyncTask()
     ASSERT(!mWorkerTask || !isReady());
 }
 
-void AsyncTask::runAndMarkAsReady()
+void AsyncTask::run()
 {
     ASSERT(mWorkerTask);
 
@@ -112,7 +114,18 @@ void AsyncTask::runAndMarkAsReady()
     // Release shared_ptr<WorkerTask> before notifying the event to allow for destructor based
     // dependencies (example: anglebug.com/42267099)
     mWorkerTask.reset();
+}
+
+void AsyncTask::markAsReady()
+{
+    ASSERT(!mWorkerTask);
     AsyncWaitableEvent::markAsReady();
+}
+
+void AsyncTask::runAndMarkAsReady()
+{
+    run();
+    markAsReady();
 }
 
 // WorkerThreadPool implementation.
@@ -174,6 +187,9 @@ class WorkerThreadLoopPolicy
 class MultiThreadedWorkerPool : public AsyncTaskWorkerPool
 {
   public:
+    MultiThreadedWorkerPool() = default;
+    ~MultiThreadedWorkerPool() override;
+
     // AsyncTaskWorkerPool
     void postAsyncTask(std::shared_ptr<AsyncTask> &&task) override;
 
@@ -185,16 +201,27 @@ class MultiThreadedWorkerPool : public AsyncTaskWorkerPool
     bool isTaskQueueEmptyLocked() const { return mTaskQueue.empty(); }
     std::shared_ptr<AsyncTask> &getNextTaskLocked();
 
+    void incrementFreeThreadCount(size_t n);
+    void decrementFreeThreadCount(size_t n);
+    void startThreadIfNeededLocked(std::unique_lock<std::mutex> lock);
+
     // Creates new or wakes existing thread.
+    // When creating a new thread the |mFreeThreadCount| MUST be incremented.
     virtual void startThreadLocked(std::unique_lock<std::mutex> lock) = 0;
 
     std::mutex mMutex;  // Protects access to the fields in this class
 
   private:
     std::queue<std::shared_ptr<AsyncTask>> mTaskQueue;
+    std::atomic<size_t> mFreeThreadCount{0};
 };
 
 // MultiThreadedWorkerPool implementation.
+MultiThreadedWorkerPool::~MultiThreadedWorkerPool()
+{
+    ASSERT(mFreeThreadCount == 0);
+}
+
 void MultiThreadedWorkerPool::postAsyncTask(std::shared_ptr<AsyncTask> &&task)
 {
     // Thread safety: This function is thread-safe because member access is protected by |mMutex|.
@@ -202,7 +229,7 @@ void MultiThreadedWorkerPool::postAsyncTask(std::shared_ptr<AsyncTask> &&task)
 
     mTaskQueue.emplace(std::move(task));
 
-    startThreadLocked(std::move(lock));
+    startThreadIfNeededLocked(std::move(lock));
 }
 
 void MultiThreadedWorkerPool::runThreadLoop(WorkerThreadLoopPolicy *policy)
@@ -211,8 +238,11 @@ void MultiThreadedWorkerPool::runThreadLoop(WorkerThreadLoopPolicy *policy)
     {
         std::shared_ptr<AsyncTask> task;
         {
+            std::unique_lock<std::mutex> tempLock(mMutex);
+            // Mark this thread as busy running a task, waiting for a task, or terminated.
+            decrementFreeThreadCount(1);
             const auto [hasNextTaskToRun, lock] =
-                policy->ensureHasNextTaskToRunLocked(std::unique_lock<std::mutex>(mMutex));
+                policy->ensureHasNextTaskToRunLocked(std::move(tempLock));
             if (!hasNextTaskToRun)
             {
                 return;
@@ -221,7 +251,12 @@ void MultiThreadedWorkerPool::runThreadLoop(WorkerThreadLoopPolicy *policy)
             mTaskQueue.pop();
         }
 
-        task->runAndMarkAsReady();
+        task->run();
+
+        // Mark this thread as free before marking task as ready.
+        incrementFreeThreadCount(1);
+
+        task->markAsReady();
     }
 }
 
@@ -229,6 +264,25 @@ std::shared_ptr<AsyncTask> &MultiThreadedWorkerPool::getNextTaskLocked()
 {
     ASSERT(!isTaskQueueEmptyLocked());
     return mTaskQueue.front();
+}
+
+void MultiThreadedWorkerPool::incrementFreeThreadCount(size_t n)
+{
+    mFreeThreadCount.fetch_add(n, std::memory_order_relaxed);
+}
+
+void MultiThreadedWorkerPool::decrementFreeThreadCount(size_t n)
+{
+    const size_t prevCount = mFreeThreadCount.fetch_sub(n, std::memory_order_relaxed);
+    ASSERT(prevCount >= n);
+}
+
+void MultiThreadedWorkerPool::startThreadIfNeededLocked(std::unique_lock<std::mutex> lock)
+{
+    if (mTaskQueue.size() > mFreeThreadCount.load(std::memory_order_relaxed))
+    {
+        startThreadLocked(std::move(lock));
+    }
 }
 
 class AsyncWorkerPool final : public MultiThreadedWorkerPool, WorkerThreadLoopPolicy
@@ -289,6 +343,7 @@ void AsyncWorkerPool::startThreadLocked(std::unique_lock<std::mutex> lock)
     }
 
     // Otherwise, create a new thread.
+    incrementFreeThreadCount(1);
     mThreads.emplace_back(&AsyncWorkerPool::threadLoop, this);
 }
 
