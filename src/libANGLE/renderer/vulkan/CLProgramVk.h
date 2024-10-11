@@ -332,7 +332,7 @@ class CLAsyncBuildTask : public angle::WorkerTask
           mNotify(notify)
     {}
 
-    void operator()() override;
+    void operator()(angle::WaitableEvent *event) override;
 
   private:
     CLProgramVk *mProgramVk;

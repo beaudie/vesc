@@ -275,7 +275,7 @@ class ProgramExecutableVk::WarmUpTaskCommon : public vk::Context, public LinkSub
         mErrorLine     = line;
     }
 
-    void operator()() override { UNREACHABLE(); }
+    void operator()(angle::WaitableEvent *event) override { UNREACHABLE(); }
 
     angle::Result getResult(const gl::Context *context, gl::InfoLog &infoLog) override
     {
@@ -345,7 +345,7 @@ class ProgramExecutableVk::WarmUpComputeTask : public WarmUpTaskCommon
     {}
     ~WarmUpComputeTask() override = default;
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         angle::Result result = mExecutableVk->warmUpComputePipelineCache(this, mPipelineRobustness,
                                                                          mPipelineProtectedAccess);
@@ -380,7 +380,7 @@ class ProgramExecutableVk::WarmUpGraphicsTask : public WarmUpTaskCommon
     }
     ~WarmUpGraphicsTask() override = default;
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         angle::Result result = mExecutableVk->warmUpGraphicsPipelineCache(
             this, mPipelineRobustness, mPipelineProtectedAccess, mPipelineSubset, mIsSurfaceRotated,
@@ -840,7 +840,8 @@ angle::Result ProgramExecutableVk::getPipelineCacheWarmUpTasks(
     {
         for (std::shared_ptr<rx::LinkSubTask> &task : warmUpSubTasks)
         {
-            (*task)();
+            // Pass nullptr since tasks are not using the event.
+            (*task)(nullptr);
         }
         warmUpSubTasks.clear();
     }
