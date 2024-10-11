@@ -16,6 +16,23 @@
       "message": "Changes to support D/S FF in the translator are still untested at this point, but the change refactors the existing color FF part a bit, so I thought it might be good to try and land it while I sort out the backend part.",
       "revId": "f2a01f156538a68b6fc6981535e98740d0f473ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a578d12a_f05b84bc",
+        "filename": "src/compiler/translator/tree_ops/spirv/EmulateFramebufferFetch.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-11T01:31:14Z",
+      "side": 1,
+      "message": "can you add a comment saying where the work for depth/stencil is deferred to?",
+      "revId": "f2a01f156538a68b6fc6981535e98740d0f473ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
