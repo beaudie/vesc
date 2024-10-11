@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9db7dcc2_4fbad1fc",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-11T17:42:50Z",
+      "side": 1,
+      "message": "ugh, the above is not true.. got confused between \"frame\" and \"iteration\", thanks Cody.\n\nChanged to saving grid by default. Let\u0027s leave additional customization for later.",
+      "parentUuid": "1a0de77f_2aaef5ff",
+      "range": {
+        "startLine": 207,
+        "startChar": 15,
+        "endLine": 207,
+        "endChar": 44
+      },
+      "revId": "cb9c9e268f3bc2c102a5a0d48dec355f2c223200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ff7cdfb_d91f4a01",
@@ -71,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e39b5317_beaa6f71",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2213,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-11T17:42:50Z",
+      "side": 1,
+      "message": "haha, 3rd comment, almost exactly the same :)\n\nFeels like breaking offscreen gles1 into its own branch might make things easier to follow.. I\u0027ll keep this as is for now.",
+      "parentUuid": "5ff7cdfb_d91f4a01",
+      "range": {
+        "startLine": 2213,
+        "startChar": 54,
+        "endLine": 2213,
+        "endChar": 59
+      },
+      "revId": "cb9c9e268f3bc2c102a5a0d48dec355f2c223200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ba4f610_868edccf",
@@ -84,6 +132,30 @@
       "writtenOn": "2024-10-11T15:50:08Z",
       "side": 1,
       "message": "Slight preference for:\n```\n_grid1\n_grid2\n_grid3\n```\nbut not a big deal.",
+      "range": {
+        "startLine": 2724,
+        "startChar": 33,
+        "endLine": 2724,
+        "endChar": 50
+      },
+      "revId": "cb9c9e268f3bc2c102a5a0d48dec355f2c223200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d90e8e08_5c131617",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2724,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-11T17:42:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ba4f610_868edccf",
       "range": {
         "startLine": 2724,
         "startChar": 33,
