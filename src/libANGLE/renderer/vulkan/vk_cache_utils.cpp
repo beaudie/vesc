@@ -5065,7 +5065,7 @@ void CreateMonolithicPipelineTask::setCompatibleRenderPass(const RenderPass *com
     mCompatibleRenderPass = compatibleRenderPass;
 }
 
-void CreateMonolithicPipelineTask::operator()()
+void CreateMonolithicPipelineTask::operator()(angle::WaitableEvent *event)
 {
     const RenderPass unusedRenderPass;
     const RenderPass *compatibleRenderPass =
