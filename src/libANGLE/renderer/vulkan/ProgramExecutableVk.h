@@ -374,7 +374,7 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                const gl::ProgramLinkedResources &resources)
     {
         SpvSourceOptions options = SpvCreateSourceOptions(
-            context->getFeatures(), context->getRenderer()->getMaxInputAttachmentCount());
+            context->getFeatures(), context->getRenderer()->getMaxColorInputAttachmentCount());
         SpvAssignAllLocations(options, programState, resources, &mVariableInfoMap);
     }
 
