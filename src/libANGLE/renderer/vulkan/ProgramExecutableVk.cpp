@@ -1161,7 +1161,7 @@ void ProgramExecutableVk::addInputAttachmentDescriptorSetDesc(vk::Context *conte
         return;
     }
 
-    if (!mExecutable->usesFramebufferFetch())
+    if (!mExecutable->usesColorFramebufferFetch())
     {
         return;
     }
@@ -1342,7 +1342,7 @@ ProgramTransformOptions ProgramExecutableVk::getTransformOptions(
         contextVk->getFeatures().emulateTransformFeedback.enabled &&
         !contextVk->getState().isTransformFeedbackActiveUnpaused();
     FramebufferVk *drawFrameBuffer = vk::GetImpl(contextVk->getState().getDrawFramebuffer());
-    const bool hasFramebufferFetch = mExecutable->usesFramebufferFetch();
+    const bool hasFramebufferFetch = mExecutable->usesColorFramebufferFetch();
     const bool isMultisampled      = drawFrameBuffer->getSamples() > 1;
     transformOptions.multiSampleFramebufferFetch = hasFramebufferFetch && isMultisampled;
     transformOptions.enableSampleShading =

@@ -247,7 +247,7 @@ class alignas(4) RenderPassDesc final
     {
         return static_cast<FramebufferFetchMode>(mFramebufferFetchMode);
     }
-    bool hasFramebufferFetch() const
+    bool hasColorFramebufferFetch() const
     {
         return framebufferFetchMode() == FramebufferFetchMode::Color;
     }
@@ -872,9 +872,9 @@ class GraphicsPipelineDesc final
                               FramebufferFetchMode framebufferFetchMode);
     void setRenderPassSampleCount(GLint samples);
     void setRenderPassFramebufferFetchMode(FramebufferFetchMode framebufferFetchMode);
-    bool getRenderPassFramebufferFetchMode() const
+    bool hasRenderPassColorFramebufferFetch() const
     {
-        return mSharedNonVertexInput.renderPass.hasFramebufferFetch();
+        return mSharedNonVertexInput.renderPass.hasColorFramebufferFetch();
     }
 
     void setRenderPassFoveation(bool isFoveated);
@@ -2025,8 +2025,8 @@ class FramebufferDesc
 
     void updateLayerCount(uint32_t layerCount);
     uint32_t getLayerCount() const { return mLayerCount; }
-    void setFramebufferFetchMode(bool hasFramebufferFetch);
-    bool hasFramebufferFetch() const { return mHasFramebufferFetch; }
+    void setColorFramebufferFetchMode(bool hasColorFramebufferFetch);
+    bool hasColorFramebufferFetch() const { return mHasColorFramebufferFetch; }
 
     bool isMultiview() const { return mIsMultiview; }
 
@@ -2044,7 +2044,7 @@ class FramebufferDesc
     uint16_t mMaxIndex : 5;
 
     // Whether the render pass has input attachments or not.
-    uint16_t mHasFramebufferFetch : 1;
+    uint16_t mHasColorFramebufferFetch : 1;
     static_assert(gl::IMPLEMENTATION_MAX_FRAMEBUFFER_LAYERS < (1 << 9) - 1,
                   "Not enough bits for mLayerCount");
 
