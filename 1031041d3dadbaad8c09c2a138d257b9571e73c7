@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44c3e3ad_5abb9838",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-12T06:35:42Z",
+      "side": 1,
+      "message": "`uint8_t`? The value is always less than or equal to eight.",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8a02d76_051f76b4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-12T06:35:42Z",
+      "side": 1,
+      "message": "Should this limit be set to zero when framebuffer fetch extensions are disabled?",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
