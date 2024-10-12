@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7469b76_c14a8a05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-12T02:35:23Z",
+      "side": 1,
+      "message": "Thank you for the fix. If there is a CTS test that was previously failing due to this, please remove its suppression (found in`src/tests/deqp_support/deqp_*_expectations.txt`)\n\nIf there are no tests to show this bug, please add one in `BlitFramebufferANGLETest.cpp`",
+      "revId": "9a7c1f945a7eca90301c2f54daf0afd375eb53c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
