@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a1f2ed8_bde96de4",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-13T07:10:10Z",
+      "side": 1,
+      "message": "This would ensure that there are no padding bytes with undefined values just in case this struct would be hashed or `memcmp`\u0027d someday.",
+      "parentUuid": "da75fcab_2984a03d",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8a02d76_051f76b4",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 4
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "I had it that way at first, it turned out to just be annoyingly problematic. Like, you need to set this for FF, but also when PLS uses FF, also when advanced blend is emualted, etc.\n\nIn the end, if input attachments are not used, this variable is not looked at, so setting it unconditionally is harmless.",
       "parentUuid": "a8a02d76_051f76b4",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8504baee_9a280e39",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-13T07:10:10Z",
+      "side": 1,
+      "message": "If FF extensions are not supported, this value becomes equal to `maxColorAttachments`.\n\nAny internal use of input attachments would cause VVL errors if the supported number of input attachments is less than `maxColorAttachments`.\n\nConsider trying `win-exp-test` to check the unsuppressed tests on newer Intel hardware.",
+      "parentUuid": "847c3b37_546e35cb",
       "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
