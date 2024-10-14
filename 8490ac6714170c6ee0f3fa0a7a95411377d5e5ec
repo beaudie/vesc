@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c755d876_271da416",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-14T17:00:42Z",
+      "side": 1,
+      "message": "Does that mean  depth stencil framebuffer fetch will only supported if dynamic rendering is supported?",
+      "revId": "8490ac6714170c6ee0f3fa0a7a95411377d5e5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
