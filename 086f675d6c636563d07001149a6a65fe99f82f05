@@ -70,6 +70,30 @@
       },
       "revId": "086f675d6c636563d07001149a6a65fe99f82f05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbb3522a_494a6edf",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-14T22:47:11Z",
+      "side": 1,
+      "message": "Sounds good. I am looking into a more generic solution ([CL])(https://crrev.com/c/5922077). However, there are still errors.\nIn the mean time, shall we land this CL to fix the immediate issue on the Vulkan backend and land a more generic solution in the follow-up?\n(After the [CL that includes the test for the issue](https://crrev.com/c/5893032) lands, the test in this CL should be removed.)",
+      "parentUuid": "80c4dc19_a2135b05",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 85
+      },
+      "revId": "086f675d6c636563d07001149a6a65fe99f82f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
