@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa0a696_62939279",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-14T01:24:42Z",
+      "side": 1,
+      "message": "Ack, but we have a different solution for that if it ever happens (see `ANGLE_ENABLE_STRUCT_PADDING_WARNINGS`)",
+      "parentUuid": "2a1f2ed8_bde96de4",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8a02d76_051f76b4",
@@ -103,6 +121,24 @@
       "side": 1,
       "message": "If FF extensions are not supported, this value becomes equal to `maxColorAttachments`.\n\nAny internal use of input attachments would cause VVL errors if the supported number of input attachments is less than `maxColorAttachments`.\n\nConsider trying `win-exp-test` to check the unsuppressed tests on newer Intel hardware.",
       "parentUuid": "847c3b37_546e35cb",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6621b34b_d22238e1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-14T01:24:42Z",
+      "side": 1,
+      "message": "Good point, I need to limit this to input attachment count too, I\u0027ll do that next time I get the chance",
+      "parentUuid": "8504baee_9a280e39",
       "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
