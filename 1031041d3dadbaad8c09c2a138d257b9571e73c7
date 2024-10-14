@@ -141,6 +141,42 @@
       "parentUuid": "8504baee_9a280e39",
       "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc3d06b8_ae7060da",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-14T13:14:16Z",
+      "side": 1,
+      "message": "PLS will eventually be adjusted to not use non-coherent framebuffer fetch when it\u0027s not explicitly supported. This will lead to losing test coverage for the case when a driver supports fewer input attachments than output attachments.\n\nI suggest adding an explicit configuration override to",
+      "parentUuid": "6621b34b_d22238e1",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fbf505c_6a0366a2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-14T13:14:16Z",
+      "side": 1,
+      "message": "Consider adding a targeted test case for this issue. The existing cases are unfortunately not applicable:\n- PLS shouldn\u0027t use non-coherent framebuffer fetch when the latter is unsupported. Once we fix that, the code coverage will be reduced.\n- Force-enabling non-coherent framebuffer fetch for testing with existing test cases is not an option because Intel/Windows drivers do not support `INPUT_ATTACHMENT` usage for the swapchain.\n\nThere should be an isolated test that uses non-coherent framebuffer fetch (with feature override) on a custom framebuffer just to ensure that VVL errors are not triggered when `maxInputAttachmentCount \u003c maxColorAttachments`.",
+      "parentUuid": "6621b34b_d22238e1",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
