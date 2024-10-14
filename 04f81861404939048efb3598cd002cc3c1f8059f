@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "04f81861404939048efb3598cd002cc3c1f8059f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a9478cd_5be70695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-14T01:34:39Z",
+      "side": 1,
+      "message": "Thanks a lot for this follow up!",
+      "revId": "04f81861404939048efb3598cd002cc3c1f8059f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3d386e4_eeac23c2",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-14T01:34:39Z",
+      "side": 1,
+      "message": "Since YUV and MSAA are separate cases below, might as well move the `flags` calculation to the `else` path, and directly define a constexpr flag for the YUV and MSAA cases. The type is `uint32_t` so the above code _works_, but semantically the variable is made to hold two different things, it\u0027s a bit weird.",
+      "range": {
+        "startLine": 3478,
+        "startChar": 0,
+        "endLine": 3506,
+        "endChar": 34
+      },
+      "revId": "04f81861404939048efb3598cd002cc3c1f8059f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
