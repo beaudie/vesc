@@ -6437,8 +6437,7 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
     const gl::ProgramExecutable &executable,
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
-    PipelineType pipelineType,
-    const SharedDescriptorSetCacheKey &sharedCacheKey)
+    PipelineType pipelineType)
 {
     const std::vector<gl::SamplerBinding> &samplerBindings = executable.getSamplerBindings();
     const std::vector<GLuint> &samplerBoundTextureUnits = executable.getSamplerBoundTextureUnits();
@@ -6482,8 +6481,6 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
                 infoDesc.samplerOrBufferSerial   = 0;
                 infoDesc.imageSubresourceRange   = 0;
 
-                textureVk->onNewDescriptorSet(sharedCacheKey);
-
                 const BufferView *view = nullptr;
                 ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, &samplerBinding,
                                                                false, &view));
@@ -6503,8 +6500,6 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
                 ImageOrBufferViewSubresourceSerial imageViewSerial =
                     textureVk->getImageViewSubresourceSerial(
                         samplerState, samplerUniform.isTexelFetchStaticUse());
-
-                textureVk->onNewDescriptorSet(sharedCacheKey);
 
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
                 SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
