@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14944b98_a7c8cc2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-15T17:48:24Z",
+      "side": 1,
+      "message": "@ynovikov@chromium.org - do you want me to wait for your verification or can i go ahead with the merge?",
+      "revId": "47fa04fc9e3b4bbb767d3444e633f596a9a5344c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
