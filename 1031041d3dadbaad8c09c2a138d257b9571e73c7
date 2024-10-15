@@ -231,6 +231,24 @@
       "parentUuid": "213893f6_38dc938b",
       "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41fbc7c6_5a2e2d9f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-15T13:48:27Z",
+      "side": 1,
+      "message": "I thought PLS doesn\u0027t interact with the swapchain?\n\nBut ok, I personally have no opinion on whether FF is better or storage images on Intel/windows, but I _would_ like some input from Chris from committing to one or the other.",
+      "parentUuid": "b134b3bf_6c224fe3",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
