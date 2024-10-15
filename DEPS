@@ -17,6 +17,18 @@ gclient_gn_args = [
 ]
 
 vars = {
+  'angle_enable_cl': True,
+  'angle_enable_cl_testing': False,
+  'angle_enable_vulkan': True,
+  'angle_enable_vulkan_validation_layers': True,
+  'angle_enable_wgpu': True,
+  'build_angle_deqp_tests': True,
+  'build_angle_perftests': True,
+  'build_with_catapult': True,
+  'build_with_swiftshader': True,
+  'use_custom_libcxx': True,
+  'export_libcxxapi_from_executables': True,
+
   'android_git': 'https://android.googlesource.com',
   'chromium_git': 'https://chromium.googlesource.com',
   'chrome_internal_git': 'https://chrome-internal.googlesource.com',
@@ -673,7 +685,7 @@ deps = {
 
   'third_party/catapult': {
     'url': Var('chromium_git') + '/catapult.git' + '@' + Var('catapult_revision'),
-    'condition': 'not build_with_chromium',
+    'condition': 'build_with_catapult and not build_with_chromium',
   },
 
   # Cherry is a dEQP/VK-GL-CTS management GUI written in Go. We use it for viewing test results.
@@ -689,7 +701,7 @@ deps = {
 
   'third_party/clspv/src': {
     'url': Var('chromium_git') + '/external/github.com/google/clspv@a173c052455434a422bcfe5c12ffe44d574fd6e1',
-    'condition': 'not build_with_chromium',
+    'condition': 'angle_enable_cl and angle_enable_vulkan and not build_with_chromium',
   },
 
   'third_party/cpu_features/src': {
@@ -700,7 +712,7 @@ deps = {
 
   'third_party/dawn': {
     'url': Var('dawn_git') + '/dawn.git' + '@' +  Var('dawn_revision'),
-    'condition': 'not build_with_chromium'
+    'condition': 'angle_enable_wgpu and not build_with_chromium'
   },
 
   'third_party/depot_tools': {
@@ -745,6 +757,7 @@ deps = {
   # glmark2 is a GPL3-licensed OpenGL ES 2.0 benchmark. We use it for testing.
   'third_party/glmark2/src': {
     'url': Var('chromium_git') + '/external/github.com/glmark2/glmark2@ca8de51fedb70bace5351c6b002eb952c747e889',
+    'condition': 'build_angle_perftests',
   },
 
   'third_party/googletest': {
@@ -777,7 +790,7 @@ deps = {
   # libjpeg_turbo is used by glmark2.
   'third_party/libjpeg_turbo': {
     'url': Var('chromium_git') + '/chromium/deps/libjpeg_turbo.git@927aabfcd26897abb9776ecf2a6c38ea5bb52ab6',
-    'condition': 'not build_with_chromium',
+    'condition': 'build_angle_perftests and not build_with_chromium',
   },
 
   'third_party/libpng/src': {
@@ -787,7 +800,7 @@ deps = {
 
   'third_party/llvm/src': {
     'url': Var('chromium_git') + '/external/github.com/llvm/llvm-project@d222fa4521531cc4ac14b8e157d231c108c003be',
-    'condition': 'not build_with_chromium',
+    'condition': '(build_with_swiftshader or (angle_enable_cl and angle_enable_vulkan)) and not build_with_chromium',
   },
 
   'third_party/jdk': {
@@ -824,12 +837,12 @@ deps = {
 
   'third_party/libc++/src': {
     'url': Var('chromium_git') + '/external/github.com/llvm/llvm-project/libcxx.git@6a68fd412b9aecd515a20a7cf84d11b598bfaf96',
-    'condition': 'not build_with_chromium',
+    'condition': 'use_custom_libcxx and not build_with_chromium',
   },
 
   'third_party/libc++abi/src': {
     'url': Var('chromium_git') + '/external/github.com/llvm/llvm-project/libcxxabi.git@9a1d90c3b412d5ebeb97a6e33d98e1d0dd923221',
-    'condition': 'not build_with_chromium',
+    'condition': 'export_libcxxapi_from_executables and not build_with_chromium',
   },
 
   'third_party/libunwind/src': {
@@ -872,7 +885,7 @@ deps = {
 
   'third_party/OpenCL-CTS/src': {
     'url': Var('chromium_git') + '/external/github.com/KhronosGroup/OpenCL-CTS@e0a31a03fc8f816d59fd8b3051ac6a61d3fa50c6',
-    'condition': 'not build_with_chromium',
+    'condition': 'angle_enable_cl_testing and not build_with_chromium',
   },
 
   'third_party/OpenCL-Docs/src': {
@@ -968,7 +981,7 @@ deps = {
 
   'third_party/SwiftShader': {
     'url': Var('swiftshader_git') + '/SwiftShader@7a9a492a38b7c701f7c96a15a76046aed8f8c0c3',
-    'condition': 'not build_with_chromium',
+    'condition': 'build_with_swiftshader and not build_with_chromium',
   },
 
   'third_party/turbine/cipd': {
@@ -984,6 +997,7 @@ deps = {
 
   'third_party/VK-GL-CTS/src': {
     'url': Var('chromium_git') + '/external/github.com/KhronosGroup/VK-GL-CTS' + '@' + Var('vk_gl_cts_revision'),
+    'condition': 'build_angle_deqp_tests',
   },
 
   'third_party/vulkan-deps': {
@@ -1038,7 +1052,7 @@ deps = {
 
   'third_party/vulkan-validation-layers/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-ValidationLayers@b63e9bd51fbd7bf8fea161a4f7c06994abc24b75',
-    'condition': 'not build_with_chromium',
+    'condition': 'angle_enable_vulkan_validation_layers and not build_with_chromium',
   },
 
   'third_party/vulkan_memory_allocator': {
