@@ -213,6 +213,24 @@
       "parentUuid": "f7932b5a_95a921c7",
       "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b134b3bf_6c224fe3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-15T09:36:02Z",
+      "side": 1,
+      "message": "\u003e In vulkan, non-coherent FF is _always_ supported. The _functionality_ of it is supported that is.\n\nExcept when the swapchain does not support `INPUT_ATTACHMENT` usage (Intel/Windows once again).\n\n\u003e There is a choice of falling back to storage image usage vs reducing the color attachment count by 1\n\nPLS FF implementation assumes regular FF functionality as in GL ES. I think it would be much easier and safer to fall back to images when coherent options are not available _and_ `maxInputAttachmentCount \u003c maxColorAttachments`. In practice, this case is reachable only in tests.",
+      "parentUuid": "213893f6_38dc938b",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
