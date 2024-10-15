@@ -16,6 +16,24 @@
       "message": "I\u0027m keeping this WIP until it\u0027s properly tested. I don\u0027t yet know how to properly test an ANGLE CL because this is my first.\n\nThis deserves a new GLES1 test too.\n\nI tested locally with `--use-angle\u003dvulkan` with Intel Alderlake GPU on Android.",
       "revId": "f164151c2a864af1cf115b3774f5135d78447c62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4373044d_0931c4f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-15T18:53:41Z",
+      "side": 1,
+      "message": "Just click \"CQ DRY RUN\" and watch bots. If you could add an end2end test that demonstrate the bug, that will e more convincing as well as help prevent future regression.",
+      "parentUuid": "1330cdc1_59afed65",
+      "revId": "f164151c2a864af1cf115b3774f5135d78447c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
