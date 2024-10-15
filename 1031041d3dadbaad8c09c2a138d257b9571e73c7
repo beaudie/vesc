@@ -249,6 +249,24 @@
       "parentUuid": "b134b3bf_6c224fe3",
       "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce6c2a60_d212adf1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-15T14:08:03Z",
+      "side": 1,
+      "message": "\u003e I thought PLS doesn\u0027t interact with the swapchain?\n\nIt does not. I was addressing the \"non-coherent FF is _always_ supported\" comment.\n\nFWIW, Intel/Windows supports `VK_EXT_fragment_shader_interlock` so the fallback path is used only in tests.",
+      "parentUuid": "41fbc7c6_5a2e2d9f",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
