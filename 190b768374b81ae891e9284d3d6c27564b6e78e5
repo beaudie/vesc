@@ -34,6 +34,24 @@
       "parentUuid": "23a92df2_307b6a31",
       "revId": "190b768374b81ae891e9284d3d6c27564b6e78e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30368f85_cda763b6",
+        "filename": "src/libGLESv2/cl_stubs.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-15T18:51:12Z",
+      "side": 1,
+      "message": "Ok, no maybe just something like this:\n\n```\nCL_RETURN_ERROR(queue.onRelease())\n```\n\nAnd then have `onRelease()` call `finish()` with the explanation why.\n\n---\n\nAlso, I completely understand the desire to make the error non-fatal because it seems like you can just move on instead, but I advise you let the failure show itself early. Makes debugging harder otherwise. If that `finish()` actually fails, the following calls will probably also fail (something has seriously gone wrong).",
+      "parentUuid": "e166b52c_da2d9dea",
+      "revId": "190b768374b81ae891e9284d3d6c27564b6e78e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
