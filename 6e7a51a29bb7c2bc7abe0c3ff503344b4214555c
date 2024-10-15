@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09647cf1_c2d25a2b",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-15T20:05:19Z",
+      "side": 1,
+      "message": "You need to go one step further and check that there is not already a setBlendConstant command. If someone sets the blend to non-zero and then zero after, it should not be skipped.",
+      "range": {
+        "startLine": 1163,
+        "startChar": 0,
+        "endLine": 1163,
+        "endChar": 45
+      },
+      "revId": "6e7a51a29bb7c2bc7abe0c3ff503344b4214555c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "300b348a_ce3e90f1",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-15T20:05:19Z",
+      "side": 1,
+      "message": "You can remove all the static_cast because this function returns uint32_t anyways.",
+      "range": {
+        "startLine": 603,
+        "startChar": 19,
+        "endLine": 603,
+        "endChar": 40
+      },
+      "revId": "6e7a51a29bb7c2bc7abe0c3ff503344b4214555c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffe995c5_36dcfc9d",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-15T20:05:19Z",
+      "side": 1,
+      "message": "Same for this.",
+      "range": {
+        "startLine": 651,
+        "startChar": 19,
+        "endLine": 651,
+        "endChar": 39
+      },
+      "revId": "6e7a51a29bb7c2bc7abe0c3ff503344b4214555c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

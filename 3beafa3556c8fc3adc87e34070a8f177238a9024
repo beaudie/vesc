@@ -226,6 +226,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c01573c_be0af6ee",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_command_buffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-15T20:05:19Z",
+      "side": 1,
+      "message": "Still missing the ref",
+      "parentUuid": "5a089824_d52adce5",
+      "range": {
+        "startLine": 240,
+        "startChar": 26,
+        "endLine": 240,
+        "endChar": 36
+      },
+      "revId": "3beafa3556c8fc3adc87e34070a8f177238a9024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22cb1e27_2eb22e80",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_pipeline_state.cpp",
         "patchSetId": 2
