@@ -16,6 +16,24 @@
       "message": "Does that mean  depth stencil framebuffer fetch will only supported if dynamic rendering is supported?",
       "revId": "8490ac6714170c6ee0f3fa0a7a95411377d5e5ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14250cc7_32d8bc93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-15T04:13:23Z",
+      "side": 1,
+      "message": "Yes. Too much hassle with render pass objects, as you can see from all the paths that FF takes without dynamic rendering, and depth/stencil makes it even more complicated (for example, you _don\u0027t_ want to be permanently in D/S FF mode, that interacts terribly with read-only depth/stencil feedback loop). With DR, you don\u0027t need that perma-FF thing.",
+      "parentUuid": "c755d876_271da416",
+      "revId": "8490ac6714170c6ee0f3fa0a7a95411377d5e5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
