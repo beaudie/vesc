@@ -33,6 +33,24 @@
       "message": "Is this extension really needed? FYI, `vulkan/`\u0027s implementation is bogus.",
       "revId": "cfb623187792f87a33e516bf0a46f66a5f408bd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5466312b_61f4f68f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2762,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-15T16:13:40Z",
+      "side": 1,
+      "message": "i wanted to mirror skia\u0027s call sequence and that calls `glEnable(GL_MULTISAMPLE_EXT)` and @lexa.knyazev@gmail.com mentioned that it requires support for `GL_EXT_multisample_compatibility`",
+      "parentUuid": "fe207f6e_36c0656d",
+      "revId": "cfb623187792f87a33e516bf0a46f66a5f408bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
