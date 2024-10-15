@@ -52,6 +52,24 @@
       "parentUuid": "95cd5e80_d59566c8",
       "revId": "9a7c1f945a7eca90301c2f54daf0afd375eb53c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "721a0a3c_5c5adb79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-15T04:21:15Z",
+      "side": 1,
+      "message": "Looks like you need to run `git cl format`.",
+      "parentUuid": "61002dfb_c02e2ce0",
+      "revId": "9a7c1f945a7eca90301c2f54daf0afd375eb53c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
