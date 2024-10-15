@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23a92df2_307b6a31",
+        "filename": "src/libGLESv2/cl_stubs.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-15T04:15:51Z",
+      "side": 1,
+      "message": "Can this be moved inside `queue.release()` instead? The code in this file is mostly there for mechanically turning the C calls into ANGLE-internal calls, it\u0027d be cleaner to keep the logic in `src/libANGLE`",
+      "revId": "190b768374b81ae891e9284d3d6c27564b6e78e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
