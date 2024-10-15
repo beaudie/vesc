@@ -16,6 +16,24 @@
       "message": "Can this be moved inside `queue.release()` instead? The code in this file is mostly there for mechanically turning the C calls into ANGLE-internal calls, it\u0027d be cleaner to keep the logic in `src/libANGLE`",
       "revId": "190b768374b81ae891e9284d3d6c27564b6e78e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e166b52c_da2d9dea",
+        "filename": "src/libGLESv2/cl_stubs.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-10-15T18:19:48Z",
+      "side": 1,
+      "message": "Actually, that `release()` call is from a parent CLObject class that mainly only deals with object\u0027s ARC.\n\nI would need to make `release()` virtual and override in `CLCommandQueue` if I wanted to move this code to FrontEnd (only special for Command Queue here). This might be a code smell?\n\nOkay with either, let me know your thoughts.",
+      "parentUuid": "23a92df2_307b6a31",
+      "revId": "190b768374b81ae891e9284d3d6c27564b6e78e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
