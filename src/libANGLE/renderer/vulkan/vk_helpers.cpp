@@ -4484,6 +4484,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     DescriptorSetPointer *descriptorSetOut,
     SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
+    ASSERT(context->getFeatures().descriptorSetCache.enabled);
     // First scan the descriptorSet cache.
     if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut))
     {
@@ -4548,6 +4549,7 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 void DynamicDescriptorPool::releaseCachedDescriptorSet(Renderer *renderer,
                                                        const DescriptorSetDesc &desc)
 {
+    ASSERT(renderer->getFeatures().descriptorSetCache.enabled);
     DescriptorSetPointer descriptorSet;
     if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet))
     {
