@@ -16,6 +16,24 @@
       "message": "The new test is failing on mac/GL drivers. Could you please add a suppression line like this to `angle_end2end_tests_expectations.txt` (in some section where you can find other MAC OPENGL suppressions)?\n\n```\n373506513 MAC OPENGL : BlitFramebufferTest.BlitMultisampledFramebufferToMRT/* \u003d SKIP\n```",
       "revId": "c673d50025da7ad392b230389e32a1e01b5f6af3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5c06413_ed10bde1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-15T14:31:45Z",
+      "side": 1,
+      "message": "I\u0027ve created anglebug.com/373506513 for you already",
+      "parentUuid": "8b7c9435_9bb04156",
+      "revId": "c673d50025da7ad392b230389e32a1e01b5f6af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
