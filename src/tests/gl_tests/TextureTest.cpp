@@ -2759,7 +2759,10 @@ TEST_P(Texture2DTest, PBOWithMultipleDraws)
 // Almost mirrors UnitTest_DMSAA_dst_read test from Android skqp test suite
 TEST_P(Texture2DTestES3, UnitTest_DMSAA_dst_read)
 {
-    glEnable(GL_MULTISAMPLE);
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_multisample_compatibility"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_sRGB_write_control"));
+
+    glEnable(GL_MULTISAMPLE_EXT);
 
     GLTexture texture;
     glActiveTexture(GL_TEXTURE31);
