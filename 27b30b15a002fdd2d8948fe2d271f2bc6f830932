@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "488e98ae_3f91ce41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-16T01:55:07Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "27b30b15a002fdd2d8948fe2d271f2bc6f830932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11a5b487_069d854a",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-16T01:55:07Z",
+      "side": 1,
+      "message": "Typos",
+      "range": {
+        "startLine": 229,
+        "startChar": 3,
+        "endLine": 229,
+        "endChar": 30
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "dc43b84d_b8118dca",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/validationES2.h",
+              "range": {
+                "startLine": 229,
+                "startChar": 0,
+                "endLine": 230,
+                "endChar": 0
+              },
+              "replacement": "// Validation of ObjectPtrLabel\n"
+            },
+            {
+              "path": "src/libANGLE/validationES2.h",
+              "range": {
+                "startLine": 236,
+                "startChar": 0,
+                "endLine": 237,
+                "endChar": 0
+              },
+              "replacement": "// Validation of GetObjectPtrLabel\n"
+            }
+          ]
+        }
+      ],
+      "revId": "27b30b15a002fdd2d8948fe2d271f2bc6f830932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f27753bf_76c39d3f",
+        "filename": "src/tests/gl_tests/DebugTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-16T01:55:07Z",
+      "side": 1,
+      "message": "Could you please also add a test similar to `DebugTestES3.ObjectPtrLabels` for ES32?",
+      "revId": "27b30b15a002fdd2d8948fe2d271f2bc6f830932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
