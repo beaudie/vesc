@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7b92cb7_d90abb55",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:16:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd4a923c_38efbd0d",
+      "range": {
+        "startLine": 257,
+        "startChar": 12,
+        "endLine": 258,
+        "endChar": 18
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e50ebc69_34ee6277",
@@ -65,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5898df3c_e9241675",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:16:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e50ebc69_34ee6277",
+      "range": {
+        "startLine": 267,
+        "startChar": 12,
+        "endLine": 267,
+        "endChar": 47
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27178b33_5cbd06dc",
@@ -78,6 +126,24 @@
       "writtenOn": "2024-10-16T13:39:22Z",
       "side": 1,
       "message": "We really need some structs and utility functions for handling CL formats instead of these duplicated switch statements. Something for later.",
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95da5985_ac6dca51",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:16:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "27178b33_5cbd06dc",
       "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -123,6 +189,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03ffb892_1485e78a",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:16:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "787cec6b_82d5cee9",
+      "range": {
+        "startLine": 364,
+        "startChar": 12,
+        "endLine": 364,
+        "endChar": 18
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2912b9bd_3802061d",
@@ -136,6 +226,30 @@
       "writtenOn": "2024-10-16T13:39:22Z",
       "side": 1,
       "message": "These assumptions are dangerous. Please consider adding more cases with a default `UNREACHABLE`.",
+      "range": {
+        "startLine": 386,
+        "startChar": 0,
+        "endLine": 387,
+        "endChar": 18
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79d95df2_0ce37293",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:16:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2912b9bd_3802061d",
       "range": {
         "startLine": 386,
         "startChar": 0,
@@ -169,6 +283,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "843652b8_fa30d8f7",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:16:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d5bb6cd_80986f7f",
+      "range": {
+        "startLine": 408,
+        "startChar": 0,
+        "endLine": 409,
+        "endChar": 18
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48f0d36e_c60f81a7",
@@ -182,6 +320,30 @@
       "writtenOn": "2024-10-16T13:39:22Z",
       "side": 1,
       "message": "Same as the previous CL. Did you intend to write `isSet(CL_MEM_USE_HOST_PTR) || isSet(CL_MEM_COPY_HOST_PTR)`?",
+      "range": {
+        "startLine": 427,
+        "startChar": 33,
+        "endLine": 427,
+        "endChar": 75
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "444325d2_eb5d0e74",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:16:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48f0d36e_c60f81a7",
       "range": {
         "startLine": 427,
         "startChar": 33,
@@ -253,6 +415,30 @@
       "side": 1,
       "message": "Done in the parent CL: https://chromium-review.googlesource.com/c/angle/angle/+/5796524",
       "parentUuid": "180047af_cbc02d42",
+      "range": {
+        "startLine": 460,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 85
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00bff074_dda41652",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:16:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "421ac651_de984f1f",
       "range": {
         "startLine": 460,
         "startChar": 0,
