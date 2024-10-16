@@ -1,0 +1,241 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd4a923c_38efbd0d",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T13:39:22Z",
+      "side": 1,
+      "message": "Just return `VK_IMAGE_TYPE_1D` in the switch instead of assigning to a variable and returning at the end.",
+      "range": {
+        "startLine": 257,
+        "startChar": 12,
+        "endLine": 258,
+        "endChar": 18
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e50ebc69_34ee6277",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T13:39:22Z",
+      "side": 1,
+      "message": "`UNREACHABLE()`?",
+      "range": {
+        "startLine": 267,
+        "startChar": 12,
+        "endLine": 267,
+        "endChar": 47
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "655ebbc3_d13fb80e",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+              "range": {
+                "startLine": 267,
+                "startChar": 0,
+                "endLine": 268,
+                "endChar": 0
+              },
+              "replacement": "            UNREACHABLE();\n"
+            }
+          ]
+        }
+      ],
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27178b33_5cbd06dc",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T13:39:22Z",
+      "side": 1,
+      "message": "We really need some structs and utility functions for handling CL formats instead of these duplicated switch statements. Something for later.",
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "787cec6b_82d5cee9",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T13:39:22Z",
+      "side": 1,
+      "message": "`UNIMPLEMENTED` or `UNREACHABLE` without the Image3D fall through",
+      "range": {
+        "startLine": 364,
+        "startChar": 12,
+        "endLine": 364,
+        "endChar": 18
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "7a47427d_d59a80dc",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+              "range": {
+                "startLine": 364,
+                "startChar": 0,
+                "endLine": 364,
+                "endChar": 0
+              },
+              "replacement": "            UNREACHABLE();\n"
+            }
+          ]
+        }
+      ],
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2912b9bd_3802061d",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T13:39:22Z",
+      "side": 1,
+      "message": "These assumptions are dangerous. Please consider adding more cases with a default `UNREACHABLE`.",
+      "range": {
+        "startLine": 386,
+        "startChar": 0,
+        "endLine": 387,
+        "endChar": 18
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d5bb6cd_80986f7f",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T13:39:22Z",
+      "side": 1,
+      "message": "Same for this.",
+      "range": {
+        "startLine": 408,
+        "startChar": 0,
+        "endLine": 409,
+        "endChar": 18
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48f0d36e_c60f81a7",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T13:39:22Z",
+      "side": 1,
+      "message": "Same as the previous CL. Did you intend to write `isSet(CL_MEM_USE_HOST_PTR) || isSet(CL_MEM_COPY_HOST_PTR)`?",
+      "range": {
+        "startLine": 427,
+        "startChar": 33,
+        "endLine": 427,
+        "endChar": 75
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e02b0c89_8655a3b5",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T13:39:22Z",
+      "side": 1,
+      "message": "Suggest caching this somewhere.",
+      "range": {
+        "startLine": 460,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 85
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29aa3b3d_0e0c2e51",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T13:39:22Z",
+      "side": 1,
+      "message": "Could you rename this to getVkAllocationSize? It overlapping with the frontend size is confusing.",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 26
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
