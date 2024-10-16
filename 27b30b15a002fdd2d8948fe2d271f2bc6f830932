@@ -185,6 +185,24 @@
       "parentUuid": "a7ef2d6a_b4f4eb8f",
       "revId": "27b30b15a002fdd2d8948fe2d271f2bc6f830932",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b70612b2_6c0e1552",
+        "filename": "src/tests/gl_tests/DebugTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 3615769
+      },
+      "writtenOn": "2024-10-16T03:54:05Z",
+      "side": 1,
+      "message": "ACK",
+      "parentUuid": "24254975_f0621536",
+      "revId": "27b30b15a002fdd2d8948fe2d271f2bc6f830932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
