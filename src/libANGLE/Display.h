@@ -82,6 +82,7 @@ struct DisplayState final : private angle::NonCopyable
 
     EGLLabelKHR label;
     ContextMap contextMap;
+    mutable angle::SimpleMutex contextMapMutex;
     SurfaceMap surfaceMap;
     angle::FeatureOverrides featureOverrides;
     EGLNativeDisplayType displayId;
@@ -354,7 +355,9 @@ class Display final : public LabeledObject,
 
     Error restoreLostDevice();
     Error releaseContext(gl::Context *context, Thread *thread);
-    Error releaseContextImpl(gl::Context *context, ContextMap *contexts);
+    Error releaseContextImpl(gl::Context *context,
+                             ContextMap *contexts,
+                             std::unique_lock<angle::SimpleMutex> &&contextMapLock);
 
     void initDisplayExtensions();
     void initVendorString();
