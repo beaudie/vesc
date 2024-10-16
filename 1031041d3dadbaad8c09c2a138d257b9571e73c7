@@ -285,6 +285,24 @@
       "parentUuid": "ce6c2a60_d212adf1",
       "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52331c5a_b979d401",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-16T06:35:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "927338a7_b64d54cb",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
