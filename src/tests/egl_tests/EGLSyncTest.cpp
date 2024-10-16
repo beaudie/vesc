@@ -257,6 +257,7 @@ TEST_P(EGLSyncTest, EglClientWaitSync)
         EGLSyncKHR clientWaitSync   = eglCreateSyncKHR(display, EGL_SYNC_FENCE_KHR, nullptr);
         EXPECT_NE(clientWaitSync, EGL_NO_SYNC_KHR);
 
+        INFO() << "Yuxin Debug calling into eglClientWaitSyncKHR";
         ASSERT_EQ(EGL_CONDITION_SATISFIED_KHR,
                   eglClientWaitSyncKHR(display, clientWaitSync, EGL_SYNC_FLUSH_COMMANDS_BIT_KHR,
                                        kTimeout));
@@ -278,6 +279,7 @@ TEST_P(EGLSyncTest, EglClientWaitSync)
         EGLSyncKHR clientWaitSync   = eglCreateSync(display, EGL_SYNC_FENCE, nullptr);
         EXPECT_NE(clientWaitSync, EGL_NO_SYNC);
 
+        INFO() << "Yuxin Debug calling into eglClientWaitSync";
         ASSERT_EQ(
             EGL_CONDITION_SATISFIED,
             eglClientWaitSync(display, clientWaitSync, EGL_SYNC_FLUSH_COMMANDS_BIT, kTimeout));

@@ -268,12 +268,13 @@ angle::Result SyncHelper::getStatus(Context *context, ContextVk *contextVk, bool
 
 angle::Result SyncHelper::submitSyncIfDeferred(ContextVk *contextVk, RenderPassClosureReason reason)
 {
+    INFO() << "Yuxin Debug SyncHelper::submitSyncIfDeferred() is called";
     if (contextVk == nullptr)
     {
-        // This is the case with EGLSync.  The implicit flush is never deferred, so there is nothing
-        // to do.
         return angle::Result::Continue;
     }
+
+    INFO() << "Yuxin Debug contextVk is not nullptr";
 
     if (contextVk->getRenderer()->hasResourceUseSubmitted(mUse))
     {
@@ -288,6 +289,7 @@ angle::Result SyncHelper::submitSyncIfDeferred(ContextVk *contextVk, RenderPassC
     //
     // Deferring the submission is restricted to non-EGL sync objects, so it's sufficient to ensure
     // that the contexts in the share group issue their deferred flushes.
+    INFO() << "Yuxin Debug checking all share group contexts";
     for (auto context : contextVk->getShareGroup()->getContexts())
     {
         ContextVk *sharedContextVk = vk::GetImpl(context.second);
