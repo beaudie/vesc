@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64420d59_4091e219",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-16T20:49:37Z",
+      "side": 1,
+      "message": "Geoff, Alexey: PTAL. Thanks.",
+      "revId": "1f66e74fdc03e9c93ee011ab7e3cae393b034ccd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
