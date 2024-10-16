@@ -34,6 +34,24 @@
       "parentUuid": "8b7c9435_9bb04156",
       "revId": "c673d50025da7ad392b230389e32a1e01b5f6af3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ac57d19_2f4c35e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3641729
+      },
+      "writtenOn": "2024-10-16T02:26:41Z",
+      "side": 1,
+      "message": "Change has been added to file `angle_end2end_tests_expectations.txt`.",
+      "parentUuid": "d5c06413_ed10bde1",
+      "revId": "c673d50025da7ad392b230389e32a1e01b5f6af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
