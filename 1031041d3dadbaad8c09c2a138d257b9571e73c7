@@ -267,6 +267,24 @@
       "parentUuid": "41fbc7c6_5a2e2d9f",
       "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "927338a7_b64d54cb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-16T03:05:59Z",
+      "side": 1,
+      "message": "Added a test to use max color attachments, if input attachment descriptors are not enough it would hit a VVL failure.\n\nAlso refined the condition to set `mMaxInputAttachmentCount` only when FF is in use. I opted for not changing the logic of PLS in the same change, just fixing the limits in its presence.\n\nLet\u0027s see what the bots think!",
+      "parentUuid": "ce6c2a60_d212adf1",
+      "revId": "1031041d3dadbaad8c09c2a138d257b9571e73c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
