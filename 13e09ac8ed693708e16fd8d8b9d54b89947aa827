@@ -241,6 +241,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "421ac651_de984f1f",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-16T17:19:26Z",
+      "side": 1,
+      "message": "Done in the parent CL: https://chromium-review.googlesource.com/c/angle/angle/+/5796524",
+      "parentUuid": "180047af_cbc02d42",
+      "range": {
+        "startLine": 460,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 85
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29aa3b3d_0e0c2e51",
         "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
         "patchSetId": 16
