@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "183d0ab6_294a7825",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-16T14:05:59Z",
+      "side": 1,
+      "message": "My mistake on the isSet checking if any flag is set. The name is very misleading and we should either change it or avoid using that function.",
+      "parentUuid": "df55ffba_8e920a18",
+      "range": {
+        "startLine": 164,
+        "startChar": 21,
+        "endLine": 164,
+        "endChar": 57
+      },
+      "revId": "d24ce5727464bb4e9c09d622ac1bc56e9fb8c8cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9957e5c5_de602442",
         "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
         "patchSetId": 30
