@@ -769,7 +769,7 @@ EGLBoolean EGLAPIENTRY EGL_Terminate(EGLDisplay dpy)
     Thread *thread = egl::GetCurrentThread();
     EGLBoolean returnValue;
     {
-        ANGLE_SCOPED_GLOBAL_LOCK();
+        ANGLE_SCOPED_GLOBAL_AND_EGL_SYNC_LOCK();
         EGL_EVENT(Terminate, "dpy = 0x%016" PRIxPTR "", (uintptr_t)dpy);
 
         egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
@@ -1180,7 +1180,7 @@ EGLint EGLAPIENTRY EGL_ClientWaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags
     Thread *thread = egl::GetCurrentThread();
     EGLint returnValue;
     {
-        ANGLE_SCOPED_GLOBAL_LOCK();
+        ANGLE_SCOPED_GLOBAL_EGL_SYNC_LOCK();
         EGL_EVENT(ClientWaitSync,
                   "dpy = 0x%016" PRIxPTR ", sync = 0x%016" PRIxPTR ", flags = %d, timeout = %llu",
                   (uintptr_t)dpy, (uintptr_t)sync, flags, static_cast<unsigned long long>(timeout));
@@ -1347,7 +1347,7 @@ EGLSync EGLAPIENTRY EGL_CreateSync(EGLDisplay dpy, EGLenum type, const EGLAttrib
     Thread *thread = egl::GetCurrentThread();
     EGLSync returnValue;
     {
-        ANGLE_SCOPED_GLOBAL_LOCK();
+        ANGLE_SCOPED_GLOBAL_EGL_SYNC_LOCK();
         EGL_EVENT(CreateSync,
                   "dpy = 0x%016" PRIxPTR ", type = 0x%X, attrib_list = 0x%016" PRIxPTR "",
                   (uintptr_t)dpy, type, (uintptr_t)attrib_list);
@@ -1416,7 +1416,7 @@ EGLBoolean EGLAPIENTRY EGL_DestroySync(EGLDisplay dpy, EGLSync sync)
     Thread *thread = egl::GetCurrentThread();
     EGLBoolean returnValue;
     {
-        ANGLE_SCOPED_GLOBAL_LOCK();
+        ANGLE_SCOPED_GLOBAL_EGL_SYNC_LOCK();
         EGL_EVENT(DestroySync, "dpy = 0x%016" PRIxPTR ", sync = 0x%016" PRIxPTR "", (uintptr_t)dpy,
                   (uintptr_t)sync);
 
@@ -1490,7 +1490,7 @@ EGLBoolean EGLAPIENTRY EGL_GetSyncAttrib(EGLDisplay dpy,
     Thread *thread = egl::GetCurrentThread();
     EGLBoolean returnValue;
     {
-        ANGLE_SCOPED_GLOBAL_LOCK();
+        ANGLE_SCOPED_GLOBAL_EGL_SYNC_LOCK();
         EGL_EVENT(GetSyncAttrib,
                   "dpy = 0x%016" PRIxPTR ", sync = 0x%016" PRIxPTR
                   ", attribute = %d, value = 0x%016" PRIxPTR "",
@@ -1526,7 +1526,7 @@ EGLBoolean EGLAPIENTRY EGL_WaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags)
     Thread *thread = egl::GetCurrentThread();
     EGLBoolean returnValue;
     {
-        ANGLE_SCOPED_GLOBAL_LOCK();
+        ANGLE_SCOPED_GLOBAL_EGL_SYNC_LOCK();
         EGL_EVENT(WaitSync, "dpy = 0x%016" PRIxPTR ", sync = 0x%016" PRIxPTR ", flags = %d",
                   (uintptr_t)dpy, (uintptr_t)sync, flags);
 

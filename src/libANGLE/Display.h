@@ -82,6 +82,7 @@ struct DisplayState final : private angle::NonCopyable
 
     EGLLabelKHR label;
     ContextMap contextMap;
+    mutable angle::SimpleMutex contextMapMutex;
     SurfaceMap surfaceMap;
     angle::FeatureOverrides featureOverrides;
     EGLNativeDisplayType displayId;
