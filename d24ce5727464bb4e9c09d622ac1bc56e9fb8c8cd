@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8774fdfe_b23828db",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:37:39Z",
+      "side": 1,
+      "message": "I\u0027m assuming this is done. I\u0027m not aware of a method/help function for checking if the format is valid for the flags. As a result, will rely on intersects with read or write to determine which list to load.",
+      "parentUuid": "55235626_b5cce3cd",
+      "range": {
+        "startLine": 164,
+        "startChar": 21,
+        "endLine": 164,
+        "endChar": 57
+      },
+      "revId": "d24ce5727464bb4e9c09d622ac1bc56e9fb8c8cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9957e5c5_de602442",
@@ -85,6 +109,30 @@
       "writtenOn": "2024-10-16T13:25:38Z",
       "side": 1,
       "message": "this should be `std::min(supportedFormats.size(), numEntries)`",
+      "range": {
+        "startLine": 194,
+        "startChar": 41,
+        "endLine": 194,
+        "endChar": 64
+      },
+      "revId": "d24ce5727464bb4e9c09d622ac1bc56e9fb8c8cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11a099ca_30d31280",
+        "filename": "src/libANGLE/renderer/vulkan/CLContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:37:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9957e5c5_de602442",
       "range": {
         "startLine": 194,
         "startChar": 41,
