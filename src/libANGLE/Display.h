@@ -437,6 +437,7 @@ class Display final : public LabeledObject,
 
     angle::SimpleMutex mDisplayGlobalMutex;
     angle::SimpleMutex mProgramCacheMutex;
+    mutable angle::SimpleMutex mContextMapMutex;
 
     bool mTerminatedByApi;
 };
