@@ -227,6 +227,7 @@ bool InitializeProcess()
 {
     EnsureDebugAllocated();
     AllocateGlobalMutex();
+    AllocateGlobalEGLSyncMutex();
     return AllocateCurrentThread() != nullptr;
 }
 
@@ -234,6 +235,7 @@ void TerminateProcess()
 {
     DeallocateDebug();
     DeallocateGlobalMutex();
+    DeallocateGlobalEGLSyncMutex();
     DeallocateCurrentThread();
 }
 
