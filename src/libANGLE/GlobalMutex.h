@@ -29,6 +29,18 @@ class [[nodiscard]] ScopedGlobalMutexLock final : angle::NonCopyable
 #endif
 };
 
+class [[nodiscard]] ScopedGlobalSyncObjectMutexLock final : angle::NonCopyable
+{
+  public:
+    ScopedGlobalSyncObjectMutexLock();
+    ~ScopedGlobalSyncObjectMutexLock();
+
+#if !defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
+  private:
+    priv::GlobalMutex &mMutex;
+#endif
+};
+
 // For Context protection where lock is optional. Works slower than ScopedGlobalMutexLock.
 class [[nodiscard]] ScopedOptionalGlobalMutexLock final : angle::NonCopyable
 {

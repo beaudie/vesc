@@ -120,21 +120,28 @@ namespace
                "requires constructor/destructor compiler atributes."
 #    endif
 priv::GlobalMutex *g_MutexPtr = nullptr;
+priv::GlobalMutex *g_SyncMutexPtr = nullptr;
 
 void ANGLE_CONSTRUCTOR AllocateGlobalMutex()
 {
     ASSERT(g_MutexPtr == nullptr);
     g_MutexPtr = new priv::GlobalMutex();
+    ASSERT(g_SyncMutexPtr == nullptr);
+    g_SyncMutexPtr = new priv::GlobalMutex();
 }
 
 void ANGLE_DESTRUCTOR DeallocateGlobalMutex()
 {
     SafeDelete(g_MutexPtr);
+    SafeDelete(g_SyncMutexPtr);
 }
 
 #else
 ANGLE_REQUIRE_CONSTANT_INIT std::atomic<priv::GlobalMutex *> g_Mutex(nullptr);
+ANGLE_REQUIRE_CONSTANT_INIT std::atomic<priv::GlobalMutex *> g_SyncMutex(nullptr);
 static_assert(std::is_trivially_destructible<decltype(g_Mutex)>::value,
+              "global mutex is not trivially destructible");
+static_assert(std::is_trivially_destructible<decltype(g_SyncMutex)>::value,
               "global mutex is not trivially destructible");
 
 priv::GlobalMutex *AllocateGlobalMutexImpl()
@@ -155,6 +162,26 @@ priv::GlobalMutex *GetGlobalMutex()
 {
     priv::GlobalMutex *mutex = g_Mutex.load();
     return mutex != nullptr ? mutex : AllocateGlobalMutexImpl();
+}
+
+priv::GlobalMutex *AllocateGlobalSyncObjectMutexImpl()
+{
+    priv::GlobalMutex *currentMutex = nullptr;
+    std::unique_ptr<priv::GlobalMutex> newMutex(new priv::GlobalMutex());
+    do
+    {
+        if (g_SyncMutex.compare_exchange_weak(currentMutex, newMutex.get()))
+        {
+            return newMutex.release();
+        }
+    } while (currentMutex == nullptr);
+    return currentMutex;
+}
+
+priv::GlobalMutex *GetGlobalSyncObjectMutex()
+{
+    priv::GlobalMutex *mutex = g_SyncMutex.load();
+    return mutex != nullptr ? mutex : AllocateGlobalSyncObjectMutexImpl();
 }
 #endif
 }  // anonymous namespace
@@ -177,6 +204,30 @@ ScopedGlobalMutexLock::ScopedGlobalMutexLock() : mMutex(*GetGlobalMutex())
 }
 
 ScopedGlobalMutexLock::~ScopedGlobalMutexLock()
+{
+    mMutex.unlock();
+}
+#endif
+
+// ScopedGlobalSyncObjectMutexLock implementation.
+#if defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
+ScopedGlobalSyncObjectMutexLock::ScopedGlobalSyncObjectMutexLock()
+{
+    g_SyncMutexPtr->lock();
+}
+
+ScopedGlobalSyncObjectMutexLock::~ScopedGlobalSyncObjectMutexLock()
+{
+    g_SyncMutexPtr->unlock();
+}
+#else
+ScopedGlobalSyncObjectMutexLock::ScopedGlobalSyncObjectMutexLock()
+    : mMutex(*GetGlobalSyncObjectMutex())
+{
+    mMutex.lock();
+}
+
+ScopedGlobalSyncObjectMutexLock::~ScopedGlobalSyncObjectMutexLock()
 {
     mMutex.unlock();
 }

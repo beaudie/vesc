@@ -222,6 +222,18 @@ inline bool operator==(const ANGLEPlatformDisplay &a, const ANGLEPlatformDisplay
     return a.tie() == b.tie();
 }
 
+static angle::SimpleMutex *GetDevicePlatformDisplayMapMutex()
+{
+    static angle::base::NoDestructor<angle::SimpleMutex> devicePlatformDisplayMapMutex;
+    return devicePlatformDisplayMapMutex.get();
+}
+
+static angle::SimpleMutex *GetANGLEPlatformDisplayMapMutex()
+{
+    static angle::base::NoDestructor<angle::SimpleMutex> anglePlatformDisplayMapMutex;
+    return anglePlatformDisplayMapMutex.get();
+}
+
 static constexpr size_t kANGLEPlatformDisplayMapSize = 9;
 typedef angle::FlatUnorderedMap<ANGLEPlatformDisplay, Display *, kANGLEPlatformDisplayMapSize>
     ANGLEPlatformDisplayMap;
@@ -782,27 +794,32 @@ Display *Display::GetDisplayFromNativeDisplay(EGLenum platform,
         updatedAttribMap.get(EGL_FEATURE_OVERRIDES_DISABLED_ANGLE, 0);
     EGLAttrib disableAllNonOverriddenFeatures =
         updatedAttribMap.get(EGL_FEATURE_ALL_DISABLED_ANGLE, 0);
-    ANGLEPlatformDisplayMap *displays = GetANGLEPlatformDisplayMap();
     ANGLEPlatformDisplay combinedDisplayKey(
         nativeDisplay, powerPreference, platformANGLEType, deviceIdHigh, deviceIdLow, displayKey,
         enabledFeatureOverrides, disabledFeatureOverrides, disableAllNonOverriddenFeatures);
-    const auto &iter = displays->find(combinedDisplayKey);
 
-    if (iter != displays->end())
     {
-        display = iter->second;
-    }
+        std::lock_guard<angle::SimpleMutex> lock(*GetANGLEPlatformDisplayMapMutex());
 
-    if (display == nullptr)
-    {
-        // Validate the native display
-        if (!Display::isValidNativeDisplay(nativeDisplay))
+        ANGLEPlatformDisplayMap *displays = GetANGLEPlatformDisplayMap();
+        const auto &iter                  = displays->find(combinedDisplayKey);
+
+        if (iter != displays->end())
         {
-            return nullptr;
+            display = iter->second;
         }
 
-        display = new Display(platform, nativeDisplay, nullptr);
-        displays->insert(std::make_pair(combinedDisplayKey, display));
+        if (display == nullptr)
+        {
+            // Validate the native display
+            if (!Display::isValidNativeDisplay(nativeDisplay))
+            {
+                return nullptr;
+            }
+
+            display = new Display(platform, nativeDisplay, nullptr);
+            displays->insert(std::make_pair(combinedDisplayKey, display));
+        }
     }
     // Apply new attributes if the display is not initialized yet.
     if (!display->isInitialized())
@@ -838,6 +855,7 @@ Display *Display::GetDisplayFromNativeDisplay(EGLenum platform,
 // static
 Display *Display::GetExistingDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay)
 {
+    std::lock_guard<angle::SimpleMutex> lock(*GetANGLEPlatformDisplayMapMutex());
     ANGLEPlatformDisplayMap *displays = GetANGLEPlatformDisplayMap();
     const auto &iter                  = displays->find(nativeDisplay);
 
@@ -857,34 +875,41 @@ Display *Display::GetDisplayFromDevice(Device *device, const AttributeMap &attri
 
     ASSERT(Device::IsValidDevice(device));
 
-    ANGLEPlatformDisplayMap *anglePlatformDisplays   = GetANGLEPlatformDisplayMap();
-    DevicePlatformDisplayMap *devicePlatformDisplays = GetDevicePlatformDisplayMap();
-
-    // First see if this eglDevice is in use by a Display created using ANGLE platform
-    for (auto &displayMapEntry : *anglePlatformDisplays)
     {
-        egl::Display *iterDisplay = displayMapEntry.second;
-        if (iterDisplay->getDevice() == device)
+        // First see if this eglDevice is in use by a Display created using ANGLE platform
+        std::lock_guard<angle::SimpleMutex> lock(*GetANGLEPlatformDisplayMapMutex());
+        ANGLEPlatformDisplayMap *anglePlatformDisplays = GetANGLEPlatformDisplayMap();
+        for (auto &displayMapEntry : *anglePlatformDisplays)
         {
-            display = iterDisplay;
+            egl::Display *iterDisplay = displayMapEntry.second;
+            if (iterDisplay->getDevice() == device)
+            {
+                display = iterDisplay;
+            }
         }
     }
 
-    if (display == nullptr)
     {
-        // See if the eglDevice is in use by a Display created using the DEVICE platform
-        const auto &iter = devicePlatformDisplays->find(device);
-        if (iter != devicePlatformDisplays->end())
-        {
-            display = iter->second;
-        }
-    }
+        // Next see if this eglDevice is in use by a Display created using the DEVICE platform
+        std::lock_guard<angle::SimpleMutex> lock(*GetDevicePlatformDisplayMapMutex());
+        DevicePlatformDisplayMap *devicePlatformDisplays = GetDevicePlatformDisplayMap();
 
-    if (display == nullptr)
-    {
-        // Otherwise create a new Display
-        display = new Display(EGL_PLATFORM_DEVICE_EXT, 0, device);
-        devicePlatformDisplays->insert(std::make_pair(device, display));
+        if (display == nullptr)
+        {
+            // See if the eglDevice is in use by a Display created using the DEVICE platform
+            const auto &iter = devicePlatformDisplays->find(device);
+            if (iter != devicePlatformDisplays->end())
+            {
+                display = iter->second;
+            }
+        }
+
+        if (display == nullptr)
+        {
+            // Otherwise create a new Display
+            display = new Display(EGL_PLATFORM_DEVICE_EXT, 0, device);
+            devicePlatformDisplays->insert(std::make_pair(device, display));
+        }
     }
 
     // Apply new attributes if the display is not initialized yet.
@@ -939,6 +964,7 @@ Display::~Display()
         case EGL_PLATFORM_WAYLAND_EXT:
         case EGL_PLATFORM_SURFACELESS_MESA:
         {
+            std::lock_guard<angle::SimpleMutex> lock(*GetANGLEPlatformDisplayMapMutex());
             ANGLEPlatformDisplayMap *displays      = GetANGLEPlatformDisplayMap();
             ANGLEPlatformDisplayMap::iterator iter = displays->find(ANGLEPlatformDisplay(
                 mState.displayId,
@@ -959,6 +985,7 @@ Display::~Display()
         }
         case EGL_PLATFORM_DEVICE_EXT:
         {
+            std::lock_guard<angle::SimpleMutex> lock(*GetDevicePlatformDisplayMapMutex());
             DevicePlatformDisplayMap *displays      = GetDevicePlatformDisplayMap();
             DevicePlatformDisplayMap::iterator iter = displays->find(mDevice);
             if (iter != displays->end())
@@ -991,6 +1018,7 @@ void Display::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
 {
     ASSERT(index == kGPUSwitchedSubjectIndex);
     ASSERT(message == angle::SubjectMessage::SubjectChanged);
+    std::lock_guard<angle::SimpleMutex> lock(mContextMapMutex);
     for (auto context : mState.contextMap)
     {
         context.second->onGPUSwitch();
@@ -1215,42 +1243,48 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
                            std::make_move_iterator(mSyncMap.end()));
     mSyncMap.clear();
 
-    // Cache total number of contexts before invalidation. This is used as a check to verify that
-    // no context is "lost" while being moved between the various sets.
-    size_t contextSetSizeBeforeInvalidation = mState.contextMap.size() + mInvalidContextMap.size();
-
-    // If app called eglTerminate and no active threads remain,
-    // force release any context that is still current.
-    ContextMap contextsStillCurrent = {};
-    for (auto context : mState.contextMap)
     {
-        if (context.second->isReferenced())
+        std::lock_guard<angle::SimpleMutex> lock(mContextMapMutex);
+        // Cache total number of contexts before invalidation. This is used as a check to verify
+        // that no context is "lost" while being moved between the various sets.
+        size_t contextSetSizeBeforeInvalidation =
+            mState.contextMap.size() + mInvalidContextMap.size();
+
+        // If app called eglTerminate and no active threads remain,
+        // force release any context that is still current.
+        ContextMap contextsStillCurrent = {};
+        for (auto context : mState.contextMap)
         {
-            contextsStillCurrent.emplace(context);
-            continue;
+            if (context.second->isReferenced())
+            {
+                contextsStillCurrent.emplace(context);
+                continue;
+            }
+
+            // Add context that is not current to mInvalidContextSet for cleanup.
+            mInvalidContextMap.emplace(context);
         }
 
-        // Add context that is not current to mInvalidContextSet for cleanup.
-        mInvalidContextMap.emplace(context);
-    }
+        // There are many methods that require contexts that are still current to be present in
+        // display's contextSet like during context release or to notify of state changes in a
+        // subject. So as to not interrupt this flow, do not remove contexts that are still current
+        // on some thread from display's contextSet even though eglTerminate marks such contexts as
+        // invalid.
+        //
+        // "mState.contextSet" will now contain only those contexts that are still current on some
+        // thread.
+        mState.contextMap = std::move(contextsStillCurrent);
 
-    // There are many methods that require contexts that are still current to be present in
-    // display's contextSet like during context release or to notify of state changes in a subject.
-    // So as to not interrupt this flow, do not remove contexts that are still current on some
-    // thread from display's contextSet even though eglTerminate marks such contexts as invalid.
-    //
-    // "mState.contextSet" will now contain only those contexts that are still current on some
-    // thread.
-    mState.contextMap = std::move(contextsStillCurrent);
+        // Assert that the total number of contexts is the same before and after context
+        // invalidation.
+        ASSERT(contextSetSizeBeforeInvalidation ==
+               mState.contextMap.size() + mInvalidContextMap.size());
 
-    // Assert that the total number of contexts is the same before and after context invalidation.
-    ASSERT(contextSetSizeBeforeInvalidation ==
-           mState.contextMap.size() + mInvalidContextMap.size());
-
-    if (!mState.contextMap.empty())
-    {
-        // There was atleast 1 context that was current on some thread, early return.
-        return NoError();
+        if (!mState.contextMap.empty())
+        {
+            // There was atleast 1 context that was current on some thread, early return.
+            return NoError();
+        }
     }
 
     // The global texture and semaphore managers should be deleted with the last context that uses
@@ -1629,7 +1663,11 @@ Error Display::createContext(const Config *configuration,
     }
 
     ASSERT(context != nullptr);
-    mState.contextMap.insert(std::pair(context->id().value, context));
+
+    {
+        std::lock_guard<angle::SimpleMutex> lock(mContextMapMutex);
+        mState.contextMap.insert(std::pair(context->id().value, context));
+    }
 
     ASSERT(outContext != nullptr);
     *outContext = context;
@@ -1751,14 +1789,17 @@ Error Display::makeCurrent(Thread *thread,
 
 Error Display::restoreLostDevice()
 {
-    for (ContextMap::iterator ctx = mState.contextMap.begin(); ctx != mState.contextMap.end();
-         ctx++)
     {
-        if (ctx->second->isResetNotificationEnabled())
+        std::lock_guard<angle::SimpleMutex> lock(mContextMapMutex);
+        for (ContextMap::iterator ctx = mState.contextMap.begin(); ctx != mState.contextMap.end();
+             ctx++)
         {
-            // If reset notifications have been requested, application must delete all contexts
-            // first
-            return EglContextLost();
+            if (ctx->second->isResetNotificationEnabled())
+            {
+                // If reset notifications have been requested, application must delete all contexts
+                // first
+                return EglContextLost();
+            }
         }
     }
 
@@ -1829,8 +1870,12 @@ Error Display::releaseContextImpl(gl::Context *context, ContextMap *contexts)
 
     // Use scoped_ptr to make sure the context is always freed.
     std::unique_ptr<gl::Context> unique_context(context);
-    ASSERT(contexts->find(context->id().value) != contexts->end());
-    contexts->erase(context->id().value);
+
+    {
+        std::lock_guard<angle::SimpleMutex> lock(mContextMapMutex);
+        ASSERT(contexts->find(context->id().value) != contexts->end());
+        contexts->erase(context->id().value);
+    }
 
     if (context->usingDisplayTextureShareGroup())
     {
@@ -2247,21 +2292,27 @@ Error Display::valdiatePixmap(const Config *config,
 
 bool Display::isValidDisplay(const egl::Display *display)
 {
-    const ANGLEPlatformDisplayMap *anglePlatformDisplayMap = GetANGLEPlatformDisplayMap();
-    for (const auto &displayPair : *anglePlatformDisplayMap)
     {
-        if (displayPair.second == display)
+        std::lock_guard<angle::SimpleMutex> lock(*GetANGLEPlatformDisplayMapMutex());
+        const ANGLEPlatformDisplayMap *anglePlatformDisplayMap = GetANGLEPlatformDisplayMap();
+        for (const auto &displayPair : *anglePlatformDisplayMap)
         {
-            return true;
+            if (displayPair.second == display)
+            {
+                return true;
+            }
         }
     }
 
-    const DevicePlatformDisplayMap *devicePlatformDisplayMap = GetDevicePlatformDisplayMap();
-    for (const auto &displayPair : *devicePlatformDisplayMap)
     {
-        if (displayPair.second == display)
+        std::lock_guard<angle::SimpleMutex> lock(*GetDevicePlatformDisplayMapMutex());
+        const DevicePlatformDisplayMap *devicePlatformDisplayMap = GetDevicePlatformDisplayMap();
+        for (const auto &displayPair : *devicePlatformDisplayMap)
         {
-            return true;
+            if (displayPair.second == display)
+            {
+                return true;
+            }
         }
     }
 
@@ -2631,6 +2682,7 @@ angle::ImageLoadContext Display::getImageLoadContext() const
 
 const gl::Context *Display::getContext(gl::ContextID contextID) const
 {
+    std::lock_guard<angle::SimpleMutex> lock(mContextMapMutex);
     auto iter = mState.contextMap.find(contextID.value);
     return iter != mState.contextMap.end() ? iter->second : nullptr;
 }
@@ -2655,6 +2707,7 @@ const egl::Sync *Display::getSync(egl::SyncID syncID) const
 
 gl::Context *Display::getContext(gl::ContextID contextID)
 {
+    std::lock_guard<angle::SimpleMutex> lock(mContextMapMutex);
     auto iter = mState.contextMap.find(contextID.value);
     return iter != mState.contextMap.end() ? iter->second : nullptr;
 }
