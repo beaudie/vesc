@@ -383,36 +383,6 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
         "SYNC_IMAGE_LAYOUT_TRANSITION",
     },
-    // From various tests. The validation layer does not calculate the exact vertexCounts that's
-    // being accessed. http://anglebug.com/42265220
-    {
-        "SYNC-HAZARD-READ-AFTER-WRITE",
-        "Hazard READ_AFTER_WRITE for vertex",
-        "usage: SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
-    },
-    {
-        "SYNC-HAZARD-READ-AFTER-WRITE",
-        "Hazard READ_AFTER_WRITE for index",
-        "usage: SYNC_INDEX_INPUT_INDEX_READ",
-    },
-    {
-        "SYNC-HAZARD-WRITE-AFTER-READ",
-        "Hazard WRITE_AFTER_READ for",
-        "Access info (usage: SYNC_VERTEX_SHADER_SHADER_STORAGE_WRITE, prior_usage: "
-        "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
-    },
-    {
-        "SYNC-HAZARD-WRITE-AFTER-READ",
-        "Hazard WRITE_AFTER_READ for dstBuffer VkBuffer",
-        "Access info (usage: SYNC_COPY_TRANSFER_WRITE, prior_usage: "
-        "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
-    },
-    {
-        "SYNC-HAZARD-WRITE-AFTER-READ",
-        "Hazard WRITE_AFTER_READ for VkBuffer",
-        "Access info (usage: SYNC_COMPUTE_SHADER_SHADER_STORAGE_WRITE, prior_usage: "
-        "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
-    },
     // http://anglebug.com/42266506 (VkNonDispatchableHandle on x86 bots)
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
