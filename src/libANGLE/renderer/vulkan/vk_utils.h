@@ -861,6 +861,13 @@ class SharedPtr final
         mRefCounted = new RefCountedStorage(std::move(object));
         mRefCounted->addRef();
     }
+    SharedPtr(RefCountedStorage *refCountedStorage) : mRefCounted(refCountedStorage)
+    {
+        if (mRefCounted)
+        {
+            mRefCounted->addRef();
+        }
+    }
     ~SharedPtr() { reset(); }
 
     SharedPtr(const SharedPtr &other) : mRefCounted(nullptr) { *this = other; }
@@ -923,6 +930,8 @@ class SharedPtr final
         ASSERT(mRefCounted != nullptr);
         return mRefCounted->getRefCount() == 1;
     }
+
+    RefCountedStorage *getRefCountedStorage() const { return mRefCounted; }
 
   private:
     void releaseRef()
