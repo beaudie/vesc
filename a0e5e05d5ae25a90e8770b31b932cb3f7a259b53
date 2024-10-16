@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d84bb05e_94f1a1f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1114825
+      },
+      "writtenOn": "2024-10-16T10:59:57Z",
+      "side": 1,
+      "message": "@syoussefi could you ptal? this is obviously super-rough at the moment - the custom_vars would all need much more sensible defaults - but I\u0027m just wondering if ANGLE has any interest in merging something like this, or if we should keep it as a downstream modification in Mesa\u0027s build",
+      "revId": "a0e5e05d5ae25a90e8770b31b932cb3f7a259b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
