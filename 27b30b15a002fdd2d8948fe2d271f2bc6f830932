@@ -110,6 +110,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4902d05d_9536abf7",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-16T03:36:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a815009f_0749f787",
+      "range": {
+        "startLine": 229,
+        "startChar": 3,
+        "endLine": 229,
+        "endChar": 30
+      },
+      "revId": "27b30b15a002fdd2d8948fe2d271f2bc6f830932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f27753bf_76c39d3f",
@@ -141,6 +165,24 @@
       "side": 1,
       "message": "DebugTestES3.ObjectPtrLabels is added for ES32",
       "parentUuid": "f27753bf_76c39d3f",
+      "revId": "27b30b15a002fdd2d8948fe2d271f2bc6f830932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24254975_f0621536",
+        "filename": "src/tests/gl_tests/DebugTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-16T03:36:50Z",
+      "side": 1,
+      "message": "(thank you, please remember to resolve the comment so we know at a glance that it\u0027s addressed)",
+      "parentUuid": "a7ef2d6a_b4f4eb8f",
       "revId": "27b30b15a002fdd2d8948fe2d271f2bc6f830932",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
