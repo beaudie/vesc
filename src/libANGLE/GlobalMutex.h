@@ -15,8 +15,17 @@ namespace egl
 namespace priv
 {
 class GlobalMutex;
+
+enum class GlobalMutexChoice
+{
+    // All EGL entry points except EGL Sync objects
+    EGL,
+    // Entry points relating to EGL Sync objects
+    Sync,
+};
 }  // namespace priv
 
+template <priv::GlobalMutexChoice mutexChoice>
 class [[nodiscard]] ScopedGlobalMutexLock final : angle::NonCopyable
 {
   public:
@@ -25,9 +34,12 @@ class [[nodiscard]] ScopedGlobalMutexLock final : angle::NonCopyable
 
 #if !defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
   private:
-    priv::GlobalMutex &mMutex;
+    priv::GlobalMutex *mMutex;
 #endif
 };
+
+using ScopedGlobalEGLMutexLock           = ScopedGlobalMutexLock<priv::GlobalMutexChoice::EGL>;
+using ScopedGlobalEGLSyncObjectMutexLock = ScopedGlobalMutexLock<priv::GlobalMutexChoice::Sync>;
 
 // For Context protection where lock is optional. Works slower than ScopedGlobalMutexLock.
 class [[nodiscard]] ScopedOptionalGlobalMutexLock final : angle::NonCopyable
