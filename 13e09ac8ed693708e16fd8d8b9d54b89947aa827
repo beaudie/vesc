@@ -217,6 +217,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "180047af_cbc02d42",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-16T14:37:05Z",
+      "side": 1,
+      "message": "There\u0027s already `supportsExternalMemoryHost` as an ANGLE feature, just need initializing it!",
+      "parentUuid": "e02b0c89_8655a3b5",
+      "range": {
+        "startLine": 460,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 85
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29aa3b3d_0e0c2e51",
         "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
         "patchSetId": 16
