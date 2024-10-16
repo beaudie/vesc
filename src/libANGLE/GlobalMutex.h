@@ -29,6 +29,18 @@ class [[nodiscard]] ScopedGlobalMutexLock final : angle::NonCopyable
 #endif
 };
 
+class [[nodiscard]] ScopedGlobalEGLSyncObjectMutexLock final : angle::NonCopyable
+{
+  public:
+    ScopedGlobalEGLSyncObjectMutexLock();
+    ~ScopedGlobalEGLSyncObjectMutexLock();
+
+#if !defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
+  private:
+    priv::GlobalMutex &mMutex;
+#endif
+};
+
 // For Context protection where lock is optional. Works slower than ScopedGlobalMutexLock.
 class [[nodiscard]] ScopedOptionalGlobalMutexLock final : angle::NonCopyable
 {
@@ -42,7 +54,9 @@ class [[nodiscard]] ScopedOptionalGlobalMutexLock final : angle::NonCopyable
 
 #if defined(ANGLE_PLATFORM_WINDOWS) && !defined(ANGLE_STATIC)
 void AllocateGlobalMutex();
+void AllocateGlobalEGLSyncMutex();
 void DeallocateGlobalMutex();
+void DeallocateGlobalEGLSyncMutex();
 #endif
 
 }  // namespace egl

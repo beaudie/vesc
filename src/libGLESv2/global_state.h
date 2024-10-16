@@ -102,6 +102,20 @@ ANGLE_INLINE ScopedContextMutexLock LockAndTryMergeContextMutexes(gl::Context *c
 }  // namespace egl
 
 #define ANGLE_SCOPED_GLOBAL_LOCK() egl::ScopedGlobalMutexLock globalMutexLock
+#if ANGLE_CAPTURE_ENABLED
+#    define ANGLE_SCOPED_GLOBAL_AND_EGL_SYNC_LOCK() egl::ScopedGlobalMutexLock globalMutexLock
+#else
+#    define ANGLE_SCOPED_GLOBAL_AND_EGL_SYNC_LOCK() \
+        egl::ScopedGlobalMutexLock globalMutexLock; \
+        egl::ScopedGlobalEGLSyncObjectMutexLock globalEGLSyncObjectMutexLock
+#endif
+
+#if ANGLE_CAPTURE_ENABLED
+#    define ANGLE_SCOPED_GLOBAL_EGL_SYNC_LOCK() egl::ScopedGlobalMutexLock globalMutexLock
+#else
+#    define ANGLE_SCOPED_GLOBAL_EGL_SYNC_LOCK() \
+        egl::ScopedGlobalEGLSyncObjectMutexLock globalEGLSyncObjectMutexLock
+#endif
 
 namespace gl
 {
