@@ -470,6 +470,30 @@
       },
       "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f02c67cf_3aabc4bc",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-16T20:24:17Z",
+      "side": 1,
+      "message": "This would require modifying the pure virtual method declared in CLMemoryVk which would then require modifying the CLBufferVk code aw well.",
+      "parentUuid": "29aa3b3d_0e0c2e51",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 26
+      },
+      "revId": "13e09ac8ed693708e16fd8d8b9d54b89947aa827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
