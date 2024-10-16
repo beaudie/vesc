@@ -16,6 +16,24 @@
       "message": "@syoussefi could you ptal? this is obviously super-rough at the moment - the custom_vars would all need much more sensible defaults - but I\u0027m just wondering if ANGLE has any interest in merging something like this, or if we should keep it as a downstream modification in Mesa\u0027s build",
       "revId": "a0e5e05d5ae25a90e8770b31b932cb3f7a259b53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd147d25_f8f90465",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-16T12:27:16Z",
+      "side": 1,
+      "message": "FYI, there was an effort to use only git submodules to manage deps: https://docs.google.com/document/d/1NhgzGAaApCds2yEhtnDDGoXeCcqS6MKYLY4SosY9inA\n\nNot sure if it\u0027s still a goal.",
+      "parentUuid": "d84bb05e_94f1a1f3",
+      "revId": "a0e5e05d5ae25a90e8770b31b932cb3f7a259b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
