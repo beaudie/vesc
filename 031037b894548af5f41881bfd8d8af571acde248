@@ -20,6 +20,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d2a4400d_dc6b2067",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2746,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-17T21:39:33Z",
+      "side": 1,
+      "message": "Should be removed, since it checks for `GL_CHROMIUM_copy_texture`, which is not used in the test.",
+      "range": {
+        "startLine": 2743,
+        "startChar": 0,
+        "endLine": 2746,
+        "endChar": 5
+      },
+      "revId": "031037b894548af5f41881bfd8d8af571acde248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e8c8cd7_4b8159ba",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2817,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-17T21:39:33Z",
+      "side": 1,
+      "message": "Should be removed",
+      "range": {
+        "startLine": 2814,
+        "startChar": 0,
+        "endLine": 2817,
+        "endChar": 5
+      },
+      "revId": "031037b894548af5f41881bfd8d8af571acde248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "75234a04_f1e16b40",
         "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
         "patchSetId": 2
