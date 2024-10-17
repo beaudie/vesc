@@ -52,6 +52,24 @@
       "parentUuid": "e166b52c_da2d9dea",
       "revId": "190b768374b81ae891e9284d3d6c27564b6e78e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68ba9ba4_79333f53",
+        "filename": "src/libGLESv2/cl_stubs.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-10-17T18:42:30Z",
+      "side": 1,
+      "message": "Agreed/+1 on the error return\n\nDone.",
+      "parentUuid": "30368f85_cda763b6",
+      "revId": "190b768374b81ae891e9284d3d6c27564b6e78e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
