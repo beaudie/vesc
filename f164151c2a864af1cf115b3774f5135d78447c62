@@ -51,6 +51,24 @@
       "message": "LGTM. The golden image needs to be updated. I will leave it to Cody for that.",
       "revId": "f164151c2a864af1cf115b3774f5135d78447c62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc524c7b_e3e9357b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-17T16:23:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4373044d_0931c4f6",
+      "revId": "f164151c2a864af1cf115b3774f5135d78447c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
