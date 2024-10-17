@@ -5677,8 +5677,10 @@ bool ValidateFramebufferTexture2D(const Context *context,
 
             case TextureTarget::External:
             {
-                if (!context->getExtensions().YUVTargetEXT)
+                if (!context->getExtensions().YUVTargetEXT &&
+                    !context->getExtensions().EGLImageExternalOES)
                 {
+                    // TODO: Update message
                     ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kYUVTargetExtensionRequired);
                     return false;
                 }
