@@ -1825,12 +1825,22 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     const gl::SamplerBindingVector &samplers,
     PipelineType pipelineType,
     UpdateDescriptorSetsBuilder *updateBuilder,
-    vk::CommandBufferHelperCommon *commandBufferHelper,
-    const vk::DescriptorSetDesc &texturesDesc)
+    vk::CommandBufferHelperCommon *commandBufferHelper)
 {
+    // We use textureSerial to optimize texture binding updates. Each permutation of a
+    // {VkImage/VkSampler} generates a unique serial. These object ids are combined to form a unique
+    // signature for each descriptor set. This allows us to keep a cache of descriptor sets and
+    // avoid calling vkAllocateDesctiporSets each texture update.
+    vk::DescriptorSetDescBuilder textureDescriptorBuilder;
+
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
+
+    textureDescriptorBuilder.updatePreCacheActiveTextures(context, *mExecutable, textures,
+                                                          samplers);
+
     ANGLE_TRY(mDynamicDescriptorPools[DescriptorSetIndex::Texture]->getOrAllocateDescriptorSet(
-        context, texturesDesc, mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
+        context, textureDescriptorBuilder.getDesc(),
+        mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
         &mDescriptorSets[DescriptorSetIndex::Texture], &newSharedCacheKey));
     ASSERT(mDescriptorSets[DescriptorSetIndex::Texture]);
     mDescriptorPools[DescriptorSetIndex::Texture] =
@@ -1838,13 +1848,11 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
     if (newSharedCacheKey != nullptr)
     {
-        vk::DescriptorSetDescBuilder fullDesc(
-            mTextureWriteDescriptorDescs.getTotalDescriptorCount());
         // Cache miss. A new cache entry has been created.
-        ANGLE_TRY(fullDesc.updateFullActiveTextures(
+        ANGLE_TRY(textureDescriptorBuilder.updateActiveTexturesForCacheMiss(
             context, mVariableInfoMap, mTextureWriteDescriptorDescs, *mExecutable, textures,
             samplers, pipelineType, newSharedCacheKey));
-        fullDesc.updateDescriptorSet(
+        textureDescriptorBuilder.updateDescriptorSet(
             context->getRenderer(), mTextureWriteDescriptorDescs, updateBuilder,
             mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet());
     }
