@@ -4516,24 +4516,31 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 {
     Renderer *renderer = context->getRenderer();
 
-    // Eviction logic: Before we allocate a new pool, check to see if there is any existing pool
-    // is not bound to program and is GPU compete. We destroy one pool in exchange for allocate
-    // a new pool to keep total descriptorPool count under control.
-    for (size_t poolIndex = 0; poolIndex < mDescriptorPools.size();)
+    // When cache is disabled, we are going to constantly release the current descriptorSet and put
+    // in garbage list and then recycle one from garbage list. The garbage list is essentially a
+    // ring buffer contains all pending/extra descriptorSets. For now we only do eviction if cache
+    // is enabled.
+    if (renderer->getFeatures().descriptorSetCache.enabled)
     {
-        if (!mDescriptorPools[poolIndex])
+        // Eviction logic: Before we allocate a new pool, check to see if there is any existing pool
+        // is not bound to program and is GPU compete. We destroy one pool in exchange for allocate
+        // a new pool to keep total descriptorPool count under control.
+        for (size_t poolIndex = 0; poolIndex < mDescriptorPools.size();)
         {
-            mDescriptorPools.erase(mDescriptorPools.begin() + poolIndex);
-            continue;
+            if (!mDescriptorPools[poolIndex])
+            {
+                mDescriptorPools.erase(mDescriptorPools.begin() + poolIndex);
+                continue;
+            }
+            if (mDescriptorPools[poolIndex].unique() &&
+                renderer->hasResourceUseFinished(mDescriptorPools[poolIndex]->getResourceUse()))
+            {
+                mDescriptorPools[poolIndex]->destroy(renderer);
+                mDescriptorPools.erase(mDescriptorPools.begin() + poolIndex);
+                break;
+            }
+            ++poolIndex;
         }
-        if (mDescriptorPools[poolIndex].unique() &&
-            renderer->hasResourceUseFinished(mDescriptorPools[poolIndex]->getResourceUse()))
-        {
-            mDescriptorPools[poolIndex]->destroy(renderer);
-            mDescriptorPools.erase(mDescriptorPools.begin() + poolIndex);
-            break;
-        }
-        ++poolIndex;
     }
 
     static constexpr size_t kMaxPools = 99999;
