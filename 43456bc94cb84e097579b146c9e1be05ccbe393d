@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e922d18_73b0e5d8",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-10-17T15:48:44Z",
+      "side": 1,
+      "message": "I think we probably only need to change this to false to disable MSRTT. No need to revert the whole CL. The original CL just contains the changes required to enable MSRTT. And MSRTT is probably the real root cause of the leaks. It changed the way skia allocates MSAA textures.",
+      "range": {
+        "startLine": 954,
+        "startChar": 22,
+        "endLine": 954,
+        "endChar": 52
+      },
+      "revId": "43456bc94cb84e097579b146c9e1be05ccbe393d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
