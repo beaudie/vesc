@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c010480c_442c4854",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-17T16:10:37Z",
+      "side": 1,
+      "message": "I think we should follow Quyen\u0027s suggestion and just disable the multisampled render-to-texture extension because it sounds like the IOSurface format translations are an important correctness fix.\n\nlgtm whichever way you choose.",
+      "revId": "43456bc94cb84e097579b146c9e1be05ccbe393d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e922d18_73b0e5d8",
