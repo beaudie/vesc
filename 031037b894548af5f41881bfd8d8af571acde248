@@ -1,0 +1,85 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5917a31_c5610aa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-17T20:29:12Z",
+      "side": 1,
+      "message": "Thank you",
+      "revId": "031037b894548af5f41881bfd8d8af571acde248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75234a04_f1e16b40",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2867,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-17T20:29:12Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the destination target here be `GL_TEXTURE_2D`?",
+      "range": {
+        "startLine": 2867,
+        "startChar": 26,
+        "endLine": 2867,
+        "endChar": 49
+      },
+      "revId": "031037b894548af5f41881bfd8d8af571acde248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3018bb47_d924675b",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2870,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-17T20:29:12Z",
+      "side": 1,
+      "message": "There should be a framebuffer bound to `GL_TEXTURE_2D` in order to verify the destination texture?",
+      "range": {
+        "startLine": 2870,
+        "startChar": 4,
+        "endLine": 2870,
+        "endChar": 25
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "35e0546e_54e32645",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/gl_tests/CopyTextureTest.cpp",
+              "range": {
+                "startLine": 2871,
+                "startChar": 0,
+                "endLine": 2871,
+                "endChar": 0
+              },
+              "replacement": "    GLFramebuffer framebuffer;\n    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);\n    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[1], 0);\n    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "031037b894548af5f41881bfd8d8af571acde248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
