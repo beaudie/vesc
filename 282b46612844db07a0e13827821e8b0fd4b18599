@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9124d246_bc7ccdd5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-17T18:56:24Z",
+      "side": 1,
+      "message": "Could you please add a link to crrev.com/5937060 ? We should make it easy to find the real fix from crbug.com/42261786 .",
+      "revId": "282b46612844db07a0e13827821e8b0fd4b18599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d8d5566_606c70fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-17T18:56:24Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "282b46612844db07a0e13827821e8b0fd4b18599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
