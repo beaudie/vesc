@@ -69,6 +69,41 @@
       "parentUuid": "4373044d_0931c4f6",
       "revId": "f164151c2a864af1cf115b3774f5135d78447c62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ff35ed2_6f23a6f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-17T18:01:54Z",
+      "side": 1,
+      "message": "Drive-by approval since Cody is out.\n\nFeel free to add your name to CONTRIBUTORS Lina.",
+      "revId": "f164151c2a864af1cf115b3774f5135d78447c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f85a087e_c2228e57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-17T18:01:54Z",
+      "side": 1,
+      "message": "Looks like this fixed minetest (and we can perhaps rely on that as the test). I can accept the new images if you can verify they are what they are supposed to be.",
+      "parentUuid": "fc524c7b_e3e9357b",
+      "revId": "f164151c2a864af1cf115b3774f5135d78447c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
