@@ -39,6 +39,30 @@
       },
       "revId": "43456bc94cb84e097579b146c9e1be05ccbe393d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76178632_b24781bc",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-17T17:05:00Z",
+      "side": 1,
+      "message": "I was worried that since this CL was fairly simple the actual bug may be with RGBX emulation in general. I think it\u0027s safer to just revert the whole thing for now.",
+      "parentUuid": "7e922d18_73b0e5d8",
+      "range": {
+        "startLine": 954,
+        "startChar": 22,
+        "endLine": 954,
+        "endChar": 52
+      },
+      "revId": "43456bc94cb84e097579b146c9e1be05ccbe393d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
