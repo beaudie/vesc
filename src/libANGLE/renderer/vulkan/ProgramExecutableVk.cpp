@@ -1960,6 +1960,7 @@ angle::Result ProgramExecutableVk::bindDescriptorSets(
             commandBuffer->bindDescriptorSets(getPipelineLayout(), pipelineBindPoint,
                                               descriptorSetIndex, 1, &descSet, 0, nullptr);
         }
+        commandBufferHelper->retainResource(mDescriptorSets[descriptorSetIndex].get());
     }
 
     return angle::Result::Continue;
