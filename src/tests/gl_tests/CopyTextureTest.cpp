@@ -2748,6 +2748,9 @@ TEST_P(CopyTextureTestES3, CopyImageSubDataToEGLImage)
     // copy from/to GL_TEXTURE_EXTERNAL_OES texture target. If  GL_EXT_copy_image
     // is not supported, then no need to test.
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_copy_image"));
+    // GL_EXT_YUV_target extension is required to use GL_TEXTURE_EXTERNAL_OES as a target
+    // for glFramebufferTexture2D().
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_YUV_target"));
 
     EGLWindow *window = getEGLWindow();
     EGLDisplay dpy    = window->getDisplay();
