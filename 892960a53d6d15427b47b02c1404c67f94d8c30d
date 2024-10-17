@@ -16,6 +16,24 @@
       "message": "If you grep device_context_volatile_eagl you could find couple of more places to remove in case that\u0027s appropriate.",
       "revId": "892960a53d6d15427b47b02c1404c67f94d8c30d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3180ca4_60506b68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-17T07:47:36Z",
+      "side": 1,
+      "message": "Those are extension headers that may need to keep the symbols until we are sure that nobody uses them.",
+      "parentUuid": "67d7be4d_be5e1d05",
+      "revId": "892960a53d6d15427b47b02c1404c67f94d8c30d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
