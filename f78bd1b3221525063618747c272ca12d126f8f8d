@@ -69,6 +69,24 @@
       "message": "Does it guarantee that `releaseRef()` will call `mRefCounted-\u003eget().destroy()` and `SafeDelete(mRefCounted)` ? What happens if after calling `mRefCounted-\u003ereleaseRef();`, below chunk is not called:\n\n```\nif (!mRefCounted-\u003eisReferenced())\n{\n    mRefCounted-\u003eget().destroy();\n    SafeDelete(mRefCounted);\n}\n```",
       "revId": "f78bd1b3221525063618747c272ca12d126f8f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7ddb523_f8e64ceb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-17T22:49:06Z",
+      "side": 1,
+      "message": "That is expected. It means there are other owners that holding refcount to it.",
+      "parentUuid": "d33c9d76_6080039d",
+      "revId": "f78bd1b3221525063618747c272ca12d126f8f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
