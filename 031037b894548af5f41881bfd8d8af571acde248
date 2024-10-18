@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b17d4a4_26c71869",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2746,
+      "author": {
+        "id": 3641729
+      },
+      "writtenOn": "2024-10-18T02:25:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d2a4400d_dc6b2067",
+      "range": {
+        "startLine": 2743,
+        "startChar": 0,
+        "endLine": 2746,
+        "endChar": 5
+      },
+      "revId": "031037b894548af5f41881bfd8d8af571acde248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e8c8cd7_4b8159ba",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0968f27a_aef0fabe",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2817,
+      "author": {
+        "id": 3641729
+      },
+      "writtenOn": "2024-10-18T02:25:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8e8c8cd7_4b8159ba",
+      "range": {
+        "startLine": 2814,
+        "startChar": 0,
+        "endLine": 2817,
+        "endChar": 5
+      },
+      "revId": "031037b894548af5f41881bfd8d8af571acde248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75234a04_f1e16b40",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-10-17T20:29:12Z",
       "side": 1,
       "message": "Shouldn\u0027t the destination target here be `GL_TEXTURE_2D`?",
+      "range": {
+        "startLine": 2867,
+        "startChar": 26,
+        "endLine": 2867,
+        "endChar": 49
+      },
+      "revId": "031037b894548af5f41881bfd8d8af571acde248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baf014d2_5f2c0160",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2867,
+      "author": {
+        "id": 3641729
+      },
+      "writtenOn": "2024-10-18T02:25:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "75234a04_f1e16b40",
       "range": {
         "startLine": 2867,
         "startChar": 26,
@@ -124,6 +196,30 @@
           ]
         }
       ],
+      "revId": "031037b894548af5f41881bfd8d8af571acde248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e638543e_807f67da",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2870,
+      "author": {
+        "id": 3641729
+      },
+      "writtenOn": "2024-10-18T02:25:19Z",
+      "side": 1,
+      "message": "`mFramebuffer` has already been bound to GL_FRAMEBUFFER with color_attachment0 `mTextures[1]` during the `testSetUp`. Don\u0027t need to rebind it.",
+      "parentUuid": "3018bb47_d924675b",
+      "range": {
+        "startLine": 2870,
+        "startChar": 4,
+        "endLine": 2870,
+        "endChar": 25
+      },
       "revId": "031037b894548af5f41881bfd8d8af571acde248",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
