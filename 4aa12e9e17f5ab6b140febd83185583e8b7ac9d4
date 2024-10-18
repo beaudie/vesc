@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad96d6c5_1328c000",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1648,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-18T21:01:42Z",
+      "side": 0,
+      "message": "Why do we remove the `contextVk-\u003eaddGarbage()` code here?",
+      "revId": "4aa12e9e17f5ab6b140febd83185583e8b7ac9d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
