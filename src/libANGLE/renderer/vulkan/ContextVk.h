@@ -1328,8 +1328,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                  DirtyBits::Iterator *dirtyBitsIterator);
     template <typename CommandBufferHelperT>
     angle::Result handleDirtyUniformBuffersImpl(CommandBufferHelperT *commandBufferHelper);
-    template <typename CommandBufferHelperT>
-    angle::Result handleDirtyDescriptorSetsImpl(CommandBufferHelperT *commandBufferHelper,
+    template <typename CommandBufferT>
+    angle::Result handleDirtyDescriptorSetsImpl(CommandBufferT *commandBufferHelper,
                                                 PipelineType pipelineType);
     void handleDirtyGraphicsDynamicScissorImpl(bool isPrimitivesGeneratedQueryActive);
 
@@ -1717,6 +1717,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Storage for default uniforms of ProgramVks and ProgramPipelineVks.
     vk::DynamicBuffer mDefaultUniformStorage;
+    // Descriptor sets for current program.
+    vk::DescriptorSetArray<vk::DescriptorSetPointer> mDescriptorSets;
+    // DynamicUniform for current program.
+    gl::ShaderVector<uint32_t> mDynamicUniformDescriptorOffsets;
+    std::vector<uint32_t> mDynamicShaderResourceDescriptorOffsets;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 
