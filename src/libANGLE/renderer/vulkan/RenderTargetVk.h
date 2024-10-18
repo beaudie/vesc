@@ -93,11 +93,17 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     // For cube maps we use single-level single-layer 2D array views.
     angle::Result getImageView(vk::Context *context, const vk::ImageView **imageViewOut) const;
+    angle::Result getDepthOrStencilImageView(vk::Context *context,
+                                             VkImageAspectFlagBits aspect,
+                                             const vk::ImageView **imageViewOut) const;
     angle::Result getImageViewWithColorspace(vk::Context *context,
                                              gl::SrgbWriteControlMode srgbWriteContrlMode,
                                              const vk::ImageView **imageViewOut) const;
     angle::Result getResolveImageView(vk::Context *context,
                                       const vk::ImageView **imageViewOut) const;
+    angle::Result getResolveDepthOrStencilImageView(vk::Context *context,
+                                                    VkImageAspectFlagBits aspect,
+                                                    const vk::ImageView **imageViewOut) const;
 
     // For 3D textures, the 2D view created for render target is invalid to read from.  The
     // following will return a view to the whole image (for all types, including 3D and 2DArray).
@@ -204,6 +210,11 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
                                    const vk::ImageHelper &image,
                                    vk::ImageViewHelper *imageViews,
                                    const vk::ImageView **imageViewOut) const;
+    angle::Result getDepthOrStencilImageViewImpl(vk::Context *context,
+                                                 const vk::ImageHelper &image,
+                                                 vk::ImageViewHelper *imageViews,
+                                                 VkImageAspectFlagBits aspect,
+                                                 const vk::ImageView **imageViewOut) const;
 
     vk::ImageOrBufferViewSubresourceSerial getSubresourceSerialImpl(
         vk::ImageViewHelper *imageViews) const;
