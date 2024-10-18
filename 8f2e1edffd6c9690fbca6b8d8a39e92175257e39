@@ -16,6 +16,24 @@
       "message": "Doesn\u0027t this undo the benefits of `SharedPtr`? `SharedPtr` is managing the lifetime of the refcounted thing (so that `releaseRef` can automatically destroy the resource). I see this pointer is now taken out and cached in `mDescriptorSetCache`, that removes the ability for SharedPtr to manage the lifetime.\n\nMaybe there\u0027s a way to make this safer. One usage is just checking if the pointers are the same, you could add an `operator\u003d\u003d` for that instead. For `mDescriptorSetCache`, I haven\u0027t read too carefully yet to know what can be done.",
       "revId": "8f2e1edffd6c9690fbca6b8d8a39e92175257e39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "648052e1_bea69959",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-18T20:56:37Z",
+      "side": 1,
+      "message": "Basically this is std::weak_ptr equivalent, essentially a weak pointer. It is used by DescriptorSetHelper which needs to have a back pointer to the pool that allocated from. One way I can make it safer is created another type WeakPtr which only allows pass in/out SharedPtr and does not allow any ref count modification.",
+      "parentUuid": "cbe7821c_bc453bd5",
+      "revId": "8f2e1edffd6c9690fbca6b8d8a39e92175257e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
