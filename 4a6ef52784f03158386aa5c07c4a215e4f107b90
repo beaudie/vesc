@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "903fe382_f2894c93",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-18T00:53:54Z",
+      "side": 1,
+      "message": "nit: do you mean \"Right now\"?",
+      "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "532adce1_f232bec4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-18T00:53:54Z",
+      "side": 1,
+      "message": "nit: typo: `discriptorSet` --\u003e `descriptorSet`",
+      "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1102a24_61942a91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 4352,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-18T00:53:54Z",
+      "side": 1,
+      "message": "Is it because access to this function is not thread safe, so we don\u0027t use `DescriptorPoolPointer`, and use `RefCountedDescriptorPool` instead?",
+      "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
