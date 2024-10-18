@@ -56,6 +56,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8203c6a9_6a584fba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 12670,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-18T20:40:46Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this always be valid? It was just `Init`ed above.",
+      "revId": "f78bd1b3221525063618747c272ca12d126f8f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d33c9d76_6080039d",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 7
@@ -103,6 +120,46 @@
       "side": 1,
       "message": "Acknowledged",
       "parentUuid": "a7ddb523_f8e64ceb",
+      "revId": "f78bd1b3221525063618747c272ca12d126f8f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bc09d75_d155a626",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-18T20:40:46Z",
+      "side": 1,
+      "message": "```suggestion\n    operator bool() const { return valid(); }\n```",
+      "revId": "f78bd1b3221525063618747c272ca12d126f8f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fcf044e_4b508a31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-18T20:40:46Z",
+      "side": 1,
+      "message": "Code dedup:\n\n```suggestion\n        return \u0026*this;\n```\n\nOr you could make `operator*` do `return *get()`",
+      "range": {
+        "startLine": 917,
+        "startChar": 0,
+        "endLine": 918,
+        "endChar": 35
+      },
       "revId": "f78bd1b3221525063618747c272ca12d126f8f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
