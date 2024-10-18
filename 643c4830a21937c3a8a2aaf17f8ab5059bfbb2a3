@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1b3f3a63_ddeae53f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-18T18:30:23Z",
+      "side": 1,
+      "message": "Because there are places we want a weak pointer. For example, DescriptorSetHelper holds a weak pointer to the pool. DescriptorPoolPointer is a strong pointer which will prevent it from destroyed.",
+      "parentUuid": "d741ccc8_af2593b6",
+      "revId": "643c4830a21937c3a8a2aaf17f8ab5059bfbb2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af61ff5b_245f5b34",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 24

@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c29c2ebb_74fc40af",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 4303,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-18T18:30:23Z",
+      "side": 1,
+      "message": "Right, mostly for sanity check. Maybe we don\u0027t need the assertion at all, then we can get rid of this. But there should be no perf difference since destruction still end up walk through everything and invoke destructor.",
+      "parentUuid": "0f82d401_98cce293",
+      "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1102a24_61942a91",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 21
