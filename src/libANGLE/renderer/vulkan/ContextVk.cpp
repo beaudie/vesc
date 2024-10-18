@@ -907,7 +907,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, vk::Rendere
       mInitialContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mContextPriority(mInitialContextPriority),
       mProtectionType(vk::ConvertProtectionBoolToType(state.hasProtectedContent())),
-      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
+      mShareGroupVk(vk::GetImpl(state.getShareGroup())),
+      mDynamicUniformDescriptorOffsets{}
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -2596,7 +2597,8 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         ProgramExecutableVk *executableVk = vk::GetImpl(executable);
         ANGLE_TRY(executableVk->updateTexturesDescriptorSet(
             this, mActiveTextures, mState.getSamplers(), pipelineType,
-            mShareGroupVk->getUpdateDescriptorSetsBuilder(), commandBufferHelper));
+            mShareGroupVk->getUpdateDescriptorSetsBuilder(), commandBufferHelper,
+            &mDescriptorSets[DescriptorSetIndex::Texture]));
     }
 
     return angle::Result::Continue;
@@ -2886,7 +2888,9 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk->updateShaderResourcesDescriptorSet(
         this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), mShaderBufferWriteDescriptorDescs,
-        commandBufferHelper, mShaderBuffersDescriptorDesc, &newSharedCacheKey));
+        commandBufferHelper, &mDescriptorSets[DescriptorSetIndex::ShaderResource],
+        &mDynamicShaderResourceDescriptorOffsets, mShaderBuffersDescriptorDesc,
+        &newSharedCacheKey));
 
     if (newSharedCacheKey)
     {
@@ -2943,7 +2947,9 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk->updateShaderResourcesDescriptorSet(
         this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), mShaderBufferWriteDescriptorDescs,
-        commandBufferHelper, mShaderBuffersDescriptorDesc, &newSharedCacheKey));
+        commandBufferHelper, &mDescriptorSets[DescriptorSetIndex::ShaderResource],
+        &mDynamicShaderResourceDescriptorOffsets, mShaderBuffersDescriptorDesc,
+        &newSharedCacheKey));
 
     if (newSharedCacheKey)
     {
@@ -3012,7 +3018,8 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk->updateUniformsAndXfbDescriptorSet(
         this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), writeDescriptorDescs,
-        mRenderPassCommands, currentUniformBuffer, &uniformsAndXfbDesc, &newSharedCacheKey));
+        mRenderPassCommands, &mDescriptorSets[DescriptorSetIndex::UniformsAndXfb],
+        currentUniformBuffer, &uniformsAndXfbDesc, &newSharedCacheKey));
 
     if (newSharedCacheKey)
     {
@@ -3141,7 +3148,9 @@ angle::Result ContextVk::handleDirtyUniformsImpl(DirtyBits::Iterator *dirtyBitsI
         vk::SafeGetImpl(mState.getCurrentTransformFeedback());
     ANGLE_TRY(executableVk->updateUniforms(
         this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), commandBufferHelper, &mEmptyBuffer,
-        &mDefaultUniformStorage, mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
+        &mDefaultUniformStorage, &mDescriptorSets[DescriptorSetIndex::UniformsAndXfb],
+        &mDynamicUniformDescriptorOffsets, mState.isTransformFeedbackActiveUnpaused(),
+        transformFeedbackVk));
 
     return angle::Result::Continue;
 }
@@ -3476,8 +3485,75 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferHelperT *com
     }
 
     ProgramExecutableVk *executableVk = vk::GetImpl(mState.getProgramExecutable());
-    return executableVk->bindDescriptorSets(this, commandBufferHelper,
-                                            &commandBufferHelper->getCommandBuffer(), pipelineType);
+    return bindDescriptorSets(this, *executableVk, commandBufferHelper,
+                              &commandBufferHelper->getCommandBuffer(), pipelineType);
+}
+
+template <typename CommandBufferT>
+angle::Result ContextVk::bindDescriptorSets(vk::Context *context,
+                                            const ProgramExecutableVk &executableVk,
+                                            vk::CommandBufferHelperCommon *commandBufferHelper,
+                                            CommandBufferT *commandBuffer,
+                                            PipelineType pipelineType)
+{
+    // Can probably use better dirty bits here.
+
+    // Find the maximum non-null descriptor set.  This is used in conjunction with a driver
+    // workaround to bind empty descriptor sets only for gaps in between 0 and max and avoid
+    // binding unnecessary empty descriptor sets for the sets beyond max.
+    DescriptorSetIndex lastNonNullDescriptorSetIndex = DescriptorSetIndex::InvalidEnum;
+    for (DescriptorSetIndex descriptorSetIndex : angle::AllEnums<DescriptorSetIndex>())
+    {
+        if (mDescriptorSets[descriptorSetIndex])
+        {
+            lastNonNullDescriptorSetIndex = descriptorSetIndex;
+        }
+    }
+
+    const VkPipelineBindPoint pipelineBindPoint = pipelineType == PipelineType::Compute
+                                                      ? VK_PIPELINE_BIND_POINT_COMPUTE
+                                                      : VK_PIPELINE_BIND_POINT_GRAPHICS;
+
+    for (DescriptorSetIndex descriptorSetIndex : angle::AllEnums<DescriptorSetIndex>())
+    {
+        if (ToUnderlying(descriptorSetIndex) > ToUnderlying(lastNonNullDescriptorSetIndex))
+        {
+            continue;
+        }
+
+        if (!mDescriptorSets[descriptorSetIndex])
+        {
+            continue;
+        }
+
+        VkDescriptorSet descSet = mDescriptorSets[descriptorSetIndex]->getDescriptorSet();
+        ASSERT(descSet != VK_NULL_HANDLE);
+
+        // Default uniforms are encompassed in a block per shader stage, and they are assigned
+        // through dynamic uniform buffers (requiring dynamic offsets).  No other descriptor
+        // requires a dynamic offset.
+        if (descriptorSetIndex == DescriptorSetIndex::UniformsAndXfb)
+        {
+            commandBuffer->bindDescriptorSets(
+                executableVk.getPipelineLayout(), pipelineBindPoint, descriptorSetIndex, 1,
+                &descSet, static_cast<uint32_t>(mDynamicUniformDescriptorOffsets.size()),
+                mDynamicUniformDescriptorOffsets.data());
+        }
+        else if (descriptorSetIndex == DescriptorSetIndex::ShaderResource)
+        {
+            commandBuffer->bindDescriptorSets(
+                executableVk.getPipelineLayout(), pipelineBindPoint, descriptorSetIndex, 1,
+                &descSet, static_cast<uint32_t>(mDynamicShaderResourceDescriptorOffsets.size()),
+                mDynamicShaderResourceDescriptorOffsets.data());
+        }
+        else
+        {
+            commandBuffer->bindDescriptorSets(executableVk.getPipelineLayout(), pipelineBindPoint,
+                                              descriptorSetIndex, 1, &descSet, 0, nullptr);
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 void ContextVk::syncObjectPerfCounters(const angle::VulkanPerfCounters &commandQueuePerfCounters)
@@ -7739,6 +7815,14 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         ASSERT(!someCommandsNeedFlush);
         mLastFlushedQueueSerial = mOutsideRenderPassCommands->getQueueSerial();
         generateOutsideRenderPassCommandsQueueSerial();
+    }
+
+    for (vk::DescriptorSetPointer &descriptorSet : mDescriptorSets)
+    {
+        if (descriptorSet)
+        {
+            descriptorSet->setQueueSerial(mLastFlushedQueueSerial);
+        }
     }
 
     // We must add the per context dynamic buffers into resourceUseList before submission so that
