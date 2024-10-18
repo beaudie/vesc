@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f0a42bd_5d808b26",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-18T16:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "903fe382_f2894c93",
+      "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "532adce1_f232bec4",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-18T00:53:54Z",
       "side": 1,
       "message": "nit: typo: `discriptorSet` --\u003e `descriptorSet`",
+      "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "460538cb_edc6e738",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-18T16:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "532adce1_f232bec4",
       "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73ade614_5387345e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 4303,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-18T16:51:32Z",
+      "side": 1,
+      "message": "We don\u0027t. Pools never reused. They gets destroyed and new one created. We could potentially just reset the pool before reuse. But that is a difefrent topic. The code here is mostly to avoid hit assertion. DescriptorSetHelper\u0027s destructor has assertion that mPool and mDescriptorSet is null. Without this, when mDescriptorSetGarbageList is destroyed, you will hit assertion.",
+      "parentUuid": "0a49d8ef_59343df0",
+      "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1102a24_61942a91",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 21
@@ -65,6 +119,24 @@
       "writtenOn": "2024-10-18T00:53:54Z",
       "side": 1,
       "message": "Is it because access to this function is not thread safe, so we don\u0027t use `DescriptorPoolPointer`, and use `RefCountedDescriptorPool` instead?",
+      "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08871a82_9f5250d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 4352,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-18T16:51:32Z",
+      "side": 1,
+      "message": "This already addressed in prior CL",
+      "parentUuid": "d1102a24_61942a91",
       "revId": "4a6ef52784f03158386aa5c07c4a215e4f107b90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
