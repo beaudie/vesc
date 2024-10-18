@@ -1455,6 +1455,13 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result ensureInterfacePipelineCache();
 
+    template <typename CommandBufferT>
+    angle::Result bindDescriptorSets(vk::Context *context,
+                                     const ProgramExecutableVk &executableVk,
+                                     vk::CommandBufferHelperCommon *commandBufferHelper,
+                                     CommandBufferT *commandBuffer,
+                                     PipelineType pipelineType);
+
     angle::ImageLoadContext mImageLoadContext;
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
@@ -1717,6 +1724,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Storage for default uniforms of ProgramVks and ProgramPipelineVks.
     vk::DynamicBuffer mDefaultUniformStorage;
+    // Descriptor sets for current program.
+    vk::DescriptorSetArray<vk::DescriptorSetPointer> mDescriptorSets;
+    // DynamicUniform for current program.
+    gl::ShaderVector<uint32_t> mDynamicUniformDescriptorOffsets;
+    std::vector<uint32_t> mDynamicShaderResourceDescriptorOffsets;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 

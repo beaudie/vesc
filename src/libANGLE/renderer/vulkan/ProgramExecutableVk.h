@@ -219,13 +219,16 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                               const gl::SamplerBindingVector &samplers,
                                               PipelineType pipelineType,
                                               UpdateDescriptorSetsBuilder *updateBuilder,
-                                              vk::CommandBufferHelperCommon *commandBufferHelper);
+                                              vk::CommandBufferHelperCommon *commandBufferHelper,
+                                              vk::DescriptorSetPointer *descriptorSetOut);
 
     angle::Result updateShaderResourcesDescriptorSet(
         vk::Context *context,
         UpdateDescriptorSetsBuilder *updateBuilder,
         const vk::WriteDescriptorDescs &writeDescriptorDescs,
         vk::CommandBufferHelperCommon *commandBufferHelper,
+        vk::DescriptorSetPointer *descriptorSetOut,
+        std::vector<uint32_t> *dynamicShaderResourceDescriptorOffsets,
         const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
         vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut);
 
@@ -234,6 +237,7 @@ class ProgramExecutableVk : public ProgramExecutableImpl
         UpdateDescriptorSetsBuilder *updateBuilder,
         const vk::WriteDescriptorDescs &writeDescriptorDescs,
         vk::CommandBufferHelperCommon *commandBufferHelper,
+        vk::DescriptorSetPointer *descriptorSetOut,
         vk::BufferHelper *defaultUniformBuffer,
         vk::DescriptorSetDescBuilder *uniformsAndXfbDesc,
         vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut);
@@ -307,6 +311,8 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                  vk::CommandBufferHelperCommon *commandBufferHelper,
                                  vk::BufferHelper *emptyBuffer,
                                  vk::DynamicBuffer *defaultUniformStorage,
+                                 vk::DescriptorSetPointer *descriptorSetOut,
+                                 gl::ShaderVector<uint32_t> *dynamicUniformDescriptorOffsets,
                                  bool isTransformFeedbackActiveUnpaused,
                                  TransformFeedbackVk *transformFeedbackVk);
     void onProgramBind();
@@ -504,6 +510,7 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                              const vk::DescriptorSetDescBuilder &descriptorSetDesc,
                                              const vk::WriteDescriptorDescs &writeDescriptorDescs,
                                              DescriptorSetIndex setIndex,
+                                             vk::DescriptorSetPointer *descriptorSetOut,
                                              vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut);
 
     // When loading from cache / binary, initialize the pipeline cache with given data.  Otherwise
@@ -515,8 +522,7 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     void initializeWriteDescriptorDesc(vk::Context *context);
 
-    // Descriptor sets and pools for shader resources for this program.
-    vk::DescriptorSetArray<vk::DescriptorSetPointer> mDescriptorSets;
+    // Descriptor set pools for shader resources for this program.
     vk::DescriptorSetArray<vk::DynamicDescriptorPoolPointer> mDynamicDescriptorPools;
     vk::DescriptorSetArray<vk::DescriptorPoolPointer> mDescriptorPools;
     vk::BufferSerial mCurrentDefaultUniformBufferSerial;
@@ -530,8 +536,6 @@ class ProgramExecutableVk : public ProgramExecutableImpl
 
     // A set of dynamic offsets used with vkCmdBindDescriptorSets for the default uniform buffers.
     VkDescriptorType mUniformBufferDescriptorType;
-    gl::ShaderVector<uint32_t> mDynamicUniformDescriptorOffsets;
-    std::vector<uint32_t> mDynamicShaderResourceDescriptorOffsets;
 
     ShaderInterfaceVariableInfoMap mVariableInfoMap;
 
