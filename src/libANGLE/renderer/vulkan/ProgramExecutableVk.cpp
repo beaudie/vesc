@@ -1770,7 +1770,7 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
                                                   mDescriptorSets[setIndex]->getDescriptorSet());
         }
 
-        commandBufferHelper->retainResource(&mDescriptorSets[setIndex]->getPool()->get());
+        commandBufferHelper->retainResource(mDescriptorSets[setIndex]->getPool().get());
         commandBufferHelper->retainResource(mDescriptorPools[setIndex].get());
     }
     else

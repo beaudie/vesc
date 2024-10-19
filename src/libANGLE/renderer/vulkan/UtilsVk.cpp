@@ -4748,7 +4748,7 @@ angle::Result UtilsVk::allocateDescriptorSetWithLayout(
 
     // Because this is a one time use descriptorSet, we immediately put in the garbage list for
     // recycle.
-    vk::DescriptorPoolPointer pool = descriptorSet->getPool();
+    vk::DescriptorPoolWeakPointer &pool = descriptorSet->getPool();
     pool->addGarbage(std::move(descriptorSet));
 
     return angle::Result::Continue;
