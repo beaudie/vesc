@@ -4156,7 +4156,7 @@ void DescriptorSetHelper::destroy()
         // Since the pool is created without VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT, we
         // don't call vkFreeDescriptorSets. We always add to garbage list so that it can be
         // recycled.
-        mPool->get().addGarbage(std::move(*this));
+        mPool->addGarbage(std::move(*this));
         ASSERT(!valid());
     }
 }
@@ -4274,10 +4274,10 @@ bool DescriptorPoolHelper::recycleGarbage(Renderer *renderer,
 
 bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
                                                  const DescriptorSetLayout &descriptorSetLayout,
-                                                 RefCountedDescriptorPool *refCountedPool,
+                                                 const DescriptorPoolWeakPointer &pool,
                                                  DescriptorSetPointer *descriptorSetOut)
 {
-    ASSERT(&(refCountedPool->get()) == this);
+    ASSERT(pool.get() == this);
     if (recycleGarbage(context->getRenderer(), descriptorSetOut))
     {
         return true;
@@ -4286,7 +4286,7 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
     VkDescriptorSet descriptorSet;
     if (allocateVkDescriptorSet(context, descriptorSetLayout, &descriptorSet))
     {
-        DescriptorSetHelper helper = DescriptorSetHelper(descriptorSet, refCountedPool);
+        DescriptorSetHelper helper = DescriptorSetHelper(descriptorSet, pool);
         *descriptorSetOut          = std::move(helper);
         return true;
     }
@@ -4297,13 +4297,14 @@ void DescriptorPoolHelper::resetGarbage()
 {
     while (!mDescriptorSetGarbageList.empty())
     {
-        ASSERT(mDescriptorSetGarbageList.front().unique());
-        ASSERT(mDescriptorSetGarbageList.front().valid());
+        DescriptorSetPointer &garbage = mDescriptorSetGarbageList.front();
+        ASSERT(garbage.unique());
+        ASSERT(garbage->valid());
         // Because we do not use VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT when pool is
         // created, We can't free each individual descriptor set before destroying the pool, we
         // simply nuke the descriptorSet so that it won't hit assertion.
-        mDescriptorSetGarbageList.front()->mDescriptorSet = VK_NULL_HANDLE;
-        mDescriptorSetGarbageList.front()->mPool          = nullptr;
+        garbage->mDescriptorSet = VK_NULL_HANDLE;
+        garbage->mPool.reset();
         mDescriptorSetGarbageList.pop_front();
     }
 }
@@ -4349,7 +4350,7 @@ angle::Result DynamicDescriptorPool::init(Context *context,
     mPoolSizes.assign(setSizes, setSizes + setSizeCount);
     mCachedDescriptorSetLayout = descriptorSetLayout.getHandle();
 
-    DescriptorPoolPointer newPool = MakeShared<DescriptorPoolHelper>();
+    DescriptorPoolPointer newPool = DescriptorPoolPointer::makeShared();
     ANGLE_TRY(newPool->init(context, mPoolSizes, mMaxSetsPerPool));
 
     mDescriptorPools.emplace_back(std::move(newPool));
@@ -4381,41 +4382,42 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
     ASSERT(descriptorSetLayout.getHandle() == mCachedDescriptorSetLayout);
 
     // First try to allocate from the same pool
-    RefCountedDescriptorPool *refCountedPool = nullptr;
+    DescriptorPoolWeakPointer pool1;
     if (*descriptorSetOut)
     {
-        refCountedPool = (*descriptorSetOut)->getPool();
-        if (refCountedPool->get().allocateDescriptorSet(context, descriptorSetLayout,
-                                                        refCountedPool, descriptorSetOut))
+        pool1 = (*descriptorSetOut)->getPool();
+        if (pool1->allocateDescriptorSet(context, descriptorSetLayout, pool1, descriptorSetOut))
         {
             return angle::Result::Continue;
         }
     }
 
     // Next try to allocate from mCurrentPoolIndex pool
+    DescriptorPoolWeakPointer pool2;
     if (mDescriptorPools[mCurrentPoolIndex] &&
-        mDescriptorPools[mCurrentPoolIndex].getRefCountedStorage() != refCountedPool &&
-        mDescriptorPools[mCurrentPoolIndex]->allocateDescriptorSet(
-            context, descriptorSetLayout,
-            mDescriptorPools[mCurrentPoolIndex].getRefCountedStorage(), descriptorSetOut))
+        mDescriptorPools[mCurrentPoolIndex].get() != pool1.get())
     {
-        return angle::Result::Continue;
+        pool2 = mDescriptorPools[mCurrentPoolIndex];
+        if (pool2->allocateDescriptorSet(context, descriptorSetLayout, pool2, descriptorSetOut))
+        {
+            return angle::Result::Continue;
+        }
     }
 
     // Next try all other existing pools
+    DescriptorPoolWeakPointer pool;
     for (size_t poolIndex = 0; poolIndex < mDescriptorPools.size(); ++poolIndex)
     {
-        DescriptorPoolPointer &pool = mDescriptorPools[poolIndex];
+        pool = mDescriptorPools[poolIndex];
         if (!pool)
         {
             continue;
         }
-        if (pool.getRefCountedStorage() == refCountedPool || poolIndex == mCurrentPoolIndex)
+        if (pool.get() == pool1.get() || pool.get() == pool2.get())
         {
             continue;
         }
-        if (pool->allocateDescriptorSet(context, descriptorSetLayout, pool.getRefCountedStorage(),
-                                        descriptorSetOut))
+        if (pool->allocateDescriptorSet(context, descriptorSetLayout, pool, descriptorSetOut))
         {
             return angle::Result::Continue;
         }
@@ -4423,9 +4425,9 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
 
     // Last, try to allocate a new pool (and/or evict an existing pool)
     ANGLE_TRY(allocateNewPool(context));
-    bool success = mDescriptorPools[mCurrentPoolIndex]->allocateDescriptorSet(
-        context, descriptorSetLayout, mDescriptorPools[mCurrentPoolIndex].getRefCountedStorage(),
-        descriptorSetOut);
+    pool = mDescriptorPools[mCurrentPoolIndex];
+    bool success =
+        pool->allocateDescriptorSet(context, descriptorSetLayout, pool, descriptorSetOut);
     // Allocate from a new pool must succeed.
     ASSERT(success);
 
@@ -4456,7 +4458,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     // Let pool know there is a shared cache key created and destroys the shared cache key
     // when it destroys the pool.
     *newSharedCacheKeyOut = CreateSharedDescriptorSetCacheKey(desc, this);
-    (*descriptorSetOut)->getPool()->get().onNewDescriptorSetAllocated(*newSharedCacheKeyOut);
+    (*descriptorSetOut)->getPool()->onNewDescriptorSetAllocated(*newSharedCacheKeyOut);
 
     return angle::Result::Continue;
 }
@@ -4500,7 +4502,7 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
     {
         mMaxSetsPerPool *= mMaxSetsPerPoolMultiplier;
     }
-    DescriptorPoolPointer newPool = MakeShared<DescriptorPoolHelper>();
+    DescriptorPoolPointer newPool = DescriptorPoolPointer::makeShared();
     ANGLE_TRY(newPool->init(context, mPoolSizes, mMaxSetsPerPool));
 
     mDescriptorPools.emplace_back(std::move(newPool));
@@ -4522,7 +4524,7 @@ void DynamicDescriptorPool::releaseCachedDescriptorSet(Renderer *renderer,
 
         if (descriptorSet.unique())
         {
-            RefCountedDescriptorPool *pool = descriptorSet->getPool();
+            const DescriptorPoolWeakPointer &pool = descriptorSet->getPool();
             descriptorSet.reset();
             checkAndReleaseUnusedPool(renderer, pool);
         }
@@ -4536,12 +4538,12 @@ void DynamicDescriptorPool::destroyCachedDescriptorSet(Renderer *renderer,
 }
 
 void DynamicDescriptorPool::checkAndReleaseUnusedPool(Renderer *renderer,
-                                                      RefCountedDescriptorPool *pool)
+                                                      const DescriptorPoolWeakPointer &pool)
 {
     // If pool still contains any valid descriptorSet cache, then don't destroy it. Note that even
     // if pool has no valid descriptorSet, pool itself may still be bound to a program until it gets
     // unbound when next descriptorSet gets allocated. We always keep at least one pool around.
-    if (mDescriptorPools.size() < 2 || pool->get().hasValidDescriptorSet() || pool->isReferenced())
+    if (mDescriptorPools.size() < 2 || pool->hasValidDescriptorSet() || pool.use_count() > 1)
     {
         return;
     }
@@ -4550,15 +4552,15 @@ void DynamicDescriptorPool::checkAndReleaseUnusedPool(Renderer *renderer,
     size_t poolIndex;
     for (poolIndex = 0; poolIndex < mDescriptorPools.size(); ++poolIndex)
     {
-        if (pool == mDescriptorPools[poolIndex].getRefCountedStorage())
+        if (pool == mDescriptorPools[poolIndex])
         {
             break;
         }
     }
     // There must be a match
     ASSERT(poolIndex != mDescriptorPools.size());
-    ASSERT(pool->get().valid());
-    pool->get().release(renderer);
+    ASSERT(pool->valid());
+    pool->release(renderer);
 }
 
 // For testing only!
