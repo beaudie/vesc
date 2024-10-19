@@ -849,6 +849,8 @@ using AtomicBindingPointer = BindingPointer<T, AtomicRefCounted<T>>;
 
 // This is intended to have same interface as std::shared_ptr except this must used in thread safe
 // environment.
+template <typename>
+class WeakPtr;
 template <typename T>
 class SharedPtr final
 {
@@ -861,18 +863,20 @@ class SharedPtr final
         mRefCounted = new RefCountedStorage(std::move(object));
         mRefCounted->addRef();
     }
-    SharedPtr(RefCountedStorage *refCountedStorage) : mRefCounted(refCountedStorage)
-    {
-        if (mRefCounted)
-        {
-            mRefCounted->addRef();
-        }
-    }
+    SharedPtr(const WeakPtr<T> &other) : mRefCounted(nullptr) { *this = other; }
     ~SharedPtr() { reset(); }
 
     SharedPtr(const SharedPtr &other) : mRefCounted(nullptr) { *this = other; }
 
     SharedPtr(SharedPtr &&other) : mRefCounted(nullptr) { *this = std::move(other); }
+
+    static SharedPtr<T> makeShared()
+    {
+        SharedPtr<T> newObject;
+        newObject.mRefCounted = new RefCountedStorage;
+        newObject.mRefCounted->addRef();
+        return newObject;
+    }
 
     void reset()
     {
@@ -908,8 +912,21 @@ class SharedPtr final
         return *this;
     }
 
+    SharedPtr &operator=(const WeakPtr<T> &other)
+    {
+        if (mRefCounted)
+        {
+            releaseRef();
+        }
+        mRefCounted = other.mRefCounted;
+        if (mRefCounted)
+        {
+            mRefCounted->addRef();
+        }
+        return *this;
+    }
+
     operator bool() const { return mRefCounted != nullptr; }
-    bool valid() const { return mRefCounted != nullptr; }
 
     T &operator*() const
     {
@@ -931,8 +948,6 @@ class SharedPtr final
         return mRefCounted->getRefCount() == 1;
     }
 
-    RefCountedStorage *getRefCountedStorage() const { return mRefCounted; }
-
   private:
     void releaseRef()
     {
@@ -945,14 +960,46 @@ class SharedPtr final
         }
     }
 
+    friend class WeakPtr<T>;
     RefCountedStorage *mRefCounted;
 };
+
+// This is intended to have same interface as std::weak_ptr
 template <typename T>
-SharedPtr<T> MakeShared()
+class WeakPtr final
 {
-    RefCounted<T> *newRefCountedObject = new RefCounted<T>();
-    return SharedPtr<T>(newRefCountedObject);
-}
+  public:
+    using RefCountedStorage = RefCounted<T>;
+
+    WeakPtr() : mRefCounted(nullptr) {}
+
+    const WeakPtr<T> &operator=(const SharedPtr<T> &other)
+    {
+        mRefCounted = other.mRefCounted;
+        return *this;
+    }
+
+    void reset() { mRefCounted = nullptr; }
+
+    operator bool() const { return mRefCounted != nullptr; }
+
+    T *operator->() const { return get(); }
+
+    T *get() const
+    {
+        ASSERT(mRefCounted != nullptr);
+        ASSERT(mRefCounted->getRefCount() > 0);
+        return &mRefCounted->get();
+    }
+
+    long use_count() const { return mRefCounted->getRefCount(); }
+
+    bool owner_equal(const SharedPtr<T> &other) const { return mRefCounted == other.mRefCounted; }
+
+  private:
+    friend class SharedPtr<T>;
+    RefCountedStorage *mRefCounted;
+};
 
 // Helper class to share ref-counted Vulkan objects.  Requires that T have a destroy method
 // that takes a VkDevice and returns void.
