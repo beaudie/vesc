@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e0855b_3c4aa3f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-20T23:51:09Z",
+      "side": 1,
+      "message": "Thank you for the fix! It is indeed rare to see promoted extensions missing from the extension list.",
+      "revId": "c2486c8d9822c4a99eb394b870b2e5e5d80fb296",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24830451_f53f2131",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-20T23:51:09Z",
+      "side": 1,
+      "message": "The parts checking for Vulkan 1.2 and Vulkan 1.3 would always be false. Currently, we don\u0027t attempt to create an instance \u003e 1.1.\n\nFYI. I tried that in the past, which just added complication with no benefit: https://chromium-review.googlesource.com/c/angle/angle/+/4116450\n\n(maybe one day we can raise our minimum requirements to Vulkan 1.3 and simplify, but that\u0027ll be years in the future)\n\nSo, please remove these for now. Feel free to comment on the other CL that something like this needs to be added if that change ever lands.",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 1
+      },
+      "revId": "c2486c8d9822c4a99eb394b870b2e5e5d80fb296",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
