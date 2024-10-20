@@ -107,6 +107,16 @@ bool IsVulkan11(uint32_t apiVersion)
     return apiVersion >= VK_API_VERSION_1_1;
 }
 
+bool IsVulkan12(uint32_t apiVersion)
+{
+    return apiVersion >= VK_API_VERSION_1_2;
+}
+
+bool IsVulkan13(uint32_t apiVersion)
+{
+    return apiVersion >= VK_API_VERSION_1_3;
+}
+
 bool IsRADV(uint32_t vendorId, uint32_t driverId, const char *deviceName)
 {
     // Check against RADV driver id first.
@@ -2733,23 +2743,27 @@ void Renderer::appendDeviceExtensionFeaturesPromotedTo11(
     vk::AddToPNextChain(deviceProperties, &mSubgroupProperties);
     vk::AddToPNextChain(deviceFeatures, &mProtectedMemoryFeatures);
 
-    if (ExtensionFound(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan11(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mSamplerYcbcrConversionFeatures);
     }
 
-    if (ExtensionFound(VK_KHR_MULTIVIEW_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_MULTIVIEW_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan11(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mMultiviewFeatures);
         vk::AddToPNextChain(deviceProperties, &mMultiviewProperties);
     }
 
-    if (ExtensionFound(VK_KHR_16BIT_STORAGE_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_16BIT_STORAGE_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan11(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &m16BitStorageFeatures);
     }
 
-    if (ExtensionFound(VK_KHR_VARIABLE_POINTERS_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_VARIABLE_POINTERS_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan11(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mVariablePointersFeatures);
     }
@@ -2795,47 +2809,57 @@ void Renderer::appendDeviceExtensionFeaturesPromotedTo12(
     VkPhysicalDeviceFeatures2KHR *deviceFeatures,
     VkPhysicalDeviceProperties2 *deviceProperties)
 {
-    if (ExtensionFound(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan12(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceProperties, &mFloatControlProperties);
     }
 
-    if (ExtensionFound(VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan12(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mShaderFloat16Int8Features);
     }
 
-    if (ExtensionFound(VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan12(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceProperties, &mDepthStencilResolveProperties);
     }
 
-    if (ExtensionFound(VK_KHR_DRIVER_PROPERTIES_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_DRIVER_PROPERTIES_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan12(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceProperties, &mDriverProperties);
     }
 
-    if (ExtensionFound(VK_KHR_SHADER_SUBGROUP_EXTENDED_TYPES_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_SHADER_SUBGROUP_EXTENDED_TYPES_EXTENSION_NAME,
+                       deviceExtensionNames) ||
+        IsVulkan12(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mSubgroupExtendedTypesFeatures);
     }
 
-    if (ExtensionFound(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan12(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mHostQueryResetFeatures);
     }
 
-    if (ExtensionFound(VK_KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan12(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mImagelessFramebufferFeatures);
     }
 
-    if (ExtensionFound(VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan12(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mTimelineSemaphoreFeatures);
     }
 
-    if (ExtensionFound(VK_KHR_8BIT_STORAGE_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_8BIT_STORAGE_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan12(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &m8BitStorageFeatures);
     }
@@ -2859,27 +2883,32 @@ void Renderer::appendDeviceExtensionFeaturesPromotedTo13(
     VkPhysicalDeviceFeatures2KHR *deviceFeatures,
     VkPhysicalDeviceProperties2 *deviceProperties)
 {
-    if (ExtensionFound(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan13(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mExtendedDynamicStateFeatures);
     }
 
-    if (ExtensionFound(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan13(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mExtendedDynamicState2Features);
     }
 
-    if (ExtensionFound(VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan13(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mSynchronization2Features);
     }
 
-    if (ExtensionFound(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan13(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mDynamicRenderingFeatures);
     }
 
-    if (ExtensionFound(VK_KHR_MAINTENANCE_5_EXTENSION_NAME, deviceExtensionNames))
+    if (ExtensionFound(VK_KHR_MAINTENANCE_5_EXTENSION_NAME, deviceExtensionNames) ||
+        IsVulkan13(mInstanceVersion))
     {
         vk::AddToPNextChain(deviceFeatures, &mMaintenance5Features);
     }
