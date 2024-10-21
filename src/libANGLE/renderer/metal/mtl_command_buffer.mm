@@ -640,6 +640,15 @@ void CommandQueue::onCommandBufferCompleted(id<MTLCommandBuffer> buf,
 
     ANGLE_MTL_LOG("Completed MTLCommandBuffer %llu:%p", serial, buf);
 
+    NSError *error = buf.error;
+    if (error)
+    {
+        MTLCommandBufferError cmdBufferError = (MTLCommandBufferError)[error code];
+        ANGLE_MTL_LOG("Completed MTLCommandBuffer %llu:%p, error code is %@", serial, buf,
+                      error.localizedDescription);
+        mLastCmdBufferError = cmdBufferError;
+    }
+
     if (timeElapsedEntry != 0)
     {
         // Record this command buffer's elapsed time.
