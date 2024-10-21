@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f7bbe99_88a356a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 12176,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T18:14:05Z",
+      "side": 1,
+      "message": "Not redecalaring, but creating a new one. Line 12170 checks `imageViews[range]` to see if a view was previously created; if yes, it\u0027s returned, if not, a new view is created (this line) and the return value is set to the newly created view (the following line).\n\nThe new view is actually initialized by Vulkan in line 12179.",
+      "parentUuid": "8f126d4c_71a762c8",
+      "revId": "33e9b332e2089d664742281c2aedfa9cc5b7bbe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56e4c754_588639ab",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-18T21:01:00Z",
       "side": 1,
       "message": "Is it duplicated code as line 12170?",
+      "revId": "33e9b332e2089d664742281c2aedfa9cc5b7bbe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cee8c7f_19eb8ea9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 12177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T18:14:05Z",
+      "side": 1,
+      "message": "See above",
+      "parentUuid": "56e4c754_588639ab",
       "revId": "33e9b332e2089d664742281c2aedfa9cc5b7bbe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
