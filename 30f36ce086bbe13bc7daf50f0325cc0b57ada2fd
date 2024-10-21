@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "105618b6_55870663",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T17:57:42Z",
+      "side": 1,
+      "message": "Can be moved outside the `if` before the retain calls (no action needed if you move these to a helper in a prior CL)",
+      "range": {
+        "startLine": 1777,
+        "startChar": 0,
+        "endLine": 1778,
+        "endChar": 74
+      },
+      "revId": "30f36ce086bbe13bc7daf50f0325cc0b57ada2fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
