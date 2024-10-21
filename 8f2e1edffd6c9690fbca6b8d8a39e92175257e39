@@ -70,6 +70,24 @@
       "parentUuid": "d5229aa5_71becfb2",
       "revId": "8f2e1edffd6c9690fbca6b8d8a39e92175257e39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "342b1628_80e360f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-21T17:12:15Z",
+      "side": 1,
+      "message": "The problem is that right now the pool\u0027s refcount is being used by eviction code to decide whether a pool can be evicted or not. There are ways to workaround this, for example, add another refcount for this eviction purpose, then we could potentially make DesctriptorSetHelper owns a refcount to pool. But WeakPtr does make it safer though- it does not allow change of underline refcount. It basically limit the risk to DescriptorSethelper object\u0027s use of the pool pointer.\nI personally dont like the way eviction is implemented and I want to explore other evictions: instead of evict a pool, we should should keep a LRU list of DescriptorSetHelper and then evict the oldest set that has not been used for a while. Once we get to that point, I think we can change to a string pointer here. But before we get to that, My suggestion is we should keep this as is (this is basically implemented this way before my CL).",
+      "parentUuid": "8ce80cf0_6169eb52",
+      "revId": "8f2e1edffd6c9690fbca6b8d8a39e92175257e39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
