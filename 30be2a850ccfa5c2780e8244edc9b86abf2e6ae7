@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79c9904f_770c841e",
+        "filename": "src/compiler/translator/tree_util/FindPreciseNodes.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-21T20:23:24Z",
+      "side": 1,
+      "message": "might be nothing but for large shaders, given we are visiting the entire AST, are we fine with added cost due to additional branching?",
+      "revId": "30be2a850ccfa5c2780e8244edc9b86abf2e6ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
