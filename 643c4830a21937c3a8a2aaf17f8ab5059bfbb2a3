@@ -3,6 +3,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "616c5f03_6014ac86",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T17:51:34Z",
+      "side": 1,
+      "message": "A little helper for these 4 lines would be nice, it\u0027s repeated for `Texture` in `updateTexturesDescriptorSet` below, as well as `CLProgramVk::allocateDescriptorSet`\n\n```\n    ASSERT(mDescriptorSets[setIndex]);\n    mDescriptorPools[setIndex] \u003d mDescriptorSets[setIndex]-\u003egetPool();\n\n    commandBufferHelper-\u003eretainResource(mDescriptorSets[setIndex].get());\n    commandBufferHelper-\u003eretainResource(mDescriptorPools[setIndex].get());\n```",
+      "range": {
+        "startLine": 1760,
+        "startChar": 0,
+        "endLine": 1771,
+        "endChar": 74
+      },
+      "revId": "643c4830a21937c3a8a2aaf17f8ab5059bfbb2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6417357f_772b9ba1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T17:51:34Z",
+      "side": 1,
+      "message": "Already included (first include in the file)\n\n```suggestion\n#include \"libANGLE/renderer/vulkan/android/vk_android_utils.h\"\n```",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 48
+      },
+      "revId": "643c4830a21937c3a8a2aaf17f8ab5059bfbb2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "972b6d84_55b169b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 4304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T17:51:34Z",
+      "side": 1,
+      "message": "Was `mPool` a weak ptr here? Might be worth mentioning that, as the explanation is not clear (looks like a leak!).\n\nPerhaps instead of `nuke` (which sounds like `destroy`) we could say \"remove the weak reference\" or something. Also better to specify what invariant this satisfies instead of \"won\u0027t hit assertion\" (unclear which assertion)",
+      "revId": "643c4830a21937c3a8a2aaf17f8ab5059bfbb2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d741ccc8_af2593b6",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 24
