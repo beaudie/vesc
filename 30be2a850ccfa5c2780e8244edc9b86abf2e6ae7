@@ -16,6 +16,24 @@
       "message": "might be nothing but for large shaders, given we are visiting the entire AST, are we fine with added cost due to additional branching?",
       "revId": "30be2a850ccfa5c2780e8244edc9b86abf2e6ae7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac767c51_ee676c2e",
+        "filename": "src/compiler/translator/tree_util/FindPreciseNodes.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T20:29:21Z",
+      "side": 1,
+      "message": "`precise`\u0027s usage is rare, and like I said is mainly targeted at tessellation shader usage (also rare). I\u0027m not worried about an extra branch.\n\nThe translator has _much_ worse overhead everywhere else.",
+      "parentUuid": "79c9904f_770c841e",
+      "revId": "30be2a850ccfa5c2780e8244edc9b86abf2e6ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
