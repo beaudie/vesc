@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d3aac5e_e7b3ae42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T18:00:28Z",
+      "side": 1,
+      "message": "nit:\n\n```suggestion\ntries to allocate from the same pool. Then tries to allocate from\nmCurrentPoolIndex and then loops all existing pools. This CL keeps the\nbasic logic, but avoids repeated tries on the same pool.\n```",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 53
+      },
+      "revId": "1b236ac630460093ce0eb0f994a77ade8a5fc2b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a37c1b9_1834adb4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4470,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T18:00:28Z",
+      "side": 1,
+      "message": "Some tool misconfiguration perhaps, can be reverted:\n\n```suggestion\n    // Eviction logic: Before we allocate a new pool, check to see if there is any existing pool is\n    // not bound to program and is GPU compete. We destroy one pool in exchange for allocate a new\n    // pool to keep total descriptorPool count under control.\n```",
+      "range": {
+        "startLine": 4468,
+        "startChar": 0,
+        "endLine": 4470,
+        "endChar": 67
+      },
+      "revId": "1b236ac630460093ce0eb0f994a77ade8a5fc2b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
