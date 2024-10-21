@@ -210,6 +210,9 @@ b/273271471 WIN INTEL VULKAN : ShaderAlgorithmTest.rgb_to_hsl_vertex_shader/* = 
 42262474 NVIDIA OPENGL : GLSLTest_ES31.TernaryOnMatricesInDifferentBlockStorages/* = SKIP
 42262474 NVIDIA GLES : GLSLTest_ES31.TernaryOnStructsInDifferentBlockStorages/* = SKIP
 42262474 NVIDIA GLES : GLSLTest_ES31.TernaryOnMatricesInDifferentBlockStorages/* = SKIP
+// Nvidia does not ignore gl_Layer for non-layered framebuffers
+372390039 NVIDIA OPENGL : GeometryShaderTest.GLLayerIneffectiveWithoutLayeredFramebuffer/* = SKIP
+372390039 NVIDIA GLES : GeometryShaderTest.GLLayerIneffectiveWithoutLayeredFramebuffer/* = SKIP
 
 // Nvidia Vulkan
 42265709 NVIDIA VULKAN : GLSLTest_ES31.TessellationControlShaderMatrixCopyBug/* = SKIP
