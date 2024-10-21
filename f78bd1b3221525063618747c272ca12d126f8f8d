@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe3e4af_30e18b3c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 12670,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-21T21:19:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8203c6a9_6a584fba",
+      "revId": "f78bd1b3221525063618747c272ca12d126f8f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d33c9d76_6080039d",
@@ -141,6 +159,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c8284fe_1fc731cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-21T21:19:35Z",
+      "side": 1,
+      "message": "valid() is not needed. Removed.",
+      "parentUuid": "7bc09d75_d155a626",
+      "revId": "f78bd1b3221525063618747c272ca12d126f8f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1fcf044e_4b508a31",
@@ -154,6 +190,30 @@
       "writtenOn": "2024-10-18T20:40:46Z",
       "side": 1,
       "message": "Code dedup:\n\n```suggestion\n        return \u0026*this;\n```\n\nOr you could make `operator*` do `return *get()`",
+      "range": {
+        "startLine": 917,
+        "startChar": 0,
+        "endLine": 918,
+        "endChar": 35
+      },
+      "revId": "f78bd1b3221525063618747c272ca12d126f8f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04bf58c_b83f0ced",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-21T21:19:35Z",
+      "side": 1,
+      "message": "The suggestion doesn\u0027t compile. But its just one line anyway, there isn\u0027t much dup here.",
+      "parentUuid": "1fcf044e_4b508a31",
       "range": {
         "startLine": 917,
         "startChar": 0,
