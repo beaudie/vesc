@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f045007f_726d08cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T00:03:40Z",
+      "side": 1,
+      "message": "I kinda liked Patchset 1 by the way, our minimum required version _is_ Vulkan 1.1, so might as well remove the checks. I can follow up with a change to make the Vulkan backend refuse to initialize in the presence of Vulkan 1.0, so if you want to go with Patchset 2, I can clean it up after too.",
+      "revId": "c2486c8d9822c4a99eb394b870b2e5e5d80fb296",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24830451_f53f2131",
