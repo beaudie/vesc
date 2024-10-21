@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1455f866_30832e96",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T18:10:24Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand why we\u0027d want to turn this flag _off_? Lots of AST transformations would be erroneous without it. Lots of fuzzer bugs will follow this change.\n\nThe translator absolutely needs to do this transformation for correctness.",
+      "revId": "494f747b3fd1b2c44a014dfbab20408fff978c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f31c068_4fa298a5",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T18:10:24Z",
+      "side": 1,
+      "message": "No need for this assert to be in a struct",
+      "revId": "494f747b3fd1b2c44a014dfbab20408fff978c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
