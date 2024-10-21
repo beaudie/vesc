@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3722107c_88b3caf6",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2799,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T18:04:26Z",
+      "side": 1,
+      "message": "Instead of adding a dependency to `GL_EXT_YUV_target`, I suggest changing this test to check `texture` instead of `mTextures[0]`. That extension is not supported everywhere (over Vulkan), so the test will end up being mostly disabled.",
+      "revId": "1c6fcf041e0dd204b194b9c06a1c92f4e9b982af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
