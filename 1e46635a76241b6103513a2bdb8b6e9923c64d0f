@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9974385_d8a29aea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T16:17:09Z",
+      "side": 1,
+      "message": "Need another LGTM due to external contribution, CC Charlie",
+      "revId": "1e46635a76241b6103513a2bdb8b6e9923c64d0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

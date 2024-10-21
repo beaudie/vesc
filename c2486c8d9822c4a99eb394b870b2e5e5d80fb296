@@ -56,6 +56,30 @@
       },
       "revId": "c2486c8d9822c4a99eb394b870b2e5e5d80fb296",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "559180f6_432bd390",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T16:17:09Z",
+      "side": 1,
+      "message": "(thanks for the update. In the future, remember to \"Done\" the thread and resolve it so we know you\u0027re not planning on working on the change further)",
+      "parentUuid": "24830451_f53f2131",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 1
+      },
+      "revId": "c2486c8d9822c4a99eb394b870b2e5e5d80fb296",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
