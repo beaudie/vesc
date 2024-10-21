@@ -12739,6 +12739,12 @@ angle::Result MetaDescriptorPool::bindCachedDescriptorPool(
     DescriptorSetLayoutCache *descriptorSetLayoutCache,
     DynamicDescriptorPoolPointer *dynamicDescriptorPoolOut)
 {
+    if (descriptorSetLayoutDesc.empty())
+    {
+        // No need for descriptorSet pool.
+        return angle::Result::Continue;
+    }
+
     auto cacheIter = mPayload.find(descriptorSetLayoutDesc);
     if (cacheIter != mPayload.end())
     {
