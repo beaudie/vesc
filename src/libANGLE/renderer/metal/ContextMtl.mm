@@ -273,12 +273,12 @@ angle::Result ContextMtl::flush(const gl::Context *context)
     // needed. This is typically required if two MTLDevices are
     // operating on the same IOSurface.
     flushCommandBuffer(mtl::NoWait);
-    return angle::Result::Continue;
+    return checkCommandBufferError();
 }
 angle::Result ContextMtl::finish(const gl::Context *context)
 {
     ANGLE_TRY(finishCommandBuffer());
-    return angle::Result::Continue;
+    return checkCommandBufferError();
 }
 
 ANGLE_INLINE angle::Result ContextMtl::resyncDrawFramebufferIfNeeded(const gl::Context *context)
@@ -2965,6 +2965,13 @@ angle::Result ContextMtl::checkIfPipelineChanged(const gl::Context *context,
 
     *isPipelineDescChanged = rppChange;
 
+    return angle::Result::Continue;
+}
+
+angle::Result ContextMtl::checkCommandBufferError()
+{
+    ANGLE_CHECK_GL_ALLOC(
+        this, mCmdBuffer.cmdQueue().getLastCmdBufferError() != MTLCommandBufferErrorOutOfMemory);
     return angle::Result::Continue;
 }
 

@@ -103,6 +103,7 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
     void setActiveTimeElapsedEntry(uint64_t id);
     bool isTimeElapsedEntryComplete(uint64_t id);
     double getTimeElapsedEntryInSeconds(uint64_t id);
+    MTLCommandBufferError getLastCmdBufferError() { return mLastCmdBufferError; }
 
   private:
     void onCommandBufferCompleted(id<MTLCommandBuffer> buf,
@@ -141,6 +142,8 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
 
     mutable std::mutex mLock;
     mutable std::condition_variable mCompletedBufferSerialCv;
+
+    MTLCommandBufferError mLastCmdBufferError = MTLCommandBufferErrorNone;
 
     void addCommandBufferToTimeElapsedEntry(std::lock_guard<std::mutex> &lg, uint64_t id);
     void recordCommandBufferTimeElapsed(std::lock_guard<std::mutex> &lg,
