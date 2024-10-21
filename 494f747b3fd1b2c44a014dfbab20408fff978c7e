@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3897e257_2acd258c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T20:09:29Z",
+      "side": 1,
+      "message": "Ah, didn\u0027t realize the old path had a mask on what to simplify.",
+      "parentUuid": "66b1f2f2_fd5ddc1b",
+      "revId": "494f747b3fd1b2c44a014dfbab20408fff978c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f31c068_4fa298a5",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "It needs to be something that can be a friend.",
       "parentUuid": "3f31c068_4fa298a5",
+      "revId": "494f747b3fd1b2c44a014dfbab20408fff978c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45506095_dd4f5b63",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-21T20:09:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3b089e83_34bab181",
       "revId": "494f747b3fd1b2c44a014dfbab20408fff978c7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
