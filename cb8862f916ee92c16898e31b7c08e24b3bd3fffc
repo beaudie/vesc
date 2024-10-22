@@ -1,0 +1,91 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1f3efb2_1b3323cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-22T05:03:58Z",
+      "side": 1,
+      "message": "lgtm+2 with one minor suggestion on an enum name. Thank you for implementing this!",
+      "revId": "cb8862f916ee92c16898e31b7c08e24b3bd3fffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fbf2e16_b66b3193",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-22T05:03:58Z",
+      "side": 1,
+      "message": "Did you consider \"NotPLS\" or something similar for this enum? I think it\u0027d be clearer.",
+      "fixSuggestions": [
+        {
+          "fixId": "ca73b93a_7a4b1da7",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "include/GLSLANG/ShaderLang.h",
+              "range": {
+                "startLine": 112,
+                "startChar": 0,
+                "endLine": 113,
+                "endChar": 0
+              },
+              "replacement": "    NotPLS,  // Indicates that no PLS uniform was declared at the binding index in question.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "cb8862f916ee92c16898e31b7c08e24b3bd3fffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fe88d5c_32098c6b",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-22T05:03:58Z",
+      "side": 1,
+      "message": "If the \"not PLS\" enum\u0027s renamed please update this doc.",
+      "fixSuggestions": [
+        {
+          "fixId": "5cf7f4a3_171b322d",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "include/GLSLANG/ShaderLang.h",
+              "range": {
+                "startLine": 875,
+                "startChar": 0,
+                "endLine": 877,
+                "endChar": 0
+              },
+              "replacement": "// Returns the pixel local storage uniform format at each binding index, or \"InvalidEnum\" if there\n// is not one.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "cb8862f916ee92c16898e31b7c08e24b3bd3fffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
