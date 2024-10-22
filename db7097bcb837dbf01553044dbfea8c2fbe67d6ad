@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e0e94ba_6063a371",
+        "filename": "src/libANGLE/renderer/CLExtensions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-22T03:34:03Z",
+      "side": 1,
+      "message": "I didnt get a chance to update this (in the latest update), noticed that CL backend needs little tweaking as well (with the changes i had). Will update this along with CL backend changes.",
+      "parentUuid": "e9078001_816b3eeb",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 0
+      },
+      "revId": "db7097bcb837dbf01553044dbfea8c2fbe67d6ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1355a22_807e212f",
         "filename": "src/libANGLE/renderer/CLExtensions.h",
         "patchSetId": 1
