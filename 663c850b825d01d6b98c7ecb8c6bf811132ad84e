@@ -16,6 +16,24 @@
       "message": "What are the semantics on the CL side? Could (offset,size) be (3,2) for example? In that case, previously we were (incorrectly) attempting to write to bytes 3..5, but after this change we\u0027ll be writing to 0..4.\n\nI\u0027m just wondering if you were meant to convert 3..5 to 0..7 instead?",
       "revId": "663c850b825d01d6b98c7ecb8c6bf811132ad84e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ce471d0_a759b095",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-22T09:18:19Z",
+      "side": 1,
+      "message": "Good catch, it spotted an issue with the change. Updated the patch set.",
+      "parentUuid": "17ce3514_e052c804",
+      "revId": "663c850b825d01d6b98c7ecb8c6bf811132ad84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
