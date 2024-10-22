@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc164c42_df402724",
+        "filename": "third_party/OpenCL-CTS/angle_oclcts_gtest.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-22T20:16:34Z",
+      "side": 1,
+      "message": "Please move constants private to the cpp in the cpp itself",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "8b7ca2a7f490c2344a10ce2d8f88b9646b141bed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
