@@ -16,6 +16,24 @@
       "message": "Do you mean `1 bit for whether the framebuffer is layered`?",
       "revId": "914c8fca3f6b91934fc7517c845c238c5f497616",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9a96190_17ab0092",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-22T18:09:58Z",
+      "side": 1,
+      "message": "Yes, done\n\n```suggestion\n// - 1 bit for whether the framebuffer is layered\n```",
+      "parentUuid": "c25ab202_73f0de52",
+      "revId": "914c8fca3f6b91934fc7517c845c238c5f497616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
