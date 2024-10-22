@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6402e926_b9404266",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-22T17:46:15Z",
+      "side": 1,
+      "message": "Unexpected is that using `std::atomic_int` is faster than original implementation without atomic (34.246 vs 35.543). I rechecked multiple times, but this is just how my device behaves.",
+      "parentUuid": "e1f34fb0_919f66d6",
+      "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ad2b8c6_51592ec9",
         "filename": "src/common/WorkerThread.cpp",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-22T17:18:57Z",
       "side": 1,
       "message": "Suggest adding comment in `markAsReady` that you need release to synchronize with isReady()\u0027s load, which does not happen under the mutex.\n\n---\n\nThat said, why not remove the mutex from `markAsReady()` and change the load to acquire here instead?",
+      "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2a54567_66d2a704",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-22T17:46:15Z",
+      "side": 1,
+      "message": "\u003eSuggest adding comment in markAsReady that you need release to synchronize with isReady()\u0027s load, which does not happen under the mutex.\n\nOK, will add.\n\n---\n\n\u003e That said, why not remove the mutex from markAsReady() and change the load to acquire here instead?\nFrom my experience I have a rule, that you should always change state, used to start waiting on a conditional variable under the same mutex lock, that is used for waiting. Otherwise, you will likely have a deadlock bug.\n\nIn this particular case we will have a bug if remove mutex lock from `markAsReady()`.\n- thread 1: checks `isReady()` false in `wait()`.\n- thread 1: checks `mIsReady.load(std::memory_order_relaxed) \u003d\u003d 0` and **decides** to start waiting on the `mCondition`.\n- thread 2: calls `mIsReady.store(1, std::memory_order_release)` in `markAsReady()` (because **no mutex is locked**).\n- thread 2: calls `mCondition.notify_all()`, but since \"thread 1\" is not waiting yet - call will be **no-op**.\n- thread 1: **starts waiting** while `mIsReady` is `1`.\n- thread 1: will may **infinitely** (if no spurious waken), since `markAsReady()` was already called and it is called only once.",
+      "parentUuid": "8ad2b8c6_51592ec9",
       "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
