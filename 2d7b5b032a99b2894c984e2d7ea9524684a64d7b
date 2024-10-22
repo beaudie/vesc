@@ -46,6 +46,30 @@
       },
       "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "923ff82f_0e191fb8",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-22T03:31:32Z",
+      "side": 1,
+      "message": "For sub-buffers, the parent is used for all memory op updates with offsets and sizes taking in from sub-buffer. With that approach copy in here for sub-buffers with same parent - queue serial on the parent is the same for both write and read ops hitting the asserts. That was the motivation for keeping this as special case in this change.",
+      "parentUuid": "65008a2b_899fdc7e",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 64
+      },
+      "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
