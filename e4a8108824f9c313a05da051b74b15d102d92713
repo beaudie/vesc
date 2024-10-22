@@ -34,6 +34,24 @@
       "parentUuid": "e3b989b9_6bc99bb5",
       "revId": "e4a8108824f9c313a05da051b74b15d102d92713",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "877d9ec3_59319a8e",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-22T03:17:25Z",
+      "side": 1,
+      "message": "Execution status could use its own enum, enabling it through a separate patch. Will post a link to it here. For now, i kept this change as is.",
+      "parentUuid": "2d54b9d7_fc4dee21",
+      "revId": "e4a8108824f9c313a05da051b74b15d102d92713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
