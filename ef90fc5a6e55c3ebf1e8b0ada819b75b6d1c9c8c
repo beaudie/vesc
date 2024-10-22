@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aad63555_648f58d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-22T22:02:20Z",
+      "side": 1,
+      "message": "This goes back to PS24 of https://chromium-review.googlesource.com/c/angle/angle/+/5918586/24, with the comments addressed.",
+      "revId": "ef90fc5a6e55c3ebf1e8b0ada819b75b6d1c9c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
