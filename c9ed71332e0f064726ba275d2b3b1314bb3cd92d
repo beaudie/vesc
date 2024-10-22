@@ -16,6 +16,24 @@
       "message": "I\u0027m afraid this particular part of the change is problematic. In Chrome (and I think others), there\u0027s a sandbox and ANGLE gets a small chance before the sandbox is set up to do some things. One of the things forbidden by the sandbox is creating threads, so we _have_ to create all the threads up front and early.",
       "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7fa9a91_98673c3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-22T19:49:39Z",
+      "side": 1,
+      "message": "OK, this is easy to change.\n\nHowever I\u0027m interested what happens when sandbox is set up.\n\nCurrently, all threads are created in the `createThreads()` that is called in each `AsyncWorkerPool::postWorkerTask()` method. First call will actually create all threads, while subsequent will be a no-op.\n\nSo there must be some empty task during sandbox startup just to create all the threads. Am I right?\n\nIf there is no such task, then threads are already created after setup, and there should be no difference if all created in a single first task or in multiple tasks (future change will even avoid creating threads unnecessarily).\n\nAlso there is `angle_delegate_workers \u003d build_with_chromium` option. I assumed that `AsyncWorkerPool` is not even used in Chrome.",
+      "parentUuid": "2c3038ce_19f19a94",
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
