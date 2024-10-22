@@ -38,6 +38,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d62c3e4_3f83bf07",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-22T18:13:55Z",
+      "side": 1,
+      "message": "Can\u0027t you just create `WaitableEventDone` here since it will always done when this function returns?",
+      "range": {
+        "startLine": 34,
+        "startChar": 37,
+        "endLine": 34,
+        "endChar": 55
+      },
+      "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ad2b8c6_51592ec9",
         "filename": "src/common/WorkerThread.cpp",
         "patchSetId": 3
