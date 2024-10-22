@@ -216,6 +216,24 @@
       "parentUuid": "af61ff5b_245f5b34",
       "revId": "643c4830a21937c3a8a2aaf17f8ab5059bfbb2a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0740309a_55dc6120",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-22T22:00:14Z",
+      "side": 1,
+      "message": "Actually this is required not just for the assertion, but for correctness as well. Otherwise, when pool is destroyed, it clear the garbage list which will end up calling DescriptorSetHelper::destroy() which will find it is valid and add back to the garbage list again. This is causing the bots failure in next CL. Reland CL with the fix is here https://chromium-review.googlesource.com/c/angle/angle/+/5954701",
+      "parentUuid": "0bc18117_7928570d",
+      "revId": "643c4830a21937c3a8a2aaf17f8ab5059bfbb2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
