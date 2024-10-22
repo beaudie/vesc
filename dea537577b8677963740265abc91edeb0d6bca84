@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c3ecc53_6384f6c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3678426
+      },
+      "writtenOn": "2024-10-22T19:14:32Z",
+      "side": 1,
+      "message": "Redo of the last CL, this time won\u0027t break on Vulkan \u003c1.1",
+      "revId": "dea537577b8677963740265abc91edeb0d6bca84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
