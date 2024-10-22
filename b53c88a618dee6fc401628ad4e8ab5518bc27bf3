@@ -69,6 +69,24 @@
       "parentUuid": "8ad2b8c6_51592ec9",
       "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "438e5964_68c2476d",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-22T18:07:07Z",
+      "side": 1,
+      "message": "Right, thanks for not following my suggestions blindly, lol 😄",
+      "parentUuid": "a2a54567_66d2a704",
+      "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
