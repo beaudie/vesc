@@ -22,6 +22,30 @@
       },
       "revId": "30f36ce086bbe13bc7daf50f0325cc0b57ada2fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50ba4e27_59a733c7",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-22T23:39:03Z",
+      "side": 1,
+      "message": "This will be removed in https://chromium-review.googlesource.com/c/angle/angle/+/5941126",
+      "parentUuid": "105618b6_55870663",
+      "range": {
+        "startLine": 1777,
+        "startChar": 0,
+        "endLine": 1778,
+        "endChar": 74
+      },
+      "revId": "30f36ce086bbe13bc7daf50f0325cc0b57ada2fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

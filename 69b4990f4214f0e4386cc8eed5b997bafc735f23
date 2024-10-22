@@ -16,6 +16,24 @@
       "message": "What happened here?",
       "revId": "69b4990f4214f0e4386cc8eed5b997bafc735f23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ba956d5_9810d94d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 6485,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-22T23:39:03Z",
+      "side": 0,
+      "message": "updateFullActiveTextures is only get called when descriptorSet cache is disabled. So there is no cacheKey at all. Also added an ASSERT at entry of the function.",
+      "parentUuid": "62fffe5f_993b2c5c",
+      "revId": "69b4990f4214f0e4386cc8eed5b997bafc735f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
