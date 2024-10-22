@@ -70,6 +70,30 @@
       },
       "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50178dd0_082073cc",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-22T17:09:04Z",
+      "side": 1,
+      "message": "You should still be able to make it work, it\u0027s an easy win where otherwise apps hitting this path would unnecessarily suffer. Something like a `dstBufferVk-\u003ecopyFromSelf(...)` would probably just solve your problem?\n\nI\u0027m a fan of implementing things right from scratch, but if you want to leave a TODO and optimize later I won\u0027t push back.",
+      "parentUuid": "923ff82f_0e191fb8",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 64
+      },
+      "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
