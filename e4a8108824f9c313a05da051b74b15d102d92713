@@ -52,6 +52,24 @@
       "parentUuid": "2d54b9d7_fc4dee21",
       "revId": "e4a8108824f9c313a05da051b74b15d102d92713",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6269f5e_cbafcde4",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-22T17:04:37Z",
+      "side": 1,
+      "message": "Separate change for `blocking` is perfect. Please remove the default value in this CL so the parameter is explicitly (and intentionally) set by the caller",
+      "parentUuid": "877d9ec3_59319a8e",
+      "revId": "e4a8108824f9c313a05da051b74b15d102d92713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
