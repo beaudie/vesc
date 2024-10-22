@@ -51,6 +51,23 @@
       "message": "Does CuttleFish not support Vulkan 1.1? If it doesn\u0027t, that\u0027s a serious problem we should check regardless of this change.\n\nANGLE officially supports Vulkan 1.1, I was about to add a change to make ANGLE refuse to work on a Vulkan 1.0 instance/device.\n\nFWIW, since CuttleFish is running over swiftshader, the problem may just be in the loader (i.e. the instance version)?",
       "revId": "e9cafd2785980c1da58cb491701b0e6cf96f086c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaf0eea3_76844287",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-22T16:37:11Z",
+      "side": 1,
+      "message": "@andrew.sumsion7@gmail.com would you mind please relanding your change after this, but the version that does `|| IsVulkan11()`? That would solve your problem while we figure out what to do with CuttleFish",
+      "revId": "e9cafd2785980c1da58cb491701b0e6cf96f086c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
