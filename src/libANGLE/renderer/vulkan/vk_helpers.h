@@ -283,11 +283,10 @@ class DescriptorSetHelper final : public Resource
         other.mPool          = nullptr;
     }
 
-    ~DescriptorSetHelper() override
-    {
-        ASSERT(mDescriptorSet == VK_NULL_HANDLE);
-        ASSERT(!mPool);
-    }
+    // Because we do not use VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT when pool is
+    // created, We don't free each individual descriptor set before destroying the pool. Also mPool
+    // is a weak pointer, so no need to do anything here.
+    ~DescriptorSetHelper() override = default;
 
     void destroy();
 
@@ -298,8 +297,6 @@ class DescriptorSetHelper final : public Resource
 
   private:
     VkDescriptorSet mDescriptorSet;
-    // So that resetGarbage can modify this
-    friend class DescriptorPoolHelper;
     RefCountedDescriptorPool *mPool;
 };
 using DescriptorSetPointer = SharedPtr<DescriptorSetHelper>;
@@ -355,8 +352,6 @@ class DescriptorPoolHelper final : public Resource
                                  VkDescriptorSet *descriptorSetOut);
 
     bool recycleGarbage(Renderer *renderer, DescriptorSetPointer *descriptorSetOut);
-
-    void resetGarbage();
 
     // Track the number of descriptorSets allocated out of this pool that are valid. DescriptorSets
     // that have been allocated but in the mDescriptorSetGarbageList is considered as invalid.

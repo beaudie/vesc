@@ -21,7 +21,6 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/android/vk_android_utils.h"
-#include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_ref_counted_event.h"
 #include "libANGLE/renderer/vulkan/vk_renderer.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -4265,14 +4264,14 @@ angle::Result DescriptorPoolHelper::init(Context *context,
 void DescriptorPoolHelper::destroy(Renderer *renderer)
 {
     mDescriptorSetCacheManager.destroyKeys(renderer);
-    resetGarbage();
+    mDescriptorSetGarbageList.clear();
     ASSERT(renderer->hasResourceUseFinished(mUse));
     mDescriptorPool.destroy(renderer->getDevice());
 }
 
 void DescriptorPoolHelper::release(Renderer *renderer)
 {
-    resetGarbage();
+    mDescriptorSetGarbageList.clear();
 
     GarbageObjects garbageObjects;
     garbageObjects.emplace_back(GetGarbage(&mDescriptorPool));
@@ -4342,21 +4341,6 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
         return true;
     }
     return false;
-}
-
-void DescriptorPoolHelper::resetGarbage()
-{
-    while (!mDescriptorSetGarbageList.empty())
-    {
-        ASSERT(mDescriptorSetGarbageList.front().unique());
-        ASSERT(mDescriptorSetGarbageList.front().valid());
-        // Because we do not use VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT when pool is
-        // created, We can't free each individual descriptor set before destroying the pool, we
-        // simply nuke the descriptorSet so that it won't hit assertion.
-        mDescriptorSetGarbageList.front()->mDescriptorSet = VK_NULL_HANDLE;
-        mDescriptorSetGarbageList.front()->mPool          = nullptr;
-        mDescriptorSetGarbageList.pop_front();
-    }
 }
 
 // DynamicDescriptorPool implementation.
