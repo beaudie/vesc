@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c3038ce_19f19a94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-22T17:52:27Z",
+      "side": 1,
+      "message": "I\u0027m afraid this particular part of the change is problematic. In Chrome (and I think others), there\u0027s a sandbox and ANGLE gets a small chance before the sandbox is set up to do some things. One of the things forbidden by the sandbox is creating threads, so we _have_ to create all the threads up front and early.",
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
