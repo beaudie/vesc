@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b3fcb96_23964ab4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4394,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-23T19:19:09Z",
+      "side": 0,
+      "message": "It looks to me like this was resulting in ANGLE declaring ES3.1 support even if `getMaxSupportedESVersion` returned ES3 or ES2, right?! That\u0027s probably the cause of the new failures. It\u0027d be interesting to know what\u0027s stopping SwiftShader from supporting ES3.1. For Pixel4, no hope I guess.\n\nBut anyway, we could at least move the `|| exposeNonConformantExtensionsAndVersions` to the exact features that are causing trouble so we know where to look for in the future to fix them.",
+      "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
