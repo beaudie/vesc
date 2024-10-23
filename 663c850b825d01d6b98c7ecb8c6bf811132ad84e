@@ -70,6 +70,24 @@
       "parentUuid": "a78f1bd3_1828f3b2",
       "revId": "663c850b825d01d6b98c7ecb8c6bf811132ad84e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70451c40_5ab0ec09",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-23T18:51:21Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7757816e_a538976c",
+      "revId": "663c850b825d01d6b98c7ecb8c6bf811132ad84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
