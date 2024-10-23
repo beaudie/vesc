@@ -118,6 +118,30 @@
       },
       "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2913753d_7d7d754e",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-23T18:55:23Z",
+      "side": 1,
+      "message": "Hurray!",
+      "parentUuid": "3c9e77c0_e1f03a6b",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 64
+      },
+      "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
