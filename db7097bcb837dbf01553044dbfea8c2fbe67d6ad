@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9cc4b120_13ca55fa",
+        "filename": "src/libANGLE/renderer/CLExtensions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-23T06:31:00Z",
+      "side": 1,
+      "message": "Noticed that extension string `extensions` had to be setup as that\u0027s the output format of the device extension string. \n\nUpdated the patch just with the suggested name change.",
+      "parentUuid": "3e0e94ba_6063a371",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 0
+      },
+      "revId": "db7097bcb837dbf01553044dbfea8c2fbe67d6ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1355a22_807e212f",
         "filename": "src/libANGLE/renderer/CLExtensions.h",
         "patchSetId": 1
