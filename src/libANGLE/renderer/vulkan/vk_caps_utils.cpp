@@ -1100,14 +1100,14 @@ void Renderer::ensureCapsInitialized() const
     mNativeExtensions.shaderImageAtomicOES = true;
 
     // Tessellation shaders are required for ES 3.2.
-    if (mPhysicalDeviceFeatures.tessellationShader)
+    if (mPhysicalDeviceFeatures.tessellationShader ||
+        mFeatures.exposeNonConformantExtensionsAndVersions.enabled)
     {
         constexpr uint32_t kReservedTessellationDefaultUniformBindingCount = 2;
 
-        bool tessellationShaderEnabled =
-            mFeatures.supportsTransformFeedbackExtension.enabled &&
-            (mFeatures.supportsPrimitivesGeneratedQuery.enabled ||
-             mFeatures.exposeNonConformantExtensionsAndVersions.enabled);
+        bool tessellationShaderEnabled = (mFeatures.supportsTransformFeedbackExtension.enabled &&
+                                          mFeatures.supportsPrimitivesGeneratedQuery.enabled) ||
+                                         mFeatures.exposeNonConformantExtensionsAndVersions.enabled;
         mNativeExtensions.tessellationShaderEXT = tessellationShaderEnabled;
         mNativeExtensions.tessellationShaderOES = tessellationShaderEnabled;
         mNativeCaps.maxPatchVertices            = rx::LimitToInt(limitsVk.maxTessellationPatchSize);
@@ -1157,11 +1157,12 @@ void Renderer::ensureCapsInitialized() const
     }
 
     // Geometry shaders are required for ES 3.2.
-    if (mPhysicalDeviceFeatures.geometryShader)
+    if (mPhysicalDeviceFeatures.geometryShader ||
+        mFeatures.exposeNonConformantExtensionsAndVersions.enabled)
     {
-        bool geometryShaderEnabled = mFeatures.supportsTransformFeedbackExtension.enabled &&
-                                     (mFeatures.supportsPrimitivesGeneratedQuery.enabled ||
-                                      mFeatures.exposeNonConformantExtensionsAndVersions.enabled);
+        bool geometryShaderEnabled = (mFeatures.supportsTransformFeedbackExtension.enabled &&
+                                      mFeatures.supportsPrimitivesGeneratedQuery.enabled) ||
+                                     mFeatures.exposeNonConformantExtensionsAndVersions.enabled;
         mNativeExtensions.geometryShaderEXT = geometryShaderEnabled;
         mNativeExtensions.geometryShaderOES = geometryShaderEnabled;
         mNativeCaps.maxFramebufferLayers    = rx::LimitToInt(limitsVk.maxFramebufferLayers);
