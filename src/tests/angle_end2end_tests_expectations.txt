@@ -31,6 +31,9 @@
 42266871 : CopyTexImageTestES3.RedefineSameLevel/* = SKIP
 // Currently fails on WebGPU as it's not fully implemented yet.
 
+// ES 3.2 tests are skipped on SwS.
+374841339 VULKAN SWIFTSHADER : */ES3_2* = SKIP
+
 // Fails AST validation
 342866374 : GLSLTest_ES31.PerVertexRedefinition/*_ForceInitShaderVariables* = SKIP
 

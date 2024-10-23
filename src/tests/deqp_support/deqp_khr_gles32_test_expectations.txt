@@ -9,6 +9,9 @@
 // Pipeline cache failure with older drivers
 42266855 VULKAN NVIDIA : KHR-GLES32.core.tessellation_shader.single.primitive_coverage = FAIL
 
+// Since ES 3.2 is not supported on SwS yet, it should be skipped.
+374841339 VULKAN SWIFTSHADER : KHR-* = SKIP
+
 // Geometry shader support (conditioned to windows as that's our only bot capable of running these
 // tests)
 // API validation bugs
