@@ -16,6 +16,24 @@
       "message": "If you\u0027ve hit this, there\u0027s a bug to be fixed. Please don\u0027t remove the assert. The bug is that a buffer is written to by the GPU that is host visible, and the cache flush on the GPU is not done. There is no way for the host to access that memory without issuing a submission just to flush that cache.\n\nWhat the CL side needs to do is, before submission, it should check for this and issue a cache flush (see `ContextVk::flushImpl`, where `mIsAnyHostVisibleBufferWritten` is handled). If for any reason the CL side doesn\u0027t need that, you should explicitly `getAndResetHasHostVisibleBufferWrite` and throw the result away with a comment.",
       "revId": "c19e48ad6d231952dfb202652afb7542dccff43c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "723b5b55_c7bfc40f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1623,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-23T00:21:10Z",
+      "side": 0,
+      "message": "Done. Credit to @g.tammana@samsung.com. The fix was basically cherry picking the flushComputePassCommands() changes from https://chromium-review.googlesource.com/c/angle/angle/+/5916156/2/src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+      "parentUuid": "38049aa7_f83e4bb4",
+      "revId": "c19e48ad6d231952dfb202652afb7542dccff43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
