@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4229d657_f4231b20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2024-10-23T17:42:57Z",
+      "side": 1,
+      "message": "nit: Please include a link to https://crrev.com/c/5956483 so history shows what is being relanded and include some text which explains what is different from the original change. Something along the lines of: not adding the extensions to `mEnabledDeviceExtensions` as a device with Vulkan 1.1 may not report the extensions which would cause failures in `VerifyExtensionsPresent()`",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "ea93f004e8d8adfaa5630b2ab4152c6b52e17fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d54091e5_bac9a6af",
