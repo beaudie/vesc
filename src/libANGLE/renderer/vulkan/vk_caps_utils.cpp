@@ -1357,6 +1357,18 @@ void Renderer::ensureCapsInitialized() const
 
     // Log any missing extensions required for GLES 3.2.
     LogMissingExtensionsForGLES32(mNativeExtensions);
+
+    if (mFeatures.exposeNonConformantExtensionsAndVersions.enabled)
+    {
+        mNativeExtensions.geometryShaderEXT = true;
+        mNativeExtensions.geometryShaderOES = true;
+
+        mNativeExtensions.tessellationShaderEXT = true;
+        mNativeExtensions.tessellationShaderOES = true;
+
+        mNativeExtensions.gpuShader5EXT = true;
+        mNativeExtensions.gpuShader5OES = true;
+    }
 }
 
 bool CanSupportGLES32(const gl::Extensions &nativeExtensions)
