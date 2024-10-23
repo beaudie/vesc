@@ -94,6 +94,30 @@
       },
       "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c9e77c0_e1f03a6b",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-23T06:14:14Z",
+      "side": 1,
+      "message": "Looks like i wasn\u0027t looking properly enough :). It\u0027s already accounted for in the existing interface. Updated.",
+      "parentUuid": "50178dd0_082073cc",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 64
+      },
+      "revId": "2d7b5b032a99b2894c984e2d7ea9524684a64d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
