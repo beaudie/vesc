@@ -16,6 +16,24 @@
       "message": "It looks to me like this was resulting in ANGLE declaring ES3.1 support even if `getMaxSupportedESVersion` returned ES3 or ES2, right?! That\u0027s probably the cause of the new failures. It\u0027d be interesting to know what\u0027s stopping SwiftShader from supporting ES3.1. For Pixel4, no hope I guess.\n\nBut anyway, we could at least move the `|| exposeNonConformantExtensionsAndVersions` to the exact features that are causing trouble so we know where to look for in the future to fix them.",
       "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9c3d7fc_f91cc907",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4394,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-23T23:58:42Z",
+      "side": 0,
+      "message": "If `getMaxSupportedESVersion()` is less than ES3.1, ANGLE should not declare support for it, since `LimitVersionTo()` takes the least of the two versions.\n\nSwS is capped to ES3.1 here due to lack of geometry and tessellation shader extensions. I have removed the non-conformant flag check from this function, since `getMaxSupportedESVersion()` already uses it to advertise ES 3.2.\n\nIt looks like some tests also check for geometry shaders for further testing (e.g., `dEQP-GLES3.functional.negative_api.vertex_array.draw_elements`). It looks like when SwS reports that this extension is not available, it runs more code that results in error.\n\n\u003e But anyway, we could at least move the || exposeNonConformantExtensionsAndVersions to the exact features that are causing trouble so we know where to look for in the future to fix them.\n\nDo you mean enabling the extensions above using this flag in `ensureCapsInitialized()`?",
+      "parentUuid": "4b3fcb96_23964ab4",
+      "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
