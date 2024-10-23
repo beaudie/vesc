@@ -52,6 +52,24 @@
       "parentUuid": "4ce471d0_a759b095",
       "revId": "663c850b825d01d6b98c7ecb8c6bf811132ad84e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7757816e_a538976c",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-23T06:09:32Z",
+      "side": 1,
+      "message": "Argh😞...it doesn\u0027t. Suggested fix should be sufficient enough. Updated the change.",
+      "parentUuid": "a78f1bd3_1828f3b2",
+      "revId": "663c850b825d01d6b98c7ecb8c6bf811132ad84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
