@@ -3549,6 +3549,7 @@ class ImageViewHelper final : angle::NonCopyable
                (image.getActualFormat().isSRGB &&
                 mReadColorspace == vk::ImageViewColorspace::Linear);
     }
+    angle::FormatID getColorspaceOverrideFormatForRead(angle::FormatID format) const;
 
     bool hasColorspaceOverrideForWrite(const ImageHelper &image) const
     {
@@ -3677,6 +3678,8 @@ class ImageViewHelper final : angle::NonCopyable
                                                  VkImageUsageFlags imageUsageFlags);
 
     void updateColorspace(const ImageHelper &image) const;
+    angle::FormatID getColorspaceOverrideFormatForColorspace(angle::FormatID format,
+                                                             ImageViewColorspace colorspace) const;
 
     // For applications that frequently switch a texture's base/max level, and make no other changes
     // to the texture, keep track of the currently-used base and max levels, and keep one "read

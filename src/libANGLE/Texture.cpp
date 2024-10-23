@@ -2093,7 +2093,13 @@ angle::Result Texture::setStorageEGLImageTarget(Context *context,
 
     ANGLE_TRY(setEGLImageTargetImpl(context, type, imageTarget->getLevelCount(), imageTarget));
 
-    mState.mImmutableLevels = imageTarget->getLevelCount();
+    // If EGLImage source was an immutable format texture and the EGLImage was created with mip
+    // level == 0 enable an optimization where we avoid orphaning when generating mipmaps for an
+    // EGLImage texture target.
+    mState.mImmutableLevels =
+        (imageTarget->isSourceImmutableFormat() && imageTarget->getBaseLevel() == 0)
+            ? imageTarget->getSourceLevelCount()
+            : imageTarget->getLevelCount();
     mState.mImmutableFormat = true;
 
     // Changing the texture to immutable can trigger a change in the base and max levels:
