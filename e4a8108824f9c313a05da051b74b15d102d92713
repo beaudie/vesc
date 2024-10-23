@@ -70,6 +70,24 @@
       "parentUuid": "877d9ec3_59319a8e",
       "revId": "e4a8108824f9c313a05da051b74b15d102d92713",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd21e509_56f1fa54",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-23T06:12:46Z",
+      "side": 1,
+      "message": "\u003e parameter is explicitly (and intentionally) set by the caller\n\n👍🏽 Removed the default value. \n\nWill follow up on setting up execution status as enum in a separate PR.",
+      "parentUuid": "c6269f5e_cbafcde4",
+      "revId": "e4a8108824f9c313a05da051b74b15d102d92713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
