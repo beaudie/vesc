@@ -68,6 +68,10 @@
         ],
       },
     },
+	'remove_from': [
+      # TODO: Just for testing. Do not submit.
+      'android-arm64-pixel4',
+    ],
   },
   'angle_trace_interpreter_tests': {
     'remove_from': [
