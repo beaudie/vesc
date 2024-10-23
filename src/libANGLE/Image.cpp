@@ -389,6 +389,27 @@ void Image::addTargetSibling(ImageSibling *sibling)
     mState.targets.insert(sibling);
 }
 
+bool Image::isSourceImmutableFormat() const
+{
+    if (IsTextureTarget(mState.target))
+    {
+        gl::Texture *texture = rx::GetAs<gl::Texture>(mState.source);
+        ASSERT(texture);
+        return texture->getImmutableFormat();
+    }
+    return false;
+}
+
+GLuint Image::getSourceLevelCount() const
+{
+    ASSERT(mState.source != nullptr);
+    ASSERT(IsTextureTarget(mState.target));
+
+    gl::Texture *texture = rx::GetAs<gl::Texture>(mState.source);
+    ASSERT(texture && texture->getImmutableFormat());
+    return texture->getImmutableLevels();
+}
+
 angle::Result Image::orphanSibling(const gl::Context *context, ImageSibling *sibling)
 {
     ASSERT(sibling != nullptr);
@@ -484,6 +505,11 @@ bool Image::isLayered() const
 size_t Image::getSamples() const
 {
     return mState.samples;
+}
+
+GLuint Image::getBaseLevel() const
+{
+    return mState.imageIndex.getLevelIndex();
 }
 
 GLuint Image::getLevelCount() const
