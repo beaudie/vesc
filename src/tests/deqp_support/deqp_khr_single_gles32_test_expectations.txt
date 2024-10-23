@@ -3,3 +3,6 @@
 // found in the LICENSE file.
 
 // See README.md for format.
+
+// Since ES 3.2 is not supported on SwS yet, it should be skipped.
+374841339 VULKAN SWIFTSHADER : KHR-* = SKIP

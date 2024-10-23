@@ -428,6 +428,10 @@ EGLSyncImpl *DisplayVk::createSync()
 
 gl::Version DisplayVk::getMaxSupportedESVersion() const
 {
+    //    gl::Version maxSupportedESVersion = mRenderer->getMaxSupportedESVersion();
+    //    return mRenderer->getFeatures().exposeNonConformantExtensionsAndVersions.enabled
+    //               ? gl::Version(3, 2)
+    //               : maxSupportedESVersion;
     return mRenderer->getMaxSupportedESVersion();
 }
 

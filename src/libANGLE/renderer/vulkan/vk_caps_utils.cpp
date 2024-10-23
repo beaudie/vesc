@@ -588,8 +588,13 @@ void Renderer::ensureCapsInitialized() const
     // advanced blend as long as the Vulkan extension is supported.  Otherwise, the extension is
     // emulated where possible.
     // GL_EXT_blend_minmax is required for this extension, which is always enabled (hence omitted).
-    mNativeExtensions.blendEquationAdvancedKHR = mFeatures.supportsBlendOperationAdvanced.enabled ||
-                                                 mFeatures.emulateAdvancedBlendEquations.enabled;
+    // TODO(abdolrashidi): Non-conformant flag is used to enable more testing on current platforms.
+    // It should be removed when the tests can pass without it.
+    const bool isIntel = IsIntel(mPhysicalDeviceProperties.vendorID);
+    mNativeExtensions.blendEquationAdvancedKHR =
+        mFeatures.supportsBlendOperationAdvanced.enabled ||
+        mFeatures.emulateAdvancedBlendEquations.enabled ||
+        (isIntel && mFeatures.exposeNonConformantExtensionsAndVersions.enabled);
 
     mNativeExtensions.blendEquationAdvancedCoherentKHR =
         mFeatures.supportsBlendOperationAdvancedCoherent.enabled ||
