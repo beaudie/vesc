@@ -52,6 +52,24 @@
       "parentUuid": "542354f6_8ad2315e",
       "revId": "dea537577b8677963740265abc91edeb0d6bca84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a31e641_f5b8188a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-23T12:57:27Z",
+      "side": 1,
+      "message": "Ok we should probably revert this again for now, but it now seems like CF _does_ support Vulkan1.1, but it has a bug. Looking at https://docs.vulkan.org/spec/latest/appendices/versions.html#versions-1.1, all of these structs should be supported by Vulkan 1.1, and the extension string doesn\u0027t need to be present. If I were to take a hunch, I\u0027d say CF is not implementing one of these extensions, and instead of filling out the corresponding feature/property struct with false, it\u0027s giving up",
+      "parentUuid": "6230f3b3_a0275b07",
+      "revId": "dea537577b8677963740265abc91edeb0d6bca84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
