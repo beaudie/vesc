@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "072c7bd9_4d0bae16",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-24T13:14:31Z",
+      "side": 1,
+      "message": "super-nit: Use uppercase `S` for the type.",
+      "revId": "9d1789fe37c36bf84f992f2bfa80c68aa431bc6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
