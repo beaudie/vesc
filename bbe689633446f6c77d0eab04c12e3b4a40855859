@@ -34,6 +34,24 @@
       "parentUuid": "4b3fcb96_23964ab4",
       "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e837565_c074ea38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4394,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-24T01:45:39Z",
+      "side": 0,
+      "message": "Oh right, totally missed that it\u0027s not just straight out returning 3.1.\n\nOk no the problem is the opposite now? `getMaxSupportedESVersion` is returning 3.2 for swiftshader now because `exposeNonConformantExtensionsAndVersions` is set. You should be able to remove the `if (geom_tess)` check here and instead also remove `exposeNonConformantExtensionsAndVersions` from this:\n\n```\n    if (!mFeatures.exposeNonConformantExtensionsAndVersions.enabled \u0026\u0026\n        !CanSupportGLES32(mNativeExtensions))\n    {\n        maxVersion \u003d LimitVersionTo(maxVersion, {3, 1});\n    }\n```\n\nSo we drop to 3.1 without GLES3.2 extensions unconditionally. _Then_ if there are devices where we want to expose 3.2 despite limitations, we have to expose the right extensions with `exposeNonConformantExtensionsAndVersions` in their conditions (like geometry/tessellation have for example in vk_caps_utils.cpp)",
+      "parentUuid": "b9c3d7fc_f91cc907",
+      "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
