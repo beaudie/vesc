@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3d0c0a1_cd31a13e",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-24T03:21:45Z",
+      "side": 1,
+      "message": "Better catch bugs earlier:\n\n```suggestion\n            UNREACHABLE();\n```",
+      "range": {
+        "startLine": 407,
+        "startChar": 0,
+        "endLine": 408,
+        "endChar": 18
+      },
+      "revId": "44d72a04d8696b242739ccae5a6c597231b2753e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3daa990_f1522645",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-24T03:21:45Z",
+      "side": 1,
+      "message": "No consideration for 2D Array images?",
+      "revId": "44d72a04d8696b242739ccae5a6c597231b2753e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
