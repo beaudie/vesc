@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d8a1520_a8d1ed4f",
+        "filename": "src/tests/compiler_tests/Parse_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2024-10-24T12:25:25Z",
+      "side": 1,
+      "message": "Should we fix that as well (in a separate CL)?",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 614,
+        "endChar": 24
+      },
+      "revId": "81362f107eed748048f66aa3014e6c826f216ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
