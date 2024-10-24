@@ -16,6 +16,24 @@
       "message": "Looks like Rafay got this code from here, can we talk about this here before landing? https://chromium-review.googlesource.com/c/angle/angle/+/5796530/comment/09f7bb08_a89ff705/",
       "revId": "3b6dc230602e9810d91e7911a9d0691a1f91e26a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "628ee3d2_ce628bf2",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-24T00:24:54Z",
+      "side": 1,
+      "message": "Sure. I see the point you made there. Was thinking about it -- it might be better to place the barriers at this point. Taking another look at this.",
+      "parentUuid": "cb70be0c_0237b0ee",
+      "revId": "3b6dc230602e9810d91e7911a9d0691a1f91e26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
