@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b917538_171bcb7a",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-24T21:55:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3d0c0a1_cd31a13e",
+      "range": {
+        "startLine": 407,
+        "startChar": 0,
+        "endLine": 408,
+        "endChar": 18
+      },
+      "revId": "44d72a04d8696b242739ccae5a6c597231b2753e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3daa990_f1522645",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-10-24T03:21:45Z",
       "side": 1,
       "message": "No consideration for 2D Array images?",
+      "revId": "44d72a04d8696b242739ccae5a6c597231b2753e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03098572_687f175a",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-24T21:55:09Z",
+      "side": 1,
+      "message": "Done. I have later internal reviews that I need to cherry pick over that would have addresses 2D array images.",
+      "parentUuid": "c3daa990_f1522645",
       "revId": "44d72a04d8696b242739ccae5a6c597231b2753e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
