@@ -16,6 +16,23 @@
       "message": "super-nit: Use uppercase `S` for the type.",
       "revId": "9d1789fe37c36bf84f992f2bfa80c68aa431bc6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8f1809b_8f1989c9",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20001,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-24T16:12:41Z",
+      "side": 1,
+      "message": "I\u0027m surprised that `NonScalarEqualOperator` and `StructAndArrayEqualOperator` were not sufficient for this",
+      "revId": "9d1789fe37c36bf84f992f2bfa80c68aa431bc6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
