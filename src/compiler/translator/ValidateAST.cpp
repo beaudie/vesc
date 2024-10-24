@@ -927,7 +927,6 @@ void ValidateAST::visitFunctionPrototype(TIntermFunctionPrototype *node)
         const TFunction *function = node->getFunction();
         mDeclaredFunctions.insert(function);
     }
-
     const TFunction *function = node->getFunction();
     const TType &returnType   = function->getReturnType();
     if (mOptions.validatePrecision && IsPrecisionApplicableToType(returnType.getBasicType()) &&
