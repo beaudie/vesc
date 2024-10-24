@@ -1112,6 +1112,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     class ScopedDescriptorSetUpdates;
 
+    bool hasSomethingToFlush(bool *isSingleBufferedWindowOut) const;
+
     angle::Result setupDraw(const gl::Context *context,
                             gl::PrimitiveMode mode,
                             GLint firstVertexOrInvalid,

@@ -1484,10 +1484,8 @@ angle::Result ContextVk::initialize(const angle::ImageLoadContext &imageLoadCont
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::flush(const gl::Context *context)
+bool ContextVk::hasSomethingToFlush(bool *isSingleBufferedWindowOut) const
 {
-    // Skip the flush if there's nothing recorded.
-    //
     // Don't skip flushes for single-buffered windows with staged updates. It is expected that a
     // flush call on a single-buffered window ensures any pending updates reach the screen.
     const bool isSingleBufferedWindow =
@@ -1495,8 +1493,17 @@ angle::Result ContextVk::flush(const gl::Context *context)
     const bool isSingleBufferedWindowWithStagedUpdates =
         isSingleBufferedWindow && mCurrentWindowSurface->hasStagedUpdates();
 
-    if (!mHasAnyCommandsPendingSubmission && !hasActiveRenderPass() &&
-        mOutsideRenderPassCommands->empty() && !isSingleBufferedWindowWithStagedUpdates)
+    *isSingleBufferedWindowOut = isSingleBufferedWindow;
+
+    return (mHasAnyCommandsPendingSubmission || hasActiveRenderPass() ||
+            !mOutsideRenderPassCommands->empty() || isSingleBufferedWindowWithStagedUpdates);
+}
+
+angle::Result ContextVk::flush(const gl::Context *context)
+{
+    // Skip if there's nothing to flush.
+    bool isSingleBufferedWindow = false;
+    if (!hasSomethingToFlush(&isSingleBufferedWindow))
     {
         return angle::Result::Continue;
     }
@@ -1528,15 +1535,16 @@ angle::Result ContextVk::flush(const gl::Context *context)
 
 angle::Result ContextVk::finish(const gl::Context *context)
 {
+    bool isSingleBufferedWindow = false;
     if (mRenderer->getFeatures().swapbuffersOnFlushOrFinishWithSingleBuffer.enabled &&
-        (mCurrentWindowSurface != nullptr) && mCurrentWindowSurface->isSharedPresentMode())
+        hasSomethingToFlush(&isSingleBufferedWindow) && isSingleBufferedWindow)
     {
         ANGLE_TRY(mCurrentWindowSurface->onSharedPresentContextFlush(context));
+        // While call above performs implicit flush, don't skip |finishImpl| below, since we still
+        // need to wait for submitted commands.
     }
-    else
-    {
-        ANGLE_TRY(finishImpl(RenderPassClosureReason::GLFinish));
-    }
+
+    ANGLE_TRY(finishImpl(RenderPassClosureReason::GLFinish));
 
     syncObjectPerfCounters(mRenderer->getCommandQueuePerfCounters());
     return angle::Result::Continue;
