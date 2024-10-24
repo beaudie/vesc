@@ -4450,7 +4450,7 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
 
     // Next try to allocate from mCurrentPoolIndex pool
     DescriptorPoolPointer pool2;
-    if (mDescriptorPools[mCurrentPoolIndex] && mDescriptorPools[mCurrentPoolIndex]->valid() &&
+    if (mDescriptorPools[mCurrentPoolIndex] &&
         !mDescriptorPools[mCurrentPoolIndex].owner_equal(pool1))
     {
         pool2 = mDescriptorPools[mCurrentPoolIndex];
@@ -4463,7 +4463,7 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
     // Next try all other existing pools
     for (DescriptorPoolPointer &pool : mDescriptorPools)
     {
-        if (!pool || !pool->valid())
+        if (!pool)
         {
             continue;
         }
@@ -4600,13 +4600,19 @@ void DynamicDescriptorPool::checkAndReleaseUnusedPool(Renderer *renderer,
     {
         if (pool.owner_equal(mDescriptorPools[poolIndex]))
         {
-            break;
+            ASSERT(pool->valid());
+            pool->release(renderer);
+            mDescriptorPools.erase(mDescriptorPools.begin() + poolIndex);
+            // Adjust mCurrentPoolIndex if it is at or after the element being erased.
+            if (mCurrentPoolIndex >= poolIndex && mCurrentPoolIndex > 0)
+            {
+                mCurrentPoolIndex--;
+            }
+            return;
         }
     }
     // There must be a match
-    ASSERT(poolIndex != mDescriptorPools.size());
-    ASSERT(pool->valid());
-    pool->release(renderer);
+    UNREACHABLE();
 }
 
 // For testing only!
