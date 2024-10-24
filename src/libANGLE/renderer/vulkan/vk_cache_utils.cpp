@@ -7067,10 +7067,14 @@ void SharedCacheKeyManager<SharedCacheKeyT>::releaseKeys(ContextVk *contextVk)
     {
         if (*sharedCacheKey.get() != nullptr)
         {
+            // ReleaseCachedObject may end up evict the pool. Move out std::unique_ptr out of
+            // std::shared_ptr so that when pool is destroyed it wont hit assertion that its
+            // sharedKey still valid.
+            auto uniquePtr = std::move(*sharedCacheKey.get());
+            ASSERT(*sharedCacheKey.get() == nullptr);
             // Immediate destroy the cached object and the key itself when first releaseRef call is
             // made
-            ReleaseCachedObject(contextVk, *(*sharedCacheKey.get()));
-            *sharedCacheKey.get() = nullptr;
+            ReleaseCachedObject(contextVk, *uniquePtr);
         }
     }
     mSharedCacheKeys.clear();
@@ -7085,10 +7089,14 @@ void SharedCacheKeyManager<SharedCacheKeyT>::releaseKeys(Renderer *renderer)
     {
         if (*sharedCacheKey.get() != nullptr)
         {
+            // ReleaseCachedObject may end up evict the pool. Move out std::unique_ptr out of
+            // std::shared_ptr so that when pool is destroyed it wont hit assertion that its
+            // sharedKey still valid.
+            auto uniquePtr = std::move(*sharedCacheKey.get());
+            ASSERT(*sharedCacheKey.get() == nullptr);
             // Immediate destroy the cached object and the key itself when first releaseKeys call is
             // made
-            ReleaseCachedObject(renderer, *(*sharedCacheKey.get()));
-            *sharedCacheKey.get() = nullptr;
+            ReleaseCachedObject(renderer, *uniquePtr);
         }
     }
     mSharedCacheKeys.clear();
@@ -7104,9 +7112,13 @@ void SharedCacheKeyManager<SharedCacheKeyT>::destroyKeys(Renderer *renderer)
         // destroy the cache key
         if (*sharedCacheKey.get() != nullptr)
         {
+            // DestroyCachedObject may end up evict the pool. Move out std::unique_ptr out of
+            // std::shared_ptr so that when pool is destroyed it wont hit assertion that its
+            // sharedKey still valid.
+            auto uniquePtr = std::move(*sharedCacheKey.get());
+            ASSERT(*sharedCacheKey.get() == nullptr);
             // Immediate destroy the cached object and the key
-            DestroyCachedObject(renderer, *(*sharedCacheKey.get()));
-            *sharedCacheKey.get() = nullptr;
+            DestroyCachedObject(renderer, *uniquePtr);
         }
     }
     mSharedCacheKeys.clear();
