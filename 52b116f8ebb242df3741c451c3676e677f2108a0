@@ -16,6 +16,40 @@
       "message": "need to skip tests for pixel4 and pixel6",
       "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9f3616d_fb9e9132",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T22:38:18Z",
+      "side": 1,
+      "message": "What\u0027s special about level 0? Say an EGL image has multiple levels, base level is 1, and someone calls glGenerateMipmap, is that supposed to orphan the image or generate mipmaps in the rest of the existing image?",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e629046e_d50e3d1e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T22:38:18Z",
+      "side": 1,
+      "message": "Are all these copies just so that there is a format change? Why not use UtilsVk\u0027s blit shader and use a view that overrides the format?",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
