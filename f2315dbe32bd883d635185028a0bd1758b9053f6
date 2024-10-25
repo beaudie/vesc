@@ -16,6 +16,24 @@
       "message": "super-nit: This change is likely not needed.",
       "revId": "f2315dbe32bd883d635185028a0bd1758b9053f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c565da21_a4d9e2dd",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-10-25T05:37:33Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "cf24728b_772f2556",
+      "revId": "f2315dbe32bd883d635185028a0bd1758b9053f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
