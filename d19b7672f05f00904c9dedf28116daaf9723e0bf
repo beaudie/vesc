@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b1bdb86_ca3c9f5d",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:11:44Z",
+      "side": 1,
+      "message": "nit: Please associate TODOs with `http://anglebug.com/NNNNNNN` otherwise future readers won\u0027t have the context.",
+      "revId": "d19b7672f05f00904c9dedf28116daaf9723e0bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d21e162_036c3bfe",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:11:44Z",
+      "side": 1,
+      "message": "```suggestion\n            UNREACHABLE();\n```",
+      "range": {
+        "startLine": 661,
+        "startChar": 0,
+        "endLine": 662,
+        "endChar": 26
+      },
+      "revId": "d19b7672f05f00904c9dedf28116daaf9723e0bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
