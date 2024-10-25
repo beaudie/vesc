@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ff3206a_ddc5a39f",
+        "filename": "src/compiler/translator/tree_ops/SeparateDeclarations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:40:52Z",
+      "side": 1,
+      "message": "Style nit:\n\n```suggestion\n            if (mNewStructure-\u003eatGlobalScope())\n            {\n                newType-\u003esetQualifier(EvqGlobal);\n            }\n```",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 49
+      },
+      "revId": "88db72bba3de55c16a1f3d7ad21a00e0421850cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3ee447a_f0545b0f",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:40:52Z",
+      "side": 1,
+      "message": "Could you please add an all-encompassing test in GLSLTest.cpp too so all the backends are exercised?",
+      "revId": "88db72bba3de55c16a1f3d7ad21a00e0421850cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
