@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a03b3fe_58d8f209",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-25T23:53:04Z",
+      "side": 1,
+      "message": "Replaced with `Bug: angleproject:6878`. Hope this is correct one.",
+      "parentUuid": "07480bc9_ab9d1e0a",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 15
+      },
+      "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9bfc251_523d3143",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "I wanted to avoid calculating `isSingleBufferedWindow` twice.\n\n\u003e and then use it both here and in finish().\n\nWe will need to use it in three places: in `hasSomethingToFlush()`, in `flush()` (2 times, so cache into a local var) and in `finish()`.\n\nAnother way is to calculate `isSingleBufferedWindow` into a local variable and then pass it into the `hasSomethingToFlush()` as input argument. But this way there will be pattern like this in `flush()` and `finish()`:\n```\nconst bool isSingleBufferedWindow \u003d isSingleBufferedWindowCurrent();\n//use hasSomethingToFlush(isSingleBufferedWindow)\n```\n\nSince all functions require `isSingleBufferedWindow` I opted for the output parameter as an additional side effect of `hasSomethingToFlush()`...\n\nIs it OK, to change `hasSomethingToFlush()` to accept `isSingleBufferedWindow` as input parameter, to avoid calculating it two times?\nI just find calculating it two times in a single place (especially in `finish()`) more awkward than using output parameter)",
       "parentUuid": "a9bfc251_523d3143",
+      "range": {
+        "startLine": 1492,
+        "startChar": 8,
+        "endLine": 1492,
+        "endChar": 89
+      },
+      "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01def5c2_e803140a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-25T23:53:04Z",
+      "side": 1,
+      "message": "Updated `hasSomethingToFlush()` to use input `isSingleBufferedWindow` parameter, and  added `ContextVk::isSingleBufferedWindowCurrent()`.\n\nI like it better than the old way, because now, `finish()` can early return if `isSingleBufferedWindow \u003d\u003d false`. So more flexibility this way)",
+      "parentUuid": "bfbecb2c_fea7c72d",
       "range": {
         "startLine": 1492,
         "startChar": 8,
