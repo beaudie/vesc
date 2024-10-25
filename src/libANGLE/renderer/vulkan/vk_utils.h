@@ -867,6 +867,8 @@ class SharedPtr final
     {
         if (mRefCounted)
         {
+            // There must be a SharedPtr holding onto the underline object when WeakPtr is valid.
+            ASSERT(mRefCounted->isReferenced());
             mRefCounted->addRef();
         }
     }
@@ -971,19 +973,29 @@ class WeakPtr final
 
     void reset() { mRefCounted = nullptr; }
 
-    operator bool() const { return mRefCounted != nullptr; }
+    operator bool() const
+    {
+        // There must be a SharedPtr holding onto the underline object when WeakPtr is valid.
+        ASSERT(mRefCounted == nullptr || mRefCounted->isReferenced());
+        return mRefCounted != nullptr;
+    }
 
     T *operator->() const { return get(); }
 
     T *get() const
     {
         ASSERT(mRefCounted != nullptr);
-        ASSERT(mRefCounted->getRefCount() > 0);
+        ASSERT(mRefCounted->isReferenced());
         return &mRefCounted->get();
     }
 
     long use_count() const { return mRefCounted->getRefCount(); }
-    bool owner_equal(const SharedPtr<T> &other) const { return mRefCounted == other.mRefCounted; }
+    bool owner_equal(const SharedPtr<T> &other) const
+    {
+        // There must be a SharedPtr holding onto the underline object when WeakPtr is valid.
+        ASSERT(mRefCounted == nullptr || mRefCounted->isReferenced());
+        return mRefCounted == other.mRefCounted;
+    }
 
   private:
     friend class SharedPtr<T>;
