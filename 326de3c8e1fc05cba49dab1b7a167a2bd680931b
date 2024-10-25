@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7985e2dc_d869864c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:24:51Z",
+      "side": 1,
+      "message": "Looks like the data is filled directly over the mapped staging buffer?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 36
+      },
+      "revId": "326de3c8e1fc05cba49dab1b7a167a2bd680931b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c95f5a39_1a329b32",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:24:51Z",
+      "side": 1,
+      "message": "Please use `std::clamp` instead",
+      "range": {
+        "startLine": 501,
+        "startChar": 0,
+        "endLine": 502,
+        "endChar": 69
+      },
+      "revId": "326de3c8e1fc05cba49dab1b7a167a2bd680931b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffdd4853_e31acf4b",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:24:51Z",
+      "side": 1,
+      "message": "This has a maximum bound, could we please avoid `void *` here?\n\nYou can have a union like:\n\n```\nunion PixelColor\n{\n    uint8_t u8[4];\n    int8_t s8[4];\n    uint16_t u16[4];\n    int16_t s16[4];\n    uint32_t u32[4];\n    int32_t s32[4];\n    cl_half fp16[4];\n    cl_float fp32[4];\n};\n```\n\nand at call site create an instance and pass in here (avoids unique_ptr, new, etc too)",
+      "range": {
+        "startLine": 504,
+        "startChar": 50,
+        "endLine": 504,
+        "endChar": 63
+      },
+      "revId": "326de3c8e1fc05cba49dab1b7a167a2bd680931b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a511ba_f8ea4fca",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:24:51Z",
+      "side": 1,
+      "message": "Per our style, please use `static_cast` everywhere",
+      "revId": "326de3c8e1fc05cba49dab1b7a167a2bd680931b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c13e42ef_c91a3980",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:24:51Z",
+      "side": 1,
+      "message": "```suggestion\n                UNREACHABLE();\n```",
+      "range": {
+        "startLine": 633,
+        "startChar": 0,
+        "endLine": 634,
+        "endChar": 30
+      },
+      "revId": "326de3c8e1fc05cba49dab1b7a167a2bd680931b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "524f253f_2d173e31",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-25T19:24:51Z",
+      "side": 1,
+      "message": "style: Please move this to the cpp file, place in the anonymous namespace at the top, and capitalize the first letter",
+      "revId": "326de3c8e1fc05cba49dab1b7a167a2bd680931b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
