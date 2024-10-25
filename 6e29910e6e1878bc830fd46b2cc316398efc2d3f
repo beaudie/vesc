@@ -16,6 +16,24 @@
       "message": "This was written at a time when ANGLE wasn\u0027t 3.2-conformant, so we unconditionally dropped to 3.1.\n\nAmirali is actually fixing this code right now in https://chromium-review.googlesource.com/c/angle/angle/+/5958147, so I\u0027m going to abandon this change.",
       "revId": "6e29910e6e1878bc830fd46b2cc316398efc2d3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a094936c_f084ef68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1223189
+      },
+      "writtenOn": "2024-10-25T16:39:21Z",
+      "side": 1,
+      "message": "Cool, waiting for the right fix. Thanks for letting me now.",
+      "parentUuid": "da4fd3cd_1ad44109",
+      "revId": "6e29910e6e1878bc830fd46b2cc316398efc2d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
