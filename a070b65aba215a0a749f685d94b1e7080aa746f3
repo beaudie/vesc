@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9eccdea_021fdfca",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1118354
+      },
+      "writtenOn": "2024-10-25T13:34:30Z",
+      "side": 1,
+      "message": "I\u0027m not sure why it started after this CL, but the Chromium -\u003e ANGLE roller is now failing to create CLs because this URL is different than the one in Chromium DEPS:\n```\nAssertionError: ANGLE DEPS entry third_party/libdrm/src has a different URL (https://chromium.googlesource.com/chromiumos/third_party/libdrm) than Chromium (https://chromium.googlesource.com/chromiumos/third_party/libdrm.git).\n```",
+      "range": {
+        "startLine": 772,
+        "startChar": 0,
+        "endLine": 772,
+        "endChar": 107
+      },
+      "revId": "a070b65aba215a0a749f685d94b1e7080aa746f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
