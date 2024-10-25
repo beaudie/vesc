@@ -22,6 +22,30 @@
       },
       "revId": "a070b65aba215a0a749f685d94b1e7080aa746f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e87be0c8_6f51ace4",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-25T14:35:41Z",
+      "side": 1,
+      "message": "It looks like Chromium spells out `.git` on all their DEPS:\n```\n  # Userspace interface to kernel DRM services.\n  \u0027src/third_party/libdrm/src\u0027: {\n      \u0027url\u0027: Var(\u0027chromium_git\u0027) + \u0027/chromiumos/third_party/libdrm.git\u0027 + \u0027@\u0027 + \u0027ad78bb591d02162d3b90890aa4d0a238b2a37cde\u0027,\n      \u0027condition\u0027: \u0027checkout_linux\u0027,\n  },\n```\nhttps://chromium.googlesource.com/chromium/src/+/master/DEPS\n\nI\u0027ll update our DEPS to have .git as well.",
+      "parentUuid": "e9eccdea_021fdfca",
+      "range": {
+        "startLine": 772,
+        "startChar": 0,
+        "endLine": 772,
+        "endChar": 107
+      },
+      "revId": "a070b65aba215a0a749f685d94b1e7080aa746f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
