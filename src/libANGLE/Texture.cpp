@@ -1842,7 +1842,7 @@ angle::Result Texture::generateMipmap(Context *context)
     // EGL_KHR_gl_image states that images are only orphaned when generating mipmaps if the texture
     // is not mip complete.
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    if (!isMipmapComplete())
+    if (!mState.mImmutableFormat && !isMipmapComplete())
     {
         ANGLE_TRY(orphanImages(context, &releaseImage));
     }
@@ -2091,9 +2091,15 @@ angle::Result Texture::setStorageEGLImageTarget(Context *context,
            type == TextureType::_2DArray || type == TextureType::CubeMap ||
            type == TextureType::CubeMapArray);
 
-    ANGLE_TRY(setEGLImageTargetImpl(context, type, imageTarget->getLevelCount(), imageTarget));
+    // If EGLImage source was an immutable format texture and the EGLImage was created with mip
+    // level == 0 enable an optimization where we avoid orphaning when generating mipmaps for an
+    // EGLImage texture target.
+    GLuint levelCount = (imageTarget->isSourceImmutableFormat() && imageTarget->getBaseLevel() == 0)
+                            ? imageTarget->getSourceLevelCount()
+                            : imageTarget->getLevelCount();
+    ANGLE_TRY(setEGLImageTargetImpl(context, type, levelCount, imageTarget));
 
-    mState.mImmutableLevels = imageTarget->getLevelCount();
+    mState.mImmutableLevels = levelCount;
     mState.mImmutableFormat = true;
 
     // Changing the texture to immutable can trigger a change in the base and max levels:

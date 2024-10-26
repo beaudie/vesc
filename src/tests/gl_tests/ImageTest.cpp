@@ -927,6 +927,7 @@ void main()
     void SourceNativeClientBufferTargetExternal_helper(const EGLint *attribs);
     void SourceNativeClientBufferTargetRenderbuffer_helper(const EGLint *attribs);
     void Source2DTarget2D_helper(const EGLint *attribs);
+    void Source2DTarget2DImageStorageGenerateMipmap_helper(const EGLint *attribs);
     void Source2DTarget2DArray_helper(const EGLint *attribs);
     void Source2DTargetRenderbuffer_helper(const EGLint *attribs);
     void Source2DTargetExternal_helper(const EGLint *attribs);
@@ -2327,6 +2328,59 @@ void ImageTest::verifyImageStorageMipmapWithBlend(const EGLint *attribs,
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
 
     EXPECT_PIXEL_NEAR(7, 11, blendedColor[0], blendedColor[1], blendedColor[2], blendedColor[3], 1);
+}
+
+void ImageTest::Source2DTarget2DImageStorageGenerateMipmap_helper(const EGLint *attribs)
+{
+    constexpr GLsizei kWidth    = 40;
+    constexpr GLsizei kHeight   = 32;
+    const GLsizei mipLevelCount = static_cast<GLsizei>(std::log2(std::max(kWidth, kHeight)) + 1);
+
+    // Create a source 2D texture
+    GLTexture srcTexture;
+    glBindTexture(GL_TEXTURE_2D, srcTexture);
+    glTexStorage2D(GL_TEXTURE_2D, mipLevelCount, GL_RGBA8, kWidth, kHeight);
+
+    EGLImageKHR image = EGL_NO_IMAGE_KHR;
+    ImageStorageGenerateMipmap_helper(attribs, kWidth, kHeight, nullptr, srcTexture, &image);
+    verifyImageStorageMipmap(attribs, image, mipLevelCount);
+
+    // Clean up image
+    eglDestroyImageKHR(getEGLWindow()->getDisplay(), image);
+}
+
+// Test interaction between GL_EXT_EGL_image_storage and glGenerateMipmap
+TEST_P(ImageTestES3, Source2DTarget2DGenerateMipmap)
+{
+    Source2DTarget2DImageStorageGenerateMipmap_helper(kDefaultAttribs);
+}
+
+// Test interaction between GL_EXT_EGL_image_storage and glGenerateMipmap with colorspace overrides
+TEST_P(ImageTestES3, Source2DTarget2DGenerateMipmap_Colorspace)
+{
+    Source2DTarget2DImageStorageGenerateMipmap_helper(kColorspaceAttribs);
+}
+
+// Test to ensure that Vulkan backend's LOAD_OP is correct for non-0 miplevels. A bug in
+// content tracking of mip levels will cause rendering artifacts and result in test failure.
+TEST_P(ImageTestES3, Source2DTarget2DGenerateMipmapColorspaceBlend)
+{
+    constexpr GLsizei kWidth    = 40;
+    constexpr GLsizei kHeight   = 32;
+    const GLsizei mipLevelCount = static_cast<GLsizei>(std::log2(std::max(kWidth, kHeight)) + 1);
+
+    // Create a source 2D texture
+    GLTexture srcTexture;
+    glBindTexture(GL_TEXTURE_2D, srcTexture);
+    glTexStorage2D(GL_TEXTURE_2D, mipLevelCount, GL_RGBA8, kWidth, kHeight);
+
+    EGLImageKHR image = EGL_NO_IMAGE_KHR;
+    ImageStorageGenerateMipmap_helper(kColorspaceAttribs, kWidth, kHeight, nullptr, srcTexture,
+                                      &image);
+    verifyImageStorageMipmapWithBlend(kColorspaceAttribs, image, mipLevelCount);
+
+    // Clean up image
+    eglDestroyImageKHR(getEGLWindow()->getDisplay(), image);
 }
 
 void ImageTest::SourceAHBTarget2DImageStorageGenerateMipmap_helper(const EGLint *attribs)
