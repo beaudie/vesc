@@ -125,6 +125,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c02aa1d4_74d96228",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-26T13:11:23Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/5967630\n\nwill take a look later",
+      "parentUuid": "8e6e930b_cb394cbe",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e629046e_d50e3d1e",
