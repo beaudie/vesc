@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c38676c0_d7559954",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-26T01:57:15Z",
+      "side": 1,
+      "message": "I think I understand now.\n\nDone.",
+      "parentUuid": "8c9354ff_80e445e7",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 15
+      },
+      "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9bfc251_523d3143",
@@ -181,6 +205,30 @@
       "side": 1,
       "message": "I was thinking they could just recalculate `isSingleBufferedWindow()`, it would be simpler. It\u0027s `finish` (no one really calls that outside tests / termination) and even `flush` is a rare operation.",
       "parentUuid": "01def5c2_e803140a",
+      "range": {
+        "startLine": 1492,
+        "startChar": 8,
+        "endLine": 1492,
+        "endChar": 89
+      },
+      "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fc55dfc_5b983bcd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-26T01:57:15Z",
+      "side": 1,
+      "message": "I know, it is just that repeated execution makes me uncomfortable, even tho I understand that performance impact in this situation can\u0027t be even measured in a real world case. I think this comes from very early days when I programmed for ZX Spectrum)\n\nOK, I removed the parameter. Now it\u0027s looks cleaner.",
+      "parentUuid": "9209cb7a_c23a60db",
       "range": {
         "startLine": 1492,
         "startChar": 8,
