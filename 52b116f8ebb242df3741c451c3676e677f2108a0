@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a6fc282a_02bd1bb7",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-26T02:35:59Z",
+      "side": 1,
+      "message": "\u003e is that based on whether new mips need to be created or not?\n\n`GL_EXT_EGL_image_storage` spec says - `calling GenerateMipmap on a texture created with EGLImageTarget*StorageEXT never causes orphaning`\n\nin that sense it is more appropriate to call this an incomplete fix but i dont know what the expected behavior for this usecase is -\n1. EGLImage source is a GL texture with size 40X32 with 1 mip level (baseLevel \u003d\u003d 0)\n2. EGLImage is created with `EGL_GL_TEXTURE_LEVEL_KHR \u003d\u003d 0`\n3. EGLImage target is created with `glEGLImageTargetTexStorageEXT`\n4. App calls `glGenerateMipmap` on EGLImage target\n\nthe spec says we shouldn\u0027t orphan but it is impossible to do that, right?",
+      "parentUuid": "c22424fa_d4ce41a4",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e629046e_d50e3d1e",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
