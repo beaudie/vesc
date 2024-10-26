@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e6e930b_cb394cbe",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-26T12:59:55Z",
+      "side": 1,
+      "message": "well, then we need update `isMipComplete` so that we dont orphan. let me split this part into a separate change and work on it later",
+      "parentUuid": "3bcfd27b_d5d2327f",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e629046e_d50e3d1e",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -156,6 +174,24 @@
       "side": 1,
       "message": "\u003e As long as the image\u0027s format is sRGB Vulkan automatically handles the math\n\nYes, and choosing the right view for the sampler and color attachment in a draw call would also let the device handle sRGB\u003c-\u003eLinear conversions, right?\n\n\u003e i am aware of the blitresolve code but dont see a method for a simple blit in UtilsVk?\n\nIt won\u0027t be the blitResolve() function, but you can use the BlitResolve.frag shader for this; bind mip 0 as sampler, use either the point or linear sampler, bind mip 1 as color attachment, draw, repeat for next mip.",
       "parentUuid": "a83b259b_957f84d1",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b7bd0f7_637d3961",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-26T12:59:55Z",
+      "side": 1,
+      "message": "will give this a try",
+      "parentUuid": "938960bd_2021cc7f",
       "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
