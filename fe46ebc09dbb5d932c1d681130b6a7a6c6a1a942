@@ -51,6 +51,24 @@
       "parentUuid": "3ba617ba_0fcc7eb3",
       "revId": "fe46ebc09dbb5d932c1d681130b6a7a6c6a1a942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "210fc91f_b6c83f2e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-26T01:54:06Z",
+      "side": 1,
+      "message": "That is exactly the behavior we want for SwiftShader, to claim that it cannot support ES3.2\n\nWe shouldn\u0027t be running ES3.2 tests on SwiftShader in the first place. If this is a CTS bug (expecting es3.2 for es3.1 contexts), we can fix that upstream. In the meantime, the 3.2 tests can also be skipped for swiftshader.",
+      "parentUuid": "f809592f_d877b992",
+      "revId": "fe46ebc09dbb5d932c1d681130b6a7a6c6a1a942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

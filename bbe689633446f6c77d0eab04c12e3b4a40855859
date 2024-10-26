@@ -70,6 +70,24 @@
       "parentUuid": "2e837565_c074ea38",
       "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2add7f5b_6d96caa3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4394,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-26T01:54:06Z",
+      "side": 0,
+      "message": "I wasn\u0027t expecting we\u0027d enable something like geometry/tessellation, but more like something that _works_ on SwiftShader but is missing features to support corner case scenarios.\n\nI think this discussion is converging with the other comment. SwiftShader should result in ES3.1 contexts, and you shouldn\u0027t need to force enable any of these (maybe one of the conditions of gpuShader5 could be `|| exposeNonConformant` for the sake of traces). The ES3.2 tests should not run for SwiftShader at all.",
+      "parentUuid": "0a6ffeb2_16284db9",
+      "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
