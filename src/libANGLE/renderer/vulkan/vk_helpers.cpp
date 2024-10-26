@@ -12373,23 +12373,35 @@ angle::Result ImageViewHelper::initFragmentShadingRateView(ContextVk *contextVk,
         &mFragmentShadingRateImageView, vk::LevelIndex(0), 1, 0, 1, image->getUsage());
 }
 
-angle::FormatID ImageViewHelper::getColorspaceOverrideFormatForWrite(angle::FormatID format) const
+angle::FormatID ImageViewHelper::getColorspaceOverrideFormatForColorspace(
+    angle::FormatID format,
+    ImageViewColorspace colorspace) const
 {
-    ASSERT(mWriteColorspace != ImageViewColorspace::Invalid);
+    ASSERT(colorspace != ImageViewColorspace::Invalid);
 
     angle::FormatID colorspaceOverrideFormat = format;
     angle::FormatID linearFormat             = ConvertToLinear(format);
     angle::FormatID sRGBFormat               = ConvertToSRGB(format);
-    if (mWriteColorspace == ImageViewColorspace::Linear && linearFormat != angle::FormatID::NONE)
+    if (colorspace == ImageViewColorspace::Linear && linearFormat != angle::FormatID::NONE)
     {
         colorspaceOverrideFormat = linearFormat;
     }
-    else if (mWriteColorspace == ImageViewColorspace::SRGB && sRGBFormat != angle::FormatID::NONE)
+    else if (colorspace == ImageViewColorspace::SRGB && sRGBFormat != angle::FormatID::NONE)
     {
         colorspaceOverrideFormat = sRGBFormat;
     }
 
     return colorspaceOverrideFormat;
+}
+
+angle::FormatID ImageViewHelper::getColorspaceOverrideFormatForRead(angle::FormatID format) const
+{
+    return getColorspaceOverrideFormatForColorspace(format, mReadColorspace);
+}
+
+angle::FormatID ImageViewHelper::getColorspaceOverrideFormatForWrite(angle::FormatID format) const
+{
+    return getColorspaceOverrideFormatForColorspace(format, mWriteColorspace);
 }
 
 void ImageViewHelper::updateColorspace(const ImageHelper &image) const
