@@ -927,6 +927,7 @@ void main()
     void SourceNativeClientBufferTargetExternal_helper(const EGLint *attribs);
     void SourceNativeClientBufferTargetRenderbuffer_helper(const EGLint *attribs);
     void Source2DTarget2D_helper(const EGLint *attribs);
+    void Source2DTarget2DImageStorageGenerateMipmap_helper(const EGLint *attribs);
     void Source2DTarget2DArray_helper(const EGLint *attribs);
     void Source2DTargetRenderbuffer_helper(const EGLint *attribs);
     void Source2DTargetExternal_helper(const EGLint *attribs);
@@ -2270,6 +2271,32 @@ void ImageTest::ImageStorageGenerateMipmap_helper(const EGLint *attribs,
 
     // Clean up
     eglDestroyImageKHR(window->getDisplay(), image);
+}
+
+void ImageTest::Source2DTarget2DImageStorageGenerateMipmap_helper(const EGLint *attribs)
+{
+    constexpr GLsizei kWidth    = 40;
+    constexpr GLsizei kHeight   = 32;
+    const GLsizei mipLevelCount = static_cast<GLsizei>(std::log2(std::max(kWidth, kHeight)) + 1);
+
+    // Create a source 2D texture
+    GLTexture srcTexture;
+    glBindTexture(GL_TEXTURE_2D, srcTexture);
+    glTexStorage2D(GL_TEXTURE_2D, mipLevelCount, GL_RGBA8, kWidth, kHeight);
+
+    ImageStorageGenerateMipmap_helper(attribs, kWidth, kHeight, nullptr, srcTexture);
+}
+
+// Test interaction between GL_EXT_EGL_image_storage and glGenerateMipmap
+TEST_P(ImageTestES3, Source2DTarget2DGenerateMipmap)
+{
+    Source2DTarget2DImageStorageGenerateMipmap_helper(kDefaultAttribs);
+}
+
+// Test interaction between GL_EXT_EGL_image_storage and glGenerateMipmap with colorspace overrides
+TEST_P(ImageTestES3, Source2DTarget2DGenerateMipmap_Colorspace)
+{
+    Source2DTarget2DImageStorageGenerateMipmap_helper(kColorspaceAttribs);
 }
 
 void ImageTest::SourceAHBTarget2DImageStorageGenerateMipmap_helper(const EGLint *attribs)
