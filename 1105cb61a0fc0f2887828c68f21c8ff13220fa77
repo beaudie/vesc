@@ -261,6 +261,30 @@
       },
       "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f13ba716_80583f9b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-26T02:19:18Z",
+      "side": 1,
+      "message": "Agree. Thanks, I will remember this).",
+      "parentUuid": "76587c1f_2a8cf77d",
+      "range": {
+        "startLine": 1492,
+        "startChar": 8,
+        "endLine": 1492,
+        "endChar": 89
+      },
+      "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
