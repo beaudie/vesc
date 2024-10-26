@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c22424fa_d4ce41a4",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-26T01:48:01Z",
+      "side": 1,
+      "message": "What I\u0027m trying to understand is what the GL rules are; should glGenerateMipmap orphan the image or not, is that based on whether new mips need to be created or not?\n\nBecause the way I see it, this cannot be an _optimization_, if we were orphaning an image that we shouldn\u0027t have, this is a(n incomplete) fix. If we _should_ be orphaning the image, then this is introducing a bug.",
+      "parentUuid": "e5231dd3_d29ff35f",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e629046e_d50e3d1e",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
