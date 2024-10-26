@@ -192,6 +192,7 @@ class Image final : public ThreadSafeRefCountObject, public LabeledObject
     const gl::Extents &getExtents() const;
     bool isLayered() const;
     size_t getSamples() const;
+    GLuint getBaseLevel() const;
     GLuint getLevelCount() const;
     bool hasProtectedContent() const;
     EGLenum getColorspaceAttribute() const { return mState.colorspace; }
@@ -200,6 +201,8 @@ class Image final : public ThreadSafeRefCountObject, public LabeledObject
 
     rx::ImageImpl *getImplementation() const;
 
+    bool isSourceImmutableFormat() const;
+    GLuint getSourceLevelCount() const;
     bool orphaned() const;
     gl::InitState sourceInitState() const;
     void setInitState(gl::InitState initState);
