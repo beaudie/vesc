@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef12f39a_ac886815",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-26T05:18:07Z",
+      "side": 1,
+      "message": "Can land after https://chromium-review.googlesource.com/c/chromium/src/+/5967119",
+      "revId": "5dceccde606874ab125f1675a198b82e85dd0431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
