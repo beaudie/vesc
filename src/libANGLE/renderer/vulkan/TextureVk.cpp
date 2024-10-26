@@ -2379,6 +2379,89 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result TextureVk::generateMipmapsWithColorspaceOverride(const gl::Context *context)
+{
+    ContextVk *contextVk   = vk::GetImpl(context);
+    vk::Renderer *renderer = contextVk->getRenderer();
+
+    vk::ImageViewHelper &imageViews = getImageViews();
+    angle::FormatID intendedFormatOverride =
+        imageViews.getColorspaceOverrideFormatForRead(mImage->getIntendedFormatID());
+    angle::FormatID actualFormatOverride =
+        imageViews.getColorspaceOverrideFormatForRead(mImage->getActualFormatID());
+    vk::ImageHelper intermediateImage;
+
+    uint32_t levelCount      = mImage->getLevelCount();
+    uint32_t layerCount      = mImage->getLayerCount();
+    VkExtent3D extents       = mImage->getExtents();
+    vk::LevelIndex baseLevel = mImage->toVkLevel(gl::LevelIndex(mState.getEffectiveBaseLevel()));
+    vk::LevelIndex maxLevel  = mImage->toVkLevel(gl::LevelIndex(mState.getMipmapMaxLevel()));
+
+    // 1. Create a staging image with the override format
+    ANGLE_TRY(intermediateImage.initStaging(
+        contextVk, contextVk->getState().hasProtectedContent(), renderer->getMemoryProperties(),
+        mImage->getType(), extents, intendedFormatOverride, actualFormatOverride,
+        mImage->getSamples(), mImage->getUsage(), levelCount, layerCount));
+    ASSERT(intermediateImage.valid());
+
+    // 2. Copy baseLevel data
+    ASSERT(intermediateImage.getAspectFlags() == mImage->getAspectFlags());
+    const VkImageAspectFlags aspectFlags = intermediateImage.getAspectFlags();
+
+    vk::CommandBufferAccess baseLevelCopyAccess;
+    baseLevelCopyAccess.onImageTransferWrite(gl::LevelIndex(baseLevel.get()), 1, 0, layerCount,
+                                             aspectFlags, &intermediateImage);
+    baseLevelCopyAccess.onImageTransferRead(aspectFlags, mImage);
+
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(baseLevelCopyAccess, &commandBuffer));
+
+    VkImageCopy copyRegion               = {};
+    copyRegion.srcSubresource.aspectMask = aspectFlags;
+    copyRegion.srcSubresource.layerCount = layerCount;
+    copyRegion.srcSubresource.mipLevel   = baseLevel.get();
+    copyRegion.dstSubresource            = copyRegion.srcSubresource;
+    copyRegion.extent                    = extents;
+
+    commandBuffer->copyImage(mImage->getImage(), mImage->getCurrentLayout(renderer),
+                             intermediateImage.getImage(),
+                             intermediateImage.getCurrentLayout(renderer), 1, &copyRegion);
+
+    // 3. Generate mipmap on the intermediate image
+    ANGLE_TRY(intermediateImage.generateMipmapsWithBlit(contextVk, baseLevel, maxLevel));
+
+    // 4. Copy over entire content of, excluding the baseLevel, the intermediate image into mImage
+    vk::CommandBufferAccess access;
+    access.onImageTransferWrite(gl::LevelIndex(baseLevel.get()), levelCount, 0, layerCount,
+                                aspectFlags, mImage);
+    access.onImageTransferRead(aspectFlags, &intermediateImage);
+
+    commandBuffer = nullptr;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+    copyRegion                           = {};
+    copyRegion.srcSubresource.aspectMask = aspectFlags;
+    copyRegion.srcSubresource.layerCount = layerCount;
+    copyRegion.dstSubresource            = copyRegion.srcSubresource;
+
+    for (vk::LevelIndex levelVk = baseLevel + 1; levelVk < vk::LevelIndex(levelCount); ++levelVk)
+    {
+        gl::Extents levelExtents = intermediateImage.getLevelExtents(levelVk);
+
+        copyRegion.srcSubresource.mipLevel = levelVk.get();
+        copyRegion.dstSubresource.mipLevel = levelVk.get();
+        gl_vk::GetExtent(levelExtents, &copyRegion.extent);
+
+        commandBuffer->copyImage(intermediateImage.getImage(),
+                                 intermediateImage.getCurrentLayout(renderer), mImage->getImage(),
+                                 mImage->getCurrentLayout(renderer), 1, &copyRegion);
+    }
+
+    intermediateImage.releaseImage(renderer);
+
+    return angle::Result::Continue;
+}
+
 angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 {
     vk::Renderer *renderer = contextVk->getRenderer();
@@ -2547,6 +2630,12 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     vk::LevelIndex baseLevel = mImage->toVkLevel(gl::LevelIndex(mState.getEffectiveBaseLevel()));
     vk::LevelIndex maxLevel  = mImage->toVkLevel(gl::LevelIndex(mState.getMipmapMaxLevel()));
     ASSERT(maxLevel != vk::LevelIndex(0));
+
+    if (getImageViews().hasColorspaceOverrideForRead(*mImage))
+    {
+        // Handle special case where this is an EGLImage texture target with colorspace override
+        return generateMipmapsWithColorspaceOverride(context);
+    }
 
     // If it's possible to generate mipmap in compute, that would give the best possible
     // performance on some hardware.
