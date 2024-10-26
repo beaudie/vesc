@@ -237,6 +237,30 @@
       },
       "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76587c1f_2a8cf77d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-26T02:13:31Z",
+      "side": 1,
+      "message": "I have and understand the feeling, it\u0027s hard to \"intentionally write slower code\" 😄\n\nBut I\u0027ve learned that keeping the mess managed is more important, so itchy as it makes my brain, \"simple\" wins over \"fast\" where fast is immeasurable, haha",
+      "parentUuid": "6fc55dfc_5b983bcd",
+      "range": {
+        "startLine": 1492,
+        "startChar": 8,
+        "endLine": 1492,
+        "endChar": 89
+      },
+      "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
