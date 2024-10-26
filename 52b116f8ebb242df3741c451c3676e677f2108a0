@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3bcfd27b_d5d2327f",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-26T03:20:34Z",
+      "side": 1,
+      "message": "Shouldn\u0027t that do the same thing that glGenerateMipmap does for a texture created with glTexStorage2D with 1 mip (or a few mips that don\u0027t go all the way down to 1x1)?\n\nI suspect in that case `glGenerateMipmap` would just fill in as many mips as it can?",
+      "parentUuid": "a6fc282a_02bd1bb7",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e629046e_d50e3d1e",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
