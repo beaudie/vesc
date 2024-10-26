@@ -52,6 +52,24 @@
       "parentUuid": "b9c3d7fc_f91cc907",
       "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a6ffeb2_16284db9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4394,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-26T01:29:06Z",
+      "side": 0,
+      "message": "Enabling the missing extensions in `vk_caps_utils.cpp`, using the non-conformant flag, results in errors on SwS. Do you mean enabling those missing extensions unconditionally? Should we create the 3.2 context with the flag, but those features remain disabled?",
+      "parentUuid": "2e837565_c074ea38",
+      "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

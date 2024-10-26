@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27bb100a_78ecdf56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-26T01:29:06Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "fe46ebc09dbb5d932c1d681130b6a7a6c6a1a942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ba617ba_0fcc7eb3",
@@ -14,6 +31,24 @@
       "writtenOn": "2024-10-24T20:27:35Z",
       "side": 1,
       "message": "This will blow up for swiftshader.",
+      "revId": "fe46ebc09dbb5d932c1d681130b6a7a6c6a1a942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f809592f_d877b992",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-26T01:29:06Z",
+      "side": 1,
+      "message": "True. If I remove this (basically PS5), some tests with ES 3.2 config fail on SwS when creating the context:\n```\nEGL ERROR: eglCreateContext: Requested GLES version (3.2) is greater than max supported (3, 1).\n```\nDuring validation, it goes through `getMaxSupportedESVersion()`, sees that ES 3.1 is the max supported (ES 3.2 check was bypassed at baseline), and fails.",
+      "parentUuid": "3ba617ba_0fcc7eb3",
       "revId": "fe46ebc09dbb5d932c1d681130b6a7a6c6a1a942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
