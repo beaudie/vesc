@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5231dd3_d29ff35f",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-26T01:03:44Z",
+      "side": 1,
+      "message": "\u003e is that supposed to orphan the image\n\ncurrent code will orphan for EGLImages not created using `EGL_ANDROID_image_native_buffer` extension, thus defeating the purpose of the `GL_EXT_EGL_image_storage` extension\n\nPS:\n\nCurrent usage of `GL_EXT_EGL_image_storage` is for EGLImages backed by AHBs using `EGL_ANDROID_image_native_buffer` extension. There is no mechanism to specify baseLevel for such EGLImages and `imageTarget-\u003egetLevelCount()` returns the levelCount of the AHB. These prevent orphaning during mipmap generation\n\nI am just expanding this to texture types other than AHB backed EGLImages under specific conditions -\n1. EGLImage source must be an immutable format GL texture (its storage will never be respecified)\n2. EGLImage was created with `EGL_GL_TEXTURE_LEVEL_KHR \u003d\u003d 0` (mirroring AHB backed EGLImage usecase)\n\nWe can definitely have a follow up change that explores expanding this optimization to usecases like the one you mentioned",
+      "parentUuid": "d9f3616d_fb9e9132",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e629046e_d50e3d1e",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2024-10-25T22:38:18Z",
       "side": 1,
       "message": "Are all these copies just so that there is a format change? Why not use UtilsVk\u0027s blit shader and use a view that overrides the format?",
+      "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a83b259b_957f84d1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-10-26T01:03:44Z",
+      "side": 1,
+      "message": "\u003e Are all these copies just so that there is a format change? Why not use UtilsVk\u0027s blit shader and use a view that overrides the format?\n\nwhen generating mipmaps with filtering enabled the math for an image that is in sRGB colorspace vs. linear colorspace is different, e.g, 128 in linear is actually a 188 in sRGB. As long as the image\u0027s format is sRGB Vulkan automatically handles the math\n\n\u003e Why not use UtilsVk\u0027s blit shader and use a view that overrides the format?\n\ni am aware of the blitresolve code but dont see a method for a simple blit in `UtilsVk`?",
+      "parentUuid": "e629046e_d50e3d1e",
       "revId": "52b116f8ebb242df3741c451c3676e677f2108a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
