@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c9354ff_80e445e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-26T01:39:23Z",
+      "side": 1,
+      "message": "`Bug: angleproject:42265370` actually, we migrated to buganizer, and the old bug numbers are mapped to new ones. The old issue tracker has been taken down.",
+      "parentUuid": "3a03b3fe_58d8f209",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 15
+      },
+      "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9bfc251_523d3143",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "Updated `hasSomethingToFlush()` to use input `isSingleBufferedWindow` parameter, and  added `ContextVk::isSingleBufferedWindowCurrent()`.\n\nI like it better than the old way, because now, `finish()` can early return if `isSingleBufferedWindow \u003d\u003d false`. So more flexibility this way)",
       "parentUuid": "bfbecb2c_fea7c72d",
+      "range": {
+        "startLine": 1492,
+        "startChar": 8,
+        "endLine": 1492,
+        "endChar": 89
+      },
+      "revId": "1105cb61a0fc0f2887828c68f21c8ff13220fa77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9209cb7a_c23a60db",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-26T01:39:23Z",
+      "side": 1,
+      "message": "I was thinking they could just recalculate `isSingleBufferedWindow()`, it would be simpler. It\u0027s `finish` (no one really calls that outside tests / termination) and even `flush` is a rare operation.",
+      "parentUuid": "01def5c2_e803140a",
       "range": {
         "startLine": 1492,
         "startChar": 8,
